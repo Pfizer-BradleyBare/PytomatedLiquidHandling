@@ -28,7 +28,6 @@ def Do(Dest, Sequences):
 	CommandString += "[Volumes] " + Vol[:-1] + "\n"
 	CommandString += "[Totals] " + Tot[:-1] + "\n"
 
-	print(CommandString)
 
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()

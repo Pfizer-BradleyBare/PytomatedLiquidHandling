@@ -13,8 +13,6 @@ def Reserve(Plate, Temp, RPM):
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 
-	print(CommandString)
-
 	if Response != None and "True".lower() in Response.lower():
 		return True
 	else:
@@ -39,8 +37,6 @@ def Move(Plate):
 	CommandString += "[Move]\n"
 	CommandString += "[Plate] " + str(Plate) + "\n"
 
-	print(CommandString)
-
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return True
@@ -51,8 +47,6 @@ def Remove(Plate):
 	CommandString += "[Heater]\n"
 	CommandString += "[Remove]\n"
 	CommandString += "[Plate] " + str(Plate) + "\n"
-
-	print(CommandString)
 
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
