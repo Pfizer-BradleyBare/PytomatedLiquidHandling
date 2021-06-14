@@ -1,0 +1,87 @@
+#####################################################
+################# EXPLANATION #######################
+#
+# This file and other configuration files are provided
+# to create Hamilton specific functionality. While also
+# providing interHamilton compatability for methods.
+#
+# This configuration file is used for deck loading.
+# The Python script will read this file and, based
+# on the volumes used for both plates and solutions,
+# will autoload the deck for the Hamilton.
+#
+# This file is the lowest priority in the loading
+# sequence. Thusly, this file is referenced when all 
+# other deck loading protocols are exhausted.
+#
+#
+#####################################################
+#####################################################
+
+Dead Volume:
+  Reagents:
+    FlipTube: 150
+    15mL Centrifuge Tube: 500
+    60mL Reagent Reservior: 1000
+    200mL Reagent Trough: 10000
+
+
+Tips:
+  NTR50:
+    Max Volume: 50
+    Max Tips: 768
+  NTR300:
+    Max Volume: 300
+    Max Tips: 768
+  FTR1000:
+    Max Volume: 1000
+    Max Tips: 480
+
+Incubate:
+  LidHomeSequences:
+    - Lid1_Home
+    - Lid2_Home
+
+  Heaters:
+    COM_ID:
+      - 1
+      - 2
+
+    Type:
+      - HeaterShaker
+      - HeaterShaker
+
+    Shake:
+      - True
+      - True
+
+    SequencePrefix:
+      - _HHS1_
+      - _HHS2_
+
+    PlateSequences:
+      96 Well PCR Plate:
+        200: 96WellPCRPlate200uL
+        400: 96WellPCRPlate400uL
+        1200: 96WellPCRPlate1200uL
+
+    LidSequences:
+      96 Well PCR Plate:   
+        200: Lid_200uL
+        400: Lid_400uL
+        1200: Lid_1200uL
+
+Transport:
+  Lid:
+    Open: 100
+    Close: 50
+  96 Well PCR Plate:
+    200:
+      Open: 100
+      Close: 50
+    400:
+      Open: 100
+      Close: 50
+    1200:
+      Open: 100
+      Close: 50
