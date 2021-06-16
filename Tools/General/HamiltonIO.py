@@ -11,14 +11,30 @@ HAMILTON_RESPONSE_FILE = os.path.join(BaseFolder, Folder,"Response.txt")
 
 SimulatedIO = None
 
+######################################################################### 
+#	Description: Initializes the HamiltonIO system in the simulated state
+#	Input Arguments: N/A
+#	Returns: N/A
+#########################################################################
 def Init():
 	global SimulatedIO
 	SimulatedIO = True
 
+######################################################################### 
+#	Description: Changes the state of the Hamilton IO. True indicates the Hamilton response is simulated
+#	Input Arguments: [Simulate: True or False]
+#	Returns: N/A
+#########################################################################
 def Simulated(Simulate):
 	global SimulatedIO
 	SimulatedIO = Simulate
 
+######################################################################### 
+#	Description: Pushes a command to the communication channel for the Hamilton.
+#	The first file creates is a temporary file. As soon as write is complete the file is renamed to a file the Hamilton expects.
+#	Input Arguments: [Command: String]
+#	Returns: N/A
+#########################################################################
 def Push(Command):
 	global SimulatedIO
 	if SimulatedIO == False:
@@ -27,6 +43,11 @@ def Push(Command):
 		file.close()
 		os.rename(HAMILTON_COMMAND_TEMP_FILE, HAMILTON_COMMAND_FILE)
 
+######################################################################### 
+#	Description: Reads a response from the Hamilton. As soon as the response is read the file is deleted.
+#	Input Arguments: N/A
+#	Returns: [String]
+#########################################################################
 def Pull():
 	global SimulatedIO
 	if SimulatedIO == False:
@@ -43,6 +64,11 @@ def Pull():
 			quit()
 		return Response
 
+######################################################################### 
+#	Description: Ends the communication on the Hamilton system
+#	Input Arguments: N/A
+#	Returns: N/A
+#########################################################################
 def EndCommunication():
 	Push("END")
 	Pull()

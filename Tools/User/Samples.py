@@ -16,18 +16,41 @@ Total_Samples = 0
 #This is the sequence list, adjusted for the sample start position.
 Sequences = []
 
+######################################################################### 
+#	Description: Returns the number of rows-1 or samples in the worklist
+#	Input Arguments: N/A
+#	Returns: Integer
+#########################################################################
 def GetNumSamples():
 	global Num_Samples
 	return Num_Samples
 
+######################################################################### 
+#	Description: Returns the number of sequences in the worklist. Sequences are described in the _SampleSequence Column
+#	Input Arguments: None
+#	Returns: Integer
+#########################################################################
 def GetTotalSamples():
 	global Total_Samples
 	return Total_Samples
 
+######################################################################### 
+#	Description: Returns the all sequence positions that will be used
+#	Input Arguments: None
+#	Returns: 1D Array of Integers
+#########################################################################
 def GetSequences():
 	global Sequences
 	return Sequences
 
+######################################################################### 
+#	Description: Performs Initialization of this module by doing the following:
+#		1. Count the number of sample rows
+#		2. Get the range for each column present in the worklist
+#		3. Get and count the number of sequence positions
+#	Input Arguments: [SampleStartPosition: Integer] [PulledWorkListSheet: List of Lists]
+#	Returns: N/A
+#########################################################################
 def Init(SampleStartPosition, PulledWorkListSheet):
 	global Num_Samples
 	global Total_Samples
@@ -61,13 +84,19 @@ def Init(SampleStartPosition, PulledWorkListSheet):
 		for Seq in str(SampleSeq).split(","):
 			Temp.append(int(float(Seq)) + SampleStartPosition - 1)
 		Sequences.append(Temp)
-
-	Temp = []
-	for row in Column("_SampleSequence"):
-		Temp += str(row).split(",")
 	Total_Samples = len(Temp)
+
+	#Temp = []
+	#for row in Column("_SampleSequence"):
+	#	Temp += str(row).split(",")
+	#Total_Samples = len(Temp)
 	#Get total number of samples, which includes duplicates. Not the same as the number of rows in worklist
 
+######################################################################### 
+#	Description: Searches the dictionary for the specified column name. If column name is not found, then the column name is returned in the array
+#	Input Arguments: [Column_Name: String]
+#	Returns: [List of length Num_Samples]
+#########################################################################
 def Column(Column_Name):
 	global Column_Ranges
 	global Num_Samples

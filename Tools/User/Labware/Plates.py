@@ -9,6 +9,11 @@ import copy
 Plates_List = {}
 
 class Class:
+######################################################################### 
+#	Description: Initializes class to default starting parameters
+#	Input Arguments: [PlateName: String] [Type: String] [SequencesList: List]
+#	Returns: N/A
+#########################################################################
 	def __init__ (self,PlateName, Type, SequencesList):
 		self.PlateName = PlateName
 		self.Type = Type
@@ -27,6 +32,9 @@ class Class:
 	def SetLidState(self):
 		self.Lid = True
 
+	def ResetLidState(self):
+		self.Lid = False
+
 	def GetLidState(self):
 		return self.Lid
 
@@ -36,6 +44,11 @@ class Class:
 	def GetVolumesList(self):
 		return self.VolumesList
 
+######################################################################### 
+#	Description: Returns the max well volume on this plate
+#	Input Arguments: N/A
+#	Returns: [Float]
+#########################################################################
 	def GetVolume(self):
 		MaxVol = 0
 		for vol in self.GetVolumesList():
@@ -58,6 +71,11 @@ class Class:
 	def UpdateFactors(self, NewFactorsList):
 		self.FactorsList = NewFactorsList
 
+######################################################################### 
+#	Description: Creates a sorted pipetting list to be used by the hamilton pipette command
+#	Input Arguments: [SourceList: List] [SourceVolumeList: List]
+#	Returns: [List of Lists]
+#########################################################################
 	def CreatePipetteSequence(self, SourceList, SourceVolumeList):
 		global Plates_List
 
@@ -75,11 +93,24 @@ class Class:
 
 		return copy.deepcopy(sorted(Expanded, key=lambda x: x[0]))
 
-#This function adds a plate object to the dictionary. Category is the plate type and Sequences list is the 
+def Init():
+	global Plates_List
+	Plates_List = {}
+
+######################################################################### 
+#	Description: Creates a new plate class and adds it to the plate dictionary
+#	Input Arguments: [PlateName: String] [Type: String] [SequencesList: List]
+#	Returns: N/A
+#########################################################################
 def AddPlate(PlateName, Type, SequencesList):
 	global Plates_List
 	Plates_List[PlateName] = Class(PlateName, Type, SequencesList)
 
+######################################################################### 
+#	Description: Returns the plate class with PlateName
+#	Input Arguments: [PlateName: String]
+#	Returns: Plate class
+#########################################################################
 def GetPlate(PlateName):
 	global Plates_List
 	if PlateName in Plates_List:
@@ -87,6 +118,11 @@ def GetPlate(PlateName):
 	else:
 		return None
 
+######################################################################### 
+#	Description: Returns the plates that are alive or active
+#	Input Arguments: N/A
+#	Returns: [List of strings]
+#########################################################################
 def GetActivePlates():
 	global Plates_List
 
@@ -98,17 +134,22 @@ def GetActivePlates():
 
 	return ActiveList
 
-def Init():
-	global Plates_List
-	Plates_List = {}
-
+######################################################################### 
+#	Description: Confirms the the string argument is a valid plate
+#	Input Arguments: [PlateName: String]
+#	Returns: [bool]
+#########################################################################
 def IsPlate(PlateName):
 	global Plates_List
 	if PlateName in Plates_List:
 		return True
 	return False
 
-#A dead plate is a plate that is not used in this method sequence. Dead plates orginate from the Split plate step
+######################################################################### 
+#	Description: Returns the dead plates. Meaning the plates that will never be used in this sequence. Any steps that reference this plate are also dead
+#	Input Arguments: N/A
+#	Returns: [List of Strings]
+#########################################################################
 def GetDeadPlates():
 	global Plates_List
 	Temp = []
@@ -121,7 +162,11 @@ def GetDeadPlates():
 			Temp.append(key)
 	return Temp
 
-#This function will return all plate objects that are not dead
+######################################################################### 
+#	Description: Returns all plates that are not dead. Plates can either be active or inactive.
+#	Input Arguments: N/A
+#	Returns: [List of strings]
+#########################################################################
 def GetPlates():
 	Temp = []
 	DeadPlates = GetDeadPlates()
@@ -140,6 +185,11 @@ def GetPlates():
 			Temp.append(plate)
 	return Temp
 
+######################################################################### 
+#	Description: Makes the starting plate in the step sequence active.
+#	Input Arguments: [StartingPlateName: String]
+#	Returns: N/A
+#########################################################################
 def StartStepSequence(StartingPlateName):
 	for key in Plates_List:
 		if key == StartingPlateName:

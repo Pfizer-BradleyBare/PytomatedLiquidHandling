@@ -19,10 +19,25 @@ Equilibration_Buffer = None
 Destination = None
 Incubation_Equilibration_Step = None
 
+######################################################################### 
+#	Description: Returns the incubation step in which desalting equilibration is most logical
+#	Input Arguments: N/A
+#	Returns: [Step module Class]
+#########################################################################
 def GetEquilibrationStep():
 	global Incubation_Equilibration_Step
 	return Incubation_Equilibration_Step
 
+######################################################################### 
+#	Description: Initializes the desalting library by performing the following steps:
+#	1. Iterate through all steps in MutableStepsList
+#	2. If an incubation step is found, save that step
+#	3. If a desalting step is found, set the latest incubation step as the most logical equilibration step.
+#		Pull all step information. Add the equilibration buffer to the solutions list w/ used volume, and add a waste trough to the list of plates.
+#		Finally, step the preferred loading positions for this step.
+#	Input Arguments: [MutableStepsList: List]
+#	Returns: N/A
+#########################################################################
 def Init(MutableStepsList):
 	global Equilibrated
 	global Incubation_Equilibration_Step
@@ -60,7 +75,11 @@ def Init(MutableStepsList):
 			CONFIGURATION.AddPreferredLoading(Equilibration_Buffer, PreferredLoading["Buffer"])
 			CONFIGURATION.AddPreferredLoading(Destination, PreferredLoading["Destination"])
 
-
+######################################################################### 
+#	Description: Performs equilibration by calling the appropriate hamilton commands
+#	Input Arguments: N/A
+#	Returns: N/A
+#########################################################################
 def Equilibrate():
 	global Equilibrated
 	global Sample_Volume
@@ -70,6 +89,11 @@ def Equilibrate():
 		Equilibrated = True
 		DESALT.Equilibrate(Equilibration_Buffer, Sample_Volume)
 
+######################################################################### 
+#	Description: Performs equilibration and simulates a pipetting step into the destination plate
+#	Input Arguments: N/A
+#	Returns: N/A
+#########################################################################
 def Process():
 	global Sample_Volume
 	global Sample_Source
@@ -80,7 +104,12 @@ def Process():
 	PLATES.GetPlate(Destination).CreatePipetteSequence(SAMPLES.Column(Equilibration_Buffer), SAMPLES.Column(Sample_Volume))
 	Equilibrated = False
 	DESALT.Process(Destination, Equilibration_Buffer, Sample_Volume, Sample_Source)
-		
+	
+######################################################################### 
+#	Description: Runs equilibration and processing
+#	Input Arguments: [step: Step Class]
+#	Returns: N/A
+#########################################################################	
 def Step(step):
 	Equilibrate()
 	Process()

@@ -12,10 +12,21 @@ STARTING_CONCENTRATION = "Starting Concentration (mg/mL)"
 TARGET_CONCENTRATION = "Target Concentration (mg/mL)"
 TARGET_VOLUME = "Target Volume (uL)"
 
+######################################################################### 
+#	Description: No itialization required here. Provided for consistency
+#	Input Arguments: N/A
+#	Returns: N/A
+#########################################################################
 def Init():
 	pass
 
-
+######################################################################### 
+#	Description: Performs a dilution step by doing the following:
+#	1. Forms a pipette hamilton command for the diluent solution
+#	2. Forms a pipette hamilton command for the source solution
+#	Input Arguments: [step: Step class]
+#	Returns: N/A
+#########################################################################
 def Step(step):
 	#dilute equation is C1*V1 = C2*V2 Where:
 	#C1 is SourceConcentration

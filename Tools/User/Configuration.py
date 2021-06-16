@@ -13,6 +13,11 @@ PreferredLoading = {}
 StepPreferredLoading = {}
 CheckSequences = []
 
+######################################################################### 
+#	Description: Initializes the library by pulling information from Config files
+#	Input Arguments: N/A
+#	Returns: N/A
+#########################################################################
 def Init():
 	global Sequences
 	global PreferredLoading
@@ -30,26 +35,56 @@ def Init():
 	SysConfig = yaml.full_load(file)
 	file.close()
 
+######################################################################### 
+#	Description: Adds a sequence to the list of sequences to check on the Hamilton devices
+#	Input Arguments: [Sequence: String]
+#	Returns: N/A
+#########################################################################
 def AddCheckSequence(Sequence):
 	global CheckSequences
 	if Sequence not in CheckSequences:
 		CheckSequences.append(Sequence)	
 
+######################################################################### 
+#	Description: Returns the array of sequences to check
+#	Input Arguments: N/A
+#	Returns: [1D-array of strings]
+#########################################################################
 def GetCheckSequences():
 	global CheckSequences
 	return CheckSequences
 
+######################################################################### 
+#	Description: Returns step specific configuration information
+#	Input Arguments: [Step: String]
+#	Returns: [Dictionary as described in YAML config file]
+#########################################################################
 def GetStepConfig(Step):
 	global SysConfig
 	return SysConfig[Step]
 
+######################################################################### 
+#	Description: Returns step specific loading information
+#	Input Arguments: [Step: String]
+#	Returns: [Dictionary as described in YAML config file]
+#########################################################################
 def GetStepLoading(Step):
 	global PreferredLoading
 	return PreferredLoading["Steps"][Step]
 
+######################################################################### 
+#	Description: Add software specific loading to dictionary for later processing
+#	Input Arguments: [Item: String] [LoadingArray: 1D-Array of strings]
+#	Returns: N/A
+#########################################################################
 def AddPreferredLoading(Item, LoadingArray):
 	StepPreferredLoading[Item] = LoadingArray
 
+######################################################################### 
+#	Description: Searches for a preferred loading entry for the argument
+#	Input Arguments: [LoadingItem: String]
+#	Returns: If item is found then returns loading information described in YAML file (Array), else None as array
+#########################################################################
 def TryPreferred(LoadingItem):
 	global PreferredLoading
 
@@ -59,8 +94,11 @@ def TryPreferred(LoadingItem):
 					return PreferredLoading["Labware"][Category][Item]
 	return [None]
 
-
-
+######################################################################### 
+#	Description: Attempts to load both plates and solutions using the loading information available in the YAML file
+#	Input Arguments:  [Plates_List: 1D-array of plate objects] [Solutions_List: 1D-array of solution objects]
+#	Returns: If loading was sucessful then returns a dictionary of loading information with item name as key, else returns False
+#########################################################################
 def Load(Plates_List, Solutions_List):
 	global Sequences
 	global StepPreferredLoading

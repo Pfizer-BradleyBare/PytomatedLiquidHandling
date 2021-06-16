@@ -89,10 +89,17 @@ while(True):
 
 if Initialization_Run == True:
 
-	#HAMILTONIO.Simulated(False)
+	HAMILTONIO.Simulated(False)
 	PRERUN.CheckSequences(CONFIGURATION.GetCheckSequences())
 	PRERUN.Tips(SOLUTIONS.GetPipetteTips())
-	PRERUN.Labware(CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions()))
+	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
+
+	print("\n\n\n\n")
+
+	for item in Labware:
+		print(Labware[item])
+	
+	PRERUN.Labware(Labware)
 
 
 	#initialize all the Hamilton Libraries.
