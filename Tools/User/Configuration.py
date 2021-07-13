@@ -35,6 +35,12 @@ def Init():
 	SysConfig = yaml.full_load(file)
 	file.close()
 
+
+WriteLoadingInformation()
+
+ReadLoadingInformation()
+
+
 ######################################################################### 
 #	Description: Adds a sequence to the list of sequences to check on the Hamilton devices
 #	Input Arguments: [Sequence: String]
@@ -118,7 +124,8 @@ def Load(Plates_List, Solutions_List):
 			if Sequences["Plates"][Sequence]["Max Supported Volume"] >= MaxVol:
 				if int(not not Sequences["Plates"][Sequence]["Lid"]) >= int(not not LidRequired):
 					Temp = {}
-					Temp["Volume"] = Sequences["Plates"][Sequence]["Max Supported Volume"]
+					Temp["Volume"] = MaxVol
+					Temp["MaxVolume"] = Sequences["Plates"][Sequence]["Max Supported Volume"]
 					Temp["Labware Type"] = Sequences["Plates"][Sequence]["Labware Type"]
 					Temp["Labware Category"] = "Plates"
 					Temp["Lid"] = Sequences["Plates"][Sequence]["Lid"]
@@ -140,6 +147,7 @@ def Load(Plates_List, Solutions_List):
 			if Sequences["Reagents"][Sequence]["Max Supported Volume"] >= MaxVolWDead and Sequences["Reagents"][Sequence]["Storage Condition"] == SolutionStorage:
 				Temp = {}
 				Temp["Volume"] = MaxVolWDead
+				Temp["MaxVolume"] = Sequences["Reagents"][Sequence]["Max Supported Volume"]
 				Temp["Labware Type"] = Sequences["Reagents"][Sequence]["Labware Type"]
 				Temp["Labware Category"] = "Reagents"
 				Temp["Lid"] = Sequences["Reagents"][Sequence]["Lid"]
@@ -180,6 +188,7 @@ def Load(Plates_List, Solutions_List):
 					FinalLoading[Item] = {"Sequence":Sequence, 
 						"Lid":Loading[Item]["Sequences"][Sequence]["Lid"], 
 						"LoadingPosition":Loading[Item]["Sequences"][Sequence]["Deck Position"], 
+						"MaxVolume":Loading[Item]["Sequences"][Sequence]["MaxVolume"],
 						"Volume":Loading[Item]["Sequences"][Sequence]["Volume"],
 						"Labware Type":Loading[Item]["Sequences"][Sequence]["Labware Type"],
 						"Labware Category":Loading[Item]["Sequences"][Sequence]["Labware Category"]}
@@ -196,6 +205,7 @@ def Load(Plates_List, Solutions_List):
 					FinalLoading[Item] = {"Sequence":Sequence, 
 						"Lid":Loading[Item]["Sequences"][Sequence]["Lid"], 
 						"LoadingPosition":Loading[Item]["Sequences"][Sequence]["Deck Position"], 
+						"MaxVolume":Loading[Item]["Sequences"][Sequence]["MaxVolume"],
 						"Volume":Loading[Item]["Sequences"][Sequence]["Volume"],
 						"Labware Type":Loading[Item]["Sequences"][Sequence]["Labware Type"],
 						"Labware Category":Loading[Item]["Sequences"][Sequence]["Labware Category"]}

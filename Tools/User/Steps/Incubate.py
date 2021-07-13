@@ -18,6 +18,13 @@ Incubation_List = []
 Lids = {}
 Heaters = {}
 
+######################################################################### 
+#	Description: intialized through the following actions:
+#	1. Load step specific configuration information and stores to be used later
+#	2. Combines the HHS prefix with the plate sequence information and stores in a dictionary for later use. Additionally add all HHS and Lid sequences to the hamilton check sequences
+#	Input Arguments: 
+#	Returns: 
+#########################################################################
 def Init(MutableStepsList):
 	global Incubation_List
 
@@ -53,6 +60,10 @@ def Init(MutableStepsList):
 	for Step in MutableStepsList:
 		if Step.GetTitle() == TITLE:
 		 Incubation_List.append({"Plate":Step.GetParentPlate(), "Temp":Step.GetParameters()[TEMP], "RPM":Step.GetParameters()[SHAKE]}) 
+
+	print(Incubation_List)
+	print("\n",Lids)
+	print("\n",Heaters)
 	StartHeaters()
 
 def StartHeaters():
