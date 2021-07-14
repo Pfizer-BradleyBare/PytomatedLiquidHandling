@@ -1,6 +1,7 @@
 from ..User.Labware import Plates as PLATES
 from ..User.Labware import Solutions as SOLUTIONS
 from ..General import ExcelIO as EXCELIO
+from ..General import HamiltonIO as HAMILTONIO
 import copy
 import yaml
 import os
@@ -37,11 +38,11 @@ def Init():
 	SysConfig = yaml.full_load(file)
 	file.close()
 
-	try:
+	if HAMILTONIO.IsSimulated() == False:
 		file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
 		DeckLoading = yaml.full_load(file)
 		file.close()
-	except:
+	else:
 		DeckLoading = None
 
 def WriteLoadingInformation(YamlData):
@@ -108,6 +109,19 @@ def AddCheckSequence(Sequence):
 def GetCheckSequences():
 	global CheckSequences
 	return CheckSequences
+
+######################################################################### 
+#	Description: Returns step specific configuration information
+#	Input Arguments: [Step: String]
+#	Returns: [Dictionary as described in YAML config file]
+#########################################################################
+def GetDeckLoading(LabwareName):
+	global DeckLoading
+	if HAMILTONIO.IsSimulated() == True:
+		return None
+	else:	
+		return DeckLoading["LabwareName"]
+
 
 ######################################################################### 
 #	Description: Returns step specific configuration information
