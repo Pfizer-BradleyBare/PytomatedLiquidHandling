@@ -41,6 +41,47 @@ WriteLoadingInformation()
 ReadLoadingInformation()
 
 
+
+######################################################################### 
+#	Description: Returns a list of floats describing well dispense heights 
+#	Input Arguments: [PlateName: String], [WellVolumes: List[Float]]
+#	Returns: [DispenseHeights: List[float]]
+#########################################################################
+def WellVolumeToDispenseHeight(PlateName, WellVolumes):
+	#use platename to get the  Labware Category, Labware Type, and Max Volume from storage file​
+	#Use Labware Category, Labware Type, and Max Volume to get labware equations from SystemConfiguration.yaml as List of Dicts​
+	#If file or key does not exist, then return List of Zero’s (Same size as input List)​
+	Height  = 0
+	DispenseHeights = []
+	while(true):
+		Height += .1
+		#calculate well volume at height
+		for i in range(0, len(WellVolumes)-1):
+			if volumeHheight > WellVolumes[i]:
+				DispenseHeights.append(Height)
+				WellVolumes.pop(i)
+				i -=1
+		if len(WellVolumes) == 0:
+			return DispenseHeights
+
+######################################################################### 
+#	Description: Calculates Volume from a given height
+#	Input Arguments: [Height: Float], [Segments: List[Dict])
+#	Returns: [Calculated Volume: Float]
+#########################################################################
+
+def VolumeFromHeight(Height, Segments):
+	Volume = 0
+	for segment in Segments:
+		EquationString = segment["SegmentEquation"]
+		EquationString.replace("x",str(Height))
+		Volume += eval(EquationString)
+		Height -= float(segment["MaxSegmentHeight"])
+		if Height <= 0:
+			break
+	return Volume
+
+
 ######################################################################### 
 #	Description: Adds a sequence to the list of sequences to check on the Hamilton devices
 #	Input Arguments: [Sequence: String]
