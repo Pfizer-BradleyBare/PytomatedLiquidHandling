@@ -13,18 +13,20 @@ Timer_List = {}
 def Init():
 	global Timer_List
 
-	Timer_List = {} 
+	Timer_List = [] 
 
 #Callback is a function that takes only a plate name as a parameter (String)
-def StartTimer(Plate, WaitTime, Callback):
+def StartTimer(step, WaitTime, Callback):
 	global Timer_List
 	WaitTime *= 60
+	#Convert min to seconds
 
-	Timer_List[Plate] = [WaitTime, time.time(), Callback]
+	Timer_List.append( {"Step":step,"Wait Time":WaitTime, "Start Time":time.time(), "Callback":Callback})
 	#TIMER.Start(Plate,WaitTime)
 	#We will only start the time for the remaining time. Time handling will be done in python
 
-	PLATES.GetPlate(Plate).Deactivate()
+
+	PLATES.GetPlate(step.GetParentPlate()).Deactivate()
 
 	if len(PLATES.GetActivePlates()) == 0:
 		WaitForTimer()
@@ -39,19 +41,20 @@ def WaitForTimer():
 	if len(Timer_List) > 0:
 
 		Time = time.time()
-		SleepingPlate = min(Timer_List, key=lambda x: Timer_List[x][0] - (Time - Timer_List[x][1]))
 
-		TIMER.Start(SleepingPlate,Timer_List[SleepingPlate][0] - (Time - Timer_List[SleepingPlate][1]))
-		TIMER.Wait(SleepingPlate)
+		SleepingPlate = min(Timer_List, key=lambda x: x["Wait Time"] - (Time - x["Start Time"]))
 
-		Timer_List[SleepingPlate][2](SleepingPlate)
+		TIMER.Start(SleepingPlate["Wait Time"] - (Time - SleepingPlate["Start Time"]))
+		TIMER.Wait()
+
+		SleepingPlate["Callback"](SleepingPlate["Step"])
 		#Calls our callback function
 
-		del Timer_List[SleepingPlate]
+		Timer_List.remove(SleepingPlate)
 
-		PLATES.GetPlate(SleepingPlate).Activate()
+		PLATES.GetPlate(SleepingPlate["Step"].GetParentPlate()).Activate()
 
-def Callback(Plate):
+def Callback(step):
 	pass
 
 def Step(step):
