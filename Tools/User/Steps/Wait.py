@@ -21,7 +21,8 @@ def StartTimer(Plate, WaitTime, Callback):
 	WaitTime *= 60
 
 	Timer_List[Plate] = [WaitTime, time.time(), Callback]
-	TIMER.Start(Plate,WaitTime)
+	#TIMER.Start(Plate,WaitTime)
+	#We will only start the time for the remaining time. Time handling will be done in python
 
 	PLATES.GetPlate(Plate).Deactivate()
 
@@ -40,6 +41,7 @@ def WaitForTimer():
 		Time = time.time()
 		SleepingPlate = min(Timer_List, key=lambda x: Timer_List[x][0] - (Time - Timer_List[x][1]))
 
+		TIMER.Start(SleepingPlate,Timer_List[SleepingPlate][0] - (Time - Timer_List[SleepingPlate][1]))
 		TIMER.Wait(SleepingPlate)
 
 		Timer_List[SleepingPlate][2](SleepingPlate)

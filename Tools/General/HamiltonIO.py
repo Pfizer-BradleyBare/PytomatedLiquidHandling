@@ -29,6 +29,10 @@ def Simulated(Simulate):
 	global SimulatedIO
 	SimulatedIO = Simulate
 
+
+def IsSimulated():
+	global SimulatedIO
+	return SimulatedIO
 ######################################################################### 
 #	Description: Pushes a command to the communication channel for the Hamilton.
 #	The first file creates is a temporary file. As soon as write is complete the file is renamed to a file the Hamilton expects.

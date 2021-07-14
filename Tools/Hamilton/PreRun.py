@@ -17,8 +17,14 @@ def Labware(LoadingList):
 	CommandString += "[Labware]\n"
 	for Labware in LoadingList:
 		CommandString += "[Name]" + str(Labware) + "[LabwareSequence]" + str(LoadingList[Labware]["Sequence"]) + "[LidSequence]" + str(LoadingList[Labware]["Lid"])  
-		CommandString += "[LoadingLocation]" + str(LoadingList[Labware]["LoadingPosition"]) + "[Volume]" + str(LoadingList[Labware]["Volume"]) 
+		CommandString += "[LoadingLocation]" + str(LoadingList[Labware]["LoadingPosition"])
+		if str(LoadingList[Labware]["Labware Category"]) == "Plates":
+			CommandString += "[Volume]" + str(LoadingList[Labware]["MaxVolume"])
+		else:
+			CommandString += "[Volume]" + str(LoadingList[Labware]["Volume"])
 		CommandString += "[LabwareType]" + str(LoadingList[Labware]["Labware Type"]) + "[LabwareCategory]" + str(LoadingList[Labware]["Labware Category"]) + "\n"
+
+	print(CommandString)
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return True

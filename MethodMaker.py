@@ -89,7 +89,7 @@ while(True):
 
 if Initialization_Run == True:
 
-	HAMILTONIO.Simulated(False)
+	#HAMILTONIO.Simulated(False)
 	PRERUN.CheckSequences(CONFIGURATION.GetCheckSequences())
 	PRERUN.Tips(SOLUTIONS.GetPipetteTips())
 	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
@@ -97,9 +97,12 @@ if Initialization_Run == True:
 	print("\n\n\n\n")
 
 	for item in Labware:
-		print(Labware[item])
+		print(item, ": ", Labware[item])
 	
+	#Write Loading information to storage file
+
 	PRERUN.Labware(Labware)
+
 
 
 	#initialize all the Hamilton Libraries.
