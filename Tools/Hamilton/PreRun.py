@@ -24,7 +24,6 @@ def Labware(LoadingList):
 			CommandString += "[Volume]" + str(LoadingList[Labware]["Volume"])
 		CommandString += "[LabwareType]" + str(LoadingList[Labware]["Labware Type"]) + "[LabwareCategory]" + str(LoadingList[Labware]["Labware Category"]) + "\n"
 
-	print(CommandString)
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return True

@@ -10,6 +10,7 @@ import collections
 SysConfig = {}
 Sequences = {}
 PreferredLoading = {}
+DeckLoading = {}
 StepPreferredLoading = {}
 CheckSequences = []
 
@@ -22,6 +23,7 @@ def Init():
 	global Sequences
 	global PreferredLoading
 	global SysConfig
+	global DeckLoading
 
 	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","AutoloadingSequences.yaml"))
 	Sequences = yaml.full_load(file)
@@ -35,11 +37,17 @@ def Init():
 	SysConfig = yaml.full_load(file)
 	file.close()
 
+	try:
+		file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
+		DeckLoading = yaml.full_load(file)
+		file.close()
+	except:
+		DeckLoading = None
 
-WriteLoadingInformation()
-
-ReadLoadingInformation()
-
+def WriteLoadingInformation(YamlData):
+	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"),"w")
+	yaml.dump(YamlData,file)
+	file.close()
 
 ######################################################################### 
 #	Description: Adds a sequence to the list of sequences to check on the Hamilton devices
@@ -232,6 +240,8 @@ def Load(Plates_List, Solutions_List):
 
 	for item in FinalLoading:
 		AddCheckSequence(FinalLoading[item]["Sequence"])
+		if FinalLoading[item]["Labware Category"] == "Plates":
+			AddCheckSequence(FinalLoading[item]["Lid"])
 
 	return FinalLoading
 

@@ -78,6 +78,11 @@ class Class:
 
 		self.Parameters = {}
 
+	def __eq__(self,other):
+		if not isinstance(other, Class):
+			return False
+		return self.Title == other.Title and self.Row == other.Row and self.Col == other.Col and self.Parent == other.Parent and self.Parameters == other.Parameters
+
 	def GetTitle(self):
 		return self.Title
 

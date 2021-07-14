@@ -78,10 +78,8 @@ class Class:
 #########################################################################
 	def CreatePipetteSequence(self, SourceList, SourceVolumeList):
 		global Plates_List
-
-		print(self.GetVolumesList())
 		
-		DispenseHeights = WellVolumeToDispenseHeight(self.GetName(),self.GetVolumesList())
+		#DispenseHeights = WellVolumeToDispenseHeight(self.GetName(),self.GetVolumesList())
 
 		Expanded = []
 
@@ -91,7 +89,7 @@ class Class:
 			
 			for Position in self.GetSequenceList()[count]:
 
-				Expanded.append([int(float(Position)), SourceList[count], ActualVolume, DispenseHeights[count]])
+				Expanded.append([int(float(Position)), SourceList[count], ActualVolume, count]) #DispenseHeights[count]])
 			
 			self.GetVolumesList()[count] += ActualVolume
 

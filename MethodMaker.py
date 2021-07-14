@@ -94,10 +94,13 @@ if Initialization_Run == True:
 	PRERUN.Tips(SOLUTIONS.GetPipetteTips())
 	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
 
+	CONFIGURATION.WriteLoadingInformation(Labware)
+
 	print("\n\n\n\n")
 
 	for item in Labware:
-		print(item, ": ", Labware[item])
+		pass
+		#print(item, ": ", Labware[item])
 	
 	#Write Loading information to storage file
 

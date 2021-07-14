@@ -1,0 +1,120 @@
+0.2 mg/mL Trypsin in 100mM Tris pH8.2:
+  Labware Category: Reagents
+  Labware Type: FlipTube
+  Lid: true
+  LoadingPosition: E1
+  MaxVolume: 1500
+  Sequence: E1
+  Volume: 270.0
+100mM Tris pH8.2:
+  Labware Category: Reagents
+  Labware Type: 200mL Reagent Trough
+  Lid: false
+  LoadingPosition: Carrier38_Pos2
+  MaxVolume: 190000
+  Sequence: T2
+  Volume: 10320.0
+1M IAA:
+  Labware Category: Reagents
+  Labware Type: FlipTube
+  Lid: true
+  LoadingPosition: F4
+  MaxVolume: 1500
+  Sequence: F4
+  Volume: 174.0
+50% TFA:
+  Labware Category: Reagents
+  Labware Type: FlipTube
+  Lid: true
+  LoadingPosition: F1
+  MaxVolume: 1500
+  Sequence: F1
+  Volume: 206.8
+Denaturation:
+  Labware Category: Plates
+  Labware Type: 96 Well PCR Plate
+  Lid: true
+  LoadingPosition: Carrier14_Pos3
+  MaxVolume: 400
+  Sequence: Carrier14_Pos3_96WellPCRPlate400uL_1mLChannel
+  Volume: 121.0
+Desalting:
+  Labware Category: Plates
+  Labware Type: 96 Well PCR Plate
+  Lid: false
+  LoadingPosition: Carrier38_Pos5
+  MaxVolume: 1200
+  Sequence: Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel
+  Volume: 300.0
+Desalting Waste:
+  Labware Category: Plates
+  Labware Type: 96 Well PCR Plate
+  Lid: false
+  LoadingPosition: Carrier38_Pos1
+  MaxVolume: 1200
+  Sequence: Carrier38_Pos1_96WellPCRPlate1200uL_1mLChannel
+  Volume: 1
+HCP:
+  Labware Category: Plates
+  Labware Type: 96 Well PCR Plate
+  Lid: false
+  LoadingPosition: Carrier14_Pos4
+  MaxVolume: 400
+  Sequence: Carrier14_Pos4_96WellPCRPlate400uL_1mLChannel
+  Volume: 294.2
+Liquid 1:
+  Labware Category: Reagents
+  Labware Type: 15mL Centrifuge Tube
+  Lid: false
+  LoadingPosition: C1
+  MaxVolume: 14000
+  Sequence: C1
+  Volume: 620.0
+Liquid 2:
+  Labware Category: Reagents
+  Labware Type: 15mL Centrifuge Tube
+  Lid: false
+  LoadingPosition: C2
+  MaxVolume: 14000
+  Sequence: C2
+  Volume: 560.0
+Liquid 3:
+  Labware Category: Reagents
+  Labware Type: 15mL Centrifuge Tube
+  Lid: false
+  LoadingPosition: C3
+  MaxVolume: 14000
+  Sequence: C3
+  Volume: 560.0
+PNGaseF:
+  Labware Category: Reagents
+  Labware Type: FlipTube
+  Lid: true
+  LoadingPosition: E2
+  MaxVolume: 1500
+  Sequence: E2
+  Volume: 153.6
+SVA:
+  Labware Category: Plates
+  Labware Type: 96 Well PCR Plate
+  Lid: false
+  LoadingPosition: Carrier14_Pos5
+  MaxVolume: 400
+  Sequence: Carrier14_Pos5_96WellPCRPlate400uL_1mLChannel
+  Volume: 297.8
+Sample:
+  Labware Category: Plates
+  Labware Type: 96 Well PCR Plate
+  Lid: false
+  LoadingPosition: Carrier38_Pos3
+  MaxVolume: 200
+  Sequence: Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel
+  Volume: 0
+Water:
+  Labware Category: Reagents
+  Labware Type: 60mL Reagent Reservior
+  Lid: false
+  LoadingPosition: R1
+  MaxVolume: 50000
+  Sequence: R1
+  Volume: 1100.0

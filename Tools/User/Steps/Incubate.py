@@ -1,8 +1,8 @@
 from ..Steps import Steps as STEPS
 from ..Steps import Desalt as DESALT
 from ..Labware import Plates as PLATES
-from ...Hamilton.Commands import Heater_Shaker as HEATER_SHAKER
-from ...Hamilton.Commands import Lid as LID
+from ...Hamilton.Commands import Heater as HEATER
+from ...Hamilton.Commands import Transport as TRANSPORT
 from ..Steps import Wait as WAIT
 from ...User import Configuration as CONFIGURATION
 import time
@@ -12,7 +12,7 @@ TEMP = "Temp (C)"
 TIME = "Time (min)"
 SHAKE = "Shake (rpm)"
 
-#format is [Plate, Temp, RPM]
+#List of incubation steps
 Incubation_List = []
 
 Lids = {}
@@ -37,7 +37,7 @@ def Init(MutableStepsList):
 	if "Heaters" in Config:
 		for HHS in range(0,len(Config["Heaters"]["COM_ID"])):
 			
-			Heaters[Config["Heaters"]["COM_ID"][HHS]] = {"Reserved":False, "Type":Config["Heaters"]["Type"][HHS], "Shake":Config["Heaters"]["Shake"][HHS], "Temp":25, "RPM":0}
+			Heaters[Config["Heaters"]["COM_ID"][HHS]] = {"Reserved":False, "Type":Config["Heaters"]["Type"][HHS], "Shake":Config["Heaters"]["Shake"][HHS], "Temp":25}
 
 			Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"] = {}
 			for PlateType in Config["Heaters"]["PlateSequences"]:
@@ -58,48 +58,103 @@ def Init(MutableStepsList):
 	#Do configuration for the incubation step
 
 	for Step in MutableStepsList:
-		if Step.GetTitle() == TITLE:
-		 Incubation_List.append({"Plate":Step.GetParentPlate(), "Temp":Step.GetParameters()[TEMP], "RPM":Step.GetParameters()[SHAKE]}) 
+		if Step.GetTitle() == TITLE and str(Step.GetParameters()[TEMP]).lower() != "Ambient".lower():
+			Incubation_List.append(Step)
 
 	print(Incubation_List)
 	print("\n",Lids)
-	print("\n",Heaters)
+	print("\n",Heaters,"\n\n")
 	StartHeaters()
 
 def StartHeaters():
 	global Incubation_List
+	global Heaters
 
-	if len(Incubation_List) == 0:
-		return
+	for Incubation in Incubation_List[:]:
+		Temp = Incubation.GetParameters()[TEMP]
+		PossibleHeaters = sorted(Heaters, key=lambda h: abs(Heaters[h]["Temp"] - Temp))
 
-	while True:
-		Temp = Incubation_List[0]
-		Response = HEATER_SHAKER.Reserve(Temp["Plate"], Temp["Temp"], Temp["RPM"])
+		for ID in PossibleHeaters:
+			if (not not Heaters[ID]["Reserved"]) == False and (not not Incubation.GetParameters()[SHAKE]) <= Heaters[ID]["Shake"]:
 
-		if Response == False:
-			break
+				Heaters[ID]["Reserved"] = Incubation
+				Incubation_List.remove(Incubation)
+				Heaters[ID]["Temp"] = Temp
+				HEATER.StartHeating(ID,Temp)
+				break
 
-		Incubation_List.remove(Temp)
+def GetReservedHeater(step):
+	global Heaters
+	for Heater in Heaters:
+		if Heaters[Heater]["Reserved"] == step:
+			return Heater
+	return None
 
-def Callback(Plate):
-	LID.Remove(Plate)
-	LID.Release(Plate)
-	HEATER_SHAKER.Remove(Plate)
-	HEATER_SHAKER.Release(Plate)
+def ReserveLid(step):
+	global Lids
+	for Lid in Lids:
+		if (not not Lids[Lid]["Reserved"]) == False:
+			Lids[Lid]["Reserved"] = step
+			return True
+	return False
+
+def GetReservedLid(step):
+	global Lids
+	for Lid in Lids:
+		if Lids[Lid]["Reserved"] == step:
+			return Lid
+	return None
+
+def Callback(step):
+	global Heaters
+	global Lids
+
+	ID = GetReservedHeater(step)
+	Lid = GetReservedLid(step)
+	
+
+	Lids[Lid]["Reserved"] = False
+
+	if ID != None:
+		Heaters[ID]["Reserved"] = False
+		HEATER.StopHeating(ID)
+		HEATER.StopShaking(ID)
+		TRANSPORT.Move(1,2,3,4)
+		#Move lid
+		TRANSPORT.Move(1,2,3,4)
+		#Move the plate back
+	else:
+		TRANSPORT.Move(1,2,3,4)
+		#Move lid
 
 	StartHeaters()
 
 def Step(step):
-	Plate = step.GetParentPlate()
-	Temp = step.GetParameters()[TEMP]
-	if str(Temp).lower() == "ambient":
-		PLATES.GetPlate(Plate).SetLidState()
+	ID = GetReservedHeater(step)
 
-	HEATER_SHAKER.Move(Plate)
-	LID.Reserve(Plate)
-	LID.Move(Plate)
+	if ReserveLid(step) == False:
+		WAIT.WaitForTimer()
+	#We need to wait for incubation to finish if no lids are available
+
+	Lid = GetReservedLid(step)
+
+	if ID != None:
+		TRANSPORT.Move(1,2,3,4)
+		#Move the plate to the heater if not ambient incubation
+		
+		TRANSPORT.Move(1,2,3,4)
+		#Move lid
+		
+		HEATER.StartShaking(ID, step.GetParameters()[SHAKE])
+
+	else:
+		PLATES.GetPlate(step.GetParentPlate()).SetLidState()
+		#This is a RT incubation on a carrier so we need to record that for deck loading
+		
+		TRANSPORT.Move(1,2,3,4)
+		#Move lid
 	
-	WAIT.StartTimer(Plate, step.GetParameters()[TIME], Callback)
+	WAIT.StartTimer(step, step.GetParameters()[TIME], Callback)
 
 
 
