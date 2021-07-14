@@ -111,6 +111,7 @@ def Callback(step):
 
 	ID = GetReservedHeater(step)
 	Lid = GetReservedLid(step)
+	Loading = CONFIGURATION.GetDeckLoading(step.GetParentPlate())
 	
 
 	Lids[Lid]["Reserved"] = False
@@ -119,6 +120,7 @@ def Callback(step):
 		Heaters[ID]["Reserved"] = False
 		HEATER.StopHeating(ID)
 		HEATER.StopShaking(ID)
+		
 		TRANSPORT.Move(1,2,3,4)
 		#Move lid
 		TRANSPORT.Move(1,2,3,4)
@@ -130,13 +132,14 @@ def Callback(step):
 	StartHeaters()
 
 def Step(step):
-	ID = GetReservedHeater(step)
 
 	if ReserveLid(step) == False:
 		WAIT.WaitForTimer()
 	#We need to wait for incubation to finish if no lids are available
 
+	ID = GetReservedHeater(step)
 	Lid = GetReservedLid(step)
+	Loading = CONFIGURATION.GetDeckLoading(step.GetParentPlate())
 
 	if ID != None:
 		TRANSPORT.Move(1,2,3,4)

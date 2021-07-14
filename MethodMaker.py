@@ -87,7 +87,7 @@ while(True):
 	Steps[Step.GetTitle()](Step)
 #do each step
 
-if Initialization_Run == True:
+if HAMILTONIO.IsSimulated() == True:
 
 	#HAMILTONIO.Simulated(False)
 	PRERUN.CheckSequences(CONFIGURATION.GetCheckSequences())
