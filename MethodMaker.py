@@ -89,7 +89,7 @@ while(True):
 
 if HAMILTONIO.IsSimulated() == True:
 
-	#HAMILTONIO.Simulated(False)
+	HAMILTONIO.Simulated(False)
 	PRERUN.CheckSequences(CONFIGURATION.GetCheckSequences())
 	PRERUN.Tips(SOLUTIONS.GetPipetteTips())
 	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())

@@ -7,7 +7,7 @@ def Start(WaitTime):
 	CommandString = ""
 	CommandString += "[Timer]\n"
 	CommandString += "[Start]\n"
-	CommandString += "[Time] " + str(WaitTime) + "\n"
+	CommandString += "[Time]" + str(WaitTime) + "\n"
 
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()

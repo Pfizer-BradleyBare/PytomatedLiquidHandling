@@ -53,13 +53,13 @@ Plates:
   Carrier14_Pos4_96WellPCRPlate200uL_1mLChannel:
     Max Supported Volume: 200
     Labware Type: 96 Well PCR Plate
-    Lid: True
+    Lid: Carrier14_Pos4_Lid_200uL
     Deck Position: Carrier14_Pos4
 
   Carrier14_Pos5_96WellPCRPlate200uL_1mLChannel:
     Max Supported Volume: 200
     Labware Type: 96 Well PCR Plate
-    Lid: True
+    Lid: False
     Deck Position: Carrier14_Pos5
 
 
@@ -70,7 +70,7 @@ Plates:
   Carrier14_Pos3_96WellPCRPlate400uL_1mLChannel:
     Max Supported Volume: 400
     Labware Type: 96 Well PCR Plate
-    Lid: True
+    Lid: Carrier14_Pos3_Lid_400uL
     Deck Position: Carrier14_Pos3
 
   Carrier14_Pos4_96WellPCRPlate400uL_1mLChannel:
@@ -92,7 +92,7 @@ Plates:
   Carrier14_Pos4_96WellPCRPlate1200uL_1mLChannel:
     Max Supported Volume: 1200
     Labware Type: 96 Well PCR Plate
-    Lid: True
+    Lid: Carrier14_Pos4_Lid_1200uL
     Deck Position: Carrier14_Pos4
 
   Carrier14_Pos5_96WellPCRPlate1200uL_1mLChannel:
