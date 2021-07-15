@@ -133,28 +133,30 @@ def Callback(step):
 			HEATER.StopShaking(ID)
 		
 		if Loading != None:
-			TransportDestination = Lid
-			TransportSource = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Lid"]
-			TransportOpenDistance = TransportConfig["Lid"]["Open"]
-			TransportCloseDistance = TransportConfig["Lid"]["Close"]
-			TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
+			LidTransportDestination = Lid
+			LidTransportSource = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Lid"]
+			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
+			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#Lid
 
-			TransportDestination = Loading["Sequence"]
-			TransportSource = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Plate"]
-			TransportOpenDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Open"]
-			TransportCloseDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Close"]
-			TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
+			PlateTransportDestination = Loading["Sequence"]
+			PlateTransportSource = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Plate"]
+			PlateTransportOpenDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Open"]
+			PlateTransportCloseDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Close"]
+			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#plate
+
+			TRANSPORT.HeaterRemove(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
 		
 
 	else:
 		if Loading != None:
-			TransportDestination = Lid
-			TransportSource = Loading["Lid"]
-			TransportOpenDistance = TransportConfig["Lid"]["Open"]
-			TransportCloseDistance = TransportConfig["Lid"]["Close"]
-			TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
+			LidTransportDestination = Lid
+			LidTransportSource = Loading["Lid"]
+			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
+			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
 
 	StartHeaters()
 
@@ -172,29 +174,31 @@ def Step(step):
 
 	if ID != None:
 		if Loading != None:
-			TransportSource = Loading["Sequence"]
-			TransportDestination = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Plate"]
-			TransportOpenDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Open"]
-			TransportCloseDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Close"]
-			TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
+			PlateTransportSource = Loading["Sequence"]
+			PlateTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Plate"]
+			PlateTransportOpenDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Open"]
+			PlateTransportCloseDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Close"]
+			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#plate
 		
-			TransportSource = Lid
-			TransportDestination = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Lid"]
-			TransportOpenDistance = TransportConfig["Lid"]["Open"]
-			TransportCloseDistance = TransportConfig["Lid"]["Close"]
-			TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
+			LidTransportSource = Lid
+			LidTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Lid"]
+			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
+			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#Lid
+
+			TRANSPORT.HeaterMove(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
 
 		if step.GetParameters()[SHAKE] > 0:
 			HEATER.StartShaking(ID, step.GetParameters()[SHAKE])
 	else:
 		if Loading != None:
-			TransportSource = Lid
-			TransportDestination = Loading["Lid"]
-			TransportOpenDistance = TransportConfig["Lid"]["Open"]
-			TransportCloseDistance = TransportConfig["Lid"]["Close"]
-			TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
+			LidTransportSource = Lid
+			LidTransportDestination = Loading["Lid"]
+			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
+			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
 		
 		PLATES.GetPlate(step.GetParentPlate()).SetLidState()
 	#Make decisions if incubation is ambient or not

@@ -58,7 +58,7 @@ def Pull():
 		while os.path.exists(HAMILTON_RESPONSE_FILE) == False:
 			time.sleep(0.1)
 
-		time.sleep(0.1)
+		time.sleep(2)
 		file = open(HAMILTON_RESPONSE_FILE, "r")
 		Response = file.read()
 		file.close()
