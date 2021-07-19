@@ -4,10 +4,7 @@ from ..Labware import Solutions as SOLUTIONS
 from ...User import Samples as SAMPLES
 from ...Hamilton.Commands import Pipette as PIPETTE
 from ...User import Configuration as CONFIGURATION
-<<<<<<< HEAD
 from ...General import HamiltonIO as HAMILTONIO
-=======
->>>>>>> b63204e0ffe64ab4872dd2ca6e59170934289d11
 import copy
 
 TITLE = "Liquid Transfer"

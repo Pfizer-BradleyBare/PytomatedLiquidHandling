@@ -39,21 +39,12 @@ def Init():
 	SysConfig = yaml.full_load(file)
 	file.close()
 
-<<<<<<< HEAD
 	# if HAMILTONIO.IsSimulated() == False:
 	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
 	DeckLoading = yaml.full_load(file)
 	file.close()
 	# else:
 	# 	DeckLoading = None
-=======
-	#if HAMILTONIO.IsSimulated() == False:
-	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
-	DeckLoading = yaml.full_load(file)
-	file.close()
-	#else:
-		#DeckLoading = None
->>>>>>> b63204e0ffe64ab4872dd2ca6e59170934289d11
 
 def WriteLoadingInformation(YamlData):
 	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"),"w")
@@ -137,17 +128,10 @@ def GetCheckSequences():
 #########################################################################
 def GetDeckLoading(LabwareName):
 	global DeckLoading
-<<<<<<< HEAD
-	# if HAMILTONIO.IsSimulated() == True:
-	# 	return None
-	# else:	
-	return DeckLoading[LabwareName]
-=======
 	if HAMILTONIO.IsSimulated() == True:
 		return None
 	else:	
 		return DeckLoading[LabwareName]
->>>>>>> b63204e0ffe64ab4872dd2ca6e59170934289d11
 
 
 ######################################################################### 
