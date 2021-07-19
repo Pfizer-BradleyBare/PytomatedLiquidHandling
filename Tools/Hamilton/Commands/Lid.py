@@ -1,5 +1,10 @@
 from ...General import HamiltonIO as HAMILTONIO
 
+def PreRun():
+	return True
+
+def Init():
+	return True
 
 #this function will reserve a lid on the Hamilton. This lid can be used on or off the Heaters
 def Reserve(Plate):

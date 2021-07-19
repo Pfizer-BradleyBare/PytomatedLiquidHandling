@@ -1,5 +1,10 @@
 from ...General import HamiltonIO as HAMILTONIO
 
+def PreRun():
+	return True
+
+def Init():
+	return True
 
 #this function should start an equilibration on the Hamilton system. If this function is called twice, for whatever reason, the Hamilton should know the tips are equilibrated. 
 def Equilibrate(Buffer, Volume):

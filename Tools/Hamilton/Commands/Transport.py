@@ -1,5 +1,11 @@
 from ...General import HamiltonIO as HAMILTONIO
 	
+def PreRun():
+	return True
+
+def Init():
+	return True
+	
 def Move(SourceSeq, DestinationSeq, OpenDistance, CloseDistance):
 	CommandString = ""
 	CommandString += "[Transport]\n"
