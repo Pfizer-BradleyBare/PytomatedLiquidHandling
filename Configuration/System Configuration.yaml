@@ -97,15 +97,15 @@ Incubate:
 
 Transport:
   Lid:
-    Open: 100
-    Close: 50
+    Open: 88
+    Close: 81
   96 Well PCR Plate:
     200:
-      Open: 100
-      Close: 50
+      Open: 85
+      Close: 75
     400:
-      Open: 100
-      Close: 50
+      Open: 85
+      Close: 75
     1200:
-      Open: 100
-      Close: 50
+      Open: 85
+      Close: 73

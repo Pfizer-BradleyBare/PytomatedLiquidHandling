@@ -3,6 +3,7 @@ from ..Labware import Plates as PLATES
 from ..Labware import Solutions as SOLUTIONS
 from ...User import Samples as SAMPLES
 from ...Hamilton.Commands import Pipette as PIPETTE
+from ...User import Configuration as CONFIGURATION
 import copy
 
 TITLE = "Liquid Transfer"

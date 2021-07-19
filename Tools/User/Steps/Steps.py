@@ -99,6 +99,7 @@ class Class:
 
 	def AddParameters(self, Key, Value):
 		self.Parameters[Key] = Value
+		
 	def GetParameters(self):
 		return self.Parameters
 
