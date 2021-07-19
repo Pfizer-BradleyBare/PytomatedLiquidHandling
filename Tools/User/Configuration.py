@@ -5,6 +5,7 @@ from ..General import HamiltonIO as HAMILTONIO
 import copy
 import yaml
 import os
+import os.path
 import collections
 
 #This is a dictionary that contains the loading information
@@ -38,17 +39,68 @@ def Init():
 	SysConfig = yaml.full_load(file)
 	file.close()
 
-	#if HAMILTONIO.IsSimulated() == False:
+	# if HAMILTONIO.IsSimulated() == False:
 	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
 	DeckLoading = yaml.full_load(file)
 	file.close()
-	#else:
-		#DeckLoading = None
+	# else:
+	# 	DeckLoading = None
 
 def WriteLoadingInformation(YamlData):
 	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"),"w")
 	yaml.dump(YamlData,file)
 	file.close()
+
+
+######################################################################### 
+#	Description: Returns a list of floats describing well dispense heights 
+#	Input Arguments: [PlateName: String], [WellVolumes: List[Float]]
+#	Returns: [DispenseHeights: List[float]]
+#########################################################################
+def WellVolumeToDispenseHeight(PlateName, WellVolumes):
+	#use platename to get the  Labware Category, Labware Type, and Max Volume from storage file​	
+	#print("Here")
+	LabwareLoading = GetDeckLoading(PlateName)
+	
+	if not LabwareLoading:
+		return [0]*len(WellVolumes)
+	LabwareCategory =LabwareLoading["Labware Category"]
+	LabwareType =LabwareLoading["Labware Type"]
+	MaxVolume =LabwareLoading["MaxVolume"]
+	Segments = SysConfig["VolumeEquations"][LabwareCategory][LabwareType][MaxVolume]
+	print("SEGMENTS = ", Segments)
+	Height  = 0
+	DispenseHeights = [-1]*len(WellVolumes)
+
+	while(True): 
+		Height += .1
+		VolumeHeight = VolumeFromHeight(Height,Segments)
+		for i in range(0, len(WellVolumes)): 
+			if VolumeHeight > WellVolumes[i]:	
+				if DispenseHeights[i] == -1:
+					DispenseHeights[i] = Height
+		if not -1 in DispenseHeights:
+			return DispenseHeights
+
+######################################################################### 
+#	Description: Calculates Volume from a given height
+#	Input Arguments: [Height: Float], [Segments: List[Dict])
+#	Returns: [Calculated Volume: Float]
+#########################################################################
+
+def VolumeFromHeight(Height, Segments):
+	Volume = 0
+	for segment in Segments:
+		EquationString = segment["SegmentEquation"]
+		EquationString = EquationString.replace("x",str(Height))
+		Volume += eval(EquationString)
+		Height -= float(segment["MaxSegmentHeight"])
+		if Height <= 0:
+			break
+	if Height > 0:
+		return float("inf")
+	return Volume
+
 
 ######################################################################### 
 #	Description: Adds a sequence to the list of sequences to check on the Hamilton devices
