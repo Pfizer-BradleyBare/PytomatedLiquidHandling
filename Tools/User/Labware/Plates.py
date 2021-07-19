@@ -3,6 +3,7 @@
 from ..Steps import Plate as PLATE
 from ..Steps import Steps as STEPS
 from ...User import Samples as SAMPLES
+from ...User import Configuration as CONFIG
 import copy
 
 #this dict is in the format: PlateName: [Category, LidUsed, ActiveState, SequencesList, FactorsList, TotalVolumesList]. Then list are the length of the number of samples
@@ -79,7 +80,9 @@ class Class:
 	def CreatePipetteSequence(self, SourceList, SourceVolumeList):
 		global Plates_List
 		
-		#DispenseHeights = WellVolumeToDispenseHeight(self.GetName(),self.GetVolumesList())
+		DispenseHeights = CONFIG.WellVolumeToDispenseHeight(self.GetName(),self.GetVolumesList())
+		print("Dispense Heights: ", DispenseHeights)
+		print("VolumeList: ", self.GetVolumesList())
 
 		Expanded = []
 
@@ -89,7 +92,7 @@ class Class:
 			
 			for Position in self.GetSequenceList()[count]:
 
-				Expanded.append([int(float(Position)), SourceList[count], ActualVolume, count]) #DispenseHeights[count]])
+				Expanded.append([int(float(Position)), SourceList[count], ActualVolume, DispenseHeights[count]])
 			
 			self.GetVolumesList()[count] += ActualVolume
 

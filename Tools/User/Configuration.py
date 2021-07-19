@@ -5,6 +5,7 @@ from ..General import HamiltonIO as HAMILTONIO
 import copy
 import yaml
 import os
+import os.path
 import collections
 
 #This is a dictionary that contains the loading information
@@ -38,12 +39,12 @@ def Init():
 	SysConfig = yaml.full_load(file)
 	file.close()
 
-	if HAMILTONIO.IsSimulated() == False:
-		file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
-		DeckLoading = yaml.full_load(file)
-		file.close()
-	else:
-		DeckLoading = None
+	# if HAMILTONIO.IsSimulated() == False:
+	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
+	DeckLoading = yaml.full_load(file)
+	file.close()
+	# else:
+	# 	DeckLoading = None
 
 def WriteLoadingInformation(YamlData):
 	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"),"w")
@@ -57,20 +58,28 @@ def WriteLoadingInformation(YamlData):
 #	Returns: [DispenseHeights: List[float]]
 #########################################################################
 def WellVolumeToDispenseHeight(PlateName, WellVolumes):
-	#use platename to get the  Labware Category, Labware Type, and Max Volume from storage file​
-	#Use Labware Category, Labware Type, and Max Volume to get labware equations from SystemConfiguration.yaml as List of Dicts​
-	#If file or key does not exist, then return List of Zero’s (Same size as input List)​
+	#use platename to get the  Labware Category, Labware Type, and Max Volume from storage file​	
+	#print("Here")
+	LabwareLoading = GetDeckLoading(PlateName)
+	
+	if not LabwareLoading:
+		return [0]*len(WellVolumes)
+	LabwareCategory =LabwareLoading["Labware Category"]
+	LabwareType =LabwareLoading["Labware Type"]
+	MaxVolume =LabwareLoading["MaxVolume"]
+	Segments = SysConfig["VolumeEquations"][LabwareCategory][LabwareType][MaxVolume]
+	print("SEGMENTS = ", Segments)
 	Height  = 0
-	DispenseHeights = []
-	while(true):
+	DispenseHeights = [-1]*len(WellVolumes)
+
+	while(True): 
 		Height += .1
-		#calculate well volume at height
-		for i in range(0, len(WellVolumes)-1):
-			if volumeHheight > WellVolumes[i]:
-				DispenseHeights.append(Height)
-				WellVolumes.pop(i)
-				i -=1
-		if len(WellVolumes) == 0:
+		VolumeHeight = VolumeFromHeight(Height,Segments)
+		for i in range(0, len(WellVolumes)): 
+			if VolumeHeight > WellVolumes[i]:	
+				if DispenseHeights[i] == -1:
+					DispenseHeights[i] = Height
+		if not -1 in DispenseHeights:
 			return DispenseHeights
 
 ######################################################################### 
@@ -83,11 +92,13 @@ def VolumeFromHeight(Height, Segments):
 	Volume = 0
 	for segment in Segments:
 		EquationString = segment["SegmentEquation"]
-		EquationString.replace("x",str(Height))
+		EquationString = EquationString.replace("x",str(Height))
 		Volume += eval(EquationString)
 		Height -= float(segment["MaxSegmentHeight"])
 		if Height <= 0:
 			break
+	if Height > 0:
+		return float("inf")
 	return Volume
 
 
@@ -117,10 +128,10 @@ def GetCheckSequences():
 #########################################################################
 def GetDeckLoading(LabwareName):
 	global DeckLoading
-	if HAMILTONIO.IsSimulated() == True:
-		return None
-	else:	
-		return DeckLoading["LabwareName"]
+	# if HAMILTONIO.IsSimulated() == True:
+	# 	return None
+	# else:	
+	return DeckLoading[LabwareName]
 
 
 ######################################################################### 
