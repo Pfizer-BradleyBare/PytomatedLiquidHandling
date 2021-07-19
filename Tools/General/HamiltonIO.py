@@ -58,10 +58,10 @@ def Pull():
 		while os.path.exists(HAMILTON_RESPONSE_FILE) == False:
 			time.sleep(0.1)
 
+		time.sleep(0.1)
 		file = open(HAMILTON_RESPONSE_FILE, "r")
 		Response = file.read()
 		file.close()
-		time.sleep(0.1)
 		os.remove(HAMILTON_RESPONSE_FILE)
 		if Response == "Abort":
 			Push("END")

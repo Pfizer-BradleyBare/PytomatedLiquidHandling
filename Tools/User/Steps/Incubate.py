@@ -17,6 +17,7 @@ Incubation_List = []
 
 Lids = {}
 Heaters = {}
+TransportConfig = {}
 
 ######################################################################### 
 #	Description: intialized through the following actions:
@@ -27,8 +28,13 @@ Heaters = {}
 #########################################################################
 def Init(MutableStepsList):
 	global Incubation_List
+	global Heaters
+	global Lids
+	global TransportConfig
+
 
 	Config = CONFIGURATION.GetStepConfig(TITLE)
+	TransportConfig = CONFIGURATION.GetStepConfig("Transport")
 
 	for Lid in Config["LidHomeSequences"]:
 		Lids[Lid] = {"Reserved": False}
@@ -60,6 +66,11 @@ def Init(MutableStepsList):
 	for Step in MutableStepsList:
 		if Step.GetTitle() == TITLE and str(Step.GetParameters()[TEMP]).lower() != "Ambient".lower():
 			Incubation_List.append(Step)
+
+	HeaterList = []
+	for Heater in Heaters:
+		HeaterList.append({"ID":Heater, "Type":Heaters[Heater]["Type"]})
+	HEATER.Init(HeaterList)
 
 	print(Incubation_List)
 	print("\n",Lids)
@@ -113,27 +124,47 @@ def Callback(step):
 	Lid = GetReservedLid(step)
 	Loading = CONFIGURATION.GetDeckLoading(step.GetParentPlate())
 	
-
 	Lids[Lid]["Reserved"] = False
 
 	if ID != None:
 		Heaters[ID]["Reserved"] = False
 		HEATER.StopHeating(ID)
-		HEATER.StopShaking(ID)
+		if step.GetParameters()[SHAKE] > 0:
+			HEATER.StopShaking(ID)
 		
-		TRANSPORT.Move(1,2,3,4)
-		#Move lid
-		TRANSPORT.Move(1,2,3,4)
-		#Move the plate back
+		if Loading != None:
+			LidTransportDestination = Lid
+			LidTransportSource = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Lid"]
+			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
+			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
+			#Lid
+
+			PlateTransportDestination = Loading["Sequence"]
+			PlateTransportSource = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Plate"]
+			PlateTransportOpenDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Open"]
+			PlateTransportCloseDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Close"]
+			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
+			#plate
+
+			TRANSPORT.HeaterRemove(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
+		
+
 	else:
-		TRANSPORT.Move(1,2,3,4)
-		#Move lid
+		if Loading != None:
+			LidTransportDestination = Lid
+			LidTransportSource = Loading["Lid"]
+			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
+			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
 
 	StartHeaters()
 
 def Step(step):
+	global Heaters
+	global TransportConfig
 
-	if ReserveLid(step) == False:
+	while ReserveLid(step) == False:
 		WAIT.WaitForTimer()
 	#We need to wait for incubation to finish if no lids are available
 
@@ -142,20 +173,35 @@ def Step(step):
 	Loading = CONFIGURATION.GetDeckLoading(step.GetParentPlate())
 
 	if ID != None:
-		TRANSPORT.Move(1,2,3,4)
-		#Move the plate to the heater if not ambient incubation
+		if Loading != None:
+			PlateTransportSource = Loading["Sequence"]
+			PlateTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Plate"]
+			PlateTransportOpenDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Open"]
+			PlateTransportCloseDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Close"]
+			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
+			#plate
 		
-		TRANSPORT.Move(1,2,3,4)
-		#Move lid
-		
-		HEATER.StartShaking(ID, step.GetParameters()[SHAKE])
+			LidTransportSource = Lid
+			LidTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Lid"]
+			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
+			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
+			#Lid
 
+			TRANSPORT.HeaterMove(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
+
+		if step.GetParameters()[SHAKE] > 0:
+			HEATER.StartShaking(ID, step.GetParameters()[SHAKE])
 	else:
-		PLATES.GetPlate(step.GetParentPlate()).SetLidState()
-		#This is a RT incubation on a carrier so we need to record that for deck loading
+		if Loading != None:
+			LidTransportSource = Lid
+			LidTransportDestination = Loading["Lid"]
+			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
+			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
 		
-		TRANSPORT.Move(1,2,3,4)
-		#Move lid
+		PLATES.GetPlate(step.GetParentPlate()).SetLidState()
+	#Make decisions if incubation is ambient or not
 	
 	WAIT.StartTimer(step, step.GetParameters()[TIME], Callback)
 

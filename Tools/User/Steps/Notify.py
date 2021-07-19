@@ -1,13 +1,15 @@
 from ..Steps import Steps as STEPS
+from ...Hamilton.Commands import Notify as NOTIFY
 
 TITLE = "Notify"
-WAIT_ON_USER = STEPS.PARAMS_START + 0
-SUBJECT = STEPS.PARAMS_START + 1
-MESSAGE = STEPS.PARAMS_START + 2
+WAIT_ON_USER = "Wait On User"
+SUBJECT = "Subject"
+MESSAGE = "Message"
 
 
 def Init():
 	pass
 
 def Step(step):
-	pass
+	Parameters = step.GetParameters()
+	NOTIFY.SendMessage(Parameters[WAIT_ON_USER],Parameters[SUBJECT],Parameters[MESSAGE])

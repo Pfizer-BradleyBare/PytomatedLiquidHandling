@@ -39,12 +39,21 @@ def Init():
 	SysConfig = yaml.full_load(file)
 	file.close()
 
+<<<<<<< HEAD
 	# if HAMILTONIO.IsSimulated() == False:
 	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
 	DeckLoading = yaml.full_load(file)
 	file.close()
 	# else:
 	# 	DeckLoading = None
+=======
+	#if HAMILTONIO.IsSimulated() == False:
+	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
+	DeckLoading = yaml.full_load(file)
+	file.close()
+	#else:
+		#DeckLoading = None
+>>>>>>> b63204e0ffe64ab4872dd2ca6e59170934289d11
 
 def WriteLoadingInformation(YamlData):
 	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"),"w")
@@ -122,16 +131,23 @@ def GetCheckSequences():
 	return CheckSequences
 
 ######################################################################### 
-#	Description: Returns step specific configuration information
+#	Description: Returns deck loading for a particular labware
 #	Input Arguments: [Step: String]
 #	Returns: [Dictionary as described in YAML config file]
 #########################################################################
 def GetDeckLoading(LabwareName):
 	global DeckLoading
+<<<<<<< HEAD
 	# if HAMILTONIO.IsSimulated() == True:
 	# 	return None
 	# else:	
 	return DeckLoading[LabwareName]
+=======
+	if HAMILTONIO.IsSimulated() == True:
+		return None
+	else:	
+		return DeckLoading[LabwareName]
+>>>>>>> b63204e0ffe64ab4872dd2ca6e59170934289d11
 
 
 ######################################################################### 
@@ -199,7 +215,7 @@ def Load(Plates_List, Solutions_List):
 				if int(not not Sequences["Plates"][Sequence]["Lid"]) >= int(not not LidRequired):
 					Temp = {}
 					Temp["Volume"] = MaxVol
-					Temp["MaxVolume"] = Sequences["Plates"][Sequence]["Max Supported Volume"]
+					Temp["Max Volume"] = Sequences["Plates"][Sequence]["Max Supported Volume"]
 					Temp["Labware Type"] = Sequences["Plates"][Sequence]["Labware Type"]
 					Temp["Labware Category"] = "Plates"
 					Temp["Lid"] = Sequences["Plates"][Sequence]["Lid"]
@@ -221,7 +237,7 @@ def Load(Plates_List, Solutions_List):
 			if Sequences["Reagents"][Sequence]["Max Supported Volume"] >= MaxVolWDead and Sequences["Reagents"][Sequence]["Storage Condition"] == SolutionStorage:
 				Temp = {}
 				Temp["Volume"] = MaxVolWDead
-				Temp["MaxVolume"] = Sequences["Reagents"][Sequence]["Max Supported Volume"]
+				Temp["Max Volume"] = Sequences["Reagents"][Sequence]["Max Supported Volume"]
 				Temp["Labware Type"] = Sequences["Reagents"][Sequence]["Labware Type"]
 				Temp["Labware Category"] = "Reagents"
 				Temp["Lid"] = Sequences["Reagents"][Sequence]["Lid"]
@@ -262,7 +278,7 @@ def Load(Plates_List, Solutions_List):
 					FinalLoading[Item] = {"Sequence":Sequence, 
 						"Lid":Loading[Item]["Sequences"][Sequence]["Lid"], 
 						"LoadingPosition":Loading[Item]["Sequences"][Sequence]["Deck Position"], 
-						"MaxVolume":Loading[Item]["Sequences"][Sequence]["MaxVolume"],
+						"Max Volume":Loading[Item]["Sequences"][Sequence]["Max Volume"],
 						"Volume":Loading[Item]["Sequences"][Sequence]["Volume"],
 						"Labware Type":Loading[Item]["Sequences"][Sequence]["Labware Type"],
 						"Labware Category":Loading[Item]["Sequences"][Sequence]["Labware Category"]}
@@ -279,7 +295,7 @@ def Load(Plates_List, Solutions_List):
 					FinalLoading[Item] = {"Sequence":Sequence, 
 						"Lid":Loading[Item]["Sequences"][Sequence]["Lid"], 
 						"LoadingPosition":Loading[Item]["Sequences"][Sequence]["Deck Position"], 
-						"MaxVolume":Loading[Item]["Sequences"][Sequence]["MaxVolume"],
+						"Max Volume":Loading[Item]["Sequences"][Sequence]["Max Volume"],
 						"Volume":Loading[Item]["Sequences"][Sequence]["Volume"],
 						"Labware Type":Loading[Item]["Sequences"][Sequence]["Labware Type"],
 						"Labware Category":Loading[Item]["Sequences"][Sequence]["Labware Category"]}
@@ -306,7 +322,7 @@ def Load(Plates_List, Solutions_List):
 
 	for item in FinalLoading:
 		AddCheckSequence(FinalLoading[item]["Sequence"])
-		if FinalLoading[item]["Labware Category"] == "Plates":
+		if FinalLoading[item]["Labware Category"] == "Plates" and (not not FinalLoading[item]["Lid"]) != False:
 			AddCheckSequence(FinalLoading[item]["Lid"])
 
 	return FinalLoading
