@@ -1,4 +1,11 @@
 from ..General import HamiltonIO as HAMILTONIO
+from ..Hamilton.Commands import Desalt as DESALT
+from ..Hamilton.Commands import Heater as HEATER
+from ..Hamilton.Commands import Notify as NOTIFY
+from ..Hamilton.Commands import Pipette as PIPETTE
+from ..Hamilton.Commands import Timer as TIMER
+from ..Hamilton.Commands import Transport as TRANSPORT
+
 
 def CheckSequences(SequencesList):
 	CommandString = ""

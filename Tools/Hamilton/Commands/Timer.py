@@ -1,6 +1,6 @@
 from ...General import HamiltonIO as HAMILTONIO
 
-def Init():
+def PreRun():
 	return True
 
 #this function will start a timer for a specified plate

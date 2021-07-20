@@ -101,10 +101,16 @@ if HAMILTONIO.IsSimulated() == True:
 	for item in Labware:
 		pass
 		#print(item, ": ", Labware[item])
-	
 	#Write Loading information to storage file
 
 	PRERUN.Labware(Labware)
+	PRERUN.DESALT.PreRun(1,2)
+	PRERUN.HEATER.PreRun(INCUBATE.GetHeaterList())
+	PRERUN.NOTIFY.PreRun()
+	PRERUN.PIPETTE.PreRun()
+	PRERUN.TIMER.PreRun()
+	PRERUN.TRANSPORT.PreRun()
 	#initialize all the Hamilton Libraries.
+
 
 HAMILTONIO.EndCommunication()

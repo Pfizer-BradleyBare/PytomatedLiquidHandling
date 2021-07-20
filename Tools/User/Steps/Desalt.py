@@ -13,6 +13,7 @@ VOLUME = "Sample Volume (uL)"
 
 #This variable tracks whether or not the tips have been equilibrated
 Equilibrated = None
+Required_Tips = 0
 Sample_Volume = 0
 Sample_Source = None
 Equilibration_Buffer = None
@@ -65,12 +66,15 @@ def Init(MutableStepsList):
 			SOLUTIONS.AddSolution(Equilibration_Buffer, SOLUTIONS.TYPE_BUFFER, SOLUTIONS.STORAGE_AMBIENT)
 			SOLUTIONS.GetSolution(Equilibration_Buffer).AddVolume(Sample_Volume * SAMPLES.GetTotalSamples())
 
+			print(SAMPLES.GetTotalSamples())
+			#quit()
+
 			PLATES.AddPlate("Desalting Waste", "96 Well PCR Plate", SAMPLES.GetSequences())
 			PLATES.GetPlate("Desalting Waste").CreatePipetteSequence(SAMPLES.Column(""),SAMPLES.Column(1))
 			#Volume of 1 added so the Waste solution is not deleted from the solutions list.
 			#HCP analysis detected cross contamination, At this point it is better to use a plate for waste. In that way each sample is isolated to a well.
 
-			PreferredLoading = CONFIGURATION.GetStepLoading(TITLE)
+			PreferredLoading = CONFIGURATION.GetStepConfig(TITLE)["Preferred Loading"]
 			CONFIGURATION.AddPreferredLoading("Desalting Waste", PreferredLoading["Waste"])
 			CONFIGURATION.AddPreferredLoading(Equilibration_Buffer, PreferredLoading["Buffer"])
 			CONFIGURATION.AddPreferredLoading(Destination, PreferredLoading["Destination"])
