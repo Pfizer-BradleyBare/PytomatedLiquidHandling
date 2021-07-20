@@ -29,6 +29,22 @@ VolumeEquations:
         - SegmentNumber: 2
           MaxSegmentHeight: 22.1
           SegmentEquation: x * 11
+      400:
+        - SegmentNumber: 1
+          MaxSegmentHeight: 11.5
+          SegmentEquation: x * 6.5450
+      
+        - SegmentNumber: 2
+          MaxSegmentHeight: 22.1
+          SegmentEquation: x * 11
+      1200:
+        - SegmentNumber: 1
+          MaxSegmentHeight: 11.5
+          SegmentEquation: x * 6.5450
+      
+        - SegmentNumber: 2
+          MaxSegmentHeight: 22.1
+          SegmentEquation: x * 11
   Reagents:
     FlipTube:
       1500:
@@ -39,73 +55,67 @@ VolumeEquations:
         - SegmentNumber: 2
           MaxSegmentHeight: 22.1
           SegmentEquation: x * 11
-      
-
 
 Dead Volume:
   Reagents:
     FlipTube: 150
     15mL Centrifuge Tube: 500
     60mL Reagent Reservior: 1000
-    200mL Reagent Trough: 10000
+    200mL Reagent Trough: 5000
 
+Steps:
+  Incubate:
+    LidHomeSequences:
+      - Lid1_Home
+      - Lid2_Home
+    Heaters:
+      COM_ID:
+        - 1
+        - 2
+      Type:
+        - HeaterShaker
+        - HeaterShaker
+      Shake:
+        - True
+        - True
+      SequencePrefix:
+        - _HHS1_
+        - _HHS2_
+      PlateSequences:
+        96 Well PCR Plate:
+          200: 96WellPCRPlate200uL
+          400: 96WellPCRPlate400uL
+          1200: 96WellPCRPlate1200uL
+      LidSequences:
+        96 Well PCR Plate:   
+          200: Lid_200uL
+          400: Lid_400uL
+          1200: Lid_1200uL
 
-Tips:
-  NTR50:
-    Max Volume: 50
-    Max Tips: 768
-  NTR300:
-    Max Volume: 300
-    Max Tips: 768
-  FTR1000:
-    Max Volume: 1000
-    Max Tips: 480
+  Transport:
+    Lid:
+      Open: 88
+      Close: 81
+    96 Well PCR Plate:
+      200:
+        Open: 85
+        Close: 75
+      400:
+        Open: 85
+        Close: 75
+      1200:
+        Open: 85
+        Close: 73
 
-Incubate:
-  LidHomeSequences:
-    - Lid1_Home
-    - Lid2_Home
-
-  Heaters:
-    COM_ID:
-      - 1
-      - 2
-
+  Desalt:
+    Preferred Loading:
+      Waste: 
+        - Carrier38_Pos1_96WellPCRPlate1200uL_1mLChannel
+      Buffer: 
+        - T2
+      Destination: 
+        - Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel
     Type:
-      - HeaterShaker
-      - HeaterShaker
-
-    Shake:
-      - True
-      - True
-
-    SequencePrefix:
-      - _HHS1_
-      - _HHS2_
-
-    PlateSequences:
-      96 Well PCR Plate:
-        200: 96WellPCRPlate200uL
-        400: 96WellPCRPlate400uL
-        1200: 96WellPCRPlate1200uL
-
-    LidSequences:
-      96 Well PCR Plate:   
-        200: Lid_200uL
-        400: Lid_400uL
-        1200: Lid_1200uL
-
-Transport:
-  Lid:
-    Open: 88
-    Close: 81
-  96 Well PCR Plate:
-    200:
-      Open: 85
-      Close: 75
-    400:
-      Open: 85
-      Close: 75
-    1200:
-      Open: 85
-      Close: 73
+      SizeX:
+        100:
+          Total Buffer Volume: 1000

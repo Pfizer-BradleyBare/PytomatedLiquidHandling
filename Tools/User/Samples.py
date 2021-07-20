@@ -79,17 +79,14 @@ def Init(SampleStartPosition, PulledWorkListSheet):
 		count += 1
 	#end
 
+	TotalSamplesArray = []
 	for SampleSeq in Column(WORKLIST_SAMPLE_SEQUENCE):
 		Temp = []
 		for Seq in str(SampleSeq).split(","):
 			Temp.append(int(float(Seq)) + SampleStartPosition - 1)
 		Sequences.append(Temp)
-	Total_Samples = len(Temp)
-
-	#Temp = []
-	#for row in Column("_SampleSequence"):
-	#	Temp += str(row).split(",")
-	#Total_Samples = len(Temp)
+		TotalSamplesArray = TotalSamplesArray + Temp
+	Total_Samples = len(TotalSamplesArray)
 	#Get total number of samples, which includes duplicates. Not the same as the number of rows in worklist
 
 ######################################################################### 

@@ -67,15 +67,16 @@ def Init(MutableStepsList):
 		if Step.GetTitle() == TITLE and str(Step.GetParameters()[TEMP]).lower() != "Ambient".lower():
 			Incubation_List.append(Step)
 
-	HeaterList = []
-	for Heater in Heaters:
-		HeaterList.append({"ID":Heater, "Type":Heaters[Heater]["Type"]})
-	HEATER.Init(HeaterList)
-
 	print(Incubation_List)
 	print("\n",Lids)
 	print("\n",Heaters,"\n\n")
 	StartHeaters()
+
+def GetHeaterList():
+	HeaterList = []
+	for Heater in Heaters:
+		HeaterList.append({"ID":Heater, "Type":Heaters[Heater]["Type"]})
+	return HeaterList
 
 def StartHeaters():
 	global Incubation_List

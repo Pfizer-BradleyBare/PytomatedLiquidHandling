@@ -9,10 +9,11 @@ from ...Hamilton.Commands import Desalt as DESALT
 TITLE = "Desalt"
 SOURCE = "Source"
 EQUILIBRATION_BUFFER = "Equilibration Buffer"
-VOLUME = "Sample Volume (uL)"
+VOLUME = "Type"
 
 #This variable tracks whether or not the tips have been equilibrated
 Equilibrated = None
+Required_Tips = 0
 Sample_Volume = 0
 Sample_Source = None
 Equilibration_Buffer = None
@@ -45,32 +46,47 @@ def Init(MutableStepsList):
 	global Sample_Source
 	global Equilibration_Buffer
 	global Destination
+	global Required_Tips
 	
 	Equilibrated = False
 	Latest_Incubate_Step = None
+
+
 
 	for Step in MutableStepsList:
 		if Step.GetTitle() == INCUBATE.TITLE:
 			Latest_Incubate_Step = Step
 
 		if Step.GetTitle() == TITLE:
-			
+			StepConfig = CONFIGURATION.GetStepConfig(TITLE)
+
+			DesaltingArray = Step.GetParameters()[VOLUME].split(",")
+			TypeArray = []
+			VolumeArray = []
+			for DesaltingStep in DesaltingArray:
+				StepParams = DesaltingStep.split(":")
+				TypeArray.append(StepParams[0].replace(" ",""))
+				VolumeArray.append(float(StepParams[1].replace(" ","")))
+			NumTipSets = len(DesaltingArray)
+
+			Required_Tips = 3 * SAMPLES.GetTotalSamples()
 			Incubation_Equilibration_Step = Latest_Incubate_Step
-			Sample_Volume = Step.GetParameters()[VOLUME]
+			Sample_Volume = sum(VolumeArray)
 			Sample_Source = Step.GetParameters()[SOURCE]
 			Equilibration_Buffer = Step.GetParameters()[EQUILIBRATION_BUFFER]
 			Destination = Step.GetParentPlate()
 			#I set these ahead of time because ths cannot change after equilibration. Best to lock it at the beginning
 
 			SOLUTIONS.AddSolution(Equilibration_Buffer, SOLUTIONS.TYPE_BUFFER, SOLUTIONS.STORAGE_AMBIENT)
-			SOLUTIONS.GetSolution(Equilibration_Buffer).AddVolume(Sample_Volume * SAMPLES.GetTotalSamples())
+			for i in range(0,NumTipSets):
+				SOLUTIONS.GetSolution(Equilibration_Buffer).AddVolume(StepConfig["Type"][TypeArray[i]][VolumeArray[i]]["Total Buffer Volume"] * SAMPLES.GetTotalSamples())
 
 			PLATES.AddPlate("Desalting Waste", "96 Well PCR Plate", SAMPLES.GetSequences())
 			PLATES.GetPlate("Desalting Waste").CreatePipetteSequence(SAMPLES.Column(""),SAMPLES.Column(1))
 			#Volume of 1 added so the Waste solution is not deleted from the solutions list.
 			#HCP analysis detected cross contamination, At this point it is better to use a plate for waste. In that way each sample is isolated to a well.
 
-			PreferredLoading = CONFIGURATION.GetStepLoading(TITLE)
+			PreferredLoading = StepConfig["Preferred Loading"]
 			CONFIGURATION.AddPreferredLoading("Desalting Waste", PreferredLoading["Waste"])
 			CONFIGURATION.AddPreferredLoading(Equilibration_Buffer, PreferredLoading["Buffer"])
 			CONFIGURATION.AddPreferredLoading(Destination, PreferredLoading["Destination"])

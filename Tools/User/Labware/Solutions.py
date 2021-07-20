@@ -64,11 +64,11 @@ def Init():
 	Solutions = {}
 	Pipette_List =[]
 
-	Config = CONFIGURATION.GetStepConfig("Tips")
+	#Config = CONFIGURATION.GetStepConfig("Tips")
 
-	for Tip in Config:
-		Tips_List[Tip] = Config[Tip]
-		Tips_List[Tip]["Used"] = 0
+	#for Tip in Config:
+	#	Tips_List[Tip] = Config[Tip]
+	#	Tips_List[Tip]["Used"] = 0
 
 ######################################################################### 
 #	Description: Attempts to create and add a solution class to the tracker dictionary

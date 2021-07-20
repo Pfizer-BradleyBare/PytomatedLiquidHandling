@@ -1,9 +1,9 @@
 from ...General import HamiltonIO as HAMILTONIO
 
-def Init(HeaterList):
+def PreRun(HeaterList):
 	CommandString = ""
+	CommandString += "[PreRun]\n"
 	CommandString += "[Heater]\n"
-	CommandString += "[Init]\n"
 	for Heater in HeaterList:
 		CommandString += "[ID]" + str(Heater["ID"]) + "[Type]" + str(Heater["Type"]) + "\n"
 	HAMILTONIO.Push(CommandString)

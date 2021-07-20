@@ -39,17 +39,19 @@ def Init():
 	SysConfig = yaml.full_load(file)
 	file.close()
 
-	# if HAMILTONIO.IsSimulated() == False:
+	#if HAMILTONIO.IsSimulated() == False:
 	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
 	DeckLoading = yaml.full_load(file)
 	file.close()
-	# else:
+	#else:
 	# 	DeckLoading = None
 
 def WriteLoadingInformation(YamlData):
 	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"),"w")
 	yaml.dump(YamlData,file)
 	file.close()
+	DeckLoading = YamlData
+
 
 
 ######################################################################### 
@@ -66,9 +68,8 @@ def WellVolumeToDispenseHeight(PlateName, WellVolumes):
 		return [0]*len(WellVolumes)
 	LabwareCategory =LabwareLoading["Labware Category"]
 	LabwareType =LabwareLoading["Labware Type"]
-	MaxVolume =LabwareLoading["MaxVolume"]
+	MaxVolume =LabwareLoading["Max Volume"]
 	Segments = SysConfig["VolumeEquations"][LabwareCategory][LabwareType][MaxVolume]
-	print("SEGMENTS = ", Segments)
 	Height  = 0
 	DispenseHeights = [-1]*len(WellVolumes)
 
@@ -128,11 +129,10 @@ def GetCheckSequences():
 #########################################################################
 def GetDeckLoading(LabwareName):
 	global DeckLoading
-	if HAMILTONIO.IsSimulated() == True:
-		return None
-	else:	
+	try:
 		return DeckLoading[LabwareName]
-
+	except:
+		return None
 
 ######################################################################### 
 #	Description: Returns step specific configuration information
@@ -141,16 +141,7 @@ def GetDeckLoading(LabwareName):
 #########################################################################
 def GetStepConfig(Step):
 	global SysConfig
-	return SysConfig[Step]
-
-######################################################################### 
-#	Description: Returns step specific loading information
-#	Input Arguments: [Step: String]
-#	Returns: [Dictionary as described in YAML config file]
-#########################################################################
-def GetStepLoading(Step):
-	global PreferredLoading
-	return PreferredLoading["Steps"][Step]
+	return SysConfig["Steps"][Step]
 
 ######################################################################### 
 #	Description: Add software specific loading to dictionary for later processing
@@ -299,7 +290,14 @@ def Load(Plates_List, Solutions_List):
 	#
 
 	if(len(Plates_List) + len(Solutions_List) != len(FinalLoading)):
-		return False
+		print("Unabled to load all labware. The following labware exceeds available container volume on deck.")
+		for plate in Plates_List:
+			if plate.GetName() not in FinalLoading:
+				print(plate.GetName(),": ",plate.GetVolume())
+		for solution in Solutions_List:
+			if solution.GetName() not in FinalLoading:
+				print(solution.GetName(),": ",solution.GetVolume())
+		quit()
 	#check that we were able to load everything
 
 	global CheckSequences

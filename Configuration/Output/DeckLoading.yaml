@@ -5,15 +5,15 @@
   LoadingPosition: E1
   Max Volume: 1500
   Sequence: E1
-  Volume: 270.0
+  Volume: 1470.0
 100mM Tris pH8.2:
   Labware Category: Reagents
   Labware Type: 200mL Reagent Trough
   Lid: false
   LoadingPosition: Carrier38_Pos2
-  Max Volume: 190000
+  Max Volume: 210000
   Sequence: T2
-  Volume: 10320.0
+  Volume: 93220.0
 1M IAA:
   Labware Category: Reagents
   Labware Type: FlipTube
@@ -21,7 +21,7 @@
   LoadingPosition: F4
   Max Volume: 1500
   Sequence: F4
-  Volume: 174.0
+  Volume: 414.0
 50% TFA:
   Labware Category: Reagents
   Labware Type: FlipTube
@@ -29,7 +29,7 @@
   LoadingPosition: F1
   Max Volume: 1500
   Sequence: F1
-  Volume: 206.8
+  Volume: 774.8000000000001
 Denaturation:
   Labware Category: Plates
   Labware Type: 96 Well PCR Plate
@@ -37,7 +37,7 @@ Denaturation:
   LoadingPosition: Carrier14_Pos3
   Max Volume: 400
   Sequence: Carrier14_Pos3_96WellPCRPlate400uL_1mLChannel
-  Volume: 121.0
+  Volume: 76.0
 Desalting:
   Labware Category: Plates
   Labware Type: 96 Well PCR Plate
@@ -45,7 +45,7 @@ Desalting:
   LoadingPosition: Carrier38_Pos5
   Max Volume: 1200
   Sequence: Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel
-  Volume: 300.0
+  Volume: 200.0
 Desalting Waste:
   Labware Category: Plates
   Labware Type: 96 Well PCR Plate
@@ -69,7 +69,7 @@ Liquid 1:
   LoadingPosition: C1
   Max Volume: 14000
   Sequence: C1
-  Volume: 620.0
+  Volume: 530.0
 Liquid 2:
   Labware Category: Reagents
   Labware Type: 15mL Centrifuge Tube
@@ -85,7 +85,7 @@ Liquid 3:
   LoadingPosition: C3
   Max Volume: 14000
   Sequence: C3
-  Volume: 560.0
+  Volume: 980.0
 PNGaseF:
   Labware Category: Reagents
   Labware Type: FlipTube
@@ -93,7 +93,7 @@ PNGaseF:
   LoadingPosition: E2
   Max Volume: 1500
   Sequence: E2
-  Volume: 153.6
+  Volume: 171.6
 SVA:
   Labware Category: Plates
   Labware Type: 96 Well PCR Plate
@@ -117,4 +117,4 @@ Water:
   LoadingPosition: R1
   Max Volume: 50000
   Sequence: R1
-  Volume: 1100.0
+  Volume: 2100.0
