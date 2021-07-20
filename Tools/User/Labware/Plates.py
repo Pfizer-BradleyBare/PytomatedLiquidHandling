@@ -81,10 +81,9 @@ class Class:
 		global Plates_List
 		
 		DispenseHeights = CONFIG.WellVolumeToDispenseHeight(self.GetName(),self.GetVolumesList())
-		print("Dispense Heights: ", DispenseHeights)
-		print("VolumeList: ", self.GetVolumesList())
 
 		Expanded = []
+
 
 		for count in range(0,len(self.GetSequenceList())):
 
@@ -95,7 +94,7 @@ class Class:
 				Expanded.append([int(float(Position)), SourceList[count], ActualVolume, DispenseHeights[count]])
 			
 			self.GetVolumesList()[count] += ActualVolume
-
+		
 		return copy.deepcopy(sorted(Expanded, key=lambda x: x[0]))
 
 def Init():

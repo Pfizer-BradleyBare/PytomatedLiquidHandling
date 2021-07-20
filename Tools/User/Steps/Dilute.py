@@ -57,7 +57,7 @@ def Step(step):
 	DiluentVolumeList = list(map(lambda x,y: y - x, SourceVolumeList,TargetVolumeList))
 
 	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList)
-	#print(Sequences)
+	
 
 	_Temp = copy.deepcopy(Sequences)
 	for Sequence in _Temp:
@@ -69,6 +69,9 @@ def Step(step):
 			SOLUTIONS.GetSolution(Sequence[1]).AddVolume(Sequence[2])
 
 	if len(Sequences) != 0:
+		print(Sequences)
+		for row in Sequences:
+			row.append("Yes")
 		PIPETTE.Do(DestinationPlate, Sequences)
 
 	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(DiluentList, DiluentVolumeList)
@@ -90,6 +93,8 @@ def Step(step):
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 
 	if len(Sequences) != 0:
+		for row in Sequences:
+			row.append("Yes")
 		PIPETTE.Do(DestinationPlate, Sequences)
 #end
 
