@@ -36,6 +36,8 @@ def Tips(TipsList):
 	for Tip in TipsList:
 		CommandString += "[Tip]" + str(Tip) + "[Num]" + str(TipsList[Tip]["Used"]) + "\n"
 
+	print(CommandString)
+
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return True

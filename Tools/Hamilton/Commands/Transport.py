@@ -1,7 +1,4 @@
 from ...General import HamiltonIO as HAMILTONIO
-	
-def PreRun():
-	return True
 
 def Init():
 	return True

@@ -31,14 +31,6 @@ import Tools.User.Steps.Notify as NOTIFY
 import Tools.User.Steps.Finish as FINISH
 
 import Tools.Hamilton.PreRun as PRERUN
-import Tools.Hamilton.Commands.Desalt as HAMILTON_DESALT
-import Tools.Hamilton.Commands.Heater as HAMILTON_HEATER
-import Tools.Hamilton.Commands.Lid as HAMILTON_LID
-import Tools.Hamilton.Commands.Notify as HAMILTON_NOTIFY
-import Tools.Hamilton.Commands.Pipette as HAMILTON_PIPETTE
-import Tools.Hamilton.Commands.Timer as HAMILTON_TIMER
-import Tools.Hamilton.Commands.Transport as HAMILTON_TRANSPORT
-
 
 print("Init Classes")
 EXCELIO.Init(Excel_File_Path)
@@ -113,16 +105,6 @@ if HAMILTONIO.IsSimulated() == True:
 	#Write Loading information to storage file
 
 	PRERUN.Labware(Labware)
-	HAMILTON_DESALT.PreRun()
-	HAMILTON_HEATER.PreRun()
-	HAMILTON_LID.PreRun()
-	HAMILTON_NOTIFY.PreRun()
-	HAMILTON_PIPETTE.PreRun()
-	HAMILTON_TIMER.PreRun()
-	HAMILTON_TRANSPORT.PreRun()
-
-
-
 	#initialize all the Hamilton Libraries.
 
 HAMILTONIO.EndCommunication()
