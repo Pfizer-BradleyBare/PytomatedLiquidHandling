@@ -55,8 +55,6 @@ VolumeEquations:
         - SegmentNumber: 2
           MaxSegmentHeight: 22.1
           SegmentEquation: x * 11
-      
-
 
 Dead Volume:
   Reagents:
@@ -64,22 +62,6 @@ Dead Volume:
     15mL Centrifuge Tube: 500
     60mL Reagent Reservior: 1000
     200mL Reagent Trough: 5000
-
-
-Tips:
-  NTR50:
-    Max Volume: 50
-    Max Tips: 768
-  NTR300:
-    Max Volume: 300
-    Max Tips: 768
-  FTR1000:
-    Max Volume: 1000
-    Max Tips: 480
-
-
-
-
 
 Steps:
   Incubate:
@@ -133,5 +115,7 @@ Steps:
         - T2
       Destination: 
         - Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel
-    Total Equilibration Volume: 900
-    Total Elution Volume: 100
+    Type:
+      SizeX:
+        100:
+          Total Buffer Volume: 1000

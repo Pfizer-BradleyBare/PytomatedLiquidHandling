@@ -144,15 +144,6 @@ def GetStepConfig(Step):
 	return SysConfig["Steps"][Step]
 
 ######################################################################### 
-#	Description: Returns step specific loading information
-#	Input Arguments: [Step: String]
-#	Returns: [Dictionary as described in YAML config file]
-#########################################################################
-#def GetStepLoading(Step):
-#	global PreferredLoading
-#	return PreferredLoading["Steps"][Step]
-
-######################################################################### 
 #	Description: Add software specific loading to dictionary for later processing
 #	Input Arguments: [Item: String] [LoadingArray: 1D-Array of strings]
 #	Returns: N/A
@@ -299,7 +290,14 @@ def Load(Plates_List, Solutions_List):
 	#
 
 	if(len(Plates_List) + len(Solutions_List) != len(FinalLoading)):
-		return False
+		print("Unabled to load all labware. The following labware exceeds available container volume on deck.")
+		for plate in Plates_List:
+			if plate.GetName() not in FinalLoading:
+				print(plate.GetName(),": ",plate.GetVolume())
+		for solution in Solutions_List:
+			if solution.GetName() not in FinalLoading:
+				print(solution.GetName(),": ",solution.GetVolume())
+		quit()
 	#check that we were able to load everything
 
 	global CheckSequences
