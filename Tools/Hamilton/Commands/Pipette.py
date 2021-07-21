@@ -15,19 +15,22 @@ def Do(Dest, Sequences):
 	Vol = ""
 	Tot = ""
 	Sor = ""
+	Mix = ""
 	for Sequence in Sequences:
 		Seq += str(Sequence[0]) + ","
 		Sor += str(Sequence[1]) + ","
 		Vol += "{0:.2f}".format(float(Sequence[2])) + ","
 		Tot += "{0:.2f}".format(float(Sequence[3])) + ","
+		Mix += Sequence[4] + ","
 
 	CommandString = ""
 	CommandString += "[Pipette]\n"
-	CommandString += "[Destination] " + Dest + "\n"
-	CommandString += "[Sources] " + Sor[:-1] + "\n"
-	CommandString += "[Sequences] " + Seq[:-1] + "\n"
-	CommandString += "[Volumes] " + Vol[:-1] + "\n"
-	CommandString += "[Totals] " + Tot[:-1] + "\n"
+	CommandString += "[Destination]" + Dest 
+	CommandString += "[Sources]" + Sor[:-1] 
+	CommandString += "[Sequences]" + Seq[:-1]
+	CommandString += "[Volumes]" + Vol[:-1]  
+	CommandString += "[Totals]" + Tot[:-1] 
+	CommandString += "[Mix?]" + Mix[:-1] + "\n"
 
 	print(CommandString)
 
