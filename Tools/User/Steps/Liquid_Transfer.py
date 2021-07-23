@@ -21,11 +21,8 @@ def Init():
 def Step(step):
 	DestinationPlate = step.GetParentPlate()
 	
-
 	SourceList = SAMPLES.Column(step.GetParameters()[NAME])
 	SourceVolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
-	
-	
 	
 	for Source in SourceList:
 		SOLUTIONS.AddSolution(Source, step.GetParameters()[TYPE], step.GetParameters()[STORAGE])
@@ -34,12 +31,12 @@ def Step(step):
 	
 	_Temp = copy.deepcopy(Sequences)
 	for Sequence in _Temp:
-
 		if(Sequence[2] == 0):
 			Sequences.remove(Sequence)
-			
 		else:
 			SOLUTIONS.GetSolution(Sequence[1]).AddVolume(Sequence[2])
+			SOLUTIONS.AddPipetteVolume(Sequence[2])
+	
 	if HAMILTONIO.IsSimulated() == False:
 		for sequence in Sequences:
 			name = sequence[1]
@@ -52,6 +49,4 @@ def Step(step):
 		for row in Sequences:
 			row.append(step.GetParameters()["Mix?"])
 		PIPETTE.Do(DestinationPlate, Sequences)
-	
-	
 

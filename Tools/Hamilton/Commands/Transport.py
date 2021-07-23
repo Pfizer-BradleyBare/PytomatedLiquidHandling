@@ -1,6 +1,12 @@
 from ...General import HamiltonIO as HAMILTONIO
 
 def PreRun():
+	CommandString = ""
+	CommandString += "[PreRun]\n"
+	CommandString += "[Transport]\n"
+
+	HAMILTONIO.Push(CommandString)
+	Response = HAMILTONIO.Pull()
 	return True
 	
 def Move(SourceSeq, DestinationSeq, OpenDistance, CloseDistance):

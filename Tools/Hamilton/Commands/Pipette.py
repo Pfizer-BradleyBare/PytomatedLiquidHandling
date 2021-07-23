@@ -1,6 +1,14 @@
 from ...General import HamiltonIO as HAMILTONIO
 
-def PreRun():
+def PreRun(VolumesArray):
+	CommandString = ""
+	CommandString += "[PreRun]\n"
+	CommandString += "[Pipette]\n" 
+	for Volume in VolumesArray:
+		CommandString += "[Volume]" + str(Volume) + "\n"
+
+	HAMILTONIO.Push(CommandString)
+	Response = HAMILTONIO.Pull()
 	return True
 
 def Do(Dest, Sequences):

@@ -91,23 +91,14 @@ if HAMILTONIO.IsSimulated() == True:
 
 	#HAMILTONIO.Simulated(False)
 	PRERUN.CheckSequences(CONFIGURATION.GetCheckSequences())
-	PRERUN.Tips(SOLUTIONS.GetPipetteTips())
 	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
+	PRERUN.Labware(Labware)
 
 	CONFIGURATION.WriteLoadingInformation(Labware)
-
-	print("\n\n\n\n")
-
-	for item in Labware:
-		pass
-		#print(item, ": ", Labware[item])
-	#Write Loading information to storage file
-
-	PRERUN.Labware(Labware)
-	PRERUN.DESALT.PreRun(1,2)
+	PRERUN.PIPETTE.PreRun(SOLUTIONS.GetPipetteVolumes())
 	PRERUN.HEATER.PreRun(INCUBATE.GetHeaterList())
 	PRERUN.NOTIFY.PreRun()
-	PRERUN.PIPETTE.PreRun()
+	PRERUN.DESALT.PreRun(DESALT.GetDesaltParams())
 	PRERUN.TIMER.PreRun()
 	PRERUN.TRANSPORT.PreRun()
 	#initialize all the Hamilton Libraries.

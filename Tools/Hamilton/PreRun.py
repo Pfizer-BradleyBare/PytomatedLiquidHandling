@@ -35,17 +35,3 @@ def Labware(LoadingList):
 	Response = HAMILTONIO.Pull()
 	return True
 
-#this function send a list of pipetting steps to the Hamilton. From this list, the Hamilton will determine how many tips are used
-def Tips(TipsList):
-	CommandString = ""
-	CommandString += "[PreRun]\n"
-	CommandString += "[Tips]\n"
-	for Tip in TipsList:
-		CommandString += "[Tip]" + str(Tip) + "[Num]" + str(TipsList[Tip]["Used"]) + "\n"
-
-	print(CommandString)
-
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
-	return True
-

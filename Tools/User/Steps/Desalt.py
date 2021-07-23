@@ -9,16 +9,12 @@ from ...Hamilton.Commands import Desalt as DESALT
 TITLE = "Desalt"
 SOURCE = "Source"
 EQUILIBRATION_BUFFER = "Equilibration Buffer"
-VOLUME = "Type"
+TYPE = "Type"
 
 #This variable tracks whether or not the tips have been equilibrated
 Equilibrated = None
-Required_Tips = 0
-Sample_Volume = 0
-Sample_Source = None
-Equilibration_Buffer = None
-Destination = None
 Incubation_Equilibration_Step = None
+Desalting_Params = {}
 
 ######################################################################### 
 #	Description: Returns the incubation step in which desalting equilibration is most logical
@@ -42,16 +38,10 @@ def GetEquilibrationStep():
 def Init(MutableStepsList):
 	global Equilibrated
 	global Incubation_Equilibration_Step
-	global Sample_Volume
-	global Sample_Source
-	global Equilibration_Buffer
-	global Destination
-	global Required_Tips
+	global Desalting_Params
 	
 	Equilibrated = False
 	Latest_Incubate_Step = None
-
-
 
 	for Step in MutableStepsList:
 		if Step.GetTitle() == INCUBATE.TITLE:
@@ -60,26 +50,37 @@ def Init(MutableStepsList):
 		if Step.GetTitle() == TITLE:
 			StepConfig = CONFIGURATION.GetStepConfig(TITLE)
 
-			DesaltingArray = Step.GetParameters()[VOLUME].split(",")
+			DesaltingArray = Step.GetParameters()[TYPE].split(",")
 			TypeArray = []
 			VolumeArray = []
 			for DesaltingStep in DesaltingArray:
 				StepParams = DesaltingStep.split(":")
 				TypeArray.append(StepParams[0].replace(" ",""))
-				VolumeArray.append(float(StepParams[1].replace(" ","")))
+				VolumeArray.append(StepParams[1].replace(" ",""))
 			NumTipSets = len(DesaltingArray)
+			#Get Desalting details
 
-			Required_Tips = 3 * SAMPLES.GetTotalSamples()
 			Incubation_Equilibration_Step = Latest_Incubate_Step
-			Sample_Volume = sum(VolumeArray)
-			Sample_Source = Step.GetParameters()[SOURCE]
-			Equilibration_Buffer = Step.GetParameters()[EQUILIBRATION_BUFFER]
-			Destination = Step.GetParentPlate()
 			#I set these ahead of time because ths cannot change after equilibration. Best to lock it at the beginning
 
-			SOLUTIONS.AddSolution(Equilibration_Buffer, SOLUTIONS.TYPE_BUFFER, SOLUTIONS.STORAGE_AMBIENT)
+			Desalting_Params["Required Tips"] = 3 * SAMPLES.GetTotalSamples()
+			Desalting_Params["Type"] = ','.join(TypeArray)
+			Desalting_Params["Volume"] = ','.join(VolumeArray)
+			Desalting_Params["Source"] = Step.GetParameters()[SOURCE]
+			Desalting_Params["Buffer"] = Step.GetParameters()[EQUILIBRATION_BUFFER]
+			Desalting_Params["Destination"] = Step.GetParentPlate()
+
+			Source = CONFIGURATION.GetDeckLoading(Step.GetParameters()[SOURCE])
+			Buffer = CONFIGURATION.GetDeckLoading(Step.GetParameters()[EQUILIBRATION_BUFFER])
+			Destination = CONFIGURATION.GetDeckLoading(Step.GetParentPlate())
+
+			Desalting_Params["Source Sequence"] = Step.GetParameters()[SOURCE] if Source == None else Source["Sequence"]
+			Desalting_Params["Buffer Sequence"] = Step.GetParameters()[EQUILIBRATION_BUFFER] if Buffer == None else Buffer["Sequence"]
+			Desalting_Params["Destination Sequence"] = Step.GetParentPlate() if Destination == None else Destination["Sequence"]
+
+			SOLUTIONS.AddSolution(Desalting_Params["Buffer"], SOLUTIONS.TYPE_BUFFER, SOLUTIONS.STORAGE_AMBIENT)
 			for i in range(0,NumTipSets):
-				SOLUTIONS.GetSolution(Equilibration_Buffer).AddVolume(StepConfig["Type"][TypeArray[i]][VolumeArray[i]]["Total Buffer Volume"] * SAMPLES.GetTotalSamples())
+				SOLUTIONS.GetSolution(Desalting_Params["Buffer"]).AddVolume(StepConfig["Type"][TypeArray[i]][float(VolumeArray[i])]["Total Buffer Volume"] * SAMPLES.GetTotalSamples())
 
 			PLATES.AddPlate("Desalting Waste", "96 Well PCR Plate", SAMPLES.GetSequences())
 			PLATES.GetPlate("Desalting Waste").CreatePipetteSequence(SAMPLES.Column(""),SAMPLES.Column(1))
@@ -88,8 +89,12 @@ def Init(MutableStepsList):
 
 			PreferredLoading = StepConfig["Preferred Loading"]
 			CONFIGURATION.AddPreferredLoading("Desalting Waste", PreferredLoading["Waste"])
-			CONFIGURATION.AddPreferredLoading(Equilibration_Buffer, PreferredLoading["Buffer"])
-			CONFIGURATION.AddPreferredLoading(Destination, PreferredLoading["Destination"])
+			CONFIGURATION.AddPreferredLoading(Desalting_Params["Buffer"], PreferredLoading["Buffer"])
+			CONFIGURATION.AddPreferredLoading(Desalting_Params["Destination"], PreferredLoading["Destination"])
+
+def GetDesaltParams():
+	global Desalting_Params
+	return Desalting_Params
 
 ######################################################################### 
 #	Description: Performs equilibration by calling the appropriate hamilton commands
@@ -98,12 +103,10 @@ def Init(MutableStepsList):
 #########################################################################
 def Equilibrate():
 	global Equilibrated
-	global Sample_Volume
-	global Equilibration_Buffer
 
 	if Equilibrated == False:
 		Equilibrated = True
-		DESALT.Equilibrate(Equilibration_Buffer, Sample_Volume)
+		DESALT.Equilibrate()
 
 ######################################################################### 
 #	Description: Performs equilibration and simulates a pipetting step into the destination plate
@@ -111,15 +114,16 @@ def Equilibrate():
 #	Returns: N/A
 #########################################################################
 def Process():
-	global Sample_Volume
-	global Sample_Source
-	global Equilibration_Buffer
+	global Desalting_Params
 	global Equilibrated
-	global Destination
 
-	PLATES.GetPlate(Destination).CreatePipetteSequence(SAMPLES.Column(Equilibration_Buffer), SAMPLES.Column(Sample_Volume))
+	Destination = Desalting_Params["Destination"]
+	Buffer = Desalting_Params["Buffer"]
+	Volume = sum(list(map(int, Desalting_Params["Volume"].split(","))))
+
+	PLATES.GetPlate(Destination).CreatePipetteSequence(SAMPLES.Column(Buffer), SAMPLES.Column(Volume))
 	Equilibrated = False
-	DESALT.Process(Destination, Equilibration_Buffer, Sample_Volume, Sample_Source)
+	DESALT.Process()
 	
 ######################################################################### 
 #	Description: Runs equilibration and processing

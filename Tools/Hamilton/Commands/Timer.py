@@ -1,6 +1,12 @@
 from ...General import HamiltonIO as HAMILTONIO
 
 def PreRun():
+	CommandString = ""
+	CommandString += "[PreRun]\n"
+	CommandString += "[Timer]\n"
+
+	HAMILTONIO.Push(CommandString)
+	Response = HAMILTONIO.Pull()
 	return True
 
 #this function will start a timer for a specified plate

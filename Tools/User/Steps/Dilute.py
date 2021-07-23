@@ -38,14 +38,11 @@ def Step(step):
 	#We need to solve for Source Volume
 	#V1 = (C2*V2)/C1
 
-	DestinationPlate = step.GetParentPlate()
-
 	TargetConcentrationList = SAMPLES.Column(step.GetParameters()[TARGET_CONCENTRATION])
 	TargetVolumeList = SAMPLES.Column(step.GetParameters()[TARGET_VOLUME])
-
+	SourceConcentrationList = SAMPLES.Column(step.GetParameters()[STARTING_CONCENTRATION])
 	SourceList = SAMPLES.Column(step.GetParameters()[SOURCE])
 	DiluentList = SAMPLES.Column(step.GetParameters()[DILUENT])
-	SourceConcentrationList = SAMPLES.Column(step.GetParameters()[STARTING_CONCENTRATION])
 
 	for Source in SourceList:
 		SOLUTIONS.AddSolution(Source, SOLUTIONS.TYPE_REAGENT, SOLUTIONS.STORAGE_AMBIENT)
@@ -55,9 +52,11 @@ def Step(step):
 
 	SourceVolumeList = list(map(lambda x,y,z: (z * y) / x if x != None and x != 0 else 0, SourceConcentrationList,TargetVolumeList,TargetConcentrationList))
 	DiluentVolumeList = list(map(lambda x,y: y - x, SourceVolumeList,TargetVolumeList))
+	#Calculate correct volumes to pipette
+
+	DestinationPlate = step.GetParentPlate()
 
 	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList)
-	
 
 	_Temp = copy.deepcopy(Sequences)
 	for Sequence in _Temp:
@@ -67,15 +66,25 @@ def Step(step):
 			
 		else:
 			SOLUTIONS.GetSolution(Sequence[1]).AddVolume(Sequence[2])
+			SOLUTIONS.AddPipetteVolume(Sequence[2])
+
+	if HAMILTONIO.IsSimulated() == False:
+		for sequence in Sequences:
+			name = sequence[1]
+			SequencePos = CONFIGURATION.GetDeckLoading(name)["Sequence"]
+			sequence[1] = SequencePos
+		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 
 	if len(Sequences) != 0:
 		print(Sequences)
 		for row in Sequences:
 			row.append("Yes")
 		PIPETTE.Do(DestinationPlate, Sequences)
+	#Do the source pipetting
+
+	DestinationPlate = step.GetParentPlate()
 
 	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(DiluentList, DiluentVolumeList)
-	#print(Sequences)
 
 	_Temp = copy.deepcopy(Sequences)
 	for Sequence in _Temp:
@@ -85,6 +94,8 @@ def Step(step):
 			
 		else:
 			SOLUTIONS.GetSolution(Sequence[1]).AddVolume(Sequence[2])
+			SOLUTIONS.AddPipetteVolume(Sequence[2])
+
 	if HAMILTONIO.IsSimulated() == False:
 		for sequence in Sequences:
 			name = sequence[1]
@@ -96,6 +107,7 @@ def Step(step):
 		for row in Sequences:
 			row.append("Yes")
 		PIPETTE.Do(DestinationPlate, Sequences)
+	#Do the diluent pipetting
 #end
 
 

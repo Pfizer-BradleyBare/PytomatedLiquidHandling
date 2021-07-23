@@ -1,6 +1,12 @@
 from ...General import HamiltonIO as HAMILTONIO
 
 def PreRun():
+	CommandString = ""
+	CommandString += "[PreRun]\n"
+	CommandString += "[Notify]\n"
+
+	HAMILTONIO.Push(CommandString)
+	Response = HAMILTONIO.Pull()
 	return True
 
 #this function will reserve a lid on the Hamilton. This lid can be used on or off the Heaters

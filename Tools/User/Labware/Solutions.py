@@ -46,8 +46,6 @@ class Class:
 #########################################################################
 	def AddVolume(self, Volume):
 		self.TotalVolume += Volume
-		global Pipette_List
-		Pipette_List.append(Volume)
 
 	def GetVolume(self):
 		return self.TotalVolume
@@ -63,12 +61,6 @@ def Init():
 	global Tips_List
 	Solutions = {}
 	Pipette_List =[]
-
-	#Config = CONFIGURATION.GetStepConfig("Tips")
-
-	#for Tip in Config:
-	#	Tips_List[Tip] = Config[Tip]
-	#	Tips_List[Tip]["Used"] = 0
 
 ######################################################################### 
 #	Description: Attempts to create and add a solution class to the tracker dictionary
@@ -112,34 +104,15 @@ def GetSolutions():
 			Temp.append(Solutions[key])
 	return Temp
 
+def AddPipetteVolume(Volume):
+	global Pipette_List
+	Pipette_List.append(Volume)
+
 def GetPipetteVolumes():
 	global Pipette_List
 	return Pipette_List
 
-######################################################################### 
-#	Description: Categorizes each pipetting step into the appropriate tip bucket
-#	Input Arguments: N/A
-#	Returns: [Dictionary]
-#########################################################################
-def GetPipetteTips():
-	global Pipette_List
-	global Tips_List
 
-	Vols = []
-
-	for Tip in Tips_List:
-		Vols.append([Tips_List[Tip]["Max Volume"], Tip])
-
-	Vols = sorted(Vols, key = lambda l:l[0])
-	#Get possible tip sizes in order from least to greatest
-
-	for vol in Pipette_List:
-		for TipVol in Vols:
-			if vol <= TipVol[0]:
-				Tips_List[TipVol[1]]["Used"] += 1
-				break 
-
-	return Tips_List
 
 
 
