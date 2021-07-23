@@ -9,35 +9,13 @@ def PreRun():
 	Response = HAMILTONIO.Pull()
 	return True
 	
-def Move(SourceSeq, DestinationSeq, OpenDistance, CloseDistance):
+def Move(SourceSeq, DestinationSeq, OpenDistance, CloseDistance, Eject):
 	CommandString = ""
 	CommandString += "[Transport]\n"
 	CommandString += "[Move]\n"
-	CommandString += "[Source]" + str(SourceSeq) + "[Destination]" + str(DestinationSeq) + "[Open]" + str(OpenDistance) + "[Close]" + str(CloseDistance) + "\n"
+	CommandString += "[Source]" + str(SourceSeq) + "[Destination]" + str(DestinationSeq) + "[Open]" + str(OpenDistance) + "[Close]" + str(CloseDistance) + "[Eject]" + str(Eject) + "\n"
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return Response
-
-def HeaterMove(PlateSource, PlateDest, PlateOpen, PlateClose, LidSource, LidDest, LidOpen, LidClose):
-	CommandString = ""
-	CommandString += "[Transport]\n"
-	CommandString += "[Heater Move]\n"
-	CommandString += "[PlateSource]" + str(PlateSource) + "[PlateDest]" + str(PlateDest) + "[PlateOpen]" + str(PlateOpen) + "[PlateClose]" + str(PlateClose)
-	CommandString += "[LidSource]" + str(LidSource) + "[LidDest]" + str(LidDest) + "[LidOpen]" + str(LidOpen) + "[LidClose]" + str(LidClose) +"\n"
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
-	return Response
-
-def HeaterRemove(PlateSource, PlateDest, PlateOpen, PlateClose, LidSource, LidDest, LidOpen, LidClose):
-	CommandString = ""
-	CommandString += "[Transport]\n"
-	CommandString += "[Heater Remove]\n"
-	CommandString += "[PlateSource]" + str(PlateSource) + "[PlateDest]" + str(PlateDest) + "[PlateOpen]" + str(PlateOpen) + "[PlateClose]" + str(PlateClose)
-	CommandString += "[LidSource]" + str(LidSource) + "[LidDest]" + str(LidDest) + "[LidOpen]" + str(LidOpen) + "[LidClose]" + str(LidClose) +"\n"
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
-	return Response
-
-
 
 

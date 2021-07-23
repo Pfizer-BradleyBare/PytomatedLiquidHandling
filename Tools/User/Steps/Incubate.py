@@ -148,7 +148,9 @@ def Callback(step):
 			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#plate
 
-			TRANSPORT.HeaterRemove(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,0)
+			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,1)
+			#TRANSPORT.HeaterRemove(PlateTransportSource,PlateTransportDe,stination,PlateTransportOpenDistance,PlateTransportCloseDistance,LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
 		
 
 	else:
@@ -157,7 +159,7 @@ def Callback(step):
 			LidTransportSource = Loading["Lid"]
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance, 1)
 
 	StartHeaters()
 
@@ -189,7 +191,9 @@ def Step(step):
 			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#Lid
 
-			TRANSPORT.HeaterMove(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
+			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,0)
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,1)
+			#TRANSPORT.HeaterMove(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
 
 		if step.GetParameters()[SHAKE] > 0:
 			HEATER.StartShaking(ID, step.GetParameters()[SHAKE])
@@ -199,7 +203,7 @@ def Step(step):
 			LidTransportDestination = Loading["Lid"]
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance, 1)
 		
 		PLATES.GetPlate(step.GetParentPlate()).SetLidState()
 	#Make decisions if incubation is ambient or not
