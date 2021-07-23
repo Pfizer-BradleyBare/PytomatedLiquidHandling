@@ -10,6 +10,7 @@ def PreRun(Params):
 	CommandString += "[Volumes]" + str(Params["Volume"])
 	CommandString += "[Source]" + str(Params["Source Sequence"])
 	CommandString += "[Buffer]" + str(Params["Buffer Sequence"])
+	CommandString += "[Waste]" + str(Params["Waste Sequence"])
 	CommandString += "[Destination]" + str(Params["Destination Sequence"]) + "\n"
 
 	HAMILTONIO.Push(CommandString)

@@ -90,11 +90,14 @@ while(True):
 if HAMILTONIO.IsSimulated() == True:
 
 	HAMILTONIO.Simulated(False)
+
+	PRERUN.Samples(SAMPLES.GetTotalSamples())
 	PRERUN.CheckSequences(CONFIGURATION.GetCheckSequences())
 	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
 	PRERUN.Labware(Labware)
 
 	CONFIGURATION.WriteLoadingInformation(Labware)
+	
 	PRERUN.PIPETTE.PreRun(SOLUTIONS.GetPipetteVolumes())
 	PRERUN.HEATER.PreRun(INCUBATE.GetHeaterList())
 	PRERUN.NOTIFY.PreRun()

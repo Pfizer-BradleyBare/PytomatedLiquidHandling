@@ -35,3 +35,14 @@ def Labware(LoadingList):
 	Response = HAMILTONIO.Pull()
 	return True
 
+def Samples(NumSamples):
+	CommandString = ""
+	CommandString += "[PreRun]\n"
+	CommandString += "[Samples]\n"
+	CommandString += "[SampleNumber]" + str(NumSamples) + "\n"
+	
+	HAMILTONIO.Push(CommandString)
+	Response = HAMILTONIO.Pull()
+	return True
+
+

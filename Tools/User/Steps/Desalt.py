@@ -73,9 +73,11 @@ def Init(MutableStepsList):
 			Source = CONFIGURATION.GetDeckLoading(Step.GetParameters()[SOURCE])
 			Buffer = CONFIGURATION.GetDeckLoading(Step.GetParameters()[EQUILIBRATION_BUFFER])
 			Destination = CONFIGURATION.GetDeckLoading(Step.GetParentPlate())
+			Waste = CONFIGURATION.GetDeckLoading("Desalting Waste")
 
 			Desalting_Params["Source Sequence"] = Step.GetParameters()[SOURCE] if Source == None else Source["Sequence"]
 			Desalting_Params["Buffer Sequence"] = Step.GetParameters()[EQUILIBRATION_BUFFER] if Buffer == None else Buffer["Sequence"]
+			Desalting_Params["Waste Sequence"] = "Desalting Waste" if Waste == None else Waste["Sequence"]
 			Desalting_Params["Destination Sequence"] = Step.GetParentPlate() if Destination == None else Destination["Sequence"]
 
 			SOLUTIONS.AddSolution(Desalting_Params["Buffer"], SOLUTIONS.TYPE_BUFFER, SOLUTIONS.STORAGE_AMBIENT)
