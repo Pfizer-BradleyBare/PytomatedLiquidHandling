@@ -61,7 +61,6 @@ def WriteLoadingInformation(YamlData):
 #########################################################################
 def WellVolumeToDispenseHeight(PlateName, WellVolumes):
 	#use platename to get the  Labware Category, Labware Type, and Max Volume from storage file​	
-	#print("Here")
 	LabwareLoading = GetDeckLoading(PlateName)
 	
 	if not LabwareLoading:

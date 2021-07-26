@@ -27,6 +27,7 @@ import Tools.User.Steps.Dilute as DILUTE
 import Tools.User.Steps.Desalt as DESALT
 import Tools.User.Steps.Wait as WAIT
 import Tools.User.Steps.Incubate as INCUBATE
+import Tools.User.Steps.Vacuum as VACUUM
 import Tools.User.Steps.Notify as NOTIFY
 import Tools.User.Steps.Finish as FINISH
 
@@ -71,6 +72,8 @@ Steps = {
 	DESALT.TITLE: DESALT.Step,
 
 	INCUBATE.TITLE: INCUBATE.Step,
+
+	VACUUM.TITLE: VACUUM.Step,
 
 	NOTIFY.TITLE: NOTIFY.Step,
 

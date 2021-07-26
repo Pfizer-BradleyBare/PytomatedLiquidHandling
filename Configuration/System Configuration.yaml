@@ -96,6 +96,9 @@ Steps:
     Lid:
       Open: 88
       Close: 81
+    Vacuum:
+      Open: 150
+      Close: 150
     96 Well PCR Plate:
       200:
         Open: 85
@@ -119,3 +122,14 @@ Steps:
       SizeX:
         100:
           Total Buffer Volume: 1000
+
+  Vacuum:
+    Vacuum Sequences:
+      Home: HomeSeq
+      Vacuum: VacSeq
+
+    PlateSequences:
+      96 Well PCR Plate:
+        200: Test
+        400: Test2
+        1200: Test3

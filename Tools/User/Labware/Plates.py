@@ -23,6 +23,7 @@ class Class:
 		self.SequencesList = SequencesList
 		self.FactorsList = [1] * len(SequencesList)
 		self.VolumesList = [0] * len(SequencesList)
+		self.MaxVolume = 0
 
 	def GetName(self):
 		return self.PlateName
@@ -45,17 +46,19 @@ class Class:
 	def GetVolumesList(self):
 		return self.VolumesList
 
+	def UpdateMaxVolume(self):
+		for Volume in self.GetVolumesList():
+			Volume = abs(Volume)
+			if Volume > self.MaxVolume:
+				self.MaxVolume = Volume
+
 ######################################################################### 
 #	Description: Returns the max well volume on this plate
 #	Input Arguments: N/A
 #	Returns: [Float]
 #########################################################################
 	def GetVolume(self):
-		MaxVol = 0
-		for vol in self.GetVolumesList():
-			if vol > MaxVol:
-				MaxVol = vol
-		return MaxVol
+		return self.MaxVolume
 
 	def Activate(self):
 		self.ActiveState = True
@@ -84,16 +87,22 @@ class Class:
 
 		Expanded = []
 
-
 		for count in range(0,len(self.GetSequenceList())):
 
 			ActualVolume = SourceVolumeList[count] * self.GetFactors()[count]
+
+			if IsPlate(SourceList[count]) == True:
+				Plate = GetPlate(SourceList[count])
+				Plate.GetVolumesList()[count] -= ActualVolume
+				Plate.UpdateMaxVolume()
+			#Do plate volume subtraction
 			
 			for Position in self.GetSequenceList()[count]:
 
 				Expanded.append([int(float(Position)), SourceList[count], ActualVolume, DispenseHeights[count]])
 			
 			self.GetVolumesList()[count] += ActualVolume
+			self.UpdateMaxVolume()
 		
 		return copy.deepcopy(sorted(Expanded, key=lambda x: x[0]))
 
@@ -180,12 +189,7 @@ def GetPlates():
 	for Plate in Plates_List:
 		plate = Plates_List[Plate]
 
-		if Plate not in DeadPlates:
-			MaxVol = 0
-
-			for Vol in plate.GetVolumesList():
-				if Vol > MaxVol:
-					MaxVol = Vol
+		if Plate not in DeadPlates and plate.GetVolume() > 0:
 			Temp.append(plate)
 	return Temp
 

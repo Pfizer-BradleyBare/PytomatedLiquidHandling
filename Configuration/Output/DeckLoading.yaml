@@ -109,7 +109,7 @@ Sample:
   LoadingPosition: Carrier38_Pos3
   Max Volume: 200
   Sequence: Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel
-  Volume: 0
+  Volume: 25.0
 Water:
   Labware Category: Reagents
   Labware Type: 60mL Reagent Reservior
