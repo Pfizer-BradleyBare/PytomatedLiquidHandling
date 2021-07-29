@@ -1,120 +1,32 @@
-Desalting:
-  Labware Category: Plates
-  Labware Type: 96 Well PCR Plate
-  Lid: false
-  LoadingPosition: Carrier38_Pos5
-  Max Volume: 1200
-  Sequence: Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel
-  Volume: 100
-Digestion Buffer:
-  Labware Category: Reagents
-  Labware Type: 200mL Reagent Trough
-  Lid: false
-  LoadingPosition: Carrier38_Pos2
-  Max Volume: 200000
-  Sequence: T2
-  Volume: 9040.0
-Desalting Waste:
-  Labware Category: Plates
-  Labware Type: 96 Well PCR Plate
-  Lid: false
-  LoadingPosition: Carrier38_Pos1
-  Max Volume: 1200
-  Sequence: Carrier38_Pos1_96WellPCRPlate1200uL_1mLChannel
-  Volume: 1
-Sample:
-  Labware Category: Plates
-  Labware Type: 96 Well PCR Plate
-  Lid: false
-  LoadingPosition: Carrier38_Pos3
-  Max Volume: 200
-  Sequence: Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel
-  Volume: 5.0
 Denaturation:
   Labware Category: Plates
   Labware Type: 96 Well PCR Plate
-  Lid: false
-  LoadingPosition: Carrier14_Pos3
-  Max Volume: 200
-  Sequence: Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel
-  Volume: 108.33
-Digestion:
-  Labware Category: Plates
-  Labware Type: 96 Well PCR Plate
-  Lid: Carrier14_Pos4_Lid_200uL
+  Lid: Carrier14_Pos4_Lid_1200uL
   LoadingPosition: Carrier14_Pos4
-  Max Volume: 200
-  Sequence: Carrier14_Pos4_96WellPCRPlate200uL_1mLChannel
-  Volume: 14.899999999999999
-Denaturation Buffer:
+  Max Volume: 1200
+  Sequence: Carrier14_Pos4_96WellPCRPlate1200uL_1mLChannel
+  Volume: 900.0
+Liquid 1:
   Labware Category: Reagents
   Labware Type: 15mL Centrifuge Tube
   Lid: false
   LoadingPosition: C1
   Max Volume: 14000
   Sequence: C1
-  Volume: 844.0
-Water:
+  Volume: 1120.0
+Liquid 2:
   Labware Category: Reagents
-  Labware Type: 60mL Reagent Reservior
+  Labware Type: 15mL Centrifuge Tube
   Lid: false
-  LoadingPosition: R1
-  Max Volume: 50000
-  Sequence: R1
-  Volume: 1020.0
-500mM DTT:
-  Labware Category: Reagents
-  Labware Type: FlipTube
-  Lid: true
-  LoadingPosition: F1
-  Max Volume: 1500
-  Sequence: F1
-  Volume: 154.0
-500mM TCEP:
-  Labware Category: Reagents
-  Labware Type: FlipTube
-  Lid: true
-  LoadingPosition: F2
-  Max Volume: 1500
-  Sequence: F2
-  Volume: 154.0
-null:
-  Labware Category: Reagents
-  Labware Type: FlipTube
-  Lid: true
-  LoadingPosition: F3
-  Max Volume: 1500
-  Sequence: F3
-  Volume: 158.0
-300mM DTT in Denaturation Buffer:
-  Labware Category: Reagents
-  Labware Type: FlipTube
-  Lid: true
-  LoadingPosition: F7
-  Max Volume: 1500
-  Sequence: F7
-  Volume: 163.32
-500mM IAA in Denaturation Buffer:
-  Labware Category: Reagents
-  Labware Type: FlipTube
-  Lid: true
-  LoadingPosition: F4
-  Max Volume: 1500
-  Sequence: F4
-  Volume: 170.0
-1.0 mg/mL Trypsin in 500mM Acetic Acid:
-  Labware Category: Reagents
-  Labware Type: FlipTube
-  Lid: true
-  LoadingPosition: E1
-  Max Volume: 1500
-  Sequence: E1
-  Volume: 162.8
-10% TFA:
-  Labware Category: Reagents
-  Labware Type: FlipTube
-  Lid: true
-  LoadingPosition: F5
-  Max Volume: 1500
-  Sequence: F5
-  Volume: 156.8
+  LoadingPosition: C2
+  Max Volume: 14000
+  Sequence: C2
+  Volume: 1700.0
+Sample:
+  Labware Category: Plates
+  Labware Type: Starstedt 56 Well Rack
+  Lid: false
+  LoadingPosition: Carrier14_Pos5
+  Max Volume: 2000
+  Sequence: Carrier14_Pos5_56VialStarstedtRack2000uL_1mLChannel
+  Volume: 900.0

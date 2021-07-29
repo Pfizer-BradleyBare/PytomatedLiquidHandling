@@ -17,6 +17,7 @@ def CheckSequences(SequencesList):
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return True
+	
 
 #This function send the loading list to the Hamilton.
 def Labware(LoadingList):

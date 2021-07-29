@@ -302,6 +302,7 @@ def Load(Plates_List, Solutions_List):
 	global CheckSequences
 
 	for item in FinalLoading:
+
 		AddCheckSequence(FinalLoading[item]["Sequence"])
 		if FinalLoading[item]["Labware Category"] == "Plates" and (not not FinalLoading[item]["Lid"]) != False:
 			AddCheckSequence(FinalLoading[item]["Lid"])

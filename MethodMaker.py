@@ -95,8 +95,8 @@ if HAMILTONIO.IsSimulated() == True:
 	HAMILTONIO.Simulated(False)
 
 	PRERUN.Samples(SAMPLES.GetTotalSamples())
-	PRERUN.CheckSequences(CONFIGURATION.GetCheckSequences())
 	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
+	PRERUN.CheckSequences(CONFIGURATION.GetCheckSequences())
 	PRERUN.Labware(Labware)
 
 	CONFIGURATION.WriteLoadingInformation(Labware)
