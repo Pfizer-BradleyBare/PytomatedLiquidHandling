@@ -9,10 +9,18 @@ CHOICE = "Plate Choice"
 NAME_1 = "Plate Name 1"
 NAME_2 = "Plate Name 2"
 
+IsUsedFlag = False
+
+def IsUsed():
+	global IsUsedFlag
+	return IsUsedFlag
 
 def Init(MutableStepsList):
+	global IsUsedFlag
+
 	for Step in MutableStepsList[:]:
 		if Step.GetTitle() == TITLE:
+			IsUsedFlag = True
 			
 			PlateName = Step.GetParentPlate()
 			NewPlate1 = Step.GetParameters()[NAME_1]

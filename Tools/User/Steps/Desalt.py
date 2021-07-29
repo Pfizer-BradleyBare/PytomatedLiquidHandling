@@ -15,6 +15,7 @@ TYPE = "Type"
 Equilibrated = None
 Incubation_Equilibration_Step = None
 Desalting_Params = {}
+IsUsedFlag = False
 
 ######################################################################### 
 #	Description: Returns the incubation step in which desalting equilibration is most logical
@@ -24,6 +25,14 @@ Desalting_Params = {}
 def GetEquilibrationStep():
 	global Incubation_Equilibration_Step
 	return Incubation_Equilibration_Step
+
+def GetDesaltParams():
+	global Desalting_Params
+	return Desalting_Params
+
+def IsUsed():
+	global IsUsedFlag
+	return IsUsedFlag
 
 ######################################################################### 
 #	Description: Initializes the desalting library by performing the following steps:
@@ -39,6 +48,7 @@ def Init(MutableStepsList):
 	global Equilibrated
 	global Incubation_Equilibration_Step
 	global Desalting_Params
+	global IsUsedFlag
 	
 	Equilibrated = False
 	Latest_Incubate_Step = None
@@ -49,6 +59,7 @@ def Init(MutableStepsList):
 
 		if Step.GetTitle() == TITLE:
 			StepConfig = CONFIGURATION.GetStepConfig(TITLE)
+			IsUsedFlag = True
 
 			DesaltingArray = Step.GetParameters()[TYPE].split(",")
 			TypeArray = []
@@ -93,10 +104,6 @@ def Init(MutableStepsList):
 			CONFIGURATION.AddPreferredLoading("Desalting Waste", PreferredLoading["Waste"])
 			CONFIGURATION.AddPreferredLoading(Desalting_Params["Buffer"], PreferredLoading["Buffer"])
 			CONFIGURATION.AddPreferredLoading(Desalting_Params["Destination"], PreferredLoading["Destination"])
-
-def GetDesaltParams():
-	global Desalting_Params
-	return Desalting_Params
 
 ######################################################################### 
 #	Description: Performs equilibration by calling the appropriate hamilton commands

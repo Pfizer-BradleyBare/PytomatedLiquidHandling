@@ -14,6 +14,11 @@ STORAGE = "Storage Condition"
 VOLUME = "Volume (uL)"
 MIXING = "Mix?"
 
+IsUsedFlag = True
+
+def IsUsed():
+	global IsUsedFlag
+	return IsUsedFlag
 
 def Init():
 	pass

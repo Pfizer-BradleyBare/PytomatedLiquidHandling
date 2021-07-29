@@ -1,6 +1,7 @@
 from ..General import HamiltonIO as HAMILTONIO
 from ..Hamilton.Commands import Desalt as DESALT
 from ..Hamilton.Commands import Heater as HEATER
+from ..Hamilton.Commands import Vacuum as VACUUM
 from ..Hamilton.Commands import Notify as NOTIFY
 from ..Hamilton.Commands import Pipette as PIPETTE
 from ..Hamilton.Commands import Timer as TIMER
@@ -30,6 +31,8 @@ def Labware(LoadingList):
 		else:
 			CommandString += "[Volume]" + str(LoadingList[Labware]["Volume"])
 		CommandString += "[LabwareType]" + str(LoadingList[Labware]["Labware Type"]) + "[LabwareCategory]" + str(LoadingList[Labware]["Labware Category"]) + "\n"
+
+	print(CommandString)
 
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()

@@ -42,6 +42,7 @@ def Do(Dest, Sequences):
 
 	print(CommandString)
 
+
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return True

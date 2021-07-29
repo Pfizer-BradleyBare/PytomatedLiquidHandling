@@ -7,6 +7,12 @@ import time
 TITLE = "Wait"
 TIME = STEPS.PARAMS_START + 0
 
+IsUsedFlag = True
+
+def IsUsed():
+	global IsUsedFlag
+	return IsUsedFlag
+
 #format is Plate: WaitTime, StartTime
 Timer_List = {}
 

@@ -6,6 +6,12 @@ TITLE = "Plate"
 NAME = "Name"
 TYPE = "Type"
 
+IsUsedFlag = True
+
+def IsUsed():
+	global IsUsedFlag
+	return IsUsedFlag
+
 #This function may modify the Mutable list if required
 def Init(MutableStepsList, SequencesList):
 	for Step in MutableStepsList[:]:

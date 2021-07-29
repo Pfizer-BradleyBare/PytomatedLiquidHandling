@@ -6,6 +6,11 @@ WAIT_ON_USER = "Wait On User"
 SUBJECT = "Subject"
 MESSAGE = "Message"
 
+IsUsedFlag = True
+
+def IsUsed():
+	global IsUsedFlag
+	return IsUsedFlag
 
 def Init():
 	pass

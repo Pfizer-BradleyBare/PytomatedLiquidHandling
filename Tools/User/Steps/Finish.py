@@ -5,6 +5,12 @@ from ..Labware import Plates as PLATES
 
 TITLE = "Finish"
 
+IsUsedFlag = True
+
+def IsUsed():
+	global IsUsedFlag
+	return IsUsedFlag
+
 def Init():
 	pass
 		

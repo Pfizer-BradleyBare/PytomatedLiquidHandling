@@ -14,6 +14,12 @@ STARTING_CONCENTRATION = "Starting Concentration (mg/mL)"
 TARGET_CONCENTRATION = "Target Concentration (mg/mL)"
 TARGET_VOLUME = "Target Volume (uL)"
 
+IsUsedFlag = True
+
+def IsUsed():
+	global IsUsedFlag
+	return IsUsedFlag
+
 ######################################################################### 
 #	Description: No itialization required here. Provided for consistency
 #	Input Arguments: N/A

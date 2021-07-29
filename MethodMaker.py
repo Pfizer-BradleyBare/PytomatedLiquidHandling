@@ -101,12 +101,23 @@ if HAMILTONIO.IsSimulated() == True:
 
 	CONFIGURATION.WriteLoadingInformation(Labware)
 	
-	PRERUN.PIPETTE.PreRun(SOLUTIONS.GetPipetteVolumes())
-	PRERUN.HEATER.PreRun(INCUBATE.GetHeaterList())
-	PRERUN.NOTIFY.PreRun()
-	PRERUN.DESALT.PreRun(DESALT.GetDesaltParams())
-	PRERUN.TIMER.PreRun()
-	PRERUN.TRANSPORT.PreRun()
+	if LIQUID_TRANSFER.IsUsed() == True or DILUTE.IsUsed() == True:
+		PRERUN.PIPETTE.PreRun(SOLUTIONS.GetPipetteVolumes())
+	
+	if INCUBATE.IsUsed() == True:
+		PRERUN.HEATER.PreRun(INCUBATE.GetHeaterList())
+	
+	if NOTIFY.IsUsed() == True:
+		PRERUN.NOTIFY.PreRun()
+	
+	if DESALT.IsUsed() == True:
+		PRERUN.DESALT.PreRun(DESALT.GetDesaltParams())
+
+	if WAIT.IsUsed() == True:
+		PRERUN.TIMER.PreRun()
+
+	if INCUBATE.IsUsed() == True:
+		PRERUN.TRANSPORT.PreRun()
 	#initialize all the Hamilton Libraries.
 
 

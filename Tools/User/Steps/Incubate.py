@@ -19,6 +19,12 @@ Lids = {}
 Heaters = {}
 TransportConfig = {}
 
+IsUsedFlag = False
+
+def IsUsed():
+	global IsUsedFlag
+	return IsUsedFlag
+
 ######################################################################### 
 #	Description: intialized through the following actions:
 #	1. Load step specific configuration information and stores to be used later
@@ -31,6 +37,7 @@ def Init(MutableStepsList):
 	global Heaters
 	global Lids
 	global TransportConfig
+	global IsUsedFlag
 
 
 	Config = CONFIGURATION.GetStepConfig(TITLE)
@@ -64,8 +71,12 @@ def Init(MutableStepsList):
 	#Do configuration for the incubation step
 
 	for Step in MutableStepsList:
-		if Step.GetTitle() == TITLE and str(Step.GetParameters()[TEMP]).lower() != "Ambient".lower():
-			Incubation_List.append(Step)
+		if Step.GetTitle() == TITLE:
+			
+			IsUsedFlag = True
+
+			if str(Step.GetParameters()[TEMP]).lower() != "Ambient".lower():
+					Incubation_List.append(Step)
 
 	print(Incubation_List)
 	print("\n",Lids)

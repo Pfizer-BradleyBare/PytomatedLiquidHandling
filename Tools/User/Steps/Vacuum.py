@@ -13,6 +13,11 @@ TIME = "Time (sec)"
 
 VacuumConfig = {}
 TransportConfig = {}
+IsUsedFlag = False
+
+def IsUsed():
+	global IsUsedFlag
+	return IsUsedFlag
 
 def Init(MutableStepsList):
 	global TransportConfig
