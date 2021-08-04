@@ -1,0 +1,72 @@
+#####################################################
+################# EXPLANATION #######################
+#
+# This file and other configuration files are provided
+# to create Hamilton specific functionality. While also
+# providing interHamilton compatability for methods.
+#
+# This configuration file is used for preferred deck
+# Loading. The python script will read this file first
+# then try to load the deck based on name or type preference.
+# If a value is not found, that value will be automatically
+# loaded using the sequences file.
+#
+# This file is the highest priority loading file. This file
+# will always be read first to ensure preferred loading.
+#
+#####################################################
+#####################################################
+
+
+
+Sample: 
+  Preferred Sequences:
+      - Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel
+      - Carrier14_Pos5_56VialStarstedtRack200uL_1mLChannel
+      - Carrier14_Pos5_56VialStarstedtRack2000uL_1mLChannel   
+
+Denaturation: 
+  Preferred Sequences:
+      - Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel
+      - Carrier14_Pos3_96WellPCRPlate400uL_1mLChannel
+      - Carrier14_Pos4_96WellPCRPlate1200uL_1mLChannel
+
+Water: 
+  Preferred Sequences:
+      - R1 
+
+Quench: 
+  Preferred Sequences:
+      - F1
+      - F2
+      - F3
+
+Alkylant: 
+  Preferred Sequences:
+      - F4
+      - F5
+      - F6 
+
+Reductant: 
+  Preferred Sequences:
+      - F7
+      - F8
+      - F9
+
+Denaturant: 
+  Preferred Sequences:
+      - C1
+      - C2
+      - C3 
+
+Buffer/Diluent: 
+  Preferred Sequences:
+      - R2
+      - R3
+      - R4
+
+Enzyme: 
+  Preferred Sequences:
+      - E1
+      - E2
+      - E3

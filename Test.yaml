@@ -1,0 +1,21 @@
+
+
+#The plates listed here must match in the excel dropdown for plates.
+#In the case of a mismatch, the corresponding plate will not be able to load and the runs will fail
+Plates:
+  #Plate definitions should adhere to the following specification
+  #Plate Type: ex: "96 Well PCR Plate"
+  #   Volumes available for that type. ex: "200"
+  #     Sequence name of the plate. ex: "Carrier31_Pos2_96WellPCRPlate200uL_1mLChannel"
+  #       Does the plate have a lid. ex: "True"
+  #
+  # Please see example below
+  #
+
+  96 Well PCR Plate:
+    200:
+      TestCarrier: True
+    400:
+      TestCarrier400: False
+    1200:
+      TestCarrier1200: True
