@@ -18,69 +18,55 @@
 #####################################################
 
 
-# The names listed here will be searched for a match from any solution or plate name in the method. If a match is found,
-# the type is the same, and the volume is supported. Then the value here will be used for deck loading.
-Labware:
-  Names:
-    #Name definitions should adhere to the following specification
-    #Name. ex: "Sample"
-    #   Sequence name of the loading position. ex: "Carrier31_Pos2_96WellPCRPlate200uL_1mLChannel"
-    #
-  # Please see example below
-  #
 
-    Sample: 
+Sample: 
+  Preferred Sequences:
       - Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel
       - Carrier14_Pos5_56VialStarstedtRack200uL_1mLChannel
-      - Carrier14_Pos5_56VialStarstedtRack2000uL_1mLChannel
-  
-    Denaturation: 
+      - Carrier14_Pos5_56VialStarstedtRack2000uL_1mLChannel   
+
+Denaturation: 
+  Preferred Sequences:
       - Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel
       - Carrier14_Pos3_96WellPCRPlate400uL_1mLChannel
       - Carrier14_Pos4_96WellPCRPlate1200uL_1mLChannel
 
-    Desalting:
-      - Carrier38_Pos5_96wellPCRPlate1200uL_1mLChannel
-  
-    Water: 
-      - R1
+Water: 
+  Preferred Sequences:
+      - R1 
 
-# The reagent types here will be searched for a match from any solution or plate name in the method. If a match is found,
-# storage temp is the same, and the volume is support, then the value here will be used for deck loading.
-  Types:
-  #Type definitions should adhere to the following specification
-  #Type. ex: "Alkylant" ***This name must be in the list of reagent types
-  #   Sequence name of the loading position. ex: "F2"
-  #
-  # Please see example below
-  #
-
-    Quench: 
+Quench: 
+  Preferred Sequences:
       - F1
       - F2
       - F3
-  
-    Alkylant: 
+
+Alkylant: 
+  Preferred Sequences:
       - F4
       - F5
-      - F6
-  
-    Reductant: 
+      - F6 
+
+Reductant: 
+  Preferred Sequences:
       - F7
       - F8
       - F9
 
-    Denaturant:
+Denaturant: 
+  Preferred Sequences:
       - C1
       - C2
-      - C3
+      - C3 
 
-    Enzyme:
+Buffer/Diluent: 
+  Preferred Sequences:
+      - R2
+      - R3
+      - R4
+
+Enzyme: 
+  Preferred Sequences:
       - E1
       - E2
       - E3
-  
-    Buffer/Diluent: 
-      - R1
-      - R2
-      - R3

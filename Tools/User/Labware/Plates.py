@@ -24,6 +24,7 @@ class Class:
 		self.FactorsList = [1] * len(SequencesList)
 		self.VolumesList = [0] * len(SequencesList)
 		self.MaxVolume = 0
+		self.RequiresLoading = False
 
 	def GetName(self):
 		return self.PlateName
@@ -48,9 +49,14 @@ class Class:
 
 	def UpdateMaxVolume(self):
 		for Volume in self.GetVolumesList():
+			if Volume < 0:
+				self.RequiresLoading = True
 			Volume = abs(Volume)
 			if Volume > self.MaxVolume:
 				self.MaxVolume = Volume
+
+	def LoadingRequired(self):
+		return self.RequiresLoading
 
 ######################################################################### 
 #	Description: Returns the max well volume on this plate

@@ -7,7 +7,7 @@ if len(sys.argv) > 1:
 	Initialization_Run = eval(sys.argv[3])
 else:
 	Sample_Start_Pos = 1
-	Excel_File_Path = "Method Maker1.xlsx"
+	Excel_File_Path = "Method Maker2.xlsx"
 	Initialization_Run = True
 
 print("import")
@@ -92,7 +92,7 @@ while(True):
 
 if HAMILTONIO.IsSimulated() == True:
 
-	HAMILTONIO.Simulated(False)
+	#HAMILTONIO.Simulated(False)
 
 	PRERUN.Samples(SAMPLES.GetTotalSamples())
 	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
@@ -100,6 +100,9 @@ if HAMILTONIO.IsSimulated() == True:
 	PRERUN.Labware(Labware)
 
 	CONFIGURATION.WriteLoadingInformation(Labware)
+
+	CONFIGURATION.GeneratePrepSheet(Labware)
+	#Generate prep sheet here
 	
 	if LIQUID_TRANSFER.IsUsed() == True or DILUTE.IsUsed() == True:
 		PRERUN.PIPETTE.PreRun(SOLUTIONS.GetPipetteVolumes())

@@ -100,7 +100,7 @@ def GetSolutions():
 	global Solutions
 	Temp = []
 	for key in Solutions:
-		if Solutions[key].GetVolume() > 0 and Solutions[key].GetType() != TYPE_PLATE:
+		if Solutions[key].GetVolume() != 0 and Solutions[key].GetType() != TYPE_PLATE:
 			Temp.append(Solutions[key])
 	return Temp
 

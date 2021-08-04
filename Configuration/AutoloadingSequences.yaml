@@ -19,631 +19,779 @@
 #####################################################
 
 
+Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel:
+  Max Supported Volume: 200
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 200uL Biorad 96 Well PCR Plate
+  Lid Sequence: False
+  Deck Position: Carrier38_Pos3
 
-#The plates listed here must match in the excel dropdown for plates.
-#In the case of a mismatch, the corresponding plate will not be able to load and the runs will fail
-#Additionally, the sequences listed here must match the Hamilton deck layout. Mismatches will cause a fail
-#
-# Extra: This is a way to control which positions can be used. If you want to lock users to positions, only list those positions
-#
-Plates:
-  #
-  # Please see example below
-  #
+Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel:
+  Max Supported Volume: 200
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 200uL Biorad 96 Well PCR Plate
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos3
 
+Carrier14_Pos4_96WellPCRPlate200uL_1mLChannel:
+  Max Supported Volume: 200
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 200uL Biorad 96 Well PCR Plate
+  Lid Sequence: Carrier14_Pos4_Lid_200uL
+  Deck Position: Carrier14_Pos4
 
-#96 well plates
-
-#
-# 200uL plates
-#
-
-  Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel:
-    Max Supported Volume: 200
-    Labware Type: 96 Well PCR Plate
-    Lid: False
-    Deck Position: Carrier38_Pos3
-
-  Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel:
-    Max Supported Volume: 200
-    Labware Type: 96 Well PCR Plate
-    Lid: False
-    Deck Position: Carrier14_Pos3
-
-  Carrier14_Pos4_96WellPCRPlate200uL_1mLChannel:
-    Max Supported Volume: 200
-    Labware Type: 96 Well PCR Plate
-    Lid: Carrier14_Pos4_Lid_200uL
-    Deck Position: Carrier14_Pos4
-
-  Carrier14_Pos5_96WellPCRPlate200uL_1mLChannel:
-    Max Supported Volume: 200
-    Labware Type: 96 Well PCR Plate
-    Lid: False
-    Deck Position: Carrier14_Pos5
-
+Carrier14_Pos5_96WellPCRPlate200uL_1mLChannel:
+  Max Supported Volume: 200
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 200uL Biorad 96 Well PCR Plate
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos5
 
 #
 # 400uL plates
 #
 
-  Carrier14_Pos3_96WellPCRPlate400uL_1mLChannel:
-    Max Supported Volume: 400
-    Labware Type: 96 Well PCR Plate
-    Lid: Carrier14_Pos3_Lid_400uL
-    Deck Position: Carrier14_Pos3
+Carrier14_Pos3_96WellPCRPlate400uL_1mLChannel:
+  Max Supported Volume: 400
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 400uL Thermo 96 Well PCR Plate
+  Lid Sequence: Carrier14_Pos3_Lid_400uL
+  Deck Position: Carrier14_Pos3
 
-  Carrier14_Pos4_96WellPCRPlate400uL_1mLChannel:
-    Max Supported Volume: 400
-    Labware Type: 96 Well PCR Plate
-    Lid: False
-    Deck Position: Carrier14_Pos4
+Carrier14_Pos4_96WellPCRPlate400uL_1mLChannel:
+  Max Supported Volume: 400
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 400uL Thermo 96 Well PCR Plate
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos4
 
-  Carrier14_Pos5_96WellPCRPlate400uL_1mLChannel:
-    Max Supported Volume: 400
-    Labware Type: 96 Well PCR Plate
-    Lid: False
-    Deck Position: Carrier14_Pos5
+Carrier14_Pos5_96WellPCRPlate400uL_1mLChannel:
+  Max Supported Volume: 400
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 400uL Thermo 96 Well PCR Plate
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos5
 
 #
 # 1200uL plates
 #
 
-  Carrier14_Pos4_96WellPCRPlate1200uL_1mLChannel:
-    Max Supported Volume: 1200
-    Labware Type: 96 Well PCR Plate
-    Lid: Carrier14_Pos4_Lid_1200uL
-    Deck Position: Carrier14_Pos4
+Carrier14_Pos4_96WellPCRPlate1200uL_1mLChannel:
+  Max Supported Volume: 1200
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 1200uL DeepWell 96 Well PCR Plate
+  Lid Sequence: Carrier14_Pos4_Lid_1200uL
+  Deck Position: Carrier14_Pos4
 
-  Carrier14_Pos5_96WellPCRPlate1200uL_1mLChannel:
-    Max Supported Volume: 1200
-    Labware Type: 96 Well PCR Plate
-    Lid: False
-    Deck Position: Carrier14_Pos5
+Carrier14_Pos5_96WellPCRPlate1200uL_1mLChannel:
+  Max Supported Volume: 1200
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 1200uL DeepWell 96 Well PCR Plate
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos5
 
-  Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel:
-    Max Supported Volume: 1200
-    Labware Type: 96 Well PCR Plate
-    Lid: False
-    Deck Position: Carrier38_Pos5
+Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel:
+  Max Supported Volume: 1200
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 1200uL DeepWell 96 Well PCR Plate
+  Lid Sequence: False
+  Deck Position: Carrier38_Pos5
 
-  Carrier38_Pos1_96WellPCRPlate1200uL_1mLChannel:
-    Max Supported Volume: 1200
-    Labware Type: 96 Well PCR Plate
-    Lid: False
-    Deck Position: Carrier38_Pos1
+Carrier38_Pos1_96WellPCRPlate1200uL_1mLChannel:
+  Max Supported Volume: 1200
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 1200uL DeepWell 96 Well PCR Plate
+  Lid Sequence: False
+  Deck Position: Carrier38_Pos1
 
 #Starstedt plates
 
-  Carrier14_Pos5_56VialStarstedtRack200uL_1mLChannel:
-    Max Supported Volume: 200
-    Labware Type: Starstedt 56 Well Rack
-    Lid: False
-    Deck Position: Carrier14_Pos5
+Carrier14_Pos5_56VialStarstedtRack200uL_1mLChannel:
+  Max Supported Volume: 200
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: Starstedt 56 Well Plate
+  Labware Name: 200uL Starstedt Tube Plate
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos5
 
-  Carrier14_Pos5_56VialStarstedtRack2000uL_1mLChannel:
-    Max Supported Volume: 2000
-    Labware Type: Starstedt 56 Well Rack
-    Lid: False
-    Deck Position: Carrier14_Pos5
+Carrier14_Pos5_56VialStarstedtRack2000uL_1mLChannel:
+  Max Supported Volume: 2000
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: Starstedt 56 Well Plate
+  Labware Name: 2000uL Starstedt Tube Plate
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos5
 
 #LC Vial plates
 
-  Carrier14_Pos5_48VialLCRack_1mLChannel:
-    Max Supported Volume: 2000
-    Labware Type: Waters TRV 48 Well Rack
-    Lid: False
-    Deck Position: Carrier14_Pos5
-
-
-
-
-#The containers listed here must match the Hamilton deck layout sequences. Mismatches will cause a method failure
-Reagents:
-  #Reagent Container definitions should adhere to the following specification
-  #The Storage Condition. ex: "Ambient" or "Cold"
-  #   Container Volume in MicroLiters. ex: "1000" (Should be list from smallest to largest)
-  #     Sequence names. ex: FlipTube_Pos1
-  #
-  # Additional considerations: It is recommended to build in a dwell volume for each container depending on the size.
-  # Ex: A 15mL centrifuge tube is better modeled with a max of 14mL to give a dead volume for user loading.
-  #
-  # Please see example below
-  #
-
-  E1:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Cold
-    Deck Position: E1
-
-  E2:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Cold
-    Deck Position: E2
-
-  E3:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Cold
-    Deck Position: E3
-
-  E4:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Cold
-    Deck Position: E4
-
-  E5:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Cold
-    Deck Position: E5
-
-  E6:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Cold
-    Deck Position: E6
-
-  E7:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Cold
-    Deck Position: E7
-
-  E8:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Cold
-    Deck Position: E8
-
-  F1:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F1
-
-  F2:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F2
-
-  F3:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F3
-
-  F4:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F4
-
-  F5:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F5
-
-  F6:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F6
-
-  F7:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F7
-
-  F8:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F8
-
-  F9:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F9
-
-  F10:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F10
-
-  F11:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F11
-
-  F12:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F12
-
-  F13:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F13
-
-  F14:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F14
-
-  F15:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F15
-
-  F16:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F16
-
-  F17:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F17
-
-  F18:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F18
-
-  F19:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F19
-
-  F20:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F20
-
-  F21:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F21
-
-  F22:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F22
-
-  F23:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F23
-
-  F24:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F24
-
-  F25:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F25
-
-  F26:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F26
-
-  F27:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F27
-
-  F28:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F28
-
-  F29:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F29
-
-  F30:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F30
-
-  F31:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F31
-
-  F32:
-    Max Supported Volume: 1500
-    Labware Type: FlipTube
-    Lid: True
-    Storage Condition: Ambient
-    Deck Position: F32
-
-  C1:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C1
-
-  C2:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C2
-
-  C3:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C3
-
-  C4:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C4
-
-  C5:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C5
-
-  C6:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C6
-
-  C7:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C7
-
-  C8:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C8
-
-  C9:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C9
-
-  C10:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C10
-
-  C11:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C11
-
-  C12:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C12
-
-  C13:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C13
-
-  C14:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C14
-
-  C15:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C15
-
-  C16:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C16
-
-  C17:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C17
-
-  C18:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C18
-
-  C19:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C19
-
-  C20:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C20
-
-  C21:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C21
-
-  C22:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C22
-
-  C23:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C23
-
-  C24:
-    Max Supported Volume: 14000
-    Labware Type: 15mL Centrifuge Tube
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: C24
-
-  R1:
-    Max Supported Volume: 50000
-    Labware Type: 60mL Reagent Reservior
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: R1
-  
-  R2:
-    Max Supported Volume: 50000
-    Labware Type: 60mL Reagent Reservior
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: R2
-  
-  R3:
-    Max Supported Volume: 50000
-    Labware Type: 60mL Reagent Reservior
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: R3
-  
-  R4:
-    Max Supported Volume: 50000
-    Labware Type: 60mL Reagent Reservior
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: R4
-  
-  R5:
-    Max Supported Volume: 50000
-    Labware Type: 60mL Reagent Reservior
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: R5
-  
-  T1:
-    Max Supported Volume: 200000
-    Labware Type: 200mL Reagent Trough
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: Carrier38_Pos1
-  
-  T2:
-    Max Supported Volume: 200000
-    Labware Type: 200mL Reagent Trough
-    Lid: False
-    Storage Condition: Ambient
-    Deck Position: Carrier38_Pos2
+Carrier14_Pos5_48VialLCRack_1mLChannel:
+  Max Supported Volume: 2000
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: Waters TRV 48 Well Plate
+  Labware Name: 2000uL Water Total Recovery Vial Plate
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos5
+
+E1:
+  Max Supported Volume: 1500
+  Storage Condition: Cold
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: E1
+
+E2:
+  Max Supported Volume: 1500
+  Storage Condition: Cold
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: E2
+
+E3:
+  Max Supported Volume: 1500
+  Storage Condition: Cold
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: E3
+
+E4:
+  Max Supported Volume: 1500
+  Storage Condition: Cold
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: E4
+
+E5:
+  Max Supported Volume: 1500
+  Storage Condition: Cold
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: E5
+
+E6:
+  Max Supported Volume: 1500
+  Storage Condition: Cold
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: E6
+
+E7:
+  Max Supported Volume: 1500
+  Storage Condition: Cold
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: E7
+
+E8:
+  Max Supported Volume: 1500
+  Storage Condition: Cold
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: E8
+
+F1:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F1
+
+F2:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F2
+
+F3:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F3
+
+F4:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F4
+
+F5:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F5
+
+F6:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F6
+
+F7:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F7
+
+F8:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F8
+
+F9:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F9
+
+F10:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F10
+
+F11:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F11
+
+F12:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F12
+
+F13:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F13
+
+F14:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F14
+
+F15:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F15
+
+F16:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F16
+
+F17:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F17
+
+F18:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F18
+
+F19:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F19
+
+F20:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F20
+
+F21:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F21
+
+F22:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F22
+
+F23:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F23
+
+F24:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F24
+
+F25:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F25
+
+F26:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F26
+
+F27:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F27
+
+F28:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F28
+
+F29:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F29
+
+F30:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F30
+
+F31:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F31
+
+F32:
+  Max Supported Volume: 1500
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: FlipTube
+  Labware Name: Hamilton 1.5mL FlipTube
+  Lid Sequence: True
+  Deck Position: F32
+
+C1:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C1
+
+C2:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C2
+
+C3:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C3
+
+C4:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C4
+
+C5:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C5
+
+C6:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C6
+
+C7:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C7
+
+C8:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C8
+
+C9:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C9
+
+C10:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C10
+
+C11:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C11
+
+C12:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C12
+
+C13:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C13
+
+C14:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C14
+
+C15:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C15
+
+C16:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C16
+
+C17:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C17
+
+C18:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C18
+
+C19:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C19
+
+C20:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C20
+
+C21:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C21
+
+C22:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C22
+
+C23:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C23
+
+C24:
+  Max Supported Volume: 14000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 15mL Centrifuge Tube
+  Labware Name: 15mL Centrifuge Tube
+  Lid Sequence: False
+  Deck Position: C24
+
+R1:
+  Max Supported Volume: 50000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 60mL Reagent Reservior
+  Labware Name: 60mL Reagent Reservior
+  Lid Sequence: False
+  Deck Position: R1
+
+R2:
+  Max Supported Volume: 50000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 60mL Reagent Reservior
+  Labware Name: 60mL Reagent Reservior
+  Lid Sequence: False
+  Deck Position: R2
+
+R3:
+  Max Supported Volume: 50000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 60mL Reagent Reservior
+  Labware Name: 60mL Reagent Reservior
+  Lid Sequence: False
+  Deck Position: R3
+
+R4:
+  Max Supported Volume: 50000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 60mL Reagent Reservior
+  Labware Name: 60mL Reagent Reservior
+  Lid Sequence: False
+  Deck Position: R4
+
+R5:
+  Max Supported Volume: 50000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 60mL Reagent Reservior
+  Labware Name: 60mL Reagent Reservior
+  Lid Sequence: False
+  Deck Position: R5
+
+T1:
+  Max Supported Volume: 200000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 200mL Reagent Trough
+  Labware Name: 200mL Reagent Trough
+  Lid Sequence: False
+  Deck Position: Carrier38_Pos1
+
+T2:
+  Max Supported Volume: 200000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 200mL Reagent Trough
+  Labware Name: 200mL Reagent Trough
+  Lid Sequence: False
+  Deck Position: Carrier38_Pos2

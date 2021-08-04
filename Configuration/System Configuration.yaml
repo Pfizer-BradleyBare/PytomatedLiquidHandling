@@ -19,49 +19,53 @@
 #####################################################
 
 VolumeEquations:
-  Plates:
-    96 Well PCR Plate:
-      200:
-        - SegmentNumber: 1
-          MaxSegmentHeight: 11.5
-          SegmentEquation: x * 6.5450
+  200uL Biorad 96 Well PCR Plate:
+    - SegmentNumber: 1
+      MaxSegmentHeight: 11.5
+      SegmentEquation: x * 6.5450
       
-        - SegmentNumber: 2
-          MaxSegmentHeight: 22.1
-          SegmentEquation: x * 11
-      400:
-        - SegmentNumber: 1
-          MaxSegmentHeight: 11.5
-          SegmentEquation: x * 6.5450
+    - SegmentNumber: 2
+      MaxSegmentHeight: 22.1
+      SegmentEquation: x * 11
+  
+  400uL Thermo 96 Well PCR Plate:
+    - SegmentNumber: 1
+      MaxSegmentHeight: 11.5
+      SegmentEquation: x * 6.5450
       
-        - SegmentNumber: 2
-          MaxSegmentHeight: 22.1
-          SegmentEquation: x * 11
-      1200:
-        - SegmentNumber: 1
-          MaxSegmentHeight: 11.5
-          SegmentEquation: x * 6.5450
+    - SegmentNumber: 2
+      MaxSegmentHeight: 22.1
+      SegmentEquation: x * 11
+
+  1200uL DeepWell 96 Well PCR Plate:
+    - SegmentNumber: 1
+      MaxSegmentHeight: 11.5
+      SegmentEquation: x * 6.5450
       
-        - SegmentNumber: 2
-          MaxSegmentHeight: 22.1
-          SegmentEquation: x * 11
-  Reagents:
-    FlipTube:
-      1500:
-        - SegmentNumber: 1
-          MaxSegmentHeight: 11.5
-          SegmentEquation: x * 6.5450
+    - SegmentNumber: 2
+      MaxSegmentHeight: 22.1
+      SegmentEquation: x * 11
+  
+  Hamilton 1.5mL FlipTube:
+    - SegmentNumber: 1
+      MaxSegmentHeight: 11.5
+      SegmentEquation: x * 6.5450
       
-        - SegmentNumber: 2
-          MaxSegmentHeight: 22.1
-          SegmentEquation: x * 11
+    - SegmentNumber: 2
+      MaxSegmentHeight: 22.1
+      SegmentEquation: x * 11
 
 Dead Volume:
-  Reagents:
-    FlipTube: 150
-    15mL Centrifuge Tube: 500
-    60mL Reagent Reservior: 1000
-    200mL Reagent Trough: 5000
+  200uL Biorad 96 Well PCR Plate: 25
+  400uL Thermo 96 Well PCR Plate: 50
+  1200uL DeepWell 96 Well PCR Plate: 100
+  200uL Starstedt Tube Plate: 25
+  2000uL Starstedt Tube Plate: 150
+  2000uL Water Total Recovery Vial Plate: 50
+  Hamilton 1.5mL FlipTube: 150
+  15mL Centrifuge Tube: 500
+  60mL Reagent Reservior: 2500
+  200mL Reagent Trough: 6000
 
 Steps:
   Incubate:

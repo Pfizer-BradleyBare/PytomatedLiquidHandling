@@ -2,6 +2,7 @@ from ..User.Labware import Plates as PLATES
 from ..User.Labware import Solutions as SOLUTIONS
 from ..General import ExcelIO as EXCELIO
 from ..General import HamiltonIO as HAMILTONIO
+from ..User import Samples as SAMPLES
 import copy
 import yaml
 import os
@@ -47,6 +48,8 @@ def Init():
 	 	DeckLoading = None
 
 def WriteLoadingInformation(YamlData):
+	global DeckLoading
+
 	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"),"w")
 	yaml.dump(YamlData,file)
 	file.close()
@@ -65,10 +68,7 @@ def WellVolumeToDispenseHeight(PlateName, WellVolumes):
 	
 	if not LabwareLoading:
 		return [0]*len(WellVolumes)
-	LabwareCategory =LabwareLoading["Labware Category"]
-	LabwareType =LabwareLoading["Labware Type"]
-	MaxVolume =LabwareLoading["Max Volume"]
-	Segments = SysConfig["VolumeEquations"][LabwareCategory][LabwareType][MaxVolume]
+	Segments = SysConfig["VolumeEquations"][LabwareLoading["Labware Name"]]
 	Height  = 0
 	DispenseHeights = [-1]*len(WellVolumes)
 
@@ -151,20 +151,6 @@ def AddPreferredLoading(Item, LoadingArray):
 	StepPreferredLoading[Item] = LoadingArray
 
 ######################################################################### 
-#	Description: Searches for a preferred loading entry for the argument
-#	Input Arguments: [LoadingItem: String]
-#	Returns: If item is found then returns loading information described in YAML file (Array), else None as array
-#########################################################################
-def TryPreferred(LoadingItem):
-	global PreferredLoading
-
-	for Category in PreferredLoading["Labware"].keys():
-		for Item in PreferredLoading["Labware"][Category].keys():
-			if Item == LoadingItem:
-					return PreferredLoading["Labware"][Category][Item]
-	return [None]
-
-######################################################################### 
 #	Description: Attempts to load both plates and solutions using the loading information available in the YAML file
 #	Input Arguments:  [Plates_List: 1D-array of plate objects] [Solutions_List: 1D-array of solution objects]
 #	Returns: If loading was sucessful then returns a dictionary of loading information with item name as key, else returns False
@@ -173,51 +159,40 @@ def Load(Plates_List, Solutions_List):
 	global Sequences
 	global StepPreferredLoading
 	global SysConfig
+	global PreferredLoading
+
+	DeadVolumeConfig = SysConfig["Dead Volume"]
 
 	Loading = {}
 
-	for Plate in Plates_List:
+	PlateSequences = {k: v for k, v in Sequences.items() if "Plate" == v["Labware Category"]}
 
+	for Plate in Plates_List:
 		PlateType = Plate.GetType()
 		MaxVol = Plate.GetVolume()
 		LidRequired = Plate.GetLidState()
-		
-		Possibles = {}
 
-		for Sequence in Sequences["Plates"]:
-			if Sequences["Plates"][Sequence]["Max Supported Volume"] >= MaxVol:
-				if int(not not Sequences["Plates"][Sequence]["Lid"]) >= int(not not LidRequired):
-					Temp = {}
-					Temp["Volume"] = MaxVol
-					Temp["Max Volume"] = Sequences["Plates"][Sequence]["Max Supported Volume"]
-					Temp["Labware Type"] = Sequences["Plates"][Sequence]["Labware Type"]
-					Temp["Labware Category"] = "Plates"
-					Temp["Lid"] = Sequences["Plates"][Sequence]["Lid"]
-					Temp["Deck Position"] = Sequences["Plates"][Sequence]["Deck Position"]
-					Possibles = {**Possibles, **{Sequence:Temp}}
-		Loading[Plate.GetName()] = {"PreferredCategories":[Plate.GetName(),Plate.GetType()], "Sequences":copy.deepcopy(Possibles)}
+		Possibles = collections.OrderedDict({k: v for k, v in PlateSequences.items() if v["Max Supported Volume"] >= (MaxVol + DeadVolumeConfig[v["Labware Name"]]) and PlateType == v["Labware Type"] and int(not not v["Lid Sequence"]) >= int(not not LidRequired)})
+		Possibles = collections.OrderedDict({k: v for k, v in sorted(Possibles.items(), key=lambda item: item[1]["Max Supported Volume"])})
 
-	SolutionDeadVolumes = SysConfig["Dead Volume"]["Reagents"]
+		for item in Possibles:
+			Possibles[item]["Used Volume"] = MaxVol + DeadVolumeConfig[Possibles[item]["Labware Name"]]
+
+		Loading[Plate.GetName()] = {"PreferredCategories":[Plate.GetName(),Plate.GetType()], "Sequences":collections.OrderedDict(copy.deepcopy(Possibles))}
+
+	ReagentSequences = {k: v for k, v in Sequences.items() if "Reagent" == v["Labware Category"]}
+
 	for Solution in Solutions_List:
 		SolutionStorage = Solution.GetStorage()
 		MaxVol = Solution.GetVolume()
 
-		Possibles = {}
+		Possibles = {k: v for k, v in ReagentSequences.items() if v["Max Supported Volume"] >= (MaxVol + DeadVolumeConfig[v["Labware Name"]]) and SolutionStorage == v["Storage Condition"]}
+		Possibles = collections.OrderedDict({k: v for k, v in sorted(Possibles.items(), key=lambda item: item[1]["Max Supported Volume"])})
 
-		for Sequence in Sequences["Reagents"]:
-			if Sequences["Reagents"][Sequence]["Labware Type"] in SolutionDeadVolumes:
-				MaxVolWDead = SolutionDeadVolumes[Sequences["Reagents"][Sequence]["Labware Type"]] + MaxVol
+		for item in Possibles:
+			Possibles[item]["Used Volume"] = MaxVol + DeadVolumeConfig[Possibles[item]["Labware Name"]]
 
-			if Sequences["Reagents"][Sequence]["Max Supported Volume"] >= MaxVolWDead and Sequences["Reagents"][Sequence]["Storage Condition"] == SolutionStorage:
-				Temp = {}
-				Temp["Volume"] = MaxVolWDead
-				Temp["Max Volume"] = Sequences["Reagents"][Sequence]["Max Supported Volume"]
-				Temp["Labware Type"] = Sequences["Reagents"][Sequence]["Labware Type"]
-				Temp["Labware Category"] = "Reagents"
-				Temp["Lid"] = Sequences["Reagents"][Sequence]["Lid"]
-				Temp["Deck Position"] = Sequences["Reagents"][Sequence]["Deck Position"]
-				Possibles = {**Possibles, **{Sequence:Temp}}
-		Loading[Solution.GetName()] = {"PreferredCategories":[Solution.GetName(),Solution.GetType()], "Sequences":copy.deepcopy(Possibles)}
+		Loading[Solution.GetName()] = {"PreferredCategories":[Solution.GetName(),Solution.GetType()], "Sequences":collections.OrderedDict(copy.deepcopy(Possibles))}
 
 	# Do solution loading
 	#
@@ -241,7 +216,14 @@ def Load(Plates_List, Solutions_List):
 	for Item in Loading:
 		done = False
 		for PreferredCategory in Loading[Item]["PreferredCategories"]:
-			LoadSequences = TryPreferred(PreferredCategory)
+
+			LoadSequences = [None]
+
+			for item in PreferredLoading:
+				if item == PreferredCategory:
+					LoadSequences = PreferredLoading[item]["Preferred Sequences"]
+					break
+
 			if Item in StepPreferredLoading:
 				LoadSequences = StepPreferredLoading[Item] + LoadSequences
 			
@@ -250,10 +232,11 @@ def Load(Plates_List, Solutions_List):
 				
 					PositionTracker.append(Loading[Item]["Sequences"][Sequence]["Deck Position"])
 					FinalLoading[Item] = {"Sequence":Sequence, 
-						"Lid":Loading[Item]["Sequences"][Sequence]["Lid"], 
+						"Lid":Loading[Item]["Sequences"][Sequence]["Lid Sequence"], 
 						"LoadingPosition":Loading[Item]["Sequences"][Sequence]["Deck Position"], 
-						"Max Volume":Loading[Item]["Sequences"][Sequence]["Max Volume"],
-						"Volume":Loading[Item]["Sequences"][Sequence]["Volume"],
+						"Max Volume":Loading[Item]["Sequences"][Sequence]["Max Supported Volume"],
+						"Volume":Loading[Item]["Sequences"][Sequence]["Used Volume"],
+						"Labware Name":Loading[Item]["Sequences"][Sequence]["Labware Name"],
 						"Labware Type":Loading[Item]["Sequences"][Sequence]["Labware Type"],
 						"Labware Category":Loading[Item]["Sequences"][Sequence]["Labware Category"]}
 					LoadSequences.remove(Sequence)
@@ -267,10 +250,11 @@ def Load(Plates_List, Solutions_List):
 				if Loading[Item]["Sequences"][Sequence]["Deck Position"] not in PositionTracker:
 					PositionTracker.append(Loading[Item]["Sequences"][Sequence]["Deck Position"])
 					FinalLoading[Item] = {"Sequence":Sequence, 
-						"Lid":Loading[Item]["Sequences"][Sequence]["Lid"], 
+						"Lid":Loading[Item]["Sequences"][Sequence]["Lid Sequence"], 
 						"LoadingPosition":Loading[Item]["Sequences"][Sequence]["Deck Position"], 
-						"Max Volume":Loading[Item]["Sequences"][Sequence]["Max Volume"],
-						"Volume":Loading[Item]["Sequences"][Sequence]["Volume"],
+						"Max Volume":Loading[Item]["Sequences"][Sequence]["Max Supported Volume"],
+						"Volume":Loading[Item]["Sequences"][Sequence]["Used Volume"],
+						"Labware Name":Loading[Item]["Sequences"][Sequence]["Labware Name"],
 						"Labware Type":Loading[Item]["Sequences"][Sequence]["Labware Type"],
 						"Labware Category":Loading[Item]["Sequences"][Sequence]["Labware Category"]}
 					done = True
@@ -308,6 +292,95 @@ def Load(Plates_List, Solutions_List):
 			AddCheckSequence(FinalLoading[item]["Lid"])
 
 	return FinalLoading
+
+def NumericToAlphaNumeric(Number):
+	Alpha = int((Number-1) / 8)
+	Numeric = Number % 8
+	if Numeric == 0:
+		Numeric = 8
+	AN = str(chr(65+Alpha)) + str(Numeric)
+	return AN
+
+
+def GeneratePrepSheet(LabwareArray):
+	global SysConfig
+
+	StartRow = 2
+	StartCol = 2
+	MaxCol = 11
+	CurrentRow = StartRow
+	CurrentCol = StartCol
+	RowPadding = 2
+	ColPadding = 2
+	RowTracker = 0
+
+	try:
+		EXCELIO.DeleteSheet("PrepList")
+	except:
+		pass
+
+	EXCELIO.CreateSheet("PrepList")
+
+	for Labware in LabwareArray:
+		IsPlate = PLATES.IsPlate(Labware)
+
+		if IsPlate == True and PLATES.GetPlate(Labware).LoadingRequired():
+			Plate = PLATES.GetPlate(Labware)
+			LoadingDict = GetDeckLoading(Labware)
+
+			if LoadingDict != None:
+				DeadVolumeConfig = SysConfig["Dead Volume"]
+
+				PlatePrepArray = []
+				for index in range(0,SAMPLES.GetNumSamples()):
+					for position in Plate.GetSequenceList()[index]:
+						PlatePrepArray.append({"Position":position,"AlphaNumeric":NumericToAlphaNumeric(position),"Volume":abs(Plate.GetVolumesList()[index]) + DeadVolumeConfig[LoadingDict["Labware Name"]]})
+
+				PlatePrepArray = sorted(PlatePrepArray, key=lambda x: x["Position"])
+				
+				UsedSpace = EXCELIO.PrintPlate(CurrentRow, CurrentCol, Plate.GetName(), LoadingDict["Labware Name"], 8, 12, PlatePrepArray)
+
+				NewRow = UsedSpace[0] + CurrentRow
+				NewCol = UsedSpace[1] + CurrentCol
+				
+				if NewRow > RowTracker:
+					RowTracker = NewRow
+
+				if NewCol > MaxCol:
+					CurrentCol = StartCol
+					CurrentRow = RowTracker + RowPadding
+				else:
+					CurrentCol = NewCol + ColPadding
+			#Do plate solution sheet here
+
+
+	CurrentRow = RowTracker + RowPadding * 2
+	CurrentCol = StartCol
+
+	for Labware in LabwareArray:
+		IsPlate = PLATES.IsPlate(Labware)
+		if IsPlate == False:
+			LoadingDict = GetDeckLoading(Labware)
+
+			if LoadingDict != None:
+
+				UsedSpace = EXCELIO.PrintReagent(CurrentRow, CurrentCol, Labware, LoadingDict["Labware Name"], LoadingDict["Volume"])
+
+				NewRow = UsedSpace[0] + CurrentRow
+				NewCol = UsedSpace[1] + CurrentCol
+				
+				if NewRow > RowTracker:
+					RowTracker = NewRow
+
+				if NewCol > MaxCol:
+					CurrentCol = StartCol
+					CurrentRow = RowTracker + RowPadding
+				else:
+					CurrentCol = NewCol + ColPadding
+			#Do reagent solution loading here
+
+	EXCELIO.AutoFit("PrepList")	
+	quit()
 
 
 

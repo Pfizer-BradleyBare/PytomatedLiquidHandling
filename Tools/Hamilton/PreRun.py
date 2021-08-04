@@ -31,7 +31,7 @@ def Labware(LoadingList):
 			CommandString += "[Volume]" + str(LoadingList[Labware]["Max Volume"])
 		else:
 			CommandString += "[Volume]" + str(LoadingList[Labware]["Volume"])
-		CommandString += "[LabwareType]" + str(LoadingList[Labware]["Labware Type"]) + "[LabwareCategory]" + str(LoadingList[Labware]["Labware Category"]) + "\n"
+		CommandString += "[LabwareType]" + str(LoadingList[Labware]["Labware Type"]) + "[LabwareCategory]" + str(LoadingList[Labware]["Labware Category"]) + "[LabwareName]" + str(LoadingList[Labware]["Labware Name"]) + "\n"
 
 	print(CommandString)
 
