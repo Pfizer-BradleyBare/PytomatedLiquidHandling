@@ -21,39 +21,30 @@
 VolumeEquations:
   200uL Biorad 96 Well PCR Plate:
     - SegmentNumber: 1
-      MaxSegmentHeight: 11.5
-      SegmentEquation: x * 6.5450
+      MaxSegmentHeight: 0
+      SegmentEquation: x * 2.3562
       
     - SegmentNumber: 2
-      MaxSegmentHeight: 22.1
-      SegmentEquation: x * 11
+      MaxSegmentHeight: 14.68
+      SegmentEquation: x * 16.4934
   
   400uL Thermo 96 Well PCR Plate:
     - SegmentNumber: 1
-      MaxSegmentHeight: 11.5
-      SegmentEquation: x * 6.5450
+      MaxSegmentHeight: 3
+      SegmentEquation: x * 18.9150
       
     - SegmentNumber: 2
-      MaxSegmentHeight: 22.1
-      SegmentEquation: x * 11
+      MaxSegmentHeight: 8
+      SegmentEquation: x * 56.7450
 
   1200uL DeepWell 96 Well PCR Plate:
     - SegmentNumber: 1
-      MaxSegmentHeight: 11.5
-      SegmentEquation: x * 6.5450
+      MaxSegmentHeight: 3
+      SegmentEquation: x * x * (13.1947 - (1.0472 * x))
       
     - SegmentNumber: 2
-      MaxSegmentHeight: 22.1
-      SegmentEquation: x * 11
-  
-  Hamilton 1.5mL FlipTube:
-    - SegmentNumber: 1
-      MaxSegmentHeight: 11.5
-      SegmentEquation: x * 6.5450
-      
-    - SegmentNumber: 2
-      MaxSegmentHeight: 22.1
-      SegmentEquation: x * 11
+      MaxSegmentHeight: 18
+      SegmentEquation: x * 70.5600
 
 Dead Volume:
   200uL Biorad 96 Well PCR Plate: 25
