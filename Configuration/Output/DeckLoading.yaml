@@ -6,7 +6,7 @@
   LoadingPosition: E1
   Max Volume: 1500
   Sequence: E1
-  Volume: 188.4
+  Volume: 162.8
 10% TFA:
   Labware Category: Reagent
   Labware Name: Hamilton 1.5mL FlipTube
@@ -15,7 +15,7 @@
   LoadingPosition: F1
   Max Volume: 1500
   Sequence: F1
-  Volume: 170.4
+  Volume: 156.8
 300mM DTT in Denaturation Buffer:
   Labware Category: Reagent
   Labware Name: Hamilton 1.5mL FlipTube
@@ -24,7 +24,7 @@
   LoadingPosition: F7
   Max Volume: 1500
   Sequence: F7
-  Volume: 189.95999999999998
+  Volume: 163.32
 500mM IAA in Denaturation Buffer:
   Labware Category: Reagent
   Labware Name: Hamilton 1.5mL FlipTube
@@ -33,7 +33,7 @@
   LoadingPosition: F4
   Max Volume: 1500
   Sequence: F4
-  Volume: 210.0
+  Volume: 170.0
 Denaturation:
   Labware Category: Plate
   Labware Name: 200uL Biorad 96 Well PCR Plate
@@ -51,7 +51,7 @@ Denaturation Buffer:
   LoadingPosition: C1
   Max Volume: 14000
   Sequence: C1
-  Volume: 1532.0
+  Volume: 844.0
 Desalting:
   Labware Category: Plate
   Labware Name: 1200uL DeepWell 96 Well PCR Plate
@@ -87,7 +87,7 @@ Digestion Buffer:
   LoadingPosition: Carrier38_Pos2
   Max Volume: 200000
   Sequence: T2
-  Volume: 18120.0
+  Volume: 10040.0
 Sample:
   Labware Category: Plate
   Labware Name: 200uL Biorad 96 Well PCR Plate
@@ -105,4 +105,4 @@ Water:
   LoadingPosition: R1
   Max Volume: 50000
   Sequence: R1
-  Volume: 2548.0
+  Volume: 2538.0

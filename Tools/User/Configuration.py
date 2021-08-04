@@ -380,7 +380,6 @@ def GeneratePrepSheet(LabwareArray):
 			#Do reagent solution loading here
 
 	EXCELIO.AutoFit("PrepList")	
-	quit()
 
 
 
