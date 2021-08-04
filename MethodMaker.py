@@ -4,11 +4,34 @@ import time
 if len(sys.argv) > 1:
 	Excel_File_Path = sys.argv[1]
 	Sample_Start_Pos = int(sys.argv[2])
-	Initialization_Run = eval(sys.argv[3])
+	RunType = sys.argv[3]
+
+	if RunType == "Run":
+		Initialization_Run = False
+		GenerateList = False
+		TestRun = False
+
+	elif RunType == "Init":
+		Initialization_Run = True
+		GenerateList = False
+		TestRun = False
+
+	elif RunType == "PrepList":
+		Initialization_Run = True
+		GenerateList = True
+		TestRun = False
+
+	elif RunType == "Test":
+		Initialization_Run = True
+		GenerateList = False
+		TestRun = True
+
 else:
 	Sample_Start_Pos = 1
 	Excel_File_Path = "Method Maker2.xlsx"
 	Initialization_Run = True
+	GenerateList = True
+	TestRun = True
 
 print("import")
 import Tools.General.ExcelIO as EXCELIO
@@ -92,7 +115,8 @@ while(True):
 
 if HAMILTONIO.IsSimulated() == True:
 
-	#HAMILTONIO.Simulated(False)
+	if GenerateList == False and TestRun == False:
+		HAMILTONIO.Simulated(False)
 
 	PRERUN.Samples(SAMPLES.GetTotalSamples())
 	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
@@ -101,7 +125,8 @@ if HAMILTONIO.IsSimulated() == True:
 
 	CONFIGURATION.WriteLoadingInformation(Labware)
 
-	CONFIGURATION.GeneratePrepSheet(Labware)
+	if GenerateList == True:
+		CONFIGURATION.GeneratePrepSheet(Labware)
 	#Generate prep sheet here
 	
 	if LIQUID_TRANSFER.IsUsed() == True or DILUTE.IsUsed() == True:
