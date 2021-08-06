@@ -60,57 +60,66 @@ def Step(step):
 	DiluentVolumeList = list(map(lambda x,y: y - x, SourceVolumeList,TargetVolumeList))
 	#Calculate correct volumes to pipette
 
+	FirstSourceList = []
+	FirstVolumeList = []
+	SecondSourceList = []
+	SecondVolumeList = []
+
+	for index in range(0,len(SourceVolumeList)):
+		if SourceVolumeList[index] > DiluentVolumeList[index]:
+			FirstSourceList.append(SourceList[index])
+			FirstVolumeList.append(SourceVolumeList[index])
+
+			SecondSourceList.append(DiluentList[index])
+			SecondVolumeList.append(DiluentVolumeList[index])
+		else:
+			SecondSourceList.append(SourceList[index])
+			SecondVolumeList.append(SourceVolumeList[index])
+			
+			FirstSourceList.append(DiluentList[index])
+			FirstVolumeList.append(DiluentVolumeList[index])
+	#We want to pipette the highest volume first for each sample no matter what.
+
 	DestinationPlate = step.GetParentPlate()
 
-	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList)
+	PlateEmpty = PLATES.GetPlate(DestinationPlate).GetVolume() == 0
+	if PlateEmpty == True:
+		MixList = SAMPLES.Column("No")
+	else:
+		MixList = SAMPLES.Column("Yes")
+	#We should only mix if the plate is not empty
+
+	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList, MixList)
 
 	_Temp = copy.deepcopy(Sequences)
 	for Sequence in _Temp:
-
-		if(Sequence[2] == 0):
-			Sequences.remove(Sequence)
-			
-		else:
-			SOLUTIONS.GetSolution(Sequence[1]).AddVolume(Sequence[2])
-			SOLUTIONS.AddPipetteVolume(Sequence[2])
+		SOLUTIONS.GetSolution(Sequence["Source"]).AddVolume(Sequence["Volume"])
+		SOLUTIONS.AddPipetteVolume(Sequence["Volume"])
 
 	if HAMILTONIO.IsSimulated() == False:
 		for sequence in Sequences:
-			name = sequence[1]
-			SequencePos = CONFIGURATION.GetDeckLoading(name)["Sequence"]
-			sequence[1] = SequencePos
+			sequence["Source"] = CONFIGURATION.GetDeckLoading(sequence["Source"])["Sequence"]
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 
 	if len(Sequences) != 0:
-		for row in Sequences:
-			row.append("No")
 		PIPETTE.Do(DestinationPlate, Sequences)
 	#Do the source pipetting
 
 	DestinationPlate = step.GetParentPlate()
 
-	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(DiluentList, DiluentVolumeList)
+	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(DiluentList, DiluentVolumeList,SAMPLES.Column("Yes"))
 
 	_Temp = copy.deepcopy(Sequences)
 	for Sequence in _Temp:
-
-		if(Sequence[2] == 0):
-			Sequences.remove(Sequence)
-			
-		else:
-			SOLUTIONS.GetSolution(Sequence[1]).AddVolume(Sequence[2])
-			SOLUTIONS.AddPipetteVolume(Sequence[2])
+		SOLUTIONS.GetSolution(Sequence["Source"]).AddVolume(Sequence["Volume"])
+		SOLUTIONS.AddPipetteVolume(Sequence["Volume"])
 
 	if HAMILTONIO.IsSimulated() == False:
 		for sequence in Sequences:
-			name = sequence[1]
-			SequencePos = CONFIGURATION.GetDeckLoading(name)["Sequence"]
-			sequence[1] = SequencePos
+			Sequence["Source"] = CONFIGURATION.GetDeckLoading(Sequence["Source"])["Sequence"]
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 
 	if len(Sequences) != 0:
-		for row in Sequences:
-			row.append("Yes")
 		PIPETTE.Do(DestinationPlate, Sequences)
 	#Do the diluent pipetting
 #end

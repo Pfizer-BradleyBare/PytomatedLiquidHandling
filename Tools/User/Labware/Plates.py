@@ -86,7 +86,7 @@ class Class:
 #	Input Arguments: [SourceList: List] [SourceVolumeList: List]
 #	Returns: [List of Lists]
 #########################################################################
-	def CreatePipetteSequence(self, SourceList, SourceVolumeList):
+	def CreatePipetteSequence(self, SourceList, SourceVolumeList, MixList):
 		global Plates_List
 		
 		DispenseHeights = CONFIGURATION.WellVolumeToDispenseHeight(self.GetName(),self.GetVolumesList())
@@ -97,20 +97,21 @@ class Class:
 
 			ActualVolume = SourceVolumeList[count] * self.GetFactors()[count]
 
-			if IsPlate(SourceList[count]) == True:
-				Plate = GetPlate(SourceList[count])
-				Plate.GetVolumesList()[count] -= ActualVolume
-				Plate.UpdateMaxVolume()
-			#Do plate volume subtraction
-			
-			for Position in self.GetSequenceList()[count]:
+			if ActualVolume > 0:
 
-				Expanded.append([int(float(Position)), SourceList[count], ActualVolume, DispenseHeights[count], self.GetVolumesList()[count]])
+				if IsPlate(SourceList[count]) == True:
+					Plate = GetPlate(SourceList[count])
+					Plate.GetVolumesList()[count] -= ActualVolume
+					Plate.UpdateMaxVolume()
+				#Do plate volume subtraction
 			
-			self.GetVolumesList()[count] += ActualVolume
-			self.UpdateMaxVolume()
+				for Position in self.GetSequenceList()[count]:
+					Expanded.append({"Position":int(float(Position)), "Source":SourceList[count], "Volume":ActualVolume, "Height":DispenseHeights[count], "Mix":MixList[count]})
+			
+				self.GetVolumesList()[count] += ActualVolume
+				self.UpdateMaxVolume()
 		
-		return copy.deepcopy(sorted(Expanded, key=lambda x: x[0]))
+		return copy.deepcopy(sorted(Expanded, key=lambda x: x["Position"]))
 
 def Init():
 	global Plates_List

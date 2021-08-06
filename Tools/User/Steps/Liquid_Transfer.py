@@ -28,29 +28,25 @@ def Step(step):
 	
 	SourceList = SAMPLES.Column(step.GetParameters()[NAME])
 	SourceVolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
+	MixList = SAMPLES.Column(step.GetParameters()[MIXING])
 	
 	for Source in SourceList:
 		SOLUTIONS.AddSolution(Source, step.GetParameters()[TYPE], step.GetParameters()[STORAGE])
 
-	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList)
+	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList,MixList)
 	
 	_Temp = copy.deepcopy(Sequences)
 	for Sequence in _Temp:
-		if(Sequence[2] == 0):
-			Sequences.remove(Sequence)
-		else:
-			SOLUTIONS.GetSolution(Sequence[1]).AddVolume(Sequence[2])
-			SOLUTIONS.AddPipetteVolume(Sequence[2])
+			SOLUTIONS.GetSolution(Sequence["Source"]).AddVolume(Sequence["Volume"])
+			SOLUTIONS.AddPipetteVolume(Sequence["Volume"])
 	
 	if HAMILTONIO.IsSimulated() == False:
 		for sequence in Sequences:
 			name = sequence[1]
-			SequencePos = CONFIGURATION.GetDeckLoading(name)["Sequence"]
-			sequence[1] = SequencePos
+			sequence["Source"] = CONFIGURATION.GetDeckLoading(sequence["Source"])["Sequence"]
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
+	#Translate User defined names into sequence loading names
 
 	if len(Sequences) != 0:
-		for row in Sequences:
-			row.append(step.GetParameters()["Mix?"])
 		PIPETTE.Do(DestinationPlate, Sequences)
 

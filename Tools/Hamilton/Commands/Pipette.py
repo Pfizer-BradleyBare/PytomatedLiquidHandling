@@ -25,11 +25,11 @@ def Do(Dest, Sequences):
 	Sor = ""
 	Mix = ""
 	for Sequence in Sequences:
-		Seq += str(Sequence[0]) + ","
-		Sor += str(Sequence[1]) + ","
-		Vol += "{0:.2f}".format(float(Sequence[2])) + ","
-		Tot += "{0:.2f}".format(float(Sequence[3])) + ","
-		Mix += Sequence[5] + ","
+		Seq += str(Sequence["Position"]) + ","
+		Sor += str(Sequence["Source"]) + ","
+		Vol += "{0:.2f}".format(float(Sequence["Volume"])) + ","
+		Tot += "{0:.2f}".format(float(Sequence["Height"])) + ","
+		Mix += Sequence["Mix"] + ","
 
 	CommandString = ""
 	CommandString += "[Pipette]\n"
