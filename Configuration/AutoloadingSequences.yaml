@@ -20,7 +20,7 @@
 
 
 Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel:
-  Max Supported Volume: 200
+  Max Supported Volume: 225
   Storage Condition: False
   Labware Category: Plate
   Labware Type: 96 Well PCR Plate
@@ -29,16 +29,16 @@ Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel:
   Deck Position: Carrier38_Pos3
 
 Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel:
-  Max Supported Volume: 200
+  Max Supported Volume: 225
   Storage Condition: False
   Labware Category: Plate
   Labware Type: 96 Well PCR Plate
   Labware Name: 200uL Biorad 96 Well PCR Plate
-  Lid Sequence: False
+  Lid Sequence: Carrier14_Pos3_Lid_200uL
   Deck Position: Carrier14_Pos3
 
 Carrier14_Pos4_96WellPCRPlate200uL_1mLChannel:
-  Max Supported Volume: 200
+  Max Supported Volume: 225
   Storage Condition: False
   Labware Category: Plate
   Labware Type: 96 Well PCR Plate
@@ -47,7 +47,7 @@ Carrier14_Pos4_96WellPCRPlate200uL_1mLChannel:
   Deck Position: Carrier14_Pos4
 
 Carrier14_Pos5_96WellPCRPlate200uL_1mLChannel:
-  Max Supported Volume: 200
+  Max Supported Volume: 225
   Storage Condition: False
   Labware Category: Plate
   Labware Type: 96 Well PCR Plate
@@ -117,14 +117,42 @@ Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel:
   Lid Sequence: False
   Deck Position: Carrier38_Pos5
 
-Carrier38_Pos1_96WellPCRPlate1200uL_1mLChannel:
-  Max Supported Volume: 1200
+#2000
+Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel:
+  Max Supported Volume: 2000
   Storage Condition: False
   Labware Category: Plate
   Labware Type: 96 Well PCR Plate
-  Labware Name: 1200uL DeepWell 96 Well PCR Plate
+  Labware Name: 2000uL Corning 96 Well PCR Plate
   Lid Sequence: False
   Deck Position: Carrier38_Pos1
+
+Carrier14_Pos3_96WellPCRPlate2000uL_1mLChannel:
+  Max Supported Volume: 2000
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 2000uL Corning 96 Well PCR Plate
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos3
+
+Carrier14_Pos4_96WellPCRPlate2000uL_1mLChannel:
+  Max Supported Volume: 2000
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 2000uL Corning 96 Well PCR Plate
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos4
+
+Carrier14_Pos5_96WellPCRPlate2000uL_1mLChannel:
+  Max Supported Volume: 2000
+  Storage Condition: False
+  Labware Category: Plate
+  Labware Type: 96 Well PCR Plate
+  Labware Name: 2000uL Corning 96 Well PCR Plate
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos5
 
 #Starstedt plates
 
@@ -778,7 +806,7 @@ R5:
   Lid Sequence: False
   Deck Position: R5
 
-T1:
+T5:
   Max Supported Volume: 200000
   Storage Condition: Ambient
   Labware Category: Reagent
@@ -787,7 +815,7 @@ T1:
   Lid Sequence: False
   Deck Position: Carrier38_Pos1
 
-T2:
+T4:
   Max Supported Volume: 200000
   Storage Condition: Ambient
   Labware Category: Reagent
@@ -795,3 +823,21 @@ T2:
   Labware Name: 200mL Reagent Trough
   Lid Sequence: False
   Deck Position: Carrier38_Pos2
+
+T10:
+  Max Supported Volume: 200000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 200mL Reagent Trough
+  Labware Name: 200mL Reagent Trough
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos1
+
+T9:
+  Max Supported Volume: 200000
+  Storage Condition: Ambient
+  Labware Category: Reagent
+  Labware Type: 200mL Reagent Trough
+  Labware Name: 200mL Reagent Trough
+  Lid Sequence: False
+  Deck Position: Carrier14_Pos2

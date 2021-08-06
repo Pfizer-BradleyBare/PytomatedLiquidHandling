@@ -1,13 +1,13 @@
-1.0 mg/mL Trypsin in 500mM Acetic Acid:
-  Labware Category: Reagent
-  Labware Name: Hamilton 1.5mL FlipTube
-  Labware Type: FlipTube
-  Lid: true
-  LoadingPosition: E1
-  Max Volume: 1500
-  Sequence: E1
-  Volume: 162.8
-10% TFA:
+Destination:
+  Labware Category: Plate
+  Labware Name: 200uL Biorad 96 Well PCR Plate
+  Labware Type: 96 Well PCR Plate
+  Lid: false
+  LoadingPosition: Carrier38_Pos3
+  Max Volume: 300
+  Sequence: Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel
+  Volume: 225.0
+Solution 1:
   Labware Category: Reagent
   Labware Name: Hamilton 1.5mL FlipTube
   Labware Type: FlipTube
@@ -15,94 +15,22 @@
   LoadingPosition: F1
   Max Volume: 1500
   Sequence: F1
-  Volume: 156.8
-300mM DTT in Denaturation Buffer:
+  Volume: 160.0
+Solution 2:
   Labware Category: Reagent
   Labware Name: Hamilton 1.5mL FlipTube
   Labware Type: FlipTube
   Lid: true
-  LoadingPosition: F7
+  LoadingPosition: F2
   Max Volume: 1500
-  Sequence: F7
-  Volume: 163.32
-500mM IAA in Denaturation Buffer:
+  Sequence: F2
+  Volume: 350.0
+Solution 3:
   Labware Category: Reagent
   Labware Name: Hamilton 1.5mL FlipTube
   Labware Type: FlipTube
   Lid: true
-  LoadingPosition: F4
+  LoadingPosition: F3
   Max Volume: 1500
-  Sequence: F4
-  Volume: 170.0
-Denaturation:
-  Labware Category: Plate
-  Labware Name: 200uL Biorad 96 Well PCR Plate
-  Labware Type: 96 Well PCR Plate
-  Lid: false
-  LoadingPosition: Carrier14_Pos3
-  Max Volume: 200
-  Sequence: Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel
-  Volume: 133.32999999999998
-Denaturation Buffer:
-  Labware Category: Reagent
-  Labware Name: 15mL Centrifuge Tube
-  Labware Type: 15mL Centrifuge Tube
-  Lid: false
-  LoadingPosition: C1
-  Max Volume: 14000
-  Sequence: C1
-  Volume: 844.0
-Desalting:
-  Labware Category: Plate
-  Labware Name: 1200uL DeepWell 96 Well PCR Plate
-  Labware Type: 96 Well PCR Plate
-  Lid: false
-  LoadingPosition: Carrier38_Pos5
-  Max Volume: 1200
-  Sequence: Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel
-  Volume: 200
-Desalting Waste:
-  Labware Category: Plate
-  Labware Name: 1200uL DeepWell 96 Well PCR Plate
-  Labware Type: 96 Well PCR Plate
-  Lid: false
-  LoadingPosition: Carrier38_Pos1
-  Max Volume: 1200
-  Sequence: Carrier38_Pos1_96WellPCRPlate1200uL_1mLChannel
-  Volume: 101
-Digestion:
-  Labware Category: Plate
-  Labware Name: 200uL Biorad 96 Well PCR Plate
-  Labware Type: 96 Well PCR Plate
-  Lid: Carrier14_Pos4_Lid_200uL
-  LoadingPosition: Carrier14_Pos4
-  Max Volume: 200
-  Sequence: Carrier14_Pos4_96WellPCRPlate200uL_1mLChannel
-  Volume: 39.9
-Digestion Buffer:
-  Labware Category: Reagent
-  Labware Name: 200mL Reagent Trough
-  Labware Type: 200mL Reagent Trough
-  Lid: false
-  LoadingPosition: Carrier38_Pos2
-  Max Volume: 200000
-  Sequence: T2
-  Volume: 10040.0
-Sample:
-  Labware Category: Plate
-  Labware Name: 200uL Biorad 96 Well PCR Plate
-  Labware Type: 96 Well PCR Plate
-  Lid: false
-  LoadingPosition: Carrier38_Pos3
-  Max Volume: 200
-  Sequence: Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel
-  Volume: 35.0
-Water:
-  Labware Category: Reagent
-  Labware Name: 60mL Reagent Reservior
-  Labware Type: 60mL Reagent Reservior
-  Lid: false
-  LoadingPosition: R1
-  Max Volume: 50000
-  Sequence: R1
-  Volume: 2538.0
+  Sequence: F3
+  Volume: 175.0

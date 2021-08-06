@@ -50,7 +50,6 @@ def Step(step):
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 
 	if len(Sequences) != 0:
-		#print("p",step.GetParameters())
 		for row in Sequences:
 			row.append(step.GetParameters()["Mix?"])
 		PIPETTE.Do(DestinationPlate, Sequences)

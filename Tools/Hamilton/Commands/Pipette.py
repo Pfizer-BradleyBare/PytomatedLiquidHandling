@@ -29,7 +29,7 @@ def Do(Dest, Sequences):
 		Sor += str(Sequence[1]) + ","
 		Vol += "{0:.2f}".format(float(Sequence[2])) + ","
 		Tot += "{0:.2f}".format(float(Sequence[3])) + ","
-		Mix += Sequence[4] + ","
+		Mix += Sequence[5] + ","
 
 	CommandString = ""
 	CommandString += "[Pipette]\n"

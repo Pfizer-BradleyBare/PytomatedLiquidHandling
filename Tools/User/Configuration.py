@@ -63,17 +63,20 @@ def WriteLoadingInformation(YamlData):
 #	Returns: [DispenseHeights: List[float]]
 #########################################################################
 def WellVolumeToDispenseHeight(PlateName, WellVolumes):
+	HEIGHT_INCREMENT = 0.01
+
 	#use platename to get the  Labware Category, Labware Type, and Max Volume from storage file​	
 	LabwareLoading = GetDeckLoading(PlateName)
-	
+
 	if not LabwareLoading:
 		return [0]*len(WellVolumes)
+
 	Segments = SysConfig["VolumeEquations"][LabwareLoading["Labware Name"]]
 	Height  = 0
 	DispenseHeights = [-1]*len(WellVolumes)
 
 	while(True): 
-		Height += .1
+		Height += HEIGHT_INCREMENT
 		VolumeHeight = VolumeFromHeight(Height,Segments)
 		for i in range(0, len(WellVolumes)): 
 			if VolumeHeight > WellVolumes[i]:	
@@ -91,8 +94,15 @@ def WellVolumeToDispenseHeight(PlateName, WellVolumes):
 def VolumeFromHeight(Height, Segments):
 	Volume = 0
 	for segment in Segments:
+		CalcHeight = 0
 		EquationString = segment["SegmentEquation"]
-		EquationString = EquationString.replace("x",str(Height))
+
+		if Height >= segment["MaxSegmentHeight"]:
+			CalcHeight = segment["MaxSegmentHeight"]
+		else:
+			CalcHeight = Height
+
+		EquationString = EquationString.replace("x",str(CalcHeight))
 		Volume += eval(EquationString)
 		Height -= float(segment["MaxSegmentHeight"])
 		if Height <= 0:

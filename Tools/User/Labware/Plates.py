@@ -105,7 +105,7 @@ class Class:
 			
 			for Position in self.GetSequenceList()[count]:
 
-				Expanded.append([int(float(Position)), SourceList[count], ActualVolume, DispenseHeights[count]])
+				Expanded.append([int(float(Position)), SourceList[count], ActualVolume, DispenseHeights[count], self.GetVolumesList()[count]])
 			
 			self.GetVolumesList()[count] += ActualVolume
 			self.UpdateMaxVolume()

@@ -82,9 +82,8 @@ def Step(step):
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 
 	if len(Sequences) != 0:
-		print(Sequences)
 		for row in Sequences:
-			row.append("Yes")
+			row.append("No")
 		PIPETTE.Do(DestinationPlate, Sequences)
 	#Do the source pipetting
 
