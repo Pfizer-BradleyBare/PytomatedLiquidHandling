@@ -89,29 +89,46 @@ class Class:
 	def CreatePipetteSequence(self, SourceList, SourceVolumeList, MixList):
 		global Plates_List
 		
-		DispenseHeights = CONFIGURATION.WellVolumeToDispenseHeight(self.GetName(),self.GetVolumesList())
+		VolumesList = self.GetVolumesList()
+		DispenseHeights = CONFIGURATION.WellVolumeToDispenseHeight(self.GetName(),VolumesList)
+		SamplePosition = SAMPLES.GetSamplePositions()
+		DestinationPosition = self.GetSequenceList()
 
 		Expanded = []
 
-		for count in range(0,len(self.GetSequenceList())):
+		for count in range(0,len(DestinationPosition)):
 
 			ActualVolume = SourceVolumeList[count] * self.GetFactors()[count]
 
 			if ActualVolume > 0:
-
-				if IsPlate(SourceList[count]) == True:
-					Plate = GetPlate(SourceList[count])
-					Plate.GetVolumesList()[count] -= ActualVolume
-					Plate.UpdateMaxVolume()
-				#Do plate volume subtraction
 			
-				for Position in self.GetSequenceList()[count]:
-					Expanded.append({"Position":int(float(Position)), "Source":SourceList[count], "Volume":ActualVolume, "Height":DispenseHeights[count], "Mix":MixList[count]})
+				for Position in DestinationPosition[count]:
+
+					SourcePosition = Position
+
+					if IsPlate(SourceList[count]) == True:
+						Plate = GetPlate(SourceList[count])
+
+						SamplePositionIndex = count
+
+						if SourceList[count] == STEPS.GetStartingPlate():
+							for index in range(0,len(DestinationPosition)):
+								if SamplePosition[count] in DestinationPosition[index]:
+									SamplePositionIndex = index
+
+							SourcePosition = SamplePosition[count]
+						#Get index of sample position
+						
+						Plate.GetVolumesList()[SamplePositionIndex] -= ActualVolume
+						Plate.UpdateMaxVolume()
+					#Do plate volume subtraction
+
+					Expanded.append({"Destination Position":int(float(Position)),"Destination":self.GetName(), "Source Position":int(float(SourcePosition)), "Source":SourceList[count], "Volume":ActualVolume, "Height":DispenseHeights[count], "Total":VolumesList[count], "Mix":MixList[count]})
 			
 				self.GetVolumesList()[count] += ActualVolume
 				self.UpdateMaxVolume()
 		
-		return copy.deepcopy(sorted(Expanded, key=lambda x: x["Position"]))
+		return copy.deepcopy(sorted(Expanded, key=lambda x: x["Destination Position"]))
 
 def Init():
 	global Plates_List

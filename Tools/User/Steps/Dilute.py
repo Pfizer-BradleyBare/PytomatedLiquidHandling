@@ -82,14 +82,7 @@ def Step(step):
 
 	DestinationPlate = step.GetParentPlate()
 
-	PlateEmpty = PLATES.GetPlate(DestinationPlate).GetVolume() == 0
-	if PlateEmpty == True:
-		MixList = SAMPLES.Column("No")
-	else:
-		MixList = SAMPLES.Column("Yes")
-	#We should only mix if the plate is not empty
-
-	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList, MixList)
+	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(FirstSourceList, FirstVolumeList, SAMPLES.Column("Yes"))
 
 	_Temp = copy.deepcopy(Sequences)
 	for Sequence in _Temp:
@@ -107,7 +100,7 @@ def Step(step):
 
 	DestinationPlate = step.GetParentPlate()
 
-	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(DiluentList, DiluentVolumeList,SAMPLES.Column("Yes"))
+	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SecondSourceList, SecondVolumeList, SAMPLES.Column("Yes"))
 
 	_Temp = copy.deepcopy(Sequences)
 	for Sequence in _Temp:
@@ -116,7 +109,7 @@ def Step(step):
 
 	if HAMILTONIO.IsSimulated() == False:
 		for sequence in Sequences:
-			Sequence["Source"] = CONFIGURATION.GetDeckLoading(Sequence["Source"])["Sequence"]
+			sequence["Source"] = CONFIGURATION.GetDeckLoading(sequence["Source"])["Sequence"]
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 
 	if len(Sequences) != 0:

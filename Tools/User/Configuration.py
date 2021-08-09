@@ -40,12 +40,12 @@ def Init():
 	SysConfig = yaml.full_load(file)
 	file.close()
 
-	#if HAMILTONIO.IsSimulated() == False:
-	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
-	DeckLoading = yaml.full_load(file)
-	file.close()
-	#else:
-	# 	DeckLoading = None
+	if HAMILTONIO.IsSimulated() == False:
+		file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
+		DeckLoading = yaml.full_load(file)
+		file.close()
+	else:
+	 	DeckLoading = None
 
 def WriteLoadingInformation(YamlData):
 	global DeckLoading
@@ -344,7 +344,8 @@ def GeneratePrepSheet(LabwareArray):
 				PlatePrepArray = []
 				for index in range(0,SAMPLES.GetNumSamples()):
 					for position in Plate.GetSequenceList()[index]:
-						PlatePrepArray.append({"Position":position,"AlphaNumeric":NumericToAlphaNumeric(position),"Volume":abs(Plate.GetVolumesList()[index]) + DeadVolumeConfig[LoadingDict["Labware Name"]]})
+						if Plate.GetVolumesList()[index] != 0:
+							PlatePrepArray.append({"Position":position,"AlphaNumeric":NumericToAlphaNumeric(position),"Volume":abs(Plate.GetVolumesList()[index]) + DeadVolumeConfig[LoadingDict["Labware Name"]]})
 
 				PlatePrepArray = sorted(PlatePrepArray, key=lambda x: x["Position"])
 				

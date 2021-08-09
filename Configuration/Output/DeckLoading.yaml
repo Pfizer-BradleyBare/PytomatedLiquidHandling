@@ -42,7 +42,7 @@ Denaturation:
   LoadingPosition: Carrier14_Pos3
   Max Volume: 225
   Sequence: Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel
-  Volume: 133.32999999999998
+  Volume: 118.33
 Denaturation Buffer:
   Labware Category: Reagent
   Labware Name: 15mL Centrifuge Tube
@@ -78,7 +78,7 @@ Digestion:
   LoadingPosition: Carrier14_Pos4
   Max Volume: 225
   Sequence: Carrier14_Pos4_96WellPCRPlate200uL_1mLChannel
-  Volume: 39.9
+  Volume: 24.9
 Digestion Buffer:
   Labware Category: Reagent
   Labware Name: 200mL Reagent Trough
@@ -96,7 +96,7 @@ Sample:
   LoadingPosition: Carrier38_Pos3
   Max Volume: 225
   Sequence: Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel
-  Volume: 35.0
+  Volume: 20.0
 Water:
   Labware Category: Reagent
   Labware Name: 60mL Reagent Reservior
@@ -105,4 +105,4 @@ Water:
   LoadingPosition: R1
   Max Volume: 50000
   Sequence: R1
-  Volume: 2538.0
+  Volume: 2516.0

@@ -19,29 +19,37 @@ def Do(Dest, Sequences):
 	#SequenceFactorVolume 2D List: These are the positions, the volume for that position, and the total volume in the container before this step
 	#self.Samples.PlateSequenceFactorVolumeAddVolume(Dest, VolumeList)
 
-	Seq = ""
-	Vol = ""
-	Tot = ""
-	Sor = ""
+	Dest = ""
+	DestPos = ""
+	Source = ""
+	SourcePos = ""
+	Volume = ""
+	DestHeight = ""
+	TotalVolume = ""
 	Mix = ""
+
 	for Sequence in Sequences:
-		Seq += str(Sequence["Position"]) + ","
-		Sor += str(Sequence["Source"]) + ","
-		Vol += "{0:.2f}".format(float(Sequence["Volume"])) + ","
-		Tot += "{0:.2f}".format(float(Sequence["Height"])) + ","
+		Dest += str(Sequence["Destination"]) + ","
+		DestPos += str(Sequence["Destination Position"]) + ","
+		Source += str(Sequence["Source"]) + ","
+		SourcePos += str(Sequence["Source Position"]) + ","
+		Volume += "{0:.2f}".format(float(Sequence["Volume"])) + ","
+		DestHeight += "{0:.2f}".format(float(Sequence["Height"])) + ","
+		TotalVolume += "{0:.2f}".format(float(Sequence["Total"])) + ","
 		Mix += Sequence["Mix"] + ","
 
 	CommandString = ""
 	CommandString += "[Pipette]\n"
-	CommandString += "[Destination]" + Dest 
-	CommandString += "[Sources]" + Sor[:-1] 
-	CommandString += "[Sequences]" + Seq[:-1]
-	CommandString += "[Volumes]" + Vol[:-1]  
-	CommandString += "[Totals]" + Tot[:-1] 
-	CommandString += "[Mix?]" + Mix[:-1] + "\n"
+	CommandString += "[Destination]" + Dest[:-1]
+	CommandString += "[DestinationPosition]" + DestPos[:-1]
+	CommandString += "[Source]" + Source[:-1] 
+	CommandString += "[SourcePosition]" + SourcePos[:-1] 
+	CommandString += "[Volume]" + Volume[:-1] 
+	CommandString += "[Height]" + DestHeight[:-1]  
+	CommandString += "[Total]" + TotalVolume[:-1] 
+	CommandString += "[Mix]" + Mix[:-1] + "\n"
 
 	print(CommandString)
-
 
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()

@@ -164,19 +164,16 @@ def Callback(step):
 			LidTransportSource = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Lid"]
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
-			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#Lid
 
 			PlateTransportDestination = Loading["Sequence"]
 			PlateTransportSource = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Plate"]
 			PlateTransportOpenDistance = TransportConfig[Loading["Labware Name"]]["Open"]
 			PlateTransportCloseDistance = TransportConfig[Loading["Labware Name"]]["Close"]
-			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#plate
 
 			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,0)
 			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,1)
-			#TRANSPORT.HeaterRemove(PlateTransportSource,PlateTransportDe,stination,PlateTransportOpenDistance,PlateTransportCloseDistance,LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
 		
 
 	else:
@@ -207,19 +204,16 @@ def Step(step):
 			PlateTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Plate"]
 			PlateTransportOpenDistance = TransportConfig[Loading["Labware Name"]]["Open"]
 			PlateTransportCloseDistance = TransportConfig[Loading["Labware Name"]]["Close"]
-			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#plate
 		
 			LidTransportSource = Lid
 			LidTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Lid"]
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
-			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#Lid
 
 			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,0)
 			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,1)
-			#TRANSPORT.HeaterMove(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance)
 
 		if step.GetParameters()[SHAKE] > 0:
 			HEATER.StartShaking(ID, step.GetParameters()[SHAKE])
