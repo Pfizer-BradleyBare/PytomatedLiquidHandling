@@ -4,6 +4,7 @@ from ..Labware import Plates as PLATES
 from ...Hamilton.Commands import Heater as HEATER
 from ...Hamilton.Commands import Transport as TRANSPORT
 from ..Steps import Wait as WAIT
+from ..Steps import Split_Plate as SPLIT_PLATE
 from ...User import Configuration as CONFIGURATION
 import time
 
@@ -14,6 +15,7 @@ SHAKE = "Shake (rpm)"
 
 #List of incubation steps
 Incubation_List = []
+Incubation_Num_List = []
 
 Lids = {}
 Heaters = {}
@@ -56,29 +58,33 @@ def Init(MutableStepsList):
 			for PlateType in Config["Heaters"]["PlateSequences"]:
 
 				Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"][PlateType] = {}
-				for PlateVol in Config["Heaters"]["PlateSequences"][PlateType]:
 
-					Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"][PlateType][PlateVol] = {}
-					Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"][PlateType][PlateVol]["Plate"] = {}
-					Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"][PlateType][PlateVol]["Lid"] = {}
-					PlateSequence = Config["Heaters"]["SequencePrefix"][HHS] + Config["Heaters"]["PlateSequences"][PlateType][PlateVol]
-					LidSequence = Config["Heaters"]["SequencePrefix"][HHS] + Config["Heaters"]["LidSequences"][PlateType][PlateVol]
-					Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"][PlateType][PlateVol]["Plate"] = PlateSequence
-					Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"][PlateType][PlateVol]["Lid"] = LidSequence
-					CONFIGURATION.AddCheckSequence(PlateSequence)
-					CONFIGURATION.AddCheckSequence(LidSequence)
+				PlateSequence = Config["Heaters"]["SequencePrefix"][HHS] + Config["Heaters"]["PlateSequences"][PlateType]
+				LidSequence = Config["Heaters"]["SequencePrefix"][HHS] + Config["Heaters"]["LidSequences"][PlateType]
+				Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"][PlateType]["Plate"] = PlateSequence
+				Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"][PlateType]["Lid"] = LidSequence
+				CONFIGURATION.AddCheckSequence(PlateSequence)
+				CONFIGURATION.AddCheckSequence(LidSequence)
 	#This does double duty. It combines the sequence prefix with the plate and lid sequences. In doing so it also ensures that each plate sequence has a matching lid sequence, which is imperative.
 	#Do configuration for the incubation step
 
+	IncubationCounter = 1
+
 	for Step in MutableStepsList:
+		if Step.GetTitle() == SPLIT_PLATE.TITLE:
+			IncubationCounter += 1
+
+
 		if Step.GetTitle() == TITLE:
 			
 			IsUsedFlag = True
 
 			if str(Step.GetParameters()[TEMP]).lower() != "Ambient".lower():
 					Incubation_List.append(Step)
+					Incubation_Num_List.append(IncubationCounter)
 
 	print(Incubation_List)
+	print(Incubation_Num_List)
 	print("\n",Lids)
 	print("\n",Heaters,"\n\n")
 	StartHeaters()
@@ -97,11 +103,20 @@ def StartHeaters():
 		Temp = Incubation.GetParameters()[TEMP]
 		PossibleHeaters = sorted(Heaters, key=lambda h: abs(Heaters[h]["Temp"] - Temp))
 
+		NumReservedHeaters = 0
+		for Heater in Heaters:
+			if (not not Heaters[Heater]["Reserved"]) == True:
+				NumReservedHeaters += 1
+		if not(NumReservedHeaters < Incubation_Num_List[0]):
+			return
+		#Only heat the number of plates we have running at one time
+
 		for ID in PossibleHeaters:
 			if (not not Heaters[ID]["Reserved"]) == False and (not not Incubation.GetParameters()[SHAKE]) <= Heaters[ID]["Shake"]:
 
 				Heaters[ID]["Reserved"] = Incubation
-				Incubation_List.remove(Incubation)
+				Incubation_List.pop(0)
+				Incubation_Num_List.pop(0)
 				Heaters[ID]["Temp"] = Temp
 				HEATER.StartHeating(ID,Temp)
 				break
@@ -146,16 +161,16 @@ def Callback(step):
 		
 		if Loading != None:
 			LidTransportDestination = Lid
-			LidTransportSource = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Lid"]
+			LidTransportSource = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Lid"]
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
 			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#Lid
 
 			PlateTransportDestination = Loading["Sequence"]
-			PlateTransportSource = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Plate"]
-			PlateTransportOpenDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Open"]
-			PlateTransportCloseDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Close"]
+			PlateTransportSource = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Plate"]
+			PlateTransportOpenDistance = TransportConfig[Loading["Labware Name"]]["Open"]
+			PlateTransportCloseDistance = TransportConfig[Loading["Labware Name"]]["Close"]
 			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#plate
 
@@ -189,14 +204,14 @@ def Step(step):
 	if ID != None:
 		if Loading != None:
 			PlateTransportSource = Loading["Sequence"]
-			PlateTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Plate"]
-			PlateTransportOpenDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Open"]
-			PlateTransportCloseDistance = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Close"]
+			PlateTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Plate"]
+			PlateTransportOpenDistance = TransportConfig[Loading["Labware Name"]]["Open"]
+			PlateTransportCloseDistance = TransportConfig[Loading["Labware Name"]]["Close"]
 			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)
 			#plate
 		
 			LidTransportSource = Lid
-			LidTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]["Lid"]
+			LidTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Lid"]
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
 			#TRANSPORT.Move(TransportSource,TransportDestination,TransportOpenDistance,TransportCloseDistance)

@@ -46,6 +46,16 @@ VolumeEquations:
       MaxSegmentHeight: 18
       SegmentEquation: x * 70.5600
 
+  2000uL Corning 96 Well PCR Plate:
+    - SegmentNumber: 1
+      MaxSegmentHeight: 4
+      SegmentEquation: x * x * (12.5664 - (1.0472 * x))
+      
+    - SegmentNumber: 2
+      MaxSegmentHeight: 38
+      SegmentEquation: x * 64.0000
+
+
 Dead Volume:
   200uL Biorad 96 Well PCR Plate: 25
   400uL Thermo 96 Well PCR Plate: 50
@@ -78,15 +88,13 @@ Steps:
         - _HHS1_
         - _HHS2_
       PlateSequences:
-        96 Well PCR Plate:
-          200: 96WellPCRPlate200uL
-          400: 96WellPCRPlate400uL
-          1200: 96WellPCRPlate1200uL
-      LidSequences:
-        96 Well PCR Plate:   
-          200: Lid_200uL
-          400: Lid_400uL
-          1200: Lid_1200uL
+        200uL Biorad 96 Well PCR Plate: 96WellPCRPlate200uL
+        400uL Thermo 96 Well PCR Plate: 96WellPCRPlate400uL
+        1200uL DeepWell 96 Well PCR Plate: 96WellPCRPlate1200uL
+      LidSequences:  
+        200uL Biorad 96 Well PCR Plate: Lid_200uL
+        400uL Thermo 96 Well PCR Plate: Lid_400uL
+        1200uL DeepWell 96 Well PCR Plate: Lid_1200uL
 
   Transport:
     Lid:
@@ -95,16 +103,15 @@ Steps:
     Vacuum:
       Open: 150
       Close: 150
-    96 Well PCR Plate:
-      200:
-        Open: 85
-        Close: 75
-      400:
-        Open: 85
-        Close: 75
-      1200:
-        Open: 85
-        Close: 73
+    200uL Biorad 96 Well PCR Plate:
+      Open: 85
+      Close: 75
+    400uL Thermo 96 Well PCR Plate:
+      Open: 85
+      Close: 75
+    1200uL DeepWell 96 Well PCR Plate:
+      Open: 85
+      Close: 73
 
   Desalt:
     Preferred Loading:
