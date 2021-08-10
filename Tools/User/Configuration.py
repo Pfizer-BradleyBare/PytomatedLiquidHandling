@@ -282,6 +282,9 @@ def Load(Plates_List, Solutions_List):
 	#
 	#
 
+	FinalLoading = dict(sorted(FinalLoading.items(), key=lambda x: x[1]["LoadingPosition"]))
+	#Sort by position so the deck loading is in position order
+
 	if(len(Plates_List) + len(Solutions_List) != len(FinalLoading)):
 		print("Unabled to load all labware. The following labware exceeds available container volume on deck.")
 		for plate in Plates_List:
