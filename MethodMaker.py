@@ -127,7 +127,7 @@ if HAMILTONIO.IsSimulated() == True:
 
 	if GenerateList == True:
 		pass
-		#CONFIGURATION.GeneratePrepSheet(Labware)
+		CONFIGURATION.GeneratePrepSheet(Labware)
 	#Generate prep sheet here
 	
 	if LIQUID_TRANSFER.IsUsed() == True or DILUTE.IsUsed() == True:
