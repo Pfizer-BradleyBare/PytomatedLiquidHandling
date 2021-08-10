@@ -14,6 +14,9 @@ def Move(SourceSeq, DestinationSeq, OpenDistance, CloseDistance, Eject):
 	CommandString += "[Transport]\n"
 	CommandString += "[Move]\n"
 	CommandString += "[Source]" + str(SourceSeq) + "[Destination]" + str(DestinationSeq) + "[Open]" + str(OpenDistance) + "[Close]" + str(CloseDistance) + "[Eject]" + str(Eject) + "\n"
+	
+	print(CommandString)
+
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return Response

@@ -15,6 +15,9 @@ def StartHeating(ID, Temp):
 	CommandString += "[Heater]\n"
 	CommandString += "[Start Heat]\n"
 	CommandString += "[ID]" + str(ID) + "[Temp]" + str(Temp) + "\n"
+
+	print(CommandString)
+
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return Response
@@ -24,6 +27,9 @@ def StopHeating(ID):
 	CommandString += "[Heater]\n"
 	CommandString += "[Stop Heat]\n"
 	CommandString += "[ID]" + str(ID) + "\n"
+
+	print(CommandString)
+
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return Response
@@ -33,6 +39,9 @@ def StartShaking(ID, RPM):
 	CommandString += "[Heater]\n"
 	CommandString += "[Start Shake]\n"
 	CommandString += "[ID]" + str(ID) + "[RPM]" + str(RPM) + "\n"
+
+	print(CommandString)
+
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return Response
@@ -42,6 +51,9 @@ def StopShaking(ID):
 	CommandString += "[Heater]\n"
 	CommandString += "[Stop Shake]\n"
 	CommandString += "[ID]" + str(ID) + "\n"
+
+	print(CommandString)
+	
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return Response

@@ -16,6 +16,8 @@ def Start(WaitTime):
 	CommandString += "[Start]\n"
 	CommandString += "[Time]" + str(WaitTime) + "\n"
 
+	print(CommandString)
+
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return True
@@ -25,6 +27,8 @@ def Wait():
 	CommandString = ""
 	CommandString += "[Timer]\n"
 	CommandString += "[Wait]\n"
+
+	print(CommandString)
 
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()

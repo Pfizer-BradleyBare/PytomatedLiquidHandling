@@ -92,6 +92,7 @@ def Step(step):
 	if HAMILTONIO.IsSimulated() == False:
 		for sequence in Sequences:
 			sequence["Source"] = CONFIGURATION.GetDeckLoading(sequence["Source"])["Sequence"]
+			sequence["Destination"] = CONFIGURATION.GetDeckLoading(sequence["Destination"])["Sequence"]
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 
 	if len(Sequences) != 0:
@@ -110,6 +111,7 @@ def Step(step):
 	if HAMILTONIO.IsSimulated() == False:
 		for sequence in Sequences:
 			sequence["Source"] = CONFIGURATION.GetDeckLoading(sequence["Source"])["Sequence"]
+			sequence["Destination"] = CONFIGURATION.GetDeckLoading(sequence["Destination"])["Sequence"]
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 
 	if len(Sequences) != 0:

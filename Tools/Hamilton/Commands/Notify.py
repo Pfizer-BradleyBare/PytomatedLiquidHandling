@@ -29,6 +29,8 @@ def SendMessage(Wait, SubjectString, MessageString):
 	CommandString += "[Subject]" + str(SubjectString)
 	CommandString += "[Message]" + str(MessageString) + "\n"
 
+	print(CommandString)
+
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return True

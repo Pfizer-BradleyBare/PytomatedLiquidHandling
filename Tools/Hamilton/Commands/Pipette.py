@@ -44,8 +44,8 @@ def Do(Dest, Sequences):
 	CommandString += "[DestinationPosition]" + DestPos[:-1]
 	CommandString += "[Source]" + Source[:-1] 
 	CommandString += "[SourcePosition]" + SourcePos[:-1] 
-	CommandString += "[Volume]" + Volume[:-1] 
-	CommandString += "[Height]" + DestHeight[:-1]  
+	CommandString += "[TransferVolume]" + Volume[:-1] 
+	CommandString += "[DestinationHeight]" + DestHeight[:-1]  
 	CommandString += "[Total]" + TotalVolume[:-1] 
 	CommandString += "[Mix]" + Mix[:-1] + "\n"
 
