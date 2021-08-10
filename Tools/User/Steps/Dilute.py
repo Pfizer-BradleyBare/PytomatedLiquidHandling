@@ -82,7 +82,12 @@ def Step(step):
 
 	DestinationPlate = step.GetParentPlate()
 
-	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(FirstSourceList, FirstVolumeList, SAMPLES.Column("Yes"))
+	if PLATES.GetPlate(DestinationPlate).GetVolume() != 0:
+		Mix = SAMPLES.Column("Yes")
+	else:
+		Mix = SAMPLES.Column("No")
+
+	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(FirstSourceList, FirstVolumeList, Mix)
 
 	_Temp = copy.deepcopy(Sequences)
 	for Sequence in _Temp:
