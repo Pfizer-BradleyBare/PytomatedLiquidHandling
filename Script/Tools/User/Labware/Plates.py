@@ -44,11 +44,29 @@ class Class:
 	def GetSequenceList(self):
 		return self.SequencesList
 
+	def UpdateSequenceList(self, NewSequencesList):
+		self.SequencesList = NewSequencesList
+
 	def GetVolumesList(self):
 		return self.VolumesList
 
 	def UpdateMaxVolume(self):
-		for Volume in self.GetVolumesList():
+		Sequences = self.GetSequenceList()
+		Volumes = self.GetVolumesList()
+
+		TotalVolumes = {}
+
+		for SequenceList in Sequences:
+			for Sequence in SequenceList:
+				TotalVolumes[str(Sequence)] = 0
+
+				for SequenceListIndex in range(0,len(Sequences)):
+						if Sequence in Sequences[SequenceListIndex]:
+							TotalVolumes[str(Sequence)] += Volumes[SequenceListIndex] * len(Sequences[SequenceListIndex])
+		print(TotalVolumes)
+		
+		for Key in TotalVolumes:
+			Volume = TotalVolumes[Key]
 			if Volume < 0:
 				self.RequiresLoading = True
 			Volume = abs(Volume)
@@ -91,7 +109,6 @@ class Class:
 		
 		VolumesList = self.GetVolumesList()
 		DispenseHeights = CONFIGURATION.WellVolumeToDispenseHeight(self.GetName(),VolumesList)
-		SamplePosition = SAMPLES.GetSamplePositions()
 		DestinationPosition = self.GetSequenceList()
 
 		Expanded = []
@@ -102,28 +119,17 @@ class Class:
 
 			if ActualVolume > 0:
 			
-				for Position in DestinationPosition[count]:
-
-					SourcePosition = Position
+				for count2 in range(0,len(DestinationPosition[count])):
+					SourcePosition = DestinationPosition[count][count2]
 
 					if IsPlate(SourceList[count]) == True:
 						Plate = GetPlate(SourceList[count])
-
-						SamplePositionIndex = count
-
-						if SourceList[count] == STEPS.GetStartingPlate():
-							for index in range(0,len(DestinationPosition)):
-								if SamplePosition[count] in DestinationPosition[index]:
-									SamplePositionIndex = index
-
-							SourcePosition = SamplePosition[count]
-						#Get index of sample position
-						
-						Plate.GetVolumesList()[SamplePositionIndex] -= ActualVolume
+						SourcePosition = Plate.GetSequenceList()[count][count2]
+						Plate.GetVolumesList()[count] -= ActualVolume
 						Plate.UpdateMaxVolume()
 					#Do plate volume subtraction
 
-					Expanded.append({"Destination Position":int(float(Position)),"Destination":self.GetName(), "Source Position":int(float(SourcePosition)), "Source":SourceList[count], "Volume":ActualVolume, "Height":DispenseHeights[count], "Total":VolumesList[count], "Mix":MixList[count]})
+					Expanded.append({"Destination Position":int(float(DestinationPosition[count][count2])),"Destination":self.GetName(), "Source Position":int(float(SourcePosition)), "Source":SourceList[count], "Volume":ActualVolume, "Height":DispenseHeights[count], "Total":VolumesList[count], "Mix":MixList[count]})
 			
 				self.GetVolumesList()[count] += ActualVolume
 				self.UpdateMaxVolume()

@@ -118,13 +118,13 @@ def PrintPlate(StartRow, StartCol, PlateName, LabwareName, PlateRows, PlateCols,
 	Test = [Test[i:i+PlateCols] for i in range(0, len(Test), PlateCols)]
 
 	for item in ValArray:
-		Row = item["Position"] % PlateRows
+		Row = int(item) % PlateRows
 		if Row == 0:
 			Row = PlateRows
 		Row -= 1
-		Col = int((item["Position"] - 1) / PlateRows)
+		Col = int((int(item) - 1) / PlateRows)
 
-		Test[Row][Col] = str(item["AlphaNumeric"]) + ": " + str(item["Volume"]) + "uL"
+		Test[Row][Col] = str(ValArray[item]["AlphaNumeric"]) + ": " + str(ValArray[item]["Volume"]) + "uL"
 	
 	Push("PrepList", StartRow+1, StartCol, StartRow+1, StartCol, Test)
 

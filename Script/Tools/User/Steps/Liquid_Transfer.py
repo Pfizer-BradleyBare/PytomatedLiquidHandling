@@ -8,7 +8,7 @@ from ...General import HamiltonIO as HAMILTONIO
 import copy
 
 TITLE = "Liquid Transfer"
-NAME = "Name"
+NAME = "Source"
 TYPE = "Liquid Type"
 STORAGE = "Storage Condition"
 VOLUME = "Volume (uL)"

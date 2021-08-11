@@ -27,7 +27,7 @@ if len(sys.argv) > 1:
 		TestRun = True
 
 else:
-	Sample_Start_Pos = 1
+	Sample_Start_Pos = 10
 	Excel_File_Path = "Method Maker2.xlsm"
 	Initialization_Run = True
 	GenerateList = True
@@ -53,6 +53,8 @@ import Tools.User.Steps.Incubate as INCUBATE
 import Tools.User.Steps.Vacuum as VACUUM
 import Tools.User.Steps.Notify as NOTIFY
 import Tools.User.Steps.Finish as FINISH
+import Tools.User.Steps.Aliquot as ALIQUOT
+import Tools.User.Steps.Pool as POOL
 
 import Tools.Hamilton.PreRun as PRERUN
 
@@ -78,8 +80,10 @@ WAIT.Init()
 INCUBATE.Init(STEPS.GetSteps())
 NOTIFY.Init()
 FINISH.Init()
-#init steps
+ALIQUOT.Init(STEPS.GetSteps())
+POOL.Init(STEPS.GetSteps())
 
+#init steps
 PLATES.StartStepSequence(STEPS.GetStartingPlate())
 STEPS.StartStepSequence()
 
@@ -100,7 +104,11 @@ Steps = {
 
 	NOTIFY.TITLE: NOTIFY.Step,
 
-	FINISH.TITLE: FINISH.Step
+	FINISH.TITLE: FINISH.Step,
+
+	ALIQUOT.TITLE: ALIQUOT.Step,
+
+	POOL.TITLE: POOL.Step
 }
 
 while(True):

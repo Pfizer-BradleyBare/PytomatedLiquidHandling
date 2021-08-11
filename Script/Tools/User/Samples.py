@@ -3,7 +3,6 @@ from ..General import ExcelIO as EXCELIO
 import copy
 
 WORKLIST_SAMPLE_SEQUENCE = "_SampleSequence"
-WORKLIST_SAMPLE_POSITION = "Sample Position"
 #Worklist constants
 
 #This dict holds the specific range of the specified column. That way sample information can be pulled as needed.
@@ -16,7 +15,8 @@ Total_Samples = 0
 
 #This is the sequence list, adjusted for the sample start position.
 Sequences = []
-SamplePositions = []
+
+StartPosition = 0
 
 ######################################################################### 
 #	Description: Returns the number of rows-1 or samples in the worklist
@@ -45,9 +45,9 @@ def GetSequences():
 	global Sequences
 	return Sequences
 
-def GetSamplePositions():
-	global SamplePositions
-	return SamplePositions
+def GetStartPosition():
+	global StartPosition
+	return StartPosition
 
 ######################################################################### 
 #	Description: Performs Initialization of this module by doing the following:
@@ -63,7 +63,9 @@ def Init(SampleStartPosition, PulledWorkListSheet):
 	global Column_Ranges
 	global Sequences
 	global SamplePositions
+	global StartPosition
 
+	StartPosition = SampleStartPosition
 	Column_Ranges = {}
 	Num_Samples = 0
 	Sequences = []
@@ -86,7 +88,6 @@ def Init(SampleStartPosition, PulledWorkListSheet):
 		count += 1
 	#end
 
-	SamplePosition = Column(WORKLIST_SAMPLE_POSITION)
 	SampleSequence = Column(WORKLIST_SAMPLE_SEQUENCE)
 
 	TotalSamplesArray = []
@@ -97,7 +98,6 @@ def Init(SampleStartPosition, PulledWorkListSheet):
 			Temp.append(int(float(Seq)) + SampleStartPosition - 1)
 
 		Sequences.append(Temp)
-		SamplePositions.append(int(float(SamplePosition[index])) + SampleStartPosition - 1)
 		TotalSamplesArray = TotalSamplesArray + Temp
 
 	Total_Samples = len(TotalSamplesArray)

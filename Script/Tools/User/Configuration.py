@@ -344,13 +344,16 @@ def GeneratePrepSheet(LabwareArray):
 			if LoadingDict != None:
 				DeadVolumeConfig = SysConfig["Dead Volume"]
 
-				PlatePrepArray = []
+				PlatePrepArray = dict()
 				for index in range(0,SAMPLES.GetNumSamples()):
 					for position in Plate.GetSequenceList()[index]:
 						if Plate.GetVolumesList()[index] != 0:
-							PlatePrepArray.append({"Position":position,"AlphaNumeric":NumericToAlphaNumeric(position),"Volume":abs(Plate.GetVolumesList()[index]) + DeadVolumeConfig[LoadingDict["Labware Name"]]})
+							if int(position) in PlatePrepArray:
+								PlatePrepArray[int(position)]["Volume"] += abs(Plate.GetVolumesList()[index])
+							else:
+								PlatePrepArray[int(position)] = {"AlphaNumeric":NumericToAlphaNumeric(position),"Volume":abs(Plate.GetVolumesList()[index]) + DeadVolumeConfig[LoadingDict["Labware Name"]]}
 
-				PlatePrepArray = sorted(PlatePrepArray, key=lambda x: x["Position"])
+				#PlatePrepArray = sorted(PlatePrepArray, key=lambda x: x["Position"])
 				
 				UsedSpace = EXCELIO.PrintPlate(CurrentRow, CurrentCol, Plate.GetName(), LoadingDict["Labware Name"], 8, 12, PlatePrepArray)
 
