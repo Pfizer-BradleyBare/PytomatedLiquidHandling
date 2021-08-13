@@ -1,4 +1,5 @@
 from ...General import HamiltonIO as HAMILTONIO
+from ...General import Log as LOG
 
 def PreRun(VolumesArray):
 	CommandString = ""
@@ -49,7 +50,7 @@ def Do(Dest, Sequences):
 	CommandString += "[Total]" + TotalVolume[:-1] 
 	CommandString += "[Mix]" + Mix[:-1] + "\n"
 
-	print(CommandString)
+	LOG.Command(CommandString)
 
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()

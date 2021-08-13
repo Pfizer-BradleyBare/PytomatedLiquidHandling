@@ -5,6 +5,7 @@ from ...User import Samples as SAMPLES
 from ...Hamilton.Commands import Pipette as PIPETTE
 from ...User import Configuration as CONFIGURATION
 from ...General import HamiltonIO as HAMILTONIO
+from ...General import Log as LOG
 import copy
 
 TITLE = "Liquid Transfer"
@@ -24,6 +25,7 @@ def Init():
 	pass
 
 def Step(step):
+
 	DestinationPlate = step.GetParentPlate()
 	
 	SourceList = SAMPLES.Column(step.GetParameters()[NAME])
@@ -47,6 +49,8 @@ def Step(step):
 			sequence["Destination"] = CONFIGURATION.GetDeckLoading(sequence["Destination"])["Sequence"]
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 	#Translate User defined names into sequence loading names
+
+	LOG.Step(step,"This is a liquid Transfer step")
 
 	if len(Sequences) != 0:
 		PIPETTE.Do(DestinationPlate, Sequences)

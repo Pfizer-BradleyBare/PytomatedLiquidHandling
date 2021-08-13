@@ -99,7 +99,7 @@ def Center(Sheet,RowStart,ColStart,RowEnd,ColEnd):
 	xl.Book(Excel_File).sheets[Sheet].range((RowStart,ColStart),(RowEnd,ColEnd)).api.HorizontalAlignment = -4108
 
 def AutoFit(Sheet):
-	xl.Book(Excel_File).sheets[Sheet].autofit()
+	xl.Book(Excel_File).sheets[Sheet].autofit('c')
 
 def PrintPlate(StartRow, StartCol, PlateName, LabwareName, PlateRows, PlateCols, ValArray):
 

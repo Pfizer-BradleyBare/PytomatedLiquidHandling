@@ -117,3 +117,13 @@ def Column(Column_Name):
 		return EXCELIO.Pull(EXCELIO.WORKLIST_SHEET, Temp[0], Temp[1], Temp[2], Temp[3], 1)
 	except:
 		return [Column_Name] * Num_Samples
+
+def InColumn(Column_Name):
+	global Column_Ranges
+
+	Found = True
+	try:
+		Temp = Column_Ranges[Column_Name]
+	except:
+		Found = False
+	return Found

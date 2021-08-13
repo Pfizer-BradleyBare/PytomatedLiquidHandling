@@ -63,7 +63,6 @@ class Class:
 				for SequenceListIndex in range(0,len(Sequences)):
 						if Sequence in Sequences[SequenceListIndex]:
 							TotalVolumes[str(Sequence)] += Volumes[SequenceListIndex] * len(Sequences[SequenceListIndex])
-		print(TotalVolumes)
 		
 		for Key in TotalVolumes:
 			Volume = TotalVolumes[Key]

@@ -5,6 +5,7 @@ from ...User import Samples as SAMPLES
 from ...Hamilton.Commands import Pipette as PIPETTE
 from ...User import Configuration as CONFIGURATION
 from ...General import HamiltonIO as HAMILTONIO
+from ...General import Log as LOG
 import copy
 
 TITLE = "Dilute"
@@ -60,6 +61,16 @@ def Step(step):
 	DiluentVolumeList = list(map(lambda x,y: y - x, SourceVolumeList,TargetVolumeList))
 	#Calculate correct volumes to pipette
 
+	for VolIndex in range(0,len(SourceVolumeList)):
+		if SourceVolumeList[VolIndex] > TargetVolumeList[VolIndex] or DiluentVolumeList[VolIndex] < 0:
+			SourceVolumeList[VolIndex] = TargetVolumeList[VolIndex]
+			DiluentVolumeList[VolIndex] = 0
+
+		if DiluentVolumeList[VolIndex] > TargetVolumeList[VolIndex] or SourceVolumeList[VolIndex] < 0:
+			DiluentVolumeList[VolIndex] = TargetVolumeList[VolIndex]
+			SourceVolumeList[VolIndex] = 0
+	#check for ridiculous pipetting volumes and correct it. User should ideally never input something ridiculous
+
 	FirstSourceList = []
 	FirstVolumeList = []
 	SecondSourceList = []
@@ -99,6 +110,8 @@ def Step(step):
 			sequence["Source"] = CONFIGURATION.GetDeckLoading(sequence["Source"])["Sequence"]
 			sequence["Destination"] = CONFIGURATION.GetDeckLoading(sequence["Destination"])["Sequence"]
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
+
+	LOG.Step(step,"This is a Dilute step")
 
 	if len(Sequences) != 0:
 		PIPETTE.Do(DestinationPlate, Sequences)
