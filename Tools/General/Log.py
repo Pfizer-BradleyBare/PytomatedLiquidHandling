@@ -1,6 +1,7 @@
 from ..General import ExcelIO as EXCELIO
 from ..General import HamiltonIO as HAMILTONIO
 from ..User import Samples as SAMPLES
+import math
 
 PRERUN_SHEET = "TestLog"
 TRUERUN_SHEET = "RunLog"
@@ -11,7 +12,7 @@ LATEST_STEP_INFO = {}
 LOG_ROW_START = 2
 LOG_COL_START = 2
 LOG_ROW_END = 1000
-LOG_COL_END = 5
+LOG_COL_END = 200 + LOG_COL_START
 
 LOG_COL_STEP = 0
 LOG_COL_COMMENTS = 1
@@ -21,17 +22,38 @@ LOG_COL_HAMILTON = 3
 LOG_ROW_PADDING = 1
 LOG_NEXT_LINE_PADDING = 4
 
-TrueRunRow = 0
+TrueRunRow = LOG_ROW_START
 CurrentRow = LOG_ROW_START
 LogSheet = None
 
 
 LogExists = True
 
-GeneralCommentsLog = []
-StepLog = []
-CommandLog = []
-HamiltonLog = []
+GeneralCommentCounter = 0
+StepCoordinates = None
+
+def GetCommandID():
+	global StepCoordinates
+	return "("+str(StepCoordinates[0])+","+str(StepCoordinates[1])+")"
+
+def Exists():
+	global LogExists
+	return LogExists
+
+def GetLatestStep():
+	global LATEST_STEP_INFO
+	return LATEST_STEP_INFO
+
+def StartStepLog(StepCoords):
+	global StepCoordinates
+	StepCoordinates = StepCoords
+
+def EndStepLog():
+	global CurrentRow
+	global LOG_NEXT_LINE_PADDING
+	global GeneralCommentCounter
+	CurrentRow += LOG_NEXT_LINE_PADDING
+	GeneralCommentCounter = 0
 ######################################################################### 
 #	Description: Initializes the library by pulling information from Config files
 #	Input Arguments: N/A
@@ -56,16 +78,18 @@ def Init():
 		LogSheet = PRERUN_SHEET
 		try:
 			EXCELIO.DeleteSheet(LogSheet)
+			pass
 		except:
 			pass
 		EXCELIO.CreateSheet(LogSheet)
 	else:
 		LogSheet = TRUERUN_SHEET
 		try:
-			LogExists = False
+			LogExists = True
 			EXCELIO.Pull(TRUERUN_SHEET,1,1,1,1)
 		except:
-			LogExists = True
+			LogExists = False
+			EXCELIO.CreateSheet(LogSheet)
 	#This is a mess... I got nothing here
 
 	if LogExists == True:
@@ -85,26 +109,58 @@ def Init():
 	if HAMILTONIO.IsSimulated() == False:
 		CurrentRow = TrueRunRow
 
-def Exists():
-	global LogExists
-	return LogExists
+
 
 def CommandInLog(Command):
 	global LogSheet
 
+	SearchArray = []
+
+	while True:
+		CommandLineEnd = Command.find("[",1)
+		SearchArray.append(Command[:CommandLineEnd].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
+		if CommandLineEnd == -1:
+			break
+		Command = Command[CommandLineEnd:]
+	
+	MaxLength = max(len(Command) for Command in SearchArray)
+	SearchArray = [Command + [""]*(MaxLength - len(Command)) for Command in SearchArray]
+	#We have created our search array. Now let us find the command
+
 	Log = EXCELIO.Pull(LogSheet, LOG_ROW_START, LOG_COL_START, LOG_ROW_END, LOG_COL_END, n=2)
 
-	Coords = Step.GetCoordinates()
-	SearchString = "Excel Location (Row,Col): (" + str(Coords[0]) + "," + str(Coords[1]) + ")"
+	for RowIndex in range(0,LOG_ROW_END-LOG_ROW_START):
+		
+		Status = True
 
-	for Row in Log:
-		if Row[LOG_COL_COMMAND] != None and SearchString in Row[LOG_COL_COMMAND]:
-			return True
+		if Log[RowIndex][LOG_COL_COMMAND] != None and str(Log[RowIndex][LOG_COL_COMMAND]) == str(SearchArray[0][0]):
+
+			for SRowIndex in range(0,len(SearchArray)):
+				for SColIndex in range(0,len(SearchArray[SRowIndex])):
+					try:
+						LogValue = str(float(Log[RowIndex + SRowIndex][LOG_COL_COMMAND + SColIndex]))
+					except:
+						LogValue = str(Log[RowIndex + SRowIndex][LOG_COL_COMMAND + SColIndex])
+						if LogValue == "None":
+							LogValue = ""
+					try:
+						SearchValue = str(float(SearchArray[SRowIndex][SColIndex]))
+					except:
+						SearchValue = str(SearchArray[SRowIndex][SColIndex])
+					#I need to do some silly casting because of the way excell works. Basically, if it is a number then we get the decimal and convert to string. 
+					#Else we go directly to string
+
+					if LogValue != SearchValue:
+						Status = False
+			if Status == True:
+				print(True)
+				return True
+	print(SearchArray)
+	print(False)
 	return False
 
-def GetLatestStep():
-	global LATEST_STEP_INFO
-	return LATEST_STEP_INFO
+
+
 
 def HandleResponse(Response):
 	RUN_BEGINNING = "Run From Beginning of Method"
@@ -148,16 +204,16 @@ def HandleResponse(Response):
 	EXCELIO.Push(TRUERUN_SHEET, LOG_ROW_START, LOG_COL_START, LOG_ROW_START, LOG_COL_START, Log[:TrueRunRow])
 
 
-def StartNextLine():
-	global CurrentRow
-	global LOG_NEXT_LINE_PADDING
-	CurrentRow += LOG_NEXT_LINE_PADDING
+
 
 def GeneralComment(Comment):
-	global GeneralComments
-	GeneralComments.append([Comment])
+	global CurrentRow
+	global GeneralCommentCounter
+	GeneralCommentCounter += 1
+	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_COMMENTS + LOG_COL_START, CurrentRow, LOG_COL_COMMENTS + LOG_COL_START, [[Comment]])
+	CurrentRow += 1
 
-def Step(Step, Comments):
+def Step(Step):
 	global LogSheet
 	global CurrentRow
 	global LOG_ROW_PADDING
@@ -177,32 +233,33 @@ def Step(Step, Comments):
 			LogString += " (Worklist Column) "
 		printArray.append([LogString])
 
-	printArray.append(["Comments: " + str(Comments)])
-
 	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_STEP + LOG_COL_START, CurrentRow, LOG_COL_STEP + LOG_COL_START, printArray)
 
 	CurrentRow += len(printArray) + LOG_ROW_PADDING
-
-	if len(GeneralComments) == 0:
-		GeneralComments.append(["Step parameters are as expected"])
-	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_COMMENTS + LOG_COL_START, CurrentRow, LOG_COL_COMMENTS + LOG_COL_START, GeneralComments)
-	CurrentRow += len(GeneralComments) + LOG_ROW_PADDING
-	GeneralComments = []
 
 def Command(Command):
 	global LogSheet
 	global CurrentRow
 	global LOG_ROW_PADDING
+	global GeneralCommentCounter
+
+	if GeneralCommentCounter == 0:
+		GeneralComment("Step Parameters are as expected.")
+	GeneralCommentCounter = 0
+
+	CurrentRow += LOG_ROW_PADDING
 
 	printArray = []
 
 	while True:
 		CommandLineEnd = Command.find("[",1)
+		printArray.append(Command[:CommandLineEnd].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
 		if CommandLineEnd == -1:
 			break
-		printArray.append([Command[:CommandLineEnd].replace("\n","")])
 		Command = Command[CommandLineEnd:]
-	printArray.append([Command])
+	
+	MaxLength = max(len(Command) for Command in printArray)
+	printArray = [Command + [""]*(MaxLength - len(Command)) for Command in printArray]
 
 	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_COMMAND + LOG_COL_START, CurrentRow, LOG_COL_COMMAND + LOG_COL_START, printArray)
 

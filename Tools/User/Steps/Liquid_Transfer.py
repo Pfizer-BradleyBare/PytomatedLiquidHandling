@@ -26,6 +26,8 @@ def Init():
 
 def Step(step):
 
+	LOG.Step(step)
+
 	DestinationPlate = step.GetParentPlate()
 	
 	SourceList = SAMPLES.Column(step.GetParameters()[NAME])
@@ -44,14 +46,14 @@ def Step(step):
 	
 	if HAMILTONIO.IsSimulated() == False:
 		for sequence in Sequences:
-			print(sequence["Destination"])
 			sequence["Source"] = CONFIGURATION.GetDeckLoading(sequence["Source"])["Sequence"]
 			sequence["Destination"] = CONFIGURATION.GetDeckLoading(sequence["Destination"])["Sequence"]
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 	#Translate User defined names into sequence loading names
 
-	LOG.Step(step,"This is a liquid Transfer step")
-
 	if len(Sequences) != 0:
 		PIPETTE.Do(DestinationPlate, Sequences)
+	else:
+		LOG.GeneralComment("Number of sequences is zero so no liquid transfer will actually occur.")
+
 

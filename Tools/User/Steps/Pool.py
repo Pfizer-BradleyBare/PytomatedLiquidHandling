@@ -1,6 +1,7 @@
 from ..Steps import Steps as STEPS
 from ..Labware import Plates as PLATES
 from ..Steps import Split_Plate as SPLIT_PLATE
+from ...General import Log as LOG
 
 TITLE = "Pool"
 NAME = "Name"
@@ -17,4 +18,5 @@ def Init(MutableStepsList):
 	pass
 
 def Step(step):
+	LOG.Step(step)
 	pass

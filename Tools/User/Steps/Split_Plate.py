@@ -2,6 +2,7 @@ from ..Steps import Steps as STEPS
 from ...User import Samples as SAMPLES
 from ..Labware import Plates as PLATES
 from ..Steps import Plate as PLATE
+from ...General import Log as LOG
 import copy
 
 TITLE = "Split Plate"
@@ -56,6 +57,8 @@ def Init(MutableStepsList):
 
 
 def Step(step):
+	LOG.Step(step)
+	
 	PlateName1 = step.GetParameters()[NAME_1]
 	PlateName2 = step.GetParameters()[NAME_2]
 	PreviousPlateName = step.GetParentPlate()

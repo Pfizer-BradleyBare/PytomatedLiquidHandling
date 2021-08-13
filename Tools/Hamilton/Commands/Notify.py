@@ -1,4 +1,5 @@
 from ...General import HamiltonIO as HAMILTONIO
+from ...General import Log as LOG
 
 def PreRun():
 	CommandString = ""
@@ -23,16 +24,16 @@ def Init():
 #this function will reserve a lid on the Hamilton. This lid can be used on or off the Heaters
 def SendMessage(Wait, SubjectString, MessageString):
 	CommandString = ""
-	CommandString += "[Notify]\n"
+	CommandString += str(LOG.GetCommandID()) + "[Notify]\n"
 	CommandString += "[SendMessage]\n"
 	CommandString += "[Wait]" + str(Wait)
 	CommandString += "[Subject]" + str(SubjectString)
 	CommandString += "[Message]" + str(MessageString) + "\n"
 
-	print(CommandString)
-
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
+	if LOG.CommandInLog(CommandString) != True:
+		LOG.Command(CommandString)
+		HAMILTONIO.Push(CommandString)
+		Response = HAMILTONIO.Pull()
 	return True
 	#response is not parsed for this command
 

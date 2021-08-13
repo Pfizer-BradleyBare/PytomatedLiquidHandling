@@ -5,6 +5,8 @@ from ..Labware import Plates as PLATES
 from ...User import Samples as SAMPLES
 from ...User import Configuration as CONFIGURATION
 from ...Hamilton.Commands import Desalt as DESALT
+from ...General import Log as LOG
+
 
 TITLE = "Desalt"
 SOURCE = "Source"
@@ -114,8 +116,11 @@ def Equilibrate():
 	global Equilibrated
 
 	if Equilibrated == False:
+		LOG.GeneralComment("Performing Desalting Equilibration")
 		Equilibrated = True
 		DESALT.Equilibrate()
+	else:
+		LOG.GeneralComment("Equilibration already performed. Skipping Equilibration")
 
 ######################################################################### 
 #	Description: Performs equilibration and simulates a pipetting step into the destination plate
@@ -140,5 +145,7 @@ def Process():
 #	Returns: N/A
 #########################################################################	
 def Step(step):
+	LOG.Step(step)
+
 	Equilibrate()
 	Process()

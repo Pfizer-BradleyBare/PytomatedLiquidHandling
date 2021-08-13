@@ -64,15 +64,16 @@ print("Init Classes")
 EXCELIO.Init(Excel_File_Path)
 HAMILTONIO.Init()
 HAMILTONIO.Simulated(Initialization_Run)
+LOG.Init()
 #init IOs
 
-LOG.Init()
 CONFIGURATION.Init()
 PREPLIST.Init()
 STEPS.Init(EXCELIO.GetMethod())
 SAMPLES.Init(Sample_Start_Pos, EXCELIO.GetWorklist())
 PLATES.Init()
 SOLUTIONS.Init()
+LOG.StartStepLog(STEPS.GetAllSteps()[0].GetCoordinates())
 #Init Trackers
 
 PLATE.Init(STEPS.GetSteps(), SAMPLES.GetSequences())
@@ -121,9 +122,9 @@ while(True):
 	if Step == None:
 		break
 
-
+	LOG.StartStepLog(Step.GetCoordinates())
 	Steps[Step.GetTitle()](Step)
-	LOG.StartNextLine()
+	LOG.EndStepLog()
 #do each step
 
 if HAMILTONIO.IsSimulated() == True:
@@ -140,7 +141,7 @@ if HAMILTONIO.IsSimulated() == True:
 
 	if GenerateList == True:
 		pass
-		PREPLIST.GeneratePrepSheet(Labware)
+		#PREPLIST.GeneratePrepSheet(Labware)
 	#Generate prep sheet here
 	
 	if LIQUID_TRANSFER.IsUsed() == True or DILUTE.IsUsed() == True:
@@ -161,7 +162,7 @@ if HAMILTONIO.IsSimulated() == True:
 	if INCUBATE.IsUsed() == True:
 		PRERUN.TRANSPORT.PreRun()
 
-	if LOG.Exists():
+	if LOG.Exists() and TestRun == False:
 		LOG.HandleResponse(PRERUN.LOG.PreRun(LOG.GetLatestStep()))
 	#initialize all the Hamilton Libraries.
 

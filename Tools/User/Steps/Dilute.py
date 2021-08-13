@@ -45,6 +45,8 @@ def Step(step):
 	#We need to solve for Source Volume
 	#V1 = (C2*V2)/C1
 
+	LOG.Step(step)
+
 	TargetConcentrationList = SAMPLES.Column(step.GetParameters()[TARGET_CONCENTRATION])
 	TargetVolumeList = SAMPLES.Column(step.GetParameters()[TARGET_VOLUME])
 	SourceConcentrationList = SAMPLES.Column(step.GetParameters()[STARTING_CONCENTRATION])
@@ -61,12 +63,16 @@ def Step(step):
 	DiluentVolumeList = list(map(lambda x,y: y - x, SourceVolumeList,TargetVolumeList))
 	#Calculate correct volumes to pipette
 
+	DestinationSequences = PLATES.GetPlate(step.GetParentPlate()).GetSequenceList()
+
 	for VolIndex in range(0,len(SourceVolumeList)):
 		if SourceVolumeList[VolIndex] > TargetVolumeList[VolIndex] or DiluentVolumeList[VolIndex] < 0:
+			LOG.GeneralComment("Volume is out of range for Position " + str(DestinationSequences[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source,Diluent): 0 > (" + str(SourceVolumeList[VolIndex]) + "," + str(DiluentVolumeList[VolIndex]) + ") > " + str(TargetVolumeList[VolIndex]))
 			SourceVolumeList[VolIndex] = TargetVolumeList[VolIndex]
 			DiluentVolumeList[VolIndex] = 0
 
 		if DiluentVolumeList[VolIndex] > TargetVolumeList[VolIndex] or SourceVolumeList[VolIndex] < 0:
+			LOG.GeneralComment("Volume is out of range for Position " + str(DestinationSequences[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source,Diluent): 0 > (" + str(SourceVolumeList[VolIndex]) + "," + str(DiluentVolumeList[VolIndex]) + ") > " + str(TargetVolumeList[VolIndex]))
 			DiluentVolumeList[VolIndex] = TargetVolumeList[VolIndex]
 			SourceVolumeList[VolIndex] = 0
 	#check for ridiculous pipetting volumes and correct it. User should ideally never input something ridiculous
@@ -111,7 +117,7 @@ def Step(step):
 			sequence["Destination"] = CONFIGURATION.GetDeckLoading(sequence["Destination"])["Sequence"]
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 
-	LOG.Step(step,"This is a Dilute step")
+
 
 	if len(Sequences) != 0:
 		PIPETTE.Do(DestinationPlate, Sequences)
@@ -134,6 +140,8 @@ def Step(step):
 
 	if len(Sequences) != 0:
 		PIPETTE.Do(DestinationPlate, Sequences)
+	else:
+		LOG.GeneralComment("Number of sequences is zero so no liquid transfer will actually occur.")
 	#Do the diluent pipetting
 #end
 

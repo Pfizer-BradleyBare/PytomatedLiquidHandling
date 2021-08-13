@@ -2,6 +2,7 @@ from ..Steps import Steps as STEPS
 from ..Labware import Plates as PLATES
 from ..Steps import Plate as PLATE
 from ...User import Samples as SAMPLES
+from ...General import Log as LOG
 
 TITLE = "Aliquot"
 NAME = "Source"
@@ -70,4 +71,7 @@ def Init(MutableStepsList):
 			#Reset the preceding plates
 
 def Step(step):
+
+	LOG.Step(step)
+
 	pass

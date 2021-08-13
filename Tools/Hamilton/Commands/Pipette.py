@@ -30,30 +30,30 @@ def Do(Dest, Sequences):
 	Mix = ""
 
 	for Sequence in Sequences:
-		Dest += str(Sequence["Destination"]) + ","
-		DestPos += str(Sequence["Destination Position"]) + ","
-		Source += str(Sequence["Source"]) + ","
-		SourcePos += str(Sequence["Source Position"]) + ","
-		Volume += "{0:.2f}".format(float(Sequence["Volume"])) + ","
-		DestHeight += "{0:.2f}".format(float(Sequence["Height"])) + ","
-		TotalVolume += "{0:.2f}".format(float(Sequence["Total"])) + ","
-		Mix += Sequence["Mix"] + ","
+		Dest += str(Sequence["Destination"]) + HAMILTONIO.GetDelimiter()
+		DestPos += str(Sequence["Destination Position"]) + HAMILTONIO.GetDelimiter()
+		Source += str(Sequence["Source"]) + HAMILTONIO.GetDelimiter()
+		SourcePos += str(Sequence["Source Position"]) + HAMILTONIO.GetDelimiter()
+		Volume += "{0:.2f}".format(float(Sequence["Volume"])) + HAMILTONIO.GetDelimiter()
+		DestHeight += "{0:.2f}".format(float(Sequence["Height"])) + HAMILTONIO.GetDelimiter()
+		TotalVolume += "{0:.2f}".format(float(Sequence["Total"])) + HAMILTONIO.GetDelimiter()
+		Mix += Sequence["Mix"] + HAMILTONIO.GetDelimiter()
 
 	CommandString = ""
-	CommandString += "[Pipette]\n"
-	CommandString += "[Destination]" + Dest[:-1]
-	CommandString += "[DestinationPosition]" + DestPos[:-1]
-	CommandString += "[Source]" + Source[:-1] 
-	CommandString += "[SourcePosition]" + SourcePos[:-1] 
-	CommandString += "[TransferVolume]" + Volume[:-1] 
-	CommandString += "[DestinationHeight]" + DestHeight[:-1]  
-	CommandString += "[Total]" + TotalVolume[:-1] 
-	CommandString += "[Mix]" + Mix[:-1] + "\n"
+	CommandString += str(LOG.GetCommandID()) + "[Pipette]\n"
+	CommandString += "[Destination]" + Dest[:-1*len(HAMILTONIO.GetDelimiter())]
+	CommandString += "[DestinationPosition]" + DestPos[:-1*len(HAMILTONIO.GetDelimiter())]
+	CommandString += "[Source]" + Source[:-1*len(HAMILTONIO.GetDelimiter())] 
+	CommandString += "[SourcePosition]" + SourcePos[:-1*len(HAMILTONIO.GetDelimiter())] 
+	CommandString += "[TransferVolume]" + Volume[:-1*len(HAMILTONIO.GetDelimiter())] 
+	CommandString += "[DestinationHeight]" + DestHeight[:-1*len(HAMILTONIO.GetDelimiter())]  
+	CommandString += "[Total]" + TotalVolume[:-1*len(HAMILTONIO.GetDelimiter())] 
+	CommandString += "[Mix]" + Mix[:-1*len(HAMILTONIO.GetDelimiter())] + "\n"
 
-	LOG.Command(CommandString)
-
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
+	if LOG.CommandInLog(CommandString) != True:
+		LOG.Command(CommandString)
+		HAMILTONIO.Push(CommandString)
+		Response = HAMILTONIO.Pull()
 	return True
 	#response is not parsed for this command
 

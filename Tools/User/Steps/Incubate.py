@@ -6,6 +6,7 @@ from ...Hamilton.Commands import Transport as TRANSPORT
 from ..Steps import Wait as WAIT
 from ..Steps import Split_Plate as SPLIT_PLATE
 from ...User import Configuration as CONFIGURATION
+from ...General import Log as LOG
 import time
 
 TITLE = "Incubate"
@@ -187,6 +188,7 @@ def Callback(step):
 	StartHeaters()
 
 def Step(step):
+	LOG.Step(step)
 	global Heaters
 	global TransportConfig
 

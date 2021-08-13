@@ -1,6 +1,7 @@
 from ..Steps import Steps as STEPS
 from ..Labware import Plates as PLATES
 from ..Steps import Split_Plate as SPLIT_PLATE
+from ...General import Log as LOG
 
 TITLE = "Plate"
 NAME = "Name"
@@ -21,6 +22,8 @@ def Init(MutableStepsList, SequencesList):
 				MutableStepsList.remove(Step)
 
 def Step(step):
+	LOG.Step(step)
+	
 	PlateName = step.GetParameters()[NAME]
 	PreviousPlateName = step.GetParentPlate()
 
