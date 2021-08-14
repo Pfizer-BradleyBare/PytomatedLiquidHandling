@@ -24,7 +24,7 @@ def Init():
 #this function will reserve a lid on the Hamilton. This lid can be used on or off the Heaters
 def SendMessage(Wait, SubjectString, MessageString):
 	CommandString = ""
-	CommandString += str(LOG.GetCommandID()) + "[Notify]\n"
+	CommandString += "[Notify]\n"
 	CommandString += "[SendMessage]\n"
 	CommandString += "[Wait]" + str(Wait)
 	CommandString += "[Subject]" + str(SubjectString)
@@ -34,6 +34,7 @@ def SendMessage(Wait, SubjectString, MessageString):
 		LOG.Command(CommandString)
 		HAMILTONIO.Push(CommandString)
 		Response = HAMILTONIO.Pull()
+		LOG.CommandID()
 	return True
 	#response is not parsed for this command
 

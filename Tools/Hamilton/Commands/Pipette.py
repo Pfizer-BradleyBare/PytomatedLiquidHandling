@@ -40,7 +40,7 @@ def Do(Dest, Sequences):
 		Mix += Sequence["Mix"] + HAMILTONIO.GetDelimiter()
 
 	CommandString = ""
-	CommandString += str(LOG.GetCommandID()) + "[Pipette]\n"
+	CommandString += "[Pipette]\n"
 	CommandString += "[Destination]" + Dest[:-1*len(HAMILTONIO.GetDelimiter())]
 	CommandString += "[DestinationPosition]" + DestPos[:-1*len(HAMILTONIO.GetDelimiter())]
 	CommandString += "[Source]" + Source[:-1*len(HAMILTONIO.GetDelimiter())] 
@@ -54,6 +54,7 @@ def Do(Dest, Sequences):
 		LOG.Command(CommandString)
 		HAMILTONIO.Push(CommandString)
 		Response = HAMILTONIO.Pull()
+		LOG.CommandID()
 	return True
 	#response is not parsed for this command
 

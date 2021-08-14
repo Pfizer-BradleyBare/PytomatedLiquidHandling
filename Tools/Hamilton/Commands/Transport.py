@@ -12,7 +12,7 @@ def PreRun():
 	
 def Move(SourceSeq, DestinationSeq, OpenDistance, CloseDistance, Eject):
 	CommandString = ""
-	CommandString += str(LOG.GetCommandID()) + "[Transport]\n"
+	CommandString += "[Transport]\n"
 	CommandString += "[Move]\n"
 	CommandString += "[Source]" + str(SourceSeq) + "[Destination]" + str(DestinationSeq) + "[Open]" + str(OpenDistance) + "[Close]" + str(CloseDistance) + "[Eject]" + str(Eject) + "\n"
 	
@@ -20,6 +20,7 @@ def Move(SourceSeq, DestinationSeq, OpenDistance, CloseDistance, Eject):
 		LOG.Command(CommandString)
 		HAMILTONIO.Push(CommandString)
 		Response = HAMILTONIO.Pull()
+		LOG.CommandID()
 	return True
 
 

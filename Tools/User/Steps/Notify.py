@@ -17,6 +17,12 @@ def Init():
 	pass
 
 def Step(step):
-	LOG.Step(step)
+	LOG.BeginCommentsLog()
+	
 	Parameters = step.GetParameters()
+
+	LOG.EndCommentsLog()
+
+	LOG.BeginCommandLog()	
 	NOTIFY.SendMessage(Parameters[WAIT_ON_USER],Parameters[SUBJECT],Parameters[MESSAGE])
+	LOG.EndCommandLog()

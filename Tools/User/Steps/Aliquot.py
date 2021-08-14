@@ -71,7 +71,4 @@ def Init(MutableStepsList):
 			#Reset the preceding plates
 
 def Step(step):
-
-	LOG.Step(step)
-
 	pass

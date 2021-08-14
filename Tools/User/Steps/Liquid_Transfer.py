@@ -25,8 +25,7 @@ def Init():
 	pass
 
 def Step(step):
-
-	LOG.Step(step)
+	LOG.BeginCommentsLog()
 
 	DestinationPlate = step.GetParentPlate()
 	
@@ -51,9 +50,14 @@ def Step(step):
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 	#Translate User defined names into sequence loading names
 
+	if len(Sequences) == 0:
+		LOG.Comment("Number of sequences is zero so no liquid transfer will actually occur.")
+
+	LOG.EndCommentsLog()
+
+	LOG.BeginCommandLog()
 	if len(Sequences) != 0:
 		PIPETTE.Do(DestinationPlate, Sequences)
-	else:
-		LOG.GeneralComment("Number of sequences is zero so no liquid transfer will actually occur.")
+	LOG.EndCommandLog()
 
 

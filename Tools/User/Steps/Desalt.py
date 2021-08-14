@@ -116,11 +116,13 @@ def Equilibrate():
 	global Equilibrated
 
 	if Equilibrated == False:
-		LOG.GeneralComment("Performing Desalting Equilibration")
+		LOG.Comment("Performing Desalting Equilibration")
 		Equilibrated = True
+		LOG.BeginCommandLog()
 		DESALT.Equilibrate()
+		LOG.EndCommandLog()
 	else:
-		LOG.GeneralComment("Equilibration already performed. Skipping Equilibration")
+		LOG.Comment("Equilibration already performed. Skipping Equilibration")
 
 ######################################################################### 
 #	Description: Performs equilibration and simulates a pipetting step into the destination plate
@@ -137,7 +139,9 @@ def Process():
 
 	PLATES.GetPlate(Destination).CreatePipetteSequence(SAMPLES.Column(Buffer), SAMPLES.Column(Volume), SAMPLES.Column("Yes"))
 	Equilibrated = False
+	LOG.BeginCommandLog()
 	DESALT.Process()
+	LOG.EndCommandLog()
 	
 ######################################################################### 
 #	Description: Runs equilibration and processing
@@ -145,7 +149,11 @@ def Process():
 #	Returns: N/A
 #########################################################################	
 def Step(step):
-	LOG.Step(step)
 
+	LOG.BeginCommentsLog()
 	Equilibrate()
+	LOG.EndCommentsLog()
+
+	LOG.BeginCommentsLog()
 	Process()
+	LOG.EndCommentsLog()

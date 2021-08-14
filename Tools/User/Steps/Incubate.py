@@ -119,7 +119,10 @@ def StartHeaters():
 				Incubation_List.pop(0)
 				Incubation_Num_List.pop(0)
 				Heaters[ID]["Temp"] = Temp
+
+				LOG.BeginCommandLog()
 				HEATER.StartHeating(ID,Temp)
+				LOG.EndCommandLog()
 				break
 
 def GetReservedHeater(step):
@@ -156,9 +159,16 @@ def Callback(step):
 
 	if ID != None:
 		Heaters[ID]["Reserved"] = False
+		
+		LOG.BeginCommandLog()
 		HEATER.StopHeating(ID)
+		LOG.EndCommandLog()
+
+
 		if step.GetParameters()[SHAKE] > 0:
+			LOG.BeginCommandLog()
 			HEATER.StopShaking(ID)
+			LOG.EndCommandLog()
 		
 		if Loading != None:
 			LidTransportDestination = Lid
@@ -172,9 +182,12 @@ def Callback(step):
 			PlateTransportOpenDistance = TransportConfig[Loading["Labware Name"]]["Open"]
 			PlateTransportCloseDistance = TransportConfig[Loading["Labware Name"]]["Close"]
 			#plate
-
+			LOG.BeginCommandLog()
 			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,0)
+			LOG.EndCommandLog()
+			LOG.BeginCommandLog()
 			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,1)
+			LOG.EndCommandLog()
 		
 
 	else:
@@ -183,15 +196,17 @@ def Callback(step):
 			LidTransportSource = Loading["Lid"]
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			LOG.BeginCommandLog()
 			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance, 1)
+			LOG.EndCommandLog()
 
 	StartHeaters()
 
 def Step(step):
-	LOG.Step(step)
 	global Heaters
 	global TransportConfig
-
+	LOG.BeginCommentsLog()
+	LOG.EndCommentsLog()
 	while ReserveLid(step) == False:
 		WAIT.WaitForTimer()
 	#We need to wait for incubation to finish if no lids are available
@@ -213,19 +228,26 @@ def Step(step):
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
 			#Lid
-
+			LOG.BeginCommandLog()
 			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,0)
+			LOG.EndCommandLog()
+			LOG.BeginCommandLog()
 			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,1)
+			LOG.EndCommandLog()
 
 		if step.GetParameters()[SHAKE] > 0:
+			LOG.BeginCommandLog()
 			HEATER.StartShaking(ID, step.GetParameters()[SHAKE])
+			LOG.EndCommandLog()
 	else:
 		if Loading != None:
 			LidTransportSource = Lid
 			LidTransportDestination = Loading["Lid"]
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			LOG.BeginCommandLog()
 			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance, 1)
+			LOG.EndCommandLog()
 		
 		PLATES.GetPlate(step.GetParentPlate()).SetLidState()
 	#Make decisions if incubation is ambient or not

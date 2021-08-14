@@ -57,8 +57,8 @@ def Init(MutableStepsList):
 
 
 def Step(step):
-	LOG.Step(step)
-	
+	LOG.BeginCommentsLog()
+
 	PlateName1 = step.GetParameters()[NAME_1]
 	PlateName2 = step.GetParameters()[NAME_2]
 	PreviousPlateName = step.GetParentPlate()
@@ -72,3 +72,5 @@ def Step(step):
 	
 	if PlateName2 not in DeadPlates:
 		PLATES.GetPlate(PlateName2).Activate()
+
+	LOG.EndCommentsLog()

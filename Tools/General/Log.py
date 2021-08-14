@@ -12,7 +12,7 @@ LATEST_STEP_INFO = {}
 LOG_ROW_START = 2
 LOG_COL_START = 2
 LOG_ROW_END = 1000
-LOG_COL_END = 200 + LOG_COL_START
+LOG_COL_END = 5
 
 LOG_COL_STEP = 0
 LOG_COL_COMMENTS = 1
@@ -26,15 +26,21 @@ TrueRunRow = LOG_ROW_START
 CurrentRow = LOG_ROW_START
 LogSheet = None
 
-
 LogExists = True
 
 GeneralCommentCounter = 0
-StepCoordinates = None
+
+StepCounter = 1
+CommandCounter = 0
+
+def GetStepID():
+	global StepCounter
+	return "##" + str(StepCounter) + "##"
 
 def GetCommandID():
-	global StepCoordinates
-	return "("+str(StepCoordinates[0])+","+str(StepCoordinates[1])+")"
+	global StepCounter
+	global CommandCounter
+	return "##" + str(StepCounter) + "." + str(CommandCounter) + "##"
 
 def Exists():
 	global LogExists
@@ -44,16 +50,38 @@ def GetLatestStep():
 	global LATEST_STEP_INFO
 	return LATEST_STEP_INFO
 
-def StartStepLog(StepCoords):
-	global StepCoordinates
-	StepCoordinates = StepCoords
-
-def EndStepLog():
+def BeginStepLog():
+	global StepCounter
+	global CommandCounter
 	global CurrentRow
 	global LOG_NEXT_LINE_PADDING
-	global GeneralCommentCounter
 	CurrentRow += LOG_NEXT_LINE_PADDING
+	StepCounter += 1
+	CommandCounter = 0
+
+def EndStepLog():
+	return
+
+def BeginCommandLog():
+	global CommandCounter
+	global CurrentRow
+	CurrentRow += LOG_ROW_PADDING
+	CommandCounter += 1
+
+def EndCommandLog():
+	return
+
+def BeginCommentsLog():
+	global CommandCounter
+	global CurrentRow
+	CurrentRow += LOG_ROW_PADDING
+
+def EndCommentsLog():
+	global GeneralCommentCounter
+	if GeneralCommentCounter == 0:
+		Comment("Test")
 	GeneralCommentCounter = 0
+	return
 ######################################################################### 
 #	Description: Initializes the library by pulling information from Config files
 #	Input Arguments: N/A
@@ -112,55 +140,39 @@ def Init():
 
 
 def CommandInLog(Command):
+	if HAMILTONIO.IsSimulated() == True:
+		return False
+
 	global LogSheet
 
-	SearchArray = []
-
-	while True:
-		CommandLineEnd = Command.find("[",1)
-		SearchArray.append(Command[:CommandLineEnd].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
-		if CommandLineEnd == -1:
-			break
-		Command = Command[CommandLineEnd:]
-	
-	MaxLength = max(len(Command) for Command in SearchArray)
-	SearchArray = [Command + [""]*(MaxLength - len(Command)) for Command in SearchArray]
-	#We have created our search array. Now let us find the command
+	ID = GetCommandID()
 
 	Log = EXCELIO.Pull(LogSheet, LOG_ROW_START, LOG_COL_START, LOG_ROW_END, LOG_COL_END, n=2)
 
-	for RowIndex in range(0,LOG_ROW_END-LOG_ROW_START):
-		
-		Status = True
-
-		if Log[RowIndex][LOG_COL_COMMAND] != None and str(Log[RowIndex][LOG_COL_COMMAND]) == str(SearchArray[0][0]):
-
-			for SRowIndex in range(0,len(SearchArray)):
-				for SColIndex in range(0,len(SearchArray[SRowIndex])):
-					try:
-						LogValue = str(float(Log[RowIndex + SRowIndex][LOG_COL_COMMAND + SColIndex]))
-					except:
-						LogValue = str(Log[RowIndex + SRowIndex][LOG_COL_COMMAND + SColIndex])
-						if LogValue == "None":
-							LogValue = ""
-					try:
-						SearchValue = str(float(SearchArray[SRowIndex][SColIndex]))
-					except:
-						SearchValue = str(SearchArray[SRowIndex][SColIndex])
-					#I need to do some silly casting because of the way excell works. Basically, if it is a number then we get the decimal and convert to string. 
-					#Else we go directly to string
-
-					if LogValue != SearchValue:
-						Status = False
-			if Status == True:
-				print(True)
+	for Row in Log:
+		for Col in Row:
+			if ID == Col:
+				print("True")
 				return True
-	print(SearchArray)
-	print(False)
+	print("False")
 	return False
 
+def StepInLog(Command):
 
+	if HAMILTONIO.IsSimulated() == True:
+		return False
 
+	global LogSheet
+
+	ID = GetStepID()
+
+	Log = EXCELIO.Pull(LogSheet, LOG_ROW_START, LOG_COL_START, LOG_ROW_END, LOG_COL_END, n=2)
+
+	for Row in Log:
+		for Col in Row:
+			if ID == Col:
+				return True
+	return False
 
 def HandleResponse(Response):
 	RUN_BEGINNING = "Run From Beginning of Method"
@@ -192,6 +204,7 @@ def HandleResponse(Response):
 		pass
 	else:
 		print("No response matches found. Quitting...")
+		EXCELIO.Push(TRUERUN_SHEET, LOG_ROW_START, LOG_COL_START, LOG_ROW_START, LOG_COL_START, Log)
 		quit()
 
 	for RowIndex in range(TrueRunRow - LOG_ROW_START, 0, -1):
@@ -206,18 +219,16 @@ def HandleResponse(Response):
 
 
 
-def GeneralComment(Comment):
+def Comment(Comments):
 	global CurrentRow
 	global GeneralCommentCounter
 	GeneralCommentCounter += 1
-	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_COMMENTS + LOG_COL_START, CurrentRow, LOG_COL_COMMENTS + LOG_COL_START, [[Comment]])
+	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_COMMENTS + LOG_COL_START, CurrentRow, LOG_COL_COMMENTS + LOG_COL_START, [[Comments]])
 	CurrentRow += 1
 
 def Step(Step):
 	global LogSheet
 	global CurrentRow
-	global LOG_ROW_PADDING
-	global GeneralComments
 
 	printArray = []
 
@@ -235,19 +246,11 @@ def Step(Step):
 
 	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_STEP + LOG_COL_START, CurrentRow, LOG_COL_STEP + LOG_COL_START, printArray)
 
-	CurrentRow += len(printArray) + LOG_ROW_PADDING
+	CurrentRow += len(printArray)
 
 def Command(Command):
 	global LogSheet
 	global CurrentRow
-	global LOG_ROW_PADDING
-	global GeneralCommentCounter
-
-	if GeneralCommentCounter == 0:
-		GeneralComment("Step Parameters are as expected.")
-	GeneralCommentCounter = 0
-
-	CurrentRow += LOG_ROW_PADDING
 
 	printArray = []
 
@@ -263,7 +266,15 @@ def Command(Command):
 
 	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_COMMAND + LOG_COL_START, CurrentRow, LOG_COL_COMMAND + LOG_COL_START, printArray)
 
-	CurrentRow += len(printArray) + LOG_ROW_PADDING
+	CurrentRow += len(printArray)
+
+def CommandID():
+	global LogSheet
+	global CurrentRow
+
+	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_COMMAND + LOG_COL_START, CurrentRow, LOG_COL_COMMAND + LOG_COL_START, GetCommandID())
+	CurrentRow += 1
+
 
 def Hamilton(IDKHowToDoThisLOL):
 	pass

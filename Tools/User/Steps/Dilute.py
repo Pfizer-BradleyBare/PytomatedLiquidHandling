@@ -45,7 +45,7 @@ def Step(step):
 	#We need to solve for Source Volume
 	#V1 = (C2*V2)/C1
 
-	LOG.Step(step)
+	LOG.BeginCommentsLog()
 
 	TargetConcentrationList = SAMPLES.Column(step.GetParameters()[TARGET_CONCENTRATION])
 	TargetVolumeList = SAMPLES.Column(step.GetParameters()[TARGET_VOLUME])
@@ -67,12 +67,12 @@ def Step(step):
 
 	for VolIndex in range(0,len(SourceVolumeList)):
 		if SourceVolumeList[VolIndex] > TargetVolumeList[VolIndex] or DiluentVolumeList[VolIndex] < 0:
-			LOG.GeneralComment("Volume is out of range for Position " + str(DestinationSequences[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source,Diluent): 0 > (" + str(SourceVolumeList[VolIndex]) + "," + str(DiluentVolumeList[VolIndex]) + ") > " + str(TargetVolumeList[VolIndex]))
+			LOG.Comment("Volume is out of range for Position " + str(DestinationSequences[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source,Diluent): 0 > (" + str(SourceVolumeList[VolIndex]) + "," + str(DiluentVolumeList[VolIndex]) + ") > " + str(TargetVolumeList[VolIndex]))
 			SourceVolumeList[VolIndex] = TargetVolumeList[VolIndex]
 			DiluentVolumeList[VolIndex] = 0
 
 		if DiluentVolumeList[VolIndex] > TargetVolumeList[VolIndex] or SourceVolumeList[VolIndex] < 0:
-			LOG.GeneralComment("Volume is out of range for Position " + str(DestinationSequences[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source,Diluent): 0 > (" + str(SourceVolumeList[VolIndex]) + "," + str(DiluentVolumeList[VolIndex]) + ") > " + str(TargetVolumeList[VolIndex]))
+			LOG.Comment("Volume is out of range for Position " + str(DestinationSequences[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source,Diluent): 0 > (" + str(SourceVolumeList[VolIndex]) + "," + str(DiluentVolumeList[VolIndex]) + ") > " + str(TargetVolumeList[VolIndex]))
 			DiluentVolumeList[VolIndex] = TargetVolumeList[VolIndex]
 			SourceVolumeList[VolIndex] = 0
 	#check for ridiculous pipetting volumes and correct it. User should ideally never input something ridiculous
@@ -97,6 +97,9 @@ def Step(step):
 			FirstVolumeList.append(DiluentVolumeList[index])
 	#We want to pipette the highest volume first for each sample no matter what.
 
+	LOG.EndCommentsLog()
+
+	LOG.BeginCommentsLog()
 	DestinationPlate = step.GetParentPlate()
 
 	if PLATES.GetPlate(DestinationPlate).GetVolume() != 0:
@@ -119,10 +122,18 @@ def Step(step):
 
 
 
+	if len(Sequences) == 0:
+		LOG.Comment("Number of sequences is zero so no liquid transfer will actually occur.")
+
+	LOG.EndCommentsLog()
+
+	LOG.BeginCommandLog()
 	if len(Sequences) != 0:
 		PIPETTE.Do(DestinationPlate, Sequences)
+	LOG.EndCommandLog()
 	#Do the source pipetting
 
+	LOG.BeginCommentsLog()
 	DestinationPlate = step.GetParentPlate()
 
 	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SecondSourceList, SecondVolumeList, SAMPLES.Column("Yes"))
@@ -138,10 +149,15 @@ def Step(step):
 			sequence["Destination"] = CONFIGURATION.GetDeckLoading(sequence["Destination"])["Sequence"]
 		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
 
+	if len(Sequences) == 0:
+		LOG.Comment("Number of sequences is zero so no liquid transfer will actually occur.")
+
+	LOG.EndCommentsLog()
+
+	LOG.BeginCommandLog()
 	if len(Sequences) != 0:
 		PIPETTE.Do(DestinationPlate, Sequences)
-	else:
-		LOG.GeneralComment("Number of sequences is zero so no liquid transfer will actually occur.")
+	LOG.EndCommandLog()
 	#Do the diluent pipetting
 #end
 

@@ -18,5 +18,6 @@ def Init(MutableStepsList):
 	pass
 
 def Step(step):
-	LOG.Step(step)
+	LOG.BeginCommentsLog()
+	LOG.EndCommentsLog()
 	pass

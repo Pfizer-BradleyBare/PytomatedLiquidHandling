@@ -73,7 +73,6 @@ STEPS.Init(EXCELIO.GetMethod())
 SAMPLES.Init(Sample_Start_Pos, EXCELIO.GetWorklist())
 PLATES.Init()
 SOLUTIONS.Init()
-LOG.StartStepLog(STEPS.GetAllSteps()[0].GetCoordinates())
 #Init Trackers
 
 PLATE.Init(STEPS.GetSteps(), SAMPLES.GetSequences())
@@ -122,7 +121,8 @@ while(True):
 	if Step == None:
 		break
 
-	LOG.StartStepLog(Step.GetCoordinates())
+	LOG.BeginStepLog()
+	LOG.Step(Step)
 	Steps[Step.GetTitle()](Step)
 	LOG.EndStepLog()
 #do each step
@@ -162,7 +162,7 @@ if HAMILTONIO.IsSimulated() == True:
 	if INCUBATE.IsUsed() == True:
 		PRERUN.TRANSPORT.PreRun()
 
-	if LOG.Exists() and TestRun == False:
+	if LOG.Exists() and TestRun == False and len(LOG.GetLatestStep()) != 0:
 		LOG.HandleResponse(PRERUN.LOG.PreRun(LOG.GetLatestStep()))
 	#initialize all the Hamilton Libraries.
 

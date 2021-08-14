@@ -22,10 +22,12 @@ def Init(MutableStepsList, SequencesList):
 				MutableStepsList.remove(Step)
 
 def Step(step):
-	LOG.Step(step)
+	LOG.BeginCommentsLog()
 	
 	PlateName = step.GetParameters()[NAME]
 	PreviousPlateName = step.GetParentPlate()
 
 	PLATES.GetPlate(PreviousPlateName).Deactivate()
 	PLATES.GetPlate(PlateName).Activate()
+	
+	LOG.EndCommentsLog()

@@ -15,9 +15,13 @@ def Init():
 	pass
 		
 def Step(step):
-	PLATES.GetPlate(step.GetParentPlate()).Deactivate()
-	LOG.Step(step)
-	LOG.GeneralComment(str(step.GetParentPlate()) + " plate deactivated")
+	LOG.BeginCommentsLog()
 
+	PLATES.GetPlate(step.GetParentPlate()).Deactivate()
+
+	LOG.Comment(str(step.GetParentPlate()) + " plate deactivated")
+
+	LOG.EndCommentsLog()
+	
 	if len(PLATES.GetActivePlates()) == 0:
 		WAIT.WaitForTimer()

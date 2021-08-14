@@ -13,7 +13,7 @@ def PreRun():
 #this function will start a timer for a specified plate
 def Start(WaitTime):
 	CommandString = ""
-	CommandString += str(LOG.GetCommandID()) + "[Timer]\n"
+	CommandString += "[Timer]\n"
 	CommandString += "[Start]\n"
 	CommandString += "[Time]" + "{0:.2f}".format(WaitTime) + "\n"
 
@@ -21,18 +21,20 @@ def Start(WaitTime):
 		LOG.Command(CommandString)
 		HAMILTONIO.Push(CommandString)
 		Response = HAMILTONIO.Pull()
+		LOG.CommandID()
 	return True
 	
 #this function will wait on a plate timer
 def Wait():
 	CommandString = ""
-	CommandString += str(LOG.GetCommandID()) + "[Timer]\n"
+	CommandString += "[Timer]\n"
 	CommandString += "[Wait]\n"
 
 	if LOG.CommandInLog(CommandString) != True:
 		LOG.Command(CommandString)
 		HAMILTONIO.Push(CommandString)
 		Response = HAMILTONIO.Pull()
+		LOG.CommandID()
 	return True
 
 
