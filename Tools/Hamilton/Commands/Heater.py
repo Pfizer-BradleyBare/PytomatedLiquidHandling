@@ -22,7 +22,8 @@ def StartHeating(ID, Temp):
 		LOG.Command(CommandString)
 		HAMILTONIO.Push(CommandString)
 		Response = HAMILTONIO.Pull()
-		LOG.CommandID()
+		#LOG.CommandID()
+		#Do not log because we do not want heating disabled on a method resume
 	return True
 
 def StopHeating(ID):
@@ -35,7 +36,8 @@ def StopHeating(ID):
 		LOG.Command(CommandString)
 		HAMILTONIO.Push(CommandString)
 		Response = HAMILTONIO.Pull()
-		LOG.CommandID()
+		#LOG.CommandID()
+		#Do not log because we do not want heating disabled on a method resume. Similar to above
 	return True
 
 def StartShaking(ID, RPM):
