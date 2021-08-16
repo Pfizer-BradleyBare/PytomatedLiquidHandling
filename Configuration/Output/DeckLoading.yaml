@@ -42,7 +42,7 @@
   LoadingPosition: Carrier38_Pos2
   Max Volume: 200000
   Sequence: T4
-  Volume: 12500.0
+  Volume: 18500.0
 7M GnHCl, 100mM Tris pH 8.3, 5mM L-Met:
   Labware Category: Reagent
   Labware Name: 15mL Centrifuge Tube
@@ -69,7 +69,7 @@ Desalting:
   LoadingPosition: Carrier38_Pos5
   Max Volume: 1200
   Sequence: Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel
-  Volume: 150
+  Volume: 250
 Desalting Waste:
   Labware Category: Plate
   Labware Name: 2000uL Corning 96 Well PCR Plate

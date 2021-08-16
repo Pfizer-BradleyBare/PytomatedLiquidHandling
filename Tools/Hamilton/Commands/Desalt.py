@@ -7,12 +7,15 @@ def PreRun(Params):
 	CommandString += "[PreRun]\n"
 	CommandString += "[Desalt]\n"
 	CommandString += "[Tips]" + str(Params["Required Tips"])
-	CommandString += "[Types]" + str(Params["Type"])
-	CommandString += "[Volumes]" + str(Params["Volume"])
+	CommandString += "[Types]" + str(Params["Type"]).replace(",",HAMILTONIO.GetDelimiter())
+	CommandString += "[Volumes]" + str(Params["Volume"]).replace(",",HAMILTONIO.GetDelimiter())
 	CommandString += "[Source]" + str(Params["Source Sequence"])
 	CommandString += "[Buffer]" + str(Params["Buffer Sequence"])
 	CommandString += "[Waste]" + str(Params["Waste Sequence"])
 	CommandString += "[Destination]" + str(Params["Destination Sequence"]) + "\n"
+
+	print(CommandString)
+	quit()
 
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
