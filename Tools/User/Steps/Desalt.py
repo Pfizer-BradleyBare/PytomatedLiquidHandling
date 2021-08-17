@@ -134,10 +134,10 @@ def Process():
 	global Equilibrated
 
 	Destination = Desalting_Params["Destination"]
-	Buffer = Desalting_Params["Buffer"]
+	Source = Desalting_Params["Source"]
 	Volume = sum(list(map(int, Desalting_Params["Volume"].split(","))))
 
-	PLATES.GetPlate(Destination).CreatePipetteSequence(SAMPLES.Column(Buffer), SAMPLES.Column(Volume), SAMPLES.Column("Yes"))
+	PLATES.GetPlate(Destination).CreatePipetteSequence(SAMPLES.Column(Source), SAMPLES.Column(Volume), SAMPLES.Column("Yes"))
 	Equilibrated = False
 	LOG.BeginCommandLog()
 	DESALT.Process()
