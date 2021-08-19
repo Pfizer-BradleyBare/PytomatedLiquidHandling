@@ -123,6 +123,8 @@ while(True):
 
 	LOG.BeginStepLog()
 	LOG.Step(Step)
+	STEPS.UpdateStepParams(Step)
+	#This updates the actual step parameters at time the step is run. This allows for method development in real time
 	Steps[Step.GetTitle()](Step)
 	LOG.EndStepLog()
 #do each step

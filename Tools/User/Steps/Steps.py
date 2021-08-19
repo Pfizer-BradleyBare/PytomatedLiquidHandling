@@ -51,6 +51,20 @@ def GetNextStep(ActivePlates):
 
 	return None
 
+def UpdateStepParams(Step):
+	Method = EXCELIO.GetMethod()
+
+	Coords = Step.GetCoordinates()
+	Row = Coords[0]
+	Col = Coords[1]
+
+	while True:
+		Row += 1
+		if Method[Row][Col] == None:
+			break
+		Step.AddParameters(Method[Row][Col],Method[Row][Col+1])
+
+
 def GetCurrentStep():
 	global Current_Step
 	return Current_Step
@@ -126,7 +140,7 @@ def Init(PulledMethodSheet):
 				if value != None and type(value) == str and value.lower() == "Comments".lower():
 				
 					Step = Class(PulledMethodSheet[row][col - 2])
-					Step.SetCoordinates(EXCELIO.METHOD_ROW_START + row, EXCELIO.METHOD_COL_START + col - 2)
+					Step.SetCoordinates(EXCELIO.METHOD_ROW_START + row - 1, EXCELIO.METHOD_COL_START + col - 2 - 1)
 					Step.SetParentPlate(Name)	
 					Step_Name = PulledMethodSheet[row][col - 2]
 
