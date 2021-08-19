@@ -143,7 +143,6 @@ def CommandInLog(Command):
 	if HAMILTONIO.IsSimulated() == True:
 		return False
 
-	print("Blah!")
 	global LogSheet
 
 	ID = GetCommandID()
