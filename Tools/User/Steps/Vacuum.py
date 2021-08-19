@@ -9,6 +9,7 @@ from ...User import Configuration as CONFIGURATION
 TITLE = "Vacuum"
 SOURCE = "Source"
 Volume = "Volume (uL)"
+VACUUM_PLATE = "Vacuum Plate"
 WAIT_TIME = "Pre Vacuum Wait (sec)"
 PRESSURE = "Pressure Difference (mTorr)"
 TIME = "Vacuum Time (sec)"
@@ -38,6 +39,8 @@ def Init(MutableStepsList):
 	for item in VacuumConfig["PlateSequences"]:
 		CONFIGURATION.AddCheckSequence(VacuumConfig["PlateSequences"][item])
 
+	for item in VacuumConfig["VacuumPlates"]:
+		CONFIGURATION.AddCheckSequence(VacuumConfig["VacuumPlates"][item]["Sequence"])
 
 	for Step in MutableStepsList:
 		if Step.GetTitle() == TITLE:
@@ -54,13 +57,15 @@ def Step(step):
 	SourcePlate = step.GetParameters()[SOURCE]
 	Volume = step.GetParameters()[VOLUME]
 	WaitTime = step.GetParameters()[WAIT_TIME]
+	VacPlate = step.GetParameters()[VACUUM_PLATE]
 	Pressure = step.GetParameters()[PRESSURE]
 	Time = step.GetParameters()[TIME]
+
+	Plate = VacuumConfig["VacuumPlates"][VacPlate]
 
 	Loading = CONFIGURATION.GetDeckLoading(Destination)
 
 	if Loading != None:
-
 
 		Source = Loading["Sequence"]
 		Destination = VacuumConfig["PlateSequences"][Loading["Labware Name"]]
@@ -76,7 +81,7 @@ def Step(step):
 		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1)
 		#Move manifold from park to vacuum
 
-		step = LIQUID_TRANSFER.CreateStep(Destination,SourcePlate,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,Volume,Mix)
+		step = LIQUID_TRANSFER.CreateStep(Plate,SourcePlate,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,Volume,Mix)
 		LIQUID_TRANSFER.Step(step)
 		#Transfer liquid into vacuum plate
 
@@ -88,17 +93,21 @@ def Callback(step):
 	global TransportConfig
 
 	Destination = step.GetParentPlate()
-	SourcePlate = step.GetParameters()[SOURCE]
-	Volume = step.GetParameters()[VOLUME]
+	VacPlate = step.GetParameters()[VACUUM_PLATE]
 	WaitTime = step.GetParameters()[WAIT_TIME]
 	Pressure = step.GetParameters()[PRESSURE]
 	Time = step.GetParameters()[TIME]
 
 	Loading = CONFIGURATION.GetDeckLoading(Destination)
 
+	try:
+		TruePressure = VacuumConfig["VacuumPlates"][VacPlate]["Pressures"][Pressure]
+	except:
+		TruePressure = Pressure
+
 	if Loading != None:
 
-		VACUUM.Start(Pressure, Time)
+		VACUUM.Start(TruePressure, Time)
 		VACUUM.Wait()
 		#Start vacuum
 
