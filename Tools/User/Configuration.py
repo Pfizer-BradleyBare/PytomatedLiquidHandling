@@ -185,8 +185,9 @@ def Load(Plates_List, Solutions_List):
 		PlateType = Plate.GetType()
 		MaxVol = Plate.GetVolume()
 		LidRequired = Plate.GetLidState()
+		VacuumRequired = Plate.GetVacuumState()
 
-		Possibles = collections.OrderedDict({k: v for k, v in PlateSequences.items() if v["Max Supported Volume"] >= (MaxVol + DeadVolumeConfig[v["Labware Name"]]) and PlateType == v["Labware Type"] and int(not not v["Lid Sequence"]) >= int(not not LidRequired)})
+		Possibles = collections.OrderedDict({k: v for k, v in PlateSequences.items() if v["Max Supported Volume"] >= (MaxVol + DeadVolumeConfig[v["Labware Name"]]) and PlateType == v["Labware Type"] and int(not not v["Lid Sequence"]) >= int(not not LidRequired) and int(not not v["Vacuum Compatible"]) >= int(not not VacuumRequired)})
 		Possibles = collections.OrderedDict({k: v for k, v in sorted(Possibles.items(), key=lambda item: item[1]["Max Supported Volume"])})
 
 		for item in Possibles:

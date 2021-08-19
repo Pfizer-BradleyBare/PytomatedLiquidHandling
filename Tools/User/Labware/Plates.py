@@ -19,6 +19,7 @@ class Class:
 		self.PlateName = PlateName
 		self.Type = Type
 		self.Lid = False
+		self.Vacuum = False
 		self.ActiveState = False
 		self.SequencesList = SequencesList
 		self.FactorsList = [1] * len(SequencesList)
@@ -40,6 +41,15 @@ class Class:
 
 	def GetLidState(self):
 		return self.Lid
+
+	def SetVacuumState(self):
+		self.Vacuum = True
+
+	def ResetVacuumState(self):
+		self.Vacuum = False
+
+	def GetVacuumState(self):
+		return self.Vacuum
 
 	def GetSequenceList(self):
 		return self.SequencesList

@@ -27,6 +27,7 @@ Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel:
   Labware Name: 200uL Biorad 96 Well PCR Plate
   Lid Sequence: False
   Deck Position: Carrier38_Pos3
+  Vacuum Compatible: False
 
 Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel:
   Max Supported Volume: 225
@@ -36,6 +37,7 @@ Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel:
   Labware Name: 200uL Biorad 96 Well PCR Plate
   Lid Sequence: Carrier14_Pos3_Lid_200uL
   Deck Position: Carrier14_Pos3
+  Vacuum Compatible: False
 
 Carrier14_Pos4_96WellPCRPlate200uL_1mLChannel:
   Max Supported Volume: 225
@@ -45,6 +47,7 @@ Carrier14_Pos4_96WellPCRPlate200uL_1mLChannel:
   Labware Name: 200uL Biorad 96 Well PCR Plate
   Lid Sequence: Carrier14_Pos4_Lid_200uL
   Deck Position: Carrier14_Pos4
+  Vacuum Compatible: False
 
 Carrier14_Pos5_96WellPCRPlate200uL_1mLChannel:
   Max Supported Volume: 225
@@ -54,6 +57,7 @@ Carrier14_Pos5_96WellPCRPlate200uL_1mLChannel:
   Labware Name: 200uL Biorad 96 Well PCR Plate
   Lid Sequence: False
   Deck Position: Carrier14_Pos5
+  Vacuum Compatible: False
 
 #
 # 400uL plates
@@ -67,6 +71,7 @@ Carrier14_Pos3_96WellPCRPlate400uL_1mLChannel:
   Labware Name: 400uL Thermo 96 Well PCR Plate
   Lid Sequence: Carrier14_Pos3_Lid_400uL
   Deck Position: Carrier14_Pos3
+  Vacuum Compatible: False
 
 Carrier14_Pos4_96WellPCRPlate400uL_1mLChannel:
   Max Supported Volume: 400
@@ -76,6 +81,7 @@ Carrier14_Pos4_96WellPCRPlate400uL_1mLChannel:
   Labware Name: 400uL Thermo 96 Well PCR Plate
   Lid Sequence: False
   Deck Position: Carrier14_Pos4
+  Vacuum Compatible: False
 
 Carrier14_Pos5_96WellPCRPlate400uL_1mLChannel:
   Max Supported Volume: 400
@@ -85,6 +91,7 @@ Carrier14_Pos5_96WellPCRPlate400uL_1mLChannel:
   Labware Name: 400uL Thermo 96 Well PCR Plate
   Lid Sequence: False
   Deck Position: Carrier14_Pos5
+  Vacuum Compatible: False
 
 #
 # 1200uL plates
@@ -98,6 +105,7 @@ Carrier14_Pos4_96WellPCRPlate1200uL_1mLChannel:
   Labware Name: 1200uL DeepWell 96 Well PCR Plate
   Lid Sequence: Carrier14_Pos4_Lid_1200uL
   Deck Position: Carrier14_Pos4
+  Vacuum Compatible: False
 
 Carrier14_Pos5_96WellPCRPlate1200uL_1mLChannel:
   Max Supported Volume: 1200
@@ -107,6 +115,7 @@ Carrier14_Pos5_96WellPCRPlate1200uL_1mLChannel:
   Labware Name: 1200uL DeepWell 96 Well PCR Plate
   Lid Sequence: False
   Deck Position: Carrier14_Pos5
+  Vacuum Compatible: False
 
 Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel:
   Max Supported Volume: 1200
@@ -116,6 +125,7 @@ Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel:
   Labware Name: 1200uL DeepWell 96 Well PCR Plate
   Lid Sequence: False
   Deck Position: Carrier38_Pos5
+  Vacuum Compatible: False
 
 #2000
 Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel:
@@ -126,6 +136,7 @@ Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel:
   Labware Name: 2000uL Corning 96 Well PCR Plate
   Lid Sequence: False
   Deck Position: Carrier38_Pos1
+  Vacuum Compatible: True
 
 Carrier14_Pos3_96WellPCRPlate2000uL_1mLChannel:
   Max Supported Volume: 2000
@@ -135,6 +146,7 @@ Carrier14_Pos3_96WellPCRPlate2000uL_1mLChannel:
   Labware Name: 2000uL Corning 96 Well PCR Plate
   Lid Sequence: False
   Deck Position: Carrier14_Pos3
+  Vacuum Compatible: True
 
 Carrier14_Pos4_96WellPCRPlate2000uL_1mLChannel:
   Max Supported Volume: 2000
@@ -144,6 +156,7 @@ Carrier14_Pos4_96WellPCRPlate2000uL_1mLChannel:
   Labware Name: 2000uL Corning 96 Well PCR Plate
   Lid Sequence: False
   Deck Position: Carrier14_Pos4
+  Vacuum Compatible: True
 
 Carrier14_Pos5_96WellPCRPlate2000uL_1mLChannel:
   Max Supported Volume: 2000
@@ -153,37 +166,40 @@ Carrier14_Pos5_96WellPCRPlate2000uL_1mLChannel:
   Labware Name: 2000uL Corning 96 Well PCR Plate
   Lid Sequence: False
   Deck Position: Carrier14_Pos5
+  Vacuum Compatible: True
 
 #Starstedt plates
 
-Carrier14_Pos5_56VialStarstedtRack200uL_1mLChannel:
-  Max Supported Volume: 200
-  Storage Condition: False
-  Labware Category: Plate
-  Labware Type: Starstedt 56 Well Plate
-  Labware Name: 200uL Starstedt Tube Plate
-  Lid Sequence: False
-  Deck Position: Carrier14_Pos5
+#Carrier14_Pos5_56VialStarstedtRack200uL_1mLChannel:
+#  Max Supported Volume: 200
+#  Storage Condition: False
+#  Labware Category: Plate
+#  Labware Type: Starstedt 56 Well Plate
+#  Labware Name: 200uL Starstedt Tube Plate
+#  Lid Sequence: False
+#  Deck Position: Carrier14_Pos5
 
-Carrier14_Pos5_56VialStarstedtRack2000uL_1mLChannel:
-  Max Supported Volume: 2000
-  Storage Condition: False
-  Labware Category: Plate
-  Labware Type: Starstedt 56 Well Plate
-  Labware Name: 2000uL Starstedt Tube Plate
-  Lid Sequence: False
-  Deck Position: Carrier14_Pos5
+#Carrier14_Pos5_56VialStarstedtRack2000uL_1mLChannel:
+#  Max Supported Volume: 2000
+#  Storage Condition: False
+#  Labware Category: Plate
+#  Labware Type: Starstedt 56 Well Plate
+#  Labware Name: 2000uL Starstedt Tube Plate
+#  Lid Sequence: False
+#  Deck Position: Carrier14_Pos5
 
 #LC Vial plates
 
-Carrier14_Pos5_48VialLCRack_1mLChannel:
-  Max Supported Volume: 2000
-  Storage Condition: False
-  Labware Category: Plate
-  Labware Type: Waters TRV 48 Well Plate
-  Labware Name: 2000uL Water Total Recovery Vial Plate
-  Lid Sequence: False
-  Deck Position: Carrier14_Pos5
+#Carrier14_Pos5_48VialLCRack_1mLChannel:
+#  Max Supported Volume: 2000
+#  Storage Condition: False
+#  Labware Category: Plate
+#  Labware Type: Waters TRV 48 Well Plate
+#  Labware Name: 2000uL Water Total Recovery Vial Plate
+#  Lid Sequence: False
+#  Deck Position: Carrier14_Pos5
+
+#Reagents
 
 E1:
   Max Supported Volume: 1500
@@ -193,6 +209,7 @@ E1:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: E1
+  Vacuum Compatible: False
 
 E2:
   Max Supported Volume: 1500
@@ -202,6 +219,7 @@ E2:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: E2
+  Vacuum Compatible: False
 
 E3:
   Max Supported Volume: 1500
@@ -211,6 +229,7 @@ E3:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: E3
+  Vacuum Compatible: False
 
 E4:
   Max Supported Volume: 1500
@@ -220,6 +239,7 @@ E4:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: E4
+  Vacuum Compatible: False
 
 E5:
   Max Supported Volume: 1500
@@ -229,6 +249,7 @@ E5:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: E5
+  Vacuum Compatible: False
 
 E6:
   Max Supported Volume: 1500
@@ -238,6 +259,7 @@ E6:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: E6
+  Vacuum Compatible: False
 
 E7:
   Max Supported Volume: 1500
@@ -247,6 +269,7 @@ E7:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: E7
+  Vacuum Compatible: False
 
 E8:
   Max Supported Volume: 1500
@@ -256,6 +279,7 @@ E8:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: E8
+  Vacuum Compatible: False
 
 F1:
   Max Supported Volume: 1500
@@ -265,6 +289,7 @@ F1:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F1
+  Vacuum Compatible: False
 
 F2:
   Max Supported Volume: 1500
@@ -274,6 +299,7 @@ F2:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F2
+  Vacuum Compatible: False
 
 F3:
   Max Supported Volume: 1500
@@ -283,6 +309,7 @@ F3:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F3
+  Vacuum Compatible: False
 
 F4:
   Max Supported Volume: 1500
@@ -292,6 +319,7 @@ F4:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F4
+  Vacuum Compatible: False
 
 F5:
   Max Supported Volume: 1500
@@ -301,6 +329,7 @@ F5:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F5
+  Vacuum Compatible: False
 
 F6:
   Max Supported Volume: 1500
@@ -310,6 +339,7 @@ F6:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F6
+  Vacuum Compatible: False
 
 F7:
   Max Supported Volume: 1500
@@ -319,6 +349,7 @@ F7:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F7
+  Vacuum Compatible: False
 
 F8:
   Max Supported Volume: 1500
@@ -328,6 +359,7 @@ F8:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F8
+  Vacuum Compatible: False
 
 F9:
   Max Supported Volume: 1500
@@ -337,6 +369,7 @@ F9:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F9
+  Vacuum Compatible: False
 
 F10:
   Max Supported Volume: 1500
@@ -346,6 +379,7 @@ F10:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F10
+  Vacuum Compatible: False
 
 F11:
   Max Supported Volume: 1500
@@ -355,6 +389,7 @@ F11:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F11
+  Vacuum Compatible: False
 
 F12:
   Max Supported Volume: 1500
@@ -364,6 +399,7 @@ F12:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F12
+  Vacuum Compatible: False
 
 F13:
   Max Supported Volume: 1500
@@ -373,6 +409,7 @@ F13:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F13
+  Vacuum Compatible: False
 
 F14:
   Max Supported Volume: 1500
@@ -382,6 +419,7 @@ F14:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F14
+  Vacuum Compatible: False
 
 F15:
   Max Supported Volume: 1500
@@ -391,6 +429,7 @@ F15:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F15
+  Vacuum Compatible: False
 
 F16:
   Max Supported Volume: 1500
@@ -400,6 +439,7 @@ F16:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F16
+  Vacuum Compatible: False
 
 F17:
   Max Supported Volume: 1500
@@ -409,6 +449,7 @@ F17:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F17
+  Vacuum Compatible: False
 
 F18:
   Max Supported Volume: 1500
@@ -418,6 +459,7 @@ F18:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F18
+  Vacuum Compatible: False
 
 F19:
   Max Supported Volume: 1500
@@ -427,6 +469,7 @@ F19:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F19
+  Vacuum Compatible: False
 
 F20:
   Max Supported Volume: 1500
@@ -436,6 +479,7 @@ F20:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F20
+  Vacuum Compatible: False
 
 F21:
   Max Supported Volume: 1500
@@ -445,6 +489,7 @@ F21:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F21
+  Vacuum Compatible: False
 
 F22:
   Max Supported Volume: 1500
@@ -454,6 +499,7 @@ F22:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F22
+  Vacuum Compatible: False
 
 F23:
   Max Supported Volume: 1500
@@ -463,6 +509,7 @@ F23:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F23
+  Vacuum Compatible: False
 
 F24:
   Max Supported Volume: 1500
@@ -472,6 +519,7 @@ F24:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F24
+  Vacuum Compatible: False
 
 F25:
   Max Supported Volume: 1500
@@ -481,6 +529,7 @@ F25:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F25
+  Vacuum Compatible: False
 
 F26:
   Max Supported Volume: 1500
@@ -490,6 +539,7 @@ F26:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F26
+  Vacuum Compatible: False
 
 F27:
   Max Supported Volume: 1500
@@ -499,6 +549,7 @@ F27:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F27
+  Vacuum Compatible: False
 
 F28:
   Max Supported Volume: 1500
@@ -508,6 +559,7 @@ F28:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F28
+  Vacuum Compatible: False
 
 F29:
   Max Supported Volume: 1500
@@ -517,6 +569,7 @@ F29:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F29
+  Vacuum Compatible: False
 
 F30:
   Max Supported Volume: 1500
@@ -526,6 +579,7 @@ F30:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F30
+  Vacuum Compatible: False
 
 F31:
   Max Supported Volume: 1500
@@ -535,6 +589,7 @@ F31:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F31
+  Vacuum Compatible: False
 
 F32:
   Max Supported Volume: 1500
@@ -544,6 +599,7 @@ F32:
   Labware Name: Hamilton 1.5mL FlipTube
   Lid Sequence: True
   Deck Position: F32
+  Vacuum Compatible: False
 
 C1:
   Max Supported Volume: 14000
@@ -553,6 +609,7 @@ C1:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C1
+  Vacuum Compatible: False
 
 C2:
   Max Supported Volume: 14000
@@ -562,6 +619,7 @@ C2:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C2
+  Vacuum Compatible: False
 
 C3:
   Max Supported Volume: 14000
@@ -571,6 +629,7 @@ C3:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C3
+  Vacuum Compatible: False
 
 C4:
   Max Supported Volume: 14000
@@ -580,6 +639,7 @@ C4:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C4
+  Vacuum Compatible: False
 
 C5:
   Max Supported Volume: 14000
@@ -589,6 +649,7 @@ C5:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C5
+  Vacuum Compatible: False
 
 C6:
   Max Supported Volume: 14000
@@ -598,6 +659,7 @@ C6:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C6
+  Vacuum Compatible: False
 
 C7:
   Max Supported Volume: 14000
@@ -607,6 +669,7 @@ C7:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C7
+  Vacuum Compatible: False
 
 C8:
   Max Supported Volume: 14000
@@ -616,6 +679,7 @@ C8:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C8
+  Vacuum Compatible: False
 
 C9:
   Max Supported Volume: 14000
@@ -625,6 +689,7 @@ C9:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C9
+  Vacuum Compatible: False
 
 C10:
   Max Supported Volume: 14000
@@ -634,6 +699,7 @@ C10:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C10
+  Vacuum Compatible: False
 
 C11:
   Max Supported Volume: 14000
@@ -643,6 +709,7 @@ C11:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C11
+  Vacuum Compatible: False
 
 C12:
   Max Supported Volume: 14000
@@ -652,6 +719,7 @@ C12:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C12
+  Vacuum Compatible: False
 
 C13:
   Max Supported Volume: 14000
@@ -661,6 +729,7 @@ C13:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C13
+  Vacuum Compatible: False
 
 C14:
   Max Supported Volume: 14000
@@ -670,6 +739,7 @@ C14:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C14
+  Vacuum Compatible: False
 
 C15:
   Max Supported Volume: 14000
@@ -679,6 +749,7 @@ C15:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C15
+  Vacuum Compatible: False
 
 C16:
   Max Supported Volume: 14000
@@ -688,6 +759,7 @@ C16:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C16
+  Vacuum Compatible: False
 
 C17:
   Max Supported Volume: 14000
@@ -697,6 +769,7 @@ C17:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C17
+  Vacuum Compatible: False
 
 C18:
   Max Supported Volume: 14000
@@ -706,6 +779,7 @@ C18:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C18
+  Vacuum Compatible: False
 
 C19:
   Max Supported Volume: 14000
@@ -715,6 +789,7 @@ C19:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C19
+  Vacuum Compatible: False
 
 C20:
   Max Supported Volume: 14000
@@ -724,6 +799,7 @@ C20:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C20
+  Vacuum Compatible: False
 
 C21:
   Max Supported Volume: 14000
@@ -733,6 +809,7 @@ C21:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C21
+  Vacuum Compatible: False
 
 C22:
   Max Supported Volume: 14000
@@ -742,6 +819,7 @@ C22:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C22
+  Vacuum Compatible: False
 
 C23:
   Max Supported Volume: 14000
@@ -751,6 +829,7 @@ C23:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C23
+  Vacuum Compatible: False
 
 C24:
   Max Supported Volume: 14000
@@ -760,6 +839,7 @@ C24:
   Labware Name: 15mL Centrifuge Tube
   Lid Sequence: False
   Deck Position: C24
+  Vacuum Compatible: False
 
 R1:
   Max Supported Volume: 50000
@@ -769,6 +849,7 @@ R1:
   Labware Name: 60mL Reagent Reservior
   Lid Sequence: False
   Deck Position: R1
+  Vacuum Compatible: False
 
 R2:
   Max Supported Volume: 50000
@@ -778,6 +859,7 @@ R2:
   Labware Name: 60mL Reagent Reservior
   Lid Sequence: False
   Deck Position: R2
+  Vacuum Compatible: False
 
 R3:
   Max Supported Volume: 50000
@@ -787,6 +869,7 @@ R3:
   Labware Name: 60mL Reagent Reservior
   Lid Sequence: False
   Deck Position: R3
+  Vacuum Compatible: False
 
 R4:
   Max Supported Volume: 50000
@@ -796,6 +879,7 @@ R4:
   Labware Name: 60mL Reagent Reservior
   Lid Sequence: False
   Deck Position: R4
+  Vacuum Compatible: False
 
 R5:
   Max Supported Volume: 50000
@@ -805,6 +889,7 @@ R5:
   Labware Name: 60mL Reagent Reservior
   Lid Sequence: False
   Deck Position: R5
+  Vacuum Compatible: False
 
 T5:
   Max Supported Volume: 200000
@@ -814,6 +899,7 @@ T5:
   Labware Name: 200mL Reagent Trough
   Lid Sequence: False
   Deck Position: Carrier38_Pos1
+  Vacuum Compatible: False
 
 T4:
   Max Supported Volume: 200000
@@ -823,6 +909,7 @@ T4:
   Labware Name: 200mL Reagent Trough
   Lid Sequence: False
   Deck Position: Carrier38_Pos2
+  Vacuum Compatible: False
 
 T10:
   Max Supported Volume: 200000
@@ -832,6 +919,7 @@ T10:
   Labware Name: 200mL Reagent Trough
   Lid Sequence: False
   Deck Position: Carrier14_Pos1
+  Vacuum Compatible: False
 
 T9:
   Max Supported Volume: 200000
@@ -841,3 +929,4 @@ T9:
   Labware Name: 200mL Reagent Trough
   Lid Sequence: False
   Deck Position: Carrier14_Pos2
+  Vacuum Compatible: False

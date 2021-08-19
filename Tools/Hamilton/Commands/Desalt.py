@@ -14,9 +14,6 @@ def PreRun(Params):
 	CommandString += "[Waste]" + str(Params["Waste Sequence"])
 	CommandString += "[Destination]" + str(Params["Destination Sequence"]) + "\n"
 
-	print(CommandString)
-	quit()
-
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return True

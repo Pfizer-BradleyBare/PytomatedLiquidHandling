@@ -8,6 +8,8 @@ PARENT_PLATE_CATEGORY = 4
 PARAMS_START = 4
 #array Indices
 
+NOT_EXCEL_COORDINATES = (0,0)
+
 HAMILTON_STORAGE_COLD = "Cold"
 HAMILTON_STORAGE_RT = "RT"
 #Hamilton function specific constants

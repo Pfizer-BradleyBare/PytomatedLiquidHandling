@@ -100,9 +100,9 @@ Steps:
     Lid:
       Open: 88
       Close: 81
-    Vacuum:
-      Open: 150
-      Close: 150
+    Vacuum Manifold:
+      Open: 97
+      Close: 89
     200uL Biorad 96 Well PCR Plate:
       Open: 85
       Close: 75
@@ -110,6 +110,9 @@ Steps:
       Open: 85
       Close: 75
     1200uL DeepWell 96 Well PCR Plate:
+      Open: 85
+      Close: 73
+    2000uL Corning 96 Well PCR Plate:
       Open: 85
       Close: 73
 
@@ -127,12 +130,15 @@ Steps:
           Total Buffer Volume: 1000
 
   Vacuum:
-    Vacuum Sequences:
-      Home: HomeSeq
-      Vacuum: VacSeq
-
-    PlateSequences:
-      96 Well PCR Plate:
-        200: Test
-        400: Test2
-        1200: Test3
+      COM_ID: 1
+      Home: _Vacuum_ManifoldHome
+      Vacuum: _Vacuum_Manifold
+      VacuumPlates:
+        0.45um Self Poured ProA Plate:
+          Sequnce: _Vacuum_SomePlateName
+          Pressures:
+            Low: 50
+            Normal: 100
+            High: 150
+      PlateSequences:
+        2000uL Corning 96 Well PCR Plate: _Vacuum_96WellPCRPlate2000uL

@@ -11,7 +11,7 @@ LATEST_STEP_INFO = {}
 
 LOG_ROW_START = 2
 LOG_COL_START = 2
-LOG_ROW_END = 1000
+LOG_ROW_END = 5000
 LOG_COL_END = 5
 
 LOG_COL_STEP = 0
@@ -143,6 +143,7 @@ def CommandInLog(Command):
 	if HAMILTONIO.IsSimulated() == True:
 		return False
 
+	print("Blah!")
 	global LogSheet
 
 	ID = GetCommandID()

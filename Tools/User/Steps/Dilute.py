@@ -6,6 +6,7 @@ from ...Hamilton.Commands import Pipette as PIPETTE
 from ...User import Configuration as CONFIGURATION
 from ...General import HamiltonIO as HAMILTONIO
 from ...General import Log as LOG
+from ..Steps import Liquid_Transfer as LIQUID_TRANSFER
 import copy
 
 TITLE = "Dilute"
@@ -97,9 +98,6 @@ def Step(step):
 			FirstVolumeList.append(DiluentVolumeList[index])
 	#We want to pipette the highest volume first for each sample no matter what.
 
-	LOG.EndCommentsLog()
-
-	LOG.BeginCommentsLog()
 	DestinationPlate = step.GetParentPlate()
 
 	if PLATES.GetPlate(DestinationPlate).GetVolume() != 0:
@@ -107,57 +105,14 @@ def Step(step):
 	else:
 		Mix = SAMPLES.Column("No")
 
-	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(FirstSourceList, FirstVolumeList, Mix)
-
-	_Temp = copy.deepcopy(Sequences)
-	for Sequence in _Temp:
-		SOLUTIONS.GetSolution(Sequence["Source"]).AddVolume(Sequence["Volume"])
-		SOLUTIONS.AddPipetteVolume(Sequence["Volume"])
-
-	if HAMILTONIO.IsSimulated() == False:
-		for sequence in Sequences:
-			sequence["Source"] = CONFIGURATION.GetDeckLoading(sequence["Source"])["Sequence"]
-			sequence["Destination"] = CONFIGURATION.GetDeckLoading(sequence["Destination"])["Sequence"]
-		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
-
-
-
-	if len(Sequences) == 0:
-		LOG.Comment("Number of sequences is zero so no liquid transfer will actually occur.")
-
 	LOG.EndCommentsLog()
 
-	LOG.BeginCommandLog()
-	if len(Sequences) != 0:
-		PIPETTE.Do(DestinationPlate, Sequences)
-	LOG.EndCommandLog()
-	#Do the source pipetting
+	FirstStep = LIQUID_TRANSFER.CreateStep(DestinationPlate,FirstSourceList,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,FirstVolumeList,Mix)
+	LIQUID_TRANSFER.Step(FirstStep)
 
-	LOG.BeginCommentsLog()
-	DestinationPlate = step.GetParentPlate()
+	SecondStep = LIQUID_TRANSFER.CreateStep(DestinationPlate,SecondSourceList,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,SecondVolumeList,SAMPLES.Column("Yes"))
+	LIQUID_TRANSFER.Step(SecondStep)
 
-	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SecondSourceList, SecondVolumeList, SAMPLES.Column("Yes"))
-
-	_Temp = copy.deepcopy(Sequences)
-	for Sequence in _Temp:
-		SOLUTIONS.GetSolution(Sequence["Source"]).AddVolume(Sequence["Volume"])
-		SOLUTIONS.AddPipetteVolume(Sequence["Volume"])
-
-	if HAMILTONIO.IsSimulated() == False:
-		for sequence in Sequences:
-			sequence["Source"] = CONFIGURATION.GetDeckLoading(sequence["Source"])["Sequence"]
-			sequence["Destination"] = CONFIGURATION.GetDeckLoading(sequence["Destination"])["Sequence"]
-		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
-
-	if len(Sequences) == 0:
-		LOG.Comment("Number of sequences is zero so no liquid transfer will actually occur.")
-
-	LOG.EndCommentsLog()
-
-	LOG.BeginCommandLog()
-	if len(Sequences) != 0:
-		PIPETTE.Do(DestinationPlate, Sequences)
-	LOG.EndCommandLog()
 	#Do the diluent pipetting
 #end
 

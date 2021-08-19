@@ -112,6 +112,9 @@ def Column(Column_Name):
 	global Column_Ranges
 	global Num_Samples
 
+	if isinstance(Column_Name, list) == True:
+		return Column_Name
+
 	try:
 		Temp = Column_Ranges[Column_Name]
 		return EXCELIO.Pull(EXCELIO.WORKLIST_SHEET, Temp[0], Temp[1], Temp[2], Temp[3], 1)

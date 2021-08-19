@@ -7,9 +7,11 @@ from ...Hamilton.Commands import Vacuum as VACUUM
 from ...User import Configuration as CONFIGURATION
 
 TITLE = "Vacuum"
-SOURCE = "Source Plate"
+SOURCE = "Source"
+Volume = "Volume (uL)"
+WAIT_TIME = "Pre Vacuum Wait (sec)"
 PRESSURE = "Pressure Difference (mTorr)"
-TIME = "Time (sec)"
+TIME = "Vacuum Time (sec)"
 
 VacuumConfig = {}
 TransportConfig = {}
@@ -19,12 +21,30 @@ def IsUsed():
 	global IsUsedFlag
 	return IsUsedFlag
 
+def GetID():
+	return VacuumConfig["COM_ID"]
+
 def Init(MutableStepsList):
 	global TransportConfig
 	global VacuumConfig
+	global IsUsedFlag
 
 	VacuumConfig = CONFIGURATION.GetStepConfig(TITLE)
 	TransportConfig = CONFIGURATION.GetStepConfig("Transport")
+
+	CONFIGURATION.AddCheckSequence(VacuumConfig["Home"])
+	CONFIGURATION.AddCheckSequence(VacuumConfig["Vacuum"])
+
+	for item in VacuumConfig["PlateSequences"]:
+		CONFIGURATION.AddCheckSequence(VacuumConfig["PlateSequences"][item])
+
+
+	for Step in MutableStepsList:
+		if Step.GetTitle() == TITLE:
+			IsUsedFlag = True
+			PLATES.GetPlate(Step.GetParentPlate()).SetVacuumState()
+
+
 	
 def Step(step):
 	global VacuumConfig
@@ -32,45 +52,66 @@ def Step(step):
 
 	Destination = step.GetParentPlate()
 	SourcePlate = step.GetParameters()[SOURCE]
+	Volume = step.GetParameters()[VOLUME]
+	WaitTime = step.GetParameters()[WAIT_TIME]
 	Pressure = step.GetParameters()[PRESSURE]
 	Time = step.GetParameters()[TIME]
 
 	Loading = CONFIGURATION.GetDeckLoading(Destination)
 
-	PLATES.GetPlate(Destination).CreatePipetteSequence(SAMPLES.Column(SourcePlate),PLATES.GetPlate(SourcePlate).GetVolumesList())
+	if Loading != None:
+
+
+		Source = Loading["Sequence"]
+		Destination = VacuumConfig["PlateSequences"][Loading["Labware Name"]]
+		OpenWidth = TransportConfig[Loading["Labware Name"]]["Open"]
+		CloseWidth = TransportConfig[Loading["Labware Name"]]["Close"]
+		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,0)
+		#Move destination plate into vacuum
+
+		Source = VacuumConfig["Home"]
+		Destination = VacuumConfig["Vacuum"]
+		OpenWidth = TransportConfig["Vacuum Manifold"]["Open"]
+		CloseWidth = TransportConfig["Vacuum Manifold"]["Close"]
+		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1)
+		#Move manifold from park to vacuum
+
+		step = LIQUID_TRANSFER.CreateStep(Destination,SourcePlate,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,Volume,Mix)
+		LIQUID_TRANSFER.Step(step)
+		#Transfer liquid into vacuum plate
+
+		WAIT.StartTimer(step,WaitTime,WAIT.Callback())
+		#Vacuum wait time
+
+def Callback(step):
+	global VacuumConfig
+	global TransportConfig
+
+	Destination = step.GetParentPlate()
+	SourcePlate = step.GetParameters()[SOURCE]
+	Volume = step.GetParameters()[VOLUME]
+	WaitTime = step.GetParameters()[WAIT_TIME]
+	Pressure = step.GetParameters()[PRESSURE]
+	Time = step.GetParameters()[TIME]
+
+	Loading = CONFIGURATION.GetDeckLoading(Destination)
 
 	if Loading != None:
 
-		Source = Loading["Sequence"]
-		Destination = VacuumConfig["Plate Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]
-		OpenWidth = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Open"]
-		CloseWidth = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Close"]
-		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,0)
-
-		Source = VacuumConfig["Vacuum Sequences"]["Home"]
-		Destination = VacuumConfig["Vacuum Sequences"]["Vacuum"]
-		OpenWidth = TransportConfig["Vacuum"]["Open"]
-		CloseWidth = TransportConfig["Vacuum"]["Close"]
-		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1)
-
 		VACUUM.Start(Pressure, Time)
-		#Start Vacuum
 		VACUUM.Wait()
-		#Wait
+		#Start vacuum
 
-		Destination = VacuumConfig["Vacuum Sequences"]["Home"]
-		Source = VacuumConfig["Vacuum Sequences"]["Vacuum"]
-		OpenWidth = TransportConfig["Vacuum"]["Open"]
-		CloseWidth = TransportConfig["Vacuum"]["Close"]
-		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,0)
+		Destination = VacuumConfig["Home"]
+		Source = VacuumConfig["Vacuum"]
+		OpenWidth = TransportConfig["Vacuum Manifold"]["Open"]
+		CloseWidth = TransportConfig["Vacuum Manifold"]["Close"]
+		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1)
+		#Move manifold from vacuum to park
 
 		Destination = Loading["Sequence"]
-		Source = VacuumConfig["Plate Sequences"][Loading["Labware Type"]][Loading["Max Volume"]]
-		OpenWidth = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Open"]
-		CloseWidth = TransportConfig[Loading["Labware Type"]][Loading["Max Volume"]]["Close"]
-		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1)
-		#Remove
-		#Remove
-
-
-
+		Source = VacuumConfig["PlateSequences"][Loading["Labware Name"]]
+		OpenWidth = TransportConfig[Loading["Labware Name"]]["Open"]
+		CloseWidth = TransportConfig[Loading["Labware Name"]]["Close"]
+		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,0)
+		#Move destination plate back to loading position
