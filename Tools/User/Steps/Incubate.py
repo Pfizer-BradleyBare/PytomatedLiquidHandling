@@ -84,10 +84,6 @@ def Init(MutableStepsList):
 					Incubation_List.append(Step)
 					Incubation_Num_List.append(IncubationCounter)
 
-	print(Incubation_List)
-	print(Incubation_Num_List)
-	print("\n",Lids)
-	print("\n",Heaters,"\n\n")
 	StartHeaters()
 
 def GetHeaterList():

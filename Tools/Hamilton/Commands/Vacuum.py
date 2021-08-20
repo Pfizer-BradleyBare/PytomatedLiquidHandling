@@ -1,10 +1,10 @@
 from ...General import HamiltonIO as HAMILTONIO
 
-def PreRun(ID):
+def PreRun(Params):
 	CommandString = ""
 	CommandString += "[PreRun]\n"
 	CommandString += "[Vacuum]\n"
-	CommandString += "[ID]" + str(ID) + "\n"
+	CommandString += "[ID]" + str(Params["ID"]) + "[Plate]" + str(Params["Plate"]) + "\n"
 
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()

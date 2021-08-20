@@ -16,6 +16,7 @@ PreferredLoading = {}
 DeckLoading = {}
 StepPreferredLoading = {}
 CheckSequences = []
+OmitLoading = set()
 
 ######################################################################### 
 #	Description: Initializes the library by pulling information from Config files
@@ -162,7 +163,12 @@ def GetStepConfig(Step):
 #	Returns: N/A
 #########################################################################
 def AddPreferredLoading(Item, LoadingArray):
+	global StepPreferredLoading
 	StepPreferredLoading[Item] = LoadingArray
+
+def AddOmitLoading(Item):
+	global OmitLoading
+	OmitLoading.add(Item)
 
 ######################################################################### 
 #	Description: Attempts to load both plates and solutions using the loading information available in the YAML file
@@ -174,6 +180,15 @@ def Load(Plates_List, Solutions_List):
 	global StepPreferredLoading
 	global SysConfig
 	global PreferredLoading
+	global OmitLoading
+
+	for Item in Plates_List[:]:
+		if Item.GetName() in OmitLoading:
+			Plates_List.remove(Item)
+
+	for Item in Solutions_List[:]:
+		if Item.GetName() in OmitLoading:
+			Solutions_List.remove(Item)
 
 	DeadVolumeConfig = SysConfig["Dead Volume"]
 

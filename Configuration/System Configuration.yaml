@@ -135,7 +135,7 @@ Steps:
       Vacuum: _Vacuum_Manifold
       VacuumPlates:
         0.45um Self Poured ProA Plate:
-          Sequnce: _Vacuum_SomePlateName
+          Sequence: _Vacuum_ProASelfPoured045um
           Pressures:
             Low: 50
             Normal: 100

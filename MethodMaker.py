@@ -86,6 +86,7 @@ NOTIFY.Init()
 FINISH.Init()
 ALIQUOT.Init(STEPS.GetSteps())
 POOL.Init(STEPS.GetSteps())
+VACUUM.Init(STEPS.GetSteps(), SAMPLES.GetSequences())
 
 #init steps
 PLATES.StartStepSequence(STEPS.GetStartingPlate())
@@ -165,7 +166,7 @@ if HAMILTONIO.IsSimulated() == True:
 		PRERUN.TRANSPORT.PreRun()
 
 	if VACUUM.IsUsed() == True:
-		PRERUN.VACUUM.PreRun(VACUUM.GetID())
+		PRERUN.VACUUM.PreRun(VACUUM.GetVacuumParams())
 
 	if LOG.Exists() and TestRun == False and len(LOG.GetLatestStep()) != 0:
 		LOG.HandleResponse(PRERUN.LOG.PreRun(LOG.GetLatestStep()))

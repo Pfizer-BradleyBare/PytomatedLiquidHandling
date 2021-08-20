@@ -1,14 +1,16 @@
 from ..Steps import Steps as STEPS
 from ..Steps import Wait as WAIT
+from ..Steps import Liquid_Transfer as LIQUID_TRANSFER
 from ...User import Samples as SAMPLES
 from ..Labware import Plates as PLATES
+from ..Labware import Solutions as SOLUTIONS
 from ...Hamilton.Commands import Transport as TRANSPORT
 from ...Hamilton.Commands import Vacuum as VACUUM
 from ...User import Configuration as CONFIGURATION
 
 TITLE = "Vacuum"
 SOURCE = "Source"
-Volume = "Volume (uL)"
+VOLUME = "Volume (uL)"
 VACUUM_PLATE = "Vacuum Plate"
 WAIT_TIME = "Pre Vacuum Wait (sec)"
 PRESSURE = "Pressure Difference (mTorr)"
@@ -17,18 +19,23 @@ TIME = "Vacuum Time (sec)"
 VacuumConfig = {}
 TransportConfig = {}
 IsUsedFlag = False
+VacuumPlate = None
 
 def IsUsed():
 	global IsUsedFlag
 	return IsUsedFlag
 
-def GetID():
-	return VacuumConfig["COM_ID"]
+def GetVacuumParams():
+	global VacuumConfig
+	global VacuumPlate
+	return {"ID":VacuumConfig["COM_ID"], "Plate":VacuumPlate}
 
-def Init(MutableStepsList):
+
+def Init(MutableStepsList, SequencesList):
 	global TransportConfig
 	global VacuumConfig
 	global IsUsedFlag
+	global VacuumPlate
 
 	VacuumConfig = CONFIGURATION.GetStepConfig(TITLE)
 	TransportConfig = CONFIGURATION.GetStepConfig("Transport")
@@ -42,10 +49,20 @@ def Init(MutableStepsList):
 	for item in VacuumConfig["VacuumPlates"]:
 		CONFIGURATION.AddCheckSequence(VacuumConfig["VacuumPlates"][item]["Sequence"])
 
+	VacPlates = set()
+
 	for Step in MutableStepsList:
 		if Step.GetTitle() == TITLE:
 			IsUsedFlag = True
+			PLATES.AddPlate(Step.GetParameters()[VACUUM_PLATE], "Vacuum", SequencesList)
+			CONFIGURATION.AddOmitLoading(Step.GetParameters()[VACUUM_PLATE])
 			PLATES.GetPlate(Step.GetParentPlate()).SetVacuumState()
+			VacPlates.add(Step.GetParameters()[VACUUM_PLATE])
+
+	if len(VacPlates) > 1:
+		print("Only one vacuum plate is supported at this time")
+		quit()
+	VacuumPlate = list(VacPlates)[0]
 
 
 	
@@ -61,7 +78,7 @@ def Step(step):
 	Pressure = step.GetParameters()[PRESSURE]
 	Time = step.GetParameters()[TIME]
 
-	Plate = VacuumConfig["VacuumPlates"][VacPlate]
+	Plate = VacuumConfig["VacuumPlates"][VacPlate]["Sequence"]
 
 	Loading = CONFIGURATION.GetDeckLoading(Destination)
 
@@ -81,22 +98,24 @@ def Step(step):
 		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1)
 		#Move manifold from park to vacuum
 
-		step = LIQUID_TRANSFER.CreateStep(Plate,SourcePlate,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,Volume,Mix)
-		LIQUID_TRANSFER.Step(step)
-		#Transfer liquid into vacuum plate
+	LTstep = LIQUID_TRANSFER.CreateStep(VacPlate,SourcePlate,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,Volume,"N/A")
+	LIQUID_TRANSFER.Step(LTstep)
+	#Transfer liquid into vacuum plate
 
-		WAIT.StartTimer(step,WaitTime,WAIT.Callback())
-		#Vacuum wait time
+	WAIT.StartTimer(step,WaitTime,Callback)
+	#Vacuum wait time
 
 def Callback(step):
 	global VacuumConfig
 	global TransportConfig
 
 	Destination = step.GetParentPlate()
+	Volume = step.GetParameters()[VOLUME]
 	VacPlate = step.GetParameters()[VACUUM_PLATE]
 	WaitTime = step.GetParameters()[WAIT_TIME]
 	Pressure = step.GetParameters()[PRESSURE]
 	Time = step.GetParameters()[TIME]
+	Plate = VacuumConfig["VacuumPlates"][VacPlate]["Sequence"]
 
 	Loading = CONFIGURATION.GetDeckLoading(Destination)
 
@@ -105,11 +124,13 @@ def Callback(step):
 	except:
 		TruePressure = Pressure
 
-	if Loading != None:
+	PLATES.GetPlate(Destination).CreatePipetteSequence(VacPlate, SAMPLES.Column(Volume),SAMPLES.Column("N/A"))
 
-		VACUUM.Start(TruePressure, Time)
-		VACUUM.Wait()
-		#Start vacuum
+	VACUUM.Start(TruePressure, Time)
+	VACUUM.Wait()
+	#Start vacuum
+
+	if Loading != None:
 
 		Destination = VacuumConfig["Home"]
 		Source = VacuumConfig["Vacuum"]
