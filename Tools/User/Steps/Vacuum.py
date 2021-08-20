@@ -12,9 +12,9 @@ TITLE = "Vacuum"
 SOURCE = "Source"
 VOLUME = "Volume (uL)"
 VACUUM_PLATE = "Vacuum Plate"
-WAIT_TIME = "Pre Vacuum Wait (sec)"
+WAIT_TIME = "Pre Vacuum Wait (min)"
 PRESSURE = "Pressure Difference (mTorr)"
-TIME = "Vacuum Time (sec)"
+TIME = "Vacuum Time (min)"
 
 VacuumConfig = {}
 TransportConfig = {}
@@ -54,8 +54,8 @@ def Init(MutableStepsList, SequencesList):
 	for Step in MutableStepsList:
 		if Step.GetTitle() == TITLE:
 			IsUsedFlag = True
-			PLATES.AddPlate(Step.GetParameters()[VACUUM_PLATE], "Vacuum", SequencesList)
-			CONFIGURATION.AddOmitLoading(Step.GetParameters()[VACUUM_PLATE])
+			PLATES.AddPlate(VacuumConfig["VacuumPlates"][Step.GetParameters()[VACUUM_PLATE]]["Sequence"], "Vacuum", SequencesList)
+			CONFIGURATION.AddOmitLoading(VacuumConfig["VacuumPlates"][Step.GetParameters()[VACUUM_PLATE]]["Sequence"])
 			PLATES.GetPlate(Step.GetParentPlate()).SetVacuumState()
 			VacPlates.add(Step.GetParameters()[VACUUM_PLATE])
 
@@ -98,7 +98,7 @@ def Step(step):
 		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1)
 		#Move manifold from park to vacuum
 
-	LTstep = LIQUID_TRANSFER.CreateStep(VacPlate,SourcePlate,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,Volume,"N/A")
+	LTstep = LIQUID_TRANSFER.CreateStep(Plate,SourcePlate,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,Volume,"N/A")
 	LIQUID_TRANSFER.Step(LTstep)
 	#Transfer liquid into vacuum plate
 
@@ -124,9 +124,9 @@ def Callback(step):
 	except:
 		TruePressure = Pressure
 
-	PLATES.GetPlate(Destination).CreatePipetteSequence(VacPlate, SAMPLES.Column(Volume),SAMPLES.Column("N/A"))
+	PLATES.GetPlate(Destination).CreatePipetteSequence(Plate, SAMPLES.Column(Volume),SAMPLES.Column("N/A"))
 
-	VACUUM.Start(TruePressure, Time)
+	VACUUM.Start(TruePressure, Time*60)
 	VACUUM.Wait()
 	#Start vacuum
 

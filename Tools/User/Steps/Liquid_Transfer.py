@@ -58,9 +58,14 @@ def Step(step):
 	
 	if HAMILTONIO.IsSimulated() == False:
 		for sequence in Sequences:
-			sequence["Source"] = CONFIGURATION.GetDeckLoading(sequence["Source"])["Sequence"]
-			sequence["Destination"] = CONFIGURATION.GetDeckLoading(sequence["Destination"])["Sequence"]
-		DestinationPlate = CONFIGURATION.GetDeckLoading(DestinationPlate)["Sequence"]
+			try:
+				sequence["Source"] = CONFIGURATION.GetDeckLoading(sequence["Source"])["Sequence"]
+			except:
+				pass
+			try:
+				sequence["Destination"] = CONFIGURATION.GetDeckLoading(sequence["Destination"])["Sequence"]
+			except:
+				pass
 	#Translate User defined names into sequence loading names
 
 	if len(Sequences) == 0:
