@@ -90,7 +90,7 @@ def Step(step):
 		OpenWidth = TransportConfig[Loading["Labware Name"]]["Open"]
 		CloseWidth = TransportConfig[Loading["Labware Name"]]["Close"]
 		LOG.BeginCommandLog()
-		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,0)
+		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,0,0)
 		LOG.EndCommandLog()
 		#Move destination plate into vacuum
 
@@ -99,7 +99,7 @@ def Step(step):
 		OpenWidth = TransportConfig["Vacuum Manifold"]["Open"]
 		CloseWidth = TransportConfig["Vacuum Manifold"]["Close"]
 		LOG.BeginCommandLog()
-		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1)
+		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1,0)
 		LOG.EndCommandLog()
 		#Move manifold from park to vacuum
 
@@ -143,7 +143,7 @@ def Callback(step):
 		OpenWidth = TransportConfig["Vacuum Manifold"]["Open"]
 		CloseWidth = TransportConfig["Vacuum Manifold"]["Close"]
 		LOG.BeginCommandLog()
-		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1)
+		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1,0)
 		LOG.EndCommandLog()
 		#Move manifold from vacuum to park
 
@@ -152,6 +152,6 @@ def Callback(step):
 		OpenWidth = TransportConfig[Loading["Labware Name"]]["Open"]
 		CloseWidth = TransportConfig[Loading["Labware Name"]]["Close"]
 		LOG.BeginCommandLog()
-		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,0)
+		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,0,1)
 		LOG.EndCommandLog()
 		#Move destination plate back to loading position

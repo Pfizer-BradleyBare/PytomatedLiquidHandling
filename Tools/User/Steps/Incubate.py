@@ -179,10 +179,10 @@ def Callback(step):
 			PlateTransportCloseDistance = TransportConfig[Loading["Labware Name"]]["Close"]
 			#plate
 			LOG.BeginCommandLog()
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,0)
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,0,1)
 			LOG.EndCommandLog()
 			LOG.BeginCommandLog()
-			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,1)
+			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,1,1)
 			LOG.EndCommandLog()
 		
 
@@ -193,7 +193,7 @@ def Callback(step):
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
 			LOG.BeginCommandLog()
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance, 1)
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance, 1,1)
 			LOG.EndCommandLog()
 
 	StartHeaters()
@@ -225,10 +225,10 @@ def Step(step):
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
 			#Lid
 			LOG.BeginCommandLog()
-			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,0)
+			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,0,0)
 			LOG.EndCommandLog()
 			LOG.BeginCommandLog()
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,1)
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,1,0)
 			LOG.EndCommandLog()
 
 		if step.GetParameters()[SHAKE] > 0:
@@ -242,7 +242,7 @@ def Step(step):
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
 			LOG.BeginCommandLog()
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance, 1)
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance, 1,1)
 			LOG.EndCommandLog()
 		
 		PLATES.GetPlate(step.GetParentPlate()).SetLidState()
