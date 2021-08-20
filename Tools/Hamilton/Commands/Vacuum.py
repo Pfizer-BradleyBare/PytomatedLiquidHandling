@@ -1,4 +1,5 @@
 from ...General import HamiltonIO as HAMILTONIO
+from ...General import Log as LOG
 
 def PreRun(Params):
 	CommandString = ""
@@ -17,8 +18,11 @@ def Start(Pressure, Time):
 	CommandString += "[Start]\n"
 	CommandString += "[Pressure]" + str(Pressure) + "[Time]" + str(Time) + "\n"
 
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
+	if LOG.CommandInLog(CommandString) != True:
+		LOG.Command(CommandString)
+		HAMILTONIO.Push(CommandString)
+		Response = HAMILTONIO.Pull()
+		LOG.CommandID()
 	return True
 	
 #this function will wait on a plate timer
@@ -27,8 +31,11 @@ def Wait():
 	CommandString += "[Vaccum]\n"
 	CommandString += "[Wait]\n"
 
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
+	if LOG.CommandInLog(CommandString) != True:
+		LOG.Command(CommandString)
+		HAMILTONIO.Push(CommandString)
+		Response = HAMILTONIO.Pull()
+		LOG.CommandID()
 	return True
 
 
