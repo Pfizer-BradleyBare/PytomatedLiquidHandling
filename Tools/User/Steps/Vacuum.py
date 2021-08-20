@@ -7,6 +7,7 @@ from ..Labware import Solutions as SOLUTIONS
 from ...Hamilton.Commands import Transport as TRANSPORT
 from ...Hamilton.Commands import Vacuum as VACUUM
 from ...User import Configuration as CONFIGURATION
+from ...General import Log as LOG
 
 TITLE = "Vacuum"
 SOURCE = "Source"
@@ -88,14 +89,18 @@ def Step(step):
 		Destination = VacuumConfig["PlateSequences"][Loading["Labware Name"]]
 		OpenWidth = TransportConfig[Loading["Labware Name"]]["Open"]
 		CloseWidth = TransportConfig[Loading["Labware Name"]]["Close"]
+		LOG.BeginCommandLog()
 		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,0)
+		LOG.EndCommandLog()
 		#Move destination plate into vacuum
 
 		Source = VacuumConfig["Home"]
 		Destination = VacuumConfig["Vacuum"]
 		OpenWidth = TransportConfig["Vacuum Manifold"]["Open"]
 		CloseWidth = TransportConfig["Vacuum Manifold"]["Close"]
+		LOG.BeginCommandLog()
 		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1)
+		LOG.EndCommandLog()
 		#Move manifold from park to vacuum
 
 	LTstep = LIQUID_TRANSFER.CreateStep(Plate,SourcePlate,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,Volume,"N/A")
@@ -126,8 +131,9 @@ def Callback(step):
 
 	PLATES.GetPlate(Destination).CreatePipetteSequence(Plate, SAMPLES.Column(Volume),SAMPLES.Column("N/A"))
 
+	LOG.BeginCommandLog()
 	VACUUM.Start(TruePressure, Time*60)
-	VACUUM.Wait()
+	LOG.EndCommandLog()
 	#Start vacuum
 
 	if Loading != None:
@@ -136,12 +142,16 @@ def Callback(step):
 		Source = VacuumConfig["Vacuum"]
 		OpenWidth = TransportConfig["Vacuum Manifold"]["Open"]
 		CloseWidth = TransportConfig["Vacuum Manifold"]["Close"]
+		LOG.BeginCommandLog()
 		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1)
+		LOG.EndCommandLog()
 		#Move manifold from vacuum to park
 
 		Destination = Loading["Sequence"]
 		Source = VacuumConfig["PlateSequences"][Loading["Labware Name"]]
 		OpenWidth = TransportConfig[Loading["Labware Name"]]["Open"]
 		CloseWidth = TransportConfig[Loading["Labware Name"]]["Close"]
+		LOG.BeginCommandLog()
 		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,0)
+		LOG.EndCommandLog()
 		#Move destination plate back to loading position
