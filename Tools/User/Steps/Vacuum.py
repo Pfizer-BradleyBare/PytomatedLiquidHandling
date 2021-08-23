@@ -63,7 +63,8 @@ def Init(MutableStepsList, SequencesList):
 	if len(VacPlates) > 1:
 		print("Only one vacuum plate is supported at this time")
 		quit()
-	VacuumPlate = list(VacPlates)[0]
+	elif len(VacPlates) == 1:
+			VacuumPlate = list(VacPlates)[0]
 
 
 	
