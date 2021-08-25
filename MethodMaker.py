@@ -57,6 +57,7 @@ import Tools.User.Steps.Notify as NOTIFY
 import Tools.User.Steps.Finish as FINISH
 import Tools.User.Steps.Aliquot as ALIQUOT
 import Tools.User.Steps.Pool as POOL
+import Tools.User.Steps.PreLoad_Liquid as PRELOAD_LIQUID
 
 import Tools.Hamilton.PreRun as PRERUN
 
@@ -86,6 +87,7 @@ NOTIFY.Init()
 FINISH.Init()
 ALIQUOT.Init(STEPS.GetSteps())
 POOL.Init(STEPS.GetSteps())
+PRELOAD_LIQUID.Init(STEPS.GetSteps())
 VACUUM.Init(STEPS.GetSteps(), SAMPLES.GetSequences())
 
 #init steps
@@ -113,7 +115,9 @@ Steps = {
 
 	ALIQUOT.TITLE: ALIQUOT.Step,
 
-	POOL.TITLE: POOL.Step
+	POOL.TITLE: POOL.Step,
+
+	PRELOAD_LIQUID.TITLE: PRELOAD_LIQUID.Step
 }
 
 while(True):
@@ -129,6 +133,8 @@ while(True):
 	Steps[Step.GetTitle()](Step)
 	LOG.EndStepLog()
 #do each step
+
+Plate = PLATES.GetPlates()
 
 if HAMILTONIO.IsSimulated() == True:
 

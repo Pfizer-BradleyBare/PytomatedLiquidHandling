@@ -78,6 +78,7 @@ class Class:
 			Volume = TotalVolumes[Key]
 			if Volume < 0:
 				self.RequiresLoading = True
+
 			Volume = abs(Volume)
 			if Volume > self.MaxVolume:
 				self.MaxVolume = Volume

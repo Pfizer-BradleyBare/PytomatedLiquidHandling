@@ -6,7 +6,7 @@
   LoadingPosition: E1
   Max Volume: 1500
   Sequence: E1
-  Volume: 170.625
+  Volume: 151.875
 100mM Tris pH 7.5:
   Labware Category: Reagent
   Labware Name: 200mL Reagent Trough
@@ -15,7 +15,7 @@
   LoadingPosition: Carrier38_Pos2
   Max Volume: 200000
   Sequence: T4
-  Volume: 18100.0
+  Volume: 7100.0
 1M Tris pH 7.5:
   Labware Category: Reagent
   Labware Name: 60mL Reagent Reservior
@@ -24,7 +24,7 @@
   LoadingPosition: R2
   Max Volume: 50000
   Sequence: R2
-  Volume: 2775.0
+  Volume: 2525.0
 500mM DTT:
   Labware Category: Reagent
   Labware Name: Hamilton 1.5mL FlipTube
@@ -33,7 +33,7 @@
   LoadingPosition: F7
   Max Volume: 1500
   Sequence: F7
-  Volume: 163.75
+  Volume: 151.25
 500mM IAA:
   Labware Category: Reagent
   Labware Name: Hamilton 1.5mL FlipTube
@@ -42,7 +42,7 @@
   LoadingPosition: F4
   Max Volume: 1500
   Sequence: F4
-  Volume: 170.9
+  Volume: 151.9
 8M GnHCl:
   Labware Category: Reagent
   Labware Name: 15mL Centrifuge Tube
@@ -51,7 +51,7 @@
   LoadingPosition: C1
   Max Volume: 14000
   Sequence: C1
-  Volume: 1270.0
+  Volume: 570.0
 Denaturation Plate:
   Labware Category: Plate
   Labware Name: 200uL Biorad 96 Well PCR Plate
@@ -60,7 +60,7 @@ Denaturation Plate:
   LoadingPosition: Carrier14_Pos3
   Max Volume: 225
   Sequence: Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel
-  Volume: 98.15
+  Volume: 113.15
 'Desalting Plate ':
   Labware Category: Plate
   Labware Name: 1200uL DeepWell 96 Well PCR Plate
@@ -96,7 +96,7 @@ Sample:
   LoadingPosition: Carrier38_Pos3
   Max Volume: 225
   Sequence: Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel
-  Volume: 55.0
+  Volume: 100.0
 TFA:
   Labware Category: Reagent
   Labware Name: Hamilton 1.5mL FlipTube
@@ -105,7 +105,7 @@ TFA:
   LoadingPosition: F1
   Max Volume: 1500
   Sequence: F1
-  Volume: 191.25
+  Volume: 153.75
 Water:
   Labware Category: Reagent
   Labware Name: 60mL Reagent Reservior
@@ -114,4 +114,4 @@ Water:
   LoadingPosition: R1
   Max Volume: 50000
   Sequence: R1
-  Volume: 2885.0
+  Volume: 2535.0
