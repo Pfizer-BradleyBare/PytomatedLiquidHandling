@@ -90,7 +90,8 @@ def CreateBorder(Sheet,RowStart,ColStart,RowEnd,ColEnd,BorderStyle,BorderWeight)
 	Range.api.borders(10).Weight = BorderWeight
 
 def Merge(Sheet,RowStart,ColStart,RowEnd,ColEnd):
-	xl.Book(Excel_File).sheets[Sheet].range((RowStart,ColStart),(RowEnd,ColEnd)).merge()
+	#xl.Book(Excel_File).sheets[Sheet].range((RowStart,ColStart),(RowEnd,ColEnd)).merge()
+	pass
 
 def FontSize(Sheet,RowStart,ColStart,RowEnd,ColEnd, FontSize):
 	xl.Book(Excel_File).sheets[Sheet].range((RowStart,ColStart),(RowEnd,ColEnd)).api.Font.Size = FontSize
@@ -111,7 +112,7 @@ def PrintPlate(StartRow, StartCol, PlateName, LabwareName, PlateRows, PlateCols,
 	#make it look nice before we write the data
 
 	TitleString = PlateName + ": " +LabwareName
-	Push("PrepList",StartRow,StartCol,StartRow,StartCol+PlateCols-1, TitleString)
+	Push("PrepList",StartRow,StartCol,StartRow,StartCol, TitleString)
 	#Do some formatting so it looks nice
 
 	Test = [""] * PlateRows * PlateCols
@@ -151,9 +152,9 @@ def PrintReagent(StartRow, StartCol, PlateName, LabwareName, Volume):
 	Center("PrepList",StartRow+2,StartCol,StartRow+2,StartCol+4)
 	#make it look nice before we write the data
 
-	Push("PrepList",StartRow,StartCol,StartRow,StartCol+4, PlateName)
-	Push("PrepList",StartRow+1,StartCol,StartRow+1,StartCol+4, LabwareName)
-	Push("PrepList",StartRow+2,StartCol,StartRow+2,StartCol+4, "Minimum Volume: " + str(round(Volume,2)) + "uL")
+	Push("PrepList",StartRow,StartCol,StartRow,StartCol, PlateName)
+	Push("PrepList",StartRow+1,StartCol,StartRow+1,StartCol, LabwareName)
+	Push("PrepList",StartRow+2,StartCol,StartRow+2,StartCol, "Minimum Volume: " + str(round(Volume,2)) + "uL")
 
 	Merge("PrepList",StartRow+3,StartCol,StartRow+3,StartCol+1)
 	Merge("PrepList",StartRow+4,StartCol,StartRow+4,StartCol+1)
