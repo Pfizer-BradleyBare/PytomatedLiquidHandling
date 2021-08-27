@@ -78,16 +78,19 @@ def GetWorklist():
 
 def CreateBorder(Sheet,RowStart,ColStart,RowEnd,ColEnd,BorderStyle,BorderWeight):
 
-	Range = xl.Book(Excel_File).sheets[Sheet].range((RowStart,ColStart),(RowEnd,ColEnd))
+	Macro = xl.Book(Excel_File).macro("CreateBorder")
+	Macro(Sheet,RowStart,ColStart,RowEnd,ColEnd)
 
-	Range.api.borders(9).LineStyle = BorderStyle
-	Range.api.borders(9).Weight = BorderWeight
-	Range.api.borders(7).LineStyle = BorderStyle
-	Range.api.borders(7).Weight = BorderWeight
-	Range.api.borders(8).LineStyle = BorderStyle
-	Range.api.borders(8).Weight = BorderWeight
-	Range.api.borders(10).LineStyle = BorderStyle
-	Range.api.borders(10).Weight = BorderWeight
+	#Range = xl.Book(Excel_File).sheets[Sheet].range((RowStart,ColStart),(RowEnd,ColEnd))
+
+	#Range.api.borders(9).LineStyle = BorderStyle
+	#Range.api.borders(9).Weight = BorderWeight
+	#Range.api.borders(7).LineStyle = BorderStyle
+	#Range.api.borders(7).Weight = BorderWeight
+	#Range.api.borders(8).LineStyle = BorderStyle
+	#Range.api.borders(8).Weight = BorderWeight
+	#Range.api.borders(10).LineStyle = BorderStyle
+	#Range.api.borders(10).Weight = BorderWeight
 
 def Merge(Sheet,RowStart,ColStart,RowEnd,ColEnd):
 	xl.Book(Excel_File).sheets[Sheet].range((RowStart,ColStart),(RowEnd,ColEnd)).merge()
@@ -104,8 +107,8 @@ def AutoFit(Sheet):
 
 def PrintPlate(StartRow, StartCol, PlateName, LabwareName, PlateRows, PlateCols, ValArray):
 
-	#CreateBorder("PrepList",StartRow,StartCol,StartRow+PlateRows,StartCol+PlateCols-1,1,3)
-	#CreateBorder("PrepList",StartRow+1,StartCol,StartRow+PlateRows,StartCol+PlateCols-1,1,3)
+	CreateBorder("PrepList",StartRow,StartCol,StartRow+PlateRows,StartCol+PlateCols-1,1,3)
+	CreateBorder("PrepList",StartRow+1,StartCol,StartRow+PlateRows,StartCol+PlateCols-1,1,3)
 	Merge("PrepList",StartRow,StartCol,StartRow,StartCol+PlateCols-1)
 	FontSize("PrepList",StartRow,StartCol,StartRow,StartCol+PlateCols-1,20)
 	Center("PrepList",StartRow,StartCol,StartRow+PlateRows,StartCol+PlateCols-1)
@@ -134,10 +137,10 @@ def PrintPlate(StartRow, StartCol, PlateName, LabwareName, PlateRows, PlateCols,
 
 def PrintReagent(StartRow, StartCol, PlateName, LabwareName, Volume):
 
-	#CreateBorder("PrepList",StartRow,StartCol,StartRow+8,StartCol+4,1,3)
-	#CreateBorder("PrepList",StartRow+1,StartCol,StartRow+8,StartCol+4,1,3)
-	#CreateBorder("PrepList",StartRow+2,StartCol,StartRow+8,StartCol+4,1,3)
-	#CreateBorder("PrepList",StartRow+3,StartCol,StartRow+8,StartCol+4,1,3)
+	CreateBorder("PrepList",StartRow,StartCol,StartRow+8,StartCol+4,1,3)
+	CreateBorder("PrepList",StartRow+1,StartCol,StartRow+8,StartCol+4,1,3)
+	CreateBorder("PrepList",StartRow+2,StartCol,StartRow+8,StartCol+4,1,3)
+	CreateBorder("PrepList",StartRow+3,StartCol,StartRow+8,StartCol+4,1,3)
 
 	Merge("PrepList",StartRow,StartCol,StartRow,StartCol+4)
 	Merge("PrepList",StartRow+1,StartCol,StartRow+1,StartCol+4)
