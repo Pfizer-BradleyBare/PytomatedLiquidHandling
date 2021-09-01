@@ -15,6 +15,7 @@ DILUENT = "Diluent"
 STARTING_CONCENTRATION = "Starting Concentration (mg/mL)"
 TARGET_CONCENTRATION = "Target Concentration (mg/mL)"
 TARGET_VOLUME = "Target Volume (uL)"
+MAX_SOURCE_VOLUME = "Max Source Volume (uL)"
 
 IsUsedFlag = True
 
@@ -50,6 +51,7 @@ def Step(step):
 
 	TargetConcentrationList = SAMPLES.Column(step.GetParameters()[TARGET_CONCENTRATION])
 	TargetVolumeList = SAMPLES.Column(step.GetParameters()[TARGET_VOLUME])
+	MaxSourceVolumeList = SAMPLES.Column(step.GetParameters()[MAX_SOURCE_VOLUME])
 	SourceConcentrationList = SAMPLES.Column(step.GetParameters()[STARTING_CONCENTRATION])
 	SourceList = SAMPLES.Column(step.GetParameters()[SOURCE])
 	DiluentList = SAMPLES.Column(step.GetParameters()[DILUENT])
@@ -67,10 +69,13 @@ def Step(step):
 	DestinationSequences = PLATES.GetPlate(step.GetParentPlate()).GetSequenceList()
 
 	for VolIndex in range(0,len(SourceVolumeList)):
-		if SourceVolumeList[VolIndex] > TargetVolumeList[VolIndex] or DiluentVolumeList[VolIndex] < 0:
-			LOG.Comment("Volume is out of range for Position " + str(DestinationSequences[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source,Diluent): 0 > (" + str(SourceVolumeList[VolIndex]) + "," + str(DiluentVolumeList[VolIndex]) + ") > " + str(TargetVolumeList[VolIndex]))
-			SourceVolumeList[VolIndex] = TargetVolumeList[VolIndex]
-			DiluentVolumeList[VolIndex] = 0
+		if MaxSourceVolumeList[VolIndex] > TargetVolumeList[VolIndex] or MaxSourceVolumeList[VolIndex] == 0:
+			MaxSourceVolumeList[VolIndex] = TargetVolumeList[VolIndex]
+
+		if SourceVolumeList[VolIndex] > MaxSourceVolumeList[VolIndex] or DiluentVolumeList[VolIndex] < 0:
+			LOG.Comment("Volume is out of range for Position " + str(DestinationSequences[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source,Diluent): 0 > (" + str(SourceVolumeList[VolIndex]) + "," + str(DiluentVolumeList[VolIndex]) + ") > " + str(MaxSourceVolumeList[VolIndex]))
+			SourceVolumeList[VolIndex] = MaxSourceVolumeList[VolIndex]
+			DiluentVolumeList[VolIndex] = TargetVolumeList[VolIndex] - MaxSourceVolumeList[VolIndex]
 
 		if DiluentVolumeList[VolIndex] > TargetVolumeList[VolIndex] or SourceVolumeList[VolIndex] < 0:
 			LOG.Comment("Volume is out of range for Position " + str(DestinationSequences[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source,Diluent): 0 > (" + str(SourceVolumeList[VolIndex]) + "," + str(DiluentVolumeList[VolIndex]) + ") > " + str(TargetVolumeList[VolIndex]))
