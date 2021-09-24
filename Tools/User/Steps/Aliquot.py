@@ -78,9 +78,9 @@ def Init(MutableStepsList):
 			PrecedingPlates = set()
 			#Reset the preceding plates
 
-	print(PLATES.Plates_List["Sample"].GetSequenceList())
-	print(PLATES.Plates_List["Denaturation"].GetSequenceList())
-	quit()
+	#print(PLATES.Plates_List["Sample"].GetSequenceList())
+	#print(PLATES.Plates_List["Denaturation"].GetSequenceList())
+	#quit()
 
 def Step(step):
 	pass
