@@ -145,7 +145,7 @@ Carrier14_Pos1_96WellPCRPlate2000uL_1mLChannel:
   Labware Type: 96 Well PCR Plate
   Labware Name: 2000uL Corning 96 Well PCR Plate
   Lid Sequence: False
-  Deck Position: Carrier14_Pos3
+  Deck Position: Carrier14_Pos1
   Vacuum Compatible: True
 
   Carrier14_Pos2_96WellPCRPlate2000uL_1mLChannel:
@@ -155,7 +155,7 @@ Carrier14_Pos1_96WellPCRPlate2000uL_1mLChannel:
   Labware Type: 96 Well PCR Plate
   Labware Name: 2000uL Corning 96 Well PCR Plate
   Lid Sequence: False
-  Deck Position: Carrier14_Pos3
+  Deck Position: Carrier14_Pos2
   Vacuum Compatible: True
 
   Carrier14_Pos3_96WellPCRPlate2000uL_1mLChannel:
