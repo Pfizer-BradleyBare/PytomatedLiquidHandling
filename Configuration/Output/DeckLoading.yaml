@@ -1,103 +1,13 @@
-0.2 mg/mL Trypsin/LysC:
-  Labware Category: Reagent
-  Labware Name: Hamilton 1.5mL FlipTube
-  Labware Type: FlipTube
-  Lid: true
-  LoadingPosition: E1
-  Max Volume: 1500
-  Sequence: E1
-  Volume: 151.875
-100mM Tris pH 7.5:
-  Labware Category: Reagent
-  Labware Name: 200mL Reagent Trough
-  Labware Type: 200mL Reagent Trough
-  Lid: false
-  LoadingPosition: Carrier38_Pos2
-  Max Volume: 200000
-  Sequence: T4
-  Volume: 7030.0
-1M Tris pH 7.5:
-  Labware Category: Reagent
-  Labware Name: 60mL Reagent Reservior
-  Labware Type: 60mL Reagent Reservior
-  Lid: false
-  LoadingPosition: R2
-  Max Volume: 50000
-  Sequence: R2
-  Volume: 2525.0
-500mM DTT:
-  Labware Category: Reagent
-  Labware Name: Hamilton 1.5mL FlipTube
-  Labware Type: FlipTube
-  Lid: true
-  LoadingPosition: F7
-  Max Volume: 1500
-  Sequence: F7
-  Volume: 151.25
-500mM IAA:
-  Labware Category: Reagent
-  Labware Name: Hamilton 1.5mL FlipTube
-  Labware Type: FlipTube
-  Lid: true
-  LoadingPosition: F4
-  Max Volume: 1500
-  Sequence: F4
-  Volume: 151.9
-8M GnHCl:
-  Labware Category: Reagent
-  Labware Name: 15mL Centrifuge Tube
-  Labware Type: 15mL Centrifuge Tube
-  Lid: false
-  LoadingPosition: C1
-  Max Volume: 14000
-  Sequence: C1
-  Volume: 570.0
-Denaturation Plate:
-  Labware Category: Plate
-  Labware Name: 200uL Biorad 96 Well PCR Plate
-  Labware Type: 96 Well PCR Plate
-  Lid: Carrier14_Pos3_Lid_200uL
-  LoadingPosition: Carrier14_Pos3
-  Max Volume: 225
-  Sequence: Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel
-  Volume: 113.15
-'Desalting Plate ':
-  Labware Category: Plate
-  Labware Name: 1200uL DeepWell 96 Well PCR Plate
-  Labware Type: 96 Well PCR Plate
-  Lid: false
-  LoadingPosition: Carrier38_Pos5
-  Max Volume: 1200
-  Sequence: Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel
-  Volume: 150
-Desalting Waste:
+Collection:
   Labware Category: Plate
   Labware Name: 2000uL Corning 96 Well PCR Plate
   Labware Type: 96 Well PCR Plate
   Lid: false
-  LoadingPosition: Carrier38_Pos1
-  Max Volume: 2000
-  Sequence: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
-  Volume: 51
-'Digestion Plate ':
-  Labware Category: Plate
-  Labware Name: 200uL Biorad 96 Well PCR Plate
-  Labware Type: 96 Well PCR Plate
-  Lid: Carrier14_Pos4_Lid_200uL
   LoadingPosition: Carrier14_Pos4
-  Max Volume: 225
-  Sequence: Carrier14_Pos4_96WellPCRPlate200uL_1mLChannel
-  Volume: 115.625
-Sample:
-  Labware Category: Plate
-  Labware Name: 200uL Biorad 96 Well PCR Plate
-  Labware Type: 96 Well PCR Plate
-  Lid: false
-  LoadingPosition: Carrier38_Pos3
-  Max Volume: 225
-  Sequence: Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel
-  Volume: 100.0
-TFA:
+  Max Volume: 2000
+  Sequence: Carrier14_Pos4_96WellPCRPlate2000uL_1mLChannel
+  Volume: 450.0
+N/A:
   Labware Category: Reagent
   Labware Name: Hamilton 1.5mL FlipTube
   Labware Type: FlipTube
@@ -105,13 +15,40 @@ TFA:
   LoadingPosition: F1
   Max Volume: 1500
   Sequence: F1
-  Volume: 153.75
-Water:
-  Labware Category: Reagent
-  Labware Name: 60mL Reagent Reservior
-  Labware Type: 60mL Reagent Reservior
+  Volume: 1450.0
+Processing:
+  Labware Category: Plate
+  Labware Name: 2000uL Corning 96 Well PCR Plate
+  Labware Type: 96 Well PCR Plate
   Lid: false
-  LoadingPosition: R1
-  Max Volume: 50000
-  Sequence: R1
-  Volume: 2535.0
+  LoadingPosition: Carrier14_Pos2
+  Max Volume: 2000
+  Sequence: Carrier14_Pos2_96WellPCRPlate2000uL_1mLChannel
+  Volume: 150.0
+Sample:
+  Labware Category: Plate
+  Labware Name: 2000uL Corning 96 Well PCR Plate
+  Labware Type: 96 Well PCR Plate
+  Lid: false
+  LoadingPosition: Carrier38_Pos1
+  Max Volume: 2000
+  Sequence: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
+  Volume: 150.0
+Waste 1:
+  Labware Category: Plate
+  Labware Name: 2000uL Corning 96 Well PCR Plate
+  Labware Type: 96 Well PCR Plate
+  Lid: false
+  LoadingPosition: Carrier14_Pos1
+  Max Volume: 2000
+  Sequence: Carrier14_Pos1_96WellPCRPlate2000uL_1mLChannel
+  Volume: 350.0
+Waste 2:
+  Labware Category: Plate
+  Labware Name: 2000uL Corning 96 Well PCR Plate
+  Labware Type: 96 Well PCR Plate
+  Lid: false
+  LoadingPosition: Carrier14_Pos3
+  Max Volume: 2000
+  Sequence: Carrier14_Pos3_96WellPCRPlate2000uL_1mLChannel
+  Volume: 650.0

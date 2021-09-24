@@ -148,7 +148,7 @@ Carrier14_Pos1_96WellPCRPlate2000uL_1mLChannel:
   Deck Position: Carrier14_Pos1
   Vacuum Compatible: True
 
-  Carrier14_Pos2_96WellPCRPlate2000uL_1mLChannel:
+Carrier14_Pos2_96WellPCRPlate2000uL_1mLChannel:
   Max Supported Volume: 2000
   Storage Condition: False
   Labware Category: Plate
@@ -158,7 +158,7 @@ Carrier14_Pos1_96WellPCRPlate2000uL_1mLChannel:
   Deck Position: Carrier14_Pos2
   Vacuum Compatible: True
 
-  Carrier14_Pos3_96WellPCRPlate2000uL_1mLChannel:
+Carrier14_Pos3_96WellPCRPlate2000uL_1mLChannel:
   Max Supported Volume: 2000
   Storage Condition: False
   Labware Category: Plate

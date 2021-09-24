@@ -129,15 +129,19 @@ class Class:
 
 			if ActualVolume > 0:
 			
+				if IsPlate(SourceList[count]) == True:
+					Plate = GetPlate(SourceList[count])
+					Plate.GetVolumesList()[count] -= ActualVolume
+					Plate.UpdateMaxVolume()
+				#Do plate volume subtraction
+
+
 				for count2 in range(0,len(DestinationPosition[count])):
 					SourcePosition = DestinationPosition[count][count2]
 
 					if IsPlate(SourceList[count]) == True:
-						Plate = GetPlate(SourceList[count])
 						SourcePosition = Plate.GetSequenceList()[count][count2]
-						Plate.GetVolumesList()[count] -= ActualVolume
-						Plate.UpdateMaxVolume()
-					#Do plate volume subtraction
+					#Modify source position to be different if needed because it is a plate and not a reagent
 
 					Expanded.append({"Destination Position":int(float(DestinationPosition[count][count2])),"Destination":self.GetName(), "Source Position":int(float(SourcePosition)), "Source":SourceList[count], "Volume":ActualVolume, "Height":DispenseHeights[count], "Total":VolumesList[count], "Mix":MixList[count]})
 			
