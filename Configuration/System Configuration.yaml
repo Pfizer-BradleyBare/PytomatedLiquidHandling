@@ -137,8 +137,8 @@ Steps:
         0.45um Self Poured ProA Plate:
           Sequence: _Vacuum_ProASelfPoured045um
           Pressures:
-            Low: 50
-            Normal: 100
-            High: 150
+            Low: 300
+            Normal: 350
+            High: 400
       PlateSequences:
         2000uL Corning 96 Well PCR Plate: _Vacuum_96WellPCRPlate2000uL

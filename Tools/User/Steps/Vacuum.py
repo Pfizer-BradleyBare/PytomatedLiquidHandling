@@ -104,7 +104,7 @@ def Step(step):
 		LOG.EndCommandLog()
 		#Move manifold from park to vacuum
 
-	LTstep = LIQUID_TRANSFER.CreateStep(Plate,SourcePlate,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,Volume,"N/A")
+	LTstep = LIQUID_TRANSFER.CreateStep(Plate,SAMPLES.Column(SourcePlate),SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,SAMPLES.Column(Volume),"N/A")
 	LIQUID_TRANSFER.Step(LTstep)
 	#Transfer liquid into vacuum plate
 
