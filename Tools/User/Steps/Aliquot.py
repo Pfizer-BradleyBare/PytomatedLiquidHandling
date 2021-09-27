@@ -20,6 +20,8 @@ def IsUsed():
 #This function may modify the Mutable list if required
 def Init(MutableStepsList):
 
+	return
+
 	PrecedingPlates = set()
 
 	for Step in MutableStepsList[:]:
