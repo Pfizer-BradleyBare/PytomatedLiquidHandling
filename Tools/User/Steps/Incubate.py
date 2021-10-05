@@ -3,6 +3,8 @@ from ..Steps import Desalt as DESALT
 from ..Labware import Plates as PLATES
 from ...Hamilton.Commands import Heater as HEATER
 from ...Hamilton.Commands import Transport as TRANSPORT
+from ...Hamilton.Commands import Pipette as PIPETTE
+from ...User import Samples as SAMPLES
 from ..Steps import Wait as WAIT
 from ..Steps import Split_Plate as SPLIT_PLATE
 from ...User import Configuration as CONFIGURATION
@@ -13,6 +15,7 @@ TITLE = "Incubate"
 TEMP = "Temp (C)"
 TIME = "Time (min)"
 SHAKE = "Shake (rpm)"
+CORRECT = "Correct For Evaporation?"
 
 #List of incubation steps
 Incubation_List = []
@@ -185,7 +188,6 @@ def Callback(step):
 			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,1,1)
 			LOG.EndCommandLog()
 		
-
 	else:
 		if Loading != None:
 			LidTransportDestination = Lid
@@ -197,6 +199,13 @@ def Callback(step):
 			LOG.EndCommandLog()
 
 	StartHeaters()
+
+	if step.GetParameters()[CORRECT] == "Yes":
+		Sequences = PLATES.GetPlate(step.GetParentPlate()).CreatePipetteSequence(SAMPLES.Column("N/A"), SAMPLES.Column(0.000001),SAMPLES.Column("N/A"))
+		LOG.BeginCommandLog()
+		PIPETTE.Correct(Sequences)
+		LOG.EndCommandLog()
+
 
 def Step(step):
 	global Heaters

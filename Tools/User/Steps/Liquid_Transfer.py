@@ -75,7 +75,7 @@ def Step(step):
 
 	LOG.BeginCommandLog()
 	if len(Sequences) != 0:
-		PIPETTE.Do(DestinationPlate, Sequences)
+		PIPETTE.Transfer(Sequences)
 	LOG.EndCommandLog()
 
 
