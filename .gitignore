@@ -1,4 +1,4 @@
 *.pyc
 *.pyo
 ~*
-./Configuration/Output/DeckLoading.yaml
+./Configuration/
