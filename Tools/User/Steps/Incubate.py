@@ -200,11 +200,11 @@ def Callback(step):
 
 	StartHeaters()
 
-	if step.GetParameters()[CORRECT] == "Yes":
-		Sequences = PLATES.GetPlate(step.GetParentPlate()).CreatePipetteSequence(SAMPLES.Column("N/A"), SAMPLES.Column(0.000001),SAMPLES.Column("N/A"))
-		LOG.BeginCommandLog()
-		PIPETTE.Correct(Sequences)
-		LOG.EndCommandLog()
+	#if step.GetParameters()[CORRECT] == "Yes":
+	#	Sequences = PLATES.GetPlate(step.GetParentPlate()).CreatePipetteSequence(SAMPLES.Column("N/A"), SAMPLES.Column(0.000001),SAMPLES.Column("N/A"))
+	#	LOG.BeginCommandLog()
+	#	PIPETTE.Correct(Sequences)
+	#	LOG.EndCommandLog()
 
 
 def Step(step):

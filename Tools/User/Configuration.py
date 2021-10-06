@@ -9,6 +9,8 @@ import os
 import os.path
 import collections
 
+CONFIGURATION_FOLDER = "HamiltonVisualMethodEditorConfiguration\\Configuration"
+
 #This is a dictionary that contains the loading information
 SysConfig = {}
 Sequences = {}
@@ -29,20 +31,20 @@ def Init():
 	global SysConfig
 	global DeckLoading
 
-	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","AutoloadingSequences.yaml"))
+	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),CONFIGURATION_FOLDER,"AutoloadingSequences.yaml"))
 	Sequences = yaml.full_load(file)
 	file.close()
 
-	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","PreferredLoading.yaml"))
+	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),CONFIGURATION_FOLDER,"PreferredLoading.yaml"))
 	PreferredLoading = yaml.full_load(file)
 	file.close()
 
-	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","System Configuration.yaml"))
+	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),CONFIGURATION_FOLDER,"System Configuration.yaml"))
 	SysConfig = yaml.full_load(file)
 	file.close()
 
 	if HAMILTONIO.IsSimulated() == False:
-		file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"))
+		file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),CONFIGURATION_FOLDER,"Output","DeckLoading.yaml"))
 		DeckLoading = yaml.full_load(file)
 		file.close()
 	else:
@@ -51,7 +53,7 @@ def Init():
 def WriteLoadingInformation(YamlData):
 	global DeckLoading
 
-	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"Configuration","Output","DeckLoading.yaml"),"w")
+	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),CONFIGURATION_FOLDER,"Output","DeckLoading.yaml"),"w")
 	yaml.dump(YamlData,file)
 	file.close()
 	DeckLoading = YamlData
