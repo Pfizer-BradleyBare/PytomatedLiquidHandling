@@ -4,3 +4,6 @@
 [submodule "HamiltonVisualMethodEditorMethod"]
 	path = HamiltonVisualMethodEditorMethod
 	url = https://github.com/Pfizer-BradleyBare/HamiltonVisualMethodEditorMethod
+[submodule "HamiltonVisualMethodEditorWorklists"]
+	path = HamiltonVisualMethodEditorWorklists
+	url = https://github.com/Pfizer-BradleyBare/HamiltonVisualMethodEditorWorklists
