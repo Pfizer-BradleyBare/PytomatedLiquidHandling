@@ -174,6 +174,8 @@ if HAMILTONIO.IsSimulated() == True:
 	if VACUUM.IsUsed() == True:
 		PRERUN.VACUUM.PreRun(VACUUM.GetVacuumParams())
 
+	PRERUN.STATUS_UPDATE.PreRun()
+
 	if LOG.Exists() and TestRun == False and len(LOG.GetLatestStep()) != 0:
 		LOG.HandleResponse(PRERUN.LOG.PreRun(LOG.GetLatestStep()))
 	#initialize all the Hamilton Libraries.

@@ -4,19 +4,17 @@ from ...General import Log as LOG
 def PreRun():
 	CommandString = ""
 	CommandString += "[PreRun]\n"
-	CommandString += "[Notify]\n"
+	CommandString += "[StatusUpdate]\n"
 
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return True
 
 #this function will reserve a lid on the Hamilton. This lid can be used on or off the Heaters
-def SendMessage(Wait, SubjectString, MessageString):
+def AppendText(MessageString):
 	CommandString = ""
 	CommandString += "[Notify]\n"
-	CommandString += "[SendMessage]\n"
-	CommandString += "[Wait]" + str(Wait)
-	CommandString += "[Subject]" + str(SubjectString)
+	CommandString += "[AppendText]\n"
 	CommandString += "[Message]" + str(MessageString) + "\n"
 
 	if LOG.CommandInLog(CommandString) != True:

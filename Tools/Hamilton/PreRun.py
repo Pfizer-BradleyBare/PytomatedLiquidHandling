@@ -7,6 +7,7 @@ from ..Hamilton.Commands import Pipette as PIPETTE
 from ..Hamilton.Commands import Timer as TIMER
 from ..Hamilton.Commands import Transport as TRANSPORT
 from ..Hamilton.Commands import Log as LOG
+from ..Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 
 
 def CheckSequences(SequencesList):

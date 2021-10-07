@@ -3,6 +3,7 @@ from ..Labware import Plates as PLATES
 from ..Labware import Solutions as SOLUTIONS
 from ...User import Samples as SAMPLES
 from ...Hamilton.Commands import Pipette as PIPETTE
+from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 from ...User import Configuration as CONFIGURATION
 from ...General import HamiltonIO as HAMILTONIO
 from ...General import Log as LOG
@@ -41,10 +42,12 @@ def Step(step):
 	LOG.BeginCommentsLog()
 
 	DestinationPlate = step.GetParentPlate()
-	
+
 	SourceList = SAMPLES.Column(step.GetParameters()[NAME])
 	SourceVolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
 	MixList = SAMPLES.Column(step.GetParameters()[MIXING])
+
+	#STATUS_UPDATE.AppendText("Transfering " + SourceVolumeList + "uL of " + SourceList + "to " + DestinationPlate + " Plate")
 	
 	for Source in SourceList:
 		SOLUTIONS.AddSolution(Source, step.GetParameters()[TYPE], step.GetParameters()[STORAGE])
