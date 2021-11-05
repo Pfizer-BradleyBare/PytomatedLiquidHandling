@@ -176,18 +176,20 @@ def Callback(step):
 			LidTransportSource = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Lid"]
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			LidTransportGripHeight = TransportConfig["Lid"]["Grip Height"]
 			#Lid
 
 			PlateTransportDestination = Loading["Sequence"]
 			PlateTransportSource = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Plate"]
 			PlateTransportOpenDistance = TransportConfig[Loading["Labware Name"]]["Open"]
 			PlateTransportCloseDistance = TransportConfig[Loading["Labware Name"]]["Close"]
+			PlateTransportGripHeight = TransportConfig["Labware Name"]["Grip Height"]
 			#plate
 			LOG.BeginCommandLog()
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,0,1)
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,LidTransportGripHeight,0,1)
 			LOG.EndCommandLog()
 			LOG.BeginCommandLog()
-			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,1,1)
+			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,PlateTransportGripHeight,1,1)
 			LOG.EndCommandLog()
 		
 	else:
@@ -196,8 +198,9 @@ def Callback(step):
 			LidTransportSource = Loading["Lid"]
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			LidTransportGripHeight = TransportConfig["Lid"]["Grip Height"]
 			LOG.BeginCommandLog()
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance, 1,1)
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,LidTransportGripHeight, 1,1)
 			LOG.EndCommandLog()
 
 	StartHeaters()
@@ -230,18 +233,20 @@ def Step(step):
 			PlateTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Plate"]
 			PlateTransportOpenDistance = TransportConfig[Loading["Labware Name"]]["Open"]
 			PlateTransportCloseDistance = TransportConfig[Loading["Labware Name"]]["Close"]
+			PlateTransportGripHeight = TransportConfig["Labware Name"]["Grip Height"]
 			#plate
 		
 			LidTransportSource = Lid
 			LidTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Lid"]
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			LidTransportGripHeight = TransportConfig["Lid"]["Grip Height"]
 			#Lid
 			LOG.BeginCommandLog()
-			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,0,0)
+			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,PlateTransportGripHeight,0,0)
 			LOG.EndCommandLog()
 			LOG.BeginCommandLog()
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,1,0)
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,LidTransportGripHeight,1,0)
 			LOG.EndCommandLog()
 
 		if step.GetParameters()[SHAKE] > 0:
@@ -254,8 +259,9 @@ def Step(step):
 			LidTransportDestination = Loading["Lid"]
 			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
 			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
+			LidTransportGripHeight = TransportConfig["Lid"]["Grip Height"]
 			LOG.BeginCommandLog()
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance, 1,1)
+			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,LidTransportGripHeight, 1,1)
 			LOG.EndCommandLog()
 		
 		PLATES.GetPlate(step.GetParentPlate()).SetLidState()

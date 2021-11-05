@@ -1,19 +1,40 @@
-Git repo from Github -> https://github.com/Pfizer-BradleyBare/HamiltonVisualMethodEditor
+This means to replace the text: <Something> -> Replaced with something
 
-Get submodules -> git submodule init
 
-Update submodules -> git submodule update
+Folder Paths: 
+HamiltonVisualMethodEditor -> C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor
+HamiltonVisualMethodEditorConfiguration -> C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor\HamiltonVisualMethodEditorConfiguration
+HamiltonVisualMethodEditorMethod -> C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor\HamiltonVisualMethodEditorMethod
+amiltonVisualMethodEditorWorklists -> C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor\HamiltonVisualMethodEditorWorklists
 
-Now we have the access to everything we need. But the submodule is not an actual branch. So we need to find that
+Folders: 
+HamiltonVisualMethodEditor -> THIS FOLDER IS ALWAYS DONE LAST
+HamiltonVisualMethodEditorConfiguration
+HamiltonVisualMethodEditorMethod
+amiltonVisualMethodEditorWorklists
 
-There are two submodules to update. 1: HamiltonVisualMethodEditorMethod 2: HamiltonVisualMethodEditorConfiguration
+First, save your changes if you want to keep them. For each folder
+	Add your modified files to the tracker -> git add .
+	save your changes -> git commit -m "<Some kind of message for your work>"
 
-Enter each submodule -> cd <Submodule Name Above>
+get updates for each folder 
+	Enter the folder -> cd 
+	Get the updates -> git pull origin <branch>
+		HamiltonVisualMethodEditor Folder: Branch = master
+		HamiltonVisualMethodEditorConfiguration Folder: Branch = your pc config. See https://github.com/Pfizer-BradleyBare/HamiltonVisualMethodEditorConfiguration for branches
+		HamiltonVisualMethodEditorMethod Folder: Branch = your instrument method. See https://github.com/Pfizer-BradleyBare/HamiltonVisualMethodEditorMethod for branches
+		HamiltonVisualMethodEditorWorklists Folder: Branch = master
+	repeat for each folder
 
-Find branches to pull -> git branch -avv
+Make the changes within the updates according to the updates slide
+Save the changes similar to above.
 
-Actually get the branch and use it -> git checkout -b <Branch Name> origin/<Branch Name>
+Move the changes to the cloud:
+	Upload -> git push origin <branch>
+		HamiltonVisualMethodEditor Folder: Branch = master
+		HamiltonVisualMethodEditorConfiguration Folder: Branch = your pc config. See https://github.com/Pfizer-BradleyBare/HamiltonVisualMethodEditorConfiguration for branches
+		HamiltonVisualMethodEditorMethod Folder: Branch = your instrument method. See https://github.com/Pfizer-BradleyBare/HamiltonVisualMethodEditorMethod for branches
+		HamiltonVisualMethodEditorWorklists Folder: Branch = master
 
-Leave the submodule -> cd ..
 
-Do for 1 and 2 above.
+
