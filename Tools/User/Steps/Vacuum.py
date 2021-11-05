@@ -84,14 +84,15 @@ def Step(step):
 
 	Loading = CONFIGURATION.GetDeckLoading(Destination)
 
-	if Loading != None:
+	if Loading != None and not (step.GetTitle() == STEPS.GetSteps()[STEPS.GetSteps().index(step)-1].GetTitle()):
 
 		Source = Loading["Sequence"]
 		Destination = VacuumConfig["PlateSequences"][Loading["Labware Name"]]
 		OpenWidth = TransportConfig[Loading["Labware Name"]]["Open"]
 		CloseWidth = TransportConfig[Loading["Labware Name"]]["Close"]
+		GripHeight = TransportConfig[Loading["Labware Name"]]["Grip Height"]
 		LOG.BeginCommandLog()
-		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,0,0)
+		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,GripHeight,0,0)
 		LOG.EndCommandLog()
 		#Move destination plate into vacuum
 
@@ -99,8 +100,9 @@ def Step(step):
 		Destination = VacuumConfig["Vacuum"]
 		OpenWidth = TransportConfig["Vacuum Manifold"]["Open"]
 		CloseWidth = TransportConfig["Vacuum Manifold"]["Close"]
+		GripHeight = TransportConfig["Vacuum Manifold"]["Grip Height"]
 		LOG.BeginCommandLog()
-		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1,0)
+		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,GripHeight,1,0)
 		LOG.EndCommandLog()
 		#Move manifold from park to vacuum
 
@@ -137,14 +139,15 @@ def Callback(step):
 	LOG.EndCommandLog()
 	#Start vacuum
 
-	if Loading != None:
+	if Loading != None and not (step.GetTitle() == STEPS.GetSteps()[STEPS.GetSteps().index(step)+1].GetTitle()):
 
 		Destination = VacuumConfig["Home"]
 		Source = VacuumConfig["Vacuum"]
 		OpenWidth = TransportConfig["Vacuum Manifold"]["Open"]
 		CloseWidth = TransportConfig["Vacuum Manifold"]["Close"]
+		GripHeight = TransportConfig["Vacuum Manifold"]["Grip Height"]
 		LOG.BeginCommandLog()
-		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,0,0)
+		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,GripHeight,0,0)
 		LOG.EndCommandLog()
 		#Move manifold from vacuum to park
 
@@ -152,7 +155,8 @@ def Callback(step):
 		Source = VacuumConfig["PlateSequences"][Loading["Labware Name"]]
 		OpenWidth = TransportConfig[Loading["Labware Name"]]["Open"]
 		CloseWidth = TransportConfig[Loading["Labware Name"]]["Close"]
+		GripHeight = TransportConfig[Loading["Labware Name"]]["Grip Height"]
 		LOG.BeginCommandLog()
-		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,1,1)
+		TRANSPORT.Move(Source,Destination,OpenWidth,CloseWidth,GripHeight,1,1)
 		LOG.EndCommandLog()
 		#Move destination plate back to loading position
