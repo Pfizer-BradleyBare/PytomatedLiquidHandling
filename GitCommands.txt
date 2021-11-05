@@ -1,11 +1,12 @@
+Open Powershell
+
 This means to replace the text: <Something> -> Replaced with something
 
-
 Folder Paths: 
-HamiltonVisualMethodEditor -> C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor
-HamiltonVisualMethodEditorConfiguration -> C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor\HamiltonVisualMethodEditorConfiguration
-HamiltonVisualMethodEditorMethod -> C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor\HamiltonVisualMethodEditorMethod
-amiltonVisualMethodEditorWorklists -> C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor\HamiltonVisualMethodEditorWorklists
+HamiltonVisualMethodEditor -> "C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor"
+HamiltonVisualMethodEditorConfiguration -> "C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor\HamiltonVisualMethodEditorConfiguration"
+HamiltonVisualMethodEditorMethod -> "C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor\HamiltonVisualMethodEditorMethod"
+HamiltonVisualMethodEditorWorklists -> "C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor\HamiltonVisualMethodEditorWorklists"
 
 Folders: 
 HamiltonVisualMethodEditor -> THIS FOLDER IS ALWAYS DONE LAST
@@ -13,12 +14,15 @@ HamiltonVisualMethodEditorConfiguration
 HamiltonVisualMethodEditorMethod
 amiltonVisualMethodEditorWorklists
 
+START HERE:
+
 First, save your changes if you want to keep them. For each folder
+	Go into each folder -> cd <Folder Path>
 	Add your modified files to the tracker -> git add .
 	save your changes -> git commit -m "<Some kind of message for your work>"
 
 get updates for each folder 
-	Enter the folder -> cd 
+	Enter the folder -> cd <Folder Path>
 	Get the updates -> git pull origin <branch>
 		HamiltonVisualMethodEditor Folder: Branch = master
 		HamiltonVisualMethodEditorConfiguration Folder: Branch = your pc config. See https://github.com/Pfizer-BradleyBare/HamiltonVisualMethodEditorConfiguration for branches
