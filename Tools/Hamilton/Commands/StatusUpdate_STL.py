@@ -13,7 +13,7 @@ def PreRun():
 #this function will reserve a lid on the Hamilton. This lid can be used on or off the Heaters
 def AppendText(MessageString):
 	CommandString = ""
-	CommandString += "[StatusUpdate]\n"
+	CommandString += "[Notify]\n"
 	CommandString += "[AppendText]\n"
 	CommandString += "[Message]" + str(MessageString) + "\n"
 
@@ -23,4 +23,5 @@ def AppendText(MessageString):
 		Response = HAMILTONIO.Pull()
 		LOG.CommandID()
 	return True
-####	#response is not parsed for this command
+	#response is not parsed for this command
+

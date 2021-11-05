@@ -6,6 +6,7 @@ from ...User import Samples as SAMPLES
 from ...User import Configuration as CONFIGURATION
 from ...Hamilton.Commands import Desalt as DESALT
 from ...General import Log as LOG
+from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 
 
 TITLE = "Desalt"
@@ -76,6 +77,7 @@ def Init(MutableStepsList):
 			Incubation_Equilibration_Step = Latest_Incubate_Step
 			#I set these ahead of time because ths cannot change after equilibration. Best to lock it at the beginning
 
+			
 			Desalting_Params["Required Tips"] = 3 * SAMPLES.GetTotalSamples()
 			Desalting_Params["Type"] = ','.join(TypeArray)
 			Desalting_Params["Volume"] = ','.join(VolumeArray)
@@ -123,6 +125,8 @@ def Equilibrate():
 		LOG.EndCommandLog()
 	else:
 		LOG.Comment("Equilibration already performed. Skipping Equilibration")
+		
+	STATUS_UPDATE.AppendText("Performing Desalting Equilibration and Desalting Samples")	
 
 ######################################################################### 
 #	Description: Performs equilibration and simulates a pipetting step into the destination plate
@@ -136,6 +140,8 @@ def Process():
 	Destination = Desalting_Params["Destination"]
 	Source = Desalting_Params["Source"]
 	Volume = sum(list(map(int, Desalting_Params["Volume"].split(","))))
+
+	#STATUS_UPDATE.AppendText("Performing Desalting Equilibration and Desalting Samples")
 
 	PLATES.GetPlate(Destination).CreatePipetteSequence(SAMPLES.Column(Source), SAMPLES.Column(Volume), SAMPLES.Column("Yes"))
 	Equilibrated = False
@@ -157,3 +163,5 @@ def Step(step):
 	LOG.BeginCommentsLog()
 	Process()
 	LOG.EndCommentsLog()
+
+	

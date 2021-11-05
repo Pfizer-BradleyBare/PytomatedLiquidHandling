@@ -60,7 +60,6 @@ import Tools.User.Steps.Pool as POOL
 import Tools.User.Steps.PreLoad_Liquid as PRELOAD_LIQUID
 
 import Tools.Hamilton.PreRun as PRERUN
-##import Tools.Hamilton.Commands.StatusUpdate as STATUS_UPDATE
 
 print("Init Classes")
 EXCELIO.Init(Excel_File_Path)
@@ -175,9 +174,7 @@ if HAMILTONIO.IsSimulated() == True:
 	if VACUUM.IsUsed() == True:
 		PRERUN.VACUUM.PreRun(VACUUM.GetVacuumParams())
 
-	##if STATUS_UPDATE.IsUsed() == True:
 	PRERUN.STATUS_UPDATE.PreRun()
-                
 
 	if LOG.Exists() and TestRun == False and len(LOG.GetLatestStep()) != 0:
 		LOG.HandleResponse(PRERUN.LOG.PreRun(LOG.GetLatestStep()))

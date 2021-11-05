@@ -47,7 +47,7 @@ def Step(step):
 	SourceVolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
 	MixList = SAMPLES.Column(step.GetParameters()[MIXING])
 
-	#STATUS_UPDATE.AppendText("Transfering " + SourceVolumeList + "uL of " + SourceList + "to " + DestinationPlate + " Plate")
+	STATUS_UPDATE.AppendText("Transfering " +  str(step.GetParameters()[VOLUME]) + " uL of " + str(step.GetParameters()[TYPE]) + " to " + str(step.GetParentPlate()) + " plate ")
 	
 	for Source in SourceList:
 		SOLUTIONS.AddSolution(Source, step.GetParameters()[TYPE], step.GetParameters()[STORAGE])

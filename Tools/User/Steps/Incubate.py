@@ -9,6 +9,7 @@ from ..Steps import Wait as WAIT
 from ..Steps import Split_Plate as SPLIT_PLATE
 from ...User import Configuration as CONFIGURATION
 from ...General import Log as LOG
+from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 import time
 
 TITLE = "Incubate"
@@ -16,6 +17,7 @@ TEMP = "Temp (C)"
 TIME = "Time (min)"
 SHAKE = "Shake (rpm)"
 CORRECT = "Correct For Evaporation?"
+
 
 #List of incubation steps
 Incubation_List = []
@@ -219,6 +221,8 @@ def Step(step):
 	ID = GetReservedHeater(step)
 	Lid = GetReservedLid(step)
 	Loading = CONFIGURATION.GetDeckLoading(step.GetParentPlate())
+	
+	STATUS_UPDATE.AppendText("Incubate at " + str(step.GetParameters()[TEMP]) + " C for " + str(step.GetParameters()[TIME]) + " min")
 
 	if ID != None:
 		if Loading != None:

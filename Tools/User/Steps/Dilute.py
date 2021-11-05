@@ -3,6 +3,7 @@ from ..Labware import Plates as PLATES
 from ..Labware import Solutions as SOLUTIONS
 from ...User import Samples as SAMPLES
 from ...Hamilton.Commands import Pipette as PIPETTE
+from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 from ...User import Configuration as CONFIGURATION
 from ...General import HamiltonIO as HAMILTONIO
 from ...General import Log as LOG
@@ -55,6 +56,9 @@ def Step(step):
 	SourceConcentrationList = SAMPLES.Column(step.GetParameters()[STARTING_CONCENTRATION])
 	SourceList = SAMPLES.Column(step.GetParameters()[SOURCE])
 	DiluentList = SAMPLES.Column(step.GetParameters()[DILUENT])
+	DestinationSequences = PLATES.GetPlate(step.GetParentPlate()).GetSequenceList()
+
+	STATUS_UPDATE.AppendText("Transfering " + str(step.GetParameters()[TARGET_VOLUME]) + " uL of sample to " + str(step.GetParentPlate()) + " plate")
 
 	for Source in SourceList:
 		SOLUTIONS.AddSolution(Source, SOLUTIONS.TYPE_REAGENT, SOLUTIONS.STORAGE_AMBIENT)
@@ -66,7 +70,7 @@ def Step(step):
 	DiluentVolumeList = list(map(lambda x,y: y - x, SourceVolumeList,TargetVolumeList))
 	#Calculate correct volumes to pipette
 
-	DestinationSequences = PLATES.GetPlate(step.GetParentPlate()).GetSequenceList()
+	#DestinationSequences = PLATES.GetPlate(step.GetParentPlate()).GetSequenceList()
 
 	for VolIndex in range(0,len(SourceVolumeList)):
 		if MaxSourceVolumeList[VolIndex] > TargetVolumeList[VolIndex] or MaxSourceVolumeList[VolIndex] == 0:
