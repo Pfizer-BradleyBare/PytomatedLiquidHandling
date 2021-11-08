@@ -27,7 +27,7 @@ if len(sys.argv) > 1:
 		TestRun = True
 
 else:
-	Sample_Start_Pos = 10
+	Sample_Start_Pos = 1
 	Excel_File_Path = "Method Maker2.xlsm"
 	Initialization_Run = True
 	GenerateList = True
@@ -126,6 +126,8 @@ while(True):
 
 	if Step == None:
 		break
+
+	print("\n",Step)
 
 	LOG.BeginStepLog()
 	STEPS.UpdateStepParams(Step)

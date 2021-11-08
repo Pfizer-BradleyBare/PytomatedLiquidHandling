@@ -53,6 +53,8 @@ def Init(MutableStepsList):
 		for Step in MutableStepsList [:]:
 			if Step.GetParentPlate() == plate:
 				MutableStepsList.remove(Step)
+
+	
 	#remove plates which have only factors of zero. Otherwise known as dead plates
 
 
@@ -64,7 +66,9 @@ def Step(step):
 	PreviousPlateName = step.GetParentPlate()
 
 	PLATES.GetPlate(PreviousPlateName).Deactivate()
-	
+	PLATES.GetPlate(Step.GetParentPlate()).GetFactors()
+	PLATES.GetPlate(Step.GetParentPlate()).GetFactors()
+
 	DeadPlates = PLATES.GetDeadPlates()
 
 	if PlateName1 not in DeadPlates:
@@ -72,5 +76,6 @@ def Step(step):
 	
 	if PlateName2 not in DeadPlates:
 		PLATES.GetPlate(PlateName2).Activate()
+
 
 	LOG.EndCommentsLog()

@@ -61,21 +61,9 @@ class Class:
 		return self.VolumesList
 
 	def UpdateMaxVolume(self):
-		Sequences = self.GetSequenceList()
 		Volumes = self.GetVolumesList()
-
-		TotalVolumes = {}
-
-		for SequenceList in Sequences:
-			for Sequence in SequenceList:
-				TotalVolumes[str(Sequence)] = 0
-
-				for SequenceListIndex in range(0,len(Sequences)):
-						if Sequence in Sequences[SequenceListIndex]:
-							TotalVolumes[str(Sequence)] += Volumes[SequenceListIndex] * len(Sequences[SequenceListIndex])
 		
-		for Key in TotalVolumes:
-			Volume = TotalVolumes[Key]
+		for Volume in Volumes:
 			if Volume < 0:
 				self.RequiresLoading = True
 
@@ -120,7 +108,6 @@ class Class:
 		VolumesList = self.GetVolumesList()
 		DispenseHeights = CONFIGURATION.WellVolumeToDispenseHeight(self.GetName(),VolumesList)
 		DestinationPosition = self.GetSequenceList()
-
 		Expanded = []
 
 		for count in range(0,len(DestinationPosition)):

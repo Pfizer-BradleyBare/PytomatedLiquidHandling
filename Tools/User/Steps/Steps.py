@@ -179,28 +179,24 @@ def Init(PulledMethodSheet):
 				Col_List.remove(Col)
 		#remove columns that do not start with a plate
 
+		Col_List = sorted(Col_List, key=lambda x: x[0].GetCoordinates()[0])
+		#Sort in descending order
+
 		Unfiltered_Steps_List = sum(Col_List,[])
 		#Save all steps for future use
 
-		Row = 9999999999
-		for Col in Col_List:
-			if Col[0].GetCoordinates()[0] < Row:
-				Row = Col[0].GetCoordinates()[0]
+		Row = Col_List[0][0].GetCoordinates()[0]
 		#Get first row that steps begin
 
 		Pathways = []
-		for Col in Col_List:
-			if Col[0].GetCoordinates()[0] == Row:
-				Pathways.append(Col)
-		#Get our starting pathway
-
-		Col_Address = {}
-		for count in range(0,len(Col_List)):
-			Col_Address[Col_List[count][0].GetParameters()[PLATE.NAME]] = count
+		Pathways.append(Col_List[0])
+		Col_List.pop(0)
+		#Get our starting pathway and remove path from list
 
 		def __GetPathway(PlateName):
-			return Col_List[Col_Address[PlateName]]
-		#Index all the columns by plate name to make my life easier
+			for index in range(0,len(Col_List)):
+				if Col_List[index][0].GetParameters()[PLATE.NAME] == PlateName:
+					return Col_List.pop(index)
 
 		while len(Pathways) != 0:
 
@@ -231,6 +227,10 @@ def Init(PulledMethodSheet):
 
 			for item in Add_List:
 				Pathways.append(item)
+
+		for Step in Steps_List:
+			print("\n",Step)
+		quit()
 
 		StartingPlateName = Steps_List[0].GetParameters()[PLATE.NAME]
 
