@@ -99,7 +99,12 @@ def Init(MutableStepsList):
 			for i in range(0,NumTipSets):
 				SOLUTIONS.GetSolution(Desalting_Params["Buffer"]).AddVolume(StepConfig["Type"][TypeArray[i]][float(VolumeArray[i])]["Total Buffer Volume"] * SAMPLES.GetTotalSamples())
 
-			PLATES.AddPlate("Desalting Waste", "96 Well PCR Plate", SAMPLES.GetSequences())
+			PLATES.AddPlate("Desalting Waste", "96 Well PCR Plate")
+			PLATES.GetPlate("Desalting Waste").SetSequences(SAMPLES.GetSequences())
+			PLATES.GetPlate("Desalting Waste").SetContext("Desalting Waste")	
+			PLATES.GetPlate("Desalting Waste").SetFactors([1]*len(SAMPLES.GetSequences()))
+			PLATES.GetPlate("Desalting Waste").SetVolumes([0]*len(SAMPLES.GetSequences()))
+			
 			PLATES.GetPlate("Desalting Waste").CreatePipetteSequence(SAMPLES.Column(""),SAMPLES.Column(1),SAMPLES.Column("Yes"))
 			#Volume of 1 added so the Waste solution is not deleted from the solutions list.
 			#HCP analysis detected cross contamination, At this point it is better to use a plate for waste. In that way each sample is isolated to a well.

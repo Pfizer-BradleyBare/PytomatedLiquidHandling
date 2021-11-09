@@ -57,12 +57,12 @@ def GeneratePrepSheet(LabwareArray):
 
 				PlatePrepArray = dict()
 				for index in range(0,SAMPLES.GetNumSamples()):
-					for position in Plate.GetSequenceList()[index]:
-						if Plate.GetVolumesList()[index] != 0:
+					for position in Plate.GetSequences()[index]:
+						if Plate.GetVolumes()[index] != 0:
 							if int(position) in PlatePrepArray:
-								PlatePrepArray[int(position)]["Volume"] += abs(Plate.GetVolumesList()[index])
+								PlatePrepArray[int(position)]["Volume"] += abs(Plate.GetVolumes()[index])
 							else:
-								PlatePrepArray[int(position)] = {"AlphaNumeric":NumericToAlphaNumeric(position),"Volume":abs(Plate.GetVolumesList()[index]) + DeadVolumeConfig[LoadingDict["Labware Name"]]}
+								PlatePrepArray[int(position)] = {"AlphaNumeric":NumericToAlphaNumeric(position),"Volume":abs(Plate.GetVolumes()[index]) + DeadVolumeConfig[LoadingDict["Labware Name"]]}
 
 				#PlatePrepArray = sorted(PlatePrepArray, key=lambda x: x["Position"])
 				

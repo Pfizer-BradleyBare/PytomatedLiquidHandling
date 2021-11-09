@@ -182,9 +182,6 @@ def Init(PulledMethodSheet):
 		Col_List = sorted(Col_List, key=lambda x: x[0].GetCoordinates()[0])
 		#Sort in descending order
 
-		Unfiltered_Steps_List = sum(Col_List,[])
-		#Save all steps for future use
-
 		Row = Col_List[0][0].GetCoordinates()[0]
 		#Get first row that steps begin
 
@@ -228,9 +225,8 @@ def Init(PulledMethodSheet):
 			for item in Add_List:
 				Pathways.append(item)
 
-		for Step in Steps_List:
-			print("\n",Step)
-		quit()
+		Unfiltered_Steps_List = copy.deepcopy(Steps_List)
+		#Save all steps for future use
 
 		StartingPlateName = Steps_List[0].GetParameters()[PLATE.NAME]
 

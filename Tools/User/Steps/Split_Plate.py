@@ -20,7 +20,7 @@ def Init(MutableStepsList):
 	global IsUsedFlag
 
 	for Step in MutableStepsList[:]:
-		if Step.GetTitle() == TITLE:
+		if False and Step.GetTitle() == TITLE:
 			IsUsedFlag = True
 			
 			PlateName = Step.GetParentPlate()
@@ -41,41 +41,85 @@ def Init(MutableStepsList):
 					Factors1[count] *= 0.5
 					Factors2[count] *= 0.5
 
-			PLATES.GetPlate(NewPlate1).UpdateFactors(Factors1)
-			PLATES.GetPlate(NewPlate2).UpdateFactors(Factors2)
+			PLATES.GetPlate(NewPlate1).SetFactors(Factors1)
+			PLATES.GetPlate(NewPlate2).SetFactors(Factors2)
 
-	for Step in MutableStepsList[:]:
-		if Step.GetTitle() == PLATE.TITLE:
-			PLATES.GetPlate(Step.GetParameters()[PLATE.NAME]).UpdateFactors(PLATES.GetPlate(Step.GetParentPlate()).GetFactors())
+	#for Step in MutableStepsList[:]:
+	#	if Step.GetTitle() == PLATE.TITLE:
+	#		PLATES.GetPlate(Step.GetParameters()[PLATE.NAME]).SetFactors(PLATES.GetPlate(Step.GetParentPlate()).GetFactors())
 	#update all children plates to have the same factor as the parent plate
 
-	for plate in PLATES.GetDeadPlates():
-		for Step in MutableStepsList [:]:
-			if Step.GetParentPlate() == plate:
-				MutableStepsList.remove(Step)
-
-	
+	#for plate in PLATES.GetDeadPlates():
+	#	for Step in MutableStepsList [:]:
+	#		if Step.GetParentPlate() == plate:
+	#			MutableStepsList.remove(Step)
 	#remove plates which have only factors of zero. Otherwise known as dead plates
 
 
 def Step(step):
 	LOG.BeginCommentsLog()
 
-	PlateName1 = step.GetParameters()[NAME_1]
-	PlateName2 = step.GetParameters()[NAME_2]
-	PreviousPlateName = step.GetParentPlate()
 
-	PLATES.GetPlate(PreviousPlateName).Deactivate()
-	PLATES.GetPlate(Step.GetParentPlate()).GetFactors()
-	PLATES.GetPlate(Step.GetParentPlate()).GetFactors()
+	Choices = SAMPLES.Column(step.GetParameters()[CHOICE])
+	ParentPlate = step.GetParentPlate()
+	NewPlate1 = step.GetParameters()[NAME_1]
+	NewPlate2 = step.GetParameters()[NAME_2]
+	ParentFactors = copy.deepcopy(PLATES.GetPlate(ParentPlate).GetFactors())
+	ParentContext = PLATES.GetPlate(ParentPlate).GetContext()
+	NewPlate1Factors = []
+	NewPlate2Factors = []
+	#Get step information
+			
+	for count in range(0,len(Choices)):
+		if Choices[count] == NewPlate1:
+			NewPlate1Factors.append(1 * ParentFactors[count])
+			NewPlate2Factors.append(0 * ParentFactors[count])
+		elif Choices[count] == NewPlate2:
+			NewPlate1Factors.append(0 * ParentFactors[count])
+			NewPlate2Factors.append(1 * ParentFactors[count])
+		else:
+			NewPlate1Factors.append(0.5 * ParentFactors[count])
+			NewPlate2Factors.append(0.5 * ParentFactors[count])
+	#Generate the factors for this new plate.
+
+
+	NewPlateTypes = {}
+
+	AllSteps = STEPS.GetAllSteps()
+	for index in range(0,len(AllSteps)):
+		if AllSteps[index] == step:
+			step1 = AllSteps[index+1]
+			step2 = AllSteps[index+2]
+			NewPlateTypes[step1.GetParameters()[PLATE.NAME]] = step1.GetParameters()[PLATE.TYPE]
+			NewPlateTypes[step2.GetParameters()[PLATE.NAME]] = step2.GetParameters()[PLATE.TYPE]
+			break
+	#Get type for both new plates
+
+	PlateName = NewPlate1
+	PLATES.AddPlate(PlateName, NewPlateTypes[PlateName])
+	PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
+	PLATES.GetPlate(PlateName).SetContext(ParentContext + ":" + ParentPlate)	
+	PLATES.GetPlate(PlateName).SetFactors(NewPlate1Factors)
+	PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
+	#create the new plate 1
+
+	PlateName = NewPlate2
+	PLATES.AddPlate(PlateName, NewPlateTypes[PlateName])
+	PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
+	PLATES.GetPlate(PlateName).SetContext(ParentContext + ":" + ParentPlate)	
+	PLATES.GetPlate(PlateName).SetFactors(NewPlate2Factors)
+	PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
+	#create new plate 2
+
+	PLATES.GetPlate(ParentPlate).Deactivate()
 
 	DeadPlates = PLATES.GetDeadPlates()
 
-	if PlateName1 not in DeadPlates:
-		PLATES.GetPlate(PlateName1).Activate()
+	if NewPlate1 not in DeadPlates:
+		PLATES.GetPlate(NewPlate1).Activate()
 	
-	if PlateName2 not in DeadPlates:
-		PLATES.GetPlate(PlateName2).Activate()
+	if NewPlate2 not in DeadPlates:
+		PLATES.GetPlate(NewPlate2).Activate()
 
 
 	LOG.EndCommentsLog()

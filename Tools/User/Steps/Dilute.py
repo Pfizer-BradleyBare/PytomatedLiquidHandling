@@ -56,7 +56,7 @@ def Step(step):
 	SourceConcentrationList = SAMPLES.Column(step.GetParameters()[STARTING_CONCENTRATION])
 	SourceList = SAMPLES.Column(step.GetParameters()[SOURCE])
 	DiluentList = SAMPLES.Column(step.GetParameters()[DILUENT])
-	DestinationSequences = PLATES.GetPlate(step.GetParentPlate()).GetSequenceList()
+	DestinationSequences = PLATES.GetPlate(step.GetParentPlate()).GetSequences()
 
 	STATUS_UPDATE.AppendText("Transfering " + str(step.GetParameters()[TARGET_VOLUME]) + " uL of sample to " + str(step.GetParentPlate()) + " plate")
 

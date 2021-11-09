@@ -15,17 +15,18 @@ class Class:
 #	Input Arguments: [PlateName: String] [Type: String] [SequencesList: List]
 #	Returns: N/A
 #########################################################################
-	def __init__ (self,PlateName, Type, SequencesList):
+	def __init__ (self, PlateName, Type):
 		self.PlateName = PlateName
 		self.Type = Type
 		self.Lid = False
 		self.Vacuum = False
 		self.ActiveState = False
-		self.SequencesList = SequencesList
-		self.FactorsList = [1] * len(SequencesList)
-		self.VolumesList = [0] * len(SequencesList)
-		self.MaxVolume = 0
 		self.RequiresLoading = False
+		self.Context = None
+		self.SequencesList = None
+		self.FactorsList = {}
+		self.VolumesList = None
+		self.MaxVolume = 0
 
 	def GetName(self):
 		return self.PlateName
@@ -36,32 +37,35 @@ class Class:
 	def SetLidState(self):
 		self.Lid = True
 
-	def ResetLidState(self):
-		self.Lid = False
-
 	def GetLidState(self):
 		return self.Lid
 
 	def SetVacuumState(self):
 		self.Vacuum = True
 
-	def ResetVacuumState(self):
-		self.Vacuum = False
+	def GetContext(self):
+		return self.Context
+
+	def SetContext(self, Context):
+		self.Context = Context
 
 	def GetVacuumState(self):
 		return self.Vacuum
 
-	def GetSequenceList(self):
+	def GetSequences(self):
 		return self.SequencesList
 
-	def UpdateSequenceList(self, NewSequencesList):
-		self.SequencesList = NewSequencesList
+	def SetSequences(self, SequencesList):
+		self.SequencesList = SequencesList
 
-	def GetVolumesList(self):
+	def GetVolumes(self):
 		return self.VolumesList
 
+	def SetVolumes(self, VolumesList):
+		self.VolumesList = VolumesList
+
 	def UpdateMaxVolume(self):
-		Volumes = self.GetVolumesList()
+		Volumes = self.GetVolumes()
 		
 		for Volume in Volumes:
 			if Volume < 0:
@@ -91,11 +95,17 @@ class Class:
 	def IsActive(self):
 		return self.ActiveState
 
-	def GetFactors(self):
-		return self.FactorsList
+	def GetFactors(self, Context=""):
+		if Context == "":
+			Context = self.Context
 
-	def UpdateFactors(self, NewFactorsList):
-		self.FactorsList = NewFactorsList
+		return self.FactorsList[Context]
+
+	def SetFactors(self, FactorsList, Context=""):
+		if Context == "":
+			Context = self.Context
+
+		self.FactorsList[Context] = FactorsList
 
 ######################################################################### 
 #	Description: Creates a sorted pipetting list to be used by the hamilton pipette command
@@ -105,9 +115,9 @@ class Class:
 	def CreatePipetteSequence(self, SourceList, SourceVolumeList, MixList):
 		global Plates_List
 		
-		VolumesList = self.GetVolumesList()
+		VolumesList = self.GetVolumes()
 		DispenseHeights = CONFIGURATION.WellVolumeToDispenseHeight(self.GetName(),VolumesList)
-		DestinationPosition = self.GetSequenceList()
+		DestinationPosition = self.GetSequences()
 		Expanded = []
 
 		for count in range(0,len(DestinationPosition)):
@@ -118,7 +128,7 @@ class Class:
 			
 				if IsPlate(SourceList[count]) == True:
 					Plate = GetPlate(SourceList[count])
-					Plate.GetVolumesList()[count] -= ActualVolume
+					Plate.GetVolumes()[count] -= ActualVolume
 					Plate.UpdateMaxVolume()
 				#Do plate volume subtraction
 
@@ -127,12 +137,12 @@ class Class:
 					SourcePosition = DestinationPosition[count][count2]
 
 					if IsPlate(SourceList[count]) == True:
-						SourcePosition = Plate.GetSequenceList()[count][count2]
+						SourcePosition = Plate.GetSequences()[count][count2]
 					#Modify source position to be different if needed because it is a plate and not a reagent
 
 					Expanded.append({"Destination Position":int(float(DestinationPosition[count][count2])),"Destination":self.GetName(), "Source Position":int(float(SourcePosition)), "Source":SourceList[count], "Volume":ActualVolume, "Height":DispenseHeights[count], "Total":VolumesList[count], "Mix":MixList[count]})
 			
-				self.GetVolumesList()[count] += ActualVolume
+				self.GetVolumes()[count] += ActualVolume
 				self.UpdateMaxVolume()
 		
 		return copy.deepcopy(sorted(Expanded, key=lambda x: x["Destination Position"]))
@@ -146,9 +156,9 @@ def Init():
 #	Input Arguments: [PlateName: String] [Type: String] [SequencesList: List]
 #	Returns: N/A
 #########################################################################
-def AddPlate(PlateName, Type, SequencesList):
+def AddPlate(PlateName, Type):
 	global Plates_List
-	Plates_List[PlateName] = Class(PlateName, Type, SequencesList)
+	Plates_List[PlateName] = Class(PlateName, Type)
 
 ######################################################################### 
 #	Description: Returns the plate class with PlateName
