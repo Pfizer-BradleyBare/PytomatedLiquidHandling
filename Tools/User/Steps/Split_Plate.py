@@ -96,19 +96,23 @@ def Step(step):
 	#Get type for both new plates
 
 	PlateName = NewPlate1
-	PLATES.AddPlate(PlateName, NewPlateTypes[PlateName])
-	PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
+	if PLATES.GetPlate(PlateName) == None:
+		PLATES.AddPlate(PlateName, NewPlateTypes[PlateName])
+		PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
+		PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
 	PLATES.GetPlate(PlateName).SetContext(ParentContext + ":" + ParentPlate)	
 	PLATES.GetPlate(PlateName).SetFactors(NewPlate1Factors)
-	PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
+
 	#create the new plate 1
 
 	PlateName = NewPlate2
-	PLATES.AddPlate(PlateName, NewPlateTypes[PlateName])
-	PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
+	if PLATES.GetPlate(PlateName) == None:
+		PLATES.AddPlate(PlateName, NewPlateTypes[PlateName])
+		PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
+		PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
 	PLATES.GetPlate(PlateName).SetContext(ParentContext + ":" + ParentPlate)	
 	PLATES.GetPlate(PlateName).SetFactors(NewPlate2Factors)
-	PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
+
 	#create new plate 2
 
 	PLATES.GetPlate(ParentPlate).Deactivate()
