@@ -55,9 +55,15 @@ def Init(MutableStepsList, SequencesList):
 	for Step in MutableStepsList:
 		if Step.GetTitle() == TITLE:
 			IsUsedFlag = True
-			PLATES.AddPlate(VacuumConfig["VacuumPlates"][Step.GetParameters()[VACUUM_PLATE]]["Sequence"], "Vacuum", SequencesList)
+			PlateName = VacuumConfig["VacuumPlates"][Step.GetParameters()[VACUUM_PLATE]]["Sequence"]
+			PLATES.AddPlate(PlateName,  "Vacuum")
+			PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
+			PLATES.GetPlate(PlateName).SetContext(PlateName)	
+			PLATES.GetPlate(PlateName).SetFactors([1]*len(SAMPLES.GetSequences()))
+			PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
 			CONFIGURATION.AddOmitLoading(VacuumConfig["VacuumPlates"][Step.GetParameters()[VACUUM_PLATE]]["Sequence"])
-			PLATES.GetPlate(Step.GetParentPlate()).SetVacuumState()
+			print(Step.GetParentPlate())
+			#PLATES.GetPlate(Step.GetParentPlate()).SetVacuumState()
 			VacPlates.add(Step.GetParameters()[VACUUM_PLATE])
 
 	if len(VacPlates) > 1:
@@ -79,6 +85,8 @@ def Step(step):
 	VacPlate = step.GetParameters()[VACUUM_PLATE]
 	Pressure = step.GetParameters()[PRESSURE]
 	Time = step.GetParameters()[TIME]
+
+	PLATES.GetPlate(step.GetParentPlate()).SetVacuumState()
 
 	Plate = VacuumConfig["VacuumPlates"][VacPlate]["Sequence"]
 
