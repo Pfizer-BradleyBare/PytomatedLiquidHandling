@@ -133,7 +133,6 @@ while(True):
 	STEPS.UpdateStepParams(Step)
 	#This updates the actual step parameters at time the step is run. This allows for method development in real time
 
-
 	PLATES.GetPlate(Step.GetParentPlate()).SetContext(Step)
 	#This will switch the context in real time, allowing for complex pathways. Only the parent plate context is switched. No other plates are switched
 
