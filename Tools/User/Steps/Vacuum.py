@@ -56,14 +56,12 @@ def Init(MutableStepsList, SequencesList):
 		if Step.GetTitle() == TITLE:
 			IsUsedFlag = True
 			PlateName = VacuumConfig["VacuumPlates"][Step.GetParameters()[VACUUM_PLATE]]["Sequence"]
-			PLATES.AddPlate(PlateName,  "Vacuum")
+			PLATES.AddPlate(PlateName, "Vacuum")
 			PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
 			PLATES.GetPlate(PlateName).SetContext(PlateName)	
 			PLATES.GetPlate(PlateName).SetFactors([1]*len(SAMPLES.GetSequences()))
 			PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
 			CONFIGURATION.AddOmitLoading(VacuumConfig["VacuumPlates"][Step.GetParameters()[VACUUM_PLATE]]["Sequence"])
-			print(Step.GetParentPlate())
-			#PLATES.GetPlate(Step.GetParentPlate()).SetVacuumState()
 			VacPlates.add(Step.GetParameters()[VACUUM_PLATE])
 
 	if len(VacPlates) > 1:
@@ -87,6 +85,7 @@ def Step(step):
 	Time = step.GetParameters()[TIME]
 
 	PLATES.GetPlate(step.GetParentPlate()).SetVacuumState()
+	#The plate that we vacuum into needs to be a vacuum compatible plate. Set that here on a per step basis
 
 	Plate = VacuumConfig["VacuumPlates"][VacPlate]["Sequence"]
 

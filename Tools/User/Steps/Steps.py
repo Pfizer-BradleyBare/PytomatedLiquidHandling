@@ -81,7 +81,7 @@ class Class:
 	def __str__(self):
 		print("Step Title:", self.Title)
 		print("Step Coordinates: (",self.Row,",",self.Col,")")
-		print("Parent Plate:", self.Parent)
+		print("Parent Plate:", self.GetParentPlate())
 		return "Step Parameters: " + str(self.Parameters)
 
 	def __init__(self, Title):
@@ -108,10 +108,14 @@ class Class:
 	def GetCoordinates(self):
 		return (self.Row,self.Col)
 
-	def SetParentPlate(self, Parent):
+	def SetParentPlateStep(self, Parent):
 		self.Parent = Parent
-	def GetParentPlate(self):
+	
+	def GetParentPlateStep(self):
 		return self.Parent
+
+	def GetParentPlate(self):
+		return self.GetParentPlateStep().GetParameters()[PLATE.NAME]
 
 	def AddParameters(self, Key, Value):
 		self.Parameters[Key] = Value
@@ -129,8 +133,11 @@ def Init(PulledMethodSheet):
 
 		for col in range(0,EXCELIO.METHOD_COL_END - EXCELIO.METHOD_COL_START + 1):
 			
-			Name = None
-			Category = None	
+			Name = Class(PLATE.TITLE)
+			Name.SetCoordinates(None,None)
+			Name.SetParentPlateStep(None)
+			Name.AddParameters(PLATE.NAME,None)
+			Name.AddParameters(PLATE.TYPE,None)	
 			Row_List = []
 			
 			for row in range(0,EXCELIO.METHOD_ROW_END - EXCELIO.METHOD_ROW_START + 1):
@@ -141,12 +148,10 @@ def Init(PulledMethodSheet):
 				
 					Step = Class(PulledMethodSheet[row][col - 2])
 					Step.SetCoordinates(EXCELIO.METHOD_ROW_START + row - 1, EXCELIO.METHOD_COL_START + col - 2 - 1)
-					Step.SetParentPlate(Name)	
-					Step_Name = PulledMethodSheet[row][col - 2]
+					Step.SetParentPlateStep(Name)	
 
 					if Step.GetTitle() == PLATE.TITLE:
-						Name = PulledMethodSheet[row + 1][col - 1]
-						Category = PulledMethodSheet[row + 2][col - 1]
+						Name = Step
 
 					pr = 1
 					while(True):
@@ -216,8 +221,14 @@ def Init(PulledMethodSheet):
 
 					if Step.GetTitle() == SPLIT_PLATE.TITLE:
 						Remove_List.append(Path)
-						Add_List.append(__GetPathway(Step.GetParameters()[SPLIT_PLATE.NAME_1]))
-						Add_List.append(__GetPathway(Step.GetParameters()[SPLIT_PLATE.NAME_2]))
+						Pathway1 = __GetPathway(Step.GetParameters()[SPLIT_PLATE.NAME_1])
+						Pathway1[0].SetParentPlateStep(Step.GetParentPlateStep())
+
+						Pathway2 = __GetPathway(Step.GetParameters()[SPLIT_PLATE.NAME_2])
+						Pathway2[0].SetParentPlateStep(Step.GetParentPlateStep())
+						
+						Add_List.append(Pathway1)
+						Add_List.append(Pathway2)
 
 			for item in Remove_List:
 				Pathways.remove(item)

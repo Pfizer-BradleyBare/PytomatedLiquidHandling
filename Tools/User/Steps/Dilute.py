@@ -116,10 +116,10 @@ def Step(step):
 
 	LOG.EndCommentsLog()
 
-	FirstStep = LIQUID_TRANSFER.CreateStep(DestinationPlate,FirstSourceList,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,FirstVolumeList,Mix)
+	FirstStep = LIQUID_TRANSFER.CreateStep(step.GetParentPlateStep(),FirstSourceList,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,FirstVolumeList,Mix)
 	LIQUID_TRANSFER.Step(FirstStep)
 
-	SecondStep = LIQUID_TRANSFER.CreateStep(DestinationPlate,SecondSourceList,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,SecondVolumeList,SAMPLES.Column("Yes"))
+	SecondStep = LIQUID_TRANSFER.CreateStep(step.GetParentPlateStep(),SecondSourceList,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,SecondVolumeList,SAMPLES.Column("Yes"))
 	LIQUID_TRANSFER.Step(SecondStep)
 
 	#Do the diluent pipetting

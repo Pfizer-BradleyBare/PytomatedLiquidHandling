@@ -28,7 +28,7 @@ def Init():
 def CreateStep(DestinationPlate, Source, Type, Storage, Volume, Mixing):
 	NewStep = STEPS.Class(TITLE)
 	NewStep.SetCoordinates(STEPS.NOT_EXCEL_COORDINATES[0],STEPS.NOT_EXCEL_COORDINATES[1])
-	NewStep.SetParentPlate(DestinationPlate)
+	NewStep.SetParentPlateStep(DestinationPlate)
 
 	NewStep.AddParameters(NAME, Source)
 	NewStep.AddParameters(TYPE, Type)

@@ -132,12 +132,25 @@ while(True):
 	LOG.BeginStepLog()
 	STEPS.UpdateStepParams(Step)
 	#This updates the actual step parameters at time the step is run. This allows for method development in real time
+
+
+	PLATES.GetPlate(Step.GetParentPlate()).SetContext(Step)
+	#This will switch the context in real time, allowing for complex pathways. Only the parent plate context is switched. No other plates are switched
+
 	LOG.Step(Step)
 	Steps[Step.GetTitle()](Step)
+	#This does the step
 	LOG.EndStepLog()
 #do each step
 
-Plate = PLATES.GetPlates()
+Plates = PLATES.GetPlates()
+print("\n\n\n\n")
+
+for Plate in Plates:
+	print(Plate.GetName(),Plate.FactorsList)
+	print("\n\n")
+
+quit()
 
 if HAMILTONIO.IsSimulated() == True:
 

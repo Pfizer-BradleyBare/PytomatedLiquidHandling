@@ -20,41 +20,15 @@ def Init(MutableStepsList):
 	global IsUsedFlag
 
 	for Step in MutableStepsList[:]:
-		if False and Step.GetTitle() == TITLE:
+		if Step.GetTitle() == TITLE:
 			IsUsedFlag = True
+			index = MutableStepsList.index(Step)
+			MutableStepsList.remove(MutableStepsList[index+2])
+			MutableStepsList.remove(MutableStepsList[index+1])
+			#Remove the latter step first to prevent list shifting
+
+		#We want to remove the plate actions that follow a split plate. All plate related actions will occur in this action immeditely following a split plate
 			
-			PlateName = Step.GetParentPlate()
-			NewPlate1 = Step.GetParameters()[NAME_1]
-			NewPlate2 = Step.GetParameters()[NAME_2]
-			Factors1 = copy.deepcopy(PLATES.GetPlate(PlateName).GetFactors())
-			Factors2 = copy.deepcopy(PLATES.GetPlate(PlateName).GetFactors())
-			Choices = SAMPLES.Column(Step.GetParameters()[CHOICE])
-
-			for count in range(0,len(Choices)):
-				if Choices[count] == NewPlate1:
-					Factors1[count] *= 1
-					Factors2[count] *= 0
-				elif Choices[count] == NewPlate2:
-					Factors1[count] *= 0
-					Factors2[count] *= 1
-				else:
-					Factors1[count] *= 0.5
-					Factors2[count] *= 0.5
-
-			PLATES.GetPlate(NewPlate1).SetFactors(Factors1)
-			PLATES.GetPlate(NewPlate2).SetFactors(Factors2)
-
-	#for Step in MutableStepsList[:]:
-	#	if Step.GetTitle() == PLATE.TITLE:
-	#		PLATES.GetPlate(Step.GetParameters()[PLATE.NAME]).SetFactors(PLATES.GetPlate(Step.GetParentPlate()).GetFactors())
-	#update all children plates to have the same factor as the parent plate
-
-	#for plate in PLATES.GetDeadPlates():
-	#	for Step in MutableStepsList [:]:
-	#		if Step.GetParentPlate() == plate:
-	#			MutableStepsList.remove(Step)
-	#remove plates which have only factors of zero. Otherwise known as dead plates
-
 
 def Step(step):
 	LOG.BeginCommentsLog()
@@ -100,9 +74,8 @@ def Step(step):
 		PLATES.AddPlate(PlateName, NewPlateTypes[PlateName])
 		PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
 		PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
-	PLATES.GetPlate(PlateName).SetContext(ParentContext + ":" + ParentPlate)	
+	PLATES.GetPlate(PlateName).SetContext(step,PlateName)	
 	PLATES.GetPlate(PlateName).SetFactors(NewPlate1Factors)
-
 	#create the new plate 1
 
 	PlateName = NewPlate2
@@ -110,9 +83,8 @@ def Step(step):
 		PLATES.AddPlate(PlateName, NewPlateTypes[PlateName])
 		PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
 		PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
-	PLATES.GetPlate(PlateName).SetContext(ParentContext + ":" + ParentPlate)	
+	PLATES.GetPlate(PlateName).SetContext(step,PlateName)	
 	PLATES.GetPlate(PlateName).SetFactors(NewPlate2Factors)
-
 	#create new plate 2
 
 	PLATES.GetPlate(ParentPlate).Deactivate()

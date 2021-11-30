@@ -101,7 +101,7 @@ def Init(MutableStepsList):
 
 			PLATES.AddPlate("Desalting Waste", "96 Well PCR Plate")
 			PLATES.GetPlate("Desalting Waste").SetSequences(SAMPLES.GetSequences())
-			PLATES.GetPlate("Desalting Waste").SetContext("Desalting Waste")	
+			PLATES.GetPlate("Desalting Waste").SetContext(Step,"Desalting Waste")	
 			PLATES.GetPlate("Desalting Waste").SetFactors([1]*len(SAMPLES.GetSequences()))
 			PLATES.GetPlate("Desalting Waste").SetVolumes([0]*len(SAMPLES.GetSequences()))
 			

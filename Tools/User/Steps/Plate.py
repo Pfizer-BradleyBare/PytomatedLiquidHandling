@@ -21,15 +21,9 @@ def Init(MutableStepsList, SequencesList):
 	PlateName = step.GetParameters()[NAME]
 	PLATES.AddPlate(PlateName, step.GetParameters()[TYPE])
 	PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
-	PLATES.GetPlate(PlateName).SetContext(PlateName)	
+	PLATES.GetPlate(PlateName).SetContext(step,PlateName)	
 	PLATES.GetPlate(PlateName).SetFactors([1]*len(SAMPLES.GetSequences()))
 	PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
-
-	for Step in MutableStepsList[:]:
-		if Step.GetTitle() == TITLE:
-			if Step.GetParentPlate() == None:
-				MutableStepsList.remove(Step)
-	#Remove steps following a split plate.
 
 
 def Step(step):
@@ -41,12 +35,13 @@ def Step(step):
 	ParentContext = PLATES.GetPlate(ParentPlate).GetContext()
 	ParentFactors = PLATES.GetPlate(ParentPlate).GetFactors()
 
-	print(ParentContext + ":" + ParentPlate)
-	PLATES.AddPlate(step.GetParameters()[NAME], step.GetParameters()[TYPE])
-	PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
-	PLATES.GetPlate(PlateName).SetContext(ParentContext + ":" + ParentPlate)	
+	if PLATES.GetPlate(PlateName) == None:
+		PLATES.AddPlate(step.GetParameters()[NAME], step.GetParameters()[TYPE])
+		PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
+		PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
+	PLATES.GetPlate(PlateName).SetContext(step, PlateName)	
 	PLATES.GetPlate(PlateName).SetFactors(ParentFactors)
-	PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
+
 
 	PLATES.GetPlate(ParentPlate).Deactivate()
 	PLATES.GetPlate(PlateName).Activate()

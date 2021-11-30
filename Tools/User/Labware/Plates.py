@@ -46,7 +46,23 @@ class Class:
 	def GetContext(self):
 		return self.Context
 
-	def SetContext(self, Context):
+	def SetContext(self, Step, AppendText=""):
+
+		ParentPlate = Step.GetParentPlate()
+		ParentPlateStep = Step.GetParentPlateStep()
+		Context = ""
+
+		while ParentPlate != None:
+			Context = ParentPlate + ":" + Context
+			ParentPlate = ParentPlateStep.GetParentPlate()
+			ParentPlateStep = ParentPlateStep.GetParentPlateStep()
+
+		if AppendText == "":
+			Context = Context[:-1]
+		else:
+			Context = Context + AppendText
+		#This is an append text for special cases. Like creating a new plate and wanting it to have a seperate context.
+
 		self.Context = Context
 
 	def GetVacuumState(self):
