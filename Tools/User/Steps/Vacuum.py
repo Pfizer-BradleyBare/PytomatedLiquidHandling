@@ -72,13 +72,9 @@ def Init(MutableStepsList, SequencesList):
 
 
 	
-ParentPlateName = ""
-SkipTransportFlag = False
-
 def Step(step):
 	global VacuumConfig
 	global TransportConfig
-	global ParentPlateName
 
 	Destination = step.GetParentPlate()
 	SourcePlate = step.GetParameters()[SOURCE]
@@ -95,15 +91,7 @@ def Step(step):
 
 	Loading = CONFIGURATION.GetDeckLoading(Destination)
 
-
-	if Destination == ParentPlateName:
-		SkipTransportFlag = True
-	else:
-		SkipTransportFlag = False
-
-	ParentPlateName = Destination
-
-	if Loading != None and SkipTransportFlag == False:
+	if Loading != None and not (step.GetTitle() == STEPS.GetSteps()[STEPS.GetSteps().index(step)-1].GetTitle()):
 
 		Source = Loading["Sequence"]
 		Destination = VacuumConfig["PlateSequences"][Loading["Labware Name"]]
@@ -158,7 +146,7 @@ def Callback(step):
 	LOG.EndCommandLog()
 	#Start vacuum
 
-	if Loading != None and SkipTransportFlag == False:
+	if Loading != None and not (step.GetTitle() == STEPS.GetSteps()[STEPS.GetSteps().index(step)+1].GetTitle()):
 
 		Destination = VacuumConfig["Home"]
 		Source = VacuumConfig["Vacuum"]
