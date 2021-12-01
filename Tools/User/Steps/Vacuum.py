@@ -58,7 +58,7 @@ def Init(MutableStepsList, SequencesList):
 			PlateName = VacuumConfig["VacuumPlates"][Step.GetParameters()[VACUUM_PLATE]]["Sequence"]
 			PLATES.AddPlate(PlateName, "Vacuum")
 			PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
-			PLATES.GetPlate(PlateName).SetContext(PlateName)	
+			PLATES.GetPlate(PlateName).SetContext(Step)	
 			PLATES.GetPlate(PlateName).SetFactors([1]*len(SAMPLES.GetSequences()))
 			PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
 			CONFIGURATION.AddOmitLoading(VacuumConfig["VacuumPlates"][Step.GetParameters()[VACUUM_PLATE]]["Sequence"])

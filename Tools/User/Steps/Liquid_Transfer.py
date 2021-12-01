@@ -41,6 +41,7 @@ def CreateStep(DestinationPlate, Source, Type, Storage, Volume, Mixing):
 def Step(step):
 	LOG.BeginCommentsLog()
 
+	
 	DestinationPlate = step.GetParentPlate()
 
 	SourceList = SAMPLES.Column(step.GetParameters()[NAME])

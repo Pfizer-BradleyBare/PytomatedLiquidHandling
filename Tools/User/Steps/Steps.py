@@ -115,7 +115,10 @@ class Class:
 		return self.Parent
 
 	def GetParentPlate(self):
-		return self.GetParentPlateStep().GetParameters()[PLATE.NAME]
+		if isinstance(self.Parent,str):
+			return self.Parent
+		else:
+			return self.GetParentPlateStep().GetParameters()[PLATE.NAME]
 
 	def AddParameters(self, Key, Value):
 		self.Parameters[Key] = Value
