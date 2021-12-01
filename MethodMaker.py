@@ -47,6 +47,7 @@ import Tools.User.Labware.Solutions as SOLUTIONS
 
 import Tools.User.Steps.Plate as PLATE
 import Tools.User.Steps.Split_Plate as SPLIT_PLATE
+import Tools.User.Steps.Merge_Plate as MERGE_PLATE
 import Tools.User.Steps.Liquid_Transfer as LIQUID_TRANSFER
 import Tools.User.Steps.Dilute as DILUTE
 import Tools.User.Steps.Desalt as DESALT
@@ -79,6 +80,7 @@ SOLUTIONS.Init()
 
 PLATE.Init(STEPS.GetSteps(), SAMPLES.GetSequences())
 SPLIT_PLATE.Init(STEPS.GetSteps())
+MERGE_PLATE.Init(STEPS.GetSteps())
 LIQUID_TRANSFER.Init()
 DILUTE.Init()
 DESALT.Init(STEPS.GetSteps())
@@ -148,8 +150,6 @@ print("\n\n\n\n")
 for Plate in Plates:
 	print(Plate.GetName(),Plate.FactorsList)
 	print("\n\n")
-
-quit()
 
 if HAMILTONIO.IsSimulated() == True:
 

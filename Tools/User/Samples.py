@@ -90,6 +90,10 @@ def Init(SampleStartPosition, PulledWorkListSheet):
 
 	SampleSequence = Column(WORKLIST_SAMPLE_SEQUENCE)
 
+	if SampleSequence[0] == WORKLIST_SAMPLE_SEQUENCE:
+		SampleSequence = range(1,Num_Samples+1)
+	#If this column is not found (Hidden Option) then create the default
+
 	TotalSamplesArray = []
 	for index in range(0,len(SampleSequence)):
 		
