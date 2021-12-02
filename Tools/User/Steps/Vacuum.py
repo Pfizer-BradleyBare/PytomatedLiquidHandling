@@ -1,5 +1,6 @@
 from ..Steps import Steps as STEPS
 from ..Steps import Wait as WAIT
+from ..Steps import Plate as PLATE
 from ..Steps import Liquid_Transfer as LIQUID_TRANSFER
 from ...User import Samples as SAMPLES
 from ..Labware import Plates as PLATES
@@ -58,7 +59,7 @@ def Init(MutableStepsList, SequencesList):
 			PlateName = VacuumConfig["VacuumPlates"][Step.GetParameters()[VACUUM_PLATE]]["Sequence"]
 			PLATES.AddPlate(PlateName, "Vacuum")
 			PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
-			PLATES.GetPlate(PlateName).SetContext(Step)	
+			PLATES.GetPlate(PlateName).SetContext(Step, PlateName)	
 			PLATES.GetPlate(PlateName).SetFactors([1]*len(SAMPLES.GetSequences()))
 			PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
 			CONFIGURATION.AddOmitLoading(VacuumConfig["VacuumPlates"][Step.GetParameters()[VACUUM_PLATE]]["Sequence"])
@@ -89,9 +90,16 @@ def Step(step):
 
 	Plate = VacuumConfig["VacuumPlates"][VacPlate]["Sequence"]
 
+	PlateStep = STEPS.Class(PLATE.TITLE)
+	PlateStep.SetCoordinates(None,None)
+	PlateStep.SetParentPlateStep(step.GetParentPlateStep())
+	PlateStep.AddParameters(PLATE.NAME,Plate)
+	PlateStep.AddParameters(PLATE.TYPE,"Vacuum")	
+	#We are using this plate as a destination. Therfore we need a plate step to define it. Creating plate step.
+
 	Loading = CONFIGURATION.GetDeckLoading(Destination)
 
-	if Loading != None and not (step.GetTitle() == STEPS.GetSteps()[STEPS.GetSteps().index(step)-1].GetTitle()):
+	if not (step.GetTitle() == STEPS.GetSteps()[STEPS.GetSteps().index(step)-1].GetTitle()) and Loading != None:
 
 		Source = Loading["Sequence"]
 		Destination = VacuumConfig["PlateSequences"][Loading["Labware Name"]]
@@ -113,7 +121,7 @@ def Step(step):
 		LOG.EndCommandLog()
 		#Move manifold from park to vacuum
 
-	LTstep = LIQUID_TRANSFER.CreateStep(Plate,SourcePlate,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,Volume,"N/A")
+	LTstep = LIQUID_TRANSFER.CreateStep(PlateStep,SourcePlate,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,Volume,"N/A")
 	LIQUID_TRANSFER.Step(LTstep)
 	#Transfer liquid into vacuum plate
 
@@ -146,7 +154,7 @@ def Callback(step):
 	LOG.EndCommandLog()
 	#Start vacuum
 
-	if Loading != None and not (step.GetTitle() == STEPS.GetSteps()[STEPS.GetSteps().index(step)+1].GetTitle()):
+	if not (step.GetTitle() == STEPS.GetSteps()[STEPS.GetSteps().index(step)+1].GetTitle()) and Loading != None:
 
 		Destination = VacuumConfig["Home"]
 		Source = VacuumConfig["Vacuum"]

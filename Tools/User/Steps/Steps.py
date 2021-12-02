@@ -35,7 +35,7 @@ def StartStepSequence():
 	global Steps_List
 	global Temp_Steps_List
 
-	Temp_Steps_List = Steps_List[:]
+	Temp_Steps_List = copy.deepcopy(Steps_List)
 
 def GetNextStep(ActivePlates):
 	global Temp_Steps_List
@@ -115,9 +115,6 @@ class Class:
 		return self.Parent
 
 	def GetParentPlate(self):
-		if isinstance(self.Parent,str):
-			return self.Parent
-		else:
 			return self.GetParentPlateStep().GetParameters()[PLATE.NAME]
 
 	def AddParameters(self, Key, Value):

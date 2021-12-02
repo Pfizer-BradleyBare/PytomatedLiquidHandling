@@ -132,7 +132,15 @@ class Class:
 		global Plates_List
 		
 		VolumesList = self.GetVolumes()
-		DispenseHeights = CONFIGURATION.WellVolumeToDispenseHeight(self.GetName(),VolumesList)
+		FactorsList = self.GetFactors()
+
+		FinalVolumesList = []
+		for count in range(0,len(VolumesList)):
+			FinalVolumesList.append(VolumesList[count] + SourceVolumeList[count] * FactorsList[count])
+		#get the final volume present in each well ahead of time.
+
+		PreDispenseHeights = CONFIGURATION.WellVolumeToDispenseHeight(self.GetName(),VolumesList)
+		PostDispenseHeights = CONFIGURATION.WellVolumeToDispenseHeight(self.GetName(),FinalVolumesList)
 		DestinationPosition = self.GetSequences()
 		Expanded = []
 
@@ -156,7 +164,7 @@ class Class:
 						SourcePosition = Plate.GetSequences()[count][count2]
 					#Modify source position to be different if needed because it is a plate and not a reagent
 
-					Expanded.append({"Destination Position":int(float(DestinationPosition[count][count2])),"Destination":self.GetName(), "Source Position":int(float(SourcePosition)), "Source":SourceList[count], "Volume":ActualVolume, "Height":DispenseHeights[count], "Total":VolumesList[count], "Mix":MixList[count]})
+					Expanded.append({"Destination Position":int(float(DestinationPosition[count][count2])),"Destination":self.GetName(), "Source Position":int(float(SourcePosition)), "Source":SourceList[count], "Volume":ActualVolume, "PreDispenseHeight":PreDispenseHeights[count], "PostDispenseHeight":PostDispenseHeights[count], "Total":VolumesList[count], "Mix":MixList[count]})
 			
 				self.GetVolumes()[count] += ActualVolume
 				self.UpdateMaxVolume()

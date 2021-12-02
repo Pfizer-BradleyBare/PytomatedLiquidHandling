@@ -19,7 +19,8 @@ def Transfer(Sequences):
 	Source = ""
 	SourcePos = ""
 	Volume = ""
-	DestHeight = ""
+	PreDestHeight = ""
+	PostDestHeight = ""
 	TotalVolume = ""
 	Mix = ""
 
@@ -29,7 +30,8 @@ def Transfer(Sequences):
 		Source += str(Sequence["Source"]) + HAMILTONIO.GetDelimiter()
 		SourcePos += str(Sequence["Source Position"]) + HAMILTONIO.GetDelimiter()
 		Volume += "{0:.2f}".format(float(Sequence["Volume"])) + HAMILTONIO.GetDelimiter()
-		DestHeight += "{0:.2f}".format(float(Sequence["Height"])) + HAMILTONIO.GetDelimiter()
+		PreDestHeight += "{0:.2f}".format(float(Sequence["PreDispenseHeight"])) + HAMILTONIO.GetDelimiter()
+		PostDestHeight += "{0:.2f}".format(float(Sequence["PostDispenseHeight"])) + HAMILTONIO.GetDelimiter()
 		TotalVolume += "{0:.2f}".format(float(Sequence["Total"])) + HAMILTONIO.GetDelimiter()
 		Mix += Sequence["Mix"] + HAMILTONIO.GetDelimiter()
 
@@ -41,7 +43,8 @@ def Transfer(Sequences):
 	CommandString += "[Source]" + Source[:-1*len(HAMILTONIO.GetDelimiter())] 
 	CommandString += "[SourcePosition]" + SourcePos[:-1*len(HAMILTONIO.GetDelimiter())] 
 	CommandString += "[TransferVolume]" + Volume[:-1*len(HAMILTONIO.GetDelimiter())] 
-	CommandString += "[DestinationHeight]" + DestHeight[:-1*len(HAMILTONIO.GetDelimiter())]  
+	CommandString += "[PreDestinationHeight]" + PreDestHeight[:-1*len(HAMILTONIO.GetDelimiter())]  
+	CommandString += "[PostDestinationHeight]" + PostDestHeight[:-1*len(HAMILTONIO.GetDelimiter())]  
 	CommandString += "[Total]" + TotalVolume[:-1*len(HAMILTONIO.GetDelimiter())] 
 	CommandString += "[Mix]" + Mix[:-1*len(HAMILTONIO.GetDelimiter())] + "\n"
 
