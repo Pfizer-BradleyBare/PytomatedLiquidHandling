@@ -139,10 +139,15 @@ class Class:
 			FinalVolumesList.append(VolumesList[count] + SourceVolumeList[count] * FactorsList[count])
 		#get the final volume present in each well ahead of time.
 
+		print("FINAL",FinalVolumesList)
+
 		PreDispenseHeights = CONFIGURATION.WellVolumeToDispenseHeight(self.GetName(),VolumesList)
 		PostDispenseHeights = CONFIGURATION.WellVolumeToDispenseHeight(self.GetName(),FinalVolumesList)
 		DestinationPosition = self.GetSequences()
 		Expanded = []
+
+		print(PreDispenseHeights)
+		print(PostDispenseHeights)
 
 		for count in range(0,len(DestinationPosition)):
 

@@ -99,7 +99,7 @@ def Step(step):
 
 	Loading = CONFIGURATION.GetDeckLoading(Destination)
 
-	if not (step.GetTitle() == STEPS.GetSteps()[STEPS.GetSteps().index(step)-1].GetTitle()) and Loading != None:
+	if not (step.GetTitle() == STEPS.GetSteps()[STEPS.GetStepIndex(step)-1].GetTitle()) and Loading != None:
 
 		Source = Loading["Sequence"]
 		Destination = VacuumConfig["PlateSequences"][Loading["Labware Name"]]
@@ -154,7 +154,7 @@ def Callback(step):
 	LOG.EndCommandLog()
 	#Start vacuum
 
-	if not (step.GetTitle() == STEPS.GetSteps()[STEPS.GetSteps().index(step)+1].GetTitle()) and Loading != None:
+	if not (step.GetTitle() == STEPS.GetSteps()[STEPS.GetStepIndex(step)+1].GetTitle()) and Loading != None:
 
 		Destination = VacuumConfig["Home"]
 		Source = VacuumConfig["Vacuum"]

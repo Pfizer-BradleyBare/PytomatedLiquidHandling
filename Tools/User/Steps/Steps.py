@@ -73,6 +73,13 @@ def GetSteps():
 	global Steps_List
 	return Steps_List
 
+def GetStepIndex(Step):
+	Steps = GetSteps()
+
+	for index in range(0,len(Steps)):
+		if Step == Steps[index]:
+			return index
+
 def GetStartingPlate():
 	global StartingPlateName
 	return StartingPlateName

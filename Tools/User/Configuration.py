@@ -72,6 +72,7 @@ def WellVolumeToDispenseHeight(PlateName, WellVolumes):
 	LabwareLoading = GetDeckLoading(PlateName)
 
 	if not LabwareLoading:
+		print("NOT FOUND!!!")
 		return [0]*len(WellVolumes)
 
 	Segments = SysConfig["VolumeEquations"][LabwareLoading["Labware Name"]]
