@@ -5,8 +5,10 @@ def PreRun(VolumesArray):
 	CommandString = ""
 	CommandString += "[PreRun]\n"
 	CommandString += "[Pipette]\n" 
+	VolumeString = ""
 	for Volume in VolumesArray:
-		CommandString += "[Volume]" + str(Volume) + "\n"
+		VolumeString += str(Volume) + HAMILTONIO.GetDelimiter()
+	CommandString += "[Volume]" + VolumeString[:-1] + "\n"
 
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
