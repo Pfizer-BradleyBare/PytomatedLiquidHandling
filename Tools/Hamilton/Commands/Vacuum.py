@@ -3,8 +3,8 @@ from ...General import Log as LOG
 
 def PreRun(Params):
 	CommandString = ""
-	CommandString += "[PreRun]\n"
-	CommandString += "[Vacuum]\n"
+	CommandString += "[Module]PreRun"
+	CommandString += "[Command]Vacuum"
 	CommandString += "[ID]" + str(Params["ID"]) + "[Plate]" + str(Params["Plate"]) + "\n"
 
 	HAMILTONIO.Push(CommandString)
@@ -14,8 +14,8 @@ def PreRun(Params):
 #this function will start a timer for a specified plate
 def Start(Pressure, Time):
 	CommandString = ""
-	CommandString += "[Vacuum]\n"
-	CommandString += "[Start]\n"
+	CommandString += "[Module]Vacuum"
+	CommandString += "[Command]Start"
 	CommandString += "[Pressure]" + str(Pressure) + "[Time]" + str(Time) + "\n"
 
 	if LOG.CommandInLog(CommandString) != True:
@@ -28,8 +28,8 @@ def Start(Pressure, Time):
 #this function will wait on a plate timer
 def Wait():
 	CommandString = ""
-	CommandString += "[Vaccum]\n"
-	CommandString += "[Wait]\n"
+	CommandString += "[Module]Vacuum"
+	CommandString += "[Command]Wait"
 
 	if LOG.CommandInLog(CommandString) != True:
 		LOG.Command(CommandString)

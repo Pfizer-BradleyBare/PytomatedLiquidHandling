@@ -3,8 +3,8 @@ from ...General import Log as LOG
 
 def PreRun(StepDict):
 	CommandString = ""
-	CommandString += "[PreRun]\n"
-	CommandString += "[Log]\n" 
+	CommandString += "[Module]PreRun"
+	CommandString += "[Command]Log" 
 	CommandString += "[Title]" + StepDict["Title"] + "[Coordinates]" + StepDict["Coordinates"] + "\n"
 
 	HAMILTONIO.Push(CommandString)

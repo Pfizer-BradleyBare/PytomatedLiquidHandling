@@ -4,8 +4,8 @@ from ...General import Log as LOG
 
 def PreRun(Params):
 	CommandString = ""
-	CommandString += "[PreRun]\n"
-	CommandString += "[Desalt]\n"
+	CommandString += "[Module]PreRun"
+	CommandString += "[Command]Desalt"
 	CommandString += "[Tips]" + str(Params["Required Tips"])
 	CommandString += "[Types]" + str(Params["Type"]).replace(",",HAMILTONIO.GetDelimiter())
 	CommandString += "[Volumes]" + str(Params["Volume"]).replace(",",HAMILTONIO.GetDelimiter())
@@ -21,8 +21,8 @@ def PreRun(Params):
 #this function should start an equilibration on the Hamilton system. If this function is called twice, for whatever reason, the Hamilton should know the tips are equilibrated. 
 def Equilibrate():
 	CommandString = ""
-	CommandString += "[Desalt]\n"
-	CommandString += "[Equilibrate]\n"
+	CommandString += "[Module]Desalt"
+	CommandString += "[Command]Equilibrate"
 
 	if LOG.CommandInLog(CommandString) != True:
 		LOG.Command(CommandString)
@@ -34,8 +34,8 @@ def Equilibrate():
 #this function should start to process the samples through the desalting tips. The tips are assumed to be equilibrated. It is possible to equilibrate during this step if it hasn't been done yet.
 def Process():
 	CommandString = ""
-	CommandString += "[Desalt]\n"
-	CommandString += "[Process]\n"
+	CommandString += "[Module]Desalt"
+	CommandString += "[Command]Process"
 
 	if LOG.CommandInLog(CommandString) != True:
 		LOG.Command(CommandString)

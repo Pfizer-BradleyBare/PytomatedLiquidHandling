@@ -3,8 +3,8 @@ from ...General import Log as LOG
 
 def PreRun(HeaterList):
 	CommandString = ""
-	CommandString += "[PreRun]\n"
-	CommandString += "[Heater]\n"
+	CommandString += "[Module]PreRun"
+	CommandString += "[Command]Heater"
 	for Heater in HeaterList:
 		CommandString += "[ID]" + str(Heater["ID"]) + "[Type]" + str(Heater["Type"]) + "\n"
 	
@@ -14,8 +14,8 @@ def PreRun(HeaterList):
 
 def StartHeating(ID, Temp):
 	CommandString = ""
-	CommandString += "[Heater]\n"
-	CommandString += "[Start Heat]\n"
+	CommandString += "[Module]Heater"
+	CommandString += "[Command]Start Heat"
 	CommandString += "[ID]" + str(ID) + "[Temp]" + str(Temp) + "\n"
 
 	if LOG.CommandInLog(CommandString) != True:
@@ -28,8 +28,8 @@ def StartHeating(ID, Temp):
 
 def StopHeating(ID):
 	CommandString = ""
-	CommandString += "[Heater]\n"
-	CommandString += "[Stop Heat]\n"
+	CommandString += "[Module]Heater"
+	CommandString += "[Command]Stop Heat"
 	CommandString += "[ID]" + str(ID) + "\n"
 
 	if LOG.CommandInLog(CommandString) != True:
@@ -42,8 +42,8 @@ def StopHeating(ID):
 
 def StartShaking(ID, RPM):
 	CommandString = ""
-	CommandString += "[Heater]\n"
-	CommandString += "[Start Shake]\n"
+	CommandString += "[Module]Heater"
+	CommandString += "[Command]Start Shake"
 	CommandString += "[ID]" + str(ID) + "[RPM]" + str(RPM) + "\n"
 
 	if LOG.CommandInLog(CommandString) != True:
@@ -55,8 +55,8 @@ def StartShaking(ID, RPM):
 
 def StopShaking(ID):
 	CommandString = ""
-	CommandString += "[Heater]\n"
-	CommandString += "[Stop Shake]\n"
+	CommandString += "[Module]Heater"
+	CommandString += "[Command]Stop Shake"
 	CommandString += "[ID]" + str(ID) + "\n"
 	
 	if LOG.CommandInLog(CommandString) != True:

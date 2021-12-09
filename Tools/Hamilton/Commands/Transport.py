@@ -3,8 +3,8 @@ from ...General import Log as LOG
 
 def PreRun():
 	CommandString = ""
-	CommandString += "[PreRun]\n"
-	CommandString += "[Transport]\n"
+	CommandString += "[Module]PreRun"
+	CommandString += "[Command]Transport"
 
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
@@ -12,8 +12,8 @@ def PreRun():
 	
 def Move(SourceSeq, DestinationSeq, OpenDistance, CloseDistance, GripHeight, Eject, Check):
 	CommandString = ""
-	CommandString += "[Transport]\n"
-	CommandString += "[Move]\n"
+	CommandString += "[Module]Transport"
+	CommandString += "[Command]Move"
 	CommandString += "[Source]" + str(SourceSeq) + "[Destination]" + str(DestinationSeq) + "[Open]" + str(OpenDistance) + "[Close]" + str(CloseDistance) + "[Grip]" + str(GripHeight) + "[Eject]" + str(Eject) + "[Check]" + str(Check) + "\n"
 	
 	if LOG.CommandInLog(CommandString) != True:

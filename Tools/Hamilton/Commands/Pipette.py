@@ -3,8 +3,8 @@ from ...General import Log as LOG
 
 def PreRun(VolumesArray):
 	CommandString = ""
-	CommandString += "[PreRun]\n"
-	CommandString += "[Pipette]\n" 
+	CommandString += "[Module]PreRun"
+	CommandString += "[Command]Pipette" 
 	VolumeString = ""
 	for Volume in VolumesArray:
 		VolumeString += str(Volume) + HAMILTONIO.GetDelimiter()
@@ -38,8 +38,8 @@ def Transfer(Sequences):
 		Mix += Sequence["Mix"] + HAMILTONIO.GetDelimiter()
 
 	CommandString = ""
-	CommandString += "[Pipette]\n"
-	CommandString += "[Transfer]\n"
+	CommandString += "[Module]Pipette"
+	CommandString += "[Command]Transfer"
 	CommandString += "[Destination]" + Dest[:-1*len(HAMILTONIO.GetDelimiter())]
 	CommandString += "[DestinationPosition]" + DestPos[:-1*len(HAMILTONIO.GetDelimiter())]
 	CommandString += "[Source]" + Source[:-1*len(HAMILTONIO.GetDelimiter())] 
@@ -77,8 +77,8 @@ def Correct(Sequences):
 		TotalVolume += "{0:.2f}".format(float(Sequence["Total"])) + HAMILTONIO.GetDelimiter()
 
 	CommandString = ""
-	CommandString += "[Pipette]\n"
-	CommandString += "[Correct]\n"
+	CommandString += "[Module]Pipette"
+	CommandString += "[Command]Correct"
 	CommandString += "[Destination]" + Dest[:-1*len(HAMILTONIO.GetDelimiter())]
 	CommandString += "[DestinationPosition]" + DestPos[:-1*len(HAMILTONIO.GetDelimiter())]
 	CommandString += "[Total]" + TotalVolume[:-1*len(HAMILTONIO.GetDelimiter())] 

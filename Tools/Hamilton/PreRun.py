@@ -12,10 +12,12 @@ from ..Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 
 def CheckSequences(SequencesList):
 	CommandString = ""
-	CommandString += "[PreRun]\n"
-	CommandString += "[Check Sequences]\n"
+	CommandString += "[Module]PreRun"
+	CommandString += "[Command]Check Sequences"
+	SequencesString = ""
 	for Sequence in SequencesList:
-		CommandString += "[Sequence]" + str(Sequence) + "\n"
+		SequencesString += str(Sequence) + HAMILTONIO.GetDelimiter()
+	CommandString += "[Sequence]" + SequencesString[:-1] + "\n"
 	HAMILTONIO.Push(CommandString)
 	Response = HAMILTONIO.Pull()
 	return True
@@ -24,16 +26,45 @@ def CheckSequences(SequencesList):
 #This function send the loading list to the Hamilton.
 def Labware(LoadingList):
 	CommandString = ""
-	CommandString += "[PreRun]\n"
-	CommandString += "[Labware]\n"
+	CommandString += "[Module]PreRun"
+	CommandString += "[Command]Labware"
+
+
+	Names = ""
+	LabwareSequences = ""
+	LidSequences = ""
+	LoadingLocations = ""
+	LabwareVolumes = ""
+	LabwareTypes = ""
+	LabwareCategories = ""
+	LabwareNames = ""
+
 	for Labware in LoadingList:
-		CommandString += "[Name]" + str(Labware) + "[LabwareSequence]" + str(LoadingList[Labware]["Sequence"]) + "[LidSequence]" + str(LoadingList[Labware]["Lid"])  
-		CommandString += "[LoadingLocation]" + str(LoadingList[Labware]["LoadingPosition"])
+		Names += str(Labware) + HAMILTONIO.GetDelimiter()
+		LabwareSequences += str(LoadingList[Labware]["Sequence"]) + HAMILTONIO.GetDelimiter()
+		LidSequences += str(LoadingList[Labware]["Lid"]) + HAMILTONIO.GetDelimiter()
+		LoadingLocations += str(LoadingList[Labware]["LoadingPosition"]) + HAMILTONIO.GetDelimiter()
+
 		if str(LoadingList[Labware]["Labware Category"]) == "Plates":
-			CommandString += "[Volume]" + str(LoadingList[Labware]["Max Volume"])
+			LabwareVolumes += str(LoadingList[Labware]["Max Volume"]) + HAMILTONIO.GetDelimiter()
 		else:
-			CommandString += "[Volume]" + str(LoadingList[Labware]["Volume"])
-		CommandString += "[LabwareType]" + str(LoadingList[Labware]["Labware Type"]) + "[LabwareCategory]" + str(LoadingList[Labware]["Labware Category"]) + "[LabwareName]" + str(LoadingList[Labware]["Labware Name"]) + "\n"
+			LabwareVolumes += str(LoadingList[Labware]["Volume"]) + HAMILTONIO.GetDelimiter()
+
+		LabwareTypes += str(LoadingList[Labware]["Labware Type"]) + HAMILTONIO.GetDelimiter()
+		LabwareCategories += str(LoadingList[Labware]["Labware Category"]) + HAMILTONIO.GetDelimiter()
+		LabwareNames += str(LoadingList[Labware]["Labware Name"]) + HAMILTONIO.GetDelimiter()
+
+	CommandString = ""
+	CommandString += "[Module]PreRun"
+	CommandString += "[Command]Labware"
+	CommandString += "[Name]" + Names[:-1*len(HAMILTONIO.GetDelimiter())]
+	CommandString += "[LabwareSequence]" + LabwareSequences[:-1*len(HAMILTONIO.GetDelimiter())]
+	CommandString += "[LidSequence]" + LidSequences[:-1*len(HAMILTONIO.GetDelimiter())] 
+	CommandString += "[LoadingLocation]" + LoadingLocations[:-1*len(HAMILTONIO.GetDelimiter())] 
+	CommandString += "[Volume]" + LabwareVolumes[:-1*len(HAMILTONIO.GetDelimiter())] 
+	CommandString += "[LabwareType]" + LabwareTypes[:-1*len(HAMILTONIO.GetDelimiter())]  
+	CommandString += "[LabwareCategory]" + LabwareCategories[:-1*len(HAMILTONIO.GetDelimiter())]  
+	CommandString += "[LabwareName]" + LabwareNames[:-1*len(HAMILTONIO.GetDelimiter())] 
 
 	print(CommandString)
 
@@ -43,8 +74,8 @@ def Labware(LoadingList):
 
 def Samples(NumSamples):
 	CommandString = ""
-	CommandString += "[PreRun]\n"
-	CommandString += "[Samples]\n"
+	CommandString += "[Module]PreRun"
+	CommandString += "[Command]Samples"
 	CommandString += "[SampleNumber]" + str(NumSamples) + "\n"
 	
 	HAMILTONIO.Push(CommandString)
