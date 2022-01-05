@@ -53,6 +53,7 @@ def Step(step):
 	for Source in SourceList:
 		SOLUTIONS.AddSolution(Source, step.GetParameters()[TYPE], step.GetParameters()[STORAGE])
 
+	
 	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList,MixList)
 	
 	_Temp = copy.deepcopy(Sequences)
