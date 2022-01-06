@@ -164,7 +164,7 @@ if HAMILTONIO.IsSimulated() == True:
 
 	PRERUN.Samples(SAMPLES.GetTotalSamples())
 	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
-	PRERUN.CheckSequences(CONFIGURATION.GetCheckSequences())
+	#PRERUN.CheckSequences(CONFIGURATION.GetCheckSequences())
 	PRERUN.Labware(Labware)
 
 	CONFIGURATION.WriteLoadingInformation(Labware)
@@ -183,8 +183,8 @@ if HAMILTONIO.IsSimulated() == True:
 	if NOTIFY.IsUsed() == True:
 		PRERUN.NOTIFY.PreRun()
 	
-	if DESALT.IsUsed() == True:
-		PRERUN.DESALT.PreRun(DESALT.GetDesaltParams())
+	#if DESALT.IsUsed() == True:
+		#PRERUN.DESALT.PreRun(DESALT.GetDesaltParams())
 
 	if WAIT.IsUsed() == True:
 		PRERUN.TIMER.PreRun()
