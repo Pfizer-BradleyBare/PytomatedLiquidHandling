@@ -162,12 +162,9 @@ if HAMILTONIO.IsSimulated() == True:
 	if GenerateList == False and TestRun == False:
 		HAMILTONIO.Simulated(False)
 
-	print("Send Samples")
 	PRERUN.Samples(SAMPLES.GetTotalSamples())
-	print("Send Samples")
 	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
 	PRERUN.Labware(Labware)
-	print("Send Samples")
 
 	CONFIGURATION.WriteLoadingInformation(Labware)
 
