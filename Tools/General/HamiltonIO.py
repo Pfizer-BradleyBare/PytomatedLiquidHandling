@@ -9,7 +9,7 @@ HAMILTON_COMMAND_TEMP_FILE = os.path.join(BaseFolder, Folder,"Temp_Command.txt")
 HAMILTON_RESPONSE_TEMP_FILE = os.path.join(BaseFolder, Folder,"Temp_Response.txt")
 HAMILTON_RESPONSE_FILE = os.path.join(BaseFolder, Folder,"Response.txt")
 
-COMMAND_DELIMITER = ",,,"
+COMMAND_DELIMITER = ";;;"
 
 def GetDelimiter():
 	global COMMAND_DELIMITER
