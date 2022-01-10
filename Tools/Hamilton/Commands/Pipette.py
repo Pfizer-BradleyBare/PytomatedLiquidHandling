@@ -43,8 +43,13 @@ def Transfer(Sequences):
 	CommandString += "[TransferVolume]" + Volume[:-1*len(HAMILTONIO.GetDelimiter())] 
 	CommandString += "[CurrentDestinationVolume]" + CurDestVol[:-1*len(HAMILTONIO.GetDelimiter())]  
 	CommandString += "[Mix]" + Mix[:-1*len(HAMILTONIO.GetDelimiter())] + "\n"
+	CommandString += "[TipSequence]" + "50Seq, 300Seq, 50" + "\n" #I have to include this for cross module support
+	CommandString += "[LiquidClass]" + "Pipette,Desalting,Pipette,MagneticBeads" + "\n" #I have to include this for cross module support
+
+
 
 	print(CommandString)
+	quit()
 
 	if LOG.CommandInLog(CommandString) != True:
 		LOG.Command(CommandString)
