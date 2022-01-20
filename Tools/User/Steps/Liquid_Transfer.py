@@ -78,9 +78,26 @@ def Step(step):
 
 	LOG.EndCommentsLog()
 
-	LOG.BeginCommandLog()
+	
 	if len(Sequences) != 0:
-		PIPETTE.Transfer(Sequences)
-	LOG.EndCommandLog()
+
+		TransferVolumes = [str(x["Volume"]) for x in Sequences]
+
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings(TransferVolumes,["Water"]*len(TransferVolumes)), True)
+		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings(TransferVolumes), True)
+
+		Response = HAMILTONIO.SendCommands()
+
+		if Response == False:
+			LiquidClassStrings = []
+			TipSequenceStrings = []
+		else:
+			LiquidClassStrings = Response[0]["LiquidClassStrings"]
+			TipSequenceStrings = Response[1]["TipSequenceStrings"]
+
+		HAMILTONIO.AddCommand(PIPETTE.Transfer(Sequences,LiquidClassStrings,TipSequenceStrings), True)
+		Response = HAMILTONIO.SendCommands()
+
+
 
 

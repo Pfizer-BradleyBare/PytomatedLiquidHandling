@@ -8,13 +8,10 @@ def PreRun(VolumesArray):
 	VolumeString = ""
 	for Volume in VolumesArray:
 		VolumeString += str(Volume) + HAMILTONIO.GetDelimiter()
-	CommandString += "[Volume]" + VolumeString[:-1] + "\n"
+	CommandString += "[Volume]" + VolumeString[:-1*len(HAMILTONIO.GetDelimiter())]
+	return CommandString
 
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
-	return True
-
-def Transfer(Sequences):
+def Transfer(Sequences, LiquidClassStrings, TipSequenceStrings):
 
 	Dest = ""
 	DestPos = ""
@@ -35,30 +32,33 @@ def Transfer(Sequences):
 
 	CommandString = ""
 	CommandString += "[Module]Pipette"
-	CommandString += "[Command]Transfer"
+	CommandString += "[Command]TransferLiquid"
 	CommandString += "[Destination]" + Dest[:-1*len(HAMILTONIO.GetDelimiter())]
 	CommandString += "[DestinationPosition]" + DestPos[:-1*len(HAMILTONIO.GetDelimiter())]
 	CommandString += "[Source]" + Source[:-1*len(HAMILTONIO.GetDelimiter())] 
 	CommandString += "[SourcePosition]" + SourcePos[:-1*len(HAMILTONIO.GetDelimiter())] 
 	CommandString += "[TransferVolume]" + Volume[:-1*len(HAMILTONIO.GetDelimiter())] 
 	CommandString += "[CurrentDestinationVolume]" + CurDestVol[:-1*len(HAMILTONIO.GetDelimiter())]  
-	CommandString += "[Mix]" + Mix[:-1*len(HAMILTONIO.GetDelimiter())] + "\n"
-	CommandString += "[TipSequence]" + "50Seq, 300Seq, 50" + "\n" #I have to include this for cross module support
-	CommandString += "[LiquidClass]" + "Pipette,Desalting,Pipette,MagneticBeads" + "\n" #I have to include this for cross module support
+	CommandString += "[Mix]" + Mix[:-1*len(HAMILTONIO.GetDelimiter())]
+	CommandString += "[TipSequence]" + HAMILTONIO.GetDelimiter().join(TipSequenceStrings) #I have to include this for cross module support
+	CommandString += "[LiquidClass]" + HAMILTONIO.GetDelimiter().join(LiquidClassStrings) #I have to include this for cross module support
+	CommandString += "[KeepTips]" + "True or False"
+	return CommandString
 
+def GetLiquidClassStrings(TransferVolumesArray, LiquidCategoriesArray):
+	CommandString = ""
+	CommandString += "[Module]Pipette"
+	CommandString += "[Command]GetLiquidClassStrings"
+	CommandString += "[TransferVolume]" + HAMILTONIO.GetDelimiter().join(TransferVolumesArray)
+	CommandString += "[LiquidCategory]" + HAMILTONIO.GetDelimiter().join(LiquidCategoriesArray)
+	return CommandString
 
-
-	print(CommandString)
-	quit()
-
-	if LOG.CommandInLog(CommandString) != True:
-		LOG.Command(CommandString)
-		HAMILTONIO.Push(CommandString)
-		Response = HAMILTONIO.Pull()
-		LOG.CommandID()
-	return True
-	#response is not parsed for this command
-
+def GetTipSequenceStrings(TransferVolumesArray):
+	CommandString = ""
+	CommandString += "[Module]Pipette"
+	CommandString += "[Command]GetTipSequenceStrings"
+	CommandString += "[TransferVolume]" + HAMILTONIO.GetDelimiter().join(TransferVolumesArray)
+	return CommandString
 
 def Correct(Sequences):
 
@@ -83,14 +83,7 @@ def Correct(Sequences):
 	CommandString += "[Destination]" + Dest[:-1*len(HAMILTONIO.GetDelimiter())]
 	CommandString += "[DestinationPosition]" + DestPos[:-1*len(HAMILTONIO.GetDelimiter())]
 	CommandString += "[Total]" + TotalVolume[:-1*len(HAMILTONIO.GetDelimiter())] 
-
-	if LOG.CommandInLog(CommandString) != True:
-		LOG.Command(CommandString)
-		HAMILTONIO.Push(CommandString)
-		Response = HAMILTONIO.Pull()
-		LOG.CommandID()
-	return True
-	#response is not parsed for this command
+	return CommandString
 
 
 

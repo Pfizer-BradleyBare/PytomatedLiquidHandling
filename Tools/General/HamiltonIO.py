@@ -1,6 +1,7 @@
 
 import os
 import time
+from ..General import Log as LOG
 
 BaseFolder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 Folder = "CommunicationFolder"
@@ -39,13 +40,39 @@ def Simulated(Simulate):
 def IsSimulated():
 	global SimulatedIO
 	return SimulatedIO
+
+CommandsList = []
+def AddCommand(CommandString, Log):
+	global CommandsList
+
+	LOG.BeginCommandLog()
+
+	if LOG.CommandInLog(CommandString) != True:
+		LOG.Command(CommandString)
+		CommandsList.append(CommandString)
+		if Log == True:
+			LOG.CommandID()
+
+	LOG.EndCommandLog()
+
 ######################################################################### 
 #	Description: Pushes a command to the communication channel for the Hamilton.
 #	The first file creates is a temporary file. As soon as write is complete the file is renamed to a file the Hamilton expects.
 #	Input Arguments: [Command: String]
 #	Returns: N/A
 #########################################################################
-def Push(Command):
+def SendCommands():
+	global CommandsList
+	
+	#Create the command list to send
+	Command = ""
+	for CommandString in CommandsList:
+		Command = Command + CommandString + "\n"
+
+	#Reset CommandsList
+	CommandsList = []
+
+	#Send the command list
 	global SimulatedIO
 	if SimulatedIO == False:
 		file = open(HAMILTON_COMMAND_TEMP_FILE, "w")
@@ -53,26 +80,48 @@ def Push(Command):
 		file.close()
 		os.rename(HAMILTON_COMMAND_TEMP_FILE, HAMILTON_COMMAND_FILE)
 
+		#Wait for Hamilton Response
+		while os.path.exists(HAMILTON_RESPONSE_FILE) == False:
+			time.sleep(0.1)
+
+		#Wait a little longer so Hamilton will release it.
+		time.sleep(0.1)
+
+		#Read it and evaluate into an array of dictionaries
+		file = open(HAMILTON_RESPONSE_FILE, "r")
+		Response = file.read()
+		print(Response)
+		Response = eval(Response)
+		file.close()
+		os.remove(HAMILTON_RESPONSE_FILE)
+		
+		if Response == []:
+			file = open(HAMILTON_COMMAND_TEMP_FILE, "w")
+			file.write("END")
+			file.close()
+			os.rename(HAMILTON_COMMAND_TEMP_FILE, HAMILTON_COMMAND_FILE)
+			quit()
+		return Response
+	return False
+
+######################################################################### 
+#	Description: Pushes a command to the communication channel for the Hamilton.
+#	The first file creates is a temporary file. As soon as write is complete the file is renamed to a file the Hamilton expects.
+#	Input Arguments: [Command: String]
+#	Returns: N/A
+#########################################################################
+def Push(Command):
+	pass
+
 ######################################################################### 
 #	Description: Reads a response from the Hamilton. As soon as the response is read the file is deleted.
 #	Input Arguments: N/A
 #	Returns: [String]
 #########################################################################
 def Pull():
-	global SimulatedIO
-	if SimulatedIO == False:
-		while os.path.exists(HAMILTON_RESPONSE_FILE) == False:
-			time.sleep(0.1)
+	pass
 
-		time.sleep(0.1)
-		file = open(HAMILTON_RESPONSE_FILE, "r")
-		Response = file.read()
-		file.close()
-		os.remove(HAMILTON_RESPONSE_FILE)
-		if Response == "Abort":
-			Push("END")
-			quit()
-		return Response
+
 
 ######################################################################### 
 #	Description: Ends the communication on the Hamilton system
@@ -80,5 +129,5 @@ def Pull():
 #	Returns: N/A
 #########################################################################
 def EndCommunication():
-	Push("END")
-	Pull()
+	AddCommand("END",False)
+	SendCommands()

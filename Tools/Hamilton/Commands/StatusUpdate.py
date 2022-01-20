@@ -1,26 +1,23 @@
 from ...General import HamiltonIO as HAMILTONIO
 from ...General import Log as LOG
 
-def PreRun():
+def PreRun(Input):
 	CommandString = ""
 	CommandString += "[Module]PreRun"
 	CommandString += "[Command]StatusUpdate"
-
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
-	return True
+	return CommandString
 
 #this function will reserve a lid on the Hamilton. This lid can be used on or off the Heaters
-def AppendText(MessageString):
+def SetProgress(Input):
 	CommandString = ""
 	CommandString += "[Module]StatusUpdate"
-	CommandString += "[Command]AppendText"
-	CommandString += "[Message]" + str(MessageString) + "\n"
+	CommandString += "[Command]SetProgress"
+	CommandString += "[PercentComplete]" + str(Input["PercentComplete"])
+	return CommandString
 
-	if LOG.CommandInLog(CommandString) != True:
-		LOG.Command(CommandString)
-		HAMILTONIO.Push(CommandString)
-		Response = HAMILTONIO.Pull()
-		LOG.CommandID()
-	return True
-####	#response is not parsed for this command
+def AddProgressDetail(Input):
+	CommandString = ""
+	CommandString += "[Module]StatusUpdate"
+	CommandString += "[Command]AddProgressDetail"
+	CommandString += "[DetailMessage]" + str(Input["DetailMessage"])
+	return CommandString

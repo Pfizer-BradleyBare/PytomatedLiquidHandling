@@ -180,7 +180,7 @@ def HandleResponse(Response):
 	RUN_BEFORE_STEP = "Run Step Before Above Step"
 	RUN_AFTER_STEP = "Run Step After Above Step"
 
-	print(Response)
+	Response = Response["Log Selection"]
 
 	global TRUERUN_SHEET
 	global TrueRunRow

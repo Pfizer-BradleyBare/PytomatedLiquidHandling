@@ -162,9 +162,9 @@ if HAMILTONIO.IsSimulated() == True:
 	if GenerateList == False and TestRun == False:
 		HAMILTONIO.Simulated(False)
 
-	PRERUN.Samples(SAMPLES.GetTotalSamples())
+	HAMILTONIO.AddCommand(PRERUN.Samples(SAMPLES.GetTotalSamples()),False)
 	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
-	PRERUN.Labware(Labware)
+	HAMILTONIO.AddCommand(PRERUN.Labware(Labware),False)
 
 	CONFIGURATION.WriteLoadingInformation(Labware)
 
@@ -174,32 +174,36 @@ if HAMILTONIO.IsSimulated() == True:
 	#Generate prep sheet here
 	
 	if LIQUID_TRANSFER.IsUsed() == True or DILUTE.IsUsed() == True:
-		PRERUN.PIPETTE.PreRun(SOLUTIONS.GetPipetteVolumes())
+		HAMILTONIO.AddCommand(PRERUN.PIPETTE.PreRun(SOLUTIONS.GetPipetteVolumes()),False)
 	
 	if INCUBATE.IsUsed() == True:
-		PRERUN.HEATER.PreRun(INCUBATE.GetHeaterList())
+		HAMILTONIO.AddCommand(PRERUN.HEATER.PreRun(INCUBATE.GetHeaterList()),False)
 	
 	if NOTIFY.IsUsed() == True:
-		PRERUN.NOTIFY.PreRun()
+		HAMILTONIO.AddCommand(PRERUN.NOTIFY.PreRun(),False)
 	
 	#if DESALT.IsUsed() == True:
 		#PRERUN.DESALT.PreRun(DESALT.GetDesaltParams())
 
 	if WAIT.IsUsed() == True:
-		PRERUN.TIMER.PreRun()
+		HAMILTONIO.AddCommand(PRERUN.TIMER.PreRun(),False)
 
 	if INCUBATE.IsUsed() == True:
-		PRERUN.TRANSPORT.PreRun()
+		HAMILTONIO.AddCommand(PRERUN.TRANSPORT.PreRun(),False)
 
 	if VACUUM.IsUsed() == True:
-		PRERUN.VACUUM.PreRun(VACUUM.GetVacuumParams())
+		HAMILTONIO.AddCommand(PRERUN.VACUUM.PreRun(VACUUM.GetVacuumParams()),False)
 
 	##if STATUS_UPDATE.IsUsed() == True:
-	PRERUN.STATUS_UPDATE.PreRun()
+	HAMILTONIO.AddCommand(PRERUN.STATUS_UPDATE.PreRun(),False)
                 
 
+	Response = HAMILTONIO.SendCommands()
+
 	if LOG.Exists() and TestRun == False and len(LOG.GetLatestStep()) != 0:
-		LOG.HandleResponse(PRERUN.LOG.PreRun(LOG.GetLatestStep()))
+		HAMILTONIO.AddCommand(PRERUN.LOG.PreRun(LOG.GetLatestStep()),False)
+		Response = HAMILTONIO.SendCommands()
+		LOG.HandleResponse(Response[0])
 	#initialize all the Hamilton Libraries.
 
 

@@ -1,17 +1,14 @@
 from ...General import HamiltonIO as HAMILTONIO
 from ...General import Log as LOG
 
-def PreRun(StepDict):
+def PreRun(Input):
 	CommandString = ""
 	CommandString += "[Module]PreRun"
 	CommandString += "[Command]Log" 
-	CommandString += "[Title]" + StepDict["Title"] + "[Coordinates]" + StepDict["Coordinates"] + "\n"
+	CommandString += "[Title]" + Input["Title"] + "[Coordinates]" + Input["Coordinates"]
+	return CommandString
 
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
-	return Response
-
-def Do():
+def Do(Input):
 	pass
 
 

@@ -1,41 +1,52 @@
 from ...General import HamiltonIO as HAMILTONIO
 from ...General import Log as LOG
 
-def PreRun(Params):
+def PreRun(Input):
 	CommandString = ""
 	CommandString += "[Module]PreRun"
 	CommandString += "[Command]Vacuum"
-	CommandString += "[ID]" + str(Params["ID"]) + "[Plate]" + str(Params["Plate"]) + "\n"
-
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
-	return True
+	CommandString += "[ID]" + str(Input["ID"]) + "[Plate]" + str(Input["Plate"])
+	return CommandString
 
 #this function will start a timer for a specified plate
-def Start(Pressure, Time):
+def Start(Input):
 	CommandString = ""
 	CommandString += "[Module]Vacuum"
 	CommandString += "[Command]Start"
-	CommandString += "[Pressure]" + str(Pressure) + "[Time]" + str(Time) + "\n"
-
-	if LOG.CommandInLog(CommandString) != True:
-		LOG.Command(CommandString)
-		HAMILTONIO.Push(CommandString)
-		Response = HAMILTONIO.Pull()
-		LOG.CommandID()
-	return True
+	CommandString += "[VacuumPlateName]" + str(Input["VacuumPlateName"]) + "[VacuumPressure]" + str(Input["VacuumPressure"])
+	return CommandString
 	
-#this function will wait on a plate timer
-def Wait():
+def Stop(Input):
 	CommandString = ""
 	CommandString += "[Module]Vacuum"
-	CommandString += "[Command]Wait"
+	CommandString += "[Command]Stop"
+	CommandString += "[VacuumPlateName]" + str(Input["VacuumPlateName"])
+	return CommandString
 
-	if LOG.CommandInLog(CommandString) != True:
-		LOG.Command(CommandString)
-		HAMILTONIO.Push(CommandString)
-		Response = HAMILTONIO.Pull()
-		LOG.CommandID()
-	return True
+def GetVacuumCollectionPlateSequenceString(Input):
+	CommandString = ""
+	CommandString += "[Module]Vacuum"
+	CommandString += "[Command]GetVacuumCollectionPlateSequenceString"
+	CommandString += "[VacuumPlateName]" + str(Input["VacuumPlateName"])
+	return CommandString
 
+def GetVacuumManifoldParkSequenceString(Input):
+	CommandString = ""
+	CommandString += "[Module]Vacuum"
+	CommandString += "[Command]GetVacuumManifoldParkSequenceString"
+	CommandString += "[VacuumPlateName]" + str(Input["VacuumPlateName"])
+	return CommandString
 
+def GetVacuumManifoldSequenceString(Input):
+	CommandString = ""
+	CommandString += "[Module]Vacuum"
+	CommandString += "[Command]GetVacuumManifoldSequenceString"
+	CommandString += "[VacuumPlateName]" + str(Input["VacuumPlateName"])
+	return CommandString
+
+def GetVacuumPlateSequenceString(Input):
+	CommandString = ""
+	CommandString += "[Module]Vacuum"
+	CommandString += "[Command]GetVacuumPlateSequenceString"
+	CommandString += "[VacuumPlateName]" + str(Input["VacuumPlateName"])
+	return CommandString

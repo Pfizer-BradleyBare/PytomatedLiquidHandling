@@ -17,10 +17,8 @@ def CheckSequences(SequencesList):
 	SequencesString = ""
 	for Sequence in SequencesList:
 		SequencesString += str(Sequence) + HAMILTONIO.GetDelimiter()
-	CommandString += "[Sequence]" + SequencesString[:-1] + "\n"
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
-	return True
+	CommandString += "[Sequence]" + SequencesString[:-1]
+	return CommandString
 	
 
 #This function send the loading list to the Hamilton.
@@ -65,21 +63,13 @@ def Labware(LoadingList):
 	CommandString += "[LabwareType]" + LabwareTypes[:-1*len(HAMILTONIO.GetDelimiter())]  
 	CommandString += "[LabwareCategory]" + LabwareCategories[:-1*len(HAMILTONIO.GetDelimiter())]  
 	CommandString += "[LabwareName]" + LabwareNames[:-1*len(HAMILTONIO.GetDelimiter())] 
-
-	print(CommandString)
-
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
-	return True
+	return CommandString
 
 def Samples(NumSamples):
 	CommandString = ""
 	CommandString += "[Module]PreRun"
 	CommandString += "[Command]Samples"
-	CommandString += "[SampleNumber]" + str(NumSamples) + "\n"
-	
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
-	return True
+	CommandString += "[SampleNumber]" + str(NumSamples)
+	return CommandString
 
 ##PRERUN.STATUS_UPDATE.PreRun()

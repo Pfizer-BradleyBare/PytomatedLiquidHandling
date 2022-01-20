@@ -12,37 +12,22 @@ def PreRun(Params):
 	CommandString += "[Source]" + str(Params["Source Sequence"])
 	CommandString += "[Buffer]" + str(Params["Buffer Sequence"])
 	CommandString += "[Waste]" + str(Params["Waste Sequence"])
-	CommandString += "[Destination]" + str(Params["Destination Sequence"]) + "\n"
-
-	HAMILTONIO.Push(CommandString)
-	Response = HAMILTONIO.Pull()
-	return True
+	CommandString += "[Destination]" + str(Params["Destination Sequence"])
+	return CommandString
 
 #this function should start an equilibration on the Hamilton system. If this function is called twice, for whatever reason, the Hamilton should know the tips are equilibrated. 
 def Equilibrate():
 	CommandString = ""
 	CommandString += "[Module]Desalt"
 	CommandString += "[Command]Equilibrate"
-
-	if LOG.CommandInLog(CommandString) != True:
-		LOG.Command(CommandString)
-		HAMILTONIO.Push(CommandString)
-		Response = HAMILTONIO.Pull()
-		LOG.CommandID()
-	return True
+	return CommandString
 
 #this function should start to process the samples through the desalting tips. The tips are assumed to be equilibrated. It is possible to equilibrate during this step if it hasn't been done yet.
 def Process():
 	CommandString = ""
 	CommandString += "[Module]Desalt"
 	CommandString += "[Command]Process"
-
-	if LOG.CommandInLog(CommandString) != True:
-		LOG.Command(CommandString)
-		HAMILTONIO.Push(CommandString)
-		Response = HAMILTONIO.Pull()
-		LOG.CommandID()
-	return True
+	return CommandString
 
 
 
