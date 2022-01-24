@@ -2,6 +2,7 @@ from ..Steps import Steps as STEPS
 from ..Steps import Desalt as DESALT
 from ..Labware import Plates as PLATES
 from ...Hamilton.Commands import Timer as TIMER
+from ...General import HamiltonIO as HAMILTONIO
 from ...General import Log as LOG
 import time
 
@@ -51,13 +52,9 @@ def WaitForTimer():
 
 		SleepingPlate = min(Timer_List, key=lambda x: x["Wait Time"] - (Time - x["Start Time"]))
 		
-		LOG.BeginCommandLog()
-		TIMER.Start(SleepingPlate["Wait Time"] - (Time - SleepingPlate["Start Time"]))
-		LOG.EndCommandLog()
-
-		LOG.BeginCommandLog()
-		TIMER.Wait()
-		LOG.EndCommandLog()
+		HAMILTONIO.AddCommand(TIMER.Start({"WaitTime":SleepingPlate["Wait Time"] - (Time - SleepingPlate["Start Time"])}))
+		HAMILTONIO.AddCommand(TIMER.Wait({}))
+		Response = HAMILTONIO.SendCommands()
 
 		SleepingPlate["Callback"](SleepingPlate["Step"])
 		#Calls our callback function

@@ -3,29 +3,31 @@ from ..Steps import Desalt as DESALT
 from ..Labware import Plates as PLATES
 from ...Hamilton.Commands import Heater as HEATER
 from ...Hamilton.Commands import Transport as TRANSPORT
-from ...Hamilton.Commands import Pipette as PIPETTE
+from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
+from ...Hamilton.Commands import Labware as LABWARE
+from ...Hamilton.Commands import Lid as LID
 from ...User import Samples as SAMPLES
 from ..Steps import Wait as WAIT
 from ..Steps import Split_Plate as SPLIT_PLATE
 from ...User import Configuration as CONFIGURATION
 from ...General import Log as LOG
-from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
+from ...General import HamiltonIO as HAMILTONIO
+
 import time
 
 TITLE = "Incubate"
 TEMP = "Temp (C)"
 TIME = "Time (min)"
 SHAKE = "Shake (rpm)"
-CORRECT = "Correct For Evaporation?"
+#CORRECT = "Correct For Evaporation?"
 
 
 #List of incubation steps
 Incubation_List = []
 Incubation_Num_List = []
+NumSimultaneousIncubations = None
+CurrentIncubationIDCounter = 0
 
-Lids = {}
-Heaters = {}
-TransportConfig = {}
 
 IsUsedFlag = False
 
@@ -42,37 +44,9 @@ def IsUsed():
 #########################################################################
 def Init(MutableStepsList):
 	global Incubation_List
-	global Heaters
-	global Lids
-	global TransportConfig
+	global Incubation_Num_List
 	global IsUsedFlag
-
-
-	Config = CONFIGURATION.GetStepConfig(TITLE)
-	TransportConfig = CONFIGURATION.GetStepConfig("Transport")
-
-	for Lid in Config["LidHomeSequences"]:
-		Lids[Lid] = {"Reserved": False}
-		CONFIGURATION.AddCheckSequence(Lid)
-
-	if "Heaters" in Config:
-		for HHS in range(0,len(Config["Heaters"]["COM_ID"])):
-			
-			Heaters[Config["Heaters"]["COM_ID"][HHS]] = {"Reserved":False, "Type":Config["Heaters"]["Type"][HHS], "Shake":Config["Heaters"]["Shake"][HHS], "Temp":25}
-
-			Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"] = {}
-			for PlateType in Config["Heaters"]["PlateSequences"]:
-
-				Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"][PlateType] = {}
-
-				PlateSequence = Config["Heaters"]["SequencePrefix"][HHS] + Config["Heaters"]["PlateSequences"][PlateType]
-				LidSequence = Config["Heaters"]["SequencePrefix"][HHS] + Config["Heaters"]["LidSequences"][PlateType]
-				Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"][PlateType]["Plate"] = PlateSequence
-				Heaters[Config["Heaters"]["COM_ID"][HHS]]["Sequences"][PlateType]["Lid"] = LidSequence
-				CONFIGURATION.AddCheckSequence(PlateSequence)
-				CONFIGURATION.AddCheckSequence(LidSequence)
-	#This does double duty. It combines the sequence prefix with the plate and lid sequences. In doing so it also ensures that each plate sequence has a matching lid sequence, which is imperative.
-	#Do configuration for the incubation step
+	global NumSimultaneousIncubations
 
 	IncubationCounter = 1
 
@@ -80,194 +54,164 @@ def Init(MutableStepsList):
 		if Step.GetTitle() == SPLIT_PLATE.TITLE:
 			IncubationCounter += 1
 
-
 		if Step.GetTitle() == TITLE:
 			
 			IsUsedFlag = True
 
-			if str(Step.GetParameters()[TEMP]).lower() != "Ambient".lower():
-					Incubation_List.append(Step)
-					Incubation_Num_List.append(IncubationCounter)
+			Incubation_List.append(Step)
+			Incubation_Num_List.append(IncubationCounter)
+
+	NumSimultaneousIncubations = IncubationCounter
 
 	StartHeaters()
 
-def GetHeaterList():
-	HeaterList = []
-	for Heater in Heaters:
-		HeaterList.append({"ID":Heater, "Type":Heaters[Heater]["Type"]})
-	return HeaterList
+OngoingIncubationsCounter = 0
 
 def StartHeaters():
 	global Incubation_List
-	global Heaters
+	global Incubation_Num_List
+	global OngoingIncubationsCounter
+	global CurrentIncubationIDCounter
 
-	for Incubation in Incubation_List[:]:
-		Temp = Incubation.GetParameters()[TEMP]
-		PossibleHeaters = sorted(Heaters, key=lambda h: abs(Heaters[h]["Temp"] - Temp))
+	while(len(Incubation_List) != 0):
+		Incubation = Incubation_List.pop(0)
+		MaxNumIncubations = Incubation_Num_List.pop(0)
 
-		NumReservedHeaters = 0
-		for Heater in Heaters:
-			if (not not Heaters[Heater]["Reserved"]) == True:
-				NumReservedHeaters += 1
-		if not(NumReservedHeaters < Incubation_Num_List[0]):
-			return
-		#Only heat the number of plates we have running at one time
+		Params = Incubation.GetParameters()
+		Temp = Params[TEMP]
+		RPM = Params[SHAKE]
+		ParentPlate = Incubation.GetParentPlate()
 
-		for ID in PossibleHeaters:
-			if (not not Heaters[ID]["Reserved"]) == False and (not not Incubation.GetParameters()[SHAKE]) <= Heaters[ID]["Shake"]:
+		HAMILTONIO.AddCommand(HEATER.AcquireReservation({"PlateName":ParentPlate,"Temperature":Temp,"RPM":RPM}),False)
+		Response = HAMILTONIO.SendCommands()
 
-				Heaters[ID]["Reserved"] = Incubation
-				Incubation_List.pop(0)
-				Incubation_Num_List.pop(0)
-				Heaters[ID]["Temp"] = Temp
+		CurrentIncubationIDCounter += 1
+		OngoingIncubationsCounter += 1
 
-				LOG.BeginCommandLog()
-				HEATER.StartHeating(ID,Temp)
-				LOG.EndCommandLog()
-				break
+		if OngoingIncubationsCounter == MaxNumIncubations:
+			break
 
-def GetReservedHeater(step):
-	global Heaters
-	for Heater in Heaters:
-		if Heaters[Heater]["Reserved"] == step:
-			return Heater
-	return None
-
-def ReserveLid(step):
-	global Lids
-	for Lid in Lids:
-		if (not not Lids[Lid]["Reserved"]) == False:
-			Lids[Lid]["Reserved"] = step
-			return True
-	return False
-
-def GetReservedLid(step):
-	global Lids
-	for Lid in Lids:
-		if Lids[Lid]["Reserved"] == step:
-			return Lid
-	return None
 
 def Callback(step):
-	global Heaters
-	global Lids
 
-	ID = GetReservedHeater(step)
-	Lid = GetReservedLid(step)
-	Loading = CONFIGURATION.GetDeckLoading(step.GetParentPlate())
+	global OngoingIncubationsCounter
+
+	Params = step.GetParameters()
+	Temp = Params[TEMP]
+	RPM = Params[SHAKE]
+	ParentPlate = step.GetParentPlate()
 	
-	Lids[Lid]["Reserved"] = False
+	HAMILTONIO.AddCommand(HEATER.EndReservation({"PlateName":ParentPlate}))
+	#Stop heating and shaking
 
-	if ID != None:
-		Heaters[ID]["Reserved"] = False
-		
-		LOG.BeginCommandLog()
-		HEATER.StopHeating(ID)
-		LOG.EndCommandLog()
+	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.GetReservationLidTansportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(HEATER.GetReservationLidSequenceString({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(HEATER.GetReservationLidTansportType({"PlateName":ParentPlate}))
+	#Lid
 
+	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}))
+	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}))
+	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterSequenceString({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterTansportType({"PlateName":ParentPlate}))
+	#Plate
 
-		if step.GetParameters()[SHAKE] > 0:
-			LOG.BeginCommandLog()
-			HEATER.StopShaking(ID)
-			LOG.EndCommandLog()
-		
-		if Loading != None:
-			LidTransportDestination = Lid
-			LidTransportSource = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Lid"]
-			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
-			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
-			LidTransportGripHeight = TransportConfig["Lid"]["Grip Height"]
-			#Lid
+	Response = HAMILTONIO.SendCommands()
 
-			PlateTransportDestination = Loading["Sequence"]
-			PlateTransportSource = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Plate"]
-			PlateTransportOpenDistance = TransportConfig[Loading["Labware Name"]]["Open"]
-			PlateTransportCloseDistance = TransportConfig[Loading["Labware Name"]]["Close"]
-			PlateTransportGripHeight = TransportConfig[Loading["Labware Name"]]["Grip Height"]
-			#plate
-			LOG.BeginCommandLog()
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,LidTransportGripHeight,0,1)
-			LOG.EndCommandLog()
-			LOG.BeginCommandLog()
-			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,PlateTransportGripHeight,1,1)
-			LOG.EndCommandLog()
-		
+	if Response == False:
+		LidSequence = ""
+		LidType = ""
+		HeaterLidSequence = ""
+		HeaterLidType = ""
 	else:
-		if Loading != None:
-			LidTransportDestination = Lid
-			LidTransportSource = Loading["Lid"]
-			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
-			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
-			LidTransportGripHeight = TransportConfig["Lid"]["Grip Height"]
-			LOG.BeginCommandLog()
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,LidTransportGripHeight, 1,1)
-			LOG.EndCommandLog()
+		Response.pop(0) #This discards the EndReservation command response.
+		LidSequence = Response.pop(0)["Response"]
+		LidType = Response.pop(0)["Response"]
+		HeaterLidSequence = Response.pop(0)["Response"]
+		HeaterLidType = Response.pop(0)["Response"]
+	#Lets get the info we need to move the Lid
 
+	if Response == False:
+		PlateSequence = ""
+		PlateType = ""
+		HeaterSequence = ""
+		HeaterType = ""
+	else:
+		PlateSequence = Response.pop(0)["Response"]
+		PlateType = Response.pop(0)["Response"]
+		HeaterSequence = Response.pop(0)["Response"]
+		HeaterType = Response.pop(0)["Response"]
+	#Lets get the info we need to move the plate
+
+	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":HeaterLidType,"SourceSequenceString":HeaterLidSequence,"DestinationLabwareType":LidType,"DestinationSequenceString":LidSequence,"Park":"False","CheckExists":"After"}))
+	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":HeaterType,"SourceSequenceString":HeaterSequence,"DestinationLabwareType":PlateType,"DestinationSequenceString":PlateSequence,"Park":"True","CheckExists":"After"}))
+	HAMILTONIO.AddCommand(HEATER.ReleaseReservation({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.ReleaseReservation({"PlateName":ParentPlate}))
+	Response = HAMILTONIO.SendCommands()
+	#Lets move the lid then plate then release all reservations
+	
+	OngoingIncubationsCounter -= 1
 	StartHeaters()
 
-	#if step.GetParameters()[CORRECT] == "Yes":
-	#	Sequences = PLATES.GetPlate(step.GetParentPlate()).CreatePipetteSequence(SAMPLES.Column("N/A"), SAMPLES.Column(0.000001),SAMPLES.Column("N/A"))
-	#	LOG.BeginCommandLog()
-	#	PIPETTE.Correct(Sequences)
-	#	LOG.EndCommandLog()
-
-
 def Step(step):
-	global Heaters
-	global TransportConfig
 	LOG.BeginCommentsLog()
 	LOG.EndCommentsLog()
-	while ReserveLid(step) == False:
-		WAIT.WaitForTimer()
-	#We need to wait for incubation to finish if no lids are available
-
-	ID = GetReservedHeater(step)
-	Lid = GetReservedLid(step)
-	Loading = CONFIGURATION.GetDeckLoading(step.GetParentPlate())
 	
 	STATUS_UPDATE.AppendText("Incubate at " + str(step.GetParameters()[TEMP]) + " C for " + str(step.GetParameters()[TIME]) + " min")
 
-	if ID != None:
-		if Loading != None:
-			PlateTransportSource = Loading["Sequence"]
-			PlateTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Plate"]
-			PlateTransportOpenDistance = TransportConfig[Loading["Labware Name"]]["Open"]
-			PlateTransportCloseDistance = TransportConfig[Loading["Labware Name"]]["Close"]
-			PlateTransportGripHeight = TransportConfig[Loading["Labware Name"]]["Grip Height"]
-			#plate
-		
-			LidTransportSource = Lid
-			LidTransportDestination = Heaters[ID]["Sequences"][Loading["Labware Name"]]["Lid"]
-			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
-			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
-			LidTransportGripHeight = TransportConfig["Lid"]["Grip Height"]
-			#Lid
-			LOG.BeginCommandLog()
-			TRANSPORT.Move(PlateTransportSource,PlateTransportDestination,PlateTransportOpenDistance,PlateTransportCloseDistance,PlateTransportGripHeight,0,0)
-			LOG.EndCommandLog()
-			LOG.BeginCommandLog()
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,LidTransportGripHeight,1,0)
-			LOG.EndCommandLog()
+	Params = step.GetParameters()
+	Temp = Params[TEMP]
+	RPM = Params[SHAKE]
+	ParentPlate = step.GetParentPlate()
 
-		if step.GetParameters()[SHAKE] > 0:
-			LOG.BeginCommandLog()
-			HEATER.StartShaking(ID, step.GetParameters()[SHAKE])
-			LOG.EndCommandLog()
+	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}))
+	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}))
+	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterSequenceString({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterTansportType({"PlateName":ParentPlate}))
+	#Plate
+
+	HAMILTONIO.AddCommand(LID.AcquireReservation({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.GetReservationLidTansportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(HEATER.GetReservationLidSequenceString({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(HEATER.GetReservationLidTansportType({"PlateName":ParentPlate}))
+	#Lid
+
+	Response = HAMILTONIO.SendCommands()
+
+	if Response == False:
+		PlateSequence = ""
+		PlateType = ""
+		HeaterSequence = ""
+		HeaterType = ""
 	else:
-		if Loading != None:
-			LidTransportSource = Lid
-			LidTransportDestination = Loading["Lid"]
-			LidTransportOpenDistance = TransportConfig["Lid"]["Open"]
-			LidTransportCloseDistance = TransportConfig["Lid"]["Close"]
-			LidTransportGripHeight = TransportConfig["Lid"]["Grip Height"]
-			LOG.BeginCommandLog()
-			TRANSPORT.Move(LidTransportSource,LidTransportDestination,LidTransportOpenDistance,LidTransportCloseDistance,LidTransportGripHeight, 1,1)
-			LOG.EndCommandLog()
-		
-		PLATES.GetPlate(step.GetParentPlate()).SetLidState()
-	#Make decisions if incubation is ambient or not
+		PlateSequence = Response.pop(0)["Response"]
+		PlateType = Response.pop(0)["Response"]
+		HeaterSequence = Response.pop(0)["Response"]
+		HeaterType = Response.pop(0)["Response"]
+	#Lets get the info we need to move the plate
+
+	if Response == False:
+		LidSequence = ""
+		LidType = ""
+		HeaterLidSequence = ""
+		HeaterLidType = ""
+	else:
+		Response.pop(0) #This discards the lid reservation response.
+		LidSequence = Response.pop(0)["Response"]
+		LidType = Response.pop(0)["Response"]
+		HeaterLidSequence = Response.pop(0)["Response"]
+		HeaterLidType = Response.pop(0)["Response"]
+	#Lets get the info we need to move the Lid
+
+	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":PlateType,"SourceSequenceString":PlateSequence,"DestinationLabwareType":HeaterType,"DestinationSequenceString":HeaterSequence,"Park":"False","CheckExists":"False"}))
+	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":LidType,"SourceSequenceString":LidSequence,"DestinationLabwareType":HeaterLidType,"DestinationSequenceString":HeaterLidSequence,"Park":"True","CheckExists":"False"}))
+	HAMILTONIO.AddCommand(HEATER.StartReservation({"PlateName":ParentPlate,"Temperature":Temp,"RPM":RPM}))
+	Response = HAMILTONIO.SendCommands()
+	#Lets move the plate then lid then start the incubation (Incudes shaking)
 	
 	WAIT.StartTimer(step, step.GetParameters()[TIME], Callback)
+	#Wait for incubation to complete.
 
 
 

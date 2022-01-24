@@ -1,12 +1,6 @@
 import sys
 import time
 
-
-TestevalString = "[{\"home\":\"hello\"},{\"poo\":\"toliet\"}]"
-
-
-
-
 if len(sys.argv) > 1:
 	Excel_File_Path = sys.argv[1]
 	Sample_Start_Pos = int(sys.argv[2])
@@ -65,6 +59,7 @@ import Tools.User.Steps.Finish as FINISH
 import Tools.User.Steps.Aliquot as ALIQUOT
 import Tools.User.Steps.Pool as POOL
 import Tools.User.Steps.PreLoad_Liquid as PRELOAD_LIQUID
+import Tools.User.Steps.MagneticBeads as MAGNETIC_BEADS
 
 import Tools.Hamilton.PreRun as PRERUN
 ##import Tools.Hamilton.Commands.StatusUpdate as STATUS_UPDATE
@@ -98,6 +93,7 @@ ALIQUOT.Init(STEPS.GetSteps())
 POOL.Init(STEPS.GetSteps())
 PRELOAD_LIQUID.Init(STEPS.GetSteps())
 VACUUM.Init(STEPS.GetSteps(), SAMPLES.GetSequences())
+MAGNETIC_BEADS.Init(STEPS.GetSteps())
 
 #init steps
 PLATES.StartStepSequence(STEPS.GetStartingPlate())
@@ -126,7 +122,9 @@ Steps = {
 
 	POOL.TITLE: POOL.Step,
 
-	PRELOAD_LIQUID.TITLE: PRELOAD_LIQUID.Step
+	PRELOAD_LIQUID.TITLE: PRELOAD_LIQUID.Step,
+
+	MAGNETIC_BEADS.TITLE: MAGNETIC_BEADS.Step
 }
 
 while(True):
@@ -177,25 +175,29 @@ if HAMILTONIO.IsSimulated() == True:
 		HAMILTONIO.AddCommand(PRERUN.PIPETTE.PreRun(SOLUTIONS.GetPipetteVolumes()),False)
 	
 	if INCUBATE.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.HEATER.PreRun(INCUBATE.GetHeaterList()),False)
+		HAMILTONIO.AddCommand(PRERUN.HEATER.PreRun({}),False)
 	
 	if NOTIFY.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.NOTIFY.PreRun(),False)
+		HAMILTONIO.AddCommand(PRERUN.NOTIFY.PreRun({}),False)
 	
 	#if DESALT.IsUsed() == True:
 		#PRERUN.DESALT.PreRun(DESALT.GetDesaltParams())
 
 	if WAIT.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.TIMER.PreRun(),False)
+		HAMILTONIO.AddCommand(PRERUN.TIMER.PreRun({}),False)
 
 	if INCUBATE.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.TRANSPORT.PreRun(),False)
+		HAMILTONIO.AddCommand(PRERUN.TRANSPORT.PreRun({}),False)
 
 	if VACUUM.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.VACUUM.PreRun(VACUUM.GetVacuumParams()),False)
+		HAMILTONIO.AddCommand(PRERUN.VACUUM.PreRun({"VacuumPlateNames":VACUUM.GetVacuumParams()}),False)
+
+	if MAGNETIC_BEADS.IsUsed() == True:
+		HAMILTONIO.AddCommand(PRERUN.MAGNETIC_BEADS.PreRun({"PlateNames":MAGNETIC_BEADS.GetUsedParentPlateNames()}),False)
 
 	##if STATUS_UPDATE.IsUsed() == True:
-	HAMILTONIO.AddCommand(PRERUN.STATUS_UPDATE.PreRun(),False)
+	HAMILTONIO.AddCommand(PRERUN.STATUS_UPDATE.PreRun({}),False)
+	HAMILTONIO.AddCommand(PRERUN.LID.PreRun({}),False)
                 
 
 	Response = HAMILTONIO.SendCommands()

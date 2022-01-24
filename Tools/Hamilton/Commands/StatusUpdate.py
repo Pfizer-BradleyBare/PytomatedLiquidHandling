@@ -21,3 +21,6 @@ def AddProgressDetail(Input):
 	CommandString += "[Command]AddProgressDetail"
 	CommandString += "[DetailMessage]" + str(Input["DetailMessage"])
 	return CommandString
+
+def AppendText(text):
+	pass

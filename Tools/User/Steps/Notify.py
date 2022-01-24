@@ -23,6 +23,4 @@ def Step(step):
 
 	LOG.EndCommentsLog()
 
-	LOG.BeginCommandLog()	
-	NOTIFY.SendMessage(Parameters[WAIT_ON_USER],Parameters[SUBJECT],Parameters[MESSAGE])
-	LOG.EndCommandLog()
+	NOTIFY.NotifyContacts({"Subject":Parameters[SUBJECT],"Body":Parameters[MESSAGE],"Wait":Parameters[WAIT_ON_USER]})

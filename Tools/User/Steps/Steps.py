@@ -112,6 +112,7 @@ class Class:
 	def SetCoordinates(self,Row,Col):
 		self.Row = Row
 		self.Col = Col
+		
 	def GetCoordinates(self):
 		return (self.Row,self.Col)
 

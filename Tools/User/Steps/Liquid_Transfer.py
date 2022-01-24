@@ -62,31 +62,18 @@ def Step(step):
 	for Sequence in _Temp:
 			SOLUTIONS.GetSolution(Sequence["Source"]).AddVolume(Sequence["Volume"])
 			SOLUTIONS.AddPipetteVolume(Sequence["Volume"])
-	
-	if HAMILTONIO.IsSimulated() == False:
-		for sequence in Sequences:
-			try:
-				sequence["Source"] = CONFIGURATION.GetDeckLoading(sequence["Source"])["Sequence"]
-			except:
-				pass
-			try:
-				sequence["Destination"] = CONFIGURATION.GetDeckLoading(sequence["Destination"])["Sequence"]
-			except:
-				pass
-	#Translate User defined names into sequence loading names
 
 	if len(Sequences) == 0:
 		LOG.Comment("Number of sequences is zero so no liquid transfer will actually occur.")
 
 	LOG.EndCommentsLog()
 
-	
 	if len(Sequences) != 0:
 
 		TransferVolumes = [str(x["Volume"]) for x in Sequences]
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings(TransferVolumes,["Water"]*len(TransferVolumes)), True)
-		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings(TransferVolumes), True)
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings(TransferVolumes,["Water"]*len(TransferVolumes)))
+		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings(TransferVolumes))
 
 		Response = HAMILTONIO.SendCommands()
 
@@ -94,10 +81,10 @@ def Step(step):
 			LiquidClassStrings = []
 			TipSequenceStrings = []
 		else:
-			LiquidClassStrings = Response[0]["LiquidClassStrings"]
-			TipSequenceStrings = Response[1]["TipSequenceStrings"]
+			LiquidClassStrings = Response[0]["LiquidClassStrings"].split(HAMILTONIO.GetDelimiter())
+			TipSequenceStrings = Response[1]["TipSequenceStrings"].split(HAMILTONIO.GetDelimiter())
 
-		HAMILTONIO.AddCommand(PIPETTE.Transfer(Sequences,LiquidClassStrings,TipSequenceStrings), True)
+		HAMILTONIO.AddCommand(PIPETTE.Transfer(Sequences,LiquidClassStrings,TipSequenceStrings))
 		Response = HAMILTONIO.SendCommands()
 
 

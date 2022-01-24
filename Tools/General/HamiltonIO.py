@@ -42,7 +42,7 @@ def IsSimulated():
 	return SimulatedIO
 
 CommandsList = []
-def AddCommand(CommandString, Log):
+def AddCommand(CommandString, Log=True):
 	global CommandsList
 
 	LOG.BeginCommandLog()
