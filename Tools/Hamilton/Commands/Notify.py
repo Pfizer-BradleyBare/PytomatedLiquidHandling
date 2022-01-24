@@ -11,9 +11,10 @@ def PreRun(Input):
 def NotifyContacts(Input):
 	CommandString = ""
 	CommandString += "[Module]Notify"
-	CommandString += "[Command]NotifyContacts"
+	CommandString += "[Command]SendMessage"
 	CommandString += "[Subject]" + str(Input["Subject"])
 	CommandString += "[Body]" + str(Input["Body"])
+	CommandString += "[WaitForUser]" + str(Input["Wait"])
 	return CommandString
 	#response is not parsed for this command
 

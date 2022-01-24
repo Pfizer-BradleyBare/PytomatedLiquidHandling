@@ -8,9 +8,6 @@ def PreRun(Input):
 	CommandString += "[Title]" + Input["Title"] + "[Coordinates]" + Input["Coordinates"]
 	return CommandString
 
-def Do(Input):
-	pass
-
 
 
 

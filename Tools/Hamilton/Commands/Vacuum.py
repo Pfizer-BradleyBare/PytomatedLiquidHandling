@@ -5,7 +5,7 @@ def PreRun(Input):
 	CommandString = ""
 	CommandString += "[Module]PreRun"
 	CommandString += "[Command]Vacuum"
-	CommandString += "[ID]" + str(Input["ID"]) + "[Plate]" + str(Input["Plate"])
+	CommandString += "[VacuumPlateNames]" + HAMILTONIO.GetDelimiter().join(Input["VacuumPlateNames"])
 	return CommandString
 
 #this function will start a timer for a specified plate
@@ -30,10 +30,24 @@ def GetVacuumCollectionPlateSequenceString(Input):
 	CommandString += "[VacuumPlateName]" + str(Input["VacuumPlateName"])
 	return CommandString
 
-def GetVacuumManifoldParkSequenceString(Input):
+def GetVacuumCollectionPlateTransportType(Input):
 	CommandString = ""
 	CommandString += "[Module]Vacuum"
-	CommandString += "[Command]GetVacuumManifoldParkSequenceString"
+	CommandString += "[Command]GetVacuumCollectionPlateTransportType"
+	CommandString += "[VacuumPlateName]" + str(Input["VacuumPlateName"])
+	return CommandString
+
+def GetVacuumParkSequenceString(Input):
+	CommandString = ""
+	CommandString += "[Module]Vacuum"
+	CommandString += "[Command]GetVacuumParkSequenceString"
+	CommandString += "[VacuumPlateName]" + str(Input["VacuumPlateName"])
+	return CommandString
+
+def GetVacuumParkTransportType(Input):
+	CommandString = ""
+	CommandString += "[Module]Vacuum"
+	CommandString += "[Command]GetVacuumParkTransportType"
 	CommandString += "[VacuumPlateName]" + str(Input["VacuumPlateName"])
 	return CommandString
 
@@ -41,6 +55,13 @@ def GetVacuumManifoldSequenceString(Input):
 	CommandString = ""
 	CommandString += "[Module]Vacuum"
 	CommandString += "[Command]GetVacuumManifoldSequenceString"
+	CommandString += "[VacuumPlateName]" + str(Input["VacuumPlateName"])
+	return CommandString
+
+def GetVacuumManifoldTransportType(Input):
+	CommandString = ""
+	CommandString += "[Module]Vacuum"
+	CommandString += "[Command]GetVacuumManifoldTransportType"
 	CommandString += "[VacuumPlateName]" + str(Input["VacuumPlateName"])
 	return CommandString
 

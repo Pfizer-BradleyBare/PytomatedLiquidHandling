@@ -14,13 +14,6 @@ def AcquireReservation(Input):
 	CommandString += "[PlateName]" + str(Input["PlateName"]) + "[Temperature]" + str(Input["Temperature"]) + "[RPM]" + str(Input["RPM"])
 	return CommandString
 
-def CheckReservation(Input):
-	CommandString = ""
-	CommandString += "[Module]Heater"
-	CommandString += "[Command]CheckReservation"
-	CommandString += "[PlateName]" + str(Input["PlateName"])
-	return CommandString
-
 def ConfirmReservation(Input):
 	CommandString = ""
 	CommandString += "[Module]Heater"
@@ -60,20 +53,6 @@ def GetReservationLidTansportType(Input):
 	CommandString = ""
 	CommandString += "[Module]Heater"
 	CommandString += "[Command]GetReservationLidTansportType"
-	CommandString += "[PlateName]" + str(Input["PlateName"])
-	return CommandString
-
-def GetReservationPlateSequenceString(Input):
-	CommandString = ""
-	CommandString += "[Module]Heater"
-	CommandString += "[Command]GetReservationPlateSequenceString"
-	CommandString += "[PlateName]" + str(Input["PlateName"])
-	return CommandString
-
-def GetReservationPlateTansportType(Input):
-	CommandString = ""
-	CommandString += "[Module]Heater"
-	CommandString += "[Command]GetReservationPlateTansportType"
 	CommandString += "[PlateName]" + str(Input["PlateName"])
 	return CommandString
 

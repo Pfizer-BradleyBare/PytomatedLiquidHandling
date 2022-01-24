@@ -3,6 +3,7 @@ from ..Labware import Plates as PLATES
 from ..Labware import Solutions as SOLUTIONS
 from ...User import Samples as SAMPLES
 from ...Hamilton.Commands import Pipette as PIPETTE
+from ...Hamilton.Commands import Transport as TRANSPORT
 from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 from ...User import Configuration as CONFIGURATION
 from ...General import HamiltonIO as HAMILTONIO
@@ -39,6 +40,7 @@ def CreateStep(DestinationPlate, Source, Type, Storage, Volume, Mixing):
 	return NewStep
 
 def Step(step):
+
 	LOG.BeginCommentsLog()
 
 	
