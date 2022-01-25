@@ -26,23 +26,9 @@ def IsUsed():
 def Init():
 	pass
 
-def CreateStep(DestinationPlate, Source, Type, Storage, Volume, Mixing):
-	NewStep = STEPS.Class(TITLE)
-	NewStep.SetCoordinates(STEPS.NOT_EXCEL_COORDINATES[0],STEPS.NOT_EXCEL_COORDINATES[1])
-	NewStep.SetParentPlateStep(DestinationPlate)
-
-	NewStep.AddParameters(NAME, Source)
-	NewStep.AddParameters(TYPE, Type)
-	NewStep.AddParameters(STORAGE, Storage)
-	NewStep.AddParameters(VOLUME, Volume)
-	NewStep.AddParameters(MIXING, Mixing)
-
-	return NewStep
-
 def Step(step):
 
 	LOG.BeginCommentsLog()
-
 	
 	DestinationPlate = step.GetParentPlate()
 
@@ -54,26 +40,24 @@ def Step(step):
 	
 	for Source in SourceList:
 		SOLUTIONS.AddSolution(Source, step.GetParameters()[TYPE], step.GetParameters()[STORAGE])
-
 	
-	Sequences = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList,MixList)
+	Sequence = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList,MixList)
 	
-	_Temp = copy.deepcopy(Sequences)
-	for Sequence in _Temp:
-			SOLUTIONS.GetSolution(Sequence["Source"]).AddVolume(Sequence["Volume"])
-			SOLUTIONS.AddPipetteVolume(Sequence["Volume"])
+	for Counter in range(0,Sequence.GetNumSequencePositions()):
+			SOLUTIONS.GetSolution(Sequence.GetSources()[Counter]).AddVolume(Sequence.GetTransferVolumes()[Counter])
+			SOLUTIONS.AddPipetteVolume(Sequence.GetTransferVolumes()[Counter])
 
-	if len(Sequences) == 0:
+	if Sequence.GetNumSequencePositions() == 0:
 		LOG.Comment("Number of sequences is zero so no liquid transfer will actually occur.")
 
 	LOG.EndCommentsLog()
 
-	if len(Sequences) != 0:
+	if Sequence.GetNumSequencePositions() != 0:
 
-		TransferVolumes = [str(x["Volume"]) for x in Sequences]
+		TransferVolumes = Sequence.GetTransferVolumes()
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings(TransferVolumes,["Water"]*len(TransferVolumes)))
-		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings(TransferVolumes))
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":SAMPLES.Column("Water")}))
+		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 
 		Response = HAMILTONIO.SendCommands()
 
@@ -81,10 +65,10 @@ def Step(step):
 			LiquidClassStrings = []
 			TipSequenceStrings = []
 		else:
-			LiquidClassStrings = Response[0]["LiquidClassStrings"].split(HAMILTONIO.GetDelimiter())
-			TipSequenceStrings = Response[1]["TipSequenceStrings"].split(HAMILTONIO.GetDelimiter())
+			LiquidClassStrings = Response[0]["Response"].split(HAMILTONIO.GetDelimiter())
+			TipSequenceStrings = Response[1]["Response"].split(HAMILTONIO.GetDelimiter())
 
-		HAMILTONIO.AddCommand(PIPETTE.Transfer(Sequences,LiquidClassStrings,TipSequenceStrings))
+		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":Sequence,"LiquidClasses":LiquidClassStrings,"TipSequences":TipSequenceStrings}))
 		Response = HAMILTONIO.SendCommands()
 
 

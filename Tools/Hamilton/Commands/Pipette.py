@@ -11,53 +11,35 @@ def PreRun(VolumesArray):
 	CommandString += "[Volume]" + VolumeString[:-1*len(HAMILTONIO.GetDelimiter())]
 	return CommandString
 
-def Transfer(Sequences, LiquidClassStrings, TipSequenceStrings):
-
-	Dest = ""
-	DestPos = ""
-	Source = ""
-	SourcePos = ""
-	Volume = ""
-	CurDestVol = ""
-	Mix = ""
-
-	for Sequence in Sequences:
-		Dest += str(Sequence["Destination"]) + HAMILTONIO.GetDelimiter()
-		DestPos += str(Sequence["Destination Position"]) + HAMILTONIO.GetDelimiter()
-		Source += str(Sequence["Source"]) + HAMILTONIO.GetDelimiter()
-		SourcePos += str(Sequence["Source Position"]) + HAMILTONIO.GetDelimiter()
-		Volume += "{0:.2f}".format(float(Sequence["Volume"])) + HAMILTONIO.GetDelimiter()
-		CurDestVol += "{0:.2f}".format(float(Sequence["CurrentDestinationVolume"])) + HAMILTONIO.GetDelimiter()
-		Mix += Sequence["Mix"] + HAMILTONIO.GetDelimiter()
-
+def Transfer(Input):
 	CommandString = ""
 	CommandString += "[Module]Pipette"
 	CommandString += "[Command]TransferLiquid"
-	CommandString += "[Destination]" + Dest[:-1*len(HAMILTONIO.GetDelimiter())]
-	CommandString += "[DestinationPosition]" + DestPos[:-1*len(HAMILTONIO.GetDelimiter())]
-	CommandString += "[Source]" + Source[:-1*len(HAMILTONIO.GetDelimiter())] 
-	CommandString += "[SourcePosition]" + SourcePos[:-1*len(HAMILTONIO.GetDelimiter())] 
-	CommandString += "[TransferVolume]" + Volume[:-1*len(HAMILTONIO.GetDelimiter())] 
-	CommandString += "[CurrentDestinationVolume]" + CurDestVol[:-1*len(HAMILTONIO.GetDelimiter())]  
-	CommandString += "[Mix]" + Mix[:-1*len(HAMILTONIO.GetDelimiter())]
-	CommandString += "[TipSequence]" + HAMILTONIO.GetDelimiter().join(TipSequenceStrings) #I have to include this for cross module support
-	CommandString += "[LiquidClass]" + HAMILTONIO.GetDelimiter().join(LiquidClassStrings) #I have to include this for cross module support
+	CommandString += "[Destination]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetDestinations()])
+	CommandString += "[DestinationPosition]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetDestinationPositions()])
+	CommandString += "[Source]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetSources()])
+	CommandString += "[SourcePosition]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetSourcePositions()])
+	CommandString += "[TransferVolume]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetTransferVolumes()])
+	CommandString += "[CurrentDestinationVolume]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetCurrentDestinationVolumes()])
+	CommandString += "[Mix]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetMixCriteria()])
+	CommandString += "[TipSequence]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["TipSequences"]]) #I have to include this for cross module support
+	CommandString += "[LiquidClass]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["LiquidClasses"]]) #I have to include this for cross module support
 	CommandString += "[KeepTips]" + "True or False"
 	return CommandString
 
-def GetLiquidClassStrings(TransferVolumesArray, LiquidCategoriesArray):
+def GetLiquidClassStrings(Input):
 	CommandString = ""
 	CommandString += "[Module]Pipette"
 	CommandString += "[Command]GetLiquidClassStrings"
-	CommandString += "[TransferVolume]" + HAMILTONIO.GetDelimiter().join(TransferVolumesArray)
-	CommandString += "[LiquidCategory]" + HAMILTONIO.GetDelimiter().join(LiquidCategoriesArray)
+	CommandString += "[TransferVolume]" + HAMILTONIO.GetDelimiter().join([str(vol) for vol in Input["TransferVolumes"]])
+	CommandString += "[LiquidCategory]" + HAMILTONIO.GetDelimiter().join(Input["LiquidCategories"])
 	return CommandString
 
-def GetTipSequenceStrings(TransferVolumesArray):
+def GetTipSequenceStrings(Input):
 	CommandString = ""
 	CommandString += "[Module]Pipette"
 	CommandString += "[Command]GetTipSequenceStrings"
-	CommandString += "[TransferVolume]" + HAMILTONIO.GetDelimiter().join(TransferVolumesArray)
+	CommandString += "[TransferVolume]" + HAMILTONIO.GetDelimiter().join([str(vol) for vol in Input["TransferVolumes"]])
 	return CommandString
 
 def Correct(Sequences):

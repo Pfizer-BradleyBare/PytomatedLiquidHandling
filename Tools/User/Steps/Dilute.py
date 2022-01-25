@@ -116,11 +116,64 @@ def Step(step):
 
 	LOG.EndCommentsLog()
 
-	FirstStep = LIQUID_TRANSFER.CreateStep(step.GetParentPlateStep(),FirstSourceList,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,FirstVolumeList,Mix)
-	LIQUID_TRANSFER.Step(FirstStep)
+	FirstSequences = PLATES.GetPlate(step.GetParentPlate()).CreatePipetteSequence(FirstSourceList, FirstVolumeList,Mix)
+	
+	for Counter in range(0,FirstSequences.GetNumSequencePositions()):
+		SOLUTIONS.GetSolution(FirstSequences.GetSources()[Counter]).AddVolume(FirstSequences.GetTransferVolumes()[Counter])
+		SOLUTIONS.AddPipetteVolume(FirstSequences.GetTransferVolumes()[Counter])
 
-	SecondStep = LIQUID_TRANSFER.CreateStep(step.GetParentPlateStep(),SecondSourceList,SOLUTIONS.TYPE_REAGENT,SOLUTIONS.STORAGE_AMBIENT,SecondVolumeList,SAMPLES.Column("Yes"))
-	LIQUID_TRANSFER.Step(SecondStep)
+	SecondSequences = PLATES.GetPlate(step.GetParentPlate()).CreatePipetteSequence(SecondSourceList, SecondVolumeList,SAMPLES.Column("Yes"))
+
+	for Counter in range(0,SecondSequences.GetNumSequencePositions()):
+		SOLUTIONS.GetSolution(SecondSequences.GetSources()[Counter]).AddVolume(SecondSequences.GetTransferVolumes()[Counter])
+		SOLUTIONS.AddPipetteVolume(SecondSequences.GetTransferVolumes()[Counter])
+
+	FirstSeqFlag = False
+	if FirstSequences.GetNumSequencePositions() != 0:
+
+		TransferVolumes = FirstSequences.GetTransferVolumes()
+
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":SAMPLES.Column("Water")}))
+		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
+		FirstSeqFlag = True
+
+	SecondSeqFlag = False
+	if SecondSequences.GetNumSequencePositions() != 0:
+
+		TransferVolumes = SecondSequences.GetTransferVolumes()
+
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":SAMPLES.Column("Water")}))
+		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
+		SecondSeqFlag = True
+
+	Response = HAMILTONIO.SendCommands()
+
+	if Response == False:
+		if FirstSeqFlag == True:
+			FirstLiquidClassStrings = []
+			FirstTipSequenceStrings = []
+
+		if SecondSeqFlag == True:
+			SecondLiquidClassStrings = []
+			SecondTipSequenceStrings = []
+	else:
+
+		if FirstSeqFlag == True:
+			FirstLiquidClassStrings = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+			FirstTipSequenceStrings = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+
+		if SecondSeqFlag == True:
+			SecondLiquidClassStrings = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+			SecondTipSequenceStrings = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+
+	if FirstSeqFlag == True:
+		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":FirstSequences,"LiquidClasses":FirstLiquidClassStrings,"TipSequences":FirstTipSequenceStrings}))
+	
+	if SecondSeqFlag == True:
+		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":SecondSequences,"LiquidClasses":SecondLiquidClassStrings,"TipSequences":SecondTipSequenceStrings}))
+	
+	Response = HAMILTONIO.SendCommands()
+
 
 	#Do the diluent pipetting
 #end

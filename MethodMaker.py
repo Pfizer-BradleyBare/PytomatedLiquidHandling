@@ -190,7 +190,7 @@ if HAMILTONIO.IsSimulated() == True:
 		HAMILTONIO.AddCommand(PRERUN.TRANSPORT.PreRun({}),False)
 
 	if VACUUM.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.VACUUM.PreRun({"VacuumPlateNames":VACUUM.GetVacuumParams()}),False)
+		HAMILTONIO.AddCommand(PRERUN.VACUUM.PreRun({"VacuumPlateNames":VACUUM.GetVacPlates()}),False)
 
 	if MAGNETIC_BEADS.IsUsed() == True:
 		HAMILTONIO.AddCommand(PRERUN.MAGNETIC_BEADS.PreRun({"PlateNames":MAGNETIC_BEADS.GetUsedParentPlateNames()}),False)

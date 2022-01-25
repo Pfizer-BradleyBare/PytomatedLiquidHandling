@@ -9,6 +9,54 @@ import copy
 #this dict is in the format: PlateName: [Category, LidUsed, ActiveState, SequencesList, FactorsList, TotalVolumesList]. Then list are the length of the number of samples
 Plates_List = {}
 
+class PipetteSequence:
+	def __init__ (self):
+		self.Destinations = []
+		self.DestinationPositions = []
+		self.Sources = []
+		self.SourcePositions = []
+		self.TransferVolumes = []
+		self.CurrentDestinationVolumes = []
+		self.Mix = []
+
+	def GetDestinations(self):
+		return self.Destinations
+
+	def GetDestinationPositions(self):
+		return self.DestinationPositions
+
+	def GetSources(self):
+		return self.Sources
+
+	def GetSourcePositions(self):
+		return self.SourcePositions
+
+	def GetTransferVolumes(self):
+		return self.TransferVolumes
+
+	def GetCurrentDestinationVolumes(self):
+		return self.CurrentDestinationVolumes
+
+	def GetMixCriteria(self):
+		return self.Mix
+
+	def GetNumSequencePositions(self):
+		return len(self.GetDestinationPositions())
+
+	def AppendToPipetteSequence(self,Dest,DestPos,Source,SourcePos,Vol,CurDestVol,Mix):
+		Index = 0
+		for Counter in range(0,self.GetNumSequencePositions()):
+			if DestPos > self.GetDestinationPositions()[Counter]:
+				Index = Counter + 1
+
+		self.GetDestinations().insert(Index,Dest)
+		self.GetDestinationPositions().insert(Index,DestPos)
+		self.GetSources().insert(Index,Source)
+		self.GetSourcePositions().insert(Index,SourcePos)
+		self.GetTransferVolumes().insert(Index,Vol)
+		self.GetCurrentDestinationVolumes().insert(Index,CurDestVol)
+		self.GetMixCriteria().insert(Index,Mix)
+
 class Class:
 ######################################################################### 
 #	Description: Initializes class to default starting parameters
@@ -131,6 +179,7 @@ class Class:
 	def CreatePipetteSequence(self, SourceList, SourceVolumeList, MixList):
 		global Plates_List
 		
+		NewSequence = PipetteSequence()
 		VolumesList = self.GetVolumes()
 		FactorsList = self.GetFactors()
 		DestinationPosition = self.GetSequences()
@@ -155,12 +204,13 @@ class Class:
 						SourcePosition = Plate.GetSequences()[count][count2]
 					#Modify source position to be different if needed because it is a plate and not a reagent
 
-					Expanded.append({"Destination Position":int(float(DestinationPosition[count][count2])),"Destination":self.GetName(), "Source Position":int(float(SourcePosition)), "Source":SourceList[count], "Volume":ActualVolume, "CurrentDestinationVolume":VolumesList[count], "Mix":MixList[count]})
+					NewSequence.AppendToPipetteSequence(self.GetName(),DestinationPosition[count][count2],SourceList[count],SourcePosition,ActualVolume,VolumesList[count],MixList[count])
+					
 			
 				self.GetVolumes()[count] += ActualVolume
 				self.UpdateMaxVolume()
-		
-		return copy.deepcopy(sorted(Expanded, key=lambda x: x["Destination Position"]))
+
+		return copy.deepcopy(NewSequence)
 
 def Init():
 	global Plates_List

@@ -56,12 +56,14 @@ def WaitForTimer():
 		HAMILTONIO.AddCommand(TIMER.Wait({}))
 		Response = HAMILTONIO.SendCommands()
 
-		SleepingPlate["Callback"](SleepingPlate["Step"])
-		#Calls our callback function
-
 		Timer_List.remove(SleepingPlate)
 
 		PLATES.GetPlate(SleepingPlate["Step"].GetParentPlate()).Activate()
+
+		SleepingPlate["Callback"](SleepingPlate["Step"])
+		#Calls our callback function
+
+
 
 def Callback(step):
 	pass
