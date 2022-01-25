@@ -28,10 +28,10 @@ def GetReservationLidSequenceString(Input):
 	CommandString += "[PlateName]" + str(Input["PlateName"])
 	return CommandString
 
-def GetReservationLidTansportType(Input):
+def GetReservationLidTransportType(Input):
 	CommandString = ""
 	CommandString += "[Module]Heater"
-	CommandString += "[Command]GetReservationLidTansportType"
+	CommandString += "[Command]GetReservationLidTransportType"
 	CommandString += "[PlateName]" + str(Input["PlateName"])
 	return CommandString
 

@@ -104,13 +104,13 @@ def Callback(step):
 		GeneralTipSeqs = Response.pop(0)["Response"]
 	#Lets get the info we need to move the plate
 
-	PIPETTE.Transfer(RemoveSequences, BeadsLiquidClass, BeadsTipSeqs)
+	HAMILTONIO.AddCommand(PIPETTE.Transfer(RemoveSequences, BeadsLiquidClass, BeadsTipSeqs))
 	#Remove the liquid
 
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":RackType,"SourceSequenceString":RackSequence,"DestinationLabwareType":PlateType,"DestinationSequenceString":PlateSequence,"Park":"True","CheckExists":"After"}))
 	#Remove the plate from the rack
 		
-	PIPETTE.Transfer(AddSequences, GeneralLiquidClass, GeneralTipSeqs)
+	HAMILTONIO.AddCommand(PIPETTE.Transfer(AddSequences, GeneralLiquidClass, GeneralTipSeqs))
 	Response = HAMILTONIO.SendCommands()
 	#Add the storage liquid
 

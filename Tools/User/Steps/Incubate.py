@@ -105,15 +105,15 @@ def Callback(step):
 	#Stop heating and shaking
 
 	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(LID.GetReservationLidTansportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}))
 	HAMILTONIO.AddCommand(HEATER.GetReservationLidSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(HEATER.GetReservationLidTansportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(HEATER.GetReservationLidTransportType({"PlateName":ParentPlate}))
 	#Lid
 
 	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}))
 	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}))
 	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterTansportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterTransportType({"PlateName":ParentPlate}))
 	#Plate
 
 	Response = HAMILTONIO.SendCommands()
@@ -167,14 +167,14 @@ def Step(step):
 	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}))
 	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}))
 	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterTansportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterTransportType({"PlateName":ParentPlate}))
 	#Plate
 
 	HAMILTONIO.AddCommand(LID.AcquireReservation({"PlateName":ParentPlate}))
 	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(LID.GetReservationLidTansportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}))
 	HAMILTONIO.AddCommand(HEATER.GetReservationLidSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(HEATER.GetReservationLidTansportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(HEATER.GetReservationLidTransportType({"PlateName":ParentPlate}))
 	#Lid
 
 	Response = HAMILTONIO.SendCommands()
