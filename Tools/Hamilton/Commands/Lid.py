@@ -23,14 +23,14 @@ def ReleaseReservation(Input):
 
 def GetReservationLidSequenceString(Input):
 	CommandString = ""
-	CommandString += "[Module]Heater"
+	CommandString += "[Module]Lid"
 	CommandString += "[Command]GetReservationLidSequenceString"
 	CommandString += "[PlateName]" + str(Input["PlateName"])
 	return CommandString
 
 def GetReservationLidTransportType(Input):
 	CommandString = ""
-	CommandString += "[Module]Heater"
+	CommandString += "[Module]Lid"
 	CommandString += "[Command]GetReservationLidTransportType"
 	CommandString += "[PlateName]" + str(Input["PlateName"])
 	return CommandString
