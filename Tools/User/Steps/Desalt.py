@@ -9,10 +9,10 @@ from ...General import Log as LOG
 from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 
 
-TITLE = "Desalt"
+TITLE = "IMCS SizeX Desalting"
 SOURCE = "Source"
 EQUILIBRATION_BUFFER = "Equilibration Buffer"
-TYPE = "Type"
+TYPE = "Volume (uL)**100 or 200 only**"
 
 #This variable tracks whether or not the tips have been equilibrated
 Equilibrated = None
