@@ -186,7 +186,7 @@ if HAMILTONIO.IsSimulated() == True:
 	if WAIT.IsUsed() == True:
 		HAMILTONIO.AddCommand(PRERUN.TIMER.PreRun({}),False)
 
-	if INCUBATE.IsUsed() == True:
+	if INCUBATE.IsUsed() == True or VACUUM.IsUsed() == True:
 		HAMILTONIO.AddCommand(PRERUN.TRANSPORT.PreRun({}),False)
 
 	if VACUUM.IsUsed() == True:

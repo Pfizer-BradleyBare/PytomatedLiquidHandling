@@ -71,13 +71,13 @@ def Step(step):
 	if Sequence.GetNumSequencePositions() != 0:
 		TransferVolumes = Sequence.GetTransferVolumes()
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":SAMPLES.Column("Water")}))
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":len(TransferVolumes)*["Water"]}))
 		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 		LiquidTransferFlag = True
 
 	HAMILTONIO.AddCommand(VACUUM.GetVacuumPlateSequenceString({"VacuumPlateName":VacPlate}))
 
-	if not (TITLE == STEPS.GetSteps()[STEPS.GetStepIndex(step)-1].GetTitle()) and not (step.GetParentPlate() == STEPS.GetSteps()[STEPS.GetStepIndex(step)-1].GetParentPlate()):
+	if not (TITLE == STEPS.GetSteps()[STEPS.GetStepIndex(step)-1].GetTitle()):
 
 		HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[Destination]}))
 		HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[Destination]}))
@@ -166,7 +166,17 @@ def PreVacuumWaitCallback(step):
 
 def VacuumWaitCallback(step):
 
-	if not (TITLE == STEPS.GetSteps()[STEPS.GetStepIndex(step)+1].GetTitle()) and not (step.GetParentPlate() == STEPS.GetSteps()[STEPS.GetStepIndex(step)+1].GetParentPlate()):
+	Destination = step.GetParentPlate()
+	Volume = step.GetParameters()[VOLUME]
+	VacPlate = step.GetParameters()[VACUUM_PLATE]
+	WaitTime = step.GetParameters()[WAIT_TIME]
+	Pressure = step.GetParameters()[PRESSURE]
+	Time = step.GetParameters()[TIME]
+
+	HAMILTONIO.AddCommand(VACUUM.Stop({"VacuumPlateName":VacPlate}))
+	Response = HAMILTONIO.SendCommands()
+	
+	if not (TITLE == STEPS.GetSteps()[STEPS.GetStepIndex(step)+1].GetTitle()):
 
 		HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[Destination]}))
 		HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[Destination]}))
@@ -201,8 +211,6 @@ def VacuumWaitCallback(step):
 			VacuumManifoldSequence = Response.pop(0)["Response"]
 			VacuumManifoldType = Response.pop(0)["Response"]
 		#Lets get the info we need to move everything
-		
-		Response = ResponseHolder
 
 		HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":VacuumManifoldType,"SourceSequenceString":VacuumManifoldSequence,"DestinationLabwareType":VacuumParkType,"DestinationSequenceString":VacuumParkSequence,"Park":"False","CheckExists":"False"}))
 		HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":CollectionPlateType,"SourceSequenceString":CollectionPlateSequence,"DestinationLabwareType":DeckPlateType,"DestinationSequenceString":DeckPlateSequence,"Park":"True","CheckExists":"After"}))

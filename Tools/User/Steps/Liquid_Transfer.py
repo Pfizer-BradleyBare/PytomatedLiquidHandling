@@ -56,7 +56,7 @@ def Step(step):
 
 		TransferVolumes = Sequence.GetTransferVolumes()
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":SAMPLES.Column("Water")}))
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":len(TransferVolumes)*["Water"]}))
 		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 
 		Response = HAMILTONIO.SendCommands()
