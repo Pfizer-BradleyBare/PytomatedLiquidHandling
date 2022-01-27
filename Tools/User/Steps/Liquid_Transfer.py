@@ -68,7 +68,7 @@ def Step(step):
 			LiquidClassStrings = Response[0]["Response"].split(HAMILTONIO.GetDelimiter())
 			TipSequenceStrings = Response[1]["Response"].split(HAMILTONIO.GetDelimiter())
 
-		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":Sequence,"LiquidClasses":LiquidClassStrings,"TipSequences":TipSequenceStrings,"KeepTips":"False"}))
+		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":Sequence,"LiquidClasses":LiquidClassStrings,"TipSequences":TipSequenceStrings,"KeepTips":"False","DestinationPipettingOffset":0}))
 		Response = HAMILTONIO.SendCommands()
 
 

@@ -167,10 +167,10 @@ def Step(step):
 			SecondTipSequenceStrings = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
 
 	if FirstSeqFlag == True:
-		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":FirstSequences,"LiquidClasses":FirstLiquidClassStrings,"TipSequences":FirstTipSequenceStrings,"KeepTips":"False"}))
+		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":FirstSequences,"LiquidClasses":FirstLiquidClassStrings,"TipSequences":FirstTipSequenceStrings,"KeepTips":"False","DestinationPipettingOffset":0}))
 	
 	if SecondSeqFlag == True:
-		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":SecondSequences,"LiquidClasses":SecondLiquidClassStrings,"TipSequences":SecondTipSequenceStrings,"KeepTips":"False"}))
+		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":SecondSequences,"LiquidClasses":SecondLiquidClassStrings,"TipSequences":SecondTipSequenceStrings,"KeepTips":"False","DestinationPipettingOffset":0}))
 	
 	Response = HAMILTONIO.SendCommands()
 

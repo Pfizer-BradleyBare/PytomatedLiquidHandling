@@ -24,7 +24,8 @@ def Transfer(Input):
 	CommandString += "[Mix]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetMixCriteria()])
 	CommandString += "[TipSequence]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["TipSequences"]]) #I have to include this for cross module support
 	CommandString += "[LiquidClass]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["LiquidClasses"]]) #I have to include this for cross module support
-	CommandString += "[KeepTips]" + Input["KeepTips"] #If True, the command will assume that tips are on an isolated rack (Tip support rack or similar)
+	CommandString += "[DestinationPipettingOffset]" + str(Input["DestinationPipettingOffset"])
+	CommandString += "[KeepTips]" + str(Input["KeepTips"]) #If True, the command will assume that tips are on an isolated rack (Tip support rack or similar)
 	return CommandString
 
 def GetLiquidClassStrings(Input):

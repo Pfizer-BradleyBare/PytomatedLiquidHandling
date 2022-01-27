@@ -143,7 +143,7 @@ def Step(step):
 	#We need to modify the destination to be the vacuum plate sequence above. The liquid needs to move through the vacuum plate.
 	#We additionally need to modify the CurrentDestinationVolume to be zero since the vacuum plate should always be zero.
 	if Sequence.GetNumSequencePositions() != 0:
-		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":Sequence,"LiquidClasses":LiquidClassStrings,"TipSequences":TipSequenceStrings,"KeepTips":"False"}))
+		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":Sequence,"LiquidClasses":LiquidClassStrings,"TipSequences":TipSequenceStrings,"KeepTips":"False","DestinationPipettingOffset":4}))
 		Response = HAMILTONIO.SendCommands()
 	#This will perform the move of the collection plate, manifold (If required) and finally pipette liquid into the vacuum plate.
 
