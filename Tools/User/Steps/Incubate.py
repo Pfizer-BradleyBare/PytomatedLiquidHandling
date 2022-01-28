@@ -145,7 +145,7 @@ def Callback(step):
 
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":HeaterLidType,"SourceSequenceString":HeaterLidSequence,"DestinationLabwareType":LidType,"DestinationSequenceString":LidSequence,"Park":"False","CheckExists":"After"}))
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":HeaterType,"SourceSequenceString":HeaterSequence,"DestinationLabwareType":PlateType,"DestinationSequenceString":PlateSequence,"Park":"True","CheckExists":"After"}))
-	HAMILTONIO.AddCommand(HEATER.ReleaseReservation({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(HEATER.ReleaseReservation({"PlateName":ParentPlate}),False)
 	HAMILTONIO.AddCommand(LID.ReleaseReservation({"PlateName":ParentPlate}))
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the lid then plate then release all reservations

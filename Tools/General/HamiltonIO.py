@@ -74,7 +74,7 @@ def SendCommands():
 
 	#Send the command list
 	global SimulatedIO
-	if SimulatedIO == False:
+	if SimulatedIO == False and Command != "":
 		file = open(HAMILTON_COMMAND_TEMP_FILE, "w")
 		file.write(Command)
 		file.close()
