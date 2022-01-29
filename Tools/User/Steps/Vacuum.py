@@ -53,7 +53,7 @@ def Step(step):
 	Pressure = step.GetParameters()[PRESSURE]
 	Time = step.GetParameters()[TIME]
 
-	PLATES.GetPlate(step.GetParentPlate()).SetVacuumState()
+	PLATES.GetPlate(step.GetParentPlate()).SetVacuumState(VacPlate)
 	#The plate that we vacuum into needs to be a vacuum compatible plate. Set that here on a per step basis
 
 	Sequence = PLATES.GetPlate(Destination).CreatePipetteSequence(SourceList, VolumeList, SAMPLES.Column("No"))

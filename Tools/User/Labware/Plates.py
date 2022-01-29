@@ -88,8 +88,8 @@ class Class:
 	def GetLidState(self):
 		return self.Lid
 
-	def SetVacuumState(self):
-		self.Vacuum = True
+	def SetVacuumState(self, VacuumPlate):
+		self.Vacuum = VacuumPlate
 
 	def GetContext(self):
 		return self.Context
