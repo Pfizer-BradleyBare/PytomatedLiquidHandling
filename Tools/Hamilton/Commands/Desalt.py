@@ -2,7 +2,7 @@ from ...General import HamiltonIO as HAMILTONIO
 from ...General import Log as LOG
 
 
-def PreRun(Params):
+def PreRun(Input):
 	CommandString = ""
 	CommandString += "[Module]PreRun"
 	CommandString += "[Command]Desalt"
@@ -16,14 +16,14 @@ def PreRun(Params):
 	return CommandString
 
 #this function should start an equilibration on the Hamilton system. If this function is called twice, for whatever reason, the Hamilton should know the tips are equilibrated. 
-def Equilibrate():
+def Equilibrate(Input):
 	CommandString = ""
 	CommandString += "[Module]Desalt"
 	CommandString += "[Command]Equilibrate"
 	return CommandString
 
 #this function should start to process the samples through the desalting tips. The tips are assumed to be equilibrated. It is possible to equilibrate during this step if it hasn't been done yet.
-def Process():
+def Process(Input):
 	CommandString = ""
 	CommandString += "[Module]Desalt"
 	CommandString += "[Command]Process"

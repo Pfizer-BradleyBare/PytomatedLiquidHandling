@@ -104,7 +104,8 @@ class Class:
 	def __eq__(self,other):
 		if not isinstance(other, Class):
 			return False
-		return self.Title == other.Title and self.Row == other.Row and self.Col == other.Col and self.Parent == other.Parent and self.Parameters == other.Parameters
+		return self.Row == other.Row and self.Col == other.Col
+		#Row and Col in excel file is always unique so we can find step using only those parameters.
 
 	def GetTitle(self):
 		return self.Title

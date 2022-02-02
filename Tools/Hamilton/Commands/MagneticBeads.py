@@ -12,14 +12,14 @@ def GetCondensedBeadsLiquidClassStrings(Input):
 	CommandString = ""
 	CommandString += "[Module]Heater"
 	CommandString += "[Command]GetCondensedBeadsLiquidClassStrings"
-	CommandString += "[PlateName]" + str(Input["PlateName"]) + "[TransferVolumes]" + HAMILTONIO.GetDelimiter().join(Input["TransferVolumes"])
+	CommandString += "[PlateName]" + str(Input["PlateName"]) + "[TransferVolumes]" + HAMILTONIO.GetDelimiter().join([str(vol) for vol in Input["TransferVolumes"]])
 	return CommandString
 
 def GetGeneralLiquidTransferLiquidClassStrings(Input):
 	CommandString = ""
 	CommandString += "[Module]Heater"
 	CommandString += "[Command]GetGeneralLiquidTransferLiquidClassStrings"
-	CommandString += "[PlateName]" + str(Input["PlateName"]) + "[TransferVolumes]" + HAMILTONIO.GetDelimiter().join(Input["TransferVolumes"])
+	CommandString += "[PlateName]" + str(Input["PlateName"]) + "[TransferVolumes]" + HAMILTONIO.GetDelimiter().join([str(vol) for vol in Input["TransferVolumes"]])
 	return CommandString
 
 def GetMagneticRackPlateSequenceString(Input):

@@ -51,6 +51,10 @@ def Step(step):
 		elif Choices[count] == NewPlate2:
 			NewPlate1Factors.append(0 * ParentFactors[count])
 			NewPlate2Factors.append(1 * ParentFactors[count])
+		elif Choices[count] == "Concurrent":
+			NewPlate1Factors.append(1 * ParentFactors[count])
+			NewPlate2Factors.append(1 * ParentFactors[count])
+		#If it is a concurrent workflow then that means we want to maintain the current factors as the parent.
 		else:
 			NewPlate1Factors.append(0.5 * ParentFactors[count])
 			NewPlate2Factors.append(0.5 * ParentFactors[count])

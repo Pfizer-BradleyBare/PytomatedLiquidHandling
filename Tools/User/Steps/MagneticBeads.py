@@ -70,13 +70,13 @@ def Callback(step):
 	#Get transport related info
 
 	RemoveSequences = PLATES.GetPlate(ParentPlate).CreatePipetteSequence(SAMPLES.Column(BeadsPlate), PLATES.GetPlate(BeadsPlate).GetVolumes(), SAMPLES.Column("No"))
-	TransferVolumes = [str(x["Volume"]) for x in RemoveSequences]
+	TransferVolumes = RemoveSequences.GetTransferVolumes()
 	HAMILTONIO.AddCommand(MAGNETICBEADS.GetCondensedBeadsLiquidClassStrings({"PlateName":ParentPlate, "TransferVolumes":TransferVolumes}))
 	HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 	#For removing liquid from the plate
 
 	AddSequences = PLATES.GetPlate(BeadsPlate).CreatePipetteSequence(SAMPLES.Column(Buffer), SAMPLES.Column(Volume), SAMPLES.Column("After"))
-	TransferVolumes = [str(x["Volume"]) for x in AddSequences]
+	TransferVolumes = AddSequences.GetTransferVolumes()
 	HAMILTONIO.AddCommand(MAGNETICBEADS.GetGeneralLiquidTransferLiquidClassStrings({"PlateName":ParentPlate, "TransferVolumes":TransferVolumes}))
 	HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 	#For adding buffer to the plate
@@ -104,13 +104,13 @@ def Callback(step):
 		GeneralTipSeqs = Response.pop(0)["Response"]
 	#Lets get the info we need to move the plate
 
-	HAMILTONIO.AddCommand(PIPETTE.Transfer(RemoveSequences, BeadsLiquidClass, BeadsTipSeqs))
+	HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":RemoveSequences,"LiquidClasses":BeadsLiquidClass,"TipSequences":BeadsTipSeqs,"KeepTips":"False","DestinationPipettingOffset":0}))
 	#Remove the liquid
 
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":RackType,"SourceSequenceString":RackSequence,"DestinationLabwareType":PlateType,"DestinationSequenceString":PlateSequence,"Park":"True","CheckExists":"After"}))
 	#Remove the plate from the rack
 		
-	HAMILTONIO.AddCommand(PIPETTE.Transfer(AddSequences, GeneralLiquidClass, GeneralTipSeqs))
+	HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":AddSequences,"LiquidClasses":GeneralLiquidClass,"TipSequences":GeneralTipSeqs,"KeepTips":"False","DestinationPipettingOffset":0}))
 	Response = HAMILTONIO.SendCommands()
 	#Add the storage liquid
 

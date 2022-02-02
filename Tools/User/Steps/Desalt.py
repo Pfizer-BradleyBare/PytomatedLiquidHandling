@@ -9,10 +9,10 @@ from ...General import Log as LOG
 from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 
 
-TITLE = "IMCS SizeX Desalting"
+TITLE = "Desalt"
 SOURCE = "Source"
 EQUILIBRATION_BUFFER = "Equilibration Buffer"
-TYPE = "Volume (uL)**100 or 200 only**"
+TYPE = "Type"
 
 #This variable tracks whether or not the tips have been equilibrated
 Equilibrated = None
@@ -84,16 +84,10 @@ def Init(MutableStepsList):
 			Desalting_Params["Source"] = Step.GetParameters()[SOURCE]
 			Desalting_Params["Buffer"] = Step.GetParameters()[EQUILIBRATION_BUFFER]
 			Desalting_Params["Destination"] = Step.GetParentPlate()
-
-			Source = CONFIGURATION.GetDeckLoading(Step.GetParameters()[SOURCE])
-			Buffer = CONFIGURATION.GetDeckLoading(Step.GetParameters()[EQUILIBRATION_BUFFER])
-			Destination = CONFIGURATION.GetDeckLoading(Step.GetParentPlate())
-			Waste = CONFIGURATION.GetDeckLoading("Desalting Waste")
-
-			Desalting_Params["Source Sequence"] = Step.GetParameters()[SOURCE] if Source == None else Source["Sequence"]
-			Desalting_Params["Buffer Sequence"] = Step.GetParameters()[EQUILIBRATION_BUFFER] if Buffer == None else Buffer["Sequence"]
-			Desalting_Params["Waste Sequence"] = "Desalting Waste" if Waste == None else Waste["Sequence"]
-			Desalting_Params["Destination Sequence"] = Step.GetParentPlate() if Destination == None else Destination["Sequence"]
+			Desalting_Params["Source"] = Step.GetParameters()[SOURCE]
+			Desalting_Params["Buffer"] = Step.GetParameters()[EQUILIBRATION_BUFFER]
+			Desalting_Params["Waste"] = "Desalting Waste"
+			Desalting_Params["Destination"] = Step.GetParentPlate()
 
 			SOLUTIONS.AddSolution(Desalting_Params["Buffer"], SOLUTIONS.TYPE_BUFFER, SOLUTIONS.STORAGE_AMBIENT)
 			for i in range(0,NumTipSets):

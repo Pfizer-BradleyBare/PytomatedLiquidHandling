@@ -60,6 +60,7 @@ import Tools.User.Steps.Aliquot as ALIQUOT
 import Tools.User.Steps.Pool as POOL
 import Tools.User.Steps.PreLoad_Liquid as PRELOAD_LIQUID
 import Tools.User.Steps.MagneticBeads as MAGNETIC_BEADS
+import Tools.User.Steps.Merge_Plate as MERGE_PLATE
 
 import Tools.Hamilton.PreRun as PRERUN
 ##import Tools.Hamilton.Commands.StatusUpdate as STATUS_UPDATE
@@ -94,6 +95,7 @@ POOL.Init(STEPS.GetSteps())
 PRELOAD_LIQUID.Init(STEPS.GetSteps())
 VACUUM.Init(STEPS.GetSteps(), SAMPLES.GetSequences())
 MAGNETIC_BEADS.Init(STEPS.GetSteps())
+MERGE_PLATE.Init(STEPS.GetSteps())
 
 #init steps
 PLATES.StartStepSequence(STEPS.GetStartingPlate())
@@ -124,7 +126,9 @@ Steps = {
 
 	PRELOAD_LIQUID.TITLE: PRELOAD_LIQUID.Step,
 
-	MAGNETIC_BEADS.TITLE: MAGNETIC_BEADS.Step
+	MAGNETIC_BEADS.TITLE: MAGNETIC_BEADS.Step,
+
+	MERGE_PLATE.TITLE: MERGE_PLATE.Step
 }
 
 while(True):
@@ -180,8 +184,8 @@ if HAMILTONIO.IsSimulated() == True:
 	if NOTIFY.IsUsed() == True:
 		HAMILTONIO.AddCommand(PRERUN.NOTIFY.PreRun({}),False)
 	
-	#if DESALT.IsUsed() == True:
-		#PRERUN.DESALT.PreRun(DESALT.GetDesaltParams())
+	if DESALT.IsUsed() == True:
+		HAMILTONIO.AddCommand(PRERUN.DESALT.PreRun(DESALT.GetDesaltParams()))
 
 	if WAIT.IsUsed() == True:
 		HAMILTONIO.AddCommand(PRERUN.TIMER.PreRun({}),False)
