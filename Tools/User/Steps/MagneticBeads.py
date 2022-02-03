@@ -47,7 +47,7 @@ def Init(MutableStepsList):
 	for step in MutableStepsList:
 		if step.GetTitle() == TITLE:
 			IsUsedFlag = True
-			ParentPlateNames.add(step.GetParentPlate())
+			ParentPlateNames.add(step.GetParameters()[MAGNETIC_BEADS_PLATE])
 
 def GetUsedParentPlateNames():
 	global ParentPlateNames
