@@ -53,8 +53,11 @@ def GetUsedParentPlateNames():
 	global ParentPlateNames
 	return ParentPlateNames
 
+RepsCompleted = 1
+
 def Callback(step):
-	
+	global RepsCompleted
+
 	ParentPlate = step.GetParentPlate()
 	Params = step.GetParameters()
 	BeadsPlate = Params[MAGNETIC_BEADS_PLATE]
@@ -114,7 +117,22 @@ def Callback(step):
 	Response = HAMILTONIO.SendCommands()
 	#Add the storage liquid
 
+	#This finished a rep. We also assume that the rep starts in Step function.
+	print("RepsCompleted",RepsCompleted)
+	if RepsCompleted < Reps:
+		RepsCompleted += 1
+
+		HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":PlateType,"SourceSequenceString":PlateSequence,"DestinationLabwareType":RackType,"DestinationSequenceString":RackSequence,"Park":"True","CheckExists":"After"}))
+		Response = HAMILTONIO.SendCommands()
+		#Move plate to rack
+		
+		WAIT.StartTimer(step, Time, Callback)
+		#Wait for beads to condense
+
 def Step(step):
+	global RepsCompleted
+	RepsCompleted = 1
+
 	LOG.BeginCommentsLog()
 	LOG.EndCommentsLog()
 
@@ -124,36 +142,33 @@ def Step(step):
 	Buffer = Params[STORAGE_BUFFER]
 	Volume = Params[BUFFER_VOLUME]
 	Time = Params[WAIT_TIME]
-	Reps = int(Params[REPS])
 
-	for Counter in range(0,Reps):
+	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}))
+	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}))
+	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateSequenceString({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateTransportType({"PlateName":ParentPlate}))
 
-		HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}))
-		HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}))
-		HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateSequenceString({"PlateName":ParentPlate}))
-		HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateTransportType({"PlateName":ParentPlate}))
+	Response = HAMILTONIO.SendCommands()
+	#Get information for moving the plate to the rack
 
-		Response = HAMILTONIO.SendCommands()
-		#Get information for moving the plate to the rack
+	if Response == False:
+		PlateSequence = ""
+		PlateType = ""
+		RackSequence = ""
+		RackType = ""
+	else:
+		PlateSequence = Response.pop(0)["Response"]
+		PlateType = Response.pop(0)["Response"]
+		RackSequence = Response.pop(0)["Response"]
+		RackType = Response.pop(0)["Response"]
+	#Lets get the info we need to move the plate
 
-		if Response == False:
-			PlateSequence = ""
-			PlateType = ""
-			RackSequence = ""
-			RackType = ""
-		else:
-			PlateSequence = Response.pop(0)["Response"]
-			PlateType = Response.pop(0)["Response"]
-			RackSequence = Response.pop(0)["Response"]
-			RackType = Response.pop(0)["Response"]
-		#Lets get the info we need to move the plate
-
-		HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":PlateType,"SourceSequenceString":PlateSequence,"DestinationLabwareType":RackType,"DestinationSequenceString":RackSequence,"Park":"True","CheckExists":"After"}))
-		Response = HAMILTONIO.SendCommands()
-		#Move plate to rack
+	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":PlateType,"SourceSequenceString":PlateSequence,"DestinationLabwareType":RackType,"DestinationSequenceString":RackSequence,"Park":"True","CheckExists":"After"}))
+	Response = HAMILTONIO.SendCommands()
+	#Move plate to rack
 		
-		WAIT.StartTimer(step, Time, Callback)
-		#Wait for beads to condense
+	WAIT.StartTimer(step, Time, Callback)
+	#Wait for beads to condense
 		
 
 
