@@ -1,6 +1,7 @@
 from ..Steps import Steps as STEPS
 from ..Steps import Desalt as DESALT
 from ..Labware import Plates as PLATES
+from ..Labware import Solutions as SOLUTIONS
 from ...Hamilton.Commands import MagneticBeads as MAGNETICBEADS
 from ...Hamilton.Commands import Transport as TRANSPORT
 from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
@@ -66,23 +67,37 @@ def Callback(step):
 	Time = Params[WAIT_TIME]
 	Reps = int(Params[REPS])
 
-	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}))
-	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}))
-	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateTransportType({"PlateName":ParentPlate}))
+	for Source in SAMPLES.Column(Buffer):
+		SOLUTIONS.AddSolution(Source, SOLUTIONS.TYPE_BUFFER,SOLUTIONS.STORAGE_AMBIENT)
+
+	for Source in SAMPLES.Column(BeadsPlate):
+		SOLUTIONS.AddSolution(Source, SOLUTIONS.TYPE_PLATE,SOLUTIONS.STORAGE_AMBIENT)
+
+	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[BeadsPlate]}))
+	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[BeadsPlate]}))
+	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateSequenceString({"PlateName":BeadsPlate}))
+	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateTransportType({"PlateName":BeadsPlate}))
 	#Get transport related info
 
 	RemoveSequences = PLATES.GetPlate(ParentPlate).CreatePipetteSequence(SAMPLES.Column(BeadsPlate), PLATES.GetPlate(BeadsPlate).GetVolumes(), SAMPLES.Column("No"))
 	TransferVolumes = RemoveSequences.GetTransferVolumes()
-	HAMILTONIO.AddCommand(MAGNETICBEADS.GetCondensedBeadsLiquidClassStrings({"PlateName":ParentPlate, "TransferVolumes":TransferVolumes}))
+	HAMILTONIO.AddCommand(MAGNETICBEADS.GetCondensedBeadsLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}))
 	HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 	#For removing liquid from the plate
 
+	for Counter in range(0,RemoveSequences.GetNumSequencePositions()):
+		SOLUTIONS.GetSolution(RemoveSequences.GetSources()[Counter]).AddVolume(RemoveSequences.GetTransferVolumes()[Counter])
+		SOLUTIONS.AddPipetteVolume(RemoveSequences.GetTransferVolumes()[Counter])
+
 	AddSequences = PLATES.GetPlate(BeadsPlate).CreatePipetteSequence(SAMPLES.Column(Buffer), SAMPLES.Column(Volume), SAMPLES.Column("After"))
 	TransferVolumes = AddSequences.GetTransferVolumes()
-	HAMILTONIO.AddCommand(MAGNETICBEADS.GetGeneralLiquidTransferLiquidClassStrings({"PlateName":ParentPlate, "TransferVolumes":TransferVolumes}))
+	HAMILTONIO.AddCommand(MAGNETICBEADS.GetGeneralLiquidTransferLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}))
 	HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 	#For adding buffer to the plate
+
+	for Counter in range(0,AddSequences.GetNumSequencePositions()):
+		SOLUTIONS.GetSolution(AddSequences.GetSources()[Counter]).AddVolume(AddSequences.GetTransferVolumes()[Counter])
+		SOLUTIONS.AddPipetteVolume(AddSequences.GetTransferVolumes()[Counter])
 
 	Response = HAMILTONIO.SendCommands()
 	#Get information for moving the plate to the rack
@@ -101,23 +116,25 @@ def Callback(step):
 		PlateType = Response.pop(0)["Response"]
 		RackSequence = Response.pop(0)["Response"]
 		RackType = Response.pop(0)["Response"]
-		BeadsLiquidClass = Response.pop(0)["Response"]
-		BeadsTipSeqs = Response.pop(0)["Response"]
-		GeneralLiquidClass = Response.pop(0)["Response"]
-		GeneralTipSeqs = Response.pop(0)["Response"]
+		BeadsLiquidClass = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+		BeadsTipSeqs = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+		GeneralLiquidClass = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+		GeneralTipSeqs = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
 	#Lets get the info we need to move the plate
 
-	HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":RemoveSequences,"LiquidClasses":BeadsLiquidClass,"TipSequences":BeadsTipSeqs,"KeepTips":"False","DestinationPipettingOffset":0}))
-	#Remove the liquid
+	if RemoveSequences.GetNumSequencePositions() != 0:
+                HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":RemoveSequences,"LiquidClasses":BeadsLiquidClass,"TipSequences":BeadsTipSeqs,"KeepTips":"False","DestinationPipettingOffset":0}))
+        #Remove the liquid
 
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":RackType,"SourceSequenceString":RackSequence,"DestinationLabwareType":PlateType,"DestinationSequenceString":PlateSequence,"Park":"True","CheckExists":"After"}))
 	#Remove the plate from the rack
-		
-	HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":AddSequences,"LiquidClasses":GeneralLiquidClass,"TipSequences":GeneralTipSeqs,"KeepTips":"False","DestinationPipettingOffset":0}))
-	Response = HAMILTONIO.SendCommands()
-	#Add the storage liquid
 
-	#This finished a rep. We also assume that the rep starts in Step function.
+	if AddSequences.GetNumSequencePositions() != 0:
+                HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":AddSequences,"LiquidClasses":GeneralLiquidClass,"TipSequences":GeneralTipSeqs,"KeepTips":"False","DestinationPipettingOffset":0}))
+	#Add the storage liquid
+	Response = HAMILTONIO.SendCommands()
+
+        #This finished a rep. We also assume that the rep starts in Step function.
 	print("RepsCompleted",RepsCompleted)
 	if RepsCompleted < Reps:
 		RepsCompleted += 1
@@ -143,10 +160,10 @@ def Step(step):
 	Volume = Params[BUFFER_VOLUME]
 	Time = Params[WAIT_TIME]
 
-	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}))
-	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}))
-	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateTransportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[BeadsPlate]}))
+	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[BeadsPlate]}))
+	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateSequenceString({"PlateName":BeadsPlate}))
+	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateTransportType({"PlateName":BeadsPlate}))
 
 	Response = HAMILTONIO.SendCommands()
 	#Get information for moving the plate to the rack
