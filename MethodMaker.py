@@ -168,8 +168,6 @@ if HAMILTONIO.IsSimulated() == True:
 	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
 	HAMILTONIO.AddCommand(PRERUN.Labware(Labware),False)
 
-	CONFIGURATION.WriteLoadingInformation(Labware)
-
 	if GenerateList == True:
 		pass
 		PREPLIST.GeneratePrepSheet(Labware)

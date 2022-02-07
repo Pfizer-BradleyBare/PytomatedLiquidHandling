@@ -15,10 +15,7 @@ CONFIGURATION_FOLDER = "HamiltonVisualMethodEditorConfiguration\\Configuration"
 SysConfig = {}
 Sequences = {}
 PreferredLoading = {}
-DeckLoading = {}
 StepPreferredLoading = {}
-CheckSequences = []
-OmitLoading = set()
 
 ######################################################################### 
 #	Description: Initializes the library by pulling information from Config files
@@ -43,112 +40,13 @@ def Init():
 	SysConfig = yaml.full_load(file)
 	file.close()
 
-	if HAMILTONIO.IsSimulated() == False:
-		file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),CONFIGURATION_FOLDER,"Output","DeckLoading.yaml"))
-		DeckLoading = yaml.full_load(file)
-		file.close()
-	else:
-	 	DeckLoading = None
-
-def WriteLoadingInformation(YamlData):
-	global DeckLoading
-
-	file  = open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),CONFIGURATION_FOLDER,"Output","DeckLoading.yaml"),"w")
-	yaml.dump(YamlData,file)
-	file.close()
-	DeckLoading = YamlData
-
-
-
-######################################################################### 
-#	Description: Returns a list of floats describing well dispense heights 
-#	Input Arguments: [PlateName: String], [WellVolumes: List[Float]]
-#	Returns: [DispenseHeights: List[float]]
-#########################################################################
-def WellVolumeToDispenseHeight(PlateName, WellVolumes):
-	HEIGHT_INCREMENT = 0.01
-
-	#use platename to get the  Labware Category, Labware Type, and Max Volume from storage file​	
-	LabwareLoading = GetDeckLoading(PlateName)
-
-	if not LabwareLoading:
-		return [0]*len(WellVolumes)
-
-	Segments = SysConfig["VolumeEquations"][LabwareLoading["Labware Name"]]
-	Height  = 0
-	DispenseHeights = [-1]*len(WellVolumes)
-
-	while(True): 
-		Height += HEIGHT_INCREMENT
-		VolumeHeight = VolumeFromHeight(Height,Segments)
-		for i in range(0, len(WellVolumes)): 
-			if VolumeHeight > WellVolumes[i]:	
-				if DispenseHeights[i] == -1:
-					DispenseHeights[i] = Height
-		if not -1 in DispenseHeights:
-			return DispenseHeights
-
-######################################################################### 
-#	Description: Calculates Volume from a given height
-#	Input Arguments: [Height: Float], [Segments: List[Dict])
-#	Returns: [Calculated Volume: Float]
-#########################################################################
-
-def VolumeFromHeight(Height, Segments):
-	Volume = 0
-	for segment in Segments:
-		CalcHeight = 0
-		EquationString = segment["SegmentEquation"]
-
-		if Height >= segment["MaxSegmentHeight"]:
-			CalcHeight = segment["MaxSegmentHeight"]
-		else:
-			CalcHeight = Height
-
-		EquationString = EquationString.replace("x",str(CalcHeight))
-		Volume += eval(EquationString)
-		Height -= float(segment["MaxSegmentHeight"])
-		if Height <= 0:
-			break
-	if Height > 0:
-		return float("inf")
-	return Volume
-
-
-######################################################################### 
-#	Description: Adds a sequence to the list of sequences to check on the Hamilton devices
-#	Input Arguments: [Sequence: String]
-#	Returns: N/A
-#########################################################################
-def AddCheckSequence(Sequence):
-	global CheckSequences
-	if Sequence not in CheckSequences:
-		CheckSequences.append(Sequence)	
-
-######################################################################### 
-#	Description: Returns the array of sequences to check
-#	Input Arguments: N/A
-#	Returns: [1D-array of strings]
-#########################################################################
-def GetCheckSequences():
-	global CheckSequences
-	return CheckSequences
-
-######################################################################### 
-#	Description: Returns deck loading for a particular labware
-#	Input Arguments: [Step: String]
-#	Returns: [Dictionary as described in YAML config file]
-#########################################################################
-def GetDeckLoading(LabwareName):
-	global DeckLoading
-	try:
-		return DeckLoading[LabwareName]
-	except:
-		return None
-
 def GetSysConfig():
 	global SysConfig	
 	return SysConfig	
+
+def GetAutoloadingSequences():
+	global Sequences
+	return Sequences
 
 ######################################################################### 
 #	Description: Returns step specific configuration information
@@ -168,10 +66,6 @@ def AddPreferredLoading(Item, LoadingArray):
 	global StepPreferredLoading
 	StepPreferredLoading[Item] = LoadingArray
 
-def AddOmitLoading(Item):
-	global OmitLoading
-	OmitLoading.add(Item)
-
 ######################################################################### 
 #	Description: Attempts to load both plates and solutions using the loading information available in the YAML file
 #	Input Arguments:  [Plates_List: 1D-array of plate objects] [Solutions_List: 1D-array of solution objects]
@@ -184,16 +78,6 @@ def Load(Plates_List, Solutions_List):
 	global PreferredLoading
 	global OmitLoading
 
-	for Item in Plates_List[:]:
-		if Item.GetName() in OmitLoading:
-			Plates_List.remove(Item)
-
-	for Item in Solutions_List[:]:
-		if Item.GetName() in OmitLoading:
-			Solutions_List.remove(Item)
-
-	DeadVolumeConfig = SysConfig["Dead Volume"]
-
 	Loading = {}
 
 	PlateSequences = {k: v for k, v in Sequences.items() if "Plate" == v["Labware Category"]}
@@ -204,11 +88,11 @@ def Load(Plates_List, Solutions_List):
 		LidRequired = Plate.GetLidState()
 		VacuumRequired = Plate.GetVacuumState()
 
-		Possibles = collections.OrderedDict({k: v for k, v in PlateSequences.items() if v["Max Supported Volume"] >= (MaxVol + DeadVolumeConfig[v["Labware Name"]]) and PlateType == v["Labware Type"] and int(not not v["Lid Sequence"]) >= int(not not LidRequired) and (VacuumRequired == False or VacuumRequired in str(v["Vacuum Compatible"]))})
+		Possibles = collections.OrderedDict({k: v for k, v in PlateSequences.items() if v["Max Supported Volume"] >= (MaxVol + v["Dead Volume"]) and PlateType == v["Labware Type"] and int(not not v["Lid Sequence"]) >= int(not not LidRequired) and (VacuumRequired == False or VacuumRequired in str(v["Vacuum Compatible"]))})
 		Possibles = collections.OrderedDict({k: v for k, v in sorted(Possibles.items(), key=lambda item: item[1]["Max Supported Volume"])})
 
 		for item in Possibles:
-			Possibles[item]["Used Volume"] = MaxVol + DeadVolumeConfig[Possibles[item]["Labware Name"]]
+			Possibles[item]["Used Volume"] = MaxVol + Possibles[item]["Dead Volume"]
 
 		Loading[Plate.GetName()] = {"PreferredCategories":[Plate.GetName(),Plate.GetType()], "Sequences":collections.OrderedDict(copy.deepcopy(Possibles))}
 
@@ -218,11 +102,11 @@ def Load(Plates_List, Solutions_List):
 		SolutionStorage = Solution.GetStorage()
 		MaxVol = Solution.GetVolume()
 
-		Possibles = {k: v for k, v in ReagentSequences.items() if v["Max Supported Volume"] >= (MaxVol + DeadVolumeConfig[v["Labware Name"]]) and SolutionStorage == v["Storage Condition"]}
+		Possibles = {k: v for k, v in ReagentSequences.items() if v["Max Supported Volume"] >= (MaxVol + v["Dead Volume"]) and SolutionStorage == v["Storage Condition"]}
 		Possibles = collections.OrderedDict({k: v for k, v in sorted(Possibles.items(), key=lambda item: item[1]["Max Supported Volume"])})
 
 		for item in Possibles:
-			Possibles[item]["Used Volume"] = MaxVol + DeadVolumeConfig[Possibles[item]["Labware Name"]]
+			Possibles[item]["Used Volume"] = MaxVol + Possibles[item]["Dead Volume"]
 
 		Loading[Solution.GetName()] = {"PreferredCategories":[Solution.GetName(),Solution.GetType()], "Sequences":collections.OrderedDict(copy.deepcopy(Possibles))}
 
@@ -317,14 +201,6 @@ def Load(Plates_List, Solutions_List):
 				print(solution.GetName(),": ",solution.GetVolume())
 		quit()
 	#check that we were able to load everything
-
-	global CheckSequences
-
-	for item in FinalLoading:
-
-		AddCheckSequence(FinalLoading[item]["Sequence"])
-		if FinalLoading[item]["Labware Category"] == "Plates" and (not not FinalLoading[item]["Lid"]) != False:
-			AddCheckSequence(FinalLoading[item]["Lid"])
 
 	return FinalLoading
 
