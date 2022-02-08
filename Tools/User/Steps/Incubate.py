@@ -57,7 +57,7 @@ def Init(MutableStepsList):
 		if Step.GetTitle() == TITLE:
 			
 			IsUsedFlag = True
-
+			
 			Incubation_List.append(Step)
 			Incubation_Num_List.append(IncubationCounter)
 
@@ -82,17 +82,47 @@ def StartHeaters():
 		RPM = Params[SHAKE]
 		ParentPlate = Incubation.GetParentPlate()
 
-		HAMILTONIO.AddCommand(HEATER.AcquireReservation({"PlateName":ParentPlate,"Temperature":Temp,"RPM":RPM}),False)
-		Response = HAMILTONIO.SendCommands()
+		if str(Temp).lower() != "Ambient".lower():
+			HAMILTONIO.AddCommand(HEATER.AcquireReservation({"PlateName":ParentPlate,"Temperature":Temp,"RPM":RPM}),False)
+			Response = HAMILTONIO.SendCommands()
 
-		CurrentIncubationIDCounter += 1
-		OngoingIncubationsCounter += 1
+			CurrentIncubationIDCounter += 1
+			OngoingIncubationsCounter += 1
 
 		if OngoingIncubationsCounter == MaxNumIncubations:
 			break
 
 
-def Callback(step):
+
+def AmbientCallback(step):
+
+	ParentPlate = step.GetParentPlate()
+
+	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}))
+	#Lid
+
+	HAMILTONIO.AddCommand(LABWARE.GetLidSequenceStrings({"PlateNames":[ParentPlate]}))
+	#Plate
+
+	Response = HAMILTONIO.SendCommands()
+
+	if Response == False:
+		LidSequence = ""
+		LidType = ""
+		PlateLidSequence = ""
+	else:
+		LidSequence = Response.pop(0)["Response"]
+		LidType = Response.pop(0)["Response"]
+		PlateLidSequence = Response.pop(0)["Response"]
+	#Lets get the info we need to move the Lid
+
+	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":LidType,"SourceSequenceString":PlateLidSequence,"DestinationLabwareType":LidType,"DestinationSequenceString":LidSequence,"Park":"True","CheckExists":"After"}))
+	HAMILTONIO.AddCommand(LID.ReleaseReservation({"PlateName":ParentPlate}))
+	Response = HAMILTONIO.SendCommands()
+	#Lets move the lid then plate then release all reservations
+
+def HeatingCallback(step):
 
 	global OngoingIncubationsCounter
 
@@ -158,6 +188,52 @@ def Step(step):
 	LOG.EndCommentsLog()
 	
 	STATUS_UPDATE.AppendText("Incubate at " + str(step.GetParameters()[TEMP]) + " C for " + str(step.GetParameters()[TIME]) + " min")
+	
+	Params = step.GetParameters()
+	Temp = Params[TEMP]
+
+	if str(Temp).lower() == "Ambient".lower():
+		AmbientStep(step)
+	else:
+		HeatingStep(step)
+
+def AmbientStep(step):
+
+	Params = step.GetParameters()
+	Temp = Params[TEMP]
+	ParentPlate = step.GetParentPlate()
+
+	PLATES.GetPlate(step.GetParentPlate()).SetLidState()
+	#This incubation is ambient on the deck. So we set a flag which requires that the plate has a lid on deck position
+
+	HAMILTONIO.AddCommand(LABWARE.GetLidSequenceStrings({"PlateNames":[ParentPlate]}))
+
+	HAMILTONIO.AddCommand(LID.AcquireReservation({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}))
+	#Lid
+
+	Response = HAMILTONIO.SendCommands()
+
+	if Response == False:
+		PlateLidSequence = ""
+		LidSequence = ""
+		LidType = ""
+	else:
+		PlateLidSequence = Response.pop(0)["Response"]
+		Response.pop(0) #This discards the lid reservation response.
+		LidSequence = Response.pop(0)["Response"]
+		LidType = Response.pop(0)["Response"]
+	#Lets get the info we need to move the plate
+
+	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":LidType,"SourceSequenceString":LidSequence,"DestinationLabwareType":LidType,"DestinationSequenceString":PlateLidSequence,"Park":"True","CheckExists":"After"}))
+	Response = HAMILTONIO.SendCommands()
+	#Lets move the plate then lid then start the incubation (Incudes shaking)
+	
+	WAIT.StartTimer(step, step.GetParameters()[TIME], AmbientCallback)
+	#Wait for incubation to complete.
+
+def HeatingStep(step):
 
 	Params = step.GetParameters()
 	Temp = Params[TEMP]
@@ -210,7 +286,7 @@ def Step(step):
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the plate then lid then start the incubation (Incudes shaking)
 	
-	WAIT.StartTimer(step, step.GetParameters()[TIME], Callback)
+	WAIT.StartTimer(step, step.GetParameters()[TIME], HeatingCallback)
 	#Wait for incubation to complete.
 
 
