@@ -23,4 +23,7 @@ def Step(step):
 
 	LOG.EndCommentsLog()
 
-	NOTIFY.NotifyContacts({"Subject":Parameters[SUBJECT],"Body":Parameters[MESSAGE],"Wait":Parameters[WAIT_ON_USER]})
+	HAMILTONIO.AddCommand(NOTIFY.NotifyContacts({"Subject":Parameters[SUBJECT],"Body":Parameters[MESSAGE],"Wait":Parameters[WAIT_ON_USER]}))
+
+	Response = HAMILTONIO.SendCommands()
+	#No need to deal with response. Should always succeed
