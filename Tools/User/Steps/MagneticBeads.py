@@ -89,7 +89,7 @@ def Callback(step):
 		SOLUTIONS.GetSolution(RemoveSequences.GetSources()[Counter]).AddVolume(RemoveSequences.GetTransferVolumes()[Counter])
 		SOLUTIONS.AddPipetteVolume(RemoveSequences.GetTransferVolumes()[Counter])
 
-	AddSequences = PLATES.GetPlate(BeadsPlate).CreatePipetteSequence(SAMPLES.Column(Buffer), SAMPLES.Column(Volume), SAMPLES.Column("After"))
+	AddSequences = PLATES.GetPlate(BeadsPlate).CreatePipetteSequence(SAMPLES.Column(Buffer), SAMPLES.Column(Volume), SAMPLES.Column("Yes"))
 	TransferVolumes = AddSequences.GetTransferVolumes()
 	HAMILTONIO.AddCommand(MAGNETICBEADS.GetGeneralLiquidTransferLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}))
 	HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
@@ -121,6 +121,10 @@ def Callback(step):
 		GeneralLiquidClass = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
 		GeneralTipSeqs = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
 	#Lets get the info we need to move the plate
+
+	for Counter in range(0,RemoveSequences.GetNumSequencePositions()):
+		RemoveSequences.GetSources()[Counter] = RackSequence
+	#We need to modify the destination to be the vacuum plate sequence above. The liquid needs to move through the magnetic beads plate.
 
 	if RemoveSequences.GetNumSequencePositions() != 0:
                 HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":RemoveSequences,"LiquidClasses":BeadsLiquidClass,"TipSequences":BeadsTipSeqs,"KeepTips":"False","DestinationPipettingOffset":0}))
