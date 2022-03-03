@@ -27,8 +27,7 @@ def Step(step):
 	DestinationPlate = step.GetParentPlate()
 	VolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
 
-
-	PlateVolumeList = PLATES.GetPlate(DestinationPlate).GetVolumesList()
+	PlateVolumeList = PLATES.GetPlate(DestinationPlate).GetVolumes()
 
 	for index in range(0,len(PlateVolumeList)):
 		PlateVolumeList[index] -= VolumeList[index]
