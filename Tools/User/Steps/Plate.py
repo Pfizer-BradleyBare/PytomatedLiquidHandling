@@ -21,7 +21,7 @@ def Init(MutableStepsList, SequencesList):
 	PlateName = step.GetParameters()[NAME]
 	PLATES.AddPlate(PlateName, step.GetParameters()[TYPE])
 	PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
-	PLATES.GetPlate(PlateName).SetContext(step,PlateName)	
+	PLATES.GetPlate(PlateName).SetContext(step.GetContext() + ":" + PlateName)	
 	PLATES.GetPlate(PlateName).SetFactors([1]*len(SAMPLES.GetSequences()))
 	PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
 
@@ -32,18 +32,17 @@ def Step(step):
 	PlateName = step.GetParameters()[NAME]
 	PlateType = step.GetParameters()[TYPE]
 	ParentPlate = step.GetParentPlate()
-	ParentContext = PLATES.GetPlate(ParentPlate).GetContext()
+	PLATES.GetPlate(ParentPlate).SetContext(step.GetContext())
 	ParentFactors = PLATES.GetPlate(ParentPlate).GetFactors()
 
 	if PLATES.GetPlate(PlateName) == None:
-		PLATES.AddPlate(step.GetParameters()[NAME], step.GetParameters()[TYPE])
+		PLATES.AddPlate(PlateName, PlateType)
 		PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
 		PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
-	PLATES.GetPlate(PlateName).SetContext(step, PlateName)	
+	PLATES.GetPlate(PlateName).SetContext(step.GetContext()  + ":" + PlateName)	
 	PLATES.GetPlate(PlateName).SetFactors(ParentFactors)
 
-
-	PLATES.GetPlate(ParentPlate).Deactivate()
-	PLATES.GetPlate(PlateName).Activate()
+	STEPS.DeactivateContext(step.GetContext())
+	STEPS.ActivateContext(step.GetContext()  + ":" + PlateName)
 	
 	LOG.EndCommentsLog()

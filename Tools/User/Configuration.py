@@ -16,6 +16,7 @@ SysConfig = {}
 Sequences = {}
 PreferredLoading = {}
 StepPreferredLoading = {}
+OmitLoadingList = []
 
 ######################################################################### 
 #	Description: Initializes the library by pulling information from Config files
@@ -66,6 +67,10 @@ def AddPreferredLoading(Item, LoadingArray):
 	global StepPreferredLoading
 	StepPreferredLoading[Item] = LoadingArray
 
+def AddOmitLoading(Item):
+	global OmitLoadingList
+	OmitLoadingList.append(Item)
+
 ######################################################################### 
 #	Description: Attempts to load both plates and solutions using the loading information available in the YAML file
 #	Input Arguments:  [Plates_List: 1D-array of plate objects] [Solutions_List: 1D-array of solution objects]
@@ -76,7 +81,9 @@ def Load(Plates_List, Solutions_List):
 	global StepPreferredLoading
 	global SysConfig
 	global PreferredLoading
-	global OmitLoading
+	global OmitLoadingList
+
+	Plates_List = [x for x in Plates_List if x.GetName() not in OmitLoadingList]
 
 	Loading = {}
 

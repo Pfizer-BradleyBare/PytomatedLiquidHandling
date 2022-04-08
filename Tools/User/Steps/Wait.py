@@ -33,10 +33,9 @@ def StartTimer(step, WaitTime, Callback):
 	#TIMER.Start(Plate,WaitTime)
 	#We will only start the time for the remaining time. Time handling will be done in python
 
+	STEPS.DeactivateContext(step.GetContext())
 
-	PLATES.GetPlate(step.GetParentPlate()).Deactivate()
-
-	if len(PLATES.GetActivePlates()) == 0:
+	if len(STEPS.GetActiveContexts()) == 0:
 		WaitForTimer()
 
 def WaitForTimer():
@@ -58,7 +57,7 @@ def WaitForTimer():
 
 		Timer_List.remove(SleepingPlate)
 
-		PLATES.GetPlate(SleepingPlate["Step"].GetParentPlate()).Activate()
+		STEPS.ActivateContext(SleepingPlate["Step"].GetContext())
 
 		SleepingPlate["Callback"](SleepingPlate["Step"])
 		#Calls our callback function

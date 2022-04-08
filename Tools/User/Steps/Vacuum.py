@@ -32,8 +32,6 @@ def GetVacPlates():
 	global VacPlates
 	return VacPlates
 
-
-
 def Init(MutableStepsList, SequencesList):
 	global IsUsedFlag
 	global VacPlates
@@ -42,6 +40,7 @@ def Init(MutableStepsList, SequencesList):
 		if Step.GetTitle() == TITLE:
 			IsUsedFlag = True
 			VacPlates.add(Step.GetParameters()[VACUUM_PLATE])
+			CONFIGURATION.AddOmitLoading(Step.GetParameters()[VACUUM_PLATE])
 
 def Step(step):
 

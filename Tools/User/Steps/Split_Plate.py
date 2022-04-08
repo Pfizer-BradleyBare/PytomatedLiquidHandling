@@ -38,8 +38,8 @@ def Step(step):
 	ParentPlate = step.GetParentPlate()
 	NewPlate1 = step.GetParameters()[NAME_1]
 	NewPlate2 = step.GetParameters()[NAME_2]
+	PLATES.GetPlate(ParentPlate).SetContext(step.GetContext())
 	ParentFactors = copy.deepcopy(PLATES.GetPlate(ParentPlate).GetFactors())
-	ParentContext = PLATES.GetPlate(ParentPlate).GetContext()
 	NewPlate1Factors = []
 	NewPlate2Factors = []
 	#Get step information
@@ -78,7 +78,7 @@ def Step(step):
 		PLATES.AddPlate(PlateName, NewPlateTypes[PlateName])
 		PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
 		PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
-	PLATES.GetPlate(PlateName).SetContext(step,PlateName)	
+	PLATES.GetPlate(PlateName).SetContext(step.GetContext() + ":" + PlateName)	
 	PLATES.GetPlate(PlateName).SetFactors(NewPlate1Factors)
 	#create the new plate 1
 
@@ -87,19 +87,12 @@ def Step(step):
 		PLATES.AddPlate(PlateName, NewPlateTypes[PlateName])
 		PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
 		PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
-	PLATES.GetPlate(PlateName).SetContext(step,PlateName)	
+	PLATES.GetPlate(PlateName).SetContext(step.GetContext() + ":" + PlateName)	
 	PLATES.GetPlate(PlateName).SetFactors(NewPlate2Factors)
 	#create new plate 2
 
-	PLATES.GetPlate(ParentPlate).Deactivate()
-
-	DeadPlates = PLATES.GetDeadPlates()
-
-	if NewPlate1 not in DeadPlates:
-		PLATES.GetPlate(NewPlate1).Activate()
-	
-	if NewPlate2 not in DeadPlates:
-		PLATES.GetPlate(NewPlate2).Activate()
-
+	STEPS.DeactivateContext(step.GetContext())
+	STEPS.ActivateContext(step.GetContext() + ":" + NewPlate1)
+	STEPS.ActivateContext(step.GetContext() + ":" + NewPlate2)
 
 	LOG.EndCommentsLog()

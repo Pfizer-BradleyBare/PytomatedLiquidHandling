@@ -98,7 +98,6 @@ MAGNETIC_BEADS.Init(STEPS.GetSteps())
 MERGE_PLATE.Init(STEPS.GetSteps())
 
 #init steps
-PLATES.StartStepSequence(STEPS.GetStartingPlate())
 STEPS.StartStepSequence()
 
 Steps = {
@@ -132,7 +131,7 @@ Steps = {
 }
 
 while(True):
-	Step = STEPS.GetNextStep(PLATES.GetActivePlates())
+	Step = STEPS.GetNextStep()
 
 	if Step == None:
 		break
@@ -143,7 +142,7 @@ while(True):
 	STEPS.UpdateStepParams(Step)
 	#This updates the actual step parameters at time the step is run. This allows for method development in real time
 
-	PLATES.GetPlate(Step.GetParentPlate()).SetContext(Step)
+	PLATES.GetPlate(Step.GetParentPlate()).SetContext(Step.GetContext())
 	#This will switch the context in real time, allowing for complex pathways. Only the parent plate context is switched. No other plates are switched
 
 	LOG.Step(Step)
