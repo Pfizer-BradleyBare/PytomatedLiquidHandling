@@ -41,7 +41,6 @@ def GetAllSteps():
 	global Unfiltered_Steps_List
 	return Unfiltered_Steps_List
 
-
 def StartStepSequence():
 	global Steps_List
 	global Temp_Steps_List
@@ -92,6 +91,35 @@ def GetStepIndex(Step):
 	for index in range(0,len(Steps)):
 		if Step == Steps[index]:
 			return index
+
+def GetPreviousStepInPathway(Step):
+	Steps = GetSteps()
+	Index = GetStepIndex(Step)
+
+	StepContext = Step.GetContext()
+	FoundStep = None
+	for index in range(0,len(Steps)):
+		if index == Index:
+			break
+		if Steps[index].GetContext() in StepContext:
+			FoundStep = Steps[index]
+	return FoundStep
+
+def GetNextStepInPathway(Step):
+	Steps = GetSteps()
+	Index = GetStepIndex(Step)
+
+	StepContext = Step.GetContext()
+	FoundStep = None
+	Done = False
+	for index in range(0,len(Steps)):
+		if Steps[index].GetContext() in StepContext:
+			FoundStep = Steps[index]
+			if Done == True:
+				break
+			if index == Index:
+				Done = True
+	return FoundStep
 
 def GetStartingPlate():
 	global StartingPlateName
