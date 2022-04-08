@@ -76,7 +76,7 @@ def Step(step):
 
 	HAMILTONIO.AddCommand(VACUUM.GetVacuumPlateSequenceString({"VacuumPlateName":VacPlate}))
 
-	if not (TITLE == STEPS.GetPreviousStepInPathway(step).GetTitle()):
+	if not (TITLE in STEPS.GetPreviousStepInPathway(step).GetTitle()):
 		
 		HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[Destination]}))
 		HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[Destination]}))
@@ -175,7 +175,7 @@ def VacuumWaitCallback(step):
 	HAMILTONIO.AddCommand(VACUUM.Stop({"VacuumPlateName":VacPlate}))
 	Response = HAMILTONIO.SendCommands()
 	
-	if not (TITLE == STEPS.GetNextStepInPathway(step).GetTitle()):
+	if not (TITLE in STEPS.GetNextStepInPathway(step).GetTitle()):
 
 		HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[Destination]}))
 		HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[Destination]}))

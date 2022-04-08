@@ -23,7 +23,6 @@ Unfiltered_Steps_List = []
 Steps_List = []
 Temp_Steps_List = []
 Current_Step = []
-StartingPlateName = ""
 ActiveContextTracker = set()
 
 def GetActiveContexts():
@@ -121,10 +120,6 @@ def GetNextStepInPathway(Step):
 				Done = True
 	return FoundStep
 
-def GetStartingPlate():
-	global StartingPlateName
-	return StartingPlateName
-
 class Class:
 	def __str__(self):
 		print("Step Title:", self.Title)
@@ -180,7 +175,6 @@ class Class:
 def Init(PulledMethodSheet):
 		global Steps_List
 		global Unfiltered_Steps_List
-		global StartingPlateName
 		Steps_List = []
 
 		Col_List = []
@@ -239,9 +233,6 @@ def Init(PulledMethodSheet):
 		Col_List = sorted(Col_List, key=lambda x: x[0].GetCoordinates()[0])
 		#Sort in descending order
 
-		Row = Col_List[0][0].GetCoordinates()[0]
-		#Get first row that steps begin
-
 		Pathways = []
 		Pathways.append({"List":Col_List[0],"Context":""})
 		Col_List.pop(0)
@@ -292,5 +283,3 @@ def Init(PulledMethodSheet):
 
 		Unfiltered_Steps_List = copy.deepcopy(Steps_List)
 		#Save all steps for future use
-
-		StartingPlateName = Steps_List[0].GetParameters()[PLATE.NAME]
