@@ -136,14 +136,19 @@ while(True):
 	if Step == None:
 		break
 
+	PLATES.GetPlate(Step.GetParentPlate()).SetContext(Step.GetContext())
+	#This will switch the context in real time, allowing for complex pathways. Only the parent plate context is switched. No other plates are switched
+
+	if sum(PLATES.GetPlate(Step.GetParentPlate()).GetFactors()) == 0 and Step.GetTitle() != MERGE_PLATE.TITLE:
+		continue
+	#We also want to ensure that the parent is actually used. To do this, we can sum the parent plate factors. If it is 0 then the plate is not used by any samples.
+	#We do not want to skip a merge plates step no matter what.
+
 	print("\n",Step)
 
 	LOG.BeginStepLog()
 	STEPS.UpdateStepParams(Step)
 	#This updates the actual step parameters at time the step is run. This allows for method development in real time
-
-	PLATES.GetPlate(Step.GetParentPlate()).SetContext(Step.GetContext())
-	#This will switch the context in real time, allowing for complex pathways. Only the parent plate context is switched. No other plates are switched
 
 	LOG.Step(Step)
 	Steps[Step.GetTitle()](Step)

@@ -193,7 +193,7 @@ def Init(PulledMethodSheet):
 				
 				if value != None and type(value) == str and value.lower() == "Comments".lower():
 				
-					Step = Class(PulledMethodSheet[row][col - 2])
+					Step = Class(PulledMethodSheet[row][col - 2].replace(" - (Click Here to Update)",""))
 					Step.SetCoordinates(EXCELIO.METHOD_ROW_START + row - 1, EXCELIO.METHOD_COL_START + col - 2 - 1)	
 
 					if Step.GetTitle() == PLATE.TITLE:
