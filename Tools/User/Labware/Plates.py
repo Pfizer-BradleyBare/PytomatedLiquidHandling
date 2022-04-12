@@ -66,6 +66,7 @@ class Class:
 		self.Type = Type
 		self.Lid = False
 		self.Vacuum = False
+		self.Desalt = False
 		self.RequiresLoading = False
 		self.Context = None
 		self.SequencesList = None
@@ -88,14 +89,20 @@ class Class:
 	def SetVacuumState(self, VacuumPlate):
 		self.Vacuum = VacuumPlate
 
+	def GetVacuumState(self):
+		return self.Vacuum
+
+	def SetDesaltState(self, DesaltStepTitle):
+		self.Desalt = DesaltStepTitle
+
+	def GetDesaltState(self):
+		return self.Desalt
+
 	def GetContext(self):
 		return self.Context
 
 	def SetContext(self, Context):
 		self.Context = Context
-
-	def GetVacuumState(self):
-		return self.Vacuum
 
 	def GetSequences(self):
 		return self.SequencesList

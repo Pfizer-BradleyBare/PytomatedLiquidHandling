@@ -156,12 +156,7 @@ while(True):
 	LOG.EndStepLog()
 #do each step
 
-Plates = PLATES.GetPlates()
 print("\n\n\n\n")
-
-for Plate in Plates:
-	print(Plate.GetName(),Plate.FactorsList)
-	print("\n\n")
 
 if HAMILTONIO.IsSimulated() == True:
 
@@ -187,7 +182,7 @@ if HAMILTONIO.IsSimulated() == True:
 		HAMILTONIO.AddCommand(PRERUN.NOTIFY.PreRun({}),False)
 	
 	if DESALT.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.DESALT.PreRun(DESALT.GetDesaltParams()))
+		HAMILTONIO.AddCommand(PRERUN.DESALT.PreRun(DESALT.GetDesaltParams()),False)
 
 	if WAIT.IsUsed() == True:
 		HAMILTONIO.AddCommand(PRERUN.TIMER.PreRun({}),False)

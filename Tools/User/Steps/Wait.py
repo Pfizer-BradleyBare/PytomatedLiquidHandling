@@ -41,11 +41,16 @@ def StartTimer(step, WaitTime, Callback):
 def WaitForTimer():
 	global Timer_List
 	
-	if STEPS.GetCurrentStep() == DESALT.GetEquilibrationStep():
-		DESALT.Equilibrate()
-	#It is more efficient to equilibrate when the deck is not busy. So we will do it before we wait on a incubation timer
+	if len(Timer_List) > 0:	
+		CurrentStep = Timer_List[-1]["Step"]
 
-	if len(Timer_List) > 0:
+		Params = DESALT.GetDesaltParams()
+		for key in Params:
+			if Params[key]["EQ Step"] == CurrentStep:
+				DESALT.Equilibrate(key)
+		#It is more efficient to equilibrate when the deck is not busy. So we will do it before we wait on a incubation timer
+
+
 
 		Time = time.time()
 
