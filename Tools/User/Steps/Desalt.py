@@ -64,7 +64,7 @@ def Init(MutableStepsList):
 			StepConfig = CONFIGURATION.GetStepConfig(TITLE)
 			IsUsedFlag = True
 
-			DesaltingArray = Step.GetParameters()[TYPE].split(",")
+			DesaltingArray = Step.GetParameters()[TYPE].replace(";",",").split(",")
 			TypeArray = []
 			VolumeArray = []
 			for DesaltingStep in DesaltingArray:
@@ -95,7 +95,7 @@ def Init(MutableStepsList):
 
 			PLATES.AddPlate("Desalting Waste", "96 Well PCR Plate")
 			PLATES.GetPlate("Desalting Waste").SetSequences(SAMPLES.GetSequences())
-			PLATES.GetPlate("Desalting Waste").SetContext(Step,"Desalting Waste")	
+			PLATES.GetPlate("Desalting Waste").SetContext(Step.GetContext())	
 			PLATES.GetPlate("Desalting Waste").SetFactors([1]*len(SAMPLES.GetSequences()))
 			PLATES.GetPlate("Desalting Waste").SetVolumes([0]*len(SAMPLES.GetSequences()))
 			
@@ -120,7 +120,7 @@ def Equilibrate():
 		LOG.Comment("Performing Desalting Equilibration")
 		Equilibrated = True
 		LOG.BeginCommandLog()
-		DESALT.Equilibrate()
+		DESALT.Equilibrate("")
 		LOG.EndCommandLog()
 	else:
 		LOG.Comment("Equilibration already performed. Skipping Equilibration")
@@ -145,7 +145,7 @@ def Process():
 	PLATES.GetPlate(Destination).CreatePipetteSequence(SAMPLES.Column(Source), SAMPLES.Column(Volume), SAMPLES.Column("Yes"))
 	Equilibrated = False
 	LOG.BeginCommandLog()
-	DESALT.Process()
+	DESALT.Process("")
 	LOG.EndCommandLog()
 	
 ######################################################################### 

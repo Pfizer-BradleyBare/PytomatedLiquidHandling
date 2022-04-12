@@ -28,14 +28,15 @@ def Step(step):
 	VolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
 
 	PlateVolumeList = PLATES.GetPlate(DestinationPlate).GetVolumes()
+	PlateFactors = PLATES.GetPlate(DestinationPlate).GetFactors()
 
 	for index in range(0,len(PlateVolumeList)):
-		PlateVolumeList[index] -= VolumeList[index]
+		PlateVolumeList[index] -= VolumeList[index] * PlateFactors[index]
 
 	PLATES.GetPlate(DestinationPlate).UpdateMaxVolume()
 
 	for index in range(0,len(PlateVolumeList)):
-		PlateVolumeList[index] += VolumeList[index] + VolumeList[index]
+		PlateVolumeList[index] += (VolumeList[index] + VolumeList[index]) * PlateFactors[index]
 
 	PLATES.GetPlate(DestinationPlate).UpdateMaxVolume()
 	#OK what are we doing here? We are subtracting to make the volume is reflected in plate loading.
