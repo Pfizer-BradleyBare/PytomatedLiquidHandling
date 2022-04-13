@@ -11,7 +11,7 @@ def PreRun(Input):
 	CommandString += "[Source]" + HAMILTONIO.GetDelimiter().join([str(Input[key]["Source"]) for key in Input])
 	CommandString += "[Waste]" + HAMILTONIO.GetDelimiter().join([str(Input[key]["Waste"]) for key in Input])
 	CommandString += "[Buffer]" + HAMILTONIO.GetDelimiter().join([str(Input[key]["EQ Buffer"]) for key in Input])
-	CommandString += "[Volume]" + HAMILTONIO.GetDelimiter().join([str(Input[key]["Volume"]) for key in Input])
+	CommandString += "[Volume]" + HAMILTONIO.GetDelimiter().join([str(",".join(map(str,Input[key]["Volume"]))) for key in Input])
 	CommandString += "[Method]" + HAMILTONIO.GetDelimiter().join([str(Input[key]["Method"]) for key in Input])
 	CommandString += "[Positions]" + HAMILTONIO.GetDelimiter().join([str(",".join(map(str,Input[key]["Positions"]))) for key in Input])
 	return CommandString

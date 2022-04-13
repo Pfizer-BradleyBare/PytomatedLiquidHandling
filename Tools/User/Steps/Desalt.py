@@ -71,7 +71,7 @@ def Init(MutableStepsList):
 				"Source":Params[SOURCE], \
 				"Waste":Params[WASTE], \
 				"EQ Buffer":Params[EQUILIBRATION_BUFFER], \
-				"Volume":Params[TYPE], \
+				"Volume":Params[TYPE].split(";"), \
 				"Method":Params[ELUTION_METHOD], \
 				"EQ":False, \
 				"EQ Step": SearchStep}
