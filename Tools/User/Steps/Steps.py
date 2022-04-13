@@ -23,28 +23,39 @@ Unfiltered_Steps_List = []
 Steps_List = []
 Temp_Steps_List = []
 Current_Step = []
-StartingPlateName = ""
+ActiveContextTracker = set()
 
+def GetActiveContexts():
+	return ActiveContextTracker
+
+def ActivateContext(Context):
+	global ActiveContextTracker
+	ActiveContextTracker.add(Context)
+
+def DeactivateContext(Context):
+	global ActiveContextTracker
+	ActiveContextTracker.remove(Context)
 
 def GetAllSteps():
 	global Unfiltered_Steps_List
 	return Unfiltered_Steps_List
-
 
 def StartStepSequence():
 	global Steps_List
 	global Temp_Steps_List
 
 	Temp_Steps_List = copy.deepcopy(Steps_List)
+	ActivateContext(Temp_Steps_List[0].GetContext())
 
-def GetNextStep(ActivePlates):
+def GetNextStep():
 	global Temp_Steps_List
 	global Current_Step
+	global ActiveContextTracker
 
 	for step in Temp_Steps_List:
-		Plate = step.GetParentPlate()
+		Context = step.GetContext()
 
-		if Plate in ActivePlates:
+		if Context in ActiveContextTracker:
 			Current_Step = copy.deepcopy(step)
 			Temp_Steps_List.remove(step)
 			return copy.deepcopy(step)
@@ -80,15 +91,41 @@ def GetStepIndex(Step):
 		if Step == Steps[index]:
 			return index
 
-def GetStartingPlate():
-	global StartingPlateName
-	return StartingPlateName
+def GetPreviousStepInPathway(Step):
+	Steps = GetSteps()
+	Index = GetStepIndex(Step)
+
+	StepContext = Step.GetContext()
+	FoundStep = None
+	for index in range(0,len(Steps)):
+		if index == Index:
+			break
+		if Steps[index].GetContext() in StepContext:
+			FoundStep = Steps[index]
+	return FoundStep
+
+def GetNextStepInPathway(Step):
+	Steps = GetSteps()
+	Index = GetStepIndex(Step)
+
+	StepContext = Step.GetContext()
+	FoundStep = None
+	Done = False
+	for index in range(0,len(Steps)):
+		if Steps[index].GetContext() in StepContext:
+			FoundStep = Steps[index]
+			if Done == True:
+				break
+			if index == Index:
+				Done = True
+	return FoundStep
 
 class Class:
 	def __str__(self):
 		print("Step Title:", self.Title)
 		print("Step Coordinates: (",self.Row,",",self.Col,")")
 		print("Parent Plate:", self.GetParentPlate())
+		print("Context:",self.Context)
 		return "Step Parameters: " + str(self.Parameters)
 
 	def __init__(self, Title):
@@ -97,7 +134,7 @@ class Class:
 		self.Row = None
 		self.Col = None
 
-		self.Parent = None
+		self.Context = None
 
 		self.Parameters = {}
 
@@ -117,14 +154,17 @@ class Class:
 	def GetCoordinates(self):
 		return (self.Row,self.Col)
 
-	def SetParentPlateStep(self, Parent):
-		self.Parent = Parent
-	
-	def GetParentPlateStep(self):
-		return self.Parent
-
 	def GetParentPlate(self):
-			return self.GetParentPlateStep().GetParameters()[PLATE.NAME]
+		return self.Context[self.Context.rfind(":")+1:]
+	
+	def SetContext(self,Context):
+		self.Context = Context
+	
+	def GetContext(self):
+		return self.Context
+
+	def GetParentContext(self):
+		return self.Context[:self.Context.rfind(":")]
 
 	def AddParameters(self, Key, Value):
 		self.Parameters[Key] = Value
@@ -135,7 +175,6 @@ class Class:
 def Init(PulledMethodSheet):
 		global Steps_List
 		global Unfiltered_Steps_List
-		global StartingPlateName
 		Steps_List = []
 
 		Col_List = []
@@ -144,7 +183,6 @@ def Init(PulledMethodSheet):
 			
 			Name = Class(PLATE.TITLE)
 			Name.SetCoordinates(None,None)
-			Name.SetParentPlateStep(None)
 			Name.AddParameters(PLATE.NAME,None)
 			Name.AddParameters(PLATE.TYPE,None)	
 			Row_List = []
@@ -156,8 +194,12 @@ def Init(PulledMethodSheet):
 				if value != None and type(value) == str and value.lower() == "Comments".lower():
 				
 					Step = Class(PulledMethodSheet[row][col - 2].replace(" - (Click Here to Update)",""))
+<<<<<<< HEAD
 					Step.SetCoordinates(EXCELIO.METHOD_ROW_START + row - 1, EXCELIO.METHOD_COL_START + col - 2 - 1)
 					Step.SetParentPlateStep(Name)	
+=======
+					Step.SetCoordinates(EXCELIO.METHOD_ROW_START + row - 1, EXCELIO.METHOD_COL_START + col - 2 - 1)	
+>>>>>>> ee01a3b7f9c7952bac9589934315c1a54eb420a5
 
 					if Step.GetTitle() == PLATE.TITLE:
 						Name = Step
@@ -196,11 +238,8 @@ def Init(PulledMethodSheet):
 		Col_List = sorted(Col_List, key=lambda x: x[0].GetCoordinates()[0])
 		#Sort in descending order
 
-		Row = Col_List[0][0].GetCoordinates()[0]
-		#Get first row that steps begin
-
 		Pathways = []
-		Pathways.append(Col_List[0])
+		Pathways.append({"List":Col_List[0],"Context":""})
 		Col_List.pop(0)
 		#Get our starting pathway and remove path from list
 
@@ -217,9 +256,9 @@ def Init(PulledMethodSheet):
 			for Path in Pathways:
 				
 				try:
-					Step = Path.pop(0)
+					Step = Path["List"].pop(0)
 					while "DISABLED".lower() in Step.GetTitle().lower():
-						Step = Path.pop(0)
+						Step = Path["List"].pop(0)
 				except:
 					Remove_List.append(Path)
 					Step = None
@@ -227,17 +266,19 @@ def Init(PulledMethodSheet):
 				if Step != None:
 
 					Steps_List.append(Step)
+					Step.SetContext(Path["Context"])
+
+					if Step.GetTitle() == PLATE.TITLE:
+						Path["Context"] = Path["Context"] + ":" + Step.GetParameters()[PLATE.NAME]
 
 					if Step.GetTitle() == SPLIT_PLATE.TITLE:
 						Remove_List.append(Path)
-						Pathway1 = __GetPathway(Step.GetParameters()[SPLIT_PLATE.NAME_1])
-						Pathway1[0].SetParentPlateStep(Step.GetParentPlateStep())
 
+						Pathway1 = __GetPathway(Step.GetParameters()[SPLIT_PLATE.NAME_1])
 						Pathway2 = __GetPathway(Step.GetParameters()[SPLIT_PLATE.NAME_2])
-						Pathway2[0].SetParentPlateStep(Step.GetParentPlateStep())
 						
-						Add_List.append(Pathway1)
-						Add_List.append(Pathway2)
+						Add_List.append({"List":Pathway1,"Context":Path["Context"]})
+						Add_List.append({"List":Pathway2,"Context":Path["Context"]})
 
 			for item in Remove_List:
 				Pathways.remove(item)
@@ -246,6 +287,7 @@ def Init(PulledMethodSheet):
 				Pathways.append(item)
 
 		Unfiltered_Steps_List = copy.deepcopy(Steps_List)
+<<<<<<< HEAD
 		#Save all steps for future use
 
 		StartingPlateName = Steps_List[0].GetParameters()[PLATE.NAME]
@@ -258,3 +300,6 @@ def Init(PulledMethodSheet):
 
 #end
 #End
+=======
+		#Save all steps for future use
+>>>>>>> ee01a3b7f9c7952bac9589934315c1a54eb420a5

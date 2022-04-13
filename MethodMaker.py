@@ -28,7 +28,7 @@ if len(sys.argv) > 1:
 
 else:
 	Sample_Start_Pos = 1
-	Excel_File_Path = "Method Maker2.xlsm"
+	Excel_File_Path = "Method Maker.xlsm"
 	Initialization_Run = True
 	GenerateList = True
 	TestRun = True
@@ -98,7 +98,6 @@ MAGNETIC_BEADS.Init(STEPS.GetSteps())
 MERGE_PLATE.Init(STEPS.GetSteps())
 
 #init steps
-PLATES.StartStepSequence(STEPS.GetStartingPlate())
 STEPS.StartStepSequence()
 
 Steps = {
@@ -132,10 +131,18 @@ Steps = {
 }
 
 while(True):
-	Step = STEPS.GetNextStep(PLATES.GetActivePlates())
+	Step = STEPS.GetNextStep()
 
 	if Step == None:
 		break
+
+	PLATES.GetPlate(Step.GetParentPlate()).SetContext(Step.GetContext())
+	#This will switch the context in real time, allowing for complex pathways. Only the parent plate context is switched. No other plates are switched
+
+	if sum(PLATES.GetPlate(Step.GetParentPlate()).GetFactors()) == 0 and Step.GetTitle() != MERGE_PLATE.TITLE:
+		continue
+	#We also want to ensure that the parent is actually used. To do this, we can sum the parent plate factors. If it is 0 then the plate is not used by any samples.
+	#We do not want to skip a merge plates step no matter what.
 
 	print("\n",Step)
 
@@ -143,21 +150,13 @@ while(True):
 	STEPS.UpdateStepParams(Step)
 	#This updates the actual step parameters at time the step is run. This allows for method development in real time
 
-	PLATES.GetPlate(Step.GetParentPlate()).SetContext(Step)
-	#This will switch the context in real time, allowing for complex pathways. Only the parent plate context is switched. No other plates are switched
-
 	LOG.Step(Step)
 	Steps[Step.GetTitle()](Step)
 	#This does the step
 	LOG.EndStepLog()
 #do each step
 
-Plates = PLATES.GetPlates()
 print("\n\n\n\n")
-
-for Plate in Plates:
-	print(Plate.GetName(),Plate.FactorsList)
-	print("\n\n")
 
 if HAMILTONIO.IsSimulated() == True:
 
@@ -183,7 +182,7 @@ if HAMILTONIO.IsSimulated() == True:
 		HAMILTONIO.AddCommand(PRERUN.NOTIFY.PreRun({}),False)
 	
 	if DESALT.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.DESALT.PreRun(DESALT.GetDesaltParams()))
+		HAMILTONIO.AddCommand(PRERUN.DESALT.PreRun(DESALT.GetDesaltParams()),False)
 
 	if WAIT.IsUsed() == True:
 		HAMILTONIO.AddCommand(PRERUN.TIMER.PreRun({}),False)

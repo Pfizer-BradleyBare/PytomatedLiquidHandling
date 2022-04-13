@@ -32,8 +32,6 @@ def GetVacPlates():
 	global VacPlates
 	return VacPlates
 
-
-
 def Init(MutableStepsList, SequencesList):
 	global IsUsedFlag
 	global VacPlates
@@ -42,6 +40,7 @@ def Init(MutableStepsList, SequencesList):
 		if Step.GetTitle() == TITLE:
 			IsUsedFlag = True
 			VacPlates.add(Step.GetParameters()[VACUUM_PLATE])
+			CONFIGURATION.AddOmitLoading(Step.GetParameters()[VACUUM_PLATE])
 
 def Step(step):
 
@@ -77,8 +76,8 @@ def Step(step):
 
 	HAMILTONIO.AddCommand(VACUUM.GetVacuumPlateSequenceString({"VacuumPlateName":VacPlate}))
 
-	if not (TITLE == STEPS.GetSteps()[STEPS.GetStepIndex(step)-1].GetTitle()):
-
+	if not (TITLE in STEPS.GetPreviousStepInPathway(step).GetTitle()):
+		
 		HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[Destination]}))
 		HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[Destination]}))
 		HAMILTONIO.AddCommand(VACUUM.GetVacuumCollectionPlateSequenceString({"VacuumPlateName":VacPlate}))
@@ -176,7 +175,7 @@ def VacuumWaitCallback(step):
 	HAMILTONIO.AddCommand(VACUUM.Stop({"VacuumPlateName":VacPlate}))
 	Response = HAMILTONIO.SendCommands()
 	
-	if not (TITLE == STEPS.GetSteps()[STEPS.GetStepIndex(step)+1].GetTitle()):
+	if not (TITLE in STEPS.GetNextStepInPathway(step).GetTitle()):
 
 		HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[Destination]}))
 		HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[Destination]}))

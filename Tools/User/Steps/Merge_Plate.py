@@ -31,15 +31,17 @@ def Step(step):
 	LOG.BeginCommentsLog()
 
 	ParentPlate = step.GetParentPlate()
+	Context = step.GetContext()
 	WaitingPlate = step.GetParameters()[NAME]
 	Continue = step.GetParameters()[CONTINUE]
 	#Get step information
 
 	MergeSteps.append(step)
-	PLATES.GetPlate(ParentPlate).Deactivate()
+	STEPS.DeactivateContext(Context)
 
 	for MergeStep in MergeSteps[:]:
 		MergeParent = MergeStep.GetParentPlate()
+		MergeContext = MergeStep.GetContext()
 		MergeWaitingPlate = MergeStep.GetParameters()[NAME]
 		MergeContinue = MergeStep.GetParameters()[CONTINUE]
 
@@ -48,13 +50,13 @@ def Step(step):
 			MergeSteps.remove(step)
 
 			if Continue == "Yes" and MergeContinue == "Yes":
-				PLATES.GetPlate(ParentPlate).Activate()
-				PLATES.GetPlate(MergeParent).Activate()
+				STEPS.ActivateContext(Context)
+				STEPS.ActivateContext(MergeContext)
 			else:
 				if Continue == "Yes":
-					PLATES.GetPlate(ParentPlate).Activate()
+					STEPS.ActivateContext(Context)
 				if MergeContinue == "Yes":
-					PLATES.GetPlate(MergeParent).Activate()
+					STEPS.ActivateContext(MergeContext)
 			#We need ot make sure we restore the factors correctly. If both are yes, then none is actually merged, it is just a pause function.
 
 			return

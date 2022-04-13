@@ -7,16 +7,22 @@ from ...User import Configuration as CONFIGURATION
 from ...Hamilton.Commands import Desalt as DESALT
 from ...General import Log as LOG
 from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
+from ...General import HamiltonIO as HAMILTONIO
 
+#This is per sample
+DesaltingEQVolume = 900
+DesaltingElutionVolume = 100
+DesaltingRequiredTips = 3
 
-TITLE = "Desalt"
+#Step Args
+TITLE = "IMCS SizeX Desalt"
 SOURCE = "Source"
+WASTE = "Waste Plate"
 EQUILIBRATION_BUFFER = "Equilibration Buffer"
-TYPE = "Type"
+TYPE = "Volume"
+ELUTION_METHOD = "Elution Method"
 
 #This variable tracks whether or not the tips have been equilibrated
-Equilibrated = None
-Incubation_Equilibration_Step = None
 Desalting_Params = {}
 IsUsedFlag = False
 
@@ -25,10 +31,6 @@ IsUsedFlag = False
 #	Input Arguments: N/A
 #	Returns: [Step module Class]
 #########################################################################
-def GetEquilibrationStep():
-	global Incubation_Equilibration_Step
-	return Incubation_Equilibration_Step
-
 def GetDesaltParams():
 	global Desalting_Params
 	return Desalting_Params
@@ -48,79 +50,48 @@ def IsUsed():
 #	Returns: N/A
 #########################################################################
 def Init(MutableStepsList):
-	global Equilibrated
-	global Incubation_Equilibration_Step
-	global Desalting_Params
 	global IsUsedFlag
-	
-	Equilibrated = False
-	Latest_Incubate_Step = None
+	global Desalting_Params
+
+	Desalting_Params = {}
 
 	for Step in MutableStepsList:
-		if Step.GetTitle() == INCUBATE.TITLE:
-			Latest_Incubate_Step = Step
-
 		if Step.GetTitle() == TITLE:
-			StepConfig = CONFIGURATION.GetStepConfig(TITLE)
 			IsUsedFlag = True
+			Parent = Step.GetParentPlate()
+			Params = Step.GetParameters()
 
-			DesaltingArray = Step.GetParameters()[TYPE].split(",")
-			TypeArray = []
-			VolumeArray = []
-			for DesaltingStep in DesaltingArray:
-				StepParams = DesaltingStep.split(":")
-				TypeArray.append(StepParams[0].replace(" ",""))
-				VolumeArray.append(StepParams[1].replace(" ",""))
-			NumTipSets = len(DesaltingArray)
-			#Get Desalting details
+			#Now we need to find the incubation step that comes before it
+			SearchStep = Step
+			while SearchStep.GetTitle() != INCUBATE.TITLE:
+				SearchStep = STEPS.GetPreviousStepInPathway(SearchStep)
 
-			Incubation_Equilibration_Step = Latest_Incubate_Step
-			#I set these ahead of time because ths cannot change after equilibration. Best to lock it at the beginning
-
-			
-			Desalting_Params["Required Tips"] = 3 * SAMPLES.GetTotalSamples()
-			Desalting_Params["Type"] = ','.join(TypeArray)
-			Desalting_Params["Volume"] = ','.join(VolumeArray)
-			Desalting_Params["Source"] = Step.GetParameters()[SOURCE]
-			Desalting_Params["Buffer"] = Step.GetParameters()[EQUILIBRATION_BUFFER]
-			Desalting_Params["Destination"] = Step.GetParentPlate()
-			Desalting_Params["Source"] = Step.GetParameters()[SOURCE]
-			Desalting_Params["Buffer"] = Step.GetParameters()[EQUILIBRATION_BUFFER]
-			Desalting_Params["Waste"] = "Desalting Waste"
-			Desalting_Params["Destination"] = Step.GetParentPlate()
-
-			SOLUTIONS.AddSolution(Desalting_Params["Buffer"], SOLUTIONS.TYPE_BUFFER, SOLUTIONS.STORAGE_AMBIENT)
-			for i in range(0,NumTipSets):
-				SOLUTIONS.GetSolution(Desalting_Params["Buffer"]).AddVolume(StepConfig["Type"][TypeArray[i]][float(VolumeArray[i])]["Total Buffer Volume"] * SAMPLES.GetTotalSamples())
-
-			PLATES.AddPlate("Desalting Waste", "96 Well PCR Plate")
-			PLATES.GetPlate("Desalting Waste").SetSequences(SAMPLES.GetSequences())
-			PLATES.GetPlate("Desalting Waste").SetContext(Step,"Desalting Waste")	
-			PLATES.GetPlate("Desalting Waste").SetFactors([1]*len(SAMPLES.GetSequences()))
-			PLATES.GetPlate("Desalting Waste").SetVolumes([0]*len(SAMPLES.GetSequences()))
-			
-			PLATES.GetPlate("Desalting Waste").CreatePipetteSequence(SAMPLES.Column(""),SAMPLES.Column(1),SAMPLES.Column("Yes"))
-			#Volume of 1 added so the Waste solution is not deleted from the solutions list.
-			#HCP analysis detected cross contamination, At this point it is better to use a plate for waste. In that way each sample is isolated to a well.
-
-			PreferredLoading = StepConfig["Preferred Loading"]
-			CONFIGURATION.AddPreferredLoading("Desalting Waste", PreferredLoading["Waste"])
-			CONFIGURATION.AddPreferredLoading(Desalting_Params["Buffer"], PreferredLoading["Buffer"])
-			CONFIGURATION.AddPreferredLoading(Desalting_Params["Destination"], PreferredLoading["Destination"])
+			Desalting_Params[Parent + str(Step.GetCoordinates())] = {\
+				"Destination":Parent, \
+				"Source":Params[SOURCE], \
+				"Waste":Params[WASTE], \
+				"EQ Buffer":Params[EQUILIBRATION_BUFFER], \
+				"Volume":Params[TYPE].split(";"), \
+				"Method":Params[ELUTION_METHOD], \
+				"EQ":False, \
+				"EQ Step": SearchStep}
 
 ######################################################################### 
 #	Description: Performs equilibration by calling the appropriate hamilton commands
 #	Input Arguments: N/A
 #	Returns: N/A
 #########################################################################
-def Equilibrate():
-	global Equilibrated
+def Equilibrate(ParentPlate):
+	global Desalting_Params
 
-	if Equilibrated == False:
+	Params = Desalting_Params[ParentPlate]
+
+	if Params["EQ"] == False:
 		LOG.Comment("Performing Desalting Equilibration")
-		Equilibrated = True
+		Params["EQ"] = True
 		LOG.BeginCommandLog()
-		DESALT.Equilibrate()
+		HAMILTONIO.AddCommand(DESALT.Equilibrate({"ParentPlate":ParentPlate}))
+		Response = HAMILTONIO.SendCommands()
 		LOG.EndCommandLog()
 	else:
 		LOG.Comment("Equilibration already performed. Skipping Equilibration")
@@ -132,20 +103,16 @@ def Equilibrate():
 #	Input Arguments: N/A
 #	Returns: N/A
 #########################################################################
-def Process():
+def Process(ParentPlate):
 	global Desalting_Params
-	global Equilibrated
 
-	Destination = Desalting_Params["Destination"]
-	Source = Desalting_Params["Source"]
-	Volume = sum(list(map(int, Desalting_Params["Volume"].split(","))))
+	Params = Desalting_Params[ParentPlate]
 
 	#STATUS_UPDATE.AppendText("Performing Desalting Equilibration and Desalting Samples")
-
-	PLATES.GetPlate(Destination).CreatePipetteSequence(SAMPLES.Column(Source), SAMPLES.Column(Volume), SAMPLES.Column("Yes"))
-	Equilibrated = False
+	Params["EQ"] = False
 	LOG.BeginCommandLog()
-	DESALT.Process()
+	HAMILTONIO.AddCommand(DESALT.Process({"ParentPlate":ParentPlate}))
+	Response = HAMILTONIO.SendCommands()
 	LOG.EndCommandLog()
 	
 ######################################################################### 
@@ -154,13 +121,36 @@ def Process():
 #	Returns: N/A
 #########################################################################	
 def Step(step):
+	global Desalting_Params
+
+	Params = step.GetParameters()
+	Source = Params[SOURCE]
+	Volume = Params[TYPE] / 100
+	Buffer = Params[EQUILIBRATION_BUFFER]
+	EQ_Destination = Params[WASTE]
+	Sample_Destination = step.GetParentPlate()
+
+	StepKey = step.GetParentPlate() + str(step.GetCoordinates())
+
+	SOLUTIONS.AddSolution(Buffer, SOLUTIONS.TYPE_REAGENT, SOLUTIONS.STORAGE_AMBIENT)
+	SOLUTIONS.GetSolution(Buffer).SetDesaltState(TITLE)
 
 	LOG.BeginCommentsLog()
-	Equilibrate()
+	PLATES.GetPlate(EQ_Destination).SetDesaltState(TITLE)
+	Sequence = PLATES.GetPlate(EQ_Destination).CreatePipetteSequence(SAMPLES.Column(Buffer), SAMPLES.Column((DesaltingEQVolume + DesaltingElutionVolume) * Volume), SAMPLES.Column("Yes"))
+	
+	Desalting_Params[StepKey]["Positions"] = Sequence.GetDestinationPositions()
+
+	for Counter in range(0,Sequence.GetNumSequencePositions()):
+		SOLUTIONS.GetSolution(Sequence.GetSources()[Counter]).AddVolume(Sequence.GetTransferVolumes()[Counter])
+
+	Equilibrate(StepKey)
 	LOG.EndCommentsLog()
 
 	LOG.BeginCommentsLog()
-	Process()
+	PLATES.GetPlate(Sample_Destination).SetDesaltState(TITLE)
+	Sequence = PLATES.GetPlate(Sample_Destination).CreatePipetteSequence(SAMPLES.Column(Source), SAMPLES.Column(DesaltingElutionVolume * Volume), SAMPLES.Column("Yes"))
+	Process(StepKey)
 	LOG.EndCommentsLog()
 
 	

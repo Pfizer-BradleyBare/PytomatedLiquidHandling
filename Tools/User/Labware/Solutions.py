@@ -29,6 +29,7 @@ class Class:
 		self.Type = Type
 		self.Storage = Storage
 		self.TotalVolume = 0
+		self.DesaltingFlag = False
 
 	def GetName(self):
 		return self.Name
@@ -39,6 +40,11 @@ class Class:
 	def GetStorage(self):
 		return self.Storage
 
+	def SetDesaltState(self,DesaltingStepTitle):
+		self.DesaltingFlag = DesaltingStepTitle
+
+	def GetDesaltState(self):
+		return self.DesaltingFlag
 ######################################################################### 
 #	Description: Adds volume to the Solution class tracker and to the pipetting list tracker
 #	Input Arguments: [Volume: Float]

@@ -17,11 +17,11 @@ def Init():
 def Step(step):
 	LOG.BeginCommentsLog()
 
-	PLATES.GetPlate(step.GetParentPlate()).Deactivate()
+	STEPS.DeactivateContext(step.GetContext())
 
 	LOG.Comment(str(step.GetParentPlate()) + " plate deactivated")
 
 	LOG.EndCommentsLog()
 	
-	if len(PLATES.GetActivePlates()) == 0:
+	if len(STEPS.GetActiveContexts()) == 0:
 		WAIT.WaitForTimer()

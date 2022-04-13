@@ -33,20 +33,24 @@ def StartTimer(step, WaitTime, Callback):
 	#TIMER.Start(Plate,WaitTime)
 	#We will only start the time for the remaining time. Time handling will be done in python
 
+	STEPS.DeactivateContext(step.GetContext())
 
-	PLATES.GetPlate(step.GetParentPlate()).Deactivate()
-
-	if len(PLATES.GetActivePlates()) == 0:
+	if len(STEPS.GetActiveContexts()) == 0:
 		WaitForTimer()
 
 def WaitForTimer():
 	global Timer_List
 	
-	if STEPS.GetCurrentStep() == DESALT.GetEquilibrationStep():
-		DESALT.Equilibrate()
-	#It is more efficient to equilibrate when the deck is not busy. So we will do it before we wait on a incubation timer
+	if len(Timer_List) > 0:	
+		CurrentStep = Timer_List[-1]["Step"]
 
-	if len(Timer_List) > 0:
+		Params = DESALT.GetDesaltParams()
+		for key in Params:
+			if Params[key]["EQ Step"] == CurrentStep:
+				DESALT.Equilibrate(key)
+		#It is more efficient to equilibrate when the deck is not busy. So we will do it before we wait on a incubation timer
+
+
 
 		Time = time.time()
 
@@ -58,7 +62,7 @@ def WaitForTimer():
 
 		Timer_List.remove(SleepingPlate)
 
-		PLATES.GetPlate(SleepingPlate["Step"].GetParentPlate()).Activate()
+		STEPS.ActivateContext(SleepingPlate["Step"].GetContext())
 
 		SleepingPlate["Callback"](SleepingPlate["Step"])
 		#Calls our callback function

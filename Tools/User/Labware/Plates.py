@@ -1,5 +1,3 @@
-
-
 from ..Steps import Plate as PLATE
 from ..Steps import Steps as STEPS
 from ...User import Samples as SAMPLES
@@ -68,7 +66,7 @@ class Class:
 		self.Type = Type
 		self.Lid = False
 		self.Vacuum = False
-		self.ActiveState = False
+		self.Desalt = False
 		self.RequiresLoading = False
 		self.Context = None
 		self.SequencesList = None
@@ -91,30 +89,20 @@ class Class:
 	def SetVacuumState(self, VacuumPlate):
 		self.Vacuum = VacuumPlate
 
+	def GetVacuumState(self):
+		return self.Vacuum
+
+	def SetDesaltState(self, DesaltStepTitle):
+		self.Desalt = DesaltStepTitle
+
+	def GetDesaltState(self):
+		return self.Desalt
+
 	def GetContext(self):
 		return self.Context
 
-	def SetContext(self, Step, AppendText=""):
-
-		ParentPlate = Step.GetParentPlate()
-		ParentPlateStep = Step.GetParentPlateStep()
-		Context = ""
-
-		while ParentPlate != None:
-			Context = ParentPlate + ":" + Context
-			ParentPlate = ParentPlateStep.GetParentPlate()
-			ParentPlateStep = ParentPlateStep.GetParentPlateStep()
-
-		if AppendText == "":
-			Context = Context[:-1]
-		else:
-			Context = Context + AppendText
-		#This is an append text for special cases. Like creating a new plate and wanting it to have a seperate context.
-
+	def SetContext(self, Context):
 		self.Context = Context
-
-	def GetVacuumState(self):
-		return self.Vacuum
 
 	def GetSequences(self):
 		return self.SequencesList
@@ -142,34 +130,14 @@ class Class:
 	def LoadingRequired(self):
 		return self.RequiresLoading
 
-######################################################################### 
-#	Description: Returns the max well volume on this plate
-#	Input Arguments: N/A
-#	Returns: [Float]
-#########################################################################
 	def GetVolume(self):
 		return self.MaxVolume
 
-	def Activate(self):
-		self.ActiveState = True
+	def GetFactors(self):
+		return self.FactorsList[self.Context]
 
-	def Deactivate(self):
-		self.ActiveState = False
-
-	def IsActive(self):
-		return self.ActiveState
-
-	def GetFactors(self, Context=""):
-		if Context == "":
-			Context = self.Context
-
-		return self.FactorsList[Context]
-
-	def SetFactors(self, FactorsList, Context=""):
-		if Context == "":
-			Context = self.Context
-
-		self.FactorsList[Context] = FactorsList
+	def SetFactors(self, FactorsList):
+		self.FactorsList[self.Context] = FactorsList
 
 ######################################################################### 
 #	Description: Creates a sorted pipetting list to be used by the hamilton pipette command
@@ -183,11 +151,10 @@ class Class:
 		VolumesList = self.GetVolumes()
 		FactorsList = self.GetFactors()
 		DestinationPosition = self.GetSequences()
-		Expanded = []
 
 		for count in range(0,len(DestinationPosition)):
 
-			ActualVolume = SourceVolumeList[count] * self.GetFactors()[count]
+			ActualVolume = SourceVolumeList[count] * FactorsList[count]
 
 			if ActualVolume > 0:
 			
@@ -238,22 +205,6 @@ def GetPlate(PlateName):
 		return None
 
 ######################################################################### 
-#	Description: Returns the plates that are alive or active
-#	Input Arguments: N/A
-#	Returns: [List of strings]
-#########################################################################
-def GetActivePlates():
-	global Plates_List
-
-	ActiveList = []
-
-	for plate in Plates_List:
-		if Plates_List[plate].IsActive():
-			ActiveList.append(plate)
-
-	return ActiveList
-
-######################################################################### 
 #	Description: Confirms the the string argument is a valid plate
 #	Input Arguments: [PlateName: String]
 #	Returns: [bool]
@@ -298,18 +249,6 @@ def GetPlates():
 		if Plate not in DeadPlates and plate.GetVolume() > 0:
 			Temp.append(plate)
 	return Temp
-
-######################################################################### 
-#	Description: Makes the starting plate in the step sequence active.
-#	Input Arguments: [StartingPlateName: String]
-#	Returns: N/A
-#########################################################################
-def StartStepSequence(StartingPlateName):
-	for key in Plates_List:
-		if key == StartingPlateName:
-			Plates_List[key].Activate()
-		else:
-			Plates_List[key].Deactivate()
 
 
 

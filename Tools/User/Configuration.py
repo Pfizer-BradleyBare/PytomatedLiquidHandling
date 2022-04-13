@@ -5,6 +5,7 @@ from ..General import HamiltonIO as HAMILTONIO
 from ..User import Samples as SAMPLES
 import copy
 import yaml
+import json #this is used for pretty print only
 import os
 import os.path
 import collections
@@ -16,6 +17,7 @@ SysConfig = {}
 Sequences = {}
 PreferredLoading = {}
 StepPreferredLoading = {}
+OmitLoadingList = []
 
 ######################################################################### 
 #	Description: Initializes the library by pulling information from Config files
@@ -66,6 +68,10 @@ def AddPreferredLoading(Item, LoadingArray):
 	global StepPreferredLoading
 	StepPreferredLoading[Item] = LoadingArray
 
+def AddOmitLoading(Item):
+	global OmitLoadingList
+	OmitLoadingList.append(Item)
+
 ######################################################################### 
 #	Description: Attempts to load both plates and solutions using the loading information available in the YAML file
 #	Input Arguments:  [Plates_List: 1D-array of plate objects] [Solutions_List: 1D-array of solution objects]
@@ -76,7 +82,9 @@ def Load(Plates_List, Solutions_List):
 	global StepPreferredLoading
 	global SysConfig
 	global PreferredLoading
-	global OmitLoading
+	global OmitLoadingList
+
+	Plates_List = [x for x in Plates_List if x.GetName() not in OmitLoadingList]
 
 	Loading = {}
 
@@ -87,8 +95,9 @@ def Load(Plates_List, Solutions_List):
 		MaxVol = Plate.GetVolume()
 		LidRequired = Plate.GetLidState()
 		VacuumRequired = Plate.GetVacuumState()
+		DesaltRequired = Plate.GetDesaltState()
 
-		Possibles = collections.OrderedDict({k: v for k, v in PlateSequences.items() if v["Max Supported Volume"] >= (MaxVol + v["Dead Volume"]) and PlateType == v["Labware Type"] and int(not not v["Lid Sequence"]) >= int(not not LidRequired) and (VacuumRequired == False or VacuumRequired in str(v["Vacuum Compatible"]))})
+		Possibles = collections.OrderedDict({k: v for k, v in PlateSequences.items() if v["Max Supported Volume"] >= (MaxVol + v["Dead Volume"]) and PlateType == v["Labware Type"] and int(not not v["Lid Sequence"]) >= int(not not LidRequired) and (VacuumRequired == False or VacuumRequired in str(v["Vacuum Compatible"])) and (DesaltRequired == False or DesaltRequired in str(v["Desalting Compatible"]))})
 		Possibles = collections.OrderedDict({k: v for k, v in sorted(Possibles.items(), key=lambda item: item[1]["Max Supported Volume"])})
 
 		for item in Possibles:
@@ -101,8 +110,9 @@ def Load(Plates_List, Solutions_List):
 	for Solution in Solutions_List:
 		SolutionStorage = Solution.GetStorage()
 		MaxVol = Solution.GetVolume()
+		DesaltRequired = Solution.GetDesaltState()
 
-		Possibles = {k: v for k, v in ReagentSequences.items() if v["Max Supported Volume"] >= (MaxVol + v["Dead Volume"]) and SolutionStorage == v["Storage Condition"]}
+		Possibles = {k: v for k, v in ReagentSequences.items() if v["Max Supported Volume"] >= (MaxVol + v["Dead Volume"]) and SolutionStorage == v["Storage Condition"]  and (DesaltRequired == False or DesaltRequired in str(v["Desalting Compatible"]))}
 		Possibles = collections.OrderedDict({k: v for k, v in sorted(Possibles.items(), key=lambda item: item[1]["Max Supported Volume"])})
 
 		for item in Possibles:
@@ -190,6 +200,8 @@ def Load(Plates_List, Solutions_List):
 
 	FinalLoading = dict(sorted(FinalLoading.items(), key=lambda x: x[1]["LoadingPosition"]))
 	#Sort by position so the deck loading is in position order
+
+	print(json.dumps(FinalLoading,sort_keys=True, indent=4))
 
 	if(len(Plates_List) + len(Solutions_List) != len(FinalLoading)):
 		print("Unabled to load all labware. The following labware exceeds available container volume on deck.")

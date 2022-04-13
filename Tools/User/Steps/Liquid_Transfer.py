@@ -41,6 +41,8 @@ def Step(step):
 	for Source in SourceList:
 		SOLUTIONS.AddSolution(Source, step.GetParameters()[TYPE], step.GetParameters()[STORAGE])
 	
+	print(PLATES.GetPlate(DestinationPlate).FactorsList)
+
 	Sequence = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList,MixList)
 	
 	for Counter in range(0,Sequence.GetNumSequencePositions()):
