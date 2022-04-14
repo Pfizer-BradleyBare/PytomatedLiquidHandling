@@ -1,12 +1,1 @@
-[submodule "HamiltonVisualMethodEditorConfiguration"]
-	path = HamiltonVisualMethodEditorConfiguration
-	url = https://github.com/Pfizer-BradleyBare/HamiltonVisualMethodEditorConfiguration
-	branch = master
-[submodule "HamiltonVisualMethodEditorMethod"]
-	path = HamiltonVisualMethodEditorMethod
-	url = https://github.com/Pfizer-BradleyBare/HamiltonVisualMethodEditorMethod
-	branch = master
-[submodule "HamiltonVisualMethodEditorWorklists"]
-	path = HamiltonVisualMethodEditorWorklists
-	url = https://github.com/Pfizer-BradleyBare/HamiltonVisualMethodEditorWorklists
-	branch = master
+

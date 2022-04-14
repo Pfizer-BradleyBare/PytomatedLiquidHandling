@@ -194,12 +194,8 @@ def Init(PulledMethodSheet):
 				if value != None and type(value) == str and value.lower() == "Comments".lower():
 				
 					Step = Class(PulledMethodSheet[row][col - 2].replace(" - (Click Here to Update)",""))
-<<<<<<< HEAD
-					Step.SetCoordinates(EXCELIO.METHOD_ROW_START + row - 1, EXCELIO.METHOD_COL_START + col - 2 - 1)
-					Step.SetParentPlateStep(Name)	
-=======
+
 					Step.SetCoordinates(EXCELIO.METHOD_ROW_START + row - 1, EXCELIO.METHOD_COL_START + col - 2 - 1)	
->>>>>>> ee01a3b7f9c7952bac9589934315c1a54eb420a5
 
 					if Step.GetTitle() == PLATE.TITLE:
 						Name = Step
@@ -287,19 +283,6 @@ def Init(PulledMethodSheet):
 				Pathways.append(item)
 
 		Unfiltered_Steps_List = copy.deepcopy(Steps_List)
-<<<<<<< HEAD
 		#Save all steps for future use
 
 		StartingPlateName = Steps_List[0].GetParameters()[PLATE.NAME]
-
-
-
-
-
-
-
-#end
-#End
-=======
-		#Save all steps for future use
->>>>>>> ee01a3b7f9c7952bac9589934315c1a54eb420a5

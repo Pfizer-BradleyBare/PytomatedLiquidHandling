@@ -71,7 +71,7 @@ def Init(MutableStepsList):
 				"Source":Params[SOURCE], \
 				"Waste":Params[WASTE], \
 				"EQ Buffer":Params[EQUILIBRATION_BUFFER], \
-				"Volume":Params[TYPE].split(";"), \
+				"Volume":Params[TYPE].replace(" ","").split("+"), \
 				"Method":Params[ELUTION_METHOD], \
 				"EQ":False, \
 				"EQ Step": SearchStep}
@@ -125,7 +125,7 @@ def Step(step):
 
 	Params = step.GetParameters()
 	Source = Params[SOURCE]
-	Volume = Params[TYPE] / 100
+	Volume = sum(map(int,Params[TYPE].replace(" ","").split("+"))) / 100
 	Buffer = Params[EQUILIBRATION_BUFFER]
 	EQ_Destination = Params[WASTE]
 	Sample_Destination = step.GetParentPlate()
