@@ -3,6 +3,8 @@ from ...General import Log as LOG
 
 
 def PreRun(Input):
+	print("Begin")
+
 	CommandString = ""
 	CommandString += "[Module]PreRun"
 	CommandString += "[Command]IMCS SizeX Desalt"
@@ -21,7 +23,7 @@ def Equilibrate(Input):
 	CommandString = ""
 	CommandString += "[Module]IMCS SizeX Desalt"
 	CommandString += "[Command]Equilibrate"
-	CommandString += "[Parent]" + Input["ParentPlate"]
+	CommandString += "[Parent]" + Input["ParentPlate"] + "[StartPosition]" + str(Input["StartPosition"])
 	return CommandString
 
 #this function should start to process the samples through the desalting tips. The tips are assumed to be equilibrated. It is possible to equilibrate during this step if it hasn't been done yet.
@@ -29,7 +31,7 @@ def Process(Input):
 	CommandString = ""
 	CommandString += "[Module]IMCS SizeX Desalt"
 	CommandString += "[Command]Process"
-	CommandString += "[Parent]" + Input["ParentPlate"]
+	CommandString += "[Parent]" + Input["ParentPlate"] + "[StartPosition]" + str(Input["StartPosition"])
 	return CommandString
 
 

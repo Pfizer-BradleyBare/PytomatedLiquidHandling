@@ -66,12 +66,15 @@ def Init(MutableStepsList):
 			while SearchStep.GetTitle() != INCUBATE.TITLE:
 				SearchStep = STEPS.GetPreviousStepInPathway(SearchStep)
 
+				if SearchStep == None:
+					break
+
 			Desalting_Params[Parent + str(Step.GetCoordinates())] = {\
 				"Destination":Parent, \
 				"Source":Params[SOURCE], \
 				"Waste":Params[WASTE], \
 				"EQ Buffer":Params[EQUILIBRATION_BUFFER], \
-				"Volume":Params[TYPE].replace(" ","").split("+"), \
+				"Volume":str(Params[TYPE]).replace(" ","").split("+"), \
 				"Method":Params[ELUTION_METHOD], \
 				"EQ":False, \
 				"EQ Step": SearchStep}
@@ -90,7 +93,7 @@ def Equilibrate(ParentPlate):
 		LOG.Comment("Performing Desalting Equilibration")
 		Params["EQ"] = True
 		LOG.BeginCommandLog()
-		HAMILTONIO.AddCommand(DESALT.Equilibrate({"ParentPlate":ParentPlate}))
+		HAMILTONIO.AddCommand(DESALT.Equilibrate({"ParentPlate":ParentPlate, "StartPosition":SAMPLES.StartPosition}))
 		Response = HAMILTONIO.SendCommands()
 		LOG.EndCommandLog()
 	else:
@@ -111,7 +114,7 @@ def Process(ParentPlate):
 	#STATUS_UPDATE.AppendText("Performing Desalting Equilibration and Desalting Samples")
 	Params["EQ"] = False
 	LOG.BeginCommandLog()
-	HAMILTONIO.AddCommand(DESALT.Process({"ParentPlate":ParentPlate}))
+	HAMILTONIO.AddCommand(DESALT.Process({"ParentPlate":ParentPlate, "StartPosition":SAMPLES.StartPosition}))
 	Response = HAMILTONIO.SendCommands()
 	LOG.EndCommandLog()
 	
@@ -125,7 +128,7 @@ def Step(step):
 
 	Params = step.GetParameters()
 	Source = Params[SOURCE]
-	Volume = sum(map(int,Params[TYPE].replace(" ","").split("+"))) / 100
+	Volume = sum(map(float,str(Params[TYPE]).replace(" ","").split("+"))) / 100
 	Buffer = Params[EQUILIBRATION_BUFFER]
 	EQ_Destination = Params[WASTE]
 	Sample_Destination = step.GetParentPlate()
