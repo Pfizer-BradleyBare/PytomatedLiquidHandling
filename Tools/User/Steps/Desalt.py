@@ -74,7 +74,7 @@ def Init(MutableStepsList):
 				"Source":Params[SOURCE], \
 				"Waste":Params[WASTE], \
 				"EQ Buffer":Params[EQUILIBRATION_BUFFER], \
-				"Volume":str(Params[TYPE]).replace(" ","").split("+"), \
+				"Volume":str(Params[TYPE]).replace(" ","").replace('.0','').split("+"), \
 				"Method":Params[ELUTION_METHOD], \
 				"EQ":False, \
 				"EQ Step": SearchStep}
@@ -140,6 +140,15 @@ def Step(step):
 
 	LOG.BeginCommentsLog()
 	PLATES.GetPlate(EQ_Destination).SetDesaltState(TITLE)
+	
+	#This is a weird step overall. In short, we need to go back until we find the step whos parent is the waste plate. Then we can use that as a context for this pipetting step.
+	SearchStep = step
+	while(SearchStep.GetParentPlate() != EQ_Destination):	
+		SearchStep = STEPS.GetPreviousStepInPathway(SearchStep)
+
+	PLATES.GetPlate(EQ_Destination).SetContext(SearchStep.GetContext())
+	#Set the context
+
 	Sequence = PLATES.GetPlate(EQ_Destination).CreatePipetteSequence(SAMPLES.Column(Buffer), SAMPLES.Column((DesaltingEQVolume + DesaltingElutionVolume) * Volume), SAMPLES.Column("Yes"))
 	
 	Desalting_Params[StepKey]["Positions"] = Sequence.GetDestinationPositions()

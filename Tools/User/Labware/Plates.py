@@ -42,6 +42,9 @@ class PipetteSequence:
 		return len(self.GetDestinationPositions())
 
 	def AppendToPipetteSequence(self,Dest,DestPos,Source,SourcePos,Vol,CurDestVol,Mix):
+		if not Vol > 0:
+			return
+		
 		Index = 0
 		for Counter in range(0,self.GetNumSequencePositions()):
 			if DestPos > self.GetDestinationPositions()[Counter]:

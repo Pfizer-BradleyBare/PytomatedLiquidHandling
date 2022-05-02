@@ -137,6 +137,7 @@ while(True):
 		break
 
 	PLATES.GetPlate(Step.GetParentPlate()).SetContext(Step.GetContext())
+
 	#This will switch the context in real time, allowing for complex pathways. Only the parent plate context is switched. No other plates are switched
 
 	if sum(PLATES.GetPlate(Step.GetParentPlate()).GetFactors()) == 0 and Step.GetTitle() != MERGE_PLATE.TITLE:
@@ -159,6 +160,9 @@ while(True):
 print("\n\n\n\n")
 
 if HAMILTONIO.IsSimulated() == True:
+
+	for plate in PLATES.GetPlates():
+		print(plate.GetName(),plate.FactorsList)
 
 	if GenerateList == False and TestRun == False:
 		HAMILTONIO.Simulated(False)
