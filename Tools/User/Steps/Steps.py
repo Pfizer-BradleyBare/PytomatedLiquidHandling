@@ -1,40 +1,18 @@
-
-
-TITLE = 0
-ROW = 1
-COL = 2
-PARENT_PLATE_NAME = 3
-PARENT_PLATE_CATEGORY = 4
-PARAMS_START = 4
-#array Indices
-
-NOT_EXCEL_COORDINATES = (0,0)
-
-HAMILTON_STORAGE_COLD = "Cold"
-HAMILTON_STORAGE_RT = "RT"
-#Hamilton function specific constants
-
 import copy
 from ...General import ExcelIO as EXCELIO
 from ..Steps import Plate as PLATE
 from ..Steps import Split_Plate as SPLIT_PLATE
 
+ActiveContextTracker = set()
+def ActivateContext(Context):
+	ActiveContextTracker.add(Context)
+def DeactivateContext(Context):
+	ActiveContextTracker.remove(Context)
+
 Unfiltered_Steps_List = []
 Steps_List = []
 Temp_Steps_List = []
-Current_Step = []
-ActiveContextTracker = set()
-
-def GetActiveContexts():
-	return ActiveContextTracker
-
-def ActivateContext(Context):
-	global ActiveContextTracker
-	ActiveContextTracker.add(Context)
-
-def DeactivateContext(Context):
-	global ActiveContextTracker
-	ActiveContextTracker.remove(Context)
+Current_Step = None
 
 def GetAllSteps():
 	global Unfiltered_Steps_List
@@ -74,7 +52,6 @@ def UpdateStepParams(Step):
 		if Method[Row][Col] == None:
 			break
 		Step.AddParameters(Method[Row][Col],Method[Row][Col+1])
-
 
 def GetCurrentStep():
 	global Current_Step
@@ -154,7 +131,7 @@ class Class:
 	def GetCoordinates(self):
 		return (self.Row,self.Col)
 
-	def GetParentPlate(self):
+	def GetParentPlateName(self):
 		return self.Context[self.Context.rfind(":")+1:]
 	
 	def SetContext(self,Context):

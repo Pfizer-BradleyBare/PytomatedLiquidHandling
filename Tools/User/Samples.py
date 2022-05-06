@@ -1,50 +1,26 @@
-from ..User.Steps import Steps as STEP
 from ..General import ExcelIO as EXCELIO
 import copy
 
-WORKLIST_SAMPLE_SEQUENCE = "_SampleSequence"
-#Worklist constants
+ContextualFactors_Dict = {}
+def SetContextualFactors(ContextString, FactorsList):
+    ContextualFactors_Dict[ContextString] = FactorsList
+def GetContextualFactors(ContextString):
+    return ContextualFactors_Dict[ContextString]
+
+ContextualSequences_Dict = {}
+def SetContextualSequences(ContextString, SequencesList):
+	ContextualSequences_Dict[ContextString] = SequencesList
+def GetContextualSequences(ContextString):
+	return ContextualSequences_Dict[ContextString]
 
 #This dict holds the specific range of the specified column. That way sample information can be pulled as needed.
 Column_Ranges = {}
 
-#This is the number of samples in the sheet.
-Num_Samples = 0
-Total_Samples = 0
-#This includes sequence duplicates
-
-#This is the sequence list, adjusted for the sample start position.
-Sequences = []
+NumSamples = 0
+def GetNumSamples():
+	return NumSamples
 
 StartPosition = 0
-
-######################################################################### 
-#	Description: Returns the number of rows-1 or samples in the worklist
-#	Input Arguments: N/A
-#	Returns: Integer
-#########################################################################
-def GetNumSamples():
-	global Num_Samples
-	return Num_Samples
-
-######################################################################### 
-#	Description: Returns the number of sequences in the worklist. Sequences are described in the _SampleSequence Column
-#	Input Arguments: None
-#	Returns: Integer
-#########################################################################
-def GetTotalSamples():
-	global Total_Samples
-	return Total_Samples
-
-######################################################################### 
-#	Description: Returns the all sequence positions that will be used
-#	Input Arguments: None
-#	Returns: 1D Array of Integers
-#########################################################################
-def GetSequences():
-	global Sequences
-	return Sequences
-
 def GetStartPosition():
 	global StartPosition
 	return StartPosition
@@ -58,54 +34,34 @@ def GetStartPosition():
 #	Returns: N/A
 #########################################################################
 def Init(SampleStartPosition, PulledWorkListSheet):
-	global Num_Samples
-	global Total_Samples
 	global Column_Ranges
-	global Sequences
-	global SamplePositions
 	global StartPosition
+	global NumSamples
 
 	StartPosition = SampleStartPosition
 	Column_Ranges = {}
-	Num_Samples = 0
-	Sequences = []
+	NumSamples = 0
 
 	Sample_Sheet = PulledWorkListSheet
 
 	while(True):
-		if Sample_Sheet[Num_Samples + 1][0] == None:
+		if Sample_Sheet[NumSamples + 1][0] == None:
 			break
-		Num_Samples += 1
+		NumSamples += 1
 	#end
 
+	SetContextualFactors("",[1] * NumSamples)
+	SetContextualSequences("",[*range(SampleStartPosition,SampleStartPosition + NumSamples)])
+	
 	count = 0
 	while(True):
 		Column_Name = Sample_Sheet[0][count]
 		if Column_Name == None:
 			break
 
-		Column_Ranges[Column_Name] = [2,count+1,1+Num_Samples,count+1]
+		Column_Ranges[Column_Name] = [2,count+1,1+NumSamples,count+1]
 		count += 1
 	#end
-
-	SampleSequence = Column(WORKLIST_SAMPLE_SEQUENCE)
-
-	if SampleSequence[0] == WORKLIST_SAMPLE_SEQUENCE:
-		SampleSequence = range(1,Num_Samples+1)
-	#If this column is not found (Hidden Option) then create the default
-
-	TotalSamplesArray = []
-	for index in range(0,len(SampleSequence)):
-		
-		Temp = []
-		for Seq in str(SampleSequence[index]).split(","):
-			Temp.append(int(float(Seq)) + SampleStartPosition - 1)
-
-		Sequences.append(Temp)
-		TotalSamplesArray = TotalSamplesArray + Temp
-
-	Total_Samples = len(TotalSamplesArray)
-	#Get total number of samples, which includes duplicates. Not the same as the number of rows in worklist
 
 ######################################################################### 
 #	Description: Searches the dictionary for the specified column name. If column name is not found, then the column name is returned in the array
@@ -114,7 +70,7 @@ def Init(SampleStartPosition, PulledWorkListSheet):
 #########################################################################
 def Column(Column_Name):
 	global Column_Ranges
-	global Num_Samples
+	global NumSamples
 
 	if isinstance(Column_Name, list) == True:
 		return Column_Name
@@ -123,7 +79,8 @@ def Column(Column_Name):
 		Temp = Column_Ranges[Column_Name]
 		return EXCELIO.Pull(EXCELIO.WORKLIST_SHEET, Temp[0], Temp[1], Temp[2], Temp[3], 1)
 	except:
-		return [Column_Name] * Num_Samples
+		pass
+	#return [Column_Name] * NumSamples
 
 def InColumn(Column_Name):
 	global Column_Ranges

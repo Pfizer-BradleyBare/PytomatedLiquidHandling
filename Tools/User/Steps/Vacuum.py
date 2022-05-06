@@ -32,7 +32,7 @@ def GetVacPlates():
 	global VacPlates
 	return VacPlates
 
-def Init(MutableStepsList, SequencesList):
+def Init(MutableStepsList):
 	global IsUsedFlag
 	global VacPlates
 

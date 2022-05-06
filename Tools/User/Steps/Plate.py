@@ -15,32 +15,22 @@ def IsUsed():
 	return IsUsedFlag
 
 #This function may modify the Mutable list if required
-def Init(MutableStepsList, SequencesList):
-	step = MutableStepsList.pop(0)
-
-	PlateName = step.GetParameters()[NAME]
-	PLATES.AddPlate(PlateName, step.GetParameters()[TYPE])
-	PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
-	PLATES.GetPlate(PlateName).SetContext(step.GetContext() + ":" + PlateName)	
-	PLATES.GetPlate(PlateName).SetFactors([1]*len(SAMPLES.GetSequences()))
-	PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
-
+def Init(MutableStepsList):	
+	pass
 
 def Step(step):
 	LOG.BeginCommentsLog()
 
 	PlateName = step.GetParameters()[NAME]
 	PlateType = step.GetParameters()[TYPE]
-	ParentPlate = step.GetParentPlate()
-	PLATES.GetPlate(ParentPlate).SetContext(step.GetContext())
-	ParentFactors = PLATES.GetPlate(ParentPlate).GetFactors()
+	
+	if PLATES.LABWARE.GetLabware(PlateName) == None:
+		NewPlate = PLATES.Class(PlateName, PlateType)
+		PLATES.LABWARE.AddLabware(NewPlate)
 
-	if PLATES.GetPlate(PlateName) == None:
-		PLATES.AddPlate(PlateName, PlateType)
-		PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
-		PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
-	PLATES.GetPlate(PlateName).SetContext(step.GetContext()  + ":" + PlateName)	
-	PLATES.GetPlate(PlateName).SetFactors(ParentFactors)
+	SAMPLES.SetContextualFactors(STEPS.Class.GetContext(step) + ":" + PlateName, SAMPLES.GetContextualFactors(STEPS.Class.GetContext(step)))
+	SAMPLES.SetContextualSequences(STEPS.Class.GetContext(step) + ":" + PlateName, SAMPLES.GetContextualSequences(STEPS.Class.GetContext(step)))
+	#Now all the contexts are going to be derived from the parents.
 
 	STEPS.DeactivateContext(step.GetContext())
 	STEPS.ActivateContext(step.GetContext()  + ":" + PlateName)

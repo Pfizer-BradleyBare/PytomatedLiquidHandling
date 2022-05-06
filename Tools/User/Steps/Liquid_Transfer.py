@@ -12,22 +12,18 @@ import copy
 
 TITLE = "Liquid Transfer"
 NAME = "Source"
-TYPE = "Liquid Type"
-STORAGE = "Storage Condition"
 VOLUME = "Volume (uL)"
 MIXING = "Mix?"
 
 IsUsedFlag = True
 
 def IsUsed():
-	global IsUsedFlag
 	return IsUsedFlag
 
 def Init():
 	pass
 
 def Step(step):
-
 	LOG.BeginCommentsLog()
 	
 	DestinationPlate = step.GetParentPlate()
@@ -36,18 +32,7 @@ def Step(step):
 	SourceVolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
 	MixList = SAMPLES.Column(step.GetParameters()[MIXING])
 
-	STATUS_UPDATE.AppendText("Transfering " +  str(step.GetParameters()[VOLUME]) + " uL of " + str(step.GetParameters()[TYPE]) + " to " + str(step.GetParentPlate()) + " plate ")
-	
-	for Source in SourceList:
-		SOLUTIONS.AddSolution(Source, step.GetParameters()[TYPE], step.GetParameters()[STORAGE])
-	
-	print(PLATES.GetPlate(DestinationPlate).FactorsList)
-
 	Sequence = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList,MixList)
-	
-	for Counter in range(0,Sequence.GetNumSequencePositions()):
-			SOLUTIONS.GetSolution(Sequence.GetSources()[Counter]).AddVolume(Sequence.GetTransferVolumes()[Counter])
-			SOLUTIONS.AddPipetteVolume(Sequence.GetTransferVolumes()[Counter])
 
 	if Sequence.GetNumSequencePositions() == 0:
 		LOG.Comment("Number of sequences is zero so no liquid transfer will actually occur.")

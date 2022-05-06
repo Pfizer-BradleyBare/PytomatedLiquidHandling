@@ -2,10 +2,9 @@ from ..Steps import Plate as PLATE
 from ..Steps import Steps as STEPS
 from ...User import Samples as SAMPLES
 from ...User import Configuration as CONFIGURATION
+from ..Labware import Labware as LABWARE
+from ..Labware import Solutions as SOLUTIONS
 import copy
-
-#this dict is in the format: PlateName: [Category, LidUsed, ActiveState, SequencesList, FactorsList, TotalVolumesList]. Then list are the length of the number of samples
-Plates_List = {}
 
 class PipetteSequence:
 	def __init__ (self):
@@ -42,9 +41,6 @@ class PipetteSequence:
 		return len(self.GetDestinationPositions())
 
 	def AppendToPipetteSequence(self,Dest,DestPos,Source,SourcePos,Vol,CurDestVol,Mix):
-		if not Vol > 0:
-			return
-		
 		Index = 0
 		for Counter in range(0,self.GetNumSequencePositions()):
 			if DestPos > self.GetDestinationPositions()[Counter]:
@@ -58,200 +54,113 @@ class PipetteSequence:
 		self.GetCurrentDestinationVolumes().insert(Index,CurDestVol)
 		self.GetMixCriteria().insert(Index,Mix)
 
-class Class:
+class Class(LABWARE.Class):
 ######################################################################### 
 #	Description: Initializes class to default starting parameters
 #	Input Arguments: [PlateName: String] [Type: String] [SequencesList: List]
 #	Returns: N/A
 #########################################################################
-	def __init__ (self, PlateName, Type):
-		self.PlateName = PlateName
-		self.Type = Type
-		self.Lid = False
-		self.Vacuum = False
-		self.Desalt = False
-		self.RequiresLoading = False
-		self.Context = None
-		self.SequencesList = None
-		self.FactorsList = {}
-		self.VolumesList = None
-		self.MaxVolume = 0
+	def __init__ (self, Name, PlateType):
+		LABWARE.Class.__init__(self, Name, LABWARE.LabwareTypes.Plate)
+		self.PlateType = PlateType
+		self.VolumesList = [0] * SAMPLES.GetNumSamples()
+		self.MaxVolumeList = [0] * SAMPLES.GetNumSamples()
+		self.MinVolumeList = [0] * SAMPLES.GetNumSamples()
 
-	def GetName(self):
-		return self.PlateName
+	#
+	# This is the type of plate. 96 Well or some other form. This is dependant on the user config.
+	#
+	def GetPlateType(self):
+		return self.PlateType
 
-	def GetType(self):
-		return self.Type
+	#
+	# Implemented Virtual function from Labware class
+	#
+	def GetMaxVolume(self):
+		return max(self.MaxVolumeList)
 
-	def SetLidState(self):
-		self.Lid = True
-
-	def GetLidState(self):
-		return self.Lid
-
-	def SetVacuumState(self, VacuumPlate):
-		self.Vacuum = VacuumPlate
-
-	def GetVacuumState(self):
-		return self.Vacuum
-
-	def SetDesaltState(self, DesaltStepTitle):
-		self.Desalt = DesaltStepTitle
-
-	def GetDesaltState(self):
-		return self.Desalt
-
-	def GetContext(self):
-		return self.Context
-
-	def SetContext(self, Context):
-		self.Context = Context
-
-	def GetSequences(self):
-		return self.SequencesList
-
-	def SetSequences(self, SequencesList):
-		self.SequencesList = SequencesList
-
-	def GetVolumes(self):
-		return self.VolumesList
-
-	def SetVolumes(self, VolumesList):
-		self.VolumesList = VolumesList
-
-	def UpdateMaxVolume(self):
-		Volumes = self.GetVolumes()
+	#
+	# This will return the context for the plate in the current pathway
+	#
+	def GetPlateContextualString(self,Step):
+		SearchStep = Step
+		PlateName = LABWARE.Class.GetLabwareName(self)
+		while True:
+			SearchStep = STEPS.GetPreviousStepInPathway(SearchStep)
+			if STEPS.Class.GetParentPlateName(SearchStep) == PlateName:
+				return STEPS.Class.GetContext(SearchStep)
+		#This should technically never fail
 		
-		for Volume in Volumes:
-			if Volume < 0:
-				self.RequiresLoading = True
+	#
+	# This should be called everytime there is a change to the plate. This allows us to capture the historical min and max volumes of the plate
+	#
+	def DoVolumeUpdate(self):
+		CurrentVolumeList = self.VolumesList
+		MinVolumeList = self.MinVolumeList
+		MaxVolumeList = self.MaxVolumeList
 
-			Volume = abs(Volume)
-			if Volume > self.MaxVolume:
-				self.MaxVolume = Volume
+		for VolumeIndex in range(0,len(CurrentVolumeList)):
+			
+			if CurrentVolumeList[VolumeIndex] < MinVolumeList[VolumeIndex]:
+				MinVolumeList[VolumeIndex] = CurrentVolumeList[VolumeIndex]
+			#min volume is the most negative value ever acquired in the plate
 
-	def LoadingRequired(self):
-		return self.RequiresLoading
-
-	def GetVolume(self):
-		return self.MaxVolume
-
-	def GetFactors(self):
-		return self.FactorsList[self.Context]
-
-	def SetFactors(self, FactorsList):
-		self.FactorsList[self.Context] = FactorsList
-
+			Volume = abs(CurrentVolumeList[VolumeIndex])
+			if Volume > MaxVolumeList[VolumeIndex]:
+				MaxVolumeList[VolumeIndex] = Volume
+			#Max volume is the absolute max value
+				
 ######################################################################### 
 #	Description: Creates a sorted pipetting list to be used by the hamilton pipette command
 #	Input Arguments: [SourceList: List] [SourceVolumeList: List]
 #	Returns: [List of Lists]
 #########################################################################
-	def CreatePipetteSequence(self, SourceList, SourceVolumeList, MixList):
-		global Plates_List
+	def CreatePipetteSequence(self, DestinationContextStringsList, SourceContextStringsList, SourcesList, SourceVolumesList, MixingList):
 		
 		NewSequence = PipetteSequence()
-		VolumesList = self.GetVolumes()
-		FactorsList = self.GetFactors()
-		DestinationPosition = self.GetSequences()
 
-		for count in range(0,len(DestinationPosition)):
+		DestinationVolumesList = self.VolumesList
 
-			ActualVolume = SourceVolumeList[count] * FactorsList[count]
+		for SampleIndex in range(0,len(DestinationVolumesList)):
+
+			Factor = SAMPLES.GetContextualFactors(DestinationContextStringsList[SampleIndex])[SampleIndex]
+			DestinationSequencesList = SAMPLES.GetContextualSequences(DestinationContextStringsList[SampleIndex])[SampleIndex]
+
+			DestinationName = LABWARE.Class.GetLabwareName(self)
+			SourceName = SourcesList[SampleIndex]
+			Volume = SourceVolumesList[SampleIndex]
+			CurrentWellVolume = DestinationVolumesList[SampleIndex]
+			MixParameter = MixingList[SampleIndex]
+
+			ActualVolume = Volume * Factor
 
 			if ActualVolume > 0:
 			
-				if IsPlate(SourceList[count]) == True:
-					Plate = GetPlate(SourceList[count])
-					Plate.GetVolumes()[count] -= ActualVolume
-					Plate.UpdateMaxVolume()
+				SourceSequencesList = DestinationSequencesList
+
+				SourceLabware = LABWARE.GetLabware(SourceName)
+				if SourceLabware == None:
+					SourceLabware = SOLUTIONS.Class(SourceName)
+					LABWARE.AddLabware(SourceLabware)
+				#If the labware doesn't exists then it has to be a reagent. Add it
+				
+				if SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Reagent:
+					SOLUTIONS.Class.AddVolume(SourceLabware)
+
+				elif SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
+					SourceLabware.VolumesList[SampleIndex] -= ActualVolume
+					SourceLabware.DoVolumeUpdate()
+					SourceSequencesList = SAMPLES.GetContextualSequences(SourceContextStringsList[SampleIndex])
 				#Do plate volume subtraction
 
-				for count2 in range(0,len(DestinationPosition[count])):
-					SourcePosition = DestinationPosition[count][count2]
+				for SequenceIndex in range(0,len(DestinationSequencesList)):
+					DestinationSequencePosition = DestinationSequencesList[SequenceIndex]
+					SourceSequencePosition = SourceSequencesList[SequenceIndex]
 
-					if IsPlate(SourceList[count]) == True:
-						SourcePosition = Plate.GetSequences()[count][count2]
-					#Modify source position to be different if needed because it is a plate and not a reagent
-
-					NewSequence.AppendToPipetteSequence(self.GetName(),DestinationPosition[count][count2],SourceList[count],SourcePosition,ActualVolume,VolumesList[count],MixList[count])
-					
-			
-				self.GetVolumes()[count] += ActualVolume
-				self.UpdateMaxVolume()
+					NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,MixParameter)
+				
+				DestinationVolumesList[SampleIndex] += ActualVolume
+				self.DoVolumeUpdate()
 
 		return copy.deepcopy(NewSequence)
-
-def Init():
-	global Plates_List
-	Plates_List = {}
-
-######################################################################### 
-#	Description: Creates a new plate class and adds it to the plate dictionary
-#	Input Arguments: [PlateName: String] [Type: String] [SequencesList: List]
-#	Returns: N/A
-#########################################################################
-def AddPlate(PlateName, Type):
-	global Plates_List
-	Plates_List[PlateName] = Class(PlateName, Type)
-
-######################################################################### 
-#	Description: Returns the plate class with PlateName
-#	Input Arguments: [PlateName: String]
-#	Returns: Plate class
-#########################################################################
-def GetPlate(PlateName):
-	global Plates_List
-	if PlateName in Plates_List:
-		return Plates_List[PlateName]
-	else:
-		return None
-
-######################################################################### 
-#	Description: Confirms the the string argument is a valid plate
-#	Input Arguments: [PlateName: String]
-#	Returns: [bool]
-#########################################################################
-def IsPlate(PlateName):
-	global Plates_List
-	if PlateName in Plates_List:
-		return True
-	return False
-
-######################################################################### 
-#	Description: Returns the dead plates. Meaning the plates that will never be used in this sequence. Any steps that reference this plate are also dead
-#	Input Arguments: N/A
-#	Returns: [List of Strings]
-#########################################################################
-def GetDeadPlates():
-	global Plates_List
-	Temp = []
-
-	for key in Plates_List:
-		count = 0
-		for factor in Plates_List[key].GetFactors():
-			count += factor 
-		if count == 0:
-			Temp.append(key)
-	return Temp
-
-######################################################################### 
-#	Description: Returns all plates that are not dead. Plates can either be active or inactive.
-#	Input Arguments: N/A
-#	Returns: [List of strings]
-#########################################################################
-def GetPlates():
-	Temp = []
-	DeadPlates = GetDeadPlates()
-
-	global Plates_List
-
-	for Plate in Plates_List:
-		plate = Plates_List[Plate]
-
-		if Plate not in DeadPlates and plate.GetVolume() > 0:
-			Temp.append(plate)
-	return Temp
-
-
 

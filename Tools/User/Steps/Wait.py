@@ -7,7 +7,6 @@ from ...General import Log as LOG
 import time
 
 TITLE = "Wait"
-TIME = STEPS.PARAMS_START + 0
 
 IsUsedFlag = True
 

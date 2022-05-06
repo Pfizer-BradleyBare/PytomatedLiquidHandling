@@ -76,11 +76,11 @@ CONFIGURATION.Init()
 PREPLIST.Init()
 STEPS.Init(EXCELIO.GetMethod())
 SAMPLES.Init(Sample_Start_Pos, EXCELIO.GetWorklist())
-PLATES.Init()
-SOLUTIONS.Init()
+#PLATES.Init()
+#SOLUTIONS.Init()
 #Init Trackers
 
-PLATE.Init(STEPS.GetSteps(), SAMPLES.GetSequences())
+PLATE.Init(STEPS.GetSteps())
 SPLIT_PLATE.Init(STEPS.GetSteps())
 MERGE_PLATE.Init(STEPS.GetSteps())
 LIQUID_TRANSFER.Init()
@@ -93,7 +93,7 @@ FINISH.Init()
 ALIQUOT.Init(STEPS.GetSteps())
 POOL.Init(STEPS.GetSteps())
 PRELOAD_LIQUID.Init(STEPS.GetSteps())
-VACUUM.Init(STEPS.GetSteps(), SAMPLES.GetSequences())
+VACUUM.Init(STEPS.GetSteps())
 MAGNETIC_BEADS.Init(STEPS.GetSteps())
 MERGE_PLATE.Init(STEPS.GetSteps())
 
@@ -136,13 +136,10 @@ while(True):
 	if Step == None:
 		break
 
-	PLATES.GetPlate(Step.GetParentPlate()).SetContext(Step.GetContext())
-
-	#This will switch the context in real time, allowing for complex pathways. Only the parent plate context is switched. No other plates are switched
-
-	if sum(PLATES.GetPlate(Step.GetParentPlate()).GetFactors()) == 0 and Step.GetTitle() != MERGE_PLATE.TITLE:
+	if sum(SAMPLES.GetContextualFactors(STEPS.Class.GetContext(Step))) == 0 and Step.GetTitle() != MERGE_PLATE.TITLE:
 		continue
-	#We also want to ensure that the parent is actually used. To do this, we can sum the parent plate factors. If it is 0 then the plate is not used by any samples.
+	#We also want to ensure that the parent is actually used. To do this, we can sum the parent plate factors. 
+	# If it is 0 then the plate is not used by any samples.
 	#We do not want to skip a merge plates step no matter what.
 
 	print("\n",Step)
@@ -160,9 +157,6 @@ while(True):
 print("\n\n\n\n")
 
 if HAMILTONIO.IsSimulated() == True:
-
-	for plate in PLATES.GetPlates():
-		print(plate.GetName(),plate.FactorsList)
 
 	if GenerateList == False and TestRun == False:
 		HAMILTONIO.Simulated(False)
