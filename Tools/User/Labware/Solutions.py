@@ -25,6 +25,25 @@ class Class(LABWARE.Class):
 	
 	def GetPipetteVolumesList(self):
 		return self.GetPipetteVolumesList
+	
+	def GetCategory(self):
+		self.UpdateLabwareSolutionParameters()
+		return self.Category
+	def GetStorageTemperature(self):
+		self.UpdateLabwareSolutionParameters()
+		return self.StorageTemperature
+	def GetViscosity(self, SampleIndex):
+		self.UpdateLabwareSolutionParameters()
+		return self.Viscosity
+	def GetVolatility(self, SampleIndex):
+		self.UpdateLabwareSolutionParameters()
+		return self.Volatility
+	def GetHomogeneity(self, SampleIndex):
+		self.UpdateLabwareSolutionParameters()
+		return self.Homogeneity
+	def GetLiquidClassString(self):
+		self.UpdateLabwareSolutionParameters()
+		return self.LiquidClassString
 
 
 

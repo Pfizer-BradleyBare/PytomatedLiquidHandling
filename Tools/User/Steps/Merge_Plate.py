@@ -30,24 +30,20 @@ def Step(step):
 
 	LOG.BeginCommentsLog()
 
-	ParentPlate = step.GetParentPlate()
+	ParentPlate = step.GetParentPlateName()
 	Context = step.GetContext()
 	WaitingPlate = step.GetParameters()[NAME]
 	Continue = step.GetParameters()[CONTINUE]
 	#Get step information
 
-	MergeSteps.append(step)
-	STEPS.DeactivateContext(Context)
-
 	for MergeStep in MergeSteps[:]:
-		MergeParent = MergeStep.GetParentPlate()
+		MergeParent = MergeStep.GetParentPlateName()
 		MergeContext = MergeStep.GetContext()
 		MergeWaitingPlate = MergeStep.GetParameters()[NAME]
 		MergeContinue = MergeStep.GetParameters()[CONTINUE]
 
 		if MergeWaitingPlate == ParentPlate and MergeParent == WaitingPlate:
 			MergeSteps.remove(MergeStep)
-			MergeSteps.remove(step)
 
 			if Continue == "Yes" and MergeContinue == "Yes":
 				STEPS.ActivateContext(Context)
@@ -60,6 +56,9 @@ def Step(step):
 			#We need ot make sure we restore the factors correctly. If both are yes, then none is actually merged, it is just a pause function.
 
 			return
+
+	MergeSteps.append(step)
+	STEPS.DeactivateContext(Context)
 
 	WAIT.WaitForTimer()
 	#This basically acts as an asynchronous wait function.

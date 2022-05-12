@@ -22,74 +22,73 @@ def Init(MutableStepsList):
 	for Step in MutableStepsList[:]:
 		if Step.GetTitle() == TITLE:
 			IsUsedFlag = True
-			index = MutableStepsList.index(Step)
-			MutableStepsList.remove(MutableStepsList[index+2])
-			MutableStepsList.remove(MutableStepsList[index+1])
 			#Remove the latter step first to prevent list shifting
-
-		#We want to remove the plate actions that follow a split plate. All plate related actions will occur in this action immeditely following a split plate
+		#We want to remove the plate actions that follow a split plate. Why? Because we are going to do the plate work here. It must not be done twice
+		# All plate related actions will occur in this action immeditely following a split plate
 			
 
 def Step(step):
 	LOG.BeginCommentsLog()
 
-
 	Choices = SAMPLES.Column(step.GetParameters()[CHOICE])
-	ParentPlate = step.GetParentPlate()
+
 	NewPlate1 = step.GetParameters()[NAME_1]
 	NewPlate2 = step.GetParameters()[NAME_2]
-	PLATES.GetPlate(ParentPlate).SetContext(step.GetContext())
-	ParentFactors = copy.deepcopy(PLATES.GetPlate(ParentPlate).GetFactors())
+
+	ContextualFactors = PLATES.LABWARE.GetContextualFactors(STEPS.Class.GetContext(step))
+
 	NewPlate1Factors = []
 	NewPlate2Factors = []
 	#Get step information
 			
 	for count in range(0,len(Choices)):
-		if Choices[count] == NewPlate1:
-			NewPlate1Factors.append(1 * ParentFactors[count])
-			NewPlate2Factors.append(0 * ParentFactors[count])
-		elif Choices[count] == NewPlate2:
-			NewPlate1Factors.append(0 * ParentFactors[count])
-			NewPlate2Factors.append(1 * ParentFactors[count])
-		elif Choices[count] == "Concurrent":
-			NewPlate1Factors.append(1 * ParentFactors[count])
-			NewPlate2Factors.append(1 * ParentFactors[count])
+		if Choices[count].lower() == NewPlate1.lower():
+			NewPlate1Factors.append(1 * ContextualFactors[count])
+			NewPlate2Factors.append(0 * ContextualFactors[count])
+		elif Choices[count].lower() == NewPlate2.lower():
+			NewPlate1Factors.append(0 * ContextualFactors[count])
+			NewPlate2Factors.append(1 * ContextualFactors[count])
+		elif Choices[count].lower() == "Concurrent".lower():
+			NewPlate1Factors.append(1 * ContextualFactors[count])
+			NewPlate2Factors.append(1 * ContextualFactors[count])
 		#If it is a concurrent workflow then that means we want to maintain the current factors as the parent.
+		elif Choices[count].lower() == "Split".lower():
+			NewPlate1Factors.append(0.5 * ContextualFactors[count])
+			NewPlate2Factors.append(0.5 * ContextualFactors[count])
 		else:
-			NewPlate1Factors.append(0.5 * ParentFactors[count])
-			NewPlate2Factors.append(0.5 * ParentFactors[count])
+			pass
 	#Generate the factors for this new plate.
 
 
-	NewPlateTypes = {}
+	NextStep = STEPS.GetNextStepInPathway(step)
+	NextNextStep = STEPS.GetNextStepInPathway(NextStep)
+	#Two Plate Actions will always follow a split plate. ALWAYS
+	StepsList = STEPS.GetSteps()
+	StepsList.remove(NextNextStep)
+	StepsList.remove(NextStep)
+	#We are going to remove the Plate Action so the following work is not repeated
 
-	AllSteps = STEPS.GetAllSteps()
-	for index in range(0,len(AllSteps)):
-		if AllSteps[index] == step:
-			step1 = AllSteps[index+1]
-			step2 = AllSteps[index+2]
-			NewPlateTypes[step1.GetParameters()[PLATE.NAME]] = step1.GetParameters()[PLATE.TYPE]
-			NewPlateTypes[step2.GetParameters()[PLATE.NAME]] = step2.GetParameters()[PLATE.TYPE]
-			break
-	#Get type for both new plates
+	PlateParameters = STEPS.Class.GetParameters(NextStep)
+	PlateName = PlateParameters[PLATE.NAME]
+	PlateType = PlateParameters[PLATE.TYPE]
+	if PLATES.LABWARE.GetLabware(PlateName) == None:
+		NewPlate = PLATES.Class(PlateName, PlateType)
+		PLATES.LABWARE.AddLabware(NewPlate)
 
-	PlateName = NewPlate1
-	if PLATES.GetPlate(PlateName) == None:
-		PLATES.AddPlate(PlateName, NewPlateTypes[PlateName])
-		PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
-		PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
-	PLATES.GetPlate(PlateName).SetContext(step.GetContext() + ":" + PlateName)	
-	PLATES.GetPlate(PlateName).SetFactors(NewPlate1Factors)
-	#create the new plate 1
+	PLATES.LABWARE.SetContextualFactors(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualFactors(STEPS.Class.GetContext(step)))
+	PLATES.LABWARE.SetContextualSequences(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualSequences(STEPS.Class.GetContext(step)))
+	#add Plate 1
 
-	PlateName = NewPlate2
-	if PLATES.GetPlate(PlateName) == None:
-		PLATES.AddPlate(PlateName, NewPlateTypes[PlateName])
-		PLATES.GetPlate(PlateName).SetSequences(SAMPLES.GetSequences())
-		PLATES.GetPlate(PlateName).SetVolumes([0]*len(SAMPLES.GetSequences()))
-	PLATES.GetPlate(PlateName).SetContext(step.GetContext() + ":" + PlateName)	
-	PLATES.GetPlate(PlateName).SetFactors(NewPlate2Factors)
-	#create new plate 2
+	PlateParameters = STEPS.Class.GetParameters(NextNextStep)
+	PlateName = PlateParameters[PLATE.NAME]
+	PlateType = PlateParameters[PLATE.TYPE]
+	if PLATES.LABWARE.GetLabware(PlateName) == None:
+		NewPlate = PLATES.Class(PlateName, PlateType)
+		PLATES.LABWARE.AddLabware(NewPlate)
+
+	PLATES.LABWARE.SetContextualFactors(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualFactors(STEPS.Class.GetContext(step)))
+	PLATES.LABWARE.SetContextualSequences(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualSequences(STEPS.Class.GetContext(step)))
+	#add Plate 2
 
 	STEPS.DeactivateContext(step.GetContext())
 	STEPS.ActivateContext(step.GetContext() + ":" + NewPlate1)

@@ -1,11 +1,17 @@
 from enum import Enum
 import copy
+from ..Steps import Steps as STEPS
+from ...General import ExcelIO as EXCELIO
+from ...User import Samples as SAMPLES
 
 class LabwareTypes(Enum):
     Plate = "Plate"
     Reagent = "Reagent"
 
-LabwareSet = set()
+ViscosityVolatilityValues = {"Low":{"Weight":1,"Value":1},"Medium":{"Weight":1,"Value":2},"High":{"Weight":1,"Value":3},"Very High":{"Weight":1,"Value":4}}
+HomogeneityValues = {"Homogenous":{"Weight":1,"Value":1},"Heterogenous":{"Weight":1,"Value":2},"Suspension":{"Weight":1,"Value":3},"Emulsion":{"Weight":1,"Value":4}}
+#This wil
+
 
 class Class:   
     def __init__(self, NameString, LabwareType):
@@ -15,14 +21,13 @@ class Class:
         self.IsIMCSSizeXDesalting = False
         self.IsCovered = False
 
-        #This is here for book keeping perposes. This will actually be pulled or calculated for the method in real time as requested. 
-        # Each time it is pulled/calculated these values will be updated
         self.Category = None
-        self.StorageCondition = None
-        self.Volatility = None
+        self.StorageTemperature = None
         self.Viscosity = None
+        self.Volatility = None
         self.Homogeneity = None
-        #Book keeping
+        self.LiquidClassString = None
+
     #
     # This is labware info
     #
@@ -62,10 +67,53 @@ class Class:
         raise NotImplementedError() #this is a crude implementation of virtual functions
 
     #
-    # This exposes the Labware Parameters. This must be implemented by the inheriting class
+    # Virtual getter functions for solution args
     #
-    def GetLabwareParameters(self):
+    def GetCategory(self):
         raise NotImplementedError() #this is a crude implementation of virtual functions
+    def GetStorageTemperature(self):
+        raise NotImplementedError() #this is a crude implementation of virtual functions
+    def GetViscosity(self, SampleIndex):
+        raise NotImplementedError() #this is a crude implementation of virtual functions
+    def GetVolatility(self, SampleIndex):
+        raise NotImplementedError() #this is a crude implementation of virtual functions
+    def GetHomogeneity(self, SampleIndex):
+        raise NotImplementedError() #this is a crude implementation of virtual functions
+    def GetLiquidClassString(self):
+        raise NotImplementedError() #this is a crude implementation of virtual functions
+
+    def UpdateLabwareSolutionParameters(self):
+        LabwareName = self.GetLabwareName()
+        self.Category = ExcelSolutionInfoDict[LabwareName]["Category"]
+        self.StorageTemperature = ExcelSolutionInfoDict[LabwareName]["StorageTemperature"]
+        self.Viscosity = ExcelSolutionInfoDict[LabwareName]["Viscosity"]
+        self.Volatility = ExcelSolutionInfoDict[LabwareName]["Volatility"]
+        self.Homogeneity = ExcelSolutionInfoDict[LabwareName]["Homogeneity"]
+        self.LiquidClassString = ExcelSolutionInfoDict[LabwareName]["LiquidClassString"]
+
+ContextualFactors_Dict = {}
+def SetContextualFactors(ContextString, FactorsList):
+    ContextualFactors_Dict[ContextString] = FactorsList
+def GetContextualFactors(ContextString):
+    return ContextualFactors_Dict[ContextString]
+
+ContextualSequences_Dict = {}
+def SetContextualSequences(ContextString, SequencesList):
+	ContextualSequences_Dict[ContextString] = SequencesList
+def GetContextualSequences(ContextString):
+	return ContextualSequences_Dict[ContextString]
+
+
+
+#
+# Init
+#
+LabwareSet = set()
+def Init():
+    global LabwareSet
+    SetContextualFactors("",[1] * SAMPLES.GetNumSamples())
+    SetContextualSequences("",[[x] for x in [*range(SAMPLES.GetStartPosition(),SAMPLES.GetStartPosition() + SAMPLES.GetNumSamples())]])
+    LabwareSet = set()
 
 #
 # This will add a labware item to the tracked labware list
@@ -99,3 +147,60 @@ def GetAllLabwareType(LabwareType):
         if Labware.GetLabwareType() == LabwareType:
             OutputList.append(Labware)
     return Labware
+
+#
+# This will give a list of contexts for a given list of labware. It works for both Reagents and Plates. 
+# Be aware, Reagents do not have context so None will be returned 
+#
+def GetContextualStringsList(Step, LabwareNamesList):
+    ContextsList = [False] * len(LabwareNamesList)
+
+    for LabwareIndex in range(0, len(LabwareNamesList)):
+        Labware = GetLabware(LabwareNamesList[LabwareIndex])
+        if Labware == None or Class.GetLabwareType(Labware) == LabwareTypes.Reagent:
+            ContextsList[LabwareIndex] = None
+    
+    SearchStep = Step
+    while True:
+        for LabwareIndex in range(0,len(LabwareNamesList)):
+            if ContextsList[LabwareIndex] == False and STEPS.Class.GetParentPlateName(SearchStep) == LabwareNamesList[LabwareIndex]:
+                ContextsList[LabwareIndex] = STEPS.Class.GetContext(SearchStep)
+            #This should technically never fail because we are only searching for plates. Plates must exists somewhere as a parent plate
+        
+        if not False in ContextsList:
+            return ContextsList
+        
+        SearchStep = STEPS.GetPreviousStepInPathway(SearchStep)
+
+#
+# 
+#
+ExcelSolutionInfoDict = {}
+def GetExcelLabwareInfo():
+    Output = EXCELIO.Pull("Solutions",2,2,1000,12,2)
+    BreakFlag = False
+
+    for Row in range(0,10,8):
+        for Column in range(0,10,4):
+            SolutionName = Output[Row][Column]
+            if SolutionName == None:
+                BreakFlag = True
+                break
+           
+            SolutionName = SolutionName.replace(" - (Click Here to Update)","")
+            Category = Output[Row + 1][Column + 1]
+            StorageTemperature = Output[Row + 2][Column + 1]
+            Volatility = Output[Row + 3][Column + 1]
+            Viscosity = Output[Row + 4][Column + 1]
+            Homogeneity = Output[Row + 5][Column + 1]
+            LiquidClassString = Output[Row + 6][Column + 1]
+            
+            if LiquidClassString == "Custom (Advanced Only)":
+                LiquidClassString = "None"
+            #if the liquid class is the custom value then the user probably doesn't know what they are doing. Change it to None
+            
+            SolutionNames = SAMPLES.Column(SolutionName)
+            for SolutionName in SolutionNames:
+                ExcelSolutionInfoDict[SolutionName] = {"Category":Category,"StorageTemperature": StorageTemperature, "Volatility":Volatility, "Viscosity":Viscosity,"Homogeneity":Homogeneity,"LiquidClassString":LiquidClassString}
+        if BreakFlag == True:
+            break

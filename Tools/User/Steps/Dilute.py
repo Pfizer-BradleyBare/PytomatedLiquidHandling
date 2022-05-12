@@ -21,24 +21,11 @@ MAX_SOURCE_VOLUME = "Max Source Volume (uL)"
 IsUsedFlag = True
 
 def IsUsed():
-	global IsUsedFlag
 	return IsUsedFlag
 
-######################################################################### 
-#	Description: No itialization required here. Provided for consistency
-#	Input Arguments: N/A
-#	Returns: N/A
-#########################################################################
 def Init():
 	pass
 
-######################################################################### 
-#	Description: Performs a dilution step by doing the following:
-#	1. Forms a pipette hamilton command for the diluent solution
-#	2. Forms a pipette hamilton command for the source solution
-#	Input Arguments: [step: Step class]
-#	Returns: N/A
-#########################################################################
 def Step(step):
 	#dilute equation is C1*V1 = C2*V2 Where:
 	#C1 is SourceConcentration
@@ -50,39 +37,32 @@ def Step(step):
 
 	LOG.BeginCommentsLog()
 
-	TargetConcentrationList = SAMPLES.Column(step.GetParameters()[TARGET_CONCENTRATION])
-	TargetVolumeList = SAMPLES.Column(step.GetParameters()[TARGET_VOLUME])
-	MaxSourceVolumeList = SAMPLES.Column(step.GetParameters()[MAX_SOURCE_VOLUME])
-	SourceConcentrationList = SAMPLES.Column(step.GetParameters()[STARTING_CONCENTRATION])
-	SourceList = SAMPLES.Column(step.GetParameters()[SOURCE])
-	DiluentList = SAMPLES.Column(step.GetParameters()[DILUENT])
-	DestinationSequences = PLATES.GetPlate(step.GetParentPlate()).GetSequences()
-
-	STATUS_UPDATE.AppendText("Transfering " + str(step.GetParameters()[TARGET_VOLUME]) + " uL of sample to " + str(step.GetParentPlate()) + " plate")
-
-	for Source in SourceList:
-		SOLUTIONS.AddSolution(Source, SOLUTIONS.TYPE_REAGENT, SOLUTIONS.STORAGE_AMBIENT)
-
-	for Diluent in DiluentList:
-		SOLUTIONS.AddSolution(Diluent, SOLUTIONS.TYPE_BUFFER, SOLUTIONS.STORAGE_AMBIENT)
+	StepParameters = STEPS.Class.GetParameters(step)
+	TargetConcentrationList = SAMPLES.Column(StepParameters[TARGET_CONCENTRATION])
+	TargetVolumeList = SAMPLES.Column(StepParameters[TARGET_VOLUME])
+	MaxSourceVolumeList = SAMPLES.Column(StepParameters[MAX_SOURCE_VOLUME])
+	SourceConcentrationList = SAMPLES.Column(StepParameters[STARTING_CONCENTRATION])
+	SourceList = SAMPLES.Column(StepParameters[SOURCE])
+	DiluentList = SAMPLES.Column(StepParameters[DILUENT])
 
 	SourceVolumeList = list(map(lambda x,y,z: (z * y) / x if x != None and x != 0 else 0, SourceConcentrationList,TargetVolumeList,TargetConcentrationList))
 	DiluentVolumeList = list(map(lambda x,y: y - x, SourceVolumeList,TargetVolumeList))
 	#Calculate correct volumes to pipette
 
-	#DestinationSequences = PLATES.GetPlate(step.GetParentPlate()).GetSequenceList()
+	DestinationNames = SAMPLES.Column(STEPS.Class.GetParentPlateName(step))
+	DestinationContextStrings = PLATES.LABWARE.GetContextualStringsList(step, DestinationNames)
 
 	for VolIndex in range(0,len(SourceVolumeList)):
 		if MaxSourceVolumeList[VolIndex] > TargetVolumeList[VolIndex] or MaxSourceVolumeList[VolIndex] == 0:
 			MaxSourceVolumeList[VolIndex] = TargetVolumeList[VolIndex]
 
 		if SourceVolumeList[VolIndex] > MaxSourceVolumeList[VolIndex] or DiluentVolumeList[VolIndex] < 0:
-			LOG.Comment("Volume is out of range for Position " + str(DestinationSequences[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source,Diluent): 0 > (" + str(SourceVolumeList[VolIndex]) + "," + str(DiluentVolumeList[VolIndex]) + ") > " + str(MaxSourceVolumeList[VolIndex]))
+			LOG.Comment("Volume is out of range for Position " + str(SAMPLES.GetContextualSequences(DestinationContextStrings[VolIndex])[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source): 0 < " + str(SourceVolumeList[VolIndex]) + " < " + str(MaxSourceVolumeList[VolIndex]))
 			SourceVolumeList[VolIndex] = MaxSourceVolumeList[VolIndex]
 			DiluentVolumeList[VolIndex] = TargetVolumeList[VolIndex] - MaxSourceVolumeList[VolIndex]
 
 		if DiluentVolumeList[VolIndex] > TargetVolumeList[VolIndex] or SourceVolumeList[VolIndex] < 0:
-			LOG.Comment("Volume is out of range for Position " + str(DestinationSequences[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source,Diluent): 0 > (" + str(SourceVolumeList[VolIndex]) + "," + str(DiluentVolumeList[VolIndex]) + ") > " + str(TargetVolumeList[VolIndex]))
+			LOG.Comment("Volume is out of range for Position " + str(SAMPLES.GetContextualSequences(DestinationContextStrings[VolIndex])[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source): 0 < " + str(SourceVolumeList[VolIndex]) + " < " + str(TargetVolumeList[VolIndex]))
 			DiluentVolumeList[VolIndex] = TargetVolumeList[VolIndex]
 			SourceVolumeList[VolIndex] = 0
 	#check for ridiculous pipetting volumes and correct it. User should ideally never input something ridiculous
@@ -107,33 +87,22 @@ def Step(step):
 			FirstVolumeList.append(DiluentVolumeList[index])
 	#We want to pipette the highest volume first for each sample no matter what.
 
-	DestinationPlate = step.GetParentPlate()
-
-	if PLATES.GetPlate(DestinationPlate).GetVolume() != 0:
-		Mix = SAMPLES.Column("Yes")
-	else:
-		Mix = SAMPLES.Column("No")
-
 	LOG.EndCommentsLog()
 
-	FirstSequences = PLATES.GetPlate(step.GetParentPlate()).CreatePipetteSequence(FirstSourceList, FirstVolumeList,Mix)
-	
-	for Counter in range(0,FirstSequences.GetNumSequencePositions()):
-		SOLUTIONS.GetSolution(FirstSequences.GetSources()[Counter]).AddVolume(FirstSequences.GetTransferVolumes()[Counter])
-		SOLUTIONS.AddPipetteVolume(FirstSequences.GetTransferVolumes()[Counter])
+	FirstSourceContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,FirstSourceList)
+	SecondSourceContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,SecondSourceList)
 
-	SecondSequences = PLATES.GetPlate(step.GetParentPlate()).CreatePipetteSequence(SecondSourceList, SecondVolumeList,SAMPLES.Column("Yes"))
+	FirstSequences = PLATES.CreatePipetteSequence(DestinationContextStrings, DestinationNames, FirstSourceContextualStrings, FirstSourceList, FirstVolumeList,SAMPLES.Column("No"))
 
-	for Counter in range(0,SecondSequences.GetNumSequencePositions()):
-		SOLUTIONS.GetSolution(SecondSequences.GetSources()[Counter]).AddVolume(SecondSequences.GetTransferVolumes()[Counter])
-		SOLUTIONS.AddPipetteVolume(SecondSequences.GetTransferVolumes()[Counter])
+	SecondSequences = PLATES.CreatePipetteSequence(DestinationContextStrings, DestinationNames, SecondSourceContextualStrings, SecondSourceList, SecondVolumeList,SAMPLES.Column("Dispense:10"))
 
 	FirstSeqFlag = False
 	if FirstSequences.GetNumSequencePositions() != 0:
 
 		TransferVolumes = FirstSequences.GetTransferVolumes()
+		LiquidClassStrings = FirstSequences.GetLiquidClassStrings()
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":len(TransferVolumes)*["Water"]}))
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":LiquidClassStrings}))
 		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 		FirstSeqFlag = True
 
@@ -141,8 +110,9 @@ def Step(step):
 	if SecondSequences.GetNumSequencePositions() != 0:
 
 		TransferVolumes = SecondSequences.GetTransferVolumes()
+		LiquidClassStrings = SecondSequences.GetLiquidClassStrings()
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":len(TransferVolumes)*["Water"]}))
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":LiquidClassStrings}))
 		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 		SecondSeqFlag = True
 

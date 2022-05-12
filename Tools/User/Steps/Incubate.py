@@ -28,7 +28,6 @@ Incubation_Num_List = []
 NumSimultaneousIncubations = None
 CurrentIncubationIDCounter = 0
 
-
 IsUsedFlag = False
 
 def IsUsed():
@@ -80,7 +79,7 @@ def StartHeaters():
 		Params = Incubation.GetParameters()
 		Temp = Params[TEMP]
 		RPM = Params[SHAKE]
-		ParentPlate = Incubation.GetParentPlate()
+		ParentPlate = Incubation.GetParentPlateName()
 
 		if str(Temp).lower() != "Ambient".lower():
 			HAMILTONIO.AddCommand(HEATER.AcquireReservation({"PlateName":ParentPlate,"Temperature":Temp,"RPM":RPM}),False)
@@ -96,7 +95,7 @@ def StartHeaters():
 
 def AmbientCallback(step):
 
-	ParentPlate = step.GetParentPlate()
+	ParentPlate = step.GetParentPlateName()
 
 	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}))
 	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}))
@@ -129,7 +128,7 @@ def HeatingCallback(step):
 	Params = step.GetParameters()
 	Temp = Params[TEMP]
 	RPM = Params[SHAKE]
-	ParentPlate = step.GetParentPlate()
+	ParentPlate = step.GetParentPlateName()
 	
 	HAMILTONIO.AddCommand(HEATER.EndReservation({"PlateName":ParentPlate}))
 	#Stop heating and shaking
@@ -201,9 +200,9 @@ def AmbientStep(step):
 
 	Params = step.GetParameters()
 	Temp = Params[TEMP]
-	ParentPlate = step.GetParentPlate()
+	ParentPlate = step.GetParentPlateName()
 
-	PLATES.GetPlate(step.GetParentPlate()).SetLidState()
+	PLATES.LABWARE.GetLabware(ParentPlate).SetIsCovered()
 	#This incubation is ambient on the deck. So we set a flag which requires that the plate has a lid on deck position
 
 	HAMILTONIO.AddCommand(LABWARE.GetLidSequenceStrings({"PlateNames":[ParentPlate]}))
@@ -238,7 +237,7 @@ def HeatingStep(step):
 	Params = step.GetParameters()
 	Temp = Params[TEMP]
 	RPM = Params[SHAKE]
-	ParentPlate = step.GetParentPlate()
+	ParentPlate = step.GetParentPlateName()
 
 	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}))
 	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}))

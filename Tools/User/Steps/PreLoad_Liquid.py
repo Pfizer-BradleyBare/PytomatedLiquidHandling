@@ -7,11 +7,9 @@ from ...General import Log as LOG
 TITLE = "Preload Liquid"
 VOLUME = "Volume"
 
-
 IsUsedFlag = False
 
 def IsUsed():
-	global IsUsedFlag
 	return IsUsedFlag
 
 #This function may modify the Mutable list if required
@@ -24,19 +22,22 @@ def Init(MutableStepsList):
 			IsUsedFlag = True
 			
 def Step(step):
-	DestinationPlate = step.GetParentPlate()
+	DestinationPlate = step.GetParentPlateName()
 	VolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
 
-	PlateVolumeList = PLATES.GetPlate(DestinationPlate).GetVolumes()
-	PlateFactors = PLATES.GetPlate(DestinationPlate).GetFactors()
+	Labware = PLATES.LABWARE.GetLabware(DestinationPlate)
+	ContextualString = PLATES.LABWARE.GetContextualStringsList(step,[DestinationPlate])[0]
+
+	PlateVolumeList = Labware.VolumesList
+	PlateFactors = PLATES.LABWARE.GetContextualFactors(ContextualString)
 
 	for index in range(0,len(PlateVolumeList)):
 		PlateVolumeList[index] -= VolumeList[index] * PlateFactors[index]
 
-	PLATES.GetPlate(DestinationPlate).UpdateMaxVolume()
+	PLATES.Class.DoVolumeUpdate(Labware)
 
 	for index in range(0,len(PlateVolumeList)):
 		PlateVolumeList[index] += (VolumeList[index] + VolumeList[index]) * PlateFactors[index]
 
-	PLATES.GetPlate(DestinationPlate).UpdateMaxVolume()
+	PLATES.Class.DoVolumeUpdate(Labware)
 	#OK what are we doing here? We are subtracting to make the volume is reflected in plate loading.

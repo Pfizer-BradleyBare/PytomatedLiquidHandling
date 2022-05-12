@@ -5,6 +5,7 @@ from ...User import Configuration as CONFIGURATION
 from ..Labware import Labware as LABWARE
 from ..Labware import Solutions as SOLUTIONS
 import copy
+import time
 
 class PipetteSequence:
 	def __init__ (self):
@@ -15,6 +16,7 @@ class PipetteSequence:
 		self.TransferVolumes = []
 		self.CurrentDestinationVolumes = []
 		self.Mix = []
+		self.LiquidClassString = []
 
 	def GetDestinations(self):
 		return self.Destinations
@@ -37,22 +39,26 @@ class PipetteSequence:
 	def GetMixCriteria(self):
 		return self.Mix
 
+	def GetLiquidClassStrings(self):
+		return self.LiquidClassString
+
 	def GetNumSequencePositions(self):
 		return len(self.GetDestinationPositions())
 
-	def AppendToPipetteSequence(self,Dest,DestPos,Source,SourcePos,Vol,CurDestVol,Mix):
+	def AppendToPipetteSequence(self,Dest,DestPos,Source,SourcePos,Vol,CurDestVol,Mix,LiquidClassString):
 		Index = 0
 		for Counter in range(0,self.GetNumSequencePositions()):
 			if DestPos > self.GetDestinationPositions()[Counter]:
 				Index = Counter + 1
 
-		self.GetDestinations().insert(Index,Dest)
-		self.GetDestinationPositions().insert(Index,DestPos)
-		self.GetSources().insert(Index,Source)
-		self.GetSourcePositions().insert(Index,SourcePos)
-		self.GetTransferVolumes().insert(Index,Vol)
-		self.GetCurrentDestinationVolumes().insert(Index,CurDestVol)
-		self.GetMixCriteria().insert(Index,Mix)
+		self.Destinations.insert(Index,Dest)
+		self.DestinationPositions.insert(Index,DestPos)
+		self.Sources.insert(Index,Source)
+		self.SourcePositions.insert(Index,SourcePos)
+		self.TransferVolumes.insert(Index,Vol)
+		self.CurrentDestinationVolumes.insert(Index,CurDestVol)
+		self.Mix.insert(Index,Mix)
+		self.LiquidClassString.insert(Index,LiquidClassString)
 
 class Class(LABWARE.Class):
 ######################################################################### 
@@ -66,6 +72,7 @@ class Class(LABWARE.Class):
 		self.VolumesList = [0] * SAMPLES.GetNumSamples()
 		self.MaxVolumeList = [0] * SAMPLES.GetNumSamples()
 		self.MinVolumeList = [0] * SAMPLES.GetNumSamples()
+		self.WellContents = [[] for _ in range(SAMPLES.GetNumSamples())]
 
 	#
 	# This is the type of plate. 96 Well or some other form. This is dependant on the user config.
@@ -79,18 +86,6 @@ class Class(LABWARE.Class):
 	def GetMaxVolume(self):
 		return max(self.MaxVolumeList)
 
-	#
-	# This will return the context for the plate in the current pathway
-	#
-	def GetPlateContextualString(self,Step):
-		SearchStep = Step
-		PlateName = LABWARE.Class.GetLabwareName(self)
-		while True:
-			SearchStep = STEPS.GetPreviousStepInPathway(SearchStep)
-			if STEPS.Class.GetParentPlateName(SearchStep) == PlateName:
-				return STEPS.Class.GetContext(SearchStep)
-		#This should technically never fail
-		
 	#
 	# This should be called everytime there is a change to the plate. This allows us to capture the historical min and max volumes of the plate
 	#
@@ -109,58 +104,119 @@ class Class(LABWARE.Class):
 			if Volume > MaxVolumeList[VolumeIndex]:
 				MaxVolumeList[VolumeIndex] = Volume
 			#Max volume is the absolute max value
+
+	#
+	# This is a generic implementation to cover Viscosity, Volatility, and Homogeneity
+	#
+	def GenericCalculation(self, SampleIndex, DefaultValue, ValuesDict, PlatesGetFunction, SolutionsGetFunction):
+		WellContents = self.WellContents[SampleIndex]
+		
+		if len(WellContents) == 0:
+			return DefaultValue
+		
+		TotalVolume = self.VolumesList[SampleIndex]
+
+		Calculation = []
+		for Content in WellContents:
+			SolutionLabware = LABWARE.GetLabware(Content["Solution"])
+			SolutionPercentage = int(Content["Volume"] / TotalVolume * 100)
+			
+			if SolutionLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
+				Value = PlatesGetFunction(SolutionLabware, SampleIndex)
+			else:
+				Value = SolutionsGetFunction(SolutionLabware, SampleIndex)
+			ValuesDictItem = ValuesDict[Value]
+
+			Calculation += [ValuesDictItem["Value"]] * SolutionPercentage * ValuesDictItem["Weight"]
+				#why do we add the number SolutionPercentage times? Because the high the percentage the higher contribution to the new value.
+		#So what are we doing here? We are calculating the contribution each solution gives to the overall composition of the well.
+
+		WellComposition = int(round(sum(Calculation) / len(Calculation)))
+
+		for Key in ValuesDict:
+			if WellComposition == ValuesDict[Key]["Value"]:
+				return Key
+
+	def GetCategory(self):
+		return "Plate"
+	def GetStorageTemperature(self):
+		return "Ambient"
+	def GetViscosity(self, SampleIndex):
+		self.UpdateLabwareSolutionParameters()
+		return self.GenericCalculation(SampleIndex,self.Viscosity,LABWARE.ViscosityVolatilityValues, Class.GetViscosity, SOLUTIONS.Class.GetViscosity)
+	def GetVolatility(self, SampleIndex):
+		self.UpdateLabwareSolutionParameters()
+		return self.GenericCalculation(SampleIndex,self.Volatility,LABWARE.ViscosityVolatilityValues, Class.GetVolatility, SOLUTIONS.Class.GetVolatility)
+	def GetHomogeneity(self, SampleIndex):
+		self.UpdateLabwareSolutionParameters()
+		return self.GenericCalculation(SampleIndex,self.Homogeneity,LABWARE.HomogeneityValues, Class.GetHomogeneity, SOLUTIONS.Class.GetHomogeneity)
+	def GetLiquidClassString(self):
+		self.UpdateLabwareSolutionParameters()
+		return self.LiquidClassString
 				
 ######################################################################### 
 #	Description: Creates a sorted pipetting list to be used by the hamilton pipette command
 #	Input Arguments: [SourceList: List] [SourceVolumeList: List]
 #	Returns: [List of Lists]
 #########################################################################
-	def CreatePipetteSequence(self, DestinationContextStringsList, SourceContextStringsList, SourcesList, SourceVolumesList, MixingList):
-		
-		NewSequence = PipetteSequence()
+def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, SourceContextStringsList, SourceNamesList, SourceVolumesList, MixingList):
+	
+	NewSequence = PipetteSequence()
 
-		DestinationVolumesList = self.VolumesList
+	for SampleIndex in range(0,len(DestinationNamesList)):
 
-		for SampleIndex in range(0,len(DestinationVolumesList)):
+		DestinationName = DestinationNamesList[SampleIndex]
+		DestinationLabware = LABWARE.GetLabware(DestinationName)
+		DestinationVolumesList = DestinationLabware.VolumesList
+		SourceName = SourceNamesList[SampleIndex]
+		Volume = SourceVolumesList[SampleIndex]
+		CurrentWellVolume = DestinationVolumesList[SampleIndex]
+		MixParameter = MixingList[SampleIndex]
 
-			Factor = SAMPLES.GetContextualFactors(DestinationContextStringsList[SampleIndex])[SampleIndex]
-			DestinationSequencesList = SAMPLES.GetContextualSequences(DestinationContextStringsList[SampleIndex])[SampleIndex]
+		Factor = LABWARE.GetContextualFactors(DestinationContextStringsList[SampleIndex])[SampleIndex]
+		DestinationSequencesList = LABWARE.GetContextualSequences(DestinationContextStringsList[SampleIndex])[SampleIndex]
 
-			DestinationName = LABWARE.Class.GetLabwareName(self)
-			SourceName = SourcesList[SampleIndex]
-			Volume = SourceVolumesList[SampleIndex]
-			CurrentWellVolume = DestinationVolumesList[SampleIndex]
-			MixParameter = MixingList[SampleIndex]
+		ActualVolume = Volume * Factor
 
-			ActualVolume = Volume * Factor
-
-			if ActualVolume > 0:
+		if ActualVolume > 0:
 			
-				SourceSequencesList = DestinationSequencesList
+			SourceSequencesList = DestinationSequencesList
 
-				SourceLabware = LABWARE.GetLabware(SourceName)
-				if SourceLabware == None:
-					SourceLabware = SOLUTIONS.Class(SourceName)
-					LABWARE.AddLabware(SourceLabware)
-				#If the labware doesn't exists then it has to be a reagent. Add it
+			SourceLabware = LABWARE.GetLabware(SourceName)
+			if SourceLabware == None:
+				SourceLabware = SOLUTIONS.Class(SourceName)
+				LABWARE.AddLabware(SourceLabware)
+			#If the labware doesn't exists then it has to be a reagent. Add it
+			
+			SourceLiquidClassString = SourceLabware.GetLiquidClassString()
+			if SourceLiquidClassString == "None":
+				LiquidClassString = "Vicosity" + SourceLabware.GetViscosity(SampleIndex)
+				LiquidClassString += "Volatility" + SourceLabware.GetVolatility(SampleIndex)
+				LiquidClassString += "Homogeneity" + SourceLabware.GetHomogeneity(SampleIndex)
+			else:
+				LiquidClassString = "__CUSTOM__" + SourceLiquidClassString
+
+			if SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Reagent:
+				SOLUTIONS.Class.AddVolume(SourceLabware, ActualVolume)
+
+			elif SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
+				SourceLabware.VolumesList[SampleIndex] -= ActualVolume
+				SourceLabware.DoVolumeUpdate()
+				SourceSequencesList = LABWARE.GetContextualSequences(SourceContextStringsList[SampleIndex])
+				#DestinationLabware.WellContents[SampleIndex].append({"Solution":"__REMOVE__","Volume":ActualVolume})
+			#Do plate volume subtraction
+
+			DestinationLabware.WellContents[SampleIndex].append({"Solution":SourceName,"Volume":ActualVolume})
+			
+
+			for SequenceIndex in range(0,len(DestinationSequencesList)):
+				DestinationSequencePosition = DestinationSequencesList[SequenceIndex]
+				SourceSequencePosition = SourceSequencesList[SequenceIndex]
+
+				NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,MixParameter,LiquidClassString)
 				
-				if SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Reagent:
-					SOLUTIONS.Class.AddVolume(SourceLabware)
+			DestinationVolumesList[SampleIndex] += ActualVolume
+			DestinationLabware.DoVolumeUpdate()
 
-				elif SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
-					SourceLabware.VolumesList[SampleIndex] -= ActualVolume
-					SourceLabware.DoVolumeUpdate()
-					SourceSequencesList = SAMPLES.GetContextualSequences(SourceContextStringsList[SampleIndex])
-				#Do plate volume subtraction
-
-				for SequenceIndex in range(0,len(DestinationSequencesList)):
-					DestinationSequencePosition = DestinationSequencesList[SequenceIndex]
-					SourceSequencePosition = SourceSequencesList[SequenceIndex]
-
-					NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,MixParameter)
-				
-				DestinationVolumesList[SampleIndex] += ActualVolume
-				self.DoVolumeUpdate()
-
-		return copy.deepcopy(NewSequence)
+	return copy.deepcopy(NewSequence)
 

@@ -22,7 +22,7 @@ MAGNETIC_BEADS_PLATE = "Magnetic Beads Plate"
 STORAGE_BUFFER = "Storage Buffer"
 BUFFER_VOLUME = "Storage Buffer Volume (uL)"
 WAIT_TIME = "Hold Time (min)"
-REPS = "Repititions"
+REPS = "Repetitions"
 
 ParentPlateNames = set()
 
@@ -59,7 +59,7 @@ RepsCompleted = 1
 def Callback(step):
 	global RepsCompleted
 
-	ParentPlate = step.GetParentPlate()
+	ParentPlate = step.GetParentPlateName()
 	Params = step.GetParameters()
 	BeadsPlate = Params[MAGNETIC_BEADS_PLATE]
 	Buffer = Params[STORAGE_BUFFER]
@@ -67,11 +67,13 @@ def Callback(step):
 	Time = Params[WAIT_TIME]
 	Reps = int(Params[REPS])
 
-	for Source in SAMPLES.Column(Buffer):
-		SOLUTIONS.AddSolution(Source, SOLUTIONS.TYPE_BUFFER,SOLUTIONS.STORAGE_AMBIENT)
-
-	for Source in SAMPLES.Column(BeadsPlate):
-		SOLUTIONS.AddSolution(Source, SOLUTIONS.TYPE_PLATE,SOLUTIONS.STORAGE_AMBIENT)
+	DestinationNamesList = SAMPLES.Column(ParentPlate)
+	DestinationContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,DestinationNamesList)
+	SourceNamesList = SAMPLES.Column(BeadsPlate)
+	SourceContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,SourceNamesList)
+	SourceLabware = PLATES.LABWARE.GetLabware(BeadsPlate)
+	SourceVolumesList = SourceLabware.VolumesList
+	MixingList = SAMPLES.Column("No")
 
 	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[BeadsPlate]}))
 	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[BeadsPlate]}))
@@ -79,25 +81,24 @@ def Callback(step):
 	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateTransportType({"PlateName":BeadsPlate}))
 	#Get transport related info
 
-	RemoveSequences = PLATES.GetPlate(ParentPlate).CreatePipetteSequence(SAMPLES.Column(BeadsPlate), PLATES.GetPlate(BeadsPlate).GetVolumes(), SAMPLES.Column("No"))
+	RemoveSequences = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,MixingList)
 	TransferVolumes = RemoveSequences.GetTransferVolumes()
 	HAMILTONIO.AddCommand(MAGNETICBEADS.GetCondensedBeadsLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}))
 	HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 	#For removing liquid from the plate
 
-	for Counter in range(0,RemoveSequences.GetNumSequencePositions()):
-		SOLUTIONS.GetSolution(RemoveSequences.GetSources()[Counter]).AddVolume(RemoveSequences.GetTransferVolumes()[Counter])
-		SOLUTIONS.AddPipetteVolume(RemoveSequences.GetTransferVolumes()[Counter])
+	DestinationNamesList = SAMPLES.Column(BeadsPlate)
+	DestinationContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,DestinationNamesList)
+	SourceNamesList = SAMPLES.Column(Buffer)
+	SourceContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,SourceNamesList)
+	SourceVolumesList = SAMPLES.Column(Volume)
+	MixingList = SAMPLES.Column("Yes")
 
-	AddSequences = PLATES.GetPlate(BeadsPlate).CreatePipetteSequence(SAMPLES.Column(Buffer), SAMPLES.Column(Volume), SAMPLES.Column("Yes"))
+	AddSequences = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,MixingList)
 	TransferVolumes = AddSequences.GetTransferVolumes()
 	HAMILTONIO.AddCommand(MAGNETICBEADS.GetGeneralLiquidTransferLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}))
 	HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 	#For adding buffer to the plate
-
-	for Counter in range(0,AddSequences.GetNumSequencePositions()):
-		SOLUTIONS.GetSolution(AddSequences.GetSources()[Counter]).AddVolume(AddSequences.GetTransferVolumes()[Counter])
-		SOLUTIONS.AddPipetteVolume(AddSequences.GetTransferVolumes()[Counter])
 
 	Response = HAMILTONIO.SendCommands()
 	#Get information for moving the plate to the rack
@@ -138,7 +139,7 @@ def Callback(step):
 	#Add the storage liquid
 	Response = HAMILTONIO.SendCommands()
 
-        #This finished a rep. We also assume that the rep starts in Step function.
+    #This finished a rep. We also assume that the rep starts in Step function.
 	print("RepsCompleted",RepsCompleted)
 	if RepsCompleted < Reps:
 		RepsCompleted += 1
@@ -157,11 +158,8 @@ def Step(step):
 	LOG.BeginCommentsLog()
 	LOG.EndCommentsLog()
 
-	ParentPlate = step.GetParentPlate()
 	Params = step.GetParameters()
 	BeadsPlate = Params[MAGNETIC_BEADS_PLATE]
-	Buffer = Params[STORAGE_BUFFER]
-	Volume = Params[BUFFER_VOLUME]
 	Time = Params[WAIT_TIME]
 
 	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[BeadsPlate]}))

@@ -1,18 +1,6 @@
 from ..General import ExcelIO as EXCELIO
 import copy
 
-ContextualFactors_Dict = {}
-def SetContextualFactors(ContextString, FactorsList):
-    ContextualFactors_Dict[ContextString] = FactorsList
-def GetContextualFactors(ContextString):
-    return ContextualFactors_Dict[ContextString]
-
-ContextualSequences_Dict = {}
-def SetContextualSequences(ContextString, SequencesList):
-	ContextualSequences_Dict[ContextString] = SequencesList
-def GetContextualSequences(ContextString):
-	return ContextualSequences_Dict[ContextString]
-
 #This dict holds the specific range of the specified column. That way sample information can be pulled as needed.
 Column_Ranges = {}
 
@@ -49,9 +37,6 @@ def Init(SampleStartPosition, PulledWorkListSheet):
 			break
 		NumSamples += 1
 	#end
-
-	SetContextualFactors("",[1] * NumSamples)
-	SetContextualSequences("",[*range(SampleStartPosition,SampleStartPosition + NumSamples)])
 	
 	count = 0
 	while(True):
@@ -80,7 +65,7 @@ def Column(Column_Name):
 		return EXCELIO.Pull(EXCELIO.WORKLIST_SHEET, Temp[0], Temp[1], Temp[2], Temp[3], 1)
 	except:
 		pass
-	#return [Column_Name] * NumSamples
+	return [Column_Name] * NumSamples
 
 def InColumn(Column_Name):
 	global Column_Ranges

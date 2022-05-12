@@ -11,7 +11,6 @@ MESSAGE = "Message"
 IsUsedFlag = True
 
 def IsUsed():
-	global IsUsedFlag
 	return IsUsedFlag
 
 def Init():

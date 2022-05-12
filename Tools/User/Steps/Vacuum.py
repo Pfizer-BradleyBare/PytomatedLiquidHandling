@@ -44,33 +44,31 @@ def Init(MutableStepsList):
 
 def Step(step):
 
-	Destination = step.GetParentPlate()
+	Destination = step.GetParentPlateName()
 	SourceList = SAMPLES.Column(step.GetParameters()[SOURCE])
 	VolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
 	WaitTime = step.GetParameters()[WAIT_TIME]
 	VacPlate = step.GetParameters()[VACUUM_PLATE]
-	Pressure = step.GetParameters()[PRESSURE]
-	Time = step.GetParameters()[TIME]
 
-	PLATES.GetPlate(step.GetParentPlate()).SetVacuumState(VacPlate)
+	PLATES.LABWARE.GetLabware(Destination).SetIsVacuum()
 	#The plate that we vacuum into needs to be a vacuum compatible plate. Set that here on a per step basis
 
-	Sequence = PLATES.GetPlate(Destination).CreatePipetteSequence(SourceList, VolumeList, SAMPLES.Column("No"))
-	#we are going to create the sequence here so we can get all associated info at once.
-	
-	for Source in SourceList:
-		SOLUTIONS.AddSolution(Source, SOLUTIONS.TYPE_REAGENT, SOLUTIONS.STORAGE_AMBIENT)
+	DestinationNamesList = SAMPLES.Column(Destination)
+	DestinationContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,DestinationNamesList)
+	SourceNamesList = SourceList
+	SourceContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,SourceNamesList)
+	SourceVolumesList = VolumeList
+	MixingList = SAMPLES.Column("No")
 
-	for Counter in range(0,Sequence.GetNumSequencePositions()):
-		SOLUTIONS.GetSolution(Sequence.GetSources()[Counter]).AddVolume(Sequence.GetTransferVolumes()[Counter])
-		SOLUTIONS.AddPipetteVolume(Sequence.GetTransferVolumes()[Counter])
-	#keep tabs on all used solutions, and pipetted volumes
+	Sequence = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,MixingList)
+	#we are going to create the sequence here so we can get all associated info at once.
 
 	LiquidTransferFlag = False
 	if Sequence.GetNumSequencePositions() != 0:
 		TransferVolumes = Sequence.GetTransferVolumes()
+		LiquidClassStrings = Sequence.GetLiquidClassStrings()
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":len(TransferVolumes)*["Water"]}))
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":LiquidClassStrings}))
 		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 		LiquidTransferFlag = True
 
@@ -150,7 +148,7 @@ def Step(step):
 	#Vacuum wait time
 
 def PreVacuumWaitCallback(step):
-	Destination = step.GetParentPlate()
+	Destination = step.GetParentPlateName()
 	Volume = step.GetParameters()[VOLUME]
 	VacPlate = step.GetParameters()[VACUUM_PLATE]
 	WaitTime = step.GetParameters()[WAIT_TIME]
@@ -165,7 +163,7 @@ def PreVacuumWaitCallback(step):
 
 def VacuumWaitCallback(step):
 
-	Destination = step.GetParentPlate()
+	Destination = step.GetParentPlateName()
 	Volume = step.GetParameters()[VOLUME]
 	VacPlate = step.GetParameters()[VACUUM_PLATE]
 	WaitTime = step.GetParameters()[WAIT_TIME]

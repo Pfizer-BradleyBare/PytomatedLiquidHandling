@@ -58,7 +58,7 @@ def Init(MutableStepsList):
 	for Step in MutableStepsList:
 		if Step.GetTitle() == TITLE:
 			IsUsedFlag = True
-			Parent = Step.GetParentPlate()
+			Parent = Step.GetParentPlateName()
 			Params = Step.GetParameters()
 
 			#Now we need to find the incubation step that comes before it
@@ -131,37 +131,41 @@ def Step(step):
 	Volume = sum(map(float,str(Params[TYPE]).replace(" ","").split("+"))) / 100
 	Buffer = Params[EQUILIBRATION_BUFFER]
 	EQ_Destination = Params[WASTE]
-	Sample_Destination = step.GetParentPlate()
+	Sample_Destination = step.GetParentPlateName()
 
-	StepKey = step.GetParentPlate() + str(step.GetCoordinates())
-
-	SOLUTIONS.AddSolution(Buffer, SOLUTIONS.TYPE_REAGENT, SOLUTIONS.STORAGE_AMBIENT)
-	SOLUTIONS.GetSolution(Buffer).SetDesaltState(TITLE)
+	StepKey = step.GetParentPlateName() + str(step.GetCoordinates())
 
 	LOG.BeginCommentsLog()
-	PLATES.GetPlate(EQ_Destination).SetDesaltState(TITLE)
-	
-	#This is a weird step overall. In short, we need to go back until we find the step whos parent is the waste plate. Then we can use that as a context for this pipetting step.
-	SearchStep = step
-	while(SearchStep.GetParentPlate() != EQ_Destination):	
-		SearchStep = STEPS.GetPreviousStepInPathway(SearchStep)
+	EQ_Labware = PLATES.LABWARE.GetLabware(EQ_Destination)
+	EQ_Labware.SetIsIMCSSizeXDesalting()
 
-	PLATES.GetPlate(EQ_Destination).SetContext(SearchStep.GetContext())
-	#Set the context
+	EQ_DestinationNames = SAMPLES.Column(EQ_Destination)
+	EQ_DestinationContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,EQ_DestinationNames)
+	BufferNames = SAMPLES.Column(Buffer)
+	BufferContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,BufferNames)
+	SourceVolumes = SAMPLES.Column((DesaltingEQVolume + DesaltingElutionVolume) * Volume)
+	MixingParameters = SAMPLES.Column("N/A")
 
-	Sequence = PLATES.GetPlate(EQ_Destination).CreatePipetteSequence(SAMPLES.Column(Buffer), SAMPLES.Column((DesaltingEQVolume + DesaltingElutionVolume) * Volume), SAMPLES.Column("Yes"))
+	Sequence = PLATES.CreatePipetteSequence(EQ_DestinationContextualStrings,EQ_DestinationNames,BufferContextualStrings,BufferNames,SourceVolumes,MixingParameters)
 	
 	Desalting_Params[StepKey]["Positions"] = Sequence.GetDestinationPositions()
-
-	for Counter in range(0,Sequence.GetNumSequencePositions()):
-		SOLUTIONS.GetSolution(Sequence.GetSources()[Counter]).AddVolume(Sequence.GetTransferVolumes()[Counter])
 
 	Equilibrate(StepKey)
 	LOG.EndCommentsLog()
 
 	LOG.BeginCommentsLog()
-	PLATES.GetPlate(Sample_Destination).SetDesaltState(TITLE)
-	Sequence = PLATES.GetPlate(Sample_Destination).CreatePipetteSequence(SAMPLES.Column(Source), SAMPLES.Column(DesaltingElutionVolume * Volume), SAMPLES.Column("Yes"))
+
+	DestinationLabware = PLATES.LABWARE.GetLabware(Sample_Destination)
+	DestinationLabware.SetIsIMCSSizeXDesalting()
+
+	DestinationNames = SAMPLES.Column(Sample_Destination)
+	DestinationContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,DestinationNames)
+	SourceNames = SAMPLES.Column(Source)
+	SourceContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,SourceNames)
+	SourceVolumes = SAMPLES.Column(DesaltingElutionVolume * Volume)
+	MixingParameters = SAMPLES.Column("N/A")
+
+	Sequence = PLATES.CreatePipetteSequence(DestinationContextualStrings,DestinationNames,SourceContextualStrings,SourceNames,SourceVolumes,MixingParameters)
 	Process(StepKey)
 	LOG.EndCommentsLog()
 

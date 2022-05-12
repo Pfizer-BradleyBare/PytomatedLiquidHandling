@@ -44,6 +44,7 @@ import Tools.User.Configuration as CONFIGURATION
 import Tools.User.PrepList as PREPLIST
 import Tools.User.Labware.Plates as PLATES
 import Tools.User.Labware.Solutions as SOLUTIONS
+import Tools.User.Labware.Labware as LABWARE
 
 import Tools.User.Steps.Plate as PLATE
 import Tools.User.Steps.Split_Plate as SPLIT_PLATE
@@ -65,6 +66,8 @@ import Tools.User.Steps.Merge_Plate as MERGE_PLATE
 import Tools.Hamilton.PreRun as PRERUN
 ##import Tools.Hamilton.Commands.StatusUpdate as STATUS_UPDATE
 
+
+
 print("Init Classes")
 EXCELIO.Init(Excel_File_Path)
 HAMILTONIO.Init()
@@ -76,8 +79,7 @@ CONFIGURATION.Init()
 PREPLIST.Init()
 STEPS.Init(EXCELIO.GetMethod())
 SAMPLES.Init(Sample_Start_Pos, EXCELIO.GetWorklist())
-#PLATES.Init()
-#SOLUTIONS.Init()
+LABWARE.Init()
 #Init Trackers
 
 PLATE.Init(STEPS.GetSteps())
@@ -136,7 +138,7 @@ while(True):
 	if Step == None:
 		break
 
-	if sum(SAMPLES.GetContextualFactors(STEPS.Class.GetContext(Step))) == 0 and Step.GetTitle() != MERGE_PLATE.TITLE:
+	if sum(LABWARE.GetContextualFactors(STEPS.Class.GetContext(Step))) == 0 and Step.GetTitle() != MERGE_PLATE.TITLE:
 		continue
 	#We also want to ensure that the parent is actually used. To do this, we can sum the parent plate factors. 
 	# If it is 0 then the plate is not used by any samples.
@@ -146,6 +148,7 @@ while(True):
 
 	LOG.BeginStepLog()
 	STEPS.UpdateStepParams(Step)
+	PLATES.LABWARE.GetExcelLabwareInfo()
 	#This updates the actual step parameters at time the step is run. This allows for method development in real time
 
 	LOG.Step(Step)
@@ -161,8 +164,8 @@ if HAMILTONIO.IsSimulated() == True:
 	if GenerateList == False and TestRun == False:
 		HAMILTONIO.Simulated(False)
 
-	HAMILTONIO.AddCommand(PRERUN.Samples(SAMPLES.GetTotalSamples()),False)
-	Labware = CONFIGURATION.Load(PLATES.GetPlates(),SOLUTIONS.GetSolutions())
+#	HAMILTONIO.AddCommand(PRERUN.Samples(SAMPLES.GetTotalSamples()),False)
+	Labware = CONFIGURATION.Load(LABWARE.GetAllLabwareType(LABWARE.LabwareTypes.Plate),LABWARE.GetAllLabwareType(LABWARE.LabwareTypes.Reagent))
 	HAMILTONIO.AddCommand(PRERUN.Labware(Labware),False)
 
 	if GenerateList == True:

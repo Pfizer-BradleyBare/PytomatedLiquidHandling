@@ -8,7 +8,6 @@ TITLE = "Finish"
 IsUsedFlag = True
 
 def IsUsed():
-	global IsUsedFlag
 	return IsUsedFlag
 
 def Init():
@@ -19,9 +18,7 @@ def Step(step):
 
 	STEPS.DeactivateContext(step.GetContext())
 
-	LOG.Comment(str(step.GetParentPlate()) + " plate deactivated")
-
 	LOG.EndCommentsLog()
 	
-	if len(STEPS.GetActiveContexts()) == 0:
+	if STEPS.GetNumActiveContexts() == 0:
 		WAIT.WaitForTimer()

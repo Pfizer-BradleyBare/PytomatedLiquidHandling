@@ -26,13 +26,16 @@ def Init():
 def Step(step):
 	LOG.BeginCommentsLog()
 	
-	DestinationPlate = step.GetParentPlate()
+	DestinationPlateName = STEPS.Class.GetParentPlateName(step)
 
-	SourceList = SAMPLES.Column(step.GetParameters()[NAME])
-	SourceVolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
-	MixList = SAMPLES.Column(step.GetParameters()[MIXING])
+	DestinationNamesList = SAMPLES.Column(DestinationPlateName)
+	DestinationContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,DestinationNamesList)
+	SourceNamesList = SAMPLES.Column(step.GetParameters()[NAME])
+	SourceContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,SourceNamesList)
+	SourceVolumesList = SAMPLES.Column(step.GetParameters()[VOLUME])
+	MixingList = SAMPLES.Column(step.GetParameters()[MIXING])
 
-	Sequence = PLATES.GetPlate(DestinationPlate).CreatePipetteSequence(SourceList, SourceVolumeList,MixList)
+	Sequence = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,MixingList)
 
 	if Sequence.GetNumSequencePositions() == 0:
 		LOG.Comment("Number of sequences is zero so no liquid transfer will actually occur.")
@@ -42,8 +45,9 @@ def Step(step):
 	if Sequence.GetNumSequencePositions() != 0:
 
 		TransferVolumes = Sequence.GetTransferVolumes()
+		LiquidClassStrings = Sequence.GetLiquidClassStrings()
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":len(TransferVolumes)*["Water"]}))
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":LiquidClassStrings}))
 		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
 
 		Response = HAMILTONIO.SendCommands()

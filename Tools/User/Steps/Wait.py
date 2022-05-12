@@ -34,7 +34,7 @@ def StartTimer(step, WaitTime, Callback):
 
 	STEPS.DeactivateContext(step.GetContext())
 
-	if len(STEPS.GetActiveContexts()) == 0:
+	if STEPS.GetNumActiveContexts() == 0:
 		WaitForTimer()
 
 def WaitForTimer():
@@ -65,7 +65,6 @@ def WaitForTimer():
 
 		SleepingPlate["Callback"](SleepingPlate["Step"])
 		#Calls our callback function
-
 
 
 def Callback(step):

@@ -8,15 +8,13 @@ def ActivateContext(Context):
 	ActiveContextTracker.add(Context)
 def DeactivateContext(Context):
 	ActiveContextTracker.remove(Context)
+def GetNumActiveContexts():
+	return len(ActiveContextTracker)
 
 Unfiltered_Steps_List = []
 Steps_List = []
 Temp_Steps_List = []
 Current_Step = None
-
-def GetAllSteps():
-	global Unfiltered_Steps_List
-	return Unfiltered_Steps_List
 
 def StartStepSequence():
 	global Steps_List
@@ -101,7 +99,7 @@ class Class:
 	def __str__(self):
 		print("Step Title:", self.Title)
 		print("Step Coordinates: (",self.Row,",",self.Col,")")
-		print("Parent Plate:", self.GetParentPlate())
+		print("Parent Plate:", self.GetParentPlateName())
 		print("Context:",self.Context)
 		return "Step Parameters: " + str(self.Parameters)
 
