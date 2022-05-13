@@ -223,7 +223,7 @@ def Comment(Comments):
 	global CurrentRow
 	global GeneralCommentCounter
 	GeneralCommentCounter += 1
-	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_COMMENTS + LOG_COL_START, CurrentRow, LOG_COL_COMMENTS + LOG_COL_START, [[Comments]])
+	EXCELIO.WriteSheet(LogSheet,CurrentRow,LOG_COL_COMMENTS + LOG_COL_START,[[Comments]])
 	CurrentRow += 1
 
 def Step(Step):
@@ -244,8 +244,7 @@ def Step(Step):
 			LogString += " (Worklist Column) "
 		printArray.append([LogString])
 
-	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_STEP + LOG_COL_START, CurrentRow, LOG_COL_STEP + LOG_COL_START, printArray)
-
+	EXCELIO.WriteSheet(LogSheet,CurrentRow,LOG_COL_STEP + LOG_COL_START,printArray)
 	CurrentRow += len(printArray)
 
 def Command(Command):
@@ -264,7 +263,7 @@ def Command(Command):
 	MaxLength = max(len(Command) for Command in printArray)
 	printArray = [Command + [""]*(MaxLength - len(Command)) for Command in printArray]
 
-	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_COMMAND + LOG_COL_START, CurrentRow, LOG_COL_COMMAND + LOG_COL_START, printArray)
+	EXCELIO.WriteSheet(LogSheet,CurrentRow,LOG_COL_COMMAND + LOG_COL_START,printArray)
 
 	CurrentRow += len(printArray)
 
@@ -272,7 +271,7 @@ def CommandID():
 	global LogSheet
 	global CurrentRow
 
-	EXCELIO.Push(LogSheet, CurrentRow, LOG_COL_COMMAND + LOG_COL_START, CurrentRow, LOG_COL_COMMAND + LOG_COL_START, GetCommandID())
+	EXCELIO.WriteSheet(LogSheet,CurrentRow,LOG_COL_COMMAND + LOG_COL_START,[[GetCommandID()]])
 	CurrentRow += 1
 
 

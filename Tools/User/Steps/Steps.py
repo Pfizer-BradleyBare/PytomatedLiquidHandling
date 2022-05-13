@@ -42,8 +42,8 @@ def UpdateStepParams(Step):
 	Method = EXCELIO.GetMethod()
 
 	Coords = Step.GetCoordinates()
-	Row = Coords[0]
-	Col = Coords[1]
+	Row = Coords[0] - 1
+	Col = Coords[1] - 1
 
 	while True:
 		Row += 1
@@ -169,7 +169,7 @@ def Init(PulledMethodSheet):
 				if value != None and type(value) == str and value.lower() == "Comments".lower():
 				
 					Step = Class(PulledMethodSheet[row][col - 2].replace(" - (Click Here to Update)",""))
-					Step.SetCoordinates(EXCELIO.METHOD_ROW_START + row - 1, EXCELIO.METHOD_COL_START + col - 2 - 1)	
+					Step.SetCoordinates(EXCELIO.METHOD_ROW_START + row, EXCELIO.METHOD_COL_START + col - 2)	
 
 					if Step.GetTitle() == PLATE.TITLE:
 						Name = Step
