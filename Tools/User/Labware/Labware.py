@@ -146,7 +146,7 @@ def GetAllLabwareType(LabwareType):
     for Labware in LabwareSet:
         if Labware.GetLabwareType() == LabwareType:
             OutputList.append(Labware)
-    return Labware
+    return OutputList
 
 #
 # This will give a list of contexts for a given list of labware. It works for both Reagents and Plates. 
