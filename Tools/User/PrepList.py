@@ -1,5 +1,4 @@
-from ..User.Labware import Plates as PLATES
-from ..User.Labware import Solutions as SOLUTIONS
+from ..User.Labware import Labware as LABWARE
 from ..User import Configuration as CONFIGURATION
 from ..General import ExcelIO as EXCELIO
 from ..General import HamiltonIO as HAMILTONIO
@@ -45,39 +44,39 @@ def GeneratePrepSheet(LabwareArray):
 
 	EXCELIO.CreateSheet("PrepList")
 
-	for Labware in LabwareArray:
-		print(LabwareArray[Labware])
+	for LabwareName in LabwareArray:
+		Labware = LABWARE.GetLabware(LabwareName)
+		IsPlate = Labware.GetLabwareType() == LABWARE.LabwareTypes.Plate
 
-		IsPlate = PLATES.IsPlate(Labware)
-
-		if IsPlate == True and PLATES.GetPlate(Labware).LoadingRequired():
-			Plate = PLATES.GetPlate(Labware)
-
+		if IsPlate == True:
+			PlateLoadedVolumeList = Labware.MinVolumeList
 			if True:
 
 				PlatePrepArray = dict()
 				for index in range(0,SAMPLES.GetNumSamples()):
-					for position in Plate.GetSequences()[index]:
-						if Plate.GetVolumes()[index] != 0:
+						position = index + 1
+					#for position in Plate.GetSequences()[index]:
+						if PlateLoadedVolumeList[index] != 0:
 							if int(position) in PlatePrepArray:
-								PlatePrepArray[int(position)]["Volume"] += abs(Plate.GetVolumes()[index])
+								pass
 							else:
-								PlatePrepArray[int(position)] = {"AlphaNumeric":NumericToAlphaNumeric(position),"Volume":abs(Plate.GetVolumes()[index]) + Sequences[LabwareArray[Labware]["Sequence"]]["Dead Volume"]}
+								PlatePrepArray[int(position)] = {"AlphaNumeric":NumericToAlphaNumeric(position),"Volume":abs(PlateLoadedVolumeList[index]) + Sequences[LabwareArray[LabwareName]["Sequence"]]["Dead Volume"]}
 				
-				UsedSpace = EXCELIO.PrintPlate(CurrentRow, CurrentCol, Plate.GetName(), LabwareArray[Labware]["Labware Name"], 8, 12, PlatePrepArray)
+				if len(PlatePrepArray) != 0:
+					UsedSpace = EXCELIO.PrintPlate(CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], 8, 12, PlatePrepArray)
 
-				NewRow = UsedSpace[0] + CurrentRow
-				NewCol = UsedSpace[1] + CurrentCol
+					NewRow = UsedSpace[0] + CurrentRow
+					NewCol = UsedSpace[1] + CurrentCol
 				
-				if NewRow > RowTracker:
-					RowTracker = NewRow
+					if NewRow > RowTracker:
+						RowTracker = NewRow
 
-				if NewCol > MaxCol:
-					CurrentCol = StartCol
-					CurrentRow = RowTracker + RowPadding
-				else:
-					CurrentCol = NewCol + ColPadding
-			#Do plate solution sheet here
+					if NewCol > MaxCol:
+						CurrentCol = StartCol
+						CurrentRow = RowTracker + RowPadding
+					else:
+						CurrentCol = NewCol + ColPadding
+				#Do plate solution sheet here
 
 
 	CurrentRow = RowTracker + RowPadding * 2

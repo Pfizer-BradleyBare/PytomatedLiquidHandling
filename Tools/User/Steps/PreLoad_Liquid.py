@@ -5,7 +5,7 @@ from ...User import Samples as SAMPLES
 from ...General import Log as LOG
 
 TITLE = "Preload Liquid"
-VOLUME = "Volume"
+VOLUME = "Volume (uL)"
 
 IsUsedFlag = False
 

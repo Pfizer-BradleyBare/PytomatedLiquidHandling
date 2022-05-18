@@ -1,5 +1,4 @@
-from ..User.Labware import Plates as PLATES
-from ..User.Labware import Solutions as SOLUTIONS
+from ..User.Labware import Labware as LABWARE
 from ..General import ExcelIO as EXCELIO
 from ..General import HamiltonIO as HAMILTONIO
 from ..User import Samples as SAMPLES
@@ -84,18 +83,18 @@ def Load(Plates_List, Solutions_List):
 	global PreferredLoading
 	global OmitLoadingList
 
-	Plates_List = [x for x in Plates_List if x.GetName() not in OmitLoadingList]
+	Plates_List = [x for x in Plates_List if LABWARE.Class.GetLabwareName(x) not in OmitLoadingList]
 
 	Loading = {}
 
 	PlateSequences = {k: v for k, v in Sequences.items() if "Plate" == v["Labware Category"]}
 
 	for Plate in Plates_List:
-		PlateType = Plate.GetType()
-		MaxVol = Plate.GetVolume()
-		LidRequired = Plate.GetLidState()
-		VacuumRequired = Plate.GetVacuumState()
-		DesaltRequired = Plate.GetDesaltState()
+		PlateType = Plate.GetPlateType()
+		MaxVol = Plate.GetMaxVolume()
+		LidRequired = Plate.GetIsCovered()
+		VacuumRequired = Plate.GetIsVacuum()
+		DesaltRequired = Plate.GetIsIMCSSizeXDesalting()
 
 		Possibles = collections.OrderedDict({k: v for k, v in PlateSequences.items() if v["Max Supported Volume"] >= (MaxVol + v["Dead Volume"]) and PlateType == v["Labware Type"] and int(not not v["Lid Sequence"]) >= int(not not LidRequired) and (VacuumRequired == False or VacuumRequired in str(v["Vacuum Compatible"])) and (DesaltRequired == False or DesaltRequired in str(v["Desalting Compatible"]))})
 		Possibles = collections.OrderedDict({k: v for k, v in sorted(Possibles.items(), key=lambda item: item[1]["Max Supported Volume"])})
@@ -103,14 +102,14 @@ def Load(Plates_List, Solutions_List):
 		for item in Possibles:
 			Possibles[item]["Used Volume"] = MaxVol + Possibles[item]["Dead Volume"]
 
-		Loading[Plate.GetName()] = {"PreferredCategories":[Plate.GetName(),Plate.GetType()], "Sequences":collections.OrderedDict(copy.deepcopy(Possibles))}
+		Loading[Plate.GetLabwareName()] = {"PreferredCategories":[Plate.GetLabwareName(),Plate.GetPlateType()], "Sequences":collections.OrderedDict(copy.deepcopy(Possibles))}
 
 	ReagentSequences = {k: v for k, v in Sequences.items() if "Reagent" == v["Labware Category"]}
 
 	for Solution in Solutions_List:
-		SolutionStorage = Solution.GetStorage()
-		MaxVol = Solution.GetVolume()
-		DesaltRequired = Solution.GetDesaltState()
+		SolutionStorage = Solution.GetStorageTemperature()
+		MaxVol = Solution.GetMaxVolume()
+		DesaltRequired = Solution.GetIsIMCSSizeXDesalting()
 
 		Possibles = {k: v for k, v in ReagentSequences.items() if v["Max Supported Volume"] >= (MaxVol + v["Dead Volume"]) and SolutionStorage == v["Storage Condition"]  and (DesaltRequired == False or DesaltRequired in str(v["Desalting Compatible"]))}
 		Possibles = collections.OrderedDict({k: v for k, v in sorted(Possibles.items(), key=lambda item: item[1]["Max Supported Volume"])})
@@ -118,7 +117,7 @@ def Load(Plates_List, Solutions_List):
 		for item in Possibles:
 			Possibles[item]["Used Volume"] = MaxVol + Possibles[item]["Dead Volume"]
 
-		Loading[Solution.GetName()] = {"PreferredCategories":[Solution.GetName(),Solution.GetType()], "Sequences":collections.OrderedDict(copy.deepcopy(Possibles))}
+		Loading[Solution.GetLabwareName()] = {"PreferredCategories":[Solution.GetLabwareName(),Solution.GetCategory()], "Sequences":collections.OrderedDict(copy.deepcopy(Possibles))}
 
 	# Do solution loading
 	#

@@ -161,26 +161,34 @@ class Class(LABWARE.Class):
 #########################################################################
 def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, SourceContextStringsList, SourceNamesList, SourceVolumesList, MixingList):
 	
+	StartPosition = SAMPLES.GetStartPosition()
+
 	NewSequence = PipetteSequence()
 
 	for SampleIndex in range(0,len(DestinationNamesList)):
 
+		DestinationContextString = DestinationContextStringsList[SampleIndex]
 		DestinationName = DestinationNamesList[SampleIndex]
-		DestinationLabware = LABWARE.GetLabware(DestinationName)
-		DestinationVolumesList = DestinationLabware.VolumesList
+		SourceContextString = SourceContextStringsList[SampleIndex]
 		SourceName = SourceNamesList[SampleIndex]
 		Volume = SourceVolumesList[SampleIndex]
-		CurrentWellVolume = DestinationVolumesList[SampleIndex]
 		MixParameter = MixingList[SampleIndex]
+		
+		DestinationLabware = LABWARE.GetLabware(DestinationName)
 
-		Factor = LABWARE.GetContextualFactors(DestinationContextStringsList[SampleIndex])[SampleIndex]
-		DestinationSequencesList = LABWARE.GetContextualSequences(DestinationContextStringsList[SampleIndex])[SampleIndex]
+		DestinationSequencePosition = LABWARE.GetContextualSequences(DestinationContextString)[SampleIndex]
+		DestinationArrayPosition = DestinationSequencePosition - StartPosition
+		#We need the array position because that tells us which volume to modify and which factors to use.
+		#The array position is derived from the Sequence Position
 
-		ActualVolume = Volume * Factor
+		CurrentWellVolume = DestinationLabware.VolumesList[DestinationArrayPosition]
+		PipettingFactor = LABWARE.GetContextualFactors(DestinationContextStringsList[SampleIndex])[DestinationArrayPosition]
+
+		ActualVolume = Volume * PipettingFactor
 
 		if ActualVolume > 0:
 			
-			SourceSequencesList = DestinationSequencesList
+			SourceSequencePosition = DestinationSequencePosition
 
 			SourceLabware = LABWARE.GetLabware(SourceName)
 			if SourceLabware == None:
@@ -200,23 +208,20 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				SOLUTIONS.Class.AddVolume(SourceLabware, ActualVolume)
 
 			elif SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
-				SourceLabware.VolumesList[SampleIndex] -= ActualVolume
+				SourceSequencePosition = LABWARE.GetContextualSequences(SourceContextString)[SampleIndex]
+				SourceArrayPosition = SourceSequencePosition - StartPosition
+				SourceLabware.VolumesList[SourceArrayPosition] -= ActualVolume
 				SourceLabware.DoVolumeUpdate()
-				SourceSequencesList = LABWARE.GetContextualSequences(SourceContextStringsList[SampleIndex])
-				#DestinationLabware.WellContents[SampleIndex].append({"Solution":"__REMOVE__","Volume":ActualVolume})
+				#DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":"__REMOVE__","Volume":ActualVolume})
 			#Do plate volume subtraction
 
 			DestinationLabware.WellContents[SampleIndex].append({"Solution":SourceName,"Volume":ActualVolume})
 			
 
-			for SequenceIndex in range(0,len(DestinationSequencesList)):
-				DestinationSequencePosition = DestinationSequencesList[SequenceIndex]
-				SourceSequencePosition = SourceSequencesList[SequenceIndex]
-
-				NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,MixParameter,LiquidClassString)
+			NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,MixParameter,LiquidClassString)
 				
-			DestinationVolumesList[SampleIndex] += ActualVolume
+			DestinationLabware.VolumesList[DestinationArrayPosition] += ActualVolume
 			DestinationLabware.DoVolumeUpdate()
-
+			
 	return copy.deepcopy(NewSequence)
 

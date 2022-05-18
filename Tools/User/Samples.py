@@ -25,6 +25,7 @@ def Init(SampleStartPosition, PulledWorkListSheet):
 	global Column_Ranges
 	global StartPosition
 	global NumSamples
+	global SequencesList
 
 	StartPosition = SampleStartPosition
 	Column_Ranges = {}

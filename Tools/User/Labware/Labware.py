@@ -56,9 +56,9 @@ class Class:
 	# This is a flag which indicates whether or not this labware needs a lid
 	#
     def SetIsCovered(self):
-        self.Lid = True
+        self.IsCovered = True
     def GetIsCovered(self):
-        return self.Lid
+        return self.IsCovered
 
     #
     # This tracks the max volume used in this labware
@@ -112,7 +112,7 @@ LabwareSet = set()
 def Init():
     global LabwareSet
     SetContextualFactors("",[1] * SAMPLES.GetNumSamples())
-    SetContextualSequences("",[[x] for x in [*range(SAMPLES.GetStartPosition(),SAMPLES.GetStartPosition() + SAMPLES.GetNumSamples())]])
+    SetContextualSequences("",list(range(SAMPLES.GetStartPosition(),SAMPLES.GetStartPosition() + SAMPLES.GetNumSamples())))
     LabwareSet = set()
 
 #
