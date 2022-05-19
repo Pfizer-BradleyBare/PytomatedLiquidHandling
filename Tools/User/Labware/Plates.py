@@ -68,11 +68,20 @@ class Class(LABWARE.Class):
 #########################################################################
 	def __init__ (self, Name, PlateType):
 		LABWARE.Class.__init__(self, Name, LABWARE.LabwareTypes.Plate)
+		self.IsPreloaded = False
 		self.PlateType = PlateType
 		self.VolumesList = [0] * SAMPLES.GetNumSamples()
 		self.MaxVolumeList = [0] * SAMPLES.GetNumSamples()
 		self.MinVolumeList = [0] * SAMPLES.GetNumSamples()
 		self.WellContents = [[] for _ in range(SAMPLES.GetNumSamples())]
+
+	#
+	# Preloaded functions
+	#
+	def SetIsPreloaded(self):
+		self.IsPreloaded = True
+	def GetIsPreloaded(self):
+		return self.IsPreloaded
 
 	#
 	# This is the type of plate. 96 Well or some other form. This is dependant on the user config.
@@ -222,6 +231,6 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				
 			DestinationLabware.VolumesList[DestinationArrayPosition] += ActualVolume
 			DestinationLabware.DoVolumeUpdate()
-			
+
 	return copy.deepcopy(NewSequence)
 

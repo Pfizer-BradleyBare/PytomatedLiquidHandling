@@ -46,9 +46,8 @@ def GeneratePrepSheet(LabwareArray):
 
 	for LabwareName in LabwareArray:
 		Labware = LABWARE.GetLabware(LabwareName)
-		IsPlate = Labware.GetLabwareType() == LABWARE.LabwareTypes.Plate
 
-		if IsPlate == True:
+		if Labware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
 			PlateLoadedVolumeList = Labware.MinVolumeList
 			if True:
 
@@ -57,10 +56,10 @@ def GeneratePrepSheet(LabwareArray):
 						position = index + 1
 					#for position in Plate.GetSequences()[index]:
 						if PlateLoadedVolumeList[index] != 0:
-							if int(position) in PlatePrepArray:
-								pass
+							if Labware.GetIsPreloaded() == True:
+								PlatePrepArray[int(position)] = {"AlphaNumeric":position,"Volume":abs(PlateLoadedVolumeList[index])}
 							else:
-								PlatePrepArray[int(position)] = {"AlphaNumeric":NumericToAlphaNumeric(position),"Volume":abs(PlateLoadedVolumeList[index]) + Sequences[LabwareArray[LabwareName]["Sequence"]]["Dead Volume"]}
+								PlatePrepArray[int(position)] = {"AlphaNumeric":position,"Volume":abs(PlateLoadedVolumeList[index]) + Sequences[LabwareArray[LabwareName]["Sequence"]]["Dead Volume"]}
 				
 				if len(PlatePrepArray) != 0:
 					UsedSpace = EXCELIO.PrintPlate(CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], 8, 12, PlatePrepArray)
@@ -82,12 +81,13 @@ def GeneratePrepSheet(LabwareArray):
 	CurrentRow = RowTracker + RowPadding * 2
 	CurrentCol = StartCol
 
-	for Labware in LabwareArray:
-		IsPlate = PLATES.IsPlate(Labware)
-		if IsPlate == False:
+	for LabwareName in LabwareArray:
+		Labware = LABWARE.GetLabware(LabwareName)
+
+		if Labware.GetLabwareType() == LABWARE.LabwareTypes.Reagent:
 			if True:
 
-				UsedSpace = EXCELIO.PrintReagent(CurrentRow, CurrentCol, Labware, LabwareArray[Labware]["Labware Name"], LabwareArray[Labware]["Volume"])
+				UsedSpace = EXCELIO.PrintReagent(CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], LabwareArray[LabwareName]["Volume"])
 
 				NewRow = UsedSpace[0] + CurrentRow
 				NewCol = UsedSpace[1] + CurrentCol
@@ -102,7 +102,8 @@ def GeneratePrepSheet(LabwareArray):
 					CurrentCol = NewCol + ColPadding
 			#Do reagent solution loading here
 
-	EXCELIO.AutoFit("PrepList")	
+	for Column in range(1,15):
+		EXCELIO.AutoFit("PrepList",Column)	
 
 
 

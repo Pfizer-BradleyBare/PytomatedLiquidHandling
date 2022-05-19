@@ -26,6 +26,7 @@ def Step(step):
 	VolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
 
 	Labware = PLATES.LABWARE.GetLabware(DestinationPlate)
+	Labware.SetIsPreloaded()
 	ContextualString = PLATES.LABWARE.GetContextualStringsList(step,[DestinationPlate])[0]
 
 	PlateVolumeList = Labware.VolumesList

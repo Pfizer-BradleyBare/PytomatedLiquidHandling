@@ -36,7 +36,6 @@ def Simulated(Simulate):
 	global SimulatedIO
 	SimulatedIO = Simulate
 
-
 def IsSimulated():
 	global SimulatedIO
 	return SimulatedIO
@@ -104,30 +103,6 @@ def SendCommands():
 		return Response
 	return False
 
-######################################################################### 
-#	Description: Pushes a command to the communication channel for the Hamilton.
-#	The first file creates is a temporary file. As soon as write is complete the file is renamed to a file the Hamilton expects.
-#	Input Arguments: [Command: String]
-#	Returns: N/A
-#########################################################################
-def Push(Command):
-	pass
-
-######################################################################### 
-#	Description: Reads a response from the Hamilton. As soon as the response is read the file is deleted.
-#	Input Arguments: N/A
-#	Returns: [String]
-#########################################################################
-def Pull():
-	pass
-
-
-
-######################################################################### 
-#	Description: Ends the communication on the Hamilton system
-#	Input Arguments: N/A
-#	Returns: N/A
-#########################################################################
 def EndCommunication():
 	AddCommand("END",False)
 	SendCommands()

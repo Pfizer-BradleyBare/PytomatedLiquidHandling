@@ -68,24 +68,24 @@ def Step(step):
 		TransferVolumes = Sequence.GetTransferVolumes()
 		LiquidClassStrings = Sequence.GetLiquidClassStrings()
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":LiquidClassStrings}))
-		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":LiquidClassStrings}),False)
+		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}),False)
 		LiquidTransferFlag = True
 
-	HAMILTONIO.AddCommand(VACUUM.GetVacuumPlateSequenceString({"VacuumPlateName":VacPlate}))
+	HAMILTONIO.AddCommand(VACUUM.GetVacuumPlateSequenceString({"VacuumPlateName":VacPlate}),False)
 
 	if not (TITLE in STEPS.GetPreviousStepInPathway(step).GetTitle()):
 		
-		HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[Destination]}))
-		HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[Destination]}))
-		HAMILTONIO.AddCommand(VACUUM.GetVacuumCollectionPlateSequenceString({"VacuumPlateName":VacPlate}))
-		HAMILTONIO.AddCommand(VACUUM.GetVacuumCollectionPlateTransportType({"VacuumPlateName":VacPlate}))
+		HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[Destination]}),False)
+		HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[Destination]}),False)
+		HAMILTONIO.AddCommand(VACUUM.GetVacuumCollectionPlateSequenceString({"VacuumPlateName":VacPlate}),False)
+		HAMILTONIO.AddCommand(VACUUM.GetVacuumCollectionPlateTransportType({"VacuumPlateName":VacPlate}),False)
 		#Get info to move collection plate
 
-		HAMILTONIO.AddCommand(VACUUM.GetVacuumParkSequenceString({"VacuumPlateName":VacPlate}))
-		HAMILTONIO.AddCommand(VACUUM.GetVacuumParkTransportType({"VacuumPlateName":VacPlate}))
-		HAMILTONIO.AddCommand(VACUUM.GetVacuumManifoldSequenceString({"VacuumPlateName":VacPlate}))
-		HAMILTONIO.AddCommand(VACUUM.GetVacuumManifoldTransportType({"VacuumPlateName":VacPlate}))
+		HAMILTONIO.AddCommand(VACUUM.GetVacuumParkSequenceString({"VacuumPlateName":VacPlate}),False)
+		HAMILTONIO.AddCommand(VACUUM.GetVacuumParkTransportType({"VacuumPlateName":VacPlate}),False)
+		HAMILTONIO.AddCommand(VACUUM.GetVacuumManifoldSequenceString({"VacuumPlateName":VacPlate}),False)
+		HAMILTONIO.AddCommand(VACUUM.GetVacuumManifoldTransportType({"VacuumPlateName":VacPlate}),False)
 		#Get info to move vacuum manifold
 		
 		Response = HAMILTONIO.SendCommands()
@@ -175,16 +175,16 @@ def VacuumWaitCallback(step):
 	
 	if not (TITLE in STEPS.GetNextStepInPathway(step).GetTitle()):
 
-		HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[Destination]}))
-		HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[Destination]}))
-		HAMILTONIO.AddCommand(VACUUM.GetVacuumCollectionPlateSequenceString({"VacuumPlateName":VacPlate}))
-		HAMILTONIO.AddCommand(VACUUM.GetVacuumCollectionPlateTransportType({"VacuumPlateName":VacPlate}))
+		HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[Destination]}),False)
+		HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[Destination]}),False)
+		HAMILTONIO.AddCommand(VACUUM.GetVacuumCollectionPlateSequenceString({"VacuumPlateName":VacPlate}),False)
+		HAMILTONIO.AddCommand(VACUUM.GetVacuumCollectionPlateTransportType({"VacuumPlateName":VacPlate}),False)
 		#Get info to move collection plate
 
-		HAMILTONIO.AddCommand(VACUUM.GetVacuumParkSequenceString({"VacuumPlateName":VacPlate}))
-		HAMILTONIO.AddCommand(VACUUM.GetVacuumParkTransportType({"VacuumPlateName":VacPlate}))
-		HAMILTONIO.AddCommand(VACUUM.GetVacuumManifoldSequenceString({"VacuumPlateName":VacPlate}))
-		HAMILTONIO.AddCommand(VACUUM.GetVacuumManifoldTransportType({"VacuumPlateName":VacPlate}))
+		HAMILTONIO.AddCommand(VACUUM.GetVacuumParkSequenceString({"VacuumPlateName":VacPlate}),False)
+		HAMILTONIO.AddCommand(VACUUM.GetVacuumParkTransportType({"VacuumPlateName":VacPlate}),False)
+		HAMILTONIO.AddCommand(VACUUM.GetVacuumManifoldSequenceString({"VacuumPlateName":VacPlate}),False)
+		HAMILTONIO.AddCommand(VACUUM.GetVacuumManifoldTransportType({"VacuumPlateName":VacPlate}),False)
 		#Get info to move vacuum manifold
 		
 		Response = HAMILTONIO.SendCommands()

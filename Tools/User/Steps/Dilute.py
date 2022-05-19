@@ -102,8 +102,8 @@ def Step(step):
 		TransferVolumes = FirstSequences.GetTransferVolumes()
 		LiquidClassStrings = FirstSequences.GetLiquidClassStrings()
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":LiquidClassStrings}))
-		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":LiquidClassStrings}),False)
+		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}),False)
 		FirstSeqFlag = True
 
 	SecondSeqFlag = False
@@ -112,8 +112,8 @@ def Step(step):
 		TransferVolumes = SecondSequences.GetTransferVolumes()
 		LiquidClassStrings = SecondSequences.GetLiquidClassStrings()
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":LiquidClassStrings}))
-		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}))
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":LiquidClassStrings}),False)
+		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}),False)
 		SecondSeqFlag = True
 
 	Response = HAMILTONIO.SendCommands()
@@ -138,12 +138,11 @@ def Step(step):
 
 	if FirstSeqFlag == True:
 		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":FirstSequences,"LiquidClasses":FirstLiquidClassStrings,"TipSequences":FirstTipSequenceStrings,"KeepTips":"False","DestinationPipettingOffset":0}))
-	
+		Response = HAMILTONIO.SendCommands()
+
 	if SecondSeqFlag == True:
 		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":SecondSequences,"LiquidClasses":SecondLiquidClassStrings,"TipSequences":SecondTipSequenceStrings,"KeepTips":"False","DestinationPipettingOffset":0}))
-	
-	Response = HAMILTONIO.SendCommands()
-
+		Response = HAMILTONIO.SendCommands()
 
 	#Do the diluent pipetting
 #end

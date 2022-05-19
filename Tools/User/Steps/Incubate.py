@@ -97,11 +97,11 @@ def AmbientCallback(step):
 
 	ParentPlate = step.GetParentPlateName()
 
-	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}),False)
 	#Lid
 
-	HAMILTONIO.AddCommand(LABWARE.GetLidSequenceStrings({"PlateNames":[ParentPlate]}))
+	HAMILTONIO.AddCommand(LABWARE.GetLidSequenceStrings({"PlateNames":[ParentPlate]}),False)
 	#Plate
 
 	Response = HAMILTONIO.SendCommands()
@@ -117,7 +117,7 @@ def AmbientCallback(step):
 	#Lets get the info we need to move the Lid
 
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":LidType,"SourceSequenceString":PlateLidSequence,"DestinationLabwareType":LidType,"DestinationSequenceString":LidSequence,"Park":"True","CheckExists":"After"}))
-	HAMILTONIO.AddCommand(LID.ReleaseReservation({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.ReleaseReservation({"PlateName":ParentPlate}),False)
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the lid then plate then release all reservations
 
@@ -133,16 +133,16 @@ def HeatingCallback(step):
 	HAMILTONIO.AddCommand(HEATER.EndReservation({"PlateName":ParentPlate}))
 	#Stop heating and shaking
 
-	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(HEATER.GetReservationLidSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(HEATER.GetReservationLidTransportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(HEATER.GetReservationLidSequenceString({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(HEATER.GetReservationLidTransportType({"PlateName":ParentPlate}),False)
 	#Lid
 
-	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}))
-	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}))
-	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterTransportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}),False)
+	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}),False)
+	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterSequenceString({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterTransportType({"PlateName":ParentPlate}),False)
 	#Plate
 
 	Response = HAMILTONIO.SendCommands()
@@ -173,9 +173,11 @@ def HeatingCallback(step):
 	#Lets get the info we need to move the plate
 
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":HeaterLidType,"SourceSequenceString":HeaterLidSequence,"DestinationLabwareType":LidType,"DestinationSequenceString":LidSequence,"Park":"False","CheckExists":"After"}))
+	Response = HAMILTONIO.SendCommands()
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":HeaterType,"SourceSequenceString":HeaterSequence,"DestinationLabwareType":PlateType,"DestinationSequenceString":PlateSequence,"Park":"True","CheckExists":"After"}))
+	Response = HAMILTONIO.SendCommands()
 	HAMILTONIO.AddCommand(HEATER.ReleaseReservation({"PlateName":ParentPlate}),False)
-	HAMILTONIO.AddCommand(LID.ReleaseReservation({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.ReleaseReservation({"PlateName":ParentPlate}),False)
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the lid then plate then release all reservations
 	
@@ -205,11 +207,11 @@ def AmbientStep(step):
 	PLATES.LABWARE.GetLabware(ParentPlate).SetIsCovered()
 	#This incubation is ambient on the deck. So we set a flag which requires that the plate has a lid on deck position
 
-	HAMILTONIO.AddCommand(LABWARE.GetLidSequenceStrings({"PlateNames":[ParentPlate]}))
+	HAMILTONIO.AddCommand(LABWARE.GetLidSequenceStrings({"PlateNames":[ParentPlate]}),False)
 
-	HAMILTONIO.AddCommand(LID.AcquireReservation({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.AcquireReservation({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}),False)
 	#Lid
 
 	Response = HAMILTONIO.SendCommands()
@@ -239,17 +241,17 @@ def HeatingStep(step):
 	RPM = Params[SHAKE]
 	ParentPlate = step.GetParentPlateName()
 
-	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}))
-	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}))
-	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterTransportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}),False)
+	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[ParentPlate]}),False)
+	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterSequenceString({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(HEATER.GetReservationHeaterTransportType({"PlateName":ParentPlate}),False)
 	#Plate
 
-	HAMILTONIO.AddCommand(LID.AcquireReservation({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(HEATER.GetReservationLidSequenceString({"PlateName":ParentPlate}))
-	HAMILTONIO.AddCommand(HEATER.GetReservationLidTransportType({"PlateName":ParentPlate}))
+	HAMILTONIO.AddCommand(LID.AcquireReservation({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(HEATER.GetReservationLidSequenceString({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(HEATER.GetReservationLidTransportType({"PlateName":ParentPlate}),False)
 	#Lid
 
 	Response = HAMILTONIO.SendCommands()
@@ -280,7 +282,9 @@ def HeatingStep(step):
 	#Lets get the info we need to move the Lid
 
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":PlateType,"SourceSequenceString":PlateSequence,"DestinationLabwareType":HeaterType,"DestinationSequenceString":HeaterSequence,"Park":"False","CheckExists":"False"}))
+	Response = HAMILTONIO.SendCommands()
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":LidType,"SourceSequenceString":LidSequence,"DestinationLabwareType":HeaterLidType,"DestinationSequenceString":HeaterLidSequence,"Park":"True","CheckExists":"False"}))
+	Response = HAMILTONIO.SendCommands()
 	HAMILTONIO.AddCommand(HEATER.StartReservation({"PlateName":ParentPlate,"Temperature":Temp,"RPM":RPM}))
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the plate then lid then start the incubation (Incudes shaking)

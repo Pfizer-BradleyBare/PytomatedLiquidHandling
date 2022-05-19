@@ -137,6 +137,9 @@ def Init():
 	if HAMILTONIO.IsSimulated() == False:
 		CurrentRow = TrueRunRow
 
+LogList = []
+def NewLogInit():
+	pass
 
 
 def CommandInLog(Command):
@@ -216,9 +219,6 @@ def HandleResponse(Response):
 
 	EXCELIO.Push(TRUERUN_SHEET, LOG_ROW_START, LOG_COL_START, LOG_ROW_START, LOG_COL_START, Log[:TrueRunRow])
 
-
-
-
 def Comment(Comments):
 	global CurrentRow
 	global GeneralCommentCounter
@@ -255,11 +255,13 @@ def Command(Command):
 
 	while True:
 		CommandLineEnd = Command.find("[",1)
-		printArray.append(Command[:CommandLineEnd].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
 		if CommandLineEnd == -1:
+			printArray.append(Command[:].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
 			break
+		else:
+			printArray.append(Command[:CommandLineEnd].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
 		Command = Command[CommandLineEnd:]
-	
+
 	MaxLength = max(len(Command) for Command in printArray)
 	printArray = [Command + [""]*(MaxLength - len(Command)) for Command in printArray]
 
