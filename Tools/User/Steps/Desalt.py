@@ -16,10 +16,10 @@ DesaltingRequiredTips = 3
 
 #Step Args
 TITLE = "IMCS SizeX Desalt"
-SOURCE = "Source"
+SOURCE = "Source Plate"
 WASTE = "Waste Plate"
 EQUILIBRATION_BUFFER = "Equilibration Buffer"
-TYPE = "Volume"
+TYPE = "Load Volume"
 ELUTION_METHOD = "Elution Method"
 
 #This variable tracks whether or not the tips have been equilibrated
@@ -147,7 +147,10 @@ def Step(step):
 	MixingParameters = SAMPLES.Column("N/A")
 
 	Sequence = PLATES.CreatePipetteSequence(EQ_DestinationContextualStrings,EQ_DestinationNames,BufferContextualStrings,BufferNames,SourceVolumes,MixingParameters)
-	
+
+	BufferLabware = PLATES.LABWARE.GetLabware(Buffer)
+	BufferLabware.SetIsIMCSSizeXDesalting()
+
 	Desalting_Params[StepKey]["Positions"] = Sequence.GetDestinationPositions()
 
 	Equilibrate(StepKey)

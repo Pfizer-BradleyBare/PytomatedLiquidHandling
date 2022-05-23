@@ -45,13 +45,13 @@ def Labware(LoadingList):
 		LidSequences += str(LoadingList[Labware]["Lid"]) + HAMILTONIO.GetDelimiter()
 		LoadingLocations += str(LoadingList[Labware]["LoadingPosition"]) + HAMILTONIO.GetDelimiter()
 
-		if str(LoadingList[Labware]["Labware Category"]) == "Plates":
-			LabwareVolumes += str(LoadingList[Labware]["Max Volume"]) + HAMILTONIO.GetDelimiter()
+		if str(LoadingList[Labware]["Labware Info"]["Labware Category"]) == "Plates":
+			LabwareVolumes += str(LoadingList[Labware]["Labware Info"]["Max Supported Volume"]) + HAMILTONIO.GetDelimiter()
 		else:
-			LabwareVolumes += str(LoadingList[Labware]["Volume"]) + HAMILTONIO.GetDelimiter()
+			LabwareVolumes += str(LoadingList[Labware]["Used Volume"]) + HAMILTONIO.GetDelimiter()
 
-		LabwareTypes += str(LoadingList[Labware]["Labware Type"]) + HAMILTONIO.GetDelimiter()
-		LabwareCategories += str(LoadingList[Labware]["Labware Category"]) + HAMILTONIO.GetDelimiter()
+		LabwareTypes += str(LoadingList[Labware]["Labware Info"]["Labware Type"]) + HAMILTONIO.GetDelimiter()
+		LabwareCategories += str(LoadingList[Labware]["Labware Info"]["Labware Category"]) + HAMILTONIO.GetDelimiter()
 		LabwareNames += str(LoadingList[Labware]["Labware Name"]) + HAMILTONIO.GetDelimiter()
 
 	CommandString = ""

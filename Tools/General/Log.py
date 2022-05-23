@@ -141,12 +141,9 @@ LogList = []
 def NewLogInit():
 	pass
 
-
 def CommandInLog(Command):
 	if HAMILTONIO.IsSimulated() == True:
 		return False
-
-	global LogSheet
 
 	ID = GetCommandID()
 

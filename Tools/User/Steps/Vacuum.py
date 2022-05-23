@@ -50,7 +50,7 @@ def Step(step):
 	WaitTime = step.GetParameters()[WAIT_TIME]
 	VacPlate = step.GetParameters()[VACUUM_PLATE]
 
-	PLATES.LABWARE.GetLabware(Destination).SetIsVacuum()
+	PLATES.LABWARE.GetLabware(Destination).SetIsVacuum(VacPlate)
 	#The plate that we vacuum into needs to be a vacuum compatible plate. Set that here on a per step basis
 
 	DestinationNamesList = SAMPLES.Column(Destination)

@@ -66,8 +66,6 @@ import Tools.User.Steps.Merge_Plate as MERGE_PLATE
 import Tools.Hamilton.PreRun as PRERUN
 ##import Tools.Hamilton.Commands.StatusUpdate as STATUS_UPDATE
 
-
-
 print("Init Classes")
 EXCELIO.Init(Excel_File_Path)
 HAMILTONIO.Init()

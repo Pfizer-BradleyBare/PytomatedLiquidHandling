@@ -35,7 +35,7 @@ def GeneratePrepSheet(LabwareArray):
 	ColPadding = 2
 	RowTracker = 0
 
-	Sequences = CONFIGURATION.GetAutoloadingSequences()
+	#Sequences = CONFIGURATION.GetAutoloadingSequences()
 
 	try:
 		EXCELIO.DeleteSheet("PrepList")
@@ -59,7 +59,7 @@ def GeneratePrepSheet(LabwareArray):
 							if Labware.GetIsPreloaded() == True:
 								PlatePrepArray[int(position)] = {"AlphaNumeric":position,"Volume":abs(PlateLoadedVolumeList[index])}
 							else:
-								PlatePrepArray[int(position)] = {"AlphaNumeric":position,"Volume":abs(PlateLoadedVolumeList[index]) + Sequences[LabwareArray[LabwareName]["Sequence"]]["Dead Volume"]}
+								PlatePrepArray[int(position)] = {"AlphaNumeric":position,"Volume":abs(PlateLoadedVolumeList[index]) + LabwareArray[LabwareName]["Labware Info"]["Dead Volume"]}
 				
 				if len(PlatePrepArray) != 0:
 					UsedSpace = EXCELIO.PrintPlate(CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], 8, 12, PlatePrepArray)
@@ -87,7 +87,7 @@ def GeneratePrepSheet(LabwareArray):
 		if Labware.GetLabwareType() == LABWARE.LabwareTypes.Reagent:
 			if True:
 
-				UsedSpace = EXCELIO.PrintReagent(CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], LabwareArray[LabwareName]["Volume"])
+				UsedSpace = EXCELIO.PrintReagent(CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], LabwareArray[LabwareName]["Used Volume"])
 
 				NewRow = UsedSpace[0] + CurrentRow
 				NewCol = UsedSpace[1] + CurrentCol

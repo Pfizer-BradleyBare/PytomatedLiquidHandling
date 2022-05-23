@@ -39,8 +39,8 @@ class Class:
     #
     # This is a flag which indicates whether or not this labware is used on a vacuum
     #
-    def SetIsVacuum(self):
-        self.IsVacuum = True
+    def SetIsVacuum(self, VacuumPlateString):
+        self.IsVacuum = VacuumPlateString
     def GetIsVacuum(self):
         return self.IsVacuum
 
