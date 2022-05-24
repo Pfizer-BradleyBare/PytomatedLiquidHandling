@@ -168,11 +168,11 @@ def Load(Plates_List, Solutions_List):
 	if(len(Plates_List) + len(Solutions_List) != len(FinalLoading)):
 		print("Unabled to load all labware. The following labware exceeds available container volume on deck.")
 		for plate in Plates_List:
-			if plate.GetName() not in FinalLoading:
-				print(plate.GetName(),": ",plate.GetVolume())
+			if plate.GetLabwareName() not in FinalLoading:
+				print(plate.GetLabwareName(),": ",plate.GetMaxVolume())
 		for solution in Solutions_List:
-			if solution.GetName() not in FinalLoading:
-				print(solution.GetName(),": ",solution.GetVolume())
+			if solution.GetLabwareName() not in FinalLoading:
+				print(solution.GetLabwareName(),": ",solution.GetMaxVolume())
 		quit()
 	#check that we were able to load everything
 

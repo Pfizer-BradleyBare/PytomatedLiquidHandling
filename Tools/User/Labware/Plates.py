@@ -70,6 +70,7 @@ class Class(LABWARE.Class):
 		LABWARE.Class.__init__(self, Name, LABWARE.LabwareTypes.Plate)
 		self.IsPreloaded = False
 		self.PlateType = PlateType
+		self.PipetteVolumesList = []
 		self.VolumesList = [0] * SAMPLES.GetNumSamples()
 		self.MaxVolumeList = [0] * SAMPLES.GetNumSamples()
 		self.MinVolumeList = [0] * SAMPLES.GetNumSamples()
@@ -88,6 +89,14 @@ class Class(LABWARE.Class):
 	#
 	def GetPlateType(self):
 		return self.PlateType
+
+    #
+    #  All recorded pipetting volumes for this particular labware
+    #
+	def AddPipetteVolume(self, Volume):
+		self.PipetteVolumesList.append(Volume)
+	def GetPipetteVolumesList(self):
+		return self.PipetteVolumesList
 
 	#
 	# Implemented Virtual function from Labware class
@@ -168,7 +177,7 @@ class Class(LABWARE.Class):
 #	Input Arguments: [SourceList: List] [SourceVolumeList: List]
 #	Returns: [List of Lists]
 #########################################################################
-def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, SourceContextStringsList, SourceNamesList, SourceVolumesList, MixingList):
+def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, SourceContextStringsList, SourceNamesList, SourceVolumesList, MixingList, RecordPipetteVolumes=True):
 	
 	StartPosition = SAMPLES.GetStartPosition()
 
@@ -224,9 +233,10 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				#DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":"__REMOVE__","Volume":ActualVolume})
 			#Do plate volume subtraction
 
+			if RecordPipetteVolumes == True:
+				Class.AddPipetteVolume(DestinationLabware,ActualVolume)
 			DestinationLabware.WellContents[SampleIndex].append({"Solution":SourceName,"Volume":ActualVolume})
 			
-
 			NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,MixParameter,LiquidClassString)
 				
 			DestinationLabware.VolumesList[DestinationArrayPosition] += ActualVolume
@@ -234,3 +244,8 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 
 	return copy.deepcopy(NewSequence)
 
+def GetAllPipetteVolumes():
+	PipetteVolumesList = []
+	for Plate in LABWARE.GetAllLabwareType(LABWARE.LabwareTypes.Plate):
+		PipetteVolumesList += Plate.GetPipetteVolumesList()
+	return PipetteVolumesList

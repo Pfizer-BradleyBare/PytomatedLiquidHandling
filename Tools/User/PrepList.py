@@ -62,7 +62,7 @@ def GeneratePrepSheet(LabwareArray):
 								PlatePrepArray[int(position)] = {"AlphaNumeric":position,"Volume":abs(PlateLoadedVolumeList[index]) + LabwareArray[LabwareName]["Labware Info"]["Dead Volume"]}
 				
 				if len(PlatePrepArray) != 0:
-					UsedSpace = EXCELIO.PrintPlate(CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], 8, 12, PlatePrepArray)
+					UsedSpace = EXCELIO.PrintPlate(CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], LabwareArray[LabwareName]["Labware Info"]["Labware Rows"], LabwareArray[LabwareName]["Labware Info"]["Labware Columns"], PlatePrepArray)
 
 					NewRow = UsedSpace[0] + CurrentRow
 					NewCol = UsedSpace[1] + CurrentCol

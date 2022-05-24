@@ -183,13 +183,11 @@ if HAMILTONIO.IsSimulated() == True:
 	HAMILTONIO.AddCommand(PRERUN.Labware(Labware),False)
 
 	if GenerateList == True:
-		pass
 		PREPLIST.GeneratePrepSheet(Labware)
 	#Generate prep sheet here
 	
 	if LIQUID_TRANSFER.IsUsed() == True or DILUTE.IsUsed() == True:
-		#HAMILTONIO.AddCommand(PRERUN.PIPETTE.PreRun(SOLUTIONS.GetPipetteVolumes()),False)
-		pass
+		HAMILTONIO.AddCommand(PRERUN.PIPETTE.PreRun(PLATES.GetAllPipetteVolumes()),False)
 	
 	if INCUBATE.IsUsed() == True:
 		HAMILTONIO.AddCommand(PRERUN.HEATER.PreRun({}),False)
