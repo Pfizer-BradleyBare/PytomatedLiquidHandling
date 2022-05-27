@@ -11,61 +11,77 @@ TITLE = "Wait"
 IsUsedFlag = True
 
 def IsUsed():
-	global IsUsedFlag
 	return IsUsedFlag
 
 #format is Plate: WaitTime, StartTime
-Timer_List = {}
+Timer_List = []
 
 def Init():
 	global Timer_List
-
 	Timer_List = [] 
 
 #Callback is a function that takes only a plate name as a parameter (String)
-def StartTimer(step, WaitTime, Callback):
-	global Timer_List
+#Wait only means it is ONLY a timer. No other type of parallel processing will be attempted.
+def StartTimer(step, WaitTime, Callback, WaitOnly=False):
 	WaitTime *= 60
 	#Convert min to seconds
 
-	Timer_List.append( {"Step":step,"Wait Time":WaitTime, "Start Time":time.time(), "Callback":Callback})
-	#TIMER.Start(Plate,WaitTime)
+	Timer_List.append( {"Step":step,"Wait Time":WaitTime, "Start Time":time.time(), "Callback":Callback, "Wait Only":WaitOnly})
 	#We will only start the time for the remaining time. Time handling will be done in python
 
-	STEPS.DeactivateContext(step.GetContext())
+	if WaitOnly == False:
+		STEPS.DeactivateContext(step.GetContext())
 
 	if STEPS.GetNumActiveContexts() == 0:
 		WaitForTimer()
+
+def GetLowestTimer():
+	Time = time.time()
+	return min(Timer_List, key=lambda x: x["Wait Time"] - (Time - x["Start Time"]))
+
 
 def WaitForTimer():
 	global Timer_List
 	
 	if len(Timer_List) > 0:	
-		CurrentStep = Timer_List[-1]["Step"]
 
 		Params = DESALT.GetDesaltParams()
-		for key in Params:
-			if Params[key]["EQ Step"] == CurrentStep:
-				DESALT.Equilibrate(key)
+		for Timer in Timer_List:
+			if Timer["Wait Only"] == False:
+				for key in Params:
+					if Params[key]["EQ Step"] == Timer["Step"]:
+						DESALT.Equilibrate(key)
 		#It is more efficient to equilibrate when the deck is not busy. So we will do it before we wait on a incubation timer
 
-
-
-		Time = time.time()
-
-		SleepingPlate = min(Timer_List, key=lambda x: x["Wait Time"] - (Time - x["Start Time"]))
+		LowestTimer = GetLowestTimer()
 		
-		HAMILTONIO.AddCommand(TIMER.Start({"WaitTime":SleepingPlate["Wait Time"] - (Time - SleepingPlate["Start Time"])}))
-		HAMILTONIO.AddCommand(TIMER.Wait({}))
-		Response = HAMILTONIO.SendCommands()
+		RemainingTime = LowestTimer["Wait Time"] - (time.time() - LowestTimer["Start Time"])
 
-		Timer_List.remove(SleepingPlate)
+		if RemainingTime > 0:
+			HAMILTONIO.AddCommand(TIMER.Start({"WaitTime":RemainingTime}))
+			HAMILTONIO.AddCommand(TIMER.Wait({}))
+			Response = HAMILTONIO.SendCommands()
 
-		STEPS.ActivateContext(SleepingPlate["Step"].GetContext())
+		Timer_List.remove(LowestTimer)
 
-		SleepingPlate["Callback"](SleepingPlate["Step"])
+		if LowestTimer["Wait Only"] == False:
+			STEPS.ActivateContext(LowestTimer["Step"].GetContext())
+
+		LowestTimer["Callback"](LowestTimer["Step"])
 		#Calls our callback function
 
+def CheckForExpiredTimers():
+	if len(Timer_List) > 0:	
+		LowestTimer = GetLowestTimer()
+		if LowestTimer["Wait Time"] - (time.time() - LowestTimer["Start Time"]) <= 0:
+
+			Timer_List.remove(LowestTimer)
+
+			if LowestTimer["Wait Only"] == False:
+				STEPS.ActivateContext(LowestTimer["Step"].GetContext())
+
+			LowestTimer["Callback"](LowestTimer["Step"])
+			#Calls our callback function
 
 def Callback(step):
 	pass

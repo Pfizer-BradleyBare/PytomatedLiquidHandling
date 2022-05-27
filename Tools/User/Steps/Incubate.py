@@ -17,16 +17,15 @@ import time
 
 TITLE = "Incubate"
 TEMP = "Temp (C)"
+TEMPWAIT = "Wait For Temperature?"
 TIME = "Time (min)"
 SHAKE = "Shake (rpm)"
 #CORRECT = "Correct For Evaporation?"
 
-
-#List of incubation steps
+#List of all incubation steps
 Incubation_List = []
-Incubation_Num_List = []
-NumSimultaneousIncubations = None
-CurrentIncubationIDCounter = 0
+#List of incubations currently in progress (heating or otherwise)
+Ongoing_Incubations_List = []
 
 IsUsedFlag = False
 
@@ -42,56 +41,122 @@ def IsUsed():
 #	Returns: 
 #########################################################################
 def Init(MutableStepsList):
-	global Incubation_List
-	global Incubation_Num_List
 	global IsUsedFlag
-	global NumSimultaneousIncubations
-
-	IncubationCounter = 1
 
 	for Step in MutableStepsList:
-		if Step.GetTitle() == SPLIT_PLATE.TITLE:
-			IncubationCounter += 1
-
-		if Step.GetTitle() == TITLE:
-			
+		if Step.GetTitle() == TITLE:	
 			IsUsedFlag = True
-			
 			Incubation_List.append(Step)
-			Incubation_Num_List.append(IncubationCounter)
-
-	NumSimultaneousIncubations = IncubationCounter
+	#Just finding and tracking the incubations
 
 	StartHeaters()
 
-OngoingIncubationsCounter = 0
+Before_Liquid_Handling_Incubations = {}
+def StartHeatersCallback(step):
+	
+	for IncubationKey in Before_Liquid_Handling_Incubations:
+		Incubation = Before_Liquid_Handling_Incubations[IncubationKey]["Step"]
+		Temp = Incubation.GetParameters()[TEMP]
+		ParentPlate = Incubation.GetParentPlateName()
+
+		HAMILTONIO.AddCommand(HEATER.ConfirmReservation({"PlateName":ParentPlate,"Temperature":Temp}),False)
+	
+	Response = HAMILTONIO.SendCommands()
+	#Request the heating confirmation for all heaters
+
+	Time = time.time()
+	KeysList = list(Before_Liquid_Handling_Incubations)
+	ThawKeyList = []
+
+	for Index in range(0,len(Response)):
+		Incubation = Before_Liquid_Handling_Incubations[KeysList[Index]]["Step"]
+		StartTime = Before_Liquid_Handling_Incubations[KeysList[Index]]["Start Time"]
+		
+		Before_Liquid_Handling_Incubations[KeysList[Index]]["Wait Count"] += 1
+		WaitCount = Before_Liquid_Handling_Incubations[KeysList[Index]]["Wait Count"]
+
+		if int(Response[Index]["ReturnID"]) >= 0 or (Time - StartTime) >= 60*10 or WaitCount >= 10:
+			ThawKeyList.append(KeysList[Index])
+
+	for ThawKey in ThawKeyList:
+		Incubation = Before_Liquid_Handling_Incubations[ThawKey]["Step"]
+		del Before_Liquid_Handling_Incubations[ThawKey]
+		STEPS.ThawContext(STEPS.Class.GetContext(Incubation))
+	#Iterate over all heaters and responses. Thaw the incubation contexts that are ready or have expired
+
+	if len(Before_Liquid_Handling_Incubations) != 0:
+		keys = list(Before_Liquid_Handling_Incubations)
+		WAIT.StartTimer(Before_Liquid_Handling_Incubations[keys[0]]["Step"],1,StartHeatersCallback,True)
+	#Finally, we want to continue waiting on heaters that need to heat as indicated by the user
 
 def StartHeaters():
-	global Incubation_List
-	global Incubation_Num_List
-	global OngoingIncubationsCounter
-	global CurrentIncubationIDCounter
 
-	while(len(Incubation_List) != 0):
-		Incubation = Incubation_List.pop(0)
-		MaxNumIncubations = Incubation_Num_List.pop(0)
+	for Incubation in Incubation_List[:]:
+		IncubationContext = STEPS.Class.GetContext(Incubation)
+
+		SkipIncubation = False
+		for OngoingIncubation in Ongoing_Incubations_List:
+			OngoingIncubationContext = STEPS.Class.GetContext(OngoingIncubation)
+			
+			if OngoingIncubationContext in IncubationContext:
+				SkipIncubation = True
+				break
+			#The ongoing incubation will always be in the same context or the parent context of the new incubation FIY.
+		
+		if SkipIncubation == True:
+			continue
+		#The way we are doing this is clever. We are always going to try to heat as many pathways as we can. 
+		#However, we only want to heat one heater per pathway. So we are going to use the context to prevent multiple heating events on the same pathway.
+		#We also always start from the beginning of our incubations list so if there are limited heaters, we can pause a pathway and resume when heaters are available.
+
+		STEPS.UpdateStepParams(Incubation)
 
 		Params = Incubation.GetParameters()
 		Temp = Params[TEMP]
 		RPM = Params[SHAKE]
+		Wait = Params[TEMPWAIT]
 		ParentPlate = Incubation.GetParentPlateName()
 
-		if str(Temp).lower() != "Ambient".lower():
-			HAMILTONIO.AddCommand(HEATER.AcquireReservation({"PlateName":ParentPlate,"Temperature":Temp,"RPM":RPM}),False)
-			Response = HAMILTONIO.SendCommands()
+		if str(Temp).lower() == "Ambient".lower():
+			Incubation_List.remove(Incubation)
+			continue
+		#If the incubation is ambient at the time we try to heat then we will remove it from the list. This is because no heaters are being used.
 
-			CurrentIncubationIDCounter += 1
-			OngoingIncubationsCounter += 1
+		HAMILTONIO.AddCommand(HEATER.AcquireReservation({"PlateName":ParentPlate,"Temperature":Temp,"RPM":RPM}),False)
+		Response = HAMILTONIO.SendCommands()
 
-		if OngoingIncubationsCounter == MaxNumIncubations:
+		if not (Response == False) and int(Response[0]["ReturnID"]) < 0:
+			STEPS.FreezeContext(IncubationContext)
 			break
+			#we can now break out and end starting heaters. If no heaters are available it is not worth it to try to start all following incubations
+		#This is a failed command case. If an incubation fails. We need to prevent the pathway from occuring. We do not want anything to proceed until we can secure a heater.
 
+		Incubation_List.remove(Incubation)
+		Ongoing_Incubations_List.append(Incubation)
 
+		if Wait.lower() == "No".lower(): #or Wait.lower() == "Before Incubation".lower():
+			try:
+				STEPS.ThawContext(IncubationContext)
+			except:
+				pass
+			#It is possible that we never Froze the context. So we want to catch the error that will enivitably occur during that situation
+			continue
+		#Incubation has started and we do not need to wait for heating! Great! Let's try to start another heating if possible
+
+		HAMILTONIO.AddCommand(HEATER.ConfirmReservation({"PlateName":ParentPlate,"Temperature":Temp}))
+		Response = HAMILTONIO.SendCommands()
+
+		if not (Response == False) and int(Response[0]["ReturnID"]) < 0:
+			Before_Liquid_Handling_Incubations[str(STEPS.Class.GetCoordinates(Incubation))] = {"Start Time":time.time(), "Wait Count":0, "Step":Incubation}
+			STEPS.FreezeContext(IncubationContext)
+		#Now if the user wants to stall liquid handling it is almost always guarenteed that the temp will not be within range. 
+		#We still check incase the previous and new temp are the same, but if not we will add the step to the waiting list.
+		#The waiting list will wait for a max time before timeout then proceed. This ensures the temp gets close to or reaches the user set temp
+	
+	if len(Before_Liquid_Handling_Incubations) != 0:
+		keys = list(Before_Liquid_Handling_Incubations)
+		WAIT.StartTimer(Before_Liquid_Handling_Incubations[keys[0]]["Step"],1,StartHeatersCallback,True)
+	#Finally, we want to continue waiting on heaters that need to heat as indicated by the user
 
 def AmbientCallback(step):
 
@@ -180,8 +245,7 @@ def HeatingCallback(step):
 	HAMILTONIO.AddCommand(LID.ReleaseReservation({"PlateName":ParentPlate}),False)
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the lid then plate then release all reservations
-	
-	OngoingIncubationsCounter -= 1
+
 	StartHeaters()
 
 def Step(step):

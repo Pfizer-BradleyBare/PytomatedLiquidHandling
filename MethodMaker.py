@@ -147,6 +147,9 @@ Steps = {
 
 while(True):
 
+	WAIT.CheckForExpiredTimers()
+	#Wait is async, but we need to ensure that we are not pausing a context that is ready to continue running.
+
 	Step = STEPS.GetNextStep()
 
 	if Step == None:

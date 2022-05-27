@@ -11,6 +11,12 @@ def DeactivateContext(Context):
 def GetNumActiveContexts():
 	return len(ActiveContextTracker)
 
+FrozenContextTracker = set()
+def FreezeContext(Context):
+	FrozenContextTracker.add(Context)
+def ThawContext(Context):
+	FrozenContextTracker.remove(Context)
+
 Unfiltered_Steps_List = []
 Steps_List = []
 Temp_Steps_List = []
@@ -31,7 +37,7 @@ def GetNextStep():
 	for step in Temp_Steps_List:
 		Context = step.GetContext()
 
-		if Context in ActiveContextTracker:
+		if Context in ActiveContextTracker and not (Context in FrozenContextTracker):
 			Current_Step = copy.deepcopy(step)
 			Temp_Steps_List.remove(step)
 			return copy.deepcopy(step)

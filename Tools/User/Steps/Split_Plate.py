@@ -7,8 +7,8 @@ import copy
 
 TITLE = "Split Plate"
 CHOICE = "Plate Choice"
-NAME_1 = "Plate Name 1"
-NAME_2 = "Plate Name 2"
+NAME_1 = "Pathway 1"
+NAME_2 = "Pathway 2"
 
 IsUsedFlag = False
 
