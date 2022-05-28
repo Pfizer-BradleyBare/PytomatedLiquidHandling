@@ -17,11 +17,8 @@ def Init():
 	pass
 
 def Step(step):
-	LOG.BeginCommentsLog()
 	
 	Parameters = step.GetParameters()
-
-	LOG.EndCommentsLog()
 
 	HAMILTONIO.AddCommand(NOTIFY.NotifyContacts({"Subject":Parameters[SUBJECT],"Body":Parameters[MESSAGE],"Wait":Parameters[WAIT_ON_USER]}))
 

@@ -158,9 +158,6 @@ def Step(step):
 	global RepsCompleted
 	RepsCompleted = 1
 
-	LOG.BeginCommentsLog()
-	LOG.EndCommentsLog()
-
 	Params = step.GetParameters()
 	BeadsPlate = Params[MAGNETIC_BEADS_PLATE]
 	Time = Params[WAIT_TIME]

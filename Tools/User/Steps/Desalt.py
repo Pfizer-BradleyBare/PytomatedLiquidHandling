@@ -135,7 +135,6 @@ def Step(step):
 
 	StepKey = step.GetParentPlateName() + str(step.GetCoordinates())
 
-	LOG.BeginCommentsLog()
 	EQ_Labware = PLATES.LABWARE.GetLabware(EQ_Destination)
 	EQ_Labware.SetIsIMCSSizeXDesalting()
 
@@ -154,9 +153,6 @@ def Step(step):
 	Desalting_Params[StepKey]["Positions"] = Sequence.GetDestinationPositions()
 
 	Equilibrate(StepKey)
-	LOG.EndCommentsLog()
-
-	LOG.BeginCommentsLog()
 
 	DestinationLabware = PLATES.LABWARE.GetLabware(Sample_Destination)
 	DestinationLabware.SetIsIMCSSizeXDesalting()
@@ -170,6 +166,5 @@ def Step(step):
 
 	Sequence = PLATES.CreatePipetteSequence(DestinationContextualStrings,DestinationNames,SourceContextualStrings,SourceNames,SourceVolumes,MixingParameters, False)
 	Process(StepKey)
-	LOG.EndCommentsLog()
 
 	

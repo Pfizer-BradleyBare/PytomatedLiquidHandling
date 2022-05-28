@@ -14,11 +14,8 @@ def Init():
 	pass
 		
 def Step(step):
-	LOG.BeginCommentsLog()
 
 	STEPS.DeactivateContext(step.GetContext())
-
-	LOG.EndCommentsLog()
 	
 	if STEPS.GetNumActiveContexts() == 0:
 		WAIT.WaitForTimer()

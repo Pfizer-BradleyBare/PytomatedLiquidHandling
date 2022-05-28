@@ -19,7 +19,6 @@ def Init(MutableStepsList):
 	pass
 
 def Step(step):
-	LOG.BeginCommentsLog()
 
 	PlateName = step.GetParameters()[NAME]
 	PlateType = step.GetParameters()[TYPE]
@@ -34,5 +33,3 @@ def Step(step):
 
 	STEPS.DeactivateContext(step.GetContext())
 	STEPS.ActivateContext(step.GetContext()  + ":" + PlateName)
-	
-	LOG.EndCommentsLog()

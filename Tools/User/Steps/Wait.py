@@ -58,8 +58,8 @@ def WaitForTimer():
 		RemainingTime = LowestTimer["Wait Time"] - (time.time() - LowestTimer["Start Time"])
 
 		if RemainingTime > 0:
-			HAMILTONIO.AddCommand(TIMER.Start({"WaitTime":RemainingTime}))
-			HAMILTONIO.AddCommand(TIMER.Wait({}))
+			HAMILTONIO.AddCommand(TIMER.Start({"WaitTime":RemainingTime}), not LowestTimer["Wait Only"])
+			HAMILTONIO.AddCommand(TIMER.Wait({}), not LowestTimer["Wait Only"])
 			Response = HAMILTONIO.SendCommands()
 
 		Timer_List.remove(LowestTimer)
@@ -87,9 +87,7 @@ def Callback(step):
 	pass
 
 def Step(step):
-	LOG.BeginCommentsLog()
 	StartTimer(step.GetParentPlate(), step[TIME], Callback)
-	LOG.EndCommentsLog()
 
 
 

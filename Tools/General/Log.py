@@ -3,16 +3,10 @@ from ..General import HamiltonIO as HAMILTONIO
 from ..User import Samples as SAMPLES
 import math
 
-PRERUN_SHEET = "TestLog"
-TRUERUN_SHEET = "RunLog"
-
-STEP_IDENTIFIER = "Step Title:"
-LATEST_STEP_INFO = {}
-
 LOG_ROW_START = 2
 LOG_COL_START = 2
-LOG_ROW_END = 5000
-LOG_COL_END = 5
+LOG_ROW_END = 25000
+LOG_COL_END = 105
 
 LOG_COL_STEP = 0
 LOG_COL_COMMENTS = 1
@@ -22,157 +16,146 @@ LOG_COL_HAMILTON = 3
 LOG_ROW_PADDING = 1
 LOG_NEXT_LINE_PADDING = 4
 
-TrueRunRow = LOG_ROW_START
-CurrentRow = LOG_ROW_START
 LogSheet = None
+Log = None
+LogNextEmptyIndex = 0
+CommandLogCounter = 0
+#These are the new variables
 
-LogExists = True
-
-GeneralCommentCounter = 0
-
-StepCounter = 1
-CommandCounter = 0
-
-def GetStepID():
-	global StepCounter
-	return "##" + str(StepCounter) + "##"
-
-def GetCommandID():
-	global StepCounter
-	global CommandCounter
-	return "##" + str(StepCounter) + "." + str(CommandCounter) + "##"
-
-def Exists():
-	global LogExists
-	return LogExists
-
-def GetLatestStep():
-	global LATEST_STEP_INFO
-	return LATEST_STEP_INFO
-
-def BeginStepLog():
-	global StepCounter
-	global CommandCounter
-	global CurrentRow
-	global LOG_NEXT_LINE_PADDING
-	CurrentRow += LOG_NEXT_LINE_PADDING
-	StepCounter += 1
-	CommandCounter = 0
-
-def EndStepLog():
-	return
-
-def BeginCommandLog():
-	global CommandCounter
-	global CurrentRow
-	CurrentRow += LOG_ROW_PADDING
-	CommandCounter += 1
-
-def EndCommandLog():
-	return
-
-def BeginCommentsLog():
-	global CommandCounter
-	global CurrentRow
-	CurrentRow += LOG_ROW_PADDING
-
-def EndCommentsLog():
-	global GeneralCommentCounter
-	if GeneralCommentCounter == 0:
-		Comment("Test")
-	GeneralCommentCounter = 0
-	return
-######################################################################### 
-#	Description: Initializes the library by pulling information from Config files
-#	Input Arguments: N/A
-#	Returns: N/A
-#########################################################################
-def Init():
-	global PRERUN_SHEET
-	global TRUERUN_SHEET
+def Init(LogSheetName, ResetSheet):
 	global LogSheet
-	global TrueRunRow
-	global CurrentRow
-	global LogExists
-	global STEP_IDENTIFIER
-	global LATEST_STEP_INFO
+	global Log
+	global CommandLogCounter
+	global LogNextEmptyIndex
 
-	try:
-		EXCELIO.Pull(TRUERUN_SHEET,1,1,1,1)
-	except:
-		LogExists = False
+	CommandLogCounter = 0
+	LogNextEmptyIndex = 0
+	LogSheet = LogSheetName
 
-	if HAMILTONIO.IsSimulated() == True:
-		LogSheet = PRERUN_SHEET
-		try:
-			EXCELIO.DeleteSheet(LogSheet)
-			pass
-		except:
-			pass
-		EXCELIO.CreateSheet(LogSheet)
-	else:
-		LogSheet = TRUERUN_SHEET
-		try:
-			LogExists = True
-			EXCELIO.Pull(TRUERUN_SHEET,1,1,1,1)
-		except:
-			LogExists = False
-			EXCELIO.CreateSheet(LogSheet)
-	#This is a mess... I got nothing here
-
-	if LogExists == True:
-		Log = EXCELIO.Pull(TRUERUN_SHEET, LOG_ROW_START, LOG_COL_START, LOG_ROW_END, LOG_COL_END, n=2)
-		for RowIndex in range(0,len(Log)):
-			for Col in Log[RowIndex]:
-				if Col != None:
-					TrueRunRow = RowIndex + LOG_ROW_START
-		#If the sheet exists then we need to find the end of the sheet so we can continue to append log information
-
-		for RowIndex in range(TrueRunRow - LOG_ROW_START, 0, -1):
-			if Log[RowIndex][LOG_COL_STEP] != None and STEP_IDENTIFIER in Log[RowIndex][LOG_COL_STEP]:
-				LATEST_STEP_INFO["Title"] = Log[RowIndex][LOG_COL_STEP]
-				LATEST_STEP_INFO["Coordinates"] = Log[RowIndex+1][LOG_COL_STEP]
-				break
-		#We know the end of the sheet. So lets work backward until we find the last step run.
-	if HAMILTONIO.IsSimulated() == False:
-		CurrentRow = TrueRunRow
-
-LogList = []
-def NewLogInit():
-	pass
-
-def CommandInLog(Command):
-	if HAMILTONIO.IsSimulated() == True:
-		return False
-
-	ID = GetCommandID()
+	if ResetSheet == True:
+		EXCELIO.DeleteSheet(LogSheet)
+	EXCELIO.CreateSheet(LogSheet)
 
 	Log = EXCELIO.Pull(LogSheet, LOG_ROW_START, LOG_COL_START, LOG_ROW_END, LOG_COL_END, n=2)
+	#The first thing we want to do is pull the log. Now when we execute steps we can look for the existance of that step
+	
+	while True:
+		
+		LogSlice = Log[LogNextEmptyIndex:LogNextEmptyIndex+10]
+		if all(Cell is None for Row in LogSlice for Cell in Row) == True:
+			break
 
-	for Row in Log:
-		for Col in Row:
-			if ID == Col:
-				print("True")
-				return True
-	print("False")
-	return False
+		LogNextEmptyIndex += 1
+	#This will take a slice of 10 rows from the log, if all values are "None" then we can be confident we found the end of the log.
 
-def StepInLog(Command):
 
-	if HAMILTONIO.IsSimulated() == True:
-		return False
+FlushRowRanges = []
+FlushColRanges = []
+def UpdateLog(StartRow, StartCol, Array2D):
+	global LogNextEmptyIndex
 
-	global LogSheet
+	WriteRow = StartRow
+	WriteCol = StartCol
 
-	ID = GetStepID()
+	FlushRowRanges.append(WriteRow)
+	FlushColRanges.append(WriteCol)
 
-	Log = EXCELIO.Pull(LogSheet, LOG_ROW_START, LOG_COL_START, LOG_ROW_END, LOG_COL_END, n=2)
+	for Row in Array2D:
+		WriteCol = StartCol
+		for Item in Row:
+			Log[WriteRow][WriteCol] = Item
+			WriteCol += 1
+		WriteRow += 1
+	
+	FlushRowRanges.append(WriteRow)
+	FlushColRanges.append(WriteCol)
 
-	for Row in Log:
-		for Col in Row:
-			if ID == Col:
-				return True
-	return False
+	LogNextEmptyIndex += WriteRow - StartRow
+
+def PublishLog():
+	global FlushColRanges
+	global FlushRowRanges
+
+	MinRow = min(FlushRowRanges)
+	MaxRow = max(FlushRowRanges)
+	MinCol = min(FlushColRanges)
+	MaxCol = max(FlushColRanges)
+	#We do not want to flush every line to the excel file. Only the areas that were updated. So lets find the min and max row and col
+
+	FlushRowRanges = []
+	FlushColRanges = []
+
+	FlushArray = [Log[i][MinCol:MaxCol] for i in range(MinRow,MaxRow)]
+
+	EXCELIO.WriteSheet(LogSheet,MinRow + LOG_ROW_START, MinCol + LOG_COL_START, FlushArray)
+
+
+def LogStep(Step):
+	global LogNextEmptyIndex
+
+	printArray = []
+
+	printArray.append(["Step Title: " + Step.GetTitle()])
+	Coords = Step.GetCoordinates()
+	printArray.append(["Excel Location (Row,Col): (" + str(Coords[0]) + "," + str(Coords[1]) + ")"])
+
+	StepParams = Step.GetParameters()
+	for Param in StepParams:
+		In = SAMPLES.InColumn(StepParams[Param])
+		LogString = Param + ": " + str(StepParams[Param])
+		if In == True:
+			LogString += " (Worklist Column) "
+		printArray.append([LogString])
+
+	LogNextEmptyIndex += LOG_NEXT_LINE_PADDING
+	#Padding so the log is easier to look at
+
+	UpdateLog(LogNextEmptyIndex,LOG_COL_STEP,printArray)
+
+def LogFindStep(Step):
+	Coords = Step.GetCoordinates()
+	SearchValue = "Excel Location (Row,Col): (" + str(Coords[0]) + "," + str(Coords[1]) + ")"
+
+	for Row in range (0,LogNextEmptyIndex):
+		if Log[Row][LOG_COL_STEP] == SearchValue:
+			return Row
+	return -1
+
+def LogIncrementCommandCounter():
+	global CommandLogCounter
+	CommandLogCounter += 1
+	return CommandLogCounter
+
+def LogCommand(CommandString):
+	global LogNextEmptyIndex
+
+	printArray = []
+
+	while True:
+		CommandLineEnd = CommandString.find("[",1)
+		if CommandLineEnd == -1:
+			printArray.append(CommandString[:].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
+			break
+		else:
+			printArray.append(CommandString[:CommandLineEnd].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
+		CommandString = CommandString[CommandLineEnd:]
+	
+	printArray.append(["##ID - " + str(CommandLogCounter)])
+
+	MaxLength = max(len(Command) for Command in printArray)
+	printArray = [Command + [""]*(MaxLength - len(Command)) for Command in printArray]
+
+	LogNextEmptyIndex += LOG_ROW_PADDING
+	#Padding so the log is easier to look at
+
+	UpdateLog(LogNextEmptyIndex,LOG_COL_COMMAND,printArray)
+
+def LogFindCommand(CommandID):
+
+	for Row in range (0,LogNextEmptyIndex):
+		if str(Log[Row][LOG_COL_COMMAND]) == str(CommandID):
+			return Row
+	return -1
 
 def HandleResponse(Response):
 	RUN_BEGINNING = "Run From Beginning of Method"
@@ -215,67 +198,6 @@ def HandleResponse(Response):
 			StepsToRemove -= 1
 
 	EXCELIO.Push(TRUERUN_SHEET, LOG_ROW_START, LOG_COL_START, LOG_ROW_START, LOG_COL_START, Log[:TrueRunRow])
-
-def Comment(Comments):
-	global CurrentRow
-	global GeneralCommentCounter
-	GeneralCommentCounter += 1
-	EXCELIO.WriteSheet(LogSheet,CurrentRow,LOG_COL_COMMENTS + LOG_COL_START,[[Comments]])
-	CurrentRow += 1
-
-def Step(Step):
-	global LogSheet
-	global CurrentRow
-
-	printArray = []
-
-	printArray.append(["Step Title: " + Step.GetTitle()])
-	Coords = Step.GetCoordinates()
-	printArray.append(["Excel Location (Row,Col): (" + str(Coords[0]) + "," + str(Coords[1]) + ")"])
-
-	StepParams = Step.GetParameters()
-	for Param in StepParams:
-		In = SAMPLES.InColumn(StepParams[Param])
-		LogString = Param + ": " + str(StepParams[Param])
-		if In == True:
-			LogString += " (Worklist Column) "
-		printArray.append([LogString])
-
-	EXCELIO.WriteSheet(LogSheet,CurrentRow,LOG_COL_STEP + LOG_COL_START,printArray)
-	CurrentRow += len(printArray)
-
-def Command(Command):
-	global LogSheet
-	global CurrentRow
-
-	printArray = []
-
-	while True:
-		CommandLineEnd = Command.find("[",1)
-		if CommandLineEnd == -1:
-			printArray.append(Command[:].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
-			break
-		else:
-			printArray.append(Command[:CommandLineEnd].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
-		Command = Command[CommandLineEnd:]
-
-	MaxLength = max(len(Command) for Command in printArray)
-	printArray = [Command + [""]*(MaxLength - len(Command)) for Command in printArray]
-
-	EXCELIO.WriteSheet(LogSheet,CurrentRow,LOG_COL_COMMAND + LOG_COL_START,printArray)
-
-	CurrentRow += len(printArray)
-
-def CommandID():
-	global LogSheet
-	global CurrentRow
-
-	EXCELIO.WriteSheet(LogSheet,CurrentRow,LOG_COL_COMMAND + LOG_COL_START,[[GetCommandID()]])
-	CurrentRow += 1
-
-
-def Hamilton(IDKHowToDoThisLOL):
-	pass
 
 
 

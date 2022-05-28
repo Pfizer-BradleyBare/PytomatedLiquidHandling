@@ -70,7 +70,8 @@ print("Init Classes")
 EXCELIO.Init(Excel_File_Path)
 HAMILTONIO.Init()
 HAMILTONIO.Simulated(Initialization_Run)
-LOG.Init()
+#LOG.Init()
+LOG.Init("NewLog",True)
 #init IOs
 
 #
@@ -161,17 +162,18 @@ while(True):
 	# If it is 0 then the plate is not used by any samples.
 	#We do not want to skip a merge plates step no matter what.
 
-	print("\n",Step)
-
-	LOG.BeginStepLog()
 	STEPS.UpdateStepParams(Step)
 	PLATES.LABWARE.GetExcelLabwareInfo()
 	#This updates the actual step parameters at time the step is run. This allows for method development in real time
 
-	LOG.Step(Step)
+	print("\n",Step)
+
+	if LOG.LogFindStep(Step) == -1:
+		LOG.LogStep(Step)
+		LOG.PublishLog()
+
 	Steps[Step.GetTitle()](Step)
 	#This does the step
-	LOG.EndStepLog()
 #do each step
 
 print("\n\n\n\n")
@@ -220,10 +222,10 @@ if HAMILTONIO.IsSimulated() == True:
 
 	Response = HAMILTONIO.SendCommands()
 
-	if LOG.Exists() and TestRun == False and len(LOG.GetLatestStep()) != 0:
-		HAMILTONIO.AddCommand(PRERUN.LOG.PreRun(LOG.GetLatestStep()),False)
-		Response = HAMILTONIO.SendCommands()
-		LOG.HandleResponse(Response[0])
+	#if LOG.Exists() and TestRun == False and len(LOG.GetLatestStep()) != 0:
+	#	HAMILTONIO.AddCommand(PRERUN.LOG.PreRun(LOG.GetLatestStep()),False)
+	#	Response = HAMILTONIO.SendCommands()
+	#	LOG.HandleResponse(Response[0])
 	#initialize all the Hamilton Libraries.
 
 

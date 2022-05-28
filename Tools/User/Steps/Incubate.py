@@ -143,7 +143,7 @@ def StartHeaters():
 			continue
 		#Incubation has started and we do not need to wait for heating! Great! Let's try to start another heating if possible
 
-		HAMILTONIO.AddCommand(HEATER.ConfirmReservation({"PlateName":ParentPlate,"Temperature":Temp}))
+		HAMILTONIO.AddCommand(HEATER.ConfirmReservation({"PlateName":ParentPlate,"Temperature":Temp}),True)
 		Response = HAMILTONIO.SendCommands()
 
 		if not (Response == False) and int(Response[0]["ReturnID"]) < 0:
@@ -249,8 +249,6 @@ def HeatingCallback(step):
 	StartHeaters()
 
 def Step(step):
-	LOG.BeginCommentsLog()
-	LOG.EndCommentsLog()
 	
 	STATUS_UPDATE.AppendText("Incubate at " + str(step.GetParameters()[TEMP]) + " C for " + str(step.GetParameters()[TIME]) + " min")
 	

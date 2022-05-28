@@ -28,8 +28,6 @@ def Init(MutableStepsList):
 def Step(step):
 	global MergeSteps
 
-	LOG.BeginCommentsLog()
-
 	ParentPlate = step.GetParentPlateName()
 	Context = step.GetContext()
 	WaitingPlate = step.GetParameters()[NAME]
@@ -62,5 +60,3 @@ def Step(step):
 
 	WAIT.WaitForTimer()
 	#This basically acts as an asynchronous wait function.
-
-	LOG.EndCommentsLog()

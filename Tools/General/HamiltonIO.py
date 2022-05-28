@@ -42,17 +42,13 @@ def IsSimulated():
 
 CommandsList = []
 def AddCommand(CommandString, Log=True):
-	global CommandsList
 
-	LOG.BeginCommandLog()
+	CommandID = LOG.LogIncrementCommandCounter()
 
-	if LOG.CommandInLog(CommandString) != True:
-		LOG.Command(CommandString)
+	if LOG.LogFindCommand(CommandID) == -1:
+		LOG.LogCommand(CommandString)
 		CommandsList.append(CommandString)
-		if Log == True:
-			LOG.CommandID()
-
-	LOG.EndCommandLog()
+		LOG.PublishLog()
 
 ######################################################################### 
 #	Description: Pushes a command to the communication channel for the Hamilton.

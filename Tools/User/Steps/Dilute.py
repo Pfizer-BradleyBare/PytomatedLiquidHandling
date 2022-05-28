@@ -35,8 +35,6 @@ def Step(step):
 	#We need to solve for Source Volume
 	#V1 = (C2*V2)/C1
 
-	LOG.BeginCommentsLog()
-
 	StepParameters = STEPS.Class.GetParameters(step)
 	TargetConcentrationList = SAMPLES.Column(StepParameters[TARGET_CONCENTRATION])
 	TargetVolumeList = SAMPLES.Column(StepParameters[TARGET_VOLUME])
@@ -57,12 +55,12 @@ def Step(step):
 			MaxSourceVolumeList[VolIndex] = TargetVolumeList[VolIndex]
 
 		if SourceVolumeList[VolIndex] > MaxSourceVolumeList[VolIndex] or DiluentVolumeList[VolIndex] < 0:
-			LOG.Comment("Volume is out of range for Position " + str(SAMPLES.GetContextualSequences(DestinationContextStrings[VolIndex])[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source): 0 < " + str(SourceVolumeList[VolIndex]) + " < " + str(MaxSourceVolumeList[VolIndex]))
+			#LOG.Comment("Volume is out of range for Position " + str(SAMPLES.GetContextualSequences(DestinationContextStrings[VolIndex])[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source): 0 < " + str(SourceVolumeList[VolIndex]) + " < " + str(MaxSourceVolumeList[VolIndex]))
 			SourceVolumeList[VolIndex] = MaxSourceVolumeList[VolIndex]
 			DiluentVolumeList[VolIndex] = TargetVolumeList[VolIndex] - MaxSourceVolumeList[VolIndex]
 
 		if DiluentVolumeList[VolIndex] > TargetVolumeList[VolIndex] or SourceVolumeList[VolIndex] < 0:
-			LOG.Comment("Volume is out of range for Position " + str(SAMPLES.GetContextualSequences(DestinationContextStrings[VolIndex])[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source): 0 < " + str(SourceVolumeList[VolIndex]) + " < " + str(TargetVolumeList[VolIndex]))
+			#LOG.Comment("Volume is out of range for Position " + str(SAMPLES.GetContextualSequences(DestinationContextStrings[VolIndex])[VolIndex]) + ". Performing automatic correction to upper and lower limits. (Source): 0 < " + str(SourceVolumeList[VolIndex]) + " < " + str(TargetVolumeList[VolIndex]))
 			DiluentVolumeList[VolIndex] = TargetVolumeList[VolIndex]
 			SourceVolumeList[VolIndex] = 0
 	#check for ridiculous pipetting volumes and correct it. User should ideally never input something ridiculous
@@ -86,8 +84,6 @@ def Step(step):
 			FirstSourceList.append(DiluentList[index])
 			FirstVolumeList.append(DiluentVolumeList[index])
 	#We want to pipette the highest volume first for each sample no matter what.
-
-	LOG.EndCommentsLog()
 
 	FirstSourceContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,FirstSourceList)
 	SecondSourceContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,SecondSourceList)

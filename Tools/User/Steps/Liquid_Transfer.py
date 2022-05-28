@@ -24,7 +24,6 @@ def Init():
 	pass
 
 def Step(step):
-	LOG.BeginCommentsLog()
 	
 	DestinationPlateName = STEPS.Class.GetParentPlateName(step)
 
@@ -38,9 +37,8 @@ def Step(step):
 	Sequence = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,MixingList)
 
 	if Sequence.GetNumSequencePositions() == 0:
-		LOG.Comment("Number of sequences is zero so no liquid transfer will actually occur.")
-
-	LOG.EndCommentsLog()
+		#LOG.Comment("Number of sequences is zero so no liquid transfer will actually occur.")
+		pass
 
 	if Sequence.GetNumSequencePositions() != 0:
 

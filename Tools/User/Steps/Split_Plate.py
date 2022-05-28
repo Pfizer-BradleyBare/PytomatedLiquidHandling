@@ -28,8 +28,6 @@ def Init(MutableStepsList):
 			
 
 def Step(step):
-	LOG.BeginCommentsLog()
-
 	Choices = SAMPLES.Column(step.GetParameters()[CHOICE])
 
 	NewPlate1 = step.GetParameters()[NAME_1]
@@ -93,5 +91,3 @@ def Step(step):
 	STEPS.DeactivateContext(step.GetContext())
 	STEPS.ActivateContext(step.GetContext() + ":" + NewPlate1)
 	STEPS.ActivateContext(step.GetContext() + ":" + NewPlate2)
-
-	LOG.EndCommentsLog()
