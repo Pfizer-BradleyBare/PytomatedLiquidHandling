@@ -90,14 +90,9 @@ def Equilibrate(ParentPlate):
 	Params = Desalting_Params[ParentPlate]
 
 	if Params["EQ"] == False:
-		LOG.Comment("Performing Desalting Equilibration")
 		Params["EQ"] = True
-		LOG.BeginCommandLog()
 		HAMILTONIO.AddCommand(DESALT.Equilibrate({"ParentPlate":ParentPlate, "StartPosition":SAMPLES.StartPosition}))
 		Response = HAMILTONIO.SendCommands()
-		LOG.EndCommandLog()
-	else:
-		LOG.Comment("Equilibration already performed. Skipping Equilibration")
 		
 	STATUS_UPDATE.AppendText("Performing Desalting Equilibration and Desalting Samples")	
 
@@ -113,10 +108,8 @@ def Process(ParentPlate):
 
 	#STATUS_UPDATE.AppendText("Performing Desalting Equilibration and Desalting Samples")
 	Params["EQ"] = False
-	LOG.BeginCommandLog()
 	HAMILTONIO.AddCommand(DESALT.Process({"ParentPlate":ParentPlate, "StartPosition":SAMPLES.StartPosition}))
 	Response = HAMILTONIO.SendCommands()
-	LOG.EndCommandLog()
 	
 ######################################################################### 
 #	Description: Runs equilibration and processing

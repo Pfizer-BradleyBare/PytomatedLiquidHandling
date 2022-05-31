@@ -48,6 +48,7 @@ def Init(LogSheetName, ResetSheet):
 		LogNextEmptyIndex += 1
 	#This will take a slice of 10 rows from the log, if all values are "None" then we can be confident we found the end of the log.
 
+	Log = Log [:LogNextEmptyIndex]
 
 FlushRowRanges = []
 FlushColRanges = []
