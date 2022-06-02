@@ -77,16 +77,16 @@ LOG.Init("NewLog",True)
 #
 # The first thing I want to do is check that the method is validated. If it is not then we will exit and inform the user.
 #
-ValidatedStatus = EXCELIO.GetMethodValidatedStatus()
-if  ValidatedStatus == "Blocks":
-	EXCELIO.CreateMessageBox("Hi! There is a validation issue with the Building Blocks. Please close and reopen the workbook to fix. If that doesn't work, please contact a Hamilton SME.", "Blocks Validation Failed")
-	quit()
-elif ValidatedStatus == "Actions":
-	EXCELIO.CreateMessageBox("Hi! There is a validation issue with the method. Please check the method sheet for red cells and correct it.", "Method Validation Failed")
-	quit()
-elif ValidatedStatus == "Solutions":
-	EXCELIO.CreateMessageBox("Hi! There is a validation issue with the Solutions. Please check the Solutions sheet for red cells and correct it.", "Solutions Validation Failed")
-	quit()
+#ValidatedStatus = EXCELIO.GetMethodValidatedStatus()
+#if  ValidatedStatus == "Blocks":
+#	EXCELIO.CreateMessageBox("Hi! There is a validation issue with the Building Blocks. Please close and reopen the workbook to fix. If that doesn't work, please contact a Hamilton SME.", "Blocks Validation Failed")
+#	quit()
+#elif ValidatedStatus == "Actions":
+#	EXCELIO.CreateMessageBox("Hi! There is a validation issue with the method. Please check the method sheet for red cells and correct it.", "Method Validation Failed")
+#	quit()
+#elif ValidatedStatus == "Solutions":
+#	EXCELIO.CreateMessageBox("Hi! There is a validation issue with the Solutions. Please check the Solutions sheet for red cells and correct it.", "Solutions Validation Failed")
+#	quit()
 
 
 CONFIGURATION.Init()
@@ -168,9 +168,11 @@ while(True):
 
 	print("\n",Step)
 
-	if LOG.LogFindStep(Step) == -1:
-		LOG.LogStep(Step)
-		LOG.PublishLog()
+	LOG.LogStep(Step)
+	LOG.PublishLog()
+	LOG.LogComment(Step,"TEST")
+	LOG.LogComment(Step,"TEST2")
+	#LOG.LogMethodComment(Step,"TEST")
 
 	Steps[Step.GetTitle()](Step)
 	#This does the step

@@ -41,14 +41,15 @@ def IsSimulated():
 	return SimulatedIO
 
 CommandsList = []
-def AddCommand(CommandString, Log=True):
+def AddCommand(CommandString, CommandNotRepeatable=True):
 
-	CommandID = LOG.LogIncrementCommandCounter()
+	CommandID = LOG.LogCommand(CommandString)
 
-	if LOG.LogFindCommand(CommandID) == -1:
-		LOG.LogCommand(CommandString)
-		CommandsList.append(CommandString)
-		LOG.PublishLog()
+	if LOG.LogCommandIsExecuted(CommandID) == False:
+		CommandsList.append({"Command ID":CommandID,"Not Repeatable Flag":CommandNotRepeatable,"Command String":CommandString})
+		LOG.LogCommandInProgress(CommandID)
+	
+	return CommandID
 
 ######################################################################### 
 #	Description: Pushes a command to the communication channel for the Hamilton.
@@ -62,13 +63,9 @@ def SendCommands():
 	#Create the command list to send
 	Command = ""
 	for CommandString in CommandsList:
-		Command = Command + CommandString + "\n"
-
-	#Reset CommandsList
-	CommandsList = []
+		Command = Command + CommandString["Command String"] + "\n"
 
 	#Send the command list
-	global SimulatedIO
 	if SimulatedIO == False and Command != "":
 		file = open(HAMILTON_COMMAND_TEMP_FILE, "w")
 		file.write(Command)
@@ -96,7 +93,32 @@ def SendCommands():
 			file.close()
 			os.rename(HAMILTON_COMMAND_TEMP_FILE, HAMILTON_COMMAND_FILE)
 			quit()
+		
+		for ResponseDict,CommandDict in Response,CommandsList:
+			CommandID = CommandDict["Command ID"]
+			LOG.LogCommandResponse(CommandID, ResponseDict)
+
+			if CommandDict["Not Repeatable Flag"] == True:
+				LOG.LogCommandExecuted(CommandID)
+			else:
+				LOG.LogCommandExecutedRepeatable(CommandID)
+		
+		#Reset CommandsList
+		CommandsList = []
+	
 		return Response
+
+	for CommandDict in CommandsList:
+		CommandID = CommandDict["Command ID"]
+		LOG.LogCommandResponse(CommandID, {"ReturnID":"Simulation Mode, No Return ID", "ReturnMessage":"Simulation Mode, No Return Message", "Response":"Simulation Mode, No Response"})
+		if CommandDict["Not Repeatable Flag"] == True:
+			LOG.LogCommandExecuted(CommandID)
+		else:
+			LOG.LogCommandExecutedRepeatable(CommandID)
+
+	#Reset CommandsList
+	CommandsList = []
+	
 	return False
 
 def EndCommunication():

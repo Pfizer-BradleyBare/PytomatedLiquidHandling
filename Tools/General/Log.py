@@ -5,8 +5,8 @@ import math
 
 LOG_ROW_START = 2
 LOG_COL_START = 2
-LOG_ROW_END = 25000
-LOG_COL_END = 105
+LOG_ROW_END = 50000
+LOG_COL_END = 110
 
 LOG_COL_STEP = 0
 LOG_COL_COMMENTS = 1
@@ -20,15 +20,16 @@ LogSheet = None
 Log = None
 LogNextEmptyIndex = 0
 CommandLogCounter = 0
+FlushRowRanges = []
+LogNumStepComments = 0
+LogNumStepLines = 0
 #These are the new variables
 
 def Init(LogSheetName, ResetSheet):
 	global LogSheet
 	global Log
-	global CommandLogCounter
 	global LogNextEmptyIndex
 
-	CommandLogCounter = 0
 	LogNextEmptyIndex = 0
 	LogSheet = LogSheetName
 
@@ -38,7 +39,7 @@ def Init(LogSheetName, ResetSheet):
 
 	Log = EXCELIO.Pull(LogSheet, LOG_ROW_START, LOG_COL_START, LOG_ROW_END, LOG_COL_END, n=2)
 	#The first thing we want to do is pull the log. Now when we execute steps we can look for the existance of that step
-	
+
 	while True:
 		
 		LogSlice = Log[LogNextEmptyIndex:LogNextEmptyIndex+10]
@@ -48,53 +49,63 @@ def Init(LogSheetName, ResetSheet):
 		LogNextEmptyIndex += 1
 	#This will take a slice of 10 rows from the log, if all values are "None" then we can be confident we found the end of the log.
 
-	Log = Log [:LogNextEmptyIndex]
+	Log = Log[:LogNextEmptyIndex]
+	Log = [Row + [None]*(5 - len(Row)) for Row in Log]
 
-FlushRowRanges = []
-FlushColRanges = []
-def UpdateLog(StartRow, StartCol, Array2D):
+
+def WriteLog(StartRow, StartCol, Array2D):
 	global LogNextEmptyIndex
+	global Log
 
-	WriteRow = StartRow
-	WriteCol = StartCol
+	LogNextEmptyIndex += len(Array2D)
 
-	FlushRowRanges.append(WriteRow)
-	FlushColRanges.append(WriteCol)
+	Array2D = [[None] * StartCol + Row for Row in Array2D]
+	Array2D = [Row + [None]*(5 - len(Row)) for Row in Array2D]
 
-	for Row in Array2D:
-		WriteCol = StartCol
-		for Item in Row:
-			Log[WriteRow][WriteCol] = Item
-			WriteCol += 1
-		WriteRow += 1
-	
-	FlushRowRanges.append(WriteRow)
-	FlushColRanges.append(WriteCol)
+	if StartRow >= len(Log):
+		Log += Array2D
+	else:
+		Log = Log[:StartRow] + Array2D + Log[StartRow:]
 
-	LogNextEmptyIndex += WriteRow - StartRow
+	FlushRowRanges.append(StartRow)
+
+def UpdateLog(StartRow, StartCol, Array2D):
+	global Log
+
+	UpdateLength = len(Array2D)
+
+	Array2D = [[None] * StartCol + Row for Row in Array2D]
+	Array2D = [Row + [None]*(5 - len(Row)) for Row in Array2D]
+
+	if StartRow >= len(Log):
+		Log += Array2D
+	else:
+		Log = Log[:StartRow] + Array2D + Log[StartRow + UpdateLength:]
+
+	FlushRowRanges.append(StartRow)
 
 def PublishLog():
-	global FlushColRanges
-	global FlushRowRanges
+	global FlushStartRow
 
-	MinRow = min(FlushRowRanges)
-	MaxRow = max(FlushRowRanges)
-	MinCol = min(FlushColRanges)
-	MaxCol = max(FlushColRanges)
-	#We do not want to flush every line to the excel file. Only the areas that were updated. So lets find the min and max row and col
+	if len(FlushRowRanges) != 0:
+		Row = min(FlushRowRanges)
+		PrintRow = Log[Row:]
 
-	FlushRowRanges = []
-	FlushColRanges = []
+		MaxLength = max(len(Row) for Row in PrintRow)
+		PrintRow = [Row + [""]*(MaxLength - len(Row)) for Row in PrintRow]
 
-	FlushArray = [Log[i][MinCol:MaxCol] for i in range(MinRow,MaxRow)]
+		EXCELIO.WriteSheet(LogSheet,LOG_ROW_START + Row, LOG_COL_START, PrintRow)
 
-	EXCELIO.WriteSheet(LogSheet,MinRow + LOG_ROW_START, MinCol + LOG_COL_START, FlushArray)
-
+	FlushStartRow = []
 
 def LogStep(Step):
-	global LogNextEmptyIndex
+	global LogNumStepComments
+	global LogNumStepLines
 
-	printArray = []
+	LogNumStepComments = 0
+
+	printArray = [[None]] * LOG_NEXT_LINE_PADDING
+	#Padding so the log is easier to look at
 
 	printArray.append(["Step Title: " + Step.GetTitle()])
 	Coords = Step.GetCoordinates()
@@ -108,12 +119,13 @@ def LogStep(Step):
 			LogString += " (Worklist Column) "
 		printArray.append([LogString])
 
-	LogNextEmptyIndex += LOG_NEXT_LINE_PADDING
-	#Padding so the log is easier to look at
+	LogNumStepLines = len(printArray) - LOG_NEXT_LINE_PADDING
 
-	UpdateLog(LogNextEmptyIndex,LOG_COL_STEP,printArray)
+	if LogFindStep(Step) == -1:
+		WriteLog(LogNextEmptyIndex,LOG_COL_STEP,printArray)
 
 def LogFindStep(Step):
+
 	Coords = Step.GetCoordinates()
 	SearchValue = "Excel Location (Row,Col): (" + str(Coords[0]) + "," + str(Coords[1]) + ")"
 
@@ -122,41 +134,110 @@ def LogFindStep(Step):
 			return Row
 	return -1
 
-def LogIncrementCommandCounter():
-	global CommandLogCounter
-	CommandLogCounter += 1
-	return CommandLogCounter
+def LogMethodComment(Step, Comment):
+	Coords = Step.GetCoordinates()
+
+	EXCELIO.WriteSheet("Method",Coords[0],Coords[1] + 3,[[Comment]])
+
+def LogComment(Step, Comment):
+	global LogNumStepComments
+
+	if LogFindStep(Step) != -1:
+		StepRow = LogFindStep(Step) - 1 + LogNumStepLines + LogNumStepComments
+
+		if LogNumStepComments == 0:
+			try:
+				if Log[StepRow][LOG_COL_COMMENTS] == None:
+					pass
+				else:
+					WriteLog(StepRow,LOG_COL_COMMENTS,[[None]])
+					pass
+
+			except:
+				WriteLog(StepRow,LOG_COL_COMMENTS,[[None]])
+				pass
+				#I have to do this try, except because the line may not yet exists. I know it sucks
+			LogNumStepComments += 1
+			StepRow += 1
+
+		try:
+			if Log[StepRow][LOG_COL_COMMENTS] == Comment:
+				pass
+			else:
+				WriteLog(StepRow,LOG_COL_COMMENTS,[[Comment]])
+				pass
+
+		except:
+			WriteLog(StepRow,LOG_COL_COMMENTS,[[Comment]])
+			pass
+		#I have to do this try, except because the line may not yet exists. I know it sucks
+	
+		LogNumStepComments += 1
 
 def LogCommand(CommandString):
-	global LogNextEmptyIndex
+	global CommandLogCounter
+	CommandLogCounter += 1
 
-	printArray = []
+	if LogFindCommand(CommandLogCounter) == -1:
 
-	while True:
-		CommandLineEnd = CommandString.find("[",1)
-		if CommandLineEnd == -1:
-			printArray.append(CommandString[:].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
-			break
-		else:
-			printArray.append(CommandString[:CommandLineEnd].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
-		CommandString = CommandString[CommandLineEnd:]
-	
-	printArray.append(["##ID - " + str(CommandLogCounter)])
+		printArray = [[None]] * LOG_ROW_PADDING
+		#Padding so the log is easier to look at
 
-	MaxLength = max(len(Command) for Command in printArray)
-	printArray = [Command + [""]*(MaxLength - len(Command)) for Command in printArray]
+		while True:
+			CommandLineEnd = CommandString.find("[",1)
+			if CommandLineEnd == -1:
+				printArray.append(CommandString[:].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
+				break
+			else:
+				printArray.append(CommandString[:CommandLineEnd].replace("\n","").replace("]","]"+HAMILTONIO.GetDelimiter()).split(HAMILTONIO.GetDelimiter()))
+			CommandString = CommandString[CommandLineEnd:]
+		
+		printArray.append(["### " + str(CommandLogCounter) + " ###"])
+		printArray.append(["### Not Yet Executed ###"])
+		printArray.append([None])
+		printArray.append([None])
+		printArray.append([None])
 
-	LogNextEmptyIndex += LOG_ROW_PADDING
-	#Padding so the log is easier to look at
+		WriteLog(LogNextEmptyIndex,LOG_COL_COMMAND,printArray)
 
-	UpdateLog(LogNextEmptyIndex,LOG_COL_COMMAND,printArray)
+	return CommandLogCounter
 
 def LogFindCommand(CommandID):
-
 	for Row in range (0,LogNextEmptyIndex):
-		if str(Log[Row][LOG_COL_COMMAND]) == str(CommandID):
+		if str(Log[Row][LOG_COL_COMMAND]) == "### " + str(CommandID) + " ###":
 			return Row
 	return -1
+
+def LogCommandExecutedRepeatable(CommandID):
+	Row = LogFindCommand(CommandID)
+	UpdateLog(Row + 1,LOG_COL_COMMAND,[["### Executed (Special) ###"]])
+
+def LogCommandExecuted(CommandID):
+	Row = LogFindCommand(CommandID)
+	UpdateLog(Row + 1,LOG_COL_COMMAND,[["### Executed ###"]])
+
+def LogCommandInProgress(CommandID):
+	Row = LogFindCommand(CommandID)
+	UpdateLog(Row + 1,LOG_COL_COMMAND,[["### Execution In Progress ###"]])
+
+def LogCommandIsExecuted(CommandID):
+	Row = LogFindCommand(CommandID)
+
+	if str(Log[Row + 1][LOG_COL_COMMAND]) == "### Executed ###":
+		return True
+	else:
+		return False
+
+def LogCommandResponse(CommandID, ResponseDict):
+	Row = LogFindCommand(CommandID)
+	ReturnID = ResponseDict["ReturnID"]
+	ReturnMessage = ResponseDict["ReturnMessage"]
+	try:
+		Response = ResponseDict["Response"]
+	except:
+		Response = "N/A"
+
+	UpdateLog(Row + 2,LOG_COL_COMMAND,[["Return ID",ReturnID],["Return Message",ReturnMessage],["Response",Response]])
 
 def HandleResponse(Response):
 	RUN_BEGINNING = "Run From Beginning of Method"
