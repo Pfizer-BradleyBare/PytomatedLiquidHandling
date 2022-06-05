@@ -4,8 +4,6 @@ from ..User import Samples as SAMPLES
 
 LOG_ROW_START = 2
 LOG_COL_START = 2
-LOG_ROW_END = 50000
-LOG_COL_END = 110
 
 LOG_COL_STEP = 0
 LOG_COL_COMMENTS = 1
@@ -36,7 +34,14 @@ def Init(LogSheetName, ResetSheet):
 		EXCELIO.DeleteSheet(LogSheet)
 	EXCELIO.CreateSheet(LogSheet)
 
-	Log = EXCELIO.Pull(LogSheet, LOG_ROW_START, LOG_COL_START, LOG_ROW_END, LOG_COL_END, n=2)
+	Log = EXCELIO.PullUsedRange(LogSheet)
+
+	if Log == None:
+		Log = [[]]
+
+	LogRows = len(Log) + 20
+	LogCols = max(len(Col) for Col in Log)
+	Log = EXCELIO.Pull(LogSheet, LOG_ROW_START, LOG_COL_START, LOG_ROW_START + LogRows, LOG_COL_START + LogCols, n=2)
 	#The first thing we want to do is pull the log. Now when we execute steps we can look for the existance of that step
 
 	while True:
@@ -49,6 +54,7 @@ def Init(LogSheetName, ResetSheet):
 	#This will take a slice of 10 rows from the log, if all values are "None" then we can be confident we found the end of the log.
 
 	Log = Log[:LogNextEmptyIndex]
+
 	Log = [Row + [None]*(5 - len(Row)) for Row in Log]
 
 

@@ -4,7 +4,7 @@ import xlwings as xl
 METHOD_ROW_START = 1
 METHOD_COL_START = 1
 METHOD_ROW_END = 1000
-METHOD_COL_END = 500
+METHOD_COL_END = 100
 WORKLIST_ROW_START = 1
 WORKLIST_COL_START = 1
 WORKLIST_ROW_END = 100
@@ -41,6 +41,10 @@ def DeleteSheet(Sheet):
 def Pull(Sheet, RowStart, ColStart, RowEnd, ColEnd, n=1):
 	return xl.Book(Excel_File).sheets[Sheet].range((RowStart,ColStart),(RowEnd,ColEnd)).options(ndim=n).value
 
+def PullUsedRange(Sheet):
+	return xl.Book(Excel_File).sheets[Sheet].used_range.value
+
+	
 #
 # Reading a sheet is easy. For Excel 2010, if you try to write a sheet while a save is ongoing is crashes the xlwings app. By using a macro it never crashes
 #

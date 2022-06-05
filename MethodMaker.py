@@ -27,7 +27,7 @@ if len(sys.argv) > 1:
 		TestRun = True
 
 else:
-	Sample_Start_Pos = 10
+	Sample_Start_Pos = 1
 	Excel_File_Path = "Method Maker.xlsm"
 	Initialization_Run = True
 	GenerateList = True
@@ -70,8 +70,7 @@ print("Init Classes")
 EXCELIO.Init(Excel_File_Path)
 HAMILTONIO.Init()
 HAMILTONIO.Simulated(Initialization_Run)
-#LOG.Init()
-LOG.Init("NewLog",True)
+LOG.Init("NewLog",False)
 #init IOs
 
 #
@@ -181,6 +180,7 @@ while(True):
 
 	Steps[Step.GetTitle()](Step)
 	#This does the step
+
 #do each step
 
 print("\n\n\n\n")

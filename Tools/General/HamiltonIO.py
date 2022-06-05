@@ -48,6 +48,10 @@ def AddCommand(CommandString, CommandNotRepeatable=True):
 	if LOG.LogCommandIsExecuted(CommandID) == False:
 		CommandsList.append({"Command ID":CommandID,"Not Repeatable Flag":CommandNotRepeatable,"Command String":CommandString})
 		LOG.LogCommandInProgress(CommandID)
+	else:
+		print("Already Executed -> CommandID:",CommandID)
+
+	LOG.PublishLog()
 	
 	return CommandID
 
@@ -103,6 +107,8 @@ def SendCommands():
 			else:
 				LOG.LogCommandExecutedRepeatable(CommandID)
 		
+		LOG.PublishLog()
+
 		#Reset CommandsList
 		CommandsList = []
 	
@@ -115,6 +121,8 @@ def SendCommands():
 			LOG.LogCommandExecuted(CommandID)
 		else:
 			LOG.LogCommandExecutedRepeatable(CommandID)
+
+	LOG.PublishLog()
 
 	#Reset CommandsList
 	CommandsList = []
