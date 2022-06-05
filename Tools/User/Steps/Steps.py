@@ -245,7 +245,7 @@ def Init(PulledMethodSheet):
 					Step.SetContext(Path["Context"])
 
 					if Step.GetTitle() == PLATE.TITLE:
-						Path["Context"] = Path["Context"] + ":" + Step.GetParameters()[PLATE.NAME]
+						Path["Context"] = Path["Context"] + ":" + str(Step.GetParameters()[PLATE.NAME])
 
 					if Step.GetTitle() == SPLIT_PLATE.TITLE:
 						Remove_List.append(Path)

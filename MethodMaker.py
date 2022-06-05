@@ -97,6 +97,7 @@ SAMPLES.Init(Sample_Start_Pos, EXCELIO.GetWorklist())
 LABWARE.Init()
 #Init Trackers
 
+
 PLATE.Init(STEPS.GetSteps())
 SPLIT_PLATE.Init(STEPS.GetSteps())
 MERGE_PLATE.Init(STEPS.GetSteps())
@@ -113,6 +114,8 @@ PRELOAD_LIQUID.Init(STEPS.GetSteps())
 VACUUM.Init(STEPS.GetSteps())
 MAGNETIC_BEADS.Init(STEPS.GetSteps())
 MERGE_PLATE.Init(STEPS.GetSteps())
+
+
 
 #init steps
 STEPS.StartStepSequence()

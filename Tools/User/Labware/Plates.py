@@ -227,7 +227,13 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 
 			elif SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
 				SourceSequencePosition = LABWARE.GetContextualSequences(SourceContextString)[SampleIndex]
-				SourceArrayPosition = SourceSequencePosition - StartPosition
+				
+				if SourceLabware.GetIsModifierAliquot() == True:
+					SourceArrayPosition = SourceSequencePosition - 1
+				else:
+					SourceArrayPosition = SourceSequencePosition - StartPosition
+				#This is a case where the aliquot can modify the sequence position to be at the start of the plate instead of the user chosen posiiton. Set in Aliquot step.
+
 				SourceLabware.VolumesList[SourceArrayPosition] -= ActualVolume
 				SourceLabware.DoVolumeUpdate()
 				#DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":"__REMOVE__","Volume":ActualVolume})

@@ -21,12 +21,15 @@ class Class:
         self.IsIMCSSizeXDesalting = False
         self.IsCovered = False
 
+        self.ModifierAliquot = False
+
         self.Category = None
         self.StorageTemperature = None
         self.Viscosity = None
         self.Volatility = None
         self.Homogeneity = None
         self.LiquidClassString = None
+
 
     #
     # This is labware info
@@ -59,6 +62,14 @@ class Class:
         self.IsCovered = True
     def GetIsCovered(self):
         return self.IsCovered
+
+    #
+    # This is a flag which indicates that spceial aspiration calcs should be performed
+    #
+    def SetIsModifierAliquot(self):
+        self.ModifierAliquot = True
+    def GetIsModifierAliquot(self):
+        return self.ModifierAliquot
 
     #
     # This tracks the max volume used in this labware
@@ -96,14 +107,16 @@ def SetContextualFactors(ContextString, FactorsList):
     ContextualFactors_Dict[ContextString] = FactorsList
 def GetContextualFactors(ContextString):
     return ContextualFactors_Dict[ContextString]
+def GetDefaultFactors():
+    return [1] * SAMPLES.GetNumSamples()
 
 ContextualSequences_Dict = {}
 def SetContextualSequences(ContextString, SequencesList):
 	ContextualSequences_Dict[ContextString] = SequencesList
 def GetContextualSequences(ContextString):
 	return ContextualSequences_Dict[ContextString]
-
-
+def GetDefaultSequences():
+    return list(range(SAMPLES.GetStartPosition(),SAMPLES.GetStartPosition() + SAMPLES.GetNumSamples()))
 
 #
 # Init
@@ -111,8 +124,8 @@ def GetContextualSequences(ContextString):
 LabwareSet = set()
 def Init():
     global LabwareSet
-    SetContextualFactors("",[1] * SAMPLES.GetNumSamples())
-    SetContextualSequences("",list(range(SAMPLES.GetStartPosition(),SAMPLES.GetStartPosition() + SAMPLES.GetNumSamples())))
+    SetContextualFactors("",GetDefaultFactors())
+    SetContextualSequences("",GetDefaultSequences())
     LabwareSet = set()
 
 #
