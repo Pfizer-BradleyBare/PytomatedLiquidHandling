@@ -48,6 +48,11 @@ class PipetteSequence:
 	def AppendToPipetteSequence(self,Dest,DestPos,Source,SourcePos,Vol,CurDestVol,Mix,LiquidClassString):
 		Index = 0
 		for Counter in range(0,self.GetNumSequencePositions()):
+
+			if Dest == self.GetDestinations()[Counter] and DestPos == self.GetDestinationPositions()[Counter] and SourcePos == self.GetSourcePositions()[Counter] and Source == self.GetSources()[Counter]:
+				self.GetTransferVolumes()[Counter] += Vol
+				return
+
 			if DestPos > self.GetDestinationPositions()[Counter]:
 				Index = Counter + 1
 
@@ -195,7 +200,13 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 		DestinationLabware = LABWARE.GetLabware(DestinationName)
 
 		DestinationSequencePosition = LABWARE.GetContextualSequences(DestinationContextString)[SampleIndex]
-		DestinationArrayPosition = DestinationSequencePosition - StartPosition
+
+		ContextFlags = LABWARE.GetContextualFlags(DestinationContextString)
+		if "SequenceFromPlateStart" in ContextFlags:
+			DestinationArrayPosition = DestinationSequencePosition - 1
+		else:
+			DestinationArrayPosition = DestinationSequencePosition - StartPosition
+		#This is a case where the Pool can modify the sequence position to be at the start of the plate instead of the user chosen posiiton.
 		#We need the array position because that tells us which volume to modify and which factors to use.
 		#The array position is derived from the Sequence Position
 
@@ -228,11 +239,12 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 			elif SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
 				SourceSequencePosition = LABWARE.GetContextualSequences(SourceContextString)[SampleIndex]
 				
-				if SourceLabware.GetIsModifierAliquot() == True:
+				ContextFlags = LABWARE.GetContextualFlags(SourceContextString)
+				if "SequenceFromPlateStart" in ContextFlags:
 					SourceArrayPosition = SourceSequencePosition - 1
 				else:
 					SourceArrayPosition = SourceSequencePosition - StartPosition
-				#This is a case where the aliquot can modify the sequence position to be at the start of the plate instead of the user chosen posiiton. Set in Aliquot step.
+				#This is a case where the aliquot can modify the sequence position to be at the start of the plate instead of the user chosen posiiton.
 
 				SourceLabware.VolumesList[SourceArrayPosition] -= ActualVolume
 				SourceLabware.DoVolumeUpdate()
@@ -241,7 +253,7 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 
 			if RecordPipetteVolumes == True:
 				Class.AddPipetteVolume(DestinationLabware,ActualVolume)
-			DestinationLabware.WellContents[SampleIndex].append({"Solution":SourceName,"Volume":ActualVolume})
+			DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":SourceName,"Volume":ActualVolume})
 			
 			NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,MixParameter,LiquidClassString)
 				

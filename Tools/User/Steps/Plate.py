@@ -35,6 +35,14 @@ def Step(step):
 	#Testing Name
 	if not type(PlateName) is str:
 		MethodComments.append("The Plate Name parameter you provided is a number. This parameter must contain letters. Please Correct")
+	else:
+		TestLabware = PLATES.LABWARE.GetLabware(PlateName)
+		if TestLabware != None:
+			if TestLabware.GetLabwareType() == PLATES.LABWARE.LabwareTypes.Reagent:
+				MethodComments.append("The Plate Name parameter you provided is already defined as a solution. You must choose a different Plate Name. Please correct.")
+	
+	if not type(PlateName) is str:
+		MethodComments.append("The Plate Name parameter you provided is a number. This parameter must contain letters. Please Correct")
 
 	if len(MethodComments) != 0:
 		LOG.LogMethodComment(step,MethodComments)
@@ -53,6 +61,7 @@ def Step(step):
 
 	PLATES.LABWARE.SetContextualFactors(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualFactors(STEPS.Class.GetContext(step)))
 	PLATES.LABWARE.SetContextualSequences(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualSequences(STEPS.Class.GetContext(step)))
+	PLATES.LABWARE.AddContextualFlag(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualFlags(STEPS.Class.GetContext(step)))
 	#Now all the contexts are going to be derived from the parents.
 
 	STEPS.DeactivateContext(step.GetContext())

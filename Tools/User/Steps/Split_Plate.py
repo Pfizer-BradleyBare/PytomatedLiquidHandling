@@ -116,6 +116,7 @@ def Step(step):
 
 	PLATES.LABWARE.SetContextualFactors(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualFactors(STEPS.Class.GetContext(step)))
 	PLATES.LABWARE.SetContextualSequences(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualSequences(STEPS.Class.GetContext(step)))
+	PLATES.LABWARE.AddContextualFlag(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualFlags(STEPS.Class.GetContext(step)))
 	#add Plate 1
 
 	PlateParameters = STEPS.Class.GetParameters(NextNextStep)
@@ -127,6 +128,7 @@ def Step(step):
 
 	PLATES.LABWARE.SetContextualFactors(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualFactors(STEPS.Class.GetContext(step)))
 	PLATES.LABWARE.SetContextualSequences(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualSequences(STEPS.Class.GetContext(step)))
+	PLATES.LABWARE.AddContextualFlag(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualFlags(STEPS.Class.GetContext(step)))
 	#add Plate 2
 
 	STEPS.DeactivateContext(step.GetContext())

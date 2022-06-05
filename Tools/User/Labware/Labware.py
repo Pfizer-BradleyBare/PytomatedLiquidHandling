@@ -21,7 +21,7 @@ class Class:
         self.IsIMCSSizeXDesalting = False
         self.IsCovered = False
 
-        self.ModifierAliquot = False
+        self.PlateStartSequence = False
 
         self.Category = None
         self.StorageTemperature = None
@@ -66,10 +66,10 @@ class Class:
     #
     # This is a flag which indicates that spceial aspiration calcs should be performed
     #
-    def SetIsModifierAliquot(self):
-        self.ModifierAliquot = True
-    def GetIsModifierAliquot(self):
-        return self.ModifierAliquot
+    def SetIsPlateStartSequence(self):
+        self.PlateStartSequence = True
+    def GetIsPlateStartSequence(self):
+        return self.PlateStartSequence
 
     #
     # This tracks the max volume used in this labware
@@ -115,8 +115,19 @@ def SetContextualSequences(ContextString, SequencesList):
 	ContextualSequences_Dict[ContextString] = SequencesList
 def GetContextualSequences(ContextString):
 	return ContextualSequences_Dict[ContextString]
-def GetDefaultSequences():
-    return list(range(SAMPLES.GetStartPosition(),SAMPLES.GetStartPosition() + SAMPLES.GetNumSamples()))
+def GetDefaultSequences(StartPosition):
+    return list(range(StartPosition,StartPosition + SAMPLES.GetNumSamples()))
+
+ContextualFlags_Dict = {}
+def AddContextualFlag(ContextString, FlagString):
+    try:
+        ContextualFlags_Dict[ContextString] += "," + FlagString
+    except:
+        ContextualFlags_Dict[ContextString] = FlagString
+def RemoveContextualFlag(ContextString, FlagString):
+    ContextualFlags_Dict[ContextString] = ContextualFlags_Dict[ContextString].replace(FlagString,"")
+def GetContextualFlags(ContextString):
+    return ContextualFlags_Dict[ContextString]
 
 #
 # Init
@@ -125,7 +136,8 @@ LabwareSet = set()
 def Init():
     global LabwareSet
     SetContextualFactors("",GetDefaultFactors())
-    SetContextualSequences("",GetDefaultSequences())
+    SetContextualSequences("",GetDefaultSequences(SAMPLES.GetStartPosition()))
+    AddContextualFlag("","")
     LabwareSet = set()
 
 #

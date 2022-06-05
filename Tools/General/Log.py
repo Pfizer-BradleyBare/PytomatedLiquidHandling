@@ -35,14 +35,14 @@ def Init(LogSheetName, ResetSheet):
 	EXCELIO.CreateSheet(LogSheet)
 
 	Log = EXCELIO.PullUsedRange(LogSheet)
+	#The first thing we want to do is pull the log. Now when we execute steps we can look for the existance of that step
 
 	if Log == None:
-		Log = [[]]
+		Log = [[]*20]
 
-	LogRows = len(Log) + 20
-	LogCols = max(len(Col) for Col in Log)
-	Log = EXCELIO.Pull(LogSheet, LOG_ROW_START, LOG_COL_START, LOG_ROW_START + LogRows, LOG_COL_START + LogCols, n=2)
-	#The first thing we want to do is pull the log. Now when we execute steps we can look for the existance of that step
+	EXCELIO.DeleteSheet(LogSheet)
+	EXCELIO.CreateSheet(LogSheet)
+	#We pulled the log but we want to start with a clean slate.
 
 	while True:
 		
@@ -56,6 +56,10 @@ def Init(LogSheetName, ResetSheet):
 	Log = Log[:LogNextEmptyIndex]
 
 	Log = [Row + [None]*(5 - len(Row)) for Row in Log]
+
+	if len(Log) != 0:
+		FlushRowRanges.append(0)
+		PublishLog()
 
 
 def WriteLog(StartRow, StartCol, Array2D):
