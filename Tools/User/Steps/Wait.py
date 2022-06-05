@@ -6,7 +6,8 @@ from ...General import HamiltonIO as HAMILTONIO
 from ...General import Log as LOG
 import time
 
-TITLE = "Wait"
+TITLE = "Pause"
+TIME = "Time (min)"
 
 IsUsedFlag = True
 
@@ -87,8 +88,32 @@ def Callback(step):
 	pass
 
 def Step(step):
-	StartTimer(step.GetParentPlate(), step[TIME], Callback)
 
+	Time = step.GetParameters()[TIME]
 
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+	MethodComments = []
+	
+	if type(Time) is str:
+		MethodComments.append("The Time parameter can only be a number. Please Correct.")
+
+	if len(MethodComments) != 0:
+		LOG.LogMethodComment(Step,MethodComments)
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+
+	StartTimer(step, Time, Callback)
 
 

@@ -44,7 +44,44 @@ def Init(MutableStepsList):
 	global IsUsedFlag
 
 	for Step in MutableStepsList:
-		if Step.GetTitle() == TITLE:	
+		if Step.GetTitle() == TITLE:
+
+			Params = Step.GetParameters()
+			Temp = Params[TEMP]
+			Time = Params[TIME]
+			Shake = Params[SHAKE]
+
+			#########################
+			#########################
+			#########################
+			#### INPUT VALIDATION ###
+			#########################
+			#########################
+			#########################
+			MethodComments = []
+			
+			#Is source the destination?
+			if type(Temp) is str:
+				if Temp != "Ambient":
+					MethodComments.append("The Temp parameter can be either \"Ambient\" or a number. Please Correct.")
+
+			if type(Time) is str:
+				MethodComments.append("The Time parameter can only be a number. Please Correct.")
+
+			if type(Shake) is str:
+				MethodComments.append("The Shake parameter can only be a number. Please Correct.")
+
+			if len(MethodComments) != 0:
+				LOG.LogMethodComment(Step,MethodComments)
+
+			#########################
+			#########################
+			#########################
+			#### INPUT VALIDATION ###
+			#########################
+			#########################
+			#########################
+
 			IsUsedFlag = True
 			Incubation_List.append(Step)
 	#Just finding and tracking the incubations

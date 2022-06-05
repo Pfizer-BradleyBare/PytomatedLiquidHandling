@@ -48,7 +48,55 @@ def Step(step):
 	SourceList = SAMPLES.Column(step.GetParameters()[SOURCE])
 	VolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
 	WaitTime = step.GetParameters()[WAIT_TIME]
+	Time = step.GetParameters()[TIME]
+	Pressure = step.GetParameters()[PRESSURE]
 	VacPlate = step.GetParameters()[VACUUM_PLATE]
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+	MethodComments = []
+	
+	#Is source the destination?
+	if Destination in SourceList:
+		MethodComments.append("The Source parameter and parent plate (Destination) are the same. This doesn't make sense. Please correct.")
+
+	#Testing Source
+	if not all(type(Source) is str for Source in SourceList):
+		MethodComments.append("The Source parameter you provided is a number. This parameter must contain letters. Please Correct")
+
+	#Testing Volume
+	if not all(not (type(Volume) is str) for Volume in VolumeList):
+		MethodComments.append("The Volume parameter you provided is not a number. This parameter must be a number. Please Correct")
+
+	#Testing WaitTime
+	if type(WaitTime) is str:
+		MethodComments.append("The Pre Vacuum Wait parameter must be a number. Please Correct.")
+
+	#Testing Time
+	if type(Time) is str:
+		MethodComments.append("The Vacuum Time parameter must be a number. Please Correct.")
+
+	#Testing Pressure
+	if type(Pressure) is str:
+		if not (Pressure == "Low") or not (Pressure == "Normal") or not (Pressure == "High"):
+			MethodComments.append("The Pressure Difference parameter must be \"Low\", \"Normal\", \"High\" or a number. Please Correct.")
+
+	if len(MethodComments) != 0:
+		LOG.LogMethodComment(step,MethodComments)
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+
 
 	PLATES.LABWARE.GetLabware(Destination).SetIsVacuum(VacPlate)
 	#The plate that we vacuum into needs to be a vacuum compatible plate. Set that here on a per step basis

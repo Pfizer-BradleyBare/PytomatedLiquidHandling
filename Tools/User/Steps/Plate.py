@@ -23,6 +23,30 @@ def Step(step):
 	PlateName = step.GetParameters()[NAME]
 	PlateType = step.GetParameters()[TYPE]
 	
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+	MethodComments = []
+
+	#Testing Name
+	if not type(PlateName) is str:
+		MethodComments.append("The Plate Name parameter you provided is a number. This parameter must contain letters. Please Correct")
+
+	if len(MethodComments) != 0:
+		LOG.LogMethodComment(step,MethodComments)
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+
 	if PLATES.LABWARE.GetLabware(PlateName) == None:
 		NewPlate = PLATES.Class(PlateName, PlateType)
 		PLATES.LABWARE.AddLabware(NewPlate)

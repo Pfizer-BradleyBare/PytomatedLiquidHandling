@@ -34,6 +34,46 @@ def Step(step):
 	SourceVolumesList = SAMPLES.Column(step.GetParameters()[VOLUME])
 	MixingList = SAMPLES.Column(step.GetParameters()[MIXING])
 
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+	MethodComments = []
+	
+	#Is source the destination?
+	if DestinationPlateName in SourceNamesList:
+		MethodComments.append("The Source parameter and parent plate (Destination) are the same. This doesn't make sense. Please correct.")
+
+	#Testing Source
+	if not all(type(Source) is str for Source in SourceNamesList):
+		MethodComments.append("The Source parameter you provided is a number. This parameter must contain letters. Please Correct")
+
+	#Testing Volume
+	if not all(not (type(Volume) is str) for Volume in SourceVolumesList):
+		MethodComments.append("The Volume parameter you provided is not a number. This parameter must be a number. Please Correct")
+
+	#Testing Mix
+	if not all(type(Mix) is str for Mix in MixingList):
+		MethodComments.append("The Mix parameter you provided is a number. This parameter must contain letters. Please Correct")
+	elif not all(Mix == "No" or "Dispense:" in Mix or "Aspirate:" in Mix for Mix in MixingList):
+		MethodComments.append("The Mix parameter you provided is incorrect. This parameter must come from the dropdown. Please Correct")
+
+	if len(MethodComments) != 0:
+		LOG.LogMethodComment(step,MethodComments)
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+
+
 	Sequence = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,MixingList)
 
 	if Sequence.GetNumSequencePositions() == 0:

@@ -42,12 +42,79 @@ def Step(step):
 	SourceConcentrationList = SAMPLES.Column(StepParameters[STARTING_CONCENTRATION])
 	SourceList = SAMPLES.Column(StepParameters[SOURCE])
 	DiluentList = SAMPLES.Column(StepParameters[DILUENT])
+	Destination = STEPS.Class.GetParentPlateName(step)
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+	MethodComments = []
+	
+	#Is source the destination?
+	if Destination in SourceList:
+		MethodComments.append("The Source parameter and parent plate (Destination) are the same. This doesn't make sense. Please correct.")
+
+	#Is diluent the destination?
+	if Destination in DiluentList:
+		MethodComments.append("The Diluent parameter and parent plate (Destination) are the same. This doesn't make sense. Please correct.")
+
+	#Testing Source
+	if not all(type(Source) is str for Source in SourceList):
+		MethodComments.append("The Source parameter you provided is a number. This parameter must contain letters. Please Correct")
+
+	#Testing DILUENT
+	if not all(type(Diluent) is str for Diluent in DiluentList):
+		MethodComments.append("The Diluent parameter you provided is a number. This parameter must contain letters. Please Correct")
+
+	DoTest = True
+	#Testing Target Conc
+	if not all(not (type(Conc) is str) for Conc in TargetConcentrationList):
+		MethodComments.append("The Target Concentration parameter you provided is not a number. This parameter must be a number. Please Correct")
+		DoTest = False
+
+	#Testing Starting Conc
+	if not all(not (type(Conc) is str) for Conc in SourceConcentrationList):
+		MethodComments.append("The Source Concentration parameter you provided is not a number. This parameter must be a number. Please Correct")
+		DoTest = False
+
+	#Testing Starting and Target Concentration
+	if DoTest == True and not all(TargetConcentration <= SourceConcentration for SourceConcentration,TargetConcentration in zip(SourceConcentrationList,TargetConcentrationList)):
+		MethodComments.append("Source Concentration must be greater than Target Concentration for a proper dilution. Please Correct.")	
+
+	DoTest = True
+	#Testing Target Volume
+	if not all(not (type(TargetVolume) is str) for TargetVolume in TargetVolumeList):
+		MethodComments.append("The Target Volume parameter you provided is not a number. This parameter must be a number. Please Correct")
+		DoTest = False
+
+	#Testing Max Source Volume
+	if not all(not (type(MaxSourceVolume) is str) for MaxSourceVolume in MaxSourceVolumeList):
+		MethodComments.append("The Max Source Volume parameter you provided is not a number. This parameter must be a number. Please Correct")
+		DoTest = False
+
+	#Testing Target and max source volume
+	if DoTest == True and not all(MaxSourceVolume <= TargetVolume for MaxSourceVolume,TargetVolume in zip(MaxSourceVolumeList,TargetVolumeList)):
+		MethodComments.append("Max Source Volume can not be greater than Target Volume. Please Correct")	
+
+	if len(MethodComments) != 0:
+		LOG.LogMethodComment(step,MethodComments)
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
 
 	SourceVolumeList = list(map(lambda x,y,z: (z * y) / x if x != None and x != 0 else 0, SourceConcentrationList,TargetVolumeList,TargetConcentrationList))
 	DiluentVolumeList = list(map(lambda x,y: y - x, SourceVolumeList,TargetVolumeList))
 	#Calculate correct volumes to pipette
 
-	DestinationNames = SAMPLES.Column(STEPS.Class.GetParentPlateName(step))
+	DestinationNames = SAMPLES.Column(Destination)
 	DestinationContextStrings = PLATES.LABWARE.GetContextualStringsList(step, DestinationNames)
 
 	for VolIndex in range(0,len(SourceVolumeList)):

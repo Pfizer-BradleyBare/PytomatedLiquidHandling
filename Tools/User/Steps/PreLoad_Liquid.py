@@ -25,6 +25,30 @@ def Step(step):
 	DestinationPlate = step.GetParentPlateName()
 	VolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
 
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+	MethodComments = []
+
+	#Testing Volume
+	if not all(not (type(Volume) is str) for Volume in VolumeList):
+		MethodComments.append("The Volume parameter you provided is not a number. This parameter must be a number. Please Correct")
+
+	if len(MethodComments) != 0:
+		LOG.LogMethodComment(step,MethodComments)
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+
 	Labware = PLATES.LABWARE.GetLabware(DestinationPlate)
 	Labware.SetIsPreloaded()
 	ContextualString = PLATES.LABWARE.GetContextualStringsList(step,[DestinationPlate])[0]

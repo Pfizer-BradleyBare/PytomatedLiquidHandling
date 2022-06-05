@@ -1,7 +1,6 @@
 from ..General import ExcelIO as EXCELIO
 from ..General import HamiltonIO as HAMILTONIO
 from ..User import Samples as SAMPLES
-import math
 
 LOG_ROW_START = 2
 LOG_COL_START = 2
@@ -134,10 +133,16 @@ def LogFindStep(Step):
 			return Row
 	return -1
 
-def LogMethodComment(Step, Comment):
+def LogMethodComment(Step, CommentList):
 	Coords = Step.GetCoordinates()
 
-	EXCELIO.WriteSheet("Method",Coords[0],Coords[1] + 3,[[Comment]])
+	Comments = [[Comment] for Comment in CommentList]
+
+	EXCELIO.WriteSheet("Method",Coords[0],Coords[1] + 3,Comments)
+	
+	EXCELIO.CreateMessageBox("There were issues found with your method. Please go to the method sheet and correct the errors. Errors will be documented to the right of the block.","Critical Validation Error!")
+	quit()
+	
 
 def LogComment(Step, Comment):
 	global LogNumStepComments
@@ -237,7 +242,7 @@ def LogCommandResponse(CommandID, ResponseDict):
 	except:
 		Response = "N/A"
 
-	UpdateLog(Row + 2,LOG_COL_COMMAND,[["Return ID",ReturnID],["Return Message",ReturnMessage],["Response",Response]])
+	UpdateLog(Row + 2,LOG_COL_COMMAND,[["Return ID",ReturnID],["Return Message",ReturnMessage],["Response"] + Response.split(HAMILTONIO.GetDelimiter())])
 
 def HandleResponse(Response):
 	RUN_BEGINNING = "Run From Beginning of Method"

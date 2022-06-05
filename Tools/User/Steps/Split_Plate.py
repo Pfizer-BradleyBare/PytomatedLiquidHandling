@@ -22,9 +22,6 @@ def Init(MutableStepsList):
 	for Step in MutableStepsList[:]:
 		if Step.GetTitle() == TITLE:
 			IsUsedFlag = True
-			#Remove the latter step first to prevent list shifting
-		#We want to remove the plate actions that follow a split plate. Why? Because we are going to do the plate work here. It must not be done twice
-		# All plate related actions will occur in this action immeditely following a split plate
 			
 
 def Step(step):
@@ -32,6 +29,59 @@ def Step(step):
 
 	NewPlate1 = step.GetParameters()[NAME_1]
 	NewPlate2 = step.GetParameters()[NAME_2]
+
+	NextStep = STEPS.GetNextStepInPathway(step)
+	NextNextStep = STEPS.GetNextStepInPathway(NextStep)
+	#Two Plate Actions will always follow a split plate. ALWAYS. If not, then the parameters the user entered are wrong.
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+	MethodComments = []
+	
+	#Testing NewPlate1
+	if not (type(NewPlate1) is str):
+		MethodComments.append("The Pathway 1 parameter must contain letters. Please Correct.")
+	else:
+		TestLabware = PLATES.LABWARE.GetLabware(NewPlate1)
+		if TestLabware != None:
+			MethodComments.append("Split Plate block pathways must be unqiue. \"" + NewPlate1 + "\" is already a defined plate. Please choose a new name so the plate is unique.")
+		
+		elif not NextStep.GetTitle() == PLATE.TITLE or not NextNextStep.GetTitle() == PLATE.TITLE or not (NextStep.GetParameters()[PLATE.NAME] == NewPlate1 or NextNextStep.GetParameters()[PLATE.NAME] == NewPlate1):
+			MethodComments.append("The Pathway 1 parameter does not match one of the two following Plate blocks. Please ensure the Pathway 1 parameter matches one of the following Plate blocks.")
+
+	#Testing NewPlate2
+	if not (type(NewPlate2) is str):
+		MethodComments.append("The Pathway 2 parameter must contain letters. Please Correct.")
+	else:
+		TestLabware = PLATES.LABWARE.GetLabware(NewPlate2)
+		if TestLabware != None:
+			MethodComments.append("Split Plate block pathways must be unqiue. \"" + NewPlate2 + "\" is already a defined plate. Please choose a new name so the plate is unique.")
+		
+		elif not NextStep.GetTitle() == PLATE.TITLE or not NextNextStep.GetTitle() == PLATE.TITLE or not (NextStep.GetParameters()[PLATE.NAME] == NewPlate2 or NextNextStep.GetParameters()[PLATE.NAME] == NewPlate2):
+			MethodComments.append("The Pathway 2 parameter does not match one of the two following Plate blocks. Please ensure the Pathway 2 parameter matches one of the following Plate blocks.")
+
+	#Testing Choice
+	if not all(type(Choice) is str for Choice in Choices):
+		MethodComments.append("The Plate Choice parameter must contain letters. Please Correct.")
+	
+	elif not all(Choice == "Split" or Choice == "Concurrent" or Choice == NewPlate1 or Choice == NewPlate2 for Choice in Choices):
+		MethodComments.append("The Plate Choice parameter can be \"Split\", \"Concurrent\", \"" + NewPlate1 + "\", or \"" + NewPlate2 + "\". Please Correct.")
+
+	if len(MethodComments) != 0:
+		LOG.LogMethodComment(step,MethodComments)
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
 
 	ContextualFactors = PLATES.LABWARE.GetContextualFactors(STEPS.Class.GetContext(step))
 
@@ -57,21 +107,12 @@ def Step(step):
 			pass
 	#Generate the factors for this new plate.
 
-
-	NextStep = STEPS.GetNextStepInPathway(step)
-	NextNextStep = STEPS.GetNextStepInPathway(NextStep)
-	#Two Plate Actions will always follow a split plate. ALWAYS
-	StepsList = STEPS.GetSteps()
-	StepsList.remove(NextNextStep)
-	StepsList.remove(NextStep)
-	#We are going to remove the Plate Action so the following work is not repeated
-
 	PlateParameters = STEPS.Class.GetParameters(NextStep)
 	PlateName = PlateParameters[PLATE.NAME]
 	PlateType = PlateParameters[PLATE.TYPE]
-	if PLATES.LABWARE.GetLabware(PlateName) == None:
-		NewPlate = PLATES.Class(PlateName, PlateType)
-		PLATES.LABWARE.AddLabware(NewPlate)
+
+	NewPlate = PLATES.Class(PlateName, PlateType)
+	PLATES.LABWARE.AddLabware(NewPlate)
 
 	PLATES.LABWARE.SetContextualFactors(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualFactors(STEPS.Class.GetContext(step)))
 	PLATES.LABWARE.SetContextualSequences(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualSequences(STEPS.Class.GetContext(step)))
@@ -80,9 +121,9 @@ def Step(step):
 	PlateParameters = STEPS.Class.GetParameters(NextNextStep)
 	PlateName = PlateParameters[PLATE.NAME]
 	PlateType = PlateParameters[PLATE.TYPE]
-	if PLATES.LABWARE.GetLabware(PlateName) == None:
-		NewPlate = PLATES.Class(PlateName, PlateType)
-		PLATES.LABWARE.AddLabware(NewPlate)
+
+	NewPlate = PLATES.Class(PlateName, PlateType)
+	PLATES.LABWARE.AddLabware(NewPlate)
 
 	PLATES.LABWARE.SetContextualFactors(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualFactors(STEPS.Class.GetContext(step)))
 	PLATES.LABWARE.SetContextualSequences(STEPS.Class.GetContext(step) + ":" + PlateName, PLATES.LABWARE.GetContextualSequences(STEPS.Class.GetContext(step)))

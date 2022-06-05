@@ -126,6 +126,56 @@ def Step(step):
 	EQ_Destination = Params[WASTE]
 	Sample_Destination = step.GetParentPlateName()
 
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+	MethodComments = []
+	
+	#Is source the destination?
+	if Sample_Destination == Source:
+		MethodComments.append("The Source parameter and parent plate (Destination) are the same. This doesn't make sense. Please correct.")
+
+	#Testing Source
+	if not (type(Source) is str):
+		MethodComments.append("The Source parameter you provided is a number. This parameter must contain letters. Please Correct")
+	else:
+		TestLabware = PLATES.LABWARE.GetLabware(Source)
+		if TestLabware == None:
+			MethodComments.append("The Source parameter you provided is a solution. Only a plate name is acceptable. Please correct.")
+		else:
+			if TestLabware.GetLabwareType() == PLATES.LABWARE.LabwareTypes.Reagent:
+				MethodComments.append("The Source parameter you provided is a solution. Only a plate name is acceptable. Please correct.")
+
+	#Testing Waste
+	if not (type(Source) is str):
+		MethodComments.append("The Waste parameter you provided is a number. This parameter must contain letters. Please Correct")
+	else:
+		TestLabware = PLATES.LABWARE.GetLabware(EQ_Destination)
+		if TestLabware == None:
+			MethodComments.append("The Waste parameter you provided is a solution. Only a plate name is acceptable. Please correct.")
+		else:
+			if TestLabware.GetLabwareType() == PLATES.LABWARE.LabwareTypes.Reagent:
+				MethodComments.append("The Waste parameter you provided is a solution. Only a plate name is acceptable. Please correct.")
+
+	#Testing EQ Buffer
+	if not (type(Buffer) is str):
+		MethodComments.append("The Equilibration Buffer parameter you provided is a number. This parameter must contain letters. Please Correct")
+
+	if len(MethodComments) != 0:
+		LOG.LogMethodComment(step,MethodComments)
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+
 	StepKey = step.GetParentPlateName() + str(step.GetCoordinates())
 
 	EQ_Labware = PLATES.LABWARE.GetLabware(EQ_Destination)

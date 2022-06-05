@@ -27,7 +27,7 @@ if len(sys.argv) > 1:
 		TestRun = True
 
 else:
-	Sample_Start_Pos = 1
+	Sample_Start_Pos = 10
 	Excel_File_Path = "Method Maker.xlsm"
 	Initialization_Run = True
 	GenerateList = True
@@ -77,7 +77,7 @@ LOG.Init("NewLog",True)
 #
 # The first thing I want to do is check that the method is validated. If it is not then we will exit and inform the user.
 #
-#ValidatedStatus = EXCELIO.GetMethodValidatedStatus()
+ValidatedStatus = EXCELIO.GetMethodValidatedStatus()
 #if  ValidatedStatus == "Blocks":
 #	EXCELIO.CreateMessageBox("Hi! There is a validation issue with the Building Blocks. Please close and reopen the workbook to fix. If that doesn't work, please contact a Hamilton SME.", "Blocks Validation Failed")
 #	quit()
@@ -87,6 +87,7 @@ LOG.Init("NewLog",True)
 #elif ValidatedStatus == "Solutions":
 #	EXCELIO.CreateMessageBox("Hi! There is a validation issue with the Solutions. Please check the Solutions sheet for red cells and correct it.", "Solutions Validation Failed")
 #	quit()
+
 
 
 CONFIGURATION.Init()
@@ -143,13 +144,15 @@ Steps = {
 
 	MAGNETIC_BEADS.TITLE: MAGNETIC_BEADS.Step,
 
-	MERGE_PLATE.TITLE: MERGE_PLATE.Step
+	MERGE_PLATE.TITLE: MERGE_PLATE.Step,
+
+	WAIT.TITLE: WAIT.Step
 }
 
 while(True):
 
 	WAIT.CheckForExpiredTimers()
-	#Wait is async, but we need to ensure that we are not pausing a context that is ready to continue running.
+	#Wait is async, but we need to ensure that we are not continuously pausing a context that is ready to continue running.
 
 	Step = STEPS.GetNextStep()
 
@@ -172,7 +175,6 @@ while(True):
 	LOG.PublishLog()
 	LOG.LogComment(Step,"TEST")
 	LOG.LogComment(Step,"TEST2")
-	#LOG.LogMethodComment(Step,"TEST")
 
 	Steps[Step.GetTitle()](Step)
 	#This does the step

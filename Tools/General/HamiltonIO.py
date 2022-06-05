@@ -62,8 +62,8 @@ def SendCommands():
 	
 	#Create the command list to send
 	Command = ""
-	for CommandString in CommandsList:
-		Command = Command + CommandString["Command String"] + "\n"
+	for CommandDict in CommandsList:
+		Command = Command + CommandDict["Command String"] + "\n"
 
 	#Send the command list
 	if SimulatedIO == False and Command != "":

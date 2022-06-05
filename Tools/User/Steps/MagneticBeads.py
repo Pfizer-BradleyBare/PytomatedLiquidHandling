@@ -158,9 +158,63 @@ def Step(step):
 	global RepsCompleted
 	RepsCompleted = 1
 
+	ParentPlate = step.GetParentPlateName()
 	Params = step.GetParameters()
 	BeadsPlate = Params[MAGNETIC_BEADS_PLATE]
+	BufferList = SAMPLES.Column(Params[STORAGE_BUFFER])
+	VolumeList = SAMPLES.Column(Params[BUFFER_VOLUME])
 	Time = Params[WAIT_TIME]
+	Reps = Params[REPS]
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+	MethodComments = []
+	
+	#Is source the destination?
+	if ParentPlate == BeadsPlate:
+		MethodComments.append("The Magnetic Beads Plate parameter and parent plate (Destination) are the same. This doesn't make sense. Please correct.")
+
+	#Testing Magnetic Beads Plate
+	if not (type(BeadsPlate) is str):
+		MethodComments.append("The Magnetic Beads Plate parameter you provided is a number. This parameter must contain letters. Please Correct")
+	else:
+		TestLabware = PLATES.LABWARE.GetLabware(BeadsPlate)
+		if TestLabware == None:
+			MethodComments.append("The Magnetic Beads Plate parameter you provided is a solution. Only a plate name is acceptable. Please correct.")
+		else:
+			if TestLabware.GetLabwareType() == PLATES.LABWARE.LabwareTypes.Reagent:
+				MethodComments.append("The Magnetic Beads Plate parameter you provided is a solution. Only a plate name is acceptable. Please correct.")
+
+	#Testing Storage Buffer
+	if not all(type(Buffer) is str for Buffer in BufferList):
+		MethodComments.append("The Storage Buffer parameter you provided is a number. This parameter must contain letters. Please Correct")
+
+	#Testing Storage Buffer Volume
+	if not all(not (type(Volume) is str) for Volume in VolumeList):
+		MethodComments.append("The Storage Buffer Volume parameter you provided is not a number. This parameter must be a number. Please Correct")
+
+	if type(Time) is str:
+		MethodComments.append("The Time parameter you provided is not a number. This parameter must be a number. Please Correct")
+
+	if type(Reps) is str:
+		MethodComments.append("The Repetitions parameter you provided is not a number. This parameter must be a number. Please Correct")
+
+	if len(MethodComments) != 0:
+		LOG.LogMethodComment(step,MethodComments)
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+
 
 	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[BeadsPlate]}),False)
 	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[BeadsPlate]}),False)

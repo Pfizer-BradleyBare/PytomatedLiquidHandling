@@ -2,6 +2,7 @@ from ..Steps import Steps as STEPS
 from ...User import Samples as SAMPLES
 from ..Labware import Plates as PLATES
 from ..Steps import Plate as PLATE
+from ..Steps import Split_Plate as SPLIT_PLATE
 from ..Steps import Wait as WAIT
 from ...General import Log as LOG
 import copy
@@ -13,6 +14,7 @@ CONTINUE = "Continue Here?"
 IsUsedFlag = False
 
 MergeSteps = []
+MergedPathways = set()
 
 def IsUsed():
 	global IsUsedFlag
@@ -28,11 +30,60 @@ def Init(MutableStepsList):
 def Step(step):
 	global MergeSteps
 
+	SearchStep = step
+	PlateStep = step
+
+	while SearchStep.GetTitle() != SPLIT_PLATE.TITLE and not (str(SearchStep.GetCoordinates()) in MergedPathways):
+		if SearchStep.GetTitle() == PLATE.TITLE:
+			PlateStep = SearchStep
+
+		SearchStep = STEPS.GetPreviousStepInPathway(SearchStep)
+
+		if SearchStep == None:
+			break
+	#We need to find the preceeding split plate step and the parent of the entire pathway. Easy two birds
+
 	ParentPlate = step.GetParentPlateName()
 	Context = step.GetContext()
 	WaitingPlate = step.GetParameters()[NAME]
 	Continue = step.GetParameters()[CONTINUE]
 	#Get step information
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+	MethodComments = []
+
+	if SearchStep == None:
+		MethodComments.append("A Merge Plates block can only come after a split plates step. Please Correct.")
+	else:
+		Params = SearchStep.GetParameters()
+		MergePlateOptions = [Params[SPLIT_PLATE.NAME_1], Params[SPLIT_PLATE.NAME_2]]
+		CorrectParent = PlateStep.GetParameters()[PLATE.NAME]
+
+		if not (ParentPlate == CorrectParent):
+			MethodComments.append("You must merge with the same parent plate that started this new pathway. Correct Parent is \"" + CorrectParent + "\". Please reactivate the correct parent plate.")
+
+		MergePlateOptions.remove(CorrectParent)
+		CorrectMergePlate = MergePlateOptions[0]
+
+		if not (WaitingPlate == CorrectMergePlate):
+			MethodComments.append("The Plate Name parameter must be the other pathways parent plate. Correct Plate Name is \"" + CorrectMergePlate + "\". Please Correct.")
+
+	if len(MethodComments) != 0:
+		LOG.LogMethodComment(step,MethodComments)
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
 
 	for MergeStep in MergeSteps[:]:
 		MergeParent = MergeStep.GetParentPlateName()
@@ -46,13 +97,29 @@ def Step(step):
 			if Continue == "Yes" and MergeContinue == "Yes":
 				STEPS.ActivateContext(Context)
 				STEPS.ActivateContext(MergeContext)
+			#This is functionally a synchronization step. So we do not consider the pathway merged yet.
 			else:
-				if Continue == "Yes":
-					STEPS.ActivateContext(Context)
-				if MergeContinue == "Yes":
-					STEPS.ActivateContext(MergeContext)
-			#We need ot make sure we restore the factors correctly. If both are yes, then none is actually merged, it is just a pause function.
+				MergedPathways.add(str(SearchStep.GetCoordinates()))
+				#This pathway is now merged!
 
+				UpdateFactorsFlag = True
+				if SearchStep.GetParameters()[SPLIT_PLATE.CHOICE] != "Split" and SearchStep.GetParameters()[SPLIT_PLATE.CHOICE] != "Concurrent":
+					UpdateFactorsFlag = False
+				#I don't want to update the factors if it is split or concurrent. This would make the factors larger than the volume present in the wells.
+
+				Factors = PLATES.LABWARE.GetContextualFactors(Context)
+				MergeFactors = PLATES.LABWARE.GetContextualFactors(MergeContext)
+				NewFactors = [a + b for a,b in zip(Factors,MergeFactors)]
+
+				if Continue == "Yes":
+					if UpdateFactorsFlag == True:
+						PLATES.LABWARE.SetContextualFactors(Context, NewFactors)
+					STEPS.ActivateContext(Context)
+
+				if MergeContinue == "Yes":
+					if UpdateFactorsFlag == True:
+						PLATES.LABWARE.SetContextualFactors(MergeContext, NewFactors)
+					STEPS.ActivateContext(MergeContext)
 			return
 
 	MergeSteps.append(step)
