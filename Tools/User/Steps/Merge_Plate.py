@@ -32,9 +32,14 @@ def Step(step):
 
 	SearchStep = step
 	PlateStep = step
+	PreviousContext = ""
 
 	while SearchStep.GetTitle() != SPLIT_PLATE.TITLE and not (str(SearchStep.GetCoordinates()) in MergedPathways):
-		if SearchStep.GetTitle() == PLATE.TITLE:
+		
+		if SearchStep.GetTitle() != PLATE.TITLE:
+			PreviousContext = SearchStep.GetContext()
+
+		if SearchStep.GetTitle() == PLATE.TITLE and SearchStep.GetContext()+":"+SearchStep.GetParameters()[PLATE.NAME] in PreviousContext:
 			PlateStep = SearchStep
 
 		SearchStep = STEPS.GetPreviousStepInPathway(SearchStep)
@@ -85,6 +90,8 @@ def Step(step):
 	#########################
 	#########################
 
+	STEPS.DeactivateContext(Context)
+
 	for MergeStep in MergeSteps[:]:
 		MergeParent = MergeStep.GetParentPlateName()
 		MergeContext = MergeStep.GetContext()
@@ -123,7 +130,6 @@ def Step(step):
 			return
 
 	MergeSteps.append(step)
-	STEPS.DeactivateContext(Context)
 
 	WAIT.WaitForTimer()
 	#This basically acts as an asynchronous wait function.

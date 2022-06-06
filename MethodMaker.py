@@ -27,7 +27,7 @@ if len(sys.argv) > 1:
 		TestRun = True
 
 else:
-	Sample_Start_Pos = 10
+	Sample_Start_Pos = 1
 	Excel_File_Path = "Method Maker.xlsm"
 	Initialization_Run = True
 	GenerateList = True

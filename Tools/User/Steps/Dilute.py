@@ -81,7 +81,7 @@ def Step(step):
 		DoTest = False
 
 	#Testing Starting and Target Concentration
-	if DoTest == True and not all(TargetConcentration <= SourceConcentration for SourceConcentration,TargetConcentration in zip(SourceConcentrationList,TargetConcentrationList)):
+	if DoTest == True and not all(SourceConcentration == 0 for SourceConcentration in SourceConcentrationList) and not all(TargetConcentration <= SourceConcentration for SourceConcentration,TargetConcentration in zip(SourceConcentrationList,TargetConcentrationList)):
 		MethodComments.append("Source Concentration must be greater than Target Concentration for a proper dilution. Please Correct.")	
 
 	DoTest = True

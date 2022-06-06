@@ -206,7 +206,7 @@ def GetExcelLabwareInfo():
     Output = EXCELIO.Pull("Solutions",2,2,1000,12,2)
     BreakFlag = False
 
-    for Row in range(0,10,8):
+    for Row in range(0,1000,8):
         for Column in range(0,10,4):
             SolutionName = Output[Row][Column]
             if SolutionName == None:

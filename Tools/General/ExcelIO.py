@@ -134,6 +134,15 @@ def AutoFit(Sheet,ColumnNumber):
 		except:
 			pass
 
+def WrapText(Sheet,RowStart,ColStart,RowEnd,ColEnd):
+	while True:
+		try:
+			Macro = xl.Book(Excel_File).macro("PYTHON_WrapText")
+			Macro(Sheet,RowStart,ColStart,RowEnd,ColEnd)
+			break
+		except:
+			pass
+
 def PrintPlate(Sheet, StartRow, StartCol, PlateName, LabwareName, PlateRows, PlateCols, ValArray):
 
 	CreateBorder(Sheet,StartRow,StartCol,StartRow+PlateRows,StartCol+PlateCols-1,1,3)
@@ -195,6 +204,6 @@ def PrintReagent(Sheet, StartRow, StartCol, PlateName, LabwareName, Volume):
 	Merge(Sheet,StartRow+7,StartCol+2,StartRow+7,StartCol+4)
 	Merge(Sheet,StartRow+8,StartCol+2,StartRow+8,StartCol+4)
 
-	WriteSheet(Sheet,StartRow,StartCol,[[PlateName],[LabwareName],["Minimum Volume: " + str(round(Volume,2)) + "uL"],["Reagent"],["Reagent Lot"],["Reagent Volume"],["Diluent"],["Diluent Lot"],["Diluent Volume"]])
+	WriteSheet(Sheet,StartRow,StartCol,[[PlateName],[LabwareName],["Minimum Volume: " + str(Volume) + "uL"],["Reagent"],["Reagent Lot"],["Reagent Volume"],["Diluent"],["Diluent Lot"],["Diluent Volume"]])
 
 	return (10,5)

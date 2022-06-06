@@ -387,7 +387,7 @@ def HeatingStep(step):
 	HAMILTONIO.AddCommand(HEATER.StartReservation({"PlateName":ParentPlate,"Temperature":Temp,"RPM":RPM}))
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the plate then lid then start the incubation (Incudes shaking)
-	
+
 	WAIT.StartTimer(step, step.GetParameters()[TIME], HeatingCallback)
 	#Wait for incubation to complete.
 

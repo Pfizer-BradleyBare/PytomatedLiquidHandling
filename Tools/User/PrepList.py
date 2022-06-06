@@ -56,9 +56,9 @@ def GeneratePrepSheet(LabwareArray):
 					#for position in Plate.GetSequences()[index]:
 						if PlateLoadedVolumeList[index] != 0:
 							if Labware.GetIsPreloaded() == True:
-								PlatePrepArray[int(position)] = {"AlphaNumeric":position,"Volume":abs(PlateLoadedVolumeList[index])}
+								PlatePrepArray[int(position)] = {"AlphaNumeric":position,"Volume":"{:.2f}".format(abs(PlateLoadedVolumeList[index]))}
 							else:
-								PlatePrepArray[int(position)] = {"AlphaNumeric":position,"Volume":abs(PlateLoadedVolumeList[index]) + LabwareArray[LabwareName]["Labware Info"]["Dead Volume"]}
+								PlatePrepArray[int(position)] = {"AlphaNumeric":position,"Volume":"{:.2f}".format(abs(PlateLoadedVolumeList[index]) + LabwareArray[LabwareName]["Labware Info"]["Dead Volume"])}
 				
 				if len(PlatePrepArray) != 0:
 					UsedSpace = EXCELIO.PrintPlate(Sheet, CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], LabwareArray[LabwareName]["Labware Info"]["Labware Rows"], LabwareArray[LabwareName]["Labware Info"]["Labware Columns"], PlatePrepArray)
@@ -86,7 +86,7 @@ def GeneratePrepSheet(LabwareArray):
 		if Labware.GetLabwareType() == LABWARE.LabwareTypes.Reagent:
 			if True:
 
-				UsedSpace = EXCELIO.PrintReagent(Sheet, CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], LabwareArray[LabwareName]["Used Volume"])
+				UsedSpace = EXCELIO.PrintReagent(Sheet, CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], "{:.2f}".format(LabwareArray[LabwareName]["Used Volume"]))
 
 				NewRow = UsedSpace[0] + CurrentRow
 				NewCol = UsedSpace[1] + CurrentCol
@@ -101,7 +101,7 @@ def GeneratePrepSheet(LabwareArray):
 					CurrentCol = NewCol + ColPadding
 			#Do reagent solution loading here
 
-	for Column in range(1,15):
+	for Column in range(1,50):
 		EXCELIO.AutoFit(Sheet,Column)	
 
 
@@ -136,7 +136,7 @@ def PrintFinalPlateVolumes(LabwareArray):
 				position = index + 1
 				
 				if Labware.VolumesList[index] > 0:
-					PlatePrepArray[int(position)] = {"AlphaNumeric":index + 1,"Volume":Labware.VolumesList[index]}
+					PlatePrepArray[int(position)] = {"AlphaNumeric":index + 1,"Volume":"{:.2f}".format(Labware.VolumesList[index])}
 			
 			if len(PlatePrepArray) != 0:
 
@@ -174,4 +174,5 @@ def PrintFinalPlateVolumes(LabwareArray):
 	EXCELIO.FontSize(Sheet,3,2,3,TrackedMaxCol,18)
 	EXCELIO.FontSize(Sheet,4,2,4,TrackedMaxCol,18)
 
-
+	for Column in range(1,50):
+		EXCELIO.AutoFit(Sheet,Column)	
