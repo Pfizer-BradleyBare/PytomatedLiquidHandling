@@ -35,9 +35,9 @@ class Class(LABWARE.Class):
 	def GetHomogeneity(self, SampleIndex):
 		self.UpdateLabwareSolutionParameters()
 		return self.Homogeneity
-	def GetLiquidClassString(self):
+	def GetLLD(self, SampleIndex):
 		self.UpdateLabwareSolutionParameters()
-		return self.LiquidClassString
+		return self.LLD
 
 
 

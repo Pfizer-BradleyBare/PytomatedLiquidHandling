@@ -72,8 +72,12 @@ def GetMethodValidatedStatus():
 		except:
 			pass
 
-def CreateMessageBox(Message, Title):
-	Macro = xl.Book(Excel_File).macro("PYTHON_CreateMessageBox")
+def CreateCriticalMessageBox(Message, Title):
+	Macro = xl.Book(Excel_File).macro("PYTHON_CreateCriticalMessageBox")
+	Macro(Message, Title)
+
+def CreateInformationMessageBox(Message, Title):
+	Macro = xl.Book(Excel_File).macro("PYTHON_CreateInformationMessageBox")
 	Macro(Message, Title)
 
 def SelectCell(Sheet,Row,Col):

@@ -149,8 +149,9 @@ def LogMethodComment(Step, CommentList):
 	Comments = [[Comment] for Comment in CommentList]
 
 	EXCELIO.WriteSheet("Method",Coords[0],Coords[1] + 3,Comments)
-	
-	EXCELIO.CreateMessageBox("There were issues found with your method. Please go to the method sheet and correct the errors. Errors will be documented to the right of the block.","Critical Validation Error!")
+	EXCELIO.SelectCell("Method",Coords[0],Coords[1] + 3)
+
+	EXCELIO.CreateCriticalMessageBox("There were issues found with your method. Please go to the method sheet and correct the errors. Errors will be documented to the right of the block at Row: " + str(Coords[0]) + " Column: " + str(Coords[1]),"Critical Validation Error!")
 	quit()
 	
 

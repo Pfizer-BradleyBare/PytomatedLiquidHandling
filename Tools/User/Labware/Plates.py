@@ -17,6 +17,7 @@ class PipetteSequence:
 		self.CurrentDestinationVolumes = []
 		self.Mix = []
 		self.LiquidClassString = []
+		self.LLD = []
 
 	def GetDestinations(self):
 		return self.Destinations
@@ -42,10 +43,13 @@ class PipetteSequence:
 	def GetLiquidClassStrings(self):
 		return self.LiquidClassString
 
+	def GetLLD(self):
+		self.LLD
+
 	def GetNumSequencePositions(self):
 		return len(self.GetDestinationPositions())
 
-	def AppendToPipetteSequence(self,Dest,DestPos,Source,SourcePos,Vol,CurDestVol,Mix,LiquidClassString):
+	def AppendToPipetteSequence(self,Dest,DestPos,Source,SourcePos,Vol,CurDestVol,Mix,LiquidClassString,LLD):
 		Index = 0
 		for Counter in range(0,self.GetNumSequencePositions()):
 
@@ -64,6 +68,7 @@ class PipetteSequence:
 		self.CurrentDestinationVolumes.insert(Index,CurDestVol)
 		self.Mix.insert(Index,Mix)
 		self.LiquidClassString.insert(Index,LiquidClassString)
+		self.LLD.insert(Index,LLD)
 
 class Class(LABWARE.Class):
 ######################################################################### 
@@ -173,9 +178,9 @@ class Class(LABWARE.Class):
 	def GetHomogeneity(self, SampleIndex):
 		self.UpdateLabwareSolutionParameters()
 		return self.GenericCalculation(SampleIndex,self.Homogeneity,LABWARE.HomogeneityValues, Class.GetHomogeneity, SOLUTIONS.Class.GetHomogeneity)
-	def GetLiquidClassString(self):
+	def GetLLD(self, SampleIndex):
 		self.UpdateLabwareSolutionParameters()
-		return self.LiquidClassString
+		return self.GenericCalculation(SampleIndex,self.LLD,LABWARE.LLDValues, Class.GetLLD, SOLUTIONS.Class.GetLLD)
 				
 ######################################################################### 
 #	Description: Creates a sorted pipetting list to be used by the hamilton pipette command
@@ -225,17 +230,14 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				SourceLabware = SOLUTIONS.Class(SourceName)
 				LABWARE.AddLabware(SourceLabware)
 			#If the labware doesn't exists then it has to be a reagent. Add it
-			
-			SourceLiquidClassString = SourceLabware.GetLiquidClassString()
-			if SourceLiquidClassString == "None":
-				LiquidClassString = "Vicosity" + SourceLabware.GetViscosity(SampleIndex)
-				LiquidClassString += "Volatility" + SourceLabware.GetVolatility(SampleIndex)
-				LiquidClassString += "Homogeneity" + SourceLabware.GetHomogeneity(SampleIndex)
-			else:
-				LiquidClassString = "__CUSTOM__" + SourceLiquidClassString
 
 			if SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Reagent:
 				SOLUTIONS.Class.AddVolume(SourceLabware, ActualVolume)
+
+				LiquidClassString = "Vicosity" + SourceLabware.GetViscosity(SampleIndex)
+				LiquidClassString += "Volatility" + SourceLabware.GetVolatility(SampleIndex)
+				LiquidClassString += "Homogeneity" + SourceLabware.GetHomogeneity(SampleIndex)
+				LLD = SourceLabware.GetLLD(SampleIndex)
 
 			elif SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
 				SourceSequencePosition = LABWARE.GetContextualSequences(SourceContextString)[SampleIndex]
@@ -248,6 +250,11 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 					SourceArrayPosition = SourceSequencePosition - StartPosition
 				#This is a case where the aliquot can modify the sequence position to be at the start of the plate instead of the user chosen posiiton.
 
+				LiquidClassString = "Vicosity" + SourceLabware.GetViscosity(SourceArrayPosition)
+				LiquidClassString += "Volatility" + SourceLabware.GetVolatility(SourceArrayPosition)
+				LiquidClassString += "Homogeneity" + SourceLabware.GetHomogeneity(SourceArrayPosition)
+				LLD = SourceLabware.GetLLD(SourceArrayPosition)
+
 				SourceLabware.VolumesList[SourceArrayPosition] -= ActualVolume
 				SourceLabware.DoVolumeUpdate()
 				#DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":"__REMOVE__","Volume":ActualVolume})
@@ -257,7 +264,7 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				Class.AddPipetteVolume(DestinationLabware,ActualVolume)
 			DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":SourceName,"Volume":ActualVolume})
 			
-			NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,MixParameter,LiquidClassString)
+			NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,MixParameter,LiquidClassString, LLD)
 				
 			DestinationLabware.VolumesList[DestinationArrayPosition] += ActualVolume
 			DestinationLabware.DoVolumeUpdate()

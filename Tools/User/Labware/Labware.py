@@ -10,6 +10,7 @@ class LabwareTypes(Enum):
 
 ViscosityVolatilityValues = {"Low":{"Weight":1,"Value":1},"Medium":{"Weight":1,"Value":2},"High":{"Weight":1,"Value":3},"Very High":{"Weight":1,"Value":4}}
 HomogeneityValues = {"Homogenous":{"Weight":1,"Value":1},"Heterogenous":{"Weight":1,"Value":2},"Suspension":{"Weight":1,"Value":3},"Emulsion":{"Weight":1,"Value":4}}
+LLDValues = {"Normal":{"Weight":1,"Value":1},"Organic":{"Weight":1,"Value":2}}
 #This wil
 
 
@@ -28,7 +29,7 @@ class Class:
         self.Viscosity = None
         self.Volatility = None
         self.Homogeneity = None
-        self.LiquidClassString = None
+        self.LLD = None
 
 
     #
@@ -90,7 +91,7 @@ class Class:
         raise NotImplementedError() #this is a crude implementation of virtual functions
     def GetHomogeneity(self, SampleIndex):
         raise NotImplementedError() #this is a crude implementation of virtual functions
-    def GetLiquidClassString(self):
+    def GetLLD(self, SampleIndex):
         raise NotImplementedError() #this is a crude implementation of virtual functions
 
     def UpdateLabwareSolutionParameters(self):
@@ -100,7 +101,7 @@ class Class:
         self.Viscosity = ExcelSolutionInfoDict[LabwareName]["Viscosity"]
         self.Volatility = ExcelSolutionInfoDict[LabwareName]["Volatility"]
         self.Homogeneity = ExcelSolutionInfoDict[LabwareName]["Homogeneity"]
-        self.LiquidClassString = ExcelSolutionInfoDict[LabwareName]["LiquidClassString"]
+        self.LLD = ExcelSolutionInfoDict[LabwareName]["LLD"]
 
 ContextualFactors_Dict = {}
 def SetContextualFactors(ContextString, FactorsList):
@@ -218,14 +219,10 @@ def GetExcelLabwareInfo():
             Volatility = Output[Row + 3][Column + 1]
             Viscosity = Output[Row + 4][Column + 1]
             Homogeneity = Output[Row + 5][Column + 1]
-            LiquidClassString = Output[Row + 6][Column + 1]
-            
-            if LiquidClassString == "Custom (Advanced Only)":
-                LiquidClassString = "None"
-            #if the liquid class is the custom value then the user probably doesn't know what they are doing. Change it to None
+            LLD = Output[Row + 6][Column + 1]
             
             SolutionNames = SAMPLES.Column(SolutionName)
             for SolutionName in SolutionNames:
-                ExcelSolutionInfoDict[SolutionName] = {"Category":Category,"StorageTemperature": StorageTemperature, "Volatility":Volatility, "Viscosity":Viscosity,"Homogeneity":Homogeneity,"LiquidClassString":LiquidClassString}
+                ExcelSolutionInfoDict[SolutionName] = {"Category":Category,"StorageTemperature": StorageTemperature, "Volatility":Volatility, "Viscosity":Viscosity,"Homogeneity":Homogeneity,"LLD":LLD}
         if BreakFlag == True:
             break
