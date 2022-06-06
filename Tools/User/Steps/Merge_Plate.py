@@ -109,9 +109,9 @@ def Step(step):
 				MergedPathways.add(str(SearchStep.GetCoordinates()))
 				#This pathway is now merged!
 
-				UpdateFactorsFlag = True
+				UpdateFactorsFlag = False
 				if SearchStep.GetParameters()[SPLIT_PLATE.CHOICE] != "Split" and SearchStep.GetParameters()[SPLIT_PLATE.CHOICE] != "Concurrent":
-					UpdateFactorsFlag = False
+					UpdateFactorsFlag = True
 				#I don't want to update the factors if it is split or concurrent. This would make the factors larger than the volume present in the wells.
 
 				Factors = PLATES.LABWARE.GetContextualFactors(Context)
