@@ -21,7 +21,10 @@ def Init(ExcelFile):
 	Excel_File = ExcelFile
 
 def CreateSheet(Sheet):
+	Count = 0
 	while True:
+		if Count > 100:
+			raise NotImplemented
 		try:
 			Macro = xl.Book(Excel_File).macro("PYTHON_CreateSheet")
 			Macro(Sheet,"Solutions")
@@ -30,7 +33,10 @@ def CreateSheet(Sheet):
 			pass
 
 def DeleteSheet(Sheet):
+	Count = 0
 	while True:
+		if Count > 100:
+			raise NotImplemented
 		try:
 			Macro = xl.Book(Excel_File).macro("PYTHON_DeleteSheet")
 			Macro(Sheet)
@@ -49,7 +55,10 @@ def PullUsedRange(Sheet):
 # Reading a sheet is easy. For Excel 2010, if you try to write a sheet while a save is ongoing is crashes the xlwings app. By using a macro it never crashes
 #
 def WriteSheet(Sheet,Row,Col,Text2DArray):
+	Count = 0
 	while True:
+		if Count > 100:
+			raise NotImplemented
 		try:
 			Macro = xl.Book(Excel_File).macro("PYTHON_WriteSheet")
 			Macro(Sheet,Row,Col,Text2DArray)
@@ -64,7 +73,10 @@ def GetWorklist():
 	return Pull(WORKLIST_SHEET, WORKLIST_ROW_START, WORKLIST_COL_START, WORKLIST_ROW_END, WORKLIST_COL_END,2)
 
 def GetMethodValidatedStatus():
+	Count = 0
 	while True:
+		if Count > 100:
+			raise NotImplemented
 		try:
 			Macro = xl.Book(Excel_File).macro("Python_GetMethodValidatedStatus")
 			Macro()
@@ -81,7 +93,10 @@ def CreateInformationMessageBox(Message, Title):
 	Macro(Message, Title)
 
 def SelectCell(Sheet,Row,Col):
+	Count = 0
 	while True:
+		if Count > 100:
+			raise NotImplemented
 		try:
 			Macro = xl.Book(Excel_File).macro("PYTHON_SelectCell")
 			Macro(Sheet,Row,Col)
@@ -90,7 +105,10 @@ def SelectCell(Sheet,Row,Col):
 			pass
 
 def CreateBorder(Sheet,RowStart,ColStart,RowEnd,ColEnd,BorderStyle,BorderWeight):
+	Count = 0
 	while True:
+		if Count > 100:
+			raise NotImplemented
 		try:
 			Macro = xl.Book(Excel_File).macro("PYTHON_CreateBorder")
 			Macro(Sheet,RowStart,ColStart,RowEnd,ColEnd)
@@ -99,7 +117,10 @@ def CreateBorder(Sheet,RowStart,ColStart,RowEnd,ColEnd,BorderStyle,BorderWeight)
 			pass
 
 def Merge(Sheet,RowStart,ColStart,RowEnd,ColEnd):
+	Count = 0
 	while True:
+		if Count > 100:
+			raise NotImplemented
 		try:
 			Macro = xl.Book(Excel_File).macro("PYTHON_Merge")
 			Macro(Sheet,RowStart,ColStart,RowEnd,ColEnd)
@@ -108,7 +129,10 @@ def Merge(Sheet,RowStart,ColStart,RowEnd,ColEnd):
 			pass
 
 def FontSize(Sheet,RowStart,ColStart,RowEnd,ColEnd, FontSize):
+	Count = 0
 	while True:
+		if Count > 100:
+			raise NotImplemented
 		try:
 			Macro = xl.Book(Excel_File).macro("PYTHON_FontSize")
 			Macro(Sheet,RowStart,ColStart,RowEnd,ColEnd, FontSize)
@@ -117,7 +141,10 @@ def FontSize(Sheet,RowStart,ColStart,RowEnd,ColEnd, FontSize):
 			pass
 
 def Center(Sheet,RowStart,ColStart,RowEnd,ColEnd):
+	Count = 0
 	while True:
+		if Count > 100:
+			raise NotImplemented
 		try:
 			Macro = xl.Book(Excel_File).macro("PYTHON_Center")
 			Macro(Sheet,RowStart,ColStart,RowEnd,ColEnd)
@@ -126,7 +153,10 @@ def Center(Sheet,RowStart,ColStart,RowEnd,ColEnd):
 			pass
 
 def AutoFit(Sheet,ColumnNumber):
+	Count = 0
 	while True:
+		if Count > 100:
+			raise NotImplemented
 		try:
 			Macro = xl.Book(Excel_File).macro("PYTHON_AutoFit")
 			Macro(Sheet,ColumnNumber)
@@ -135,7 +165,10 @@ def AutoFit(Sheet,ColumnNumber):
 			pass
 
 def WrapText(Sheet,RowStart,ColStart,RowEnd,ColEnd):
+	Count = 0
 	while True:
+		if Count > 100:
+			raise NotImplemented
 		try:
 			Macro = xl.Book(Excel_File).macro("PYTHON_WrapText")
 			Macro(Sheet,RowStart,ColStart,RowEnd,ColEnd)
