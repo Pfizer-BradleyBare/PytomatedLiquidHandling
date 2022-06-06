@@ -33,9 +33,17 @@ def Init(SampleStartPosition, PulledWorkListSheet):
 
 	Sample_Sheet = PulledWorkListSheet
 
+	SampleVerificationCount = 1
 	while(True):
-		if Sample_Sheet[NumSamples + 1][0] == None:
+		WorklistSampleNumber = Sample_Sheet[NumSamples + 1][0]
+		
+		if WorklistSampleNumber == None:
 			break
+		elif WorklistSampleNumber != SampleVerificationCount:
+			EXCELIO.CreateMessageBox("Issue found with worklist column Sample Number. Sample numbers do not increment correctly (1,2,3,4,etc.). Please Correct.", "Critical Validation Issue")
+			quit()
+
+		SampleVerificationCount += 1 
 		NumSamples += 1
 	#end
 	

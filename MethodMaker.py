@@ -190,12 +190,13 @@ if HAMILTONIO.IsSimulated() == True:
 	if GenerateList == False and TestRun == False:
 		HAMILTONIO.Simulated(False)
 
-#	HAMILTONIO.AddCommand(PRERUN.Samples(SAMPLES.GetTotalSamples()),False)
+	HAMILTONIO.AddCommand(PRERUN.Samples(SAMPLES.GetNumSamples()),False)
 	Labware = CONFIGURATION.Load(LABWARE.GetAllLabwareType(LABWARE.LabwareTypes.Plate),LABWARE.GetAllLabwareType(LABWARE.LabwareTypes.Reagent))
 	HAMILTONIO.AddCommand(PRERUN.Labware(Labware),False)
 
 	if GenerateList == True:
 		PREPLIST.GeneratePrepSheet(Labware)
+		PREPLIST.PrintFinalPlateVolumes(Labware)
 	#Generate prep sheet here
 	
 	if LIQUID_TRANSFER.IsUsed() == True or DILUTE.IsUsed() == True:

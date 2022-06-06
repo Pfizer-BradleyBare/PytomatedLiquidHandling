@@ -130,13 +130,13 @@ def AutoFit(Sheet,ColumnNumber):
 		except:
 			pass
 
-def PrintPlate(StartRow, StartCol, PlateName, LabwareName, PlateRows, PlateCols, ValArray):
+def PrintPlate(Sheet, StartRow, StartCol, PlateName, LabwareName, PlateRows, PlateCols, ValArray):
 
-	CreateBorder("PrepList",StartRow,StartCol,StartRow+PlateRows,StartCol+PlateCols-1,1,3)
-	CreateBorder("PrepList",StartRow+1,StartCol,StartRow+PlateRows,StartCol+PlateCols-1,1,3)
-	Merge("PrepList",StartRow,StartCol,StartRow,StartCol+PlateCols-1)
-	FontSize("PrepList",StartRow,StartCol,StartRow,StartCol+PlateCols-1,20)
-	Center("PrepList",StartRow,StartCol,StartRow+PlateRows,StartCol+PlateCols-1)
+	CreateBorder(Sheet,StartRow,StartCol,StartRow+PlateRows,StartCol+PlateCols-1,1,3)
+	CreateBorder(Sheet,StartRow+1,StartCol,StartRow+PlateRows,StartCol+PlateCols-1,1,3)
+	Merge(Sheet,StartRow,StartCol,StartRow,StartCol+PlateCols-1)
+	FontSize(Sheet,StartRow,StartCol,StartRow,StartCol+PlateCols-1,20)
+	Center(Sheet,StartRow,StartCol,StartRow+PlateRows,StartCol+PlateCols-1)
 	#Do some formatting so it looks nice
 
 	Test = [""] * PlateRows * PlateCols
@@ -151,46 +151,46 @@ def PrintPlate(StartRow, StartCol, PlateName, LabwareName, PlateRows, PlateCols,
 
 		Test[Row][Col] = str(ValArray[item]["AlphaNumeric"]) + ": " + str(ValArray[item]["Volume"]) + "uL"
 	
-	WriteSheet("PrepList",StartRow,StartCol,[[PlateName + ": " +LabwareName]])
-	WriteSheet("PrepList", StartRow+1, StartCol, Test)
+	WriteSheet(Sheet,StartRow,StartCol,[[PlateName + ": " +LabwareName]])
+	WriteSheet(Sheet, StartRow+1, StartCol, Test)
 
 	return (PlateRows+1, PlateCols)
 
 
-def PrintReagent(StartRow, StartCol, PlateName, LabwareName, Volume):
+def PrintReagent(Sheet, StartRow, StartCol, PlateName, LabwareName, Volume):
 
-	CreateBorder("PrepList",StartRow,StartCol,StartRow+8,StartCol+4,1,3)
-	CreateBorder("PrepList",StartRow+1,StartCol,StartRow+8,StartCol+4,1,3)
-	CreateBorder("PrepList",StartRow+2,StartCol,StartRow+8,StartCol+4,1,3)
-	CreateBorder("PrepList",StartRow+3,StartCol,StartRow+8,StartCol+4,1,3)
+	CreateBorder(Sheet,StartRow,StartCol,StartRow+8,StartCol+4,1,3)
+	CreateBorder(Sheet,StartRow+1,StartCol,StartRow+8,StartCol+4,1,3)
+	CreateBorder(Sheet,StartRow+2,StartCol,StartRow+8,StartCol+4,1,3)
+	CreateBorder(Sheet,StartRow+3,StartCol,StartRow+8,StartCol+4,1,3)
 
-	Merge("PrepList",StartRow,StartCol,StartRow,StartCol+4)
-	Merge("PrepList",StartRow+1,StartCol,StartRow+1,StartCol+4)
-	Merge("PrepList",StartRow+2,StartCol,StartRow+2,StartCol+4)
+	Merge(Sheet,StartRow,StartCol,StartRow,StartCol+4)
+	Merge(Sheet,StartRow+1,StartCol,StartRow+1,StartCol+4)
+	Merge(Sheet,StartRow+2,StartCol,StartRow+2,StartCol+4)
 
-	FontSize("PrepList",StartRow,StartCol,StartRow,StartCol+4,14)
-	FontSize("PrepList",StartRow+1,StartCol,StartRow+1,StartCol+4,12)
-	FontSize("PrepList",StartRow+2,StartCol,StartRow+2,StartCol+4,12)
+	FontSize(Sheet,StartRow,StartCol,StartRow,StartCol+4,14)
+	FontSize(Sheet,StartRow+1,StartCol,StartRow+1,StartCol+4,12)
+	FontSize(Sheet,StartRow+2,StartCol,StartRow+2,StartCol+4,12)
 
-	Center("PrepList",StartRow,StartCol,StartRow,StartCol+4)
-	Center("PrepList",StartRow+1,StartCol,StartRow+1,StartCol+4)
-	Center("PrepList",StartRow+2,StartCol,StartRow+2,StartCol+4)
+	Center(Sheet,StartRow,StartCol,StartRow,StartCol+4)
+	Center(Sheet,StartRow+1,StartCol,StartRow+1,StartCol+4)
+	Center(Sheet,StartRow+2,StartCol,StartRow+2,StartCol+4)
 	#make it look nice before we write the data
 
-	Merge("PrepList",StartRow+3,StartCol,StartRow+3,StartCol+1)
-	Merge("PrepList",StartRow+4,StartCol,StartRow+4,StartCol+1)
-	Merge("PrepList",StartRow+5,StartCol,StartRow+5,StartCol+1)
-	Merge("PrepList",StartRow+6,StartCol,StartRow+6,StartCol+1)
-	Merge("PrepList",StartRow+7,StartCol,StartRow+7,StartCol+1)
-	Merge("PrepList",StartRow+8,StartCol,StartRow+8,StartCol+1)
+	Merge(Sheet,StartRow+3,StartCol,StartRow+3,StartCol+1)
+	Merge(Sheet,StartRow+4,StartCol,StartRow+4,StartCol+1)
+	Merge(Sheet,StartRow+5,StartCol,StartRow+5,StartCol+1)
+	Merge(Sheet,StartRow+6,StartCol,StartRow+6,StartCol+1)
+	Merge(Sheet,StartRow+7,StartCol,StartRow+7,StartCol+1)
+	Merge(Sheet,StartRow+8,StartCol,StartRow+8,StartCol+1)
 
-	Merge("PrepList",StartRow+3,StartCol+2,StartRow+3,StartCol+4)
-	Merge("PrepList",StartRow+4,StartCol+2,StartRow+4,StartCol+4)
-	Merge("PrepList",StartRow+5,StartCol+2,StartRow+5,StartCol+4)
-	Merge("PrepList",StartRow+6,StartCol+2,StartRow+6,StartCol+4)
-	Merge("PrepList",StartRow+7,StartCol+2,StartRow+7,StartCol+4)
-	Merge("PrepList",StartRow+8,StartCol+2,StartRow+8,StartCol+4)
+	Merge(Sheet,StartRow+3,StartCol+2,StartRow+3,StartCol+4)
+	Merge(Sheet,StartRow+4,StartCol+2,StartRow+4,StartCol+4)
+	Merge(Sheet,StartRow+5,StartCol+2,StartRow+5,StartCol+4)
+	Merge(Sheet,StartRow+6,StartCol+2,StartRow+6,StartCol+4)
+	Merge(Sheet,StartRow+7,StartCol+2,StartRow+7,StartCol+4)
+	Merge(Sheet,StartRow+8,StartCol+2,StartRow+8,StartCol+4)
 
-	WriteSheet("PrepList",StartRow,StartCol,[[PlateName],[LabwareName],["Minimum Volume: " + str(round(Volume,2)) + "uL"],["Reagent"],["Reagent Lot"],["Reagent Volume"],["Diluent"],["Diluent Lot"],["Diluent Volume"]])
+	WriteSheet(Sheet,StartRow,StartCol,[[PlateName],[LabwareName],["Minimum Volume: " + str(round(Volume,2)) + "uL"],["Reagent"],["Reagent Lot"],["Reagent Volume"],["Diluent"],["Diluent Lot"],["Diluent Volume"]])
 
 	return (10,5)

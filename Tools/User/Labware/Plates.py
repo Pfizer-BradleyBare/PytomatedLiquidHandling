@@ -204,6 +204,7 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 		ContextFlags = LABWARE.GetContextualFlags(DestinationContextString)
 		if "SequenceFromPlateStart" in ContextFlags:
 			DestinationArrayPosition = DestinationSequencePosition - 1
+			DestinationLabware.SetIsPlateStartSequence()
 		else:
 			DestinationArrayPosition = DestinationSequencePosition - StartPosition
 		#This is a case where the Pool can modify the sequence position to be at the start of the plate instead of the user chosen posiiton.
@@ -242,6 +243,7 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				ContextFlags = LABWARE.GetContextualFlags(SourceContextString)
 				if "SequenceFromPlateStart" in ContextFlags:
 					SourceArrayPosition = SourceSequencePosition - 1
+					SourceLabware.SetIsPlateStartSequence()
 				else:
 					SourceArrayPosition = SourceSequencePosition - StartPosition
 				#This is a case where the aliquot can modify the sequence position to be at the start of the plate instead of the user chosen posiiton.

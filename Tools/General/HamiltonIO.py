@@ -97,8 +97,8 @@ def SendCommands():
 			file.close()
 			os.rename(HAMILTON_COMMAND_TEMP_FILE, HAMILTON_COMMAND_FILE)
 			quit()
-		
-		for ResponseDict,CommandDict in Response,CommandsList:
+
+		for ResponseDict,CommandDict in zip(Response,CommandsList):
 			CommandID = CommandDict["Command ID"]
 			LOG.LogCommandResponse(CommandID, ResponseDict)
 

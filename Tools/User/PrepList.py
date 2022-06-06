@@ -26,6 +26,7 @@ def NumericToAlphaNumeric(Number):
 	return AN
 
 def GeneratePrepSheet(LabwareArray):
+	Sheet = "Preparation List"
 	StartRow = 2
 	StartCol = 2
 	MaxCol = 11
@@ -35,14 +36,12 @@ def GeneratePrepSheet(LabwareArray):
 	ColPadding = 2
 	RowTracker = 0
 
-	#Sequences = CONFIGURATION.GetAutoloadingSequences()
-
 	try:
-		EXCELIO.DeleteSheet("PrepList")
+		EXCELIO.DeleteSheet(Sheet)
 	except:
 		pass
 
-	EXCELIO.CreateSheet("PrepList")
+	EXCELIO.CreateSheet(Sheet)
 
 	for LabwareName in LabwareArray:
 		Labware = LABWARE.GetLabware(LabwareName)
@@ -62,7 +61,7 @@ def GeneratePrepSheet(LabwareArray):
 								PlatePrepArray[int(position)] = {"AlphaNumeric":position,"Volume":abs(PlateLoadedVolumeList[index]) + LabwareArray[LabwareName]["Labware Info"]["Dead Volume"]}
 				
 				if len(PlatePrepArray) != 0:
-					UsedSpace = EXCELIO.PrintPlate(CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], LabwareArray[LabwareName]["Labware Info"]["Labware Rows"], LabwareArray[LabwareName]["Labware Info"]["Labware Columns"], PlatePrepArray)
+					UsedSpace = EXCELIO.PrintPlate(Sheet, CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], LabwareArray[LabwareName]["Labware Info"]["Labware Rows"], LabwareArray[LabwareName]["Labware Info"]["Labware Columns"], PlatePrepArray)
 
 					NewRow = UsedSpace[0] + CurrentRow
 					NewCol = UsedSpace[1] + CurrentCol
@@ -87,7 +86,7 @@ def GeneratePrepSheet(LabwareArray):
 		if Labware.GetLabwareType() == LABWARE.LabwareTypes.Reagent:
 			if True:
 
-				UsedSpace = EXCELIO.PrintReagent(CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], LabwareArray[LabwareName]["Used Volume"])
+				UsedSpace = EXCELIO.PrintReagent(Sheet, CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], LabwareArray[LabwareName]["Used Volume"])
 
 				NewRow = UsedSpace[0] + CurrentRow
 				NewCol = UsedSpace[1] + CurrentCol
@@ -103,9 +102,76 @@ def GeneratePrepSheet(LabwareArray):
 			#Do reagent solution loading here
 
 	for Column in range(1,15):
-		EXCELIO.AutoFit("PrepList",Column)	
+		EXCELIO.AutoFit(Sheet,Column)	
 
 
+def PrintFinalPlateVolumes(LabwareArray):
+	Sheet = "Final Plate Volumes"
+	StartRow = 6
+	StartCol = 2
+	MaxCol = 11
+	CurrentRow = StartRow
+	CurrentCol = StartCol
+	RowPadding = 2
+	ColPadding = 2
+	RowTracker = 0
 
+	try:
+		EXCELIO.DeleteSheet(Sheet)
+	except:
+		pass
+
+	EXCELIO.CreateSheet(Sheet)
+
+	TrackedMaxCol = StartCol + MaxCol - 1
+
+	for LabwareName in LabwareArray:
+		Labware = LABWARE.GetLabware(LabwareName)
+
+		if Labware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
+
+			PlatePrepArray = dict()
+			for index in range(0,SAMPLES.GetNumSamples()):
+				
+				position = index + 1
+				
+				if Labware.VolumesList[index] > 0:
+					PlatePrepArray[int(position)] = {"AlphaNumeric":index + 1,"Volume":Labware.VolumesList[index]}
+			
+			if len(PlatePrepArray) != 0:
+
+				UsedSpace = EXCELIO.PrintPlate(Sheet, CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], LabwareArray[LabwareName]["Labware Info"]["Labware Rows"], LabwareArray[LabwareName]["Labware Info"]["Labware Columns"], PlatePrepArray)
+
+				NewRow = UsedSpace[0] + CurrentRow
+				NewCol = UsedSpace[1] + CurrentCol
+			
+				if NewCol > TrackedMaxCol:
+					TrackedMaxCol = NewCol - 1
+
+				if NewRow > RowTracker:
+					RowTracker = NewRow
+
+				if NewCol > MaxCol:
+					CurrentCol = StartCol
+					CurrentRow = RowTracker + RowPadding
+				else:
+					CurrentCol = NewCol + ColPadding
+			#Do plate solution sheet here
+
+	EXCELIO.WriteSheet(Sheet, 2, 2, [["This is the theoretical final volumes in each plate."]])
+	EXCELIO.WriteSheet(Sheet, 3, 2, [["Actual volume can be slightly less due to evaporation."]])
+	EXCELIO.WriteSheet(Sheet, 4, 2, [["Plates that are not listed have a final volume less than or equal to 0."]])
+	
+	EXCELIO.Merge(Sheet,2,2,2,TrackedMaxCol)
+	EXCELIO.Merge(Sheet,3,2,3,TrackedMaxCol)
+	EXCELIO.Merge(Sheet,4,2,4,TrackedMaxCol)
+	
+	EXCELIO.Center(Sheet,2,2,2,TrackedMaxCol)
+	EXCELIO.Center(Sheet,3,2,3,TrackedMaxCol)
+	EXCELIO.Center(Sheet,4,2,4,TrackedMaxCol)
+	
+	EXCELIO.FontSize(Sheet,2,2,2,TrackedMaxCol,18)
+	EXCELIO.FontSize(Sheet,3,2,3,TrackedMaxCol,18)
+	EXCELIO.FontSize(Sheet,4,2,4,TrackedMaxCol,18)
 
 
