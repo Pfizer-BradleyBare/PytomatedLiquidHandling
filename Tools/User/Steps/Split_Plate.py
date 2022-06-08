@@ -27,6 +27,8 @@ def Init(MutableStepsList):
 def Step(step):
 	Choices = SAMPLES.Column(step.GetParameters()[CHOICE])
 
+	ContextualFactors = PLATES.LABWARE.GetContextualFactors(STEPS.Class.GetContext(step))
+
 	NewPlate1 = step.GetParameters()[NAME_1]
 	NewPlate2 = step.GetParameters()[NAME_2]
 
@@ -69,7 +71,7 @@ def Step(step):
 	if not all(type(Choice) is str for Choice in Choices):
 		MethodComments.append("The Plate Choice parameter must contain letters. Please Correct.")
 	
-	elif not all(Choice == "Split" or Choice == "Concurrent" or Choice == NewPlate1 or Choice == NewPlate2 for Choice in Choices):
+	elif not all(Choice == "Split" or Choice == "Concurrent" or Choice == NewPlate1 or Choice == NewPlate2 or Factor == 0 for Choice,Factor in zip(Choices,ContextualFactors)):
 		MethodComments.append("The Plate Choice parameter can be \"Split\", \"Concurrent\", \"" + NewPlate1 + "\", or \"" + NewPlate2 + "\". Please Correct.")
 
 	if len(MethodComments) != 0:
@@ -82,8 +84,6 @@ def Step(step):
 	#########################
 	#########################
 	#########################
-
-	ContextualFactors = PLATES.LABWARE.GetContextualFactors(STEPS.Class.GetContext(step))
 
 	NewPlate1Factors = []
 	NewPlate2Factors = []
@@ -104,7 +104,8 @@ def Step(step):
 			NewPlate1Factors.append(0.5 * ContextualFactors[count])
 			NewPlate2Factors.append(0.5 * ContextualFactors[count])
 		else:
-			pass
+			NewPlate1Factors.append(0 * ContextualFactors[count])
+			NewPlate2Factors.append(0 * ContextualFactors[count])
 	#Generate the factors for this new plate.
 
 	PlateParameters = STEPS.Class.GetParameters(NextStep)
