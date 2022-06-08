@@ -100,7 +100,6 @@ def Step(step):
 	if Sequence.GetNumSequencePositions() != 0:
 
 		TransferVolumes = Sequence.GetTransferVolumes()
-		LiquidClassStrings = Sequence.GetSourceLiquidClassStrings()
 
 		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":Sequence.GetSourceLiquidClassStrings()}),False)
 		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":Sequence.GetDestinationLiquidClassStrings()}),False)

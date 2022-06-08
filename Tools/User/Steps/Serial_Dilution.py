@@ -113,11 +113,18 @@ def Step(step):
                     FactorsList.append(Factor)
                     Conc = Conc / Factor
                 
-                InsertNum = NumWells - len(FactorsList)
-                InsertPos = len(FactorsList) - 1
+                NumFactors = len(FactorsList)
+                ActualFactor = (StartingConcentration/TargetConcentration) ** (1/NumFactors)
+                for Index in range(0,len(FactorsList)):
+                    FactorsList[Index] = ActualFactor
+                #Spread the dilution factor across all wells equally
+
+                InsertNum = NumWells - NumFactors
+                InsertPos = NumFactors - 1
                 if InsertNum != 0:
                     for i in range(0,InsertNum):
                         FactorsList.insert(InsertPos,0)
+                #Insert zeros into wells we will not use
 
                 Conc = StartingConcentration
                 for Well, Factor in zip(Item[:], FactorsList):
@@ -206,57 +213,49 @@ def Step(step):
                 FirstTransferVolumes[Index2D][Index1D] = VolumeSwap
     #I want to swap the lowest volume and transfer that first. It makes liquid transfers more robust
 
-    print(SourceTransferSequences)
-    print(DestinationTransferSequences)
-
     for Index in range(0,len(FirstTransferSources)):
-        print("ROUND")
         
         FirstSources = FirstTransferSources[Index]
         FirstSourceContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,FirstSources)
+        FirstSourceContextualStringsSerialDilution = ["__SERIAL_DILUTION_SOURCE__:" + Context if Context is not None else None for Context in FirstSourceContextualStrings]
         FirstDestinations = FirstTransferDestinations[Index]
         FirstDestinationsContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,FirstDestinations)
+        FirstDestinationsContextualStringsSerialDilution = ["__SERIAL_DILUTION_DESTINATION__:" + Context if Context is not None else None for Context in FirstDestinationsContextualStrings]
         FirstVolumes = FirstTransferVolumes[Index]
 
         SecondSources = SecondTransferSources[Index]
         SecondSourceContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,SecondSources)
+        SecondSourceContextualStringsSerialDilution = ["__SERIAL_DILUTION_SOURCE__:" + Context if Context is not None else None for Context in SecondSourceContextualStrings]
         SecondDestinations = SecondTransferDestinations[Index]
         SecondDestinationsContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,SecondDestinations)
+        SecondDestinationsContextualStringsSerialDilution = ["__SERIAL_DILUTION_DESTINATION__:" + Context if Context is not None else None for Context in SecondDestinationsContextualStrings]
         SecondVolumes = SecondTransferVolumes[Index]
 
-        AllSourceContextualStrings = set([Context for Context in FirstSourceContextualStrings + SecondSourceContextualStrings if Context is not None])
-        AllDestinationContextualStrings = set([Context for Context in FirstDestinationsContextualStrings + SecondDestinationsContextualStrings if Context is not None])
+        for SourceContext, SourceContextSerial, DestinationContext, DestinationContextSerial in zip(FirstSourceContextualStrings,FirstSourceContextualStringsSerialDilution,FirstDestinationsContextualStrings,FirstDestinationsContextualStringsSerialDilution):
+            if SourceContext != None:
+                PLATES.LABWARE.SetContextualSequences(SourceContextSerial,SourceTransferSequences[Index])
+                PLATES.LABWARE.SetContextualFactors(SourceContextSerial,PLATES.LABWARE.GetContextualFactors(SourceContext))
+                PLATES.LABWARE.AddContextualFlag(SourceContextSerial,PLATES.LABWARE.GetContextualFlags(SourceContext))
 
-        SavedSourceSequenceContext = []
-        SavedDestinationSequenceContext = []
+            if DestinationContext != None:
+                PLATES.LABWARE.SetContextualSequences(DestinationContextSerial,DestinationTransferSequences[Index])
+                PLATES.LABWARE.SetContextualFactors(DestinationContextSerial,PLATES.LABWARE.GetContextualFactors(DestinationContext))
+                PLATES.LABWARE.AddContextualFlag(DestinationContextSerial,PLATES.LABWARE.GetContextualFlags(DestinationContext))
 
-        print("SET")
-        print(SourceTransferSequences[Index])
-        print(DestinationTransferSequences[Index])
+        for SourceContext, SourceContextSerial, DestinationContext, DestinationContextSerial in zip(SecondSourceContextualStrings,SecondSourceContextualStringsSerialDilution,SecondDestinationsContextualStrings,SecondDestinationsContextualStringsSerialDilution):
+            if SourceContext != None:
+                PLATES.LABWARE.SetContextualSequences(SourceContextSerial,SourceTransferSequences[Index])
+                PLATES.LABWARE.SetContextualFactors(SourceContextSerial,PLATES.LABWARE.GetContextualFactors(SourceContext))
+                PLATES.LABWARE.AddContextualFlag(SourceContextSerial,PLATES.LABWARE.GetContextualFlags(SourceContext))
 
-        #Now we need to save the sequence contexts first for both source and destination
-        #Then we will set the new sequences we need to do the pipetting
-        for SourceContext, DestinationContext in zip(AllSourceContextualStrings, AllDestinationContextualStrings):
-            SavedSourceSequenceContext.append(PLATES.LABWARE.GetContextualSequences(SourceContext))
-            SavedDestinationSequenceContext.append(PLATES.LABWARE.GetContextualSequences(DestinationContext))
+            if DestinationContext != None:
+                PLATES.LABWARE.SetContextualSequences(DestinationContextSerial,DestinationTransferSequences[Index])
+                PLATES.LABWARE.SetContextualFactors(DestinationContextSerial,PLATES.LABWARE.GetContextualFactors(DestinationContext))
+                PLATES.LABWARE.AddContextualFlag(DestinationContextSerial,PLATES.LABWARE.GetContextualFlags(DestinationContext))
 
-            PLATES.LABWARE.SetContextualSequences(SourceContext,SourceTransferSequences[Index])
-            PLATES.LABWARE.SetContextualSequences(DestinationContext,DestinationTransferSequences[Index])
+        FirstSequences = PLATES.CreatePipetteSequence(FirstDestinationsContextualStringsSerialDilution, FirstDestinations, FirstSourceContextualStringsSerialDilution, FirstSources, FirstVolumes,SAMPLES.Column(0),SAMPLES.Column(0))
 
-        print("FIRST")
-        print(FirstSources)
-
-        FirstSequences = PLATES.CreatePipetteSequence(FirstDestinationsContextualStrings, FirstDestinations, FirstSourceContextualStrings, FirstSources, FirstVolumes,SAMPLES.Column(0),SAMPLES.Column(0))
-
-        print("SECOND")
-        print(SecondSources)
-
-        SecondSequences = PLATES.CreatePipetteSequence(SecondDestinationsContextualStrings, SecondDestinations, SecondSourceContextualStrings, SecondSources, SecondVolumes,SAMPLES.Column(0),SAMPLES.Column(10))
-
-        #And now restore it
-        for SourceContext, SourceSequence, DestinationContext, DestinationSequence in zip(AllSourceContextualStrings, SavedSourceSequenceContext, AllDestinationContextualStrings, SavedDestinationSequenceContext):
-            PLATES.LABWARE.SetContextualSequences(SourceContext,SourceSequence)
-            PLATES.LABWARE.SetContextualSequences(DestinationContext,DestinationSequence)
+        SecondSequences = PLATES.CreatePipetteSequence(SecondDestinationsContextualStringsSerialDilution, SecondDestinations, SecondSourceContextualStringsSerialDilution, SecondSources, SecondVolumes,SAMPLES.Column(0),SAMPLES.Column(10))
 
         FirstSeqFlag = False
         if FirstSequences.GetNumSequencePositions() != 0:

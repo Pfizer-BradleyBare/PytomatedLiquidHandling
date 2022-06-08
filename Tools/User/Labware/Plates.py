@@ -156,22 +156,19 @@ class Class(LABWARE.Class):
 		WellContents = self.WellContents[SampleIndex]
 		TotalVolume = self.VolumesList[SampleIndex]
 
-		print(self.GetLabwareName())
-		print(SampleIndex)
-		print(WellContents)
-
 		if len(WellContents) == 0 or TotalVolume == 0:
 			return DefaultValue
 
 		Calculation = []
 		for Content in WellContents:
 			SolutionLabware = LABWARE.GetLabware(Content["Solution"])
+			SolutionWellPosition = Content["Well"]
 			SolutionPercentage = int(Content["Volume"] / TotalVolume * 100)
 			
 			if SolutionLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
-				Value = PlatesGetFunction(SolutionLabware, SampleIndex)
+				Value = PlatesGetFunction(SolutionLabware, SolutionWellPosition)
 			else:
-				Value = SolutionsGetFunction(SolutionLabware, SampleIndex)
+				Value = SolutionsGetFunction(SolutionLabware, SolutionWellPosition)
 			ValuesDictItem = ValuesDict[Value]
 
 			Calculation += [ValuesDictItem["Value"]] * SolutionPercentage * ValuesDictItem["Weight"]
@@ -226,7 +223,6 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 
 		DestinationSequencePosition = LABWARE.GetContextualSequences(DestinationContextString)[SampleIndex]
 
-		print("DESTINATION:",LABWARE.GetContextualSequences(DestinationContextString))
 		ContextFlags = LABWARE.GetContextualFlags(DestinationContextString)
 		if "SequenceFromPlateStart" in ContextFlags:
 			DestinationArrayPosition = DestinationSequencePosition - 1
@@ -269,7 +265,6 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 
 			elif SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
 				SourceSequencePosition = LABWARE.GetContextualSequences(SourceContextString)[SampleIndex]
-				print("SOURCE:",LABWARE.GetContextualSequences(SourceContextString))
 				ContextFlags = LABWARE.GetContextualFlags(SourceContextString)
 				if "SequenceFromPlateStart" in ContextFlags:
 					SourceArrayPosition = SourceSequencePosition - 1
