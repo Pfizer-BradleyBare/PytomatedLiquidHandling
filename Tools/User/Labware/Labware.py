@@ -8,11 +8,52 @@ class LabwareTypes(Enum):
     Plate = "Plate"
     Reagent = "Reagent"
 
-ViscosityVolatilityValues = {"Low":{"Weight":1,"Value":1},"Medium":{"Weight":1,"Value":2},"High":{"Weight":1,"Value":3},"Very High":{"Weight":1,"Value":4}}
-HomogeneityValues = {"Homogenous":{"Weight":1,"Value":1},"Heterogenous":{"Weight":1,"Value":2},"Suspension":{"Weight":1,"Value":3},"Emulsion":{"Weight":1,"Value":4}}
-LLDValues = {"Normal":{"Weight":1,"Value":1},"Organic":{"Weight":1,"Value":2}}
-#This wil
+##################################
+##################################
+# Dynamic Mixing and Calc Values #
+##################################
+##################################
+#The following dicts guide dynamic plate value calculations and provide minimum and maximum mixing criteria for each value
+#NOTE: The list is in order from least to greatest
+ViscosityValues = {\
+    "Low":{"Weight":1, "Value":1, "Minimum Mixing":{"Aspirate":0, "Dispense":0}},\
+    "Medium":{"Weight":1, "Value":2, "Minimum Mixing":{"Aspirate":0, "Dispense":0}},\
+    "High":{"Weight":1, "Value":3, "Minimum Mixing":{"Aspirate":0, "Dispense":0}},\
+    "Very High":{"Weight":1, "Value":4, "Minimum Mixing":{"Aspirate":0, "Dispense":0}}\
+    }
 
+VolatilityValues = {\
+    "Low":{"Weight":1, "Value":1, "Minimum Mixing":{"Aspirate":0, "Dispense":0}},\
+    "Medium":{"Weight":1, "Value":2, "Minimum Mixing":{"Aspirate":0, "Dispense":0}},\
+    "High":{"Weight":1, "Value":3, "Minimum Mixing":{"Aspirate":3, "Dispense":0}},\
+    "Very High":{"Weight":1, "Value":4, "Minimum Mixing":{"Aspirate":3, "Dispense":0}}\
+    }
+
+HomogeneityValues = {\
+    "Homogenous":{"Weight":1, "Value":1, "Minimum Mixing":{"Aspirate":0, "Dispense":0}},\
+    "Heterogenous":{"Weight":1, "Value":2, "Minimum Mixing":{"Aspirate":0, "Dispense":0}},\
+    "Suspension":{"Weight":1, "Value":3, "Minimum Mixing":{"Aspirate":0, "Dispense":0}},\
+    "Emulsion":{"Weight":1, "Value":4, "Minimum Mixing":{"Aspirate":0, "Dispense":0}}\
+    }
+
+LLDValues = {\
+    "Normal":{"Weight":1, "Value":1, "Minimum Mixing":{"Aspirate":0, "Dispense":0}},\
+    "Organic":{"Weight":1, "Value":2, "Minimum Mixing":{"Aspirate":5, "Dispense":0}},\
+    }
+##################################
+##################################
+# Dynamic Mixing and Calc Values #
+##################################
+##################################
+
+def DetermineMaxMixingParam(UserMixingCycles, ViscosityCriteria, VolatilityCriteria, HomogeneityCriteria, LLDCriteria, Key):
+    MixingArray = []
+    MixingArray.append(UserMixingCycles)
+    MixingArray.append(ViscosityValues[ViscosityCriteria]["Minimum Mixing"][Key])
+    MixingArray.append(VolatilityValues[VolatilityCriteria]["Minimum Mixing"][Key])
+    MixingArray.append(HomogeneityValues[HomogeneityCriteria]["Minimum Mixing"][Key])
+    MixingArray.append(LLDValues[LLDCriteria]["Minimum Mixing"][Key])
+    return max(MixingArray)
 
 class Class:   
     def __init__(self, NameString, LabwareType):
@@ -96,12 +137,16 @@ class Class:
 
     def UpdateLabwareSolutionParameters(self):
         LabwareName = self.GetLabwareName()
-        self.Category = ExcelSolutionInfoDict[LabwareName]["Category"]
-        self.StorageTemperature = ExcelSolutionInfoDict[LabwareName]["StorageTemperature"]
-        self.Viscosity = ExcelSolutionInfoDict[LabwareName]["Viscosity"]
-        self.Volatility = ExcelSolutionInfoDict[LabwareName]["Volatility"]
-        self.Homogeneity = ExcelSolutionInfoDict[LabwareName]["Homogeneity"]
-        self.LLD = ExcelSolutionInfoDict[LabwareName]["LLD"]
+        try:
+            self.Category = ExcelSolutionInfoDict[LabwareName]["Category"]
+            self.StorageTemperature = ExcelSolutionInfoDict[LabwareName]["StorageTemperature"]
+            self.Viscosity = ExcelSolutionInfoDict[LabwareName]["Viscosity"]
+            self.Volatility = ExcelSolutionInfoDict[LabwareName]["Volatility"]
+            self.Homogeneity = ExcelSolutionInfoDict[LabwareName]["Homogeneity"]
+            self.LLD = ExcelSolutionInfoDict[LabwareName]["LLD"]
+        except:
+            pass
+        #We calculate for both Source and destination. The destination may not have an entry in this dict. So we need to account for that
 
 ContextualFactors_Dict = {}
 def SetContextualFactors(ContextString, FactorsList):

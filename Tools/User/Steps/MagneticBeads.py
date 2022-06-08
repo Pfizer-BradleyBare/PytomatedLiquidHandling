@@ -73,7 +73,6 @@ def Callback(step):
 	SourceContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,SourceNamesList)
 	SourceLabware = PLATES.LABWARE.GetLabware(BeadsPlate)
 	SourceVolumesList = SourceLabware.VolumesList
-	MixingList = SAMPLES.Column("No")
 
 	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[BeadsPlate]}),False)
 	HAMILTONIO.AddCommand(LABWARE.GetLabwareTypes({"PlateNames":[BeadsPlate]}),False)
@@ -81,7 +80,8 @@ def Callback(step):
 	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateTransportType({"PlateName":BeadsPlate}),False)
 	#Get transport related info
 
-	RemoveSequences = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,MixingList)
+	print("REMOVE")
+	RemoveSequences = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,SAMPLES.Column(0),SAMPLES.Column(0))
 	TransferVolumes = RemoveSequences.GetTransferVolumes()
 	HAMILTONIO.AddCommand(MAGNETICBEADS.GetCondensedBeadsLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}),False)
 	HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}),False)
@@ -92,9 +92,9 @@ def Callback(step):
 	SourceNamesList = SAMPLES.Column(Buffer)
 	SourceContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,SourceNamesList)
 	SourceVolumesList = SAMPLES.Column(Volume)
-	MixingList = SAMPLES.Column("Yes")
 
-	AddSequences = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,MixingList)
+	print("ADD")
+	AddSequences = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,SAMPLES.Column(0),SAMPLES.Column(50))
 	TransferVolumes = AddSequences.GetTransferVolumes()
 	HAMILTONIO.AddCommand(MAGNETICBEADS.GetGeneralLiquidTransferLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}),False)
 	HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}),False)
@@ -125,10 +125,21 @@ def Callback(step):
 
 	for Counter in range(0,RemoveSequences.GetNumSequencePositions()):
 		RemoveSequences.GetSources()[Counter] = RackSequence
-	#We need to modify the destination to be the vacuum plate sequence above. The liquid needs to move through the magnetic beads plate.
+		RemoveSequences.GetDispenseCycles()[Counter] = 0
+		RemoveSequences.GetAspirateCycles()[Counter] = 0
+	#We need to modify the destination to be the magnetic beads plate sequence above. The liquid needs to move through the magnetic beads plate.
+	#We also want to disable all mixing. ALWAYS. We do not want to disturb the beads before we pick them up
 
 	if RemoveSequences.GetNumSequencePositions() != 0:
-		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":RemoveSequences,"LiquidClasses":BeadsLiquidClass,"TipSequences":BeadsTipSeqs,"KeepTips":"False","DestinationPipettingOffset":0}))
+		TransferArgumentsDict = {\
+			"SequenceClass":RemoveSequences,\
+			"SourceLiquidClasses":BeadsLiquidClass,\
+			"DestinationLiquidClasses":BeadsLiquidClass,\
+			"TipSequences":BeadsTipSeqs,\
+			"KeepTips":"False",\
+			"DestinationPipettingOffset":0}
+
+		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 	#Remove the liquid
 
@@ -137,10 +148,17 @@ def Callback(step):
 	#Remove the plate from the rack
 
 	if AddSequences.GetNumSequencePositions() != 0:
-		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":AddSequences,"LiquidClasses":GeneralLiquidClass,"TipSequences":GeneralTipSeqs,"KeepTips":"False","DestinationPipettingOffset":0}))
+		TransferArgumentsDict = {\
+			"SequenceClass":AddSequences,\
+			"SourceLiquidClasses":GeneralLiquidClass,\
+			"DestinationLiquidClasses":GeneralLiquidClass,\
+			"TipSequences":GeneralTipSeqs,\
+			"KeepTips":"False",\
+			"DestinationPipettingOffset":0}
+
+		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 	#Add the storage liquid
-	
 
     #This finished a rep. We also assume that the rep starts in Step function.
 	print("RepsCompleted",RepsCompleted)

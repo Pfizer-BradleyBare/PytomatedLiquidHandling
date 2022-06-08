@@ -21,9 +21,11 @@ def Transfer(Input):
 	CommandString += "[SourcePosition]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetSourcePositions()])
 	CommandString += "[TransferVolume]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetTransferVolumes()])
 	CommandString += "[CurrentDestinationVolume]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetCurrentDestinationVolumes()])
-	CommandString += "[Mix]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetMixCriteria()])
+	CommandString += "[AspirateMix]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetAspirateCycles()])
+	CommandString += "[DispenseMix]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SequenceClass"].GetDispenseCycles()])
 	CommandString += "[TipSequence]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["TipSequences"]]) #I have to include this for cross module support
-	CommandString += "[LiquidClass]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["LiquidClasses"]]) #I have to include this for cross module support
+	CommandString += "[SourceLiquidClass]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["SourceLiquidClasses"]]) #I have to include this for cross module support
+	CommandString += "[DestinationLiquidClass]" + HAMILTONIO.GetDelimiter().join([str(item) for item in Input["DestinationLiquidClasses"]]) #I have to include this for cross module support
 	CommandString += "[DestinationPipettingOffset]" + str(Input["DestinationPipettingOffset"])
 	CommandString += "[KeepTips]" + str(Input["KeepTips"]) #If True, the command will assume that tips are on an isolated rack (Tip support rack or similar)
 	return CommandString

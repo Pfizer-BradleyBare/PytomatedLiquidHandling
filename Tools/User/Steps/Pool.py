@@ -44,8 +44,6 @@ def Step(step):
 		if SearchStep.GetTitle() == TITLE:
 			MethodComments.append("A Pool block cannot come after another Pool block. It must be separated by an Alqiuot block. Please Correct")	
 
-
-
 	if not all(not (type(Location) is str) for Location in PoolLocations):
 		MethodComments.append("The Dispense Location parameter you provided is not a number. This parameter must be a number. Please Correct")
 

@@ -73,8 +73,25 @@ def Step(step):
 	#########################
 	#########################
 
+	AspList = []
+	DisList = []
+	for Mix in MixingList:
+		MixDict = {"Aspirate":0, "Dispense": 0}
 
-	Sequence = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,MixingList)
+		if Mix != "No":
+			Mix = Mix.replace(" ","")
+			#Remove Spaces
+			Mix = Mix.split("+")
+			
+			for MixItem in Mix:
+				MixItem = MixItem.split(":")
+				MixDict[MixItem[0]] = int(MixItem[1])
+
+		AspList.append(MixDict["Aspirate"])
+		DisList.append(MixDict["Dispense"])
+	#Parse our mixing parameter
+
+	Sequence = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,AspList,DisList)
 
 	if Sequence.GetNumSequencePositions() == 0:
 		#LOG.Comment("Number of sequences is zero so no liquid transfer will actually occur.")
@@ -83,21 +100,34 @@ def Step(step):
 	if Sequence.GetNumSequencePositions() != 0:
 
 		TransferVolumes = Sequence.GetTransferVolumes()
-		LiquidClassStrings = Sequence.GetLiquidClassStrings()
+		LiquidClassStrings = Sequence.GetSourceLiquidClassStrings()
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":LiquidClassStrings}),False)
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":Sequence.GetSourceLiquidClassStrings()}),False)
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":Sequence.GetDestinationLiquidClassStrings()}),False)
 		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}),False)
 
 		Response = HAMILTONIO.SendCommands()
 
 		if Response == False:
-			LiquidClassStrings = []
+			SourceLiquidClassStrings = []
+			DestinationLiquidClassStrings = []
 			TipSequenceStrings = []
 		else:
-			LiquidClassStrings = Response[0]["Response"].split(HAMILTONIO.GetDelimiter())
+			SourceLiquidClassStrings = Response[0]["Response"].split(HAMILTONIO.GetDelimiter())
+			DestinationLiquidClassStrings = Response[0]["Response"].split(HAMILTONIO.GetDelimiter())
 			TipSequenceStrings = Response[1]["Response"].split(HAMILTONIO.GetDelimiter())
 
-		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":Sequence,"LiquidClasses":LiquidClassStrings,"TipSequences":TipSequenceStrings,"KeepTips":"False","DestinationPipettingOffset":0}))
+
+		TransferArgumentsDict = {\
+			"SequenceClass":Sequence,\
+			"SourceLiquidClasses":SourceLiquidClassStrings,\
+			"DestinationLiquidClasses":DestinationLiquidClassStrings,\
+			"TipSequences":TipSequenceStrings,\
+			"KeepTips":"False",\
+			"DestinationPipettingOffset":0}
+
+
+		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 
 

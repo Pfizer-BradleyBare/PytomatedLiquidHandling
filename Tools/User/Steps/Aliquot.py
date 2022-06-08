@@ -24,6 +24,7 @@ def Step(step):
 
 	Params = step.GetParameters()
 	Start = Params[START]
+	AliquotLocations = SAMPLES.Column(Params[LOCATION])
 
 	#########################
 	#########################
@@ -46,6 +47,9 @@ def Step(step):
 		if SearchStep.GetTitle() == TITLE:
 			MethodComments.append("A Aliquot block cannot come after another Aliquot block. It must be separated by an Pool block. Please Correct")
 
+	if not all(not (type(Location) is str) for Location in AliquotLocations):
+		MethodComments.append("The Aspirate Location parameter you provided is not a number. This parameter must be a number. Please Correct")
+
 	if len(MethodComments) != 0:
 		LOG.LogMethodComment(step,MethodComments)
 
@@ -60,9 +64,10 @@ def Step(step):
 	Context = step.GetContext()
 
 	if Start == "Sample Start Position":
-		Sequence = PLATES.LABWARE.GetDefaultSequences(SAMPLES.GetStartPosition())
+		AliquotLocations = [SAMPLES.GetStartPosition() - 1 + int(Location) for Location in AliquotLocations]
 		PLATES.LABWARE.RemoveContextualFlag(Context,"SequenceFromPlateStart")
 	else:
-		Sequence = PLATES.LABWARE.GetDefaultSequences(1)
+		AliquotLocations = [int(Location) for Location in AliquotLocations]
 		PLATES.LABWARE.AddContextualFlag(Context,"SequenceFromPlateStart")
-	PLATES.LABWARE.SetContextualSequences(Context,Sequence)
+	
+	PLATES.LABWARE.SetContextualSequences(Context,AliquotLocations)

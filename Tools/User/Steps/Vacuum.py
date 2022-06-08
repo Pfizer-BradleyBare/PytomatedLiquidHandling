@@ -83,7 +83,7 @@ def Step(step):
 
 	#Testing Pressure
 	if type(Pressure) is str:
-		if not (Pressure == "Low") or not (Pressure == "Normal") or not (Pressure == "High"):
+		if not (Pressure == "Low") and not (Pressure == "Normal") and not (Pressure == "High"):
 			MethodComments.append("The Pressure Difference parameter must be \"Low\", \"Normal\", \"High\" or a number. Please Correct.")
 
 	if len(MethodComments) != 0:
@@ -106,17 +106,17 @@ def Step(step):
 	SourceNamesList = SourceList
 	SourceContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,SourceNamesList)
 	SourceVolumesList = VolumeList
-	MixingList = SAMPLES.Column("No")
+	MixingList = SAMPLES.Column(0)
 
-	Sequence = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,MixingList)
+	Sequence = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,MixingList,MixingList)
 	#we are going to create the sequence here so we can get all associated info at once.
 
 	LiquidTransferFlag = False
 	if Sequence.GetNumSequencePositions() != 0:
 		TransferVolumes = Sequence.GetTransferVolumes()
-		LiquidClassStrings = Sequence.GetLiquidClassStrings()
 
-		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":LiquidClassStrings}),False)
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":Sequence.GetSourceLiquidClassStrings()}),False)
+		HAMILTONIO.AddCommand(PIPETTE.GetLiquidClassStrings({"TransferVolumes":TransferVolumes,"LiquidCategories":Sequence.GetDestinationLiquidClassStrings()}),False)
 		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}),False)
 		LiquidTransferFlag = True
 
@@ -137,7 +137,8 @@ def Step(step):
 	Response = HAMILTONIO.SendCommands()
 
 	if Response == False:
-		LiquidClassStrings = ""
+		SourceLiquidClassStrings = ""
+		DestinationLiquidClassStrings = ""
 		TipSequenceStrings = ""
 		VacuumPlateSequence = ""
 		DeckPlateSequence = ""
@@ -150,7 +151,8 @@ def Step(step):
 		VacuumManifoldType = ""
 	else:
 		if LiquidTransferFlag == True:
-			LiquidClassStrings = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+			SourceLiquidClassStrings = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+			DestinationLiquidClassStrings = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
 			TipSequenceStrings = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
 		VacuumPlateSequence = Response.pop(0)["Response"]
 		DeckPlateSequence = Response.pop(0)["Response"]
@@ -178,7 +180,15 @@ def Step(step):
 		#We need to modify the destination to be the vacuum plate sequence above. The liquid needs to move through the vacuum plate.
 		#We additionally need to modify the CurrentDestinationVolume to be zero since the vacuum plate should always be zero.
 
-		HAMILTONIO.AddCommand(PIPETTE.Transfer({"SequenceClass":Sequence,"LiquidClasses":LiquidClassStrings,"TipSequences":TipSequenceStrings,"KeepTips":"False","DestinationPipettingOffset":8}))
+		TransferArgumentsDict = {\
+			"SequenceClass":Sequence,\
+			"SourceLiquidClasses":SourceLiquidClassStrings,\
+			"DestinationLiquidClasses":DestinationLiquidClassStrings,\
+			"TipSequences":TipSequenceStrings,\
+			"KeepTips":"False",\
+			"DestinationPipettingOffset":8}
+
+		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 	#This will perform the move of the collection plate, manifold (If required) and finally pipette liquid into the vacuum plate.
 

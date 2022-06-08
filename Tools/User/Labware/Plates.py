@@ -15,9 +15,12 @@ class PipetteSequence:
 		self.SourcePositions = []
 		self.TransferVolumes = []
 		self.CurrentDestinationVolumes = []
-		self.Mix = []
-		self.LiquidClassString = []
-		self.LLD = []
+		self.AspirateCycles = []
+		self.DispenseCycles = []
+		self.SourceLiquidClassStrings = []
+		self.DestinationLiquidClassStrings = []
+		self.SourceLLDValues = []
+		self.DestinationLLDValues = []
 
 	def GetDestinations(self):
 		return self.Destinations
@@ -37,19 +40,28 @@ class PipetteSequence:
 	def GetCurrentDestinationVolumes(self):
 		return self.CurrentDestinationVolumes
 
-	def GetMixCriteria(self):
-		return self.Mix
+	def GetAspirateCycles(self):
+		return self.AspirateCycles
 
-	def GetLiquidClassStrings(self):
-		return self.LiquidClassString
+	def GetDispenseCycles(self):
+		return self.DispenseCycles
 
-	def GetLLD(self):
-		self.LLD
+	def GetSourceLiquidClassStrings(self):
+		return self.SourceLiquidClassStrings
+
+	def GetDestinationLiquidClassStrings(self):
+		return self.DestinationLiquidClassStrings
+
+	def GetSourceLLDValues(self):
+		return self.SourceLLDValues
+
+	def GetDestinationLLDValues(self):
+		return self.DestinationLLDValues
 
 	def GetNumSequencePositions(self):
 		return len(self.GetDestinationPositions())
 
-	def AppendToPipetteSequence(self,Dest,DestPos,Source,SourcePos,Vol,CurDestVol,Mix,LiquidClassString,LLD):
+	def AppendToPipetteSequence(self,Dest,DestPos,Source,SourcePos,Vol,CurDestVol,AspirateCycles,DispenseCycles,SourceLiquidClassString, DestinationLiquidClassString,SourceLLDValue, DestinationLLDValue):
 		Index = 0
 		for Counter in range(0,self.GetNumSequencePositions()):
 
@@ -66,9 +78,12 @@ class PipetteSequence:
 		self.SourcePositions.insert(Index,SourcePos)
 		self.TransferVolumes.insert(Index,Vol)
 		self.CurrentDestinationVolumes.insert(Index,CurDestVol)
-		self.Mix.insert(Index,Mix)
-		self.LiquidClassString.insert(Index,LiquidClassString)
-		self.LLD.insert(Index,LLD)
+		self.AspirateCycles.insert(Index,AspirateCycles)
+		self.DispenseCycles.insert(Index,DispenseCycles)
+		self.SourceLiquidClassStrings.insert(Index,SourceLiquidClassString)
+		self.DestinationLiquidClassStrings.insert(Index,DestinationLiquidClassString)
+		self.SourceLLDValues.insert(Index,SourceLLDValue)
+		self.DestinationLLDValues.insert(Index,DestinationLLDValue)
 
 class Class(LABWARE.Class):
 ######################################################################### 
@@ -137,12 +152,16 @@ class Class(LABWARE.Class):
 	# This is a generic implementation to cover Viscosity, Volatility, and Homogeneity
 	#
 	def GenericCalculation(self, SampleIndex, DefaultValue, ValuesDict, PlatesGetFunction, SolutionsGetFunction):
+		
 		WellContents = self.WellContents[SampleIndex]
-		
-		if len(WellContents) == 0:
-			return DefaultValue
-		
 		TotalVolume = self.VolumesList[SampleIndex]
+
+		print(self.GetLabwareName())
+		print(SampleIndex)
+		print(WellContents)
+
+		if len(WellContents) == 0 or TotalVolume == 0:
+			return DefaultValue
 
 		Calculation = []
 		for Content in WellContents:
@@ -171,10 +190,10 @@ class Class(LABWARE.Class):
 		return "Ambient"
 	def GetViscosity(self, SampleIndex):
 		self.UpdateLabwareSolutionParameters()
-		return self.GenericCalculation(SampleIndex,self.Viscosity,LABWARE.ViscosityVolatilityValues, Class.GetViscosity, SOLUTIONS.Class.GetViscosity)
+		return self.GenericCalculation(SampleIndex,self.Viscosity,LABWARE.ViscosityValues, Class.GetViscosity, SOLUTIONS.Class.GetViscosity)
 	def GetVolatility(self, SampleIndex):
 		self.UpdateLabwareSolutionParameters()
-		return self.GenericCalculation(SampleIndex,self.Volatility,LABWARE.ViscosityVolatilityValues, Class.GetVolatility, SOLUTIONS.Class.GetVolatility)
+		return self.GenericCalculation(SampleIndex,self.Volatility,LABWARE.VolatilityValues, Class.GetVolatility, SOLUTIONS.Class.GetVolatility)
 	def GetHomogeneity(self, SampleIndex):
 		self.UpdateLabwareSolutionParameters()
 		return self.GenericCalculation(SampleIndex,self.Homogeneity,LABWARE.HomogeneityValues, Class.GetHomogeneity, SOLUTIONS.Class.GetHomogeneity)
@@ -187,7 +206,7 @@ class Class(LABWARE.Class):
 #	Input Arguments: [SourceList: List] [SourceVolumeList: List]
 #	Returns: [List of Lists]
 #########################################################################
-def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, SourceContextStringsList, SourceNamesList, SourceVolumesList, MixingList, RecordPipetteVolumes=True):
+def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, SourceContextStringsList, SourceNamesList, SourceVolumesList, AspirateList, DispenseList, RecordPipetteVolumes=True):
 	
 	StartPosition = SAMPLES.GetStartPosition()
 
@@ -200,12 +219,14 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 		SourceContextString = SourceContextStringsList[SampleIndex]
 		SourceName = SourceNamesList[SampleIndex]
 		Volume = SourceVolumesList[SampleIndex]
-		MixParameter = MixingList[SampleIndex]
+		Aspirate = AspirateList[SampleIndex]
+		Dispense = DispenseList[SampleIndex]
 		
 		DestinationLabware = LABWARE.GetLabware(DestinationName)
 
 		DestinationSequencePosition = LABWARE.GetContextualSequences(DestinationContextString)[SampleIndex]
 
+		print("DESTINATION:",LABWARE.GetContextualSequences(DestinationContextString))
 		ContextFlags = LABWARE.GetContextualFlags(DestinationContextString)
 		if "SequenceFromPlateStart" in ContextFlags:
 			DestinationArrayPosition = DestinationSequencePosition - 1
@@ -224,6 +245,7 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 		if ActualVolume > 0:
 			
 			SourceSequencePosition = DestinationSequencePosition
+			SourceArrayPosition = SourceSequencePosition
 
 			SourceLabware = LABWARE.GetLabware(SourceName)
 			if SourceLabware == None:
@@ -234,14 +256,20 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 			if SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Reagent:
 				SOLUTIONS.Class.AddVolume(SourceLabware, ActualVolume)
 
+				SourceViscosityCriteria = SourceLabware.GetViscosity(SampleIndex)
+				SourceVolatilityCriteria = SourceLabware.GetViscosity(SampleIndex)
+				SourceHomogeneityCriteria = SourceLabware.GetHomogeneity(SampleIndex)
+				SourceLLDCriteria = SourceLabware.GetLLD(SampleIndex)
+				#We need to get the solution properties first then we can determine mixing based off that
+
 				LiquidClassString = "Vicosity" + SourceLabware.GetViscosity(SampleIndex)
 				LiquidClassString += "Volatility" + SourceLabware.GetVolatility(SampleIndex)
 				LiquidClassString += "Homogeneity" + SourceLabware.GetHomogeneity(SampleIndex)
-				LLD = SourceLabware.GetLLD(SampleIndex)
+				
 
 			elif SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
 				SourceSequencePosition = LABWARE.GetContextualSequences(SourceContextString)[SampleIndex]
-				
+				print("SOURCE:",LABWARE.GetContextualSequences(SourceContextString))
 				ContextFlags = LABWARE.GetContextualFlags(SourceContextString)
 				if "SequenceFromPlateStart" in ContextFlags:
 					SourceArrayPosition = SourceSequencePosition - 1
@@ -250,10 +278,11 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 					SourceArrayPosition = SourceSequencePosition - StartPosition
 				#This is a case where the aliquot can modify the sequence position to be at the start of the plate instead of the user chosen posiiton.
 
-				LiquidClassString = "Vicosity" + SourceLabware.GetViscosity(SourceArrayPosition)
-				LiquidClassString += "Volatility" + SourceLabware.GetVolatility(SourceArrayPosition)
-				LiquidClassString += "Homogeneity" + SourceLabware.GetHomogeneity(SourceArrayPosition)
-				LLD = SourceLabware.GetLLD(SourceArrayPosition)
+				SourceViscosityCriteria = SourceLabware.GetViscosity(SourceArrayPosition)
+				SourceVolatilityCriteria = SourceLabware.GetViscosity(SourceArrayPosition)
+				SourceHomogeneityCriteria = SourceLabware.GetHomogeneity(SourceArrayPosition)
+				SourceLLDCriteria = SourceLabware.GetLLD(SourceArrayPosition)
+				#We need to get the solution properties first then we can determine mixing based off that
 
 				SourceLabware.VolumesList[SourceArrayPosition] -= ActualVolume
 				SourceLabware.DoVolumeUpdate()
@@ -262,12 +291,27 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 
 			if RecordPipetteVolumes == True:
 				Class.AddPipetteVolume(DestinationLabware,ActualVolume)
-			DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":SourceName,"Volume":ActualVolume})
-			
-			NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,MixParameter,LiquidClassString, LLD)
-				
+
+			DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":SourceName, "Well":SourceArrayPosition, "Volume":ActualVolume})
 			DestinationLabware.VolumesList[DestinationArrayPosition] += ActualVolume
 			DestinationLabware.DoVolumeUpdate()
+			#Add the solution to the wells
+
+			DestinationViscosityCriteria = DestinationLabware.GetViscosity(DestinationArrayPosition)
+			DestinationVolatilityCriteria = DestinationLabware.GetViscosity(DestinationArrayPosition)
+			DestinationHomogeneityCriteria = DestinationLabware.GetHomogeneity(DestinationArrayPosition)
+			DestinationLLDCriteria = DestinationLabware.GetLLD(DestinationArrayPosition)
+			#We want to calculate the Destination properties "after" the source has been added, that way we can determine the proper mixing params.
+
+			AspirateCycles = LABWARE.DetermineMaxMixingParam(Aspirate,SourceViscosityCriteria,SourceVolatilityCriteria,SourceHomogeneityCriteria,SourceLLDCriteria,"Aspirate")
+			AspirateLiquidClass = SourceViscosityCriteria + "," + SourceVolatilityCriteria + "," + SourceHomogeneityCriteria
+			#Calculate source mixing first (This is aspiration) and the source liquid class string
+
+			DispenseCycles = LABWARE.DetermineMaxMixingParam(Dispense,DestinationViscosityCriteria,DestinationVolatilityCriteria,DestinationHomogeneityCriteria,DestinationLLDCriteria,"Dispense")
+			DispenseLiquidClass = DestinationViscosityCriteria + "," + DestinationVolatilityCriteria + "," + DestinationHomogeneityCriteria
+			#Then calculate destination (This is Dispense)
+
+			NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,AspirateCycles,DispenseCycles,AspirateLiquidClass,DispenseLiquidClass,SourceLLDCriteria,DestinationLLDCriteria)
 
 	return copy.deepcopy(NewSequence)
 

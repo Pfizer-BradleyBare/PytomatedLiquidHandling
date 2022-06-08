@@ -186,9 +186,9 @@ def Step(step):
 	BufferNames = SAMPLES.Column(Buffer)
 	BufferContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,BufferNames)
 	SourceVolumes = SAMPLES.Column((DesaltingEQVolume + DesaltingElutionVolume) * Volume)
-	MixingParameters = SAMPLES.Column("N/A")
+	MixingParameters = SAMPLES.Column(0)
 
-	Sequence = PLATES.CreatePipetteSequence(EQ_DestinationContextualStrings,EQ_DestinationNames,BufferContextualStrings,BufferNames,SourceVolumes,MixingParameters, False)
+	Sequence = PLATES.CreatePipetteSequence(EQ_DestinationContextualStrings,EQ_DestinationNames,BufferContextualStrings,BufferNames,SourceVolumes,MixingParameters,MixingParameters, False)
 
 	BufferLabware = PLATES.LABWARE.GetLabware(Buffer)
 	BufferLabware.SetIsIMCSSizeXDesalting()
@@ -205,9 +205,9 @@ def Step(step):
 	SourceNames = SAMPLES.Column(Source)
 	SourceContextualStrings = PLATES.LABWARE.GetContextualStringsList(step,SourceNames)
 	SourceVolumes = SAMPLES.Column(DesaltingElutionVolume * Volume)
-	MixingParameters = SAMPLES.Column("N/A")
+	MixingParameters = SAMPLES.Column(0)
 
-	Sequence = PLATES.CreatePipetteSequence(DestinationContextualStrings,DestinationNames,SourceContextualStrings,SourceNames,SourceVolumes,MixingParameters, False)
+	Sequence = PLATES.CreatePipetteSequence(DestinationContextualStrings,DestinationNames,SourceContextualStrings,SourceNames,SourceVolumes,MixingParameters,MixingParameters, False)
 	Process(StepKey)
 
 	
