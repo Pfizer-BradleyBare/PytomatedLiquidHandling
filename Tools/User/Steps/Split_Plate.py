@@ -70,7 +70,7 @@ def Step(step):
 	#Testing Choice
 	if not all(type(Choice) is str for Choice in Choices):
 		MethodComments.append("The Plate Choice parameter must contain letters. Please Correct.")
-	
+
 	elif not all(Choice == "Split" or Choice == "Concurrent" or Choice == NewPlate1 or Choice == NewPlate2 or Factor == 0 for Choice,Factor in zip(Choices,ContextualFactors)):
 		MethodComments.append("The Plate Choice parameter can be \"Split\", \"Concurrent\", \"" + NewPlate1 + "\", or \"" + NewPlate2 + "\". Please Correct.")
 
