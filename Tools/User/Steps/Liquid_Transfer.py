@@ -112,9 +112,9 @@ def Step(step):
 			DestinationLiquidClassStrings = []
 			TipSequenceStrings = []
 		else:
-			SourceLiquidClassStrings = Response[0]["Response"].split(HAMILTONIO.GetDelimiter())
-			DestinationLiquidClassStrings = Response[0]["Response"].split(HAMILTONIO.GetDelimiter())
-			TipSequenceStrings = Response[1]["Response"].split(HAMILTONIO.GetDelimiter())
+			SourceLiquidClassStrings = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+			DestinationLiquidClassStrings = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+			TipSequenceStrings = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
 
 
 		TransferArgumentsDict = {\

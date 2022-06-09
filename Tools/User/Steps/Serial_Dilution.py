@@ -139,7 +139,7 @@ def Step(step):
         for Item in SerialDilutionDict[Key]:
             Index = Item["Destination Well Position"] - 1
 
-            if int(Item["Destination Well Position"]) == int(Key):
+            if SerialDilutionDict[Key].index(Item) == 0:
                 Item["Sample Source"] = Sources[Index]
                 Item["Source Well Position"] = int(Key)
             else:

@@ -152,7 +152,7 @@ class Class(LABWARE.Class):
 	# This is a generic implementation to cover Viscosity, Volatility, and Homogeneity
 	#
 	def GenericCalculation(self, SampleIndex, DefaultValue, ValuesDict, PlatesGetFunction, SolutionsGetFunction):
-		
+
 		WellContents = self.WellContents[SampleIndex]
 		TotalVolume = self.VolumesList[SampleIndex]
 
@@ -180,6 +180,8 @@ class Class(LABWARE.Class):
 		for Key in ValuesDict:
 			if WellComposition == ValuesDict[Key]["Value"]:
 				return Key
+
+
 
 	def GetCategory(self):
 		return "Plate"
