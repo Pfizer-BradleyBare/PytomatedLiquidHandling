@@ -1,10 +1,12 @@
 from ..Steps import Steps as STEPS
 from ..Labware import Plates as PLATES
+from ..Labware import Solutions as SOLUTIONS
 from ..Steps import Plate as PLATE
 from ...User import Samples as SAMPLES
 from ...General import Log as LOG
 
 TITLE = "Preload Liquid"
+SOURCE = "Source"
 VOLUME = "Volume (uL)"
 
 IsUsedFlag = False
@@ -24,6 +26,7 @@ def Init(MutableStepsList):
 def Step(step):
 	DestinationPlate = step.GetParentPlateName()
 	VolumeList = SAMPLES.Column(step.GetParameters()[VOLUME])
+	Sources = SAMPLES.Column(step.GetParameters()[SOURCE])
 
 	#########################
 	#########################
@@ -38,6 +41,9 @@ def Step(step):
 	if not all(not (type(Volume) is str) for Volume in VolumeList):
 		MethodComments.append("The Volume parameter you provided is not a number. This parameter must be a number. Please Correct")
 
+	if not all(Source != DestinationPlate for Source in Sources):
+		MethodComments.append("The Source parameter you provided is the parent plate. This does not make sense. Please Correct")
+
 	if len(MethodComments) != 0:
 		LOG.LogMethodComment(step,MethodComments)
 
@@ -48,6 +54,12 @@ def Step(step):
 	#########################
 	#########################
 	#########################
+
+	SourceLabware = PLATES.LABWARE.GetLabware(DestinationPlate)
+	for Source in Sources:
+		SourceLabware = PLATES.LABWARE.GetLabware(Source)
+		if SourceLabware == None:
+			SOLUTIONS.LABWARE.AddLabware(SOLUTIONS.Class(Source))
 
 	Labware = PLATES.LABWARE.GetLabware(DestinationPlate)
 	Labware.SetIsPreloaded()
@@ -63,6 +75,7 @@ def Step(step):
 
 	for index in range(0,len(PlateVolumeList)):
 		PlateVolumeList[index] += (VolumeList[index] + VolumeList[index]) * PlateFactors[index]
+		Labware.WellContents[index].append({"Solution":Sources[index], "Well":index, "Volume": VolumeList[index]})
 
 	PLATES.Class.DoVolumeUpdate(Labware)
 	#OK what are we doing here? We are subtracting to make the volume is reflected in plate loading.

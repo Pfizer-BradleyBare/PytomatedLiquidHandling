@@ -214,6 +214,12 @@ def Init(PulledMethodSheet):
 		Col_List = sorted(Col_List, key=lambda x: x[0].GetCoordinates()[0])
 		#Sort in descending order
 
+		for Col in Col_List:
+			if Col[-1].GetTitle() != "Split Plate":
+				if Col[-1].GetTitle() != "Finish":
+					EXCELIO.CreateCriticalMessageBox("All pathways must be terminated by a Finish block. Please correct.","Method Unsatisfactory")
+		#Checking that all pathways are terminated with Finish block.
+
 		Pathways = []
 		Pathways.append({"List":Col_List[0],"Context":""})
 		Col_List.pop(0)

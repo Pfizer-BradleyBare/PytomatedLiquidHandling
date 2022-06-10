@@ -86,11 +86,17 @@ def Init(MutableStepsList):
 			Incubation_List.append(Step)
 	#Just finding and tracking the incubations
 
-	StartHeaters()
+	#StartHeaters()
 
 Before_Liquid_Handling_Incubations = {}
 def StartHeatersCallback(step):
+	print("HEATER CALLBACK@@")
+	print(step.GetContext())
+	print("HEATER CALLBACK@@")
 	
+	if len(Before_Liquid_Handling_Incubations) == 0:
+		return
+
 	for IncubationKey in Before_Liquid_Handling_Incubations:
 		Incubation = Before_Liquid_Handling_Incubations[IncubationKey]["Step"]
 		Temp = Incubation.GetParameters()[TEMP]
@@ -112,13 +118,14 @@ def StartHeatersCallback(step):
 		Before_Liquid_Handling_Incubations[KeysList[Index]]["Wait Count"] += 1
 		WaitCount = Before_Liquid_Handling_Incubations[KeysList[Index]]["Wait Count"]
 
-		if int(Response[Index]["ReturnID"]) >= 0 or (Time - StartTime) >= 60*10 or WaitCount >= 10:
+		if int(Response[Index]["ReturnID"]) >= 0 or (Time - StartTime) >= 60*10 or WaitCount >= 2:
 			ThawKeyList.append(KeysList[Index])
 
 	for ThawKey in ThawKeyList:
 		Incubation = Before_Liquid_Handling_Incubations[ThawKey]["Step"]
 		del Before_Liquid_Handling_Incubations[ThawKey]
 		STEPS.ThawContext(STEPS.Class.GetContext(Incubation))
+		WAIT.WaitForTimer()
 	#Iterate over all heaters and responses. Thaw the incubation contexts that are ready or have expired
 
 	if len(Before_Liquid_Handling_Incubations) != 0:
@@ -283,10 +290,13 @@ def HeatingCallback(step):
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the lid then plate then release all reservations
 
+	Ongoing_Incubations_List.remove(step)
 	StartHeaters()
 
 def Step(step):
 	
+	print("INCUBATION STEP!#@@@@!")
+
 	STATUS_UPDATE.AppendText("Incubate at " + str(step.GetParameters()[TEMP]) + " C for " + str(step.GetParameters()[TIME]) + " min")
 	
 	Params = step.GetParameters()

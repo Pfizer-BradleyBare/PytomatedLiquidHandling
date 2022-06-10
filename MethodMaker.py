@@ -162,9 +162,6 @@ Steps = {
 
 while(True):
 
-	WAIT.CheckForExpiredTimers()
-	#Wait is async, but we need to ensure that we are not continuously pausing a context that is ready to continue running.
-
 	Step = STEPS.GetNextStep()
 
 	if Step == None:
@@ -187,6 +184,14 @@ while(True):
 
 	Steps[Step.GetTitle()](Step)
 	#This does the step
+
+	INCUBATE.StartHeaters()
+	#After the first step we want to start the heaters for incubations. The first step will always be a plate step.
+
+	WAIT.CheckForExpiredTimers()
+	#Wait is async, but we need to ensure that we are not continuously pausing a context that is ready to continue running.
+
+	WAIT.WaitForTimer()
 
 #do each step
 
@@ -248,7 +253,7 @@ HAMILTONIO.EndCommunication()
 
 if TestRun == True:
 	if GenerateList == True:
-		EXCELIO.SelectCell("Preparation List",1,1)
+		#EXCELIO.SelectCell("Preparation List",1,1)
 		EXCELIO.CreateInformationMessageBox("Preperation sheet generation completed succesfully!", "Successful Execution")
 	else:
 		EXCELIO.CreateInformationMessageBox("Method test completed succesfully! Please see the Test Log and Final Plate Volumes sheet to confirm the method performed as expected.", "Successful Execution")

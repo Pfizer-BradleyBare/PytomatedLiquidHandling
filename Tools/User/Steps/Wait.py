@@ -33,9 +33,6 @@ def StartTimer(step, WaitTime, Callback, WaitOnly=False):
 	if WaitOnly == False:
 		STEPS.DeactivateContext(step.GetContext())
 
-	if STEPS.GetNumActiveContexts() == 0:
-		WaitForTimer()
-
 def GetLowestTimer():
 	Time = time.time()
 	return min(Timer_List, key=lambda x: x["Wait Time"] - (Time - x["Start Time"]))
@@ -43,7 +40,10 @@ def GetLowestTimer():
 
 def WaitForTimer():
 	global Timer_List
-	
+
+	if STEPS.GetNumActiveContexts() != 0 or not all(Context in STEPS.FrozenContextTracker for Context in STEPS.ActiveContextTracker):
+		return
+
 	if len(Timer_List) > 0:	
 
 		Params = DESALT.GetDesaltParams()

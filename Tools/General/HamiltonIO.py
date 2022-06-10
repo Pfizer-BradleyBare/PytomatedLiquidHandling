@@ -69,8 +69,11 @@ def SendCommands():
 	for CommandDict in CommandsList:
 		Command = Command + CommandDict["Command String"] + "\n"
 
+	if Command == "":
+		return False
+
 	#Send the command list
-	if SimulatedIO == False and Command != "":
+	if SimulatedIO == False:
 		file = open(HAMILTON_COMMAND_TEMP_FILE, "w")
 		file.write(Command)
 		file.close()

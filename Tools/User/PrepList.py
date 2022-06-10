@@ -84,7 +84,7 @@ def GeneratePrepSheet(LabwareArray):
 		Labware = LABWARE.GetLabware(LabwareName)
 
 		if Labware.GetLabwareType() == LABWARE.LabwareTypes.Reagent:
-			if True:
+			if Labware.GetMaxVolume() != 0:
 
 				UsedSpace = EXCELIO.PrintReagent(Sheet, CurrentRow, CurrentCol, LabwareName, LabwareArray[LabwareName]["Labware Name"], "{:.2f}".format(LabwareArray[LabwareName]["Used Volume"]))
 

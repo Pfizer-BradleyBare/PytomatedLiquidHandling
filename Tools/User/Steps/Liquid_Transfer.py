@@ -91,6 +91,8 @@ def Step(step):
 		DisList.append(MixDict["Dispense"])
 	#Parse our mixing parameter
 
+	print(PLATES.LABWARE.GetLabware(DestinationPlateName).VolumesList)
+
 	Sequence = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,AspList,DisList)
 
 	if Sequence.GetNumSequencePositions() == 0:

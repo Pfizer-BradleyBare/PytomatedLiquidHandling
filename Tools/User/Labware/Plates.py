@@ -159,6 +159,7 @@ class Class(LABWARE.Class):
 		if len(WellContents) == 0 or TotalVolume == 0:
 			return DefaultValue
 
+
 		Calculation = []
 		for Content in WellContents:
 			SolutionLabware = LABWARE.GetLabware(Content["Solution"])
