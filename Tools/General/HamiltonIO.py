@@ -89,7 +89,7 @@ def SendCommands():
 		#Read it and evaluate into an array of dictionaries
 		file = open(HAMILTON_RESPONSE_FILE, "r")
 		Response = file.read()
-		print(Response)
+		#print(Response)
 		Response = eval(Response)
 		file.close()
 		os.remove(HAMILTON_RESPONSE_FILE)

@@ -86,16 +86,8 @@ def Init(MutableStepsList):
 			Incubation_List.append(Step)
 	#Just finding and tracking the incubations
 
-	#StartHeaters()
-
 Before_Liquid_Handling_Incubations = {}
 def StartHeatersCallback(step):
-	print("HEATER CALLBACK@@")
-	print(step.GetContext())
-	print("HEATER CALLBACK@@")
-	
-	if len(Before_Liquid_Handling_Incubations) == 0:
-		return
 
 	for IncubationKey in Before_Liquid_Handling_Incubations:
 		Incubation = Before_Liquid_Handling_Incubations[IncubationKey]["Step"]
@@ -125,7 +117,6 @@ def StartHeatersCallback(step):
 		Incubation = Before_Liquid_Handling_Incubations[ThawKey]["Step"]
 		del Before_Liquid_Handling_Incubations[ThawKey]
 		STEPS.ThawContext(STEPS.Class.GetContext(Incubation))
-		WAIT.WaitForTimer()
 	#Iterate over all heaters and responses. Thaw the incubation contexts that are ready or have expired
 
 	if len(Before_Liquid_Handling_Incubations) != 0:
@@ -294,8 +285,6 @@ def HeatingCallback(step):
 	StartHeaters()
 
 def Step(step):
-	
-	print("INCUBATION STEP!#@@@@!")
 
 	STATUS_UPDATE.AppendText("Incubate at " + str(step.GetParameters()[TEMP]) + " C for " + str(step.GetParameters()[TIME]) + " min")
 	

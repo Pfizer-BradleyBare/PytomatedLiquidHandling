@@ -160,6 +160,8 @@ Steps = {
 	SERIAL_DILUTION.TITLE: SERIAL_DILUTION.Step
 }
 
+HeatersStarted = False
+
 while(True):
 
 	Step = STEPS.GetNextStep()
@@ -185,13 +187,16 @@ while(True):
 	Steps[Step.GetTitle()](Step)
 	#This does the step
 
-	INCUBATE.StartHeaters()
+	if HeatersStarted == False:
+		INCUBATE.StartHeaters()
+		HeatersStarted = True
 	#After the first step we want to start the heaters for incubations. The first step will always be a plate step.
 
 	WAIT.CheckForExpiredTimers()
-	#Wait is async, but we need to ensure that we are not continuously pausing a context that is ready to continue running.
+	#Wait is async, but we need to ensure that we are not pausing a context that is ready to continue running.
 
 	WAIT.WaitForTimer()
+	#It is possible we freeze all contexts so we need to check for a chance to wait after each step
 
 #do each step
 
