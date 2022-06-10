@@ -32,8 +32,7 @@ IsUsedFlag = False
 #	Returns: [Step module Class]
 #########################################################################
 def GetDesaltParams():
-	global Desalting_Params
-	return Desalting_Params
+	return {Key: Desalting_Params[Key] for Key in Desalting_Params if Desalting_Params[Key]["Positions"] is not None}
 
 def IsUsed():
 	global IsUsedFlag
@@ -77,7 +76,8 @@ def Init(MutableStepsList):
 				"Volume":str(Params[TYPE]).replace(" ","").replace('.0','').split("+"), \
 				"Method":Params[ELUTION_METHOD], \
 				"EQ":False, \
-				"EQ Step": SearchStep}
+				"EQ Step": SearchStep,
+				"Positions":None}
 
 ######################################################################### 
 #	Description: Performs equilibration by calling the appropriate hamilton commands
@@ -145,10 +145,13 @@ def Step(step):
 	else:
 		TestLabware = PLATES.LABWARE.GetLabware(Source)
 		if TestLabware == None:
-			MethodComments.append("The Source parameter you provided is a solution. Only a plate name is acceptable. Please correct.")
+			MethodComments.append("The Source parameter you provided is not yet defined. Only a plate name is acceptable. Please correct.")
 		else:
 			if TestLabware.GetLabwareType() == PLATES.LABWARE.LabwareTypes.Reagent:
 				MethodComments.append("The Source parameter you provided is a solution. Only a plate name is acceptable. Please correct.")
+			else:
+				if not all(LabwareVolume >= Volume*100 for LabwareVolume in TestLabware.VolumesList):
+					MethodComments.append("The Source parameter you provided does not contain enough liquid to be used for desalting. Please correct.")
 
 	#Testing Waste
 	if not (type(Source) is str):
