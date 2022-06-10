@@ -196,8 +196,6 @@ def Step(step):
 	BufferLabware = PLATES.LABWARE.GetLabware(Buffer)
 	BufferLabware.SetIsIMCSSizeXDesalting()
 
-	Desalting_Params[StepKey]["Positions"] = Sequence.GetDestinationPositions()
-
 	Equilibrate(StepKey)
 
 	DestinationLabware = PLATES.LABWARE.GetLabware(Sample_Destination)
@@ -211,6 +209,8 @@ def Step(step):
 	MixingParameters = SAMPLES.Column(0)
 
 	Sequence = PLATES.CreatePipetteSequence(DestinationContextualStrings,DestinationNames,SourceContextualStrings,SourceNames,SourceVolumes,MixingParameters,MixingParameters, False)
+	Desalting_Params[StepKey]["Positions"] = Sequence.GetDestinationPositions()
+	
 	Process(StepKey)
 
 	
