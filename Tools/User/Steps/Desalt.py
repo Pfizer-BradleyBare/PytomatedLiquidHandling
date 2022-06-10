@@ -125,6 +125,8 @@ def Step(step):
 	Buffer = Params[EQUILIBRATION_BUFFER]
 	EQ_Destination = Params[WASTE]
 	Sample_Destination = step.GetParentPlateName()
+	Factors = PLATES.LABWARE.GetContextualFactors(step.GetContext())
+
 
 	#########################
 	#########################
@@ -150,7 +152,7 @@ def Step(step):
 			if TestLabware.GetLabwareType() == PLATES.LABWARE.LabwareTypes.Reagent:
 				MethodComments.append("The Source parameter you provided is a solution. Only a plate name is acceptable. Please correct.")
 			else:
-				if not all(LabwareVolume >= Volume*100 for LabwareVolume in TestLabware.VolumesList):
+				if not all(LabwareVolume >= Volume*100 or Factor == 0 for Factor,LabwareVolume in zip(Factors,TestLabware.VolumesList)):
 					MethodComments.append("The Source parameter you provided does not contain enough liquid to be used for desalting. Please correct.")
 
 	#Testing Waste
