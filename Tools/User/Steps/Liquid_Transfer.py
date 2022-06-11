@@ -20,6 +20,9 @@ IsUsedFlag = True
 def IsUsed():
 	return IsUsedFlag
 
+def DoesStatusUpdates():
+	return True
+
 def Init():
 	pass
 
@@ -27,13 +30,18 @@ def Step(step):
 	
 	DestinationPlateName = STEPS.Class.GetParentPlateName(step)
 
+	Source = step.GetParameters()[NAME]
+	Volume = step.GetParameters()[VOLUME]
+
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Liquid Transfer Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
+
 	DestinationNamesList = SAMPLES.Column(DestinationPlateName)
 	DestinationContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,DestinationNamesList)
-	SourceNamesList = SAMPLES.Column(step.GetParameters()[NAME])
+	SourceNamesList = SAMPLES.Column(Source)
 	SourceContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,SourceNamesList)
-	SourceVolumesList = SAMPLES.Column(step.GetParameters()[VOLUME])
+	SourceVolumesList = SAMPLES.Column(Volume)
 	MixingList = SAMPLES.Column(step.GetParameters()[MIXING])
-
 
 	#########################
 	#########################
@@ -91,8 +99,6 @@ def Step(step):
 		DisList.append(MixDict["Dispense"])
 	#Parse our mixing parameter
 
-	print(PLATES.LABWARE.GetLabware(DestinationPlateName).VolumesList)
-
 	Sequence = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,AspList,DisList)
 
 	if Sequence.GetNumSequencePositions() == 0:
@@ -127,10 +133,22 @@ def Step(step):
 			"KeepTips":"False",\
 			"DestinationPipettingOffset":0}
 
+		if SAMPLES.InColumn(Source) == True:
+			SourceString = str(Source) + " (WC) solution"
+		else:
+			SourceString = str(Source)
 
+		if SAMPLES.InColumn(Volume) == True:
+			VolumeString = str(Volume) + " (WC) volume"
+		else:
+			VolumeString = str(Volume) + " uL"
+
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Transferring " + VolumeString + " of " + SourceString + " to " + DestinationPlateName}))
 		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Liquid Transfer Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
 
 
 

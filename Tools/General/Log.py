@@ -255,6 +255,13 @@ def LogCommandResponse(CommandID, ResponseDict):
 
 	UpdateLog(Row + 2,LOG_COL_COMMAND,[["Return ID",ReturnID],["Return Message",ReturnMessage],["Response"] + Response.split(HAMILTONIO.GetDelimiter())])
 
+def RunLogExists():
+	try:
+		EXCELIO.PullUsedRange("Run Log")
+		return True
+	except:
+		return False
+
 def HandleResponse(Response):
 	RUN_BEGINNING = "Run From Beginning of Method"
 	RUN_STEP = "Run From Above Step"

@@ -77,7 +77,6 @@ def Column(Column_Name):
 	return [Column_Name] * NumSamples
 
 def InColumn(Column_Name):
-	global Column_Ranges
 
 	Found = True
 	try:

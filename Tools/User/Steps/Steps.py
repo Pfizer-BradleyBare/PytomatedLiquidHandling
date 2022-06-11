@@ -21,6 +21,13 @@ Unfiltered_Steps_List = []
 Steps_List = []
 Temp_Steps_List = []
 Current_Step = None
+NumExecutedSteps = 0
+
+def GetTotalNumSteps():
+	return len(Steps_List)
+
+def GetNumExecutedSteps():
+	return NumExecutedSteps
 
 def StartStepSequence():
 	global Steps_List

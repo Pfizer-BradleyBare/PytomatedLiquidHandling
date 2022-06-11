@@ -34,6 +34,9 @@ IsUsedFlag = False
 def GetDesaltParams():
 	return {Key: Desalting_Params[Key] for Key in Desalting_Params if Desalting_Params[Key]["Positions"] is not None}
 
+def DoesStatusUpdates():
+	return True
+
 def IsUsed():
 	global IsUsedFlag
 	return IsUsedFlag
@@ -91,10 +94,12 @@ def Equilibrate(ParentPlate):
 
 	if Params["EQ"] == False:
 		Params["EQ"] = True
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing IMCS SizeX desalting equilibration"}))
 		HAMILTONIO.AddCommand(DESALT.Equilibrate({"ParentPlate":ParentPlate, "StartPosition":SAMPLES.StartPosition}))
-		Response = HAMILTONIO.SendCommands()
-		
-	STATUS_UPDATE.AppendText("Performing Desalting Equilibration and Desalting Samples")	
+	else:
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "IMCS SizeX desalting equilibration was already performed"}))
+
+	HAMILTONIO.SendCommands()
 
 ######################################################################### 
 #	Description: Performs equilibration and simulates a pipetting step into the destination plate
@@ -108,8 +113,9 @@ def Process(ParentPlate):
 
 	#STATUS_UPDATE.AppendText("Performing Desalting Equilibration and Desalting Samples")
 	Params["EQ"] = False
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing IMCS SizeX desalting"}))
 	HAMILTONIO.AddCommand(DESALT.Process({"ParentPlate":ParentPlate, "StartPosition":SAMPLES.StartPosition}))
-	Response = HAMILTONIO.SendCommands()
+	HAMILTONIO.SendCommands()
 	
 ######################################################################### 
 #	Description: Runs equilibration and processing
@@ -117,7 +123,8 @@ def Process(ParentPlate):
 #	Returns: N/A
 #########################################################################	
 def Step(step):
-	global Desalting_Params
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting IMCS SizeX Desalting Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
 
 	Params = step.GetParameters()
 	Source = Params[SOURCE]
@@ -214,5 +221,8 @@ def Step(step):
 	Desalting_Params[StepKey]["Positions"] = Sequence.GetDestinationPositions()
 	
 	Process(StepKey)
+
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending IMCS SizeX Desalting Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
 
 	

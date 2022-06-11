@@ -10,6 +10,9 @@ IsUsedFlag = True
 def IsUsed():
 	return IsUsedFlag
 
+def DoesStatusUpdates():
+	return False
+
 def Init():
 	pass
 		

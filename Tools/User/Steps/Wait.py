@@ -14,6 +14,9 @@ IsUsedFlag = True
 def IsUsed():
 	return IsUsedFlag
 
+def DoesStatusUpdates():
+	return True
+
 #format is Plate: WaitTime, StartTime
 Timer_List = []
 

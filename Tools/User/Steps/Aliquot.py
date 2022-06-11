@@ -15,11 +15,16 @@ IsUsedFlag = False
 def IsUsed():
 	return IsUsedFlag
 
+def DoesStatusUpdates():
+	return False
+
 #This function may modify the Mutable list if required
 def Init(MutableStepsList):
 	global IsUsedFlag
 	IsUsedFlag = True
-	
+
+
+
 def Step(step):
 
 	Params = step.GetParameters()

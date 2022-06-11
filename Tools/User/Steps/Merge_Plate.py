@@ -20,6 +20,9 @@ def IsUsed():
 	global IsUsedFlag
 	return IsUsedFlag
 
+def DoesStatusUpdates():
+	return False
+
 def Init(MutableStepsList):
 	global IsUsedFlag
 

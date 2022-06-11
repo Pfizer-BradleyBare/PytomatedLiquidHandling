@@ -23,10 +23,16 @@ IsUsedFlag = True
 def IsUsed():
 	return IsUsedFlag
 
+def DoesStatusUpdates():
+	return True
+
 def Init():
 	pass
 
 def Step(step):
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Dilute Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
+
 	#dilute equation is C1*V1 = C2*V2 Where:
 	#C1 is SourceConcentration
 	#V1 is Source Volume
@@ -35,13 +41,18 @@ def Step(step):
 	#We need to solve for Source Volume
 	#V1 = (C2*V2)/C1
 
+
 	StepParameters = STEPS.Class.GetParameters(step)
+
+	Diluent = StepParameters[DILUENT]
+	Source = StepParameters[SOURCE]
+
 	TargetConcentrationList = SAMPLES.Column(StepParameters[TARGET_CONCENTRATION])
 	TargetVolumeList = SAMPLES.Column(StepParameters[TARGET_VOLUME])
 	MaxSourceVolumeList = SAMPLES.Column(StepParameters[MAX_SOURCE_VOLUME])
 	SourceConcentrationList = SAMPLES.Column(StepParameters[STARTING_CONCENTRATION])
-	SourceList = SAMPLES.Column(StepParameters[SOURCE])
-	DiluentList = SAMPLES.Column(StepParameters[DILUENT])
+	SourceList = SAMPLES.Column(Source)
+	DiluentList = SAMPLES.Column(Diluent)
 	Destination = STEPS.Class.GetParentPlateName(step)
 
 	#########################
@@ -137,6 +148,9 @@ def Step(step):
 	SecondSourceList = []
 	SecondVolumeList = []
 
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Organizing pipetting to transfer largest volumes first"}))
+	HAMILTONIO.SendCommands()
+
 	for index in range(0,len(SourceVolumeList)):
 		if SourceVolumeList[index] > DiluentVolumeList[index]:
 			FirstSourceList.append(SourceList[index])
@@ -212,7 +226,7 @@ def Step(step):
 			"KeepTips":"False",\
 			"DestinationPipettingOffset":0}
 
-
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting transfer of largest volume of source and diluent"}))
 		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 
@@ -225,10 +239,15 @@ def Step(step):
 			"KeepTips":"False",\
 			"DestinationPipettingOffset":0}
 
+
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting transfer of remaining volume of source and diluent"}))
 		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 
-	#Do the diluent pipetting
-#end
+
+
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Liquid Transfer Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
+
 
 

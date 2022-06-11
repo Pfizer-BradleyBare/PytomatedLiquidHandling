@@ -14,6 +14,9 @@ IsUsedFlag = False
 def IsUsed():
 	return IsUsedFlag
 
+def DoesStatusUpdates():
+	return False
+
 #This function may modify the Mutable list if required
 def Init(MutableStepsList):
 	global IsUsedFlag

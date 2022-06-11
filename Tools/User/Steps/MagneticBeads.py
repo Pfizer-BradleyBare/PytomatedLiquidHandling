@@ -33,6 +33,8 @@ def IsUsed():
 	global IsUsedFlag
 	return IsUsedFlag
 
+def DoesStatusUpdates():
+	return True
 
 ######################################################################### 
 #	Description: intialized through the following actions:
@@ -80,7 +82,6 @@ def Callback(step):
 	HAMILTONIO.AddCommand(MAGNETICBEADS.GetMagneticRackPlateTransportType({"PlateName":BeadsPlate}),False)
 	#Get transport related info
 
-	print("REMOVE")
 	RemoveSequences = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,SAMPLES.Column(0),SAMPLES.Column(0))
 	TransferVolumes = RemoveSequences.GetTransferVolumes()
 	HAMILTONIO.AddCommand(MAGNETICBEADS.GetCondensedBeadsLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}),False)
@@ -93,7 +94,6 @@ def Callback(step):
 	SourceContextStringsList = PLATES.LABWARE.GetContextualStringsList(step,SourceNamesList)
 	SourceVolumesList = SAMPLES.Column(Volume)
 
-	print("ADD")
 	AddSequences = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,SAMPLES.Column(0),SAMPLES.Column(50))
 	TransferVolumes = AddSequences.GetTransferVolumes()
 	HAMILTONIO.AddCommand(MAGNETICBEADS.GetGeneralLiquidTransferLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}),False)

@@ -28,6 +28,9 @@ def IsUsed():
 	global IsUsedFlag
 	return IsUsedFlag
 
+def DoesStatusUpdates():
+	return True
+
 def GetVacPlates():
 	global VacPlates
 	return VacPlates

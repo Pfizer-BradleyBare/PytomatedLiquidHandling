@@ -13,6 +13,9 @@ IsUsedFlag = True
 def IsUsed():
 	return IsUsedFlag
 
+def DoesStatusUpdates():
+	return True
+
 def Init():
 	pass
 
