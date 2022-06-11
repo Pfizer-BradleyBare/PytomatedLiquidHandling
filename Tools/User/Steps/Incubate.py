@@ -134,7 +134,7 @@ def StartHeatersCallback(step):
 
 	if len(Before_Liquid_Handling_Incubations) != 0:
 		keys = list(Before_Liquid_Handling_Incubations)
-		WAIT.StartTimer(Before_Liquid_Handling_Incubations[keys[0]]["Step"],1,StartHeatersCallback,True)
+		WAIT.StartTimer(Before_Liquid_Handling_Incubations[keys[0]]["Step"],1,StartHeatersCallback, "incubator(s) to come to temp",True)
 	#Finally, we want to continue waiting on heaters that need to heat as indicated by the user
 
 def StartHeaters():
@@ -210,7 +210,7 @@ def StartHeaters():
 	
 	if len(Before_Liquid_Handling_Incubations) != 0:
 		keys = list(Before_Liquid_Handling_Incubations)
-		WAIT.StartTimer(Before_Liquid_Handling_Incubations[keys[0]]["Step"],1,StartHeatersCallback,True)
+		WAIT.StartTimer(Before_Liquid_Handling_Incubations[keys[0]]["Step"],1,StartHeatersCallback, "incubator(s) to come to temp",True)
 	#Finally, we want to continue waiting on heaters that need to heat as indicated by the user
 
 def AmbientCallback(step):
@@ -379,7 +379,7 @@ def AmbientStep(step):
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the plate then lid then start the incubation (Incudes shaking)
 	
-	WAIT.StartTimer(step, Time, AmbientCallback)
+	WAIT.StartTimer(step, Time, AmbientCallback, "ambient Incubation of plate name" + str(ParentPlate))
 	#Wait for incubation to complete.
 
 def HeatingStep(step):
@@ -458,7 +458,7 @@ def HeatingStep(step):
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the plate then lid then start the incubation (Incudes shaking)
 
-	WAIT.StartTimer(step, Time, HeatingCallback)
+	WAIT.StartTimer(step, Time, HeatingCallback, "incubation of plate name " + str(ParentPlate))
 	#Wait for incubation to complete.
 
 

@@ -134,12 +134,12 @@ def Step(step):
 			"DestinationPipettingOffset":0}
 
 		if SAMPLES.InColumn(Source) == True:
-			SourceString = str(Source) + " (WC) solution"
+			SourceString = str(Source) + " (WC)"
 		else:
 			SourceString = str(Source)
 
 		if SAMPLES.InColumn(Volume) == True:
-			VolumeString = str(Volume) + " (WC) volume"
+			VolumeString = str(Volume) + " (WC)"
 		else:
 			VolumeString = str(Volume) + " uL"
 

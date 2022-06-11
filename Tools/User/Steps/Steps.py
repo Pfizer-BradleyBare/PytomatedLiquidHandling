@@ -225,6 +225,7 @@ def Init(PulledMethodSheet):
 			if Col[-1].GetTitle() != "Split Plate":
 				if Col[-1].GetTitle() != "Finish":
 					EXCELIO.CreateCriticalMessageBox("All pathways must be terminated by a Finish block. Please correct.","Method Unsatisfactory")
+					quit()
 		#Checking that all pathways are terminated with Finish block.
 
 		Pathways = []

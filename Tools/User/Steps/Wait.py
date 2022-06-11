@@ -3,6 +3,7 @@ from ..Steps import Desalt as DESALT
 from ..Labware import Plates as PLATES
 from ...Hamilton.Commands import Timer as TIMER
 from ...General import HamiltonIO as HAMILTONIO
+from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 from ...General import Log as LOG
 import time
 
@@ -26,11 +27,11 @@ def Init():
 
 #Callback is a function that takes only a plate name as a parameter (String)
 #Wait only means it is ONLY a timer. No other type of parallel processing will be attempted.
-def StartTimer(step, WaitTime, Callback, WaitOnly=False):
+def StartTimer(step, WaitTime, Callback, WaitReasonString, WaitOnly=False):
 	WaitTime *= 60
 	#Convert min to seconds
 
-	Timer_List.append( {"Step":step,"Wait Time":WaitTime, "Start Time":time.time(), "Callback":Callback, "Wait Only":WaitOnly})
+	Timer_List.append( {"Step":step,"Wait Time":WaitTime, "Start Time":time.time(), "Callback":Callback, "Wait Reason": WaitReasonString, "Wait Only":WaitOnly})
 	#We will only start the time for the remaining time. Time handling will be done in python
 
 	if WaitOnly == False:
@@ -50,6 +51,9 @@ def WaitForTimer():
 
 	if len(Timer_List) > 0:	
 
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "No pathways are currently active. Starting to wait for timer with lowest remaining time."}))
+		HAMILTONIO.SendCommands()
+
 		Params = DESALT.GetDesaltParams()
 		for Timer in Timer_List:
 			if Timer["Wait Only"] == False:
@@ -63,9 +67,10 @@ def WaitForTimer():
 		RemainingTime = LowestTimer["Wait Time"] - (time.time() - LowestTimer["Start Time"])
 
 		if RemainingTime > 0:
+			HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Waiting for " + str(LowestTimer["Wait Reason"]) + ". Remaining wait time: " + str(int(RemainingTime/60) + 1) + ". Total wait time: " + str(int(LowestTimer["Wait Time"] / 60))}))
 			HAMILTONIO.AddCommand(TIMER.Start({"WaitTime":RemainingTime}), not LowestTimer["Wait Only"])
 			HAMILTONIO.AddCommand(TIMER.Wait({}), not LowestTimer["Wait Only"])
-			Response = HAMILTONIO.SendCommands()
+			HAMILTONIO.SendCommands()
 
 		Timer_List.remove(LowestTimer)
 
@@ -82,6 +87,9 @@ def CheckForExpiredTimers():
 
 			Timer_List.remove(LowestTimer)
 
+			HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "A timer has expired during method progression. Starting follow-up."}))
+			HAMILTONIO.SendCommands()
+
 			if LowestTimer["Wait Only"] == False:
 				STEPS.ActivateContext(LowestTimer["Step"].GetContext())
 
@@ -92,6 +100,9 @@ def Callback(step):
 	pass
 
 def Step(step):
+
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Pause Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
 
 	Time = step.GetParameters()[TIME]
 
@@ -118,6 +129,9 @@ def Step(step):
 	#########################
 	#########################
 
-	StartTimer(step, Time, Callback)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to incubate for " + str(Time) + " minutes"}))
+	StartTimer(step, Time, Callback, "paused step")
 
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Pause Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
 

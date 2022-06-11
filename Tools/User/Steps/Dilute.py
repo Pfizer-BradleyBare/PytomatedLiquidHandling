@@ -47,10 +47,15 @@ def Step(step):
 	Diluent = StepParameters[DILUENT]
 	Source = StepParameters[SOURCE]
 
-	TargetConcentrationList = SAMPLES.Column(StepParameters[TARGET_CONCENTRATION])
-	TargetVolumeList = SAMPLES.Column(StepParameters[TARGET_VOLUME])
-	MaxSourceVolumeList = SAMPLES.Column(StepParameters[MAX_SOURCE_VOLUME])
-	SourceConcentrationList = SAMPLES.Column(StepParameters[STARTING_CONCENTRATION])
+	TargetContentration = StepParameters[TARGET_CONCENTRATION]
+	SourceContentration = StepParameters[STARTING_CONCENTRATION]
+	TargetVolume = StepParameters[TARGET_VOLUME]
+	MaxVolume = StepParameters[MAX_SOURCE_VOLUME]
+
+	TargetConcentrationList = SAMPLES.Column(TargetContentration)
+	TargetVolumeList = SAMPLES.Column(TargetVolume)
+	MaxSourceVolumeList = SAMPLES.Column(MaxVolume)
+	SourceConcentrationList = SAMPLES.Column(SourceContentration)
 	SourceList = SAMPLES.Column(Source)
 	DiluentList = SAMPLES.Column(Diluent)
 	Destination = STEPS.Class.GetParentPlateName(step)
@@ -121,12 +126,48 @@ def Step(step):
 	#########################
 	#########################
 
+	if SAMPLES.InColumn(Diluent) == True:
+		DiluentString = str(Diluent) + " (WC)"
+	else:
+		DiluentString = str(Diluent)
+
+	if SAMPLES.InColumn(Source) == True:
+		SourceString = str(Source) + " (WC)"
+	else:
+		SourceString = str(Source)
+
+	if SAMPLES.InColumn(SourceContentration) == True:
+		SourceConcentrationString = str(SourceContentration) + " (WC)"
+	else:
+		SourceConcentrationString = "source Concentration"
+
+	if SAMPLES.InColumn(TargetContentration) == True:
+		TargetConcentrationString = str(TargetContentration) + " (WC)"
+	else:
+		TargetConcentrationString = "target contentration"
+
+	if SAMPLES.InColumn(TargetVolume) == True:
+		TargetVolumeString = str(TargetVolume) + " (WC)"
+	else:
+		TargetVolumeString = str(TargetVolume) + " uL"
+
+	if SAMPLES.InColumn(MaxVolume) == True:
+		MaxVolumeString = str(MaxVolume) + " (WC)"
+	else:
+		MaxVolumeString = str(MaxVolume) + " uL"
+
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Calculating the volume of " + DiluentString + " required to dilute " + SourceString + " from " + SourceConcentrationString + " to " + TargetConcentrationString + " in " + TargetVolumeString}))
+	HAMILTONIO.SendCommands()
+
 	SourceVolumeList = list(map(lambda x,y,z: (z * y) / x if x != None and x != 0 else 0, SourceConcentrationList,TargetVolumeList,TargetConcentrationList))
 	DiluentVolumeList = list(map(lambda x,y: y - x, SourceVolumeList,TargetVolumeList))
 	#Calculate correct volumes to pipette
 
 	DestinationNames = SAMPLES.Column(Destination)
 	DestinationContextStrings = PLATES.LABWARE.GetContextualStringsList(step, DestinationNames)
+
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Capping " + SourceString + " volume to " + MaxVolumeString + ". Adjusting Source and diluent as needed."}))
+	HAMILTONIO.SendCommands()
 
 	for VolIndex in range(0,len(SourceVolumeList)):
 		if MaxSourceVolumeList[VolIndex] > TargetVolumeList[VolIndex] or MaxSourceVolumeList[VolIndex] == 0:
@@ -246,7 +287,7 @@ def Step(step):
 
 
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Liquid Transfer Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Dilute Block. Block Coordinates: " + str(step.GetCoordinates())}))
 	HAMILTONIO.SendCommands()
 
 

@@ -69,7 +69,6 @@ import Tools.User.Steps.Serial_Dilution as SERIAL_DILUTION
 
 import Tools.Hamilton.PreRun as PRERUN
 import Tools.Hamilton.Commands.StatusUpdate as STATUS_UPDATE
-##import Tools.Hamilton.Commands.StatusUpdate as STATUS_UPDATE
 
 #try:
 
@@ -127,37 +126,37 @@ SERIAL_DILUTION.Init(STEPS.GetSteps())
 STEPS.StartStepSequence()
 
 Steps = {
-	PLATE.TITLE: {"Do Step":PLATE.Step, "Update Status?":PLATE.DoesStatusUpdates},
+	PLATE.TITLE: PLATE.Step,
 
-	SPLIT_PLATE.TITLE: {"Do Step":SPLIT_PLATE.Step, "Update Status?":SPLIT_PLATE.DoesStatusUpdates},
+	SPLIT_PLATE.TITLE: SPLIT_PLATE.Step,
 
-	LIQUID_TRANSFER.TITLE: {"Do Step":LIQUID_TRANSFER.Step, "Update Status?":LIQUID_TRANSFER.DoesStatusUpdates},
+	LIQUID_TRANSFER.TITLE: LIQUID_TRANSFER.Step,
 
-	DILUTE.TITLE: {"Do Step":DILUTE.Step, "Update Status?":DILUTE.DoesStatusUpdates},
+	DILUTE.TITLE: DILUTE.Step,
 
-	DESALT.TITLE: {"Do Step":DESALT.Step, "Update Status?":DESALT.DoesStatusUpdates},
+	DESALT.TITLE: DESALT.Step,
 
-	INCUBATE.TITLE: {"Do Step":INCUBATE.Step, "Update Status?":INCUBATE.DoesStatusUpdates},
+	INCUBATE.TITLE: INCUBATE.Step,
 
-	VACUUM.TITLE: {"Do Step":VACUUM.Step, "Update Status?":VACUUM.DoesStatusUpdates},
+	VACUUM.TITLE: VACUUM.Step,
 
-	NOTIFY.TITLE: {"Do Step":NOTIFY.Step, "Update Status?":NOTIFY.DoesStatusUpdates},
+	NOTIFY.TITLE: NOTIFY.Step,
 
-	FINISH.TITLE: {"Do Step":FINISH.Step, "Update Status?":FINISH.DoesStatusUpdates},
+	FINISH.TITLE: FINISH.Step,
 
-	ALIQUOT.TITLE: {"Do Step":ALIQUOT.Step, "Update Status?":ALIQUOT.DoesStatusUpdates},
+	ALIQUOT.TITLE: ALIQUOT.Step,
 
-	POOL.TITLE: {"Do Step":POOL.Step, "Update Status?":POOL.DoesStatusUpdates},
+	POOL.TITLE: POOL.Step,
 
-	PRELOAD_LIQUID.TITLE: {"Do Step":PRELOAD_LIQUID.Step, "Update Status?":PRELOAD_LIQUID.DoesStatusUpdates},
+	PRELOAD_LIQUID.TITLE: PRELOAD_LIQUID.Step,
 
-	MAGNETIC_BEADS.TITLE: {"Do Step":MAGNETIC_BEADS.Step, "Update Status?":MAGNETIC_BEADS.DoesStatusUpdates},
+	MAGNETIC_BEADS.TITLE: MAGNETIC_BEADS.Step,
 
-	MERGE_PLATE.TITLE: {"Do Step":MERGE_PLATE.Step, "Update Status?":MERGE_PLATE.DoesStatusUpdates},
+	MERGE_PLATE.TITLE: MERGE_PLATE.Step,
 
-	WAIT.TITLE: {"Do Step":WAIT.Step, "Update Status?":WAIT.DoesStatusUpdates},
+	WAIT.TITLE: WAIT.Step,
 
-	SERIAL_DILUTION.TITLE: {"Do Step":SERIAL_DILUTION.Step, "Update Status?":SERIAL_DILUTION.DoesStatusUpdates},
+	SERIAL_DILUTION.TITLE: SERIAL_DILUTION.Step
 }
 
 HeatersStarted = False
@@ -185,12 +184,11 @@ while(True):
 	LOG.PublishLog()
 
 	STEPS.NumExecutedSteps += 1
-	if Steps[Step.GetTitle()]["Update Status?"]() == True:
-		PercentComplete = int(STEPS.GetNumExecutedSteps() / STEPS.GetTotalNumSteps() * 100)
-		HAMILTONIO.AddCommand(STATUS_UPDATE.SetProgress({"PercentComplete":PercentComplete}))
-		HAMILTONIO.SendCommands()
+	PercentComplete = int(STEPS.GetNumExecutedSteps() / STEPS.GetTotalNumSteps() * 100)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.SetProgress({"PercentComplete":PercentComplete}))
+	HAMILTONIO.SendCommands()
 
-	Steps[Step.GetTitle()]["Do Step"](Step)
+	Steps[Step.GetTitle()](Step)
 	#This does the step
 
 	if HeatersStarted == False:

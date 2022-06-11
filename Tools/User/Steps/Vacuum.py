@@ -12,6 +12,7 @@ from ...Hamilton.Commands import Pipette as PIPETTE
 from ...User import Configuration as CONFIGURATION
 from ...General import Log as LOG
 from ...General import HamiltonIO as HAMILTONIO
+from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 
 TITLE = "Vacuum"
 SOURCE = "Source"
@@ -46,6 +47,9 @@ def Init(MutableStepsList):
 			CONFIGURATION.AddOmitLoading(Step.GetParameters()[VACUUM_PLATE])
 
 def Step(step):
+
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Vacuum Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
 
 	Destination = step.GetParentPlateName()
 	SourceList = SAMPLES.Column(step.GetParameters()[SOURCE])
@@ -170,11 +174,18 @@ def Step(step):
 
 	if not (TITLE in STEPS.GetPreviousStepInPathway(step).GetTitle()):
 		HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":DeckPlateType,"SourceSequenceString":DeckPlateSequence,"DestinationLabwareType":CollectionPlateType,"DestinationSequenceString":CollectionPlateSequence,"Park":"False","CheckExists":"After"}))
-		HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":VacuumParkType,"SourceSequenceString":VacuumParkSequence,"DestinationLabwareType":VacuumManifoldType,"DestinationSequenceString":VacuumManifoldSequence,"Park":"True","CheckExists":"False"}))
-		#Move collection plate then manifold
-
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving collection plate into vacuum manifold"}))
 		Response = HAMILTONIO.SendCommands()
-	
+		
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving vacuum plate atop vacuum manifold"}))
+		HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":VacuumParkType,"SourceSequenceString":VacuumParkSequence,"DestinationLabwareType":VacuumManifoldType,"DestinationSequenceString":VacuumManifoldSequence,"Park":"True","CheckExists":"False"}))
+		Response = HAMILTONIO.SendCommands()
+		#Move collection plate then manifold
+	else:
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Previous block was a Vacuum block. Vacuum plate and collection plate are already in place"}))
+		HAMILTONIO.SendCommands()
+
+
 	if LiquidTransferFlag == True:
 
 		for Counter in range(0,Sequence.GetNumSequencePositions()):
@@ -191,14 +202,23 @@ def Step(step):
 			"KeepTips":"False",\
 			"DestinationPipettingOffset":8}
 
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Pipetting source into vacuum plate"}))
 		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 	#This will perform the move of the collection plate, manifold (If required) and finally pipette liquid into the vacuum plate.
 
-	WAIT.StartTimer(step,WaitTime,PreVacuumWaitCallback)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to wait for " + str(WaitTime) + " minutes"}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Vacuum Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
+
+	WAIT.StartTimer(step,WaitTime,PreVacuumWaitCallback, "vacuum hold time")
 	#Vacuum wait time
 
 def PreVacuumWaitCallback(step):
+	
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing first follow up of Vacuum Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
+	
 	Destination = step.GetParentPlateName()
 	Volume = step.GetParameters()[VOLUME]
 	VacPlate = step.GetParameters()[VACUUM_PLATE]
@@ -206,13 +226,26 @@ def PreVacuumWaitCallback(step):
 	Pressure = step.GetParameters()[PRESSURE]
 	Time = step.GetParameters()[TIME]
 
-	HAMILTONIO.AddCommand(VACUUM.Start({"VacuumPlateName":VacPlate,"VacuumPressure":Pressure}))
-	Response = HAMILTONIO.SendCommands()
+	if type(Pressure) is str:
+		PressureString = str(Pressure) + " pressure difference for this plate"
+	else:
+		PressureString = "pressure difference of " + str(Pressure) + " mtorr"
 
-	WAIT.StartTimer(step,Time,VacuumWaitCallback)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting vaccum with a " + PressureString}))
+	HAMILTONIO.AddCommand(VACUUM.Start({"VacuumPlateName":VacPlate,"VacuumPressure":Pressure}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to wait for " + str(Time) + " minutes"}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending first follow up of Vacuum Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
+
+	WAIT.StartTimer(step,Time,VacuumWaitCallback, "vacuum time")
 	#Wait for vacuum time now
 
+
+
 def VacuumWaitCallback(step):
+
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing second follow up of Vacuum Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
 
 	Destination = step.GetParentPlateName()
 	Volume = step.GetParameters()[VOLUME]
@@ -260,7 +293,18 @@ def VacuumWaitCallback(step):
 	#Lets get the info we need to move everything
 
 	if not (TITLE in STEPS.GetNextStepInPathway(step).GetTitle()):
+		
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Removing vaccum plate from atop vacuum manifold"}))
 		HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":VacuumManifoldType,"SourceSequenceString":VacuumManifoldSequence,"DestinationLabwareType":VacuumParkType,"DestinationSequenceString":VacuumParkSequence,"Park":"False","CheckExists":"False"}))
+		HAMILTONIO.SendCommands()
+
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Removing collection plate from vacuum manifold"}))
 		HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":CollectionPlateType,"SourceSequenceString":CollectionPlateSequence,"DestinationLabwareType":DeckPlateType,"DestinationSequenceString":DeckPlateSequence,"Park":"True","CheckExists":"After"}))
-		Response = HAMILTONIO.SendCommands()
+		HAMILTONIO.SendCommands()
 		#Move collection plate then manifold
+	else:
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Vacuum plate and collection plate will not be moved. Next block is also a Vacuum block"}))
+		HAMILTONIO.SendCommands()
+
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending second follow up of Vacuum Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()

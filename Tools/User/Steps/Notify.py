@@ -2,6 +2,7 @@ from ..Steps import Steps as STEPS
 from ...Hamilton.Commands import Notify as NOTIFY
 from ...General import Log as LOG
 from ...General import HamiltonIO as HAMILTONIO
+from ...Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 
 TITLE = "Notify"
 WAIT_ON_USER = "Wait On User"
@@ -21,6 +22,9 @@ def Init():
 
 def Step(step):
 	
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Notify Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
+
 	Parameters = step.GetParameters()
 	Subject = Parameters[SUBJECT]
 	Body = Parameters[MESSAGE]
@@ -53,7 +57,15 @@ def Step(step):
 	#########################
 	#########################
 
-	HAMILTONIO.AddCommand(NOTIFY.NotifyContacts({"Subject":Subject,"Body":Body,"Wait":Wait}))
+	if Wait == "Yes":
+		NotifyString = " and waiting for user to proceed"
+	else:
+		NotifyString = ""
 
-	Response = HAMILTONIO.SendCommands()
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Sending notification to the provided contact info" + NotifyString}))
+	HAMILTONIO.AddCommand(NOTIFY.NotifyContacts({"Subject":Subject,"Body":Body,"Wait":Wait}))
+	HAMILTONIO.SendCommands()
 	#No need to deal with response. Should always succeed
+
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Notify Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
