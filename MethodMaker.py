@@ -257,7 +257,6 @@ if HAMILTONIO.IsSimulated() == True:
 	#	LOG.HandleResponse(Response[0])
 	#initialize all the Hamilton Libraries.
 
-
 HAMILTONIO.EndCommunication()
 
 if TestRun == True:
