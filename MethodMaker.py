@@ -159,8 +159,6 @@ Steps = {
 	SERIAL_DILUTION.TITLE: SERIAL_DILUTION.Step
 }
 
-HeatersStarted = False
-
 while(True):
 
 	Step = STEPS.GetNextStep()
@@ -191,9 +189,7 @@ while(True):
 	Steps[Step.GetTitle()](Step)
 	#This does the step
 
-	if HeatersStarted == False:
-		INCUBATE.StartHeaters()
-		HeatersStarted = True
+	INCUBATE.StartHeaters()
 	#After the first step we want to start the heaters for incubations. The first step will always be a plate step.
 
 	WAIT.CheckForExpiredTimers()

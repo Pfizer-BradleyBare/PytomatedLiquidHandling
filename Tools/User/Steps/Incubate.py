@@ -26,6 +26,7 @@ SHAKE = "Shake (rpm)"
 Incubation_List = []
 #List of incubations currently in progress (heating or otherwise)
 Ongoing_Incubations_List = []
+AlreadyWaitingFlag = False
 
 IsUsedFlag = False
 
@@ -91,6 +92,8 @@ def Init(MutableStepsList):
 
 Before_Liquid_Handling_Incubations = {}
 def StartHeatersCallback(step):
+	global AlreadyWaitingFlag
+	AlreadyWaitingFlag = False
 
 	for IncubationKey in Before_Liquid_Handling_Incubations:
 		Incubation = Before_Liquid_Handling_Incubations[IncubationKey]["Step"]
@@ -132,12 +135,14 @@ def StartHeatersCallback(step):
 		STEPS.ThawContext(STEPS.Class.GetContext(Incubation))
 	#Iterate over all heaters and responses. Thaw the incubation contexts that are ready or have expired
 
-	if len(Before_Liquid_Handling_Incubations) != 0:
+	if AlreadyWaitingFlag == False and len(Before_Liquid_Handling_Incubations) != 0:
 		keys = list(Before_Liquid_Handling_Incubations)
+		AlreadyWaitingFlag = True
 		WAIT.StartTimer(Before_Liquid_Handling_Incubations[keys[0]]["Step"],1,StartHeatersCallback, "incubator(s) to come to temp",True)
 	#Finally, we want to continue waiting on heaters that need to heat as indicated by the user
 
 def StartHeaters():
+	global AlreadyWaitingFlag
 
 	for Incubation in Incubation_List[:]:
 		IncubationContext = STEPS.Class.GetContext(Incubation)
@@ -208,7 +213,8 @@ def StartHeaters():
 		#We still check incase the previous and new temp are the same, but if not we will add the step to the waiting list.
 		#The waiting list will wait for a max time before timeout then proceed. This ensures the temp gets close to or reaches the user set temp
 	
-	if len(Before_Liquid_Handling_Incubations) != 0:
+	if AlreadyWaitingFlag == False and len(Before_Liquid_Handling_Incubations) != 0:
+		AlreadyWaitingFlag = True
 		keys = list(Before_Liquid_Handling_Incubations)
 		WAIT.StartTimer(Before_Liquid_Handling_Incubations[keys[0]]["Step"],1,StartHeatersCallback, "incubator(s) to come to temp",True)
 	#Finally, we want to continue waiting on heaters that need to heat as indicated by the user
