@@ -251,13 +251,22 @@ def AmbientCallback(step):
 
 def HeatingCallback(step):
 
-	global OngoingIncubationsCounter
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing follow up of Incubate Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.SendCommands()
 
 	Params = step.GetParameters()
 	Temp = Params[TEMP]
 	RPM = Params[SHAKE]
 	ParentPlate = step.GetParentPlateName()
 	
+	if RPM != 0:
+		HeaterString = "heating and shaking"
+	else:
+		HeaterString = "heating"
+
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Incubation for plate name " + str(ParentPlate) + " required " + HeaterString + ". Removing lid then plate from heater" }))
+	HAMILTONIO.SendCommands()
+
 	HAMILTONIO.AddCommand(HEATER.EndReservation({"PlateName":ParentPlate}))
 	#Stop heating and shaking
 
@@ -300,12 +309,17 @@ def HeatingCallback(step):
 		HeaterType = Response.pop(0)["Response"]
 	#Lets get the info we need to move the plate
 
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Removing lid"}))
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":HeaterLidType,"SourceSequenceString":HeaterLidSequence,"DestinationLabwareType":LidType,"DestinationSequenceString":LidSequence,"Park":"False","CheckExists":"After"}))
 	Response = HAMILTONIO.SendCommands()
+
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Removing plate"}))
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":HeaterType,"SourceSequenceString":HeaterSequence,"DestinationLabwareType":PlateType,"DestinationSequenceString":PlateSequence,"Park":"True","CheckExists":"After"}))
 	Response = HAMILTONIO.SendCommands()
+	
 	HAMILTONIO.AddCommand(HEATER.ReleaseReservation({"PlateName":ParentPlate}),False)
 	HAMILTONIO.AddCommand(LID.ReleaseReservation({"PlateName":ParentPlate}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending follow up of Incubate Block. Incubation is now complete. Block Coordinates: " + str(step.GetCoordinates())}))
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the lid then plate then release all reservations
 
