@@ -76,7 +76,7 @@ print("Init Classes")
 EXCELIO.Init(Excel_File_Path)
 HAMILTONIO.Init()
 HAMILTONIO.Simulated(Initialization_Run)
-if TestRun == True:
+if Initialization_Run == True:
 	LOG.Init("Test Log",True)
 else:
 	LOG.Init("Run Log",True)
@@ -102,7 +102,6 @@ STEPS.Init(EXCELIO.GetMethod())
 SAMPLES.Init(Sample_Start_Pos, EXCELIO.GetWorklist())
 LABWARE.Init()
 #Init Trackers
-
 
 PLATE.Init(STEPS.GetSteps())
 SPLIT_PLATE.Init(STEPS.GetSteps())
