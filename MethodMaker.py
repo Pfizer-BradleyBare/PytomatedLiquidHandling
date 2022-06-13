@@ -86,15 +86,15 @@ else:
 # The first thing I want to do is check that the method is validated. If it is not then we will exit and inform the user.
 #
 ValidatedStatus = EXCELIO.GetMethodValidatedStatus()
-#if  ValidatedStatus == "Blocks":
-#	EXCELIO.CreateCriticalMessageBox("There is a validation issue with the Building Blocks. Please close and reopen the workbook to fix. If that doesn't work, please contact a Hamilton SME.", "Blocks Validation Failed")
-#	quit()
-#elif ValidatedStatus == "Actions":
-#	EXCELIO.CreateCriticalMessageBox("There is a validation issue with the method. Please check the method sheet for red cells and correct it.", "Method Validation Failed")
-#	quit()
-#elif ValidatedStatus == "Solutions":
-#	EXCELIO.CreateCriticalMessageBox("There is a validation issue with the Solutions. Please check the Solutions sheet for red cells and correct it.", "Solutions Validation Failed")
-#	quit()
+if  ValidatedStatus == "Blocks":
+	EXCELIO.CreateCriticalMessageBox("There is a validation issue with the Building Blocks. Please close and reopen the workbook to fix. If that doesn't work, please contact a Hamilton SME.", "Blocks Validation Failed")
+	quit()
+elif ValidatedStatus == "Actions":
+	EXCELIO.CreateCriticalMessageBox("There is a validation issue with the method. Please check the method sheet for red cells and correct it.", "Method Validation Failed")
+	quit()
+elif ValidatedStatus == "Solutions":
+	EXCELIO.CreateCriticalMessageBox("There is a validation issue with the Solutions. Please check the Solutions sheet for red cells and correct it.", "Solutions Validation Failed")
+	quit()
 
 CONFIGURATION.Init()
 PREPLIST.Init()
