@@ -256,15 +256,10 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				SOLUTIONS.Class.AddVolume(SourceLabware, ActualVolume)
 
 				SourceViscosityCriteria = SourceLabware.GetViscosity(SampleIndex)
-				SourceVolatilityCriteria = SourceLabware.GetViscosity(SampleIndex)
+				SourceVolatilityCriteria = SourceLabware.GetVolatility(SampleIndex)
 				SourceHomogeneityCriteria = SourceLabware.GetHomogeneity(SampleIndex)
 				SourceLLDCriteria = SourceLabware.GetLLD(SampleIndex)
 				#We need to get the solution properties first then we can determine mixing based off that
-
-				LiquidClassString = "Vicosity" + SourceLabware.GetViscosity(SampleIndex)
-				LiquidClassString += "Volatility" + SourceLabware.GetVolatility(SampleIndex)
-				LiquidClassString += "Homogeneity" + SourceLabware.GetHomogeneity(SampleIndex)
-				
 
 			elif SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
 				SourceSequencePosition = LABWARE.GetContextualSequences(SourceContextString)[SampleIndex]
@@ -277,7 +272,7 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				#This is a case where the aliquot can modify the sequence position to be at the start of the plate instead of the user chosen posiiton.
 
 				SourceViscosityCriteria = SourceLabware.GetViscosity(SourceArrayPosition)
-				SourceVolatilityCriteria = SourceLabware.GetViscosity(SourceArrayPosition)
+				SourceVolatilityCriteria = SourceLabware.GetVolatility(SourceArrayPosition)
 				SourceHomogeneityCriteria = SourceLabware.GetHomogeneity(SourceArrayPosition)
 				SourceLLDCriteria = SourceLabware.GetLLD(SourceArrayPosition)
 				#We need to get the solution properties first then we can determine mixing based off that
@@ -296,17 +291,17 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 			#Add the solution to the wells
 
 			DestinationViscosityCriteria = DestinationLabware.GetViscosity(DestinationArrayPosition)
-			DestinationVolatilityCriteria = DestinationLabware.GetViscosity(DestinationArrayPosition)
+			DestinationVolatilityCriteria = DestinationLabware.GetVolatility(DestinationArrayPosition)
 			DestinationHomogeneityCriteria = DestinationLabware.GetHomogeneity(DestinationArrayPosition)
 			DestinationLLDCriteria = DestinationLabware.GetLLD(DestinationArrayPosition)
 			#We want to calculate the Destination properties "after" the source has been added, that way we can determine the proper mixing params.
 
 			AspirateCycles = LABWARE.DetermineMaxMixingParam(Aspirate,SourceViscosityCriteria,SourceVolatilityCriteria,SourceHomogeneityCriteria,SourceLLDCriteria,"Aspirate")
-			AspirateLiquidClass = SourceViscosityCriteria + "," + SourceVolatilityCriteria + "," + SourceHomogeneityCriteria
+			AspirateLiquidClass = "Viscosity" + SourceViscosityCriteria + "Volatility" + SourceVolatilityCriteria + "Homogeneity" + SourceHomogeneityCriteria
 			#Calculate source mixing first (This is aspiration) and the source liquid class string
 
 			DispenseCycles = LABWARE.DetermineMaxMixingParam(Dispense,DestinationViscosityCriteria,DestinationVolatilityCriteria,DestinationHomogeneityCriteria,DestinationLLDCriteria,"Dispense")
-			DispenseLiquidClass = DestinationViscosityCriteria + "," + DestinationVolatilityCriteria + "," + DestinationHomogeneityCriteria
+			DispenseLiquidClass = "Viscosity" + DestinationViscosityCriteria + "Volatility" + DestinationVolatilityCriteria + "Homogeneity" + DestinationHomogeneityCriteria
 			#Then calculate destination (This is Dispense)
 
 			NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,AspirateCycles,DispenseCycles,AspirateLiquidClass,DispenseLiquidClass,SourceLLDCriteria,DestinationLLDCriteria)
