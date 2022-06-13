@@ -3,7 +3,6 @@ from ...General import Log as LOG
 
 
 def PreRun(Input):
-	print("Begin")
 
 	CommandString = ""
 	CommandString += "[Module]PreRun"

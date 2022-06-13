@@ -211,6 +211,10 @@ if HAMILTONIO.IsSimulated() == True:
 	Labware = CONFIGURATION.Load(LABWARE.GetAllLabwareType(LABWARE.LabwareTypes.Plate),LABWARE.GetAllLabwareType(LABWARE.LabwareTypes.Reagent))
 	HAMILTONIO.AddCommand(PRERUN.Labware(Labware),False)
 
+	print()
+	print("Complete. See Excel File.")
+	print()
+
 	if TestRun == True:
 		PREPLIST.PrintFinalPlateVolumes(Labware)
 		if GenerateList == True:
