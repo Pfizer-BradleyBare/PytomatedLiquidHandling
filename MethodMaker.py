@@ -2,268 +2,266 @@ import sys
 import time
 import traceback
 
-sys.setrecursionlimit(100)
+try:
 
-if len(sys.argv) > 1:
-	Excel_File_Path = sys.argv[1]
-	Sample_Start_Pos = int(sys.argv[2])
-	RunType = sys.argv[3]
+	if len(sys.argv) > 1:
+		Excel_File_Path = sys.argv[1]
+		Sample_Start_Pos = int(sys.argv[2])
+		RunType = sys.argv[3]
 
-	if RunType == "Run":
-		Initialization_Run = False
-		GenerateList = False
-		TestRun = False
+		if RunType == "Run":
+			Initialization_Run = False
+			GenerateList = False
+			TestRun = False
 
-	elif RunType == "Init":
-		Initialization_Run = True
-		GenerateList = False
-		TestRun = False
+		elif RunType == "Init":
+			Initialization_Run = True
+			GenerateList = False
+			TestRun = False
 
-	elif RunType == "PrepList":
+		elif RunType == "PrepList":
+			Initialization_Run = True
+			GenerateList = True
+			TestRun = True
+
+		elif RunType == "Test":
+			Initialization_Run = True
+			GenerateList = False
+			TestRun = True
+
+	else:
+		Sample_Start_Pos = 1
+		Excel_File_Path = "Method Maker.xlsm"
 		Initialization_Run = True
 		GenerateList = True
 		TestRun = True
 
-	elif RunType == "Test":
-		Initialization_Run = True
-		GenerateList = False
-		TestRun = True
+	print("import")
+	import Tools.General.ExcelIO as EXCELIO
+	import Tools.General.HamiltonIO as HAMILTONIO
+	import Tools.General.Log as LOG
 
-else:
-	Sample_Start_Pos = 1
-	Excel_File_Path = "Method Maker.xlsm"
-	Initialization_Run = True
-	GenerateList = True
-	TestRun = True
+	import Tools.User.Steps.Steps as STEPS
+	import Tools.User.Samples as SAMPLES
+	import Tools.User.Configuration as CONFIGURATION
+	import Tools.User.PrepList as PREPLIST
+	import Tools.User.Labware.Plates as PLATES
+	import Tools.User.Labware.Solutions as SOLUTIONS
+	import Tools.User.Labware.Labware as LABWARE
 
-print("import")
-import Tools.General.ExcelIO as EXCELIO
-import Tools.General.HamiltonIO as HAMILTONIO
-import Tools.General.Log as LOG
+	import Tools.User.Steps.Plate as PLATE
+	import Tools.User.Steps.Split_Plate as SPLIT_PLATE
+	import Tools.User.Steps.Merge_Plate as MERGE_PLATE
+	import Tools.User.Steps.Liquid_Transfer as LIQUID_TRANSFER
+	import Tools.User.Steps.Dilute as DILUTE
+	import Tools.User.Steps.Desalt as DESALT
+	import Tools.User.Steps.Wait as WAIT
+	import Tools.User.Steps.Incubate as INCUBATE
+	import Tools.User.Steps.Vacuum as VACUUM
+	import Tools.User.Steps.Notify as NOTIFY
+	import Tools.User.Steps.Finish as FINISH
+	import Tools.User.Steps.Aliquot as ALIQUOT
+	import Tools.User.Steps.Pool as POOL
+	import Tools.User.Steps.PreLoad_Liquid as PRELOAD_LIQUID
+	import Tools.User.Steps.MagneticBeads as MAGNETIC_BEADS
+	import Tools.User.Steps.Merge_Plate as MERGE_PLATE
+	import Tools.User.Steps.Serial_Dilution as SERIAL_DILUTION
 
-import Tools.User.Steps.Steps as STEPS
-import Tools.User.Samples as SAMPLES
-import Tools.User.Configuration as CONFIGURATION
-import Tools.User.PrepList as PREPLIST
-import Tools.User.Labware.Plates as PLATES
-import Tools.User.Labware.Solutions as SOLUTIONS
-import Tools.User.Labware.Labware as LABWARE
+	import Tools.Hamilton.PreRun as PRERUN
+	import Tools.Hamilton.Commands.StatusUpdate as STATUS_UPDATE
 
-import Tools.User.Steps.Plate as PLATE
-import Tools.User.Steps.Split_Plate as SPLIT_PLATE
-import Tools.User.Steps.Merge_Plate as MERGE_PLATE
-import Tools.User.Steps.Liquid_Transfer as LIQUID_TRANSFER
-import Tools.User.Steps.Dilute as DILUTE
-import Tools.User.Steps.Desalt as DESALT
-import Tools.User.Steps.Wait as WAIT
-import Tools.User.Steps.Incubate as INCUBATE
-import Tools.User.Steps.Vacuum as VACUUM
-import Tools.User.Steps.Notify as NOTIFY
-import Tools.User.Steps.Finish as FINISH
-import Tools.User.Steps.Aliquot as ALIQUOT
-import Tools.User.Steps.Pool as POOL
-import Tools.User.Steps.PreLoad_Liquid as PRELOAD_LIQUID
-import Tools.User.Steps.MagneticBeads as MAGNETIC_BEADS
-import Tools.User.Steps.Merge_Plate as MERGE_PLATE
-import Tools.User.Steps.Serial_Dilution as SERIAL_DILUTION
+	print("Init Classes")
+	EXCELIO.Init(Excel_File_Path)
+	HAMILTONIO.Init()
+	HAMILTONIO.Simulated(Initialization_Run)
+	if Initialization_Run == True:
+		LOG.Init("Test Log",True)
+	else:
+		LOG.Init("Run Log",True)
+	#init IOs
 
-import Tools.Hamilton.PreRun as PRERUN
-import Tools.Hamilton.Commands.StatusUpdate as STATUS_UPDATE
+	#
+	# The first thing I want to do is check that the method is validated. If it is not then we will exit and inform the user.
+	#
+	ValidatedStatus = EXCELIO.GetMethodValidatedStatus()
+	if  ValidatedStatus == "Blocks":
+		EXCELIO.CreateCriticalMessageBox("There is a validation issue with the Building Blocks. Please close and reopen the workbook to fix. If that doesn't work, please contact a Hamilton SME.", "Blocks Validation Failed")
+		quit()
+	elif ValidatedStatus == "Actions":
+		EXCELIO.CreateCriticalMessageBox("There is a validation issue with the method. Please check the method sheet for red cells and correct it.", "Method Validation Failed")
+		quit()
+	elif ValidatedStatus == "Solutions":
+		EXCELIO.CreateCriticalMessageBox("There is a validation issue with the Solutions. Please check the Solutions sheet for red cells and correct it.", "Solutions Validation Failed")
+		quit()
 
-#try:
+	CONFIGURATION.Init()
+	PREPLIST.Init()
+	STEPS.Init(EXCELIO.GetMethod())
+	SAMPLES.Init(Sample_Start_Pos, EXCELIO.GetWorklist())
+	LABWARE.Init()
+	#Init Trackers
 
-print("Init Classes")
-EXCELIO.Init(Excel_File_Path)
-HAMILTONIO.Init()
-HAMILTONIO.Simulated(Initialization_Run)
-if Initialization_Run == True:
-	LOG.Init("Test Log",True)
-else:
-	LOG.Init("Run Log",True)
-#init IOs
+	PLATE.Init(STEPS.GetSteps())
+	SPLIT_PLATE.Init(STEPS.GetSteps())
+	MERGE_PLATE.Init(STEPS.GetSteps())
+	LIQUID_TRANSFER.Init()
+	DILUTE.Init()
+	DESALT.Init(STEPS.GetSteps())
+	WAIT.Init()
+	INCUBATE.Init(STEPS.GetSteps())
+	NOTIFY.Init()
+	FINISH.Init()
+	ALIQUOT.Init(STEPS.GetSteps())
+	POOL.Init(STEPS.GetSteps())
+	PRELOAD_LIQUID.Init(STEPS.GetSteps())
+	VACUUM.Init(STEPS.GetSteps())
+	MAGNETIC_BEADS.Init(STEPS.GetSteps())
+	MERGE_PLATE.Init(STEPS.GetSteps())
+	SERIAL_DILUTION.Init(STEPS.GetSteps())
 
-#
-# The first thing I want to do is check that the method is validated. If it is not then we will exit and inform the user.
-#
-ValidatedStatus = EXCELIO.GetMethodValidatedStatus()
-if  ValidatedStatus == "Blocks":
-	EXCELIO.CreateCriticalMessageBox("There is a validation issue with the Building Blocks. Please close and reopen the workbook to fix. If that doesn't work, please contact a Hamilton SME.", "Blocks Validation Failed")
-	quit()
-elif ValidatedStatus == "Actions":
-	EXCELIO.CreateCriticalMessageBox("There is a validation issue with the method. Please check the method sheet for red cells and correct it.", "Method Validation Failed")
-	quit()
-elif ValidatedStatus == "Solutions":
-	EXCELIO.CreateCriticalMessageBox("There is a validation issue with the Solutions. Please check the Solutions sheet for red cells and correct it.", "Solutions Validation Failed")
-	quit()
+	#init steps
+	STEPS.StartStepSequence()
 
-CONFIGURATION.Init()
-PREPLIST.Init()
-STEPS.Init(EXCELIO.GetMethod())
-SAMPLES.Init(Sample_Start_Pos, EXCELIO.GetWorklist())
-LABWARE.Init()
-#Init Trackers
+	Steps = {
+		PLATE.TITLE: PLATE.Step,
 
-PLATE.Init(STEPS.GetSteps())
-SPLIT_PLATE.Init(STEPS.GetSteps())
-MERGE_PLATE.Init(STEPS.GetSteps())
-LIQUID_TRANSFER.Init()
-DILUTE.Init()
-DESALT.Init(STEPS.GetSteps())
-WAIT.Init()
-INCUBATE.Init(STEPS.GetSteps())
-NOTIFY.Init()
-FINISH.Init()
-ALIQUOT.Init(STEPS.GetSteps())
-POOL.Init(STEPS.GetSteps())
-PRELOAD_LIQUID.Init(STEPS.GetSteps())
-VACUUM.Init(STEPS.GetSteps())
-MAGNETIC_BEADS.Init(STEPS.GetSteps())
-MERGE_PLATE.Init(STEPS.GetSteps())
-SERIAL_DILUTION.Init(STEPS.GetSteps())
+		SPLIT_PLATE.TITLE: SPLIT_PLATE.Step,
 
-#init steps
-STEPS.StartStepSequence()
+		LIQUID_TRANSFER.TITLE: LIQUID_TRANSFER.Step,
 
-Steps = {
-	PLATE.TITLE: PLATE.Step,
+		DILUTE.TITLE: DILUTE.Step,
 
-	SPLIT_PLATE.TITLE: SPLIT_PLATE.Step,
+		DESALT.TITLE: DESALT.Step,
 
-	LIQUID_TRANSFER.TITLE: LIQUID_TRANSFER.Step,
+		INCUBATE.TITLE: INCUBATE.Step,
 
-	DILUTE.TITLE: DILUTE.Step,
+		VACUUM.TITLE: VACUUM.Step,
 
-	DESALT.TITLE: DESALT.Step,
+		NOTIFY.TITLE: NOTIFY.Step,
 
-	INCUBATE.TITLE: INCUBATE.Step,
+		FINISH.TITLE: FINISH.Step,
 
-	VACUUM.TITLE: VACUUM.Step,
+		ALIQUOT.TITLE: ALIQUOT.Step,
 
-	NOTIFY.TITLE: NOTIFY.Step,
+		POOL.TITLE: POOL.Step,
 
-	FINISH.TITLE: FINISH.Step,
+		PRELOAD_LIQUID.TITLE: PRELOAD_LIQUID.Step,
 
-	ALIQUOT.TITLE: ALIQUOT.Step,
+		MAGNETIC_BEADS.TITLE: MAGNETIC_BEADS.Step,
 
-	POOL.TITLE: POOL.Step,
+		MERGE_PLATE.TITLE: MERGE_PLATE.Step,
 
-	PRELOAD_LIQUID.TITLE: PRELOAD_LIQUID.Step,
+		WAIT.TITLE: WAIT.Step,
 
-	MAGNETIC_BEADS.TITLE: MAGNETIC_BEADS.Step,
+		SERIAL_DILUTION.TITLE: SERIAL_DILUTION.Step
+	}
 
-	MERGE_PLATE.TITLE: MERGE_PLATE.Step,
+	while(True):
 
-	WAIT.TITLE: WAIT.Step,
+		Step = STEPS.GetNextStep()
 
-	SERIAL_DILUTION.TITLE: SERIAL_DILUTION.Step
-}
+		if Step == None:
+			break
 
-while(True):
+		if sum(LABWARE.GetContextualFactors(STEPS.Class.GetContext(Step))) == 0 and Step.GetTitle() != MERGE_PLATE.TITLE:
+			continue
+		#We also want to ensure that the parent is actually used. To do this, we can sum the parent plate factors. 
+		# If it is 0 then the plate is not used by any samples.
+		#We do not want to skip a merge plates step no matter what.
 
-	Step = STEPS.GetNextStep()
+		STEPS.UpdateStepParams(Step)
+		PLATES.LABWARE.GetExcelLabwareInfo()
+		#This updates the actual step parameters at time the step is run. This allows for method development in real time
 
-	if Step == None:
-		break
+		print("\n",Step)
 
-	if sum(LABWARE.GetContextualFactors(STEPS.Class.GetContext(Step))) == 0 and Step.GetTitle() != MERGE_PLATE.TITLE:
-		continue
-	#We also want to ensure that the parent is actually used. To do this, we can sum the parent plate factors. 
-	# If it is 0 then the plate is not used by any samples.
-	#We do not want to skip a merge plates step no matter what.
+		LOG.LogStep(Step)
+		LOG.PublishLog()
 
-	STEPS.UpdateStepParams(Step)
-	PLATES.LABWARE.GetExcelLabwareInfo()
-	#This updates the actual step parameters at time the step is run. This allows for method development in real time
+		STEPS.NumExecutedSteps += 1
+		PercentComplete = int(STEPS.GetNumExecutedSteps() / STEPS.GetTotalNumSteps() * 100)
+		HAMILTONIO.AddCommand(STATUS_UPDATE.SetProgress({"PercentComplete":PercentComplete}))
+		HAMILTONIO.SendCommands()
 
-	print("\n",Step)
+		Steps[Step.GetTitle()](Step)
+		#This does the step
 
-	LOG.LogStep(Step)
-	LOG.PublishLog()
+		INCUBATE.StartHeaters()
+		#After the first step we want to start the heaters for incubations. The first step will always be a plate step.
 
-	STEPS.NumExecutedSteps += 1
-	PercentComplete = int(STEPS.GetNumExecutedSteps() / STEPS.GetTotalNumSteps() * 100)
-	HAMILTONIO.AddCommand(STATUS_UPDATE.SetProgress({"PercentComplete":PercentComplete}))
-	HAMILTONIO.SendCommands()
+		WAIT.CheckForExpiredTimers()
+		#Wait is async, but we need to ensure that we are not pausing a context that is ready to continue running.
 
-	Steps[Step.GetTitle()](Step)
-	#This does the step
+		WAIT.WaitForTimer()
+		#It is possible we freeze all contexts so we need to check for a chance to wait after each step
 
-	INCUBATE.StartHeaters()
-	#After the first step we want to start the heaters for incubations. The first step will always be a plate step.
+	#do each step
 
-	WAIT.CheckForExpiredTimers()
-	#Wait is async, but we need to ensure that we are not pausing a context that is ready to continue running.
+	print("\n\n\n\n")
 
-	WAIT.WaitForTimer()
-	#It is possible we freeze all contexts so we need to check for a chance to wait after each step
+	if HAMILTONIO.IsSimulated() == True:
 
-#do each step
+		if GenerateList == False and TestRun == False:
+			HAMILTONIO.Simulated(False)
 
-print("\n\n\n\n")
+		HAMILTONIO.AddCommand(PRERUN.Samples(SAMPLES.GetNumSamples()),False)
+		Labware = CONFIGURATION.Load(LABWARE.GetAllLabwareType(LABWARE.LabwareTypes.Plate),LABWARE.GetAllLabwareType(LABWARE.LabwareTypes.Reagent))
+		HAMILTONIO.AddCommand(PRERUN.Labware(Labware),False)
 
-if HAMILTONIO.IsSimulated() == True:
+		print()
+		print("Complete. See Excel File.")
+		print()
 
-	if GenerateList == False and TestRun == False:
-		HAMILTONIO.Simulated(False)
+		if TestRun == True:
+			PREPLIST.PrintFinalPlateVolumes(Labware)
+			if GenerateList == True:
+				PREPLIST.GeneratePrepSheet(Labware)
+			#Generate prep sheet here
+		
+		if LIQUID_TRANSFER.IsUsed() == True or DILUTE.IsUsed() == True:
+			HAMILTONIO.AddCommand(PRERUN.PIPETTE.PreRun(PLATES.GetAllPipetteVolumes()),False)
+		
+		if INCUBATE.IsUsed() == True:
+			HAMILTONIO.AddCommand(PRERUN.HEATER.PreRun({}),False)
+		
+		if NOTIFY.IsUsed() == True:
+			HAMILTONIO.AddCommand(PRERUN.NOTIFY.PreRun({}),False)
+		
+		if DESALT.IsUsed() == True:
+			HAMILTONIO.AddCommand(PRERUN.DESALT.PreRun(DESALT.GetDesaltParams()),False)
 
-	HAMILTONIO.AddCommand(PRERUN.Samples(SAMPLES.GetNumSamples()),False)
-	Labware = CONFIGURATION.Load(LABWARE.GetAllLabwareType(LABWARE.LabwareTypes.Plate),LABWARE.GetAllLabwareType(LABWARE.LabwareTypes.Reagent))
-	HAMILTONIO.AddCommand(PRERUN.Labware(Labware),False)
+		if WAIT.IsUsed() == True:
+			HAMILTONIO.AddCommand(PRERUN.TIMER.PreRun({}),False)
 
-	print()
-	print("Complete. See Excel File.")
-	print()
+		if INCUBATE.IsUsed() == True or VACUUM.IsUsed() == True:
+			HAMILTONIO.AddCommand(PRERUN.TRANSPORT.PreRun({}),False)
+
+		if VACUUM.IsUsed() == True:
+			HAMILTONIO.AddCommand(PRERUN.VACUUM.PreRun({"VacuumPlateNames":VACUUM.GetVacPlates()}),False)
+
+		if MAGNETIC_BEADS.IsUsed() == True:
+			HAMILTONIO.AddCommand(PRERUN.MAGNETIC_BEADS.PreRun({"PlateNames":MAGNETIC_BEADS.GetUsedParentPlateNames()}),False)
+
+		##if STATUS_UPDATE.IsUsed() == True:
+		HAMILTONIO.AddCommand(PRERUN.STATUS_UPDATE.PreRun({}),False)
+		HAMILTONIO.AddCommand(PRERUN.LID.PreRun({}),False)
+
+		Response = HAMILTONIO.SendCommands()
+
+		#if LOG.RunLogExists() and TestRun == False and len(LOG.GetLatestStep()) != 0:
+		#	HAMILTONIO.AddCommand(PRERUN.LOG.PreRun(LOG.GetLatestStep()),False)
+		#	Response = HAMILTONIO.SendCommands()
+		#	LOG.HandleResponse(Response[0])
+		#initialize all the Hamilton Libraries.
+
+	HAMILTONIO.EndCommunication()
 
 	if TestRun == True:
-		PREPLIST.PrintFinalPlateVolumes(Labware)
 		if GenerateList == True:
-			PREPLIST.GeneratePrepSheet(Labware)
-		#Generate prep sheet here
-	
-	if LIQUID_TRANSFER.IsUsed() == True or DILUTE.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.PIPETTE.PreRun(PLATES.GetAllPipetteVolumes()),False)
-	
-	if INCUBATE.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.HEATER.PreRun({}),False)
-	
-	if NOTIFY.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.NOTIFY.PreRun({}),False)
-	
-	if DESALT.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.DESALT.PreRun(DESALT.GetDesaltParams()),False)
-
-	if WAIT.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.TIMER.PreRun({}),False)
-
-	if INCUBATE.IsUsed() == True or VACUUM.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.TRANSPORT.PreRun({}),False)
-
-	if VACUUM.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.VACUUM.PreRun({"VacuumPlateNames":VACUUM.GetVacPlates()}),False)
-
-	if MAGNETIC_BEADS.IsUsed() == True:
-		HAMILTONIO.AddCommand(PRERUN.MAGNETIC_BEADS.PreRun({"PlateNames":MAGNETIC_BEADS.GetUsedParentPlateNames()}),False)
-
-	##if STATUS_UPDATE.IsUsed() == True:
-	HAMILTONIO.AddCommand(PRERUN.STATUS_UPDATE.PreRun({}),False)
-	HAMILTONIO.AddCommand(PRERUN.LID.PreRun({}),False)
-
-	Response = HAMILTONIO.SendCommands()
-
-	#if LOG.RunLogExists() and TestRun == False and len(LOG.GetLatestStep()) != 0:
-	#	HAMILTONIO.AddCommand(PRERUN.LOG.PreRun(LOG.GetLatestStep()),False)
-	#	Response = HAMILTONIO.SendCommands()
-	#	LOG.HandleResponse(Response[0])
-	#initialize all the Hamilton Libraries.
-
-HAMILTONIO.EndCommunication()
-
-if TestRun == True:
-	if GenerateList == True:
-		#EXCELIO.SelectCell("Preparation List",1,1)
-		EXCELIO.CreateInformationMessageBox("Preperation sheet generation completed succesfully!", "Successful Execution")
-	else:
-		EXCELIO.CreateInformationMessageBox("Method test completed succesfully! Please see the Test Log and Final Plate Volumes sheet to confirm the method performed as expected.", "Successful Execution")
-#except Exception as e:
-	#traceback.print_exc()
-	#EXCELIO.CreateCriticalMessageBox("An undefined error has occured. Unfortunately, this error is not captured by the normal error handling. Please contact a Hamilton SME to correct the issue.","Undefined Error Occured")
+			#EXCELIO.SelectCell("Preparation List",1,1)
+			EXCELIO.CreateInformationMessageBox("Preperation sheet generation completed succesfully!", "Successful Execution")
+		else:
+			EXCELIO.CreateInformationMessageBox("Method test completed succesfully! Please see the Test Log and Final Plate Volumes sheet to confirm the method performed as expected.", "Successful Execution")
+except Exception as e:
+	traceback.print_exc()
+	EXCELIO.CreateCriticalMessageBox("An undefined error has occured. Unfortunately, this error is not captured by the normal error handling. Please contact a Hamilton SME to correct the issue.","Undefined Error Occured")
