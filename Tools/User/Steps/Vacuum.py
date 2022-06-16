@@ -173,8 +173,8 @@ def Step(step):
 	#Lets get the info we need to move everything
 
 	if not (TITLE in STEPS.GetPreviousStepInPathway(step).GetTitle()):
-		HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":DeckPlateType,"SourceSequenceString":DeckPlateSequence,"DestinationLabwareType":CollectionPlateType,"DestinationSequenceString":CollectionPlateSequence,"Park":"False","CheckExists":"After"}))
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving collection plate into vacuum manifold"}))
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving collection plate into vacuum manifold"}))		
+		HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":DeckPlateType,"SourceSequenceString":DeckPlateSequence,"DestinationLabwareType":CollectionPlateType,"DestinationSequenceString":CollectionPlateSequence,"Park":"False","CheckExists":"False"}))
 		Response = HAMILTONIO.SendCommands()
 		
 		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving vacuum plate atop vacuum manifold"}))
@@ -200,7 +200,7 @@ def Step(step):
 			"DestinationLiquidClasses":DestinationLiquidClassStrings,\
 			"TipSequences":TipSequenceStrings,\
 			"KeepTips":"False",\
-			"DestinationPipettingOffset":8}
+			"DestinationPipettingOffset":0}
 
 		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Pipetting source into vacuum plate"}))
 		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))

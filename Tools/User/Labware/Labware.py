@@ -216,10 +216,7 @@ def GetAllLabwareType(LabwareType):
     OutputList = []
     for Labware in LabwareSet:
         if Labware.GetLabwareType() == LabwareType:
-            if LabwareType == LabwareTypes.Reagent:
-                if Labware.GetMaxVolume() != 0:
-                    OutputList.append(Labware)
-            else:
+            if Labware.GetMaxVolume() != 0:
                 OutputList.append(Labware)
     return OutputList
 
