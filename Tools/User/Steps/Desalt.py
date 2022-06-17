@@ -31,7 +31,10 @@ IsUsedFlag = False
 #	Input Arguments: N/A
 #	Returns: [Step module Class]
 #########################################################################
-def GetDesaltParams():
+def GetAllDesaltParams():
+	return Desalting_Params
+
+def GetInitDesaltParams():
 	return {Key: Desalting_Params[Key] for Key in Desalting_Params if Desalting_Params[Key]["Positions"] is not None}
 
 def DoesStatusUpdates():
@@ -71,16 +74,21 @@ def Init(MutableStepsList):
 				if SearchStep == None:
 					break
 
+			VolArray = str(Params[TYPE]).replace(" ","").replace('.0','').split("+")
+
 			Desalting_Params[Parent + str(Step.GetCoordinates())] = {\
 				"Destination":Parent, \
 				"Source":Params[SOURCE], \
 				"Waste":Params[WASTE], \
 				"EQ Buffer":Params[EQUILIBRATION_BUFFER], \
-				"Volume":str(Params[TYPE]).replace(" ","").replace('.0','').split("+"), \
+				"Volume":VolArray, \
+				"Required EQ Time": len(VolArray) * 10 * 60, \
 				"Method":Params[ELUTION_METHOD], \
 				"EQ":False, \
 				"EQ Step": SearchStep,
 				"Positions":None}
+
+			print(str(Params[TYPE]).replace(" ","").replace('.0','').split("+"))
 
 ######################################################################### 
 #	Description: Performs equilibration by calling the appropriate hamilton commands

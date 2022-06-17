@@ -44,8 +44,6 @@ def GetLowestTimer():
 	return min(Timer_List, key=lambda x: x["Wait Time"] - (Time - x["Start Time"]))
 
 def WaitForTimer():
-	global Timer_List
-
 	if STEPS.GetNumActiveContexts() != 0 and not all(Context in STEPS.FrozenContextTracker for Context in STEPS.ActiveContextTracker):
 		return
 
@@ -54,16 +52,19 @@ def WaitForTimer():
 		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "No pathways are currently active. Starting to wait for timer with lowest remaining time."}))
 		HAMILTONIO.SendCommands()
 
-		Params = DESALT.GetDesaltParams()
-		for Timer in Timer_List:
-			if Timer["Wait Only"] == False:
-				for key in Params:
-					if Params[key]["EQ Step"] == Timer["Step"]:
-						DESALT.Equilibrate(key)
+		LowestTimer = GetLowestTimer()
+	
+		Params = DESALT.GetAllDesaltParams()
+		if LowestTimer["Wait Only"] == False:
+			for key in Params:
+				
+				RemainingTime = LowestTimer["Wait Time"] - (time.time() - LowestTimer["Start Time"])
+				#We want to calculte the remaining time each round so we do not accidently prevent an incubation ending
+
+				if Params[key]["EQ Step"] == LowestTimer["Step"] and RemainingTime > Params[key]["Required EQ Time"] :
+					DESALT.Equilibrate(key)
 		#It is more efficient to equilibrate when the deck is not busy. So we will do it before we wait on a incubation timer
 
-		LowestTimer = GetLowestTimer()
-		
 		RemainingTime = LowestTimer["Wait Time"] - (time.time() - LowestTimer["Start Time"])
 
 		if RemainingTime > 0:

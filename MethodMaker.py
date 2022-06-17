@@ -2,97 +2,101 @@ import sys
 import time
 import traceback
 
-try:
 
-	if len(sys.argv) > 1:
-		Excel_File_Path = sys.argv[1]
-		Sample_Start_Pos = int(sys.argv[2])
-		RunType = sys.argv[3]
 
-		if RunType == "Run":
-			Initialization_Run = False
-			GenerateList = False
-			TestRun = False
+if len(sys.argv) > 1:
+	Excel_File_Path = sys.argv[1]
+	Sample_Start_Pos = int(sys.argv[2])
+	RunType = sys.argv[3]
 
-		elif RunType == "Init":
-			Initialization_Run = True
-			GenerateList = False
-			TestRun = False
+	if RunType == "Run":
+		Initialization_Run = False
+		GenerateList = False
+		TestRun = False
 
-		elif RunType == "PrepList":
-			Initialization_Run = True
-			GenerateList = True
-			TestRun = True
+	elif RunType == "Init":
+		Initialization_Run = True
+		GenerateList = False
+		TestRun = False
 
-		elif RunType == "Test":
-			Initialization_Run = True
-			GenerateList = False
-			TestRun = True
-
-	else:
-		Sample_Start_Pos = 1
-		Excel_File_Path = "Method Maker.xlsm"
+	elif RunType == "PrepList":
 		Initialization_Run = True
 		GenerateList = True
 		TestRun = True
 
-	print("import")
-	import Tools.General.ExcelIO as EXCELIO
-	import Tools.General.HamiltonIO as HAMILTONIO
-	import Tools.General.Log as LOG
+	elif RunType == "Test":
+		Initialization_Run = True
+		GenerateList = False
+		TestRun = True
 
-	import Tools.User.Steps.Steps as STEPS
-	import Tools.User.Samples as SAMPLES
-	import Tools.User.Configuration as CONFIGURATION
-	import Tools.User.PrepList as PREPLIST
-	import Tools.User.Labware.Plates as PLATES
-	import Tools.User.Labware.Solutions as SOLUTIONS
-	import Tools.User.Labware.Labware as LABWARE
+else:
+	Sample_Start_Pos = 1
+	Excel_File_Path = "Method Maker.xlsm"
+	Initialization_Run = True
+	GenerateList = True
+	TestRun = True
 
-	import Tools.User.Steps.Plate as PLATE
-	import Tools.User.Steps.Split_Plate as SPLIT_PLATE
-	import Tools.User.Steps.Merge_Plate as MERGE_PLATE
-	import Tools.User.Steps.Liquid_Transfer as LIQUID_TRANSFER
-	import Tools.User.Steps.Dilute as DILUTE
-	import Tools.User.Steps.Desalt as DESALT
-	import Tools.User.Steps.Wait as WAIT
-	import Tools.User.Steps.Incubate as INCUBATE
-	import Tools.User.Steps.Vacuum as VACUUM
-	import Tools.User.Steps.Notify as NOTIFY
-	import Tools.User.Steps.Finish as FINISH
-	import Tools.User.Steps.Aliquot as ALIQUOT
-	import Tools.User.Steps.Pool as POOL
-	import Tools.User.Steps.PreLoad_Liquid as PRELOAD_LIQUID
-	import Tools.User.Steps.MagneticBeads as MAGNETIC_BEADS
-	import Tools.User.Steps.Merge_Plate as MERGE_PLATE
-	import Tools.User.Steps.Serial_Dilution as SERIAL_DILUTION
 
-	import Tools.Hamilton.PreRun as PRERUN
-	import Tools.Hamilton.Commands.StatusUpdate as STATUS_UPDATE
 
-	print("Init Classes")
-	EXCELIO.Init(Excel_File_Path)
-	HAMILTONIO.Init()
-	HAMILTONIO.Simulated(Initialization_Run)
-	if Initialization_Run == True:
-		LOG.Init("Test Log",True)
-	else:
-		LOG.Init("Run Log",True)
-	#init IOs
+print("import")
+import Tools.General.ExcelIO as EXCELIO
+import Tools.General.HamiltonIO as HAMILTONIO
+import Tools.General.Log as LOG
 
-	#
-	# The first thing I want to do is check that the method is validated. If it is not then we will exit and inform the user.
-	#
-	ValidatedStatus = EXCELIO.GetMethodValidatedStatus()
-	if  ValidatedStatus == "Blocks":
-		EXCELIO.CreateCriticalMessageBox("There is a validation issue with the Building Blocks. Please close and reopen the workbook to fix. If that doesn't work, please contact a Hamilton SME.", "Blocks Validation Failed")
-		quit()
-	elif ValidatedStatus == "Actions":
-		EXCELIO.CreateCriticalMessageBox("There is a validation issue with the method. Please check the method sheet for red cells and correct it.", "Method Validation Failed")
-		quit()
-	elif ValidatedStatus == "Solutions":
-		EXCELIO.CreateCriticalMessageBox("There is a validation issue with the Solutions. Please check the Solutions sheet for red cells and correct it.", "Solutions Validation Failed")
-		quit()
+import Tools.User.Steps.Steps as STEPS
+import Tools.User.Samples as SAMPLES
+import Tools.User.Configuration as CONFIGURATION
+import Tools.User.PrepList as PREPLIST
+import Tools.User.Labware.Plates as PLATES
+import Tools.User.Labware.Solutions as SOLUTIONS
+import Tools.User.Labware.Labware as LABWARE
+
+import Tools.User.Steps.Plate as PLATE
+import Tools.User.Steps.Split_Plate as SPLIT_PLATE
+import Tools.User.Steps.Merge_Plate as MERGE_PLATE
+import Tools.User.Steps.Liquid_Transfer as LIQUID_TRANSFER
+import Tools.User.Steps.Dilute as DILUTE
+import Tools.User.Steps.Desalt as DESALT
+import Tools.User.Steps.Wait as WAIT
+import Tools.User.Steps.Incubate as INCUBATE
+import Tools.User.Steps.Vacuum as VACUUM
+import Tools.User.Steps.Notify as NOTIFY
+import Tools.User.Steps.Finish as FINISH
+import Tools.User.Steps.Aliquot as ALIQUOT
+import Tools.User.Steps.Pool as POOL
+import Tools.User.Steps.PreLoad_Liquid as PRELOAD_LIQUID
+import Tools.User.Steps.MagneticBeads as MAGNETIC_BEADS
+import Tools.User.Steps.Merge_Plate as MERGE_PLATE
+import Tools.User.Steps.Serial_Dilution as SERIAL_DILUTION
+
+import Tools.Hamilton.PreRun as PRERUN
+import Tools.Hamilton.Commands.StatusUpdate as STATUS_UPDATE
+
+print("Init Classes")
+EXCELIO.Init(Excel_File_Path)
+HAMILTONIO.Init()
+HAMILTONIO.Simulated(Initialization_Run)
+if Initialization_Run == True:
+	LOG.Init("Test Log",True)
+else:
+	LOG.Init("Run Log",True)
+#init IOs
+
+#
+# The first thing I want to do is check that the method is validated. If it is not then we will exit and inform the user.
+#
+ValidatedStatus = EXCELIO.GetMethodValidatedStatus()
+if  ValidatedStatus == "Blocks":
+	EXCELIO.CreateCriticalMessageBox("There is a validation issue with the Building Blocks. Please close and reopen the workbook to fix. If that doesn't work, please contact a Hamilton SME.", "Blocks Validation Failed")
+	quit()
+elif ValidatedStatus == "Actions":
+	EXCELIO.CreateCriticalMessageBox("There is a validation issue with the method. Please check the method sheet for red cells and correct it.", "Method Validation Failed")
+	quit()
+elif ValidatedStatus == "Solutions":
+	EXCELIO.CreateCriticalMessageBox("There is a validation issue with the Solutions. Please check the Solutions sheet for red cells and correct it.", "Solutions Validation Failed")
+	quit()
+
+try:
 
 	CONFIGURATION.Init()
 	PREPLIST.Init()
@@ -228,7 +232,7 @@ try:
 			HAMILTONIO.AddCommand(PRERUN.NOTIFY.PreRun({}),False)
 		
 		if DESALT.IsUsed() == True:
-			HAMILTONIO.AddCommand(PRERUN.DESALT.PreRun(DESALT.GetDesaltParams()),False)
+			HAMILTONIO.AddCommand(PRERUN.DESALT.PreRun(DESALT.GetInitDesaltParams()),False)
 
 		if WAIT.IsUsed() == True:
 			HAMILTONIO.AddCommand(PRERUN.TIMER.PreRun({}),False)
