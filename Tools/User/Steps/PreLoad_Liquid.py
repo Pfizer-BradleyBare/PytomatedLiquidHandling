@@ -4,6 +4,7 @@ from ..Labware import Solutions as SOLUTIONS
 from ..Steps import Plate as PLATE
 from ...User import Samples as SAMPLES
 from ...General import Log as LOG
+from ...General import HamiltonIO as HAMILTONIO
 
 TITLE = "Preload Liquid"
 SOURCE = "Source"
@@ -49,6 +50,12 @@ def Step(step):
 
 	if len(MethodComments) != 0:
 		LOG.LogMethodComment(step,MethodComments)
+		if HAMILTONIO.IsSimulated() == True:
+			quit()
+		else:
+			STEPS.UpdateStepParams(step)
+			Step(step)
+			return
 
 	#########################
 	#########################

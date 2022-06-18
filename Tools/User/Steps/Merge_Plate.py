@@ -6,6 +6,7 @@ from ..Steps import Split_Plate as SPLIT_PLATE
 from ..Steps import Wait as WAIT
 from ...General import Log as LOG
 import copy
+from ...General import HamiltonIO as HAMILTONIO
 
 TITLE = "Merge Plates"
 NAME = "Plate Name"
@@ -84,6 +85,12 @@ def Step(step):
 
 	if len(MethodComments) != 0:
 		LOG.LogMethodComment(step,MethodComments)
+		if HAMILTONIO.IsSimulated() == True:
+			quit()
+		else:
+			STEPS.UpdateStepParams(step)
+			Step(step)
+			return
 
 	#########################
 	#########################

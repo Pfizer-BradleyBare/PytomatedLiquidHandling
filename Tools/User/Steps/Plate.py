@@ -3,6 +3,7 @@ from ..Labware import Plates as PLATES
 from ..Steps import Split_Plate as SPLIT_PLATE
 from ...User import Samples as SAMPLES
 from ...General import Log as LOG
+from ...General import HamiltonIO as HAMILTONIO
 
 TITLE = "Plate"
 NAME = "Name"
@@ -49,6 +50,12 @@ def Step(step):
 
 	if len(MethodComments) != 0:
 		LOG.LogMethodComment(step,MethodComments)
+		if HAMILTONIO.IsSimulated() == True:
+			quit()
+		else:
+			STEPS.UpdateStepParams(step)
+			Step(step)
+			return
 
 	#########################
 	#########################

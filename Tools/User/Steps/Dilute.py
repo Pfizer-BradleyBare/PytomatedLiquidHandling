@@ -117,6 +117,12 @@ def Step(step):
 
 	if len(MethodComments) != 0:
 		LOG.LogMethodComment(step,MethodComments)
+		if HAMILTONIO.IsSimulated() == True:
+			quit()
+		else:
+			STEPS.UpdateStepParams(step)
+			Step(step)
+			return
 
 	#########################
 	#########################

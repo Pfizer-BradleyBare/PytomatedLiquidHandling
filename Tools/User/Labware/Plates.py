@@ -150,6 +150,18 @@ class Class(LABWARE.Class):
 			#Max volume is the absolute max value
 
 	#
+	# This adjusts the well contents by a decimal percentage for each well
+	#
+	def UpdateWellContents(self, Well, DecimalPercentage):
+		RemoveList = []
+		for Content in Well:
+			Content["Volume"] *= DecimalPercentage
+			if Content["Volume"] == 0:
+				RemoveList.append(Content)
+		for Item in RemoveList:
+			Well.remove(Item)
+
+	#
 	# This is a generic implementation to cover Viscosity, Volatility, and Homogeneity
 	#
 	def GenericCalculation(self, SampleIndex, DefaultValue, ValuesDict, PlatesGetFunction, SolutionsGetFunction):
@@ -278,12 +290,16 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				SourceLLDCriteria = SourceLabware.GetLLD(SourceArrayPosition)
 				#We need to get the solution properties first then we can determine mixing based off that
 
-				SourceLabware.VolumesList[SourceArrayPosition] -= ActualVolume
+				Volume = SourceLabware.VolumesList[SourceArrayPosition]
+				NewVolume = Volume - ActualVolume
+				PercentChange = NewVolume / Volume
+				Well = SourceLabware.WellContents[SourceArrayPosition]
+				SourceLabware.UpdateWellContents(Well, PercentChange)
+				#Update the contents in the well
+
+				SourceLabware.VolumesList[SourceArrayPosition] = NewVolume
 				SourceLabware.DoVolumeUpdate()
-				#DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":"__REMOVE__","Volume":ActualVolume})
 			#Do plate volume subtraction
-
-
 
 			DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":SourceName, "Well":SourceArrayPosition, "Volume":ActualVolume})
 			DestinationLabware.VolumesList[DestinationArrayPosition] += ActualVolume

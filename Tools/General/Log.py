@@ -1,6 +1,7 @@
 from ..General import ExcelIO as EXCELIO
 from ..General import HamiltonIO as HAMILTONIO
 from ..User import Samples as SAMPLES
+from ..Hamilton.Commands import Notify as NOTIFY
 
 LOG_ROW_START = 2
 LOG_COL_START = 2
@@ -151,9 +152,25 @@ def LogMethodComment(Step, CommentList):
 	EXCELIO.WriteSheet("Method",Coords[0],Coords[1] + 3,Comments)
 	EXCELIO.SelectCell("Method",Coords[0],Coords[1] + 3)
 
+	Message = {\
+		"Subject":"Correctable Runtime error in Method",\
+		"Body":"Hi, please remote into the Hamilton PC, CLICK OK IN THIS DIALOG, then correct the error in the excel file. An excel dialog will inform you of the error, then direct you to a row and column where the error is described. Please correct the error then click ok in the following dialog. DO NOT RETEST THE METHOD. It will cause your method to abort.",\
+		"Wait":"Yes"}
+
+	HAMILTONIO.AddCommand(NOTIFY.NotifyContacts(Message),False)
+	HAMILTONIO.SendCommands()
+
 	EXCELIO.CreateCriticalMessageBox("There were issues found with your method. Please go to the method sheet and correct the errors. Errors will be documented to the right of the block at Row: " + str(Coords[0]) + " Column: " + str(Coords[1]),"Critical Validation Error!")
-	quit()
 	
+	Message = {\
+		"Subject":"Was the error corrected?",\
+		"Body":"Before clicking ok please ensure the error is corrected. Otherwise we have to go through this process again.",\
+		"Wait":"Yes"}
+
+	HAMILTONIO.AddCommand(NOTIFY.NotifyContacts(Message),False)
+	HAMILTONIO.SendCommands()
+
+
 
 def LogComment(Step, Comment):
 	global LogNumStepComments

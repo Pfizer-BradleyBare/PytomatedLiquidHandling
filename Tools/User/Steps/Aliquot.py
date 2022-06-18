@@ -4,6 +4,7 @@ from ..Steps import Plate as PLATE
 from ..Steps import Pool as POOL
 from ...User import Samples as SAMPLES
 from ...General import Log as LOG
+from ...General import HamiltonIO as HAMILTONIO
 import time
 
 TITLE = "Aliquot"
@@ -57,6 +58,12 @@ def Step(step):
 
 	if len(MethodComments) != 0:
 		LOG.LogMethodComment(step,MethodComments)
+		if HAMILTONIO.IsSimulated() == True:
+			quit()
+		else:
+			STEPS.UpdateStepParams(step)
+			Step(step)
+			return
 
 	#########################
 	#########################

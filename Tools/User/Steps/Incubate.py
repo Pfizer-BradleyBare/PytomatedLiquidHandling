@@ -77,6 +77,7 @@ def Init(MutableStepsList):
 
 			if len(MethodComments) != 0:
 				LOG.LogMethodComment(Step,MethodComments)
+				quit()
 
 			#########################
 			#########################
@@ -169,6 +170,43 @@ def StartHeaters():
 		RPM = Params[SHAKE]
 		Wait = Params[TEMPWAIT]
 		ParentPlate = Incubation.GetParentPlateName()
+
+		#########################
+		#########################
+		#########################
+		#### INPUT VALIDATION ###
+		#########################
+		#########################
+		#########################
+		MethodComments = []
+		
+		#Is source the destination?
+		if type(Temp) is str:
+			if Temp != "Ambient":
+				MethodComments.append("The Temp parameter can be either \"Ambient\" or a number. Please Correct.")
+
+		if type(Wait) is str:
+			MethodComments.append("The Time parameter can only be a number. Please Correct.")
+
+		if type(RPM) is str:
+			MethodComments.append("The Shake parameter can only be a number. Please Correct.")
+
+		if len(MethodComments) != 0:
+			LOG.LogMethodComment(Incubation,MethodComments)
+			if HAMILTONIO.IsSimulated() == True:
+				quit()
+			else:
+				STEPS.UpdateStepParams(Incubation)
+				StartHeaters()
+				return
+
+		#########################
+		#########################
+		#########################
+		#### INPUT VALIDATION ###
+		#########################
+		#########################
+		#########################
 
 		if str(Temp).lower() == "Ambient".lower():
 			Incubation_List.remove(Incubation)
@@ -338,6 +376,45 @@ def Step(step):
 	
 	Params = step.GetParameters()
 	Temp = Params[TEMP]
+	RPM = Params[SHAKE]
+	Wait = Params[TEMPWAIT]
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
+	MethodComments = []
+	
+	#Is source the destination?
+	if type(Temp) is str:
+		if Temp != "Ambient":
+			MethodComments.append("The Temp parameter can be either \"Ambient\" or a number. Please Correct.")
+
+	if type(Wait) is str:
+		MethodComments.append("The Time parameter can only be a number. Please Correct.")
+
+	if type(RPM) is str:
+		MethodComments.append("The Shake parameter can only be a number. Please Correct.")
+
+	if len(MethodComments) != 0:
+		LOG.LogMethodComment(step,MethodComments)
+		if HAMILTONIO.IsSimulated() == True:
+			quit()
+		else:
+			STEPS.UpdateStepParams(step)
+			Step(step)
+			return
+
+	#########################
+	#########################
+	#########################
+	#### INPUT VALIDATION ###
+	#########################
+	#########################
+	#########################
 
 	if str(Temp).lower() == "Ambient".lower():
 		AmbientStep(step)

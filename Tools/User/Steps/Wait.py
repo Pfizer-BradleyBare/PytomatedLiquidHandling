@@ -120,7 +120,13 @@ def Step(step):
 		MethodComments.append("The Time parameter can only be a number. Please Correct.")
 
 	if len(MethodComments) != 0:
-		LOG.LogMethodComment(Step,MethodComments)
+		LOG.LogMethodComment(step,MethodComments)
+		if HAMILTONIO.IsSimulated() == True:
+			quit()
+		else:
+			STEPS.UpdateStepParams(step)
+			Step(step)
+			return
 
 	#########################
 	#########################
