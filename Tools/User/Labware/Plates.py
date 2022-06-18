@@ -123,6 +123,7 @@ class Class(LABWARE.Class):
 	def GetPipetteVolumesList(self):
 		return self.PipetteVolumesList
 
+
 	#
 	# Implemented Virtual function from Labware class
 	#
@@ -282,8 +283,7 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				#DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":"__REMOVE__","Volume":ActualVolume})
 			#Do plate volume subtraction
 
-			if RecordPipetteVolumes == True:
-				Class.AddPipetteVolume(DestinationLabware,ActualVolume)
+
 
 			DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":SourceName, "Well":SourceArrayPosition, "Volume":ActualVolume})
 			DestinationLabware.VolumesList[DestinationArrayPosition] += ActualVolume
@@ -305,6 +305,10 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 			#Then calculate destination (This is Dispense)
 
 			NewSequence.AppendToPipetteSequence(DestinationName,DestinationSequencePosition,SourceName,SourceSequencePosition,ActualVolume,CurrentWellVolume,AspirateCycles,DispenseCycles,AspirateLiquidClass,DispenseLiquidClass,SourceLLDCriteria,DestinationLLDCriteria)
+	
+	if RecordPipetteVolumes == True:
+		for Volume in NewSequence.GetTransferVolumes():
+			Class.AddPipetteVolume(DestinationLabware,Volume)
 
 	return copy.deepcopy(NewSequence)
 

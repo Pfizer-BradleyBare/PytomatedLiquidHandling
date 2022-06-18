@@ -79,7 +79,7 @@ HAMILTONIO.Simulated(Initialization_Run)
 if Initialization_Run == True:
 	LOG.Init("Test Log",True)
 else:
-	LOG.Init("Run Log",True)
+	LOG.Init("Run Log",False)
 #init IOs
 
 #

@@ -271,10 +271,10 @@ def HeatingCallback(step):
 		HeaterString = "heating"
 
 	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Incubation for plate name " + str(ParentPlate) + " required " + HeaterString + ". Removing lid then plate from heater" }))
-	HAMILTONIO.SendCommands()
 
 	HAMILTONIO.AddCommand(HEATER.EndReservation({"PlateName":ParentPlate}))
 	#Stop heating and shaking
+	HAMILTONIO.SendCommands()
 
 	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}),False)
 	HAMILTONIO.AddCommand(LID.GetReservationLidTransportType({"PlateName":ParentPlate}),False)
@@ -296,7 +296,6 @@ def HeatingCallback(step):
 		HeaterLidSequence = ""
 		HeaterLidType = ""
 	else:
-		Response.pop(0) #This discards the EndReservation command response.
 		LidSequence = Response.pop(0)["Response"]
 		LidType = Response.pop(0)["Response"]
 		HeaterLidSequence = Response.pop(0)["Response"]
