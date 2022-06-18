@@ -41,9 +41,12 @@ def IsSimulated():
 	return SimulatedIO
 
 CommandsList = []
-def AddCommand(CommandString, CommandNotRepeatable=True):
+def AddCommand(CommandString, CommandNotRepeatable=True, IsCommandInvisible=False):
 
-	CommandID = LOG.LogCommand(CommandString)
+	if IsCommandInvisible == True:
+		CommandID = -1
+	else:
+		CommandID = LOG.LogCommand(CommandString)
 
 	if LOG.LogCommandIsExecuted(CommandID) == False:
 		CommandsList.append({"Command ID":CommandID,"Not Repeatable Flag":CommandNotRepeatable,"Command String":CommandString})

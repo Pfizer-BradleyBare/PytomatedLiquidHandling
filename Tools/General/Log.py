@@ -95,7 +95,7 @@ def UpdateLog(StartRow, StartCol, Array2D):
 	FlushRowRanges.append(StartRow)
 
 def PublishLog():
-	global FlushStartRow
+	global FlushRowRanges
 
 	if len(FlushRowRanges) != 0:
 		Row = min(FlushRowRanges)
@@ -106,7 +106,7 @@ def PublishLog():
 
 		EXCELIO.WriteSheet(LogSheet,LOG_ROW_START + Row, LOG_COL_START, PrintRow)
 
-	FlushStartRow = []
+	FlushRowRanges = []
 
 def LogStep(Step):
 	global LogNumStepComments
@@ -157,7 +157,7 @@ def LogMethodComment(Step, CommentList):
 		"Body":"Hi, please remote into the Hamilton PC, CLICK OK IN THIS DIALOG, then correct the error in the excel file. An excel dialog will inform you of the error, then direct you to a row and column where the error is described. Please correct the error then click ok in the following dialog. DO NOT RETEST THE METHOD. It will cause your method to abort.",\
 		"Wait":"Yes"}
 
-	HAMILTONIO.AddCommand(NOTIFY.NotifyContacts(Message),False)
+	HAMILTONIO.AddCommand(NOTIFY.NotifyContacts(Message),False,True)
 	HAMILTONIO.SendCommands()
 
 	EXCELIO.CreateCriticalMessageBox("There were issues found with your method. Please go to the method sheet and correct the errors. Errors will be documented to the right of the block at Row: " + str(Coords[0]) + " Column: " + str(Coords[1]),"Critical Validation Error!")
@@ -167,10 +167,8 @@ def LogMethodComment(Step, CommentList):
 		"Body":"Before clicking ok please ensure the error is corrected. Otherwise we have to go through this process again.",\
 		"Wait":"Yes"}
 
-	HAMILTONIO.AddCommand(NOTIFY.NotifyContacts(Message),False)
+	HAMILTONIO.AddCommand(NOTIFY.NotifyContacts(Message),False,True)
 	HAMILTONIO.SendCommands()
-
-
 
 def LogComment(Step, Comment):
 	global LogNumStepComments
@@ -243,18 +241,29 @@ def LogFindCommand(CommandID):
 
 def LogCommandExecutedRepeatable(CommandID):
 	Row = LogFindCommand(CommandID)
+	if Row == -1:
+		return -1
+	
 	UpdateLog(Row + 1,LOG_COL_COMMAND,[["### Executed (Special) ###"]])
 
 def LogCommandExecuted(CommandID):
 	Row = LogFindCommand(CommandID)
+	if Row == -1:
+		return -1
+
 	UpdateLog(Row + 1,LOG_COL_COMMAND,[["### Executed ###"]])
 
 def LogCommandInProgress(CommandID):
 	Row = LogFindCommand(CommandID)
+	if Row == -1:
+		return -1
+
 	UpdateLog(Row + 1,LOG_COL_COMMAND,[["### Execution In Progress ###"]])
 
 def LogCommandIsExecuted(CommandID):
 	Row = LogFindCommand(CommandID)
+	if Row == -1:
+		return False
 
 	if str(Log[Row + 1][LOG_COL_COMMAND]) == "### Executed ###":
 		return True
@@ -263,6 +272,9 @@ def LogCommandIsExecuted(CommandID):
 
 def LogCommandResponse(CommandID, ResponseDict):
 	Row = LogFindCommand(CommandID)
+	if Row == -1:
+		return -1
+
 	ReturnID = ResponseDict["ReturnID"]
 	ReturnMessage = ResponseDict["ReturnMessage"]
 	try:
@@ -279,47 +291,57 @@ def RunLogExists():
 	except:
 		return False
 
+def GetRunLogLastExecutedStepInfoDict():
+	RunLog = EXCELIO.PullUsedRange("Run Log")
+
+	for Index in range(len(RunLog)-1,-1,-1):
+		if "Step Title" in str(RunLog[Index][LOG_COL_STEP]):
+			break
+	
+	if Index != 0:
+		return {"Title":RunLog[Index][LOG_COL_STEP], "Coordinates":RunLog[Index+1][LOG_COL_STEP]}
+	else:
+		return {}
+
 def HandleResponse(Response):
 	RUN_BEGINNING = "Run From Beginning of Method"
-	RUN_STEP = "Run From Above Step"
-	RUN_BEFORE_STEP = "Run Step Before Above Step"
-	RUN_AFTER_STEP = "Run Step After Above Step"
+	RUN_RESUME = "Resume Method"
+	RUN_REPEAT = "Repeat Last Step then Continue"
 
-	Response = Response["Log Selection"]
-
-	global TRUERUN_SHEET
-	global TrueRunRow
+	Response = Response["Response"]
 
 	StepsToRemove = 0
 
-	Log = EXCELIO.Pull(TRUERUN_SHEET, LOG_ROW_START, LOG_COL_START, LOG_ROW_END, LOG_COL_END, n=2)
-	EXCELIO.DeleteSheet(TRUERUN_SHEET)
-	EXCELIO.CreateSheet(TRUERUN_SHEET)
+	RunLog = EXCELIO.PullUsedRange("Run Log")
+		
+	MaxLength = max(len(Row) for Row in RunLog)
+	RunLog = [Row + [""]*(MaxLength - len(Row)) for Row in RunLog]
+	RunLog += [[""]*MaxLength]*5
+
+	EXCELIO.DeleteSheet("Run Log")
+	EXCELIO.CreateSheet("Run Log")
 
 	if Response == RUN_BEGINNING:
 		return
 
-	elif Response == RUN_STEP:
+	elif Response == RUN_RESUME:
+		StepsToRemove = 0
+
+	elif Response == RUN_REPEAT:
 		StepsToRemove = 1
 
-	elif Response == RUN_BEFORE_STEP:
-		StepsToRemove = 2
-
-	elif Response == RUN_AFTER_STEP:
-		pass
 	else:
 		print("No response matches found. Quitting...")
-		EXCELIO.Push(TRUERUN_SHEET, LOG_ROW_START, LOG_COL_START, LOG_ROW_START, LOG_COL_START, Log)
+		EXCELIO.WriteSheet("Run Log",LOG_ROW_START, LOG_COL_START, RunLog)
 		quit()
 
-	for RowIndex in range(TrueRunRow - LOG_ROW_START, 0, -1):
+	for Index in range(len(RunLog)-1,-1,-1):
 		if StepsToRemove == 0:
-			TrueRunRow = RowIndex
 			break
-		if Log[RowIndex][LOG_COL_STEP] != None and STEP_IDENTIFIER in Log[RowIndex][LOG_COL_STEP]:
+		if "Step Title" in str(RunLog[Index][LOG_COL_STEP]):
 			StepsToRemove -= 1
 
-	EXCELIO.Push(TRUERUN_SHEET, LOG_ROW_START, LOG_COL_START, LOG_ROW_START, LOG_COL_START, Log[:TrueRunRow])
+	EXCELIO.WriteSheet("Run Log",LOG_ROW_START, LOG_COL_START, RunLog[:Index-1])
 
 
 
