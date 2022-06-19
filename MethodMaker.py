@@ -252,9 +252,8 @@ try:
 
 		Response = HAMILTONIO.SendCommands()
 
-		LastRunStepDict = LOG.GetRunLogLastExecutedStepInfoDict()
-		if LOG.RunLogExists() and TestRun == False and len(LastRunStepDict) != 0:
-			HAMILTONIO.AddCommand(PRERUN.LOG.PreRun(LastRunStepDict),False)
+		if LOG.RunLogExists() and TestRun == False and len(LOG.GetRunLogLastExecutedStepInfoDict()) != 0:
+			HAMILTONIO.AddCommand(PRERUN.LOG.PreRun(LOG.GetRunLogLastExecutedStepInfoDict()),False)
 			Response = HAMILTONIO.SendCommands()
 			LOG.HandleResponse(Response[0])
 		#initialize all the Hamilton Libraries.
