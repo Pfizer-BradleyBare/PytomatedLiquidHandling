@@ -235,6 +235,8 @@ def Step(step):
 		else:
 			if TestLabware.GetLabwareType() == PLATES.LABWARE.LabwareTypes.Reagent:
 				MethodComments.append("The Magnetic Beads Plate parameter you provided is a solution. Only a plate name is acceptable. Please correct.")
+			if sum(TestLabware.VolumesList) == 0:
+				MethodComments.append("The Magnetic Beads Plate parameter you provided does not contain liquid. Either preload liquid or perform a liquid transfer into this plate. Please correct.")
 
 	#Testing Storage Buffer
 	if not all(type(Buffer) is str for Buffer in BufferList):
