@@ -178,20 +178,20 @@ def GetContextualFlags(ContextString):
 #
 # Init
 #
-LabwareSet = set()
+LabwareSet = []
 def Init():
     global LabwareSet
     SetContextualFactors("",GetDefaultFactors())
     SetContextualSequences("",GetDefaultSequences(SAMPLES.GetStartPosition()))
     AddContextualFlag("","")
-    LabwareSet = set()
+    LabwareSet = []
 
 #
 # This will add a labware item to the tracked labware list
 #
 def AddLabware(Labware):
     if GetLabware(Class.GetLabwareName(Labware)) == None:
-        LabwareSet.add(Labware)
+        LabwareSet.append(Labware)
     else:
         raise KeyError(f'Value already exists')
 #
