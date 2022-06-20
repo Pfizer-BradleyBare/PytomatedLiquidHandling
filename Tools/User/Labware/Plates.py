@@ -292,9 +292,10 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 
 				Volume = SourceLabware.VolumesList[SourceArrayPosition]
 				NewVolume = Volume - ActualVolume
-				PercentChange = NewVolume / Volume
-				Well = SourceLabware.WellContents[SourceArrayPosition]
-				SourceLabware.UpdateWellContents(Well, PercentChange)
+				if Volume > 0:
+					PercentChange = NewVolume / Volume
+					Well = SourceLabware.WellContents[SourceArrayPosition]
+					SourceLabware.UpdateWellContents(Well, PercentChange)
 				#Update the contents in the well
 
 				SourceLabware.VolumesList[SourceArrayPosition] = NewVolume

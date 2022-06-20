@@ -168,6 +168,7 @@ def StartHeaters():
 		Params = Incubation.GetParameters()
 		Temp = Params[TEMP]
 		RPM = Params[SHAKE]
+		Time = Params[TIME]
 		Wait = Params[TEMPWAIT]
 		ParentPlate = Incubation.GetParentPlateName()
 
@@ -185,7 +186,7 @@ def StartHeaters():
 			if Temp != "Ambient":
 				MethodComments.append("The Temp parameter can be either \"Ambient\" or a number. Please Correct.")
 
-		if type(Wait) is str:
+		if type(Time) is str:
 			MethodComments.append("The Time parameter can only be a number. Please Correct.")
 
 		if type(RPM) is str:
@@ -377,6 +378,7 @@ def Step(step):
 	Params = step.GetParameters()
 	Temp = Params[TEMP]
 	RPM = Params[SHAKE]
+	Time = Params[TIME]
 	Wait = Params[TEMPWAIT]
 
 	#########################
@@ -393,7 +395,7 @@ def Step(step):
 		if Temp != "Ambient":
 			MethodComments.append("The Temp parameter can be either \"Ambient\" or a number. Please Correct.")
 
-	if type(Wait) is str:
+	if type(Time) is str:
 		MethodComments.append("The Time parameter can only be a number. Please Correct.")
 
 	if type(RPM) is str:
