@@ -49,7 +49,7 @@ def WaitForTimer():
 
 	if len(Timer_List) > 0:	
 
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "No pathways are currently active. Starting to wait for timer with lowest remaining time."}))
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "No pathways are currently active. Starting to wait for timer with lowest remaining time."}),False,True)
 		HAMILTONIO.SendCommands()
 
 		LowestTimer = GetLowestTimer()
@@ -68,7 +68,7 @@ def WaitForTimer():
 		RemainingTime = LowestTimer["Wait Time"] - (time.time() - LowestTimer["Start Time"])
 
 		if RemainingTime > 0:
-			HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Waiting for " + str(LowestTimer["Wait Reason"]) + ". Remaining wait time: " + str(int(RemainingTime/60) + 1) + ". Total wait time: " + str(int(LowestTimer["Wait Time"] / 60))}))
+			HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Waiting for " + str(LowestTimer["Wait Reason"]) + ". Remaining wait time: " + str(int(RemainingTime/60) + 1) + ". Total wait time: " + str(int(LowestTimer["Wait Time"] / 60))}),False,True)
 			HAMILTONIO.AddCommand(TIMER.Start({"WaitTime":RemainingTime}), not LowestTimer["Wait Only"])
 			HAMILTONIO.AddCommand(TIMER.Wait({}), not LowestTimer["Wait Only"])
 			HAMILTONIO.SendCommands()
@@ -88,7 +88,7 @@ def CheckForExpiredTimers():
 
 			Timer_List.remove(LowestTimer)
 
-			HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "A timer has expired during method progression. Starting follow-up."}))
+			HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "A timer has expired during method progression. Starting follow-up."}),False,True)
 			HAMILTONIO.SendCommands()
 
 			if LowestTimer["Wait Only"] == False:
