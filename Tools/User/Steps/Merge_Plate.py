@@ -38,7 +38,7 @@ def Step(step):
 	PlateStep = step
 	PreviousContext = ""
 
-	while SearchStep.GetTitle() != SPLIT_PLATE.TITLE and not (str(SearchStep.GetCoordinates()) in MergedPathways):
+	while SearchStep.GetTitle() != SPLIT_PLATE.TITLE or (str(SearchStep.GetCoordinates()) in MergedPathways):
 		
 		if SearchStep.GetTitle() != PLATE.TITLE:
 			PreviousContext = SearchStep.GetContext()
