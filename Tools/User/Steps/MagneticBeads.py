@@ -118,7 +118,7 @@ def Callback(step):
 	SourceVolumesList = SAMPLES.Column(Volume)
 
 	AddSequences = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,SAMPLES.Column(0),SAMPLES.Column(50))
-	if RemoveSequences.GetNumSequencePositions() != 0:
+	if AddSequences.GetNumSequencePositions() != 0:
 		DoAdd = True
 	else:
 		DoAdd = False
