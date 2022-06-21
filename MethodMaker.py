@@ -184,7 +184,7 @@ try:
 
 		STEPS.NumExecutedSteps += 1
 		PercentComplete = int(STEPS.GetNumExecutedSteps() / STEPS.GetTotalNumSteps() * 100)
-		HAMILTONIO.AddCommand(STATUS_UPDATE.SetProgress({"PercentComplete":PercentComplete}),False)
+		HAMILTONIO.AddCommand(STATUS_UPDATE.SetProgress({"PercentComplete":PercentComplete}),False,True)
 		HAMILTONIO.SendCommands()
 
 		Steps[Step.GetTitle()](Step)

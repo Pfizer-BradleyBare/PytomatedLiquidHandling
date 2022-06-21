@@ -22,7 +22,7 @@ def Init():
 
 def Step(step):
 	
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Notify Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Notify Block. Block Coordinates: " + str(step.GetCoordinates())}),False,True)
 	HAMILTONIO.SendCommands()
 
 	Parameters = step.GetParameters()
@@ -68,10 +68,10 @@ def Step(step):
 	else:
 		NotifyString = ""
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Sending notification to the provided contact info" + NotifyString}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Sending notification to the provided contact info" + NotifyString}),False,True)
 	HAMILTONIO.AddCommand(NOTIFY.NotifyContacts({"Subject":Subject,"Body":Body,"Wait":Wait}))
 	HAMILTONIO.SendCommands()
 	#No need to deal with response. Should always succeed
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Notify Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Notify Block. Block Coordinates: " + str(step.GetCoordinates())}),False,True)
 	HAMILTONIO.SendCommands()

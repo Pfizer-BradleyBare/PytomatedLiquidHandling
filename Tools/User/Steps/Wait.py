@@ -102,7 +102,7 @@ def Callback(step):
 
 def Step(step):
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Pause Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Pause Block. Block Coordinates: " + str(step.GetCoordinates())}),False,True)
 	HAMILTONIO.SendCommands()
 
 	Time = step.GetParameters()[TIME]
@@ -136,9 +136,9 @@ def Step(step):
 	#########################
 	#########################
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to wait for " + str(Time) + " minutes"}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to wait for " + str(Time) + " minutes"}),False,True)
 	StartTimer(step, Time, Callback, "paused step")
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Pause Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Pause Block. Block Coordinates: " + str(step.GetCoordinates())}),False,True)
 	HAMILTONIO.SendCommands()
 

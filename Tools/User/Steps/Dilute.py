@@ -30,7 +30,7 @@ def Init():
 	pass
 
 def Step(step):
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Dilute Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Dilute Block. Block Coordinates: " + str(step.GetCoordinates())}),False,True)
 	HAMILTONIO.SendCommands()
 
 	#dilute equation is C1*V1 = C2*V2 Where:
@@ -162,7 +162,7 @@ def Step(step):
 	else:
 		MaxVolumeString = str(MaxVolume) + " uL"
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Calculating the volume of " + DiluentString + " required to dilute " + SourceString + " from " + SourceConcentrationString + " to " + TargetConcentrationString + " in " + TargetVolumeString}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Calculating the volume of " + DiluentString + " required to dilute " + SourceString + " from " + SourceConcentrationString + " to " + TargetConcentrationString + " in " + TargetVolumeString}),False,True)
 	HAMILTONIO.SendCommands()
 
 	SourceVolumeList = list(map(lambda x,y,z: (z * y) / x if x != None and x != 0 else 0, SourceConcentrationList,TargetVolumeList,TargetConcentrationList))
@@ -172,7 +172,7 @@ def Step(step):
 	DestinationNames = SAMPLES.Column(Destination)
 	DestinationContextStrings = PLATES.LABWARE.GetContextualStringsList(step, DestinationNames)
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Capping " + SourceString + " volume to " + MaxVolumeString + ". Adjusting Source and diluent as needed."}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Capping " + SourceString + " volume to " + MaxVolumeString + ". Adjusting Source and diluent as needed."}),False,True)
 	HAMILTONIO.SendCommands()
 
 	for VolIndex in range(0,len(SourceVolumeList)):
@@ -195,7 +195,7 @@ def Step(step):
 	SecondSourceList = []
 	SecondVolumeList = []
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Organizing pipetting to transfer largest volumes first"}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Organizing pipetting to transfer largest volumes first"}),False,True)
 	HAMILTONIO.SendCommands()
 
 	for index in range(0,len(SourceVolumeList)):
@@ -273,7 +273,7 @@ def Step(step):
 			"KeepTips":"False",\
 			"DestinationPipettingOffset":0}
 
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting transfer of largest volume of source and diluent"}),False)
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting transfer of largest volume of source and diluent"}),False,True)
 		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 
@@ -287,13 +287,13 @@ def Step(step):
 			"DestinationPipettingOffset":0}
 
 
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting transfer of remaining volume of source and diluent"}),False)
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting transfer of remaining volume of source and diluent"}),False,True)
 		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 
 
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Dilute Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Dilute Block. Block Coordinates: " + str(step.GetCoordinates())}),False,True)
 	HAMILTONIO.SendCommands()
 
 
