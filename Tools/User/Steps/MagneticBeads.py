@@ -100,9 +100,15 @@ def Callback(step):
 	#Get transport related info
 
 	RemoveSequences = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,SAMPLES.Column(0),SAMPLES.Column(0))
-	TransferVolumes = RemoveSequences.GetTransferVolumes()
-	HAMILTONIO.AddCommand(MAGNETICBEADS.GetCondensedBeadsLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}),False)
-	HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}),False)
+	if RemoveSequences.GetNumSequencePositions() != 0:
+		DoRemove = True
+	else:
+		DoRemove = False
+	
+	if DoRemove == True:
+		TransferVolumes = RemoveSequences.GetTransferVolumes()
+		HAMILTONIO.AddCommand(MAGNETICBEADS.GetCondensedBeadsLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}),False)
+		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}),False)
 	#For removing liquid from the plate
 
 	DestinationNamesList = SAMPLES.Column(BeadsPlate)
@@ -112,9 +118,15 @@ def Callback(step):
 	SourceVolumesList = SAMPLES.Column(Volume)
 
 	AddSequences = PLATES.CreatePipetteSequence(DestinationContextStringsList,DestinationNamesList,SourceContextStringsList,SourceNamesList,SourceVolumesList,SAMPLES.Column(0),SAMPLES.Column(50))
-	TransferVolumes = AddSequences.GetTransferVolumes()
-	HAMILTONIO.AddCommand(MAGNETICBEADS.GetGeneralLiquidTransferLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}),False)
-	HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}),False)
+	if RemoveSequences.GetNumSequencePositions() != 0:
+		DoAdd = True
+	else:
+		DoAdd = False
+	
+	if DoAdd == True:
+		TransferVolumes = AddSequences.GetTransferVolumes()
+		HAMILTONIO.AddCommand(MAGNETICBEADS.GetGeneralLiquidTransferLiquidClassStrings({"PlateName":BeadsPlate, "TransferVolumes":TransferVolumes}),False)
+		HAMILTONIO.AddCommand(PIPETTE.GetTipSequenceStrings({"TransferVolumes":TransferVolumes}),False)
 	#For adding buffer to the plate
 
 	Response = HAMILTONIO.SendCommands()
@@ -125,19 +137,23 @@ def Callback(step):
 		PlateType = ""
 		RackSequence = ""
 		RackType = ""
-		BeadsLiquidClass = []
-		BeadsTipSeqs = []
-		GeneralLiquidClass = []
-		GeneralTipSeqs = []
+		if DoRemove == True:
+			BeadsLiquidClass = []
+			BeadsTipSeqs = []
+		if DoAdd == True:
+			GeneralLiquidClass = []
+			GeneralTipSeqs = []
 	else:
 		PlateSequence = Response.pop(0)["Response"]
 		PlateType = Response.pop(0)["Response"]
 		RackSequence = Response.pop(0)["Response"]
 		RackType = Response.pop(0)["Response"]
-		BeadsLiquidClass = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
-		BeadsTipSeqs = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
-		GeneralLiquidClass = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
-		GeneralTipSeqs = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+		if DoRemove == True:
+			BeadsLiquidClass = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+			BeadsTipSeqs = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+		if DoAdd == True:
+			GeneralLiquidClass = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
+			GeneralTipSeqs = Response.pop(0)["Response"].split(HAMILTONIO.GetDelimiter())
 	#Lets get the info we need to move the plate
 
 	for Counter in range(0,RemoveSequences.GetNumSequencePositions()):
@@ -147,7 +163,7 @@ def Callback(step):
 	#We need to modify the destination to be the magnetic beads plate sequence above. The liquid needs to move through the magnetic beads plate.
 	#We also want to disable all mixing. ALWAYS. We do not want to disturb the beads before we pick them up
 
-	if RemoveSequences.GetNumSequencePositions() != 0:
+	if DoRemove == True:
 		TransferArgumentsDict = {\
 			"SequenceClass":RemoveSequences,\
 			"SourceLiquidClasses":BeadsLiquidClass,\
@@ -165,7 +181,7 @@ def Callback(step):
 	Response = HAMILTONIO.SendCommands()
 	#Remove the plate from the rack
 
-	if AddSequences.GetNumSequencePositions() != 0:
+	if DoAdd == True:
 		TransferArgumentsDict = {\
 			"SequenceClass":AddSequences,\
 			"SourceLiquidClasses":GeneralLiquidClass,\
