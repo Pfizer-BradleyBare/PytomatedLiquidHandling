@@ -102,10 +102,10 @@ def Equilibrate(ParentPlate):
 
 	if Params["EQ"] == False:
 		Params["EQ"] = True
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing IMCS SizeX desalting equilibration"}))
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing IMCS SizeX desalting equilibration"}),False)
 		HAMILTONIO.AddCommand(DESALT.Equilibrate({"ParentPlate":ParentPlate, "StartPosition":SAMPLES.StartPosition}))
 	else:
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "IMCS SizeX desalting equilibration was already performed"}))
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "IMCS SizeX desalting equilibration was already performed"}),False)
 
 	HAMILTONIO.SendCommands()
 
@@ -121,7 +121,7 @@ def Process(ParentPlate):
 
 	#STATUS_UPDATE.AppendText("Performing Desalting Equilibration and Desalting Samples")
 	Params["EQ"] = False
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing IMCS SizeX desalting"}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing IMCS SizeX desalting"}),False)
 	HAMILTONIO.AddCommand(DESALT.Process({"ParentPlate":ParentPlate, "StartPosition":SAMPLES.StartPosition}))
 	HAMILTONIO.SendCommands()
 	
@@ -131,7 +131,7 @@ def Process(ParentPlate):
 #	Returns: N/A
 #########################################################################	
 def Step(step):
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting IMCS SizeX Desalting Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting IMCS SizeX Desalting Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	HAMILTONIO.SendCommands()
 
 	Params = step.GetParameters()
@@ -236,7 +236,7 @@ def Step(step):
 	
 	Process(StepKey)
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending IMCS SizeX Desalting Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending IMCS SizeX Desalting Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	HAMILTONIO.SendCommands()
 
 	

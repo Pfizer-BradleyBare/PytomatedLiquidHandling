@@ -75,7 +75,7 @@ NumtoWordDict = { \
 def Callback(step):
 	global RepsCompleted
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting " + NumtoWordDict[str(RepsCompleted)] + " followup of Magnetic Beads Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting " + NumtoWordDict[str(RepsCompleted)] + " followup of Magnetic Beads Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	HAMILTONIO.SendCommands()
 
 	ParentPlate = step.GetParentPlateName()
@@ -172,7 +172,7 @@ def Callback(step):
 			"KeepTips":"False",\
 			"DestinationPipettingOffset":0}
 
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Removing all liquid from beads plate"}))
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Removing all liquid from beads plate"}),False)
 		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 	#Remove the liquid
@@ -190,7 +190,7 @@ def Callback(step):
 			"KeepTips":"False",\
 			"DestinationPipettingOffset":0}
 
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding storage buffer to beads plate and mixing vigorously to resuspend beads"}))
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding storage buffer to beads plate and mixing vigorously to resuspend beads"}),False)
 		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 	#Add the storage liquid
@@ -199,10 +199,10 @@ def Callback(step):
 	print("RepsCompleted",RepsCompleted)
 	if RepsCompleted < Reps:
 
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving beads plate to magnetic rack"}))
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving beads plate to magnetic rack"}),False)
 		HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":PlateType,"SourceSequenceString":PlateSequence,"DestinationLabwareType":RackType,"DestinationSequenceString":RackSequence,"Park":"True","CheckExists":"After"}))
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to condense beads for " + str(Time) + " minutes"}))
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending " + NumtoWordDict[str(RepsCompleted)] + " followup of Magnetic Beads Block. Block Coordinates: " + str(step.GetCoordinates())}))
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to condense beads for " + str(Time) + " minutes"}),False)
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending " + NumtoWordDict[str(RepsCompleted)] + " followup of Magnetic Beads Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
 		Response = HAMILTONIO.SendCommands()
 		#Move plate to rack
 		
@@ -210,11 +210,11 @@ def Callback(step):
 		WAIT.StartTimer(step, Time, Callback, "magnetic beads condense time")
 		#Wait for beads to condense
 	else:
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending " + NumtoWordDict[str(RepsCompleted)] + " followup of Magnetic Beads Block. Block Coordinates: " + str(step.GetCoordinates())}))
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending " + NumtoWordDict[str(RepsCompleted)] + " followup of Magnetic Beads Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
 		HAMILTONIO.SendCommands()
 
 def Step(step):
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Magnetic Beads Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Magnetic Beads Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	HAMILTONIO.SendCommands()
 	
 	global RepsCompleted
@@ -309,10 +309,10 @@ def Step(step):
 		RackType = Response.pop(0)["Response"]
 	#Lets get the info we need to move the plate
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving beads plate to magnetic rack"}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving beads plate to magnetic rack"}),False)
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":PlateType,"SourceSequenceString":PlateSequence,"DestinationLabwareType":RackType,"DestinationSequenceString":RackSequence,"Park":"True","CheckExists":"After"}))
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to condense beads for " + str(Time) + " minutes"}))
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Magnetic Beads Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to condense beads for " + str(Time) + " minutes"}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Magnetic Beads Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	Response = HAMILTONIO.SendCommands()
 	#Move plate to rack
 		

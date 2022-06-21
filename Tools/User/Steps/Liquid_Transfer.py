@@ -33,7 +33,7 @@ def Step(step):
 	Source = step.GetParameters()[NAME]
 	Volume = step.GetParameters()[VOLUME]
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Liquid Transfer Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Liquid Transfer Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	HAMILTONIO.SendCommands()
 
 	DestinationNamesList = SAMPLES.Column(DestinationPlateName)
@@ -149,11 +149,11 @@ def Step(step):
 		else:
 			VolumeString = str(Volume) + " uL"
 
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Transferring " + VolumeString + " of " + SourceString + " to " + DestinationPlateName}))
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Transferring " + VolumeString + " of " + SourceString + " to " + DestinationPlateName}),False)
 		HAMILTONIO.AddCommand(PIPETTE.Transfer(TransferArgumentsDict))
 		Response = HAMILTONIO.SendCommands()
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Liquid Transfer Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Liquid Transfer Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	HAMILTONIO.SendCommands()
 
 

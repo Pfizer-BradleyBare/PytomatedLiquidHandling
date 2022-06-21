@@ -119,13 +119,13 @@ def StartHeatersCallback(step):
 		WaitCount = Before_Liquid_Handling_Incubations[KeysList[Index]]["Wait Count"]
 
 		if int(Response[Index]["ReturnID"]) >= 0:
-			HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Reserved heater for plate name " + str(ParentPlate) + " is at temp. Proceeding"}))
+			HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Reserved heater for plate name " + str(ParentPlate) + " is at temp. Proceeding"}),False)
 			HAMILTONIO.SendCommands()
 			
 			ThawKeyList.append(KeysList[Index])
 		
 		elif (Time - StartTime) >= 60*10 or WaitCount >= 2:
-			HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Unfortunately, reserved heater for plate name " + str(ParentPlate) + " has timed out. Proceeding anyway"}))
+			HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Unfortunately, reserved heater for plate name " + str(ParentPlate) + " has timed out. Proceeding anyway"}),False)
 			HAMILTONIO.SendCommands()
 			
 			ThawKeyList.append(KeysList[Index])
@@ -226,7 +226,7 @@ def StartHeaters():
 		Incubation_List.remove(Incubation)
 		Ongoing_Incubations_List.append(Incubation)
 
-		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Reserved heater shaker / cooler for plate name " + str(ParentPlate)}))
+		HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Reserved heater shaker / cooler for plate name " + str(ParentPlate)}),False)
 		HAMILTONIO.SendCommands()
 
 		if Wait.lower() == "No".lower(): #or Wait.lower() == "Before Incubation".lower():
@@ -243,7 +243,7 @@ def StartHeaters():
 
 		if not (Response == False) and int(Response[0]["ReturnID"]) < 0:
 			
-			HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Heater for plate name " + str(ParentPlate) + " is not at required temp of " + str(Temp) + " C. Waiting for a max of 10 minutes before proceeding"}))
+			HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Heater for plate name " + str(ParentPlate) + " is not at required temp of " + str(Temp) + " C. Waiting for a max of 10 minutes before proceeding"}),False)
 			HAMILTONIO.SendCommands()
 			
 			Before_Liquid_Handling_Incubations[str(STEPS.Class.GetCoordinates(Incubation))] = {"Start Time":time.time(), "Wait Count":0, "Step":Incubation}
@@ -260,12 +260,12 @@ def StartHeaters():
 
 def AmbientCallback(step):
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing follow up of Incubate Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing follow up of Incubate Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	HAMILTONIO.SendCommands()
 
 	ParentPlate = step.GetParentPlateName()
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Incubation for plate name " + str(ParentPlate) + " was at ambient temp. Lid will be removed"}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Incubation for plate name " + str(ParentPlate) + " was at ambient temp. Lid will be removed"}),False)
 	HAMILTONIO.SendCommands()
 
 	HAMILTONIO.AddCommand(LID.GetReservationLidSequenceString({"PlateName":ParentPlate}),False)
@@ -287,16 +287,16 @@ def AmbientCallback(step):
 		PlateLidSequence = Response.pop(0)["Response"]
 	#Lets get the info we need to move the Lid
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Removing lid"}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Removing lid"}),False)
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":LidType,"SourceSequenceString":PlateLidSequence,"DestinationLabwareType":LidType,"DestinationSequenceString":LidSequence,"Park":"True","CheckExists":"After"}))
 	HAMILTONIO.AddCommand(LID.ReleaseReservation({"PlateName":ParentPlate}),False)
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending follow up of Incubate Block. Incubation is now complete. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending follow up of Incubate Block. Incubation is now complete. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the lid then plate then release all reservations
 
 def HeatingCallback(step):
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing follow up of Incubate Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Performing follow up of Incubate Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	HAMILTONIO.SendCommands()
 
 	Params = step.GetParameters()
@@ -309,7 +309,7 @@ def HeatingCallback(step):
 	else:
 		HeaterString = "heating"
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Incubation for plate name " + str(ParentPlate) + " required " + HeaterString + ". Removing lid then plate from heater" }))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Incubation for plate name " + str(ParentPlate) + " required " + HeaterString + ". Removing lid then plate from heater" }),False)
 
 	HAMILTONIO.AddCommand(HEATER.EndReservation({"PlateName":ParentPlate}))
 	#Stop heating and shaking
@@ -353,17 +353,17 @@ def HeatingCallback(step):
 		HeaterType = Response.pop(0)["Response"]
 	#Lets get the info we need to move the plate
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Removing lid"}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Removing lid"}),False)
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":HeaterLidType,"SourceSequenceString":HeaterLidSequence,"DestinationLabwareType":LidType,"DestinationSequenceString":LidSequence,"Park":"False","CheckExists":"After"}))
 	Response = HAMILTONIO.SendCommands()
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Removing plate"}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Removing plate"}),False)
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":HeaterType,"SourceSequenceString":HeaterSequence,"DestinationLabwareType":PlateType,"DestinationSequenceString":PlateSequence,"Park":"True","CheckExists":"After"}))
 	Response = HAMILTONIO.SendCommands()
 	
 	HAMILTONIO.AddCommand(HEATER.ReleaseReservation({"PlateName":ParentPlate}),False)
 	HAMILTONIO.AddCommand(LID.ReleaseReservation({"PlateName":ParentPlate}),False)
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending follow up of Incubate Block. Incubation is now complete. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending follow up of Incubate Block. Incubation is now complete. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the lid then plate then release all reservations
 
@@ -372,7 +372,7 @@ def HeatingCallback(step):
 
 def Step(step):
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Incubate Block. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Incubate Block. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	HAMILTONIO.SendCommands()
 	
 	Params = step.GetParameters()
@@ -429,7 +429,7 @@ def AmbientStep(step):
 	ParentPlate = step.GetParentPlateName()
 	Time = step.GetParameters()[TIME]
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Incubation for plate name " + str(ParentPlate) + " is at ambient temp. Plate will be covered only"}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Incubation for plate name " + str(ParentPlate) + " is at ambient temp. Plate will be covered only"}),False)
 	HAMILTONIO.SendCommands()
 
 	PLATES.LABWARE.GetLabware(ParentPlate).SetIsCovered()
@@ -455,10 +455,10 @@ def AmbientStep(step):
 		LidType = Response.pop(0)["Response"]
 	#Lets get the info we need to move the plate
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving lid"}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving lid"}),False)
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":LidType,"SourceSequenceString":LidSequence,"DestinationLabwareType":LidType,"DestinationSequenceString":PlateLidSequence,"Park":"True","CheckExists":"After"}))
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to incubate for " + str(Time) + " minutes"}))
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Incubate Block. Plate is now on incubator. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to incubate for " + str(Time) + " minutes"}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Incubate Block. Plate is now on incubator. Block Coordinates: " + str(step.GetCoordinates())}),False)
 
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the plate then lid then start the incubation (Incudes shaking)
@@ -479,7 +479,7 @@ def HeatingStep(step):
 	else:
 		HeaterString = "heating"
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Incubation for plate name " + str(ParentPlate) + " requires " + HeaterString + ". Moving plate to heater with lid" }))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Incubation for plate name " + str(ParentPlate) + " requires " + HeaterString + ". Moving plate to heater with lid" }),False)
 	HAMILTONIO.SendCommands()
 
 	HAMILTONIO.AddCommand(LABWARE.GetSequenceStrings({"PlateNames":[ParentPlate]}),False)
@@ -522,11 +522,11 @@ def HeatingStep(step):
 		HeaterLidType = Response.pop(0)["Response"]
 	#Lets get the info we need to move the Lid
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving plate to heater. See heater info for exact location."}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving plate to heater. See heater info for exact location."}),False)
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":PlateType,"SourceSequenceString":PlateSequence,"DestinationLabwareType":HeaterType,"DestinationSequenceString":HeaterSequence,"Park":"False","CheckExists":"False"}))
 	Response = HAMILTONIO.SendCommands()
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving lid"}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Moving lid"}),False)
 	HAMILTONIO.AddCommand(TRANSPORT.MoveLabware({"SourceLabwareType":LidType,"SourceSequenceString":LidSequence,"DestinationLabwareType":HeaterLidType,"DestinationSequenceString":HeaterLidSequence,"Park":"True","CheckExists":"False"}))
 	Response = HAMILTONIO.SendCommands()
 	
@@ -535,10 +535,10 @@ def HeatingStep(step):
 	else:
 		HeaterString = "heating at " + str(Temp) + " C and no shaking"
 
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting incubation with " + HeaterString}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting incubation with " + HeaterString}),False)
 	HAMILTONIO.AddCommand(HEATER.StartReservation({"PlateName":ParentPlate,"Temperature":Temp,"RPM":RPM}))
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to incubate for " + str(Time) + " minutes"}))
-	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Incubate Block. Plate is now on incubator. Block Coordinates: " + str(step.GetCoordinates())}))
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Adding block to timer list to incubate for " + str(Time) + " minutes"}),False)
+	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Ending Incubate Block. Plate is now on incubator. Block Coordinates: " + str(step.GetCoordinates())}),False)
 	Response = HAMILTONIO.SendCommands()
 	#Lets move the plate then lid then start the incubation (Incudes shaking)
 

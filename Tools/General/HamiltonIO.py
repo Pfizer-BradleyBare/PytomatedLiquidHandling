@@ -2,6 +2,7 @@
 import os
 import time
 from ..General import Log as LOG
+from ..Hamilton.Commands import StatusUpdate as STATUS_UPDATE
 
 BaseFolder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 Folder = "CommunicationFolder"
@@ -53,6 +54,8 @@ def AddCommand(CommandString, CommandNotRepeatable=True, IsCommandInvisible=Fals
 		LOG.LogCommandInProgress(CommandID)
 	else:
 		print("Already Executed -> CommandID:",CommandID)
+		AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Command already executed. Skipping"}),False,True)
+		SendCommands()
 
 	LOG.PublishLog()
 	
