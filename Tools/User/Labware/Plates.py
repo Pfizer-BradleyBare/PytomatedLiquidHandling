@@ -153,13 +153,22 @@ class Class(LABWARE.Class):
 	# This adjusts the well contents by a decimal percentage for each well
 	#
 	def UpdateWellContents(self, Well, DecimalPercentage):
+		WellChangeList = []
 		RemoveList = []
+
 		for Content in Well:
-			Content["Volume"] *= DecimalPercentage
+			OldVolume = Content["Volume"]
+			NewVolume = OldVolume * DecimalPercentage
+			Content["Volume"] = NewVolume
+
+			WellChangeList.append({"Solution": Content["Solution"], "Well":Content["Well"], "Volume":OldVolume - NewVolume})
+
 			if Content["Volume"] == 0:
 				RemoveList.append(Content)
 		for Item in RemoveList:
 			Well.remove(Item)
+
+		return WellChangeList
 
 	#
 	# This is a generic implementation to cover Viscosity, Volatility, and Homogeneity
@@ -167,20 +176,22 @@ class Class(LABWARE.Class):
 	def GenericCalculation(self, SampleIndex, DefaultValue, ValuesDict, PlatesGetFunction, SolutionsGetFunction):
 
 		WellContents = self.WellContents[SampleIndex]
-		TotalVolume = self.VolumesList[SampleIndex]
+		TotalVolume = sum([Content["Volume"] for Content in WellContents])
 
 		if len(WellContents) == 0 or TotalVolume == 0:
 			return DefaultValue
-
 
 		Calculation = []
 		for Content in WellContents:
 			SolutionLabware = LABWARE.GetLabware(Content["Solution"])
 			SolutionWellPosition = Content["Well"]
 			SolutionPercentage = int(Content["Volume"] / TotalVolume * 100)
-			
+
 			if SolutionLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
-				Value = PlatesGetFunction(SolutionLabware, SolutionWellPosition)
+				if SolutionLabware.GetLabwareName() != self.GetLabwareName():
+					Value = PlatesGetFunction(SolutionLabware, SolutionWellPosition)
+				else:
+					Value = DefaultValue
 			else:
 				Value = SolutionsGetFunction(SolutionLabware, SolutionWellPosition)
 			ValuesDictItem = ValuesDict[Value]
@@ -194,8 +205,6 @@ class Class(LABWARE.Class):
 		for Key in ValuesDict:
 			if WellComposition == ValuesDict[Key]["Value"]:
 				return Key
-
-
 
 	def GetCategory(self):
 		return "Plate"
@@ -273,6 +282,8 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				SourceHomogeneityCriteria = SourceLabware.GetHomogeneity(SampleIndex)
 				SourceLLDCriteria = SourceLabware.GetLLD(SampleIndex)
 				#We need to get the solution properties first then we can determine mixing based off that
+				
+				DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":SourceName, "Well":SourceArrayPosition, "Volume":ActualVolume})
 
 			elif SourceLabware.GetLabwareType() == LABWARE.LabwareTypes.Plate:
 				SourceSequencePosition = LABWARE.GetContextualSequences(SourceContextString)[SampleIndex]
@@ -290,19 +301,23 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				SourceLLDCriteria = SourceLabware.GetLLD(SourceArrayPosition)
 				#We need to get the solution properties first then we can determine mixing based off that
 
-				Volume = SourceLabware.VolumesList[SourceArrayPosition]
+				Volume = abs(SourceLabware.VolumesList[SourceArrayPosition])
 				NewVolume = Volume - ActualVolume
-				if Volume > 0:
+				if Volume != 0:
 					PercentChange = NewVolume / Volume
 					Well = SourceLabware.WellContents[SourceArrayPosition]
-					SourceLabware.UpdateWellContents(Well, PercentChange)
+					DestinationLabware.WellContents[DestinationArrayPosition] += SourceLabware.UpdateWellContents(Well, PercentChange)
+				else:
+					DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":SourceName, "Well":SourceArrayPosition, "Volume":ActualVolume})
 				#Update the contents in the well
 
 				SourceLabware.VolumesList[SourceArrayPosition] = NewVolume
 				SourceLabware.DoVolumeUpdate()
-			#Do plate volume subtraction
+				#Do plate volume subtraction
 
-			DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":SourceName, "Well":SourceArrayPosition, "Volume":ActualVolume})
+			
+
+
 			DestinationLabware.VolumesList[DestinationArrayPosition] += ActualVolume
 			DestinationLabware.DoVolumeUpdate()
 			#Add the solution to the wells
