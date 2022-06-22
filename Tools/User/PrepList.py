@@ -135,8 +135,10 @@ def PrintFinalPlateVolumes(LabwareArray):
 				
 				position = index + 1
 				
-				if Labware.VolumesList[index] > 0:
-					PlatePrepArray[int(position)] = {"AlphaNumeric":index + 1,"Volume":"{:.2f}".format(Labware.VolumesList[index])}
+				print(Labware.WellContents[index])
+				WellVolume = sum([Content["Volume"] for Content in Labware.WellContents[index]])
+				if WellVolume > 0:
+					PlatePrepArray[int(position)] = {"AlphaNumeric":index + 1,"Volume":"{:.2f}".format(WellVolume)}
 			
 			if len(PlatePrepArray) != 0:
 

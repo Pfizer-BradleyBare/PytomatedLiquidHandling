@@ -301,7 +301,7 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 				SourceLLDCriteria = SourceLabware.GetLLD(SourceArrayPosition)
 				#We need to get the solution properties first then we can determine mixing based off that
 
-				Volume = abs(SourceLabware.VolumesList[SourceArrayPosition])
+				Volume = sum([Content["Volume"] for Content in SourceLabware.WellContents[SourceArrayPosition]])
 				NewVolume = Volume - ActualVolume
 				if Volume != 0:
 					PercentChange = NewVolume / Volume

@@ -45,8 +45,8 @@ def Step(step):
 	if not all(not (type(Volume) is str) for Volume in VolumeList):
 		MethodComments.append("The Volume parameter you provided is not a number. This parameter must be a number. Please Correct")
 
-	if not all(Source != DestinationPlate for Source in Sources):
-		MethodComments.append("The Source parameter you provided is the parent plate. This does not make sense. Please Correct")
+	if all(Source != DestinationPlate for Source in Sources):
+		MethodComments.append("The Source parameter you provided must be the parent plate. I know it is weird... Please Correct")
 
 	if len(MethodComments) != 0:
 		LOG.LogMethodComment(step,MethodComments)
