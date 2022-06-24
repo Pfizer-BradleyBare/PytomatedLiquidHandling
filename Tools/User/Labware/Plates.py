@@ -311,7 +311,7 @@ def CreatePipetteSequence(DestinationContextStringsList, DestinationNamesList, S
 					DestinationLabware.WellContents[DestinationArrayPosition].append({"Solution":SourceName, "Well":SourceArrayPosition, "Volume":ActualVolume})
 				#Update the contents in the well
 
-				SourceLabware.VolumesList[SourceArrayPosition] = NewVolume
+				SourceLabware.VolumesList[SourceArrayPosition] -= ActualVolume
 				SourceLabware.DoVolumeUpdate()
 				#Do plate volume subtraction
 
