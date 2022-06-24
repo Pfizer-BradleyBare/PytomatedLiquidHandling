@@ -51,6 +51,9 @@ def Step(step):
 	if not all(not (type(Location) is str) for Location in PoolLocations):
 		MethodComments.append("The Dispense Location parameter you provided is not a number. This parameter must be a number. Please Correct")
 
+	if not all(Location > 0 and Location <= SAMPLES.GetNumSamples() for Location in PoolLocations):
+		MethodComments.append("The Dispense Location parameter you provided exceeds the total number of samples. This parameter is less than or equal to the number of samples and greater than 0. Please Correct")
+
 	if len(MethodComments) != 0:
 		LOG.LogMethodComment(step,MethodComments)
 		if HAMILTONIO.IsSimulated() == True:
