@@ -173,7 +173,7 @@ def Load(Plates_List, Solutions_List):
 		for solution in Solutions_List:
 			if solution.GetLabwareName() not in FinalLoading:
 				print(solution.GetLabwareName(),": ",solution.GetMaxVolume())
-		quit()
+		raise(AssertionError)
 	#check that we were able to load everything
 
 	return FinalLoading

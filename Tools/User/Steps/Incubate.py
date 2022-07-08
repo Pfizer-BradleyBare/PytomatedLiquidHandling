@@ -374,7 +374,8 @@ def Step(step):
 
 	HAMILTONIO.AddCommand(STATUS_UPDATE.AddProgressDetail({"DetailMessage": "Starting Incubate Block. Block Coordinates: " + str(step.GetCoordinates())}),False,True)
 	HAMILTONIO.SendCommands()
-	
+
+	ParentPlate = step.GetParentPlateName()
 	Params = step.GetParameters()
 	Temp = Params[TEMP]
 	RPM = Params[SHAKE]
@@ -400,6 +401,9 @@ def Step(step):
 
 	if type(RPM) is str:
 		MethodComments.append("The Shake parameter can only be a number. Please Correct.")
+
+	if sum(PLATES.LABWARE.GetLabware(ParentPlate).VolumesList) == 0:
+		MethodComments.append("The Parent plate does not contain liquid yet. Please Correct.")
 
 	if len(MethodComments) != 0:
 		LOG.LogMethodComment(step,MethodComments)
