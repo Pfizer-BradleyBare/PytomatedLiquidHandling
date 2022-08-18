@@ -1,6 +1,8 @@
 Attribute VB_Name = "BuildingBlocksLoader"
 Public Sub LoadBuildingBlocks()
 
+    'This loads the buildingblocks into variables and validates them. Variables for speed.
+
     ReDim GlobalBuildingBlocksSteps(0)
 
     StepCounter = 0
@@ -44,6 +46,8 @@ Public Sub LoadBuildingBlocks()
         ChoiceLocationRow = ChoiceLocation.Row
         ChoiceLocationCol = ChoiceLocation.Column - 1
         
+        
+        'Block descriptor parameters must go in a specific order. This is confirming that order
         If ThisWorkbook.Worksheets("BuildingBlocks").Cells(ChoiceLocationRow + 1, ChoiceLocationCol).Value <> "Category" Then
             MsgBox ("Disableable does not follow Step in the building blocks for " & StepString & ". Please contact an SME to repair the building blocks source.")
             GlobalBuildingBlockWorkingStatus = False
@@ -80,8 +84,9 @@ Public Sub LoadBuildingBlocks()
         GlobalBuildingBlocksStepHelpBookmarks(Counter) = ThisWorkbook.Worksheets("BuildingBlocks").Cells(ChoiceLocationRow + 5, ChoiceLocationCol + 1).Value
     
         ParameterCounter = 0
-        For Counter2 = 1 To 1000
+        For Counter2 = 1 To 1000 'This works but really should be dynamic. I'll fix it eventually. LOW Priority.
             
+            'This reads in the acceptable inputs for a given parameter. Same deal, must be in a specific order.
             If ThisWorkbook.Worksheets("BuildingBlocks").Cells(ChoiceLocationRow + Counter2, ChoiceLocationCol).Value = "Parameter" Then
                 
                 ParameterString = ThisWorkbook.Worksheets("BuildingBlocks").Cells(ChoiceLocationRow + Counter2, ChoiceLocationCol + 1).Value

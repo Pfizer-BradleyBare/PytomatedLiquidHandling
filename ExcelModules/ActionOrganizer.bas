@@ -22,11 +22,13 @@ Public Sub ValidateSteps()
             If NumParamsBuildingBlocks <> NumParamsSavedAction Then
                 GlobalOrganizerActionNotAcceptable(Counter) = True
             End If
+            'Assume all inputs are valid at the beginning
         
             NumParams = NumParamsBuildingBlocks
             If NumParamsSavedAction > NumParams Then
                 NumParams = NumParamsSavedAction
             End If
+            'Truncate inputs to length of block input length
 
             For Counter2 = 0 To NumParams - 1
             
@@ -55,6 +57,7 @@ Public Sub ValidateSteps()
                 End If
                 
             Next Counter2
+            'Validate the inputs and arguments. Everything really. Always done in real time to save the users
         End If
         
 ExitValidateDo:
@@ -70,6 +73,9 @@ Public Sub DeleteMethod()
 End Sub
 
 Public Sub PlaceSteps(ByVal Index As Integer, ByVal NumSplitPlates As Integer, ByVal Offset As Integer, ByVal Row As Integer, ByVal Column As Integer)
+
+    'This is a doozy. Basically this will attempt to place steps without overlap. This is a recursive function! Each time a split plate step is found the new pathways
+    'will call a new PlaceSteps function. Repeat for all pathways
 
     Counter = Index
     
@@ -145,10 +151,10 @@ End Sub
 Public Sub PrintSteps()
     
     GlobalOrganizerNumSplitSeperators = 0
-    'This finds the preliminary row and col of our steps
+    'This finds the preliminary row and col of our steps. The first call merely counts the numer of split plates on a per pathway basis
     PlaceSteps 0, 0, 0, 2, 4
     
-    'I do it twice because it helps with formatting and doesn't cause speed issues
+    'I do it twice because it helps with formatting and doesn't cause speed issues. The second call takes into account the number of split plates to perform a proper placement
     GlobalOrganizerNumSplitSeperators = GlobalOrganizerNumSplitSeperators + 1
     PlaceSteps 0, 0, 0, 2, 4
     
@@ -329,6 +335,7 @@ Public Sub PrintSteps()
 
     ThisWorkbook.Worksheets("Method").Range("A1:ZZ1000").WrapText = False
 
+    'formatting stuff... LAME!
     For Col = 1 To 100
         With ThisWorkbook.Worksheets("Method").Columns(Col)
             .ColumnWidth = 20
@@ -356,6 +363,7 @@ Public Sub SaveSteps()
     NumActions = 0
     NumPlates = 0
 
+    'Create a bunch of big arrays to store our saved steps. This array will be resized when a new step is found
     ReDim GlobalOrganizerActionName(0)
     ReDim GlobalOrgnizerActionNumArgs(0)
     ReDim GlobalOrganizerActionArgsTitles(20, 0)
@@ -370,6 +378,7 @@ Public Sub SaveSteps()
     For Counter = 1 To 10000
         ActionRow = 0
         ActionCol = 0
+        'The row and col is important so we know which pathway the step belongs
         
         'We need to iterate until we don't find anything on the row. This allows for steps to be side by side after a split plate step.
         While True

@@ -1,5 +1,10 @@
 Attribute VB_Name = "PythonAccessibleModules"
+'Fun fact. With XLWINGS the write function has super low priorty. So, to get around that I have to create a macro for each Python function I'd like to perform. Silly.
+
 Sub Python_GetMethodValidatedStatus()
+'This saves the user. If a method is made on a local PC but is run on a Hamilton PC we need to confirm the method can run before we start. This does that. If it is invalid then
+'the python method will kill the Hamilotn method.
+
 
     Application.ScreenUpdating = False
     

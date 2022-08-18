@@ -1,8 +1,6 @@
 Attribute VB_Name = "WorkbookMacros"
 Public Sub WorkbookOnOpen()
  
-    'MsgBox ("Hello. Click OK to download the most up to date building blocks. This will happen in the background and take only a few seconds.")
- 
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
     
@@ -10,29 +8,23 @@ Public Sub WorkbookOnOpen()
     ThisWorkbook.Worksheets("BuildingBlocks").Delete
     On Error GoTo 0
     
-    ScriptPath = "C:\Program Files (x86)\HAMILTON\BAREB\Script\HamiltonVisualMethodEditor\HamiltonVisualMethodEditorConfiguration\BuildingBlocks\BuildingBlocks.xlsx"
-    BuildingBlocksPath = Environ("USERPROFILE") & "\OneDrive - Pfizer\Documents\_ABN\BuildingBlocks\BuildingBlocks.xlsx"
+    If ABNInstallType = "Complete" Then
+        
+        BuildingBlocksPath = ABNPath & "HamiltonVisualMethodEditorConfiguration\BuildingBlocks\BuildingBlocks.xlsx"
+        
+    ElseIf ABNInstallType = "Editor" Then
     
-    If Dir(ScriptPath) <> "" Then
-        Set closedBook = Workbooks.Open(ScriptPath)
-        closedBook.Sheets("BuildingBlocks").Copy Before:=ThisWorkbook.Sheets(1)
-        closedBook.Close SaveChanges:=False
-    ElseIf Dir(BuildingBlocksPath) <> "" Then
-        Set closedBook = Workbooks.Open(BuildingBlocksPath)
-        closedBook.Sheets("BuildingBlocks").Copy Before:=ThisWorkbook.Sheets(1)
-        closedBook.Close SaveChanges:=False
-    Else
-        Dim Sheet As Worksheet
-        Set Sheet = Sheets.Add(ThisWorkbook.Sheets(1))
-        Sheet.name = "BuildingBlocks"
-        ThisWorkbook.Worksheets("BuildingBlocks").Visible = xlSheetHidden
-        ThisWorkbook.Worksheets("Method").Activate
-        MsgBox ("ABN Building blocks were not found on this system. The following document is read only. You may install building blocks in the ribbon if you would like to build a method.")
-        Exit Sub
+        BuildingBlocksPath = ABNPath & "BuildingBlocks\BuildingBlocks.xlsx"
+    
     End If
+    'Create correct building blocks paths based on install type
     
+    Set closedBook = Workbooks.Open(BuildingBlocksPath)
+    closedBook.Sheets("BuildingBlocks").Copy Before:=ThisWorkbook.Sheets(1)
+    closedBook.Close SaveChanges:=False
     ThisWorkbook.Worksheets("BuildingBlocks").Visible = xlSheetHidden
     ThisWorkbook.Worksheets("Method").Activate
+    'Load the bluilding blocks excel file as a sheet in the background
 
     LoadBuildingBlocks
     
@@ -42,6 +34,7 @@ Public Sub WorkbookOnOpen()
         MsgBox ("There were issues found with the Building Blocks. You can either view this document as Read Only or, if you wanted to run the method, close the workbook and contact an Automation Bare Necessities SME to correct the issue.")
         Exit Sub
     End If
+    'Load blocks, which validates them. Check blocks are valid
     
     Dim Selection As Range
     Set Selection = ThisWorkbook.Worksheets("Method").Range("A1:AZ100").Find("Comments")
@@ -62,6 +55,7 @@ Public Sub WorkbookOnOpen()
         DeleteMethod
         PrintSteps
     End If
+    'Check methd sheet is not empty. Handle it. If not empty then validate steps
     
     If GlobalOrganizerActionsValidated = True Then
         ThisWorkbook.Worksheets("Worklist").Activate
@@ -71,6 +65,7 @@ Public Sub WorkbookOnOpen()
         MsgBox ("There were issues found with the method. Please check the method sheet for red highlighted cells. Click the effected step to update and correct the errors.")
         Exit Sub
     End If
+    'Handle validation
 
     ThisWorkbook.Worksheets("Solutions").Activate
     LoadSolutions
@@ -88,6 +83,7 @@ Public Sub WorkbookOnOpen()
         MsgBox ("There were issues found with the Solutions. Please check the Solutions sheet for red highlighted cells. Click the effected Solution to update and correct the errors.")
         Exit Sub
     End If
+    'Validate Solutions
 
     Application.ScreenUpdating = True
     Application.DisplayAlerts = True

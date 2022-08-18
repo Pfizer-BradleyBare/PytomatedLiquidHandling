@@ -1,4 +1,6 @@
 Attribute VB_Name = "RibbonModules"
+'These are the macros that run the buttons in the Ribbon
+
 Sub ResetMethod()
 
     If GlobalBuildingBlockWorkingStatus = True Then

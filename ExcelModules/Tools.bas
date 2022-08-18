@@ -1,4 +1,6 @@
 Attribute VB_Name = "Tools"
+'Rando Tools I stole from the internet
+
 Public Function FileIsOpen(FullFilePath As String) As Boolean
 
     Dim ff As Long

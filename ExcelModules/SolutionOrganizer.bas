@@ -1,4 +1,6 @@
 Attribute VB_Name = "SolutionOrganizer"
+'Same as building blocks loader basically. Look at that and infer the purpose of this.
+
 Public Sub LoadSolutions()
 
     If ThisWorkbook.Worksheets("BuildingBlocks").Cells(3, 6).Value <> "Categories" Then

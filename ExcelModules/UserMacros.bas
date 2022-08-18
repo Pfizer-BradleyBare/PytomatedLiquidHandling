@@ -65,7 +65,7 @@ Sub UpdateAction(ByVal Selection As Range)
     For Counter = 0 To NumArgs
         GlobalOldActionArgs(Counter) = ThisWorkbook.Worksheets("Method").Cells(Selection.Row + 1 + Counter, Selection.Column + 1).Formula
     Next Counter
-    GlobalIsNewAction = True 'I have to do this so it ignores the previous split plate selection. My code is so bad
+    GlobalIsNewAction = True 'I have to do this so it ignores the previous split plate selection.
     Action.UserForm_Initialize
     
     On Error GoTo ExitUserUpdate
