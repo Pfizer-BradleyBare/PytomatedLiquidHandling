@@ -1,0 +1,36 @@
+Heaters:
+  Heater 1:
+    Com Port: 1
+    Heater Type: HeaterShaker
+    Ambient Temp: 25
+    Stable Temp Delta: 2
+    Supported Plate Types:
+      200uL Biorad 96 Well PCR Plate:
+        Plate Sequence: _HHS1_96WellPCRPlate200uL
+        Lid Sequence: _HHS1_96WellPCRPlate200uL_Lid
+      
+      400uL Thermo 96 Well PCR Plate:
+        Plate Sequence: _HHS1_96WellPCRPlate400uL
+        Lid Sequence: _HHS1_96WellPCRPlate400uL_Lid
+      
+      1200uL DeepWell 96 Well PCR Plate:
+        Plate Sequence: _HHS1_96WellPCRPlate1200uL
+        Lid Sequence: _HHS1_96WellPCRPlate1200uL_Lid
+
+  Heater 2:
+    Com Port: 2
+    Heater Type: HeaterShaker
+    Ambient Temp: 0
+    Stable Temp Delta: 2
+    Supported Plate Types:
+      200uL Biorad 96 Well PCR Plate:
+        Plate Sequence: _HHS2_96WellPCRPlate200uL
+        Lid Sequence: _HHS2_96WellPCRPlate200uL_Lid
+      
+      400uL Thermo 96 Well PCR Plate:
+        Plate Sequence: _HHS2_96WellPCRPlate400uL
+        Lid Sequence: _HHS2_96WellPCRPlate400uL_Lid
+      
+      1200uL DeepWell 96 Well PCR Plate:
+        Plate Sequence: _HHS2_96WellPCRPlate1200uL
+        Lid Sequence: _HHS2_96WellPCRPlate1200uL_Lid
