@@ -1,0 +1,2 @@
+class __Template:
+    pass
