@@ -1,4 +1,4 @@
-from .BaseConfigurationTracker import BaseConfigurationTracker
+from .BaseTracker import BaseTracker
 from .BaseObject import BaseObject
 
-__all__ = ["BaseConfigurationTracker", "BaseObject"]
+__all__ = ["BaseTracker", "BaseObject"]

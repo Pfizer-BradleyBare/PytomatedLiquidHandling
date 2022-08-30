@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 # This is an abstract loader class for loading configuration files
 
 
-class BaseConfigurationTracker(ABC):
+class BaseTracker(ABC):
     @abstractmethod
     def __init__(self):
         self.Collection = dict()

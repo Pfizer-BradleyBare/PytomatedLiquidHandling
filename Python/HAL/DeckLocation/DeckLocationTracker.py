@@ -1,9 +1,9 @@
-from ..BaseConfiguration import BaseConfigurationTracker
+from ..BaseConfiguration import BaseTracker
 from .DeckLocation import DeckLocation
 from ..Transport import TransportTracker
 
 
-class DeckLocationTracker(BaseConfigurationTracker):
+class DeckLocationTracker(BaseTracker):
     def __init__(self, TransportTrackerInstance: TransportTracker):
         self.Collection: dict[str, DeckLocation] = dict()
         self.TransportTrackerInstance: TransportTracker = TransportTrackerInstance

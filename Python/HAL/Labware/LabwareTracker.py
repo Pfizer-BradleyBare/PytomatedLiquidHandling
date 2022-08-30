@@ -1,4 +1,4 @@
-from ..BaseConfiguration import BaseConfigurationTracker
+from ..BaseConfiguration import BaseTracker
 from .Labware import Labware
 
 #
@@ -8,7 +8,7 @@ from .Labware import Labware
 #
 
 
-class LabwareTracker(BaseConfigurationTracker):
+class LabwareTracker(BaseTracker):
     def __init__(self):
         self.Collection: dict[Labware] = dict()
 

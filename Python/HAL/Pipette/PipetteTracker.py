@@ -1,9 +1,9 @@
-from ..BaseConfiguration import BaseConfigurationTracker
+from ..BaseConfiguration import BaseTracker
 from .Pipette import PipettingDevice
 from ..Tip import TipTracker
 
 
-class PipetteTracker(BaseConfigurationTracker):
+class PipetteTracker(BaseTracker):
     def __init__(
         self,
         TipTrackerInstance: TipTracker,

@@ -1,4 +1,4 @@
-from ..BaseConfiguration import BaseConfigurationTracker
+from ..BaseConfiguration import BaseTracker
 from ..Labware import LabwareTracker
 from ..DeckLocation import DeckLocationTracker
 from ..Pipette import PipetteTracker
@@ -6,7 +6,7 @@ from ..Tip import TipTracker
 from .MagneticRack import MagneticRack
 
 
-class MagneticRackTracker(BaseConfigurationTracker):
+class MagneticRackTracker(BaseTracker):
     def __init__(
         self,
         LabwareTrackerInstance: LabwareTracker,

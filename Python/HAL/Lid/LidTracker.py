@@ -1,10 +1,10 @@
-from ..BaseConfiguration import BaseConfigurationTracker
+from ..BaseConfiguration import BaseTracker
 from ..Labware import LabwareTracker
 from ..DeckLocation import DeckLocationTracker
 from .Lid import Lid
 
 
-class LidTracker(BaseConfigurationTracker):
+class LidTracker(BaseTracker):
     def __init__(
         self,
         LabwareTrackerInstance: LabwareTracker,
