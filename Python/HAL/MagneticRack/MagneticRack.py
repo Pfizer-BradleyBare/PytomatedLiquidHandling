@@ -1,9 +1,9 @@
 from ..Layout import LayoutItem
 from ..Pipette import PipettingDevice
-from ..BaseConfiguration import BaseObject
+from ..ABC import ObjectABC
 
 
-class MagneticRack(BaseObject):
+class MagneticRack(ObjectABC):
     def __init__(
         self,
         Name: str,

@@ -1,10 +1,10 @@
-from ..BaseConfiguration import BaseTracker
+from ..ABC import TrackerABC
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker
 from .Layout import LayoutItem
 
 
-class LayoutTracker(BaseTracker):
+class LayoutTracker(TrackerABC):
     def __init__(
         self,
         DeckLocationTrackerInstance: DeckLocationTracker,

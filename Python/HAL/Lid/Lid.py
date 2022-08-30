@@ -1,9 +1,9 @@
 from ..Labware import Labware
 from ..Layout import LayoutItem
-from ..BaseConfiguration import BaseObject
+from ..ABC import ObjectABC
 
 
-class Lid(BaseObject):
+class Lid(ObjectABC):
     def __init__(
         self,
         Name: str,

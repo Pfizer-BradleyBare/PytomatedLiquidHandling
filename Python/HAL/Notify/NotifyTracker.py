@@ -1,8 +1,8 @@
-from ..BaseConfiguration import BaseTracker
+from ..ABC import TrackerABC
 from .Notify import Notify
 
 
-class NotifyTracker(BaseTracker):
+class NotifyTracker(TrackerABC):
     def __init__(self):
         self.Collection: dict[str, Notify] = dict()
 

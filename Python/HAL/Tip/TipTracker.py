@@ -1,8 +1,8 @@
-from ..BaseConfiguration import BaseTracker
+from ..ABC import TrackerABC
 from .Tip import Tip
 
 
-class TipTracker(BaseTracker):
+class TipTracker(TrackerABC):
     def __init__(self):
         self.Collection: dict[str, Tip] = dict()
 

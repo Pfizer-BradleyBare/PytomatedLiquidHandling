@@ -1,5 +1,5 @@
 from enum import Enum
-from ..BaseConfiguration import BaseObject
+from ..ABC import ObjectABC
 
 
 class TipTypes(Enum):
@@ -7,7 +7,7 @@ class TipTypes(Enum):
     FTR = "FTR"
 
 
-class Tip(BaseObject):
+class Tip(ObjectABC):
     def __init__(
         self,
         Name: str,

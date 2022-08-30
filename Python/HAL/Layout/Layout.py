@@ -1,6 +1,6 @@
 from ..DeckLocation import DeckLocation
 from ..Labware import Labware
-from ..BaseConfiguration import BaseObject
+from ..ABC import ObjectABC
 
 
 class LayoutItemLidTracker:
@@ -11,7 +11,7 @@ class LayoutItemLidTracker:
         return self.HasLid
 
 
-class LayoutItem(BaseObject, LayoutItemLidTracker):
+class LayoutItem(ObjectABC, LayoutItemLidTracker):
     def __init__(
         self,
         Sequence: str,

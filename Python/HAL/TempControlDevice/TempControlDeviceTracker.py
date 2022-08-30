@@ -1,10 +1,10 @@
-from ..BaseConfiguration import BaseTracker
+from ..ABC import TrackerABC
 from ..Labware import LabwareTracker
 from ..DeckLocation import DeckLocationTracker
 from .TempControlDevice import TempControlDevice
 
 
-class TempControlDeviceTracker(BaseTracker):
+class TempControlDeviceTracker(TrackerABC):
     def __init__(
         self,
         LabwareTrackerInstance: LabwareTracker,

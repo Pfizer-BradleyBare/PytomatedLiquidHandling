@@ -1,6 +1,6 @@
 from enum import Enum
 from ..Tip import Tip
-from ..BaseConfiguration import BaseObject
+from ..ABC import ObjectABC
 
 
 class LiquidClass:
@@ -36,7 +36,7 @@ class DeviceTypes(Enum):
     Core96Head = "96 Core Head"
 
 
-class PipettingChannels(BaseObject):
+class PipettingChannels(ObjectABC):
     def __init__(self, DeviceType: DeviceTypes, Enabled: bool):
         self.Enabled: bool = Enabled
         self.DeviceType: DeviceTypes = DeviceType

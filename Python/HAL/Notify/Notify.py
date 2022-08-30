@@ -1,12 +1,12 @@
 from enum import Enum
-from ..BaseConfiguration import BaseObject
+from ..ABC import ObjectABC
 
 
 class NotificationTypes(Enum):
     EmailText = "Email/Text Notification"
 
 
-class Notify(BaseObject):
+class Notify(ObjectABC):
     def __init__(self, Enabled: bool, NotificationType: NotificationTypes):
         self.Enabled: bool = Enabled
         self.NotificationType: NotificationTypes = NotificationType

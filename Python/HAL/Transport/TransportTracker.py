@@ -1,9 +1,9 @@
-from ..BaseConfiguration import BaseTracker
+from ..ABC import TrackerABC
 from ..Labware import LabwareTracker
 from .Transport import TransportDevice
 
 
-class TransportTracker(BaseTracker):
+class TransportTracker(TrackerABC):
     def __init__(self, LabwareTrackerInstance: LabwareTracker):
         self.Collection: dict[str, TransportDevice] = dict()
         self.LabwareTrackerInstance: LabwareTracker = LabwareTrackerInstance

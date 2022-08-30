@@ -1,5 +1,5 @@
 from ..Transport import TransportDevice
-from ..BaseConfiguration import BaseObject
+from ..ABC import ObjectABC
 
 
 class LoadingConfig:
@@ -14,7 +14,7 @@ class LoadingConfig:
         return self.CarrierPosition
 
 
-class DeckLocation(BaseObject):
+class DeckLocation(ObjectABC):
     def __init__(self, Name: str, SupportedTransportInstances: list[TransportDevice]):
         self.Name: str = Name
         self.SupportedTransportInstances: list[

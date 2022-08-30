@@ -1,8 +1,8 @@
 from ..Labware import Labware
-from ..BaseConfiguration import BaseObject
+from ..ABC import ObjectABC
 
 
-class FlipTube(BaseObject):
+class FlipTube(ObjectABC):
     def __init__(self, Name: str, Sequence: str, SupportedLabware: list[Labware]):
         self.Name: str = Name
         self.Sequence: str = Sequence

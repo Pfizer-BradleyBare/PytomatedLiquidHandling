@@ -1,6 +1,6 @@
 from enum import Enum
 from ..Labware import Labware
-from ..BaseConfiguration import BaseObject
+from ..ABC import ObjectABC
 
 
 class TransportParameters:
@@ -41,7 +41,7 @@ class TransportDevices(Enum):
     TrackGripper = "Track Gripper"
 
 
-class TransportDevice(BaseObject):
+class TransportDevice(ObjectABC):
     def __init__(
         self,
         TransportDeviceID: TransportDevices,

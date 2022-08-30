@@ -1,9 +1,9 @@
 from .FlipTube import FlipTube
-from ..BaseConfiguration import BaseTracker
+from ..ABC import TrackerABC
 from ..Labware import LabwareTracker
 
 
-class FlipTubeTracker(BaseTracker):
+class FlipTubeTracker(TrackerABC):
     def __init__(self, LabwareTrackerInstance: LabwareTracker):
         self.Collection: dict[str, FlipTube] = dict()
         self.LabwareTrackerInstance: LabwareTracker = LabwareTrackerInstance

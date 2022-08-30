@@ -1,6 +1,6 @@
 from enum import Enum
 from ..Layout import CoveredLayoutItem
-from ..BaseConfiguration import BaseObject
+from ..ABC import ObjectABC
 
 
 class TempConfig:
@@ -22,7 +22,7 @@ class DeviceTypes(Enum):
     HamiltonHeaterCooler = "Hamilton Heater Cooler"
 
 
-class TempControlDevice(BaseObject):
+class TempControlDevice(ObjectABC):
     def __init__(
         self,
         Name: str,

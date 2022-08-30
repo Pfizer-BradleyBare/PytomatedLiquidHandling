@@ -1,5 +1,5 @@
 from enum import Enum
-from ..BaseConfiguration import BaseObject
+from ..ABC import ObjectABC
 
 
 #
@@ -89,7 +89,7 @@ class LabwarePipettableTracker:
         return self.IsPipettable
 
 
-class Labware(BaseObject, LabwarePipettableTracker):
+class Labware(ObjectABC, LabwarePipettableTracker):
     def __init__(
         self, Name: str, Filter: LabwareFilters, Dimensions: LabwareDimensions
     ):
