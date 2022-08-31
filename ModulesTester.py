@@ -1,23 +1,23 @@
-from ABN.Source.Modules.Transport import TransportConfigFileLoader, TransportTracker
-from ABN.Source.Modules.DeckLocation import (
+from ABN.Source.HAL.Transport import TransportConfigFileLoader, TransportTracker
+from ABN.Source.HAL.DeckLocation import (
     DeckLocationConfigFileLoader,
     DeckLocationTracker,
 )
-from ABN.Source.Modules.Labware import LabwareConfigFileLoader, LabwareTracker
-from ABN.Source.Modules.Layout import LayoutConfigFileLoader, LayoutTracker
-from ABN.Source.Modules.Lid import LidConfigFileLoader, LidTracker
-from ABN.Source.Modules.TempControlDevice import (
+from ABN.Source.HAL.Labware import LabwareConfigFileLoader, LabwareTracker
+from ABN.Source.HAL.Layout import LayoutConfigFileLoader, LayoutTracker
+from ABN.Source.HAL.Lid import LidConfigFileLoader, LidTracker
+from ABN.Source.HAL.TempControlDevice import (
     TempControlDeviceConfigFileLoader,
     TempControlDeviceTracker,
 )
-from ABN.Source.Modules.Tip import TipConfigFileLoader, TipTracker
-from ABN.Source.Modules.Pipette import PipetteConfigFileLoader, PipetteTracker
-from ABN.Source.Modules.MagneticRack import (
+from ABN.Source.HAL.Tip import TipConfigFileLoader, TipTracker
+from ABN.Source.HAL.Pipette import PipetteConfigFileLoader, PipetteTracker
+from ABN.Source.HAL.MagneticRack import (
     MagneticRackConfigFileLoader,
     MagneticRackTracker,
 )
-from ABN.Source.Modules.Notify import NotifyConfigFileLoader, NotifyTracker
-from ABN.Source.Modules.FlipTube import FlipTubeConfigFileLoader, FlipTubeTracker
+from ABN.Source.HAL.Notify import NotifyConfigFileLoader, NotifyTracker
+from ABN.Source.HAL.FlipTube import FlipTubeConfigFileLoader, FlipTubeTracker
 
 
 print("Testing Labware...")
