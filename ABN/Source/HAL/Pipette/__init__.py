@@ -8,6 +8,7 @@ from .Pipette import (
     PipettingDevice,
 )
 from .PipetteTracker import PipetteTracker
+from .HAL.PipetteInterfaceABC import PipetteInterfaceABC
 
 __all__ = [
     "LiquidClass",
@@ -18,4 +19,5 @@ __all__ = [
     "Core96HeadChannels",
     "PipettingDevice",
     "PipetteTracker",
+    "PipetteInterfaceABC",
 ]

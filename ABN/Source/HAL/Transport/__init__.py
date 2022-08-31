@@ -9,6 +9,7 @@ from .Transport import (
 )
 
 from .TransportTracker import TransportTracker
+from .HAL.TransportInterfaceABC import TransportInterfaceABC
 
 __all__ = [
     "TransportParameters",
@@ -19,4 +20,5 @@ __all__ = [
     "TrackGripperDevice",
     "IternalPlateGripperDevice",
     "TransportTracker",
+    "TransportInterfaceABC",
 ]
