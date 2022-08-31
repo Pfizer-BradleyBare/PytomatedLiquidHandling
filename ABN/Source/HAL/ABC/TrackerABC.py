@@ -1,9 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 # This is an abstract loader class for loading configuration files
 
 
-class TrackerABC(ABC):
+class TrackerABC:
     @abstractmethod
     def __init__(self):
         self.Collection = dict()
