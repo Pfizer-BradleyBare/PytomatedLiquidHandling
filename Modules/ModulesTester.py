@@ -1,17 +1,23 @@
-from HAL.Transport import TransportConfigFileLoader, TransportTracker
-from HAL.DeckLocation import DeckLocationConfigFileLoader, DeckLocationTracker
-from HAL.Labware import LabwareConfigFileLoader, LabwareTracker
-from HAL.Layout import LayoutConfigFileLoader, LayoutTracker
-from HAL.Lid import LidConfigFileLoader, LidTracker
-from HAL.TempControlDevice import (
+from Python.Modules.Transport import TransportConfigFileLoader, TransportTracker
+from Python.Modules.DeckLocation import (
+    DeckLocationConfigFileLoader,
+    DeckLocationTracker,
+)
+from Python.Modules.Labware import LabwareConfigFileLoader, LabwareTracker
+from Python.Modules.Layout import LayoutConfigFileLoader, LayoutTracker
+from Python.Modules.Lid import LidConfigFileLoader, LidTracker
+from Python.Modules.TempControlDevice import (
     TempControlDeviceConfigFileLoader,
     TempControlDeviceTracker,
 )
-from HAL.Tip import TipConfigFileLoader, TipTracker
-from HAL.Pipette import PipetteConfigFileLoader, PipetteTracker
-from HAL.MagneticRack import MagneticRackConfigFileLoader, MagneticRackTracker
-from HAL.Notify import NotifyConfigFileLoader, NotifyTracker
-from HAL.FlipTube import FlipTubeConfigFileLoader, FlipTubeTracker
+from Python.Modules.Tip import TipConfigFileLoader, TipTracker
+from Python.Modules.Pipette import PipetteConfigFileLoader, PipetteTracker
+from Python.Modules.MagneticRack import (
+    MagneticRackConfigFileLoader,
+    MagneticRackTracker,
+)
+from Python.Modules.Notify import NotifyConfigFileLoader, NotifyTracker
+from Python.Modules.FlipTube import FlipTubeConfigFileLoader, FlipTubeTracker
 
 
 print("Testing Labware...")

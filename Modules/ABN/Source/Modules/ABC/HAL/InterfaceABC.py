@@ -1,9 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 # This is an abstract loader class for loading configuration files
 
 
-class InterfaceABC(ABC):
+class InterfaceABC:
     @abstractmethod
     def HALInitialize(self) -> dict:
         raise NotImplementedError

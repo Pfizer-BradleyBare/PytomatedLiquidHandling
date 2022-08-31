@@ -1,5 +1,5 @@
 from ..Labware import Labware
-from ..ABC import ObjectABC
+from ....Python.Modules.ABC import ObjectABC
 
 
 class FlipTube(ObjectABC):
