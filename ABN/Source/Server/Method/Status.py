@@ -1,26 +1,22 @@
-# curl -H "Content-Type: application/json" -X POST -d '{\"name\":\"Joe\"}' http://localhost:8080/Method/Dequeue
+# curl -H "Content-Type: application/json" -X POST -d '{\"name\":\"Joe\"}' http://localhost:8080/Method/Status
 
 import web
-from ..Tools.Parsing import ParsePOST
+from ..Parser import Parser
 
-urls = ("/Method/Dequeue", "ABN.Source.Server.Method.Dequeue.Dequeue")
-
-ExpectedJsonKeys = ("MethodPath",)
+urls = ("/Method/Status", "ABN.Source.Server.Method.Status.Status")
 
 
-class Dequeue:
+class Status:
     def POST(self):
-        print()  # Readability
-        print("Dequeue handling started!")
+        ParserObject = Parser("Method Status", web.data())
 
-        Data = ParsePOST(web.data(), ExpectedJsonKeys)
-
-        if Data is None:
-            print("Error detected so no processing will occur.")
-            return None
+        if not ParserObject.IsValid():
+            Response = ParserObject.GetHTTPResponse()
+            return Response
 
         # Do something here
 
-        # We will always return the data we receive as a logging event
-        print()  # Readability
-        return Data
+        ParserObject.SetAPIState(True)
+
+        Response = ParserObject.GetHTTPResponse()
+        return Response

@@ -8,6 +8,7 @@ class Parser:
         print("PARSER: Handling API:", APICallID)
         print("PARSER: Created Parser class with data:", JSONstring)
 
+        self.APICallID: str = APICallID
         self.string: str = JSONstring
         self.JSON: dict = dict()
         self.APIState: bool = False
@@ -39,7 +40,8 @@ class Parser:
 
     def GetHTTPResponse(self) -> str:
         Out = dict()
-        Out["APISucess"] = self.APIState
+        Out["APICallID"] = self.APICallID
+        Out["APISuccess"] = self.APIState
         Out["APIData"] = self.JSON
         Out["APIReturn"] = self.APIReturn
 
