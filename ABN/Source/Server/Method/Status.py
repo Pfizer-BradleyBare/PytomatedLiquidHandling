@@ -1,17 +1,17 @@
-# curl -H "Content-Type: application/json" -X POST -d '{\"name\":\"Joe\"}' http://localhost:8080/Comm/SendResponse
+# curl -H "Content-Type: application/json" -X POST -d '{\"name\":\"Joe\"}' http://localhost:8080/Method/Dequeue
 
 import web
 from ..Tools.Parsing import ParsePOST
 
-urls = ("/Comm/SendResponse", "ABN.Source.Server.Comm.SendResponse.SendResponse")
+urls = ("/Method/Dequeue", "ABN.Source.Server.Method.Dequeue.Dequeue")
 
-ExpectedJsonKeys = ("MethodID", "StatusID", "Message", "Response")
+ExpectedJsonKeys = ("MethodPath",)
 
 
-class SendResponse:
+class Dequeue:
     def POST(self):
         print()  # Readability
-        print("SendReponse handling started!")
+        print("Dequeue handling started!")
 
         Data = ParsePOST(web.data(), ExpectedJsonKeys)
 

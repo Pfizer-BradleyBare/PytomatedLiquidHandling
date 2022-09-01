@@ -2,20 +2,20 @@
 
 from ..Tools.Parsing import ParseHTTPResponse
 
-urls = ("/Comm/GetCommand", "ABN.Source.Server.Comm.GetCommand.GetCommand")
+urls = ("/Command/Request", "ABN.Source.Server.Command.Request.Request")
 
-ExpectedJsonKeys = ("MethodID",)
+ExpectedJsonKeys = ("MethodPath",)
 
 
-class GetCommand:
+class Request:
     def GET(self):
         print()  # Readability
-        print("GetCommand handling started!")
+        print("Command Request handling started!")
 
         # Do something here
 
         Response = ParseHTTPResponse(
-            {"MethodID": 12345, "Out": "Test"}, ExpectedJsonKeys
+            {"MethodPath": 12345, "Out": "Test"}, ExpectedJsonKeys
         )
 
         if Response is None:
