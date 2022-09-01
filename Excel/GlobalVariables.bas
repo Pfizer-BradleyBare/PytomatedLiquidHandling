@@ -1,7 +1,4 @@
 Attribute VB_Name = "GlobalVariables"
-Global ABNPath As String
-Global ABNInstallType As String
-
 Global WordHandle As Object
 Global GlobalHelpDocumentHandle As Object
 

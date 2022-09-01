@@ -1,19 +1,13 @@
 # Test Command
-# curl -H "Content-Type: application/json" -X POST -d '{\"name\":\"Joe\"}' http://localhost:8080/IsActive/
+# curl -H "Content-Type: application/json" -X POST -d '{\"name\":\"Joe\"}' http://localhost:8080/Comm
+# curl -X GET http://localhost:8080/Comm
 
 import web
 import json
+from ABN.Source.Server.Comm.Comm import urls as CommUrls
 
-urls = (
-    "/IsActive",
-    "index",
-    "/GetCommand",
-    "index",
-    "/SendResponse",
-    "index",
-    "/QueueMethod",
-    "index",
-)
+urls = ("/Help", "index")
+urls += CommUrls
 
 
 class index:
