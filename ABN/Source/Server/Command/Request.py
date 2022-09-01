@@ -1,4 +1,4 @@
-# curl -X POST http://localhost:8080/Comm/GetCommand
+# curl -X GET http://localhost:8080/Command/Request
 
 import web
 from ..Parser import Parser

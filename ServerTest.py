@@ -9,6 +9,9 @@ import datetime
 
 import ABN.Source.Server.Command.Respond as Respond
 import ABN.Source.Server.Command.Request as Request
+import ABN.Source.Server.State.IsActive as IsActive
+import ABN.Source.Server.State.Kill as Kill
+
 
 DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\LogFiles"
 TIME = str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S"))
@@ -38,6 +41,8 @@ sys.stdout = Logger()
 urls = ()
 urls += Respond.urls
 urls += Request.urls
+urls += IsActive.urls
+urls += Kill.urls
 
 if __name__ == "__main__":
     app = web.application(urls, globals())
