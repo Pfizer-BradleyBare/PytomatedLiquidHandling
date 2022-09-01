@@ -30,6 +30,9 @@ class Parser:
     def IsValid(self) -> bool:
         return self.JSON is not None
 
+    def GetAPIData(self):
+        return self.JSON
+
     def SetAPIState(self, State: bool):
         self.APIState = State
 
