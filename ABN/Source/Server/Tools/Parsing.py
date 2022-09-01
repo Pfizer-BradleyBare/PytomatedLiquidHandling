@@ -5,9 +5,12 @@ def JsonPrettyString(JsonData: dict) -> str:
     return json.dumps(JsonData, indent=4, sort_keys=True)
 
 
-def ParseHTTPResponse(JSONResponse: dict, ExpectedKeys: tuple):
+def ParseHTTPResponse(JSONResponse: dict, ExpectedKeys: set):
 
-    if not all(key in JSONResponse for key in ExpectedKeys):
+    print(JsonPrettyString(JSONResponse))
+
+    if not ExpectedKeys - JSONResponse.keys():
+        # This checks if, at minimum, the expected keys are in the dict
         print(
             "Incorrect JSON object received. Please try again... Expected Keys:",
             str(ExpectedKeys),
@@ -18,14 +21,12 @@ def ParseHTTPResponse(JSONResponse: dict, ExpectedKeys: tuple):
     return json.dumps(JSONResponse)
 
 
-def ParsePOST(PostData: bytes, ExpectedKeys: tuple) -> dict:
+def ParsePOST(PostData: bytes, ExpectedKeys: set) -> dict:
 
     print("Parsing POST data into JSON: ", PostData)
 
     try:
         PostData = json.loads(PostData.decode().replace("'", ""))
-
-        print(JsonPrettyString(PostData))
 
         ReturnData = ParseHTTPResponse(PostData, ExpectedKeys)
 

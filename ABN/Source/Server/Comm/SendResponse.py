@@ -18,8 +18,6 @@ class SendResponse:
             print("Error detected so not processing will occur.")
             return None
 
-        print("Response will be delivered to correct method in queue.")
-
         # Do something here
 
         # We will always return the data we receive as a logging event
