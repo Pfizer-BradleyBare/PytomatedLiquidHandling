@@ -1,26 +1,22 @@
 # curl -X POST http://localhost:8080/Comm/GetCommand
 
-from ..Tools.Parsing import ParseHTTPResponse
+import web
+from ..Parser import Parser
 
 urls = ("/Command/Request", "ABN.Source.Server.Command.Request.Request")
-
-ExpectedJsonKeys = ("MethodPath",)
 
 
 class Request:
     def GET(self):
-        print()  # Readability
-        print("Command Request handling started!")
+        ParserObject = Parser("Command Request", web.data())
+
+        if not ParserObject.IsValid():
+            Response = ParserObject.GetHTTPResponse()
+            return Response
 
         # Do something here
 
-        Response = ParseHTTPResponse(
-            {"MethodPath": 12345, "Out": "Test"}, ExpectedJsonKeys
-        )
+        ParserObject.SetAPIState(True)
 
-        if Response is None:
-            print("Error detected so no processing will occur.")
-            return None
-
-        print()  # Readability
+        Response = ParserObject.GetHTTPResponse()
         return Response

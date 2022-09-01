@@ -8,11 +8,11 @@ import web
 import datetime
 
 import ABN.Source.Server.Command.Respond as Respond
+import ABN.Source.Server.Command.Request as Request
 
 DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\LogFiles"
 TIME = str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S"))
 BASE_LOGFILE_NAME = "Log.txt"
-
 LOG_FILE_FULL_PATH = os.path.join(DIRECTORY, TIME + BASE_LOGFILE_NAME)
 
 
@@ -30,9 +30,6 @@ class Logger(object):
         self.log.flush()
 
     def flush(self):
-        # this flush method is needed for python 3 compatibility.
-        # this handles the flush command by doing nothing.
-        # you might want to specify some extra behavior here.
         pass
 
 
@@ -40,7 +37,7 @@ sys.stdout = Logger()
 
 urls = ()
 urls += Respond.urls
-# urls += GC.urls
+urls += Request.urls
 
 if __name__ == "__main__":
     app = web.application(urls, globals())

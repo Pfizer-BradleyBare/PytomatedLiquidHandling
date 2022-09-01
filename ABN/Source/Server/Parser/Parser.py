@@ -2,24 +2,22 @@ import json
 
 
 class Parser:
-    def __init__(self, APICallID: str, JSONstring: str):
+    def __init__(self, APICallID: str, JSONstring: str = None):
         print()
         print("PARSER: __START__")
         print("PARSER: Handling API:", APICallID)
         print("PARSER: Created Parser class with data:", JSONstring)
 
         self.string: str = JSONstring
-        self.JSON: dict = None
+        self.JSON: dict = dict()
         self.APIState: bool = False
-        self.APIReturn: dict = None
+        self.APIReturn: dict = dict()
 
-        if JSONstring is None or JSONstring == "":
-            return
-
-        try:
-            self.JSON = json.loads(JSONstring.decode().replace("'", ""))
-        except Exception:
-            print("PARSER: Error Parsing Data! Bad format.")
+        if not (JSONstring is None or JSONstring == "" or JSONstring == b""):
+            try:
+                self.JSON = json.loads(JSONstring.decode().replace("'", ""))
+            except Exception:
+                print("PARSER: Error Parsing Data! Bad format.")
 
         print("Request Data:", json.dumps(self.JSON, indent=4, sort_keys=True))
 
