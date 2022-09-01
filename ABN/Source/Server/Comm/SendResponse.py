@@ -10,15 +10,17 @@ ExpectedJsonKeys = ("MethodID", "StatusID", "Message", "Response")
 
 class SendResponse:
     def POST(self):
+        print()  # Readability
         print("SendReponse handling started!")
 
         Data = ParsePOST(web.data(), ExpectedJsonKeys)
 
         if Data is None:
-            print("Error detected so not processing will occur.")
+            print("Error detected so no processing will occur.")
             return None
 
         # Do something here
 
         # We will always return the data we receive as a logging event
+        print()  # Readability
         return Data

@@ -4,11 +4,12 @@ from ..Tools.Parsing import ParseHTTPResponse
 
 urls = ("/Comm/GetCommand", "ABN.Source.Server.Comm.GetCommand.GetCommand")
 
-ExpectedJsonKeys = "MethodID"
+ExpectedJsonKeys = ("MethodID",)
 
 
 class GetCommand:
     def GET(self):
+        print()  # Readability
         print("GetCommand handling started!")
 
         # Do something here
@@ -18,7 +19,8 @@ class GetCommand:
         )
 
         if Response is None:
-            print("Error detected so not processing will occur.")
+            print("Error detected so no processing will occur.")
             return None
 
+        print()  # Readability
         return Response

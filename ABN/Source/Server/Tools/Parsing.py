@@ -9,7 +9,7 @@ def ParseHTTPResponse(JSONResponse: dict, ExpectedKeys: set):
 
     print(JsonPrettyString(JSONResponse))
 
-    if not ExpectedKeys - JSONResponse.keys():
+    if not all(key in JSONResponse for key in ExpectedKeys):
         # This checks if, at minimum, the expected keys are in the dict
         print(
             "Incorrect JSON object received. Please try again... Expected Keys:",
