@@ -4,10 +4,13 @@
 
 import web
 import json
-from ABN.Source.Server.Comm.Comm import urls as CommUrls
+import ABN.Source.Server.Comm.SendResponse as SR
 
-urls = ("/Help", "index")
-urls += CommUrls
+urls = ("/", "index")
+urls += SR.urls
+
+
+Out = {"Howdy": [1, 2, 3, 4, 5, 6, 7]}
 
 
 class index:
@@ -21,6 +24,8 @@ class index:
 
         data = json.loads(data)
         print(data)
+
+        return json.dumps(Out)
 
 
 if __name__ == "__main__":
