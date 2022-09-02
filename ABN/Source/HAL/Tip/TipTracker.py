@@ -1,4 +1,4 @@
-from ..ABC import TrackerABC
+from ...AbstractClasses import TrackerABC
 from .Tip import Tip
 
 

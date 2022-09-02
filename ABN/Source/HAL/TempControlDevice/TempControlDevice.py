@@ -1,6 +1,6 @@
 from enum import Enum
 from ..Layout import CoveredLayoutItem
-from ..ABC import ObjectABC
+from ...AbstractClasses import ObjectABC
 
 
 class TempConfig:

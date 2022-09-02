@@ -1,5 +1,5 @@
 from ..Transport import TransportDevice
-from ..ABC import ObjectABC
+from ...AbstractClasses import ObjectABC
 
 
 class LoadingConfig:

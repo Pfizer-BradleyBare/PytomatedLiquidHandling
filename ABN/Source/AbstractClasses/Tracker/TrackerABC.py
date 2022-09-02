@@ -13,9 +13,9 @@ class TrackerABC:
         raise NotImplementedError
 
     @abstractmethod
-    def GetLoadedObjectsAsList(self):
+    def GetObjectsAsList(self):
         return self.Collection.items()
 
     @abstractmethod
-    def GetLoadedObjectsAsDictionary(self):
+    def GetObjectsAsDictionary(self):
         return self.Collection

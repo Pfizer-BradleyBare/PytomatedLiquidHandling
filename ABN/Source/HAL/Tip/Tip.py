@@ -1,5 +1,5 @@
 from enum import Enum
-from ..ABC import ObjectABC
+from ...AbstractClasses import ObjectABC
 
 
 class TipTypes(Enum):

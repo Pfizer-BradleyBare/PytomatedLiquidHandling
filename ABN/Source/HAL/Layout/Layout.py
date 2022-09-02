@@ -1,6 +1,6 @@
 from ..DeckLocation import DeckLocation
 from ..Labware import Labware
-from ..ABC import ObjectABC
+from ...AbstractClasses import ObjectABC
 
 
 class LayoutItemLidTracker:
