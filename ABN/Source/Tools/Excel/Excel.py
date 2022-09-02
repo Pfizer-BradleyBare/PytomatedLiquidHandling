@@ -48,20 +48,6 @@ class Excel:
             (Row, Col), (Row + NumRows, Col + NumCols)
         ).value = Data
 
-    def ReadWorklistColumn(self, ColumnName: str) -> list[any]:
-        Data = self.ReadWorklistSheet()
-
-        Index = Data[0].index(ColumnName)
-
-        OutputList = list()
-        for Col in Data[1:]:
-            if Col[Index] is None:
-                break
-
-            OutputList.append(Col[Index])
-
-        return OutputList
-
     def ReadSolutionsSheet(self) -> list[list[any]]:
         return (
             xl.Book(self.ExcelFilePath)

@@ -1,5 +1,5 @@
 from ...AbstractClasses import ObjectABC
-from ..Block import Block, BlockTracker
+from .Block import Block, BlockTracker
 import os
 
 

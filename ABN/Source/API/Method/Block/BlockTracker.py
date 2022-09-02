@@ -1,5 +1,5 @@
 from .Block import Block
-from ...AbstractClasses import TrackerABC
+from ....AbstractClasses import TrackerABC
 
 
 class BlockTracker(TrackerABC):

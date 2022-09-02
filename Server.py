@@ -12,13 +12,16 @@ import ABN.Source.Server.Method.Queue as Queue
 import ABN.Source.Server.Method.Dequeue as Dequeue
 
 import ABN.Source.Tools.Excel.Excel as Excel
+import ABN.Source.API.Method.Worklist.Worklist as Worklist
 
-handle = Excel.Excel(
+handle = Excel(
     "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Method Maker.xlsm"
 )
 
-List = [[1], [1, 2, 3], [1, 2]]
-print(handle.ReadWorklistColumn("Sample Description"))
+worklist = Worklist.Worklist(handle)
+
+Data = worklist.ReadWorklistColumn("Test")
+worklist.WriteWorklistColumn("Test", Data)
 quit()
 
 BASE_DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Logging"
