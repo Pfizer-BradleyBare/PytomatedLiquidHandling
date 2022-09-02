@@ -41,6 +41,7 @@ class Logger(object):
 
 sys.stdout = Logger()
 
+
 urls = ()
 urls += Respond.urls
 urls += Request.urls
@@ -49,6 +50,7 @@ urls += Kill.urls
 urls += Status.urls
 urls += Queue.urls
 urls += Dequeue.urls
+
 
 if __name__ == "__main__":
     app = web.application(urls, globals())
