@@ -19,3 +19,7 @@ class TrackerABC:
     @abstractmethod
     def GetObjectsAsDictionary(self):
         return self.Collection
+
+    @abstractmethod
+    def GetObjectByName(self, Name: str):
+        return self.Collection[Name]
