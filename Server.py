@@ -11,6 +11,15 @@ import ABN.Source.Server.Method.Status as Status
 import ABN.Source.Server.Method.Queue as Queue
 import ABN.Source.Server.Method.Dequeue as Dequeue
 
+import ABN.Source.Tools.Excel.Excel as Excel
+
+handle = Excel.Excel(
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Method Maker.xlsm"
+)
+
+List = [[1], [1, 2, 3], [1, 2]]
+print(handle.ReadWorklistColumn("Sample Description"))
+quit()
 
 BASE_DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Logging"
 LOG_DIRECTORY = os.path.join(BASE_DIRECTORY, "LogFiles")
