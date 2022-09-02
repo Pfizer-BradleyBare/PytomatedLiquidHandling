@@ -1,7 +1,3 @@
-# Test Command
-# curl -H "Content-Type: application/json" -X POST -d '{\"name\":\"Joe\"}' http://localhost:8080/Comm
-# curl -X GET http://localhost:8080/Comm
-
 import sys
 import os
 import web
@@ -16,10 +12,13 @@ import ABN.Source.Server.Method.Queue as Queue
 import ABN.Source.Server.Method.Dequeue as Dequeue
 
 
-DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\LogFiles"
+BASE_DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Logging"
+LOG_DIRECTORY = os.path.join(BASE_DIRECTORY, "LogFiles")
 TIME = str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S"))
 BASE_LOGFILE_NAME = "Log.txt"
-LOG_FILE_FULL_PATH = os.path.join(DIRECTORY, TIME + BASE_LOGFILE_NAME)
+LOG_FILE_FULL_PATH = os.path.join(LOG_DIRECTORY, TIME + BASE_LOGFILE_NAME)
+
+os.makedirs(LOG_DIRECTORY, exist_ok=True)
 
 
 class Logger(object):

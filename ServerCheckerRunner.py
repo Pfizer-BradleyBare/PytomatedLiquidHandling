@@ -3,7 +3,7 @@ import os
 
 try:
 
-    response = requests.get("http://localhost:8080/State/IsActive")
+    response = requests.get("http://localhost:65535/State/IsActive", timeout=0.25)
 
     print("Server is Running.")
 
