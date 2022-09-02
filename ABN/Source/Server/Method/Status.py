@@ -1,4 +1,4 @@
-# curl -H "Content-Type: application/json" -X POST -d '{\"name\":\"Joe\"}' http://localhost:8080/Method/Status
+# curl -H "Content-Type: application/json" -X POST -d '{\"name\":\"Joe\"}' http://localhost:65535/Method/Status
 
 import web
 from ..Parser import Parser
