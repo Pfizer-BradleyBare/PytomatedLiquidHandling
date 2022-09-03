@@ -11,17 +11,21 @@ import ABN.Source.Server.Method.Status as Status
 import ABN.Source.Server.Method.Queue as Queue
 import ABN.Source.Server.Method.Dequeue as Dequeue
 
-import ABN.Source.Tools.Excel.Excel as Excel
-import ABN.Source.API.Method.Worklist.Worklist as Worklist
+import ABN.Source.API.Workbook.WorkbookTracker as WorkbookTracker
+import ABN.Source.API.Workbook.WorkbookLoader as WorkbookLoader
 
-handle = Excel(
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Method Maker.xlsm"
+
+WorkbookTrackerInstance = WorkbookTracker.WorkbookTracker()
+WorkbookLoader.Load(
+    WorkbookTrackerInstance,
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Method Maker.xlsm",
 )
-
-worklist = Worklist.Worklist(handle)
-
-Data = worklist.ReadWorklistColumn("Test")
-worklist.WriteWorklistColumn("Test", Data)
+print(
+    WorkbookTrackerInstance.GetObjectsAsList()[0]
+    .GetBlockTrackers()[0]
+    .GetObjectsAsList()[0]
+    .GetRow()
+)
 quit()
 
 BASE_DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Logging"
