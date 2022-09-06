@@ -24,6 +24,16 @@ class Excel:
             .value
         )
 
+    def ReadMethodSheetArea(
+        self, RowStart: int, ColStart: int, RowEnd: int, ColEnd: int
+    ) -> list[list[any]]:
+        return (
+            xl.Book(self.ExcelFilePath)
+            .sheets["Method"]
+            .range((RowStart, ColStart), (RowEnd, ColEnd))
+            .value
+        )
+
     def WriteMethodSheet(self, Row: int, Col: int, Data: list[list[str]]):
         self.__AlignArray(Data)
         NumRows = len(Data)
@@ -40,6 +50,16 @@ class Excel:
             .value
         )
 
+    def ReadWorklistSheetArea(
+        self, RowStart: int, ColStart: int, RowEnd: int, ColEnd: int
+    ) -> list[list[any]]:
+        return (
+            xl.Book(self.ExcelFilePath)
+            .sheets["Worklist"]
+            .range((RowStart, ColStart), (RowEnd, ColEnd))
+            .value
+        )
+
     def WriteWorklistSheet(self, Row: int, Col: int, Data: list[list[str]]):
         self.__AlignArray(Data)
         NumRows = len(Data)
@@ -53,6 +73,16 @@ class Excel:
             xl.Book(self.ExcelFilePath)
             .sheets["Solutions"]
             .range((1, 1), (200, 50))
+            .value
+        )
+
+    def ReadSolutionsSheetArea(
+        self, RowStart: int, ColStart: int, RowEnd: int, ColEnd: int
+    ):
+        return (
+            xl.Book(self.ExcelFilePath)
+            .sheets["Solutions"]
+            .range((RowStart, ColStart), (RowEnd, ColEnd))
             .value
         )
 

@@ -10,7 +10,7 @@ Public Sub WorkbookOnOpen()
     
     If ABNInstallType = "Complete" Then
         
-        BuildingBlocksPath = ABNPath & "ABN\Config\BuildingBlocks\BuildingBlocks.xlsx"
+        BuildingBlocksPath = ABNPath & "ABN\HamiltonVisualMethodEditorConfig\BuildingBlocks\BuildingBlocks.xlsx"
         
     ElseIf ABNInstallType = "Editor" Then
     

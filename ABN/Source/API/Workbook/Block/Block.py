@@ -1,14 +1,13 @@
 from ....AbstractClasses import ObjectABC
 from ....Tools import Excel
-
+from abc import abstractmethod
 
 _AvailableBlocks = dict()
 
 
 def ClassDecorator_AvailableBlock(DecoratedClass):
-    print(DecoratedClass)
     _AvailableBlocks[DecoratedClass.__name__] = DecoratedClass
-    # We are creating a decorator to simplify class creation without messing if else statements.
+    # We are creating a decorator to simplify class creation without messy if else statements.
     return DecoratedClass
 
 
@@ -19,6 +18,7 @@ class Block(ObjectABC):
         Row: int,
         Col: int,
     ):
+        self.ExcelInstance: Excel = ExcelInstance
         self.Row: int = Row
         self.Col: int = Col
 
@@ -34,8 +34,12 @@ class Block(ObjectABC):
     def GetCol(self) -> int:
         return self.Col
 
+    @abstractmethod
+    def Process(self, WorkbookInstance):
+        raise NotImplementedError
+
 
 def BlockObjectCreationWrapper(
     ExcelInstance: Excel, Title: str, Row: int, Col: int
 ) -> Block:
-    return _AvailableBlocks[Title](ExcelInstance, Row, Col)
+    return _AvailableBlocks[Title.replace(" ", "")](ExcelInstance, Row, Col)

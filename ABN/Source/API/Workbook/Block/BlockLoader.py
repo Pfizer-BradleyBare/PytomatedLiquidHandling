@@ -1,7 +1,7 @@
-from .Block import BlockObjectCreationWrapper
+from .Block import BlockObjectCreationWrapper, Block
 from .BlockTracker import BlockTracker
 from ....Tools import Excel
-from ...Blocks import *  # noqa F403
+from ...Blocks import *
 
 
 def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
@@ -83,10 +83,11 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
     # What does this monster do and why do we need it? We do not want to assume the blocks here. Instead, we want
     # to orgnaize the blocks based on little knowledge about the system as a whole. Probably a bad idea, who knows...
 
-    BlockInstances.append(Block(None, None, None, -1))
+    BlockInstances.append(Block(None, None, -1))
     # In order to use the recursive function below we need to have an ending block with a col number of -1. Don't ask
 
     ColSet = list(dict.fromkeys(BlockColumnNumbers))
+    print(ColSet)
     MaxDifference = ColSet[0] - ColSet[1]
     # Calculated the max difference between cols. This will always be the difference between the first set of unique values.
     # This max difference will always decrement by 2 per the excel code
