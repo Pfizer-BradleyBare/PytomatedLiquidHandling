@@ -14,7 +14,6 @@ import ABN.Source.Server.Method.Dequeue as Dequeue
 import ABN.Source.API.Workbook.WorkbookTracker as WorkbookTracker
 import ABN.Source.API.Workbook.WorkbookLoader as WorkbookLoader
 
-
 WorkbookTrackerInstance = WorkbookTracker.WorkbookTracker()
 WorkbookLoader.Load(
     WorkbookTrackerInstance,

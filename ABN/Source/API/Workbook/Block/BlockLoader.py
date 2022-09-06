@@ -1,6 +1,7 @@
-from .Block import Block
+from .Block import BlockObjectCreationWrapper
 from .BlockTracker import BlockTracker
 from ....Tools import Excel
+from ...Blocks import *  # noqa F403
 
 
 def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
@@ -28,7 +29,9 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
             Name = Name.replace(" - (Click Here to Update)", "")
 
             BlockInstances.append(
-                Block(ExcelInstance, Name, RowIndex + 1, ColIndex + 1)
+                BlockObjectCreationWrapper(
+                    ExcelInstance, Name, RowIndex + 1, ColIndex + 1
+                )
             )
             BlockColumnNumbers.append(ColIndex)
     # Put blocks in a list sorted by row
