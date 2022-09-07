@@ -1,4 +1,3 @@
-import os
 from .WorkbookTracker import WorkbookTracker
 from .Workbook import Workbook
 from ...Tools import Excel
@@ -20,7 +19,7 @@ def Load(WorkbookTrackerInstance: WorkbookTracker, ExcelFilePath: str):
 
     WorkbookTrackerInstance.LoadManual(
         Workbook(
-            os.path.basename(ExcelFilePath),
+            ExcelFilePath,
             BlockTrackerInstances,
             WorklistInstance,
             SolutionTrackerInstance,
