@@ -1,6 +1,7 @@
 from ...Workbook.Block import Block, ClassDecorator_AvailableBlock
 from ....Tools import Excel
 from ...Workbook import Workbook
+from ....HAL import Hal
 
 
 @ClassDecorator_AvailableBlock
@@ -21,5 +22,5 @@ class Aliquot(Block):
             self.Row + 3, self.Col + 2, self.Row + 3, self.Col + 2
         )
 
-    def Process(self, WorkbookInstance: Workbook):
+    def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
         pass
