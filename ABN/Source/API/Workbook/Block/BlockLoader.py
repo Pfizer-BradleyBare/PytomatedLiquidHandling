@@ -1,7 +1,7 @@
 from .Block import BlockObjectCreationWrapper, Block
 from .BlockTracker import BlockTracker
 from ....Tools import Excel
-from ...Blocks import *
+from ...Blocks import *  # noqa F403
 
 
 def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
@@ -40,7 +40,7 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
     for BlockInstances in BlockInstancesList:
         Temp = list()
         for BlockInstance in BlockInstances:
-            if type(BlockInstance).__name__ != SplitPlate.__name__:
+            if type(BlockInstance).__name__ != SplitPlate.__name__:  # noqa F405
                 Temp.append(BlockInstance)
             else:
                 Temp.append(BlockInstance)
@@ -54,7 +54,7 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
     Pathways = list()
     for BlockInstances in BlockInstancesList:
         BlockInstance = BlockInstances[0]
-        if type(BlockInstance).__name__ != Plate.__name__:
+        if type(BlockInstance).__name__ != Plate.__name__:  # noqa F405
             raise Exception("Method is not valid!")
         else:
             PlateName = BlockInstance.GetPlateName()
@@ -65,7 +65,7 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
 
     for BlockInstances in BlockInstancesList:
         BlockInstance = BlockInstances[-1]
-        if type(BlockInstance).__name__ == SplitPlate.__name__:
+        if type(BlockInstance).__name__ == SplitPlate.__name__:  # noqa F405
             if BlockInstance.GetPathway1Name() not in Pathways:
                 raise Exception("Pathways are not referenced correctly!")
             if BlockInstance.GetPathway2Name() not in Pathways:
@@ -79,7 +79,7 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
         for BlockInstance in TraversalList:
             CollectionList.append(BlockInstance)
 
-            if type(BlockInstance).__name__ == SplitPlate.__name__:
+            if type(BlockInstance).__name__ == SplitPlate.__name__:  # noqa F405
                 Pathways = [
                     BlockInstance.GetPathway1Name(),
                     BlockInstance.GetPathway2Name(),
