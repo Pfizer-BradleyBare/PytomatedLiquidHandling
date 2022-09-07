@@ -25,7 +25,7 @@ print("Testing Labware...")
 Labwares = LabwareTracker()
 LabwareLoader.LoadYaml(
     Labwares,
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\HAL\\Labware\\Labware.yaml",
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Labware\\Labware.yaml",
 )
 for Labware in Labwares.GetLoadedObjectsAsList():
     print(Labware)
@@ -38,7 +38,7 @@ print("Testing Transport...")
 TransportDevices = TransportTracker(Labwares)
 TransportLoader.LoadYaml(
     TransportDevices,
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\HAL\\Transport\\Transport.yaml",
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Transport\\Transport.yaml",
 )
 for TransportDevice in TransportDevices.GetLoadedObjectsAsList():
     print(TransportDevice)
@@ -51,7 +51,7 @@ print("Testing DeckLocation...")
 DeckLocations = DeckLocationTracker(TransportDevices)
 DeckLocationLoader.LoadYaml(
     DeckLocations,
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\HAL\\DeckLocation\\DeckLocation.yaml",
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\DeckLocation\\DeckLocation.yaml",
 )
 for Location in DeckLocations.GetLoadedObjectsAsList():
     print(Location)
@@ -64,7 +64,7 @@ print("Testing Layout...")
 LayoutItems = LayoutTracker(DeckLocations, Labwares)
 LayoutLoader.LoadYaml(
     LayoutItems,
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\HAL\\Layout\\Layout.yaml",
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Layout\\Layout.yaml",
 )
 for Layout in LayoutItems.GetLoadedObjectsAsList():
     print(Layout)
@@ -77,7 +77,7 @@ print("Testing Lid...")
 Lids = LidTracker(Labwares, DeckLocations)
 LidLoader.LoadYaml(
     Lids,
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\HAL\\Lid\\Lid.yaml",
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Lid\\Lid.yaml",
 )
 for Lid in Lids.GetLoadedObjectsAsList():
     print(Lid)
@@ -90,7 +90,7 @@ print("Testing TempControlDevice...")
 TempControlDevices = TempControlDeviceTracker(Labwares, DeckLocations)
 TempControlDeviceLoader.LoadYaml(
     TempControlDevices,
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\HAL\\TempControlDevice\\TempControlDevice.yaml",
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\TempControlDevice\\TempControlDevice.yaml",
 )
 for TempControlDevice in TempControlDevices.GetLoadedObjectsAsList():
     print(TempControlDevice)
@@ -103,7 +103,7 @@ print("Testing Tip...")
 Tips = TipTracker()
 TipLoader.LoadYaml(
     Tips,
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\HAL\\Tip\\Tip.yaml",
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Tip\\Tip.yaml",
 )
 for Tip in Tips.GetLoadedObjectsAsList():
     print(Tip)
@@ -116,7 +116,7 @@ print("Testing Pipette...")
 Pipettes = PipetteTracker(Tips)
 PipetteLoader.LoadYaml(
     Pipettes,
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\HAL\\Pipette\\Pipette.yaml",
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Pipette\\Pipette.yaml",
 )
 for Pipette in Pipettes.GetLoadedObjectsAsList():
     print(Pipette)
@@ -129,7 +129,7 @@ print("Testing Magnetic Rack...")
 MagneticRacks = MagneticRackTracker(Labwares, DeckLocations, Pipettes, Tips)
 MagneticRackLoader.LoadYaml(
     MagneticRacks,
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\HAL\\MagneticRack\\MagneticRack.yaml",
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\MagneticRack\\MagneticRack.yaml",
 )
 for MagneticRack in MagneticRacks.GetLoadedObjectsAsList():
     print(MagneticRack)
@@ -142,7 +142,7 @@ print("Testing Notify...")
 NotifyDevices = NotifyTracker()
 NotifyLoader.LoadYaml(
     NotifyDevices,
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\HAL\\Notify\\Notify.yaml",
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Notify\\Notify.yaml",
 )
 for NotifyDevice in NotifyDevices.GetLoadedObjectsAsList():
     print(NotifyDevice)
@@ -155,7 +155,7 @@ print("Testing FlipTube...")
 FlipTubes = FlipTubeTracker(Labwares)
 FlipTubeLoader.LoadYaml(
     FlipTubes,
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\Config\\HAL\\FlipTube\\FlipTube.yaml",
+    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\FlipTube\\FlipTube.yaml",
 )
 for FlipTube in FlipTubes.GetLoadedObjectsAsList():
     print(FlipTube)

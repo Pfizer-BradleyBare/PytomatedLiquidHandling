@@ -11,16 +11,7 @@ import ABN.Source.Server.Method.Status as Status
 import ABN.Source.Server.Method.Queue as Queue
 import ABN.Source.Server.Method.Dequeue as Dequeue
 
-import ABN.Source.API.Workbook.WorkbookTracker as WorkbookTracker
-import ABN.Source.API.Workbook.WorkbookLoader as WorkbookLoader
-
-WorkbookTrackerInstance = WorkbookTracker.WorkbookTracker()
-WorkbookLoader.Load(
-    WorkbookTrackerInstance,
-    "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Method Maker.xlsm",
-)
-print(WorkbookTrackerInstance.GetObjectsAsList()[0].GetBlockTrackers())
-quit()
+import ABN.Source.Server.ServerVariables as ServerVariables
 
 BASE_DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Logging"
 LOG_DIRECTORY = os.path.join(BASE_DIRECTORY, "LogFiles")
@@ -48,9 +39,6 @@ class Logger(object):
         pass
 
 
-sys.stdout = Logger()
-
-
 urls = ()
 urls += Respond.urls
 urls += Request.urls
@@ -62,5 +50,7 @@ urls += Dequeue.urls
 
 
 if __name__ == "__main__":
+    sys.stdout = Logger()
+    ServerVariables.Initialize()
     app = web.application(urls, globals())
     app.run()

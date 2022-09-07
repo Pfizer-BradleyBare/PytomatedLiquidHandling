@@ -12,37 +12,18 @@ from .Transport import TransportTracker
 
 
 class Hal:
-    def __init__(
-        self,
-        DeckLocationTrackerInstance: DeckLocationTracker,
-        FlipTubeTrackerInstance: FlipTubeTracker,
-        LabwareTrackerInstance: LabwareTracker,
-        LayoutTrackerInstance: LayoutTracker,
-        LidTrackerInstance: LidTracker,
-        MagneticRackTrackerInstance: MagneticRackTracker,
-        NotifyTrackerInstance: NotifyTracker,
-        PipetteTrackerInstance: PipetteTracker,
-        TempControlDeviceTrackerInstance: TempControlDeviceTracker,
-        TipTrackerInstance: TipTracker,
-        TransportTrackerInstance: TransportTracker,
-    ):
-        self.DeckLocationTrackerInstance: DeckLocationTracker = (
-            DeckLocationTrackerInstance
-        )
-        self.FlipTubeTrackerInstance: FlipTubeTracker = FlipTubeTrackerInstance
-        self.LabwareTrackerInstance: LabwareTracker = LabwareTrackerInstance
-        self.LayoutTrackerInstance: LayoutTracker = LayoutTrackerInstance
-        self.LidTrackerInstance: LidTracker = LidTrackerInstance
-        self.MagneticRackTrackerInstance: MagneticRackTracker = (
-            MagneticRackTrackerInstance
-        )
-        self.NotifyTrackerInstance: NotifyTracker = NotifyTrackerInstance
-        self.PipetteTrackerInstance: PipetteTracker = PipetteTrackerInstance
-        self.TempControlDeviceTrackerInstance: TempControlDeviceTracker = (
-            TempControlDeviceTrackerInstance
-        )
-        self.TipTrackerInstance: TipTracker = TipTrackerInstance
-        self.TransportTrackerInstance: TransportTracker = TransportTrackerInstance
+    def __init__(self):
+        self.DeckLocationTrackerInstance: DeckLocationTracker
+        self.FlipTubeTrackerInstance: FlipTubeTracker
+        self.LabwareTrackerInstance: LabwareTracker
+        self.LayoutTrackerInstance: LayoutTracker
+        self.LidTrackerInstance: LidTracker
+        self.MagneticRackTrackerInstance: MagneticRackTracker
+        self.NotifyTrackerInstance: NotifyTracker
+        self.PipetteTrackerInstance: PipetteTracker
+        self.TempControlDeviceTrackerInstance: TempControlDeviceTracker
+        self.TipTrackerInstance: TipTracker
+        self.TransportTrackerInstance: TransportTracker
 
         def GetDeckLocationTracker(self) -> DeckLocationTracker:
             return self.DeckLocationTrackerInstance
