@@ -105,6 +105,11 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
     # Now we need to create a seperate list for each pathway... This will need to happen recursively. Kill me now
 
     for Pathway in MethodPathways:
+        if type(Pathway[-1]).__name__ != Finish.__name__:  # noqa F405
+            raise Exception("All pathways must end with a finish step")
+    # Check that each pathway ends with a finish step.
+
+    for Pathway in MethodPathways:
         BlockTranckerInstance = BlockTracker(ExcelInstance)
         for BlockInstance in Pathway:
             BlockTranckerInstance.LoadManual(BlockInstance)
