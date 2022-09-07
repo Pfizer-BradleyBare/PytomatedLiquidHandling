@@ -12,17 +12,17 @@ class SplitPlate(Block):
         return "Split Plate" + str((self.Row, self.Col))
 
     def GetPathwayChoice(self) -> str:
-        self.ExcelInstance.ReadMethodSheetArea(
+        return self.ExcelInstance.ReadMethodSheetArea(
             self.Row + 2, self.Col + 2, self.Row + 2, self.Col + 2
         )
 
     def GetPathway1Name(self) -> str:
-        self.ExcelInstance.ReadMethodSheetArea(
+        return self.ExcelInstance.ReadMethodSheetArea(
             self.Row + 3, self.Col + 2, self.Row + 3, self.Col + 2
         )
 
     def GetPathway2Name(self) -> str:
-        self.ExcelInstance.ReadMethodSheetArea(
+        return self.ExcelInstance.ReadMethodSheetArea(
             self.Row + 4, self.Col + 2, self.Row + 4, self.Col + 2
         )
 

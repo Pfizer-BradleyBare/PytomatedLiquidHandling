@@ -1,18 +1,18 @@
-from .Aliquot import Aliquot
-from .Dilute import Dilute
-from .Finish import Finish
-from .IMCSSizeXDesalt import IMCSSizeXDesalt
-from .Incubate import Incubate
-from .LiquidTransfer import LiquidTransfer
-from .MagneticBeads import MagneticBeads
-from .MergePlates import MergePlates
-from .Notify import Notify
-from .Pause import Pause
-from .Plate import Plate
-from .Pool import Pool
-from .PreloadLiquid import PreloadLiquid
-from .SplitPlate import SplitPlate
-from .Vacuum import Vacuum
+from .Aliquot.Aliquot import Aliquot
+from .Dilute.Dilute import Dilute
+from .Finish.Finish import Finish
+from .IMCSSizeXDesalt.IMCSSizeXDesalt import IMCSSizeXDesalt
+from .Incubate.Incubate import Incubate
+from .LiquidTransfer.LiquidTransfer import LiquidTransfer
+from .MagneticBeads.MagneticBeads import MagneticBeads
+from .MergePlates.MergePlates import MergePlates
+from .Notify.Notify import Notify
+from .Pause.Pause import Pause
+from .Plate.Plate import Plate
+from .Pool.Pool import Pool
+from .PreloadLiquid.PreloadLiquid import PreloadLiquid
+from .SplitPlate.SplitPlate import SplitPlate
+from .Vacuum.Vacuum import Vacuum
 
 __all__ = [
     "Aliquot",

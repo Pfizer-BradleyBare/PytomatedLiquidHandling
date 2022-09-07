@@ -19,7 +19,7 @@ WorkbookLoader.Load(
     WorkbookTrackerInstance,
     "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Method Maker.xlsm",
 )
-print(WorkbookTrackerInstance.GetObjectsAsList()[0].Get)
+print(WorkbookTrackerInstance.GetObjectsAsList()[0].GetBlockTrackers())
 quit()
 
 BASE_DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Logging"

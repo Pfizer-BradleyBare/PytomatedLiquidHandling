@@ -10,11 +10,11 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
     Rows = len(MethodSheet)
     Cols = len(MethodSheet[0])
 
-    BlockInstances = list()
-    BlockColumnNumbers = list()
+    BlockInstancesList: list[list[Block]] = list()
 
-    for RowIndex in range(0, Rows):
-        for ColIndex in range(0, Cols):
+    for ColIndex in range(0, Cols):
+        Temp = list()
+        for RowIndex in range(0, Rows):
             Name: str = MethodSheet[RowIndex][ColIndex]
 
             if Name is None:
@@ -28,88 +28,85 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
 
             Name = Name.replace(" - (Click Here to Update)", "")
 
-            BlockInstances.append(
-                BlockObjectCreationWrapper(
-                    ExcelInstance, Name, RowIndex + 1, ColIndex + 1
-                )
+            Temp.append(
+                BlockObjectCreationWrapper(ExcelInstance, Name, RowIndex, ColIndex)
             )
-            BlockColumnNumbers.append(ColIndex)
-    # Put blocks in a list sorted by row
 
-    FinalList = list()
+        if len(Temp) != 0:
+            BlockInstancesList.append(Temp)
+    # Put blocks in a list of lists that is loaded according to the column of the block
 
-    def TracePathways(
-        List,
-        Instances: list[Block],
-        StartingCol,
-        StartingDifference,
-        DifferenceChange,
-    ):
-
-        while len(Instances) != 0:
-            Instance = Instances.pop(0)
-
-            if Instance.GetCol() == StartingCol:
-                List.append(Instance)
-
-            elif Instance.GetCol() == StartingCol - StartingDifference:
-                NewList = List + [Instance]
-                TracePathways(
-                    NewList,
-                    Instances,
-                    StartingCol - StartingDifference,
-                    StartingDifference - DifferenceChange,
-                    DifferenceChange,
-                )
-
-            elif Instance.GetCol() == StartingCol + StartingDifference:
-                NewList = List + [Instance]
-                TracePathways(
-                    NewList,
-                    Instances,
-                    StartingCol + StartingDifference,
-                    StartingDifference - DifferenceChange,
-                    DifferenceChange,
-                )
-
+    TempBlockInstancesList = list()
+    for BlockInstances in BlockInstancesList:
+        Temp = list()
+        for BlockInstance in BlockInstances:
+            if type(BlockInstance).__name__ != SplitPlate.__name__:
+                Temp.append(BlockInstance)
             else:
-                Instances.append(Instance)
+                Temp.append(BlockInstance)
+                TempBlockInstancesList.append(Temp)
+                Temp = list()
+        if len(Temp) != 0:
+            TempBlockInstancesList.append(Temp)
+    BlockInstancesList = TempBlockInstancesList
+    # Traverse each list and split the list if a split plate is present.
 
-            if Instance.GetCol() == -1:
-                FinalList.append(List)
+    Pathways = list()
+    for BlockInstances in BlockInstancesList:
+        BlockInstance = BlockInstances[0]
+        if type(BlockInstance).__name__ != Plate.__name__:
+            raise Exception("Method is not valid!")
+        else:
+            PlateName = BlockInstance.GetPlateName()
+            if PlateName in Pathways:
+                raise Exception("Method is not valid!")
+            Pathways.append(BlockInstance.GetPlateName())
+    # Check that the starting Block is a Plate and the name is unique in each list
+
+    for BlockInstances in BlockInstancesList:
+        BlockInstance = BlockInstances[-1]
+        if type(BlockInstance).__name__ == SplitPlate.__name__:
+            if BlockInstance.GetPathway1Name() not in Pathways:
+                raise Exception("Pathways are not referenced correctly!")
+            if BlockInstance.GetPathway2Name() not in Pathways:
+                raise Exception("Pathways are not referenced correctly!")
+    # Now we need to confirm that a split plate references the correct pathways
+
+    MethodPathways = list()
+
+    def TraversePathways(OutputList, CollectionList, TraversalList, PathwaysList):
+
+        for BlockInstance in TraversalList:
+            CollectionList.append(BlockInstance)
+
+            if type(BlockInstance).__name__ == SplitPlate.__name__:
+                Pathways = [
+                    BlockInstance.GetPathway1Name(),
+                    BlockInstance.GetPathway2Name(),
+                ]
+                for Pathway in PathwaysList[:]:
+                    if Pathway[0].GetPlateName() in Pathways:
+                        PathwaysList.remove(Pathway)
+                        TraversePathways(
+                            OutputList, CollectionList[:], Pathway, PathwaysList
+                        )
                 return
-        return
+            # We need to traverse both pathways
+        OutputList.append(CollectionList)
 
-    # What does this monster do and why do we need it? We do not want to assume the blocks here. Instead, we want
-    # to orgnaize the blocks based on little knowledge about the system as a whole. Probably a bad idea, who knows...
+    StartingPathway = BlockInstancesList[0]  # Load with something random
+    for BlockInstances in BlockInstancesList:
+        if BlockInstances[0].GetRow() < StartingPathway[0].GetRow():
+            StartingPathway = BlockInstances
+    BlockInstancesList.remove(StartingPathway)
+    # Find first traversal pathway.
 
-    BlockInstances.append(Block(None, None, -1))
-    # In order to use the recursive function below we need to have an ending block with a col number of -1. Don't ask
+    TraversePathways(MethodPathways, list(), StartingPathway, BlockInstancesList)
+    # Now we need to create a seperate list for each pathway... This will need to happen recursively. Kill me now
 
-    ColSet = list(dict.fromkeys(BlockColumnNumbers))
-    print(ColSet)
-    MaxDifference = ColSet[0] - ColSet[1]
-    # Calculated the max difference between cols. This will always be the difference between the first set of unique values.
-    # This max difference will always decrement by 2 per the excel code
-
-    TracePathways([], BlockInstances, BlockInstances[0].GetCol(), MaxDifference, 2)
-
-    for CheckList in FinalList[:]:
-        for List in FinalList[:]:
-            if CheckList == List:
-                continue
-
-            if len(CheckList) > len(List):
-                continue
-
-            if all(Item in List for Item in CheckList):
-                FinalList.remove(CheckList)
-                break
-    # Remove the incomplete paths from the final list
-
-    for List in FinalList:
-        BlockTrackerInstance = BlockTracker(ExcelInstance)
-        for Item in List:
-            BlockTrackerInstance.LoadManual(Item)
-        BlockTrackerInstances.append(BlockTrackerInstance)
-    # Finally, load the sorted pathways into seperate trackers.
+    for Pathway in MethodPathways:
+        BlockTranckerInstance = BlockTracker(ExcelInstance)
+        for BlockInstance in Pathway:
+            BlockTranckerInstance.LoadManual(BlockInstance)
+        BlockTrackerInstances.append(BlockTranckerInstance)
+    # Now we turn each Pathway into a block tracker instance

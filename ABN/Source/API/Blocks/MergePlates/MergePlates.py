@@ -12,7 +12,7 @@ class MergePlates(Block):
         return "Merge Plates" + str((self.Row, self.Col))
 
     def GetPlateName(self) -> str:
-        self.ExcelInstance.ReadMethodSheetArea(
+        return self.ExcelInstance.ReadMethodSheetArea(
             self.Row + 2, self.Col + 2, self.Row + 2, self.Col + 2
         )
 

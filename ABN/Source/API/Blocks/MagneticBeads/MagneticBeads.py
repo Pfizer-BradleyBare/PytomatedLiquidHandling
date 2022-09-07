@@ -12,27 +12,27 @@ class MagneticBeads(Block):
         return "Magnetic Beads" + str((self.Row, self.Col))
 
     def GetMagneticBeadsPlate(self) -> str:
-        self.ExcelInstance.ReadMethodSheetArea(
+        return self.ExcelInstance.ReadMethodSheetArea(
             self.Row + 2, self.Col + 2, self.Row + 2, self.Col + 2
         )
 
     def GetStorageBuffer(self) -> str:
-        self.ExcelInstance.ReadMethodSheetArea(
+        return self.ExcelInstance.ReadMethodSheetArea(
             self.Row + 3, self.Col + 2, self.Row + 3, self.Col + 2
         )
 
     def GetStorageBufferVolume(self) -> str:
-        self.ExcelInstance.ReadMethodSheetArea(
+        return self.ExcelInstance.ReadMethodSheetArea(
             self.Row + 4, self.Col + 2, self.Row + 4, self.Col + 2
         )
 
     def GetHoldTime(self) -> str:
-        self.ExcelInstance.ReadMethodSheetArea(
+        return self.ExcelInstance.ReadMethodSheetArea(
             self.Row + 5, self.Col + 2, self.Row + 5, self.Col + 2
         )
 
     def GetRepitions(self) -> str:
-        self.ExcelInstance.ReadMethodSheetArea(
+        return self.ExcelInstance.ReadMethodSheetArea(
             self.Row + 6, self.Col + 2, self.Row + 6, self.Col + 2
         )
 

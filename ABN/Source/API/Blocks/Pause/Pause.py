@@ -12,7 +12,7 @@ class Pause(Block):
         return "Pause" + str((self.Row, self.Col))
 
     def GetTime(self) -> str:
-        self.ExcelInstance.ReadMethodSheetArea(
+        return self.ExcelInstance.ReadMethodSheetArea(
             self.Row + 2, self.Col + 2, self.Row + 2, self.Col + 2
         )
 
