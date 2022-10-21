@@ -8,11 +8,12 @@ import threading
 from ...API.Tools.Container import ContainerTracker
 from ...Server.Globals.HalInstance import HalInstance
 from ...Server.Globals.AliveStateFlag import AliveStateFlag
+from ...Server.Globals import LOG
 
 
 class WorkbookStates(Enum):
+    # NOTE Fun Fact. The workbook states only matter for the Run type below.
     Queued = "Queued"
-    PreRun = "PreRun"  # This state is where we will do a mock runthrough and *try to* generate the deck loading
     Running = "Running"
     Paused = "Paused"  # The user paused this method manually
     Waiting = "Waiting"  # Something occured so the method is waiting on the user
@@ -24,6 +25,7 @@ class WorkbookStates(Enum):
 class WorkbookRunTypes(Enum):
     Test = "Test"  # This is a single programmatic test to check method is compatible with system
     Prep = "Prep"  # This will test with all samples added then generate a preparation list for the user
+    PreRun = "PreRun"  # This is the first step of Run
     Run = "Run"  # This will queue to run on the system
 
 
@@ -68,7 +70,7 @@ class Workbook(ObjectABC):
 
         # Thread
         self.WorkbookProcessorThread: threading.Thread = threading.Thread(
-            name=self.MethodName,
+            name=self.MethodName + "->" + self.RunType.value,
             target=WorkbookProcessor,
             args=(self,),  # args must be tuple hence the empty second argument
         )
@@ -102,9 +104,11 @@ class Workbook(ObjectABC):
     def GetInactiveContexts(self) -> list[str]:
         return self.InactiveContexts
 
+    def GetProcessingLock(self) -> threading.Lock:
+        return self.ProcessingLock
+
 
 def WorkbookProcessor(WorkbookInstance: Workbook):
-    HalInstance
     while True:
 
         WorkbookInstance.ProcessingLock.acquire()
