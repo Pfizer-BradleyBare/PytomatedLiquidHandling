@@ -12,6 +12,7 @@ from ...Server.Globals.AliveStateFlag import AliveStateFlag
 
 class WorkbookStates(Enum):
     Queued = "Queued"
+    PreRun = "PreRun"  # This state is where we will do a mock runthrough and *try to* generate the deck loading
     Running = "Running"
     Paused = "Paused"  # The user paused this method manually
     Waiting = "Waiting"  # Something occured so the method is waiting on the user
@@ -21,7 +22,6 @@ class WorkbookStates(Enum):
 
 
 class WorkbookRunTypes(Enum):
-    # Fun Fact: If the Run type is not "Run" then the WorkbookStates has no effect.
     Test = "Test"  # This is a single programmatic test to check method is compatible with system
     Prep = "Prep"  # This will test with all samples added then generate a preparation list for the user
     Run = "Run"  # This will queue to run on the system
@@ -40,7 +40,7 @@ class WorkbookRunTypes(Enum):
 # All modification must occur by the workbook somehow
 
 
-class Workbook(ObjectABC, threading.Thread):
+class Workbook(ObjectABC):
     def __init__(
         self,
         RunType: WorkbookRunTypes,
@@ -51,6 +51,10 @@ class Workbook(ObjectABC, threading.Thread):
     ):
 
         # Thread
+        self.WorkbookProcessorThread: threading.Thread = threading.Thread(
+            target=WorkbookProcessor,
+            args=(self,),  # args must be tuple hence the empty second argument
+        )
         self.ProcessingLock: threading.Lock = threading.Lock()
         self.ProcessingLock.acquire()
 
@@ -97,7 +101,18 @@ class Workbook(ObjectABC, threading.Thread):
     def GetInactiveContexts(self) -> list[str]:
         return self.InactiveContexts
 
-    def run(self):
-        AliveStateFlag
-        HalInstance
-        pass
+
+def WorkbookProcessor(WorkbookInstance: Workbook):
+    HalInstance
+    while True:
+
+        WorkbookInstance.ProcessingLock.acquire()
+        WorkbookInstance.ProcessingLock.release()
+        # The processing lock is used as a pause button to control which workbook executes.
+        # During acquire we wait for the thread to be unpaused.
+        # We immediately release so we do not stall the main process
+
+        if AliveStateFlag is False:
+            break
+
+        # do processing here
