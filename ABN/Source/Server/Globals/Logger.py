@@ -1,0 +1,64 @@
+import logging
+import os
+import datetime
+
+LOG_LEVEL = logging.DEBUG
+LOG_FORMAT = "[%(asctime)s] %(levelname)-8s %(message)s (%(threadName)s.%(module)s.%(funcName)s:%(lineno)d) <%(pathname)s>"
+
+LOG = None
+
+BASE_DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Logging"
+LOG_DIRECTORY = os.path.join(BASE_DIRECTORY, "LogFiles")
+TIME = str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S"))
+BASE_LOGFILE_NAME = "Log.ansi"
+LOG_FILE_FULL_PATH = os.path.join(LOG_DIRECTORY, TIME + BASE_LOGFILE_NAME)
+
+os.makedirs(LOG_DIRECTORY, exist_ok=True)
+
+
+class CustomFormatter(logging.Formatter):
+    """Logging colored formatter, adapted from https://stackoverflow.com/a/56944256/3638629"""
+
+    debug = "\x1b[38;5;255m"
+    info = "\x1b[38;5;39m"
+    warning = "\x1b[38;5;226m"
+    error = "\x1b[38;5;208m"
+    critical = "\x1b[31;5;196m"
+    reset = "\x1b[0m"
+
+    def __init__(self, fmt):
+        super().__init__()
+        self.fmt = fmt
+        self.FORMATS = {
+            logging.DEBUG: self.debug + self.fmt + self.reset,
+            logging.INFO: self.info + self.fmt + self.reset,
+            logging.WARNING: self.warning + self.fmt + self.reset,
+            logging.ERROR: self.error + self.fmt + self.reset,
+            logging.CRITICAL: self.critical + self.fmt + self.reset,
+        }
+
+    def format(self, record):
+        log_fmt = self.FORMATS.get(record.levelno)
+        formatter = logging.Formatter(log_fmt)
+        return formatter.format(record)
+
+
+LOG = logging.getLogger(__name__)
+LOG.setLevel(LOG_LEVEL)
+
+stdout_handler = logging.StreamHandler()
+stdout_handler.setLevel(LOG_LEVEL)
+stdout_handler.setFormatter(CustomFormatter(LOG_FORMAT))
+
+file_handler = logging.FileHandler(LOG_FILE_FULL_PATH)
+file_handler.setLevel(LOG_LEVEL)
+file_handler.setFormatter(CustomFormatter(LOG_FORMAT))
+
+LOG.addHandler(stdout_handler)
+LOG.addHandler(file_handler)
+
+LOG.debug("Debug Message")
+LOG.info("Info Message")
+LOG.warning("Warning Message")
+LOG.error("Error Message")
+LOG.critical("Critical Message")

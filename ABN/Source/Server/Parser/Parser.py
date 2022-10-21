@@ -1,12 +1,13 @@
 import json
+from ..Globals import LOG
 
 
 class Parser:
     def __init__(self, APICallID: str, JSONstring: str = None):
-        print()
-        print("PARSER: __START__")
-        print("PARSER: Handling API:", APICallID)
-        print("PARSER: Created Parser class with data:", JSONstring)
+
+        LOG.debug("PARSER: __START__")
+        LOG.info("PARSER: Handling API: %s", APICallID)
+        LOG.debug("PARSER: Created Parser class with data: %s", str(JSONstring))
 
         self.APICallID: str = APICallID
         self.string: str = JSONstring
@@ -18,13 +19,12 @@ class Parser:
             try:
                 self.JSON = json.loads(JSONstring.decode().replace("'", ""))
             except Exception:
-                print("PARSER: Error Parsing Data! Bad format.")
+                LOG.error("PARSER: Error Parsing Data! Bad format.")
 
-        print("Request Data:", json.dumps(self.JSON, indent=4, sort_keys=True))
+        LOG.debug("Request Data: %s", json.dumps(self.JSON, indent=4, sort_keys=True))
 
     def __del__(self):
-        print("PARSER: __END__")
-        print()
+        LOG.debug("PARSER: __END__")
 
     def IsValid(self) -> bool:
         return self.JSON is not None
@@ -45,5 +45,5 @@ class Parser:
         Out["APIData"] = self.JSON
         Out["APIReturn"] = self.APIReturn
 
-        print("Response Data:", json.dumps(Out, indent=4, sort_keys=True))
+        LOG.debug("Response Data: %s", json.dumps(Out, indent=4, sort_keys=True))
         return json.dumps(Out)

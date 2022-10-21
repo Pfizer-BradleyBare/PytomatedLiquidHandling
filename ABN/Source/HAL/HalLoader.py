@@ -1,3 +1,4 @@
+from ..Server.Globals import LOG
 from .DeckLocation import (
     DeckLocationLoader,
     DeckLocationTracker,
@@ -22,7 +23,7 @@ from .Hal import Hal
 
 
 def Load(HalInstance: Hal):
-    print("Loading Labware...")
+    LOG.info("Loading Labware...")
 
     Labwares = LabwareTracker()
     LabwareLoader.LoadYaml(
@@ -31,11 +32,11 @@ def Load(HalInstance: Hal):
     )
     HalInstance.LabwareTrackerInstance = Labwares
     for Labware in Labwares.GetLoadedObjectsAsList():
-        print(Labware)
+        LOG.debug(Labware)
 
-    print("Success! \n\n")
+    LOG.info("Success!")
 
-    print("Loading Transport...")
+    LOG.info("Loading Transport...")
 
     TransportDevices = TransportTracker(Labwares)
     TransportLoader.LoadYaml(
@@ -44,11 +45,11 @@ def Load(HalInstance: Hal):
     )
     HalInstance.TransportTrackerInstance = TransportDevices
     for TransportDevice in TransportDevices.GetLoadedObjectsAsList():
-        print(TransportDevice)
+        LOG.debug(TransportDevice)
 
-    print("Success! \n\n")
+    LOG.info("Success!")
 
-    print("Loading DeckLocation...")
+    LOG.info("Loading DeckLocation...")
 
     DeckLocations = DeckLocationTracker(TransportDevices)
     DeckLocationLoader.LoadYaml(
@@ -57,11 +58,11 @@ def Load(HalInstance: Hal):
     )
     HalInstance.DeckLocationTrackerInstance = DeckLocations
     for Location in DeckLocations.GetLoadedObjectsAsList():
-        print(Location)
+        LOG.debug(Location)
 
-    print("Success! \n\n")
+    LOG.info("Success!")
 
-    print("Loading Layout...")
+    LOG.info("Loading Layout...")
 
     LayoutItems = LayoutTracker(DeckLocations, Labwares)
     LayoutLoader.LoadYaml(
@@ -70,11 +71,11 @@ def Load(HalInstance: Hal):
     )
     HalInstance.LayoutTrackerInstance = LayoutItems
     for Layout in LayoutItems.GetLoadedObjectsAsList():
-        print(Layout)
+        LOG.debug(Layout)
 
-    print("Success! \n\n")
+    LOG.info("Success!")
 
-    print("Loading Lid...")
+    LOG.info("Loading Lid...")
 
     Lids = LidTracker(Labwares, DeckLocations)
     LidLoader.LoadYaml(
@@ -83,11 +84,11 @@ def Load(HalInstance: Hal):
     )
     HalInstance.LidTrackerInstance = Lids
     for Lid in Lids.GetLoadedObjectsAsList():
-        print(Lid)
+        LOG.debug(Lid)
 
-    print("Success! \n\n")
+    LOG.info("Success!")
 
-    print("Loading TempControlDevice...")
+    LOG.info("Loading TempControlDevice...")
 
     TempControlDevices = TempControlDeviceTracker(Labwares, DeckLocations)
     TempControlDeviceLoader.LoadYaml(
@@ -96,11 +97,11 @@ def Load(HalInstance: Hal):
     )
     HalInstance.TempControlDeviceTrackerInstance = TempControlDevices
     for TempControlDevice in TempControlDevices.GetLoadedObjectsAsList():
-        print(TempControlDevice)
+        LOG.debug(TempControlDevice)
 
-    print("Success! \n\n")
+    LOG.info("Success!")
 
-    print("Loading Tip...")
+    LOG.info("Loading Tip...")
 
     Tips = TipTracker()
     TipLoader.LoadYaml(
@@ -109,11 +110,11 @@ def Load(HalInstance: Hal):
     )
     HalInstance.TipTrackerInstance = Tips
     for Tip in Tips.GetLoadedObjectsAsList():
-        print(Tip)
+        LOG.debug(Tip)
 
-    print("Success! \n\n")
+    LOG.info("Success!")
 
-    print("Loading Pipette...")
+    LOG.info("Loading Pipette...")
 
     Pipettes = PipetteTracker(Tips)
     PipetteLoader.LoadYaml(
@@ -122,11 +123,11 @@ def Load(HalInstance: Hal):
     )
     HalInstance.PipetteTrackerInstance = Pipettes
     for Pipette in Pipettes.GetLoadedObjectsAsList():
-        print(Pipette)
+        LOG.debug(Pipette)
 
-    print("Success! \n\n")
+    LOG.info("Success!")
 
-    print("Loading Magnetic Rack...")
+    LOG.info("Loading Magnetic Rack...")
 
     MagneticRacks = MagneticRackTracker(Labwares, DeckLocations, Pipettes, Tips)
     MagneticRackLoader.LoadYaml(
@@ -135,11 +136,11 @@ def Load(HalInstance: Hal):
     )
     HalInstance.MagneticRackTrackerInstance = MagneticRacks
     for MagneticRack in MagneticRacks.GetLoadedObjectsAsList():
-        print(MagneticRack)
+        LOG.debug(MagneticRack)
 
-    print("Success! \n\n")
+    LOG.info("Success!")
 
-    print("Loading Notify...")
+    LOG.info("Loading Notify...")
 
     NotifyDevices = NotifyTracker()
     NotifyLoader.LoadYaml(
@@ -148,11 +149,11 @@ def Load(HalInstance: Hal):
     )
     HalInstance.NotifyTrackerInstance = NotifyDevices
     for NotifyDevice in NotifyDevices.GetLoadedObjectsAsList():
-        print(NotifyDevice)
+        LOG.debug(NotifyDevice)
 
-    print("Success! \n\n")
+    LOG.info("Success!")
 
-    print("Loading FlipTube...")
+    LOG.info("Loading FlipTube...")
 
     FlipTubes = FlipTubeTracker(Labwares)
     FlipTubeLoader.LoadYaml(
@@ -161,6 +162,6 @@ def Load(HalInstance: Hal):
     )
     HalInstance.FlipTubeTrackerInstance = FlipTubes
     for FlipTube in FlipTubes.GetLoadedObjectsAsList():
-        print(FlipTube)
+        LOG.debug(FlipTube)
 
-    print("Success! \n\n")
+    LOG.info("Success!")

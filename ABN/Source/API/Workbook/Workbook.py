@@ -50,14 +50,6 @@ class Workbook(ObjectABC):
         SolutionTrackerInstance: SolutionTracker,
     ):
 
-        # Thread
-        self.WorkbookProcessorThread: threading.Thread = threading.Thread(
-            target=WorkbookProcessor,
-            args=(self,),  # args must be tuple hence the empty second argument
-        )
-        self.ProcessingLock: threading.Lock = threading.Lock()
-        self.ProcessingLock.acquire()
-
         # Variables
         self.RunType: WorkbookRunTypes = RunType
         self.MethodPath: str = MethodPath
@@ -73,6 +65,15 @@ class Workbook(ObjectABC):
         # Contexts
         self.ActiveContexts: list[str] = list()
         self.InactiveContexts: list[str] = list()
+
+        # Thread
+        self.WorkbookProcessorThread: threading.Thread = threading.Thread(
+            name=self.MethodName,
+            target=WorkbookProcessor,
+            args=(self,),  # args must be tuple hence the empty second argument
+        )
+        self.ProcessingLock: threading.Lock = threading.Lock()
+        self.ProcessingLock.acquire()
 
     def GetName(self) -> str:
         return self.MethodName

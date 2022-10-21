@@ -2,6 +2,7 @@ from .Block import BlockObjectCreationWrapper, Block
 from .BlockTracker import BlockTracker
 from ....Tools import Excel
 from ...Blocks import *  # noqa F403
+from ....Server.Globals import LOG
 
 
 def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
@@ -136,6 +137,6 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
     Count = 1
     for BlockTranckerInstance in BlockTrackerInstances:
         for BlockInstance in BlockTranckerInstance.GetObjectsAsList():
-            print(BlockInstance.GetName())
-        print("NEXT", Count)
+            LOG.debug(BlockInstance.GetName())
+        LOG.debug("NEXT %s", Count)
         Count += 1

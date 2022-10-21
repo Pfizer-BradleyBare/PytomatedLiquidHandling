@@ -1,5 +1,6 @@
 import xlwings as xl
 import threading
+from ...Server.Globals import LOG
 
 ExcelLock = threading.Lock()
 
@@ -7,18 +8,12 @@ ExcelLock = threading.Lock()
 def ExcelClassFunctionDecorator_ThreadLock(DecoratedFunction):
     def inner(*args, **kwargs):
         ExcelLock.acquire()
-        print(
-            "ExcelLock Acquired: ",
-            DecoratedFunction.__name__,
-        )
+        LOG.debug("ExcelLock Acquired: " + DecoratedFunction.__name__)
 
         Result = DecoratedFunction(*args, **kwargs)
 
         ExcelLock.release()
-        print(
-            "ExcelLock Released: ",
-            DecoratedFunction.__name__,
-        )
+        LOG.debug("ExcelLock Released: " + DecoratedFunction.__name__)
         return Result
 
     return inner
