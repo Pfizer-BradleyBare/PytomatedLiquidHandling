@@ -111,7 +111,7 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
 
     # Non Unique
     # for Pathway in MethodPathways:
-    #    BlockTranckerInstance = BlockTracker(ExcelInstance)
+    #    BlockTranckerInstance = BlockTracker()
     #    for BlockInstance in Pathway:
     #        BlockTranckerInstance.LoadManual(BlockInstance)
     #    BlockTrackerInstances.append(BlockTranckerInstance)
@@ -121,14 +121,14 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
     # Unique
     OrganizedBlocks = list()
     for Pathway in MethodPathways:
-        BlockTranckerInstance = BlockTracker(ExcelInstance)
+        BlockTranckerInstance = BlockTracker()
         for BlockInstance in Pathway:
             if BlockInstance not in OrganizedBlocks:
                 BlockTranckerInstance.LoadManual(BlockInstance)
                 OrganizedBlocks.append(BlockInstance)
                 if type(BlockInstance).__name__ == SplitPlate.__name__:  # noqa F405
                     BlockTrackerInstances.append(BlockTranckerInstance)
-                    BlockTranckerInstance = BlockTracker(ExcelInstance)
+                    BlockTranckerInstance = BlockTracker()
         BlockTrackerInstances.append(BlockTranckerInstance)
     # Now we turn each Pathway into a block tracker instance
     # NOTE that each pathway is a unique series of blocks. This will also organize in a unique sequence
@@ -139,4 +139,3 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
             print(BlockInstance.GetName())
         print("NEXT", Count)
         Count += 1
-    quit()

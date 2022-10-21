@@ -11,8 +11,6 @@ import ABN.Source.Server.Method.Status as Status
 import ABN.Source.Server.Method.Queue as Queue
 import ABN.Source.Server.Method.Dequeue as Dequeue
 
-import ABN.Source.Server.ServerVariables as ServerVariables
-
 BASE_DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Logging"
 LOG_DIRECTORY = os.path.join(BASE_DIRECTORY, "LogFiles")
 TIME = str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S"))
@@ -51,6 +49,5 @@ urls += Dequeue.urls
 
 if __name__ == "__main__":
     sys.stdout = Logger()
-    ServerVariables.Initialize()
     app = web.application(urls, globals())
     app.run()

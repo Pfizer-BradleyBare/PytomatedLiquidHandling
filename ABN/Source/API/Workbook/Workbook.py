@@ -1,10 +1,13 @@
 import os
 from ...AbstractClasses import ObjectABC
-from .Block import Block, BlockTracker
+from .Block import BlockTracker
 from .Worklist import Worklist
 from .Solution import SolutionTracker
 from enum import Enum
 import threading
+from ...API.Tools.Container import ContainerTracker
+from ...Server.Globals.HalInstance import HalInstance
+from ...Server.Globals.AliveStateFlag import AliveStateFlag
 
 
 class WorkbookStates(Enum):
@@ -37,7 +40,7 @@ class WorkbookRunTypes(Enum):
 # All modification must occur by the workbook somehow
 
 
-class Workbook(ObjectABC):
+class Workbook(ObjectABC, threading.Thread):
     def __init__(
         self,
         RunType: WorkbookRunTypes,
@@ -48,8 +51,8 @@ class Workbook(ObjectABC):
     ):
 
         # Thread
-        self.ProcessingLock = threading.lock()
-        self.WorkbookThread: threading.Thread = None
+        self.ProcessingLock: threading.Lock = threading.Lock()
+        self.ProcessingLock.acquire()
 
         # Variables
         self.RunType: WorkbookRunTypes = RunType
@@ -61,13 +64,11 @@ class Workbook(ObjectABC):
         self.BlockTrackerInstances: list[BlockTracker] = BlockTrackerInstances
         self.WorklistInstance: Worklist = WorklistInstance
         self.SolutionTrackerInstance: SolutionTracker = SolutionTrackerInstance
+        self.ContainerTrackerInstance: ContainerTracker = ContainerTracker()
 
         # Contexts
-        self.ActiveContexts: str = ""
-        self.InactiveContexts: str = ""
-
-        # Labware
-        self.ContainerInstances = None
+        self.ActiveContexts: list[str] = list()
+        self.InactiveContexts: list[str] = list()
 
     def GetName(self) -> str:
         return self.MethodName
@@ -78,9 +79,6 @@ class Workbook(ObjectABC):
     def GetState(self) -> WorkbookStates:
         return self.State
 
-    def SetState(self, NewState: WorkbookStates):
-        self.State = NewState
-
     def GetBlockTrackers(self) -> list[BlockTracker]:
         return self.BlockTrackerInstances
 
@@ -90,9 +88,16 @@ class Workbook(ObjectABC):
     def GetSolutionTracker(self) -> SolutionTracker:
         return self.SolutionTrackerInstance
 
-    def IsStepAlreadyExecuted(self, BlockInstance: Block) -> bool:
-        if BlockInstance in self.ExecutedBlocks:
-            return True
-        else:
-            self.ExecutedBlocks.append(BlockInstance)
-            return False
+    def GetContainerTracker(self) -> ContainerTracker:
+        return self.ContainerTrackerInstance
+
+    def GetActiveContexts(self) -> list[str]:
+        return self.ActiveContexts
+
+    def GetInactiveContexts(self) -> list[str]:
+        return self.InactiveContexts
+
+    def run(self):
+        AliveStateFlag
+        HalInstance
+        pass

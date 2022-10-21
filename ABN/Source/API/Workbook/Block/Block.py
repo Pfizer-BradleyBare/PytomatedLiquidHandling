@@ -35,7 +35,7 @@ class Block(ObjectABC):
         return self.Col
 
     @abstractmethod
-    def Process(self, WorkbookInstance, HalInstance):
+    def Process(self, WorkbookInstance):
         raise NotImplementedError
 
 

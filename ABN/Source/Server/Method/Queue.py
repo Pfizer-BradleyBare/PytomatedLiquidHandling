@@ -3,7 +3,7 @@
 import web
 from ..Parser import Parser
 import os
-from ...Server import ServerVariables
+from ...Server.Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
 from ...API.Workbook import WorkbookLoader, WorkbookRunTypes
 
 urls = ("/Method/Queue", "ABN.Source.Server.Method.Queue.Queue")
@@ -38,8 +38,6 @@ class Queue:
             Response = ParserObject.GetHTTPResponse()
             return Response
         # Is valid file path?
-
-        WorkbookTrackerInstance = ServerVariables.WorkbookTrackerInstance
 
         PathsList = [
             Workbook.GetPath()

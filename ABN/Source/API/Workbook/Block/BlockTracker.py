@@ -4,9 +4,8 @@ from ....Tools import Excel
 
 
 class BlockTracker(TrackerABC):
-    def __init__(self, ExcelInstance: Excel):
+    def __init__(self):
         self.Collection: dict[str, Block] = dict()
-        self.ExcelInstance: Excel = ExcelInstance
 
     def LoadManual(self, BlockInstance: Block):
         Name = BlockInstance.GetName()
