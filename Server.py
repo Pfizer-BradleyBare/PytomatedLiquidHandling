@@ -2,6 +2,7 @@ import sys
 import os
 import web
 import datetime
+import threading
 
 import ABN.Source.Server.Command.Respond as Respond
 import ABN.Source.Server.Command.Request as Request
@@ -10,6 +11,7 @@ import ABN.Source.Server.State.Kill as Kill
 import ABN.Source.Server.Method.Status as Status
 import ABN.Source.Server.Method.Queue as Queue
 import ABN.Source.Server.Method.Dequeue as Dequeue
+
 
 BASE_DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Logging"
 LOG_DIRECTORY = os.path.join(BASE_DIRECTORY, "LogFiles")
@@ -22,6 +24,7 @@ os.makedirs(LOG_DIRECTORY, exist_ok=True)
 
 class Logger(object):
     def __init__(self):
+        self.Lock = threading.Lock()
         self.terminal = sys.stdout
         self.log = open(LOG_FILE_FULL_PATH, "w")
 
@@ -29,9 +32,11 @@ class Logger(object):
         self.log.close()
 
     def write(self, message):
+        self.Lock.acquire()
         self.terminal.write(message)
         self.log.write(message)
         self.log.flush()
+        self.Lock.release()
 
     def flush(self):
         pass
