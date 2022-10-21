@@ -7,7 +7,7 @@ class WellTracker(TrackerABC):
         self.Collection: dict[str, WellSolutionTracker] = dict()
 
     def LoadManual(self, WellSolutionTrackerInstance: WellSolutionTracker):
-        Name = WellSolutionTrackerInstance.GetWellNumber()
+        Name = WellSolutionTrackerInstance.GetName()
 
         if str(Name) in self.Collection:
             raise Exception("Well Already Exists")
@@ -22,3 +22,6 @@ class WellTracker(TrackerABC):
 
     def GetObjectByName(self, Name: str) -> WellSolutionTracker:
         return self.Collection[Name]
+
+    def GetObjectByWellNumber(self, WellNumber: int) -> WellSolutionTracker:
+        return self.Collection[str(WellNumber)]

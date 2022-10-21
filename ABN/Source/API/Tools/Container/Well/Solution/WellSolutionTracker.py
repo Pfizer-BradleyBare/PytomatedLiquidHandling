@@ -1,14 +1,14 @@
-from ......AbstractClasses import TrackerABC
+from ......AbstractClasses import TrackerABC, ObjectABC
 from .WellSolution import WellSolution
 
 
-class WellSolutionTracker(TrackerABC):
+class WellSolutionTracker(TrackerABC, ObjectABC):
     def __init__(self, WellNumber: int):
         self.WellNumber: int = WellNumber
         self.Collection: dict[str, WellSolution] = dict()
 
-    def GetWellNumber(self) -> int:
-        return self.WellNumber
+    def GetName(self) -> str:
+        return str(self.WellNumber)
 
     def LoadManual(self, WellSolutionInstance: WellSolution):
         Name = WellSolutionInstance.GetName()
@@ -17,3 +17,12 @@ class WellSolutionTracker(TrackerABC):
             raise Exception("Solution Already Exists")
 
         self.Collection[Name] = WellSolutionInstance
+
+    def GetObjectsAsList(self) -> list[WellSolution]:
+        return self.Collection.items()
+
+    def GetObjectsAsDictionary(self) -> dict[str, WellSolution]:
+        return self.Collection
+
+    def GetObjectByName(self, Name: str) -> WellSolution:
+        return self.Collection[Name]
