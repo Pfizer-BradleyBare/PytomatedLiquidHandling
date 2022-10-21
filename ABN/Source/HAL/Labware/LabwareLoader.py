@@ -3,7 +3,6 @@ from .Labware import (
     Labware,
     PipettableLabware,
     LabwareDimensions,
-    LabwareFilters,
     Wells,
     WellsEquation,
 )
@@ -23,7 +22,7 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
         Dimensions = LabwareDimensions(LongSide, ShortSide)
         # Create Dimensions Class
 
-        Filter = LabwareFilters(ConfigFile["Labware IDs"][LabwareID]["Labware Filter"])
+        Filter = ConfigFile["Labware IDs"][LabwareID]["Labware Filter"]
 
         if "Wells" in ConfigFile["Labware IDs"][LabwareID].keys():
             EquationsList = list()

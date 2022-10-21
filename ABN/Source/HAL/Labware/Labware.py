@@ -1,4 +1,3 @@
-from enum import Enum
 from ...AbstractClasses import ObjectABC
 
 
@@ -71,14 +70,15 @@ class Wells:
         return self.WellsEquations
 
 
-class LabwareFilters(Enum):
-    Lid = "Lid"
-    UVPlate96Well = "96 Well UV Plate"
-    PCRPlate96Well = "96 Well PCR Plate"
-    FlipTube = "FlipTube"
-    CentrifugeTube15mL = "15mL Centrifuge Tube"
-    ReagentReservior60mL = "60mL Reagent Reservior"
-    ReagentTrough200mL = "200mL Reagent Trough"
+# NOTE We do not want to hardcode the filters. Bad idea.
+# class LabwareFilters(Enum):
+#    Lid = "Lid"
+#    UVPlate96Well = "96 Well UV Plate"
+#    PCRPlate96Well = "96 Well PCR Plate"
+#    FlipTube = "FlipTube"
+#    CentrifugeTube15mL = "15mL Centrifuge Tube"
+#    ReagentReservior60mL = "60mL Reagent Reservior"
+#    ReagentTrough200mL = "200mL Reagent Trough"
 
 
 class LabwarePipettableTracker:
@@ -90,18 +90,16 @@ class LabwarePipettableTracker:
 
 
 class Labware(ObjectABC, LabwarePipettableTracker):
-    def __init__(
-        self, Name: str, Filter: LabwareFilters, Dimensions: LabwareDimensions
-    ):
+    def __init__(self, Name: str, Filter: str, Dimensions: LabwareDimensions):
         LabwarePipettableTracker.__init__(self, False)
         self.Name: str = Name
-        self.Filter: LabwareFilters = Filter
+        self.Filter: str = Filter
         self.Dimensions: LabwareDimensions = Dimensions
 
     def GetName(self) -> str:
         return self.Name
 
-    def GetFilter(self) -> LabwareFilters:
+    def GetFilter(self) -> str:
         return self.Filter
 
     def GetDimensions(self) -> LabwareDimensions:
@@ -112,7 +110,7 @@ class PipettableLabware(Labware):
     def __init__(
         self,
         Name: str,
-        Filter: LabwareFilters,
+        Filter: str,
         LabwareWells: Wells,
         Dimensions: LabwareDimensions,
     ):

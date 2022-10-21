@@ -109,9 +109,34 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
             raise Exception("All pathways must end with a finish step")
     # Check that each pathway ends with a finish step.
 
+    # Non Unique
+    # for Pathway in MethodPathways:
+    #    BlockTranckerInstance = BlockTracker(ExcelInstance)
+    #    for BlockInstance in Pathway:
+    #        BlockTranckerInstance.LoadManual(BlockInstance)
+    #    BlockTrackerInstances.append(BlockTranckerInstance)
+    # Now we turn each Pathway into a block tracker instance
+
+    # LOL IDK
+    # Unique
+    OrganizedBlocks = list()
     for Pathway in MethodPathways:
         BlockTranckerInstance = BlockTracker(ExcelInstance)
         for BlockInstance in Pathway:
-            BlockTranckerInstance.LoadManual(BlockInstance)
+            if BlockInstance not in OrganizedBlocks:
+                BlockTranckerInstance.LoadManual(BlockInstance)
+                OrganizedBlocks.append(BlockInstance)
+                if type(BlockInstance).__name__ == SplitPlate.__name__:  # noqa F405
+                    BlockTrackerInstances.append(BlockTranckerInstance)
+                    BlockTranckerInstance = BlockTracker(ExcelInstance)
         BlockTrackerInstances.append(BlockTranckerInstance)
     # Now we turn each Pathway into a block tracker instance
+    # NOTE that each pathway is a unique series of blocks. This will also organize in a unique sequence
+
+    Count = 1
+    for BlockTranckerInstance in BlockTrackerInstances:
+        for BlockInstance in BlockTranckerInstance.GetObjectsAsList():
+            print(BlockInstance.GetName())
+        print("NEXT", Count)
+        Count += 1
+    quit()

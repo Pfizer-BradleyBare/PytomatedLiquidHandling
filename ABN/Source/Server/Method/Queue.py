@@ -1,10 +1,10 @@
-# curl -H "Content-Type: application/json" -X POST -d "{\"Method Path\":\"C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\_Template_MAM.xlsm\"}" http://localhost:65535/Method/Queue
+# curl -H "Content-Type: application/json" -X POST -d "{\"Method Path\":\"C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\_Template_MAM.xlsm\",\"Requested Action\":\"Test\"}" http://localhost:65535/Method/Queue
 
 import web
 from ..Parser import Parser
 import os
 from ...Server import ServerVariables
-from ...API.Workbook import WorkbookLoader
+from ...API.Workbook import WorkbookLoader, WorkbookRunTypes
 
 urls = ("/Method/Queue", "ABN.Source.Server.Method.Queue.Queue")
 
@@ -18,6 +18,8 @@ class Queue:
             return Response
 
         MethodPath = ParserObject.GetAPIData()["Method Path"]
+        Action = ParserObject.GetAPIData()["Requested Action"]
+        # acceptable values are "Test", "PrepList", or "Run"
 
         if ".xlsm" not in MethodPath:
             ParserObject.SetAPIReturn(
@@ -27,6 +29,7 @@ class Queue:
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
+        # Is method actually there
 
         if not (os.access(MethodPath, os.F_OK) and os.access(MethodPath, os.W_OK)):
             ParserObject.SetAPIReturn(
@@ -48,8 +51,8 @@ class Queue:
             return Response
         # Is workbook already running?
 
-        WorkbookLoader.Load(ServerVariables.WorkbookTrackerInstance, MethodPath)
-        # Do something here
+        WorkbookLoader.Load(WorkbookTrackerInstance, MethodPath, WorkbookRunTypes.Test)
+        # Load the workbook path into the tracker
 
         ParserObject.SetAPIState(True)
 

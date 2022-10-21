@@ -1,4 +1,27 @@
 import xlwings as xl
+import threading
+
+ExcelLock = threading.Lock()
+
+
+def ExcelClassFunctionDecorator_ThreadLock(DecoratedFunction):
+    def inner(*args, **kwargs):
+        ExcelLock.acquire()
+        print(
+            "ExcelLock Acquired: ",
+            DecoratedFunction.__name__,
+        )
+
+        Result = DecoratedFunction(*args, **kwargs)
+
+        ExcelLock.release()
+        print(
+            "ExcelLock Released: ",
+            DecoratedFunction.__name__,
+        )
+        return Result
+
+    return inner
 
 
 class Excel:
@@ -10,12 +33,15 @@ class Excel:
         for List in Array:
             List += [None] * (Max - len(List))
 
+    @ExcelClassFunctionDecorator_ThreadLock
     def CreateSheet(self, Name: str):
         xl.Book(self.ExcelFilePath).sheets.add(name=Name, after="Solutions")
 
+    @ExcelClassFunctionDecorator_ThreadLock
     def DeleteSheet(self, Name: str):
         xl.Book(self.ExcelFilePath).sheets[Name].delete()
 
+    @ExcelClassFunctionDecorator_ThreadLock
     def ReadMethodSheet(self) -> list[list[any]]:
         return (
             xl.Book(self.ExcelFilePath)
@@ -24,6 +50,7 @@ class Excel:
             .value
         )
 
+    @ExcelClassFunctionDecorator_ThreadLock
     def ReadMethodSheetArea(
         self, RowStart: int, ColStart: int, RowEnd: int, ColEnd: int
     ) -> list[list[any]]:
@@ -34,6 +61,7 @@ class Excel:
             .value
         )
 
+    @ExcelClassFunctionDecorator_ThreadLock
     def WriteMethodSheet(self, Row: int, Col: int, Data: list[list[str]]):
         self.__AlignArray(Data)
         NumRows = len(Data)
@@ -42,6 +70,7 @@ class Excel:
             (Row, Col), (Row + NumRows, Col + NumCols)
         ).value = Data
 
+    @ExcelClassFunctionDecorator_ThreadLock
     def ReadWorklistSheet(self) -> list[list[any]]:
         return (
             xl.Book(self.ExcelFilePath)
@@ -50,6 +79,7 @@ class Excel:
             .value
         )
 
+    @ExcelClassFunctionDecorator_ThreadLock
     def ReadWorklistSheetArea(
         self, RowStart: int, ColStart: int, RowEnd: int, ColEnd: int
     ) -> list[list[any]]:
@@ -60,6 +90,7 @@ class Excel:
             .value
         )
 
+    @ExcelClassFunctionDecorator_ThreadLock
     def WriteWorklistSheet(self, Row: int, Col: int, Data: list[list[str]]):
         self.__AlignArray(Data)
         NumRows = len(Data)
@@ -68,6 +99,7 @@ class Excel:
             (Row, Col), (Row + NumRows, Col + NumCols)
         ).value = Data
 
+    @ExcelClassFunctionDecorator_ThreadLock
     def ReadSolutionsSheet(self) -> list[list[any]]:
         return (
             xl.Book(self.ExcelFilePath)
@@ -76,6 +108,7 @@ class Excel:
             .value
         )
 
+    @ExcelClassFunctionDecorator_ThreadLock
     def ReadSolutionsSheetArea(
         self, RowStart: int, ColStart: int, RowEnd: int, ColEnd: int
     ):
@@ -86,6 +119,7 @@ class Excel:
             .value
         )
 
+    @ExcelClassFunctionDecorator_ThreadLock
     def WriteSolutionsSheet(self, Row: int, Col: int, Data: list[list[str]]):
         self.__AlignArray(Data)
         NumRows = len(Data)
