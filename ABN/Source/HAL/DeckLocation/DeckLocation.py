@@ -20,46 +20,12 @@ class DeckLocation(ObjectABC):
         self.SupportedTransportInstances: list[
             TransportDevice
         ] = SupportedTransportInstances
-        self.Reserved: str = ""
 
     def GetName(self) -> str:
         return self.Name
 
     def GetTransportInstances(self) -> list[TransportDevice]:
         return self.SupportedTransportInstances
-
-    def Acquire(self, AcquiredName: str) -> bool:
-        if self.Reserved == "":
-            self.Reserved = AcquiredName
-            return True
-
-        print(
-            "ATTENTION!",
-            AcquiredName,
-            "is trying to acquire:",
-            self.GetName(),
-            "which is currently owned by",
-            self.Reserved,
-        )
-        return False
-
-    def Release(self, AcquiredName: str) -> bool:
-        if self.Reserved == AcquiredName:
-            self.Reserved = ""
-            return True
-
-        print(
-            "ATTENTION!",
-            AcquiredName,
-            "is trying to release:",
-            self.GetName(),
-            "which is currently owned by",
-            self.Reserved,
-        )
-        return False
-
-    def GetReservedStatus(self) -> str:
-        return self.Reserved
 
 
 class LoadableDeckLocation(DeckLocation):
