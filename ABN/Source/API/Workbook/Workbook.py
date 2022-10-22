@@ -50,7 +50,6 @@ class Workbook(ObjectABC):
         RunType: WorkbookRunTypes,
         MethodPath: str,
         MethodTree: Tree,
-        BlockTrackerInstances: list[BlockTracker],
         WorklistInstance: Worklist,
         SolutionTrackerInstance: SolutionTracker,
     ):
@@ -62,15 +61,20 @@ class Workbook(ObjectABC):
         self.State: WorkbookStates = WorkbookStates.Queued
 
         # Trackers
-        self.BlockTrackerInstances: list[BlockTracker] = BlockTrackerInstances
+        self.MethodTree: Tree = MethodTree
         self.WorklistInstance: Worklist = WorklistInstance
         self.SolutionTrackerInstance: SolutionTracker = SolutionTrackerInstance
         self.ContainerTrackerInstance: ContainerTracker = ContainerTracker()
-        self.MethodTree: Tree = MethodTree
 
         # Contexts
         self.ActiveContexts: ContextTracker = ContextTracker()
         self.InactiveContexts: ContextTracker = ContextTracker()
+
+        LOG.debug(
+            "The following method tree was determined for %s: \n%s",
+            self.MethodName,
+            self.MethodTree.GetCurrentNode(),
+        )
 
         # Thread
         self.WorkbookProcessorThread: threading.Thread = threading.Thread(
@@ -81,12 +85,6 @@ class Workbook(ObjectABC):
         self.ProcessingLock: threading.Lock = threading.Lock()
         self.ProcessingLock.acquire()
         self.WorkbookProcessorThread.start()
-
-        LOG.debug(
-            "The following method tree was determined for %s: \n%s",
-            self.MethodName,
-            self.MethodTree.GetCurrentNode(),
-        )
 
     def GetName(self) -> str:
         return self.MethodName

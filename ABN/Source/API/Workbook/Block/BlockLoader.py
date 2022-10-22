@@ -119,40 +119,12 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
             raise Exception("All pathways must end with a finish step")
     # Check that each pathway ends with a finish step.
 
-    # Non Unique
-    # for Pathway in MethodPathways:
-    #    TrackerInstance = BlockTracker()
-    #    for BlockInstance in Pathway:
-    #        TrackerInstance.LoadManual(BlockInstance)
-    #    BlockTrackerInstances.append(TrackerInstance)
-    # Now we turn each Pathway into a block tracker instance
-
-    BlockTrackerInstances: list[BlockTracker] = list()
-
     # LOL IDK
     # Unique
     OrganizedBlocks = list()
     for Pathway in MethodPathways:
-        TrackerInstance = BlockTracker()
         for BlockInstance in Pathway:
             if BlockInstance not in OrganizedBlocks:
-                TrackerInstance.LoadManual(BlockInstance)
+                BlockTrackerInstance.LoadManual(BlockInstance)
                 OrganizedBlocks.append(BlockInstance)
-                if type(BlockInstance).__name__ == SplitPlate.__name__:  # noqa F405
-                    BlockTrackerInstances.append(TrackerInstance)
-                    TrackerInstance = BlockTracker()
-        BlockTrackerInstances.append(TrackerInstance)
-    # Now we turn each Pathway into a block tracker instance
-    # NOTE that each pathway is a unique series of blocks. This will also organize in a unique sequence
-
-    for TrackerInstance in BlockTrackerInstances:
-        for BlockInstance in TrackerInstance.GetObjectsAsList():
-            BlockTrackerInstance.LoadManual(BlockInstance)
-    # Create a tracker with the blocks
-
-    Count = 1
-    for TrackerInstance in BlockTrackerInstances:
-        for BlockInstance in TrackerInstance.GetObjectsAsList():
-            LOG.debug(BlockInstance.GetName())
-        LOG.debug("NEXT %s", Count)
-        Count += 1
+    # Now get each block uniquely from the list of blocks. This is relatively in order which is what we want

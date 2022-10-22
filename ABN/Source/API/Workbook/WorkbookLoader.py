@@ -28,7 +28,6 @@ def Load(
             RunType,
             ExcelFilePath,
             TreeInstance,
-            BlockTrackerInstance,
             WorklistInstance,
             SolutionTrackerInstance,
         )
