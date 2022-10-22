@@ -114,18 +114,18 @@ class Workbook(ObjectABC):
 
 
 def WorkbookProcessor(WorkbookInstance: Workbook):
-    for i in range(10):
-        LOG.debug("Hello!")
+
+    HalInstance
+    LOG
 
     while True:
 
-        HalInstance
-        LOG
         WorkbookInstance.ProcessingLock.acquire()
         WorkbookInstance.ProcessingLock.release()
         # The processing lock is used as a pause button to control which workbook executes.
         # During acquire we wait for the thread to be unpaused.
         # We immediately release so we do not stall the main process
+
         if AliveStateFlag.AliveStateFlag is False:
             break
 
