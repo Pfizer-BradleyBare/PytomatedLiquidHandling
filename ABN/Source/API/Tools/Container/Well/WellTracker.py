@@ -4,12 +4,12 @@ from .Solution.WellSolutionTracker import WellSolutionTracker
 
 class WellTracker(TrackerABC):
     def __init__(self):
-        self.Collection: dict[str, WellSolutionTracker] = dict()
+        self.Collection: dict[int, WellSolutionTracker] = dict()
 
     def LoadManual(self, WellSolutionTrackerInstance: WellSolutionTracker):
         Name = WellSolutionTrackerInstance.GetName()
 
-        if str(Name) in self.Collection:
+        if Name in self.Collection:
             raise Exception("Well Already Exists")
 
         self.Collection[Name] = WellSolutionTrackerInstance
@@ -17,11 +17,8 @@ class WellTracker(TrackerABC):
     def GetObjectsAsList(self) -> list[WellSolutionTracker]:
         return self.Collection.items()
 
-    def GetObjectsAsDictionary(self) -> dict[str, WellSolutionTracker]:
+    def GetObjectsAsDictionary(self) -> dict[int, WellSolutionTracker]:
         return self.Collection
 
-    def GetObjectByName(self, Name: str) -> WellSolutionTracker:
+    def GetObjectByName(self, Name: int) -> WellSolutionTracker:
         return self.Collection[Name]
-
-    def GetObjectByWellNumber(self, WellNumber: int) -> WellSolutionTracker:
-        return self.Collection[str(WellNumber)]

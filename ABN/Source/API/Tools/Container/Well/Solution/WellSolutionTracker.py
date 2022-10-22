@@ -7,8 +7,8 @@ class WellSolutionTracker(TrackerABC, ObjectABC):
         self.WellNumber: int = WellNumber
         self.Collection: dict[str, WellSolution] = dict()
 
-    def GetName(self) -> str:
-        return str(self.WellNumber)
+    def GetName(self) -> int:
+        return self.WellNumber
 
     def LoadManual(self, WellSolutionInstance: WellSolution):
         Name = WellSolutionInstance.GetName()
