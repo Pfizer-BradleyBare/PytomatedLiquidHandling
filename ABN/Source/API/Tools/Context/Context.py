@@ -1,72 +1,6 @@
-from ....AbstractClasses import ObjectABC, TrackerABC
-
-
-class WellFactors(ObjectABC):
-    def __init__(self):
-        pass
-
-    def GetName(self) -> str:
-        return self.Name
-
-
-class WellFactorsTracker(TrackerABC, ObjectABC):
-    def __init__(self, WellNumber: int):
-        self.WellNumber: int = WellNumber
-        self.Collection: dict[str, WellFactors] = dict()
-
-    def GetName(self) -> str:
-        return str(self.WellNumber)
-
-    def LoadManual(self, WellSolutionInstance: WellFactors):
-        Name = WellSolutionInstance.GetName()
-
-        if str(Name) in self.Collection:
-            raise Exception("Solution Already Exists")
-
-        self.Collection[Name] = WellSolutionInstance
-
-    def GetObjectsAsList(self) -> list[WellFactors]:
-        return self.Collection.items()
-
-    def GetObjectsAsDictionary(self) -> dict[str, WellFactors]:
-        return self.Collection
-
-    def GetObjectByName(self, Name: str) -> WellFactors:
-        return self.Collection[Name]
-
-
-class WellSequences(ObjectABC):
-    def __init__(self):
-        pass
-
-    def GetName(self) -> str:
-        return self.Name
-
-
-class WellSequencesTracker(TrackerABC, ObjectABC):
-    def __init__(self, WellNumber: int):
-        self.WellNumber: int = WellNumber
-        self.Collection: dict[str, WellSequences] = dict()
-
-    def GetName(self) -> str:
-        return str(self.WellNumber)
-
-    def LoadManual(self, WellSolutionInstance: WellSequences):
-        Name = WellSolutionInstance.GetName()
-
-        if str(Name) in self.Collection:
-            raise Exception("Solution Already Exists")
-
-        self.Collection[Name] = WellSolutionInstance
-
-    def GetObjectsAsList(self) -> list[WellSequences]:
-        return self.Collection.items()
-
-    def GetObjectsAsDictionary(self) -> dict[str, WellSequences]:
-        return self.Collection
-
-    def GetObjectByName(self, Name: str) -> WellSequences:
-        return self.Collection[Name]
+from ....AbstractClasses import ObjectABC
+from .WellFactor.WellFactorTracker import WellFactorTracker
+from .WellSequences.WellSequencesTracker import WellSequencesTracker
 
 
 class Context(ObjectABC):
@@ -75,8 +9,8 @@ class Context(ObjectABC):
         Name: str,
         AspirateWellSequencesTrackerInstance: WellSequencesTracker,
         DispenseWellSequencesTrackerInstance: WellSequencesTracker,
-        AspirateWellFactorsTrackerInstance: WellFactorsTracker,
-        DispenseWellFactorsTrackerInstance: WellFactorsTracker,
+        AspirateWellFactorsTrackerInstance: WellFactorTracker,
+        DispenseWellFactorsTrackerInstance: WellFactorTracker,
     ):
         self.Name: str = Name
         self.AspirateWellSequencesTrackerInstance: WellSequencesTracker = (
@@ -85,10 +19,10 @@ class Context(ObjectABC):
         self.DispenseWellSequencesTrackerInstance: WellSequencesTracker = (
             DispenseWellSequencesTrackerInstance
         )
-        self.AspirateWellFactorsTrackerInstance: WellFactorsTracker = (
+        self.AspirateWellFactorsTrackerInstance: WellFactorTracker = (
             AspirateWellFactorsTrackerInstance
         )
-        self.DispenseWellFactorsTrackerInstance: WellFactorsTracker = (
+        self.DispenseWellFactorsTrackerInstance: WellFactorTracker = (
             DispenseWellFactorsTrackerInstance
         )
 
@@ -101,30 +35,8 @@ class Context(ObjectABC):
     def GetDispenseWellSequencesTracker(self) -> WellSequencesTracker:
         return self.DispenseWellSequencesTrackerInstance
 
-    def GetAspirateWellFactorsTracker(self) -> WellFactorsTracker:
+    def GetAspirateWellFactorTracker(self) -> WellFactorTracker:
         return self.AspirateWellFactorsTrackerInstance
 
-    def GetDispenseWellFactorsTracker(self) -> WellFactorsTracker:
+    def GetDispenseWellFactorTracker(self) -> WellFactorTracker:
         return self.DispenseWellFactorsTrackerInstance
-
-
-class ContextTracker(TrackerABC):
-    def __init__(self):
-        self.Collection: dict[str, Context] = dict()
-
-    def LoadManual(self, ContextInstance: Context):
-        Name = ContextInstance.GetName()
-
-        if str(Name) in self.Collection:
-            raise Exception("Context Already Exists")
-
-        self.Collection[Name] = ContextInstance
-
-    def GetObjectsAsList(self) -> list[Context]:
-        return self.Collection.items()
-
-    def GetObjectsAsDictionary(self) -> dict[Context]:
-        return self.Collection
-
-    def GetObjectByName(self, Name: str) -> Context:
-        return self.Collection[Name]
