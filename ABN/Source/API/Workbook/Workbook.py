@@ -7,9 +7,9 @@ from enum import Enum
 import threading
 from ...API.Tools.Container import ContainerTracker
 from ...API.Tools.Context import ContextTracker
-from ...Server.Globals.HalInstance import HalInstance
-from ...Server.Globals.AliveStateFlag import AliveStateFlag
-from ...Server.Globals import LOG
+from ...Server.Tools.HalInstance import HalInstance
+from ...Server.Tools import AliveStateFlag
+from ...Server.Tools import LOG
 
 
 class WorkbookStates(Enum):
@@ -77,6 +77,7 @@ class Workbook(ObjectABC):
         )
         self.ProcessingLock: threading.Lock = threading.Lock()
         self.ProcessingLock.acquire()
+        self.WorkbookProcessorThread.start()
 
     def GetName(self) -> str:
         return self.MethodName
@@ -105,11 +106,17 @@ class Workbook(ObjectABC):
     def GetInactiveContexts(self) -> list[str]:
         return self.InactiveContexts
 
+    def GetWorkbookProcessorThread(self) -> threading.Thread:
+        return self.WorkbookProcessorThread
+
     def GetProcessingLock(self) -> threading.Lock:
         return self.ProcessingLock
 
 
 def WorkbookProcessor(WorkbookInstance: Workbook):
+    for i in range(10):
+        LOG.debug("Hello!")
+
     while True:
 
         HalInstance
@@ -119,8 +126,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         # The processing lock is used as a pause button to control which workbook executes.
         # During acquire we wait for the thread to be unpaused.
         # We immediately release so we do not stall the main process
-
-        if AliveStateFlag is False:
+        if AliveStateFlag.AliveStateFlag is False:
             break
 
         # do processing here

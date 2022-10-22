@@ -1,5 +1,5 @@
 import json
-from ..Globals import LOG
+from ..Tools import LOG
 
 
 class Parser:
@@ -21,7 +21,7 @@ class Parser:
             except Exception:
                 LOG.error("PARSER: Error Parsing Data! Bad format.")
 
-        LOG.debug("Request Data: %s", json.dumps(self.JSON, indent=4, sort_keys=True))
+        LOG.debug("Request Data: \n%s", json.dumps(self.JSON, indent=4, sort_keys=True))
 
     def __del__(self):
         LOG.debug("PARSER: __END__")
@@ -45,5 +45,5 @@ class Parser:
         Out["APIData"] = self.JSON
         Out["APIReturn"] = self.APIReturn
 
-        LOG.debug("Response Data: %s", json.dumps(Out, indent=4, sort_keys=True))
+        LOG.debug("Response Data: \n%s", json.dumps(Out, indent=4, sort_keys=True))
         return json.dumps(Out)

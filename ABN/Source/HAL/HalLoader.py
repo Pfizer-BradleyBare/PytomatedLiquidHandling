@@ -1,4 +1,4 @@
-from ..Server.Globals import LOG
+from ..Server.Tools import LOG
 from .DeckLocation import (
     DeckLocationLoader,
     DeckLocationTracker,

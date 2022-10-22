@@ -1,4 +1,4 @@
-import ABN.Source.Server.Globals.Logger as Logger
+import ABN.Source.Server.Tools.Logger as Logger
 
 import ABN.Source.Server.Command.Respond as Respond
 import ABN.Source.Server.Command.Request as Request

@@ -2,7 +2,7 @@ from .Block import BlockObjectCreationWrapper, Block
 from .BlockTracker import BlockTracker
 from ....Tools import Excel
 from ...Blocks import *  # noqa F403
-from ....Server.Globals import LOG
+from ....Server.Tools import LOG
 
 
 def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):

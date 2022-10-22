@@ -3,7 +3,7 @@ import os
 import datetime
 
 LOG_LEVEL = logging.DEBUG
-LOG_FORMAT = "[%(asctime)s] %(levelname)-8s %(message)s (%(threadName)s.%(module)s.%(funcName)s:%(lineno)d) <%(pathname)s>"
+LOG_FORMAT = "[%(asctime)s] %(levelname)s\n%(message)s\n(%(threadName)s).%(module)s.%(funcName)s:%(lineno)d) <%(pathname)s>"
 
 LOG = None
 

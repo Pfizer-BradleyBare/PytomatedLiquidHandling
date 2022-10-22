@@ -1,6 +1,6 @@
 import xlwings as xl
 import threading
-from ...Server.Globals import LOG
+from ...Server.Tools import LOG
 
 ExcelLock = threading.Lock()
 

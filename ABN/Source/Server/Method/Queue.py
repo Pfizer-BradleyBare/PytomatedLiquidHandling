@@ -3,7 +3,7 @@
 import web
 from ..Parser import Parser
 import os
-from ...Server.Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
+from ...Server.Tools.WorkbookTrackerInstance import WorkbookTrackerInstance
 from ...API.Workbook import WorkbookLoader, WorkbookRunTypes
 
 urls = ("/Method/Queue", "ABN.Source.Server.Method.Queue.Queue")
