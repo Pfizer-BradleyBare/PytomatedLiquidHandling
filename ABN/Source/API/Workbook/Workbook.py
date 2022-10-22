@@ -10,6 +10,7 @@ from ...API.Tools.Context import ContextTracker
 from ...Server.Tools.HalInstance import HalInstance
 from ...Server.Tools import AliveStateFlag
 from ...Server.Tools import LOG
+from ...Tools import Tree
 
 
 class WorkbookStates(Enum):
@@ -48,6 +49,7 @@ class Workbook(ObjectABC):
         self,
         RunType: WorkbookRunTypes,
         MethodPath: str,
+        MethodTree: Tree,
         BlockTrackerInstances: list[BlockTracker],
         WorklistInstance: Worklist,
         SolutionTrackerInstance: SolutionTracker,
@@ -64,6 +66,7 @@ class Workbook(ObjectABC):
         self.WorklistInstance: Worklist = WorklistInstance
         self.SolutionTrackerInstance: SolutionTracker = SolutionTrackerInstance
         self.ContainerTrackerInstance: ContainerTracker = ContainerTracker()
+        self.MethodTree: Tree = MethodTree
 
         # Contexts
         self.ActiveContexts: ContextTracker = ContextTracker()
@@ -78,6 +81,12 @@ class Workbook(ObjectABC):
         self.ProcessingLock: threading.Lock = threading.Lock()
         self.ProcessingLock.acquire()
         self.WorkbookProcessorThread.start()
+
+        LOG.debug(
+            "The following method tree was determined for %s: \n%s",
+            self.MethodName,
+            self.MethodTree.GetCurrentNode(),
+        )
 
     def GetName(self) -> str:
         return self.MethodName
@@ -128,5 +137,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
         if AliveStateFlag.AliveStateFlag is False:
             break
+
+        # somehow figure out the processing
 
         # do processing here

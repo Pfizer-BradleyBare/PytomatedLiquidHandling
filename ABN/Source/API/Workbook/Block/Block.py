@@ -1,5 +1,6 @@
 from ....AbstractClasses import ObjectABC
 from ....Tools import Excel
+from ....Tools import Node
 from abc import abstractmethod
 
 _AvailableBlocks = dict()
@@ -11,13 +12,14 @@ def ClassDecorator_AvailableBlock(DecoratedClass):
     return DecoratedClass
 
 
-class Block(ObjectABC):
+class Block(ObjectABC, Node):
     def __init__(
         self,
         ExcelInstance: Excel,
         Row: int,
         Col: int,
     ):
+        Node.__init__(self)
         self.ExcelInstance: Excel = ExcelInstance
         self.Row: int = Row
         self.Col: int = Col
@@ -35,7 +37,7 @@ class Block(ObjectABC):
         return self.Col
 
     @abstractmethod
-    def Process(self, WorkbookInstance):
+    def Process(self, WorkbookInstance, HalInstance):
         raise NotImplementedError
 
 

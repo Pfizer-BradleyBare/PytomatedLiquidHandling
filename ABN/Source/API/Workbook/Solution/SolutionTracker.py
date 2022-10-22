@@ -4,8 +4,7 @@ from ....Tools import Excel
 
 
 class SolutionTracker(TrackerABC):
-    def __init__(self, ExcelInstance: Excel):
-        self.ExcelInstance: Excel = ExcelInstance
+    def __init__(self):
         self.Collection: dict[str, Solution] = dict()
 
     def LoadManual(self, SolutionInstance: Solution):

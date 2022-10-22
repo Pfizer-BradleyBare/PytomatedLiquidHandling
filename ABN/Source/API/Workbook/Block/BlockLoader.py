@@ -5,7 +5,7 @@ from ...Blocks import *  # noqa F403
 from ....Server.Tools import LOG
 
 
-def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
+def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
     MethodSheet = ExcelInstance.ReadMethodSheet()
 
     Rows = len(MethodSheet)
@@ -75,10 +75,15 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
 
     MethodPathways = list()
 
-    def TraversePathways(OutputList, CollectionList, TraversalList, PathwaysList):
-
+    # This will effectively connect our blocks into a wonderful tree in order of correct execution :)
+    # It will also make complete pathways from start to end. Neato!
+    def TraversePathways(
+        OutputList, CollectionList, TraversalList, PathwaysList, PreviousBlock
+    ):
         for BlockInstance in TraversalList:
             CollectionList.append(BlockInstance)
+            BlockInstance.SetParentNode(PreviousBlock)
+            PreviousBlock = BlockInstance
 
             if type(BlockInstance).__name__ == SplitPlate.__name__:  # noqa F405
                 Pathways = [
@@ -89,7 +94,11 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
                     if Pathway[0].GetPlateName() in Pathways:
                         PathwaysList.remove(Pathway)
                         TraversePathways(
-                            OutputList, CollectionList[:], Pathway, PathwaysList
+                            OutputList,
+                            CollectionList[:],
+                            Pathway,
+                            PathwaysList,
+                            PreviousBlock,
                         )
                 return
             # We need to traverse both pathways
@@ -102,7 +111,7 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
     BlockInstancesList.remove(StartingPathway)
     # Find first traversal pathway.
 
-    TraversePathways(MethodPathways, list(), StartingPathway, BlockInstancesList)
+    TraversePathways(MethodPathways, list(), StartingPathway, BlockInstancesList, None)
     # Now we need to create a seperate list for each pathway... This will need to happen recursively. Kill me now
 
     for Pathway in MethodPathways:
@@ -112,31 +121,38 @@ def Load(BlockTrackerInstances: list[BlockTracker], ExcelInstance: Excel):
 
     # Non Unique
     # for Pathway in MethodPathways:
-    #    BlockTranckerInstance = BlockTracker()
+    #    TrackerInstance = BlockTracker()
     #    for BlockInstance in Pathway:
-    #        BlockTranckerInstance.LoadManual(BlockInstance)
-    #    BlockTrackerInstances.append(BlockTranckerInstance)
+    #        TrackerInstance.LoadManual(BlockInstance)
+    #    BlockTrackerInstances.append(TrackerInstance)
     # Now we turn each Pathway into a block tracker instance
+
+    BlockTrackerInstances: list[BlockTracker] = list()
 
     # LOL IDK
     # Unique
     OrganizedBlocks = list()
     for Pathway in MethodPathways:
-        BlockTranckerInstance = BlockTracker()
+        TrackerInstance = BlockTracker()
         for BlockInstance in Pathway:
             if BlockInstance not in OrganizedBlocks:
-                BlockTranckerInstance.LoadManual(BlockInstance)
+                TrackerInstance.LoadManual(BlockInstance)
                 OrganizedBlocks.append(BlockInstance)
                 if type(BlockInstance).__name__ == SplitPlate.__name__:  # noqa F405
-                    BlockTrackerInstances.append(BlockTranckerInstance)
-                    BlockTranckerInstance = BlockTracker()
-        BlockTrackerInstances.append(BlockTranckerInstance)
+                    BlockTrackerInstances.append(TrackerInstance)
+                    TrackerInstance = BlockTracker()
+        BlockTrackerInstances.append(TrackerInstance)
     # Now we turn each Pathway into a block tracker instance
     # NOTE that each pathway is a unique series of blocks. This will also organize in a unique sequence
 
+    for TrackerInstance in BlockTrackerInstances:
+        for BlockInstance in TrackerInstance.GetObjectsAsList():
+            BlockTrackerInstance.LoadManual(BlockInstance)
+    # Create a tracker with the blocks
+
     Count = 1
-    for BlockTranckerInstance in BlockTrackerInstances:
-        for BlockInstance in BlockTranckerInstance.GetObjectsAsList():
+    for TrackerInstance in BlockTrackerInstances:
+        for BlockInstance in TrackerInstance.GetObjectsAsList():
             LOG.debug(BlockInstance.GetName())
         LOG.debug("NEXT %s", Count)
         Count += 1

@@ -1,10 +1,9 @@
 from .SolutionTracker import SolutionTracker
 from .Solution import Solution
+from ....Tools import Excel
 
 
-def Load(SolutionTrackerInstance: SolutionTracker):
-
-    ExcelInstance = SolutionTrackerInstance.ExcelInstance
+def Load(SolutionTrackerInstance: SolutionTracker, ExcelInstance: Excel):
 
     SolutionsSheet: list[list[str]] = ExcelInstance.ReadSolutionsSheet()
 
