@@ -6,6 +6,7 @@ from .Solution import SolutionTracker
 from enum import Enum
 import threading
 from ...API.Tools.Container import ContainerTracker
+from ...API.Tools.Context import ContextTracker
 from ...Server.Globals.HalInstance import HalInstance
 from ...Server.Globals.AliveStateFlag import AliveStateFlag
 from ...Server.Globals import LOG
@@ -65,8 +66,8 @@ class Workbook(ObjectABC):
         self.ContainerTrackerInstance: ContainerTracker = ContainerTracker()
 
         # Contexts
-        self.ActiveContexts: list[str] = list()
-        self.InactiveContexts: list[str] = list()
+        self.ActiveContexts: ContextTracker = ContextTracker()
+        self.InactiveContexts: ContextTracker = ContextTracker()
 
         # Thread
         self.WorkbookProcessorThread: threading.Thread = threading.Thread(
@@ -111,6 +112,8 @@ class Workbook(ObjectABC):
 def WorkbookProcessor(WorkbookInstance: Workbook):
     while True:
 
+        HalInstance
+        LOG
         WorkbookInstance.ProcessingLock.acquire()
         WorkbookInstance.ProcessingLock.release()
         # The processing lock is used as a pause button to control which workbook executes.

@@ -1,4 +1,4 @@
-from ....AbstractClasses import ObjectABC
+from .....AbstractClasses import ObjectABC
 
 
 class WellSequences(ObjectABC):

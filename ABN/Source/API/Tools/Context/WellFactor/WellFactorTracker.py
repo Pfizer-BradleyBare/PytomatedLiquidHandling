@@ -1,4 +1,4 @@
-from ....AbstractClasses import TrackerABC
+from .....AbstractClasses import TrackerABC
 from .WellFactor import WellFactor
 
 
