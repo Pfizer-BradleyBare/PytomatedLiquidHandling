@@ -46,7 +46,7 @@ def LoadYaml(PipetteTrackerInstance: PipetteTracker, FilePath: str):
         if DeviceType == DeviceTypes.Portrait1mLChannels:
             ActiveChannels = ChannelsDevice["Active Channels"]
 
-            PipetteTrackerInstance.LoadManual(
+            PipetteTrackerInstance.ManualLoad(
                 PipettingDevice(
                     Portrait1mLChannels(ActiveChannels, Enabled),
                     PipettingTips,
@@ -54,7 +54,7 @@ def LoadYaml(PipetteTrackerInstance: PipetteTracker, FilePath: str):
             )
 
         elif DeviceType == DeviceTypes.Core96Head:
-            PipetteTrackerInstance.LoadManual(
+            PipetteTrackerInstance.ManualLoad(
                 PipettingDevice(
                     Core96HeadChannels(Enabled),
                     PipettingTips,

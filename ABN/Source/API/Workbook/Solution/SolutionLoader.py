@@ -20,6 +20,6 @@ def Load(SolutionTrackerInstance: SolutionTracker, ExcelInstance: Excel):
 
             Name = Name.replace(" - (Click Here to Update)", "")
 
-            SolutionTrackerInstance.LoadManual(
+            SolutionTrackerInstance.ManualLoad(
                 Solution(ExcelInstance, Name, RowIndex, ColIndex)
             )

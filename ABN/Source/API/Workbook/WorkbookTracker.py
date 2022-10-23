@@ -6,16 +6,24 @@ class WorkbookTracker(TrackerABC):
     def __init__(self):
         self.Collection: dict[str, Workbook] = dict()
 
-    def LoadManual(self, MethodInstance: Workbook):
-        Name = MethodInstance.GetName()
+    def ManualLoad(self, ObjectABCInstance: Workbook) -> None:
 
-        if Name in self.Collection:
-            raise Exception("Workbook Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = MethodInstance
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
+
+    def ManualUnload(self, ObjectABCInstance: Workbook) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: Workbook) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
 
     def GetObjectsAsList(self) -> list[Workbook]:
-        return [self.Collection[key] for key in self.Collection]
+        return self.Collection.items()
 
     def GetObjectsAsDictionary(self) -> dict[str, Workbook]:
         return self.Collection

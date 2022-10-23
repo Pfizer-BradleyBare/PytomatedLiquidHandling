@@ -16,19 +16,27 @@ class LidTracker(TrackerABC):
             DeckLocationTrackerInstance
         )
 
-    def LoadManual(self, LidInstance: Lid):
-        Name = LidInstance.GetName()
+    def ManualLoad(self, ObjectABCInstance: Lid) -> None:
 
-        if Name in self.Collection:
-            raise Exception("Lid Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = LidInstance
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
 
-    def GetLoadedObjectsAsDictionary(self) -> dict[str, Lid]:
+    def ManualUnload(self, ObjectABCInstance: Lid) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: Lid) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
+
+    def GetObjectsAsList(self) -> list[Lid]:
+        return self.Collection.items()
+
+    def GetObjectsAsDictionary(self) -> dict[str, Lid]:
         return self.Collection
-
-    def GetLoadedObjectsAsList(self) -> list[Lid]:
-        return [self.Collection[key] for key in self.Collection]
 
     def GetObjectByName(self, Name: str) -> Lid:
         return self.Collection[Name]

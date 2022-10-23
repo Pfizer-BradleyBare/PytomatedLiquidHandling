@@ -20,9 +20,9 @@ def LoadYaml(TipTrackerInstance: TipTracker, FilePath: str):
         if TipType == TipTypes.NTR:
             NTRWasteSequence = MaxVolume = TipItem["NTR Waste Sequence"]
 
-            TipTrackerInstance.LoadManual(
+            TipTrackerInstance.ManualLoad(
                 TipNTR(TipID, PickupSequence, NTRWasteSequence, MaxVolume)
             )
 
         elif TipType == TipTypes.FTR:
-            TipTrackerInstance.LoadManual(TipFTR(TipID, PickupSequence, MaxVolume))
+            TipTrackerInstance.ManualLoad(TipFTR(TipID, PickupSequence, MaxVolume))

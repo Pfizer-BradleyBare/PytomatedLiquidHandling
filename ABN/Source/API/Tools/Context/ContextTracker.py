@@ -6,18 +6,26 @@ class ContextTracker(TrackerABC):
     def __init__(self):
         self.Collection: dict[str, Context] = dict()
 
-    def LoadManual(self, ContextInstance: Context):
-        Name = ContextInstance.GetName()
+    def ManualLoad(self, ObjectABCInstance: Context) -> None:
 
-        if str(Name) in self.Collection:
-            raise Exception("Context Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = ContextInstance
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
+
+    def ManualUnload(self, ObjectABCInstance: Context) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: Context) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
 
     def GetObjectsAsList(self) -> list[Context]:
         return self.Collection.items()
 
-    def GetObjectsAsDictionary(self) -> dict[Context]:
+    def GetObjectsAsDictionary(self) -> dict[str, Context]:
         return self.Collection
 
     def GetObjectByName(self, Name: str) -> Context:

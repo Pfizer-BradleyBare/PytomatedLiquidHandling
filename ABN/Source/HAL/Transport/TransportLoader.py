@@ -40,7 +40,7 @@ def LoadYaml(TransportTrackerInstance: TransportTracker, FilePath: str):
         TransportDevice = TransportDevices(DeviceID)
         if TransportDevice == TransportDevices.COREGripper:
             GripperSequence = DeviceConfig["Gripper Sequence"]
-            TransportTrackerInstance.LoadManual(
+            TransportTrackerInstance.ManualLoad(
                 COREGripperDevice(Labwares, GripperSequence)
             )
 

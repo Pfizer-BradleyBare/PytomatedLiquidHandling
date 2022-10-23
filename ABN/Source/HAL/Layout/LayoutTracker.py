@@ -16,18 +16,26 @@ class LayoutTracker(TrackerABC):
             DeckLocationTrackerInstance
         )
 
-    def LoadManual(self, LayoutItemInstance: LayoutItem):
-        Name = LayoutItemInstance.GetName()
+    def ManualLoad(self, ObjectABCInstance: LayoutItem) -> None:
 
-        if Name in self.Collection:
-            raise Exception("Layout Item Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = LayoutItemInstance
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
 
-    def GetLoadedObjectsAsList(self) -> list[LayoutItem]:
-        return [self.Collection[key] for key in self.Collection]
+    def ManualUnload(self, ObjectABCInstance: LayoutItem) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
 
-    def GetLoadedObjectsAsDictionary(self) -> dict[str, LayoutItem]:
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: LayoutItem) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
+
+    def GetObjectsAsList(self) -> list[LayoutItem]:
+        return self.Collection.items()
+
+    def GetObjectsAsDictionary(self) -> dict[str, LayoutItem]:
         return self.Collection
 
     def GetObjectByName(self, Name: str) -> LayoutItem:

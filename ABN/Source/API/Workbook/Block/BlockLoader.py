@@ -2,7 +2,6 @@ from .Block import BlockObjectCreationWrapper, Block
 from .BlockTracker import BlockTracker
 from ....Tools import Excel
 from ...Blocks import *  # noqa F403
-from ....Server.Tools import LOG
 
 
 def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
@@ -125,6 +124,6 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
     for Pathway in MethodPathways:
         for BlockInstance in Pathway:
             if BlockInstance not in OrganizedBlocks:
-                BlockTrackerInstance.LoadManual(BlockInstance)
+                BlockTrackerInstance.ManualLoad(BlockInstance)
                 OrganizedBlocks.append(BlockInstance)
     # Now get each block uniquely from the list of blocks. This is relatively in order which is what we want

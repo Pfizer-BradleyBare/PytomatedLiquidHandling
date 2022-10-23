@@ -8,19 +8,27 @@ class DeckLocationTracker(TrackerABC):
         self.Collection: dict[str, DeckLocation] = dict()
         self.TransportTrackerInstance: TransportTracker = TransportTrackerInstance
 
-    def LoadManual(self, DeckLocationInstace: DeckLocation):
-        Name = DeckLocationInstace.GetName()
+    def ManualLoad(self, ObjectABCInstance: DeckLocation) -> None:
 
-        if Name in self.Collection:
-            raise Exception("Deck Location Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = DeckLocationInstace
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
 
-    def GetLoadedObjectsAsDictionary(self) -> dict[str, DeckLocation]:
+    def ManualUnload(self, ObjectABCInstance: DeckLocation) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: DeckLocation) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
+
+    def GetObjectsAsList(self) -> list[DeckLocation]:
+        return self.Collection.items()
+
+    def GetObjectsAsDictionary(self) -> dict[str, DeckLocation]:
         return self.Collection
-
-    def GetLoadedObjectsAsList(self) -> list[DeckLocation]:
-        return [self.Collection[key] for key in self.Collection]
 
     def GetObjectByName(self, Name: str) -> DeckLocation:
         return self.Collection[Name]

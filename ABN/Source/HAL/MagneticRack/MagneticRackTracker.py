@@ -22,19 +22,27 @@ class MagneticRackTracker(TrackerABC):
         self.PipetteDeviceTrackerInstance: PipetteTracker = PipetteDeviceTrackerInstance
         self.TipTrackerInstance: TipTracker = TipTrackerInstance
 
-    def LoadManual(self, InputMagneticRack: MagneticRack):
-        Name = InputMagneticRack.GetName()
+    def ManualLoad(self, ObjectABCInstance: MagneticRack) -> None:
 
-        if Name in self.Collection:
-            raise Exception("Lid Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = InputMagneticRack
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
 
-    def GetLoadedObjectsAsDictionary(self) -> dict[str, MagneticRack]:
+    def ManualUnload(self, ObjectABCInstance: MagneticRack) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: MagneticRack) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
+
+    def GetObjectsAsList(self) -> list[MagneticRack]:
+        return self.Collection.items()
+
+    def GetObjectsAsDictionary(self) -> dict[str, MagneticRack]:
         return self.Collection
-
-    def GetLoadedObjectsAsList(self) -> list[MagneticRack]:
-        return [self.Collection[key] for key in self.Collection]
 
     def GetObjectByName(self, Name: str) -> MagneticRack:
         return self.Collection[Name]

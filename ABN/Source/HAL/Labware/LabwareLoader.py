@@ -55,7 +55,7 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
             )
             # Create Wells Class
 
-            LabwareTrackerInstance.LoadManual(
+            LabwareTrackerInstance.ManualLoad(
                 PipettableLabware(
                     LabwareID,
                     Filter,
@@ -64,7 +64,7 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
                 )
             )
         else:
-            LabwareTrackerInstance.LoadManual(Labware(LabwareID, Filter, Dimensions))
+            LabwareTrackerInstance.ManualLoad(Labware(LabwareID, Filter, Dimensions))
 
         # Create Labware Class and append
 

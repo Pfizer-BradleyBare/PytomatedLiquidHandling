@@ -74,6 +74,9 @@ class PipettingDevice:
         self.PipettingChannel: PipettingChannels = PipettingChannel
         self.PipettingTips: list[PipettingTip] = PipettingTips
 
+    def GetName(self) -> str:
+        return self.PipettingChannel.GetName()
+
     def GetPipettingChannel(self) -> PipettingChannels:
         return self.PipettingChannel
 

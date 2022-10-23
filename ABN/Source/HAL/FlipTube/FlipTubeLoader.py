@@ -25,6 +25,6 @@ def LoadYaml(FlipTubeTrackerInstance: FlipTubeTracker, FilePath: str):
                 )
             )
 
-        FlipTubeTrackerInstance.LoadManual(
+        FlipTubeTrackerInstance.ManualLoad(
             FlipTube(FlipTubeID, Sequence, SupportedLabwares)
         )

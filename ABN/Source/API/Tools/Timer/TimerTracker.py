@@ -4,15 +4,23 @@ from .Timer import Timer
 
 class TimerTracker(TrackerABC):
     def __init__(self):
-        self.Collection[str, Timer] = dict()
+        self.Collection: dict[str, Timer] = dict()
 
-    def LoadManual(self, TimerInstance: Timer):
-        Name = TimerInstance.GetName()
+    def ManualLoad(self, ObjectABCInstance: Timer) -> None:
 
-        if Name in self.Collection:
-            raise Exception("Timer Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = TimerInstance
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
+
+    def ManualUnload(self, ObjectABCInstance: Timer) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: Timer) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
 
     def GetObjectsAsList(self) -> list[Timer]:
         return self.Collection.items()

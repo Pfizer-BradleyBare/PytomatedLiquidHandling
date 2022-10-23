@@ -6,19 +6,27 @@ class TipTracker(TrackerABC):
     def __init__(self):
         self.Collection: dict[str, Tip] = dict()
 
-    def LoadManual(self, InputTip: Tip):
-        Name = InputTip.GetName()
+    def ManualLoad(self, ObjectABCInstance: Tip) -> None:
 
-        if Name in self.Collection:
-            raise Exception("Lid Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = InputTip
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
 
-    def GetLoadedObjectsAsDictionary(self) -> dict[str, Tip]:
+    def ManualUnload(self, ObjectABCInstance: Tip) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: Tip) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
+
+    def GetObjectsAsList(self) -> list[Tip]:
+        return self.Collection.items()
+
+    def GetObjectsAsDictionary(self) -> dict[str, Tip]:
         return self.Collection
-
-    def GetLoadedObjectsAsList(self) -> list[Tip]:
-        return [self.Collection[key] for key in self.Collection]
 
     def GetObjectByName(self, Name: str) -> Tip:
         return self.Collection[Name]

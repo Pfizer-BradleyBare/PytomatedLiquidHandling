@@ -1,25 +1,32 @@
 from .Solution import Solution
 from ....AbstractClasses import TrackerABC
-from ....Tools import Excel
 
 
 class SolutionTracker(TrackerABC):
     def __init__(self):
         self.Collection: dict[str, Solution] = dict()
 
-    def LoadManual(self, SolutionInstance: Solution):
-        Name = SolutionInstance.GetName()
+    def ManualLoad(self, ObjectABCInstance: Solution) -> None:
 
-        if Name in self.Collection:
-            raise Exception("Solution Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = SolutionInstance
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
+
+    def ManualUnload(self, ObjectABCInstance: Solution) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: Solution) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
+
+    def GetObjectsAsList(self) -> list[Solution]:
+        return self.Collection.items()
 
     def GetObjectsAsDictionary(self) -> dict[str, Solution]:
         return self.Collection
-
-    def GetObjectsAsList(self) -> list[Solution]:
-        return [self.Collection[key] for key in self.Collection]
 
     def GetObjectByName(self, Name: str) -> Solution:
         return self.Collection[Name]

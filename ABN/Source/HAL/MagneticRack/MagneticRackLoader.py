@@ -76,7 +76,7 @@ def LoadYaml(MagneticRackTrackerInstance: MagneticRackTracker, FilePath: str):
                 PipettingDevice(PipetteDevice, DispensePipettingTips)
             )
 
-        MagneticRackTrackerInstance.LoadManual(
+        MagneticRackTrackerInstance.ManualLoad(
             MagneticRack(
                 RackID,
                 Enabled,

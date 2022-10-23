@@ -16,18 +16,26 @@ class TempControlDeviceTracker(TrackerABC):
             DeckLocationTrackerInstance
         )
 
-    def LoadManual(self, InputDevice: TempControlDevice):
-        Name = InputDevice.GetName()
+    def ManualLoad(self, ObjectABCInstance: TempControlDevice) -> None:
 
-        if Name in self.Collection:
-            raise Exception("Temp Control Devvice Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = InputDevice
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
 
-    def GetLoadedObjectsAsList(self) -> list[TempControlDevice]:
-        return [self.Collection[key] for key in self.Collection]
+    def ManualUnload(self, ObjectABCInstance: TempControlDevice) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
 
-    def GetLoadedObjectsAsDictionary(self) -> dict[str, TempControlDevice]:
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: TempControlDevice) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
+
+    def GetObjectsAsList(self) -> list[TempControlDevice]:
+        return self.Collection.items()
+
+    def GetObjectsAsDictionary(self) -> dict[str, TempControlDevice]:
         return self.Collection
 
     def GetObjectByName(self, Name: str) -> TempControlDevice:

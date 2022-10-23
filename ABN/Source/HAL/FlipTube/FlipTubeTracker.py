@@ -8,19 +8,27 @@ class FlipTubeTracker(TrackerABC):
         self.Collection: dict[str, FlipTube] = dict()
         self.LabwareTrackerInstance: LabwareTracker = LabwareTrackerInstance
 
-    def LoadManual(self, FlipTubeInstance: FlipTube):
-        Name = FlipTubeInstance.GetName()
+    def ManualLoad(self, ObjectABCInstance: FlipTube) -> None:
 
-        if Name in self.Collection:
-            raise Exception("FlipTube Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = FlipTubeInstance
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
 
-    def GetLoadedObjectsAsDictionary(self) -> dict[str, FlipTube]:
+    def ManualUnload(self, ObjectABCInstance: FlipTube) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: FlipTube) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
+
+    def GetObjectsAsList(self) -> list[FlipTube]:
+        return self.Collection.items()
+
+    def GetObjectsAsDictionary(self) -> dict[str, FlipTube]:
         return self.Collection
-
-    def GetLoadedObjectsAsList(self) -> list[FlipTube]:
-        return [self.Collection[key] for key in self.Collection]
 
     def GetObjectByName(self, Name: str) -> FlipTube:
         return self.Collection[Name]

@@ -6,13 +6,21 @@ class WellFactorTracker(TrackerABC):
     def __init__(self):
         self.Collection: dict[int, WellFactor] = dict()
 
-    def LoadManual(self, WellFactorInstance: WellFactor):
-        Name = WellFactorInstance.GetName()
+    def ManualLoad(self, ObjectABCInstance: WellFactor) -> None:
 
-        if Name in self.Collection:
-            raise Exception("Well Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = WellFactorInstance
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
+
+    def ManualUnload(self, ObjectABCInstance: WellFactor) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: WellFactor) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
 
     def GetObjectsAsList(self) -> list[WellFactor]:
         return self.Collection.items()

@@ -23,7 +23,7 @@ def Load(
 
     TreeInstance = Tree(BlockTrackerInstance.GetObjectsAsList()[0])
 
-    WorkbookTrackerInstance.LoadManual(
+    WorkbookTrackerInstance.ManualLoad(
         Workbook(
             RunType,
             ExcelFilePath,

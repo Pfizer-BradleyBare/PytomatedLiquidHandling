@@ -45,6 +45,6 @@ def LoadYaml(TempControlDeviceTrackerInstance: TempControlDeviceTracker, FilePat
             ComPort = Device["Com Port"]
             DeviceType = DeviceTypes(Device["Device Type"])
 
-            TempControlDeviceTrackerInstance.LoadManual(
+            TempControlDeviceTrackerInstance.ManualLoad(
                 TempControlDevice(DeviceID, ComPort, DeviceType, Config, LayoutItems)
             )

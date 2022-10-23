@@ -22,7 +22,7 @@ def LoadYaml(NotifyTrackerInstance: NotifyTracker, FilePath: str):
                 "Always Notify Emails"
             ]
 
-            NotifyTrackerInstance.LoadManual(
+            NotifyTrackerInstance.ManualLoad(
                 EmailTextNotify(
                     Enabled, DeviceID, SMTPServer, SenderEmail, AlwaysNotifyEmails
                 )

@@ -11,19 +11,27 @@ class PipetteTracker(TrackerABC):
         self.Collection: dict[str, PipettingDevice] = dict()
         self.TipTrackerInstance: TipTracker = TipTrackerInstance
 
-    def LoadManual(self, InputPipettingDevice: PipettingDevice):
-        Name = InputPipettingDevice.GetPipettingChannel().GetName()
+    def ManualLoad(self, ObjectABCInstance: PipettingDevice) -> None:
 
-        if Name in self.Collection:
-            raise Exception("Pipette Device Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = InputPipettingDevice
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
 
-    def GetLoadedObjectsAsDictionary(self) -> dict[str, PipettingDevice]:
+    def ManualUnload(self, ObjectABCInstance: PipettingDevice) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: PipettingDevice) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
+
+    def GetObjectsAsList(self) -> list[PipettingDevice]:
+        return self.Collection.items()
+
+    def GetObjectsAsDictionary(self) -> dict[str, PipettingDevice]:
         return self.Collection
-
-    def GetLoadedObjectsAsList(self) -> list[PipettingDevice]:
-        return [self.Collection[key] for key in self.Collection]
 
     def GetObjectByName(self, Name: str) -> PipettingDevice:
         return self.Collection[Name]

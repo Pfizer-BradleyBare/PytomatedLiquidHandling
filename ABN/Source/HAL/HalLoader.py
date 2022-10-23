@@ -31,7 +31,7 @@ def Load(HalInstance: Hal):
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Labware\\Labware.yaml",
     )
     HalInstance.LabwareTrackerInstance = Labwares
-    for Labware in Labwares.GetLoadedObjectsAsList():
+    for Labware in Labwares.GetObjectsAsList():
         LOG.debug(Labware)
 
     LOG.info("Success!")
@@ -44,7 +44,7 @@ def Load(HalInstance: Hal):
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Transport\\Transport.yaml",
     )
     HalInstance.TransportTrackerInstance = TransportDevices
-    for TransportDevice in TransportDevices.GetLoadedObjectsAsList():
+    for TransportDevice in TransportDevices.GetObjectsAsList():
         LOG.debug(TransportDevice)
 
     LOG.info("Success!")
@@ -57,7 +57,7 @@ def Load(HalInstance: Hal):
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\DeckLocation\\DeckLocation.yaml",
     )
     HalInstance.DeckLocationTrackerInstance = DeckLocations
-    for Location in DeckLocations.GetLoadedObjectsAsList():
+    for Location in DeckLocations.GetObjectsAsList():
         LOG.debug(Location)
 
     LOG.info("Success!")
@@ -70,7 +70,7 @@ def Load(HalInstance: Hal):
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Layout\\Layout.yaml",
     )
     HalInstance.LayoutTrackerInstance = LayoutItems
-    for Layout in LayoutItems.GetLoadedObjectsAsList():
+    for Layout in LayoutItems.GetObjectsAsList():
         LOG.debug(Layout)
 
     LOG.info("Success!")
@@ -83,7 +83,7 @@ def Load(HalInstance: Hal):
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Lid\\Lid.yaml",
     )
     HalInstance.LidTrackerInstance = Lids
-    for Lid in Lids.GetLoadedObjectsAsList():
+    for Lid in Lids.GetObjectsAsList():
         LOG.debug(Lid)
 
     LOG.info("Success!")
@@ -96,7 +96,7 @@ def Load(HalInstance: Hal):
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\TempControlDevice\\TempControlDevice.yaml",
     )
     HalInstance.TempControlDeviceTrackerInstance = TempControlDevices
-    for TempControlDevice in TempControlDevices.GetLoadedObjectsAsList():
+    for TempControlDevice in TempControlDevices.GetObjectsAsList():
         LOG.debug(TempControlDevice)
 
     LOG.info("Success!")
@@ -109,7 +109,7 @@ def Load(HalInstance: Hal):
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Tip\\Tip.yaml",
     )
     HalInstance.TipTrackerInstance = Tips
-    for Tip in Tips.GetLoadedObjectsAsList():
+    for Tip in Tips.GetObjectsAsList():
         LOG.debug(Tip)
 
     LOG.info("Success!")
@@ -122,7 +122,7 @@ def Load(HalInstance: Hal):
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Pipette\\Pipette.yaml",
     )
     HalInstance.PipetteTrackerInstance = Pipettes
-    for Pipette in Pipettes.GetLoadedObjectsAsList():
+    for Pipette in Pipettes.GetObjectsAsList():
         LOG.debug(Pipette)
 
     LOG.info("Success!")
@@ -135,7 +135,7 @@ def Load(HalInstance: Hal):
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\MagneticRack\\MagneticRack.yaml",
     )
     HalInstance.MagneticRackTrackerInstance = MagneticRacks
-    for MagneticRack in MagneticRacks.GetLoadedObjectsAsList():
+    for MagneticRack in MagneticRacks.GetObjectsAsList():
         LOG.debug(MagneticRack)
 
     LOG.info("Success!")
@@ -148,7 +148,7 @@ def Load(HalInstance: Hal):
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Notify\\Notify.yaml",
     )
     HalInstance.NotifyTrackerInstance = NotifyDevices
-    for NotifyDevice in NotifyDevices.GetLoadedObjectsAsList():
+    for NotifyDevice in NotifyDevices.GetObjectsAsList():
         LOG.debug(NotifyDevice)
 
     LOG.info("Success!")
@@ -161,7 +161,7 @@ def Load(HalInstance: Hal):
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\FlipTube\\FlipTube.yaml",
     )
     HalInstance.FlipTubeTrackerInstance = FlipTubes
-    for FlipTube in FlipTubes.GetLoadedObjectsAsList():
+    for FlipTube in FlipTubes.GetObjectsAsList():
         LOG.debug(FlipTube)
 
     LOG.info("Success!")

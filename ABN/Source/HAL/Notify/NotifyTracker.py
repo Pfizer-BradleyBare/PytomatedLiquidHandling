@@ -6,19 +6,27 @@ class NotifyTracker(TrackerABC):
     def __init__(self):
         self.Collection: dict[str, Notify] = dict()
 
-    def LoadManual(self, NotifyInstance: Notify):
-        Name = NotifyInstance.GetName()
+    def ManualLoad(self, ObjectABCInstance: Notify) -> None:
 
-        if Name in self.Collection:
-            raise Exception("Lid Already Exists")
+        if self.IsTracked(ObjectABCInstance) is True:
+            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
 
-        self.Collection[Name] = NotifyInstance
+        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
 
-    def GetLoadedObjectsAsDictionary(self) -> dict[str, Notify]:
+    def ManualUnload(self, ObjectABCInstance: Notify) -> None:
+        if self.IsTracked(ObjectABCInstance) is False:
+            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+
+        del self.Collection[ObjectABCInstance.GetName()]
+
+    def IsTracked(self, ObjectABCInstance: Notify) -> bool:
+        return ObjectABCInstance.GetName() in self.Collection
+
+    def GetObjectsAsList(self) -> list[Notify]:
+        return self.Collection.items()
+
+    def GetObjectsAsDictionary(self) -> dict[str, Notify]:
         return self.Collection
-
-    def GetLoadedObjectsAsList(self) -> list[Notify]:
-        return [self.Collection[key] for key in self.Collection]
 
     def GetObjectByName(self, Name: str) -> Notify:
         return self.Collection[Name]
