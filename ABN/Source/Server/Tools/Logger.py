@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 import datetime
 
 LOG_LEVEL = logging.DEBUG
@@ -14,6 +15,19 @@ BASE_LOGFILE_NAME = "Log.ansi"
 LOG_FILE_FULL_PATH = os.path.join(LOG_DIRECTORY, TIME + BASE_LOGFILE_NAME)
 
 os.makedirs(LOG_DIRECTORY, exist_ok=True)
+
+
+class STDERRLogger(object):
+    def __init__(self):
+        self.Message = ""
+
+    def write(self, message):
+        self.Message += message
+
+    def flush(self):
+        if self.Message != "":
+            LOG.critical(self.Message)
+        self.Message = ""
 
 
 class CustomFormatter(logging.Formatter):
@@ -46,7 +60,7 @@ class CustomFormatter(logging.Formatter):
 LOG = logging.getLogger(__name__)
 LOG.setLevel(LOG_LEVEL)
 
-stdout_handler = logging.StreamHandler()
+stdout_handler = logging.StreamHandler(sys.stdout)
 stdout_handler.setLevel(LOG_LEVEL)
 stdout_handler.setFormatter(CustomFormatter(LOG_FORMAT))
 
@@ -56,6 +70,8 @@ file_handler.setFormatter(CustomFormatter(LOG_FORMAT))
 
 LOG.addHandler(stdout_handler)
 LOG.addHandler(file_handler)
+
+sys.stderr = STDERRLogger()
 
 LOG.debug("Debug Message")
 LOG.info("Info Message")
