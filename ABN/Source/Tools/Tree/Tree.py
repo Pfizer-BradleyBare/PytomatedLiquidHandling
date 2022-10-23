@@ -25,6 +25,9 @@ class Tree:
     def __init__(self, NodeInstance: Node):
         self.CurrentNode = NodeInstance
 
+    def SetCurrentNode(self, NodeInstance: Node):
+        self.CurrentNode = NodeInstance
+
     def GetCurrentNode(self) -> Node:
         return self.CurrentNode
 

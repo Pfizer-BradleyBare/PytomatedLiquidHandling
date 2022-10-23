@@ -11,6 +11,7 @@ from ...Server.Tools.HalInstance import HalInstance
 from ...Server.Tools import AliveStateFlag
 from ...Server.Tools import LOG
 from ...Tools import Tree
+from ..Tools.Timer import TimerTracker
 
 
 class WorkbookStates(Enum):
@@ -62,13 +63,13 @@ class Workbook(ObjectABC):
 
         # Trackers
         self.MethodTree: Tree = MethodTree
+        self.ExecutedBlocksTrackerInstance: BlockTracker = BlockTracker()
         self.WorklistInstance: Worklist = WorklistInstance
         self.SolutionTrackerInstance: SolutionTracker = SolutionTrackerInstance
         self.ContainerTrackerInstance: ContainerTracker = ContainerTracker()
-
-        # Contexts
         self.ActiveContexts: ContextTracker = ContextTracker()
         self.InactiveContexts: ContextTracker = ContextTracker()
+        self.TimerTrackerInstance: TimerTracker = TimerTracker()
 
         LOG.debug(
             "The following method tree was determined for %s: \n%s",
@@ -95,8 +96,8 @@ class Workbook(ObjectABC):
     def GetState(self) -> WorkbookStates:
         return self.State
 
-    def GetBlockTrackers(self) -> list[BlockTracker]:
-        return self.BlockTrackerInstances
+    def GetExecutedBlockTracker(self) -> list[BlockTracker]:
+        return self.ExecutedBlocksTrackerInstance
 
     def GetWorklist(self) -> Worklist:
         return self.WorklistInstance
@@ -112,6 +113,9 @@ class Workbook(ObjectABC):
 
     def GetInactiveContexts(self) -> list[str]:
         return self.InactiveContexts
+
+    def GetTimerTracker(self) -> TimerTracker:
+        return self.TimerTrackerInstance
 
     def GetWorkbookProcessorThread(self) -> threading.Thread:
         return self.WorkbookProcessorThread
