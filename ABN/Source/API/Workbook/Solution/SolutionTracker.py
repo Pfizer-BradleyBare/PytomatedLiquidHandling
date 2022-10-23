@@ -9,13 +9,17 @@ class SolutionTracker(TrackerABC):
     def ManualLoad(self, ObjectABCInstance: Solution) -> None:
 
         if self.IsTracked(ObjectABCInstance) is True:
-            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
+            raise Exception(
+                str(type(ObjectABCInstance).__name__) + " is already tracked"
+            )
 
         self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
 
     def ManualUnload(self, ObjectABCInstance: Solution) -> None:
         if self.IsTracked(ObjectABCInstance) is False:
-            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+            raise Exception(
+                str(type(ObjectABCInstance).__name__) + " is not yet tracked"
+            )
 
         del self.Collection[ObjectABCInstance.GetName()]
 

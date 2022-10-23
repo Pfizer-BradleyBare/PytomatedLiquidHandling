@@ -14,13 +14,17 @@ class PipetteTracker(TrackerABC):
     def ManualLoad(self, ObjectABCInstance: PipettingDevice) -> None:
 
         if self.IsTracked(ObjectABCInstance) is True:
-            raise (str(type(ObjectABCInstance).__name__)) + " is already tracked"
+            raise Exception(
+                str(type(ObjectABCInstance).__name__) + " is already tracked"
+            )
 
         self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
 
     def ManualUnload(self, ObjectABCInstance: PipettingDevice) -> None:
         if self.IsTracked(ObjectABCInstance) is False:
-            raise (str(type(ObjectABCInstance).__name__)) + " is not yet tracked"
+            raise Exception(
+                str(type(ObjectABCInstance).__name__) + " is not yet tracked"
+            )
 
         del self.Collection[ObjectABCInstance.GetName()]
 

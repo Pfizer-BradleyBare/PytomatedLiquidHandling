@@ -71,7 +71,7 @@ file_handler.setFormatter(CustomFormatter(LOG_FORMAT))
 LOG.addHandler(stdout_handler)
 LOG.addHandler(file_handler)
 
-# sys.stderr = STDERRLogger()
+sys.stderr = STDERRLogger()
 
 LOG.debug("Debug Message")
 LOG.info("Info Message")
