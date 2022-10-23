@@ -9,13 +9,13 @@ class Timer(ObjectABC):
         WaitTimeSeconds: float,
         WaitReason: str,
         BlockInstance: Block,
-        CallbackFunction: callable[Block],
+        CallbackFunction: callable,
     ):
         self.WaitTimeSeconds: float = WaitTimeSeconds
         self.WaitTimeEnd: float = time.time() + WaitTimeSeconds
         self.WaitReason: str = WaitReason
         self.BlockInstance: Block = BlockInstance
-        self.CallbackFunction: callable[Block] = CallbackFunction
+        self.CallbackFunction: callable = CallbackFunction
 
     def GetName(self) -> str:
         return "Timer: " + self.BlockInstance.GetName()
@@ -32,5 +32,5 @@ class Timer(ObjectABC):
     def GetBlock(self) -> Block:
         return self.BlockInstance
 
-    def GetCallbackFunction(self) -> callable[Block]:
+    def GetCallbackFunction(self) -> callable:
         return self.CallbackFunction
