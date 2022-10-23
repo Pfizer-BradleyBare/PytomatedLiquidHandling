@@ -13,21 +13,29 @@ class TrackerABC:
     @abstractmethod
     def ManualLoad(self, ObjectABCInstance: ObjectABC) -> None:
 
+        Name = ObjectABCInstance.GetName()
+
         if self.IsTracked(ObjectABCInstance) is True:
             raise Exception(
-                str(type(ObjectABCInstance).__name__) + " is already tracked"
+                str(type(ObjectABCInstance).__name__)
+                + " is already tracked. Name: "
+                + Name
             )
 
-        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
+        self.Collection[Name] = ObjectABCInstance
 
     @abstractmethod
     def ManualUnload(self, ObjectABCInstance: ObjectABC) -> None:
-        if self.IsTracked(ObjectABCInstance) is False:
+        Name = ObjectABCInstance.GetName()
+
+        if self.IsTracked(ObjectABCInstance) is True:
             raise Exception(
-                str(type(ObjectABCInstance).__name__) + " is not yet tracked"
+                str(type(ObjectABCInstance).__name__)
+                + " is not yet tracked. Name: "
+                + Name
             )
 
-        del self.Collection[ObjectABCInstance.GetName()]
+        self.Collection[Name] = ObjectABCInstance
 
     @abstractmethod
     def IsTracked(self, ObjectABCInstance: ObjectABC) -> bool:

@@ -8,20 +8,28 @@ class TipTracker(TrackerABC):
 
     def ManualLoad(self, ObjectABCInstance: Tip) -> None:
 
+        Name = ObjectABCInstance.GetName()
+
         if self.IsTracked(ObjectABCInstance) is True:
             raise Exception(
-                str(type(ObjectABCInstance).__name__) + " is already tracked"
+                str(type(ObjectABCInstance).__name__)
+                + " is already tracked. Name: "
+                + Name
             )
 
-        self.Collection[ObjectABCInstance.GetName()] = ObjectABCInstance
+        self.Collection[Name] = ObjectABCInstance
 
     def ManualUnload(self, ObjectABCInstance: Tip) -> None:
-        if self.IsTracked(ObjectABCInstance) is False:
+        Name = ObjectABCInstance.GetName()
+
+        if self.IsTracked(ObjectABCInstance) is True:
             raise Exception(
-                str(type(ObjectABCInstance).__name__) + " is not yet tracked"
+                str(type(ObjectABCInstance).__name__)
+                + " is not yet tracked. Name: "
+                + Name
             )
 
-        del self.Collection[ObjectABCInstance.GetName()]
+        self.Collection[Name] = ObjectABCInstance
 
     def IsTracked(self, ObjectABCInstance: Tip) -> bool:
         return ObjectABCInstance.GetName() in self.Collection
