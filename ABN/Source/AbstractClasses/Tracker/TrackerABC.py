@@ -1,8 +1,6 @@
 from abc import abstractmethod
 from ..Object.ObjectABC import ObjectABC
 
-# This is an abstract loader class for loading configuration files
-
 
 class TrackerABC:
     @abstractmethod
@@ -10,7 +8,15 @@ class TrackerABC:
         self.Collection: dict[str, ObjectABC] = dict()
 
     @abstractmethod
-    def LoadManual(self, ObjectABCInstance: ObjectABC):
+    def ManualLoad(self, ObjectABCInstance: ObjectABC):
+        raise NotImplementedError
+
+    @abstractmethod
+    def ManualUnload(self, ObjectABCInstance: ObjectABC):
+        raise NotImplementedError
+
+    @abstractmethod
+    def IsTracked(self, ObjectABCInstance: ObjectABC):
         raise NotImplementedError
 
     @abstractmethod
