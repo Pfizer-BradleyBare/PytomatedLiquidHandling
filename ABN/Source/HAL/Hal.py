@@ -9,10 +9,13 @@ from .Pipette import PipetteTracker
 from .TempControlDevice import TempControlDeviceTracker
 from .Tip import TipTracker
 from .Transport import TransportTracker
+from .Tools import HalLockTracker
 
 
 class Hal:
     def __init__(self):
+        self.HalLockTrackerInstance: HalLockTracker = HalLockTracker()
+
         self.DeckLocationTrackerInstance: DeckLocationTracker
         self.FlipTubeTrackerInstance: FlipTubeTracker
         self.LabwareTrackerInstance: LabwareTracker
