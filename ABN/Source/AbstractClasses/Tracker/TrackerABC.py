@@ -31,7 +31,7 @@ class TrackerABC:
 
     @abstractmethod
     def GetObjectsAsList(self) -> list[ObjectABC]:
-        return self.Collection.items()
+        return list(self.Collection.items())
 
     @abstractmethod
     def GetObjectsAsDictionary(self) -> dict[str, ObjectABC]:

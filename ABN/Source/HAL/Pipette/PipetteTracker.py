@@ -28,7 +28,7 @@ class PipetteTracker(TrackerABC):
         return ObjectABCInstance.GetName() in self.Collection
 
     def GetObjectsAsList(self) -> list[PipettingDevice]:
-        return self.Collection.items()
+        return list(self.Collection.items())
 
     def GetObjectsAsDictionary(self) -> dict[str, PipettingDevice]:
         return self.Collection

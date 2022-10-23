@@ -25,7 +25,7 @@ class TransportTracker(TrackerABC):
         return ObjectABCInstance.GetName() in self.Collection
 
     def GetObjectsAsList(self) -> list[TransportDevice]:
-        return self.Collection.items()
+        return list(self.Collection.items())
 
     def GetObjectsAsDictionary(self) -> dict[str, TransportDevice]:
         return self.Collection

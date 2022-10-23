@@ -33,7 +33,7 @@ class LayoutTracker(TrackerABC):
         return ObjectABCInstance.GetName() in self.Collection
 
     def GetObjectsAsList(self) -> list[LayoutItem]:
-        return self.Collection.items()
+        return list(self.Collection.items())
 
     def GetObjectsAsDictionary(self) -> dict[str, LayoutItem]:
         return self.Collection
