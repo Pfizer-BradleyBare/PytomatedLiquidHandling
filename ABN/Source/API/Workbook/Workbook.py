@@ -73,6 +73,8 @@ class Workbook(ObjectABC):
         self.MethodPath: str = MethodPath
         self.MethodName: str = os.path.basename(MethodPath)
         self.State: WorkbookStates = WorkbookStates.Queued
+        self.ExecutingContextInstance: Context
+        self.RootBlockInstance: Block = MethodTree.GetCurrentNode()
 
         # Trackers
         self.MethodTree: Tree = MethodTree
@@ -85,7 +87,6 @@ class Workbook(ObjectABC):
         self.ContainerTrackerInstance: ContainerTracker = ContainerTracker()
         self.ContextTrackerInstance: ContextTracker = ContextTracker()
         self.InactiveContextTrackerInstance: ContextTracker = ContextTracker()
-        self.ExecutingContextInstance: Context
         self.TimerTrackerInstance: TimerTracker = TimerTracker()
 
         LOG.debug(
@@ -172,6 +173,15 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # Do some workbook save state stuff here
             break
 
+        List = [MergePlates]
+
+        def TraverseAndSearch(
+            SearchBlocks: list[Block],
+            ExclusionList: list[Block],
+            OutputBlocks: list[Block],
+        ):
+            pass
+
         # Before each round of steps we want to check if we can start heaters / Coolers
         # We can not start a heater until any preceeding merge steps are completed
         # No idea how to do this...
@@ -253,7 +263,7 @@ def WorkbookInit(WorkbookInstance: Workbook):
         )
     )
 
-    WorkbookInstance.GetActiveContexts().ManualLoad(
+    WorkbookInstance.GetContextTracker().ManualLoad(
         WorkbookInstance.GetExecutingContext()
     )
 
