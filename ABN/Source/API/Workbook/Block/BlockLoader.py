@@ -115,7 +115,12 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
     # Find first traversal pathway.
 
     TraversePathways(
-        MethodPathways, list(), StartingPathway, BlockInstancesList, None, ""
+        MethodPathways,
+        list(),
+        StartingPathway,
+        BlockInstancesList,
+        None,
+        ":__StartingContext__",
     )
     # Now we need to create a seperate list for each pathway... This will need to happen recursively. Kill me now
 

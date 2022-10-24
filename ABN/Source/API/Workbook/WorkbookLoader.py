@@ -4,6 +4,7 @@ from ...Tools import Excel, Tree
 from .Worklist import Worklist
 from .Solution import SolutionTracker, SolutionLoader
 from .Block import BlockLoader, BlockTracker
+from ...HAL.Tools import DeckLoadingItemTracker
 
 
 def Load(
@@ -30,5 +31,6 @@ def Load(
             TreeInstance,
             WorklistInstance,
             SolutionTrackerInstance,
+            None,  # There will never be a deck loading unless we resume a run. But we havn't gotten there yet...
         )
     )

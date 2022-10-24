@@ -8,8 +8,16 @@ from ...Tools import Tree
 from .Worklist import Worklist
 from .Solution import SolutionTracker
 from ...API.Tools.Container import ContainerTracker
-from ...API.Tools.Context import ContextTracker, Context
+from ...API.Tools.Context import (
+    ContextTracker,
+    Context,
+    WellFactorTracker,
+    WellSequencesTracker,
+    WellSequences,
+    WellFactor,
+)
 from ..Tools.Timer import TimerTracker
+from ...HAL.Tools import DeckLoadingItemTracker
 
 from ...Server.Tools import LOG
 from ...Server.Tools.HalInstance import HalInstance
@@ -55,6 +63,7 @@ class Workbook(ObjectABC):
         MethodTree: Tree,
         WorklistInstance: Worklist,
         SolutionTrackerInstance: SolutionTracker,
+        DeckLoadingItemTrackerInstance: DeckLoadingItemTracker,
     ):
 
         # Variables
@@ -68,6 +77,9 @@ class Workbook(ObjectABC):
         self.ExecutedBlocksTrackerInstance: BlockTracker = BlockTracker()
         self.WorklistInstance: Worklist = WorklistInstance
         self.SolutionTrackerInstance: SolutionTracker = SolutionTrackerInstance
+        self.DeckLoadingItemTrackerInstance: DeckLoadingItemTracker = (
+            DeckLoadingItemTrackerInstance
+        )
         self.ContainerTrackerInstance: ContainerTracker = ContainerTracker()
         self.ActiveContexts: ContextTracker = ContextTracker()
         self.InactiveContexts: ContextTracker = ContextTracker()
@@ -79,21 +91,18 @@ class Workbook(ObjectABC):
             self.MethodTree.GetCurrentNode(),
         )
 
-        # Thread: Create and start
-        self.WorkbookProcessorThread: threading.Thread = threading.Thread(
-            name=self.MethodName + "->" + self.RunType.value,
-            target=WorkbookProcessor,
-            args=(self,),  # args must be tuple hence the empty second argument
-        )
-        self.ProcessingLock: threading.Lock = threading.Lock()
-        self.ProcessingLock.acquire()
-        self.WorkbookProcessorThread.start()
+        # Do the necessary init function.
+        # Why do it here? Because all init is handled inside the init function for simplicity sake
+        WorkbookInit(self)
 
     def GetName(self) -> str:
         return self.MethodName
 
     def GetPath(self) -> str:
         return self.MethodPath
+
+    def GetRunType(self) -> WorkbookRunTypes:
+        return self.RunType
 
     def GetState(self) -> WorkbookStates:
         return self.State
@@ -110,10 +119,10 @@ class Workbook(ObjectABC):
     def GetContainerTracker(self) -> ContainerTracker:
         return self.ContainerTrackerInstance
 
-    def GetActiveContexts(self) -> list[str]:
+    def GetActiveContexts(self) -> ContextTracker:
         return self.ActiveContexts
 
-    def GetInactiveContexts(self) -> list[str]:
+    def GetInactiveContexts(self) -> ContextTracker:
         return self.InactiveContexts
 
     def GetTimerTracker(self) -> TimerTracker:
@@ -144,3 +153,48 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         # somehow figure out the processing
 
         # do processing here
+
+
+def WorkbookInit(WorkbookInstance: Workbook):
+
+    # Check runtype. We will determine the starting well here
+    if WorkbookInstance.GetRunType() == WorkbookRunTypes.Run:
+        pass
+    else:
+        StartingWell = 1
+
+    # Set Initial Active Context
+    AspirateWellSequencesTrackerInstance = WellSequencesTracker()
+    DispenseWellSequencesTrackerInstance = WellSequencesTracker()
+
+    WellFactorsTrackerInstance = WellFactorTracker()
+
+    for SampleNumber in range(0, WorkbookInstance.GetWorklist().GetNumSamples()):
+        WellNumber = StartingWell + SampleNumber
+
+        WellSequencesInstance = WellSequences(WellNumber, [WellNumber])
+        WellFactorInstance = WellFactor(WellNumber, 1)
+
+        AspirateWellSequencesTrackerInstance.ManualLoad(WellSequencesInstance)
+        DispenseWellSequencesTrackerInstance.ManualLoad(WellSequencesInstance)
+
+        WellFactorsTrackerInstance.ManualLoad(WellFactorInstance)
+
+    WorkbookInstance.GetActiveContexts().ManualLoad(
+        Context(
+            ":__StartingContext__",
+            AspirateWellSequencesTrackerInstance,
+            DispenseWellSequencesTrackerInstance,
+            WellFactorsTrackerInstance,
+        )
+    )
+
+    # Thread: Create and start
+    WorkbookInstance.WorkbookProcessorThread: threading.Thread = threading.Thread(
+        name=WorkbookInstance.MethodName + "->" + WorkbookInstance.RunType.value,
+        target=WorkbookProcessor,
+        args=(WorkbookInstance,),  # args must be tuple hence the empty second argument
+    )
+    WorkbookInstance.ProcessingLock: threading.Lock = threading.Lock()
+    WorkbookInstance.ProcessingLock.acquire()
+    WorkbookInstance.WorkbookProcessorThread.start()

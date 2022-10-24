@@ -9,8 +9,7 @@ class Context(ObjectABC):
         Name: str,
         AspirateWellSequencesTrackerInstance: WellSequencesTracker,
         DispenseWellSequencesTrackerInstance: WellSequencesTracker,
-        AspirateWellFactorsTrackerInstance: WellFactorTracker,
-        DispenseWellFactorsTrackerInstance: WellFactorTracker,
+        WellFactorsTrackerInstance: WellFactorTracker,
     ):
         self.Name: str = Name
         self.AspirateWellSequencesTrackerInstance: WellSequencesTracker = (
@@ -19,12 +18,7 @@ class Context(ObjectABC):
         self.DispenseWellSequencesTrackerInstance: WellSequencesTracker = (
             DispenseWellSequencesTrackerInstance
         )
-        self.AspirateWellFactorsTrackerInstance: WellFactorTracker = (
-            AspirateWellFactorsTrackerInstance
-        )
-        self.DispenseWellFactorsTrackerInstance: WellFactorTracker = (
-            DispenseWellFactorsTrackerInstance
-        )
+        self.WellFactorsTrackerInstance: WellFactorTracker = WellFactorsTrackerInstance
 
     def GetName(self) -> str:
         return self.Name
@@ -35,8 +29,5 @@ class Context(ObjectABC):
     def GetDispenseWellSequencesTracker(self) -> WellSequencesTracker:
         return self.DispenseWellSequencesTrackerInstance
 
-    def GetAspirateWellFactorTracker(self) -> WellFactorTracker:
-        return self.AspirateWellFactorsTrackerInstance
-
-    def GetDispenseWellFactorTracker(self) -> WellFactorTracker:
-        return self.DispenseWellFactorsTrackerInstance
+    def GetWellFactorTracker(self) -> WellFactorTracker:
+        return self.WellFactorsTrackerInstance

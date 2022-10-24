@@ -40,6 +40,9 @@ class Block(ObjectABC, Node):
     def GetContext(self) -> str:
         return self.Context
 
+    def GetParentPlateName(self) -> str:
+        return self.Context[self.Context.rfind(":") + 1 :]  # noqa203
+
     @abstractmethod
     def Process(self, WorkbookInstance, HalInstance):
         raise NotImplementedError
