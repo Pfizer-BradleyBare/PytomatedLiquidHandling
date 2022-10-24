@@ -35,7 +35,7 @@ class ContextTracker(TrackerABC):
         return ObjectABCInstance.GetName() in self.Collection
 
     def GetObjectsAsList(self) -> list[Context]:
-        return list(self.Collection.items())
+        return [self.Collection[Key] for Key in self.Collection]
 
     def GetObjectsAsDictionary(self) -> dict[str, Context]:
         return self.Collection

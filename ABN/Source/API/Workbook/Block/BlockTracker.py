@@ -35,7 +35,7 @@ class BlockTracker(TrackerABC):
         return ObjectABCInstance.GetName() in self.Collection
 
     def GetObjectsAsList(self) -> list[Block]:
-        return list(self.Collection.items())
+        return [self.Collection[Key] for Key in self.Collection]
 
     def GetObjectsAsDictionary(self) -> dict[str, Block]:
         return self.Collection

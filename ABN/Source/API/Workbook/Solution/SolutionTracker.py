@@ -35,7 +35,7 @@ class SolutionTracker(TrackerABC):
         return ObjectABCInstance.GetName() in self.Collection
 
     def GetObjectsAsList(self) -> list[Solution]:
-        return list(self.Collection.items())
+        return [self.Collection[Key] for Key in self.Collection]
 
     def GetObjectsAsDictionary(self) -> dict[str, Solution]:
         return self.Collection

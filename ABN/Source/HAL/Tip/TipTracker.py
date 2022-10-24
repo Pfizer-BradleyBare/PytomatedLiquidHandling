@@ -35,7 +35,7 @@ class TipTracker(TrackerABC):
         return ObjectABCInstance.GetName() in self.Collection
 
     def GetObjectsAsList(self) -> list[Tip]:
-        return list(self.Collection.items())
+        return [self.Collection[Key] for Key in self.Collection]
 
     def GetObjectsAsDictionary(self) -> dict[str, Tip]:
         return self.Collection

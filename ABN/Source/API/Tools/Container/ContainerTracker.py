@@ -35,7 +35,7 @@ class ContainerTracker(TrackerABC):
         return ObjectABCInstance.GetName() in self.Collection
 
     def GetObjectsAsList(self) -> list[Container]:
-        return list(self.Collection.items())
+        return [self.Collection[Key] for Key in self.Collection]
 
     def GetObjectsAsDictionary(self) -> dict[str, Container]:
         return self.Collection
