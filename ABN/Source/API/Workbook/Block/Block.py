@@ -23,6 +23,7 @@ class Block(ObjectABC, Node):
         self.ExcelInstance: Excel = ExcelInstance
         self.Row: int = Row
         self.Col: int = Col
+        self.Context: str
 
     def __eq__(self, other):
         if not isinstance(other, Block):
@@ -35,6 +36,9 @@ class Block(ObjectABC, Node):
 
     def GetCol(self) -> int:
         return self.Col
+
+    def GetContext(self) -> str:
+        return self.Context
 
     @abstractmethod
     def Process(self, WorkbookInstance, HalInstance):

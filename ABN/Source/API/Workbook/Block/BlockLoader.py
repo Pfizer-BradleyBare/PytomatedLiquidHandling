@@ -77,12 +77,15 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
     # This will effectively connect our blocks into a wonderful tree in order of correct execution :)
     # It will also make complete pathways from start to end. Neato!
     def TraversePathways(
-        OutputList, CollectionList, TraversalList, PathwaysList, PreviousBlock
+        OutputList, CollectionList, TraversalList, PathwaysList, PreviousBlock, Context
     ):
         for BlockInstance in TraversalList:
             CollectionList.append(BlockInstance)
             BlockInstance.SetParentNode(PreviousBlock)
+            BlockInstance.Context = Context
             PreviousBlock = BlockInstance
+            if type(BlockInstance).__name__ == Plate.__name__:  # noqa F405
+                Context += ":" + Plate.GetPlateName(BlockInstance)  # noqa F405
 
             if type(BlockInstance).__name__ == SplitPlate.__name__:  # noqa F405
                 Pathways = [
@@ -98,6 +101,7 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
                             Pathway,
                             PathwaysList,
                             PreviousBlock,
+                            Context,
                         )
                 return
             # We need to traverse both pathways
@@ -110,7 +114,9 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
     BlockInstancesList.remove(StartingPathway)
     # Find first traversal pathway.
 
-    TraversePathways(MethodPathways, list(), StartingPathway, BlockInstancesList, None)
+    TraversePathways(
+        MethodPathways, list(), StartingPathway, BlockInstancesList, None, ""
+    )
     # Now we need to create a seperate list for each pathway... This will need to happen recursively. Kill me now
 
     for Pathway in MethodPathways:

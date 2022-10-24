@@ -1,17 +1,19 @@
 import os
-from ...AbstractClasses import ObjectABC
-from .Block import BlockTracker
-from .Worklist import Worklist
-from .Solution import SolutionTracker
 from enum import Enum
 import threading
+
+from ...AbstractClasses import ObjectABC
+from .Block import BlockTracker
+from ...Tools import Tree
+from .Worklist import Worklist
+from .Solution import SolutionTracker
 from ...API.Tools.Container import ContainerTracker
-from ...API.Tools.Context import ContextTracker
+from ...API.Tools.Context import ContextTracker, Context
+from ..Tools.Timer import TimerTracker
+
+from ...Server.Tools import LOG
 from ...Server.Tools.HalInstance import HalInstance
 from ...Server.Tools import AliveStateFlag
-from ...Server.Tools import LOG
-from ...Tools import Tree
-from ..Tools.Timer import TimerTracker
 
 
 class WorkbookStates(Enum):
@@ -77,7 +79,7 @@ class Workbook(ObjectABC):
             self.MethodTree.GetCurrentNode(),
         )
 
-        # Thread
+        # Thread: Create and start
         self.WorkbookProcessorThread: threading.Thread = threading.Thread(
             name=self.MethodName + "->" + self.RunType.value,
             target=WorkbookProcessor,
@@ -127,7 +129,6 @@ class Workbook(ObjectABC):
 def WorkbookProcessor(WorkbookInstance: Workbook):
 
     HalInstance
-    LOG
 
     while True:
 
