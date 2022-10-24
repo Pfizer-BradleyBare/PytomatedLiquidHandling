@@ -2,8 +2,10 @@ import os
 from enum import Enum
 import threading
 
+from ..Blocks import MergePlates
+
 from ...AbstractClasses import ObjectABC
-from .Block import BlockTracker
+from .Block import BlockTracker, Block
 from ...Tools import Tree
 from .Worklist import Worklist
 from .Solution import SolutionTracker
@@ -81,8 +83,9 @@ class Workbook(ObjectABC):
             DeckLoadingItemTrackerInstance
         )
         self.ContainerTrackerInstance: ContainerTracker = ContainerTracker()
-        self.ActiveContexts: ContextTracker = ContextTracker()
-        self.InactiveContexts: ContextTracker = ContextTracker()
+        self.ContextTrackerInstance: ContextTracker = ContextTracker()
+        self.InactiveContextTrackerInstance: ContextTracker = ContextTracker()
+        self.ExecutingContextInstance: Context
         self.TimerTrackerInstance: TimerTracker = TimerTracker()
 
         LOG.debug(
@@ -107,7 +110,10 @@ class Workbook(ObjectABC):
     def GetState(self) -> WorkbookStates:
         return self.State
 
-    def GetExecutedBlockTracker(self) -> list[BlockTracker]:
+    def GetMethodTree(self) -> Tree:
+        return self.MethodTree
+
+    def GetExecutedBlockTracker(self) -> BlockTracker:
         return self.ExecutedBlocksTrackerInstance
 
     def GetWorklist(self) -> Worklist:
@@ -119,11 +125,17 @@ class Workbook(ObjectABC):
     def GetContainerTracker(self) -> ContainerTracker:
         return self.ContainerTrackerInstance
 
-    def GetActiveContexts(self) -> ContextTracker:
-        return self.ActiveContexts
+    def GetContextTracker(self) -> ContextTracker:
+        return self.ContextTrackerInstance
 
-    def GetInactiveContexts(self) -> ContextTracker:
-        return self.InactiveContexts
+    def GetInactiveContextTracker(self) -> ContextTracker:
+        return self.InactiveContextTrackerInstance
+
+    def GetExecutingContext(self) -> Context:
+        return self.ExecutingContextInstance
+
+    def SetExecutingContext(self, ContextInstance: Context) -> None:
+        self.ExecutingContextInstance = ContextInstance
 
     def GetTimerTracker(self) -> TimerTracker:
         return self.TimerTrackerInstance
@@ -139,6 +151,15 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
     HalInstance
 
+    ContextTrackerInstance = WorkbookInstance.GetContextTracker()
+    InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
+    ExecutedBlockTrackerInstance = WorkbookInstance.GetExecutedBlockTracker()
+    MethodTree = WorkbookInstance.GetMethodTree()
+
+    CurrentExecutingBlock: Block = MethodTree.GetCurrentNode()
+    CurrentExecutingBlock.Process(WorkbookInstance, HalInstance)
+    # Do the first step processing here. First step is always a plate step.
+
     while True:
 
         WorkbookInstance.ProcessingLock.acquire()
@@ -148,9 +169,52 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         # We immediately release so we do not stall the main process
 
         if AliveStateFlag.AliveStateFlag is False:
+            # Do some workbook save state stuff here
             break
 
-        # somehow figure out the processing
+        # Before each round of steps we want to check if we can start heaters / Coolers
+        # We can not start a heater until any preceeding merge steps are completed
+        # No idea how to do this...
+
+        if InactiveContextTrackerInstance.IsTracked(
+            WorkbookInstance.GetExecutingContext()
+        ):
+            for ContextInstance in ContextTrackerInstance.GetObjectsAsList():
+                if not InactiveContextTrackerInstance.IsTracked(
+                    WorkbookInstance.GetExecutingContext()
+                ):
+                    WorkbookInstance.SetExecutingContext(ContextInstance)
+                    break
+            # find the context here
+
+            ReversedExecutedBlocks: list[
+                Block
+            ] = ExecutedBlockTrackerInstance.GetObjectsAsList().reverse()
+
+            for BlockInstance in ReversedExecutedBlocks:
+                if BlockInstance.GetContext() == WorkbookInstance.GetExecutingContext():
+                    MethodTree.SetCurrentNode(BlockInstance)
+                    break
+            # Set the tree current node here and walk forward one step
+        # Find the context we need to process if the current context is exhausted
+
+        MethodTree.WalkForward()
+        CurrentExecutingBlock: Block = MethodTree.GetCurrentNode()
+
+        if (
+            sum(
+                WellFactor.GetFactor()
+                for WellFactor in WorkbookInstance.GetExecutingContext()
+                .GetWellFactorTracker()
+                .GetObjectsAsList()
+            )
+            != 0
+            or type(CurrentExecutingBlock).__name__ == MergePlates.__name__
+        ):
+            # We will only execute the step is the factors are not zero
+            # Additionally we must always execute a merge plates step no matter what
+
+            CurrentExecutingBlock.Process(WorkbookInstance, HalInstance)
 
         # do processing here
 
@@ -159,7 +223,7 @@ def WorkbookInit(WorkbookInstance: Workbook):
 
     # Check runtype. We will determine the starting well here
     if WorkbookInstance.GetRunType() == WorkbookRunTypes.Run:
-        pass
+        StartingWell = None  # I made it none right now for testing
     else:
         StartingWell = 1
 
@@ -180,13 +244,17 @@ def WorkbookInit(WorkbookInstance: Workbook):
 
         WellFactorsTrackerInstance.ManualLoad(WellFactorInstance)
 
-    WorkbookInstance.GetActiveContexts().ManualLoad(
+    WorkbookInstance.SetExecutingContext(
         Context(
             ":__StartingContext__",
             AspirateWellSequencesTrackerInstance,
             DispenseWellSequencesTrackerInstance,
             WellFactorsTrackerInstance,
         )
+    )
+
+    WorkbookInstance.GetActiveContexts().ManualLoad(
+        WorkbookInstance.GetExecutingContext()
     )
 
     # Thread: Create and start

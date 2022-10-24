@@ -1,7 +1,7 @@
 from .Block import BlockObjectCreationWrapper, Block
 from .BlockTracker import BlockTracker
 from ....Tools import Excel
-from ...Blocks import *  # noqa F403
+from ...Blocks import Plate, SplitPlate, Finish
 
 
 def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
@@ -40,7 +40,7 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
     for BlockInstances in BlockInstancesList:
         Temp = list()
         for BlockInstance in BlockInstances:
-            if type(BlockInstance).__name__ != SplitPlate.__name__:  # noqa F405
+            if type(BlockInstance).__name__ != SplitPlate.__name__:
                 Temp.append(BlockInstance)
             else:
                 Temp.append(BlockInstance)
@@ -54,7 +54,7 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
     Pathways = list()
     for BlockInstances in BlockInstancesList:
         BlockInstance = BlockInstances[0]
-        if type(BlockInstance).__name__ != Plate.__name__:  # noqa F405
+        if type(BlockInstance).__name__ != Plate.__name__:
             raise Exception("Method is not valid!")
         else:
             PlateName = BlockInstance.GetPlateName()
@@ -65,7 +65,7 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
 
     for BlockInstances in BlockInstancesList:
         BlockInstance = BlockInstances[-1]
-        if type(BlockInstance).__name__ == SplitPlate.__name__:  # noqa F405
+        if type(BlockInstance).__name__ == SplitPlate.__name__:
             if BlockInstance.GetPathway1Name() not in Pathways:
                 raise Exception("Pathways are not referenced correctly!")
             if BlockInstance.GetPathway2Name() not in Pathways:
@@ -84,10 +84,10 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
             BlockInstance.SetParentNode(PreviousBlock)
             BlockInstance.Context = Context
             PreviousBlock = BlockInstance
-            if type(BlockInstance).__name__ == Plate.__name__:  # noqa F405
-                Context += ":" + Plate.GetPlateName(BlockInstance)  # noqa F405
+            if type(BlockInstance).__name__ == Plate.__name__:
+                Context += ":" + Plate.GetPlateName(BlockInstance)
 
-            if type(BlockInstance).__name__ == SplitPlate.__name__:  # noqa F405
+            if type(BlockInstance).__name__ == SplitPlate.__name__:
                 Pathways = [
                     BlockInstance.GetPathway1Name(),
                     BlockInstance.GetPathway2Name(),
@@ -125,7 +125,7 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
     # Now we need to create a seperate list for each pathway... This will need to happen recursively. Kill me now
 
     for Pathway in MethodPathways:
-        if type(Pathway[-1]).__name__ != Finish.__name__:  # noqa F405
+        if type(Pathway[-1]).__name__ != Finish.__name__:
             raise Exception("All pathways must end with a finish step")
     # Check that each pathway ends with a finish step.
 
