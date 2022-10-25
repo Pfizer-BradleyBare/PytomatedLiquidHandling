@@ -75,6 +75,7 @@ class Workbook(ObjectABC):
         self.State: WorkbookStates = WorkbookStates.Queued
         self.ExecutingContextInstance: Context
         self.MethodTreeRoot: Block = MethodBlocksTrackerInstance.GetObjectsAsList()[0]
+        self.StartingWell: int
 
         # Trackers
         self.MethodBlocksTrackerInstance: BlockTracker = MethodBlocksTrackerInstance
@@ -116,6 +117,9 @@ class Workbook(ObjectABC):
 
     def GetMethodTreeRoot(self) -> Block:
         return self.MethodTreeRoot
+
+    def GetStartingWell(self) -> int:
+        return self.StartingWell
 
     def GetMethodBlocksTracker(self) -> BlockTracker:
         return self.MethodBlocksTrackerInstance

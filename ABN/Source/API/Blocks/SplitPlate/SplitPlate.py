@@ -2,6 +2,13 @@ from ...Workbook.Block import Block, ClassDecorator_AvailableBlock
 from ....Tools import Excel
 from ...Workbook import Workbook
 from ....HAL import Hal
+from ...Tools.Context import (
+    Context,
+    WellFactorTracker,
+    WellSequencesTracker,
+    WellFactor,
+    WellSequences,
+)
 
 
 @ClassDecorator_AvailableBlock
@@ -31,4 +38,73 @@ class SplitPlate(Block):
         pass
 
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
-        pass
+        Pathway1Name = self.GetPathway1Name()
+        Pathway2Name = self.GetPathway2Name()
+        PathwayChoice = self.GetPathwayChoice()
+
+        if WorkbookInstance.GetWorklist().IsWorklistColumn(PathwayChoice) is True:
+            PathwayChoice = WorkbookInstance.GetWorklist().ReadWorklistColumn(
+                PathwayChoice
+            )
+        else:
+            PathwayChoice = WorkbookInstance.GetWorklist().ConvertToWorklistColumn(
+                PathwayChoice
+            )
+
+        # Do parameter validation here
+
+        OldContext = WorkbookInstance.GetExecutingContext()
+        NewPathway1Context = Context(
+            OldContext.GetName() + ":" + Pathway1Name,
+            WellSequencesTracker(),
+            WellSequencesTracker(),
+            WellFactorTracker(),
+        )
+        NewPathway2Context = Context(
+            OldContext.GetName() + ":" + Pathway2Name,
+            WellSequencesTracker(),
+            WellSequencesTracker(),
+            WellFactorTracker(),
+        )
+        #New Contexts. Now we need to load them
+
+        for (
+            Pathway,
+            WellFactorInstance,
+            AspirateWellSequencesInstance,
+            DispenseWellSequencesInstance,
+        ) in zip(
+            PathwayChoice,
+            OldContext.GetWellFactorTracker().GetObjectsAsList(),
+            OldContext.GetAspirateWellSequencesTracker().GetObjectsAsList(),
+            OldContext.GetDispenseWellSequencesTracker().GetObjectsAsList(),
+        ):
+            if Pathway == Pathway1Name:
+                pass
+            elif Pathway == Pathway2Name:
+
+
+        # Create the contexts here
+
+        # Do parameter validation here
+
+        ContextTrackerInstance = WorkbookInstance.GetContextTracker()
+        InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
+        ContainerTracker = WorkbookInstance.GetContainerTracker()
+
+        PlateContainerInstance = Container(PlateName, PlateFilter)
+        if ContainerTracker.IsTracked(PlateContainerInstance) == False:
+            ContainerTracker.ManualLoad(PlateContainerInstance)
+        # Create the container if it does not already exists
+
+        OldContextInstance = WorkbookInstance.GetExecutingContext()
+        NewContextInstance = Context(
+            OldContextInstance.GetName() + ":" + PlateName,
+            OldContextInstance.GetAspirateWellSequencesTracker(),
+            OldContextInstance.GetDispenseWellSequencesTracker,
+            OldContextInstance.GetWellFactorTracker(),
+        )
+        InactiveContextTrackerInstance.ManualLoad(OldContextInstance)
+        ContextTrackerInstance.ManualLoad(NewContextInstance)
+        WorkbookInstance.SetExecutingContext(NewContextInstance)
+        # Deactivate the previous context and active this new context
