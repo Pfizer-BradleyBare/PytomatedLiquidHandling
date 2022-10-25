@@ -166,10 +166,8 @@ class SplitPlate(Block):
         # Create the contexts here
 
         InactiveContextTrackerInstance.ManualLoad(OldContextInstance)
-
         ContextTrackerInstance.ManualLoad(NewPathway1ContextInstance)
         ContextTrackerInstance.ManualLoad(NewPathway2ContextInstance)
-
         WorkbookInstance.SetExecutingContext(NewPathway1ContextInstance)
         # Deactivate the previous context and active this new context
         # We always execute pathway 1 first. Just easier to remember as 1st is 1st
