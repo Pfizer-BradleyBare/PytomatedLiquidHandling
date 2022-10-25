@@ -158,6 +158,9 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
     ContextTrackerInstance = WorkbookInstance.GetContextTracker()
     InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
     ExecutedBlocksTrackerInstance = WorkbookInstance.GetExecutedBlocksTracker()
+    PreprocessingBlocksTrackerInstance = (
+        WorkbookInstance.GetPreprocessingBlocksTracker()
+    )
 
     CurrentExecutingBlock: Block = WorkbookInstance.GetMethodTreeRoot()
     CurrentExecutingBlock.Process(WorkbookInstance, HalInstance)
@@ -176,13 +179,45 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # Do some workbook save state stuff here
             break
 
-        SearchBlocks = [Incubate.__name__]
-        ExclusionList = [MergePlates.__name__]
-        OutputSearchBlocks: list[Block] = list()
+        ConfirmedPreprocessingBlockInstances: list[Block] = list()
+        for (
+            PreprocessingBlockInstance
+        ) in PreprocessingBlocksTrackerInstance.GetObjectsAsList():
 
-        # Before each round of steps we want to check if we can start heaters / Coolers
-        # We can not start a heater until any preceeding merge steps are completed
-        # No idea how to do this...
+            SearchBlockInstance = PreprocessingBlockInstance
+
+            while True:
+                SearchBlockInstance = SearchBlockInstance.GetParentNode()
+
+                if SearchBlockInstance is None:
+                    ConfirmedPreprocessingBlockInstances.append(
+                        PreprocessingBlockInstance
+                    )
+                    PreprocessingBlocksTrackerInstance.ManualUnload(
+                        PreprocessingBlockInstance
+                    )
+                    break
+                # We found the root. This means that this preprocessing block is ready to start
+
+                if ExecutedBlocksTrackerInstance.IsTracked(SearchBlockInstance):
+                    continue
+                # If the block has already been executed then we can skip it.
+
+                if PreprocessingBlocksTrackerInstance.IsTracked(SearchBlockInstance):
+                    break
+                # There is a preceeding block that needs to be preprocessed. So we will skip this block for now
+                # NOTE NOTE NOTE NOTE NOTE There is a question if we need to only pay attention to blocks of same type or not. I say not for now
+
+                if type(SearchBlockInstance).__name__ == MergePlates.__name__:
+                    break
+                # We can not start a preprocessing device if an unexecuted merge plates step preceeds it.
+            # We are going to walk backward until we find either a merge plates step, a preceeding preprocessing device, or the beginning of the method
+
+        for ConfirmedPreprocessingBlockInstance in ConfirmedPreprocessingBlockInstances:
+            pass
+            # I need to do something here for the preprocessing
+        # Before each round of steps we want to check if we can start heaters / Coolers or other preprocessing devices
+        # We can not start a preprocessing device until any preceeding merge steps are completed
 
         if InactiveContextTrackerInstance.IsTracked(
             WorkbookInstance.GetExecutingContext()
@@ -217,15 +252,16 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                 .GetWellFactorTracker()
                 .GetObjectsAsList()
             )
-            != 0
+            != 0  # If all the factors are zero then technically the pathway is "dead" so it will never execute
             or type(CurrentExecutingBlock).__name__ == MergePlates.__name__
         ):
-            # We will only execute the step is the factors are not zero
+            # We will only execute the step if the factors are not zero
             # Additionally we must always execute a merge plates step no matter what
 
             CurrentExecutingBlock.Process(WorkbookInstance, HalInstance)
-
-        # do processing here
+        ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
+        # We must track all executed blocks even if processing is skipped.
+        # A skipped block is still executed in the mind of the program
 
 
 def WorkbookInit(WorkbookInstance: Workbook):
