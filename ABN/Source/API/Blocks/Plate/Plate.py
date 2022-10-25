@@ -2,6 +2,8 @@ from ...Workbook.Block import Block, ClassDecorator_AvailableBlock
 from ....Tools import Excel
 from ...Workbook import Workbook
 from ....HAL import Hal
+from ...Tools.Container import Container
+from ...Tools.Context import Context
 
 
 @ClassDecorator_AvailableBlock
@@ -26,4 +28,28 @@ class Plate(Block):
         pass
 
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
-        pass
+        PlateName = self.GetPlateName()
+        PlateFilter = self.GetPlateType()
+
+        # Do parameter validation here
+
+        ContextTrackerInstance = WorkbookInstance.GetContextTracker()
+        InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
+        ContainerTracker = WorkbookInstance.GetContainerTracker()
+
+        PlateContainerInstance = Container(PlateName, PlateFilter)
+        if ContainerTracker.IsTracked(PlateContainerInstance) == False:
+            ContainerTracker.ManualLoad(PlateContainerInstance)
+        # Create the container if it does not already exists
+
+        OldContextInstance = WorkbookInstance.GetExecutingContext()
+        NewContextInstance = Context(
+            OldContextInstance.GetName() + ":" + PlateName,
+            OldContextInstance.GetAspirateWellSequencesTracker(),
+            OldContextInstance.GetDispenseWellSequencesTracker,
+            OldContextInstance.GetWellFactorTracker(),
+        )
+        InactiveContextTrackerInstance.ManualLoad(OldContextInstance)
+        ContextTrackerInstance.ManualLoad(NewContextInstance)
+        WorkbookInstance.SetExecutingContext(NewContextInstance)
+        # Deactivate the previous context and active this new context
