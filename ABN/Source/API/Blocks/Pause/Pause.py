@@ -17,5 +17,8 @@ class Pause(Block):
             self.Row + 2, self.Col + 2, self.Row + 2, self.Col + 2
         )
 
+    def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
+        pass
+
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
         pass

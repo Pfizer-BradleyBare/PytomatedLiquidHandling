@@ -42,5 +42,8 @@ class Vacuum(Block):
             self.Row + 7, self.Col + 2, self.Row + 7, self.Col + 2
         )
 
+    def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
+        pass
+
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
         pass

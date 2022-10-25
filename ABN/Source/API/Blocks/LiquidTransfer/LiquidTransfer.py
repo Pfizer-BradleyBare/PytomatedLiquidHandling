@@ -27,5 +27,8 @@ class LiquidTransfer(Block):
             self.Row + 4, self.Col + 2, self.Row + 4, self.Col + 2
         )
 
+    def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
+        pass
+
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
         pass

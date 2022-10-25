@@ -37,5 +37,8 @@ class MagneticBeads(Block):
             self.Row + 6, self.Col + 2, self.Row + 6, self.Col + 2
         )
 
+    def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
+        pass
+
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
         pass

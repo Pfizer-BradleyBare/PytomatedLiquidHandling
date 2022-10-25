@@ -44,6 +44,10 @@ class Block(ObjectABC, Node):
         return self.Context[self.Context.rfind(":") + 1 :]  # noqa203
 
     @abstractmethod
+    def Preprocess(self, WorkbookInstance, HalInstance):
+        raise NotImplementedError
+
+    @abstractmethod
     def Process(self, WorkbookInstance, HalInstance):
         raise NotImplementedError
 

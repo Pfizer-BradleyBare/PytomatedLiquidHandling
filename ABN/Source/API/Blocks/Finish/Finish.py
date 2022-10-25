@@ -12,5 +12,8 @@ class Finish(Block):
     def GetName(self) -> str:
         return "Finish" + str((self.Row, self.Col))
 
+    def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
+        pass
+
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
         pass
