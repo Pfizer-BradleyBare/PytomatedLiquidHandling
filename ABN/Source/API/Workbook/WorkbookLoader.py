@@ -30,5 +30,6 @@ def Load(
             WorklistInstance,
             SolutionTrackerInstance,
             None,  # There will never be a deck loading unless we resume a run. But we havn't gotten there yet...
+            BlockTracker,
         )
     )

@@ -65,6 +65,7 @@ class Workbook(ObjectABC):
         WorklistInstance: Worklist,
         SolutionTrackerInstance: SolutionTracker,
         DeckLoadingItemTrackerInstance: DeckLoadingItemTracker,
+        PreprocessingBlocksTrackerInstance: BlockTracker,
     ):
 
         # Variables
@@ -77,7 +78,9 @@ class Workbook(ObjectABC):
 
         # Trackers
         self.ExecutedBlocksTrackerInstance: BlockTracker = BlockTracker()
-        self.PreprocessingBlocksTrackerInstance: BlockTracker = BlockTracker()
+        self.PreprocessingBlocksTrackerInstance: BlockTracker = (
+            PreprocessingBlocksTrackerInstance
+        )
         self.WorklistInstance: Worklist = WorklistInstance
         self.SolutionTrackerInstance: SolutionTracker = SolutionTrackerInstance
         self.DeckLoadingItemTrackerInstance: DeckLoadingItemTracker = (
@@ -177,49 +180,6 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         ExclusionList = [MergePlates.__name__]
         OutputSearchBlocks: list[Block] = list()
 
-        def TraverseAndSearch(
-            InputRootBlock: Block,
-            InputExecutedBlocksTrackerInstance: BlockTracker,
-            InputPreprocessingBlocksTrackerInstance: BlockTracker,
-            InputSearchList: list[str],
-            InputExclusionList: list[str],
-            OutputBlocks: list[Block],
-        ):
-            while True:
-                if InputExecutedBlocksTrackerInstance.IsTracked(
-                    InputRootBlock
-                ) or InputPreprocessingBlocksTrackerInstance.IsTracked(InputRootBlock):
-                    continue
-
-                if (
-                    type(InputRootBlock).__name__ in InputExclusionList
-                    or type(InputRootBlock).__name__ == Finish.__name__
-                ):
-                    return
-
-                if type(InputRootBlock).__name__ in InputSearchList:
-                    OutputBlocks.append(InputRootBlock)
-                    return
-
-                if type(InputRootBlock).__name__ == SplitPlate.__name__:
-                    for Child in InputRootBlock.GetChildren():
-                        TraverseAndSearch(
-                            Child,
-                            InputExecutedBlocksTrackerInstance,
-                            InputPreprocessingBlocksTrackerInstance,
-                            InputSearchList,
-                            InputExclusionList,
-                            OutputBlocks[:],
-                        )
-                    return
-
-                InputRootBlock = InputRootBlock.GetChildren()[0]
-
-        # This needs serious work. NOTE DOES NOT WORK IN CURRENT STATE!!!!!!!!!!
-
-        for BlockInstance in OutputSearchBlocks:
-            pass
-            # do the heating here
         # Before each round of steps we want to check if we can start heaters / Coolers
         # We can not start a heater until any preceeding merge steps are completed
         # No idea how to do this...
@@ -243,7 +203,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                 if BlockInstance.GetContext() == WorkbookInstance.GetExecutingContext():
                     CurrentExecutingBlock: Block = BlockInstance
                     break
-            # Set the tree current node here and walk forward one step
+            # Set the tree current node here
         # Find the context we need to process if the current context is exhausted
 
         CurrentExecutingBlock = CurrentExecutingBlock.GetChildren()[0]
