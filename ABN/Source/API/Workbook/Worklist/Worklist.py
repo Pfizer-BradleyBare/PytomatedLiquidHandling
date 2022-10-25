@@ -4,7 +4,20 @@ from ....Tools import Excel
 class Worklist:
     def __init__(self, ExcelInstance: Excel):
         self.ExcelInstance: Excel = ExcelInstance
-        self.NumSamples: int = len(self.ReadWorklistColumn("Sample Number"))
+
+        # Determine number of samples
+        Data = self.ExcelInstance.ReadWorklistSheet()
+
+        ColIndex = Data[0].index("Sample Number")
+
+        OutputList = list()
+        for Col in Data[1:]:
+            if Col[ColIndex] is None:
+                break
+
+            OutputList.append(Col[ColIndex])
+
+        self.NumSamples = len(OutputList)
 
     def GetNumSamples(self) -> int:
         return self.NumSamples
@@ -23,16 +36,14 @@ class Worklist:
     def ReadWorklistColumn(self, ColumnName: str) -> list[any]:
         Data = self.ExcelInstance.ReadWorklistSheet()
 
-        Index = Data[0].index(ColumnName)
+        ColIndex = Data[0].index(ColumnName)
 
-        OutputList = list()
-        for Col in Data[1:]:
-            if Col[Index] is None:
-                break
+        return [
+            Data[RowIndex][ColIndex] for RowIndex in range(1, 1 + self.GetNumSamples())
+        ]
 
-            OutputList.append(Col[Index])
-
-        return OutputList
+    def ConvertToWorklistColumn(self, Value: any) -> list[any]:
+        return [Value] * self.GetNumSamples()
 
     def WriteWorklistColumn(self, ColumnName: str, Data: list[any]):
         ReadData = self.ExcelInstance.ReadWorklistSheet()
