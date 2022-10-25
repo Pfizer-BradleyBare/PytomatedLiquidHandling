@@ -2,7 +2,7 @@ import os
 from enum import Enum
 import threading
 
-from ..Blocks import MergePlates, Incubate
+from ..Blocks import MergePlates, Incubate, SplitPlate, Finish
 
 from ...AbstractClasses import ObjectABC
 from .Block import BlockTracker, Block
@@ -77,6 +77,7 @@ class Workbook(ObjectABC):
 
         # Trackers
         self.ExecutedBlocksTrackerInstance: BlockTracker = BlockTracker()
+        self.PreprocessingBlocksTrackerInstance: BlockTracker = BlockTracker()
         self.WorklistInstance: Worklist = WorklistInstance
         self.SolutionTrackerInstance: SolutionTracker = SolutionTrackerInstance
         self.DeckLoadingItemTrackerInstance: DeckLoadingItemTracker = (
@@ -114,6 +115,9 @@ class Workbook(ObjectABC):
 
     def GetExecutedBlocksTracker(self) -> BlockTracker:
         return self.ExecutedBlocksTrackerInstance
+
+    def GetPreprocessingBlocksTracker(self) -> BlockTracker:
+        return self.PreprocessingBlocksTrackerInstance
 
     def GetWorklist(self) -> Worklist:
         return self.WorklistInstance
@@ -176,13 +180,42 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         def TraverseAndSearch(
             InputRootBlock: Block,
             InputExecutedBlocksTrackerInstance: BlockTracker,
-            InputSearchBlocks: list[str],
+            InputPreprocessingBlocksTrackerInstance: BlockTracker,
+            InputSearchList: list[str],
             InputExclusionList: list[str],
             OutputBlocks: list[Block],
         ):
-            pass
+            while True:
+                if InputExecutedBlocksTrackerInstance.IsTracked(
+                    InputRootBlock
+                ) or InputPreprocessingBlocksTrackerInstance.IsTracked(InputRootBlock):
+                    continue
 
-        TraverseAndSearch(SearchBlocks, ExclusionList, OutputSearchBlocks)
+                if (
+                    type(InputRootBlock).__name__ in InputExclusionList
+                    or type(InputRootBlock).__name__ == Finish.__name__
+                ):
+                    return
+
+                if type(InputRootBlock).__name__ in InputSearchList:
+                    OutputBlocks.append(InputRootBlock)
+                    return
+
+                if type(InputRootBlock).__name__ == SplitPlate.__name__:
+                    for Child in InputRootBlock.GetChildren():
+                        TraverseAndSearch(
+                            Child,
+                            InputExecutedBlocksTrackerInstance,
+                            InputPreprocessingBlocksTrackerInstance,
+                            InputSearchList,
+                            InputExclusionList,
+                            OutputBlocks[:],
+                        )
+                    return
+
+                InputRootBlock = InputRootBlock.GetChildren()[0]
+
+        # This needs serious work. NOTE DOES NOT WORK IN CURRENT STATE!!!!!!!!!!
 
         for BlockInstance in OutputSearchBlocks:
             pass
