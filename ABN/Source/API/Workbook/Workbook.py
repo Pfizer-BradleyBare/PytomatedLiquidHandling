@@ -2,11 +2,10 @@ import os
 from enum import Enum
 import threading
 
-from ..Blocks import MergePlates
+from ..Blocks import MergePlates, Incubate
 
 from ...AbstractClasses import ObjectABC
 from .Block import BlockTracker, Block
-from ...Tools import Tree
 from .Worklist import Worklist
 from .Solution import SolutionTracker
 from ...API.Tools.Container import ContainerTracker
@@ -62,7 +61,7 @@ class Workbook(ObjectABC):
         self,
         RunType: WorkbookRunTypes,
         MethodPath: str,
-        MethodTree: Tree,
+        MethodTreeRoot: Block,
         WorklistInstance: Worklist,
         SolutionTrackerInstance: SolutionTracker,
         DeckLoadingItemTrackerInstance: DeckLoadingItemTracker,
@@ -74,10 +73,9 @@ class Workbook(ObjectABC):
         self.MethodName: str = os.path.basename(MethodPath)
         self.State: WorkbookStates = WorkbookStates.Queued
         self.ExecutingContextInstance: Context
-        self.RootBlockInstance: Block = MethodTree.GetCurrentNode()
+        self.MethodTreeRoot: Block = MethodTreeRoot
 
         # Trackers
-        self.MethodTree: Tree = MethodTree
         self.ExecutedBlocksTrackerInstance: BlockTracker = BlockTracker()
         self.WorklistInstance: Worklist = WorklistInstance
         self.SolutionTrackerInstance: SolutionTracker = SolutionTrackerInstance
@@ -92,7 +90,7 @@ class Workbook(ObjectABC):
         LOG.debug(
             "The following method tree was determined for %s: \n%s",
             self.MethodName,
-            self.MethodTree.GetCurrentNode(),
+            self.MethodTreeRoot,
         )
 
         # Do the necessary init function.
@@ -111,10 +109,10 @@ class Workbook(ObjectABC):
     def GetState(self) -> WorkbookStates:
         return self.State
 
-    def GetMethodTree(self) -> Tree:
-        return self.MethodTree
+    def GetMethodTreeRoot(self) -> Block:
+        return self.MethodTreeRoot
 
-    def GetExecutedBlockTracker(self) -> BlockTracker:
+    def GetExecutedBlocksTracker(self) -> BlockTracker:
         return self.ExecutedBlocksTrackerInstance
 
     def GetWorklist(self) -> Worklist:
@@ -150,15 +148,13 @@ class Workbook(ObjectABC):
 
 def WorkbookProcessor(WorkbookInstance: Workbook):
 
-    HalInstance
-
     ContextTrackerInstance = WorkbookInstance.GetContextTracker()
     InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
-    ExecutedBlockTrackerInstance = WorkbookInstance.GetExecutedBlockTracker()
-    MethodTree = WorkbookInstance.GetMethodTree()
+    ExecutedBlocksTrackerInstance = WorkbookInstance.GetExecutedBlocksTracker()
 
-    CurrentExecutingBlock: Block = MethodTree.GetCurrentNode()
+    CurrentExecutingBlock: Block = WorkbookInstance.GetMethodTreeRoot()
     CurrentExecutingBlock.Process(WorkbookInstance, HalInstance)
+    ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
     # Do the first step processing here. First step is always a plate step.
 
     while True:
@@ -173,15 +169,24 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # Do some workbook save state stuff here
             break
 
-        List = [MergePlates]
+        SearchBlocks = [Incubate.__name__]
+        ExclusionList = [MergePlates.__name__]
+        OutputSearchBlocks: list[Block] = list()
 
         def TraverseAndSearch(
-            SearchBlocks: list[Block],
-            ExclusionList: list[Block],
+            InputRootBlock: Block,
+            InputExecutedBlocksTrackerInstance: BlockTracker,
+            InputSearchBlocks: list[str],
+            InputExclusionList: list[str],
             OutputBlocks: list[Block],
         ):
             pass
 
+        TraverseAndSearch(SearchBlocks, ExclusionList, OutputSearchBlocks)
+
+        for BlockInstance in OutputSearchBlocks:
+            pass
+            # do the heating here
         # Before each round of steps we want to check if we can start heaters / Coolers
         # We can not start a heater until any preceeding merge steps are completed
         # No idea how to do this...
@@ -199,17 +204,18 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
             ReversedExecutedBlocks: list[
                 Block
-            ] = ExecutedBlockTrackerInstance.GetObjectsAsList().reverse()
+            ] = ExecutedBlocksTrackerInstance.GetObjectsAsList().reverse()
 
             for BlockInstance in ReversedExecutedBlocks:
                 if BlockInstance.GetContext() == WorkbookInstance.GetExecutingContext():
-                    MethodTree.SetCurrentNode(BlockInstance)
+                    CurrentExecutingBlock: Block = BlockInstance
                     break
             # Set the tree current node here and walk forward one step
         # Find the context we need to process if the current context is exhausted
 
-        MethodTree.WalkForward()
-        CurrentExecutingBlock: Block = MethodTree.GetCurrentNode()
+        CurrentExecutingBlock = CurrentExecutingBlock.GetChildren()[0]
+        # This should always be a single child. Only a split plate wil have 2 children
+        # The two children will be executed in the split plate block
 
         if (
             sum(

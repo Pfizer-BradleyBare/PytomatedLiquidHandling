@@ -14,35 +14,14 @@ class Node:
         ParentNodeInstance.Children.append(self)
         self.Parent = ParentNodeInstance
 
+    def GetParentNode(self):
+        return self.Parent
+
+    def GetChildren(self):
+        return self.Children
+
     def __repr__(self, level=0):
         ret = "\t" * level + repr(self.GetName()) + "\n"
         for child in self.Children:
             ret += child.__repr__(level + 1)
         return ret
-
-
-class Tree:
-    def __init__(self, NodeInstance: Node):
-        self.CurrentNode = NodeInstance
-
-    def SetCurrentNode(self, NodeInstance: Node):
-        self.CurrentNode = NodeInstance
-
-    def GetCurrentNode(self) -> Node:
-        return self.CurrentNode
-
-    def WalkForward(self):
-        CurrentNode = self.CurrentNode
-
-        if len(CurrentNode.Children) == 0:
-            raise Exception("Cannot walk forward... No more children")
-
-        self.CurrentNode = CurrentNode.Children.pop(0)
-        CurrentNode.Children.append(self.CurrentNode)
-        # When walking forward we always choose the first child. To allow to traverse all children we remove the first then put at the back
-
-    def WalkBackward(self):
-        if self.CurrentNode.Parent is None:
-            raise Exception("Cannot walk backward... This is the root node")
-
-        self.CurrentNode = self.CurrentNode.Parent

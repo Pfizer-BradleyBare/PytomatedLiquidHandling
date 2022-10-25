@@ -1,6 +1,6 @@
 from .WorkbookTracker import WorkbookTracker
 from .Workbook import Workbook, WorkbookRunTypes
-from ...Tools import Excel, Tree
+from ...Tools import Excel
 from .Worklist import Worklist
 from .Solution import SolutionTracker, SolutionLoader
 from .Block import BlockLoader, BlockTracker
@@ -22,13 +22,11 @@ def Load(
     BlockTrackerInstance = BlockTracker()
     BlockLoader.Load(BlockTrackerInstance, ExcelInstance)
 
-    TreeInstance = Tree(BlockTrackerInstance.GetObjectsAsList()[0])
-
     WorkbookTrackerInstance.ManualLoad(
         Workbook(
             RunType,
             ExcelFilePath,
-            TreeInstance,
+            BlockTrackerInstance.GetObjectsAsList()[0],
             WorklistInstance,
             SolutionTrackerInstance,
             None,  # There will never be a deck loading unless we resume a run. But we havn't gotten there yet...
