@@ -26,7 +26,7 @@ def Load(
         Workbook(
             RunType,
             ExcelFilePath,
-            BlockTrackerInstance.GetObjectsAsList()[0],
+            BlockTrackerInstance,
             WorklistInstance,
             SolutionTrackerInstance,
             None,  # There will never be a deck loading unless we resume a run. But we havn't gotten there yet...

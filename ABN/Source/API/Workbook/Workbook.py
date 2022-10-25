@@ -61,7 +61,7 @@ class Workbook(ObjectABC):
         self,
         RunType: WorkbookRunTypes,
         MethodPath: str,
-        MethodTreeRoot: Block,
+        MethodBlocksTrackerInstance: BlockTracker,
         WorklistInstance: Worklist,
         SolutionTrackerInstance: SolutionTracker,
         DeckLoadingItemTrackerInstance: DeckLoadingItemTracker,
@@ -74,9 +74,10 @@ class Workbook(ObjectABC):
         self.MethodName: str = os.path.basename(MethodPath)
         self.State: WorkbookStates = WorkbookStates.Queued
         self.ExecutingContextInstance: Context
-        self.MethodTreeRoot: Block = MethodTreeRoot
+        self.MethodTreeRoot: Block = MethodBlocksTrackerInstance.GetObjectsAsList()[0]
 
         # Trackers
+        self.MethodBlocksTrackerInstance: BlockTracker = MethodBlocksTrackerInstance
         self.ExecutedBlocksTrackerInstance: BlockTracker = BlockTracker()
         self.PreprocessingBlocksTrackerInstance: BlockTracker = (
             PreprocessingBlocksTrackerInstance
@@ -115,6 +116,9 @@ class Workbook(ObjectABC):
 
     def GetMethodTreeRoot(self) -> Block:
         return self.MethodTreeRoot
+
+    def GetMethodBlocksTracker(self) -> BlockTracker:
+        return self.MethodBlocksTrackerInstance
 
     def GetExecutedBlocksTracker(self) -> BlockTracker:
         return self.ExecutedBlocksTrackerInstance
@@ -169,15 +173,31 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
     while True:
 
+        def ListInList(List, InList) -> bool:
+            for Item in List:
+                if Item not in InList:
+                    return False
+            return True
+
+        if (
+            ListInList(
+                WorkbookInstance.GetMethodBlocksTracker().GetObjectsAsList(),
+                ExecutedBlocksTrackerInstance.GetObjectsAsList(),
+            )
+            is True
+        ):
+            return
+        # First thing to do is check that all blocks have been executed.
+
         WorkbookInstance.ProcessingLock.acquire()
         WorkbookInstance.ProcessingLock.release()
+        if AliveStateFlag.AliveStateFlag is False:
+            # Do some workbook save state stuff here
+            return
         # The processing lock is used as a pause button to control which workbook executes.
         # During acquire we wait for the thread to be unpaused.
         # We immediately release so we do not stall the main process
-
-        if AliveStateFlag.AliveStateFlag is False:
-            # Do some workbook save state stuff here
-            break
+        # After release we must check that the server still wants to execute. If not, we do some save state stuff then kill the thread.
 
         ConfirmedPreprocessingBlockInstances: list[Block] = list()
         for (
@@ -206,7 +226,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                 if PreprocessingBlocksTrackerInstance.IsTracked(SearchBlockInstance):
                     break
                 # There is a preceeding block that needs to be preprocessed. So we will skip this block for now
-                # NOTE NOTE NOTE NOTE NOTE There is a question if we need to only pay attention to blocks of same type or not. I say not for now
+                # NOTE NOTE NOTE NOTE TODO There is a question if we need to only pay attention to blocks of same type or not. I say not for now
 
                 if type(SearchBlockInstance).__name__ == MergePlates.__name__:
                     break
@@ -222,6 +242,16 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         if InactiveContextTrackerInstance.IsTracked(
             WorkbookInstance.GetExecutingContext()
         ):
+            if (
+                ListInList(
+                    ContextTrackerInstance.GetObjectsAsList(),
+                    InactiveContextTrackerInstance.GetObjectsAsList(),
+                )
+                is True
+            ):
+                pass
+            # If all contexts are inactive then we need to wait on devices to complete. TODO
+
             for ContextInstance in ContextTrackerInstance.GetObjectsAsList():
                 if not InactiveContextTrackerInstance.IsTracked(
                     WorkbookInstance.GetExecutingContext()
