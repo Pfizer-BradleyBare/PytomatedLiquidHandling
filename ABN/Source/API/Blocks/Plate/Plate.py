@@ -35,12 +35,6 @@ class Plate(Block):
 
         ContextTrackerInstance = WorkbookInstance.GetContextTracker()
         InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
-        ContainerTracker = WorkbookInstance.GetContainerTracker()
-
-        PlateContainerInstance = Container(PlateName, PlateFilter)
-        if ContainerTracker.IsTracked(PlateContainerInstance) == False:
-            ContainerTracker.ManualLoad(PlateContainerInstance)
-        # Create the container if it does not already exists
 
         OldContextInstance = WorkbookInstance.GetExecutingContext()
         NewContextInstance = Context(
@@ -53,3 +47,10 @@ class Plate(Block):
         ContextTrackerInstance.ManualLoad(NewContextInstance)
         WorkbookInstance.SetExecutingContext(NewContextInstance)
         # Deactivate the previous context and active this new context
+
+        ContainerTracker = WorkbookInstance.GetContainerTracker()
+
+        PlateContainerInstance = Container(PlateName, PlateFilter)
+        if ContainerTracker.IsTracked(PlateContainerInstance) is False:
+            ContainerTracker.ManualLoad(PlateContainerInstance)
+        # Create the container if it does not already exists
