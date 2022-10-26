@@ -16,4 +16,8 @@ class Finish(Block):
         pass
 
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
-        pass
+
+        WorkbookInstance.GetInactiveContextTracker().ManualLoad(
+            WorkbookInstance.GetExecutingContext()
+        )
+        # Deactivate the current context
