@@ -181,4 +181,5 @@ class SplitPlate(Block):
             )
             WorkbookInstance.GetExecutedBlocksTracker().ManualLoad(Child)
             # We are executing these blocks in the split plate step so we need to track them as executed.
+        # Create the containers for the plate blocks followin the split plate
         # Split plate pathways must be unique. Thus we are guarenteed that the container does not already exist
