@@ -44,10 +44,13 @@ class Block(ObjectABC, Node):
         return self.Context[self.Context.rfind(":") + 1 :]  # noqa203
 
     @abstractmethod
+    # Some blocks may require preprocessing before actual execution. What is an example?
+    # Preheating a heater or thermocycler before an actual incubation. That is what preprocessing is for.
     def Preprocess(self, WorkbookInstance, HalInstance):
         raise NotImplementedError
 
     @abstractmethod
+    # This is where actual block execution should occur
     def Process(self, WorkbookInstance, HalInstance):
         raise NotImplementedError
 
