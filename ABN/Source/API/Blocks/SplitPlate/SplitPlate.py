@@ -83,16 +83,14 @@ class SplitPlate(Block):
         ):
             if not (
                 WellFactorInstance.GetName()
-                == AspirateWellSequencesInstance.GetName
+                == AspirateWellSequencesInstance.GetName()
                 == DispenseWellSequencesInstance.GetName()
             ):
                 raise Exception(
                     "Wells are not the same across factors and sequences"
                 )  # This should never happen
 
-            Pathway = PathwayChoice[
-                WellFactorInstance.GetName() - WorkbookInstance.GetStartingWell()
-            ]
+            Pathway = PathwayChoice[WellFactorInstance.GetName()]
 
             if Pathway.lower() == Pathway1Name.lower():
                 NewPathway1ContextInstance.GetWellFactorTracker().ManualLoad(

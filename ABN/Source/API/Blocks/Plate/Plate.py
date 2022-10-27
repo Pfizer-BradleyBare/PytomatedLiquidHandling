@@ -8,6 +8,9 @@ from ...Tools.Context import Context
 
 @ClassDecorator_AvailableBlock
 class Plate(Block):
+    PlateNames: list[str] = list()
+    # we can use this to determine if a plate name is already a solution or not.
+
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, ExcelInstance, Row, Col)
 

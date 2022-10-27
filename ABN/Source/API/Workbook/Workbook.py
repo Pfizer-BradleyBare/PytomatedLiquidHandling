@@ -302,9 +302,9 @@ def WorkbookInit(WorkbookInstance: Workbook):
 
     # Check runtype. We will determine the starting well here
     if WorkbookInstance.GetRunType() == WorkbookRunTypes.Run:
-        StartingWell = None  # I made it none right now for testing
+        WorkbookInstance.StartingWell = None  # I made it none right now for testing
     else:
-        StartingWell = 1
+        WorkbookInstance.StartingWell = 1
 
     # Set Initial Active Context
     AspirateWellSequencesTrackerInstance = WellSequencesTracker()
@@ -313,7 +313,7 @@ def WorkbookInit(WorkbookInstance: Workbook):
     WellFactorsTrackerInstance = WellFactorTracker()
 
     for SampleNumber in range(0, WorkbookInstance.GetWorklist().GetNumSamples()):
-        WellNumber = StartingWell + SampleNumber
+        WellNumber = SampleNumber
 
         WellSequencesInstance = WellSequences(WellNumber, [WellNumber])
         WellFactorInstance = WellFactor(WellNumber, 1)
