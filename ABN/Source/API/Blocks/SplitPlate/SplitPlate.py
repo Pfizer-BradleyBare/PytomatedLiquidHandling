@@ -72,13 +72,8 @@ class SplitPlate(Block):
         )
         # New Contexts. Now we need to load them
 
-        for (
-            WellFactorInstance,
-            AspirateWellSequencesInstance,
-            DispenseWellSequencesInstance,
-        ) in zip(
+        for (WellFactorInstance, DispenseWellSequencesInstance,) in zip(
             OldContextInstance.GetWellFactorTracker().GetObjectsAsList(),
-            OldContextInstance.GetAspirateWellSequencesTracker().GetObjectsAsList(),
             OldContextInstance.GetDispenseWellSequencesTracker().GetObjectsAsList(),
         ):
             if not (
@@ -97,7 +92,7 @@ class SplitPlate(Block):
                     WellFactorInstance
                 )
                 NewPathway1ContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                    AspirateWellSequencesInstance
+                    DispenseWellSequencesInstance
                 )
                 NewPathway1ContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
                     DispenseWellSequencesInstance
@@ -108,7 +103,7 @@ class SplitPlate(Block):
                     WellFactorInstance
                 )
                 NewPathway2ContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                    AspirateWellSequencesInstance
+                    DispenseWellSequencesInstance
                 )
                 NewPathway2ContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
                     DispenseWellSequencesInstance
@@ -119,7 +114,7 @@ class SplitPlate(Block):
                     WellFactorInstance
                 )
                 NewPathway1ContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                    AspirateWellSequencesInstance
+                    DispenseWellSequencesInstance
                 )
                 NewPathway1ContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
                     DispenseWellSequencesInstance
@@ -129,7 +124,7 @@ class SplitPlate(Block):
                     WellFactorInstance
                 )
                 NewPathway2ContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                    AspirateWellSequencesInstance
+                    DispenseWellSequencesInstance
                 )
                 NewPathway2ContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
                     DispenseWellSequencesInstance
@@ -143,7 +138,7 @@ class SplitPlate(Block):
                     )
                 )
                 NewPathway1ContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                    AspirateWellSequencesInstance
+                    DispenseWellSequencesInstance
                 )
                 NewPathway1ContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
                     DispenseWellSequencesInstance
@@ -156,7 +151,7 @@ class SplitPlate(Block):
                     )
                 )
                 NewPathway2ContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                    AspirateWellSequencesInstance
+                    DispenseWellSequencesInstance
                 )
                 NewPathway2ContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
                     DispenseWellSequencesInstance
