@@ -75,7 +75,7 @@ class Workbook(ObjectABC):
         self.State: WorkbookStates = WorkbookStates.Queued
         self.ExecutingContextInstance: Context
         self.MethodTreeRoot: Block = MethodBlocksTrackerInstance.GetObjectsAsList()[0]
-        self.StartingWell: int
+        self.StartingWell: int  # This startingwell is only for plate containers. Reagent containers can be loaded anywhere
 
         # Trackers
         self.MethodBlocksTrackerInstance: BlockTracker = MethodBlocksTrackerInstance
