@@ -22,7 +22,10 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
         Dimensions = LabwareDimensions(LongSide, ShortSide)
         # Create Dimensions Class
 
-        Filter = ConfigFile["Labware IDs"][LabwareID]["Labware Filter"]
+        if "Labware Filter" in ConfigFile["Labware IDs"][LabwareID].keys():
+            Filter = ConfigFile["Labware IDs"][LabwareID]["Labware Filter"]
+        else:
+            Filter = "N/A"
 
         if "Wells" in ConfigFile["Labware IDs"][LabwareID].keys():
             EquationsList = list()
