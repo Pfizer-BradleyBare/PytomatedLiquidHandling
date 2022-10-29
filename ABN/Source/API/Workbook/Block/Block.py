@@ -31,6 +31,12 @@ class Block(ObjectABC, Node):
         return self.Row == other.Row and self.Col == other.Col
         # Row and Col in excel file is always unique so we can find step using only those parameters.
 
+    def __repr__(self, level=0):
+        ret = "\t" * level + repr(self.GetName()) + "\n"
+        for child in self.Children:
+            ret += child.__repr__(level + 1)  # type:ignore
+        return ret
+
     def GetRow(self) -> int:
         return self.Row
 

@@ -3,14 +3,14 @@ from ..Tools import LOG
 
 
 class Parser:
-    def __init__(self, APICallID: str, JSONstring: str = None):
+    def __init__(self, APICallID: str, JSONstring: bytes | None = None):
 
         LOG.debug("PARSER: __START__")
         LOG.info("PARSER: Handling API: %s", APICallID)
         LOG.debug("PARSER: Created Parser class with data: %s", str(JSONstring))
 
         self.APICallID: str = APICallID
-        self.string: str = JSONstring
+        self.string: bytes | None = JSONstring
         self.JSON: dict = dict()
         self.APIState: bool = False
         self.APIReturn: dict = dict()

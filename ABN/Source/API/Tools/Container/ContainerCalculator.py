@@ -1,4 +1,4 @@
-from .Container import Container, WellSolution
+from ..Container import Container, WellSolution
 
 
 class ContainerCalculator:

@@ -6,7 +6,7 @@ import datetime
 LOG_LEVEL = logging.DEBUG
 LOG_FORMAT = "[%(asctime)s] %(levelname)s\n%(message)s\n(%(threadName)s).%(module)s.%(funcName)s:%(lineno)d) <%(pathname)s>"
 
-LOG = None
+LOG = logging.getLogger(__name__)
 
 BASE_DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Logging"
 LOG_DIRECTORY = os.path.join(BASE_DIRECTORY, "LogFiles")
@@ -57,7 +57,6 @@ class CustomFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-LOG = logging.getLogger(__name__)
 LOG.setLevel(LOG_LEVEL)
 
 stdout_handler = logging.StreamHandler(sys.stdout)

@@ -1,4 +1,4 @@
-from .__Template import __Template
-from .__TemplateTracker import __TemplateTracker
+from .__Template import _Template
+from .__TemplateTracker import _TemplateTracker
 
-__all__ = ["__Template", "__TemplateTracker"]
+__all__ = ["_Template", "_TemplateTracker"]

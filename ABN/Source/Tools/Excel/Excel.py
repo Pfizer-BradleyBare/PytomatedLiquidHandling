@@ -23,7 +23,7 @@ class Excel:
     def __init__(self, ExcelFilePath: str):
         self.ExcelFilePath: str = ExcelFilePath
 
-    def __AlignArray(self, Array: list[list[any]]):
+    def __AlignArray(self, Array: list[list[any]]):  # type:ignore
         Max = max(len(i) for i in Array)
         for List in Array:
             List += [None] * (Max - len(List))
@@ -37,7 +37,7 @@ class Excel:
         xl.Book(self.ExcelFilePath).sheets[Name].delete()
 
     @ExcelClassFunctionDecorator_ThreadLock
-    def ReadMethodSheet(self) -> list[list[any]]:
+    def ReadMethodSheet(self) -> list[list[any]]:  # type:ignore
         return (
             xl.Book(self.ExcelFilePath)
             .sheets["Method"]
@@ -48,7 +48,7 @@ class Excel:
     @ExcelClassFunctionDecorator_ThreadLock
     def ReadMethodSheetArea(
         self, RowStart: int, ColStart: int, RowEnd: int, ColEnd: int
-    ) -> list[list[any]]:
+    ):
         return (
             xl.Book(self.ExcelFilePath)
             .sheets["Method"]
@@ -66,7 +66,7 @@ class Excel:
         ).value = Data
 
     @ExcelClassFunctionDecorator_ThreadLock
-    def ReadWorklistSheet(self) -> list[list[any]]:
+    def ReadWorklistSheet(self) -> list[list[any]]:  # type:ignore
         return (
             xl.Book(self.ExcelFilePath)
             .sheets["Worklist"]
@@ -77,7 +77,7 @@ class Excel:
     @ExcelClassFunctionDecorator_ThreadLock
     def ReadWorklistSheetArea(
         self, RowStart: int, ColStart: int, RowEnd: int, ColEnd: int
-    ) -> list[list[any]]:
+    ):
         return (
             xl.Book(self.ExcelFilePath)
             .sheets["Worklist"]
@@ -95,7 +95,7 @@ class Excel:
         ).value = Data
 
     @ExcelClassFunctionDecorator_ThreadLock
-    def ReadSolutionsSheet(self) -> list[list[any]]:
+    def ReadSolutionsSheet(self) -> list[list[any]]:  # type:ignore
         return (
             xl.Book(self.ExcelFilePath)
             .sheets["Solutions"]

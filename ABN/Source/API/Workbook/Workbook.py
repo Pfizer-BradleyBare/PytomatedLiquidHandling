@@ -2,7 +2,7 @@ import os
 from enum import Enum
 import threading
 
-from ..Blocks import MergePlates, Incubate, SplitPlate, Finish
+from ..Blocks import MergePlates
 
 from ...AbstractClasses import ObjectABC
 from .Block import BlockTracker, Block
@@ -92,6 +92,10 @@ class Workbook(ObjectABC):
         self.ContextTrackerInstance: ContextTracker = ContextTracker()
         self.InactiveContextTrackerInstance: ContextTracker = ContextTracker()
         self.TimerTrackerInstance: TimerTracker = TimerTracker()
+
+        # Thread
+        self.WorkbookProcessorThread: threading.Thread
+        self.ProcessingLock: threading.Lock
 
         LOG.debug(
             "The following method tree was determined for %s: \n%s",
@@ -266,7 +270,8 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
             ReversedExecutedBlocks: list[
                 Block
-            ] = ExecutedBlocksTrackerInstance.GetObjectsAsList().reverse()
+            ] = ExecutedBlocksTrackerInstance.GetObjectsAsList()
+            ReversedExecutedBlocks.reverse()
 
             for BlockInstance in ReversedExecutedBlocks:
                 if BlockInstance.GetContext() == WorkbookInstance.GetExecutingContext():
@@ -302,7 +307,7 @@ def WorkbookInit(WorkbookInstance: Workbook):
 
     # Check runtype. We will determine the starting well here
     if WorkbookInstance.GetRunType() == WorkbookRunTypes.Run:
-        WorkbookInstance.StartingWell = None  # I made it none right now for testing
+        WorkbookInstance.StartingWell = 0  # I made it none right now for testing
     else:
         WorkbookInstance.StartingWell = 1
 
@@ -337,11 +342,11 @@ def WorkbookInit(WorkbookInstance: Workbook):
     )
 
     # Thread: Create and start
-    WorkbookInstance.WorkbookProcessorThread: threading.Thread = threading.Thread(
+    WorkbookInstance.WorkbookProcessorThread = threading.Thread(
         name=WorkbookInstance.MethodName + "->" + WorkbookInstance.RunType.value,
         target=WorkbookProcessor,
         args=(WorkbookInstance,),  # args must be tuple hence the empty second argument
     )
-    WorkbookInstance.ProcessingLock: threading.Lock = threading.Lock()
+    WorkbookInstance.ProcessingLock = threading.Lock()
     WorkbookInstance.ProcessingLock.acquire()
     WorkbookInstance.WorkbookProcessorThread.start()

@@ -1,5 +1,4 @@
 from ....AbstractClasses import ObjectABC
-from ...Workbook.Block import Block
 from ...Workbook.Block import BlockTracker
 from .Well.WellTracker import WellTracker
 
@@ -11,7 +10,7 @@ class Container(ObjectABC):
 
         # Block Instances: These are the blocks that have used this container. Either for aspirate or dispense.
         self.AspirateBlockTrackerInstance: BlockTracker = BlockTracker()
-        self.DispenseBlockTrackerInstances: BlockTracker = BlockTracker()
+        self.DispenseBlockTrackerInstance: BlockTracker = BlockTracker()
 
         # This is used for automated deck loading. We have to restrict the choices based on the filter
         self.Filter: str = Filter
@@ -27,11 +26,11 @@ class Container(ObjectABC):
     def GetName(self) -> str:
         return self.Name
 
-    def GetAspirateBlocks(self) -> list[Block]:
-        return self.AspirateBlockInstances
+    def GetAspirateBlockTracker(self) -> BlockTracker:
+        return self.AspirateBlockTrackerInstance
 
-    def GetDispenseBlocks(self) -> list[Block]:
-        return self.DispenseBlockInstances
+    def GetDispenseBlockTracker(self) -> BlockTracker:
+        return self.DispenseBlockTrackerInstance
 
     def GetFilter(self) -> str:
         return self.Filter

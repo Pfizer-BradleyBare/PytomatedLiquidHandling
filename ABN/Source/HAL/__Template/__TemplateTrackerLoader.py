@@ -1,8 +1,8 @@
 import yaml
-from .__TemplateTracker import __TemplateTracker
+from .__TemplateTracker import _TemplateTracker
 
 
-def LoadYaml(_TemplateTrackerInstance: __TemplateTracker, FilePath: str):
+def LoadYaml(_TemplateTrackerInstance: _TemplateTracker, FilePath: str):
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()

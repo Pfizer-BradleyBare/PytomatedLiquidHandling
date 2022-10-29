@@ -1,54 +1,42 @@
-from abc import abstractmethod
 from ..Object.ObjectABC import ObjectABC
+from typing import Generic, TypeVar
 
-# NOTE: This is an abstract base class but for all intents and purposes the methods can be directly copied and used. However,
-# do not forget to change the type information!
+T = TypeVar("T", bound="ObjectABC")
 
 
-class TrackerABC:
-    @abstractmethod
+class TrackerABC(Generic[T]):
     def __init__(self):
-        self.Collection: dict[str, ObjectABC] = dict()
+        self.Collection: dict[str, T] = dict()
 
-    @abstractmethod
-    def ManualLoad(self, ObjectABCInstance: ObjectABC) -> None:
+    def ManualLoad(self, ObjectABCInstance: T) -> None:
 
         Name = ObjectABCInstance.GetName()
 
         if self.IsTracked(ObjectABCInstance) is True:
             raise Exception(
-                str(type(ObjectABCInstance).__name__)
-                + " is already tracked. Name: "
-                + Name
+                type(ObjectABCInstance).__name__ + " is already tracked. Name: " + Name
             )
 
         self.Collection[Name] = ObjectABCInstance
 
-    @abstractmethod
-    def ManualUnload(self, ObjectABCInstance: ObjectABC) -> None:
+    def ManualUnload(self, ObjectABCInstance: T) -> None:
         Name = ObjectABCInstance.GetName()
 
         if self.IsTracked(ObjectABCInstance) is True:
             raise Exception(
-                str(type(ObjectABCInstance).__name__)
-                + " is not yet tracked. Name: "
-                + Name
+                type(ObjectABCInstance).__name__ + " is not yet tracked. Name: " + Name
             )
 
         self.Collection[Name] = ObjectABCInstance
 
-    @abstractmethod
-    def IsTracked(self, ObjectABCInstance: ObjectABC) -> bool:
+    def IsTracked(self, ObjectABCInstance: T) -> bool:
         return ObjectABCInstance.GetName() in self.Collection
 
-    @abstractmethod
-    def GetObjectsAsList(self) -> list[ObjectABC]:
+    def GetObjectsAsList(self) -> list[T]:
         return [self.Collection[Key] for Key in self.Collection]
 
-    @abstractmethod
-    def GetObjectsAsDictionary(self) -> dict[str, ObjectABC]:
+    def GetObjectsAsDictionary(self) -> dict[str, T]:
         return self.Collection
 
-    @abstractmethod
-    def GetObjectByName(self, Name: str) -> ObjectABC:
+    def GetObjectByName(self, Name: str) -> T:
         return self.Collection[Name]

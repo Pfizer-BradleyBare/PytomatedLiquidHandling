@@ -31,4 +31,43 @@ class LiquidTransfer(Block):
         pass
 
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
-        pass
+        Destinations = self.GetParentPlateName()
+        Sources = self.GetSource()
+        Volumes = self.GetVolume()
+        MixingStrings = self.GetMix()
+
+        WorklistInstance = WorkbookInstance.GetWorklist()
+
+        Destinations = WorklistInstance.ConvertToWorklistColumn(Destinations)
+        MixingStrings = WorklistInstance.ConvertToWorklistColumn(MixingStrings)
+
+        if WorklistInstance.IsWorklistColumn(Sources):
+            Sources = WorklistInstance.ReadWorklistColumn(Sources)
+        else:
+            Sources = WorklistInstance.ConvertToWorklistColumn(Sources)
+
+        if WorklistInstance.IsWorklistColumn(Volumes):
+            Volumes = WorklistInstance.ReadWorklistColumn(Volumes)
+        else:
+            Volumes = WorklistInstance.ConvertToWorklistColumn(Volumes)
+
+        # Input validation here
+
+        AspirateMixingParams: list[int] = list()
+        DispenseMixingParams: list[int] = list()
+
+        for MixingString in MixingStrings:
+            MixParams = {"Aspirate": 0, "Dispense": 0}
+
+            if MixingString != "No":
+                MixingString = MixingString.replace(" ", "").split("+")
+
+                for MixParam in MixingString:
+                    MixParam = MixParam.split(":")
+                    MixParams[MixParam[0]] = int(MixParam[1])
+
+            AspirateMixingParams.append(MixParams["Aspirate"])
+            DispenseMixingParams.append(MixParams["Dispense"])
+        # Convert mixing strings to mixing params
+
+        # We need to figure out the pipetting first

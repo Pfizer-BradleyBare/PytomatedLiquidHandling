@@ -1,3 +1,4 @@
+from typing import cast
 from .Block import BlockObjectCreationWrapper, Block
 from .BlockTracker import BlockTracker
 from ....Tools import Excel
@@ -57,18 +58,18 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
         if type(BlockInstance).__name__ != Plate.__name__:
             raise Exception("Method is not valid!")
         else:
-            PlateName = BlockInstance.GetPlateName()
+            PlateName = cast(Plate, BlockInstance).GetPlateName()
             if PlateName in Pathways:
                 raise Exception("Method is not valid!")
-            Pathways.append(BlockInstance.GetPlateName())
+            Pathways.append(cast(Plate, BlockInstance).GetPlateName())
     # Check that the starting Block is a Plate and the name is unique in each list
 
     for BlockInstances in BlockInstancesList:
         BlockInstance = BlockInstances[-1]
         if type(BlockInstance).__name__ == SplitPlate.__name__:
-            if BlockInstance.GetPathway1Name() not in Pathways:
+            if cast(SplitPlate, BlockInstance).GetPathway1Name() not in Pathways:
                 raise Exception("Pathways are not referenced correctly!")
-            if BlockInstance.GetPathway2Name() not in Pathways:
+            if cast(SplitPlate, BlockInstance).GetPathway2Name() not in Pathways:
                 raise Exception("Pathways are not referenced correctly!")
     # Now we need to confirm that a split plate references the correct pathways
 

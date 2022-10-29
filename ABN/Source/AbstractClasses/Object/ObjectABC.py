@@ -6,4 +6,4 @@ from abc import abstractmethod
 class ObjectABC:
     @abstractmethod
     def GetName(self) -> str:
-        raise NotImplementedError
+        raise NotImplementedError  # this doesn't actually raise an error. This is an abstract method so python will complain

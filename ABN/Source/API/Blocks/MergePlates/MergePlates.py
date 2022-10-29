@@ -4,12 +4,13 @@ from ...Workbook import Workbook
 from ....HAL import Hal
 from ...Blocks import SplitPlate
 from ...Tools.Context import Context
+from typing import Self, cast
 
 
 @ClassDecorator_AvailableBlock
 class MergePlates(Block):
     MergedPathwayInstances: list[SplitPlate] = list()
-    WaitingMergeInstances: list[Block] = list()
+    WaitingMergeInstances: list[Self] = list()
 
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, ExcelInstance, Row, Col)
@@ -33,7 +34,7 @@ class MergePlates(Block):
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
         ProcessingMergeInstanceMergeType = self.GetMergeType()
 
-        SplitPlateBlockInstance: SplitPlate = self
+        SplitPlateBlockInstance: SplitPlate = cast(SplitPlate, self)
         while True:
             SearchBlockInstance = SplitPlateBlockInstance.GetParentNode()
 
@@ -61,7 +62,7 @@ class MergePlates(Block):
         MergePlates.WaitingMergeInstances.append(self)
         # Now we will add ourself to the waiting instances.
 
-        WaitingMergeInstance: MergePlates = None
+        WaitingMergeInstance: MergePlates | None = None
         for MergeInstance in MergePlates.WaitingMergeInstances:
             if MergeInstance.GetParentPlateName() == self.GetPlateName():
                 WaitingMergeInstance = MergeInstance
@@ -75,10 +76,10 @@ class MergePlates(Block):
         # We are going to do the merge so these steps are no longer waiting
 
         WaitingMergeInstanceContext = ContextTrackerInstance.GetObjectByName(
-            WaitingMergeInstance.Context()
+            WaitingMergeInstance.GetContext()
         )
         ProcessingMergeInstanceContext = ContextTrackerInstance.GetObjectByName(
-            self.Context()
+            self.GetContext()
         )
         # Get Merge Instance Contexts
 

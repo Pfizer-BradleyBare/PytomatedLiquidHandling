@@ -55,6 +55,6 @@ class Aliquot(Block):
                 if Location == UniqueLocation:
                     WellSequencesList.append(WellNumber)
             DispenseSequencesTrackerInstance.ManualLoad(
-                WellSequences(UniqueLocation, WellSequences)
+                WellSequences(UniqueLocation, WellSequencesList)
             )
         # We need to read the pool locations then adjust the dispense sequences

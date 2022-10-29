@@ -168,14 +168,16 @@ class LabwareCalculator:
         for Segment in WellsEquation:
             SegmentHeight = Segment.GetSegmentHeight()
 
-        if Height > SegmentHeight:
-            EvalHeight = SegmentHeight
-        else:
-            EvalHeight = Height
+            if Height > SegmentHeight:
+                EvalHeight = SegmentHeight
+            else:
+                EvalHeight = Height
 
-        Height -= SegmentHeight
+            Height -= SegmentHeight
 
-        CalculatedVolume += eval(Segment.GetSegmentEquation(), {}, {"h": EvalHeight})
+            CalculatedVolume += eval(
+                Segment.GetSegmentEquation(), {}, {"h": EvalHeight}
+            )
 
         return CalculatedVolume
 

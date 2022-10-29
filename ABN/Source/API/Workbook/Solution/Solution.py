@@ -12,9 +12,6 @@ class Solution(ObjectABC):
     def GetName(self) -> str:
         return self.Name
 
-    def GetCoordinates(self) -> tuple[int, int]:
-        return self.Coordinates
-
     def GetCategory(self):
         return self.ExcelInstance.ReadSolutionsSheetArea(
             self.Row + 2, self.Col + 2, self.Row + 2, self.Col + 2

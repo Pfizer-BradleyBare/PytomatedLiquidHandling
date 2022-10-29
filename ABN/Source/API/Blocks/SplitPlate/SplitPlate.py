@@ -1,3 +1,4 @@
+from typing import cast
 from ...Workbook.Block import Block, ClassDecorator_AvailableBlock
 from ....Tools import Excel
 from ...Workbook import Workbook
@@ -77,9 +78,7 @@ class SplitPlate(Block):
             OldContextInstance.GetDispenseWellSequencesTracker().GetObjectsAsList(),
         ):
             if not (
-                WellFactorInstance.GetName()
-                == AspirateWellSequencesInstance.GetName()
-                == DispenseWellSequencesInstance.GetName()
+                WellFactorInstance.GetName() == DispenseWellSequencesInstance.GetName()
             ):
                 raise Exception(
                     "Wells are not the same across factors and sequences"
@@ -167,7 +166,7 @@ class SplitPlate(Block):
 
         ContainerTracker = WorkbookInstance.GetContainerTracker()
 
-        Children: list[Plate] = self.GetChildren()
+        Children: list[Plate] = cast(list[Plate], self.GetChildren())
         for Child in Children:
             ContainerTracker.ManualLoad(
                 Container(Child.GetPlateName(), Child.GetPlateType())

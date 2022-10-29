@@ -65,7 +65,7 @@ class Core96HeadChannels(PipettingChannels):
         PipettingChannels.__init__(self, DeviceTypes.Core96Head, Enabled)
 
 
-class PipettingDevice:
+class PipettingDevice(ObjectABC):
     def __init__(
         self,
         PipettingChannel: PipettingChannels,
