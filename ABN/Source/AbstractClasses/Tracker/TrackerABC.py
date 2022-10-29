@@ -32,6 +32,9 @@ class TrackerABC(Generic[T]):
     def IsTracked(self, ObjectABCInstance: T) -> bool:
         return ObjectABCInstance.GetName() in self.Collection
 
+    def GetNumObjects(self) -> int:
+        return len(self.Collection)
+
     def GetObjectsAsList(self) -> list[T]:
         return [self.Collection[Key] for Key in self.Collection]
 
