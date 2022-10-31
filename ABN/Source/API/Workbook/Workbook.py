@@ -75,7 +75,6 @@ class Workbook(ObjectABC):
         self.State: WorkbookStates = WorkbookStates.Queued
         self.ExecutingContextInstance: Context
         self.MethodTreeRoot: Block = MethodBlocksTrackerInstance.GetObjectsAsList()[0]
-        self.StartingWell: int  # This startingwell is only for plate containers. Reagent containers can be loaded anywhere
 
         # Trackers
         self.MethodBlocksTrackerInstance: BlockTracker = MethodBlocksTrackerInstance
@@ -121,9 +120,6 @@ class Workbook(ObjectABC):
 
     def GetMethodTreeRoot(self) -> Block:
         return self.MethodTreeRoot
-
-    def GetStartingWell(self) -> int:
-        return self.StartingWell
 
     def GetMethodBlocksTracker(self) -> BlockTracker:
         return self.MethodBlocksTrackerInstance
@@ -304,12 +300,6 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
 
 def WorkbookInit(WorkbookInstance: Workbook):
-
-    # Check runtype. We will determine the starting well here
-    if WorkbookInstance.GetRunType() == WorkbookRunTypes.Run:
-        WorkbookInstance.StartingWell = 0  # I made it none right now for testing
-    else:
-        WorkbookInstance.StartingWell = 1
 
     # Set Initial Active Context
     AspirateWellSequencesTrackerInstance = WellSequencesTracker()
