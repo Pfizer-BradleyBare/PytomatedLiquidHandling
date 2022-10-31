@@ -24,7 +24,7 @@ class Timer(ObjectABC):
         self.CallbackFunction: Callable[[Block, Workbook, Hal], None] = CallbackFunction
 
     def GetName(self) -> str:
-        return "Timer: " + self.BlockInstance.GetName()
+        return "Timer: " + str(self.BlockInstance.GetName())
 
     def GetWaitTime(self) -> float:
         return self.WaitTimeSeconds

@@ -6,7 +6,7 @@ T = TypeVar("T", bound="ObjectABC")
 
 class TrackerABC(Generic[T]):
     def __init__(self):
-        self.Collection: dict[str, T] = dict()
+        self.Collection: dict[str | int, T] = dict()
 
     def ManualLoad(self, ObjectABCInstance: T) -> None:
 
@@ -14,7 +14,9 @@ class TrackerABC(Generic[T]):
 
         if self.IsTracked(ObjectABCInstance) is True:
             raise Exception(
-                type(ObjectABCInstance).__name__ + " is already tracked. Name: " + Name
+                type(ObjectABCInstance).__name__
+                + " is already tracked. Name: "
+                + str(Name)
             )
 
         self.Collection[Name] = ObjectABCInstance
@@ -24,7 +26,9 @@ class TrackerABC(Generic[T]):
 
         if self.IsTracked(ObjectABCInstance) is True:
             raise Exception(
-                type(ObjectABCInstance).__name__ + " is not yet tracked. Name: " + Name
+                type(ObjectABCInstance).__name__
+                + " is not yet tracked. Name: "
+                + str(Name)
             )
 
         self.Collection[Name] = ObjectABCInstance
@@ -38,8 +42,8 @@ class TrackerABC(Generic[T]):
     def GetObjectsAsList(self) -> list[T]:
         return [self.Collection[Key] for Key in self.Collection]
 
-    def GetObjectsAsDictionary(self) -> dict[str, T]:
+    def GetObjectsAsDictionary(self) -> dict[str | int, T]:
         return self.Collection
 
-    def GetObjectByName(self, Name: str) -> T:
+    def GetObjectByName(self, Name: str | int) -> T:
         return self.Collection[Name]
