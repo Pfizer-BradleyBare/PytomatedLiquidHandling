@@ -3,10 +3,10 @@ from .WellSolution import WellSolution
 
 
 class WellSolutionTracker(TrackerABC[WellSolution], ObjectABC):
-    def __init__(self, WellNumber: str):
+    def __init__(self, WellNumber: int):
         TrackerABC.__init__(self)
-        self.WellNumber: str = WellNumber
+        self.WellNumber: int = WellNumber
         self.Collection: dict[str, WellSolution] = dict()
 
-    def GetName(self) -> str:
+    def GetName(self) -> int:
         return self.WellNumber
