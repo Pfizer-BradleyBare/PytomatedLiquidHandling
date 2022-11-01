@@ -112,7 +112,7 @@ class LiquidTransfer(Block):
             SequenceTrackerInstance,
             WorkbookInstance.GetDeckLoadingItemTracker(),
             WorkbookInstance.GetExecutingContext(),
-            HalInstance.PipetteTrackerInstance,
-            HalInstance.PipetteTrackerInstance,
+            HalInstance.GetPipetteTracker(),
+            HalInstance.GetPipetteTracker(),
         ).Process()
         # We need to figure out the pipetting first

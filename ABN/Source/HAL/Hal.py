@@ -28,35 +28,35 @@ class Hal:
         self.TipTrackerInstance: TipTracker
         self.TransportTrackerInstance: TransportTracker
 
-        def GetDeckLocationTracker(self) -> DeckLocationTracker:
-            return self.DeckLocationTrackerInstance
+    def GetDeckLocationTracker(self) -> DeckLocationTracker:
+        return self.DeckLocationTrackerInstance
 
-        def GetFlipTubeTracker(self) -> FlipTubeTracker:
-            return self.FlipTubeTrackerInstance
+    def GetFlipTubeTracker(self) -> FlipTubeTracker:
+        return self.FlipTubeTrackerInstance
 
-        def GetLabwareTracker(self) -> LabwareTracker:
-            return self.LabwareTrackerInstance
+    def GetLabwareTracker(self) -> LabwareTracker:
+        return self.LabwareTrackerInstance
 
-        def GetLayoutTracker(self) -> LayoutTracker:
-            return self.LayoutTrackerInstance
+    def GetLayoutTracker(self) -> LayoutTracker:
+        return self.LayoutTrackerInstance
 
-        def GetLidTracker(self) -> LidTracker:
-            return self.LidTrackerInstance
+    def GetLidTracker(self) -> LidTracker:
+        return self.LidTrackerInstance
 
-        def GetMagneticRackTracker(self) -> MagneticRackTracker:
-            return self.MagneticRackTrackerInstance
+    def GetMagneticRackTracker(self) -> MagneticRackTracker:
+        return self.MagneticRackTrackerInstance
 
-        def GetNotifyTracker(self) -> NotifyTracker:
-            return self.NotifyTrackerInstance
+    def GetNotifyTracker(self) -> NotifyTracker:
+        return self.NotifyTrackerInstance
 
-        def GetPipetteTracker(self) -> PipetteTracker:
-            return self.PipetteTrackerInstance
+    def GetPipetteTracker(self) -> PipetteTracker:
+        return self.PipetteTrackerInstance
 
-        def GetTempControlDeviceTracker(self) -> TempControlDeviceTracker:
-            return self.TempControlDeviceTrackerInstance
+    def GetTempControlDeviceTracker(self) -> TempControlDeviceTracker:
+        return self.TempControlDeviceTrackerInstance
 
-        def GetTipTracker(self) -> TipTracker:
-            return self.TipTrackerInstance
+    def GetTipTracker(self) -> TipTracker:
+        return self.TipTrackerInstance
 
-        def GetTransportTracker(self) -> TransportTracker:
-            return self.TransportTrackerInstance
+    def GetTransportTracker(self) -> TransportTracker:
+        return self.TransportTrackerInstance
