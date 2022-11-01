@@ -6,7 +6,7 @@ from ....HAL import Hal
 from ...Tools.Context import (
     Context,
     WellFactorTracker,
-    WellSequencesTracker,
+    WellSequenceTracker,
     WellFactor,
 )
 from ...Tools.Container import Container
@@ -42,15 +42,15 @@ class SplitPlate(Block):
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
         Pathway1Name = self.GetPathway1Name()
         Pathway2Name = self.GetPathway2Name()
-        PathwayChoice = self.GetPathwayChoice()
+        PathwayChoices = self.GetPathwayChoice()
 
-        if WorkbookInstance.GetWorklist().IsWorklistColumn(PathwayChoice) is True:
-            PathwayChoice = WorkbookInstance.GetWorklist().ReadWorklistColumn(
-                PathwayChoice
+        if WorkbookInstance.GetWorklist().IsWorklistColumn(PathwayChoices) is True:
+            PathwayChoices = WorkbookInstance.GetWorklist().ReadWorklistColumn(
+                PathwayChoices
             )
         else:
-            PathwayChoice = WorkbookInstance.GetWorklist().ConvertToWorklistColumn(
-                PathwayChoice
+            PathwayChoices = WorkbookInstance.GetWorklist().ConvertToWorklistColumn(
+                PathwayChoices
             )
 
         # Do parameter validation here
@@ -61,100 +61,71 @@ class SplitPlate(Block):
         OldContextInstance = WorkbookInstance.GetExecutingContext()
         NewPathway1ContextInstance = Context(
             OldContextInstance.GetName() + ":" + Pathway1Name,
-            WellSequencesTracker(),
-            WellSequencesTracker(),
+            WellSequenceTracker(),
+            WellSequenceTracker(),
             WellFactorTracker(),
         )
         NewPathway2ContextInstance = Context(
             OldContextInstance.GetName() + ":" + Pathway2Name,
-            WellSequencesTracker(),
-            WellSequencesTracker(),
+            WellSequenceTracker(),
+            WellSequenceTracker(),
             WellFactorTracker(),
         )
         # New Contexts. Now we need to load them
 
-        for (WellFactorInstance, DispenseWellSequencesInstance,) in zip(
-            OldContextInstance.GetWellFactorTracker().GetObjectsAsList(),
-            OldContextInstance.GetDispenseWellSequencesTracker().GetObjectsAsList(),
-        ):
-            if not (
-                WellFactorInstance.GetName() == DispenseWellSequencesInstance.GetName()
-            ):
-                raise Exception(
-                    "Wells are not the same across factors and sequences"
-                )  # This should never happen
+        for WellNumber in range(0, WorkbookInstance.GetWorklist().GetNumSamples()):
 
-            Pathway = PathwayChoice[WellFactorInstance.GetName()]
+            PathwayChoice = PathwayChoices[WellNumber]
 
-            if Pathway.lower() == Pathway1Name.lower():
-                NewPathway1ContextInstance.GetWellFactorTracker().ManualLoad(
-                    WellFactorInstance
+            Factor = (
+                OldContextInstance.GetWellFactorTracker()
+                .GetObjectByName(WellNumber)
+                .GetFactor()
+            )
+            SequenceInstance = (
+                OldContextInstance.GetDispenseWellSequenceTracker().GetObjectByName(
+                    WellNumber
                 )
-                NewPathway1ContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                    DispenseWellSequencesInstance
-                )
-                NewPathway1ContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
-                    DispenseWellSequencesInstance
-                )
+            )
 
-            elif Pathway.lower() == Pathway2Name.lower():
-                NewPathway2ContextInstance.GetWellFactorTracker().ManualLoad(
-                    WellFactorInstance
-                )
-                NewPathway2ContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                    DispenseWellSequencesInstance
-                )
-                NewPathway2ContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
-                    DispenseWellSequencesInstance
-                )
+            if PathwayChoice == Pathway1Name:
+                Pathway1Factor = Factor * 1.0
+                Pathway2Factor = Factor * 0.0
 
-            elif Pathway.lower() == "Concurrent".lower():
-                NewPathway1ContextInstance.GetWellFactorTracker().ManualLoad(
-                    WellFactorInstance
-                )
-                NewPathway1ContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                    DispenseWellSequencesInstance
-                )
-                NewPathway1ContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
-                    DispenseWellSequencesInstance
-                )
+            elif PathwayChoice == Pathway2Name:
+                Pathway1Factor = Factor * 0.0
+                Pathway2Factor = Factor * 1.0
 
-                NewPathway2ContextInstance.GetWellFactorTracker().ManualLoad(
-                    WellFactorInstance
-                )
-                NewPathway2ContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                    DispenseWellSequencesInstance
-                )
-                NewPathway2ContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
-                    DispenseWellSequencesInstance
-                )
+            elif PathwayChoice == "Split":
+                Pathway1Factor = Factor * 0.5
+                Pathway2Factor = Factor * 0.5
 
-            else:  # Pathway.lower() == "Split".lower():
-                NewPathway1ContextInstance.GetWellFactorTracker().ManualLoad(
-                    WellFactor(
-                        WellFactorInstance.GetName(),
-                        WellFactorInstance.GetFactor() * 0.5,
-                    )
-                )
-                NewPathway1ContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                    DispenseWellSequencesInstance
-                )
-                NewPathway1ContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
-                    DispenseWellSequencesInstance
-                )
+            else:  # PathwayChoice == "Concurrent":
+                Pathway1Factor = Factor * 1.0
+                Pathway2Factor = Factor * 1.0
 
-                NewPathway2ContextInstance.GetWellFactorTracker().ManualLoad(
-                    WellFactor(
-                        WellFactorInstance.GetName(),
-                        WellFactorInstance.GetFactor() * 0.5,
-                    )
-                )
-                NewPathway2ContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                    DispenseWellSequencesInstance
-                )
-                NewPathway2ContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
-                    DispenseWellSequencesInstance
-                )
+            # Pathway 1 context
+            NewPathway1ContextInstance.GetAspirateWellSequenceTracker().ManualLoad(
+                SequenceInstance
+            )
+            NewPathway1ContextInstance.GetDispenseWellSequenceTracker().ManualLoad(
+                SequenceInstance
+            )
+            NewPathway1ContextInstance.GetWellFactorTracker().ManualLoad(
+                WellFactor(WellNumber, Pathway1Factor)
+            )
+
+            # Pathway 2 context
+            NewPathway2ContextInstance.GetAspirateWellSequenceTracker().ManualLoad(
+                SequenceInstance
+            )
+            NewPathway2ContextInstance.GetDispenseWellSequenceTracker().ManualLoad(
+                SequenceInstance
+            )
+            NewPathway2ContextInstance.GetWellFactorTracker().ManualLoad(
+                WellFactor(WellNumber, Pathway2Factor)
+            )
+
         # Create the contexts here
 
         InactiveContextTrackerInstance.ManualLoad(OldContextInstance)
@@ -162,7 +133,7 @@ class SplitPlate(Block):
         ContextTrackerInstance.ManualLoad(NewPathway2ContextInstance)
         WorkbookInstance.SetExecutingContext(NewPathway1ContextInstance)
         # Deactivate the previous context and active this new context
-        # We always execute pathway 1 first. Just easier to remember as 1st is 1st
+        # We always execute pathway 1 first. Just easier to remember cause it is like reading a book. Left to right
 
         ContainerTracker = WorkbookInstance.GetContainerTracker()
 

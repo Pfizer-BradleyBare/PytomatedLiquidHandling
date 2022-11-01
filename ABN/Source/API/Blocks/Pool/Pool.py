@@ -2,7 +2,7 @@ from ...Workbook.Block import Block, ClassDecorator_AvailableBlock
 from ....Tools import Excel
 from ...Workbook import Workbook
 from ....HAL import Hal
-from ...Tools.Context import WellSequences
+from ...Tools.Context import WellSequence
 
 
 @ClassDecorator_AvailableBlock
@@ -39,22 +39,18 @@ class Pool(Block):
         # do input validation here
 
         DispenseSequencesTrackerInstance = (
-            WorkbookInstance.GetExecutingContext().GetDispenseWellSequencesTracker()
+            WorkbookInstance.GetExecutingContext().GetDispenseWellSequenceTracker()
         )
 
-        for SequenceInstance in DispenseSequencesTrackerInstance.GetObjectsAsList():
-            DispenseSequencesTrackerInstance.ManualUnload(SequenceInstance)
-        # We have to remve all the sequences before we start to reload
-
-        for UniqueLocation in set(Locations):
-            WellSequencesList: list[int] = list()
-            for Location, WellNumber in zip(
-                Locations,
-                range(0, len(Locations)),
-            ):
-                if Location == UniqueLocation:
-                    WellSequencesList.append(WellNumber)
-            DispenseSequencesTrackerInstance.ManualLoad(
-                WellSequences(UniqueLocation, WellSequencesList)
+        for WellNumber, Location in zip(
+            range(0, WorklistInstance.GetNumSamples()), Locations
+        ):
+            SequenceInstance = DispenseSequencesTrackerInstance.GetObjectByName(
+                WellNumber
             )
-        # We need to read the pool locations then adjust the dispense sequences
+            if SequenceInstance.GetSequence() != Location:
+                DispenseSequencesTrackerInstance.ManualUnload(SequenceInstance)
+                DispenseSequencesTrackerInstance.ManualLoad(
+                    WellSequence(WellNumber, Location)
+                )
+        # We just need to update the Sequence in the ones that are different. Easy?

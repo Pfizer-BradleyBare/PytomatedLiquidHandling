@@ -13,8 +13,8 @@ from ...API.Tools.Context import (
     ContextTracker,
     Context,
     WellFactorTracker,
-    WellSequencesTracker,
-    WellSequences,
+    WellSequenceTracker,
+    WellSequence,
     WellFactor,
 )
 from ..Tools.Timer import TimerTracker
@@ -302,27 +302,27 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 def WorkbookInit(WorkbookInstance: Workbook):
 
     # Set Initial Active Context
-    AspirateWellSequencesTrackerInstance = WellSequencesTracker()
-    DispenseWellSequencesTrackerInstance = WellSequencesTracker()
+    AspirateWellSequenceTrackerInstance = WellSequenceTracker()
+    DispenseWellSequenceTrackerInstance = WellSequenceTracker()
 
     WellFactorsTrackerInstance = WellFactorTracker()
 
     for SampleNumber in range(0, WorkbookInstance.GetWorklist().GetNumSamples()):
         WellNumber = SampleNumber
 
-        WellSequencesInstance = WellSequences(WellNumber, [WellNumber])
+        WellSequencesInstance = WellSequence(WellNumber, WellNumber)
         WellFactorInstance = WellFactor(WellNumber, 1)
 
-        AspirateWellSequencesTrackerInstance.ManualLoad(WellSequencesInstance)
-        DispenseWellSequencesTrackerInstance.ManualLoad(WellSequencesInstance)
+        AspirateWellSequenceTrackerInstance.ManualLoad(WellSequencesInstance)
+        DispenseWellSequenceTrackerInstance.ManualLoad(WellSequencesInstance)
 
         WellFactorsTrackerInstance.ManualLoad(WellFactorInstance)
 
     WorkbookInstance.SetExecutingContext(
         Context(
             ":__StartingContext__",
-            AspirateWellSequencesTrackerInstance,
-            DispenseWellSequencesTrackerInstance,
+            AspirateWellSequenceTrackerInstance,
+            DispenseWellSequenceTrackerInstance,
             WellFactorsTrackerInstance,
         )
     )

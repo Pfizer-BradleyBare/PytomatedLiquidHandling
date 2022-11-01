@@ -105,36 +105,34 @@ class MergePlates(Block):
             ):
                 UpdateContextFactorsFlag = False
 
-            def CombineContexts(
+            def CombineFactors(
                 DestinationContextInstance: Context,
                 SourceContextInstance: Context,
             ):
-                for (
-                    WellFactorInstance,
-                    AspirateWellSequencesInstance,
-                    DispenseWellSequencesInstance,
-                ) in zip(
-                    SourceContextInstance.GetWellFactorTracker().GetObjectsAsList(),
-                    SourceContextInstance.GetAspirateWellSequencesTracker().GetObjectsAsList(),
-                    SourceContextInstance.GetDispenseWellSequencesTracker().GetObjectsAsList(),
+                for WellNumber in range(
+                    0, WorkbookInstance.GetWorklist().GetNumSamples()
                 ):
-                    DestinationContextInstance.GetWellFactorTracker().ManualLoad(
-                        WellFactorInstance
+                    WellFactorInstance = DestinationContextInstance.GetWellFactorTracker().GetObjectByName(
+                        WellNumber
                     )
-                    DestinationContextInstance.GetAspirateWellSequencesTracker().ManualLoad(
-                        AspirateWellSequencesInstance
-                    )
-                    DestinationContextInstance.GetDispenseWellSequencesTracker().ManualLoad(
-                        DispenseWellSequencesInstance
-                    )
+                    if WellFactorInstance.GetFactor() == 0:
+                        DestinationContextInstance.GetWellFactorTracker().ManualUnload(
+                            WellFactorInstance
+                        )
+                        DestinationContextInstance.GetWellFactorTracker().ManualLoad(
+                            SourceContextInstance.GetWellFactorTracker().GetObjectByName(
+                                WellNumber
+                            )
+                        )
 
             # It is guarenteed that the wells in one pathway to do not overlap with the other merging pathway
 
             if WaitingMergeInstanceMergeType == "Yes":
                 InactiveContextTrackerInstance.ManualUnload(WaitingMergeInstanceContext)
+                # We also need to track the finish step as executed here.
 
                 if UpdateContextFactorsFlag is True:
-                    CombineContexts(
+                    CombineFactors(
                         WaitingMergeInstanceContext,
                         ProcessingMergeInstanceContext,
                     )
@@ -143,9 +141,10 @@ class MergePlates(Block):
                 InactiveContextTrackerInstance.ManualUnload(
                     ProcessingMergeInstanceContext
                 )
+                # We also need to track the finish step as executed here.
 
                 if UpdateContextFactorsFlag is True:
-                    CombineContexts(
+                    CombineFactors(
                         ProcessingMergeInstanceContext,
                         WaitingMergeInstanceContext,
                     )

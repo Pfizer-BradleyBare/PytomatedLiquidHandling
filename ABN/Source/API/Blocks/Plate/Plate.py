@@ -42,8 +42,8 @@ class Plate(Block):
         OldContextInstance = WorkbookInstance.GetExecutingContext()
         NewContextInstance = Context(
             OldContextInstance.GetName() + ":" + PlateName,
-            OldContextInstance.GetDispenseWellSequencesTracker(),
-            OldContextInstance.GetDispenseWellSequencesTracker(),
+            OldContextInstance.GetDispenseWellSequenceTracker(),
+            OldContextInstance.GetDispenseWellSequenceTracker(),
             OldContextInstance.GetWellFactorTracker(),
         )
         # We only bring forward the dispense well sequences

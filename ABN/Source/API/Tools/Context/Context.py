@@ -1,33 +1,33 @@
 from ....AbstractClasses import ObjectABC
 from .WellFactor.WellFactorTracker import WellFactorTracker
-from .WellSequences.WellSequencesTracker import WellSequencesTracker
+from .WellSequence.WellSequenceTracker import WellSequenceTracker
 
 
 class Context(ObjectABC):
     def __init__(
         self,
         Name: str,
-        AspirateWellSequencesTrackerInstance: WellSequencesTracker,
-        DispenseWellSequencesTrackerInstance: WellSequencesTracker,
+        AspirateWellSequenceTrackerInstance: WellSequenceTracker,
+        DispenseWellSequenceTrackerInstance: WellSequenceTracker,
         WellFactorsTrackerInstance: WellFactorTracker,
     ):
         self.Name: str = Name
-        self.AspirateWellSequencesTrackerInstance: WellSequencesTracker = (
-            AspirateWellSequencesTrackerInstance
+        self.AspirateWellSequenceTrackerInstance: WellSequenceTracker = (
+            AspirateWellSequenceTrackerInstance
         )
-        self.DispenseWellSequencesTrackerInstance: WellSequencesTracker = (
-            DispenseWellSequencesTrackerInstance
+        self.DispenseWellSequenceTrackerInstance: WellSequenceTracker = (
+            DispenseWellSequenceTrackerInstance
         )
         self.WellFactorsTrackerInstance: WellFactorTracker = WellFactorsTrackerInstance
 
     def GetName(self) -> str:
         return self.Name
 
-    def GetAspirateWellSequencesTracker(self) -> WellSequencesTracker:
-        return self.AspirateWellSequencesTrackerInstance
+    def GetAspirateWellSequenceTracker(self) -> WellSequenceTracker:
+        return self.AspirateWellSequenceTrackerInstance
 
-    def GetDispenseWellSequencesTracker(self) -> WellSequencesTracker:
-        return self.DispenseWellSequencesTrackerInstance
+    def GetDispenseWellSequenceTracker(self) -> WellSequenceTracker:
+        return self.DispenseWellSequenceTrackerInstance
 
     def GetWellFactorTracker(self) -> WellFactorTracker:
         return self.WellFactorsTrackerInstance

@@ -25,7 +25,7 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
         if "Labware Filter" in ConfigFile["Labware IDs"][LabwareID].keys():
             Filter = ConfigFile["Labware IDs"][LabwareID]["Labware Filter"]
         else:
-            Filter = "N/A"
+            Filter = None
 
         if "Wells" in ConfigFile["Labware IDs"][LabwareID].keys():
             EquationsList = list()
