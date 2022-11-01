@@ -28,5 +28,20 @@ class PipetteDriver(DriverABC):
             DispensePipettingDeviceTrackerInstance
         )
 
+    def GetSequenceTracker(self) -> SequenceTracker:
+        return self.SequenceTrackerInstance
+
+    def GetDeckLoadingItemTracker(self) -> DeckLoadingItemTracker:
+        return self.DeckLoadingItemTrackerInstance
+
+    def GetContext(self) -> Context:
+        return self.ContextInstance
+
+    def GetAspiratePipettingDeviceTracker(self):
+        return self.AspiratePipettingDeviceTrackerInstance
+
+    def GetDispensePipettingDeviceTracker(self):
+        return self.DispensePipettingDeviceTrackerInstance
+
     def Process(self):
         pass
