@@ -241,8 +241,9 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # We are going to walk backward until we find either a merge plates step, a preceeding preprocessing device, or the beginning of the method
 
         for ConfirmedPreprocessingBlockInstance in ConfirmedPreprocessingBlockInstances:
-            pass
-            # I need to do something here for the preprocessing
+            ConfirmedPreprocessingBlockInstance.Preprocess(
+                WorkbookInstance, HalInstance
+            )
         # Before each round of steps we want to check if we can start heaters / Coolers or other preprocessing devices
         # We can not start a preprocessing device until any preceeding merge steps are completed
 
