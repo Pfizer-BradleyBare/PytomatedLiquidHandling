@@ -220,15 +220,16 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                     ConfirmedPreprocessingBlockInstances.append(
                         PreprocessingBlockInstance
                     )
-                    PreprocessingBlocksTrackerInstance.ManualUnload(
-                        PreprocessingBlockInstance
-                    )
                     break
                 # We found the root. This means that this preprocessing block is ready to start
 
                 if ExecutedBlocksTrackerInstance.IsTracked(SearchBlockInstance):
+                    PreprocessingBlocksTrackerInstance.ManualUnload(
+                        PreprocessingBlockInstance
+                    )
                     continue
                 # If the block has already been executed then we can skip it.
+                # We also need to remove it from the Preprocessing tracker. If it has executed then preprocessing requirements are complete
 
                 if PreprocessingBlocksTrackerInstance.IsTracked(SearchBlockInstance):
                     break
