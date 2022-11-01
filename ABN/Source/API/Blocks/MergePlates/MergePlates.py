@@ -129,7 +129,10 @@ class MergePlates(Block):
 
             if WaitingMergeInstanceMergeType == "Yes":
                 InactiveContextTrackerInstance.ManualUnload(WaitingMergeInstanceContext)
-                # We also need to track the finish step as executed here.
+                WorkbookInstance.GetExecutedBlocksTracker().ManualLoad(
+                    self.GetChildren()[0]
+                )
+                # We load the other pathways finish step as executed because theoretically it should execute
 
                 if UpdateContextFactorsFlag is True:
                     CombineFactors(
@@ -141,7 +144,10 @@ class MergePlates(Block):
                 InactiveContextTrackerInstance.ManualUnload(
                     ProcessingMergeInstanceContext
                 )
-                # We also need to track the finish step as executed here.
+                WorkbookInstance.GetExecutedBlocksTracker().ManualLoad(
+                    WaitingMergeInstance.GetChildren()[0]
+                )
+                # We load the other pathways finish step as executed because theoretically it should execute
 
                 if UpdateContextFactorsFlag is True:
                     CombineFactors(
