@@ -14,6 +14,7 @@ class PipetteDriver(DriverABC):
         ContextInstance: Context,
         AspiratePipettingDeviceTrackerInstance: PipetteTracker,
         DispensePipettingDeviceTrackerInstance: PipetteTracker,
+        # We have both aspirate and dispense pipetting devices because aspirate vs dispense liquid classes can be different.
     ):
         DriverABC.__init__(self, SimulateState)
         self.SequenceTrackerInstance: SequenceTracker = SequenceTrackerInstance
