@@ -3,7 +3,7 @@ from ....Tools import Excel
 from ...Workbook import Workbook
 from ....HAL import Hal
 from ...Tools.Container import Container
-from ....Driver.Pipette import Sequence, SequenceTracker
+from ....Driver.Pipette import Sequence, SequenceTracker, PipetteDriver
 
 
 @ClassDecorator_AvailableBlock
@@ -81,15 +81,38 @@ class LiquidTransfer(Block):
 
         SequenceTrackerInstance = SequenceTracker()
         for (
+            WellNumber,
             Destination,
             Source,
             Volume,
             AspirateMixingParam,
             DispenseMixingParam,
         ) in zip(
-            Destinations, Sources, Volumes, AspirateMixingParams, DispenseMixingParams
+            range(0, WorklistInstance.GetNumSamples()),
+            Destinations,
+            Sources,
+            Volumes,
+            AspirateMixingParams,
+            DispenseMixingParams,
         ):
-            pass
-        # Create our pipetting sequence
+            SequenceTrackerInstance.ManualLoad(
+                Sequence(
+                    WellNumber,
+                    ContainerTrackerInstance.GetObjectByName(Destination),
+                    ContainerTrackerInstance.GetObjectByName(Source),
+                    AspirateMixingParam,
+                    DispenseMixingParam,
+                    Volume,
+                )
+            )
+        # Create our pipetting tracker
 
+        PipetteDriver(
+            True,
+            SequenceTrackerInstance,
+            WorkbookInstance.GetDeckLoadingItemTracker(),
+            WorkbookInstance.GetExecutingContext(),
+            HalInstance.PipetteTrackerInstance,
+            HalInstance.PipetteTrackerInstance,
+        ).Process()
         # We need to figure out the pipetting first

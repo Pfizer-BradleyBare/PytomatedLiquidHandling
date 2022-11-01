@@ -136,6 +136,9 @@ class Workbook(ObjectABC):
     def GetSolutionTracker(self) -> SolutionTracker:
         return self.SolutionTrackerInstance
 
+    def GetDeckLoadingItemTracker(self) -> DeckLoadingItemTracker:
+        return self.DeckLoadingItemTrackerInstance
+
     def GetContainerTracker(self) -> ContainerTracker:
         return self.ContainerTrackerInstance
 
