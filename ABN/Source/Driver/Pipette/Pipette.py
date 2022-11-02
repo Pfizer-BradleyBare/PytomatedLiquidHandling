@@ -73,7 +73,7 @@ class PipetteDriver(DriverABC):
             DestinationContainerOperatorInstance = (
                 Sequence.GetDestinationContainerOperator()
             )
-            SourceContainerOperatorInstance = Sequence.GetDestinationContainerOperator()
+            SourceContainerOperatorInstance = Sequence.GetSourceContainerOperator()
 
             DestinationContainerOperatorInstance.Dispense(
                 DispenseWellNumber,
@@ -87,4 +87,3 @@ class PipetteDriver(DriverABC):
             pass
 
         print("QUIT")
-        quit()
