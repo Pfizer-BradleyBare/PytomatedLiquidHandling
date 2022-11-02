@@ -1,6 +1,6 @@
 from .....AbstractClasses import TrackerABC
-from .Solution.WellSolutionTracker import WellSolutionTracker
+from .Well import Well
 
 
-class WellTracker(TrackerABC[WellSolutionTracker]):
+class WellTracker(TrackerABC[Well]):
     pass

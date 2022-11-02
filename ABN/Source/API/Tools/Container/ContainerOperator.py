@@ -2,58 +2,13 @@ from ...Workbook.Block import Block
 from .Container import Container
 from .Well.Solution.WellSolutionTracker import WellSolutionTracker
 from .Well.Solution.WellSolution import WellSolution
+from .Well.Well import Well
 
 
 class ContainerOperator:
     def __init__(self, ContainerInstance: Container, BlockInstance: Block):
         self.ContainerInstance: Container = ContainerInstance
         self.BlockInstance: Block = BlockInstance
-
-    def Dispense(
-        self, WellNumber: int, SourceWellSolutionTrackerInstance: WellSolutionTracker
-    ):
-        if not self.ContainerInstance.GetDispenseBlockTracker().IsTracked(
-            self.BlockInstance
-        ):
-            self.ContainerInstance.GetDispenseBlockTracker().ManualLoad(
-                self.BlockInstance
-            )
-
-        WellInstance = self.ContainerInstance.GetWellTracker().GetObjectByName(
-            WellNumber
-        )
-
-        DestinationWellSolutionTrackerInstance = WellInstance.GetWellSolutionTracker()
-
-        for (
-            WellSolutionInstance
-        ) in SourceWellSolutionTrackerInstance.GetObjectsAsList():
-            if DestinationWellSolutionTrackerInstance.IsTracked(WellSolutionInstance):
-                TrackedWellSolution = (
-                    DestinationWellSolutionTrackerInstance.GetObjectByName(
-                        WellSolutionInstance.GetName()
-                    )
-                )
-                DestinationWellSolutionTrackerInstance.ManualUnload(
-                    WellSolutionInstance
-                )
-
-                UpdatedWellSolution = WellSolution(
-                    WellSolutionInstance.GetName(),
-                    WellSolutionInstance.GetVolume() + TrackedWellSolution.GetVolume(),
-                )
-                DestinationWellSolutionTrackerInstance.ManualLoad(UpdatedWellSolution)
-            else:
-                DestinationWellSolutionTrackerInstance.ManualLoad(WellSolutionInstance)
-            # If the solution is already tracked then we remove it and add a new updated solution. Basically updating the volume of the solution
-
-        WellVolume = sum(
-            Solution.GetVolume()
-            for Solution in DestinationWellSolutionTrackerInstance.GetObjectsAsList()
-        )
-        if WellVolume > WellInstance.MaxWellVolume:
-            WellInstance.MaxWellVolume = WellVolume
-        # We also check if the new volume is greater than the current max
 
     def Aspirate(self, WellNumber: int, Volume: float) -> WellSolutionTracker:
         if not self.ContainerInstance.GetAspirateBlockTracker().IsTracked(
@@ -62,6 +17,11 @@ class ContainerOperator:
             self.ContainerInstance.GetAspirateBlockTracker().ManualLoad(
                 self.BlockInstance
             )
+
+        WellInstance = Well(WellNumber)
+        if not self.ContainerInstance.GetWellTracker().IsTracked(WellInstance):
+            self.ContainerInstance.GetWellTracker().ManualLoad(WellInstance)
+        # If it doesn't exist then lets add it
 
         WellInstance = self.ContainerInstance.GetWellTracker().GetObjectByName(
             WellNumber
@@ -113,3 +73,54 @@ class ContainerOperator:
                     )
 
         return ReturnWellSolutionTrackerInstance
+
+    def Dispense(
+        self, WellNumber: int, SourceWellSolutionTrackerInstance: WellSolutionTracker
+    ):
+        if not self.ContainerInstance.GetDispenseBlockTracker().IsTracked(
+            self.BlockInstance
+        ):
+            self.ContainerInstance.GetDispenseBlockTracker().ManualLoad(
+                self.BlockInstance
+            )
+
+        WellInstance = Well(WellNumber)
+        if not self.ContainerInstance.GetWellTracker().IsTracked(WellInstance):
+            self.ContainerInstance.GetWellTracker().ManualLoad(WellInstance)
+        # If it doesn't exist then lets add it
+
+        WellInstance = self.ContainerInstance.GetWellTracker().GetObjectByName(
+            WellNumber
+        )
+
+        DestinationWellSolutionTrackerInstance = WellInstance.GetWellSolutionTracker()
+
+        for (
+            WellSolutionInstance
+        ) in SourceWellSolutionTrackerInstance.GetObjectsAsList():
+            if DestinationWellSolutionTrackerInstance.IsTracked(WellSolutionInstance):
+                TrackedWellSolution = (
+                    DestinationWellSolutionTrackerInstance.GetObjectByName(
+                        WellSolutionInstance.GetName()
+                    )
+                )
+                DestinationWellSolutionTrackerInstance.ManualUnload(
+                    WellSolutionInstance
+                )
+
+                UpdatedWellSolution = WellSolution(
+                    WellSolutionInstance.GetName(),
+                    WellSolutionInstance.GetVolume() + TrackedWellSolution.GetVolume(),
+                )
+                DestinationWellSolutionTrackerInstance.ManualLoad(UpdatedWellSolution)
+            else:
+                DestinationWellSolutionTrackerInstance.ManualLoad(WellSolutionInstance)
+            # If the solution is already tracked then we remove it and add a new updated solution. Basically updating the volume of the solution
+
+        WellVolume = sum(
+            Solution.GetVolume()
+            for Solution in DestinationWellSolutionTrackerInstance.GetObjectsAsList()
+        )
+        if WellVolume > WellInstance.MaxWellVolume:
+            WellInstance.MaxWellVolume = WellVolume
+        # We also check if the new volume is greater than the current max

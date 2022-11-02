@@ -45,4 +45,46 @@ class PipetteDriver(DriverABC):
         return self.DispensePipettingDeviceTrackerInstance
 
     def Process(self):
-        pass
+        SimulateState = self.GetSimulateState()
+
+        print("IN PROCESS")
+
+        WellFactorTrackerInstance = self.GetContext().GetWellFactorTracker()
+        AspirateWellSequencesTrackerInstance = (
+            self.GetContext().GetAspirateWellSequenceTracker()
+        )
+        DispenseWellSequencesTrackerInstance = (
+            self.GetContext().GetDispenseWellSequenceTracker()
+        )
+
+        for Sequence in self.GetSequenceTracker().GetObjectsAsList():
+            if WellFactorTrackerInstance.GetObjectByName(Sequence.GetName()) == 0:
+                continue
+
+            AspirateWellNumber = AspirateWellSequencesTrackerInstance.GetObjectByName(
+                Sequence.GetName()
+            ).GetSequence()
+            DispenseWellNumber = DispenseWellSequencesTrackerInstance.GetObjectByName(
+                Sequence.GetName()
+            ).GetSequence()
+
+            TransferVolume = Sequence.GetTransferVolume()
+
+            DestinationContainerOperatorInstance = (
+                Sequence.GetDestinationContainerOperator()
+            )
+            SourceContainerOperatorInstance = Sequence.GetDestinationContainerOperator()
+
+            DestinationContainerOperatorInstance.Dispense(
+                DispenseWellNumber,
+                SourceContainerOperatorInstance.Aspirate(
+                    AspirateWellNumber, TransferVolume
+                ),
+            )
+        # First thing we need to do is update the well volumes. This is going to be something...
+
+        if SimulateState is False:
+            pass
+
+        print("QUIT")
+        quit()

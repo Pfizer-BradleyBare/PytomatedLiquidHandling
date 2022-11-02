@@ -93,8 +93,12 @@ class Workbook(ObjectABC):
         self.TimerTrackerInstance: TimerTracker = TimerTracker()
 
         # Thread
-        self.WorkbookProcessorThread: threading.Thread
-        self.ProcessingLock: threading.Lock
+        self.WorkbookProcessorThread: threading.Thread = threading.Thread(
+            name=self.MethodName + "->" + self.RunType.value,
+            target=WorkbookProcessor,
+            args=(self,),  # args must be tuple hence the empty second argument
+        )
+        self.ProcessingLock: threading.Lock = threading.Lock()
 
         LOG.debug(
             "The following method tree was determined for %s: \n%s",
@@ -193,6 +197,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             )
             is True
         ):
+            print("METHOD EXECUTION COMPLETE")
             return
         # First thing to do is check that all blocks have been executed.
 
@@ -298,6 +303,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # We will only execute the step if the factors are not zero
             # Additionally we must always execute a merge plates step no matter what
 
+            print("EXECUTING", CurrentExecutingBlock.GetName())
             CurrentExecutingBlock.Process(WorkbookInstance, HalInstance)
         ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
         # We must track all executed blocks even if processing is skipped.
@@ -336,12 +342,5 @@ def WorkbookInit(WorkbookInstance: Workbook):
         WorkbookInstance.GetExecutingContext()
     )
 
-    # Thread: Create and start
-    WorkbookInstance.WorkbookProcessorThread = threading.Thread(
-        name=WorkbookInstance.MethodName + "->" + WorkbookInstance.RunType.value,
-        target=WorkbookProcessor,
-        args=(WorkbookInstance,),  # args must be tuple hence the empty second argument
-    )
-    WorkbookInstance.ProcessingLock = threading.Lock()
-    WorkbookInstance.ProcessingLock.acquire()
+    # WorkbookInstance.ProcessingLock.acquire()
     WorkbookInstance.WorkbookProcessorThread.start()

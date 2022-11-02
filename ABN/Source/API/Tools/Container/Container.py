@@ -18,11 +18,6 @@ class Container(ObjectABC):
         # What solutions and volume is in each well
         self.WellTrackerInstance: WellTracker = WellTracker()
 
-        # What wells have been overaspirated
-        self.WellOverAspirateTrackerInstance: WellTracker = WellTracker()
-
-        self.MaxWellVolume: float = 0
-
     def GetName(self) -> str:
         return self.Name
 
@@ -37,9 +32,3 @@ class Container(ObjectABC):
 
     def GetWellTracker(self) -> WellTracker:
         return self.WellTrackerInstance
-
-    def GetWellOverAspirateTracker(self) -> WellTracker:
-        return self.WellOverAspirateTrackerInstance
-
-    def GetMaxVolume(self) -> float:
-        return self.MaxWellVolume

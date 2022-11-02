@@ -2,7 +2,7 @@ from ...Workbook.Block import Block, ClassDecorator_AvailableBlock
 from ....Tools import Excel
 from ...Workbook import Workbook
 from ....HAL import Hal
-from ...Tools.Container import Container
+from ...Tools.Container import Container, ContainerOperator
 from ....Driver.Pipette import Sequence, SequenceTracker, PipetteDriver
 
 
@@ -75,8 +75,9 @@ class LiquidTransfer(Block):
         ContainerTrackerInstance = WorkbookInstance.GetContainerTracker()
 
         for Source in Sources:
-            if ContainerTrackerInstance.IsTracked(Source) is not True:
-                ContainerTrackerInstance.ManualLoad(Container(Source, None))
+            SourceContainerInstance = Container(Source, None)
+            if ContainerTrackerInstance.IsTracked(SourceContainerInstance) is not True:
+                ContainerTrackerInstance.ManualLoad(SourceContainerInstance)
         # If source is not a container then we need to add it
 
         SequenceTrackerInstance = SequenceTracker()
@@ -98,8 +99,12 @@ class LiquidTransfer(Block):
             SequenceTrackerInstance.ManualLoad(
                 Sequence(
                     WellNumber,
-                    ContainerTrackerInstance.GetObjectByName(Destination),
-                    ContainerTrackerInstance.GetObjectByName(Source),
+                    ContainerOperator(
+                        ContainerTrackerInstance.GetObjectByName(Destination), self
+                    ),
+                    ContainerOperator(
+                        ContainerTrackerInstance.GetObjectByName(Source), self
+                    ),
                     AspirateMixingParam,
                     DispenseMixingParam,
                     Volume,

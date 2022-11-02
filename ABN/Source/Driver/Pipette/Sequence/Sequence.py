@@ -1,21 +1,25 @@
 from ....AbstractClasses import ObjectABC
-from ....API.Tools.Container import Container
+from ....API.Tools.Container import ContainerOperator
 
 
 class Sequence(ObjectABC):
     def __init__(
         self,
         Well: int,
-        DestinationContainerInstance: Container,
-        SourceContainerInstance: Container,
+        DestinationContainerOperatorInstance: ContainerOperator,
+        SourceContainerOperatorInstance: ContainerOperator,
         AspirateMixCycles: int,
         DispenseMixCycles: int,
         TransferVolume: float,
     ):
         self.Well: int = Well
 
-        self.DestinationContainerInstance: Container = DestinationContainerInstance
-        self.SourceContainerInstance: Container = SourceContainerInstance
+        self.DestinationContainerOperatorInstance: ContainerOperator = (
+            DestinationContainerOperatorInstance
+        )
+        self.SourceContainerOperatorInstance: ContainerOperator = (
+            SourceContainerOperatorInstance
+        )
 
         self.AspirateMixCycles: int = AspirateMixCycles
         self.DispenseMixCycles: int = DispenseMixCycles
@@ -25,11 +29,11 @@ class Sequence(ObjectABC):
     def GetName(self) -> int:
         return self.Well
 
-    def GetDestinationContainer(self) -> Container:
-        return self.DestinationContainerInstance
+    def GetDestinationContainerOperator(self) -> ContainerOperator:
+        return self.DestinationContainerOperatorInstance
 
-    def GetSourceContainer(self) -> Container:
-        return self.SourceContainerInstance
+    def GetSourceContainerOperator(self) -> ContainerOperator:
+        return self.SourceContainerOperatorInstance
 
     def GetAspirateMixCycles(self) -> int:
         return self.AspirateMixCycles
