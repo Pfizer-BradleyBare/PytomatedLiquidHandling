@@ -24,7 +24,7 @@ class TrackerABC(Generic[T]):
     def ManualUnload(self, ObjectABCInstance: T) -> None:
         Name = ObjectABCInstance.GetName()
 
-        if self.IsTracked(ObjectABCInstance) is True:
+        if self.IsTracked(ObjectABCInstance) is False:
             raise Exception(
                 type(ObjectABCInstance).__name__
                 + " is not yet tracked. Name: "
