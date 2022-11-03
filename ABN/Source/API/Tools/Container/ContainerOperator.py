@@ -154,7 +154,12 @@ class ContainerOperator:
             self.LLD: SolutionPropertyValue = LLD
 
         def GetName(self) -> str:
-            return ""
+            return (
+                self.Volatility.GetName()
+                + self.Viscosity.GetName()
+                + self.Homogeneity.GetName()
+                + self.LLD.GetName()
+            ).replace(" ", "")
 
         def GetVolatility(self) -> SolutionPropertyValue:
             return self.Volatility
@@ -179,7 +184,9 @@ class ContainerOperator:
         )
 
         WellSolutionInstances = WellInstance.GetWellSolutionTracker().GetObjectsAsList()
+
         WellVolume = sum(Solution.GetVolume() for Solution in WellSolutionInstances)
+        # A solution will technically not have a well volume because we never pipette into a solution. Only out of
 
         if WellVolume == 0:
             ContainerName = self.ContainerInstance.GetName()

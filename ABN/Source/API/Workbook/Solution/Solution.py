@@ -21,14 +21,15 @@ SolutionPropertyValues.ManualLoad(
     SolutionPropertyValue("Homogeneity Homogenous", 1, 0, 0)
 )
 SolutionPropertyValues.ManualLoad(
-    SolutionPropertyValue("Homogeneity Heterogenous", 1, 0, 0)
+    SolutionPropertyValue("Homogeneity Emulsion", 1, 0, 0)
 )
 SolutionPropertyValues.ManualLoad(
     SolutionPropertyValue("Homogeneity Suspension", 1, 0, 0)
 )
 SolutionPropertyValues.ManualLoad(
-    SolutionPropertyValue("Homogeneity Emulsion", 1, 0, 0)
+    SolutionPropertyValue("Homogeneity Heterogenous", 1, 0, 0)
 )
+
 
 SolutionPropertyValues.ManualLoad(SolutionPropertyValue("LLD Normal", 1, 0, 0))
 SolutionPropertyValues.ManualLoad(SolutionPropertyValue("LLD Organic", 1, 0, 0))
