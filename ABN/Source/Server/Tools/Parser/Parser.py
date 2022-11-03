@@ -1,5 +1,5 @@
 import json
-from ..Tools import LOG
+from ...Globals import LOG
 
 
 class Parser:

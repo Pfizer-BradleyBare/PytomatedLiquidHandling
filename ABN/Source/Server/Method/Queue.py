@@ -1,9 +1,9 @@
 # curl -H "Content-Type: application/json" -X POST -d "{\"Method Path\":\"C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\_Template_MAM.xlsm\",\"Requested Action\":\"Test\"}" http://localhost:65535/Method/Queue
 
 import web
-from ..Parser import Parser
+from ..Tools.Parser import Parser
 import os
-from ...Server.Tools.WorkbookTrackerInstance import WorkbookTrackerInstance
+from ...Server.Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
 from ...API.Workbook import WorkbookLoader, WorkbookRunTypes
 
 urls = ("/Method/Queue", "ABN.Source.Server.Method.Queue.Queue")

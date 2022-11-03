@@ -1,7 +1,7 @@
 # curl -X GET http://localhost:65535/State/IsActive
 
 import web
-from ..Parser import Parser
+from ..Tools.Parser import Parser
 
 urls = ("/State/IsActive", "ABN.Source.Server.State.IsActive.IsActive")
 

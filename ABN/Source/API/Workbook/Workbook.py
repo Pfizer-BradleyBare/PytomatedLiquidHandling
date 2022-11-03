@@ -20,9 +20,9 @@ from ...API.Tools.Context import (
 from ..Tools.Timer import TimerTracker
 from ...HAL.Tools import DeckLoadingItemTracker
 
-from ...Server.Tools import LOG
-from ...Server.Tools.HalInstance import HalInstance
-from ...Server.Tools import AliveStateFlag
+from ...Server.Globals import LOG
+from ...Server.Globals.HalInstance import HalInstance
+from ...Server.Globals import AliveStateFlag
 
 
 class WorkbookStates(Enum):
