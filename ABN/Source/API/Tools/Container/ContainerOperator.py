@@ -1,5 +1,7 @@
 from ...Workbook.Block import Block
 from ...Workbook.Solution import SolutionTracker, SolutionPropertyValues
+from ...Workbook.Solution.Value.Value import SolutionPropertyValue
+from ....Tools.AbstractClasses import ObjectABC
 from .Container import Container
 from .Well.Solution.WellSolutionTracker import WellSolutionTracker
 from .Well.Solution.WellSolution import WellSolution
@@ -67,15 +69,14 @@ class ContainerOperator:
                     WellSolution(WellSolutionInstance.GetName(), RemovedVolume)
                 )
 
+                NewSolutionInstance = WellSolution(
+                    WellSolutionInstance.GetName(), NewVolume
+                )
+
                 SourceWellSolutionTrackerInstance.ManualUnload(WellSolutionInstance)
 
                 if NewVolume > 0:
-                    SourceWellSolutionTrackerInstance.ManualLoad(
-                        WellSolution(
-                            WellSolutionInstance.GetName(),
-                            NewVolume,
-                        )
-                    )
+                    SourceWellSolutionTrackerInstance.ManualLoad(NewSolutionInstance)
 
         return ReturnWellSolutionTrackerInstance
 
@@ -106,20 +107,25 @@ class ContainerOperator:
             WellSolutionInstance
         ) in SourceWellSolutionTrackerInstance.GetObjectsAsList():
             if DestinationWellSolutionTrackerInstance.IsTracked(WellSolutionInstance):
-                TrackedWellSolution = (
+                TrackedWellSolutionInstance = (
                     DestinationWellSolutionTrackerInstance.GetObjectByName(
                         WellSolutionInstance.GetName()
                     )
                 )
-                DestinationWellSolutionTrackerInstance.ManualUnload(
-                    WellSolutionInstance
+
+                UpdatedWellSolutionInstance = WellSolution(
+                    WellSolutionInstance.GetName(),
+                    WellSolutionInstance.GetVolume()
+                    + TrackedWellSolutionInstance.GetVolume(),
                 )
 
-                UpdatedWellSolution = WellSolution(
-                    WellSolutionInstance.GetName(),
-                    WellSolutionInstance.GetVolume() + TrackedWellSolution.GetVolume(),
+                DestinationWellSolutionTrackerInstance.ManualUnload(
+                    TrackedWellSolutionInstance
                 )
-                DestinationWellSolutionTrackerInstance.ManualLoad(UpdatedWellSolution)
+
+                DestinationWellSolutionTrackerInstance.ManualLoad(
+                    UpdatedWellSolutionInstance
+                )
             else:
                 DestinationWellSolutionTrackerInstance.ManualLoad(WellSolutionInstance)
             # If the solution is already tracked then we remove it and add a new updated solution. Basically updating the volume of the solution
@@ -132,12 +138,40 @@ class ContainerOperator:
             WellInstance.MaxWellVolume = WellVolume
         # We also check if the new volume is greater than the current max
 
+    class LiquidClass(ObjectABC):
+        def __init__(
+            self,
+            Volatility: SolutionPropertyValue,
+            Viscosity: SolutionPropertyValue,
+            Homogeneity: SolutionPropertyValue,
+            LLD: SolutionPropertyValue,
+        ):
+            self.Volatility: SolutionPropertyValue = Volatility
+            self.Viscosity: SolutionPropertyValue = Viscosity
+            self.Homogeneity: SolutionPropertyValue = Homogeneity
+            self.LLD: SolutionPropertyValue = LLD
+
+        def GetName(self) -> str:
+            return ""
+
+        def GetVolatility(self) -> SolutionPropertyValue:
+            return self.Volatility
+
+        def GetViscosity(self) -> SolutionPropertyValue:
+            return self.Viscosity
+
+        def GetHomogeneity(self) -> SolutionPropertyValue:
+            return self.Homogeneity
+
+        def GetLLD(self) -> SolutionPropertyValue:
+            return self.LLD
+
     # Liquid class is the combo of Volatility, Viscosity, Homogeneity, and LLD
     def GetLiquidClass(
         self,
         SolutionTrackerInstance: SolutionTracker,
         WellNumber: int,
-    ) -> str:
+    ) -> LiquidClass:
         WellInstance = self.ContainerInstance.GetWellTracker().GetObjectByName(
             WellNumber
         )
@@ -147,26 +181,16 @@ class ContainerOperator:
 
         if WellVolume == 0:
             ContainerName = self.ContainerInstance.GetName()
-            Volatility = (
-                SolutionTrackerInstance.GetObjectByName(ContainerName)
-                .GetVolatility()
-                .GetName()
-            )
-            Viscosity = (
-                SolutionTrackerInstance.GetObjectByName(ContainerName)
-                .GetViscosity()
-                .GetName()
-            )
-            Homogeneity = (
-                SolutionTrackerInstance.GetObjectByName(ContainerName)
-                .GetHomogeneity()
-                .GetName()
-            )
-            LLD = (
-                SolutionTrackerInstance.GetObjectByName(ContainerName)
-                .GetLLD()
-                .GetName()
-            )
+            Volatility = SolutionTrackerInstance.GetObjectByName(
+                ContainerName
+            ).GetVolatility()
+            Viscosity = SolutionTrackerInstance.GetObjectByName(
+                ContainerName
+            ).GetViscosity()
+            Homogeneity = SolutionTrackerInstance.GetObjectByName(
+                ContainerName
+            ).GetHomogeneity()
+            LLD = SolutionTrackerInstance.GetObjectByName(ContainerName).GetLLD()
 
         else:
             VolatilityList = list()
@@ -207,19 +231,61 @@ class ContainerOperator:
 
             Volatility = SolutionPropertyValues.GetObjectByNumericValue(
                 int(round(sum(VolatilityList) / len(VolatilityList)))
-            ).GetName()
+            )
 
             Viscosity = SolutionPropertyValues.GetObjectByNumericValue(
                 int(round(sum(ViscosityList) / len(ViscosityList)))
-            ).GetName()
+            )
 
             Homogeneity = SolutionPropertyValues.GetObjectByNumericValue(
                 int(round(sum(HomogeneityList) / len(HomogeneityList)))
-            ).GetName()
+            )
 
             LLD = SolutionPropertyValues.GetObjectByNumericValue(
                 int(round(sum(LLDList) / len(LLDList)))
-            ).GetName()
+            )
             # We are going to process the whole shebang here
 
-        return Volatility + Viscosity + Homogeneity + LLD
+        return ContainerOperator.LiquidClass(Volatility, Viscosity, Homogeneity, LLD)
+
+    def GetMinAspirateMixParam(self, LiquidClassInstance: LiquidClass):
+        ReturnMinMixParam = 0
+
+        MinMixParam = LiquidClassInstance.GetVolatility().GetMinAspirateMix()
+        if MinMixParam > ReturnMinMixParam:
+            ReturnMinMixParam = MinMixParam
+
+        MinMixParam = LiquidClassInstance.GetViscosity().GetMinAspirateMix()
+        if MinMixParam > ReturnMinMixParam:
+            ReturnMinMixParam = MinMixParam
+
+        MinMixParam = LiquidClassInstance.GetHomogeneity().GetMinAspirateMix()
+        if MinMixParam > ReturnMinMixParam:
+            ReturnMinMixParam = MinMixParam
+
+        MinMixParam = LiquidClassInstance.GetLLD().GetMinAspirateMix()
+        if MinMixParam > ReturnMinMixParam:
+            ReturnMinMixParam = MinMixParam
+
+        return ReturnMinMixParam
+
+    def GetMinDispenseMixParam(self, LiquidClassInstance: LiquidClass):
+        ReturnMinMixParam = 0
+
+        MinMixParam = LiquidClassInstance.GetVolatility().GetMinDispenseMix()
+        if MinMixParam > ReturnMinMixParam:
+            ReturnMinMixParam = MinMixParam
+
+        MinMixParam = LiquidClassInstance.GetViscosity().GetMinDispenseMix()
+        if MinMixParam > ReturnMinMixParam:
+            ReturnMinMixParam = MinMixParam
+
+        MinMixParam = LiquidClassInstance.GetHomogeneity().GetMinDispenseMix()
+        if MinMixParam > ReturnMinMixParam:
+            ReturnMinMixParam = MinMixParam
+
+        MinMixParam = LiquidClassInstance.GetLLD().GetMinDispenseMix()
+        if MinMixParam > ReturnMinMixParam:
+            ReturnMinMixParam = MinMixParam
+
+        return ReturnMinMixParam
