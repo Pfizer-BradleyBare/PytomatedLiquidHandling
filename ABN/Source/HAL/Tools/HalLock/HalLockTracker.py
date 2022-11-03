@@ -1,4 +1,4 @@
-from ....AbstractClasses import TrackerABC, ObjectABC
+from ....Tools.AbstractClasses import TrackerABC, ObjectABC
 
 
 class HalLockTracker(TrackerABC[ObjectABC]):

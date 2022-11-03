@@ -4,7 +4,7 @@ import threading
 
 from ..Blocks import MergePlates
 
-from ...AbstractClasses import ObjectABC
+from ...Tools.AbstractClasses import ObjectABC
 from .Block import BlockTracker, Block
 from .Worklist import Worklist
 from .Solution import SolutionTracker

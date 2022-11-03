@@ -1,5 +1,5 @@
 from .Solution.WellSolutionTracker import WellSolutionTracker
-from .....AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import ObjectABC
 
 
 class Well(ObjectABC):

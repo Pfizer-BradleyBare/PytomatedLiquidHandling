@@ -1,5 +1,5 @@
 from .Sequence import Sequence
-from ....AbstractClasses import TrackerABC
+from ....Tools.AbstractClasses import TrackerABC
 
 
 class SequenceTracker(TrackerABC[Sequence]):

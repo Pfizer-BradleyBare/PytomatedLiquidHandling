@@ -1,4 +1,4 @@
-from .....AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import ObjectABC
 
 
 class SolutionPropertyValue(ObjectABC):

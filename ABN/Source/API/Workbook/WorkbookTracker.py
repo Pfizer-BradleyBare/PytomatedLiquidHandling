@@ -1,5 +1,5 @@
 from .Workbook import Workbook
-from ...AbstractClasses import TrackerABC
+from ...Tools.AbstractClasses import TrackerABC
 
 
 class WorkbookTracker(TrackerABC[Workbook]):

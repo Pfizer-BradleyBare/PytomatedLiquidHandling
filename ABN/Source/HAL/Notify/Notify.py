@@ -1,5 +1,5 @@
 from enum import Enum
-from ...AbstractClasses import ObjectABC
+from ...Tools.AbstractClasses import ObjectABC
 
 
 class NotificationTypes(Enum):

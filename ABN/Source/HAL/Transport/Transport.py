@@ -1,6 +1,6 @@
 from enum import Enum
 from ..Labware import Labware
-from ...AbstractClasses import ObjectABC
+from ...Tools.AbstractClasses import ObjectABC
 
 
 class TransportParameters:

@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from ....AbstractClasses import InterfaceABC
+from ....Tools.AbstractClasses import InterfaceABC
 
 
 class FlipTubeInterfaceABC(InterfaceABC):

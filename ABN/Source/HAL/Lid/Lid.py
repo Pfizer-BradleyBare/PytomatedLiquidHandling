@@ -1,6 +1,6 @@
 from ..Labware import Labware
 from ..Layout import LayoutItem
-from ...AbstractClasses import ObjectABC
+from ...Tools.AbstractClasses import ObjectABC
 
 
 class Lid(ObjectABC):

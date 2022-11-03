@@ -1,5 +1,5 @@
 from .FlipTube import FlipTube
-from ...AbstractClasses import TrackerABC
+from ...Tools.AbstractClasses import TrackerABC
 from ..Labware import LabwareTracker
 
 

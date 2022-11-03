@@ -1,4 +1,4 @@
-from ....AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import ObjectABC
 from ....Tools import Excel
 from ....Tools import Node
 from abc import abstractmethod

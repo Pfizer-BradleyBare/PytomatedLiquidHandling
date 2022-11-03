@@ -1,5 +1,5 @@
 from ....Tools import Excel
-from ....AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import ObjectABC
 from .Value.Value import SolutionPropertyValue
 from .Value.ValueTracker import SolutionPropertyValueTracker
 

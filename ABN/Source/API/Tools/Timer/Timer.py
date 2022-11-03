@@ -1,5 +1,5 @@
 import time
-from ....AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import ObjectABC
 from ...Workbook import Block, Workbook
 from ....HAL import Hal
 from typing import Callable
