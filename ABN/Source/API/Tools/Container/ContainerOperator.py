@@ -138,6 +138,8 @@ class ContainerOperator:
             WellInstance.MaxWellVolume = WellVolume
         # We also check if the new volume is greater than the current max
 
+    # This is defined inside the ContainerOperator class because it is only used within this class. We do NOT want to expose this anywhere else.
+    # On the other hand a liquid class is well specific so maybe it should be there... I digress
     class LiquidClass(ObjectABC):
         def __init__(
             self,
