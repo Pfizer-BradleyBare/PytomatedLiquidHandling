@@ -3,7 +3,7 @@ from ....Tools import Excel
 from ...Workbook import Workbook
 from ....HAL import Hal
 from ...Tools.Container import Container, ContainerOperator
-from ....Driver.Pipette import Sequence, SequenceTracker, PipetteDriver
+from ....Driver.Pipette import Sequence, SequenceTracker, Pipette
 
 
 @ClassDecorator_AvailableBlock
@@ -112,12 +112,13 @@ class LiquidTransfer(Block):
             )
         # Create our pipetting tracker
 
-        PipetteDriver(
+        Pipette(
             True,
             SequenceTrackerInstance,
+            WorkbookInstance.GetSolutionTracker(),
             WorkbookInstance.GetDeckLoadingItemTracker(),
             WorkbookInstance.GetExecutingContext(),
             HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
             HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
-        ).Process()
+        )
         # We need to figure out the pipetting first

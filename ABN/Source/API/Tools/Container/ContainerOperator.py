@@ -1,4 +1,5 @@
 from ...Workbook.Block import Block
+from ...Workbook.Solution import SolutionTracker, SolutionPropertyValues
 from .Container import Container
 from .Well.Solution.WellSolutionTracker import WellSolutionTracker
 from .Well.Solution.WellSolution import WellSolution
@@ -10,7 +11,11 @@ class ContainerOperator:
         self.ContainerInstance: Container = ContainerInstance
         self.BlockInstance: Block = BlockInstance
 
-    def Aspirate(self, WellNumber: int, Volume: float) -> WellSolutionTracker:
+    def Aspirate(
+        self,
+        WellNumber: int,
+        Volume: float,
+    ) -> WellSolutionTracker:
         if not self.ContainerInstance.GetAspirateBlockTracker().IsTracked(
             self.BlockInstance
         ):
@@ -75,7 +80,9 @@ class ContainerOperator:
         return ReturnWellSolutionTrackerInstance
 
     def Dispense(
-        self, WellNumber: int, SourceWellSolutionTrackerInstance: WellSolutionTracker
+        self,
+        WellNumber: int,
+        SourceWellSolutionTrackerInstance: WellSolutionTracker,
     ):
         if not self.ContainerInstance.GetDispenseBlockTracker().IsTracked(
             self.BlockInstance
@@ -124,3 +131,95 @@ class ContainerOperator:
         if WellVolume > WellInstance.MaxWellVolume:
             WellInstance.MaxWellVolume = WellVolume
         # We also check if the new volume is greater than the current max
+
+    # Liquid class is the combo of Volatility, Viscosity, Homogeneity, and LLD
+    def GetLiquidClass(
+        self,
+        SolutionTrackerInstance: SolutionTracker,
+        WellNumber: int,
+    ) -> str:
+        WellInstance = self.ContainerInstance.GetWellTracker().GetObjectByName(
+            WellNumber
+        )
+
+        WellSolutionInstances = WellInstance.GetWellSolutionTracker().GetObjectsAsList()
+        WellVolume = sum(Solution.GetVolume() for Solution in WellSolutionInstances)
+
+        if WellVolume == 0:
+            ContainerName = self.ContainerInstance.GetName()
+            Volatility = (
+                SolutionTrackerInstance.GetObjectByName(ContainerName)
+                .GetVolatility()
+                .GetName()
+            )
+            Viscosity = (
+                SolutionTrackerInstance.GetObjectByName(ContainerName)
+                .GetViscosity()
+                .GetName()
+            )
+            Homogeneity = (
+                SolutionTrackerInstance.GetObjectByName(ContainerName)
+                .GetHomogeneity()
+                .GetName()
+            )
+            LLD = (
+                SolutionTrackerInstance.GetObjectByName(ContainerName)
+                .GetLLD()
+                .GetName()
+            )
+
+        else:
+            VolatilityList = list()
+            ViscosityList = list()
+            HomogeneityList = list()
+            LLDList = list()
+
+            for WellSolutionInstance in WellSolutionInstances:
+                Percentage = int(WellSolutionInstance.GetVolume() * 100 / WellVolume)
+
+                SolutionInstance = SolutionTrackerInstance.GetObjectByName(
+                    WellSolutionInstance.GetName()
+                )
+
+                VolatilityList += (
+                    [SolutionInstance.GetVolatility().GetNumericValue()]
+                    * Percentage
+                    * SolutionInstance.GetVolatility().GetWeight()
+                )
+
+                ViscosityList += (
+                    [SolutionInstance.GetViscosity().GetNumericValue()]
+                    * Percentage
+                    * SolutionInstance.GetViscosity().GetWeight()
+                )
+
+                HomogeneityList += (
+                    [SolutionInstance.GetHomogeneity().GetNumericValue()]
+                    * Percentage
+                    * SolutionInstance.GetHomogeneity().GetWeight()
+                )
+
+                LLDList += (
+                    [SolutionInstance.GetLLD().GetNumericValue()]
+                    * Percentage
+                    * SolutionInstance.GetLLD().GetWeight()
+                )
+
+            Volatility = SolutionPropertyValues.GetObjectByNumericValue(
+                int(round(sum(VolatilityList) / len(VolatilityList)))
+            ).GetName()
+
+            Viscosity = SolutionPropertyValues.GetObjectByNumericValue(
+                int(round(sum(ViscosityList) / len(ViscosityList)))
+            ).GetName()
+
+            Homogeneity = SolutionPropertyValues.GetObjectByNumericValue(
+                int(round(sum(HomogeneityList) / len(HomogeneityList)))
+            ).GetName()
+
+            LLD = SolutionPropertyValues.GetObjectByNumericValue(
+                int(round(sum(LLDList) / len(LLDList)))
+            ).GetName()
+            # We are going to process the whole shebang here
+
+        return Volatility + Viscosity + Homogeneity + LLD
