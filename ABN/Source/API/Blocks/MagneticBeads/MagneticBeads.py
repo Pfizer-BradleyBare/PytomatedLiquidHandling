@@ -1,4 +1,8 @@
-from ...Workbook.Block import Block, ClassDecorator_AvailableBlock
+from ...Workbook.Block import (
+    Block,
+    ClassDecorator_AvailableBlock,
+    FunctionDecorator_ProcessFunction,
+)
 from ....Tools import Excel
 from ...Workbook import Workbook
 from ....HAL import Hal
@@ -40,5 +44,6 @@ class MagneticBeads(Block):
     def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
         pass
 
+    @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
         pass

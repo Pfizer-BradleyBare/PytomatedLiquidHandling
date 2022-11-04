@@ -12,6 +12,22 @@ def ClassDecorator_AvailableBlock(DecoratedClass):
     return DecoratedClass
 
 
+def FunctionDecorator_ProcessFunction(DecoratedFunction):
+    def inner(*args, **kwargs):
+
+        Result = DecoratedFunction(*args, **kwargs)
+        Self = args[0]
+        WorkbookInstance = args[1]
+
+        WorkbookInstance.GetContainerTracker().GetObjectByName(
+            Self.GetParentPlateName()
+        ).GetBlockTracker().ManualLoad(Self)
+
+        return Result
+
+    return inner
+
+
 class Block(ObjectABC, Node):
     def __init__(
         self,
@@ -50,13 +66,13 @@ class Block(ObjectABC, Node):
         return self.Context[self.Context.rfind(":") + 1 :]  # noqa203
 
     @abstractmethod
-    # Some blocks may require preprocessing before actual execution. What is an example?
-    # Preheating a heater or thermocycler before an actual incubation. That is what preprocessing is for.
+    # This is where actual block execution should occur
     def Preprocess(self, WorkbookInstance, HalInstance):
         raise NotImplementedError
 
     @abstractmethod
     # This is where actual block execution should occur
+    @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance, HalInstance):
         raise NotImplementedError
 
