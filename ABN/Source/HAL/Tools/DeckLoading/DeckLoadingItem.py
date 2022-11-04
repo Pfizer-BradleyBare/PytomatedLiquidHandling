@@ -1,14 +1,14 @@
 from ....Tools.AbstractClasses import ObjectABC
-from ...Layout import LayoutItem
+from ...Labware import Labware
 
 
 class DeckLoadingItem(ObjectABC):
-    def __init__(self, Name: str, LayoutItemInstance: LayoutItem):
+    def __init__(self, Name: str, LabwareInstance: Labware):
         self.Name: str = Name
-        self.LayoutItemInstance: LayoutItem = LayoutItemInstance
+        self.LabwareInstance: Labware = LabwareInstance
 
     def GetName(self) -> str:
         return self.Name
 
-    def GetLayoutItem(self) -> LayoutItem:
-        return self.LayoutItemInstance
+    def GetLabware(self) -> Labware:
+        return self.LabwareInstance

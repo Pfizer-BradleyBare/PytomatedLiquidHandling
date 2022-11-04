@@ -54,4 +54,4 @@ def Pipette(
     if SimulateState is False:
         pass
 
-    print("QUIT")
+    print("COMPLETE")

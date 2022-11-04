@@ -8,7 +8,7 @@ from ...Tools.AbstractClasses import ObjectABC
 from .Block import BlockTracker, Block
 from .Worklist import Worklist
 from .Solution import SolutionTracker
-from ...API.Tools.Container import ContainerTracker
+from ...API.Tools.Container import ContainerTracker, Container
 from ...API.Tools.Context import (
     ContextTracker,
     Context,
@@ -198,6 +198,16 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             is True
         ):
             print("METHOD EXECUTION COMPLETE")
+            for (
+                ContainerInstance
+            ) in WorkbookInstance.GetContainerTracker().GetObjectsAsList():
+                print(
+                    ContainerInstance.GetName(),
+                    [
+                        BlockIn.GetName()
+                        for BlockIn in ContainerInstance.GetBlockTracker().GetObjectsAsList()
+                    ],
+                )
             return
         # First thing to do is check that all blocks have been executed.
 
@@ -229,12 +239,8 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                 # We found the root. This means that this preprocessing block is ready to start
 
                 if ExecutedBlocksTrackerInstance.IsTracked(SearchBlockInstance):
-                    PreprocessingBlocksTrackerInstance.ManualUnload(
-                        PreprocessingBlockInstance
-                    )
                     continue
                 # If the block has already been executed then we can skip it.
-                # We also need to remove it from the Preprocessing tracker. If it has executed then preprocessing requirements are complete
 
                 if PreprocessingBlocksTrackerInstance.IsTracked(SearchBlockInstance):
                     break
@@ -341,6 +347,11 @@ def WorkbookInit(WorkbookInstance: Workbook):
     WorkbookInstance.GetContextTracker().ManualLoad(
         WorkbookInstance.GetExecutingContext()
     )
+
+    WorkbookInstance.GetContainerTracker().ManualLoad(
+        Container("__StartingContext__", None)
+    )
+    # Setting initial context and container.
 
     # WorkbookInstance.ProcessingLock.acquire()
     WorkbookInstance.WorkbookProcessorThread.start()

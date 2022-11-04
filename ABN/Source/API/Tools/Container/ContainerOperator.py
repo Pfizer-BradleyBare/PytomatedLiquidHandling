@@ -18,12 +18,6 @@ class ContainerOperator:
         WellNumber: int,
         Volume: float,
     ) -> WellSolutionTracker:
-        if not self.ContainerInstance.GetAspirateBlockTracker().IsTracked(
-            self.BlockInstance
-        ):
-            self.ContainerInstance.GetAspirateBlockTracker().ManualLoad(
-                self.BlockInstance
-            )
 
         WellInstance = Well(WellNumber)
         if not self.ContainerInstance.GetWellTracker().IsTracked(WellInstance):
@@ -85,12 +79,6 @@ class ContainerOperator:
         WellNumber: int,
         SourceWellSolutionTrackerInstance: WellSolutionTracker,
     ):
-        if not self.ContainerInstance.GetDispenseBlockTracker().IsTracked(
-            self.BlockInstance
-        ):
-            self.ContainerInstance.GetDispenseBlockTracker().ManualLoad(
-                self.BlockInstance
-            )
 
         WellInstance = Well(WellNumber)
         if not self.ContainerInstance.GetWellTracker().IsTracked(WellInstance):

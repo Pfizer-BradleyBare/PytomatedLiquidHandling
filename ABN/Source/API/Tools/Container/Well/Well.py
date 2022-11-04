@@ -13,11 +13,5 @@ class Well(ObjectABC):
     def GetName(self) -> int:
         return self.WellNumber
 
-    def GetMaxVolume(self) -> float:
-        return self.MaxWellVolume
-
-    def GetMinVolume(self) -> float:
-        return self.MinWellVolume
-
     def GetWellSolutionTracker(self) -> WellSolutionTracker:
         return self.WellSolutionTrackerInstance
