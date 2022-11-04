@@ -22,12 +22,13 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
         Dimensions = LabwareDimensions(LongSide, ShortSide)
         # Create Dimensions Class
 
-        if "Labware Filter" in ConfigFile["Labware IDs"][LabwareID].keys():
-            Filter = ConfigFile["Labware IDs"][LabwareID]["Labware Filter"]
-        else:
-            Filter = None
+        Filters = list()
 
         if "Wells" in ConfigFile["Labware IDs"][LabwareID].keys():
+            Filters = ConfigFile["Labware IDs"][LabwareID]["Labware Filters"]
+
+            print(Filters)
+
             EquationsList = list()
             SegmentEquations = ConfigFile["Labware IDs"][LabwareID]["Wells"][
                 "Segment Equations"
@@ -61,13 +62,13 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
             LabwareTrackerInstance.ManualLoad(
                 PipettableLabware(
                     LabwareID,
-                    Filter,
+                    Filters,
                     LabwareWells,
                     Dimensions,
                 )
             )
         else:
-            LabwareTrackerInstance.ManualLoad(Labware(LabwareID, Filter, Dimensions))
+            LabwareTrackerInstance.ManualLoad(Labware(LabwareID, Filters, Dimensions))
 
         # Create Labware Class and append
 

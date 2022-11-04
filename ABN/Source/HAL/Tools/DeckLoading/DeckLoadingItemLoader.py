@@ -1,4 +1,5 @@
 from .DeckLoadingItemTracker import DeckLoadingItemTracker
+from .DeckLoadingItem import DeckLoadingItem
 from ...Labware import PipettableLabware
 from ....API.Tools.Container import ContainerTracker
 from ....HAL import Hal
@@ -13,31 +14,47 @@ def Load(
     for ContainerInstance in ContainerTrackerInstance.GetObjectsAsList():
         LabwareTrackerInstance = HalInstance.GetLabwareTracker()
 
-        ContainerFilter = ContainerInstance.GetFilter()
+        MaxVolume = ContainerInstance.GetMaxWellVolume()
+        MinVolume = ContainerInstance.GetMinWellVolume()
 
-        if ContainerFilter is None:  # This is a reagent
-            Volume = abs(ContainerInstance.GetMinWellVolume())
+        if MaxVolume == 0:
+            Volume = abs(MinVolume)
+        else:
+            Volume = MaxVolume
+        # We do not distinguish between plates and reagents. We are just going to load and see what happens
 
-        else:  # This is a plate
-            MaxVolume = ContainerInstance.GetMaxWellVolume()
-            MinVolume = ContainerInstance.GetMinWellVolume()
+        if Volume == 0:
+            continue
+        # We don't want to load a container if it effectively is never used.
 
-            if MaxVolume == 0:
-                Volume = abs(MinVolume)
-            else:
-                Volume = MaxVolume
-        # Plates can be loaded as 'reagent' containers explicitly in the method by users. We want to support that
+        PipettableLabwareInstances = cast(
+            list[PipettableLabware],
+            [
+                LabwareInstance
+                for LabwareInstance in LabwareTrackerInstance.GetObjectsAsList()
+                if type(LabwareInstance).__name__ == PipettableLabware.__name__
+            ],
+        )
 
-        for LabwareInstance in LabwareTrackerInstance.GetObjectsAsList():
+        for LabwareInstance in sorted(
+            PipettableLabwareInstances, key=lambda x: x.GetWells().GetMaxVolume()
+        ):
             if type(LabwareInstance).__name__ != PipettableLabware.__name__:
                 continue
 
             LabwareInstance = cast(PipettableLabware, LabwareInstance)
 
-            if ContainerFilter != LabwareInstance.GetFilter():
+            ContainerFilter = ContainerInstance.GetFilter()
+
+            if ContainerFilter not in LabwareInstance.GetFilters():
                 continue
 
             LabwareWells = LabwareInstance.GetWells()
 
             if Volume > LabwareWells.GetMaxVolume() - LabwareWells.GetDeadVolume():
                 continue
+
+            DeckLoadingItemTrackerInstance.ManualLoad(
+                DeckLoadingItem(ContainerInstance.GetName(), LabwareInstance)
+            )
+            break

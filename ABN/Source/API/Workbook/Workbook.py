@@ -18,7 +18,7 @@ from ...API.Tools.Context import (
     WellFactor,
 )
 from ..Tools.Timer import TimerTracker
-from ...HAL.Tools import DeckLoadingItemTracker
+from ...HAL.Tools import DeckLoadingItemTracker, Load
 
 from ...Server.Globals import LOG
 from ...Server.Globals.HalInstance import HalInstance
@@ -197,17 +197,16 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             )
             is True
         ):
+            Load(
+                WorkbookInstance.GetDeckLoadingItemTracker(),
+                WorkbookInstance.GetContainerTracker(),
+                HalInstance,
+            )
+
+            for Item in WorkbookInstance.GetDeckLoadingItemTracker().GetObjectsAsList():
+                print(Item.GetName(), Item.GetLabware().GetName())
             print("METHOD EXECUTION COMPLETE")
-            for (
-                ContainerInstance
-            ) in WorkbookInstance.GetContainerTracker().GetObjectsAsList():
-                print(
-                    ContainerInstance.GetName(),
-                    [
-                        BlockIn.GetName()
-                        for BlockIn in ContainerInstance.GetBlockTracker().GetObjectsAsList()
-                    ],
-                )
+
             return
         # First thing to do is check that all blocks have been executed.
 
