@@ -35,12 +35,11 @@ def Load(
                 if type(LabwareInstance).__name__ == PipettableLabware.__name__
             ],
         )
+        # Gets only the pipettableLabware
 
         for LabwareInstance in sorted(
             PipettableLabwareInstances, key=lambda x: x.GetWells().GetMaxVolume()
         ):
-            if type(LabwareInstance).__name__ != PipettableLabware.__name__:
-                continue
 
             LabwareInstance = cast(PipettableLabware, LabwareInstance)
 
@@ -58,3 +57,5 @@ def Load(
                 DeckLoadingItem(ContainerInstance.GetName(), LabwareInstance)
             )
             break
+
+        # I'd like to add choices. So if the user runs the Hamilton can tell it the choices if that becomes a concern.
