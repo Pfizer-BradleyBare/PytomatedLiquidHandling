@@ -72,7 +72,7 @@ def Load(
                     reverse=True,
                 )[0]
             )
-        # Largest No Preference labware
+        # If the best fit labware does not exist then the largest labware is the best fit
 
         for LabwareInstance in sorted(
             PipettableLabwareInstances, key=lambda x: x.GetWells().GetMaxVolume()
@@ -83,7 +83,7 @@ def Load(
             if not PreferredLabwareTrackerInstance.IsTracked(LabwareInstance):
                 PreferredLabwareTrackerInstance.ManualLoad(LabwareInstance)
             break
-        # This is the labware the user prefers
+        # This is the labware the user prefers if they prefer one
 
         if PreferredLabwareTrackerInstance.GetNumObjects() != 0:
 
