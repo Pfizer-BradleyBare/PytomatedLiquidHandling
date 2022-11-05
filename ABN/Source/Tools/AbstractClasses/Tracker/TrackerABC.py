@@ -31,7 +31,7 @@ class TrackerABC(Generic[T]):
                 + str(Name)
             )
 
-        self.Collection[Name] = ObjectABCInstance
+        del self.Collection[Name]
 
     def IsTracked(self, ObjectABCInstance: T) -> bool:
         return ObjectABCInstance.GetName() in self.Collection

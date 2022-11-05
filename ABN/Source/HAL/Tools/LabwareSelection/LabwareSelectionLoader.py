@@ -42,16 +42,7 @@ def Load(
         # Gets only the pipettableLabware
 
         LabwareSelectionInstance = LabwareSelection(ContainerInstance.GetName())
-
-        for LabwareInstance in sorted(
-            PipettableLabwareInstances, key=lambda x: x.GetWells().GetMaxVolume()
-        ):
-            if LabwareInstance.GetName() not in ContainerFilters:
-                continue
-
-            LabwareSelectionInstance.GetLabwareTracker().ManualLoad(LabwareInstance)
-            break
-        # This is the labware the user prefers
+        PreferredLabwareTrackerInstance = LabwareSelectionInstance.GetLabwareTracker()
 
         for LabwareInstance in sorted(
             PipettableLabwareInstances, key=lambda x: x.GetWells().GetMaxVolume()
@@ -65,9 +56,42 @@ def Load(
             if Volume > LabwareWells.GetMaxVolume() - LabwareWells.GetDeadVolume():
                 continue
 
-            LabwareSelectionInstance.GetLabwareTracker().ManualLoad(LabwareInstance)
+            PreferredLabwareTrackerInstance.ManualLoad(LabwareInstance)
             break
         # This is the best fit labware
 
-        if LabwareSelectionInstance.GetLabwareTracker().GetNumObjects() != 0:
+        if (
+            PreferredLabwareTrackerInstance.GetNumObjects() == 0
+            and "No Preference" in ContainerFilters
+        ):
+
+            PreferredLabwareTrackerInstance.ManualLoad(
+                sorted(
+                    PipettableLabwareInstances,
+                    key=lambda x: x.GetWells().GetMaxVolume(),
+                    reverse=True,
+                )[0]
+            )
+        # Largest No Preference labware
+
+        for LabwareInstance in sorted(
+            PipettableLabwareInstances, key=lambda x: x.GetWells().GetMaxVolume()
+        ):
+            if LabwareInstance.GetName() not in ContainerFilters:
+                continue
+
+            if not PreferredLabwareTrackerInstance.IsTracked(LabwareInstance):
+                PreferredLabwareTrackerInstance.ManualLoad(LabwareInstance)
+            break
+        # This is the labware the user prefers
+
+        if PreferredLabwareTrackerInstance.GetNumObjects() != 0:
+
+            FirstItem = PreferredLabwareTrackerInstance.GetObjectsAsList()[0]
+            PreferredLabwareTrackerInstance.ManualUnload(FirstItem)
+            PreferredLabwareTrackerInstance.ManualLoad(FirstItem)
+            # We need to reverse the order of the tracker. There will only be 2 items so we can remove the first and re-add it
+            # We do this because we want the user preferred item to be first if there is one.
+            # However, the code above requires we add the items in the reverse order
+
             LabwareSelectionTrackerInstance.ManualLoad(LabwareSelectionInstance)
