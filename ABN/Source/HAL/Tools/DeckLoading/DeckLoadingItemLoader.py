@@ -17,8 +17,11 @@ def Load(
         MaxVolume = ContainerInstance.GetMaxWellVolume()
         MinVolume = ContainerInstance.GetMinWellVolume()
 
+        ContainerFilters = [ContainerInstance.GetFilter()]
+
         if MaxVolume == 0:
             Volume = abs(MinVolume)
+            ContainerFilters += ["No Preference"]
         else:
             Volume = MaxVolume
         # We do not distinguish between plates and reagents. We are just going to load and see what happens
@@ -43,9 +46,10 @@ def Load(
 
             LabwareInstance = cast(PipettableLabware, LabwareInstance)
 
-            ContainerFilter = ContainerInstance.GetFilter()
-
-            if ContainerFilter not in LabwareInstance.GetFilters():
+            if not any(
+                item in LabwareInstance.GetFilters() for item in ContainerFilters
+            ):
+                print(ContainerFilters, LabwareInstance.GetFilters())
                 continue
 
             LabwareWells = LabwareInstance.GetWells()

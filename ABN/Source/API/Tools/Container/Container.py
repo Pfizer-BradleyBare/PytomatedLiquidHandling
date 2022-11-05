@@ -4,7 +4,7 @@ from .Well.WellTracker import WellTracker
 
 
 class Container(ObjectABC):
-    def __init__(self, Name: str, Filter: str | None):
+    def __init__(self, Name: str, Filter: str):
 
         self.Name: str = Name
 
@@ -12,7 +12,7 @@ class Container(ObjectABC):
         self.BlockTrackerInstance: BlockTracker = BlockTracker()
 
         # This is used for automated deck loading. We have to restrict the choices based on the filter
-        self.Filter: str | None = Filter
+        self.Filter: str = Filter
 
         # What solutions and volume is in each well
         self.WellTrackerInstance: WellTracker = WellTracker()
@@ -23,7 +23,7 @@ class Container(ObjectABC):
     def GetBlockTracker(self) -> BlockTracker:
         return self.BlockTrackerInstance
 
-    def GetFilter(self) -> str | None:
+    def GetFilter(self) -> str:
         return self.Filter
 
     def GetWellTracker(self) -> WellTracker:

@@ -348,7 +348,7 @@ def WorkbookInit(WorkbookInstance: Workbook):
     )
 
     WorkbookInstance.GetContainerTracker().ManualLoad(
-        Container("__StartingContext__", None)
+        Container("__StartingContext__", "No Preference")
     )
     # Setting initial context and container.
 
