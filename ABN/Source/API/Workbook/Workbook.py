@@ -184,18 +184,9 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
     while True:
 
-        def ListInList(List, InList) -> bool:
-            for Item in List:
-                if Item not in InList:
-                    return False
-            return True
-
-        if (
-            ListInList(
-                WorkbookInstance.GetMethodBlocksTracker().GetObjectsAsList(),
-                ExecutedBlocksTrackerInstance.GetObjectsAsList(),
-            )
-            is True
+        if all(
+            item in ExecutedBlocksTrackerInstance.GetObjectsAsList()
+            for item in WorkbookInstance.GetMethodBlocksTracker().GetObjectsAsList()
         ):
             Load(
                 WorkbookInstance.GetDeckLoadingItemTracker(),
@@ -261,12 +252,9 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         if InactiveContextTrackerInstance.IsTracked(
             WorkbookInstance.GetExecutingContext()
         ):
-            if (
-                ListInList(
-                    ContextTrackerInstance.GetObjectsAsList(),
-                    InactiveContextTrackerInstance.GetObjectsAsList(),
-                )
-                is True
+            if all(
+                item in InactiveContextTrackerInstance.GetObjectsAsList()
+                for item in ContextTrackerInstance.GetObjectsAsList()
             ):
                 pass
             # If all contexts are inactive then we need to wait on devices to complete. TODO

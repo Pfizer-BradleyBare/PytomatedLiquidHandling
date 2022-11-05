@@ -49,7 +49,6 @@ def Load(
             if not any(
                 item in LabwareInstance.GetFilters() for item in ContainerFilters
             ):
-                print(ContainerFilters, LabwareInstance.GetFilters())
                 continue
 
             LabwareWells = LabwareInstance.GetWells()
