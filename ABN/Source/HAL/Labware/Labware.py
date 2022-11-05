@@ -90,17 +90,17 @@ class LabwarePipettableTracker:
 
 
 class Labware(ObjectABC, LabwarePipettableTracker):
-    def __init__(self, Name: str, Filters: list[str], Dimensions: LabwareDimensions):
+    def __init__(self, Name: str, Filter: str | None, Dimensions: LabwareDimensions):
         LabwarePipettableTracker.__init__(self, False)
         self.Name: str = Name
-        self.Filters: list[str] = Filters
+        self.Filter: str | None = Filter
         self.Dimensions: LabwareDimensions = Dimensions
 
     def GetName(self) -> str:
         return self.Name
 
-    def GetFilters(self) -> list[str]:
-        return self.Filters
+    def GetFilter(self) -> str | None:
+        return self.Filter
 
     def GetDimensions(self) -> LabwareDimensions:
         return self.Dimensions
@@ -110,11 +110,11 @@ class PipettableLabware(Labware):
     def __init__(
         self,
         Name: str,
-        Filters: list[str],
+        Filter: str | None,
         LabwareWells: Wells,
         Dimensions: LabwareDimensions,
     ):
-        Labware.__init__(self, Name, Filters, Dimensions)
+        Labware.__init__(self, Name, Filter, Dimensions)
         LabwarePipettableTracker.__init__(self, True)
         self.LabwareWells: Wells = LabwareWells
 

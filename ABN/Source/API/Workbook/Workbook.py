@@ -18,7 +18,12 @@ from ...API.Tools.Context import (
     WellFactor,
 )
 from ..Tools.Timer import TimerTracker
-from ...HAL.Tools import DeckLoadingItemTracker, Load
+from ...HAL.Tools import DeckLoadingItemTracker
+
+from ...HAL.Tools.LabwareSelection.LabwareSelectionLoader import Load
+from ...HAL.Tools.LabwareSelection.LabwareSelectionTracker import (
+    LabwareSelectionTracker,
+)
 
 from ...Server.Globals import LOG
 from ...Server.Globals.HalInstance import HalInstance
@@ -188,14 +193,21 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             item in ExecutedBlocksTrackerInstance.GetObjectsAsList()
             for item in WorkbookInstance.GetMethodBlocksTracker().GetObjectsAsList()
         ):
+            Track = LabwareSelectionTracker()
             Load(
-                WorkbookInstance.GetDeckLoadingItemTracker(),
+                Track,
                 WorkbookInstance.GetContainerTracker(),
                 HalInstance,
             )
 
-            for Item in WorkbookInstance.GetDeckLoadingItemTracker().GetObjectsAsList():
-                print(Item.GetName(), Item.GetLabware().GetName())
+            for Item in Track.GetObjectsAsList():
+                print(
+                    Item.GetName(),
+                    [
+                        Lab.GetName()
+                        for Lab in Item.GetLabwareTracker().GetObjectsAsList()
+                    ],
+                )
             print("METHOD EXECUTION COMPLETE")
 
             return
@@ -336,7 +348,9 @@ def WorkbookInit(WorkbookInstance: Workbook):
     )
 
     WorkbookInstance.GetContainerTracker().ManualLoad(
-        Container("__StartingContext__", "No Preference")
+        Container(
+            "__StartingContext__", None
+        )  # This will never be loaded so filter doesn't matter
     )
     # Setting initial context and container.
 
