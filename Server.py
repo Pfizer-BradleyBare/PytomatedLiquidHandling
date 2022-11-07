@@ -9,8 +9,13 @@ import ABN.Source.Server.Method.Queue as Queue
 import ABN.Source.Server.Method.Dequeue as Dequeue
 
 import web
+import os
+
 
 if __name__ == "__main__":
+
+    os.environ["PORT"] = "255"
+    # Set port
 
     Logger.LOG.info("Starting Server")
 

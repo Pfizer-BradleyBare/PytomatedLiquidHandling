@@ -12,5 +12,5 @@ except Exception:
     print("Server is not Running... Starting server in new cmd window.")
 
     os.system(
-        'start cmd /K python "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Server.py" 65535'
+        'start cmd /K python "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Server.py"'
     )
