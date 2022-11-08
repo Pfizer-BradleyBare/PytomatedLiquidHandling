@@ -13,7 +13,7 @@ class Parser:
         self.string: bytes | None = JSONstring
         self.JSON: dict = dict()
         self.APIState: bool = False
-        self.APIReturn: dict = dict()
+        self.APIReturn: dict = {"Message": ""}
 
         if not (JSONstring is None or JSONstring == "" or JSONstring == b""):
             try:
@@ -35,10 +35,13 @@ class Parser:
     def SetAPIState(self, State: bool):
         self.APIState = State
 
-    def SetAPIReturn(self, Return: dict):
-        self.APIReturn = Return
+    def SetAPIReturn(self, Key: str, Value: str):
+        self.APIReturn[Key] = Value
 
     def GetHTTPResponse(self) -> str:
+        if self.APIReturn["Message"] == "":
+            raise Exception("APIReturn Message key must be set. ALWAYS!")
+
         Out = dict()
         Out["APICallID"] = self.APICallID
         Out["APISuccess"] = self.APIState

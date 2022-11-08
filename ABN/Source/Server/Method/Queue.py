@@ -1,4 +1,13 @@
-# curl -H "Content-Type: application/json" -X POST -d "{\"Method Path\":\"C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\_Template_MAM.xlsm\",\"Requested Action\":\"Test\"}" http://localhost:65535/Method/Queue
+# curl -H "Content-Type: application/json" -X POST -d "{\"Method Path\":\"C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\_Template_MAM.xlsm\",\"Action\":\"Test\"}" http://localhost:65535/Method/Queue
+
+# ##### API Definition #####
+#
+# Keys:
+#   "Method Path"
+#   "Action"
+#
+# ##########################
+
 
 import web
 from ..Tools.Parser import Parser
@@ -18,14 +27,12 @@ class Queue:
             return Response
 
         MethodPath = ParserObject.GetAPIData()["Method Path"]
-        Action = ParserObject.GetAPIData()["Requested Action"]
+        Action = ParserObject.GetAPIData()["Action"]
         # acceptable values are "Test", "PrepList", or "Run"
 
         if ".xlsm" not in MethodPath:
             ParserObject.SetAPIReturn(
-                {
-                    "Reason": "Method Path is not an xlsm file. (Macro Enabled Excel File)"
-                }
+                "Message", "Method Path is not an xlsm file. (Macro Enabled Excel File)"
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
@@ -33,7 +40,8 @@ class Queue:
 
         if not (os.access(MethodPath, os.F_OK) and os.access(MethodPath, os.W_OK)):
             ParserObject.SetAPIReturn(
-                {"Reason": "Method Path does not exist or is read only"}
+                "Message",
+                "Method Path does not exist or is read only (User Error. Save Excel File?)",
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
@@ -44,15 +52,18 @@ class Queue:
             for Workbook in WorkbookTrackerInstance.GetObjectsAsList()
         ]
         if MethodPath in PathsList:
-            ParserObject.SetAPIReturn({"Reason": "Method is already running"})
+            ParserObject.SetAPIReturn("Message", "Method is already running")
             Response = ParserObject.GetHTTPResponse()
             return Response
         # Is workbook already running?
 
-        WorkbookLoader.Load(WorkbookTrackerInstance, MethodPath, WorkbookRunTypes.Test)
+        WorkbookLoader.Load(
+            WorkbookTrackerInstance, MethodPath, WorkbookRunTypes(Action)
+        )
         # Load the workbook path into the tracker
 
         ParserObject.SetAPIState(True)
+        ParserObject.SetAPIReturn("Message", "Method Queued")
 
         Response = ParserObject.GetHTTPResponse()
         return Response

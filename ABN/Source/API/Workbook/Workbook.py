@@ -354,5 +354,5 @@ def WorkbookInit(WorkbookInstance: Workbook):
     )
     # Setting initial context and container.
 
-    # WorkbookInstance.ProcessingLock.acquire()
+    WorkbookInstance.ProcessingLock.acquire()
     WorkbookInstance.WorkbookProcessorThread.start()
