@@ -10,7 +10,7 @@ class Respond:
     def POST(self):
         ParserObject = Parser("Command Respond", web.data())
 
-        if not ParserObject.IsValid():
+        if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()
             return Response
 

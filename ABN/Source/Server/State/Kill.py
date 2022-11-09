@@ -4,13 +4,19 @@ from ..Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
 from ..Globals import LOG
 from ..Tools.Parser import Parser
 
+import web
+
 urls = ("/State/Kill", "ABN.Source.Server.State.Kill.Kill")
 
 
 class Kill:
     def GET(self):
 
-        ParserObject = Parser("State Kill", None)
+        ParserObject = Parser("State Kill", web.data())
+
+        if not ParserObject.IsValid([]):
+            Response = ParserObject.GetHTTPResponse()
+            return Response
 
         LOG.info("Starting Kill sequence...")
 

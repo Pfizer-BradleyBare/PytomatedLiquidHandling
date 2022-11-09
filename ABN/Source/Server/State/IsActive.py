@@ -10,7 +10,7 @@ class IsActive:
     def GET(self):
         ParserObject = Parser("State IsActive", web.data())
 
-        if not ParserObject.IsValid():
+        if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()
             return Response
 

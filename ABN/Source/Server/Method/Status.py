@@ -10,7 +10,7 @@ class Status:
     def POST(self):
         ParserObject = Parser("Method Status", web.data())
 
-        if not ParserObject.IsValid():
+        if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()
             return Response
 

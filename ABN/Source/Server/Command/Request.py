@@ -10,7 +10,7 @@ class Request:
     def GET(self):
         ParserObject = Parser("Command Request", web.data())
 
-        if not ParserObject.IsValid():
+        if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()
             return Response
 

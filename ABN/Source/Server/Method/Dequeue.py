@@ -10,7 +10,7 @@ class Dequeue:
     def POST(self):
         ParserObject = Parser("Method Dequeue", web.data())
 
-        if not ParserObject.IsValid():
+        if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()
             return Response
 
