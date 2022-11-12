@@ -3,7 +3,7 @@ from ...Workbook.Block import (
     ClassDecorator_AvailableBlock,
     FunctionDecorator_ProcessFunction,
 )
-from ....Tools import Excel
+from ....Tools import Excel, ExcelOperator
 from ...Workbook import Workbook
 from ....HAL import Hal
 from ...Tools.Container import Container, ContainerOperator
@@ -19,19 +19,19 @@ class LiquidTransfer(Block):
         return "Liquid Transfer" + str((self.Row, self.Col))
 
     def GetSource(self) -> str:
-        return self.ExcelInstance.ReadMethodSheetArea(
-            self.Row + 2, self.Col + 2, self.Row + 2, self.Col + 2
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Method")
+            return ExcelOperatorInstance.ReadCellValue(self.Row + 2, self.Col + 2)
 
     def GetVolume(self) -> str:
-        return self.ExcelInstance.ReadMethodSheetArea(
-            self.Row + 3, self.Col + 2, self.Row + 3, self.Col + 2
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Method")
+            return ExcelOperatorInstance.ReadCellValue(self.Row + 3, self.Col + 2)
 
     def GetMix(self) -> str:
-        return self.ExcelInstance.ReadMethodSheetArea(
-            self.Row + 4, self.Col + 2, self.Row + 4, self.Col + 2
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Method")
+            return ExcelOperatorInstance.ReadCellValue(self.Row + 4, self.Col + 2)
 
     def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
         pass

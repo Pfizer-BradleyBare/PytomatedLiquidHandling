@@ -1,4 +1,4 @@
-from ....Tools import Excel
+from ....Tools import Excel, ExcelOperator
 from ....Tools.AbstractClasses import ObjectABC
 from .Value.Value import SolutionPropertyValue
 from .Value.ValueTracker import SolutionPropertyValueTracker
@@ -46,43 +46,31 @@ class Solution(ObjectABC):
         return self.Name
 
     def GetCategory(self):
-        return self.ExcelInstance.ReadSolutionsSheetArea(
-            self.Row + 2, self.Col + 2, self.Row + 2, self.Col + 2
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Solutions")
+            return ExcelOperatorInstance.ReadCellValue(2, 2)
 
     def GetStorageTemp(self):
-        return self.ExcelInstance.ReadSolutionsSheetArea(
-            self.Row + 3, self.Col + 2, self.Row + 3, self.Col + 2
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Solutions")
+            return ExcelOperatorInstance.ReadCellValue(3, 2)
 
     def GetVolatility(self) -> SolutionPropertyValue:
-        return SolutionPropertyValues.GetObjectByName(
-            "Volatility "
-            + self.ExcelInstance.ReadSolutionsSheetArea(
-                self.Row + 4, self.Col + 2, self.Row + 4, self.Col + 2
-            )
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Solutions")
+            return "Volatility " + ExcelOperatorInstance.ReadCellValue(4, 2)
 
     def GetViscosity(self) -> SolutionPropertyValue:
-        return SolutionPropertyValues.GetObjectByName(
-            "Viscosity "
-            + self.ExcelInstance.ReadSolutionsSheetArea(
-                self.Row + 5, self.Col + 2, self.Row + 5, self.Col + 2
-            )
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Solutions")
+            return "Viscosity " + ExcelOperatorInstance.ReadCellValue(5, 2)
 
     def GetHomogeneity(self) -> SolutionPropertyValue:
-        return SolutionPropertyValues.GetObjectByName(
-            "Homogeneity "
-            + self.ExcelInstance.ReadSolutionsSheetArea(
-                self.Row + 6, self.Col + 2, self.Row + 6, self.Col + 2
-            )
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Solutions")
+            return "Homogeneity " + ExcelOperatorInstance.ReadCellValue(6, 2)
 
     def GetLLD(self) -> SolutionPropertyValue:
-        return SolutionPropertyValues.GetObjectByName(
-            "LLD "
-            + self.ExcelInstance.ReadSolutionsSheetArea(
-                self.Row + 7, self.Col + 2, self.Row + 7, self.Col + 2
-            )
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Solutions")
+            return "LLD " + ExcelOperatorInstance.ReadCellValue(7, 2)

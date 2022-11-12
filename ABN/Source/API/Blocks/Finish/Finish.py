@@ -3,7 +3,7 @@ from ...Workbook.Block import (
     ClassDecorator_AvailableBlock,
     FunctionDecorator_ProcessFunction,
 )
-from ....Tools import Excel
+from ....Tools import Excel, ExcelOperator
 from ...Workbook import Workbook
 from ....HAL import Hal
 

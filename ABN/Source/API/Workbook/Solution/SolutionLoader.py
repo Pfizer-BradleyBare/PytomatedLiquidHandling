@@ -1,11 +1,12 @@
 from .SolutionTracker import SolutionTracker
 from .Solution import Solution
-from ....Tools import Excel
+from ....Tools import Excel, ExcelOperator
 
 
 def Load(SolutionTrackerInstance: SolutionTracker, ExcelInstance: Excel):
-
-    SolutionsSheet: list[list[str]] = ExcelInstance.ReadSolutionsSheet()
+    with ExcelOperator(False, ExcelInstance) as ExcelOperatorInstance:
+        ExcelOperatorInstance.SelectSheet("Solutions")
+        SolutionsSheet = ExcelOperatorInstance.ReadRangeValues(1, 1, 200, 50)
 
     MaxRows = len(SolutionsSheet)
 

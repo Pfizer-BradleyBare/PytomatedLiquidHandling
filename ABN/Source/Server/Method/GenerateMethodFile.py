@@ -4,9 +4,8 @@ from .AvailableMethods import MethodsPath, TemplateMethodSuffix, TempFolder
 import os
 import shutil
 import stat
-import xlwings
-import pythoncom
-
+from ...Tools import Excel, ExcelOperator
+from typing import cast
 
 urls = (
     "/Method/GenerateMethodFile",
@@ -58,20 +57,19 @@ class GenerateMethodFile:
         shutil.copy(TemplateMethodFilePath, DesiredMethodFilePath)
         os.chmod(DesiredMethodFilePath, stat.S_IWRITE)
 
-        pythoncom.CoInitialize()
-        with xlwings.App(visible=True, add_book=False) as XLApp:
+        with ExcelOperator(
+            False, Excel(DesiredMethodFilePath)
+        ) as ExcelOperatorInstance:
 
-            Book = XLApp.books.open(DesiredMethodFilePath)
-
-            Sheet: xlwings.Sheet
-            Sheet = Book.sheets["Worklist"]
-
-            CopyFormula = Sheet.range((2, 1), (2, 100)).formula
+            ExcelOperatorInstance.SelectSheet("Worklist")
+            CopyFormula = cast(
+                tuple[tuple[any]], ExcelOperatorInstance.ReadRangeFormulas(2, 1, 2, 100)  # type: ignore
+            )
 
             for Index in range(1, int(ParserObject.GetAPIData()["Sample Number"])):
-                Sheet.range((2 + Index, 1), (2 + Index, 100)).formula = CopyFormula
+                ExcelOperatorInstance.WriteRangeFormulas(2 + Index, 1, CopyFormula)
 
-            Book.save()
+            ExcelOperatorInstance.Save()
 
         ParserObject.SetAPIState(True)
         ParserObject.SetAPIReturn("Message", "Method file created successfully")

@@ -3,7 +3,7 @@ from ...Workbook.Block import (
     ClassDecorator_AvailableBlock,
     FunctionDecorator_ProcessFunction,
 )
-from ....Tools import Excel
+from ....Tools import Excel, ExcelOperator
 from ...Workbook import Workbook
 from ....HAL import Hal
 
@@ -17,29 +17,29 @@ class MagneticBeads(Block):
         return "Magnetic Beads" + str((self.Row, self.Col))
 
     def GetMagneticBeadsPlate(self) -> str:
-        return self.ExcelInstance.ReadMethodSheetArea(
-            self.Row + 2, self.Col + 2, self.Row + 2, self.Col + 2
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Method")
+            return ExcelOperatorInstance.ReadCellValue(self.Row + 2, self.Col + 2)
 
     def GetStorageBuffer(self) -> str:
-        return self.ExcelInstance.ReadMethodSheetArea(
-            self.Row + 3, self.Col + 2, self.Row + 3, self.Col + 2
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Method")
+            return ExcelOperatorInstance.ReadCellValue(self.Row + 3, self.Col + 2)
 
     def GetStorageBufferVolume(self) -> str:
-        return self.ExcelInstance.ReadMethodSheetArea(
-            self.Row + 4, self.Col + 2, self.Row + 4, self.Col + 2
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Method")
+            return ExcelOperatorInstance.ReadCellValue(self.Row + 4, self.Col + 2)
 
     def GetHoldTime(self) -> str:
-        return self.ExcelInstance.ReadMethodSheetArea(
-            self.Row + 5, self.Col + 2, self.Row + 5, self.Col + 2
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Method")
+            return ExcelOperatorInstance.ReadCellValue(self.Row + 5, self.Col + 2)
 
     def GetRepitions(self) -> str:
-        return self.ExcelInstance.ReadMethodSheetArea(
-            self.Row + 6, self.Col + 2, self.Row + 6, self.Col + 2
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Method")
+            return ExcelOperatorInstance.ReadCellValue(self.Row + 6, self.Col + 2)
 
     def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
         pass

@@ -1,12 +1,14 @@
 from typing import cast
 from .Block import BlockObjectCreationWrapper, Block
 from .BlockTracker import BlockTracker
-from ....Tools import Excel
+from ....Tools import Excel, ExcelOperator
 from ...Blocks import Plate, SplitPlate, Finish
 
 
 def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
-    MethodSheet = ExcelInstance.ReadMethodSheet()
+    with ExcelOperator(False, ExcelInstance) as ExcelOperatorInstance:
+        ExcelOperatorInstance.SelectSheet("Method")
+        MethodSheet = ExcelOperatorInstance.ReadRangeValues(1, 1, 1500, 100)
 
     Rows = len(MethodSheet)
     Cols = len(MethodSheet[0])

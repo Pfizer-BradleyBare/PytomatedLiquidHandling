@@ -1,6 +1,6 @@
 from .WorkbookTracker import WorkbookTracker
 from .Workbook import Workbook, WorkbookRunTypes
-from ...Tools import Excel
+from ...Tools import Excel, ExcelOperator
 from .Worklist import Worklist
 from .Solution import SolutionTracker, SolutionLoader
 from .Block import BlockLoader, BlockTracker

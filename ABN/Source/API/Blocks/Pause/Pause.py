@@ -3,7 +3,7 @@ from ...Workbook.Block import (
     ClassDecorator_AvailableBlock,
     FunctionDecorator_ProcessFunction,
 )
-from ....Tools import Excel
+from ....Tools import Excel, ExcelOperator
 from ...Workbook import Workbook
 from ....HAL import Hal
 
@@ -17,9 +17,9 @@ class Pause(Block):
         return "Pause" + str((self.Row, self.Col))
 
     def GetTime(self) -> str:
-        return self.ExcelInstance.ReadMethodSheetArea(
-            self.Row + 2, self.Col + 2, self.Row + 2, self.Col + 2
-        )
+        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
+            ExcelOperatorInstance.SelectSheet("Method")
+            return ExcelOperatorInstance.ReadCellValue(self.Row + 2, self.Col + 2)
 
     def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
         pass
