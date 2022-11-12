@@ -20,11 +20,14 @@ class AvailableMethods:
 
         MethodProjects = dict()
 
-        Methods = [
-            Item
-            for Item in os.listdir(MethodsPath)
-            if os.path.isdir(os.path.join(MethodsPath, Item))
-        ]
+        if os.path.exists(MethodsPath):
+            Methods = [
+                Item
+                for Item in os.listdir(MethodsPath)
+                if os.path.isdir(os.path.join(MethodsPath, Item))
+            ]
+        else:
+            Methods = list()
 
         for Method in Methods:
             MethodProjects[Method] = [
