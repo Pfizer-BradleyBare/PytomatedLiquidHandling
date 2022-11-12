@@ -34,6 +34,14 @@ class GenerateMethodFile:
             MethodsPath, MethodFolder, ProjectFolder, TemplateMethodFile
         )
 
+        DesiredMethodFilePath = os.path.join(
+            MethodsPath,
+            MethodFolder,
+            ProjectFolder,
+            TempFolder,
+            ParserObject.GetAPIData()["Desired Filename"] + ".xlsm",
+        )
+
         try:
             os.mkdir(
                 os.path.join(
@@ -45,14 +53,6 @@ class GenerateMethodFile:
             )
         except FileExistsError:
             pass
-
-        DesiredMethodFilePath = os.path.join(
-            MethodsPath,
-            MethodFolder,
-            ProjectFolder,
-            TempFolder,
-            ParserObject.GetAPIData()["Desired Filename"] + ".xlsm",
-        )
 
         shutil.copy(TemplateMethodFilePath, DesiredMethodFilePath)
         os.chmod(DesiredMethodFilePath, stat.S_IWRITE)

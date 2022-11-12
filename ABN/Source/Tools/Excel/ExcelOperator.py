@@ -26,7 +26,16 @@ class ExcelOperator:
         self.Visible: bool = Visible
         self.ExcelInstance: Excel = ExcelInstance
 
-        pythoncom.CoInitialize()
+        # If this book is already open we are going to save then close it before doing anything fancy
+        for Book in xlwings.books:
+            if Book.fullname == ExcelInstance.GetExcelFilePath():
+                App = Book.app
+                Book.Save()
+                Book.close()
+                if len(App.books) == 0:
+                    App.quit()
+
+        pythoncom.CoInitialize()  # Required for some reason.
         self.App: xlwings.App | None = xlwings.App(visible=self.Visible, add_book=False)
         self.Book: xlwings.Book = self.App.books.open(self.ExcelInstance.ExcelFilePath)
         self.Sheet: xlwings.Sheet
