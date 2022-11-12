@@ -26,20 +26,25 @@ class AvailableMethods:
             if os.path.isdir(os.path.join(MethodsPath, Item))
         ]
 
-        print(Methods)
-
         for Method in Methods:
-
             MethodProjects[Method] = [
                 Dir
                 for Dir in os.listdir(os.path.join(MethodsPath, Method))
                 if Dir != "Archive"
+                and os.path.isdir(os.path.join(MethodsPath, Method, Dir))
+                and any(
+                    "__Template_" + Method + "_" + Dir + ".xlsm" in item
+                    for item in os.listdir(os.path.join(MethodsPath, Method, Dir))
+                )
             ]
+
+        for Method in MethodProjects:
+            if len(MethodProjects[Method]) == 0:
+                Methods.remove(Method)
 
         ParserObject.SetAPIState(True)
         ParserObject.SetAPIReturn("Methods", Methods)
         ParserObject.SetAPIReturn("Method Projects", MethodProjects)
-        ParserObject.SetAPIReturn("Test", {"Test1": {"Test2": 1}})
         ParserObject.SetAPIReturn("Message", "Possible methods returned as dict")
 
         Response = ParserObject.GetHTTPResponse()
