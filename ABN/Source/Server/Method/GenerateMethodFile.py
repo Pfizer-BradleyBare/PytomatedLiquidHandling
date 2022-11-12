@@ -73,6 +73,7 @@ class GenerateMethodFile:
 
         ParserObject.SetAPIState(True)
         ParserObject.SetAPIReturn("Message", "Method file created successfully")
+        ParserObject.SetAPIReturn("Method File Path", DesiredMethodFilePath)
 
         Response = ParserObject.GetHTTPResponse()
         return Response
