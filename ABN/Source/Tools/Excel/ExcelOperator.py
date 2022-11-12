@@ -27,10 +27,15 @@ class ExcelOperator:
         self.ExcelInstance: Excel = ExcelInstance
 
         # If this book is already open we are going to save then close it before doing anything fancy
-        for Book in xlwings.books:
+        try:
+            Books = xlwings.books
+        except Exception:
+            Books = []
+
+        for Book in Books:
             if Book.fullname == ExcelInstance.GetExcelFilePath():
                 App = Book.app
-                Book.Save()
+                Book.save()
                 Book.close()
                 if len(App.books) == 0:
                     App.quit()
@@ -46,11 +51,6 @@ class ExcelOperator:
     def __exit__(self, type, value, traceback):
         if self.App is not None:
             self.App.__exit__(type, value, traceback)
-            self.App = None
-
-    def __del__(self):
-        if self.App is not None:
-            self.App.quit()
             self.App = None
 
     def __AlignArray(self, Array: list[list[any]]):  # type:ignore

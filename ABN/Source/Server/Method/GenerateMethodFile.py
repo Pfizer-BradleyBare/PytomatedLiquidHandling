@@ -67,7 +67,7 @@ class GenerateMethodFile:
             )
 
             for Index in range(1, int(ParserObject.GetAPIData()["Sample Number"])):
-                ExcelOperatorInstance.WriteRangeFormulas(2 + Index, 1, CopyFormula)
+                ExcelOperatorInstance.WriteRangeFormulas(1 + Index, 1, CopyFormula)
 
             ExcelOperatorInstance.Save()
 
