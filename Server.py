@@ -8,6 +8,7 @@ import ABN.Source.Server.Method.Status as Status
 import ABN.Source.Server.Method.Queue as Queue
 import ABN.Source.Server.Method.Dequeue as Dequeue
 import ABN.Source.Server.Method.AvailableMethods as AvailableMethods
+import ABN.Source.Server.Method.GenerateMethodFile as GenerateMethodFile
 
 import web
 import os
@@ -29,6 +30,7 @@ if __name__ == "__main__":
     urls += Queue.urls
     urls += Dequeue.urls
     urls += AvailableMethods.urls
+    urls += GenerateMethodFile.urls
 
     app = web.application(urls, globals())
     app.run()

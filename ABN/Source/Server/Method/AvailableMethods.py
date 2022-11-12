@@ -3,6 +3,9 @@ from ..Tools.Parser import Parser
 import os
 
 MethodsPath = "C:\\___MethodsTest"
+TemplateMethodSuffix = "__Template"
+ArchiveFolder = "Archive"
+TempFolder = "Temp"
 
 urls = (
     "/Method/AvailableMethods",
@@ -33,10 +36,11 @@ class AvailableMethods:
             MethodProjects[Method] = [
                 Dir
                 for Dir in os.listdir(os.path.join(MethodsPath, Method))
-                if Dir != "Archive"
+                if Dir != ArchiveFolder
+                and Dir != TempFolder
                 and os.path.isdir(os.path.join(MethodsPath, Method, Dir))
                 and any(
-                    "__Template_" + Method + "_" + Dir + ".xlsm" in item
+                    TemplateMethodSuffix + "_" + Method + "_" + Dir + ".xlsm" in item
                     for item in os.listdir(os.path.join(MethodsPath, Method, Dir))
                 )
             ]
