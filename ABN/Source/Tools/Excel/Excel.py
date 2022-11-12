@@ -1,6 +1,8 @@
 import xlwings as xl
+import pythoncom
 import threading
 from ...Server.Globals import LOG
+from typing import Callable
 
 ExcelLock = threading.Lock()
 
@@ -17,6 +19,47 @@ def ExcelClassFunctionDecorator_ThreadLock(DecoratedFunction):
         return Result
 
     return inner
+
+
+class Excel2:
+    def __init__(self, ExcelFilePath: str):
+        self.ExcelFilePath: str = ExcelFilePath
+
+    def __AlignArray(self, Array: list[list[any]]):  # type:ignore
+        Max = max(len(i) for i in Array)
+        for List in Array:
+            List += [None] * (Max - len(List))
+
+    def GetExcelFilePath(self):
+        return self.ExcelFilePath
+
+    @ExcelClassFunctionDecorator_ThreadLock
+    def Operate(
+        self,
+        SheetFunction: Callable[[xl.App], xl.Sheet] | None,
+        OperatorFunction: Callable[[xl.Sheet], any] | None,  # type: ignore
+    ):
+
+        pythoncom.CoInitialize()
+        with xl.App(visible=True, add_book=False) as XLApp:
+            XLApp.books.open(self.ExcelFilePath)
+
+            if SheetFunction is not None:
+                Sheet = SheetFunction(XLApp)
+            else:
+                Sheet = None
+
+            if OperatorFunction is not None and Sheet is not None:
+                OperatorFunction(Sheet)
+
+    def CreateSheet(self, Name: str):
+        def AddSheet(XLApp: xl.App):
+            XLApp.books[self.GetExcelFilePath()].sheets.add(
+                name=Name, after="Solutions"
+            )
+            return XLApp.books[self.GetExcelFilePath()].sheets[Name]
+
+        self.Operate(AddSheet, None)
 
 
 class Excel:

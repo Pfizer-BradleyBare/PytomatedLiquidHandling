@@ -35,14 +35,17 @@ class GenerateMethodFile:
             MethodsPath, MethodFolder, ProjectFolder, TemplateMethodFile
         )
 
-        os.mkdir(
-            os.path.join(
-                MethodsPath,
-                MethodFolder,
-                ProjectFolder,
-                TempFolder,
+        try:
+            os.mkdir(
+                os.path.join(
+                    MethodsPath,
+                    MethodFolder,
+                    ProjectFolder,
+                    TempFolder,
+                ),
             )
-        )
+        except FileExistsError:
+            pass
 
         DesiredMethodFilePath = os.path.join(
             MethodsPath,
@@ -56,7 +59,7 @@ class GenerateMethodFile:
         os.chmod(DesiredMethodFilePath, stat.S_IWRITE)
 
         pythoncom.CoInitialize()
-        with xlwings.App(visible=False) as XLApp:
+        with xlwings.App(visible=True, add_book=False) as XLApp:
 
             Book = XLApp.books.open(DesiredMethodFilePath)
 
