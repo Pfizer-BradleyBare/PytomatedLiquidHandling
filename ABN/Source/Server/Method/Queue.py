@@ -22,7 +22,9 @@ class Queue:
     def POST(self):
         ParserObject = Parser("Method Queue", web.data())
 
-        if not ParserObject.IsValid(["Method Path", "Action"]):
+        if not ParserObject.IsValid(
+            ["Method Path", "Action", "User Name", "User Contact Info"]
+        ):
             Response = ParserObject.GetHTTPResponse()
             return Response
 
