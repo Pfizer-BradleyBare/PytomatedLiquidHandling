@@ -4,14 +4,14 @@ from ..Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
 from ...API.Workbook import WorkbookRunTypes
 
 urls = (
-    "/Method/List",
-    "ABN.Source.Server.Method.List.List",
+    "/Method/ListQueue",
+    "ABN.Source.Server.Method.ListQueue.ListQueue",
 )
 
 
-class List:
+class ListQueue:
     def GET(self):
-        ParserObject = Parser("Method List", web.data())
+        ParserObject = Parser("Method ListQueue", web.data())
 
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()
