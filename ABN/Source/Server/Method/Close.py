@@ -1,6 +1,6 @@
 import web
 from ..Tools.Parser import Parser
-from ...Tools import Excel, ExcelOperator
+import xlwings
 
 
 urls = (
@@ -19,9 +19,14 @@ class Close:
 
         MethodFilePath = ParserObject.GetAPIData()["Method File Path"]
 
-        with ExcelOperator(False, Excel(MethodFilePath)) as ExcelOperatorInstance:
-            ExcelOperatorInstance  # type: ignore
-        # This will check if the book is already open and if so will close it.
+        if xlwings.apps.count != 0:
+            for Book in xlwings.books:
+                if Book.fullname == MethodFilePath:
+                    Book.save()
+                    App = Book.app
+                    Book.close()
+                    if len(App.books) == 0:
+                        App.quit()
 
         ParserObject.SetAPIState(True)
         ParserObject.SetAPIReturn("Message", "Excel Workbook Closed")
