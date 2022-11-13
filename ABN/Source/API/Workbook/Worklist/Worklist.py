@@ -8,7 +8,7 @@ class Worklist:
         # Determine number of samples
         with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
             ExcelOperatorInstance.SelectSheet("Worklist")
-            Data = ExcelOperatorInstance.ReadRangeValues(1, 1, 500, 100)
+            Data = ExcelOperatorInstance.ReadRangeValues(1, 1, 100, 100)
 
         ColIndex = Data[0].index("Sample Number")
 
@@ -30,7 +30,7 @@ class Worklist:
     def IsWorklistColumn(self, ColumnName: str) -> bool:
         with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
             ExcelOperatorInstance.SelectSheet("Worklist")
-            Data = ExcelOperatorInstance.ReadRangeValues(1, 1, 500, 100)
+            Data = ExcelOperatorInstance.ReadRangeValues(1, 1, 100, 100)
 
         try:
             Data[0].index(ColumnName)
@@ -41,7 +41,7 @@ class Worklist:
     def ReadWorklistColumn(self, ColumnName: str) -> list[any]:  # type:ignore
         with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
             ExcelOperatorInstance.SelectSheet("Worklist")
-            Data = ExcelOperatorInstance.ReadRangeValues(1, 1, 500, 100)
+            Data = ExcelOperatorInstance.ReadRangeValues(1, 1, 100, 100)
 
         ColIndex = Data[0].index(ColumnName)
 
@@ -55,7 +55,7 @@ class Worklist:
     def WriteWorklistColumn(self, ColumnName: str, Data: list[any]):  # type:ignore
         with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
             ExcelOperatorInstance.SelectSheet("Worklist")
-            ReadData = ExcelOperatorInstance.ReadRangeValues(1, 1, 500, 100)
+            ReadData = ExcelOperatorInstance.ReadRangeValues(1, 1, 100, 100)
 
             Index = ReadData[0].index(ColumnName) + 1
 
