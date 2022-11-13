@@ -63,11 +63,13 @@ class GenerateMethodFile:
 
             ExcelOperatorInstance.SelectSheet("Worklist")
             CopyFormula = cast(
-                tuple[tuple[any]], ExcelOperatorInstance.ReadRangeFormulas(2, 1, 2, 100)  # type: ignore
+                tuple[tuple[any]], ExcelOperatorInstance.ReadRangeFormulas(2, 1, 2, 3)  # type: ignore
             )
 
-            for Index in range(1, int(ParserObject.GetAPIData()["Sample Number"])):
-                ExcelOperatorInstance.WriteRangeFormulas(1 + Index, 1, CopyFormula)
+            print(CopyFormula)
+            CopyFormula = CopyFormula * int(ParserObject.GetAPIData()["Sample Number"])
+            ExcelOperatorInstance.WriteRangeFormulas(2, 1, CopyFormula)
+            print(CopyFormula)
 
             ExcelOperatorInstance.Save()
 

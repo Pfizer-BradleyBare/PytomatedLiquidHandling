@@ -135,7 +135,7 @@ class ExcelOperator:
         NumCols = len(Data[0])
 
         self.Sheet.range(
-            (RowStart, ColStart), (RowStart + NumRows, ColStart + NumCols)
+            (RowStart, ColStart), (RowStart + NumRows - 1, ColStart + NumCols - 1)
         ).value = Data
 
     @ExcelClassFunctionDecorator_ThreadLock
@@ -150,5 +150,5 @@ class ExcelOperator:
         NumCols = len(Data[0])
 
         self.Sheet.range(
-            (RowStart, ColStart), (RowStart + NumRows, ColStart + NumCols)
+            (RowStart, ColStart), (RowStart + NumRows - 1, ColStart + NumCols - 1)
         ).formula = Data
