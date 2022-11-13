@@ -29,7 +29,7 @@ class Queue:
             return Response
 
         MethodPath = ParserObject.GetAPIData()["Method Path"]
-        Action = ParserObject.GetAPIData()["Action"]
+        Action = WorkbookRunTypes(ParserObject.GetAPIData()["Action"])
         # acceptable values are "Test", "PrepList", or "Run"
 
         if ".xlsm" not in MethodPath:
@@ -59,9 +59,10 @@ class Queue:
             return Response
         # Is workbook already running?
 
-        WorkbookLoader.Load(
-            WorkbookTrackerInstance, MethodPath, WorkbookRunTypes(Action)
-        )
+        if Action == WorkbookRunTypes.Run:
+            Action = WorkbookRunTypes.PreRun
+
+        WorkbookLoader.Load(WorkbookTrackerInstance, MethodPath, Action)
         # Load the workbook path into the tracker
 
         ParserObject.SetAPIState(True)

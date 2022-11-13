@@ -44,8 +44,8 @@ class WorkbookStates(Enum):
 class WorkbookRunTypes(Enum):
     Test = "Test"  # This is a single programmatic test to check method is compatible with system
     Prep = "Prep"  # This will test with all samples added then generate a preparation list for the user
-    PreRun = "PreRun"  # This is the first step of Run
     Run = "Run"  # This will queue to run on the system
+    PreRun = "PreRun"
 
 
 # NOTE
@@ -72,18 +72,17 @@ class Workbook(ObjectABC):
         DeckLoadingItemTrackerInstance: DeckLoadingItemTracker,
         PreprocessingBlocksTrackerInstance: BlockTracker,
     ):
+        # Normal Init Variables
 
         # Variables
         self.RunType: WorkbookRunTypes = RunType
         self.MethodPath: str = MethodPath
         self.MethodName: str = os.path.basename(MethodPath)
         self.State: WorkbookStates = WorkbookStates.Queued
-        self.ExecutingContextInstance: Context
         self.MethodTreeRoot: Block = MethodBlocksTrackerInstance.GetObjectsAsList()[0]
 
         # Trackers
         self.MethodBlocksTrackerInstance: BlockTracker = MethodBlocksTrackerInstance
-        self.ExecutedBlocksTrackerInstance: BlockTracker = BlockTracker()
         self.PreprocessingBlocksTrackerInstance: BlockTracker = (
             PreprocessingBlocksTrackerInstance
         )
@@ -92,18 +91,23 @@ class Workbook(ObjectABC):
         self.DeckLoadingItemTrackerInstance: DeckLoadingItemTracker = (
             DeckLoadingItemTrackerInstance
         )
-        self.ContainerTrackerInstance: ContainerTracker = ContainerTracker()
-        self.ContextTrackerInstance: ContextTracker = ContextTracker()
-        self.InactiveContextTrackerInstance: ContextTracker = ContextTracker()
-        self.TimerTrackerInstance: TimerTracker = TimerTracker()
+        # Thread
+        self.ProcessingLock: threading.Lock = threading.Lock()
+
+        # Special Init Variables (These variables are allow to be set in the Workbook Init function to faciliate resets)
+
+        # Variables
+        self.ExecutingContextInstance: Context
+
+        # Trackers
+        self.ExecutedBlocksTrackerInstance: BlockTracker
+        self.ContainerTrackerInstance: ContainerTracker
+        self.ContextTrackerInstance: ContextTracker
+        self.InactiveContextTrackerInstance: ContextTracker
+        self.TimerTrackerInstance: TimerTracker
 
         # Thread
-        self.WorkbookProcessorThread: threading.Thread = threading.Thread(
-            name=self.MethodName + "->" + self.RunType.value,
-            target=WorkbookProcessor,
-            args=(self,),  # args must be tuple hence the empty second argument
-        )
-        self.ProcessingLock: threading.Lock = threading.Lock()
+        self.WorkbookProcessorThread: threading.Thread
 
         LOG.debug(
             "The following method tree was determined for %s: \n%s",
@@ -209,6 +213,8 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                     ],
                 )
             print("METHOD EXECUTION COMPLETE")
+
+            WorkbookInit(WorkbookInstance)
 
             return
         # First thing to do is check that all blocks have been executed.
@@ -317,6 +323,22 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
 def WorkbookInit(WorkbookInstance: Workbook):
 
+    # Setup special varibles
+
+    # Trackers
+    WorkbookInstance.ExecutedBlocksTrackerInstance = BlockTracker()
+    WorkbookInstance.ContainerTrackerInstance = ContainerTracker()
+    WorkbookInstance.ContextTrackerInstance = ContextTracker()
+    WorkbookInstance.InactiveContextTrackerInstance = ContextTracker()
+    WorkbookInstance.TimerTrackerInstance = TimerTracker()
+
+    # Thread
+    WorkbookInstance.WorkbookProcessorThread = threading.Thread(
+        name=WorkbookInstance.GetName() + "->" + WorkbookInstance.GetRunType().value,
+        target=WorkbookProcessor,
+        args=(WorkbookInstance,),  # args must be tuple hence the empty second argument
+    )
+
     # Set Initial Active Context
     AspirateWellSequenceTrackerInstance = WellSequenceTracker()
     DispenseWellSequenceTrackerInstance = WellSequenceTracker()
@@ -354,5 +376,8 @@ def WorkbookInit(WorkbookInstance: Workbook):
     )
     # Setting initial context and container.
 
-    WorkbookInstance.ProcessingLock.acquire()
+    if WorkbookInstance.GetRunType() == WorkbookRunTypes.Run:
+        pass
+        # WorkbookInstance.ProcessingLock.acquire()
+
     WorkbookInstance.WorkbookProcessorThread.start()

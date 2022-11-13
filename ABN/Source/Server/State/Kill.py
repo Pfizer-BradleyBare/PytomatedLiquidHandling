@@ -28,7 +28,8 @@ class Kill:
             Thread = WorkbookInstance.GetWorkbookProcessorThread()
 
             LOG.debug("Killing thread: %s", Thread.name)
-            WorkbookInstance.GetProcessingLock().release()
+            if WorkbookInstance.GetProcessingLock().locked() is True:
+                WorkbookInstance.GetProcessingLock().release()
             Thread.join()
 
         del ParserObject

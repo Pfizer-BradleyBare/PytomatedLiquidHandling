@@ -12,6 +12,7 @@ import ABN.Source.Server.Method.GenerateMethodFile as GenerateMethodFile
 import ABN.Source.Server.Method.Open as Open
 import ABN.Source.Server.Method.Close as Close
 import ABN.Source.Server.Method.CleanupMethodProject as CleanupMethodProject
+import ABN.Source.Server.Method.List as List
 
 import web
 import os
@@ -36,6 +37,7 @@ if __name__ == "__main__":
     urls += GenerateMethodFile.urls
     urls += Open.urls
     urls += Close.urls
+    urls += List.urls
     urls += CleanupMethodProject.urls
 
     app = web.application(urls, globals())
