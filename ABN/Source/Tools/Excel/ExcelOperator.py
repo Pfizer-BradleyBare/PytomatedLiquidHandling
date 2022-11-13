@@ -25,33 +25,33 @@ class ExcelOperator:
     def __init__(self, Visible: bool, ExcelInstance: Excel):
         self.Visible: bool = Visible
         self.ExcelInstance: Excel = ExcelInstance
-
-        # If this book is already open we are going to save then close it before doing anything fancy
-        try:
-            Books = xlwings.books
-        except Exception:
-            Books = []
-
-        for Book in Books:
-            if Book.fullname == ExcelInstance.GetExcelFilePath():
-                App = Book.app
-                Book.save()
-                Book.close()
-                if len(App.books) == 0:
-                    App.quit()
-
-        pythoncom.CoInitialize()  # Required for some reason.
-        self.App: xlwings.App | None = xlwings.App(visible=self.Visible, add_book=False)
-        self.Book: xlwings.Book = self.App.books.open(self.ExcelInstance.ExcelFilePath)
+        self.App: xlwings.App | None = None
+        self.Book: xlwings.Book
         self.Sheet: xlwings.Sheet
+
+        if xlwings.apps.count != 0:
+            for Book in xlwings.books:
+                if Book.fullname == ExcelInstance.GetExcelFilePath():
+                    self.App = Book.app
+                    self.Book = Book
+
+        if self.App is None:
+            pythoncom.CoInitialize()  # Required for some reason.
+            self.App: xlwings.App | None = xlwings.App(
+                visible=self.Visible, add_book=False
+            )
+            self.Book: xlwings.Book = self.App.books.open(
+                self.ExcelInstance.ExcelFilePath
+            )
 
     def __enter__(self):
         return self
 
     def __exit__(self, type, value, traceback):
+        self.Book.close()
         if self.App is not None:
-            self.App.__exit__(type, value, traceback)
-            self.App = None
+            if len(self.App.books) == 0:
+                self.App.quit()
 
     def __AlignArray(self, Array: list[list[any]]):  # type:ignore
         Max = max(len(i) for i in Array)

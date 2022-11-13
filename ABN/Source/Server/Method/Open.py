@@ -1,8 +1,6 @@
 import web
 from ..Tools.Parser import Parser
 import xlwings
-from ...Tools import Excel, ExcelOperator
-
 
 urls = (
     "/Method/Open",
@@ -20,12 +18,14 @@ class Open:
 
         MethodFilePath = ParserObject.GetAPIData()["Method File Path"]
 
-        with ExcelOperator(False, Excel(MethodFilePath)) as ExcelOperatorInstance:
-            ExcelOperatorInstance  # type: ignore
-        # This will check if the book is already open then close it.
+        BookHandle: xlwings.Book | None = None
+        if xlwings.apps.count != 0:
+            for Book in xlwings.books:
+                if Book.fullname == MethodFilePath:
+                    BookHandle = Book
 
-        xlwings.Book(MethodFilePath)
-        # Now we will open it no strings attached.
+        if BookHandle is None:
+            BookHandle = xlwings.Book(MethodFilePath)
 
         ParserObject.SetAPIState(True)
         ParserObject.SetAPIReturn("Message", "Excel Workbook Opened")
