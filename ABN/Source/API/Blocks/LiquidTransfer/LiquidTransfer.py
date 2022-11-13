@@ -3,7 +3,7 @@ from ...Workbook.Block import (
     ClassDecorator_AvailableBlock,
     FunctionDecorator_ProcessFunction,
 )
-from ....Tools import Excel, ExcelOperator
+from ....Tools import Excel, ExcelHandle
 from ...Workbook import Workbook
 from ....HAL import Hal
 from ...Tools.Container import Container, ContainerOperator
@@ -19,116 +19,120 @@ class LiquidTransfer(Block):
         return "Liquid Transfer" + str((self.Row, self.Col))
 
     def GetSource(self) -> str:
-        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
-            ExcelOperatorInstance.SelectSheet("Method")
-            return ExcelOperatorInstance.ReadCellValue(self.Row + 2, self.Col + 2)
+        self.ExcelInstance.SelectSheet("Method")
+        return self.ExcelInstance.ReadCellValue(self.Row + 2, self.Col + 2)
 
     def GetVolume(self) -> str:
-        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
-            ExcelOperatorInstance.SelectSheet("Method")
-            return ExcelOperatorInstance.ReadCellValue(self.Row + 3, self.Col + 2)
+        self.ExcelInstance.SelectSheet("Method")
+        return self.ExcelInstance.ReadCellValue(self.Row + 3, self.Col + 2)
 
     def GetMix(self) -> str:
-        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
-            ExcelOperatorInstance.SelectSheet("Method")
-            return ExcelOperatorInstance.ReadCellValue(self.Row + 4, self.Col + 2)
+        self.ExcelInstance.SelectSheet("Method")
+        return self.ExcelInstance.ReadCellValue(self.Row + 4, self.Col + 2)
 
     def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
-        pass
+        with ExcelHandle(False) as ExcelHandleInstance:
+            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
 
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
-        Destinations = self.GetParentPlateName()
-        Sources = self.GetSource()
-        Volumes = self.GetVolume()
-        MixingStrings = self.GetMix()
+        with ExcelHandle(False) as ExcelHandleInstance:
+            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
 
-        WorklistInstance = WorkbookInstance.GetWorklist()
+            Destinations = self.GetParentPlateName()
+            Sources = self.GetSource()
+            Volumes = self.GetVolume()
+            MixingStrings = self.GetMix()
 
-        Destinations = WorklistInstance.ConvertToWorklistColumn(Destinations)
-        MixingStrings = WorklistInstance.ConvertToWorklistColumn(MixingStrings)
+            WorklistInstance = WorkbookInstance.GetWorklist()
 
-        if WorklistInstance.IsWorklistColumn(Sources):
-            Sources = WorklistInstance.ReadWorklistColumn(Sources)
-        else:
-            Sources = WorklistInstance.ConvertToWorklistColumn(Sources)
+            Destinations = WorklistInstance.ConvertToWorklistColumn(Destinations)
+            MixingStrings = WorklistInstance.ConvertToWorklistColumn(MixingStrings)
 
-        if WorklistInstance.IsWorklistColumn(Volumes):
-            Volumes = WorklistInstance.ReadWorklistColumn(Volumes)
-        else:
-            Volumes = WorklistInstance.ConvertToWorklistColumn(Volumes)
+            if WorklistInstance.IsWorklistColumn(Sources):
+                Sources = WorklistInstance.ReadWorklistColumn(Sources)
+            else:
+                Sources = WorklistInstance.ConvertToWorklistColumn(Sources)
 
-        # Input validation here
+            if WorklistInstance.IsWorklistColumn(Volumes):
+                Volumes = WorklistInstance.ReadWorklistColumn(Volumes)
+            else:
+                Volumes = WorklistInstance.ConvertToWorklistColumn(Volumes)
 
-        AspirateMixingParams: list[int] = list()
-        DispenseMixingParams: list[int] = list()
+            # Input validation here
 
-        for MixingString in MixingStrings:
-            MixParams = {"Aspirate": 0, "Dispense": 0}
+            AspirateMixingParams: list[int] = list()
+            DispenseMixingParams: list[int] = list()
 
-            if MixingString != "No":
-                MixingString = MixingString.replace(" ", "").split("+")
+            for MixingString in MixingStrings:
+                MixParams = {"Aspirate": 0, "Dispense": 0}
 
-                for MixParam in MixingString:
-                    MixParam = MixParam.split(":")
-                    MixParams[MixParam[0]] = int(MixParam[1])
+                if MixingString != "No":
+                    MixingString = MixingString.replace(" ", "").split("+")
 
-            AspirateMixingParams.append(MixParams["Aspirate"])
-            DispenseMixingParams.append(MixParams["Dispense"])
-        # Convert mixing strings to mixing params
+                    for MixParam in MixingString:
+                        MixParam = MixParam.split(":")
+                        MixParams[MixParam[0]] = int(MixParam[1])
 
-        ContainerTrackerInstance = WorkbookInstance.GetContainerTracker()
+                AspirateMixingParams.append(MixParams["Aspirate"])
+                DispenseMixingParams.append(MixParams["Dispense"])
+            # Convert mixing strings to mixing params
 
-        for Source in Sources:
-            SourceContainerInstance = Container(
-                Source,
-                WorkbookInstance.GetSolutionTracker()
-                .GetObjectByName(Source)
-                .GetCategory(),
-            )
-            if ContainerTrackerInstance.IsTracked(SourceContainerInstance) is not True:
-                ContainerTrackerInstance.ManualLoad(SourceContainerInstance)
-        # If source is not a container then we need to add it
+            ContainerTrackerInstance = WorkbookInstance.GetContainerTracker()
 
-        SequenceTrackerInstance = SequenceTracker()
-        for (
-            WellNumber,
-            Destination,
-            Source,
-            Volume,
-            AspirateMixingParam,
-            DispenseMixingParam,
-        ) in zip(
-            range(0, WorklistInstance.GetNumSamples()),
-            Destinations,
-            Sources,
-            Volumes,
-            AspirateMixingParams,
-            DispenseMixingParams,
-        ):
-            SequenceTrackerInstance.ManualLoad(
-                Sequence(
-                    WellNumber,
-                    ContainerOperator(
-                        ContainerTrackerInstance.GetObjectByName(Destination), self
-                    ),
-                    ContainerOperator(
-                        ContainerTrackerInstance.GetObjectByName(Source), self
-                    ),
-                    AspirateMixingParam,
-                    DispenseMixingParam,
-                    Volume,
+            for Source in Sources:
+                SourceContainerInstance = Container(
+                    Source,
+                    WorkbookInstance.GetSolutionTracker()
+                    .GetObjectByName(Source)
+                    .GetCategory(),
                 )
-            )
-        # Create our pipetting tracker
+                if (
+                    ContainerTrackerInstance.IsTracked(SourceContainerInstance)
+                    is not True
+                ):
+                    ContainerTrackerInstance.ManualLoad(SourceContainerInstance)
+            # If source is not a container then we need to add it
 
-        Pipette(
-            True,
-            SequenceTrackerInstance,
-            WorkbookInstance.GetSolutionTracker(),
-            WorkbookInstance.GetDeckLoadingItemTracker(),
-            WorkbookInstance.GetExecutingContext(),
-            HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
-            HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
-        )
-        # We need to figure out the pipetting first
+            SequenceTrackerInstance = SequenceTracker()
+            for (
+                WellNumber,
+                Destination,
+                Source,
+                Volume,
+                AspirateMixingParam,
+                DispenseMixingParam,
+            ) in zip(
+                range(0, WorklistInstance.GetNumSamples()),
+                Destinations,
+                Sources,
+                Volumes,
+                AspirateMixingParams,
+                DispenseMixingParams,
+            ):
+                SequenceTrackerInstance.ManualLoad(
+                    Sequence(
+                        WellNumber,
+                        ContainerOperator(
+                            ContainerTrackerInstance.GetObjectByName(Destination), self
+                        ),
+                        ContainerOperator(
+                            ContainerTrackerInstance.GetObjectByName(Source), self
+                        ),
+                        AspirateMixingParam,
+                        DispenseMixingParam,
+                        Volume,
+                    )
+                )
+            # Create our pipetting tracker
+
+            Pipette(
+                True,
+                SequenceTrackerInstance,
+                WorkbookInstance.GetSolutionTracker(),
+                WorkbookInstance.GetDeckLoadingItemTracker(),
+                WorkbookInstance.GetExecutingContext(),
+                HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
+                HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
+            )
+            # We need to figure out the pipetting first

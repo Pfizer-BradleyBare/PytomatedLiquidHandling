@@ -1,6 +1,6 @@
 from .WorkbookTracker import WorkbookTracker
 from .Workbook import Workbook, WorkbookRunTypes
-from ...Tools import Excel, ExcelOperator
+from ...Tools import Excel, ExcelHandle
 from .Worklist import Worklist
 from .Solution import SolutionTracker, SolutionLoader
 from .Block import BlockLoader, BlockTracker
@@ -12,24 +12,27 @@ def Load(
     ExcelFilePath: str,
     RunType: WorkbookRunTypes,
 ):
-    ExcelInstance = Excel(ExcelFilePath)
+    with ExcelHandle(False) as ExcelHandleInstance:
 
-    WorklistInstance = Worklist(ExcelInstance)
-    SolutionTrackerInstance = SolutionTracker()
+        ExcelInstance = Excel(ExcelFilePath)
+        ExcelInstance.AttachHandle(ExcelHandleInstance)
 
-    SolutionLoader.Load(SolutionTrackerInstance, ExcelInstance)
+        WorklistInstance = Worklist(ExcelInstance)
+        SolutionTrackerInstance = SolutionTracker()
 
-    BlockTrackerInstance = BlockTracker()
-    BlockLoader.Load(BlockTrackerInstance, ExcelInstance)
+        SolutionLoader.Load(SolutionTrackerInstance, ExcelInstance)
 
-    WorkbookTrackerInstance.ManualLoad(
-        Workbook(
-            RunType,
-            ExcelFilePath,
-            BlockTrackerInstance,
-            WorklistInstance,
-            SolutionTrackerInstance,
-            DeckLoadingItemTracker(),  # There will never be a deck loading unless we resume a run. But we havn't gotten there yet...
-            BlockTracker(),
+        BlockTrackerInstance = BlockTracker()
+        BlockLoader.Load(BlockTrackerInstance, ExcelInstance)
+
+        WorkbookTrackerInstance.ManualLoad(
+            Workbook(
+                RunType,
+                ExcelFilePath,
+                BlockTrackerInstance,
+                WorklistInstance,
+                SolutionTrackerInstance,
+                DeckLoadingItemTracker(),  # There will never be a deck loading unless we resume a run. But we havn't gotten there yet...
+                BlockTracker(),
+            )
         )
-    )

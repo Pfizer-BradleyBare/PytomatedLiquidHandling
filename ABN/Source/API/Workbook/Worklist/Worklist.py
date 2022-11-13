@@ -1,4 +1,4 @@
-from ....Tools import Excel, ExcelOperator
+from ....Tools import Excel
 
 
 class Worklist:
@@ -6,9 +6,8 @@ class Worklist:
         self.ExcelInstance: Excel = ExcelInstance
 
         # Determine number of samples
-        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
-            ExcelOperatorInstance.SelectSheet("Worklist")
-            Data = ExcelOperatorInstance.ReadRangeValues(1, 1, 100, 100)
+        self.ExcelInstance.SelectSheet("Worklist")
+        Data = self.ExcelInstance.ReadRangeValues(1, 1, 100, 100)
 
         ColIndex = Data[0].index("Sample Number")
 
@@ -28,9 +27,8 @@ class Worklist:
         return len(Data) == self.GetNumSamples()
 
     def IsWorklistColumn(self, ColumnName: str) -> bool:
-        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
-            ExcelOperatorInstance.SelectSheet("Worklist")
-            Data = ExcelOperatorInstance.ReadRangeValues(1, 1, 100, 100)
+        self.ExcelInstance.SelectSheet("Worklist")
+        Data = self.ExcelInstance.ReadRangeValues(1, 1, 100, 100)
 
         try:
             Data[0].index(ColumnName)
@@ -39,9 +37,8 @@ class Worklist:
             return False
 
     def ReadWorklistColumn(self, ColumnName: str) -> list[any]:  # type:ignore
-        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
-            ExcelOperatorInstance.SelectSheet("Worklist")
-            Data = ExcelOperatorInstance.ReadRangeValues(1, 1, 100, 100)
+        self.ExcelInstance.SelectSheet("Worklist")
+        Data = self.ExcelInstance.ReadRangeValues(1, 1, 100, 100)
 
         ColIndex = Data[0].index(ColumnName)
 
@@ -53,10 +50,9 @@ class Worklist:
         return [Value] * self.GetNumSamples()
 
     def WriteWorklistColumn(self, ColumnName: str, Data: list[any]):  # type:ignore
-        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
-            ExcelOperatorInstance.SelectSheet("Worklist")
-            ReadData = ExcelOperatorInstance.ReadRangeValues(1, 1, 100, 100)
+        self.ExcelInstance.SelectSheet("Worklist")
+        ReadData = self.ExcelInstance.ReadRangeValues(1, 1, 100, 100)
 
-            Index = ReadData[0].index(ColumnName) + 1
+        Index = ReadData[0].index(ColumnName) + 1
 
-            ExcelOperatorInstance.WriteRangeValues(2, Index, [[Item] for Item in Data])
+        self.ExcelInstance.WriteRangeValues(2, Index, [[Item] for Item in Data])

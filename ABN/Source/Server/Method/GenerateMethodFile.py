@@ -4,7 +4,7 @@ from .AvailableMethods import MethodsPath, TemplateMethodSuffix, TempFolder
 import os
 import shutil
 import stat
-from ...Tools import Excel, ExcelOperator
+from ...Tools import Excel, ExcelHandle
 from typing import cast
 
 urls = (
@@ -57,19 +57,19 @@ class GenerateMethodFile:
         shutil.copy(TemplateMethodFilePath, DesiredMethodFilePath)
         os.chmod(DesiredMethodFilePath, stat.S_IWRITE)
 
-        with ExcelOperator(
-            False, Excel(DesiredMethodFilePath)
-        ) as ExcelOperatorInstance:
+        ExcelInstance = Excel(DesiredMethodFilePath)
+        with ExcelHandle(False) as ExcelHandleInstance:
+            ExcelInstance.AttachHandle(ExcelHandleInstance)
 
-            ExcelOperatorInstance.SelectSheet("Worklist")
+            ExcelInstance.SelectSheet("Worklist")
             CopyFormula = cast(
-                tuple[tuple[any]], ExcelOperatorInstance.ReadRangeFormulas(2, 1, 2, 3)  # type: ignore
+                tuple[tuple[any]], ExcelInstance.ReadRangeFormulas(2, 1, 2, 3)  # type: ignore
             )
 
             CopyFormula = CopyFormula * int(ParserObject.GetAPIData()["Sample Number"])
-            ExcelOperatorInstance.WriteRangeFormulas(2, 1, CopyFormula)
+            ExcelInstance.WriteRangeFormulas(2, 1, CopyFormula)
 
-            ExcelOperatorInstance.Save()
+            ExcelInstance.Save()
 
         ParserObject.SetAPIState(True)
         ParserObject.SetAPIReturn("Message", "Method file created successfully")

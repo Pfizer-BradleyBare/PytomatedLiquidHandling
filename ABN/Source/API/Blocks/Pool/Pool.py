@@ -3,7 +3,7 @@ from ...Workbook.Block import (
     ClassDecorator_AvailableBlock,
     FunctionDecorator_ProcessFunction,
 )
-from ....Tools import Excel, ExcelOperator
+from ....Tools import Excel, ExcelHandle
 from ...Workbook import Workbook
 from ....HAL import Hal
 from ...Tools.Context import WellSequence
@@ -18,44 +18,45 @@ class Pool(Block):
         return "Pool" + str((self.Row, self.Col))
 
     def GetLocation(self) -> str:
-        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
-            ExcelOperatorInstance.SelectSheet("Method")
-            return ExcelOperatorInstance.ReadCellValue(self.Row + 2, self.Col + 2)
+        self.ExcelInstance.SelectSheet("Method")
+        return self.ExcelInstance.ReadCellValue(self.Row + 2, self.Col + 2)
 
     def GetStartPosition(self) -> str:
-        with ExcelOperator(False, self.ExcelInstance) as ExcelOperatorInstance:
-            ExcelOperatorInstance.SelectSheet("Method")
-            return ExcelOperatorInstance.ReadCellValue(self.Row + 3, self.Col + 2)
+        self.ExcelInstance.SelectSheet("Method")
+        return self.ExcelInstance.ReadCellValue(self.Row + 3, self.Col + 2)
 
     def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
-        pass
+        with ExcelHandle(False) as ExcelHandleInstance:
+            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
 
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
-        Locations = self.GetLocation()
+        with ExcelHandle(False) as ExcelHandleInstance:
+            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
+            Locations = self.GetLocation()
 
-        WorklistInstance = WorkbookInstance.GetWorklist()
+            WorklistInstance = WorkbookInstance.GetWorklist()
 
-        if WorklistInstance.IsWorklistColumn(Locations):
-            Locations = WorklistInstance.ReadWorklistColumn(Locations)
-        else:
-            Locations = WorklistInstance.ConvertToWorklistColumn(int(Locations))
+            if WorklistInstance.IsWorklistColumn(Locations):
+                Locations = WorklistInstance.ReadWorklistColumn(Locations)
+            else:
+                Locations = WorklistInstance.ConvertToWorklistColumn(int(Locations))
 
-        # do input validation here
+            # do input validation here
 
-        DispenseSequencesTrackerInstance = (
-            WorkbookInstance.GetExecutingContext().GetDispenseWellSequenceTracker()
-        )
-
-        for WellNumber, Location in zip(
-            range(0, WorklistInstance.GetNumSamples()), Locations
-        ):
-            SequenceInstance = DispenseSequencesTrackerInstance.GetObjectByName(
-                WellNumber
+            DispenseSequencesTrackerInstance = (
+                WorkbookInstance.GetExecutingContext().GetDispenseWellSequenceTracker()
             )
-            if SequenceInstance.GetSequence() != Location:
-                DispenseSequencesTrackerInstance.ManualUnload(SequenceInstance)
-                DispenseSequencesTrackerInstance.ManualLoad(
-                    WellSequence(WellNumber, Location)
+
+            for WellNumber, Location in zip(
+                range(0, WorklistInstance.GetNumSamples()), Locations
+            ):
+                SequenceInstance = DispenseSequencesTrackerInstance.GetObjectByName(
+                    WellNumber
                 )
-        # We just need to update the Sequence in the ones that are different. Easy?
+                if SequenceInstance.GetSequence() != Location:
+                    DispenseSequencesTrackerInstance.ManualUnload(SequenceInstance)
+                    DispenseSequencesTrackerInstance.ManualLoad(
+                        WellSequence(WellNumber, Location)
+                    )
+            # We just need to update the Sequence in the ones that are different. Easy?

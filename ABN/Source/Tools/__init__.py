@@ -1,5 +1,5 @@
 from .Excel.Excel import Excel
-from .Excel.ExcelOperator import ExcelOperator
+from .Excel.ExcelHandle import ExcelHandle
 from .Tree.Tree import Node
 
-__all__ = ["Excel", "Node", "ExcelOperator"]
+__all__ = ["Excel", "Node", "ExcelHandle"]
