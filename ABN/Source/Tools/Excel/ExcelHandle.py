@@ -10,14 +10,12 @@ class ExcelHandle:
         self.App: xlwings.App | None = None
         self.Book: xlwings.Book | None = None
         self.Visible: bool = Visible
-        ExcelHandle.Lock.acquire()
 
     def __enter__(self):
+        ExcelHandle.Lock.acquire()
         return self
 
     def __exit__(self, type, value, traceback):
-        ExcelHandle.Lock.release()
-
         if self.Book is not None:
             self.Book.save()
             self.Book.close()
@@ -25,6 +23,8 @@ class ExcelHandle:
             if self.App is not None:
                 if len(self.App.books) == 0:
                     self.App.quit()
+
+        ExcelHandle.Lock.release()
 
     def IsValid(self) -> bool:
         return self.Book is not None
