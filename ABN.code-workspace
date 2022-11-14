@@ -1,14 +1,13 @@
 {
 	"folders": [
 		{
-			"path": "AutomationBareNecessitiesConfiguration"
+			"path": "ABN/AutomationBareNecessitiesConfiguration"
 		},
 		{
-			"path": "AutomationBareNecessitiesMethod"
+			"path": "ABN/AutomationBareNecessitiesMethod"
 		},
 		{
-			"path": ".."
+			"path": "."
 		}
-	],
-	"settings": {}
+	]
 }
