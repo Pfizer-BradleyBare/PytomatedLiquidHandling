@@ -58,11 +58,8 @@ class GenerateMethodFile:
         os.chmod(DesiredMethodFilePath, stat.S_IWRITE)
 
         ExcelInstance = Excel(DesiredMethodFilePath)
-        print("Pre-attach")
         with ExcelHandle(False) as ExcelHandleInstance:
-            print("Pre-attach")
             ExcelInstance.AttachHandle(ExcelHandleInstance)
-            print("Post")
 
             ExcelInstance.SelectSheet("Worklist")
             CopyFormula = cast(
