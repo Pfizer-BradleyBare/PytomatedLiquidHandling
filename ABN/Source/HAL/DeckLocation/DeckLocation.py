@@ -15,11 +15,19 @@ class LoadingConfig:
 
 
 class DeckLocation(ObjectABC):
-    def __init__(self, Name: str, SupportedTransportInstances: list[TransportDevice]):
+    def __init__(
+        self,
+        Name: str,
+        SupportedTransportInstances: list[TransportDevice],
+        LoadingConfigInstance: LoadingConfig | None,
+        IsStorageLocation: bool,
+    ):
         self.Name: str = Name
         self.SupportedTransportInstances: list[
             TransportDevice
         ] = SupportedTransportInstances
+        self.LoadingConfigInstance: LoadingConfig | None = LoadingConfigInstance
+        self.StorageLocation: bool = IsStorageLocation
 
     def GetName(self) -> str:
         return self.Name
@@ -27,16 +35,15 @@ class DeckLocation(ObjectABC):
     def GetTransportInstances(self) -> list[TransportDevice]:
         return self.SupportedTransportInstances
 
+    def IsStorageLocation(self) -> bool:
+        return self.StorageLocation
 
-class LoadableDeckLocation(DeckLocation):
-    def __init__(
-        self,
-        Name: str,
-        SupportedTransportInstances: list[TransportDevice],
-        LoadingConfigInstance: LoadingConfig,
-    ):
-        DeckLocation.__init__(self, Name, SupportedTransportInstances)
-        self.LoadingConfigInstance: LoadingConfig = LoadingConfigInstance
+    def IsLoadableLocation(self) -> bool:
+        return self.LoadingConfigInstance is not None
 
     def GetLoadingConfig(self) -> LoadingConfig:
+        if self.LoadingConfigInstance is None:
+            raise Exception(
+                "This is not a loadable location. Did you check if it is a IsLoadableLocation first?"
+            )
         return self.LoadingConfigInstance

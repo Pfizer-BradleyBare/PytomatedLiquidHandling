@@ -1,5 +1,5 @@
 import yaml
-from .DeckLocation import DeckLocation, LoadableDeckLocation, LoadingConfig
+from .DeckLocation import DeckLocation, LoadingConfig
 from .DeckLocationTracker import DeckLocationTracker
 
 
@@ -22,6 +22,8 @@ def LoadYaml(DeckLocationTrackerInstance: DeckLocationTracker, FilePath: str):
                     )
                 )
 
+        LoadingConfigInstance = None
+
         if "Loading" in ConfigFile["Location IDs"][LocationID].keys():
             CarrierString = ConfigFile["Location IDs"][LocationID]["Loading"][
                 "Carrier Labware String"
@@ -29,14 +31,13 @@ def LoadYaml(DeckLocationTrackerInstance: DeckLocationTracker, FilePath: str):
             CarrierPosition = ConfigFile["Location IDs"][LocationID]["Loading"][
                 "Carrier Position"
             ]
-            DeckLocationTrackerInstance.ManualLoad(
-                LoadableDeckLocation(
-                    LocationID,
-                    TransportDevices,
-                    LoadingConfig(CarrierString, CarrierPosition),
-                )
+            LoadingConfigInstance = LoadingConfig(CarrierString, CarrierPosition)
+
+        DeckLocationTrackerInstance.ManualLoad(
+            DeckLocation(
+                LocationID,
+                TransportDevices,
+                LoadingConfigInstance,
+                ConfigFile["Location IDs"][LocationID]["StorageLocation"],
             )
-        else:
-            DeckLocationTrackerInstance.ManualLoad(
-                DeckLocation(LocationID, TransportDevices)
-            )
+        )
