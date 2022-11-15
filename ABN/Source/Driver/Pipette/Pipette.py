@@ -1,6 +1,6 @@
 from .Sequence.SequenceTracker import SequenceTracker
 from ...HAL.Pipette import PipetteTracker
-from ...HAL.Tools import DeckLoadingItemTracker
+from ...HAL.Tools import LoadedLabwareTracker
 from ...API.Tools.Context import Context
 from ...API.Workbook.Solution import SolutionTracker
 
@@ -9,7 +9,7 @@ def Pipette(
     SimulateState: bool,
     SequenceTrackerInstance: SequenceTracker,
     SolutionTrackerInstance: SolutionTracker,
-    DeckLoadingItemTrackerInstance: DeckLoadingItemTracker,
+    LoadedLabwareTrackerInstance: LoadedLabwareTracker,
     ContextInstance: Context,
     AspiratePipettingDeviceTrackerInstance: PipetteTracker,
     DispensePipettingDeviceTrackerInstance: PipetteTracker,

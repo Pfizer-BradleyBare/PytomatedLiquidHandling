@@ -1,9 +1,7 @@
 from .LabwareSelectionTracker import LabwareSelectionTracker
 from .LabwareSelection import LabwareSelection
-from ...Labware import PipettableLabware
 from ....API.Tools.Container import ContainerTracker
 from ... import Hal
-from typing import cast
 
 
 def Load(
@@ -31,14 +29,11 @@ def Load(
             continue
         # We don't want to load a container if it effectively is never used.
 
-        PipettableLabwareInstances = cast(
-            list[PipettableLabware],
-            [
-                LabwareInstance
-                for LabwareInstance in LabwareTrackerInstance.GetObjectsAsList()
-                if type(LabwareInstance).__name__ == PipettableLabware.__name__
-            ],
-        )
+        PipettableLabwareInstances = [
+            LabwareInstance
+            for LabwareInstance in LabwareTrackerInstance.GetObjectsAsList()
+            if LabwareInstance.IsPipettable()
+        ]
         # Gets only the pipettableLabware
 
         LabwareSelectionInstance = LabwareSelection(ContainerInstance.GetName())

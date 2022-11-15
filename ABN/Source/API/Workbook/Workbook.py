@@ -18,7 +18,7 @@ from ...API.Tools.Context import (
     WellFactor,
 )
 from ..Tools.Timer import TimerTracker
-from ...HAL.Tools import DeckLoadingItemTracker
+from ...HAL.Tools import LoadedLabwareTracker
 
 from ...HAL.Tools.LabwareSelection.LabwareSelectionLoader import Load
 from ...HAL.Tools.LabwareSelection.LabwareSelectionTracker import (
@@ -31,7 +31,7 @@ from ...Server.Globals import AliveStateFlag
 
 
 class WorkbookStates(Enum):
-    # NOTE Fun Fact. The workbook states only matter for the Run type below.
+    # NOTE Fun Fact. The workbook states only matter for the Run type.
     Queued = "Queued"
     Running = "Running"
     Paused = "Paused"  # The user paused this method manually
@@ -69,7 +69,7 @@ class Workbook(ObjectABC):
         MethodBlocksTrackerInstance: BlockTracker,
         WorklistInstance: Worklist,
         SolutionTrackerInstance: SolutionTracker,
-        DeckLoadingItemTrackerInstance: DeckLoadingItemTracker,
+        LoadedLabwareTrackerInstance: LoadedLabwareTracker,
         PreprocessingBlocksTrackerInstance: BlockTracker,
     ):
         # Normal Init Variables
@@ -79,6 +79,7 @@ class Workbook(ObjectABC):
         self.MethodPath: str = MethodPath
         self.MethodName: str = os.path.basename(MethodPath)
         self.State: WorkbookStates = WorkbookStates.Queued
+        self.StateReason: str = "Workbook created but not yet run."
         self.MethodTreeRoot: Block = MethodBlocksTrackerInstance.GetObjectsAsList()[0]
 
         # Trackers
@@ -88,8 +89,8 @@ class Workbook(ObjectABC):
         )
         self.WorklistInstance: Worklist = WorklistInstance
         self.SolutionTrackerInstance: SolutionTracker = SolutionTrackerInstance
-        self.DeckLoadingItemTrackerInstance: DeckLoadingItemTracker = (
-            DeckLoadingItemTrackerInstance
+        self.LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
+            LoadedLabwareTrackerInstance
         )
         # Thread
         self.ProcessingLock: threading.Lock = threading.Lock()
@@ -149,8 +150,8 @@ class Workbook(ObjectABC):
     def GetSolutionTracker(self) -> SolutionTracker:
         return self.SolutionTrackerInstance
 
-    def GetDeckLoadingItemTracker(self) -> DeckLoadingItemTracker:
-        return self.DeckLoadingItemTrackerInstance
+    def GetLoadedLabwareTracker(self) -> LoadedLabwareTracker:
+        return self.LoadedLabwareTrackerInstance
 
     def GetContainerTracker(self) -> ContainerTracker:
         return self.ContainerTrackerInstance
@@ -204,14 +205,9 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                 HalInstance,
             )
 
-            for Item in Track.GetObjectsAsList():
-                print(
-                    Item.GetName(),
-                    [
-                        Lab.GetName()
-                        for Lab in Item.GetLabwareTracker().GetObjectsAsList()
-                    ],
-                )
+            WorkbookInstance.ProcessingLock.acquire()
+            # Somehow here I need to wait but check on the deck loading being complete
+
             print("METHOD EXECUTION COMPLETE")
 
             WorkbookInit(WorkbookInstance)

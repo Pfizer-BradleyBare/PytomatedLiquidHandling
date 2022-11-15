@@ -1,7 +1,6 @@
 import yaml
 from .Labware import (
     Labware,
-    PipettableLabware,
     LabwareDimensions,
     Wells,
     WellsEquation,
@@ -23,6 +22,7 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
         # Create Dimensions Class
 
         Filter = None
+        WellsInstance = None
 
         if "Wells" in ConfigFile["Labware IDs"][LabwareID].keys():
             Filter = ConfigFile["Labware IDs"][LabwareID]["Labware Filter"]
@@ -47,7 +47,7 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
             MaxVolume = ConfigFile["Labware IDs"][LabwareID]["Wells"]["Max Volume"]
             DeadVolume = ConfigFile["Labware IDs"][LabwareID]["Wells"]["Dead Volume"]
 
-            LabwareWells = Wells(
+            WellsInstance = Wells(
                 Columns,
                 Rows,
                 SequencesPerWell,
@@ -57,16 +57,9 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
             )
             # Create Wells Class
 
-            LabwareTrackerInstance.ManualLoad(
-                PipettableLabware(
-                    LabwareID,
-                    Filter,
-                    LabwareWells,
-                    Dimensions,
-                )
-            )
-        else:
-            LabwareTrackerInstance.ManualLoad(Labware(LabwareID, Filter, Dimensions))
+        LabwareTrackerInstance.ManualLoad(
+            Labware(LabwareID, Filter, WellsInstance, Dimensions)
+        )
 
         # Create Labware Class and append
 

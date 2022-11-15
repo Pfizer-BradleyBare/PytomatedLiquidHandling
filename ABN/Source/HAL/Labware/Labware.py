@@ -81,20 +81,18 @@ class Wells:
 #    ReagentTrough200mL = "200mL Reagent Trough"
 
 
-class LabwarePipettableTracker:
-    def __init__(self, IsPipettable: bool):
-        self.IsPipettable: bool = IsPipettable
-
-    def Pipettable(self):
-        return self.IsPipettable
-
-
-class Labware(ObjectABC, LabwarePipettableTracker):
-    def __init__(self, Name: str, Filter: str | None, Dimensions: LabwareDimensions):
-        LabwarePipettableTracker.__init__(self, False)
+class Labware(ObjectABC):
+    def __init__(
+        self,
+        Name: str,
+        Filter: str | None,
+        LabwareWells: Wells | None,
+        Dimensions: LabwareDimensions,
+    ):
         self.Name: str = Name
         self.Filter: str | None = Filter
         self.Dimensions: LabwareDimensions = Dimensions
+        self.LabwareWells: Wells | None = LabwareWells
 
     def GetName(self) -> str:
         return self.Name
@@ -105,28 +103,23 @@ class Labware(ObjectABC, LabwarePipettableTracker):
     def GetDimensions(self) -> LabwareDimensions:
         return self.Dimensions
 
-
-class PipettableLabware(Labware):
-    def __init__(
-        self,
-        Name: str,
-        Filter: str | None,
-        LabwareWells: Wells,
-        Dimensions: LabwareDimensions,
-    ):
-        Labware.__init__(self, Name, Filter, Dimensions)
-        LabwarePipettableTracker.__init__(self, True)
-        self.LabwareWells: Wells = LabwareWells
+    def IsPipettable(self) -> bool:
+        return self.LabwareWells is not None
 
     def GetWells(self) -> Wells:
+        if self.LabwareWells is None:
+            raise Exception(
+                "This labware does not have wells. Did you check if it is pipettable first?"
+            )
+
         return self.LabwareWells
 
 
 class LabwareCalculator:
-    def __init__(self, LabwareInstance: PipettableLabware):
-        self.LabwareInstance: PipettableLabware = LabwareInstance
+    def __init__(self, LabwareInstance: Labware):
+        self.LabwareInstance: Labware = LabwareInstance
 
-    def GetLabware(self) -> PipettableLabware:
+    def GetLabware(self) -> Labware:
         return self.LabwareInstance
 
     def WellHeightFromVolume(self, Volume: float) -> float:
