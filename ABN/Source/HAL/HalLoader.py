@@ -28,7 +28,7 @@ def Load(HalInstance: Hal):
     Labwares = LabwareTracker()
     LabwareLoader.LoadYaml(
         Labwares,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Labware\\Labware.yaml",
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Labware\\Labware.yaml",
     )
     HalInstance.LabwareTrackerInstance = Labwares
     for Labware in Labwares.GetObjectsAsList():
@@ -41,7 +41,7 @@ def Load(HalInstance: Hal):
     TransportDevices = TransportTracker(Labwares)
     TransportLoader.LoadYaml(
         TransportDevices,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Transport\\Transport.yaml",
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Transport\\Transport.yaml",
     )
     HalInstance.TransportTrackerInstance = TransportDevices
     for TransportDevice in TransportDevices.GetObjectsAsList():
@@ -54,7 +54,7 @@ def Load(HalInstance: Hal):
     DeckLocations = DeckLocationTracker(TransportDevices)
     DeckLocationLoader.LoadYaml(
         DeckLocations,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\DeckLocation\\DeckLocation.yaml",
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\DeckLocation\\DeckLocation.yaml",
     )
     HalInstance.DeckLocationTrackerInstance = DeckLocations
     for Location in DeckLocations.GetObjectsAsList():
@@ -67,7 +67,7 @@ def Load(HalInstance: Hal):
     LayoutItems = LayoutTracker(DeckLocations, Labwares)
     LayoutLoader.LoadYaml(
         LayoutItems,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Layout\\Layout.yaml",
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Layout\\Layout.yaml",
     )
     HalInstance.LayoutTrackerInstance = LayoutItems
     for Layout in LayoutItems.GetObjectsAsList():
@@ -80,7 +80,7 @@ def Load(HalInstance: Hal):
     Lids = LidTracker(Labwares, DeckLocations)
     LidLoader.LoadYaml(
         Lids,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Lid\\Lid.yaml",
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Lid\\Lid.yaml",
     )
     HalInstance.LidTrackerInstance = Lids
     for Lid in Lids.GetObjectsAsList():
@@ -93,7 +93,7 @@ def Load(HalInstance: Hal):
     TempControlDevices = TempControlDeviceTracker(Labwares, DeckLocations)
     TempControlDeviceLoader.LoadYaml(
         TempControlDevices,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\TempControlDevice\\TempControlDevice.yaml",
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\TempControlDevice\\TempControlDevice.yaml",
     )
     HalInstance.TempControlDeviceTrackerInstance = TempControlDevices
     for TempControlDevice in TempControlDevices.GetObjectsAsList():
@@ -106,7 +106,7 @@ def Load(HalInstance: Hal):
     Tips = TipTracker()
     TipLoader.LoadYaml(
         Tips,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Tip\\Tip.yaml",
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Tip\\Tip.yaml",
     )
     HalInstance.TipTrackerInstance = Tips
     for Tip in Tips.GetObjectsAsList():
@@ -119,7 +119,7 @@ def Load(HalInstance: Hal):
     Pipettes = PipetteTracker(Tips)
     PipetteLoader.LoadYaml(
         Pipettes,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Pipette\\Pipette.yaml",
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Pipette\\Pipette.yaml",
     )
     HalInstance.PipetteTrackerInstance = Pipettes
     for Pipette in Pipettes.GetObjectsAsList():
@@ -132,7 +132,7 @@ def Load(HalInstance: Hal):
     MagneticRacks = MagneticRackTracker(Labwares, DeckLocations, Pipettes, Tips)
     MagneticRackLoader.LoadYaml(
         MagneticRacks,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\MagneticRack\\MagneticRack.yaml",
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\MagneticRack\\MagneticRack.yaml",
     )
     HalInstance.MagneticRackTrackerInstance = MagneticRacks
     for MagneticRack in MagneticRacks.GetObjectsAsList():
@@ -145,7 +145,7 @@ def Load(HalInstance: Hal):
     NotifyDevices = NotifyTracker()
     NotifyLoader.LoadYaml(
         NotifyDevices,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\Notify\\Notify.yaml",
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Notify\\Notify.yaml",
     )
     HalInstance.NotifyTrackerInstance = NotifyDevices
     for NotifyDevice in NotifyDevices.GetObjectsAsList():
@@ -158,7 +158,7 @@ def Load(HalInstance: Hal):
     FlipTubes = FlipTubeTracker(Labwares)
     FlipTubeLoader.LoadYaml(
         FlipTubes,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\ABN\\HamiltonVisualMethodEditorConfiguration\\HAL\\FlipTube\\FlipTube.yaml",
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\FlipTube\\FlipTube.yaml",
     )
     HalInstance.FlipTubeTrackerInstance = FlipTubes
     for FlipTube in FlipTubes.GetObjectsAsList():
