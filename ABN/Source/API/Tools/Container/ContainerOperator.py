@@ -47,7 +47,9 @@ class ContainerOperator:
             ReturnWellSolutionTrackerInstance.ManualLoad(
                 WellSolution(self.ContainerInstance.GetName(), Volume)
             )
+            # We have to return a unique WellSolution instance because it will be tracked in the destination
             WellInstance.MinWellVolume -= Volume
+
         # We are pipetting from a reagent source
 
         else:
@@ -63,6 +65,7 @@ class ContainerOperator:
                 ReturnWellSolutionTrackerInstance.ManualLoad(
                     WellSolution(WellSolutionInstance.GetName(), RemovedVolume)
                 )
+                # We have to return a unique WellSolution instance because it will be tracked in the destination
 
                 WellSolutionInstance.Volume = NewVolume
 
