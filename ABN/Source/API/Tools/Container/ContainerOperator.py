@@ -48,6 +48,7 @@ class ContainerOperator:
                 WellSolution(self.ContainerInstance.GetName(), Volume)
             )
             WellInstance.MinWellVolume -= Volume
+        # We are pipetting from a reagent source
 
         else:
             for (
@@ -63,14 +64,11 @@ class ContainerOperator:
                     WellSolution(WellSolutionInstance.GetName(), RemovedVolume)
                 )
 
-                NewSolutionInstance = WellSolution(
-                    WellSolutionInstance.GetName(), NewVolume
-                )
+                WellSolutionInstance.Volume = NewVolume
 
-                SourceWellSolutionTrackerInstance.ManualUnload(WellSolutionInstance)
-
-                if NewVolume > 0:
-                    SourceWellSolutionTrackerInstance.ManualLoad(NewSolutionInstance)
+                if NewVolume <= 0:
+                    SourceWellSolutionTrackerInstance.ManualUnload(WellSolutionInstance)
+            # We are pipetting from a plate source
 
         return ReturnWellSolutionTrackerInstance
 
@@ -101,19 +99,8 @@ class ContainerOperator:
                     )
                 )
 
-                UpdatedWellSolutionInstance = WellSolution(
-                    WellSolutionInstance.GetName(),
-                    WellSolutionInstance.GetVolume()
-                    + TrackedWellSolutionInstance.GetVolume(),
-                )
+                TrackedWellSolutionInstance.Volume += WellSolutionInstance.GetVolume()
 
-                DestinationWellSolutionTrackerInstance.ManualUnload(
-                    TrackedWellSolutionInstance
-                )
-
-                DestinationWellSolutionTrackerInstance.ManualLoad(
-                    UpdatedWellSolutionInstance
-                )
             else:
                 DestinationWellSolutionTrackerInstance.ManualLoad(WellSolutionInstance)
             # If the solution is already tracked then we remove it and add a new updated solution. Basically updating the volume of the solution

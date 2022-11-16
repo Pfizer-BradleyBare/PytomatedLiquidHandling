@@ -1,6 +1,7 @@
 from ....Tools.AbstractClasses import ObjectABC
 from ...Labware import Labware
 from ...Layout import LayoutItem
+from .WellAssignment.WellAssignmentTracker import WellAssignmentTracker
 
 
 class LoadedLabware(ObjectABC):
@@ -15,10 +16,16 @@ class LoadedLabware(ObjectABC):
         self.LabwareInstance: Labware = LabwareInstance
         self.LayoutItemInstance: LayoutItem = LayoutItemInstance
 
-        self.Wells = [False] * 2
+        self.WellAssignmentTrackerInstance = WellAssignmentTracker()
 
     def GetName(self) -> str:
         return self.Name
 
     def GetLabware(self) -> Labware:
         return self.LabwareInstance
+
+    def GetLayoutItem(self) -> LayoutItem:
+        return self.LayoutItemInstance
+
+    def GetWellAssignmentTracker(self) -> WellAssignmentTracker:
+        return self.WellAssignmentTrackerInstance
