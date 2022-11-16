@@ -4,7 +4,7 @@ from ...Tools import Excel, ExcelHandle
 from .Worklist import Worklist
 from .Solution import SolutionTracker, SolutionLoader
 from .Block import BlockLoader, BlockTracker
-from ...HAL.Tools import LoadedLabwareTracker
+from ...Driver.LoadedLabwareConnection import LoadedLabwareConnectionTracker
 
 
 def Load(
@@ -32,7 +32,7 @@ def Load(
                 BlockTrackerInstance,
                 WorklistInstance,
                 SolutionTrackerInstance,
-                LoadedLabwareTracker(),  # There will never be a deck loading unless we resume a run. But we havn't gotten there yet...
+                LoadedLabwareConnectionTracker(),  # There will never be a deck loading unless we resume a run. But we havn't gotten there yet...
                 BlockTracker(),
             )
         )

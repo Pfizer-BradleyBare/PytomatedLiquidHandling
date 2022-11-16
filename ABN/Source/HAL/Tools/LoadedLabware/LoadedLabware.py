@@ -7,10 +7,8 @@ from .WellAssignment.WellAssignmentTracker import WellAssignmentTracker
 class LoadedLabware(ObjectABC):
     Counter: int = 1
 
-    def __init__(
-        self, Name: str, LabwareInstance: Labware, LayoutItemInstance: LayoutItem
-    ):
-        self.Name: str = Name + str(LoadedLabware.Counter)
+    def __init__(self, LabwareInstance: Labware, LayoutItemInstance: LayoutItem):
+        self.Name: str = LabwareInstance.GetName() + str(LoadedLabware.Counter)
         LoadedLabware.Counter += 1
 
         self.LabwareInstance: Labware = LabwareInstance

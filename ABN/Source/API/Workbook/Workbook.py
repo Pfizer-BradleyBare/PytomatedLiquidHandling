@@ -18,7 +18,7 @@ from ...API.Tools.Context import (
     WellFactor,
 )
 from ..Tools.Timer import TimerTracker
-from ...HAL.Tools import LoadedLabwareTracker
+from ...Driver.LoadedLabwareConnection import LoadedLabwareConnectionTracker
 
 from ...HAL.Tools.LabwareSelection.LabwareSelectionLoader import Load
 from ...HAL.Tools.LabwareSelection.LabwareSelectionTracker import (
@@ -69,7 +69,7 @@ class Workbook(ObjectABC):
         MethodBlocksTrackerInstance: BlockTracker,
         WorklistInstance: Worklist,
         SolutionTrackerInstance: SolutionTracker,
-        LoadedLabwareTrackerInstance: LoadedLabwareTracker,
+        LoadedLabwareConnectionTrackerInstance: LoadedLabwareConnectionTracker,
         PreprocessingBlocksTrackerInstance: BlockTracker,
     ):
         # Normal Init Variables
@@ -89,8 +89,8 @@ class Workbook(ObjectABC):
         )
         self.WorklistInstance: Worklist = WorklistInstance
         self.SolutionTrackerInstance: SolutionTracker = SolutionTrackerInstance
-        self.LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
-            LoadedLabwareTrackerInstance
+        self.LoadedLabwareConnectionTrackerInstance: LoadedLabwareConnectionTracker = (
+            LoadedLabwareConnectionTrackerInstance
         )
         # Thread
         self.ProcessingLock: threading.Lock = threading.Lock()
@@ -150,8 +150,8 @@ class Workbook(ObjectABC):
     def GetSolutionTracker(self) -> SolutionTracker:
         return self.SolutionTrackerInstance
 
-    def GetLoadedLabwareTracker(self) -> LoadedLabwareTracker:
-        return self.LoadedLabwareTrackerInstance
+    def GetLoadedLabwareConnectionTracker(self) -> LoadedLabwareConnectionTracker:
+        return self.LoadedLabwareConnectionTrackerInstance
 
     def GetContainerTracker(self) -> ContainerTracker:
         return self.ContainerTrackerInstance
@@ -204,6 +204,15 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                 WorkbookInstance.GetContainerTracker(),
                 HalInstance,
             )
+
+            for item in Track.GetObjectsAsList():
+                print(
+                    item.GetName(),
+                    [
+                        item1.GetName()
+                        for item1 in item.GetLabwareTracker().GetObjectsAsList()
+                    ],
+                )
 
             WorkbookInstance.ProcessingLock.acquire()
             # Somehow here I need to wait but check on the deck loading being complete
