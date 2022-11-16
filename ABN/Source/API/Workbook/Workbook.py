@@ -20,10 +20,7 @@ from ...API.Tools.Context import (
 from ..Tools.Timer import TimerTracker
 from ...Driver.LoadedLabwareConnection import LoadedLabwareConnectionTracker
 
-from ...HAL.Tools.LabwareSelection.LabwareSelectionLoader import Load
-from ...HAL.Tools.LabwareSelection.LabwareSelectionTracker import (
-    LabwareSelectionTracker,
-)
+from ...HAL.Tools import LabwareSelectionLoader, LabwareSelectionTracker
 
 from ...Server.Globals import LOG
 from ...Server.Globals.HalInstance import HalInstance
@@ -180,6 +177,22 @@ class Workbook(ObjectABC):
 
 def WorkbookProcessor(WorkbookInstance: Workbook):
 
+    while True:
+
+        WorkbookInstance.ProcessingLock.acquire()
+        WorkbookInstance.ProcessingLock.release()
+        if AliveStateFlag.AliveStateFlag is False:
+            # Do some workbook save state stuff here
+            return
+
+        if all(
+            LoadedLabwareConnection.IsConnected()
+            for LoadedLabwareConnection in WorkbookInstance.GetLoadedLabwareConnectionTracker().GetObjectsAsList()
+        ):
+            break
+        # if all are connected then we can start running. Boom!
+    # This first thing we need to do is check that all labwares are loaded. If not then we sit here and wait.
+
     ContextTrackerInstance = WorkbookInstance.GetContextTracker()
     InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
     ExecutedBlocksTrackerInstance = WorkbookInstance.GetExecutedBlocksTracker()
@@ -198,14 +211,14 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             item in ExecutedBlocksTrackerInstance.GetObjectsAsList()
             for item in WorkbookInstance.GetMethodBlocksTracker().GetObjectsAsList()
         ):
-            Track = LabwareSelectionTracker()
-            Load(
-                Track,
+            LabwareSelectionTrackerInstance = LabwareSelectionTracker()
+            LabwareSelectionLoader(
+                LabwareSelectionTrackerInstance,
                 WorkbookInstance.GetContainerTracker(),
                 HalInstance,
             )
 
-            for item in Track.GetObjectsAsList():
+            for item in LabwareSelectionTrackerInstance.GetObjectsAsList():
                 print(
                     item.GetName(),
                     [
