@@ -21,6 +21,16 @@ class CleanupMethodProject:
         Method = ParserObject.GetAPIData()["Method"]
         Project = ParserObject.GetAPIData()["Project"]
 
+        if Method == "Custom":
+            ParserObject.SetAPIState(True)
+            ParserObject.SetAPIReturn(
+                "Message",
+                "Nothing to clean. User loaded Custom Method",
+            )
+
+            Response = ParserObject.GetHTTPResponse()
+            return Response
+
         CleanupPath = os.path.join(
             MethodsPath,
             Method,

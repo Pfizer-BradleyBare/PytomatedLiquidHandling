@@ -341,7 +341,7 @@ def WorkbookInit(WorkbookInstance: Workbook):
 
     WellFactorsTrackerInstance = WellFactorTracker()
 
-    for SampleNumber in range(0, WorkbookInstance.GetWorklist().GetNumSamples()):
+    for SampleNumber in range(1, WorkbookInstance.GetWorklist().GetNumSamples() + 1):
         WellNumber = SampleNumber
 
         WellSequencesInstance = WellSequence(WellNumber, WellNumber)

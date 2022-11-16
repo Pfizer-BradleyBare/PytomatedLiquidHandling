@@ -103,7 +103,7 @@ class LiquidTransfer(Block):
                 AspirateMixingParam,
                 DispenseMixingParam,
             ) in zip(
-                range(0, WorklistInstance.GetNumSamples()),
+                range(1, WorklistInstance.GetNumSamples() + 1),
                 Destinations,
                 Sources,
                 Volumes,
@@ -127,11 +127,8 @@ class LiquidTransfer(Block):
             # Create our pipetting tracker
 
             Pipette(
-                True,
+                WorkbookInstance,
                 SequenceTrackerInstance,
-                WorkbookInstance.GetSolutionTracker(),
-                WorkbookInstance.GetLoadedLabwareTracker(),
-                WorkbookInstance.GetExecutingContext(),
                 HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
                 HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
             )

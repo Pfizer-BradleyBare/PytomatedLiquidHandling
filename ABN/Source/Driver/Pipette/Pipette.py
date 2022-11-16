@@ -1,21 +1,18 @@
 from .Sequence.SequenceTracker import SequenceTracker
 from ...HAL.Pipette import PipetteTracker
-from ...HAL.Tools import LoadedLabwareTracker
-from ...API.Tools.Context import Context
-from ...API.Workbook.Solution import SolutionTracker
+from ...API.Workbook import Workbook
 
 
 def Pipette(
-    SimulateState: bool,
+    WorkbookInstance: Workbook,
     SequenceTrackerInstance: SequenceTracker,
-    SolutionTrackerInstance: SolutionTracker,
-    LoadedLabwareTrackerInstance: LoadedLabwareTracker,
-    ContextInstance: Context,
     AspiratePipettingDeviceTrackerInstance: PipetteTracker,
     DispensePipettingDeviceTrackerInstance: PipetteTracker,
 ):
 
     print("IN PROCESS")
+
+    ContextInstance = WorkbookInstance.GetExecutingContext()
 
     WellFactorTrackerInstance = ContextInstance.GetWellFactorTracker()
     AspirateWellSequencesTrackerInstance = (
@@ -50,8 +47,5 @@ def Pipette(
             ),
         )
     # First thing we need to do is update the well volumes. This is going to be something...
-
-    if SimulateState is False:
-        pass
 
     print("COMPLETE")
