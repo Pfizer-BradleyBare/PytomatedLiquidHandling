@@ -1,3 +1,3 @@
-from ..ResourceLock.ResourceLockTracker import ResourceLockTracker
+from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 
 ResourceLockTrackerInstance = ResourceLockTracker()

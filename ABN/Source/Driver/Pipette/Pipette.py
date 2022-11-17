@@ -15,37 +15,37 @@ def Pipette(
     ContextInstance = WorkbookInstance.GetExecutingContext()
 
     WellFactorTrackerInstance = ContextInstance.GetWellFactorTracker()
-    AspirateWellSequencesTrackerInstance = (
-        ContextInstance.GetAspirateWellSequenceTracker()
-    )
-    DispenseWellSequencesTrackerInstance = (
-        ContextInstance.GetDispenseWellSequenceTracker()
-    )
+    # AspirateWellSequencesTrackerInstance = (
+    #    ContextInstance.GetAspirateWellSequenceTracker()
+    # )
+    # DispenseWellSequencesTrackerInstance = (
+    #    ContextInstance.GetDispenseWellSequenceTracker()
+    # )
 
     for Sequence in SequenceTrackerInstance.GetObjectsAsList():
         if WellFactorTrackerInstance.GetObjectByName(Sequence.GetName()) == 0:
             continue
 
-        AspirateWellNumber = AspirateWellSequencesTrackerInstance.GetObjectByName(
-            Sequence.GetName()
-        ).GetSequence()
-        DispenseWellNumber = DispenseWellSequencesTrackerInstance.GetObjectByName(
-            Sequence.GetName()
-        ).GetSequence()
+        # AspirateWellNumber = AspirateWellSequencesTrackerInstance.GetObjectByName(
+        #    Sequence.GetName()
+        # ).GetSequence()
+        # DispenseWellNumber = DispenseWellSequencesTrackerInstance.GetObjectByName(
+        #    Sequence.GetName()
+        # ).GetSequence()
 
-        TransferVolume = Sequence.GetTransferVolume()
+        # TransferVolume = Sequence.GetTransferVolume()
 
-        DestinationContainerOperatorInstance = (
-            Sequence.GetDestinationContainerOperator()
-        )
-        SourceContainerOperatorInstance = Sequence.GetSourceContainerOperator()
+        # DestinationContainerOperatorInstance = (
+        #    Sequence.GetDestinationContainerOperator()
+        # )
+        # SourceContainerOperatorInstance = Sequence.GetSourceContainerOperator()
 
-        DestinationContainerOperatorInstance.Dispense(
-            DispenseWellNumber,
-            SourceContainerOperatorInstance.Aspirate(
-                AspirateWellNumber, TransferVolume
-            ),
-        )
+        # DestinationContainerOperatorInstance.Dispense(
+        #    DispenseWellNumber,
+        #    SourceContainerOperatorInstance.Aspirate(
+        #        AspirateWellNumber, TransferVolume
+        #    ),
+        # )
     # First thing we need to do is update the well volumes. This is going to be something...
 
     print("COMPLETE")

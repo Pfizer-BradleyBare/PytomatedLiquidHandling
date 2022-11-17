@@ -1,6 +1,6 @@
-from ....HAL.Labware import Labware
-from ....HAL.Layout import LayoutItem
-from ....Tools.AbstractClasses import ObjectABC
+from .....HAL.Labware import Labware
+from .....HAL.Layout import LayoutItem
+from .....Tools.AbstractClasses import ObjectABC
 from .WellAssignment.WellAssignmentTracker import WellAssignmentTracker
 
 

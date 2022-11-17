@@ -1,4 +1,4 @@
-from ....API.Tools.Container import ContainerOperator
+from ....HAL.Layout import LayoutItem
 from ....Tools.AbstractClasses import ObjectABC
 
 
@@ -6,20 +6,16 @@ class Sequence(ObjectABC):
     def __init__(
         self,
         Well: int,
-        DestinationContainerOperatorInstance: ContainerOperator,
-        SourceContainerOperatorInstance: ContainerOperator,
+        DestinationLayoutItemInstance: LayoutItem,
+        SourceLayoutItemInstance: LayoutItem,
         AspirateMixCycles: int,
         DispenseMixCycles: int,
         TransferVolume: float,
     ):
         self.Well: int = Well
 
-        self.DestinationContainerOperatorInstance: ContainerOperator = (
-            DestinationContainerOperatorInstance
-        )
-        self.SourceContainerOperatorInstance: ContainerOperator = (
-            SourceContainerOperatorInstance
-        )
+        self.DestinationLayoutItemInstance: LayoutItem = DestinationLayoutItemInstance
+        self.SourceLayoutItemInstance: LayoutItem = SourceLayoutItemInstance
 
         self.AspirateMixCycles: int = AspirateMixCycles
         self.DispenseMixCycles: int = DispenseMixCycles
@@ -29,11 +25,11 @@ class Sequence(ObjectABC):
     def GetName(self) -> int:
         return self.Well
 
-    def GetDestinationContainerOperator(self) -> ContainerOperator:
-        return self.DestinationContainerOperatorInstance
+    def GetDestinationLayoutItem(self) -> LayoutItem:
+        return self.DestinationLayoutItemInstance
 
-    def GetSourceContainerOperator(self) -> ContainerOperator:
-        return self.SourceContainerOperatorInstance
+    def GetSourceLayoutItem(self) -> LayoutItem:
+        return self.SourceLayoutItemInstance
 
     def GetAspirateMixCycles(self) -> int:
         return self.AspirateMixCycles

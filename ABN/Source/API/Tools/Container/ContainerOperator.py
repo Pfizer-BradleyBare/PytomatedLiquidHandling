@@ -151,6 +151,48 @@ class ContainerOperator:
         def GetLLD(self) -> SolutionPropertyValue:
             return self.LLD
 
+        def GetMinAspirateMixParam(self):
+            ReturnMinMixParam = 0
+
+            MinMixParam = self.GetVolatility().GetMinAspirateMix()
+            if MinMixParam > ReturnMinMixParam:
+                ReturnMinMixParam = MinMixParam
+
+            MinMixParam = self.GetViscosity().GetMinAspirateMix()
+            if MinMixParam > ReturnMinMixParam:
+                ReturnMinMixParam = MinMixParam
+
+            MinMixParam = self.GetHomogeneity().GetMinAspirateMix()
+            if MinMixParam > ReturnMinMixParam:
+                ReturnMinMixParam = MinMixParam
+
+            MinMixParam = self.GetLLD().GetMinAspirateMix()
+            if MinMixParam > ReturnMinMixParam:
+                ReturnMinMixParam = MinMixParam
+
+            return ReturnMinMixParam
+
+        def GetMinDispenseMixParam(self):
+            ReturnMinMixParam = 0
+
+            MinMixParam = self.GetVolatility().GetMinDispenseMix()
+            if MinMixParam > ReturnMinMixParam:
+                ReturnMinMixParam = MinMixParam
+
+            MinMixParam = self.GetViscosity().GetMinDispenseMix()
+            if MinMixParam > ReturnMinMixParam:
+                ReturnMinMixParam = MinMixParam
+
+            MinMixParam = self.GetHomogeneity().GetMinDispenseMix()
+            if MinMixParam > ReturnMinMixParam:
+                ReturnMinMixParam = MinMixParam
+
+            MinMixParam = self.GetLLD().GetMinDispenseMix()
+            if MinMixParam > ReturnMinMixParam:
+                ReturnMinMixParam = MinMixParam
+
+            return ReturnMinMixParam
+
     # Liquid class is the combo of Volatility, Viscosity, Homogeneity, and LLD
     def GetLiquidClass(
         self,
@@ -234,45 +276,3 @@ class ContainerOperator:
             # We are going to process the whole shebang here
 
         return ContainerOperator.LiquidClass(Volatility, Viscosity, Homogeneity, LLD)
-
-    def GetMinAspirateMixParam(self, LiquidClassInstance: LiquidClass):
-        ReturnMinMixParam = 0
-
-        MinMixParam = LiquidClassInstance.GetVolatility().GetMinAspirateMix()
-        if MinMixParam > ReturnMinMixParam:
-            ReturnMinMixParam = MinMixParam
-
-        MinMixParam = LiquidClassInstance.GetViscosity().GetMinAspirateMix()
-        if MinMixParam > ReturnMinMixParam:
-            ReturnMinMixParam = MinMixParam
-
-        MinMixParam = LiquidClassInstance.GetHomogeneity().GetMinAspirateMix()
-        if MinMixParam > ReturnMinMixParam:
-            ReturnMinMixParam = MinMixParam
-
-        MinMixParam = LiquidClassInstance.GetLLD().GetMinAspirateMix()
-        if MinMixParam > ReturnMinMixParam:
-            ReturnMinMixParam = MinMixParam
-
-        return ReturnMinMixParam
-
-    def GetMinDispenseMixParam(self, LiquidClassInstance: LiquidClass):
-        ReturnMinMixParam = 0
-
-        MinMixParam = LiquidClassInstance.GetVolatility().GetMinDispenseMix()
-        if MinMixParam > ReturnMinMixParam:
-            ReturnMinMixParam = MinMixParam
-
-        MinMixParam = LiquidClassInstance.GetViscosity().GetMinDispenseMix()
-        if MinMixParam > ReturnMinMixParam:
-            ReturnMinMixParam = MinMixParam
-
-        MinMixParam = LiquidClassInstance.GetHomogeneity().GetMinDispenseMix()
-        if MinMixParam > ReturnMinMixParam:
-            ReturnMinMixParam = MinMixParam
-
-        MinMixParam = LiquidClassInstance.GetLLD().GetMinDispenseMix()
-        if MinMixParam > ReturnMinMixParam:
-            ReturnMinMixParam = MinMixParam
-
-        return ReturnMinMixParam

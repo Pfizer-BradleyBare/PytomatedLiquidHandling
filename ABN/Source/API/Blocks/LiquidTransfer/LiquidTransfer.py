@@ -109,20 +109,21 @@ class LiquidTransfer(Block):
                 AspirateMixingParams,
                 DispenseMixingParams,
             ):
-                SequenceTrackerInstance.ManualLoad(
-                    Sequence(
-                        WellNumber,
-                        ContainerOperator(
-                            ContainerTrackerInstance.GetObjectByName(Destination), self
-                        ),
-                        ContainerOperator(
-                            ContainerTrackerInstance.GetObjectByName(Source), self
-                        ),
-                        AspirateMixingParam,
-                        DispenseMixingParam,
-                        Volume,
-                    )
-                )
+                pass
+                # SequenceTrackerInstance.ManualLoad(
+                #    Sequence(
+                #        WellNumber,
+                #        ContainerOperator(
+                #            ContainerTrackerInstance.GetObjectByName(Destination), self
+                #        ),
+                #        ContainerOperator(
+                #            ContainerTrackerInstance.GetObjectByName(Source), self
+                #        ),
+                #        AspirateMixingParam,
+                #        DispenseMixingParam,
+                #        Volume,
+                #    )
+                # )
             # Create our pipetting tracker
 
             # Pipette(
@@ -131,4 +132,4 @@ class LiquidTransfer(Block):
             #    HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
             #    HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
             # )
-            # We need to figure out the pipetting first
+            # We need to figure out the pipetting first.

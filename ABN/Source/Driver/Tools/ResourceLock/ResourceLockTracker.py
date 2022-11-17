@@ -1,4 +1,4 @@
-from ...Tools.AbstractClasses import ObjectABC, TrackerABC
+from ....Tools.AbstractClasses import ObjectABC, TrackerABC
 
 
 class ResourceLockTracker(TrackerABC[ObjectABC]):

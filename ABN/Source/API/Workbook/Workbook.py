@@ -11,7 +11,7 @@ from ...API.Tools.Context import (
     WellSequence,
     WellSequenceTracker,
 )
-from ...Driver.LoadedLabwareConnection import (
+from ...Driver.Tools.LoadedLabwareConnection import (
     LabwareSelectionLoader,
     LabwareSelectionTracker,
     LoadedLabwareConnection,

@@ -1,4 +1,4 @@
-from ...Tools.AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import ObjectABC
 from .LabwareSelection.LabwareSelection import LabwareSelection
 from .LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 
