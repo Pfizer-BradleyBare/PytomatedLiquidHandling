@@ -1,24 +1,19 @@
 from ...Tools.AbstractClasses import ObjectABC
-from ...API.Tools.Container import Container
 from ...HAL.Tools import LoadedLabwareTracker
 from ...HAL.Tools import LabwareSelection
 
 
 class LoadedLabwareConnection(ObjectABC):
-    def __init__(
-        self, ContainerInstance: Container, LabwareSelectionInstance: LabwareSelection
-    ):
-        self.ContainerInstance: Container = ContainerInstance
+    def __init__(self, Name: str, LabwareSelectionInstance: LabwareSelection):
+        self.Name: str = Name
         self.LabwareSelectionInstance: LabwareSelection = LabwareSelectionInstance
         self.LoadedLabwareTrackerInstance: LoadedLabwareTracker = LoadedLabwareTracker()
 
     def GetName(self) -> str:
-        return self.ContainerInstance.GetName()
-
-    def GetContainerInstance(self) -> Container:
-        return self.ContainerInstance
+        return self.Name
 
     def IsConnected(self):
+        # Must contain at leat 1 lasbware to be considered as connected
         return self.LoadedLabwareTrackerInstance.GetNumObjects() != 0
 
     def GetLabwareSelection(self):

@@ -18,7 +18,10 @@ from ...API.Tools.Context import (
     WellFactor,
 )
 from ..Tools.Timer import TimerTracker
-from ...Driver.LoadedLabwareConnection import LoadedLabwareConnectionTracker
+from ...Driver.LoadedLabwareConnection import (
+    LoadedLabwareConnectionTracker,
+    LoadedLabwareConnection,
+)
 
 from ...HAL.Tools import LabwareSelectionLoader, LabwareSelectionTracker
 
@@ -28,7 +31,7 @@ from ...Server.Globals import AliveStateFlag
 
 
 class WorkbookStates(Enum):
-    # NOTE Fun Fact. The workbook states only matter for the Run type.
+    # NOTE Fun Fact. The workbook states only matter for the type Run. Otherwise we "ignore" them
     Queued = "Queued"
     Running = "Running"
     Paused = "Paused"  # The user paused this method manually
@@ -178,7 +181,6 @@ class Workbook(ObjectABC):
 def WorkbookProcessor(WorkbookInstance: Workbook):
 
     while True:
-
         WorkbookInstance.ProcessingLock.acquire()
         WorkbookInstance.ProcessingLock.release()
         if AliveStateFlag.AliveStateFlag is False:
@@ -211,6 +213,11 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             item in ExecutedBlocksTrackerInstance.GetObjectsAsList()
             for item in WorkbookInstance.GetMethodBlocksTracker().GetObjectsAsList()
         ):
+
+            LoadedLabwareConnectionTrackerInstance = (
+                WorkbookInstance.GetLoadedLabwareConnectionTracker()
+            )
+
             LabwareSelectionTrackerInstance = LabwareSelectionTracker()
             LabwareSelectionLoader(
                 LabwareSelectionTrackerInstance,
@@ -218,19 +225,14 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                 HalInstance,
             )
 
-            for item in LabwareSelectionTrackerInstance.GetObjectsAsList():
-                print(
-                    item.GetName(),
-                    [
-                        item1.GetName()
-                        for item1 in item.GetLabwareTracker().GetObjectsAsList()
-                    ],
+            for (
+                LabwareSelectionInstance
+            ) in LabwareSelectionTrackerInstance.GetObjectsAsList():
+                LoadedLabwareConnectionTrackerInstance.ManualLoad(
+                    LoadedLabwareConnection(
+                        LabwareSelectionInstance.GetName(), LabwareSelectionInstance
+                    )
                 )
-
-            WorkbookInstance.ProcessingLock.acquire()
-            # Somehow here I need to wait but check on the deck loading being complete
-
-            print("METHOD EXECUTION COMPLETE")
 
             WorkbookInit(WorkbookInstance)
 
