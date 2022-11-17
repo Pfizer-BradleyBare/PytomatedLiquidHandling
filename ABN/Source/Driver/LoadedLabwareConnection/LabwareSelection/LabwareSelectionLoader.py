@@ -1,13 +1,12 @@
 from .LabwareSelectionTracker import LabwareSelectionTracker
 from .LabwareSelection import LabwareSelection
 from ....API.Tools.Container import ContainerTracker
-from ... import Hal
+from ....Server.Globals.HalInstance import HalInstance
 
 
 def Load(
     LabwareSelectionTrackerInstance: LabwareSelectionTracker,
     ContainerTrackerInstance: ContainerTracker,
-    HalInstance: Hal,
 ):
     for ContainerInstance in ContainerTrackerInstance.GetObjectsAsList():
         LabwareTrackerInstance = HalInstance.GetLabwareTracker()

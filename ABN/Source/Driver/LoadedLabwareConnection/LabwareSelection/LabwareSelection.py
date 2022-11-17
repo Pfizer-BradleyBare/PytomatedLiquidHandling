@@ -1,5 +1,5 @@
 from ....Tools.AbstractClasses import ObjectABC
-from ...Labware import LabwareTracker
+from ....HAL.Labware import LabwareTracker
 
 
 class LabwareSelection(ObjectABC):

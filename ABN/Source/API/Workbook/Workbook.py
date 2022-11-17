@@ -23,10 +23,12 @@ from ...Driver.LoadedLabwareConnection import (
     LoadedLabwareConnection,
 )
 
-from ...HAL.Tools import LabwareSelectionLoader, LabwareSelectionTracker
+from ...Driver.LoadedLabwareConnection import (
+    LabwareSelectionLoader,
+    LabwareSelectionTracker,
+)
 
 from ...Server.Globals import LOG
-from ...Server.Globals.HalInstance import HalInstance
 from ...Server.Globals import AliveStateFlag
 
 
@@ -264,9 +266,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
             LabwareSelectionTrackerInstance = LabwareSelectionTracker()
             LabwareSelectionLoader(
-                LabwareSelectionTrackerInstance,
-                WorkbookInstance.GetContainerTracker(),
-                HalInstance,
+                LabwareSelectionTrackerInstance, WorkbookInstance.GetContainerTracker()
             )
 
             for (
