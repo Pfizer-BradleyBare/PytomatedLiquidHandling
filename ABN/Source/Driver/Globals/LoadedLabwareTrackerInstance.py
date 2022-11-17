@@ -1,4 +1,4 @@
-from ...Driver.LoadedLabwareConnection.LoadedLabware.LoadedLabwareTracker import (
+from ..LoadedLabwareConnection.LoadedLabware.LoadedLabwareTracker import (
     LoadedLabwareTracker,
 )
 

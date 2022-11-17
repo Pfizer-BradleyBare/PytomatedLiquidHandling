@@ -52,6 +52,11 @@ class WorkbookStates(Enum):
         "The method is ready to run but the deck must be loaded first. Please proceed to load the deck.",
     )
 
+    WaitingTimer = (
+        "Waiting: Timer",
+        "The method is running correctly but no contexts are active. Most likely waiting on a timer of some sort.",
+    )
+
     WaitingNotification = (
         "Waiting: Notification",
         "A notification was fired that waits on the user before proceeding. Please confirm the notification to continue.",
@@ -168,8 +173,14 @@ class Workbook(ObjectABC):
     def GetRunType(self) -> WorkbookRunTypes:
         return self.RunType
 
+    def SetRunType(self, RunType: WorkbookRunTypes):
+        self.RunType = RunType
+
     def GetState(self) -> WorkbookStates:
         return self.State
+
+    def SetState(self, State: WorkbookStates):
+        self.State = State
 
     def GetMethodTreeRoot(self) -> Block:
         return self.MethodTreeRoot
@@ -233,6 +244,8 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
     while True:
 
+        WorkbookInstance.SetState(WorkbookStates.WaitingDeckLoading)
+
         while True:
             WorkbookInstance.ProcessingLock.acquire()
             WorkbookInstance.ProcessingLock.release()
@@ -248,6 +261,8 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # if all are connected then we can start running. Boom!
         # This first thing we need to do is check that all labwares are loaded. If not then we sit here and wait.
         # This could be expanded to wait until a set of labware is loaded before proceeding. How? No idea.
+
+        WorkbookInstance.SetState(WorkbookStates.Running)
 
         if all(
             item in ExecutedBlocksTrackerInstance.GetObjectsAsList()
@@ -273,6 +288,18 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                 )
 
             if WorkbookInstance.GetRunType() == WorkbookRunTypes.PreRun:
+
+                WorkbookInstance.SetRunType(WorkbookRunTypes.Run)
+                WorkbookInstance.SetState(WorkbookStates.Queued)
+
+                WorkbookInstance.ProcessingLock.acquire()
+                WorkbookInstance.ProcessingLock.release()
+                if AliveStateFlag.AliveStateFlag is False:
+                    # Do some workbook save state stuff here
+                    return
+                # Everything is controlled by the server. So we will wait here for the server to tell us we are next to run
+                # Then we will reinit the workbook and wait on deck loading
+
                 WorkbookInit(WorkbookInstance)
             # If we are prerun then we need to do this another time to actually run the method
             # else we are done here and can return
@@ -333,7 +360,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                 item in InactiveContextTrackerInstance.GetObjectsAsList()
                 for item in ContextTrackerInstance.GetObjectsAsList()
             ):
-                pass
+                WorkbookInstance.SetState(WorkbookStates.WaitingTimer)
             # If all contexts are inactive then we need to wait on devices to complete. TODO
 
             for ContextInstance in ContextTrackerInstance.GetObjectsAsList():
