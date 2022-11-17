@@ -1,5 +1,3 @@
-from ..LoadedLabwareConnection.LoadedLabware.LoadedLabwareTracker import (
-    LoadedLabwareTracker,
-)
+from ..LoadedLabwareConnection import LoadedLabwareTracker
 
 LoadedLabwareTrackerInstance = LoadedLabwareTracker()
