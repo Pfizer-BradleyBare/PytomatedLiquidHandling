@@ -1,10 +1,10 @@
-from ...Workbook.Block import Block
-from ...Workbook.Solution import SolutionTracker, SolutionPropertyValues
-from ...Workbook.Solution.Value.Value import SolutionPropertyValue
 from ....Tools.AbstractClasses import ObjectABC
+from ...Workbook.Block import Block
+from ...Workbook.Solution import SolutionPropertyValues, SolutionTracker
+from ...Workbook.Solution.Value.Value import SolutionPropertyValue
 from .Container import Container
-from .Well.Solution.WellSolutionTracker import WellSolutionTracker
 from .Well.Solution.WellSolution import WellSolution
+from .Well.Solution.WellSolutionTracker import WellSolutionTracker
 from .Well.Well import Well
 
 

@@ -1,6 +1,7 @@
 import yaml
-from .NotifyTracker import NotifyTracker
+
 from .Notify import EmailTextNotify, NotificationTypes
+from .NotifyTracker import NotifyTracker
 
 
 def LoadYaml(NotifyTrackerInstance: NotifyTracker, FilePath: str):

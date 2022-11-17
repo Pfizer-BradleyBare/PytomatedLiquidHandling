@@ -1,5 +1,5 @@
-from .ExcelHandle import ExcelHandle
 from ...Server.Globals import LOG
+from .ExcelHandle import ExcelHandle
 
 
 def ExcelClassFunctionDecorator_ThreadLock(DecoratedFunction):

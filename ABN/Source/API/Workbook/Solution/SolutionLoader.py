@@ -1,6 +1,6 @@
-from .SolutionTracker import SolutionTracker
-from .Solution import Solution
 from ....Tools import Excel
+from .Solution import Solution
+from .SolutionTracker import SolutionTracker
 
 
 def Load(SolutionTrackerInstance: SolutionTracker, ExcelInstance: Excel):

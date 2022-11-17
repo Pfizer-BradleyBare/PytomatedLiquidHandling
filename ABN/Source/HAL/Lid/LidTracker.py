@@ -1,6 +1,6 @@
 from ...Tools.AbstractClasses import TrackerABC
-from ..Labware import LabwareTracker
 from ..DeckLocation import DeckLocationTracker
+from ..Labware import LabwareTracker
 from .Lid import Lid
 
 

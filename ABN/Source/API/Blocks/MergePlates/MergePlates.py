@@ -1,14 +1,14 @@
+from typing import Self, cast
+
+from ....Tools import Excel, ExcelHandle
+from ...Blocks import SplitPlate
+from ...Tools.Context import Context
+from ...Workbook import Workbook
 from ...Workbook.Block import (
     Block,
     ClassDecorator_AvailableBlock,
     FunctionDecorator_ProcessFunction,
 )
-from ....Tools import Excel, ExcelHandle
-from ...Workbook import Workbook
-
-from ...Blocks import SplitPlate
-from ...Tools.Context import Context
-from typing import Self, cast
 
 
 @ClassDecorator_AvailableBlock

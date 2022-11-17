@@ -1,11 +1,13 @@
-import web
-from ..Tools.Parser import Parser
-from .AvailableMethods import MethodsPath, TemplateMethodSuffix, TempFolder
 import os
 import shutil
 import stat
-from ...Tools import Excel, ExcelHandle
 from typing import cast
+
+import web
+
+from ...Tools import Excel, ExcelHandle
+from ..Tools.Parser import Parser
+from .AvailableMethods import MethodsPath, TempFolder, TemplateMethodSuffix
 
 urls = (
     "/Method/GenerateMethodFile",

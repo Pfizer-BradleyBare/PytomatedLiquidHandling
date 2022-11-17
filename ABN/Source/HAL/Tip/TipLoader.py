@@ -1,6 +1,7 @@
 import yaml
+
+from .Tip import TipFTR, TipNTR, TipTypes
 from .TipTracker import TipTracker
-from .Tip import TipTypes, TipFTR, TipNTR
 
 
 def LoadYaml(TipTrackerInstance: TipTracker, FilePath: str):

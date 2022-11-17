@@ -1,5 +1,5 @@
-from ..Transport import TransportDevice
 from ...Tools.AbstractClasses import ObjectABC
+from ..Transport import TransportDevice
 
 
 class LoadingConfig:

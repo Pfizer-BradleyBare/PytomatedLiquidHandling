@@ -1,7 +1,8 @@
 import yaml
-from .TempControlDevice import TempConfig, TempControlDevice, DeviceTypes
-from .TempControlDeviceTracker import TempControlDeviceTracker
+
 from ..Layout import CoveredLayoutItem
+from .TempControlDevice import DeviceTypes, TempConfig, TempControlDevice
+from .TempControlDeviceTracker import TempControlDeviceTracker
 
 
 def LoadYaml(TempControlDeviceTrackerInstance: TempControlDeviceTracker, FilePath: str):

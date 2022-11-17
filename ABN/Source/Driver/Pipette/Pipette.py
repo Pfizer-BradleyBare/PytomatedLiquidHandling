@@ -1,6 +1,6 @@
-from .Sequence.SequenceTracker import SequenceTracker
-from ...HAL.Pipette import PipetteTracker
 from ...API.Workbook import Workbook
+from ...HAL.Pipette import PipetteTracker
+from .Sequence.SequenceTracker import SequenceTracker
 
 
 def Pipette(

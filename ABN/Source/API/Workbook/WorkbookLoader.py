@@ -1,10 +1,10 @@
-from .WorkbookTracker import WorkbookTracker
-from .Workbook import Workbook, WorkbookRunTypes
-from ...Tools import Excel, ExcelHandle
-from .Worklist import Worklist
-from .Solution import SolutionTracker, SolutionLoader
-from .Block import BlockLoader, BlockTracker
 from ...Driver.LoadedLabwareConnection import LoadedLabwareConnectionTracker
+from ...Tools import Excel, ExcelHandle
+from .Block import BlockLoader, BlockTracker
+from .Solution import SolutionLoader, SolutionTracker
+from .Workbook import Workbook, WorkbookRunTypes
+from .WorkbookTracker import WorkbookTracker
+from .Worklist import Worklist
 
 
 def Load(

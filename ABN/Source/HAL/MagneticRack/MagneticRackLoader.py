@@ -1,8 +1,9 @@
 import yaml
-from .MagneticRackTracker import MagneticRackTracker
+
 from ..Layout import LayoutItem
-from ..Pipette import PipettingDevice, PipettingTip, LiquidClass
+from ..Pipette import LiquidClass, PipettingDevice, PipettingTip
 from .MagneticRack import MagneticRack
+from .MagneticRackTracker import MagneticRackTracker
 
 
 def LoadYaml(MagneticRackTrackerInstance: MagneticRackTracker, FilePath: str):

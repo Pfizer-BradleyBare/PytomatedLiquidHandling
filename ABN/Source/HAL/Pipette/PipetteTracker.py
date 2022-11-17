@@ -1,6 +1,6 @@
 from ...Tools.AbstractClasses import TrackerABC
-from .Pipette import PipettingDevice
 from ..Tip import TipTracker
+from .Pipette import PipettingDevice
 
 
 class PipetteTracker(TrackerABC[PipettingDevice]):

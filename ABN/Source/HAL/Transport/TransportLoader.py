@@ -1,9 +1,10 @@
 import yaml
+
 from .Transport import (
-    TransportParameters,
+    COREGripperDevice,
     TransportableLabware,
     TransportDevices,
-    COREGripperDevice,
+    TransportParameters,
 )
 from .TransportTracker import TransportTracker
 

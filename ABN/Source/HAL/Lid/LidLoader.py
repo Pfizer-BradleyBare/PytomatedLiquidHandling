@@ -1,7 +1,8 @@
 import yaml
+
+from ..Layout import LayoutItem
 from .Lid import Lid
 from .LidTracker import LidTracker
-from ..Layout import LayoutItem
 
 
 def LoadYaml(LidTrackerInstance: LidTracker, FilePath: str):

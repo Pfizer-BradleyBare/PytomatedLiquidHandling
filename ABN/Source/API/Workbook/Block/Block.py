@@ -1,7 +1,7 @@
-from ....Tools.AbstractClasses import ObjectABC
-from ....Tools import Excel
-from ....Tools import Node
 from abc import abstractmethod
+
+from ....Tools import Excel, Node
+from ....Tools.AbstractClasses import ObjectABC
 
 _AvailableBlocks = dict()
 

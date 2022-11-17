@@ -1,6 +1,8 @@
-import web
-from ..Tools.Parser import Parser
 import os
+
+import web
+
+from ..Tools.Parser import Parser
 
 MethodsPath = "C:\\___MethodsTest"
 TemplateMethodSuffix = "__Template"

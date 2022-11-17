@@ -1,10 +1,10 @@
+from ....Tools import Excel
+from ...Workbook import Workbook
 from ...Workbook.Block import (
     Block,
     ClassDecorator_AvailableBlock,
     FunctionDecorator_ProcessFunction,
 )
-from ....Tools import Excel
-from ...Workbook import Workbook
 
 
 @ClassDecorator_AvailableBlock

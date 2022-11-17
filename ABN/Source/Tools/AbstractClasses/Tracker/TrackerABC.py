@@ -1,5 +1,6 @@
-from ..Object.ObjectABC import ObjectABC
 from typing import Generic, TypeVar
+
+from ..Object.ObjectABC import ObjectABC
 
 T = TypeVar("T", bound="ObjectABC")
 

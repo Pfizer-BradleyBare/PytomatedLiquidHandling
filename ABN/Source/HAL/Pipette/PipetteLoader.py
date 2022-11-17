@@ -1,13 +1,14 @@
 import yaml
-from .PipetteTracker import PipetteTracker
+
 from .Pipette import (
-    LiquidClass,
-    PipettingTip,
-    DeviceTypes,
-    Portrait1mLChannels,
-    PipettingDevice,
     Core96HeadChannels,
+    DeviceTypes,
+    LiquidClass,
+    PipettingDevice,
+    PipettingTip,
+    Portrait1mLChannels,
 )
+from .PipetteTracker import PipetteTracker
 
 
 def LoadYaml(PipetteTrackerInstance: PipetteTracker, FilePath: str):

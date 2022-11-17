@@ -1,25 +1,16 @@
 from ..Server.Globals import LOG
-from .DeckLocation import (
-    DeckLocationLoader,
-    DeckLocationTracker,
-)
+from .DeckLocation import DeckLocationLoader, DeckLocationTracker
 from .FlipTube import FlipTubeLoader, FlipTubeTracker
+from .Hal import Hal
 from .Labware import LabwareLoader, LabwareTracker
 from .Layout import LayoutLoader, LayoutTracker
 from .Lid import LidLoader, LidTracker
-from .MagneticRack import (
-    MagneticRackLoader,
-    MagneticRackTracker,
-)
+from .MagneticRack import MagneticRackLoader, MagneticRackTracker
 from .Notify import NotifyLoader, NotifyTracker
 from .Pipette import PipetteLoader, PipetteTracker
-from .TempControlDevice import (
-    TempControlDeviceLoader,
-    TempControlDeviceTracker,
-)
+from .TempControlDevice import TempControlDeviceLoader, TempControlDeviceTracker
 from .Tip import TipLoader, TipTracker
 from .Transport import TransportLoader, TransportTracker
-from .Hal import Hal
 
 
 def Load(HalInstance: Hal):

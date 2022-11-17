@@ -1,6 +1,6 @@
+from ...Tools.AbstractClasses import ObjectABC
 from ..Layout import LayoutItem
 from ..Pipette import PipettingDevice
-from ...Tools.AbstractClasses import ObjectABC
 
 
 class MagneticRack(ObjectABC):

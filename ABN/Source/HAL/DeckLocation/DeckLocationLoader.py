@@ -1,4 +1,5 @@
 import yaml
+
 from .DeckLocation import DeckLocation, LoadingConfig
 from .DeckLocationTracker import DeckLocationTracker
 

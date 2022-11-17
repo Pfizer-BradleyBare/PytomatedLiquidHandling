@@ -1,8 +1,10 @@
-import web
-from ..Tools.Parser import Parser
-from ..Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
-from .AvailableMethods import MethodsPath, TempFolder
 import os
+
+import web
+
+from ..Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
+from ..Tools.Parser import Parser
+from .AvailableMethods import MethodsPath, TempFolder
 
 urls = (
     "/Method/CleanupMethodProject",

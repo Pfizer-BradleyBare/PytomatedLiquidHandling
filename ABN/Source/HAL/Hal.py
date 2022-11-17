@@ -8,8 +8,8 @@ from .Notify import NotifyTracker
 from .Pipette import PipetteTracker
 from .TempControlDevice import TempControlDeviceTracker
 from .Tip import TipTracker
-from .Transport import TransportTracker
 from .Tools import HalLockTracker
+from .Transport import TransportTracker
 
 
 class Hal:

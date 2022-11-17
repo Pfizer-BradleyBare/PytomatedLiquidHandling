@@ -1,10 +1,6 @@
 import yaml
-from .Labware import (
-    Labware,
-    LabwareDimensions,
-    Wells,
-    WellsEquation,
-)
+
+from .Labware import Labware, LabwareDimensions, Wells, WellsEquation
 from .LabwareTracker import LabwareTracker
 
 

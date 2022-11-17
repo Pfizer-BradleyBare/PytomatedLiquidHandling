@@ -1,6 +1,7 @@
-import xlwings
-import pythoncom
 import threading
+
+import pythoncom
+import xlwings
 
 
 class ExcelHandle:

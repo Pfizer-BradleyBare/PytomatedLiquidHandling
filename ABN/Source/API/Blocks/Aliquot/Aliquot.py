@@ -1,12 +1,11 @@
+from ....Tools import Excel, ExcelHandle
+from ...Tools.Context import WellSequence
+from ...Workbook import Workbook
 from ...Workbook.Block import (
     Block,
     ClassDecorator_AvailableBlock,
     FunctionDecorator_ProcessFunction,
 )
-from ....Tools import Excel, ExcelHandle
-from ...Workbook import Workbook
-
-from ...Tools.Context import WellSequence
 
 
 @ClassDecorator_AvailableBlock

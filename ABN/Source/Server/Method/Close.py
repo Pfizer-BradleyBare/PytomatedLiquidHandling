@@ -1,7 +1,7 @@
 import web
-from ..Tools.Parser import Parser
 import xlwings
 
+from ..Tools.Parser import Parser
 
 urls = (
     "/Method/Close",

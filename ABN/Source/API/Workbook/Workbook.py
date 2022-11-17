@@ -1,35 +1,29 @@
 import os
-from enum import Enum
 import threading
+from enum import Enum
 
-from ..Blocks import MergePlates
-
-from ...Tools.AbstractClasses import ObjectABC
-from .Block import BlockTracker, Block
-from .Worklist import Worklist
-from .Solution import SolutionTracker
-from ...API.Tools.Container import ContainerTracker, Container
+from ...API.Tools.Container import Container, ContainerTracker
 from ...API.Tools.Context import (
-    ContextTracker,
     Context,
-    WellFactorTracker,
-    WellSequenceTracker,
-    WellSequence,
+    ContextTracker,
     WellFactor,
+    WellFactorTracker,
+    WellSequence,
+    WellSequenceTracker,
 )
-from ..Tools.Timer import TimerTracker
-from ...Driver.LoadedLabwareConnection import (
-    LoadedLabwareConnectionTracker,
-    LoadedLabwareConnection,
-)
-
 from ...Driver.LoadedLabwareConnection import (
     LabwareSelectionLoader,
     LabwareSelectionTracker,
+    LoadedLabwareConnection,
+    LoadedLabwareConnectionTracker,
 )
-
-from ...Server.Globals import LOG
-from ...Server.Globals import AliveStateFlag
+from ...Server.Globals import LOG, AliveStateFlag
+from ...Tools.AbstractClasses import ObjectABC
+from ..Blocks import MergePlates
+from ..Tools.Timer import TimerTracker
+from .Block import Block, BlockTracker
+from .Solution import SolutionTracker
+from .Worklist import Worklist
 
 
 class WorkbookStates(Enum):

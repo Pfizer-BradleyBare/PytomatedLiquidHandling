@@ -1,6 +1,7 @@
 from enum import Enum
-from ..Tip import Tip
+
 from ...Tools.AbstractClasses import ObjectABC
+from ..Tip import Tip
 
 
 class LiquidClass:

@@ -1,7 +1,7 @@
-from .LabwareSelectionTracker import LabwareSelectionTracker
-from .LabwareSelection import LabwareSelection
 from ....API.Tools.Container import ContainerTracker
 from ....Server.Globals.HalInstance import HalInstance
+from .LabwareSelection import LabwareSelection
+from .LabwareSelectionTracker import LabwareSelectionTracker
 
 
 def Load(

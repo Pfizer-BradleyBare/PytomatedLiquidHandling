@@ -1,6 +1,6 @@
 from ...Tools.AbstractClasses import ObjectABC
-from .LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from .LabwareSelection.LabwareSelection import LabwareSelection
+from .LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 
 
 class LoadedLabwareConnection(ObjectABC):

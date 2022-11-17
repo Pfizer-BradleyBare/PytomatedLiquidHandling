@@ -1,8 +1,8 @@
 import time
+from typing import Callable
+
 from ....Tools.AbstractClasses import ObjectABC
 from ...Workbook import Block, Workbook
-
-from typing import Callable
 
 
 class Timer(ObjectABC):

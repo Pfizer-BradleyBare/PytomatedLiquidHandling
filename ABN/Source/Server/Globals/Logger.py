@@ -1,7 +1,7 @@
+import datetime
 import logging
 import os
 import sys
-import datetime
 
 LOG_LEVEL = logging.DEBUG
 LOG_FORMAT = "[%(asctime)s] %(levelname)s\n%(message)s\n(%(threadName)s).%(module)s.%(funcName)s:%(lineno)d) <%(pathname)s>"

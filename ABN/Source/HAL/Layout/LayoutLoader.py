@@ -1,5 +1,6 @@
 import yaml
-from .Layout import LayoutItem, CoveredLayoutItem
+
+from .Layout import CoveredLayoutItem, LayoutItem
 from .LayoutTracker import LayoutTracker as LT
 
 

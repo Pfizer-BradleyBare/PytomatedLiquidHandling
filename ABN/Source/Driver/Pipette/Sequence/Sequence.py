@@ -1,5 +1,5 @@
-from ....Tools.AbstractClasses import ObjectABC
 from ....API.Tools.Container import ContainerOperator
+from ....Tools.AbstractClasses import ObjectABC
 
 
 class Sequence(ObjectABC):

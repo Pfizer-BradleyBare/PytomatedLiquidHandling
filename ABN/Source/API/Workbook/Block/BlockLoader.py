@@ -1,8 +1,9 @@
 from typing import cast
-from .Block import BlockObjectCreationWrapper, Block
-from .BlockTracker import BlockTracker
+
 from ....Tools import Excel
-from ...Blocks import Plate, SplitPlate, Finish
+from ...Blocks import Finish, Plate, SplitPlate
+from .Block import Block, BlockObjectCreationWrapper
+from .BlockTracker import BlockTracker
 
 
 def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
