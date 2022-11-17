@@ -1,5 +1,6 @@
-import requests
 import subprocess
+
+import requests
 
 try:
 
