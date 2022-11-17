@@ -31,14 +31,58 @@ from ...Server.Globals import AliveStateFlag
 
 
 class WorkbookStates(Enum):
+    def __init__(self, a, b):
+        self.State = a
+        self.Reason = b
+
     # NOTE Fun Fact. The workbook states only matter for the type Run. Otherwise we "ignore" them
-    Queued = "Queued"
-    Running = "Running"
-    Paused = "Paused"  # The user paused this method manually
-    Waiting = "Waiting"  # Something occured so the method is waiting on the user
-    Stopped = "Stopped"  # The user stopped the method but it is still in the list. This allows
-    # the user to remove plates and all that jazz
-    # Killed = "Killed" #The method has been removed from the tracker. It no longer exists
+    Queued = (
+        "Queued",
+        "Method is ready for deck loading but space is not available or method is not next in queue.",
+    )
+
+    Running = (
+        "Running",
+        "Method is running normally. No interaction from the user is required.",
+    )
+
+    WaitingPaused = (
+        "Waiting: Paused",
+        "User paused this method manually. Method will not proceed until unpaused.",
+    )
+
+    WaitingDeckLoading = (
+        "Waiting: Deck Loading",
+        "The method is ready to run but the deck must be loaded first. Please proceed to load the deck.",
+    )
+
+    WaitingNotification = (
+        "Waiting: Notification",
+        "A notification was fired that waits on the user before proceeding. Please confirm the notification to continue.",
+    )
+
+    WaitingError = (
+        "Waiting: Error",
+        "An error occured. Please correct.",  # TODO
+    )
+
+    Aborted = (
+        "Aborted",
+        "User has aborted this method manually. Only deck unloading is allowed.",
+    )
+    # The user stopped the method but it is still in the list. This allows the user to remove plates and all that jazz
+
+    Complete = (
+        "Complete",
+        "Method execution is complete. Only deck unloading is allowed.",
+    )
+    # The user stopped the method but it is still in the list. This allows the user to remove plates and all that jazz
+
+    Dequeued = (
+        "Dequeued",
+        "Method no longer 'exists' in the system. This is here for book keeping only. User will never see this state.",
+    )
+    # The user stopped the method but it is still in the list. This allows the user to remove plates and all that jazz
 
 
 class WorkbookRunTypes(Enum):
@@ -79,7 +123,6 @@ class Workbook(ObjectABC):
         self.MethodPath: str = MethodPath
         self.MethodName: str = os.path.basename(MethodPath)
         self.State: WorkbookStates = WorkbookStates.Queued
-        self.StateReason: str = "Workbook created but not yet run."
         self.MethodTreeRoot: Block = MethodBlocksTrackerInstance.GetObjectsAsList()[0]
 
         # Trackers
@@ -180,21 +223,6 @@ class Workbook(ObjectABC):
 
 def WorkbookProcessor(WorkbookInstance: Workbook):
 
-    while True:
-        WorkbookInstance.ProcessingLock.acquire()
-        WorkbookInstance.ProcessingLock.release()
-        if AliveStateFlag.AliveStateFlag is False:
-            # Do some workbook save state stuff here
-            return
-
-        if all(
-            LoadedLabwareConnection.IsConnected()
-            for LoadedLabwareConnection in WorkbookInstance.GetLoadedLabwareConnectionTracker().GetObjectsAsList()
-        ):
-            break
-        # if all are connected then we can start running. Boom!
-    # This first thing we need to do is check that all labwares are loaded. If not then we sit here and wait.
-
     ContextTrackerInstance = WorkbookInstance.GetContextTracker()
     InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
     ExecutedBlocksTrackerInstance = WorkbookInstance.GetExecutedBlocksTracker()
@@ -208,6 +236,22 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
     # Do the first step processing here. First step is always a plate step.
 
     while True:
+
+        while True:
+            WorkbookInstance.ProcessingLock.acquire()
+            WorkbookInstance.ProcessingLock.release()
+            if AliveStateFlag.AliveStateFlag is False:
+                # Do some workbook save state stuff here
+                return
+
+            if all(
+                LoadedLabwareConnection.IsConnected()
+                for LoadedLabwareConnection in WorkbookInstance.GetLoadedLabwareConnectionTracker().GetObjectsAsList()
+            ):
+                break
+            # if all are connected then we can start running. Boom!
+        # This first thing we need to do is check that all labwares are loaded. If not then we sit here and wait.
+        # This could be expanded to wait until a set of labware is loaded before proceeding. How? No idea.
 
         if all(
             item in ExecutedBlocksTrackerInstance.GetObjectsAsList()
@@ -234,10 +278,13 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                     )
                 )
 
-            WorkbookInit(WorkbookInstance)
+            if WorkbookInstance.GetRunType() == WorkbookRunTypes.PreRun:
+                WorkbookInit(WorkbookInstance)
+            # If we are prerun then we need to do this another time to actually run the method
+            # else we are done here and can return
 
             return
-        # First thing to do is check that all blocks have been executed.
+        # First thing to do is check if all blocks have been executed.
 
         WorkbookInstance.ProcessingLock.acquire()
         WorkbookInstance.ProcessingLock.release()
