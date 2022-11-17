@@ -5,7 +5,6 @@ from ...Workbook.Block import (
 )
 from ....Tools import Excel, ExcelHandle
 from ...Workbook import Workbook
-from ....HAL import Hal
 
 
 @ClassDecorator_AvailableBlock
@@ -32,11 +31,11 @@ class Incubate(Block):
         self.ExcelInstance.SelectSheet("Method")
         return self.ExcelInstance.ReadCellValue(self.Row + 5, self.Col + 2)
 
-    def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
+    def Preprocess(self, WorkbookInstance: Workbook):
         with ExcelHandle(False) as ExcelHandleInstance:
             self.ExcelInstance.AttachHandle(ExcelHandleInstance)
 
     @FunctionDecorator_ProcessFunction
-    def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
+    def Process(self, WorkbookInstance: Workbook):
         with ExcelHandle(False) as ExcelHandleInstance:
             self.ExcelInstance.AttachHandle(ExcelHandleInstance)

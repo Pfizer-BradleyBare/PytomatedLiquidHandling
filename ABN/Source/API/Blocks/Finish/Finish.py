@@ -5,7 +5,6 @@ from ...Workbook.Block import (
 )
 from ....Tools import Excel
 from ...Workbook import Workbook
-from ....HAL import Hal
 
 
 @ClassDecorator_AvailableBlock
@@ -16,11 +15,11 @@ class Finish(Block):
     def GetName(self) -> str:
         return "Finish" + str((self.Row, self.Col))
 
-    def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
+    def Preprocess(self, WorkbookInstance: Workbook):
         pass
 
     @FunctionDecorator_ProcessFunction
-    def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
+    def Process(self, WorkbookInstance: Workbook):
 
         WorkbookInstance.GetInactiveContextTracker().ManualLoad(
             WorkbookInstance.GetExecutingContext()

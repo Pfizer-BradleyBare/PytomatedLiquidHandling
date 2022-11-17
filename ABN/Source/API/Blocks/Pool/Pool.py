@@ -5,7 +5,7 @@ from ...Workbook.Block import (
 )
 from ....Tools import Excel, ExcelHandle
 from ...Workbook import Workbook
-from ....HAL import Hal
+
 from ...Tools.Context import WellSequence
 
 
@@ -25,12 +25,12 @@ class Pool(Block):
         self.ExcelInstance.SelectSheet("Method")
         return self.ExcelInstance.ReadCellValue(self.Row + 3, self.Col + 2)
 
-    def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
+    def Preprocess(self, WorkbookInstance: Workbook):
         with ExcelHandle(False) as ExcelHandleInstance:
             self.ExcelInstance.AttachHandle(ExcelHandleInstance)
 
     @FunctionDecorator_ProcessFunction
-    def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
+    def Process(self, WorkbookInstance: Workbook):
         with ExcelHandle(False) as ExcelHandleInstance:
             self.ExcelInstance.AttachHandle(ExcelHandleInstance)
             Locations = self.GetLocation()

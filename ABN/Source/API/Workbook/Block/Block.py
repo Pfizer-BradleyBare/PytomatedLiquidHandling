@@ -67,13 +67,13 @@ class Block(ObjectABC, Node):
 
     @abstractmethod
     # This is where actual block execution should occur
-    def Preprocess(self, WorkbookInstance, HalInstance):
+    def Preprocess(self, WorkbookInstance):
         raise NotImplementedError
 
     @abstractmethod
     # This is where actual block execution should occur
     @FunctionDecorator_ProcessFunction
-    def Process(self, WorkbookInstance, HalInstance):
+    def Process(self, WorkbookInstance):
         raise NotImplementedError
 
 

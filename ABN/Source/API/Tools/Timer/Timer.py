@@ -1,7 +1,7 @@
 import time
 from ....Tools.AbstractClasses import ObjectABC
 from ...Workbook import Block, Workbook
-from ....HAL import Hal
+
 from typing import Callable
 
 
@@ -12,16 +12,14 @@ class Timer(ObjectABC):
         WaitReason: str,
         BlockInstance: Block,
         WorkbookInstance: Workbook,
-        HalInstance: Hal,
-        CallbackFunction: Callable[[Block, Workbook, Hal], None],
+        CallbackFunction: Callable[[Block, Workbook], None],
     ):
         self.WaitTimeSeconds: float = WaitTimeSeconds
         self.WaitTimeEnd: float = time.time() + WaitTimeSeconds
         self.WaitReason: str = WaitReason
         self.BlockInstance: Block = BlockInstance
         self.WorkbookInstance: Workbook = WorkbookInstance
-        self.HalInstance: Hal = HalInstance
-        self.CallbackFunction: Callable[[Block, Workbook, Hal], None] = CallbackFunction
+        self.CallbackFunction: Callable[[Block, Workbook], None] = CallbackFunction
 
     def GetName(self) -> str:
         return "Timer: " + str(self.BlockInstance.GetName())
@@ -36,6 +34,4 @@ class Timer(ObjectABC):
         return self.WaitReason
 
     def ExecuteCallbackFunction(self) -> None:
-        self.CallbackFunction(
-            self.BlockInstance, self.WorkbookInstance, self.HalInstance
-        )
+        self.CallbackFunction(self.BlockInstance, self.WorkbookInstance)

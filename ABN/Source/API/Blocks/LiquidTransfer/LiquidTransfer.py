@@ -5,9 +5,9 @@ from ...Workbook.Block import (
 )
 from ....Tools import Excel, ExcelHandle
 from ...Workbook import Workbook
-from ....HAL import Hal
+
 from ...Tools.Container import Container, ContainerOperator
-from ....Driver.Pipette import Sequence, SequenceTracker, Pipette
+from ....Driver.Pipette import Sequence, SequenceTracker  # , Pipette
 
 
 @ClassDecorator_AvailableBlock
@@ -30,12 +30,12 @@ class LiquidTransfer(Block):
         self.ExcelInstance.SelectSheet("Method")
         return self.ExcelInstance.ReadCellValue(self.Row + 4, self.Col + 2)
 
-    def Preprocess(self, WorkbookInstance: Workbook, HalInstance: Hal):
+    def Preprocess(self, WorkbookInstance: Workbook):
         with ExcelHandle(False) as ExcelHandleInstance:
             self.ExcelInstance.AttachHandle(ExcelHandleInstance)
 
     @FunctionDecorator_ProcessFunction
-    def Process(self, WorkbookInstance: Workbook, HalInstance: Hal):
+    def Process(self, WorkbookInstance: Workbook):
         with ExcelHandle(False) as ExcelHandleInstance:
             self.ExcelInstance.AttachHandle(ExcelHandleInstance)
 
@@ -126,10 +126,10 @@ class LiquidTransfer(Block):
                 )
             # Create our pipetting tracker
 
-            Pipette(
-                WorkbookInstance,
-                SequenceTrackerInstance,
-                HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
-                HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
-            )
+            # Pipette(
+            #    WorkbookInstance,
+            #    SequenceTrackerInstance,
+            #    HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
+            #    HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
+            # )
             # We need to figure out the pipetting first
