@@ -1,7 +1,7 @@
-from ....Driver.Pipette import Sequence, SequenceTracker  # , Pipette
+from ....Driver.Pipette import Sequence, SequenceTracker
 from ....Tools import Excel, ExcelHandle
 from ...Tools.Container import Container, ContainerOperator
-from ...Workbook import Workbook
+from ...Workbook import Workbook, WorkbookRunTypes
 from ...Workbook.Block import (
     Block,
     ClassDecorator_AvailableBlock,
@@ -94,37 +94,63 @@ class LiquidTransfer(Block):
             # If source is not a container then we need to add it
 
             SequenceTrackerInstance = SequenceTracker()
-            for (
-                WellNumber,
-                Destination,
-                Source,
-                Volume,
-                AspirateMixingParam,
-                DispenseMixingParam,
-            ) in zip(
-                range(1, WorklistInstance.GetNumSamples() + 1),
+
+            ContextInstance = WorkbookInstance.GetExecutingContext()
+
+            WellFactorTrackerInstance = ContextInstance.GetWellFactorTracker()
+
+            WellFactorTrackerInstance = ContextInstance.GetWellFactorTracker()
+            AspirateWellSequencesTrackerInstance = (
+                ContextInstance.GetAspirateWellSequenceTracker()
+            )
+            DispenseWellSequencesTrackerInstance = (
+                ContextInstance.GetDispenseWellSequenceTracker()
+            )
+
+            ProgrammaticDispenseWellNumbers = list()
+            ProgrammaticAspirateWellNumbers = list()
+
+            ProgrammaticDispenseMixParams = list()
+            ProgrammaticSourceMixParams = list()
+
+            ProgrammaticDispenseLiquidClassNames = list()
+            ProgrammaticSourceLiquidClassNames = list()
+
+            for Destination, Source, WellNumber, Volume in zip(
                 Destinations,
                 Sources,
+                range(1, WorklistInstance.GetNumSamples() + 1),
                 Volumes,
-                AspirateMixingParams,
-                DispenseMixingParams,
             ):
-                pass
-                # SequenceTrackerInstance.ManualLoad(
-                #    Sequence(
-                #        WellNumber,
-                #        ContainerOperator(
-                #            ContainerTrackerInstance.GetObjectByName(Destination), self
-                #        ),
-                #        ContainerOperator(
-                #            ContainerTrackerInstance.GetObjectByName(Source), self
-                #        ),
-                #        AspirateMixingParam,
-                #        DispenseMixingParam,
-                #        Volume,
-                #    )
-                # )
-            # Create our pipetting tracker
+                if WellFactorTrackerInstance.GetObjectByName(WellNumber) == 0:
+                    continue
+
+                AspirateWellNumber = (
+                    AspirateWellSequencesTrackerInstance.GetObjectByName(
+                        WellNumber
+                    ).GetSequence()
+                )
+                DispenseWellNumber = (
+                    DispenseWellSequencesTrackerInstance.GetObjectByName(
+                        WellNumber
+                    ).GetSequence()
+                )
+
+                DestinationOperatorInstance = ContainerOperator(Destination)
+                SourceOperatorInstance = ContainerOperator(Source)
+
+                DestinationOperatorInstance.Dispense(
+                    DispenseWellNumber,
+                    SourceOperatorInstance.Aspirate(AspirateWellNumber, Volume),
+                )
+                # lets do programmatic pipetting first
+
+                if WorkbookInstance.GetRunType() == WorkbookRunTypes.Run:
+                    LoadedLabwareConnectionTrackerInstance = (
+                        WorkbookInstance.GetLoadedLabwareConnectionTracker()
+                    )
+
+                # Now we take the programmatic pipetting info and use it to do physical pipetting
 
             # Pipette(
             #    WorkbookInstance,

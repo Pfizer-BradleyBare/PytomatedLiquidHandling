@@ -1,3 +1,3 @@
-from ...Driver.Tools.LoadedLabwareConnection import LoadedLabwareTracker
+from ..Tools.LoadedLabwareConnection import LoadedLabwareTracker
 
 LoadedLabwareTrackerInstance = LoadedLabwareTracker()

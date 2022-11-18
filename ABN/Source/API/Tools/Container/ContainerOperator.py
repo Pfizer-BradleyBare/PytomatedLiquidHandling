@@ -1,5 +1,4 @@
 from ....Tools.AbstractClasses import ObjectABC
-from ...Workbook.Block import Block
 from ...Workbook.Solution import SolutionPropertyValues, SolutionTracker
 from ...Workbook.Solution.Value.Value import SolutionPropertyValue
 from .Container import Container
@@ -9,9 +8,8 @@ from .Well.Well import Well
 
 
 class ContainerOperator:
-    def __init__(self, ContainerInstance: Container, BlockInstance: Block):
+    def __init__(self, ContainerInstance: Container):
         self.ContainerInstance: Container = ContainerInstance
-        self.BlockInstance: Block = BlockInstance
 
     def Aspirate(
         self,
