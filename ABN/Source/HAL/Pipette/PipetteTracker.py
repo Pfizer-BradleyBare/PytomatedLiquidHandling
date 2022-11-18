@@ -1,12 +1,6 @@
 from ...Tools.AbstractClasses import TrackerABC
-from ..Tip import TipTracker
-from .Pipette import PipettingDevice
+from .Pipette import Pipette
 
 
-class PipetteTracker(TrackerABC[PipettingDevice]):
-    def __init__(
-        self,
-        TipTrackerInstance: TipTracker,
-    ):
-        TrackerABC.__init__(self)
-        self.TipTrackerInstance: TipTracker = TipTrackerInstance
+class PipetteTracker(TrackerABC[Pipette]):
+    pass

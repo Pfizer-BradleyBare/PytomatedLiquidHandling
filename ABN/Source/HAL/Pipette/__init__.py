@@ -1,23 +1,22 @@
-from .Pipette import (
-    LiquidClass,
-    PipettingTip,
-    DeviceTypes,
-    PipettingChannels,
-    Portrait1mLChannels,
-    Core96HeadChannels,
-    PipettingDevice,
+from .Pipette import Pipette, Pipette8Channel, Pipette96Channel, PipettingDeviceTypes
+from .PipetteTip.LiquidClass.LiquidClass import LiquidClass
+from .PipetteTip.LiquidClass.LiquidClassCategory import LiquidClassCategory
+from .PipetteTip.LiquidClass.LiquidClassCategoryTracker import (
+    LiquidClassCategoryTracker,
 )
+from .PipetteTip.PipetteTip import PipetteTip
+from .PipetteTip.PipetteTipTracker import PipetteTipTracker
 from .PipetteTracker import PipetteTracker
-from .HAL.PipetteInterfaceABC import PipetteInterfaceABC
 
 __all__ = [
+    "Pipette",
+    "Pipette8Channel",
+    "Pipette96Channel",
+    "PipettingDeviceTypes",
     "LiquidClass",
-    "PipettingTip",
-    "DeviceTypes",
-    "PipettingChannels",
-    "Portrait1mLChannels",
-    "Core96HeadChannels",
-    "PipettingDevice",
+    "LiquidClassCategory",
+    "LiquidClassCategoryTracker",
+    "PipetteTip",
+    "PipetteTipTracker",
     "PipetteTracker",
-    "PipetteInterfaceABC",
 ]

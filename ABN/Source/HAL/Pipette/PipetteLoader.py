@@ -1,63 +1,93 @@
 import yaml
 
-from .Pipette import (
-    Core96HeadChannels,
-    DeviceTypes,
-    LiquidClass,
-    PipettingDevice,
-    PipettingTip,
-    Portrait1mLChannels,
+from ..Tip import TipTracker
+from .Pipette import Pipette8Channel, Pipette96Channel, PipettingDeviceTypes
+from .PipetteTip.LiquidClass.LiquidClass import LiquidClass
+from .PipetteTip.LiquidClass.LiquidClassCategory import LiquidClassCategory
+from .PipetteTip.LiquidClass.LiquidClassCategoryTracker import (
+    LiquidClassCategoryTracker,
 )
+from .PipetteTip.PipetteTip import PipetteTip
+from .PipetteTip.PipetteTipTracker import PipetteTipTracker
 from .PipetteTracker import PipetteTracker
 
 
-def LoadYaml(PipetteTrackerInstance: PipetteTracker, FilePath: str):
+def LoadYaml(
+    PipetteTrackerInstance: PipetteTracker,
+    TipTrackerInstance: TipTracker,
+    FilePath: str,
+):
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
 
-    for ChannelsDeviceID in ConfigFile["Device IDs"]:
-        ChannelsDevice = ConfigFile["Device IDs"][ChannelsDeviceID]
-        Enabled = ChannelsDevice["Enabled"]
+    for Device in ConfigFile["Device IDs"]:
+        Enabled = ConfigFile["Device IDs"][Device]["Enabled"]
 
-        PipettingTips = list()
-        for TipID in ChannelsDevice["Supported Tips"]:
-            TipItem = PipetteTrackerInstance.TipTrackerInstance.GetObjectByName(TipID)
+        PipetteTipTrackerInstance = PipetteTipTracker()
 
-            LiquidClasses = list()
-            for LiquidClassID in ChannelsDevice["Supported Tips"][TipID][
+        for Tip in ConfigFile["Device IDs"][Device]["Supported Tips"]:
+
+            TipInstance = TipTrackerInstance.GetObjectByName(Tip)
+            PickupSequence = ConfigFile["Device IDs"][Device]["Supported Tips"][Tip][
+                "Pickup Sequence"
+            ]
+            DropoffSequence = ConfigFile["Device IDs"][Device]["Supported Tips"][Tip][
+                "Drop Off Sequence"
+            ]
+            WasteSequence = ConfigFile["Device IDs"][Device]["Supported Tips"][Tip][
+                "Waste Sequence"
+            ]
+
+            LiquidClassCategoryTrackerInstance = LiquidClassCategoryTracker()
+
+            for LiquidClassID in ConfigFile["Device IDs"][Device]["Supported Tips"][
                 "Liquid Class IDs"
             ]:
-                for LiquidClassItem in ChannelsDevice["Supported Tips"][TipID][
-                    "Liquid Class IDs"
-                ][LiquidClassID]:
-                    MaxVolume = LiquidClassItem["Max Volume"]
-                    LiquidClassString = LiquidClassItem["Liquid Class"]
+                LiquidClassCategoryInstance = LiquidClassCategory(LiquidClassID)
 
-                    LiquidClasses.append(
-                        LiquidClass(LiquidClassID, MaxVolume, LiquidClassString)
-                    )
-            # Do the supported Tips loading
+                for LiquidClassItem in ConfigFile["Device IDs"][Device][
+                    "Supported Tips"
+                ]["Liquid Class IDs"][LiquidClassID]:
 
-            PipettingTips.append(PipettingTip(TipItem, LiquidClasses))
+                    MaxVolume = ConfigFile["Device IDs"][Device]["Supported Tips"][
+                        "Liquid Class IDs"
+                    ][LiquidClassID][LiquidClassItem]["Max Volume"]
 
-        DeviceType = DeviceTypes(ChannelsDeviceID)
+                    Name = ConfigFile["Device IDs"][Device]["Supported Tips"][
+                        "Liquid Class IDs"
+                    ][LiquidClassID][LiquidClassItem]["Max Volume"]
 
-        if DeviceType == DeviceTypes.Portrait1mLChannels:
-            ActiveChannels = ChannelsDevice["Active Channels"]
+                    LiquidClassCategoryInstance.ManualLoad(LiquidClass(Name, MaxVolume))
 
-            PipetteTrackerInstance.ManualLoad(
-                PipettingDevice(
-                    Portrait1mLChannels(ActiveChannels, Enabled),
-                    PipettingTips,
+                LiquidClassCategoryTrackerInstance.ManualLoad(
+                    LiquidClassCategoryInstance
+                )
+
+            PipetteTipTrackerInstance.ManualLoad(
+                PipetteTip(
+                    TipInstance,
+                    LiquidClassCategoryTrackerInstance,
+                    PickupSequence,
+                    DropoffSequence,
+                    WasteSequence,
                 )
             )
 
-        elif DeviceType == DeviceTypes.Core96Head:
+        PipetteDeviceType = PipettingDeviceTypes(Device)
+
+        if PipetteDeviceType == PipettingDeviceTypes.Pipette8Channel:
+
             PipetteTrackerInstance.ManualLoad(
-                PipettingDevice(
-                    Core96HeadChannels(Enabled),
-                    PipettingTips,
+                Pipette8Channel(
+                    Enabled,
+                    PipetteTipTrackerInstance,
+                    ConfigFile["Device IDs"][Device]["Active Channels"],
                 )
+            )
+
+        if PipetteDeviceType == PipettingDeviceTypes.Pipette96Channel:
+            PipetteTrackerInstance.ManualLoad(
+                Pipette96Channel(Enabled, PipetteTipTrackerInstance)
             )
