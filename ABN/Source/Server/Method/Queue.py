@@ -14,7 +14,8 @@ import os
 import web
 
 from ...API.Workbook import WorkbookLoader, WorkbookRunTypes
-from ...Server.Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
+from ..Globals.HalInstance import HalInstance
+from ..Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
 from ..Tools.Parser import Parser
 
 urls = ("/Method/Queue", "ABN.Source.Server.Method.Queue.Queue")
@@ -64,7 +65,7 @@ class Queue:
         if Action == WorkbookRunTypes.Run:
             Action = WorkbookRunTypes.PreRun
 
-        WorkbookLoader.Load(WorkbookTrackerInstance, MethodPath, Action)
+        WorkbookLoader.Load(WorkbookTrackerInstance, HalInstance, MethodPath, Action)
         # Load the workbook path into the tracker
 
         ParserObject.SetAPIState(True)

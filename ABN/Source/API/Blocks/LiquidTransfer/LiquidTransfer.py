@@ -1,4 +1,4 @@
-from ....Driver.Pipette import Sequence, SequenceTracker
+# from ....Driver.Pipette import Sequence, SequenceTracker
 from ....Tools import Excel, ExcelHandle
 from ...Tools.Container import Container, ContainerOperator
 from ...Workbook import Workbook, WorkbookRunTypes
@@ -93,7 +93,7 @@ class LiquidTransfer(Block):
                     ContainerTrackerInstance.ManualLoad(SourceContainerInstance)
             # If source is not a container then we need to add it
 
-            SequenceTrackerInstance = SequenceTracker()
+            # SequenceTrackerInstance = SequenceTracker()
 
             ContextInstance = WorkbookInstance.GetExecutingContext()
 
