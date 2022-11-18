@@ -1,3 +1,4 @@
+from ...HAL import Hal
 from ...Tools import Excel, ExcelHandle
 from ..Tools.LoadedLabwareConnection import LoadedLabwareConnectionTracker
 from .Block import BlockLoader, BlockTracker
@@ -9,6 +10,7 @@ from .Worklist import Worklist
 
 def Load(
     WorkbookTrackerInstance: WorkbookTracker,
+    HalInstance: Hal,
     ExcelFilePath: str,
     RunType: WorkbookRunTypes,
 ):
@@ -27,6 +29,7 @@ def Load(
 
         WorkbookTrackerInstance.ManualLoad(
             Workbook(
+                HalInstance,
                 RunType,
                 ExcelFilePath,
                 BlockTrackerInstance,

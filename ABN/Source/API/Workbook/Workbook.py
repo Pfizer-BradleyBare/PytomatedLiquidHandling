@@ -11,6 +11,7 @@ from ...API.Tools.Context import (
     WellSequence,
     WellSequenceTracker,
 )
+from ...HAL import Hal
 from ...Server.Globals import LOG, AliveStateFlag
 from ...Tools.AbstractClasses import ObjectABC
 from ..Blocks import MergePlates
@@ -109,6 +110,7 @@ class WorkbookRunTypes(Enum):
 class Workbook(ObjectABC):
     def __init__(
         self,
+        HalInstance: Hal,
         RunType: WorkbookRunTypes,
         MethodPath: str,
         MethodBlocksTrackerInstance: BlockTracker,
@@ -117,9 +119,11 @@ class Workbook(ObjectABC):
         LoadedLabwareConnectionTrackerInstance: LoadedLabwareConnectionTracker,
         PreprocessingBlocksTrackerInstance: BlockTracker,
     ):
+
         # Normal Init Variables
 
         # Variables
+        self.HalInstance: Hal = HalInstance
         self.RunType: WorkbookRunTypes = RunType
         self.MethodPath: str = MethodPath
         self.MethodName: str = os.path.basename(MethodPath)
@@ -199,6 +203,9 @@ class Workbook(ObjectABC):
 
     def GetSolutionTracker(self) -> SolutionTracker:
         return self.SolutionTrackerInstance
+
+    def GetHal(self) -> Hal:
+        return self.HalInstance
 
     def GetLoadedLabwareConnectionTracker(self) -> LoadedLabwareConnectionTracker:
         return self.LoadedLabwareConnectionTrackerInstance
