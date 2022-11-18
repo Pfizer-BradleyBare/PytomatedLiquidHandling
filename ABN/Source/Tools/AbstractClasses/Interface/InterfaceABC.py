@@ -1,9 +1,17 @@
 from abc import abstractmethod
+from enum import Enum
 
-# This is an abstract loader class for loading configuration files
+
+class OnOff(Enum):
+    On = 1
+    Off = 0
 
 
 class InterfaceABC:
     @abstractmethod
-    def HALInitialize(self) -> dict:
+    def Initialize(self) -> dict:
+        raise NotImplementedError
+
+    @abstractmethod
+    def Deinitialize(self) -> dict:
         raise NotImplementedError
