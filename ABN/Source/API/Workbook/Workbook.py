@@ -12,14 +12,14 @@ from ...API.Tools.Context import (
     WellSequenceTracker,
 )
 from ...Server.Globals import LOG, AliveStateFlag
-from ...Server.Tools.LoadedLabwareConnection import (
+from ...Tools.AbstractClasses import ObjectABC
+from ..Blocks import MergePlates
+from ..Tools.LoadedLabwareConnection import (
     LabwareSelectionLoader,
     LabwareSelectionTracker,
     LoadedLabwareConnection,
     LoadedLabwareConnectionTracker,
 )
-from ...Tools.AbstractClasses import ObjectABC
-from ..Blocks import MergePlates
 from ..Tools.Timer import TimerTracker
 from .Block import Block, BlockTracker
 from .Solution import SolutionTracker

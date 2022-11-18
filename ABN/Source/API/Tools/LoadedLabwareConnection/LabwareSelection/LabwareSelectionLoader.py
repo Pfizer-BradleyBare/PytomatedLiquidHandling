@@ -1,5 +1,5 @@
 from .....API.Tools.Container import ContainerTracker
-from ....Globals.HalInstance import HalInstance
+from .....Server.Globals.HalInstance import HalInstance
 from .LabwareSelection import LabwareSelection
 from .LabwareSelectionTracker import LabwareSelectionTracker
 

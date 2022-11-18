@@ -1,3 +1,3 @@
-from ..Tools.LoadedLabwareConnection import LoadedLabwareTracker
+from ...API.Tools.LoadedLabwareConnection import LoadedLabwareTracker
 
 LoadedLabwareTrackerInstance = LoadedLabwareTracker()

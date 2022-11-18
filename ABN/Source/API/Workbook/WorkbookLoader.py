@@ -1,5 +1,5 @@
-from ...Server.Tools.LoadedLabwareConnection import LoadedLabwareConnectionTracker
 from ...Tools import Excel, ExcelHandle
+from ..Tools.LoadedLabwareConnection import LoadedLabwareConnectionTracker
 from .Block import BlockLoader, BlockTracker
 from .Solution import SolutionLoader, SolutionTracker
 from .Workbook import Workbook, WorkbookRunTypes
