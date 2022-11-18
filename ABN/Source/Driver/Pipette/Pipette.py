@@ -1,51 +1,62 @@
-from ...API.Workbook import Workbook
-from ...HAL.Pipette import PipetteTracker
-from .Sequence.SequenceTracker import SequenceTracker
+from enum import Enum
+
+from ...Tools.AbstractClasses import ObjectABC
+from .PipetteTip.PipetteTipTracker import PipetteTipTracker
 
 
-def Pipette(
-    WorkbookInstance: Workbook,
-    SequenceTrackerInstance: SequenceTracker,
-    AspiratePipettingDeviceTrackerInstance: PipetteTracker,
-    DispensePipettingDeviceTrackerInstance: PipetteTracker,
-):
+class PipettingDeviceTypes(Enum):
+    Pipette8Channel = "1mL Channels Portrait"
+    Pipette96Channel = "96 Core Head"
 
-    print("IN PROCESS")
 
-    ContextInstance = WorkbookInstance.GetExecutingContext()
+class Pipette(ObjectABC):
+    def __init__(
+        self,
+        PipettingDeviceType: PipettingDeviceTypes,
+        Enabled: bool,
+        SupoortedPipetteTipTrackerInstance: PipetteTipTracker,
+    ):
+        self.PipettingDeviceType: PipettingDeviceTypes = PipettingDeviceType
+        self.Enabled: bool = Enabled
+        self.SupoortedPipetteTipTrackerInstance: PipetteTipTracker = (
+            SupoortedPipetteTipTrackerInstance
+        )
 
-    WellFactorTrackerInstance = ContextInstance.GetWellFactorTracker()
-    # AspirateWellSequencesTrackerInstance = (
-    #    ContextInstance.GetAspirateWellSequenceTracker()
-    # )
-    # DispenseWellSequencesTrackerInstance = (
-    #    ContextInstance.GetDispenseWellSequenceTracker()
-    # )
+    def GetName(self) -> str:
+        return self.PipettingDeviceType.value
 
-    for Sequence in SequenceTrackerInstance.GetObjectsAsList():
-        if WellFactorTrackerInstance.GetObjectByName(Sequence.GetName()) == 0:
-            continue
+    def IsEnabled(self) -> bool:
+        return self.Enabled
 
-        # AspirateWellNumber = AspirateWellSequencesTrackerInstance.GetObjectByName(
-        #    Sequence.GetName()
-        # ).GetSequence()
-        # DispenseWellNumber = DispenseWellSequencesTrackerInstance.GetObjectByName(
-        #    Sequence.GetName()
-        # ).GetSequence()
+    def GetSupoortedPipetteTipTracker(self) -> PipetteTipTracker:
+        return self.SupoortedPipetteTipTrackerInstance
 
-        # TransferVolume = Sequence.GetTransferVolume()
 
-        # DestinationContainerOperatorInstance = (
-        #    Sequence.GetDestinationContainerOperator()
-        # )
-        # SourceContainerOperatorInstance = Sequence.GetSourceContainerOperator()
+class Pipette96Channel(Pipette):
+    def __init__(
+        self,
+        Enabled: bool,
+        SupoortedPipetteTipTrackerInstance: PipetteTipTracker,
+    ):
+        Pipette.__init__(
+            self,
+            PipettingDeviceTypes.Pipette96Channel,
+            Enabled,
+            SupoortedPipetteTipTrackerInstance,
+        )
 
-        # DestinationContainerOperatorInstance.Dispense(
-        #    DispenseWellNumber,
-        #    SourceContainerOperatorInstance.Aspirate(
-        #        AspirateWellNumber, TransferVolume
-        #    ),
-        # )
-    # First thing we need to do is update the well volumes. This is going to be something...
 
-    print("COMPLETE")
+class Pipette8Channel(Pipette):
+    def __init__(
+        self,
+        Enabled: bool,
+        SupoortedPipetteTipTrackerInstance: PipetteTipTracker,
+        ActiveChannels: list[int],
+    ):
+        Pipette.__init__(
+            self,
+            PipettingDeviceTypes.Pipette8Channel,
+            Enabled,
+            SupoortedPipetteTipTrackerInstance,
+        )
+        self.ActiveChannels: list[int] = ActiveChannels
