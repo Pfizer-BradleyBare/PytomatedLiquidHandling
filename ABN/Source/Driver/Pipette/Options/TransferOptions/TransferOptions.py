@@ -9,10 +9,10 @@ class TransferOptions(ObjectABC):
         Name: str,
         ChannelNumber: int,
         SourceSequence: str,
-        SourceWell: int,
+        SourceSequencePosition: int,
         SourceLiquidClass: str,
         DestinationSequence: str,
-        DestinationWell: int,
+        DestinationSequencePosition: int,
         DestinationLiquidClass: str,
         Volume: float,
     ):
@@ -21,7 +21,7 @@ class TransferOptions(ObjectABC):
         self.ChannelNumber: int = ChannelNumber
 
         self.SourceSequence: str = SourceSequence
-        self.SourceWell: int = SourceWell
+        self.SourceSequencePosition: int = SourceSequencePosition
         self.SourceLiquidClass: str = SourceLiquidClass
         self.SourceMixingCycles: int = 0
         self.SourceCapacitiveLiquidLevelDetection: OnOff = OnOff.Off
@@ -30,7 +30,7 @@ class TransferOptions(ObjectABC):
         self.SourceFixedHeight: float = 0
 
         self.DestinationSequence: str = DestinationSequence
-        self.DestinationWell: int = DestinationWell
+        self.DestinationSequencePosition: int = DestinationSequencePosition
         self.DestinationLiquidClass: str = DestinationLiquidClass
         self.DestinationMixingCycles: int = 0
         self.DestinationCapacitiveLiquidLevelDetection: OnOff = OnOff.Off

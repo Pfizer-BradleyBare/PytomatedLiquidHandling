@@ -9,14 +9,14 @@ class MeasureOptions(ObjectABC):
         Name: str,
         ChannelNumber: int,
         Sequence: str,
-        Well: int,
+        SequencePosition: int,
     ):
         self.Name: str = Name
 
         self.ChannelNumber: int = ChannelNumber
 
         self.Sequence: str = Sequence
-        self.Well: int = Well
+        self.SequencePosition: int = SequencePosition
         self.CapacitiveLiquidLevelDetection: OnOff = OnOff.Off
         self.PressureLiquidLevelDetection: OnOff = OnOff.Off
 

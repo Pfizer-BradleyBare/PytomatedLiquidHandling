@@ -2,18 +2,18 @@ import os
 
 import web
 
-import ABN.Source.Server.Command.Request as Request
-import ABN.Source.Server.Command.Respond as Respond
+import ABN.Source.Server.BackEnd.Request as Request
+import ABN.Source.Server.BackEnd.Respond as Respond
+import ABN.Source.Server.FrontEnd.AvailableMethods as AvailableMethods
+import ABN.Source.Server.FrontEnd.CleanupMethodProject as CleanupMethodProject
+import ABN.Source.Server.FrontEnd.Close as Close
+import ABN.Source.Server.FrontEnd.Dequeue as Dequeue
+import ABN.Source.Server.FrontEnd.GenerateMethodFile as GenerateMethodFile
+import ABN.Source.Server.FrontEnd.ListQueue as ListQueue
+import ABN.Source.Server.FrontEnd.Open as Open
+import ABN.Source.Server.FrontEnd.Queue as Queue
+import ABN.Source.Server.FrontEnd.Status as Status
 import ABN.Source.Server.Globals.Logger as Logger
-import ABN.Source.Server.Method.AvailableMethods as AvailableMethods
-import ABN.Source.Server.Method.CleanupMethodProject as CleanupMethodProject
-import ABN.Source.Server.Method.Close as Close
-import ABN.Source.Server.Method.Dequeue as Dequeue
-import ABN.Source.Server.Method.GenerateMethodFile as GenerateMethodFile
-import ABN.Source.Server.Method.ListQueue as ListQueue
-import ABN.Source.Server.Method.Open as Open
-import ABN.Source.Server.Method.Queue as Queue
-import ABN.Source.Server.Method.Status as Status
 import ABN.Source.Server.State.IsActive as IsActive
 import ABN.Source.Server.State.Kill as Kill
 
