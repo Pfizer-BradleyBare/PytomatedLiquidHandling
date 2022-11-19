@@ -17,8 +17,9 @@ class MeasureOptions(ObjectABC):
 
         self.Sequence: str = Sequence
         self.SequencePosition: int = SequencePosition
-        self.CapacitiveLiquidLevelDetection: OnOff = OnOff.Off
-        self.PressureLiquidLevelDetection: OnOff = OnOff.Off
+        self.CapacitiveLiquidLevelDetection: int = 0
+        self.PressureLiquidLevelDetection: int = 0
+        self.MaxHeightDifference: float = 0
 
     def GetName(self) -> str:
         return self.Name

@@ -3,9 +3,13 @@ from enum import Enum
 from .....Tools.AbstractClasses import ObjectABC
 
 
-class EjectOptions(ObjectABC):
+class InitializeOptions(ObjectABC):
     def __init__(
-        self, Name: str, Sequence: str, ChannelNumber: int, SequencePosition: int
+        self,
+        Name: str,
+        Sequence: str,
+        ChannelNumber: int,
+        SequencePosition: int,
     ):
         self.Name: str = Name
         self.ChannelNumber: int = ChannelNumber

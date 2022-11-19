@@ -2,5 +2,5 @@ from .....Tools.AbstractClasses import TrackerABC
 from .EjectOptions import EjectOptions
 
 
-class PickupOptionsTracker(TrackerABC[EjectOptions]):
+class EjectOptionsTracker(TrackerABC[EjectOptions]):
     pass
