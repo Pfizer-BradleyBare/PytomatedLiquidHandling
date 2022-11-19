@@ -1,7 +1,7 @@
 # from ....Driver.Pipette import Sequence, SequenceTracker
 from ....Tools import Excel, ExcelHandle
 from ...Tools.Container import Container, ContainerOperator
-from ...Workbook import Workbook, WorkbookRunTypes
+from ...Workbook import Workbook  # WorkbookRunTypes
 from ...Workbook.Block import (
     Block,
     ClassDecorator_AvailableBlock,
@@ -145,7 +145,7 @@ class LiquidTransfer(Block):
                 )
                 # lets do programmatic pipetting first
 
-                if WorkbookInstance.GetRunType() == WorkbookRunTypes.Run:
+                if WorkbookInstance.GetRunType() == "Run":
                     LoadedLabwareConnectionTrackerInstance = (
                         WorkbookInstance.GetLoadedLabwareConnectionTracker()
                     )

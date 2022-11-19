@@ -5,9 +5,11 @@ from .Hal import Hal
 from .Labware import LabwareLoader, LabwareTracker
 from .Layout import LayoutLoader, LayoutTracker
 from .Lid import LidLoader, LidTracker
-from .MagneticRack import MagneticRackLoader, MagneticRackTracker
+
+# from .MagneticRack import MagneticRackLoader, MagneticRackTracker
 from .Notify import NotifyLoader, NotifyTracker
-from .Pipette import PipetteLoader, PipetteTracker
+
+# from .Pipette import PipetteLoader, PipetteTracker
 from .TempControlDevice import TempControlDeviceLoader, TempControlDeviceTracker
 from .Tip import TipLoader, TipTracker
 from .Transport import TransportLoader, TransportTracker
@@ -107,27 +109,27 @@ def Load(HalInstance: Hal):
 
     LOG.info("Loading Pipette...")
 
-    Pipettes = PipetteTracker(Tips)
-    PipetteLoader.LoadYaml(
-        Pipettes,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Pipette\\Pipette.yaml",
-    )
-    HalInstance.PipetteTrackerInstance = Pipettes
-    for Pipette in Pipettes.GetObjectsAsList():
-        LOG.debug(Pipette)
+    #    Pipettes = PipetteTracker(Tips)
+    #    PipetteLoader.LoadYaml(
+    #        Pipettes,
+    #        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Pipette\\Pipette.yaml",
+    #    )
+    #    HalInstance.PipetteTrackerInstance = Pipettes
+    #    for Pipette in Pipettes.GetObjectsAsList():
+    #        LOG.debug(Pipette)
 
     LOG.info("Success!")
 
     LOG.info("Loading Magnetic Rack...")
 
-    MagneticRacks = MagneticRackTracker(Labwares, DeckLocations, Pipettes, Tips)
-    MagneticRackLoader.LoadYaml(
-        MagneticRacks,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\MagneticRack\\MagneticRack.yaml",
-    )
-    HalInstance.MagneticRackTrackerInstance = MagneticRacks
-    for MagneticRack in MagneticRacks.GetObjectsAsList():
-        LOG.debug(MagneticRack)
+    #    MagneticRacks = MagneticRackTracker(Labwares, DeckLocations, Pipettes, Tips)
+    #    MagneticRackLoader.LoadYaml(
+    #        MagneticRacks,
+    #        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\MagneticRack\\MagneticRack.yaml",
+    #    )
+    #    HalInstance.MagneticRackTrackerInstance = MagneticRacks
+    #    for MagneticRack in MagneticRacks.GetObjectsAsList():
+    #        LOG.debug(MagneticRack)
 
     LOG.info("Success!")
 

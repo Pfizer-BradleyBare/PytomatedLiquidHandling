@@ -3,7 +3,8 @@ from .FlipTube import FlipTubeTracker
 from .Labware import LabwareTracker
 from .Layout import LayoutTracker
 from .Lid import LidTracker
-from .MagneticRack import MagneticRackTracker
+
+# from .MagneticRack import MagneticRackTracker
 from .Notify import NotifyTracker
 from .Pipette import PipetteTracker
 from .TempControlDevice import TempControlDeviceTracker
@@ -18,7 +19,7 @@ class Hal:
         self.LabwareTrackerInstance: LabwareTracker
         self.LayoutTrackerInstance: LayoutTracker
         self.LidTrackerInstance: LidTracker
-        self.MagneticRackTrackerInstance: MagneticRackTracker
+        #   self.MagneticRackTrackerInstance: MagneticRackTracker
         self.NotifyTrackerInstance: NotifyTracker
         self.PipetteTrackerInstance: PipetteTracker
         self.TempControlDeviceTrackerInstance: TempControlDeviceTracker
@@ -40,8 +41,8 @@ class Hal:
     def GetLidTracker(self) -> LidTracker:
         return self.LidTrackerInstance
 
-    def GetMagneticRackTracker(self) -> MagneticRackTracker:
-        return self.MagneticRackTrackerInstance
+    # def GetMagneticRackTracker(self) -> MagneticRackTracker:
+    #    return self.MagneticRackTrackerInstance
 
     def GetNotifyTracker(self) -> NotifyTracker:
         return self.NotifyTrackerInstance

@@ -2,20 +2,20 @@ import os
 
 import web
 
-import ABN.Source.Server.BackEnd.Request as Request
-import ABN.Source.Server.BackEnd.Respond as Respond
-import ABN.Source.Server.FrontEnd.AvailableMethods as AvailableMethods
-import ABN.Source.Server.FrontEnd.CleanupMethodProject as CleanupMethodProject
-import ABN.Source.Server.FrontEnd.Close as Close
-import ABN.Source.Server.FrontEnd.Dequeue as Dequeue
-import ABN.Source.Server.FrontEnd.GenerateMethodFile as GenerateMethodFile
-import ABN.Source.Server.FrontEnd.ListQueue as ListQueue
-import ABN.Source.Server.FrontEnd.Open as Open
-import ABN.Source.Server.FrontEnd.Queue as Queue
-import ABN.Source.Server.FrontEnd.Status as Status
+import ABN.Source.API.Endpoints.AvailableMethods as AvailableMethods
+import ABN.Source.API.Endpoints.CleanupMethodProject as CleanupMethodProject
+import ABN.Source.API.Endpoints.Close as Close
+import ABN.Source.API.Endpoints.Dequeue as Dequeue
+import ABN.Source.API.Endpoints.GenerateMethodFile as GenerateMethodFile
+import ABN.Source.API.Endpoints.ListQueue as ListQueue
+import ABN.Source.API.Endpoints.Open as Open
+import ABN.Source.API.Endpoints.Queue as Queue
+import ABN.Source.API.Endpoints.Status as Status
+import ABN.Source.Driver.Endpoints.Request as Request
+import ABN.Source.Driver.Endpoints.Respond as Respond
+import ABN.Source.Server.Endpoints.IsActive as IsActive
+import ABN.Source.Server.Endpoints.Kill as Kill
 import ABN.Source.Server.Globals.Logger as Logger
-import ABN.Source.Server.State.IsActive as IsActive
-import ABN.Source.Server.State.Kill as Kill
 
 if __name__ == "__main__":
 
