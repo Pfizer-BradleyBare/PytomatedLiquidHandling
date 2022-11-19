@@ -1,8 +1,8 @@
 import web
 
-from ...API.Workbook import WorkbookRunTypes
+from ...Server.Tools.Parser import Parser
 from ..Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
-from ..Tools.Parser import Parser
+from ..Workbook import WorkbookRunTypes
 
 urls = (
     "/Method/ListQueue",

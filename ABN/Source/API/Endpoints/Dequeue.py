@@ -2,7 +2,7 @@
 
 import web
 
-from ..Tools.Parser import Parser
+from ...Server.Tools.Parser import Parser
 
 urls = ("/Method/Dequeue", "ABN.Source.Server.Method.Dequeue.Dequeue")
 

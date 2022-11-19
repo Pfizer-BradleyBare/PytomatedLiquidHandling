@@ -5,8 +5,8 @@ from typing import cast
 
 import web
 
+from ...Server.Tools.Parser import Parser
 from ...Tools import Excel, ExcelHandle
-from ..Tools.Parser import Parser
 from .AvailableMethods import MethodsPath, TempFolder, TemplateMethodSuffix
 
 urls = (

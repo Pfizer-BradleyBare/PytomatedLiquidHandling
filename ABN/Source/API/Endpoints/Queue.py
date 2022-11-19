@@ -13,10 +13,10 @@ import os
 
 import web
 
-from ...API.Workbook import WorkbookLoader, WorkbookRunTypes
-from ..Globals.HalInstance import HalInstance
+from ...HAL.Globals.HalInstance import HalInstance
+from ...Server.Tools.Parser import Parser
 from ..Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
-from ..Tools.Parser import Parser
+from ..Workbook import WorkbookLoader, WorkbookRunTypes
 
 urls = ("/Method/Queue", "ABN.Source.Server.Method.Queue.Queue")
 

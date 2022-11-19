@@ -2,8 +2,8 @@ import os
 
 import web
 
+from ...Server.Tools.Parser import Parser
 from ..Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
-from ..Tools.Parser import Parser
 from .AvailableMethods import MethodsPath, TempFolder
 
 urls = (

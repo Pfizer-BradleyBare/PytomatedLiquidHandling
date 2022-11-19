@@ -1,4 +1,4 @@
-from ...HAL import Hal, HalLoader
+from .. import Hal, HalLoader
 
 HalInstance: Hal = Hal()
 HalLoader.Load(HalInstance)
