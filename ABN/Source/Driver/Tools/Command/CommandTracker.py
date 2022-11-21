@@ -9,4 +9,6 @@ class CommandTracker(TrackerABC[Command]):
                 "Command Trackers can only have one Command at a time. Please unload the current Command before trying to load another Command."
             )
 
-        return super().ManualLoad(ObjectABCInstance)
+        super().ManualLoad(ObjectABCInstance)
+
+        return
