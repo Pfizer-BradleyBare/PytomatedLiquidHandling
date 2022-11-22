@@ -4,12 +4,12 @@ import web
 
 from ...Server.Tools.Parser import Parser
 
-urls = ("/Command/Respond", "ABN.Source.Server.Command.Respond.Respond")
+urls = ("/Driver/Respond", "ABN.Source.Driver.Endpoints.Respond.Respond")
 
 
 class Respond:
     def POST(self):
-        ParserObject = Parser("Command Respond", web.data())
+        ParserObject = Parser("Driver Respond", web.data())
 
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()

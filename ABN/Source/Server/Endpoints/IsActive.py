@@ -4,7 +4,7 @@ import web
 
 from ..Tools.Parser import Parser
 
-urls = ("/State/IsActive", "ABN.Source.Server.State.IsActive.IsActive")
+urls = ("/State/IsActive", "ABN.Source.Server.Endpoints.IsActive.IsActive")
 
 
 class IsActive:

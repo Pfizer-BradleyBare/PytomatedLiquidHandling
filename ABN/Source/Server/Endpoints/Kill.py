@@ -5,7 +5,7 @@ from ...API.Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
 from ..Globals import LOG, AliveStateFlag
 from ..Tools.Parser import Parser
 
-urls = ("/State/Kill", "ABN.Source.Server.State.Kill.Kill")
+urls = ("/State/Kill", "ABN.Source.Server.Endpoints.Kill.Kill")
 
 
 class Kill:
