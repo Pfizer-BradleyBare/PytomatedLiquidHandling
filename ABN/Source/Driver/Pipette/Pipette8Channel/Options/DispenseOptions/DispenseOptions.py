@@ -1,9 +1,9 @@
 from enum import Enum
 
-from .....Tools.AbstractClasses import ObjectABC
+from ......Tools.AbstractClasses import ObjectABC
 
 
-class AspirateOptions(ObjectABC):
+class DispenseOptions(ObjectABC):
     def __init__(
         self,
         Name: str,
@@ -22,18 +22,17 @@ class AspirateOptions(ObjectABC):
         # Normal Parameters
         self.Volume: float = Volume
         self.Mode: int = 0
-        self.LiquidClass: str = LiquidClass
-        self.CapacitiveLiquidLevelDetection: int = 0
-        self.SubmergeDepth: float = 2
-        self.PressureLiquidLevelDetection: int = 0
-        self.MaxHeightDifference: float = 0
         self.FixHeightFromBottom: float = 0
         self.RetractDistanceForTransportAir: float = 0
+        self.CapacitiveLiquidLevelDetection: int = 0
+        self.SubmergeDepth: float = 2
+        self.SideTouch: int = 0
 
         # Channel Settings
         self.ChannelNumber: int = ChannelNumber
 
         # Advanced
+        self.LiquidClass: str = LiquidClass
         self.LiquidFollowing: int = 0
         self.MixCycles: int = 0
         self.MixPosition: float = 0

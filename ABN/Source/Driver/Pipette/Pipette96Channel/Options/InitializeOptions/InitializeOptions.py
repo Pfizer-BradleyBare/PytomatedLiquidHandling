@@ -1,6 +1,6 @@
 from enum import Enum
 
-from .....Tools.AbstractClasses import ObjectABC
+from ......Tools.AbstractClasses import ObjectABC
 
 
 class InitializeOptions(ObjectABC):
