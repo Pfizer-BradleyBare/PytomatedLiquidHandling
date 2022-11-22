@@ -7,7 +7,6 @@ class DispenseOptions(ObjectABC):
     def __init__(
         self,
         Name: str,
-        ChannelNumber: int,
         Sequence: str,
         SequencePosition: int,
         LiquidClass: str,
@@ -27,9 +26,6 @@ class DispenseOptions(ObjectABC):
         self.CapacitiveLiquidLevelDetection: int = 0
         self.SubmergeDepth: float = 2
         self.SideTouch: int = 0
-
-        # Channel Settings
-        self.ChannelNumber: int = ChannelNumber
 
         # Advanced
         self.LiquidClass: str = LiquidClass

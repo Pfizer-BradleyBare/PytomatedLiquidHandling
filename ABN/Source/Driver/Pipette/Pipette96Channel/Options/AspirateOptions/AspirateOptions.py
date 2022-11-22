@@ -7,7 +7,6 @@ class AspirateOptions(ObjectABC):
     def __init__(
         self,
         Name: str,
-        ChannelNumber: int,
         Sequence: str,
         SequencePosition: int,
         LiquidClass: str,
@@ -27,9 +26,6 @@ class AspirateOptions(ObjectABC):
         self.SubmergeDepth: float = 2
         self.FixHeightFromBottom: float = 0
         self.RetractDistanceForTransportAir: float = 0
-
-        # Channel Settings
-        self.ChannelNumber: int = ChannelNumber
 
         # Advanced
         self.LiquidFollowing: int = 0

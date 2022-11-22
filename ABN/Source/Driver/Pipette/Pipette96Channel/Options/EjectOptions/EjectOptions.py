@@ -4,11 +4,8 @@ from ......Tools.AbstractClasses import ObjectABC
 
 
 class EjectOptions(ObjectABC):
-    def __init__(
-        self, Name: str, Sequence: str, ChannelNumber: int, SequencePosition: int
-    ):
+    def __init__(self, Name: str, Sequence: str, SequencePosition: int):
         self.Name: str = Name
-        self.ChannelNumber: int = ChannelNumber
         self.Sequence: str = Sequence
         self.SequencePosition: int = SequencePosition
 
