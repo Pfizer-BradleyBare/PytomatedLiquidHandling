@@ -3,6 +3,7 @@
 import web
 
 from ...Server.Tools.Parser import Parser
+from ..Globals.CommandTrackerInstance import CommandTrackerInstance
 
 urls = ("/Driver/Request", "ABN.Source.Driver.Endpoints.Request.Request")
 
@@ -15,9 +16,18 @@ class Request:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        # Do something here
+        if CommandTrackerInstance.GetNumObjects() == 0:
+            ParserObject.SetAPIState(False)
+            ParserObject.SetAPIReturn("Message", "Command not available.")
 
         ParserObject.SetAPIState(True)
+        ParserObject.SetAPIReturn("Message", "Command returned")
+
+        Command = CommandTrackerInstance.GetObjectsAsList()[0]
+
+        ParserObject.SetAPIReturn("Module Name", Command.GetModuleName())
+        ParserObject.SetAPIReturn("Command Name", Command.GetCommandName())
+        ParserObject.SetAPIReturn("Command Parameters", Command.GetCommandParameters())
 
         Response = ParserObject.GetHTTPResponse()
         return Response

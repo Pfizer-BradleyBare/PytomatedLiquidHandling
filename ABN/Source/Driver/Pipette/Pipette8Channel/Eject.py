@@ -29,4 +29,6 @@ class EjectCommand(Command):
         for ChannelNumber in OutputDict["ChannelNumber"]:
             ChannelNumberList[ChannelNumber - 1] = 1
 
+        OutputDict["ChannelNumber"] = ChannelNumberList
+
         return OutputDict

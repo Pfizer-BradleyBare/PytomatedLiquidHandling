@@ -5,9 +5,13 @@ from .Options.AspirateOptions.AspirateOptionsTracker import AspirateOptionsTrack
 
 
 class AspirateCommand(Command):
-    def __init__(self, OptionsTrackerInstance: AspirateOptionsTracker):
+    def __init__(self, Name: str, OptionsTrackerInstance: AspirateOptionsTracker):
         Command.__init__(self)
+        self.Name: str = Name
         self.OptionsTrackerInstance: AspirateOptionsTracker = OptionsTrackerInstance
+
+    def GetName(self) -> str:
+        return self.Name
 
     def GetModuleName(self) -> str:
         return "Pipette 8 Channel"
@@ -28,5 +32,7 @@ class AspirateCommand(Command):
 
         for ChannelNumber in OutputDict["ChannelNumber"]:
             ChannelNumberList[ChannelNumber - 1] = 1
+
+        OutputDict["ChannelNumber"] = ChannelNumberList
 
         return OutputDict
