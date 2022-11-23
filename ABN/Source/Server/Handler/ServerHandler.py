@@ -5,6 +5,10 @@ from .Endpoints import IsActive, Kill
 class ServerHandler(ServerHandlerABC):
     def __init__(self):
         self.IsAliveFlag: bool = True
+        self.ServerHandlerInstances: list[ServerHandlerABC] = list()
+
+    def RegisterServerHandler(self, ServerHandlerInstance: ServerHandlerABC):
+        self.ServerHandlerInstances.append(ServerHandlerInstance)
 
     def IsAlive(self) -> bool:
         return self.IsAliveFlag
@@ -16,4 +20,5 @@ class ServerHandler(ServerHandlerABC):
         return urls
 
     def Kill(self):
-        pass
+        for ServerHandlerInstance in self.ServerHandlerInstances:
+            ServerHandlerInstance.Kill()
