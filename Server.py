@@ -15,12 +15,15 @@ if __name__ == "__main__":
 
     ServerHandler = SH.ServerHandler()
     DriverHandler = DH.DriverHandler()
+    # Create our handlers
 
     urls = ()
     urls += ServerHandler.GetEndpoints()
     urls += DriverHandler.GetEndpoints()
+    # Add endpoints as addresses we can access over HTTP
 
     ServerHandler.RegisterServerHandler(DriverHandler)
+    # Register each handler with our main server
 
     app = web.application(urls, globals())
     app.run()
