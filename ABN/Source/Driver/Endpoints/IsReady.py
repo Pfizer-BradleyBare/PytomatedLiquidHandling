@@ -16,8 +16,6 @@ class IsReady:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        # Do something here
-
         CommandReady = False
         if CommandTrackerInstance.GetNumObjects() != 0:
             if CommandTrackerInstance.GetObjectsAsList()[0].ResponseInstance is None:

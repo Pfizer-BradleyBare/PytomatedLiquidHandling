@@ -17,17 +17,25 @@ class Request:
             return Response
 
         if CommandTrackerInstance.GetNumObjects() == 0:
-            ParserObject.SetAPIState(False)
             ParserObject.SetAPIReturn("Message", "Command not available.")
+            Response = ParserObject.GetHTTPResponse()
+            return Response
 
-        ParserObject.SetAPIState(True)
-        ParserObject.SetAPIReturn("Message", "Command returned")
+        if CommandTrackerInstance.GetObjectsAsList()[0].ResponseInstance is not None:
+            ParserObject.SetAPIReturn(
+                "Message",
+                "Command avilable, but already has response. How did this even happen???",
+            )
+            Response = ParserObject.GetHTTPResponse()
+            return Response
 
         Command = CommandTrackerInstance.GetObjectsAsList()[0]
 
         ParserObject.SetAPIReturn("Module Name", Command.GetModuleName())
         ParserObject.SetAPIReturn("Command Name", Command.GetCommandName())
         ParserObject.SetAPIReturn("Command Parameters", Command.GetCommandParameters())
+        ParserObject.SetAPIState(True)
+        ParserObject.SetAPIReturn("Message", "Command returned")
 
         Response = ParserObject.GetHTTPResponse()
         return Response

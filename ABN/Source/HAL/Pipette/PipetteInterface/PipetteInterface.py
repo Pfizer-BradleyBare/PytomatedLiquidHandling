@@ -12,21 +12,7 @@ class PipetteInterface(InterfaceABC):
         raise NotImplementedError
 
     @abstractmethod
-    def Transfer50uL(self, TransferOptionsTrackerInstance: TransferOptionsTracker):
-        raise NotImplementedError
-
-    @abstractmethod
-    def Transfer300uL(self, TransferOptionsTrackerInstance: TransferOptionsTracker):
-        raise NotImplementedError
-
-    @abstractmethod
-    def Transfer1000uL(self, TransferOptionsTrackerInstance: TransferOptionsTracker):
-        raise NotImplementedError
-
-    @abstractmethod
-    def MeasureLiquidHeight(
-        self, TransferOptionsTrackerInstance: MeasureOptionsTracker
-    ):
+    def Transfer(self, TransferOptionsTrackerInstance: TransferOptionsTracker):
         raise NotImplementedError
 
     @abstractmethod
