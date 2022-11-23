@@ -2,11 +2,11 @@
 
 import web
 
-from ...Server.Tools.Parser import Parser
-from ..Globals.CommandTrackerInstance import CommandTrackerInstance
-from ..Tools.Command.Response.Response import Response as CommandResponse
+from ....Server.Tools.Parser import Parser
+from ...Globals.CommandTrackerInstance import CommandTrackerInstance
+from ...Tools.Command.Response.Response import Response as CommandResponse
 
-urls = ("/Driver/Respond", "ABN.Source.Driver.Endpoints.Respond.Respond")
+urls = ("/Driver/Respond", "ABN.Source.Driver.Handler.Endpoints.Respond.Respond")
 
 
 class Respond:

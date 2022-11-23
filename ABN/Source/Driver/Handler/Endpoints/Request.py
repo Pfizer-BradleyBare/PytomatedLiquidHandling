@@ -2,10 +2,10 @@
 
 import web
 
-from ...Server.Tools.Parser import Parser
-from ..Globals.CommandTrackerInstance import CommandTrackerInstance
+from ....Server.Tools.Parser import Parser
+from ...Globals.CommandTrackerInstance import CommandTrackerInstance
 
-urls = ("/Driver/Request", "ABN.Source.Driver.Endpoints.Request.Request")
+urls = ("/Driver/Request", "ABN.Source.Driver.Handler.Endpoints.Request.Request")
 
 
 class Request:
