@@ -3,7 +3,7 @@ import web
 
 from ....API.Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
 from ...Globals import LOG
-from ...Globals.ServerHandling import ServerHandlerInstances
+from ...Globals.HandlerRegistry import HandlerRegistry
 from ...Tools.Parser import Parser
 
 urls = ("/State/Kill", "ABN.Source.Server.Handler.Endpoints.Kill.Kill")
@@ -20,7 +20,7 @@ class Kill:
 
         LOG.info("Starting Kill sequence...")
 
-        for ServerHandlerInstance in ServerHandlerInstances:
+        for ServerHandlerInstance in HandlerRegistry.GetObjectsAsList():
             ServerHandlerInstance.IsAliveFlag = False
             ServerHandlerInstance.Kill()
 

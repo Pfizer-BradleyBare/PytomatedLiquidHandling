@@ -1,7 +1,9 @@
 from abc import abstractmethod
 
+from ..Object.ObjectABC import ObjectABC
 
-class ServerHandlerABC:
+
+class ServerHandlerABC(ObjectABC):
     def __init__(self):
         self.IsAliveFlag: bool = True
 

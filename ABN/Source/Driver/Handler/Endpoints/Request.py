@@ -2,8 +2,8 @@
 
 import web
 
+from ....Server.Globals.HandlerRegistry import HandlerRegistry
 from ....Server.Tools.Parser import Parser
-from ...Globals.CommandTrackerInstance import CommandTrackerInstance
 
 urls = ("/Driver/Request", "ABN.Source.Driver.Handler.Endpoints.Request.Request")
 
@@ -15,6 +15,10 @@ class Request:
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()
             return Response
+
+        CommandTrackerInstance = HandlerRegistry.GetObjectByName(
+            "Driver Handler"
+        ).CommandTrackerInstance  # type:ignore
 
         if CommandTrackerInstance.GetNumObjects() == 0:
             ParserObject.SetAPIReturn("Message", "Command not available.")

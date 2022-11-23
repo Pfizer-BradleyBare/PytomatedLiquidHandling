@@ -2,8 +2,8 @@
 
 import web
 
+from ....Server.Globals.HandlerRegistry import HandlerRegistry
 from ....Server.Tools.Parser import Parser
-from ...Globals.CommandTrackerInstance import CommandTrackerInstance
 
 urls = ("/Driver/IsReady", "ABN.Source.Driver.Handler.Endpoints.IsReady.IsReady")
 
@@ -15,6 +15,10 @@ class IsReady:
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()
             return Response
+
+        CommandTrackerInstance = HandlerRegistry.GetObjectByName(
+            "Driver Handler"
+        ).CommandTrackerInstance  # type:ignore
 
         CommandReady = False
         if CommandTrackerInstance.GetNumObjects() != 0:

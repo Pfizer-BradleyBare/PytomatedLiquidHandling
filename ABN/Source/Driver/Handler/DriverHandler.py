@@ -8,6 +8,9 @@ class DriverHandler(ServerHandlerABC):
     def __init__(self):
         self.CommandTrackerInstance: CommandTracker = CommandTracker()
 
+    def GetName(self) -> str:
+        return "Driver Handler"
+
     def GetEndpoints(self) -> tuple:
         urls = ()
         urls += IsReady.urls
