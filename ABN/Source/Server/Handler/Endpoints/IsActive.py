@@ -2,9 +2,9 @@
 
 import web
 
-from ..Tools.Parser import Parser
+from ...Tools.Parser import Parser
 
-urls = ("/State/IsActive", "ABN.Source.Server.Endpoints.IsActive.IsActive")
+urls = ("/State/IsActive", "ABN.Source.Server.Handler.Endpoints.IsActive.IsActive")
 
 
 class IsActive:

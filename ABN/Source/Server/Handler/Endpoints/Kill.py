@@ -1,11 +1,11 @@
 # curl -X GET http://localhost:65535/State/Kill
 import web
 
-from ...API.Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
-from ..Globals import LOG, AliveStateFlag
-from ..Tools.Parser import Parser
+from ....API.Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
+from ...Globals import LOG, AliveStateFlag
+from ...Tools.Parser import Parser
 
-urls = ("/State/Kill", "ABN.Source.Server.Endpoints.Kill.Kill")
+urls = ("/State/Kill", "ABN.Source.Server.Handler.Endpoints.Kill.Kill")
 
 
 class Kill:
