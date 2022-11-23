@@ -10,9 +10,6 @@ class Command(ObjectABC):
         self.ResponseInstance: Response | None = None
         self.ResponseEvent: Event = Event()
 
-    def WaitForResponse(self, timeout: float | None = None):
-        self.ResponseEvent.wait(timeout)
-
     def GetResponse(self) -> Response:
         if self.ResponseInstance is None:
             raise Exception("Response not set. Did you WaitForResponse first?")
