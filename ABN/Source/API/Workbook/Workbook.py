@@ -12,7 +12,7 @@ from ...API.Tools.Context import (
     WellSequenceTracker,
 )
 from ...HAL import Hal
-from ...Server.Globals import LOG, AliveStateFlag
+from ...Server.Globals import LOG  # , AliveStateFlag
 from ...Tools.AbstractClasses import ObjectABC
 from ..Blocks import MergePlates
 from ..Tools.LoadedLabwareConnection import (
@@ -256,9 +256,9 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         while True:
             WorkbookInstance.ProcessingLock.acquire()
             WorkbookInstance.ProcessingLock.release()
-            if AliveStateFlag.AliveStateFlag is False:
-                # Do some workbook save state stuff here
-                return
+            # if AliveStateFlag.AliveStateFlag is False: TODO
+            # Do some workbook save state stuff here
+            #    return
 
             if all(
                 LoadedLabwareConnection.IsConnected()
@@ -301,9 +301,9 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
                 WorkbookInstance.ProcessingLock.acquire()
                 WorkbookInstance.ProcessingLock.release()
-                if AliveStateFlag.AliveStateFlag is False:
-                    # Do some workbook save state stuff here
-                    return
+                # if AliveStateFlag.AliveStateFlag is False: TODO
+                # Do some workbook save state stuff here
+                #    return
                 # Everything is controlled by the server. So we will wait here for the server to tell us we are next to run
                 # Then we will reinit the workbook and wait on deck loading
 
@@ -316,9 +316,9 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
         WorkbookInstance.ProcessingLock.acquire()
         WorkbookInstance.ProcessingLock.release()
-        if AliveStateFlag.AliveStateFlag is False:
-            # Do some workbook save state stuff here
-            return
+        # if AliveStateFlag.AliveStateFlag is False: TODO
+        # Do some workbook save state stuff here
+        #    return
         # The processing lock is used as a pause button to control which workbook executes.
         # During acquire we wait for the thread to be unpaused.
         # We immediately release so we do not stall the main process

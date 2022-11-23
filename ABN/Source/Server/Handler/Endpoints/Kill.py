@@ -2,7 +2,8 @@
 import web
 
 from ....API.Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
-from ...Globals import LOG, AliveStateFlag
+from ...Globals import LOG
+from ...Globals.ServerHandling import ServerHandlerInstances
 from ...Tools.Parser import Parser
 
 urls = ("/State/Kill", "ABN.Source.Server.Handler.Endpoints.Kill.Kill")
@@ -19,6 +20,14 @@ class Kill:
 
         LOG.info("Starting Kill sequence...")
 
+        for ServerHandlerInstance in ServerHandlerInstances:
+            ServerHandlerInstance.IsAliveFlag = False
+            ServerHandlerInstance.Kill()
+
+        LOG.info("Kill sequence complete! Goodbye!")
+
+        quit()
+
         LOG.debug("Setting state flag as false")
         AliveStateFlag.AliveStateFlag = False
 
@@ -32,7 +41,3 @@ class Kill:
             Thread.join()
 
         del ParserObject
-
-        LOG.info("Kill sequence complete! Goodbye!")
-
-        quit()

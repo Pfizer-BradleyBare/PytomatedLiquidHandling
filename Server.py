@@ -4,6 +4,7 @@ import web
 
 import ABN.Source.Driver.Handler.DriverHandler as DH
 import ABN.Source.Server.Globals.Logger as Logger
+import ABN.Source.Server.Globals.ServerHandling as ServerHandling
 import ABN.Source.Server.Handler.ServerHandler as SH
 
 if __name__ == "__main__":
@@ -22,7 +23,8 @@ if __name__ == "__main__":
     urls += DriverHandler.GetEndpoints()
     # Add endpoints as addresses we can access over HTTP
 
-    ServerHandler.RegisterServerHandler(DriverHandler)
+    ServerHandling.RegisterServerHandler(ServerHandler)
+    ServerHandling.RegisterServerHandler(DriverHandler)
     # Register each handler with our main server
 
     app = web.application(urls, globals())

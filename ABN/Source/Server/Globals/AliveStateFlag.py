@@ -1,1 +1,0 @@
-AliveStateFlag: bool = True
