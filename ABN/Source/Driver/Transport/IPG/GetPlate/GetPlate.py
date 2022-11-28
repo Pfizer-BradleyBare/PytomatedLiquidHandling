@@ -12,7 +12,7 @@ class GetPlateCommand(Command):
         return self.Name
 
     def GetModuleName(self) -> str:
-        return "Transport ISwap"
+        return "Transport IPG"
 
     def GetCommandName(self) -> str:
         return "Get Plate"
