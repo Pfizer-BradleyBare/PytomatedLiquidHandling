@@ -2,7 +2,7 @@ from ....Tools.Command.Command import Command
 from .StartTemperatureControlOptions import StartTemperatureControlOptions
 
 
-class GetPlateCommand(Command):
+class StartTemperatureControlCommand(Command):
     def __init__(self, Name: str, OptionsInstance: StartTemperatureControlOptions):
         Command.__init__(self)
         self.Name: str = Name

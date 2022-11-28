@@ -2,7 +2,7 @@ from ....Tools.Command.Command import Command
 from .StopTemperatureControlOptions import StopTemperatureControlOptions
 
 
-class DisconnectCommand(Command):
+class StopTemperatureControlCommand(Command):
     def __init__(self, Name: str, OptionsInstance: StopTemperatureControlOptions):
         Command.__init__(self)
         self.Name: str = Name

@@ -2,7 +2,7 @@ from ....Tools.Command.Command import Command
 from .StopShakeControlOptions import StopShakeControlOptions
 
 
-class DisconnectCommand(Command):
+class StopShakeControlCommand(Command):
     def __init__(self, Name: str, OptionsInstance: StopShakeControlOptions):
         Command.__init__(self)
         self.Name: str = Name

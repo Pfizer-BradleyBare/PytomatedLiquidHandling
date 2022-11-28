@@ -2,7 +2,7 @@ from ....Tools.Command.Command import Command
 from .PlacePlateOptions import PlacePlateOptions
 
 
-class GetPlateCommand(Command):
+class PlacePlateCommand(Command):
     def __init__(self, Name: str, OptionsInstance: PlacePlateOptions):
         Command.__init__(self)
         self.Name: str = Name

@@ -2,7 +2,7 @@ from ....Tools.Command.Command import Command
 from .StartShakeControlOptions import StartShakeControlOptions
 
 
-class GetPlateCommand(Command):
+class StartShakeControlCommand(Command):
     def __init__(self, Name: str, OptionsInstance: StartShakeControlOptions):
         Command.__init__(self)
         self.Name: str = Name

@@ -1,21 +1,21 @@
 from ....Tools.Command.Command import Command
-from .SetPlateLockOptions import SetPlateLockOptions
+from .InitializeOptions import InitializeOptions
 
 
-class SetPlateLockCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: SetPlateLockOptions):
+class InitializeCommand(Command):
+    def __init__(self, Name: str, OptionsInstance: InitializeOptions):
         Command.__init__(self)
         self.Name: str = Name
-        self.OptionsInstance: SetPlateLockOptions = OptionsInstance
+        self.OptionsInstance: InitializeOptions = OptionsInstance
 
     def GetName(self) -> str:
         return self.Name
 
     def GetModuleName(self) -> str:
-        return "Temperature Control HeaterShaker"
+        return "FlipTube"
 
     def GetCommandName(self) -> str:
-        return "Set Plate Lock"
+        return "Initialize"
 
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         return vars(self.OptionsInstance)
