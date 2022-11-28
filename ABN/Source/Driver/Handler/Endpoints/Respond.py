@@ -4,6 +4,7 @@ import web
 
 from ....Server.Globals.HandlerRegistry import HandlerRegistry
 from ....Server.Tools.Parser import Parser
+from ...Tools.Command.CommandTracker import CommandTracker
 from ...Tools.Command.Response.Response import Response as CommandResponse
 
 urls = ("/Driver/Respond", "ABN.Source.Driver.Handler.Endpoints.Respond.Respond")
@@ -17,7 +18,7 @@ class Respond:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        CommandTrackerInstance = HandlerRegistry.GetObjectByName(
+        CommandTrackerInstance: CommandTracker = HandlerRegistry.GetObjectByName(
             "Driver Handler"
         ).CommandTrackerInstance  # type:ignore
 
