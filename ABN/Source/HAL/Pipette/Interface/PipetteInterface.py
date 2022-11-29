@@ -5,6 +5,8 @@ from .TransferOptions.TransferOptionsTracker import TransferOptionsTracker
 
 
 class PipetteInterface(InterfaceABC):
+    TipsStored: bool = False
+
     def __init__(self):
         pass
 

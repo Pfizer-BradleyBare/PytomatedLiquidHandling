@@ -15,10 +15,12 @@ class TransferOptions(ObjectABC):
         DestinationVolume: float,
         DestinationMixCycles: int,
         DestinationLiquidCLass: str,
+        ReuseTips: bool,
+        StoreTips: bool,
     ):
         self.SourceLayoutItemInstance: LayoutItem = SourceLayoutItemInstance
         self.SourcePosition: int = SourcePosition
-        self.SourceVolume: float = SourceVolume
+        self.SourceVolume: float = SourceVolume  # if non-zero then fixed height will be used else LLD and if LLD fails then bottom
         self.SourceMixCycles: int = SourceMixCycles
         self.SourceLiquidClass: str = SourceLiquidClass
 
@@ -27,3 +29,6 @@ class TransferOptions(ObjectABC):
         self.DestinationVolume: float = DestinationVolume
         self.DestinationMixCycles: int = DestinationMixCycles
         self.DestinationLiquidCLass: str = DestinationLiquidCLass
+
+        self.ReuseTips: bool = ReuseTips
+        self.StoreTips: bool = StoreTips
