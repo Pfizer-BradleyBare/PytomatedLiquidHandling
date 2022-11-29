@@ -1,12 +1,14 @@
+from collections import defaultdict
+
 from ....Tools.Command.Command import Command
-from .CloseSpecialOptions import CloseSpecialOptions
+from .CloseSpecialOptionsTracker import CloseSpecialOptionsTracker
 
 
 class CloseSpecialCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: CloseSpecialOptions):
+    def __init__(self, Name: str, OptionsTrackerInstance: CloseSpecialOptionsTracker):
         Command.__init__(self)
         self.Name: str = Name
-        self.OptionsInstance: CloseSpecialOptions = OptionsInstance
+        self.OptionsTrackerInstance: CloseSpecialOptionsTracker = OptionsTrackerInstance
 
     def GetName(self) -> str:
         return self.Name
@@ -18,4 +20,11 @@ class CloseSpecialCommand(Command):
         return "Close Special"
 
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
-        return vars(self.OptionsInstance)
+        OutputDict = defaultdict(list)
+        for PickupOption in self.OptionsTrackerInstance.GetObjectsAsList():
+            PickupOptionDict = vars(PickupOption)
+
+            for key, value in PickupOptionDict.items():
+                OutputDict[key].append(value)
+
+        return OutputDict
