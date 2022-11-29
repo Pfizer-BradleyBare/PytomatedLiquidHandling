@@ -7,6 +7,8 @@ class StartTimerOptions(ObjectABC):
         self.Name: str = Name
 
         self.WaitTime: float = WaitTime
+        self.ShowTimer: bool = True
+        self.IsStoppable: bool = True
 
     def GetName(self) -> str:
         return self.Name
