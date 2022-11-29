@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
 from ....Tools.AbstractClasses import InterfaceABC
-from .InterfaceOptions.Transfer.TransferOptionsTracker import TransferOptionsTracker
+from .TransferOptions.TransferOptionsTracker import TransferOptionsTracker
 
 
 class PipetteInterface(InterfaceABC):
