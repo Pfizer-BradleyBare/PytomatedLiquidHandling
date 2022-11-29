@@ -28,11 +28,12 @@ class EjectCommand(Command):
             for key, value in PickupOptionDict.items():
                 OutputDict[key].append(value)
 
-        ChannelNumberList = [0] * 16
+        ChannelNumberList = ["0"] * 16
 
         for ChannelNumber in OutputDict["ChannelNumber"]:
-            ChannelNumberList[ChannelNumber - 1] = 1
+            ChannelNumberList[ChannelNumber - 1] = "1"
 
         OutputDict["ChannelNumber"] = ChannelNumberList
+        OutputDict["ChannelNumberString"] = "".join(ChannelNumberList)  # type:ignore
 
         return OutputDict

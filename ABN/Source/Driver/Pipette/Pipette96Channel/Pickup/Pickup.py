@@ -34,5 +34,6 @@ class PickupCommand(Command):
             ChannelNumberList[ChannelNumber - 1] = 1
 
         OutputDict["ChannelNumber"] = ChannelNumberList
+        OutputDict["ChannelNumberString"] = "".join(ChannelNumberList)  # type:ignore
 
         return OutputDict

@@ -28,4 +28,12 @@ class DispenseCommand(Command):
             for key, value in PickupOptionDict.items():
                 OutputDict[key].append(value)
 
+        ChannelNumberList = [0] * 96
+
+        for ChannelNumber in OutputDict["ChannelNumber"]:
+            ChannelNumberList[ChannelNumber - 1] = 1
+
+        OutputDict["ChannelNumber"] = ChannelNumberList
+        OutputDict["ChannelNumberString"] = "".join(ChannelNumberList)  # type:ignore
+
         return OutputDict
