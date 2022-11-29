@@ -20,7 +20,7 @@ class GetPlateOptions(ObjectABC):
         self.GripWidth: float = GripWidth
         self.OpenWidth: float = OpenWidth
 
-        self.Xspeed: int = 4
+        self.GripForce: int = 4
         self.GripSpeed: float = 277.8
         self.ZSpeed: float = 128.7
         self.CheckPlateExists: int = 0

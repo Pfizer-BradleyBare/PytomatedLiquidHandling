@@ -12,6 +12,8 @@ class PlacePlateOptions(ObjectABC):
 
         self.PlateSequence: str = PlateSequence
 
+        self.Movement: int = 0
+
         # Only matters if movement is 1
         self.RetractDistance: float = 0
         self.LiftupHeight: float = 0

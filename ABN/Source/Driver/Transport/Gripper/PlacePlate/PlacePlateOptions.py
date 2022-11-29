@@ -14,7 +14,7 @@ class PlacePlateOptions(ObjectABC):
 
         self.EjectTool: int = 0
 
-        self.Xspeed: int = 4
+        self.XSpeed: int = 4
         self.ZSpeed: float = 128.7
         self.PressOnDistance: float = 1
         self.CheckPlateExists: int = 0

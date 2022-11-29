@@ -26,6 +26,7 @@ class GetPlateOptions(ObjectABC):
         self.LiftupHeight: float = 0
         self.LabwareOrientation: int = 1
 
+        self.GripForce: int = 5
         self.Tolerance: float = 2
         self.InverseGrip: int = 0
         self.CollisionControl: int = 1
