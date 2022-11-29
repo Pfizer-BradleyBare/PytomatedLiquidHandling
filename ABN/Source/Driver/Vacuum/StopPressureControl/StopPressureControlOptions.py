@@ -2,11 +2,11 @@ from ....Tools.AbstractClasses import ObjectABC
 
 
 class StopPressureControlOptions(ObjectABC):
-    def __init__(self, Name: str, HandleID: int):
+    def __init__(self, Name: str, PumpID: int):
 
         self.Name: str = Name
 
-        self.HandleID: int = HandleID
+        self.PumpID: int = PumpID
 
     def GetName(self) -> str:
         return self.Name

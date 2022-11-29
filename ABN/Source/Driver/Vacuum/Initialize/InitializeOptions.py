@@ -2,11 +2,12 @@ from ....Tools.AbstractClasses import ObjectABC
 
 
 class InitializeOptions(ObjectABC):
-    def __init__(self, Name: str, ComPort: int):
+    def __init__(self, Name: str, ComPort: int, PumpID: int):
 
         self.Name: str = Name
 
         self.ComPort: int = ComPort
+        self.PumpID: int = PumpID
 
     def GetName(self) -> str:
         return self.Name

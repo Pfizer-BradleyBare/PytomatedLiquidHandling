@@ -1,12 +1,12 @@
 from ....Tools.AbstractClasses import ObjectABC
 
 
-class TerminateOptions(ObjectABC):
-    def __init__(self, Name: str, HandleID: int):
+class GetPressureOptions(ObjectABC):
+    def __init__(self, Name: str, PumpID: int):
 
         self.Name: str = Name
 
-        self.HandleID: int = HandleID
+        self.PumpID: int = PumpID
 
     def GetName(self) -> str:
         return self.Name
