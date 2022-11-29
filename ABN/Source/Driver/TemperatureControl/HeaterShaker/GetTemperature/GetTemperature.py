@@ -1,12 +1,12 @@
 from ....Tools.Command.Command import Command
-from .DisconnectOptions import DisconnectOptions
+from .GetTemperatureOptions import GetTemperatureOptions
 
 
-class DisconnectCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: DisconnectOptions):
+class StopShakeControlCommand(Command):
+    def __init__(self, Name: str, OptionsInstance: GetTemperatureOptions):
         Command.__init__(self)
         self.Name: str = Name
-        self.OptionsInstance: DisconnectOptions = OptionsInstance
+        self.OptionsInstance: GetTemperatureOptions = OptionsInstance
 
     def GetName(self) -> str:
         return self.Name
@@ -15,7 +15,7 @@ class DisconnectCommand(Command):
         return "Temperature Control HeaterShaker"
 
     def GetCommandName(self) -> str:
-        return "Disconnect"
+        return "Stop Shake Control"
 
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         return vars(self.OptionsInstance)

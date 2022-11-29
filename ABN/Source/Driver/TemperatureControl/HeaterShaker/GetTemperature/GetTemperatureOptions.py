@@ -1,12 +1,12 @@
 from .....Tools.AbstractClasses import ObjectABC
 
 
-class ConnectOptions(ObjectABC):
-    def __init__(self, Name: str, ComPort: str):
+class GetTemperatureOptions(ObjectABC):
+    def __init__(self, Name: str, HandleID: int):
 
         self.Name: str = Name
 
-        self.ComPort: str = ComPort
+        self.HandleID: int = HandleID
 
     def GetName(self) -> str:
         return self.Name
