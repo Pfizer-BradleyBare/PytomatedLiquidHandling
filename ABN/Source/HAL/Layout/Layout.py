@@ -3,23 +3,16 @@ from ..DeckLocation import DeckLocation
 from ..Labware import Labware
 
 
-class LayoutItemLidTracker:
-    def __init__(self, HasLid: bool):
-        self.HasLid: bool = HasLid
-
-    def HasLidSequence(self) -> bool:
-        return self.HasLid
-
-
-class LayoutItem(ObjectABC, LayoutItemLidTracker):
+class LayoutItem(ObjectABC):
     def __init__(
         self,
         Sequence: str,
+        LidSequence: str | None,
         DeckLocationInstance: DeckLocation,
         LabwareInstance: Labware,
     ):
-        LayoutItemLidTracker.__init__(self, False)
         self.Sequence: str = Sequence
+        self.LidSequence: str | None = LidSequence
         self.LabwareInstance: Labware = LabwareInstance
         self.DeckLocationInstance: DeckLocation = DeckLocationInstance
 
@@ -35,19 +28,13 @@ class LayoutItem(ObjectABC, LayoutItemLidTracker):
     def GetDeckLocation(self) -> DeckLocation:
         return self.DeckLocationInstance
 
-
-class CoveredLayoutItem(LayoutItem):
-    def __init__(
-        self,
-        Sequence: str,
-        LidSequence: str,
-        DeckLocationInstance: DeckLocation,
-        LabwareInstance: Labware,
-    ):
-        LayoutItem.__init__(self, Sequence, DeckLocationInstance, LabwareInstance)
-        LayoutItemLidTracker.__init__(self, True)
-
-        self.LidSequence: str = LidSequence
+    def HasLid(self) -> bool:
+        return self.LidSequence is not None
 
     def GetLidSequence(self) -> str:
+        if self.LidSequence is None:
+            raise Exception(
+                "Layout Item does not have a lid? Did you check HasLid first?"
+            )
+
         return self.LidSequence

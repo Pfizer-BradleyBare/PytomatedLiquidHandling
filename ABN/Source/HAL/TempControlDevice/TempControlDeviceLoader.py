@@ -1,6 +1,6 @@
 import yaml
 
-from ..Layout import CoveredLayoutItem
+from ..Layout import LayoutItem
 from .TempControlDevice import DeviceTypes, TempConfig, TempControlDevice
 from .TempControlDeviceTracker import TempControlDeviceTracker
 
@@ -38,9 +38,11 @@ def LoadYaml(TempControlDeviceTrackerInstance: TempControlDeviceTracker, FilePat
                 Sequence = Device["Supported Labware"][LabwareID]["Plate Sequence"]
                 LidSequence = Device["Supported Labware"][LabwareID]["Lid Sequence"]
 
-                LayoutItem = CoveredLayoutItem(Sequence, LidSequence, Location, Labware)
+                LayoutItemInstance = LayoutItem(
+                    Sequence, LidSequence, Location, Labware
+                )
 
-                LayoutItems.append(LayoutItem)
+                LayoutItems.append(LayoutItemInstance)
                 # add to our list for our item creation and also add it to the layout loader for tracking
 
             ComPort = Device["Com Port"]

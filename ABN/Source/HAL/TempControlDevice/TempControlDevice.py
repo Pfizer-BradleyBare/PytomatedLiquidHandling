@@ -1,7 +1,7 @@
 from enum import Enum
 
 from ...Tools.AbstractClasses import ObjectABC
-from ..Layout import CoveredLayoutItem
+from ..Layout import LayoutItem
 
 
 class TempConfig:
@@ -30,13 +30,13 @@ class TempControlDevice(ObjectABC):
         ComPort: str,
         DeviceType: DeviceTypes,
         Config: TempConfig,
-        LayoutItems: list[CoveredLayoutItem],
+        LayoutItems: list[LayoutItem],
     ):
         self.Name: str = Name
         self.ComPort: str = ComPort
         self.DeviceType: DeviceTypes = DeviceType
         self.Config: TempConfig = Config
-        self.LayoutItems: list[CoveredLayoutItem] = LayoutItems
+        self.LayoutItems: list[LayoutItem] = LayoutItems
 
     def GetName(self) -> str:
         return self.Name
@@ -50,5 +50,5 @@ class TempControlDevice(ObjectABC):
     def GetTempConfig(self) -> TempConfig:
         return self.Config
 
-    def GetLayoutItems(self) -> list[CoveredLayoutItem]:
+    def GetLayoutItems(self) -> list[LayoutItem]:
         return self.LayoutItems

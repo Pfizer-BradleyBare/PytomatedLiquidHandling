@@ -1,13 +1,7 @@
-from abc import abstractmethod
-from enum import Enum
+from abc import ABC, abstractmethod
 
 
-class OnOff(Enum):
-    On = 1
-    Off = 0
-
-
-class InterfaceABC:
+class InterfaceABC(ABC):
     @abstractmethod
     def Initialize(self) -> dict:
         raise NotImplementedError

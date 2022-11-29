@@ -1,6 +1,6 @@
 from enum import Enum
 
-from .....Tools.AbstractClasses import ObjectABC, OnOff
+from .....Tools.AbstractClasses import ObjectABC
 
 
 class MeasureOptions(ObjectABC):

@@ -1,6 +1,6 @@
 import yaml
 
-from .Layout import CoveredLayoutItem, LayoutItem
+from .Layout import LayoutItem
 from .LayoutTracker import LayoutTracker as LT
 
 
@@ -27,15 +27,11 @@ def LoadYaml(LayoutTrackerInstance: LT, FilePath: str):
                     )
                 )
 
+                LidSequence = None
                 if "Lid Sequence" in Item.keys():
                     LidSequence = Item["Lid Sequence"]
-                    LayoutTrackerInstance.ManualLoad(
-                        CoveredLayoutItem(
-                            Sequence, LidSequence, Location, LabwareObject
-                        )
-                    )
-                else:
-                    LayoutTrackerInstance.ManualLoad(
-                        LayoutItem(Sequence, Location, LabwareObject)
-                    )
+
+                LayoutTrackerInstance.ManualLoad(
+                    LayoutItem(Sequence, LidSequence, Location, LabwareObject)
+                )
                 # create item and add to list

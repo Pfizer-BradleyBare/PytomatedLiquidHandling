@@ -1,5 +1,10 @@
-from .Tip import TipTypes, Tip, TipFTR, TipNTR
+from .Tip import Tip, TipFTR, TipNTR, TipTypes
 from .TipTracker import TipTracker
-from .HAL.TipInterfaceABC import TipInterfaceABC
 
-__all__ = ["TipTypes", "Tip", "TipFTR", "TipNTR", "TipTracker", "TipInterfaceABC"]
+__all__ = [
+    "TipTypes",
+    "Tip",
+    "TipFTR",
+    "TipNTR",
+    "TipTracker",
+]

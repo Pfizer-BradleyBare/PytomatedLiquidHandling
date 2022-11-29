@@ -33,6 +33,6 @@ def LoadYaml(LidTrackerInstance: LidTracker, FilePath: str):
             )
 
         LidTrackerInstance.ManualLoad(
-            Lid(LidID, LayoutItem(LidSequence, LidLocation, LidLabware), Labwares)
+            Lid(LidID, LayoutItem(LidSequence, None, LidLocation, LidLabware), Labwares)
         )
         # Create Labware Class and append
