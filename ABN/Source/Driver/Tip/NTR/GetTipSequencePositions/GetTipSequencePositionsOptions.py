@@ -1,26 +1,22 @@
 from .....Tools.AbstractClasses import ObjectABC
 
 
-class DeinitializeOptions(ObjectABC):
+class GetTipSequencePositionsOptions(ObjectABC):
     def __init__(
         self,
         Name: str,
         TipSequence: str,
-        GeneratedWasteSequence: str,
-        TransportDevice: int,
+        GeneratedRackWasteSequence: str,
         GripperSequence: str,
-        IPGParkLocation: int,
+        NumPositions: int,
     ):
 
         self.Name: str = Name
 
         self.TipSequence: str = TipSequence
-
-        self.GeneratedWasteSequence: str = GeneratedWasteSequence
-
-        self.TransportDevice: int = TransportDevice
+        self.GeneratedRackWasteSequence: str = GeneratedRackWasteSequence
         self.GripperSequence: str = GripperSequence
-        self.IPGParkLocation: int = IPGParkLocation
+        self.NumPositions: int = NumPositions
 
     def GetName(self) -> str:
         return self.Name

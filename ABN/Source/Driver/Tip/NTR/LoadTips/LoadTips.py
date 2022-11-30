@@ -1,18 +1,18 @@
 from ....Tools.Command.Command import Command
-from .InitializeOptions import InitializeOptions
+from .LoadTipsOptions import LoadTipsOptions
 
 
 class InitializeCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: InitializeOptions):
+    def __init__(self, Name: str, OptionsInstance: LoadTipsOptions):
         Command.__init__(self)
         self.Name: str = Name
-        self.OptionsInstance: InitializeOptions = OptionsInstance
+        self.OptionsInstance: LoadTipsOptions = OptionsInstance
 
     def GetName(self) -> str:
         return self.Name
 
     def GetModuleName(self) -> str:
-        return "Tip NTR"
+        return "Tip FTR"
 
     def GetCommandName(self) -> str:
         return "Initialize"
