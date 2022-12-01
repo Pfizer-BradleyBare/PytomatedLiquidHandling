@@ -1,12 +1,12 @@
 from ...Tools.Command.Command import Command
-from .MoveToTrackNumberOptions import MoveToTrackNumberOptions
+from .MoveOptions import MoveOptions
 
 
-class MoveToTrackNumberCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: MoveToTrackNumberOptions):
+class MoveCommand(Command):
+    def __init__(self, Name: str, OptionsInstance: MoveOptions):
         Command.__init__(self)
         self.Name: str = Name
-        self.OptionsInstance: MoveToTrackNumberOptions = OptionsInstance
+        self.OptionsInstance: MoveOptions = OptionsInstance
 
     def GetName(self) -> str:
         return self.Name

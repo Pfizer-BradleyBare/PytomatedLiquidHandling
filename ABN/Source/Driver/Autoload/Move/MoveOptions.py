@@ -1,7 +1,7 @@
 from ....Tools.AbstractClasses import ObjectABC
 
 
-class MoveToTrackNumberOptions(ObjectABC):
+class MoveOptions(ObjectABC):
     def __init__(self, Name: str, Track: int):
 
         self.Name: str = Name
