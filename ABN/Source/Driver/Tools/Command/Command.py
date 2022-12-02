@@ -25,5 +25,9 @@ class Command(ObjectABC):
         raise NotImplementedError
 
     @abstractmethod
+    def GetResponseKeys(self) -> list[str]:
+        raise NotImplementedError
+
+    @abstractmethod
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         raise NotImplementedError

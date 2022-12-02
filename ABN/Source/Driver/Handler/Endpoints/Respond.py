@@ -14,10 +14,6 @@ class Respond:
     def POST(self):
         ParserObject = Parser("Driver Respond", web.data())
 
-        if not ParserObject.IsValid(["State", "Message", "Extra Info"]):
-            Response = ParserObject.GetHTTPResponse()
-            return Response
-
         CommandTrackerInstance: CommandTracker = HandlerRegistry.GetObjectByName(
             "Driver Handler"
         ).CommandTrackerInstance  # type:ignore
@@ -37,11 +33,26 @@ class Respond:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
+        ExpectedResponseKeys = CommandTrackerInstance.GetObjectsAsList()[
+            0
+        ].GetResponseKeys()
+
+        if not ParserObject.IsValid(["State", "Message"] + ExpectedResponseKeys):
+            Response = ParserObject.GetHTTPResponse()
+            return Response
+        # Checking is valid is more complex than normal. Each command has expected keys. We need to add that to the normal keys to confirm the response is valid
+
+        Additional = dict()
+        for Key in ExpectedResponseKeys:
+            Additional[Key] = ParserObject.GetAPIData()[Key]
+        # Create dict that houses the expected keys so we can create the response object
+
         CommandTrackerInstance.GetObjectsAsList()[0].ResponseInstance = CommandResponse(
             ParserObject.GetAPIData()["State"],
             ParserObject.GetAPIData()["Message"],
-            ParserObject.GetAPIData()["Extra Info"],
+            Additional,
         )
+        # boom
         CommandTrackerInstance.GetObjectsAsList()[0].ResponseEvent.set()
         # Add response then release threads waiting for a response
 
