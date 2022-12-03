@@ -5,8 +5,13 @@ from .DispenseOptionsTracker import DispenseOptionsTracker
 
 
 class DispenseCommand(Command):
-    def __init__(self, Name: str, OptionsTrackerInstance: DispenseOptionsTracker):
-        Command.__init__(self, Name)
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsTrackerInstance: DispenseOptionsTracker,
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsTrackerInstance: DispenseOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:

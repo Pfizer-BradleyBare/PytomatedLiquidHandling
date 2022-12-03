@@ -3,8 +3,10 @@ from .MoveOptions import MoveOptions
 
 
 class MoveCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: MoveOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self, Name: str, CustomErrorHandling: bool, OptionsInstance: MoveOptions
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: MoveOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

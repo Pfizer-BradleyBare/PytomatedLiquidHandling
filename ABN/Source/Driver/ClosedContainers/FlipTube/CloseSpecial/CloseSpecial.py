@@ -5,8 +5,13 @@ from .CloseSpecialOptionsTracker import CloseSpecialOptionsTracker
 
 
 class CloseSpecialCommand(Command):
-    def __init__(self, Name: str, OptionsTrackerInstance: CloseSpecialOptionsTracker):
-        Command.__init__(self, Name)
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsTrackerInstance: CloseSpecialOptionsTracker,
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsTrackerInstance: CloseSpecialOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:

@@ -3,8 +3,13 @@ from .StartPressureControlOptions import StartPressureControlOptions
 
 
 class StartPressureControlCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: StartPressureControlOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsInstance: StartPressureControlOptions,
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: StartPressureControlOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

@@ -3,8 +3,13 @@ from .StartTemperatureControlOptions import StartTemperatureControlOptions
 
 
 class StartTemperatureControlCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: StartTemperatureControlOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsInstance: StartTemperatureControlOptions,
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: StartTemperatureControlOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

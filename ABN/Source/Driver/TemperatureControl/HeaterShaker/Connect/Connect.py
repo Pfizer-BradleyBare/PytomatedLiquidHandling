@@ -3,8 +3,10 @@ from .ConnectOptions import ConnectOptions
 
 
 class ConnectCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: ConnectOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self, Name: str, CustomErrorHandling: bool, OptionsInstance: ConnectOptions
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: ConnectOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

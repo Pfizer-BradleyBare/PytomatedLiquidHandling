@@ -5,8 +5,13 @@ from .EjectOptionsTracker import EjectOptionsTracker
 
 
 class EjectCommand(Command):
-    def __init__(self, Name: str, OptionsTrackerInstance: EjectOptionsTracker):
-        Command.__init__(self, Name)
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsTrackerInstance: EjectOptionsTracker,
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsTrackerInstance: EjectOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:

@@ -3,8 +3,10 @@ from .InitializeOptions import InitializeOptions
 
 
 class InitializeCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: InitializeOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self, Name: str, CustomErrorHandling: bool, OptionsInstance: InitializeOptions
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: InitializeOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

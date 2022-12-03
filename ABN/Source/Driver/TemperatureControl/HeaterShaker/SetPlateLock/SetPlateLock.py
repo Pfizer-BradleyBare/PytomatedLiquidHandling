@@ -3,8 +3,10 @@ from .SetPlateLockOptions import SetPlateLockOptions
 
 
 class SetPlateLockCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: SetPlateLockOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self, Name: str, CustomErrorHandling: bool, OptionsInstance: SetPlateLockOptions
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: SetPlateLockOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

@@ -3,8 +3,13 @@ from .GetTemperatureOptions import GetTemperatureOptions
 
 
 class StopShakeControlCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: GetTemperatureOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsInstance: GetTemperatureOptions,
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: GetTemperatureOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

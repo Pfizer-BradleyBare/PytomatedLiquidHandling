@@ -33,7 +33,7 @@ class IsReady:
         Ops.ManualLoad(AspirateOptions("Test4", 5, "C5", 1, "1", 5))
         Ops.ManualLoad(AspirateOptions("Test7", 8, "C8", 1, "1", 8))
 
-        CommandTrackerInstance.ManualLoad(AspirateCommand("Test", Ops))
+        CommandTrackerInstance.ManualLoad(AspirateCommand("Test", False, Ops))
 
         CommandReady = False
         if CommandTrackerInstance.GetNumObjects() != 0:

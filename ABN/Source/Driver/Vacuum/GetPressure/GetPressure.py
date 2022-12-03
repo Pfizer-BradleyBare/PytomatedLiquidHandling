@@ -3,8 +3,10 @@ from .GetPressureOptions import GetPressureOptions
 
 
 class StopPressureControlCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: GetPressureOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self, Name: str, CustomErrorHandling: bool, OptionsInstance: GetPressureOptions
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: GetPressureOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

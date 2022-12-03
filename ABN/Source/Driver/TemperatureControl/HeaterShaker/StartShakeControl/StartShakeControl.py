@@ -3,8 +3,13 @@ from .StartShakeControlOptions import StartShakeControlOptions
 
 
 class StartShakeControlCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: StartShakeControlOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsInstance: StartShakeControlOptions,
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: StartShakeControlOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

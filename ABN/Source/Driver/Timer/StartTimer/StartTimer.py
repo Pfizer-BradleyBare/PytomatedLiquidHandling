@@ -3,8 +3,10 @@ from .StartTimerOptions import StartTimerOptions
 
 
 class StartTimerCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: StartTimerOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self, Name: str, CustomErrorHandling: bool, OptionsInstance: StartTimerOptions
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: StartTimerOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

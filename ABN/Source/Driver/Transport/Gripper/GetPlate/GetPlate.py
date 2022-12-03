@@ -3,8 +3,10 @@ from .GetPlateOptions import GetPlateOptions
 
 
 class GetPlateCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: GetPlateOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self, Name: str, CustomErrorHandling: bool, OptionsInstance: GetPlateOptions
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: GetPlateOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

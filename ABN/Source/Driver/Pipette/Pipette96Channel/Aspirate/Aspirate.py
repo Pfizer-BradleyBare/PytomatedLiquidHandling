@@ -5,8 +5,13 @@ from .AspirateOptionsTracker import AspirateOptionsTracker
 
 
 class AspirateCommand(Command):
-    def __init__(self, Name: str, OptionsTrackerInstance: AspirateOptionsTracker):
-        Command.__init__(self, Name)
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsTrackerInstance: AspirateOptionsTracker,
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsTrackerInstance: AspirateOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:

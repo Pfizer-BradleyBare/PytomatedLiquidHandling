@@ -5,8 +5,13 @@ from .PickupOptionsTracker import PickupOptionsTracker
 
 
 class PickupCommand(Command):
-    def __init__(self, Name: str, OptionsTrackerInstance: PickupOptionsTracker):
-        Command.__init__(self, Name)
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsTrackerInstance: PickupOptionsTracker,
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsTrackerInstance: PickupOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:

@@ -3,8 +3,13 @@ from .UnloadCarrierOptions import UnloadCarrierOptions
 
 
 class UnloadCarrierCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: UnloadCarrierOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsInstance: UnloadCarrierOptions,
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: UnloadCarrierOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

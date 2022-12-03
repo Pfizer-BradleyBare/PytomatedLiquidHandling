@@ -5,8 +5,13 @@ from .OpenOptionsTracker import OpenOptionsTracker
 
 
 class OpenCommand(Command):
-    def __init__(self, Name: str, OptionsTrackerInstance: OpenOptionsTracker):
-        Command.__init__(self, Name)
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsTrackerInstance: OpenOptionsTracker,
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsTrackerInstance: OpenOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:

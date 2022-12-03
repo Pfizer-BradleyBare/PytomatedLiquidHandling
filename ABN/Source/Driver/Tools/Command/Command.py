@@ -6,10 +6,11 @@ from .Response.Response import Response
 
 
 class Command(ObjectABC):
-    def __init__(self, Name: str):
+    def __init__(self, Name: str, CustomErrorHandling: bool):
         self.ResponseInstance: Response | None = None
         self.ResponseEvent: Event = Event()
         self.Name: str = Name
+        self.CustomErrorHandling: bool = CustomErrorHandling
 
     def GetName(self) -> str:
         return self.Name

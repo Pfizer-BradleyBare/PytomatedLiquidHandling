@@ -3,8 +3,13 @@ from .GetTipSequencePositionsOptions import GetTipSequencePositionsOptions
 
 
 class InitializeCommand(Command):
-    def __init__(self, Name: str, OptionsInstance: GetTipSequencePositionsOptions):
-        Command.__init__(self, Name)
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsInstance: GetTipSequencePositionsOptions,
+    ):
+        Command.__init__(self, Name, CustomErrorHandling)
         self.OptionsInstance: GetTipSequencePositionsOptions = OptionsInstance
 
     def GetModuleName(self) -> str:
