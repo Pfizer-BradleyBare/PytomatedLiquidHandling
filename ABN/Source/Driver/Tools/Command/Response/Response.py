@@ -2,7 +2,7 @@ class Response:
     def __init__(
         self, State: bool, Message: str, Additional: dict[str, any]  # type:ignore
     ):
-        self.State: bool = State
+        self.State: bool = bool(State)
         self.Message: str = Message
         self.Additional: dict[str, any] = Additional  # type:ignore
 
