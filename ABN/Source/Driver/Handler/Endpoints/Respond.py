@@ -37,7 +37,9 @@ class Respond:
             0
         ].GetResponseKeys()
 
-        if not ParserObject.IsValid(["State", "Message"] + ExpectedResponseKeys):
+        if not ParserObject.IsValid(
+            ["State", "ErrorDescription"] + ExpectedResponseKeys
+        ):
             Response = ParserObject.GetHTTPResponse()
             return Response
         # Checking is valid is more complex than normal. Each command has expected keys. We need to add that to the normal keys to confirm the response is valid
@@ -49,7 +51,7 @@ class Respond:
 
         CommandTrackerInstance.GetObjectsAsList()[0].ResponseInstance = CommandResponse(
             ParserObject.GetAPIData()["State"],
-            ParserObject.GetAPIData()["Message"],
+            ParserObject.GetAPIData()["ErrorDescription"],
             Additional,
         )
         # boom
