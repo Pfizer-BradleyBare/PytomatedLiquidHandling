@@ -4,12 +4,8 @@ from .StartTimerOptions import StartTimerOptions
 
 class StartTimerCommand(Command):
     def __init__(self, Name: str, OptionsInstance: StartTimerOptions):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsInstance: StartTimerOptions = OptionsInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Timer"

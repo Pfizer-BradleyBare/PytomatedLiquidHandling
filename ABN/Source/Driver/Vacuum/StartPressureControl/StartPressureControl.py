@@ -4,12 +4,8 @@ from .StartPressureControlOptions import StartPressureControlOptions
 
 class StartPressureControlCommand(Command):
     def __init__(self, Name: str, OptionsInstance: StartPressureControlOptions):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsInstance: StartPressureControlOptions = OptionsInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Vacuum"

@@ -6,12 +6,8 @@ from .CloseSpecialOptionsTracker import CloseSpecialOptionsTracker
 
 class CloseSpecialCommand(Command):
     def __init__(self, Name: str, OptionsTrackerInstance: CloseSpecialOptionsTracker):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsTrackerInstance: CloseSpecialOptionsTracker = OptionsTrackerInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "FlipTube"

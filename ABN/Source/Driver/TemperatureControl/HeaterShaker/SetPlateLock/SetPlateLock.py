@@ -4,12 +4,8 @@ from .SetPlateLockOptions import SetPlateLockOptions
 
 class SetPlateLockCommand(Command):
     def __init__(self, Name: str, OptionsInstance: SetPlateLockOptions):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsInstance: SetPlateLockOptions = OptionsInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Temperature Control HeaterShaker"

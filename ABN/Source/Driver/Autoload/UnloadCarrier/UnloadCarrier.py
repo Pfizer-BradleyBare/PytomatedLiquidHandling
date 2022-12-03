@@ -4,12 +4,8 @@ from .UnloadCarrierOptions import UnloadCarrierOptions
 
 class UnloadCarrierCommand(Command):
     def __init__(self, Name: str, OptionsInstance: UnloadCarrierOptions):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsInstance: UnloadCarrierOptions = OptionsInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Autoload"

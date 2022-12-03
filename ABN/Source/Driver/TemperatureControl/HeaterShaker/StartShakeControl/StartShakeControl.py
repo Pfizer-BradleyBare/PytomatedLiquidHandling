@@ -4,12 +4,8 @@ from .StartShakeControlOptions import StartShakeControlOptions
 
 class StartShakeControlCommand(Command):
     def __init__(self, Name: str, OptionsInstance: StartShakeControlOptions):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsInstance: StartShakeControlOptions = OptionsInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Temperature Control HeaterShaker"

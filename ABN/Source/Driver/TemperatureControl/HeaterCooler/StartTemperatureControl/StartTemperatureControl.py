@@ -4,12 +4,8 @@ from .StartTemperatureControlOptions import StartTemperatureControlOptions
 
 class StartTemperatureControlCommand(Command):
     def __init__(self, Name: str, OptionsInstance: StartTemperatureControlOptions):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsInstance: StartTemperatureControlOptions = OptionsInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Temperature Control HeaterCooler"

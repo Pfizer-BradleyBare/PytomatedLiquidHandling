@@ -4,12 +4,8 @@ from .InitializeOptions import InitializeOptions
 
 class InitializeCommand(Command):
     def __init__(self, Name: str, OptionsInstance: InitializeOptions):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsInstance: InitializeOptions = OptionsInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Vacuum"

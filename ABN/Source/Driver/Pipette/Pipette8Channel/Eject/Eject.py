@@ -6,12 +6,8 @@ from .EjectOptionsTracker import EjectOptionsTracker
 
 class EjectCommand(Command):
     def __init__(self, Name: str, OptionsTrackerInstance: EjectOptionsTracker):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsTrackerInstance: EjectOptionsTracker = OptionsTrackerInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Pipette 8 Channel"

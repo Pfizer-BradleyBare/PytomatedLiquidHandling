@@ -6,12 +6,8 @@ from .DispenseOptionsTracker import DispenseOptionsTracker
 
 class DispenseCommand(Command):
     def __init__(self, Name: str, OptionsTrackerInstance: DispenseOptionsTracker):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsTrackerInstance: DispenseOptionsTracker = OptionsTrackerInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Pipette 8 Channel"

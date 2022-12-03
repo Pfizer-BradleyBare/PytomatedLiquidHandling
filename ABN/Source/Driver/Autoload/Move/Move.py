@@ -4,12 +4,8 @@ from .MoveOptions import MoveOptions
 
 class MoveCommand(Command):
     def __init__(self, Name: str, OptionsInstance: MoveOptions):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsInstance: MoveOptions = OptionsInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Autoload"

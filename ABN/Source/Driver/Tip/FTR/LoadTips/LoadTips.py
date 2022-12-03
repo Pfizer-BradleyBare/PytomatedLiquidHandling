@@ -4,12 +4,8 @@ from .LoadTipsOptions import LoadTipsOptions
 
 class InitializeCommand(Command):
     def __init__(self, Name: str, OptionsInstance: LoadTipsOptions):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsInstance: LoadTipsOptions = OptionsInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Tip FTR"

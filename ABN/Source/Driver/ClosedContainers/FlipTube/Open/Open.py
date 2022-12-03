@@ -6,12 +6,8 @@ from .OpenOptionsTracker import OpenOptionsTracker
 
 class OpenCommand(Command):
     def __init__(self, Name: str, OptionsTrackerInstance: OpenOptionsTracker):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsTrackerInstance: OpenOptionsTracker = OptionsTrackerInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "FlipTube"

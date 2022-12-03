@@ -4,12 +4,8 @@ from .GetPlateOptions import GetPlateOptions
 
 class GetPlateCommand(Command):
     def __init__(self, Name: str, OptionsInstance: GetPlateOptions):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsInstance: GetPlateOptions = OptionsInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Transport Gripper"

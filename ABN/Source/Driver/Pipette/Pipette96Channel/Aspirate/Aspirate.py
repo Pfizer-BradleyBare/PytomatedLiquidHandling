@@ -6,12 +6,8 @@ from .AspirateOptionsTracker import AspirateOptionsTracker
 
 class AspirateCommand(Command):
     def __init__(self, Name: str, OptionsTrackerInstance: AspirateOptionsTracker):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsTrackerInstance: AspirateOptionsTracker = OptionsTrackerInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Pipette 96 Channel"

@@ -4,12 +4,8 @@ from .LoadCarrierOptions import LoadCarrierOptions
 
 class LoadCarrierCommand(Command):
     def __init__(self, Name: str, OptionsInstance: LoadCarrierOptions):
-        Command.__init__(self)
-        self.Name: str = Name
+        Command.__init__(self, Name)
         self.OptionsInstance: LoadCarrierOptions = OptionsInstance
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return "Autoload"

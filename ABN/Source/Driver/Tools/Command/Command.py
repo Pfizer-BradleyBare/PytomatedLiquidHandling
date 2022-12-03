@@ -6,9 +6,13 @@ from .Response.Response import Response
 
 
 class Command(ObjectABC):
-    def __init__(self):
+    def __init__(self, Name: str):
         self.ResponseInstance: Response | None = None
         self.ResponseEvent: Event = Event()
+        self.Name: str = Name
+
+    def GetName(self) -> str:
+        return self.Name
 
     def GetResponse(self) -> Response:
         if self.ResponseInstance is None:
