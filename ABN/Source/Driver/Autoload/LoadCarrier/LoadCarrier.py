@@ -15,6 +15,9 @@ class LoadCarrierCommand(Command):
     def GetCommandName(self) -> str:
         return "Load Carrier"
 
+    def GetResponseKeys(self) -> list[str]:
+        return []
+
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         OutputDict = vars(self.OptionsInstance)
         OutputDict["CustomErrorHandling"] = self.CustomErrorHandling
