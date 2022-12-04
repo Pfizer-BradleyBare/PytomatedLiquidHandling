@@ -15,6 +15,9 @@ class MoveCommand(Command):
     def GetCommandName(self) -> str:
         return "Unload Carrier"
 
+    def GetResponseKeys(self) -> list[str]:
+        return []
+
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         OutputDict = vars(self.OptionsInstance)
         OutputDict["CustomErrorHandling"] = self.CustomErrorHandling

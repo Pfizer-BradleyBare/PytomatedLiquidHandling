@@ -18,6 +18,9 @@ class InitializeCommand(Command):
     def GetCommandName(self) -> str:
         return "Initialize"
 
+    def GetResponseKeys(self) -> list[str]:
+        return ["TipPosition"]
+
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         OutputDict = vars(self.OptionsInstance)
         OutputDict["CustomErrorHandling"] = self.CustomErrorHandling

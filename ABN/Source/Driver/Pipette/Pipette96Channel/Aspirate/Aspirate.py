@@ -20,6 +20,9 @@ class AspirateCommand(Command):
     def GetCommandName(self) -> str:
         return "Aspirate"
 
+    def GetResponseKeys(self) -> list[str]:
+        return []
+
     def GetCommandParameters(self) -> dict[str, list]:
 
         OutputDict = defaultdict(list)

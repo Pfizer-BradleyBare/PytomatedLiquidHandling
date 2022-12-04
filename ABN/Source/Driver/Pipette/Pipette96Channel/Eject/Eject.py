@@ -20,6 +20,9 @@ class EjectCommand(Command):
     def GetCommandName(self) -> str:
         return "Eject"
 
+    def GetResponseKeys(self) -> list[str]:
+        return []
+
     def GetCommandParameters(self) -> dict[str, list]:
 
         OutputDict = defaultdict(list)

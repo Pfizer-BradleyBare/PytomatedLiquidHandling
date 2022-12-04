@@ -20,6 +20,9 @@ class DispenseCommand(Command):
     def GetCommandName(self) -> str:
         return "Dispense"
 
+    def GetResponseKeys(self) -> list[str]:
+        return []
+
     def GetCommandParameters(self) -> dict[str, list]:
 
         OutputDict = defaultdict(list)

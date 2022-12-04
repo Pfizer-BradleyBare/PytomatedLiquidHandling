@@ -18,6 +18,9 @@ class StopTemperatureControlCommand(Command):
     def GetCommandName(self) -> str:
         return "Stop Temperature Control"
 
+    def GetResponseKeys(self) -> list[str]:
+        return []
+
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         OutputDict = vars(self.OptionsInstance)
         OutputDict["CustomErrorHandling"] = self.CustomErrorHandling

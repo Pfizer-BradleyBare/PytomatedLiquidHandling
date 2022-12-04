@@ -20,6 +20,9 @@ class CloseCommand(Command):
     def GetCommandName(self) -> str:
         return "Close"
 
+    def GetResponseKeys(self) -> list[str]:
+        return []
+
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         OutputDict = defaultdict(list)
         OutputDict["CustomErrorHandling"] = self.CustomErrorHandling  # type:ignore
