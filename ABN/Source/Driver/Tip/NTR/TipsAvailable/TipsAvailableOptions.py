@@ -1,7 +1,7 @@
 from .....Tools.AbstractClasses import ObjectABC
 
 
-class GetTipSequencePositionsOptions(ObjectABC):
+class TipsAvailableOptions(ObjectABC):
     def __init__(
         self,
         Name: str,

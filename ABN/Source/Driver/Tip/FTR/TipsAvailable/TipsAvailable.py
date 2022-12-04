@@ -1,5 +1,5 @@
 from ....Tools.Command.Command import Command
-from .GetTipSequencePositionsOptions import GetTipSequencePositionsOptions
+from .TipsAvailableOptions import TipsAvailableOptions
 
 
 class InitializeCommand(Command):
@@ -7,10 +7,10 @@ class InitializeCommand(Command):
         self,
         Name: str,
         CustomErrorHandling: bool,
-        OptionsInstance: GetTipSequencePositionsOptions,
+        OptionsInstance: TipsAvailableOptions,
     ):
         Command.__init__(self, Name, CustomErrorHandling)
-        self.OptionsInstance: GetTipSequencePositionsOptions = OptionsInstance
+        self.OptionsInstance: TipsAvailableOptions = OptionsInstance
 
     def GetModuleName(self) -> str:
         return "Tip FTR"
