@@ -2,7 +2,7 @@ from ...Tools.Command.Command import Command
 from .GetPressureOptions import GetPressureOptions
 
 
-class StopPressureControlCommand(Command):
+class GetPressureCommand(Command):
     def __init__(
         self, Name: str, CustomErrorHandling: bool, OptionsInstance: GetPressureOptions
     ):
@@ -13,7 +13,7 @@ class StopPressureControlCommand(Command):
         return "Vacuum"
 
     def GetCommandName(self) -> str:
-        return "Stop Pressure Control"
+        return "Get Pressure"
 
     def GetResponseKeys(self) -> list[str]:
         return ["Pressure"]

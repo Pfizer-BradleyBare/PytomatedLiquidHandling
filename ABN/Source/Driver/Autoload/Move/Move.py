@@ -13,7 +13,7 @@ class MoveCommand(Command):
         return "Autoload"
 
     def GetCommandName(self) -> str:
-        return "Unload Carrier"
+        return "Move"
 
     def GetResponseKeys(self) -> list[str]:
         return []

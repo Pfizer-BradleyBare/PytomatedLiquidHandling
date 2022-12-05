@@ -2,7 +2,7 @@ from ....Tools.Command.Command import Command
 from .TipsAvailableOptions import TipsAvailableOptions
 
 
-class InitializeCommand(Command):
+class TipsAvailableCommand(Command):
     def __init__(
         self,
         Name: str,
@@ -16,7 +16,7 @@ class InitializeCommand(Command):
         return "Tip FTR"
 
     def GetCommandName(self) -> str:
-        return "Initialize"
+        return "Tips Available"
 
     def GetResponseKeys(self) -> list[str]:
         return ["TipPosition"]

@@ -2,7 +2,7 @@ from ....Tools.Command.Command import Command
 from .GetShakingSpeedOptions import GetShakingSpeedOptions
 
 
-class StopShakeControlCommand(Command):
+class GetShakingSpeedCommand(Command):
     def __init__(
         self,
         Name: str,
@@ -16,7 +16,7 @@ class StopShakeControlCommand(Command):
         return "Temperature Control HeaterShaker"
 
     def GetCommandName(self) -> str:
-        return "Stop Shake Control"
+        return "Get Shaking Speed"
 
     def GetResponseKeys(self) -> list[str]:
         return ["ShakingSpeed"]

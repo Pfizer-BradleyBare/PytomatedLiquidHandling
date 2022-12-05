@@ -2,7 +2,7 @@ from ....Tools.Command.Command import Command
 from .LoadTipsOptions import LoadTipsOptions
 
 
-class InitializeCommand(Command):
+class LoadTipsCommand(Command):
     def __init__(
         self, Name: str, CustomErrorHandling: bool, OptionsInstance: LoadTipsOptions
     ):
@@ -13,7 +13,7 @@ class InitializeCommand(Command):
         return "Tip FTR"
 
     def GetCommandName(self) -> str:
-        return "Initialize"
+        return "Load Tips"
 
     def GetResponseKeys(self) -> list[str]:
         return []

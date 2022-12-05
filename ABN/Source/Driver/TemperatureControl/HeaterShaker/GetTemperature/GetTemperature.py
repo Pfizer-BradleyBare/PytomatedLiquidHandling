@@ -2,7 +2,7 @@ from ....Tools.Command.Command import Command
 from .GetTemperatureOptions import GetTemperatureOptions
 
 
-class StopShakeControlCommand(Command):
+class GetTemperatureCommand(Command):
     def __init__(
         self,
         Name: str,
@@ -16,7 +16,7 @@ class StopShakeControlCommand(Command):
         return "Temperature Control HeaterShaker"
 
     def GetCommandName(self) -> str:
-        return "Stop Shake Control"
+        return "Get Temperature"
 
     def GetResponseKeys(self) -> list[str]:
         return ["Temperature"]
