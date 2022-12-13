@@ -6,29 +6,27 @@ class TransferOptions(ObjectABC):
     def __init__(
         self,
         SourceLayoutItemInstance: LayoutItem,
-        SourcePosition: int,
-        SourceVolume: float,  # Can be zero
+        SourcePosition: int,  # This is the well position. Not sequence position
+        CurrentSourceVolume: float,
         SourceMixCycles: int,
-        SourceLiquidClass: str,
+        SourceLiquidClassCategory: str,
         DestinationLayoutItemInstance: LayoutItem,
-        DestinationPosition: int,
-        DestinationVolume: float,
+        DestinationPosition: int,  # This is the well position. Not sequence position
+        CurrentDestinationVolume: float,
         DestinationMixCycles: int,
-        DestinationLiquidCLass: str,
-        ReuseTips: bool,
-        StoreTips: bool,
+        DestinationLiquidCLassCategory: str,
+        TransferVolume: float,
     ):
         self.SourceLayoutItemInstance: LayoutItem = SourceLayoutItemInstance
         self.SourcePosition: int = SourcePosition
-        self.SourceVolume: float = SourceVolume  # if non-zero then fixed height will be used else LLD and if LLD fails then bottom
+        self.CurrentSourceVolume: float = CurrentSourceVolume
         self.SourceMixCycles: int = SourceMixCycles
-        self.SourceLiquidClass: str = SourceLiquidClass
+        self.SourceLiquidClassCategory: str = SourceLiquidClassCategory
 
         self.DestinationLayoutItemInstance: LayoutItem = DestinationLayoutItemInstance
         self.DestinationPosition: int = DestinationPosition
-        self.DestinationVolume: float = DestinationVolume
+        self.CurrentDestinationVolume: float = CurrentDestinationVolume
         self.DestinationMixCycles: int = DestinationMixCycles
-        self.DestinationLiquidCLass: str = DestinationLiquidCLass
+        self.DestinationLiquidCLassCategory: str = DestinationLiquidCLassCategory
 
-        self.ReuseTips: bool = ReuseTips
-        self.StoreTips: bool = StoreTips
+        self.TransferVolume: float = TransferVolume

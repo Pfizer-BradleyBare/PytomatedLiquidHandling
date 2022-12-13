@@ -3,4 +3,5 @@ from .TransferOptions import TransferOptions
 
 
 class TransferOptionsTracker(TrackerABC[TransferOptions]):
-    pass
+    def __init__(self, StoreTips: bool):
+        self.StoreTips: bool = StoreTips
