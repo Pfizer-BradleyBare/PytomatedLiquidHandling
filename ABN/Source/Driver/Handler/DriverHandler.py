@@ -9,7 +9,7 @@ class DriverHandler(ServerHandlerABC):
         self.CommandTrackerInstance: CommandTracker = CommandTracker()
 
     def GetName(self) -> str:
-        return "Driver Handler"
+        return "Driver"
 
     def GetEndpoints(self) -> tuple:
         urls = ()
@@ -24,13 +24,3 @@ class DriverHandler(ServerHandlerABC):
 
     def ExecuteCommand(self, CommandInstance: Command):
         self.CommandTrackerInstance.ManualLoad(CommandInstance)
-
-    def WaitOnExecute(self, timeout: float | None = None) -> Command:
-        if self.CommandTrackerInstance.GetNumObjects() == 0:
-            raise Exception("No Command running. You did something wrong.")
-
-        CommandInstance = self.CommandTrackerInstance.GetObjectsAsList()[0]
-
-        CommandInstance.ResponseEvent.wait(timeout)
-        self.CommandTrackerInstance.ManualUnload(CommandInstance)
-        return CommandInstance

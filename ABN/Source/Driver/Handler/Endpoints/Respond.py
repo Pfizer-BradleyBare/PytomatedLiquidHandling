@@ -15,7 +15,7 @@ class Respond:
         ParserObject = Parser("Driver Respond", web.data())
 
         CommandTrackerInstance: CommandTracker = HandlerRegistry.GetObjectByName(
-            "Driver Handler"
+            "Driver"
         ).CommandTrackerInstance  # type:ignore
 
         if CommandTrackerInstance.GetNumObjects() == 0:

@@ -22,7 +22,7 @@ class IsReady:
             return Response
 
         CommandTrackerInstance = HandlerRegistry.GetObjectByName(
-            "Driver Handler"
+            "Driver"
         ).CommandTrackerInstance  # type:ignore
 
         Ops = AspirateOptionsTracker()

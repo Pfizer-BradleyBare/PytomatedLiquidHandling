@@ -4,7 +4,7 @@ from .Endpoints import IsActive, Kill
 
 class ServerHandler(ServerHandlerABC):
     def GetName(self) -> str:
-        return "Server Handler"
+        return "Server"
 
     def GetEndpoints(self) -> tuple:
         urls = ()

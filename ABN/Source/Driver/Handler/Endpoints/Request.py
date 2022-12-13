@@ -18,7 +18,7 @@ class Request:
             return Response
 
         CommandTrackerInstance: CommandTracker = HandlerRegistry.GetObjectByName(
-            "Driver Handler"
+            "Driver"
         ).CommandTrackerInstance  # type:ignore
 
         if CommandTrackerInstance.GetNumObjects() == 0:
