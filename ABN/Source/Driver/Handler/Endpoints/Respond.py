@@ -25,7 +25,13 @@ class Respond:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        if CommandTrackerInstance.GetObjectsAsList()[0].ResponseInstance is not None:
+        OutputCommandInstance = None
+        for CommandInstance in CommandTrackerInstance.GetObjectsAsList():
+            if CommandInstance.ResponseInstance is None:
+                OutputCommandInstance = CommandInstance
+                break
+
+        if OutputCommandInstance is None:
             ParserObject.SetAPIReturn(
                 "Message",
                 "Command already has response... How did this even happen???",
@@ -33,9 +39,7 @@ class Respond:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        ExpectedResponseKeys = CommandTrackerInstance.GetObjectsAsList()[
-            0
-        ].GetResponseKeys()
+        ExpectedResponseKeys = OutputCommandInstance.GetResponseKeys()
 
         if not ParserObject.IsValid(
             ["State", "ErrorDescription"] + ExpectedResponseKeys
@@ -49,13 +53,13 @@ class Respond:
             Additional[Key] = ParserObject.GetAPIData()[Key]
         # Create dict that houses the expected keys so we can create the response object
 
-        CommandTrackerInstance.GetObjectsAsList()[0].ResponseInstance = CommandResponse(
+        OutputCommandInstance.ResponseInstance = CommandResponse(
             ParserObject.GetAPIData()["State"],
             ParserObject.GetAPIData()["ErrorDescription"],
             Additional,
         )
         # boom
-        CommandTrackerInstance.GetObjectsAsList()[0].ResponseEvent.set()
+        OutputCommandInstance.ResponseEvent.set()
         # Add response then release threads waiting for a response
 
         ParserObject.SetAPIState(True)

@@ -36,9 +36,10 @@ class IsReady:
         CommandTrackerInstance.ManualLoad(AspirateCommand("Test", False, Ops))
 
         CommandReady = False
-        if CommandTrackerInstance.GetNumObjects() != 0:
-            if CommandTrackerInstance.GetObjectsAsList()[0].ResponseInstance is None:
+        for CommandInstance in CommandTrackerInstance.GetObjectsAsList():
+            if CommandInstance.ResponseInstance is None:
                 CommandReady = True
+                break
 
         ParserObject.SetAPIState(True)
         ParserObject.SetAPIReturn("Message", "Returned Command IsReady status")

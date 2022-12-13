@@ -26,19 +26,27 @@ class Request:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        if CommandTrackerInstance.GetObjectsAsList()[0].ResponseInstance is not None:
+        OutputCommandInstance = None
+        for CommandInstance in CommandTrackerInstance.GetObjectsAsList():
+            if CommandInstance.ResponseInstance is None:
+                OutputCommandInstance = CommandInstance
+                break
+
+        if OutputCommandInstance is None:
             ParserObject.SetAPIReturn(
                 "Message",
-                "Command avilable, but already has response. How did this even happen???",
+                "No command available. Please check the IsReady endpoint first...",
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        Command = CommandTrackerInstance.GetObjectsAsList()[0]
-
-        ParserObject.SetAPIReturn("Module Name", Command.GetModuleName())
-        ParserObject.SetAPIReturn("Command Name", Command.GetCommandName())
-        ParserObject.SetAPIReturn("Command Parameters", Command.GetCommandParameters())
+        ParserObject.SetAPIReturn("Module Name", OutputCommandInstance.GetModuleName())
+        ParserObject.SetAPIReturn(
+            "Command Name", OutputCommandInstance.GetCommandName()
+        )
+        ParserObject.SetAPIReturn(
+            "Command Parameters", OutputCommandInstance.GetCommandParameters()
+        )
         ParserObject.SetAPIState(True)
         ParserObject.SetAPIReturn("Message", "Command returned")
 
