@@ -1,3 +1,4 @@
+from threading import Lock
 from typing import Generic, TypeVar
 
 from ..Object.ObjectABC import ObjectABC
@@ -8,8 +9,11 @@ T = TypeVar("T", bound="ObjectABC")
 class TrackerABC(Generic[T]):
     def __init__(self):
         self.Collection: dict[str | int, T] = dict()
+        self.ThreadLock: Lock = Lock()
 
     def ManualLoad(self, ObjectABCInstance: T) -> None:
+
+        self.ThreadLock.acquire()
 
         Name = ObjectABCInstance.GetName()
 
@@ -22,7 +26,12 @@ class TrackerABC(Generic[T]):
 
         self.Collection[Name] = ObjectABCInstance
 
+        self.ThreadLock.release()
+
     def ManualUnload(self, ObjectABCInstance: T) -> None:
+
+        self.ThreadLock.acquire()
+
         Name = ObjectABCInstance.GetName()
 
         if self.IsTracked(ObjectABCInstance) is False:
@@ -34,17 +43,49 @@ class TrackerABC(Generic[T]):
 
         del self.Collection[Name]
 
+        self.ThreadLock.release()
+
     def IsTracked(self, ObjectABCInstance: T) -> bool:
-        return ObjectABCInstance.GetName() in self.Collection
+        self.ThreadLock.acquire()
+
+        BoolTest = ObjectABCInstance.GetName() in self.Collection
+
+        self.ThreadLock.release()
+
+        return BoolTest
 
     def GetNumObjects(self) -> int:
-        return len(self.Collection)
+        self.ThreadLock.acquire()
+
+        Length = len(self.Collection)
+
+        self.ThreadLock.release()
+
+        return Length
 
     def GetObjectsAsList(self) -> list[T]:
-        return [self.Collection[Key] for Key in self.Collection]
+        self.ThreadLock.acquire()
+
+        List = [self.Collection[Key] for Key in self.Collection]
+
+        self.ThreadLock.release()
+
+        return List
 
     def GetObjectsAsDictionary(self) -> dict[str | int, T]:
-        return self.Collection
+        self.ThreadLock.acquire()
+
+        Dict = self.Collection
+
+        self.ThreadLock.release()
+
+        return Dict
 
     def GetObjectByName(self, Name: str | int) -> T:
-        return self.Collection[Name]
+        self.ThreadLock.acquire()
+
+        Object = self.Collection[Name]
+
+        self.ThreadLock.release()
+
+        return Object
