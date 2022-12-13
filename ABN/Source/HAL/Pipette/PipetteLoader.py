@@ -1,6 +1,6 @@
 import yaml
 
-from ..Tip import TipTracker
+from ..Tip.BaseTip import TipTracker
 from .Pipette import Pipette8Channel, Pipette96Channel, PipettingDeviceTypes
 from .PipetteTip.LiquidClass.LiquidClass import LiquidClass
 from .PipetteTip.LiquidClass.LiquidClassCategory import LiquidClassCategory

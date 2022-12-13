@@ -1,10 +1,5 @@
-from .Tip import Tip, TipFTR, TipNTR, TipTypes
-from .TipTracker import TipTracker
+from .TipFTR import TipFTR
+from .TipLoader import LoadYaml
+from .TipNTR import TipNTR
 
-__all__ = [
-    "TipTypes",
-    "Tip",
-    "TipFTR",
-    "TipNTR",
-    "TipTracker",
-]
+__all__ = ["TipFTR", "TipNTR", "LoadYaml"]

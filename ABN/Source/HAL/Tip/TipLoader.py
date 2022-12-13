@@ -1,7 +1,7 @@
 import yaml
 
-from .Tip import TipFTR, TipNTR, TipTypes
-from .TipTracker import TipTracker
+from ..Tip import TipFTR, TipNTR
+from .BaseTip import TipTracker, TipTypes
 
 
 def LoadYaml(TipTrackerInstance: TipTracker, FilePath: str):
@@ -19,10 +19,13 @@ def LoadYaml(TipTrackerInstance: TipTracker, FilePath: str):
         TipType = TipTypes(TipItem["Tip Type"])
 
         if TipType == TipTypes.NTR:
-            NTRWasteSequence = MaxVolume = TipItem["NTR Waste Sequence"]
+            NTRWasteSequence = TipItem["NTR Waste Sequence"]
+            GripperSequence = TipItem["Gripper Sequence"]
 
             TipTrackerInstance.ManualLoad(
-                TipNTR(TipID, PickupSequence, NTRWasteSequence, MaxVolume)
+                TipNTR(
+                    TipID, PickupSequence, NTRWasteSequence, GripperSequence, MaxVolume
+                )
             )
 
         elif TipType == TipTypes.FTR:

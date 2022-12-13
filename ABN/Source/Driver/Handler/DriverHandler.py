@@ -22,5 +22,14 @@ class DriverHandler(ServerHandlerABC):
         if self.CommandTrackerInstance.GetNumObjects() != 0:
             self.CommandTrackerInstance.GetObjectsAsList()[0].ResponseEvent.set()
 
-    def ExecuteCommand(self, CommandInstance: Command):
+    def ExecuteCommand(
+        self, CommandInstance: Command, Timeout: float | None = None
+    ) -> bool:
+
         self.CommandTrackerInstance.ManualLoad(CommandInstance)
+
+        TimeoutFlag = CommandInstance.ResponseEvent.wait(Timeout)
+
+        self.CommandTrackerInstance.ManualUnload(CommandInstance)
+
+        return TimeoutFlag

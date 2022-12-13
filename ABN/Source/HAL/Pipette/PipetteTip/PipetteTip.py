@@ -1,5 +1,5 @@
 from ....Tools.AbstractClasses import ObjectABC
-from ...Tip import Tip
+from ...Tip.BaseTip import Tip
 from .LiquidClass.LiquidClassCategoryTracker import LiquidClassCategoryTracker
 
 

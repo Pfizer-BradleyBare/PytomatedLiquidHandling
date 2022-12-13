@@ -17,7 +17,7 @@ class Command(ObjectABC):
 
     def GetResponse(self) -> Response:
         if self.ResponseInstance is None:
-            raise Exception("Response not set. Did you WaitForResponse first?")
+            raise Exception("Response not set. Did the command timeout?")
 
         return self.ResponseInstance
 

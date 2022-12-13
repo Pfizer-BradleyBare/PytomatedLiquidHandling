@@ -17,7 +17,7 @@ class TrackerABC(Generic[T]):
 
         Name = ObjectABCInstance.GetName()
 
-        if self.IsTracked(ObjectABCInstance) is True:
+        if self.IsTracked(Name) is True:
             raise Exception(
                 type(ObjectABCInstance).__name__
                 + " is already tracked. Name: "
@@ -34,7 +34,7 @@ class TrackerABC(Generic[T]):
 
         Name = ObjectABCInstance.GetName()
 
-        if self.IsTracked(ObjectABCInstance) is False:
+        if self.IsTracked(Name) is False:
             raise Exception(
                 type(ObjectABCInstance).__name__
                 + " is not yet tracked. Name: "
@@ -45,10 +45,10 @@ class TrackerABC(Generic[T]):
 
         self.ThreadLock.release()
 
-    def IsTracked(self, ObjectABCInstance: T) -> bool:
+    def IsTracked(self, Name: str | int) -> bool:
         self.ThreadLock.acquire()
 
-        BoolTest = ObjectABCInstance.GetName() in self.Collection
+        BoolTest = Name in self.Collection
 
         self.ThreadLock.release()
 

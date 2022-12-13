@@ -3,9 +3,9 @@ from abc import ABC, abstractmethod
 
 class InterfaceABC(ABC):
     @abstractmethod
-    def Initialize(self) -> dict:
+    def Initialize(self):
         raise NotImplementedError
 
     @abstractmethod
-    def Deinitialize(self) -> dict:
+    def Deinitialize(self):
         raise NotImplementedError
