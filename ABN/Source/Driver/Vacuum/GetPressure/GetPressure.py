@@ -6,7 +6,9 @@ class GetPressureCommand(Command):
     def __init__(
         self, Name: str, CustomErrorHandling: bool, OptionsInstance: GetPressureOptions
     ):
-        Command.__init__(self, Name, CustomErrorHandling)
+        Command.__init__(
+            self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
+        )
         self.OptionsInstance: GetPressureOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

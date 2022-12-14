@@ -9,7 +9,9 @@ class GetTempertureCommand(Command):
         CustomErrorHandling: bool,
         OptionsInstance: GetTemperatureOptions,
     ):
-        Command.__init__(self, Name, CustomErrorHandling)
+        Command.__init__(
+            self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
+        )
         self.OptionsInstance: GetTemperatureOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

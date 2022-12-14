@@ -11,7 +11,9 @@ class PickupCommand(Command):
         CustomErrorHandling: bool,
         OptionsTrackerInstance: PickupOptionsTracker,
     ):
-        Command.__init__(self, Name, CustomErrorHandling)
+        Command.__init__(
+            self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
+        )
         self.OptionsTrackerInstance: PickupOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:

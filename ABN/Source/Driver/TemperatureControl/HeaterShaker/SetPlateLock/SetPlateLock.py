@@ -6,7 +6,9 @@ class SetPlateLockCommand(Command):
     def __init__(
         self, Name: str, CustomErrorHandling: bool, OptionsInstance: SetPlateLockOptions
     ):
-        Command.__init__(self, Name, CustomErrorHandling)
+        Command.__init__(
+            self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
+        )
         self.OptionsInstance: SetPlateLockOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

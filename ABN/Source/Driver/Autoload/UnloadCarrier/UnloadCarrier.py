@@ -9,7 +9,9 @@ class UnloadCarrierCommand(Command):
         CustomErrorHandling: bool,
         OptionsInstance: UnloadCarrierOptions,
     ):
-        Command.__init__(self, Name, CustomErrorHandling)
+        Command.__init__(
+            self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
+        )
         self.OptionsInstance: UnloadCarrierOptions = OptionsInstance
 
     def GetModuleName(self) -> str:

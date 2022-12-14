@@ -11,7 +11,9 @@ class AspirateCommand(Command):
         CustomErrorHandling: bool,
         OptionsTrackerInstance: AspirateOptionsTracker,
     ):
-        Command.__init__(self, Name, CustomErrorHandling)
+        Command.__init__(
+            self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
+        )
         self.OptionsTrackerInstance: AspirateOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:

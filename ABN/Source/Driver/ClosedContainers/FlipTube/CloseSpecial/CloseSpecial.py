@@ -11,7 +11,9 @@ class CloseSpecialCommand(Command):
         CustomErrorHandling: bool,
         OptionsTrackerInstance: CloseSpecialOptionsTracker,
     ):
-        Command.__init__(self, Name, CustomErrorHandling)
+        Command.__init__(
+            self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
+        )
         self.OptionsTrackerInstance: CloseSpecialOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:
