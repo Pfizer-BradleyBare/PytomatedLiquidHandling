@@ -17,9 +17,8 @@ class ContainerOperator:
         Volume: float,
     ) -> WellSolutionTracker:
 
-        WellInstance = Well(WellNumber)
-        if not self.ContainerInstance.GetWellTracker().IsTracked(WellInstance):
-            self.ContainerInstance.GetWellTracker().ManualLoad(WellInstance)
+        if not self.ContainerInstance.GetWellTracker().IsTracked(WellNumber):
+            self.ContainerInstance.GetWellTracker().ManualLoad(Well(WellNumber))
         # If it doesn't exist then lets add it
 
         WellInstance = self.ContainerInstance.GetWellTracker().GetObjectByName(
@@ -79,9 +78,8 @@ class ContainerOperator:
         SourceWellSolutionTrackerInstance: WellSolutionTracker,
     ):
 
-        WellInstance = Well(WellNumber)
-        if not self.ContainerInstance.GetWellTracker().IsTracked(WellInstance):
-            self.ContainerInstance.GetWellTracker().ManualLoad(WellInstance)
+        if not self.ContainerInstance.GetWellTracker().IsTracked(WellNumber):
+            self.ContainerInstance.GetWellTracker().ManualLoad(Well(WellNumber))
         # If it doesn't exist then lets add it
 
         WellInstance = self.ContainerInstance.GetWellTracker().GetObjectByName(
@@ -93,7 +91,9 @@ class ContainerOperator:
         for (
             WellSolutionInstance
         ) in SourceWellSolutionTrackerInstance.GetObjectsAsList():
-            if DestinationWellSolutionTrackerInstance.IsTracked(WellSolutionInstance):
+            if DestinationWellSolutionTrackerInstance.IsTracked(
+                WellSolutionInstance.GetName()
+            ):
                 TrackedWellSolutionInstance = (
                     DestinationWellSolutionTrackerInstance.GetObjectByName(
                         WellSolutionInstance.GetName()

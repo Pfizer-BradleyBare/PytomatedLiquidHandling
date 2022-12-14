@@ -74,7 +74,7 @@ def Load(
             if LabwareInstance.GetName() not in ContainerFilters:
                 continue
 
-            if not PreferredLabwareTrackerInstance.IsTracked(LabwareInstance):
+            if not PreferredLabwareTrackerInstance.IsTracked(LabwareInstance.GetName()):
                 PreferredLabwareTrackerInstance.ManualLoad(LabwareInstance)
             break
         # This is the labware the user prefers if they prefer one

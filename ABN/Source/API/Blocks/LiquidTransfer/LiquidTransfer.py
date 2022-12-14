@@ -80,17 +80,15 @@ class LiquidTransfer(Block):
             ContainerTrackerInstance = WorkbookInstance.GetContainerTracker()
 
             for Source in Sources:
-                SourceContainerInstance = Container(
-                    Source,
-                    WorkbookInstance.GetSolutionTracker()
-                    .GetObjectByName(Source)
-                    .GetCategory(),
-                )
-                if (
-                    ContainerTrackerInstance.IsTracked(SourceContainerInstance)
-                    is not True
-                ):
-                    ContainerTrackerInstance.ManualLoad(SourceContainerInstance)
+                if ContainerTrackerInstance.IsTracked(Source) is not True:
+                    ContainerTrackerInstance.ManualLoad(
+                        Container(
+                            Source,
+                            WorkbookInstance.GetSolutionTracker()
+                            .GetObjectByName(Source)
+                            .GetCategory(),
+                        )
+                    )
             # If source is not a container then we need to add it
 
             # SequenceTrackerInstance = SequenceTracker()

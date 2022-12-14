@@ -341,11 +341,15 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                     break
                 # We found the root. This means that this preprocessing block is ready to start
 
-                if ExecutedBlocksTrackerInstance.IsTracked(SearchBlockInstance):
+                if ExecutedBlocksTrackerInstance.IsTracked(
+                    SearchBlockInstance.GetName()
+                ):
                     continue
                 # If the block has already been executed then we can skip it.
 
-                if PreprocessingBlocksTrackerInstance.IsTracked(SearchBlockInstance):
+                if PreprocessingBlocksTrackerInstance.IsTracked(
+                    SearchBlockInstance.GetName()
+                ):
                     break
                 # There is a preceeding block that needs to be preprocessed. So we will skip this block for now
                 # NOTE NOTE NOTE NOTE TODO There is a question if we need to only pay attention to blocks of same type or not. I say not for now
@@ -361,7 +365,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         # We can not start a preprocessing device until any preceeding merge steps are completed
 
         if InactiveContextTrackerInstance.IsTracked(
-            WorkbookInstance.GetExecutingContext()
+            WorkbookInstance.GetExecutingContext().GetName()
         ):
             if all(
                 item in InactiveContextTrackerInstance.GetObjectsAsList()
@@ -372,7 +376,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
             for ContextInstance in ContextTrackerInstance.GetObjectsAsList():
                 if not InactiveContextTrackerInstance.IsTracked(
-                    WorkbookInstance.GetExecutingContext()
+                    WorkbookInstance.GetExecutingContext().GetName()
                 ):
                     WorkbookInstance.SetExecutingContext(ContextInstance)
                     break
