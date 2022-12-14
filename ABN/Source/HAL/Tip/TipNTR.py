@@ -30,6 +30,8 @@ class TipNTR(Tip):
         self.NTRWasteSequence: str = NTRWasteSequence
         self.GripperSequence: str = GripperSequence
 
+        self.GeneratedWasteSequence: str | None = None
+
     def Initialize(self):
 
         CommandInstance = LoadTipsCommand(
@@ -44,6 +46,10 @@ class TipNTR(Tip):
         )
 
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        self.GeneratedWasteSequence = CommandInstance.GetResponse().GetAdditional()[
+            "GeneratedWasteSequence"
+        ]
 
         # We also need to show a deck loading dialog, move the autoload, etc.
 
@@ -62,11 +68,11 @@ class TipNTR(Tip):
             ),
         )
 
-        DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
-        DriverHandlerInstance.ExecuteCommand(CommandInstance)
+        self.GeneratedWasteSequence = CommandInstance.GetResponse().GetAdditional()[
+            "GeneratedWasteSequence"
+        ]
 
         # We also need to show a deck loading dialog, move the autoload, etc.
 

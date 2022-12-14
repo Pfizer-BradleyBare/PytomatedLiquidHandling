@@ -16,7 +16,7 @@ class LoadTipsCommand(Command):
         return "Load Tips"
 
     def GetResponseKeys(self) -> list[str]:
-        return []
+        return ["GeneratedWasteSequence"]
 
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         OutputDict = vars(self.OptionsInstance)
