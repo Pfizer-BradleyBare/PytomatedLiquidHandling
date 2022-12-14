@@ -1,3 +1,6 @@
+from typing import cast
+
+from ...Driver.Handler.DriverHandler import DriverHandler
 from ...Driver.Tip.FTR import (
     LoadTipsCommand,
     LoadTipsOptions,
@@ -7,24 +10,92 @@ from ...Driver.Tip.FTR import (
     TipsRemainingOptions,
 )
 from ...Driver.Tools import CommandTracker
+from ...Server.Globals.HandlerRegistry import HandlerRegistry
 from .BaseTip import Tip, TipTypes
+
+__DriverHandlerInstance: DriverHandler = cast(
+    DriverHandler, HandlerRegistry.GetObjectByName("Driver")
+)
 
 
 class TipFTR(Tip):
     def __init__(self, Name: str, PickupSequence: str, MaxVolume: float):
         Tip.__init__(self, Name, PickupSequence, TipTypes.FTR, MaxVolume)
 
-    def Initialize(self) -> CommandTracker:
-        raise NotImplementedError
+    def Initialize(self):
 
-    def Deinitialize(self) -> CommandTracker:
-        raise NotImplementedError
+        CommandInstance = LoadTipsCommand(
+            "Load Tips During FTR Init",
+            True,
+            LoadTipsOptions(
+                "",
+                self.PickupSequence,
+            ),
+        )
 
-    def Reload(self) -> CommandTracker:
-        raise NotImplementedError
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
-    def GetNextAvailableTipPosition(self) -> CommandTracker:
-        raise NotImplementedError
+        self.GeneratedWasteSequence = CommandInstance.GetResponse().GetAdditional()[
+            "GeneratedWasteSequence"
+        ]
 
-    def GetRemainingTips(self) -> CommandTracker:
-        raise NotImplementedError
+        # We also need to show a deck loading dialog, move the autoload, etc.
+
+    def Deinitialize(self):
+        pass
+
+    def Reload(self):
+        CommandInstance = LoadTipsCommand(
+            "Load Tips During Reload",
+            True,
+            LoadTipsOptions(
+                "",
+                self.PickupSequence,
+            ),
+        )
+
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        self.GeneratedWasteSequence = CommandInstance.GetResponse().GetAdditional()[
+            "GeneratedWasteSequence"
+        ]
+
+        # We also need to show a deck loading dialog, move the autoload, etc.
+
+    def UpdateTipPosition(self, NumTips: int):
+
+        CommandInstance = TipsAvailableCommand(
+            "",
+            True,
+            TipsAvailableOptions(
+                "",
+                self.PickupSequence,
+                NumTips,
+            ),
+        )
+
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        Response = CommandInstance.GetResponse()
+
+        self.TipPosition = Response.GetAdditional()["TipPosition"]
+
+        if Response.GetState() == False:
+            self.Reload()
+
+            self.UpdateTipPosition(NumTips)
+
+    def GetRemainingTips(self) -> int:
+
+        CommandInstance = TipsRemainingCommand(
+            "",
+            True,
+            TipsRemainingOptions(
+                "",
+                self.PickupSequence,
+            ),
+        )
+
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        return CommandInstance.GetResponse().GetAdditional()["NumRemaining"]
