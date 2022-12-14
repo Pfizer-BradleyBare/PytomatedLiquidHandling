@@ -70,7 +70,7 @@ class TipNTR(Tip):
 
         # We also need to show a deck loading dialog, move the autoload, etc.
 
-    def GetNextAvailableTipPosition(self, NumTips: int):
+    def UpdateTipPosition(self, NumTips: int):
 
         CommandInstance = TipsAvailableCommand(
             "",
@@ -88,5 +88,24 @@ class TipNTR(Tip):
 
         Response = CommandInstance.GetResponse()
 
-    def GetRemainingTips(self):
-        raise NotImplementedError
+        self.TipPosition = Response.GetAdditional()["TipPosition"]
+
+        if Response.GetState() == False:
+            self.Reload()
+
+            self.UpdateTipPosition(NumTips)
+
+    def GetRemainingTips(self) -> int:
+
+        CommandInstance = TipsRemainingCommand(
+            "",
+            True,
+            TipsRemainingOptions(
+                "",
+                self.PickupSequence,
+            ),
+        )
+
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        return CommandInstance.GetResponse().GetAdditional()["NumRemaining"]
