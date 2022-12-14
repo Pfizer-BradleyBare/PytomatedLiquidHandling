@@ -23,26 +23,14 @@ class TipFTR(Tip):
         Tip.__init__(self, Name, PickupSequence, TipTypes.FTR, MaxVolume)
 
     def Initialize(self):
-
-        CommandInstance = LoadTipsCommand(
-            "Load Tips During FTR Init",
-            True,
-            LoadTipsOptions(
-                "",
-                self.PickupSequence,
-            ),
-        )
-
-        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
-
-        # We also need to show a deck loading dialog, move the autoload, etc.
+        self.Reload()
 
     def Deinitialize(self):
         pass
 
     def Reload(self):
         CommandInstance = LoadTipsCommand(
-            "Load Tips During Reload",
+            "",
             True,
             LoadTipsOptions(
                 "",

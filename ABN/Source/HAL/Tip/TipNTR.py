@@ -33,32 +33,14 @@ class TipNTR(Tip):
         self.GeneratedWasteSequence: str | None = None
 
     def Initialize(self):
-
-        CommandInstance = LoadTipsCommand(
-            "Load Tips During NTR Init",
-            True,
-            LoadTipsOptions(
-                "",
-                self.PickupSequence,
-                self.NTRWasteSequence,
-                self.GripperSequence,
-            ),
-        )
-
-        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
-
-        self.GeneratedWasteSequence = CommandInstance.GetResponse().GetAdditional()[
-            "GeneratedWasteSequence"
-        ]
-
-        # We also need to show a deck loading dialog, move the autoload, etc.
+        self.Reload()
 
     def Deinitialize(self):
         pass
 
     def Reload(self):
         CommandInstance = LoadTipsCommand(
-            "Load Tips During Reload",
+            "",
             True,
             LoadTipsOptions(
                 "",
