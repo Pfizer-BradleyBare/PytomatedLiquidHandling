@@ -35,10 +35,6 @@ class TipFTR(Tip):
 
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
-        self.GeneratedWasteSequence = CommandInstance.GetResponse().GetAdditional()[
-            "GeneratedWasteSequence"
-        ]
-
         # We also need to show a deck loading dialog, move the autoload, etc.
 
     def Deinitialize(self):
@@ -55,10 +51,6 @@ class TipFTR(Tip):
         )
 
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
-
-        self.GeneratedWasteSequence = CommandInstance.GetResponse().GetAdditional()[
-            "GeneratedWasteSequence"
-        ]
 
         # We also need to show a deck loading dialog, move the autoload, etc.
 
