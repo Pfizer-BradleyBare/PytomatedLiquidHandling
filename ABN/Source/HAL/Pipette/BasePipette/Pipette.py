@@ -1,6 +1,7 @@
 from enum import Enum
 
 from ....Tools.AbstractClasses import ObjectABC
+from ...Labware import LabwareTracker
 from .Interface.PipetteInterface import PipetteInterface
 from .PipetteTip.PipetteTipTracker import PipetteTipTracker
 
@@ -16,11 +17,15 @@ class Pipette(ObjectABC, PipetteInterface):
         PipettingDeviceType: PipettingDeviceTypes,
         Enabled: bool,
         SupoortedPipetteTipTrackerInstance: PipetteTipTracker,
+        SupportedLabwareTrackerInstance: LabwareTracker,
     ):
         self.PipettingDeviceType: PipettingDeviceTypes = PipettingDeviceType
         self.Enabled: bool = Enabled
         self.SupoortedPipetteTipTrackerInstance: PipetteTipTracker = (
             SupoortedPipetteTipTrackerInstance
+        )
+        self.SupportedLabwareTrackerInstance: LabwareTracker = (
+            SupportedLabwareTrackerInstance
         )
 
     def GetName(self) -> str:
