@@ -27,7 +27,20 @@ class EjectCommand(Command):
 
     def GetCommandParameters(self) -> dict[str, list]:
 
-        OutputDict = vars(self.OptionsInstance)
-        OutputDict["CustomErrorHandling"] = self.CustomErrorHandling
-        OutputDict["CommandName"] = self.Name
+        OutputDict = defaultdict(list)
+        OutputDict["CustomErrorHandling"] = self.CustomErrorHandling  # type:ignore
+        for PickupOption in self.OptionsTrackerInstance.GetObjectsAsList():
+            PickupOptionDict = vars(PickupOption)
+
+            for key, value in PickupOptionDict.items():
+                OutputDict[key].append(value)
+
+        ChannelNumberList = [0] * 96
+
+        for ChannelNumber in OutputDict["ChannelNumber"]:
+            ChannelNumberList[ChannelNumber - 1] = 1
+
+        OutputDict["ChannelNumber"] = ChannelNumberList
+        OutputDict["ChannelNumberString"] = "".join(ChannelNumberList)  # type:ignore
+
         return OutputDict

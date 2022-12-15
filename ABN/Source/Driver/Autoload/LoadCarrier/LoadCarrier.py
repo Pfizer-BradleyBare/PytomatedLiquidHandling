@@ -23,5 +23,4 @@ class LoadCarrierCommand(Command):
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         OutputDict = vars(self.OptionsInstance)
         OutputDict["CustomErrorHandling"] = self.CustomErrorHandling
-        OutputDict["CommandName"] = self.Name
         return OutputDict
