@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from ....Tools.Command.Command import Command
-from .DispenseOptions import DispenseOptions
+from .DispenseOptionsTracker import DispenseOptionsTracker
 
 
 class DispenseCommand(Command):
@@ -9,12 +9,12 @@ class DispenseCommand(Command):
         self,
         Name: str,
         CustomErrorHandling: bool,
-        OptionsInstance: DispenseOptions,
+        OptionsTrackerInstance: DispenseOptionsTracker,
     ):
         Command.__init__(
             self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
         )
-        self.OptionsInstance: DispenseOptions = OptionsInstance
+        self.OptionsTrackerInstance: DispenseOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:
         return "Pipette 96 Channel"
@@ -29,6 +29,7 @@ class DispenseCommand(Command):
 
         OutputDict = defaultdict(list)
         OutputDict["CustomErrorHandling"] = self.CustomErrorHandling  # type:ignore
+        OutputDict["CommandName"] = self.Name  # type:ignore
         for PickupOption in self.OptionsTrackerInstance.GetObjectsAsList():
             PickupOptionDict = vars(PickupOption)
 

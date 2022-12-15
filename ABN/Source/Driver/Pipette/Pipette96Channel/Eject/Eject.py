@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from ....Tools.Command.Command import Command
-from .EjectOptions import EjectOptions
+from .EjectOptionsTracker import EjectOptionsTracker
 
 
 class EjectCommand(Command):
@@ -9,12 +9,12 @@ class EjectCommand(Command):
         self,
         Name: str,
         CustomErrorHandling: bool,
-        OptionsInstance: EjectOptions,
+        OptionsTrackerInstance: EjectOptionsTracker,
     ):
         Command.__init__(
             self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
         )
-        self.OptionsInstance: EjectOptions = OptionsInstance
+        self.OptionsTrackerInstance: EjectOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:
         return "Pipette 96 Channel"
@@ -29,6 +29,7 @@ class EjectCommand(Command):
 
         OutputDict = defaultdict(list)
         OutputDict["CustomErrorHandling"] = self.CustomErrorHandling  # type:ignore
+        OutputDict["CommandName"] = self.Name  # type:ignore
         for PickupOption in self.OptionsTrackerInstance.GetObjectsAsList():
             PickupOptionDict = vars(PickupOption)
 

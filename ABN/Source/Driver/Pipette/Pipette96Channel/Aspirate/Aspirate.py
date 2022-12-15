@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from ....Tools.Command.Command import Command
-from .AspirateOptions import AspirateOptions
+from .AspirateOptionsTracker import AspirateOptionsTracker
 
 
 class AspirateCommand(Command):
@@ -9,12 +9,12 @@ class AspirateCommand(Command):
         self,
         Name: str,
         CustomErrorHandling: bool,
-        OptionsInstance: AspirateOptions,
+        OptionsTrackerInstance: AspirateOptionsTracker,
     ):
         Command.__init__(
             self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
         )
-        self.OptionsInstance: AspirateOptions = OptionsInstance
+        self.OptionsTrackerInstance: AspirateOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:
         return "Pipette 96 Channel"
@@ -29,6 +29,7 @@ class AspirateCommand(Command):
 
         OutputDict = defaultdict(list)
         OutputDict["CustomErrorHandling"] = self.CustomErrorHandling  # type:ignore
+        OutputDict["CommandName"] = self.Name  # type:ignore
         for PickupOption in self.OptionsTrackerInstance.GetObjectsAsList():
             PickupOptionDict = vars(PickupOption)
 

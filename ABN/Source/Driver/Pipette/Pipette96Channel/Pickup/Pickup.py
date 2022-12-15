@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from ....Tools.Command.Command import Command
-from .PickupOptions import PickupOptions
+from .PickupOptionsTracker import PickupOptionsTracker
 
 
 class PickupCommand(Command):
@@ -9,12 +9,12 @@ class PickupCommand(Command):
         self,
         Name: str,
         CustomErrorHandling: bool,
-        OptionsInstance: PickupOptions,
+        OptionsTrackerInstance: PickupOptionsTracker,
     ):
         Command.__init__(
             self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
         )
-        self.OptionsInstance: PickupOptions = OptionsInstance
+        self.OptionsTrackerInstance: PickupOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:
         return "Pipette 96 Channel"
@@ -29,6 +29,7 @@ class PickupCommand(Command):
 
         OutputDict = defaultdict(list)
         OutputDict["CustomErrorHandling"] = self.CustomErrorHandling  # type:ignore
+        OutputDict["CommandName"] = self.Name  # type:ignore
         for PickupOption in self.OptionsTrackerInstance.GetObjectsAsList():
             PickupOptionDict = vars(PickupOption)
 
