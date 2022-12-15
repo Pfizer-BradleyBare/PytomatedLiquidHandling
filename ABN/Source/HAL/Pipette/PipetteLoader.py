@@ -1,15 +1,16 @@
 import yaml
 
+from ..Pipette import Pipette8Channel, Pipette96Channel
 from ..Tip.BaseTip import TipTracker
-from .Pipette import Pipette8Channel, Pipette96Channel, PipettingDeviceTypes
-from .PipetteTip.LiquidClass.LiquidClass import LiquidClass
-from .PipetteTip.LiquidClass.LiquidClassCategory import LiquidClassCategory
-from .PipetteTip.LiquidClass.LiquidClassCategoryTracker import (
+from .BasePipette import (
+    LiquidClass,
+    LiquidClassCategory,
     LiquidClassCategoryTracker,
+    PipetteTip,
+    PipetteTipTracker,
+    PipetteTracker,
+    PipettingDeviceTypes,
 )
-from .PipetteTip.PipetteTip import PipetteTip
-from .PipetteTip.PipetteTipTracker import PipetteTipTracker
-from .PipetteTracker import PipetteTracker
 
 
 def LoadYaml(

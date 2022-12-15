@@ -1,6 +1,7 @@
 from enum import Enum
 
-from ...Tools.AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import ObjectABC
+from .Interface.PipetteInterface import PipetteInterface
 from .PipetteTip.PipetteTipTracker import PipetteTipTracker
 
 
@@ -9,7 +10,7 @@ class PipettingDeviceTypes(Enum):
     Pipette96Channel = "96 Core Head"
 
 
-class Pipette(ObjectABC):
+class Pipette(ObjectABC, PipetteInterface):
     def __init__(
         self,
         PipettingDeviceType: PipettingDeviceTypes,
@@ -30,33 +31,3 @@ class Pipette(ObjectABC):
 
     def GetSupoortedPipetteTipTracker(self) -> PipetteTipTracker:
         return self.SupoortedPipetteTipTrackerInstance
-
-
-class Pipette96Channel(Pipette):
-    def __init__(
-        self,
-        Enabled: bool,
-        SupoortedPipetteTipTrackerInstance: PipetteTipTracker,
-    ):
-        Pipette.__init__(
-            self,
-            PipettingDeviceTypes.Pipette96Channel,
-            Enabled,
-            SupoortedPipetteTipTrackerInstance,
-        )
-
-
-class Pipette8Channel(Pipette):
-    def __init__(
-        self,
-        Enabled: bool,
-        SupoortedPipetteTipTrackerInstance: PipetteTipTracker,
-        ActiveChannels: list[int],
-    ):
-        Pipette.__init__(
-            self,
-            PipettingDeviceTypes.Pipette8Channel,
-            Enabled,
-            SupoortedPipetteTipTrackerInstance,
-        )
-        self.ActiveChannels: list[int] = ActiveChannels

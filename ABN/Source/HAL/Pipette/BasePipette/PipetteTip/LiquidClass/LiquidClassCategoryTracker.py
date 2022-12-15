@@ -1,4 +1,4 @@
-from .....Tools.AbstractClasses import TrackerABC
+from ......Tools.AbstractClasses import TrackerABC
 from .LiquidClassCategory import LiquidClassCategory
 
 

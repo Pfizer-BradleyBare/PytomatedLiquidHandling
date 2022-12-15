@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from ....Tools.AbstractClasses import InterfaceABC
+from .....Tools.AbstractClasses import InterfaceABC
 from .TransferOptions.TransferOptionsTracker import TransferOptionsTracker
 
 
