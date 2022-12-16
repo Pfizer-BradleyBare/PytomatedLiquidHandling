@@ -17,3 +17,16 @@ class Response:
 
     def GetAdditional(self) -> dict[str, any]:  # type: ignore
         return self.Additional
+
+
+def ClampMax(Number, Max):
+    while Number > Max:
+        Number -= Max
+
+    return Number
+
+
+c = 7
+s = 3
+
+print(ClampMax(c, s))
