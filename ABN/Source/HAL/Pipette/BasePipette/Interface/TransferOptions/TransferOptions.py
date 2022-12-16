@@ -30,3 +30,4 @@ class TransferOptions(ObjectABC):
         self.DestinationLiquidClassCategory: str = DestinationLiquidClassCategory
 
         self.TransferVolume: float = TransferVolume
+        self.NumTransfers: int = 1
