@@ -1,21 +1,8 @@
 from enum import Enum
 
 from ...Tools.AbstractClasses import ObjectABC
-from ..Layout import LayoutItem
-
-
-class TempConfig:
-    def __init__(
-        self,
-        AmbientTemp: float,
-        StableTempDelta: float,
-        MinimumTemp: float,
-        MaximumTemp: float,
-    ):
-        self.AmbientTemp: float = AmbientTemp
-        self.StableTempDelta: float = StableTempDelta
-        self.MinimumTemp: float = MinimumTemp
-        self.MaximumTemp: float = MaximumTemp
+from ..Layout import LayoutTracker
+from .TempLimits.TempLimits import TempLimits
 
 
 class DeviceTypes(Enum):
@@ -29,26 +16,14 @@ class TempControlDevice(ObjectABC):
         Name: str,
         ComPort: str,
         DeviceType: DeviceTypes,
-        Config: TempConfig,
-        LayoutItems: list[LayoutItem],
+        TempLimitsInstance: TempLimits,
+        LayoutTrackerInstance: LayoutTracker,
     ):
         self.Name: str = Name
         self.ComPort: str = ComPort
         self.DeviceType: DeviceTypes = DeviceType
-        self.Config: TempConfig = Config
-        self.LayoutItems: list[LayoutItem] = LayoutItems
+        self.TempLimitsInstance: TempLimits = TempLimitsInstance
+        self.LayoutTrackerInstance: LayoutTracker = LayoutTrackerInstance
 
     def GetName(self) -> str:
         return self.Name
-
-    def GetComPort(self) -> str:
-        return self.ComPort
-
-    def GetDeviceType(self) -> DeviceTypes:
-        return self.DeviceType
-
-    def GetTempConfig(self) -> TempConfig:
-        return self.Config
-
-    def GetLayoutItems(self) -> list[LayoutItem]:
-        return self.LayoutItems

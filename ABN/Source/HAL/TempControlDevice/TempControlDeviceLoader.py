@@ -1,11 +1,19 @@
 import yaml
 
-from ..Layout import LayoutItem
-from .TempControlDevice import DeviceTypes, TempConfig, TempControlDevice
+from ..DeckLocation import DeckLocationTracker
+from ..Labware import LabwareTracker
+from ..Layout import LayoutItem, LayoutTracker
+from .TempControlDevice import DeviceTypes, TempControlDevice, TempLimits
 from .TempControlDeviceTracker import TempControlDeviceTracker
 
 
-def LoadYaml(TempControlDeviceTrackerInstance: TempControlDeviceTracker, FilePath: str):
+def LoadYaml(
+    LabwareTrackerInstance: LabwareTracker,
+    DeckLocationTrackerInstance: DeckLocationTracker,
+    FilePath: str,
+) -> TempControlDeviceTracker:
+    TempControlDeviceTrackerInstance = TempControlDeviceTracker()
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
@@ -17,23 +25,20 @@ def LoadYaml(TempControlDeviceTrackerInstance: TempControlDeviceTracker, FilePat
 
         if Device["Enabled"] is True:
 
-            AmbientTemp = Device["Temp Config"]["Ambient"]
-            StableTempDelta = Device["Temp Config"]["Stable Delta"]
-            MaxTemp = Device["Temp Config"]["Maximum"]
-            MinTemp = Device["Temp Config"]["Minimum"]
-            Config = TempConfig(AmbientTemp, StableTempDelta, MinTemp, MaxTemp)
+            StableTempDelta = Device["Temp Limits"]["Stable Delta"]
+            MaxTemp = Device["Temp Limits"]["Maximum"]
+            MinTemp = Device["Temp Limits"]["Minimum"]
+            Config = TempLimits(StableTempDelta, MinTemp, MaxTemp)
             # Create Temp Config
 
-            Location = TempControlDeviceTrackerInstance.DeckLocationTrackerInstance.GetObjectByName(
+            Location = DeckLocationTrackerInstance.GetObjectByName(
                 Device["Deck Location ID"]
             )
 
-            LayoutItems = list()
+            LayoutItemTrackerInstance = LayoutTracker()
 
             for LabwareID in Device["Supported Labware"]:
-                Labware = TempControlDeviceTrackerInstance.LabwareTrackerInstance.GetObjectByName(
-                    LabwareID
-                )
+                Labware = LabwareTrackerInstance.GetObjectByName(LabwareID)
 
                 Sequence = Device["Supported Labware"][LabwareID]["Plate Sequence"]
                 LidSequence = Device["Supported Labware"][LabwareID]["Lid Sequence"]
@@ -42,12 +47,16 @@ def LoadYaml(TempControlDeviceTrackerInstance: TempControlDeviceTracker, FilePat
                     Sequence, LidSequence, Location, Labware
                 )
 
-                LayoutItems.append(LayoutItemInstance)
+                LayoutItemTrackerInstance.ManualLoad(LayoutItemInstance)
                 # add to our list for our item creation and also add it to the layout loader for tracking
 
             ComPort = Device["Com Port"]
             DeviceType = DeviceTypes(Device["Device Type"])
 
             TempControlDeviceTrackerInstance.ManualLoad(
-                TempControlDevice(DeviceID, ComPort, DeviceType, Config, LayoutItems)
+                TempControlDevice(
+                    DeviceID, ComPort, DeviceType, Config, LayoutItemTrackerInstance
+                )
             )
+
+    return TempControlDeviceTrackerInstance

@@ -1,10 +1,19 @@
 import yaml
 
+from ..DeckLocation import DeckLocationTracker
+from ..Labware import LabwareTracker
 from .Layout import LayoutItem
-from .LayoutTracker import LayoutTracker as LT
+from .LayoutTracker import LayoutTracker
 
 
-def LoadYaml(LayoutTrackerInstance: LT, FilePath: str):
+def LoadYaml(
+    LabwareTrackerInstance: LabwareTracker,
+    DeckLocationTrackerInstance: DeckLocationTracker,
+    FilePath: str,
+) -> LayoutTracker:
+
+    LayoutTrackerInstance = LayoutTracker()
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
@@ -16,16 +25,10 @@ def LoadYaml(LayoutTrackerInstance: LT, FilePath: str):
         if Items is not None:
             for Item in Items:
                 Sequence = Item["Deck Sequence"]
-                Location = (
-                    LayoutTrackerInstance.DeckLocationTrackerInstance.GetObjectByName(
-                        Item["Deck Location ID"]
-                    )
+                Location = DeckLocationTrackerInstance.GetObjectByName(
+                    Item["Deck Location ID"]
                 )
-                LabwareObject = (
-                    LayoutTrackerInstance.LabwareTrackerInstance.GetObjectByName(
-                        LabwareID
-                    )
-                )
+                LabwareObject = LabwareTrackerInstance.GetObjectByName(LabwareID)
 
                 LidSequence = None
                 if "Lid Sequence" in Item.keys():
@@ -35,3 +38,5 @@ def LoadYaml(LayoutTrackerInstance: LT, FilePath: str):
                     LayoutItem(Sequence, LidSequence, Location, LabwareObject)
                 )
                 # create item and add to list
+
+    return LayoutTrackerInstance

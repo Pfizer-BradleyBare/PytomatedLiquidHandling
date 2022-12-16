@@ -1,10 +1,15 @@
 import yaml
 
+from ..Transport import TransportTracker
 from .DeckLocation import DeckLocation, LoadingConfig
 from .DeckLocationTracker import DeckLocationTracker
 
 
-def LoadYaml(DeckLocationTrackerInstance: DeckLocationTracker, FilePath: str):
+def LoadYaml(
+    TransportTrackerInstance: TransportTracker, FilePath: str
+) -> DeckLocationTracker:
+    DeckLocationTrackerInstance = DeckLocationTracker()
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
@@ -18,9 +23,7 @@ def LoadYaml(DeckLocationTrackerInstance: DeckLocationTracker, FilePath: str):
         if TransportIDs is not None:
             for TransportID in TransportIDs:
                 TransportDevices.append(
-                    DeckLocationTrackerInstance.TransportTrackerInstance.GetObjectByName(
-                        TransportID
-                    )
+                    TransportTrackerInstance.GetObjectByName(TransportID)
                 )
 
         LoadingConfigInstance = None
@@ -42,3 +45,5 @@ def LoadYaml(DeckLocationTrackerInstance: DeckLocationTracker, FilePath: str):
                 ConfigFile["Location IDs"][LocationID]["StorageLocation"],
             )
         )
+
+    return DeckLocationTrackerInstance

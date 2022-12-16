@@ -1,8 +1,9 @@
-from .TempControlDevice import DeviceTypes, TempConfig, TempControlDevice
+from .TempControlDevice import DeviceTypes, TempControlDevice
 from .TempControlDeviceTracker import TempControlDeviceTracker
+from .TempLimits.TempLimits import TempLimits
 
 __all__ = [
-    "TempConfig",
+    "TempLimits",
     "DeviceTypes",
     "TempControlDevice",
     "TempControlDeviceTracker",

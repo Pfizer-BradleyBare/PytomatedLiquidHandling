@@ -1,10 +1,13 @@
 import yaml
 
+from ..Labware import LabwareTracker
 from .FlipTube import FlipTube
 from .FlipTubeTracker import FlipTubeTracker
 
 
-def LoadYaml(FlipTubeTrackerInstance: FlipTubeTracker, FilePath: str):
+def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str) -> FlipTubeTracker:
+    FlipTubeTrackerInstance = FlipTubeTracker()
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
@@ -20,12 +23,10 @@ def LoadYaml(FlipTubeTrackerInstance: FlipTubeTracker, FilePath: str):
         for LabwareID in ConfigFile["FlipTube Tool IDs"][FlipTubeID][
             "Supported Labware"
         ]:
-            SupportedLabwares.append(
-                FlipTubeTrackerInstance.LabwareTrackerInstance.GetObjectByName(
-                    LabwareID
-                )
-            )
+            SupportedLabwares.append(LabwareTrackerInstance.GetObjectByName(LabwareID))
 
         FlipTubeTrackerInstance.ManualLoad(
             FlipTube(FlipTubeID, Sequence, SupportedLabwares)
         )
+
+    return FlipTubeTrackerInstance

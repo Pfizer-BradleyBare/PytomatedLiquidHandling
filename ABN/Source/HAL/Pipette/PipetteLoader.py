@@ -14,10 +14,11 @@ from .BasePipette import (
 
 
 def LoadYaml(
-    PipetteTrackerInstance: PipetteTracker,
     TipTrackerInstance: TipTracker,
     FilePath: str,
-):
+) -> PipetteTracker:
+    PipetteTrackerInstance = PipetteTracker()
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
@@ -92,3 +93,5 @@ def LoadYaml(
             PipetteTrackerInstance.ManualLoad(
                 Pipette96Channel(Enabled, PipetteTipTrackerInstance)
             )
+
+    return PipetteTrackerInstance

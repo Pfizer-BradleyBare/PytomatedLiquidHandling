@@ -1,11 +1,19 @@
 import yaml
 
+from ..DeckLocation import DeckLocationTracker
+from ..Labware import LabwareTracker
 from ..Layout import LayoutItem
 from .Lid import Lid
 from .LidTracker import LidTracker
 
 
-def LoadYaml(LidTrackerInstance: LidTracker, FilePath: str):
+def LoadYaml(
+    LabwareTrackerInstance: LabwareTracker,
+    DeckLocationTrackerInstance: DeckLocationTracker,
+    FilePath: str,
+) -> LidTracker:
+    LidTrackerInstance = LidTracker()
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
@@ -17,10 +25,8 @@ def LoadYaml(LidTrackerInstance: LidTracker, FilePath: str):
         if LidItem["Enabled"] is not True or LidItem["Supported Labware"] is None:
             continue
 
-        LidLabware = LidTrackerInstance.LabwareTrackerInstance.GetObjectByName(
-            LidItem["Labware"]
-        )
-        LidLocation = LidTrackerInstance.DeckLocationTrackerInstance.GetObjectByName(
+        LidLabware = LabwareTrackerInstance.GetObjectByName(LidItem["Labware"])
+        LidLocation = DeckLocationTrackerInstance.GetObjectByName(
             LidItem["Deck Location ID"]
         )
         LidSequence = LidItem["Sequence"]
@@ -28,11 +34,11 @@ def LoadYaml(LidTrackerInstance: LidTracker, FilePath: str):
         Labwares = list()
 
         for LabwareID in LidItem["Supported Labware"]:
-            Labwares.append(
-                LidTrackerInstance.LabwareTrackerInstance.GetObjectByName(LabwareID)
-            )
+            Labwares.append(LabwareTrackerInstance.GetObjectByName(LabwareID))
 
         LidTrackerInstance.ManualLoad(
             Lid(LidID, LayoutItem(LidSequence, None, LidLocation, LidLabware), Labwares)
         )
         # Create Labware Class and append
+
+    return LidTrackerInstance

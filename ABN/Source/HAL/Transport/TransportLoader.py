@@ -1,5 +1,6 @@
 import yaml
 
+from ..Labware import LabwareTracker
 from .Transport import (
     COREGripperDevice,
     TransportableLabware,
@@ -9,7 +10,9 @@ from .Transport import (
 from .TransportTracker import TransportTracker
 
 
-def LoadYaml(TransportTrackerInstance: TransportTracker, FilePath: str):
+def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str) -> TransportTracker:
+    TransportTrackerInstance = TransportTracker()
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
@@ -24,11 +27,7 @@ def LoadYaml(TransportTrackerInstance: TransportTracker, FilePath: str):
 
         Labwares = list()
         for LabwareID in DeviceConfig["Supported Labware"]:
-            LabwareObject = (
-                TransportTrackerInstance.LabwareTrackerInstance.GetObjectByName(
-                    LabwareID
-                )
-            )
+            LabwareObject = LabwareTrackerInstance.GetObjectByName(LabwareID)
 
             CloseOffset = DeviceConfig["Supported Labware"][LabwareID]["Close Offset"]
             OpenOffset = DeviceConfig["Supported Labware"][LabwareID]["Open Offset"]
@@ -50,3 +49,5 @@ def LoadYaml(TransportTrackerInstance: TransportTracker, FilePath: str):
 
         elif TransportDevice == TransportDevices.TrackGripper:
             pass
+
+    return TransportTrackerInstance
