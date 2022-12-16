@@ -1,6 +1,7 @@
 from enum import Enum
 
 from ....Tools.AbstractClasses import ObjectABC
+from .Interface.TransportInterface import TransportInterface
 from .TransportableLabware.TransportableLabwareTracker import (
     TransportableLabwareTracker,
 )
@@ -12,7 +13,7 @@ class TransportDevices(Enum):
     TrackGripper = "Track Gripper"
 
 
-class TransportDevice(ObjectABC):
+class TransportDevice(ObjectABC, TransportInterface):
     def __init__(
         self,
         Name: TransportDevices,

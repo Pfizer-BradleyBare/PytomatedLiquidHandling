@@ -1,3 +1,4 @@
+from ..Layout import LayoutItem
 from .BaseTransportDevice import (
     TransportableLabwareTracker,
     TransportDevice,
@@ -15,3 +16,14 @@ class TrackGripper(TransportDevice):
             TransportDevices.InternalPlateGripper,
             TransportableLabwareTrackerInstance,
         )
+
+    def Initialize(self):
+        raise NotImplementedError
+
+    def Deinitialize(self):
+        raise NotImplementedError
+
+    def MovePlate(
+        self, SourceLayoutItem: LayoutItem, DestinationLayoutItem: LayoutItem
+    ):
+        raise NotImplementedError
