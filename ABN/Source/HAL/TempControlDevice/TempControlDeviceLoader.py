@@ -3,8 +3,13 @@ import yaml
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker
 from ..Layout import LayoutItem, LayoutTracker
-from .TempControlDevice import DeviceTypes, TempControlDevice, TempLimits
-from .TempControlDeviceTracker import TempControlDeviceTracker
+from ..TempControlDevice import HamiltonHeaterCooler, HamiltonHeaterShaker
+from .BaseTempControlDevice import (
+    DeviceTypes,
+    TempControlDevice,
+    TempControlDeviceTracker,
+    TempLimits,
+)
 
 
 def LoadYaml(
@@ -28,7 +33,7 @@ def LoadYaml(
             StableTempDelta = Device["Temp Limits"]["Stable Delta"]
             MaxTemp = Device["Temp Limits"]["Maximum"]
             MinTemp = Device["Temp Limits"]["Minimum"]
-            Config = TempLimits(StableTempDelta, MinTemp, MaxTemp)
+            TempLimitsInstance = TempLimits(StableTempDelta, MinTemp, MaxTemp)
             # Create Temp Config
 
             Location = DeckLocationTrackerInstance.GetObjectByName(
@@ -53,10 +58,18 @@ def LoadYaml(
             ComPort = Device["Com Port"]
             DeviceType = DeviceTypes(Device["Device Type"])
 
-            TempControlDeviceTrackerInstance.ManualLoad(
-                TempControlDevice(
-                    DeviceID, ComPort, DeviceType, Config, LayoutItemTrackerInstance
+            if DeviceType == DeviceTypes.HamiltonHeaterCooler:
+                TempControlDeviceTrackerInstance.ManualLoad(
+                    HamiltonHeaterCooler(
+                        DeviceID, ComPort, TempLimitsInstance, LayoutItemTrackerInstance
+                    )
                 )
-            )
+
+            if DeviceType == DeviceTypes.HamiltonHeaterShaker:
+                TempControlDeviceTrackerInstance.ManualLoad(
+                    HamiltonHeaterShaker(
+                        DeviceID, ComPort, TempLimitsInstance, LayoutItemTrackerInstance
+                    )
+                )
 
     return TempControlDeviceTrackerInstance
