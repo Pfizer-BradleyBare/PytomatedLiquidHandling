@@ -14,7 +14,7 @@ class TransferOptions(ObjectABC):
         DestinationPosition: int,  # This is the well position. Not sequence position
         CurrentDestinationVolume: float,
         DestinationMixCycles: int,
-        DestinationLiquidCLassCategory: str,
+        DestinationLiquidClassCategory: str,
         TransferVolume: float,
     ):
         self.SourceLayoutItemInstance: LayoutItem = SourceLayoutItemInstance
@@ -27,6 +27,6 @@ class TransferOptions(ObjectABC):
         self.DestinationPosition: int = DestinationPosition
         self.CurrentDestinationVolume: float = CurrentDestinationVolume
         self.DestinationMixCycles: int = DestinationMixCycles
-        self.DestinationLiquidCLassCategory: str = DestinationLiquidCLassCategory
+        self.DestinationLiquidClassCategory: str = DestinationLiquidClassCategory
 
         self.TransferVolume: float = TransferVolume

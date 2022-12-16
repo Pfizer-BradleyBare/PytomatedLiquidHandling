@@ -22,18 +22,3 @@ class PipetteTip(ObjectABC):
 
     def GetName(self) -> str:
         return self.TipInstance.GetName()
-
-    def GetTip(self) -> Tip:
-        return self.TipInstance
-
-    def GetLiquidClassCategoryTracker(self) -> LiquidClassCategoryTracker:
-        return self.LiquidClassCategoryTrackerInstance
-
-    def GetReusePickupSequence(self) -> str:
-        return self.ReusePickupSequence
-
-    def GetReuseDropoffSequence(self) -> str:
-        return self.ReuseDropoffSequence
-
-    def GetWasteSequence(self) -> str:
-        return self.WasteSequence

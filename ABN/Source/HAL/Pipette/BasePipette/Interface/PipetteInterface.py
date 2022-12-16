@@ -64,3 +64,10 @@ def TestLabwareSupported(
         Index += 1
 
     return FailedIndices
+
+
+def ClampMax(Number: int, Max: int):
+    while Number > Max:
+        Number -= Max
+
+    return Number

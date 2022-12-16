@@ -1,9 +1,16 @@
 from collections import defaultdict
+from math import ceil
 
+from ...Driver.Pipette.Pipette8Channel import (
+    AspirateCommand,
+    AspirateOptions,
+    AspirateOptionsTracker,
+)
 from ..Labware import LabwareTracker
 from ..Pipette import TransferOptionsTracker
-from .BasePipette import Pipette, PipetteTipTracker, PipettingDeviceTypes
+from .BasePipette import Pipette, PipetteTip, PipetteTipTracker, PipettingDeviceTypes
 from .BasePipette.Interface.PipetteInterface import (
+    ClampMax,
     TestLabwareSupported,
     TestSumLessThanMax,
 )
@@ -35,25 +42,43 @@ class Pipette8Channel(Pipette):
     def Transfer(self, TransferOptionsTrackerInstance: TransferOptionsTracker):
         pass
 
-        TransferOptionDict = defaultdict(list)
-
-        for TransferOption in TransferOptionsTrackerInstance.GetObjectsAsList():
-            TempDict = vars(TransferOption)
-
-            for key, value in TempDict.items():
-                TransferOptionDict[key].append(value)
-        # Covert options to dict of lists of transfer option
-
-        MaxVolumes = [
-            Volume - 0 for Volume in TransferOptionDict["CurrentSourceVolume"]
+        SourceLayoutItemInstances = [
+            Option.SourceLayoutItemInstance
+            for Option in TransferOptionsTrackerInstance.GetObjectsAsList()
         ]
+        SourcePositions = [
+            Option.SourcePosition
+            for Option in TransferOptionsTrackerInstance.GetObjectsAsList()
+        ]
+        CurrentSourceVolumes = [
+            Option.CurrentSourceVolume
+            for Option in TransferOptionsTrackerInstance.GetObjectsAsList()
+        ]
+        DestinationLayoutItemInstances = [
+            Option.DestinationLayoutItemInstance
+            for Option in TransferOptionsTrackerInstance.GetObjectsAsList()
+        ]
+        DestinationPositions = [
+            Option.DestinationPosition
+            for Option in TransferOptionsTrackerInstance.GetObjectsAsList()
+        ]
+        CurrentDestinationVolumes = [
+            Option.CurrentDestinationVolume
+            for Option in TransferOptionsTrackerInstance.GetObjectsAsList()
+        ]
+        TransferVolumes = [
+            Option.TransferVolume
+            for Option in TransferOptionsTrackerInstance.GetObjectsAsList()
+        ]
+
+        MaxVolumes = [Volume - 0 for Volume in CurrentSourceVolumes]
 
         if (
             len(
                 TestSumLessThanMax(
-                    TransferOptionDict["SourceLayoutItemInstance"],
-                    TransferOptionDict["SourcePosition"],
-                    TransferOptionDict["TransferVolume"],
+                    SourceLayoutItemInstances,
+                    SourcePositions,
+                    TransferVolumes,
                     MaxVolumes,
                 )
             )
@@ -64,16 +89,14 @@ class Pipette8Channel(Pipette):
             )
         # Does each source contain enough volume for this transfer?
 
-        MaxVolumes = [
-            Volume - 0 for Volume in TransferOptionDict["CurrentDestinationVolume"]
-        ]
+        MaxVolumes = [Volume - 0 for Volume in CurrentDestinationVolumes]
 
         if (
             len(
                 TestSumLessThanMax(
-                    TransferOptionDict["DestinationLayoutItemInstance"],
-                    TransferOptionDict["DestinationPosition"],
-                    TransferOptionDict["TransferVolume"],
+                    DestinationLayoutItemInstances,
+                    DestinationPositions,
+                    TransferVolumes,
                     MaxVolumes,
                 )
             )
@@ -88,7 +111,7 @@ class Pipette8Channel(Pipette):
             len(
                 TestLabwareSupported(
                     self.SupportedLabwareTrackerInstance,
-                    TransferOptionDict["SourceLayoutItemInstance"],
+                    SourceLayoutItemInstances,
                 )
             )
             != 0
@@ -101,7 +124,7 @@ class Pipette8Channel(Pipette):
             len(
                 TestLabwareSupported(
                     self.SupportedLabwareTrackerInstance,
-                    TransferOptionDict["DestinationLayoutItemInstance"],
+                    DestinationLayoutItemInstances,
                 )
             )
             != 0
@@ -120,5 +143,108 @@ class Pipette8Channel(Pipette):
             self.ActiveChannels * (int(NumTransfers / NumActiveChannels) + 1)
         )[:NumTransfers]
         # Do some array math to align the active channels across our transfers
+
+        # NOTE: I played with sorting to make the liquid aspirate and dispense smarter. Trust me not a good idea
+
+        for TransferOptionsInstance, PipettingChannel in zip(
+            TransferOptionsTrackerInstance.GetObjectsAsList(), PipettingChannels
+        ):
+
+            SourceLayoutItemInstance = TransferOptionsInstance.SourceLayoutItemInstance
+            SourcePosition = TransferOptionsInstance.SourcePosition
+            CurrentSourceVolume = TransferOptionsInstance.CurrentSourceVolume
+            SourceMixCycles = TransferOptionsInstance.SourceMixCycles
+            SourceLiquidClassCategory = (
+                TransferOptionsInstance.SourceLiquidClassCategory
+            )
+            DestinationLayoutItemInstance = (
+                TransferOptionsInstance.DestinationLayoutItemInstance
+            )
+            DestinationPosition = TransferOptionsInstance.DestinationPosition
+            CurrentDestinationVolume = TransferOptionsInstance.CurrentDestinationVolume
+            DestinationMixCycles = TransferOptionsInstance.DestinationMixCycles
+            DestinationLiquidClassCategory = (
+                TransferOptionsInstance.DestinationLiquidClassCategory
+            )
+            TransferVolume = TransferOptionsInstance.TransferVolume
+            # Pull out our variables
+
+            SelectedPipetteTipInstance: None | PipetteTip = None
+            for (
+                PipetteTipInstance
+            ) in self.SupportedPipetteTipTrackerInstance.GetObjectsAsList():
+                if PipetteTipInstance.TipInstance.MaxVolume >= TransferVolume:
+                    SelectedPipetteTipInstance = PipetteTipInstance
+                    break
+            # Get the tip we want to use
+            if SelectedPipetteTipInstance is None:
+                SelectedPipetteTipInstance = (
+                    self.SupportedPipetteTipTrackerInstance.GetObjectsAsList()[-1]
+                )
+            # If we don't find a tip we are going to use the largest tip
+
+            NumTransfers = ceil(
+                TransferVolume / SelectedPipetteTipInstance.TipInstance.MaxVolume
+            )
+            TransferVolume /= NumTransfers
+            # Do we need to split this into mutliple transfers?
+
+            if (
+                SelectedPipetteTipInstance.LiquidClassCategoryTrackerInstance.IsTracked(
+                    SourceLiquidClassCategory
+                )
+                is True
+            ):
+                SelectedSourceLiquidClassCategory = SelectedPipetteTipInstance.LiquidClassCategoryTrackerInstance.GetObjectByName(
+                    SourceLiquidClassCategory
+                )
+            else:
+                SelectedSourceLiquidClassCategory = SelectedPipetteTipInstance.LiquidClassCategoryTrackerInstance.GetObjectByName(
+                    "Default"
+                )
+            # Source
+            if (
+                SelectedPipetteTipInstance.LiquidClassCategoryTrackerInstance.IsTracked(
+                    SourceLiquidClassCategory
+                )
+                is True
+            ):
+                SelectedDestinationLiquidClassCategory = SelectedPipetteTipInstance.LiquidClassCategoryTrackerInstance.GetObjectByName(
+                    SourceLiquidClassCategory
+                )
+            else:
+                SelectedDestinationLiquidClassCategory = SelectedPipetteTipInstance.LiquidClassCategoryTrackerInstance.GetObjectByName(
+                    "Default"
+                )
+            # Destination
+            # Get the liqid class category we want to use
+
+            for (
+                LiquidClassInstance
+            ) in SelectedSourceLiquidClassCategory.GetObjectsAsList():
+                if LiquidClassInstance.MaxVolume >= TransferVolume:
+                    SelectedSourceLiquidClass = LiquidClassInstance
+                    break
+            # Source
+            for (
+                LiquidClassInstance
+            ) in SelectedDestinationLiquidClassCategory.GetObjectsAsList():
+                if LiquidClassInstance.MaxVolume >= TransferVolume:
+                    SelectedDestinationLiquidClass = LiquidClassInstance
+                    break
+            # Destination
+            # Get the liquid class we want to use
+
+            if CurrentDestinationVolume == 0:
+                DestinationMixCycles = 0
+            # Do I need to modify the destination mixing cycles?
+
+            PipettingChannel = ClampMax(
+                PipettingChannel,
+                SourceLayoutItemInstance.LabwareInstance.LabwareWells.SeqPerWell,  # type:ignore
+            )
+            # Clamp channel number into number of sequence positions for our source. Destination should, hopefully, always be a plate so clamping not needed
+
+            # Create our PipettingOptions
 
         # Now the pipetting junk. aye yi yi

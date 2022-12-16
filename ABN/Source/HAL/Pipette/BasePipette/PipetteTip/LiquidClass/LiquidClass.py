@@ -8,6 +8,3 @@ class LiquidClass(ObjectABC):
 
     def GetName(self) -> str:
         return self.Name
-
-    def GetMaxVolume(self) -> float:
-        return self.MaxVolume
