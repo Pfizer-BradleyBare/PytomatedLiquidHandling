@@ -1,17 +1,20 @@
 import yaml
 
 from ..Labware import LabwareTracker
-from .Transport import (
-    COREGripperDevice,
+from ..Transport import COREGripper, InternalPlateGripper, TrackGripper
+from .BaseTransportDevice import (
     TransportableLabware,
+    TransportableLabwareTracker,
     TransportDevices,
+    TransportDeviceTracker,
     TransportParameters,
 )
-from .TransportTracker import TransportTracker
 
 
-def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str) -> TransportTracker:
-    TransportTrackerInstance = TransportTracker()
+def LoadYaml(
+    LabwareTrackerInstance: LabwareTracker, FilePath: str
+) -> TransportDeviceTracker:
+    TransportDeviceTrackerInstance = TransportDeviceTracker()
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
@@ -25,7 +28,7 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str) -> Transport
         if DeviceConfig["Supported Labware"] is None:
             continue
 
-        Labwares = list()
+        TransportableLabwareTrackerInstance = TransportableLabwareTracker()
         for LabwareID in DeviceConfig["Supported Labware"]:
             LabwareObject = LabwareTrackerInstance.GetObjectByName(LabwareID)
 
@@ -35,19 +38,25 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str) -> Transport
 
             Parameters = TransportParameters(CloseOffset, OpenOffset, PickupHeight)
 
-            Labwares.append(TransportableLabware(LabwareObject, Parameters))
+            TransportableLabwareTrackerInstance.ManualLoad(
+                TransportableLabware(LabwareObject, Parameters)
+            )
 
         TransportDevice = TransportDevices(DeviceID)
         if TransportDevice == TransportDevices.COREGripper:
             GripperSequence = DeviceConfig["Gripper Sequence"]
-            TransportTrackerInstance.ManualLoad(
-                COREGripperDevice(Labwares, GripperSequence)
+            TransportDeviceTrackerInstance.ManualLoad(
+                COREGripper(TransportableLabwareTrackerInstance, GripperSequence)
             )
 
         elif TransportDevice == TransportDevices.InternalPlateGripper:
-            pass
+            TransportDeviceTrackerInstance.ManualLoad(
+                InternalPlateGripper(TransportableLabwareTrackerInstance)
+            )
 
         elif TransportDevice == TransportDevices.TrackGripper:
-            pass
+            TransportDeviceTrackerInstance.ManualLoad(
+                TrackGripper(TransportableLabwareTrackerInstance)
+            )
 
-    return TransportTrackerInstance
+    return TransportDeviceTrackerInstance

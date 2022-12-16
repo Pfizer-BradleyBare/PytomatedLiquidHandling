@@ -2,7 +2,7 @@ import yaml
 
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker
-from ..Layout import LayoutItem, LayoutTracker
+from ..Layout import LayoutItem, LayoutItemTracker
 from ..TempControlDevice import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .BaseTempControlDevice import (
     DeviceTypes,
@@ -40,7 +40,7 @@ def LoadYaml(
                 Device["Deck Location ID"]
             )
 
-            LayoutItemTrackerInstance = LayoutTracker()
+            LayoutItemTrackerInstance = LayoutItemTracker()
 
             for LabwareID in Device["Supported Labware"]:
                 Labware = LabwareTrackerInstance.GetObjectByName(LabwareID)

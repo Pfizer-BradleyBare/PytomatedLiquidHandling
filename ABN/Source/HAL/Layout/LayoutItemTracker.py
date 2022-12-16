@@ -1,8 +1,8 @@
 from ...Tools.AbstractClasses import TrackerABC
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker
-from .Layout import LayoutItem
+from .LayoutItem import LayoutItem
 
 
-class LayoutTracker(TrackerABC[LayoutItem]):
+class LayoutItemTracker(TrackerABC[LayoutItem]):
     pass

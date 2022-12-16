@@ -1,4 +1,4 @@
-from ..Layout import LayoutTracker
+from ..Layout import LayoutItemTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
 
 
@@ -8,10 +8,10 @@ class HamiltonHeaterShaker(TempControlDevice):
         Name: str,
         ComPort: str,
         TempLimitsInstance: TempLimits,
-        LayoutTrackerInstance: LayoutTracker,
+        LayoutItemTrackerInstance: LayoutItemTracker,
     ):
         TempControlDevice.__init__(
-            self, Name, ComPort, True, TempLimitsInstance, LayoutTrackerInstance
+            self, Name, ComPort, True, TempLimitsInstance, LayoutItemTrackerInstance
         )
 
     def Initialize(self):

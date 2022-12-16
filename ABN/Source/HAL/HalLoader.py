@@ -3,7 +3,7 @@ from .DeckLocation import DeckLocationLoader, DeckLocationTracker
 from .FlipTube import FlipTubeLoader, FlipTubeTracker
 from .Hal import Hal
 from .Labware import LabwareLoader, LabwareTracker
-from .Layout import LayoutLoader, LayoutTracker
+from .Layout import LayoutItemLoader, LayoutItemTracker
 from .Lid import LidLoader, LidTracker
 
 # from .MagneticRack import MagneticRackLoader, MagneticRackTracker
@@ -57,12 +57,12 @@ def Load(HalInstance: Hal):
 
     LOG.info("Loading Layout...")
 
-    LayoutItems = LayoutTracker(DeckLocations, Labwares)
-    LayoutLoader.LoadYaml(
+    LayoutItems = LayoutItemTracker(DeckLocations, Labwares)
+    LayoutItemLoader.LoadYaml(
         LayoutItems,
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Layout\\Layout.yaml",
     )
-    HalInstance.LayoutTrackerInstance = LayoutItems
+    HalInstance.LayoutItemTrackerInstance = LayoutItems
     for Layout in LayoutItems.GetObjectsAsList():
         LOG.debug(Layout)
 

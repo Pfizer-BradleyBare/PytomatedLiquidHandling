@@ -1,7 +1,7 @@
 from .DeckLocation import DeckLocationTracker
 from .FlipTube import FlipTubeTracker
 from .Labware import LabwareTracker
-from .Layout import LayoutTracker
+from .Layout import LayoutItemTracker
 from .Lid import LidTracker
 
 # from .MagneticRack import MagneticRackTracker
@@ -17,7 +17,7 @@ class Hal:
         self.DeckLocationTrackerInstance: DeckLocationTracker
         self.FlipTubeTrackerInstance: FlipTubeTracker
         self.LabwareTrackerInstance: LabwareTracker
-        self.LayoutTrackerInstance: LayoutTracker
+        self.LayoutItemTrackerInstance: LayoutItemTracker
         self.LidTrackerInstance: LidTracker
         #   self.MagneticRackTrackerInstance: MagneticRackTracker
         self.NotifyTrackerInstance: NotifyTracker
@@ -35,8 +35,8 @@ class Hal:
     def GetLabwareTracker(self) -> LabwareTracker:
         return self.LabwareTrackerInstance
 
-    def GetLayoutTracker(self) -> LayoutTracker:
-        return self.LayoutTrackerInstance
+    def GetLayoutItemTracker(self) -> LayoutItemTracker:
+        return self.LayoutItemTrackerInstance
 
     def GetLidTracker(self) -> LidTracker:
         return self.LidTrackerInstance

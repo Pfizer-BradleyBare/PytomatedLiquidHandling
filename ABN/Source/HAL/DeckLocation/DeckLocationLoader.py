@@ -1,12 +1,12 @@
 import yaml
 
-from ..Transport import TransportTracker
+from ..Transport.BaseTransportDevice import TransportDeviceTracker
 from .DeckLocation import DeckLocation, LoadingConfig
 from .DeckLocationTracker import DeckLocationTracker
 
 
 def LoadYaml(
-    TransportTrackerInstance: TransportTracker, FilePath: str
+    TransportDeviceTrackerInstance: TransportDeviceTracker, FilePath: str
 ) -> DeckLocationTracker:
     DeckLocationTrackerInstance = DeckLocationTracker()
 
@@ -23,7 +23,7 @@ def LoadYaml(
         if TransportIDs is not None:
             for TransportID in TransportIDs:
                 TransportDevices.append(
-                    TransportTrackerInstance.GetObjectByName(TransportID)
+                    TransportDeviceTrackerInstance.GetObjectByName(TransportID)
                 )
 
         LoadingConfigInstance = None
