@@ -1,6 +1,12 @@
 import yaml
 
-from .Labware import Labware, LabwareDimensions, Wells, WellsEquation
+from ..Labware import (
+    Labware,
+    LabwareDimensions,
+    WellEquation,
+    WellEquationTracker,
+    Wells,
+)
 from .LabwareTracker import LabwareTracker
 
 
@@ -24,14 +30,13 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
             Filter = ConfigFile["Labware IDs"][LabwareID]["Labware Filter"]
 
             EquationsList = list()
+            WellEquationTrackerInstance = WellEquationTracker()
             SegmentEquations = ConfigFile["Labware IDs"][LabwareID]["Wells"][
                 "Segment Equations"
             ]
             for Segment in SegmentEquations:
-                EquationsList.append(
-                    WellsEquation(
-                        Segment["Segment Height"], Segment["Segment Equation"]
-                    )
+                WellEquationTrackerInstance.ManualLoad(
+                    WellEquation(Segment["Segment Height"], Segment["Segment Equation"])
                 )
             # Create WellsEquation Class List
 
@@ -49,7 +54,7 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
                 SequencesPerWell,
                 MaxVolume,
                 DeadVolume,
-                EquationsList,
+                WellEquationTrackerInstance,
             )
             # Create Wells Class
 

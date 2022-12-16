@@ -439,5 +439,6 @@ class Pipette8Channel(Pipette):
                 __DriverHandlerInstance.ExecuteCommand(
                     EjectCommand("", True, EjectOptionsTrackerInstance)
                 )
+                # Lets assume this is perfect and will not need error handling yet
 
         # Now the pipetting junk. aye yi yi
