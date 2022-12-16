@@ -13,20 +13,25 @@ def LoadYaml(TipTrackerInstance: TipTracker, FilePath: str):
     for TipID in ConfigFile["Tip IDs"]:
         TipItem = ConfigFile["Tip IDs"][TipID]
 
-        PickupSequence = TipItem["Pickup Sequence"]
-        MaxVolume = TipItem["Max Pipetting Volume"]
+        if TipItem["Enabled"] is True:
+            PickupSequence = TipItem["Pickup Sequence"]
+            MaxVolume = TipItem["Max Pipetting Volume"]
 
-        TipType = TipTypes(TipItem["Tip Type"])
+            TipType = TipTypes(TipItem["Tip Type"])
 
-        if TipType == TipTypes.NTR:
-            NTRWasteSequence = TipItem["NTR Waste Sequence"]
-            GripperSequence = TipItem["Gripper Sequence"]
+            if TipType == TipTypes.NTR:
+                NTRWasteSequence = TipItem["NTR Waste Sequence"]
+                GripperSequence = TipItem["Gripper Sequence"]
 
-            TipTrackerInstance.ManualLoad(
-                TipNTR(
-                    TipID, PickupSequence, NTRWasteSequence, GripperSequence, MaxVolume
+                TipTrackerInstance.ManualLoad(
+                    TipNTR(
+                        TipID,
+                        PickupSequence,
+                        NTRWasteSequence,
+                        GripperSequence,
+                        MaxVolume,
+                    )
                 )
-            )
 
-        elif TipType == TipTypes.FTR:
-            TipTrackerInstance.ManualLoad(TipFTR(TipID, PickupSequence, MaxVolume))
+            elif TipType == TipTypes.FTR:
+                TipTrackerInstance.ManualLoad(TipFTR(TipID, PickupSequence, MaxVolume))

@@ -11,20 +11,21 @@ def LoadYaml(NotifyTrackerInstance: NotifyTracker, FilePath: str):
     # Get config file contents
 
     for NotifyID in ConfigFile["Notify IDs"]:
-        Enabled = ConfigFile["Notify IDs"][NotifyID]["Enabled"]
 
-        Type = NotificationTypes(NotifyID)
+        if ConfigFile["Notify IDs"][NotifyID]["Enabled"] is True:
 
-        if Type == NotificationTypes.EmailText:
-            DeviceID = ConfigFile["Notify IDs"][NotifyID]["Device ID"]
-            SMTPServer = ConfigFile["Notify IDs"][NotifyID]["SMTP Server"]
-            SenderEmail = ConfigFile["Notify IDs"][NotifyID]["Sender Email"]
-            AlwaysNotifyEmails = ConfigFile["Notify IDs"][NotifyID][
-                "Always Notify Emails"
-            ]
+            Type = NotificationTypes(NotifyID)
 
-            NotifyTrackerInstance.ManualLoad(
-                EmailTextNotify(
-                    Enabled, DeviceID, SMTPServer, SenderEmail, AlwaysNotifyEmails
+            if Type == NotificationTypes.EmailText:
+                DeviceID = ConfigFile["Notify IDs"][NotifyID]["Device ID"]
+                SMTPServer = ConfigFile["Notify IDs"][NotifyID]["SMTP Server"]
+                SenderEmail = ConfigFile["Notify IDs"][NotifyID]["Sender Email"]
+                AlwaysNotifyEmails = ConfigFile["Notify IDs"][NotifyID][
+                    "Always Notify Emails"
+                ]
+
+                NotifyTrackerInstance.ManualLoad(
+                    EmailTextNotify(
+                        DeviceID, SMTPServer, SenderEmail, AlwaysNotifyEmails
+                    )
                 )
-            )

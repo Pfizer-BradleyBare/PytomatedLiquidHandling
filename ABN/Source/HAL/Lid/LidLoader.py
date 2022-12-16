@@ -22,23 +22,26 @@ def LoadYaml(
     for LidID in ConfigFile["Lid IDs"]:
         LidItem = ConfigFile["Lid IDs"][LidID]
 
-        if LidItem["Enabled"] is not True or LidItem["Supported Labware"] is None:
-            continue
+        if LidItem["Enabled"] is True:
 
-        LidLabware = LabwareTrackerInstance.GetObjectByName(LidItem["Labware"])
-        LidLocation = DeckLocationTrackerInstance.GetObjectByName(
-            LidItem["Deck Location ID"]
-        )
-        LidSequence = LidItem["Sequence"]
+            LidLabware = LabwareTrackerInstance.GetObjectByName(LidItem["Labware"])
+            LidLocation = DeckLocationTrackerInstance.GetObjectByName(
+                LidItem["Deck Location ID"]
+            )
+            LidSequence = LidItem["Sequence"]
 
-        Labwares = list()
+            Labwares = list()
 
-        for LabwareID in LidItem["Supported Labware"]:
-            Labwares.append(LabwareTrackerInstance.GetObjectByName(LabwareID))
+            for LabwareID in LidItem["Supported Labware"]:
+                Labwares.append(LabwareTrackerInstance.GetObjectByName(LabwareID))
 
-        LidTrackerInstance.ManualLoad(
-            Lid(LidID, LayoutItem(LidSequence, None, LidLocation, LidLabware), Labwares)
-        )
-        # Create Labware Class and append
+            LidTrackerInstance.ManualLoad(
+                Lid(
+                    LidID,
+                    LayoutItem(LidSequence, None, LidLocation, LidLabware),
+                    Labwares,
+                )
+            )
+            # Create Labware Class and append
 
     return LidTrackerInstance

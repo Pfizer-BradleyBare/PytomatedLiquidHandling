@@ -8,12 +8,8 @@ class NotificationTypes(Enum):
 
 
 class Notify(ObjectABC):
-    def __init__(self, Enabled: bool, NotificationType: NotificationTypes):
-        self.Enabled: bool = Enabled
+    def __init__(self, NotificationType: NotificationTypes):
         self.NotificationType: NotificationTypes = NotificationType
-
-    def GetEnabledState(self) -> bool:
-        return self.Enabled
 
     def GetNotificationType(self) -> NotificationTypes:
         return self.NotificationType
@@ -25,13 +21,12 @@ class Notify(ObjectABC):
 class EmailTextNotify(Notify):
     def __init__(
         self,
-        Enabled: bool,
         AutomationDeviceID: str,
         SMTPServer: str,
         SenderEmailAddress: str,
         AlwaysNotifyEmails: list[str],
     ):
-        Notify.__init__(self, Enabled, NotificationTypes.EmailText)
+        Notify.__init__(self, NotificationTypes.EmailText)
         self.AutomationDeviceID: str = AutomationDeviceID
         self.SMTPServer: str = SMTPServer
         self.SenderEmailAddress: str = SenderEmailAddress
