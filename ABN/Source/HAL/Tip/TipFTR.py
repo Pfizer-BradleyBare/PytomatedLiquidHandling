@@ -9,7 +9,6 @@ from ...Driver.Tip.FTR import (
     TipsRemainingCommand,
     TipsRemainingOptions,
 )
-from ...Driver.Tools import CommandTracker
 from ...Server.Globals.HandlerRegistry import HandlerRegistry
 from .BaseTip import Tip, TipTypes
 

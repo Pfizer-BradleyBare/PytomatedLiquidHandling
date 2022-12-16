@@ -1,6 +1,8 @@
 from collections import defaultdict
 from math import ceil
+from typing import cast
 
+from ...Driver.Handler.DriverHandler import DriverHandler
 from ...Driver.Pipette.Pipette8Channel import (
     AspirateCommand,
     AspirateOptions,
@@ -16,6 +18,7 @@ from ...Driver.Pipette.Pipette8Channel import (
     PickupOptionsTracker,
 )
 from ...Driver.Tools import CommandTracker
+from ...Server.Globals.HandlerRegistry import HandlerRegistry
 from ..Labware import LabwareTracker
 from ..Pipette import TransferOptions, TransferOptionsTracker
 from .BasePipette import Pipette, PipetteTip, PipetteTipTracker, PipettingDeviceTypes
@@ -23,6 +26,10 @@ from .BasePipette.Interface.PipetteInterface import (
     ClampMax,
     TestLabwareSupported,
     TestSumLessThanMax,
+)
+
+__DriverHandlerInstance: DriverHandler = cast(
+    DriverHandler, HandlerRegistry.GetObjectByName("Driver")
 )
 
 
@@ -255,8 +262,9 @@ class Pipette8Channel(Pipette):
                                 TransferOptionsTrackerInstance.GetObjectsAsList()[
                                     Index
                                 ].CurrentSourceVolume = (
-                                    CurrentSourceVolume - TransferVolume
-                                    #We remove liquid from source
+                                    CurrentSourceVolume
+                                    - TransferVolume
+                                    # We remove liquid from source
                                 )
                             # Source
                             if (
@@ -272,8 +280,9 @@ class Pipette8Channel(Pipette):
                                 TransferOptionsTrackerInstance.GetObjectsAsList()[
                                     Index
                                 ].CurrentDestinationVolume = (
-                                    CurrentDestinationVolume + TransferVolume
-                                    #We add liquid to destination
+                                    CurrentDestinationVolume
+                                    + TransferVolume
+                                    # We add liquid to destination
                                 )
                             # Destination
                         # Find the next same layoutitem and position then modify current volume
@@ -308,6 +317,9 @@ class Pipette8Channel(Pipette):
                     # Destination
                     # Get the liqid class category we want to use
 
+                    SelectedSourceLiquidClass = (
+                        SelectedSourceLiquidClassCategory.GetObjectsAsList()[-1]
+                    )
                     for (
                         LiquidClassInstance
                     ) in SelectedSourceLiquidClassCategory.GetObjectsAsList():
@@ -315,6 +327,9 @@ class Pipette8Channel(Pipette):
                             SelectedSourceLiquidClass = LiquidClassInstance
                             break
                     # Source
+                    SelectedDestinationLiquidClass = (
+                        SelectedDestinationLiquidClassCategory.GetObjectsAsList()[-1]
+                    )
                     for (
                         LiquidClassInstance
                     ) in SelectedDestinationLiquidClassCategory.GetObjectsAsList():
@@ -359,33 +374,70 @@ class Pipette8Channel(Pipette):
                     )
                     # Get correct destination position assuming any labware with any number of seq per well can be used
 
-                    
-                    PickupOptionsTrackerInstance.ManualLoad(PickupOptions(
-                        "",
-                        PipetteTipInstance.TipInstance.PickupSequence,
-                        PipettingChannel,
-                        CurrentTipPosition,
-                    ))
+                    PickupOptionsTrackerInstance.ManualLoad(
+                        PickupOptions(
+                            "",
+                            PipetteTipInstance.TipInstance.PickupSequence,
+                            PipettingChannel,
+                            CurrentTipPosition,
+                        )
+                    )
                     CurrentTipPosition += 1
-                    #Pickup
+                    # Pickup
 
-                    
-                    #Aspirate
+                    AspirateOptionsInstance = AspirateOptions(
+                        "",
+                        PipettingChannel,
+                        SourceLayoutItemInstance.Sequence,
+                        SourcePosition,
+                        SelectedSourceLiquidClass.GetName(),
+                        TransferVolume,
+                    )
+                    # TODO Configure Options Further
+                    AspirateOptionsTrackerInstance.ManualLoad(AspirateOptionsInstance)
+                    # Aspirate
 
-                    #Dispense
+                    DispenseOptionsInstance = DispenseOptions(
+                        "",
+                        PipettingChannel,
+                        SourceLayoutItemInstance.Sequence,
+                        SourcePosition,
+                        SelectedDestinationLiquidClass.GetName(),
+                        TransferVolume,
+                    )
+                    # TODO Configure Options Further
+                    DispenseOptionsTrackerInstance.ManualLoad(DispenseOptionsInstance)
+                    # Dispense
 
-                    #Eject
+                    EjectOptionsTrackerInstance.ManualLoad(
+                        EjectOptions(
+                            "",
+                            PipetteTipInstance.WasteSequence,
+                            PipettingChannel,
+                            PipettingChannel,
+                        )
+                    )
+                    # Eject
                     # Create our PipettingOptions
 
                     Counter += 1
                     if Counter == TransferOptionsTrackerInstance.GetNumObjects():
                         break
 
-        Counter = 0
-        while Counter < TransferOptionsTrackerInstance.GetNumObjects():
+                __DriverHandlerInstance.ExecuteCommand(
+                    PickupCommand("", True, PickupOptionsTrackerInstance),
+                )
 
-            for PipettingChannel in self.ActiveChannels:
+                __DriverHandlerInstance.ExecuteCommand(
+                    AspirateCommand("", True, AspirateOptionsTrackerInstance)
+                )
 
+                __DriverHandlerInstance.ExecuteCommand(
+                    DispenseCommand("", True, DispenseOptionsTrackerInstance)
+                )
 
+                __DriverHandlerInstance.ExecuteCommand(
+                    EjectCommand("", True, EjectOptionsTrackerInstance)
+                )
 
         # Now the pipetting junk. aye yi yi
