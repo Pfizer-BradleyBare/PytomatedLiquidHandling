@@ -71,7 +71,10 @@ def LoadYaml(
             if DeviceType == DeviceTypes.HamiltonHeaterShaker:
                 TempControlDeviceTrackerInstance.ManualLoad(
                     HamiltonHeaterShaker(
-                        DeviceID, ComPort, TempLimitsInstance, LayoutItemTrackerInstance
+                        DeviceID,
+                        ComPort,
+                        TempLimitsInstance,
+                        SupportedLayoutItemTrackerInstance,
                     )
                 )
 
