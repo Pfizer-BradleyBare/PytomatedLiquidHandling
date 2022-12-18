@@ -30,16 +30,18 @@ def LoadYaml(
             )
             LidSequence = LidItem["Sequence"]
 
-            Labwares = list()
+            SupportedLabwareTrackerInstance = LabwareTracker()
 
             for LabwareID in LidItem["Supported Labware"]:
-                Labwares.append(LabwareTrackerInstance.GetObjectByName(LabwareID))
+                SupportedLabwareTrackerInstance.ManualLoad(
+                    LabwareTrackerInstance.GetObjectByName(LabwareID)
+                )
 
             LidTrackerInstance.ManualLoad(
                 Lid(
                     LidID,
                     LayoutItem(LidSequence, None, LidLocation, LidLabware),
-                    Labwares,
+                    SupportedLabwareTrackerInstance,
                 )
             )
             # Create Labware Class and append

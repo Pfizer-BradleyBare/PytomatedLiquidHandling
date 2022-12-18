@@ -1,5 +1,5 @@
 from ...Tools.AbstractClasses import ObjectABC
-from ..Labware import Labware
+from ..Labware import LabwareTracker
 from ..Layout import LayoutItem
 
 
@@ -8,17 +8,13 @@ class Lid(ObjectABC):
         self,
         Name: str,
         LidLayoutItem: LayoutItem,
-        SupportedLabware: list[Labware],
+        SupportedLabwareTrackerInstance: LabwareTracker,
     ):
         self.Name: str = Name
         self.LidLayoutItem: LayoutItem = LidLayoutItem
-        self.SupportedLabware: list[Labware] = SupportedLabware
+        self.SupportedLabwareTrackerInstance: LabwareTracker = (
+            SupportedLabwareTrackerInstance
+        )
 
     def GetName(self) -> str:
         return self.Name
-
-    def GetLidLayoutItem(self) -> LayoutItem:
-        return self.LidLayoutItem
-
-    def GetSupportedLabware(self) -> list[Labware]:
-        return self.SupportedLabware
