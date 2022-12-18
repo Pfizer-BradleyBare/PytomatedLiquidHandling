@@ -18,13 +18,15 @@ class TempControlDevice(ObjectABC, TempControlDeviceInterface):
         ComPort: str,
         ShakingSupported: bool,
         TempLimitsInstance: TempLimits,
-        LayoutItemTrackerInstance: LayoutItemTracker,
+        SupportedLayoutItemTrackerInstance: LayoutItemTracker,
     ):
         self.Name: str = Name
         self.ComPort: str = ComPort
         self.ShakingSupported: bool = ShakingSupported
         self.TempLimitsInstance: TempLimits = TempLimitsInstance
-        self.LayoutItemTrackerInstance: LayoutItemTracker = LayoutItemTrackerInstance
+        self.SupportedLayoutItemTrackerInstance: LayoutItemTracker = (
+            SupportedLayoutItemTrackerInstance
+        )
 
     def GetName(self) -> str:
         return self.Name

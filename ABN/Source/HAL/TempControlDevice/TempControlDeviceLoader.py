@@ -40,7 +40,7 @@ def LoadYaml(
                 Device["Deck Location ID"]
             )
 
-            LayoutItemTrackerInstance = LayoutItemTracker()
+            SupportedLayoutItemTrackerInstance = LayoutItemTracker()
 
             for LabwareID in Device["Supported Labware"]:
                 Labware = LabwareTrackerInstance.GetObjectByName(LabwareID)
@@ -52,7 +52,7 @@ def LoadYaml(
                     Sequence, LidSequence, Location, Labware
                 )
 
-                LayoutItemTrackerInstance.ManualLoad(LayoutItemInstance)
+                SupportedLayoutItemTrackerInstance.ManualLoad(LayoutItemInstance)
                 # add to our list for our item creation and also add it to the layout loader for tracking
 
             ComPort = Device["Com Port"]
@@ -61,7 +61,10 @@ def LoadYaml(
             if DeviceType == DeviceTypes.HamiltonHeaterCooler:
                 TempControlDeviceTrackerInstance.ManualLoad(
                     HamiltonHeaterCooler(
-                        DeviceID, ComPort, TempLimitsInstance, LayoutItemTrackerInstance
+                        DeviceID,
+                        ComPort,
+                        TempLimitsInstance,
+                        SupportedLayoutItemTrackerInstance,
                     )
                 )
 
