@@ -1,5 +1,5 @@
 from ...Tools.AbstractClasses import ObjectABC
-from ..Transport.BaseTransportDevice import TransportDevice
+from ..Transport.BaseTransportDevice import TransportDeviceTracker
 
 
 class LoadingConfig:
@@ -18,22 +18,19 @@ class DeckLocation(ObjectABC):
     def __init__(
         self,
         Name: str,
-        SupportedTransportInstances: list[TransportDevice],
+        SupportedTransportDeviceTrackerInstance: TransportDeviceTracker,
         LoadingConfigInstance: LoadingConfig | None,
         IsStorageLocation: bool,
     ):
         self.Name: str = Name
-        self.SupportedTransportInstances: list[
-            TransportDevice
-        ] = SupportedTransportInstances
+        self.SupportedTransportDeviceTrackerInstance: TransportDeviceTracker = (
+            SupportedTransportDeviceTrackerInstance
+        )
         self.LoadingConfigInstance: LoadingConfig | None = LoadingConfigInstance
         self.StorageLocation: bool = IsStorageLocation
 
     def GetName(self) -> str:
         return self.Name
-
-    def GetTransportInstances(self) -> list[TransportDevice]:
-        return self.SupportedTransportInstances
 
     def IsStorageLocation(self) -> bool:
         return self.StorageLocation
