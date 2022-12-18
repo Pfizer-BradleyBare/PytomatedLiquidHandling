@@ -1,18 +1,16 @@
 from ...Tools.AbstractClasses import ObjectABC
-from ..Labware import Labware
+from ..Labware import LabwareTracker
 
 
 class FlipTube(ObjectABC):
-    def __init__(self, Name: str, Sequence: str, SupportedLabware: list[Labware]):
+    def __init__(
+        self, Name: str, Sequence: str, SupportedLabwareTrackerInstance: LabwareTracker
+    ):
         self.Name: str = Name
         self.Sequence: str = Sequence
-        self.SupportedLabware: list[Labware] = SupportedLabware
+        self.SupportedLabwareTrackerInstance: LabwareTracker = (
+            SupportedLabwareTrackerInstance
+        )
 
     def GetName(self) -> str:
         return self.Name
-
-    def GetSequence(self) -> str:
-        return self.Sequence
-
-    def GetSupportedLabware(self) -> list[Labware]:
-        return self.SupportedLabware

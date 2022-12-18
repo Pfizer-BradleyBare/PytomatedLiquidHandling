@@ -19,14 +19,16 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str) -> FlipTubeT
         if ConfigFile["FlipTube Tool IDs"][FlipTubeID]["Supported Labware"] is None:
             continue
 
-        SupportedLabwares = list()
+        SupportedLabwareTrackerInstance = LabwareTracker()
         for LabwareID in ConfigFile["FlipTube Tool IDs"][FlipTubeID][
             "Supported Labware"
         ]:
-            SupportedLabwares.append(LabwareTrackerInstance.GetObjectByName(LabwareID))
+            SupportedLabwareTrackerInstance.ManualLoad(
+                LabwareTrackerInstance.GetObjectByName(LabwareID)
+            )
 
         FlipTubeTrackerInstance.ManualLoad(
-            FlipTube(FlipTubeID, Sequence, SupportedLabwares)
+            FlipTube(FlipTubeID, Sequence, SupportedLabwareTrackerInstance)
         )
 
     return FlipTubeTrackerInstance
