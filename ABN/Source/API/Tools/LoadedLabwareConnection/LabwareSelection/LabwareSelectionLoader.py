@@ -1,53 +1,59 @@
-from .....API.Tools.Container import ContainerTracker
-from .....HAL.Globals.HalInstance import HalInstance
+from typing import cast
+
+from .....API.Tools.SymbolicLabware import SymbolicLabwareTracker
+from .....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Handler.APIHandler import APIHandler
 from .LabwareSelection import LabwareSelection
 from .LabwareSelectionTracker import LabwareSelectionTracker
+
+__APIHandler__ = cast(APIHandler, HandlerRegistry.GetObjectByName("API"))
 
 
 def Load(
     LabwareSelectionTrackerInstance: LabwareSelectionTracker,
-    ContainerTrackerInstance: ContainerTracker,
+    SymbolicLabwareTrackerInstance: SymbolicLabwareTracker,
 ):
-    for ContainerInstance in ContainerTrackerInstance.GetObjectsAsList():
-        LabwareTrackerInstance = HalInstance.GetLabwareTracker()
+    for SymbolicLabwareInstance in SymbolicLabwareTrackerInstance.GetObjectsAsList():
+        LabwareTrackerInstance = __APIHandler__.HALLayerInstance.LabwareTrackerInstance
 
-        MaxVolume = ContainerInstance.GetMaxWellVolume()
-        MinVolume = ContainerInstance.GetMinWellVolume()
+        MaxVolume = SymbolicLabwareInstance.GetMaxWellVolume()
+        MinVolume = SymbolicLabwareInstance.GetMinWellVolume()
 
-        ContainerFilters = [ContainerInstance.GetFilter()]
+        SymbolicLabwareFilters = [SymbolicLabwareInstance.GetFilter()]
 
         if MaxVolume == 0:
             Volume = abs(MinVolume)
-            ContainerFilters += ["No Preference"]
-            # We add this so we can find the best fit container as a choice and recommend it to the user
+            SymbolicLabwareFilters += ["No Preference"]
+            # We add this so we can find the best fit SymbolicLabware as a choice and recommend it to the user
         else:
             Volume = MaxVolume
         # We do not distinguish between plates and reagents. We are just going to load and see what happens
 
         if Volume == 0:
             continue
-        # We don't want to load a container if it effectively is never used.
+        # We don't want to load a SymbolicLabware if it effectively is never used.
 
         PipettableLabwareInstances = [
             LabwareInstance
             for LabwareInstance in LabwareTrackerInstance.GetObjectsAsList()
-            if LabwareInstance.IsPipettable()
+            if LabwareInstance.LabwareWells == None
         ]
         # Gets only the pipettableLabware
 
-        LabwareSelectionInstance = LabwareSelection(ContainerInstance.GetName())
+        LabwareSelectionInstance = LabwareSelection(SymbolicLabwareInstance.GetName())
         PreferredLabwareTrackerInstance = LabwareSelectionInstance.GetLabwareTracker()
 
         for LabwareInstance in sorted(
-            PipettableLabwareInstances, key=lambda x: x.GetWells().GetMaxVolume()
+            PipettableLabwareInstances,
+            key=lambda x: x.LabwareWells.MaxVolume,  # type:ignore
         ):
 
-            if LabwareInstance.GetFilter() not in ContainerFilters:
+            if LabwareInstance.Filter not in SymbolicLabwareFilters:
                 continue
 
-            LabwareWells = LabwareInstance.GetWells()
+            LabwareWells = LabwareInstance.LabwareWells
 
-            if Volume > LabwareWells.GetMaxVolume() - LabwareWells.GetDeadVolume():
+            if Volume > LabwareWells.MaxVolume - LabwareWells.DeadVolume:  # type:ignore
                 continue
 
             PreferredLabwareTrackerInstance.ManualLoad(LabwareInstance)
@@ -56,22 +62,23 @@ def Load(
 
         if (
             PreferredLabwareTrackerInstance.GetNumObjects() == 0
-            and "No Preference" in ContainerFilters
+            and "No Preference" in SymbolicLabwareFilters
         ):
 
             PreferredLabwareTrackerInstance.ManualLoad(
                 sorted(
                     PipettableLabwareInstances,
-                    key=lambda x: x.GetWells().GetMaxVolume(),
+                    key=lambda x: x.LabwareWells.MaxVolume,  # type:ignore
                     reverse=True,
                 )[0]
             )
         # If the best fit labware does not exist then the largest labware is the best fit
 
         for LabwareInstance in sorted(
-            PipettableLabwareInstances, key=lambda x: x.GetWells().GetMaxVolume()
+            PipettableLabwareInstances,
+            key=lambda x: x.LabwareWells.MaxVolume,  # type:ignore
         ):
-            if LabwareInstance.GetName() not in ContainerFilters:
+            if LabwareInstance.GetName() not in SymbolicLabwareFilters:
                 continue
 
             if not PreferredLabwareTrackerInstance.IsTracked(LabwareInstance.GetName()):
