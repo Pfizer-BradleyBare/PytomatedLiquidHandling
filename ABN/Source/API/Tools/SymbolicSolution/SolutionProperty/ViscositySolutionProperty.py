@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import cast
+from typing import Self
 
 from .BaseSolutionProperty.SolutionProperty import SolutionPropertyValue
 
@@ -10,7 +10,7 @@ class ViscositySolutionProperty(Enum):
     High = SolutionPropertyValue(1, 0, 0)
 
     @classmethod
-    def GetByNumericKey(cls, NumericKey: int) -> ViscositySolutionProperty:  # type: ignore
+    def GetByNumericKey(cls, NumericKey: int) -> Self:  # type: ignore
         for Item in ViscositySolutionProperty:
             if Item.value.GetNumericValue() == NumericKey:
                 return Item

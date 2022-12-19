@@ -25,20 +25,3 @@ class SolutionPropertyValue:
 
     def GetMinDispenseMix(self) -> int:
         return self.MinDispenseMix
-
-
-from enum import Enum
-
-
-class p(Enum):
-    Low = SolutionPropertyValue(1, 0, 0)
-    Medium = SolutionPropertyValue(1, 0, 0)
-    High = SolutionPropertyValue(1, 0, 0)
-
-    @classmethod
-    def g(cls, Key: int):
-        for item in p:
-            print(item)
-
-
-p.g(1)

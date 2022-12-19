@@ -19,10 +19,6 @@ from .BaseClosedContainers.ClosedContainers import (
     ClosedContainersTypes,
 )
 
-__DriverHandlerInstance: DriverHandler = cast(
-    DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-)
-
 
 class FlipTube(ClosedContainers):
     def __init__(
@@ -36,6 +32,10 @@ class FlipTube(ClosedContainers):
         )
 
     def Initialize(self):
+        __DriverHandlerInstance: DriverHandler = cast(
+            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
+        )
+
         __DriverHandlerInstance.ExecuteCommand(
             InitializeCommand("", True, InitializeOptions(""))
         )
@@ -44,6 +44,10 @@ class FlipTube(ClosedContainers):
         pass
 
     def Open(self, LayoutItemInstances: list[LayoutItem], Positions: list[int]):
+        __DriverHandlerInstance: DriverHandler = cast(
+            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
+        )
+
         OpenOptionsTrackerInstance = OpenOptionsTracker()
 
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
@@ -58,6 +62,10 @@ class FlipTube(ClosedContainers):
         )
 
     def Close(self, LayoutItemInstances: list[LayoutItem], Positions: list[int]):
+        __DriverHandlerInstance: DriverHandler = cast(
+            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
+        )
+
         CloseOptionsTrackerInstance = CloseOptionsTracker()
 
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):

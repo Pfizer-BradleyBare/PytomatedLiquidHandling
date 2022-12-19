@@ -2,7 +2,6 @@ from typing import cast
 
 from ....Server.Globals.HandlerRegistry import HandlerRegistry
 from ....Tools.AbstractClasses import ObjectABC
-from ...Handler.APIHandler import APIHandler
 from ..SymbolicSolution.SolutionProperty import (
     HomogeneitySolutionProperty,
     LLDSolutionProperty,
@@ -15,10 +14,6 @@ from .Well.Well import Well
 from .Well.WellSolution.WellSolution import WellSolution
 from .Well.WellSolution.WellSolutionTracker import WellSolutionTracker
 
-SymbolicSolutionTrackerInstance = cast(
-    APIHandler, HandlerRegistry.GetObjectByName("API")
-).SymbolicSolutionTrackerInstance
-
 
 class SymbolicLabwareOperator:
     def __init__(self, SymbolicLabwareInstance: SymbolicLabware):
@@ -29,6 +24,10 @@ class SymbolicLabwareOperator:
         WellNumber: int,
         Volume: float,
     ) -> WellSolutionTracker:
+
+        SymbolicSolutionTrackerInstance = HandlerRegistry.GetObjectByName(
+            "API"
+        ).SymbolicSolutionTrackerInstance  # type:ignore
 
         if not self.SymbolicLabwareInstance.GetWellTracker().IsTracked(WellNumber):
             self.SymbolicLabwareInstance.GetWellTracker().ManualLoad(Well(WellNumber))

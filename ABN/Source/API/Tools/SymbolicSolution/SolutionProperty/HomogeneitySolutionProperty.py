@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Self
 
 from .BaseSolutionProperty.SolutionProperty import SolutionPropertyValue
 
@@ -10,7 +11,7 @@ class HomogeneitySolutionProperty(Enum):
     Heterogenous = SolutionPropertyValue(1, 0, 0)
 
     @classmethod
-    def GetByNumericKey(cls, NumericKey: int) -> HomogeneitySolutionProperty:  # type: ignore
+    def GetByNumericKey(cls, NumericKey: int) -> Self:  # type: ignore
         for Item in HomogeneitySolutionProperty:
             if Item.value.GetNumericValue() == NumericKey:
                 return Item

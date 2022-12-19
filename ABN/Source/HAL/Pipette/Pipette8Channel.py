@@ -28,10 +28,6 @@ from .BasePipette.Interface.PipetteInterface import (
     TestSumLessThanMax,
 )
 
-__DriverHandlerInstance: DriverHandler = cast(
-    DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-)
-
 
 class Pipette8Channel(Pipette):
     def __init__(
@@ -58,6 +54,9 @@ class Pipette8Channel(Pipette):
 
     def Transfer(self, TransferOptionsTrackerInstance: TransferOptionsTracker):
         # NOTE: I played with sorting to make the liquid aspirate and dispense smarter. Trust me not a good idea. Try if you dare
+        __DriverHandlerInstance: DriverHandler = cast(
+            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
+        )
 
         SourceLayoutItemInstances = [
             Option.SourceLayoutItemInstance

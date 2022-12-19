@@ -15,10 +15,6 @@ from .BaseTransportDevice import (
     TransportDevices,
 )
 
-__DriverHandlerInstance: DriverHandler = cast(
-    DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-)
-
 
 class COREGripper(TransportDevice):
     def __init__(
@@ -40,6 +36,9 @@ class COREGripper(TransportDevice):
     def Transport(
         self, SourceLayoutItem: LayoutItem, DestinationLayoutItem: LayoutItem
     ):
+        __DriverHandlerInstance: DriverHandler = cast(
+            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
+        )
 
         if not SourceLayoutItem.DeckLocationInstance.SupportedLocationTransportDeviceTrackerInstance.IsTracked(
             type(self).__name__

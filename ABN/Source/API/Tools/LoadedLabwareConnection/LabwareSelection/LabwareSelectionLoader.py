@@ -2,11 +2,8 @@ from typing import cast
 
 from .....API.Tools.SymbolicLabware import SymbolicLabwareTracker
 from .....Server.Globals.HandlerRegistry import HandlerRegistry
-from ....Handler.APIHandler import APIHandler
 from .LabwareSelection import LabwareSelection
 from .LabwareSelectionTracker import LabwareSelectionTracker
-
-__APIHandler__ = cast(APIHandler, HandlerRegistry.GetObjectByName("API"))
 
 
 def Load(
@@ -14,7 +11,9 @@ def Load(
     SymbolicLabwareTrackerInstance: SymbolicLabwareTracker,
 ):
     for SymbolicLabwareInstance in SymbolicLabwareTrackerInstance.GetObjectsAsList():
-        LabwareTrackerInstance = __APIHandler__.HALLayerInstance.LabwareTrackerInstance
+        LabwareTrackerInstance = HandlerRegistry.GetObjectByName(
+            "API"
+        ).HALLayerInstance.LabwareTrackerInstance  # type:ignore
 
         MaxVolume = SymbolicLabwareInstance.GetMaxWellVolume()
         MinVolume = SymbolicLabwareInstance.GetMinWellVolume()
