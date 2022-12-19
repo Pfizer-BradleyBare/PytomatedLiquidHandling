@@ -27,7 +27,7 @@ class InternalPlateGripper(TransportDevice):
     def Deinitialize(self):
         raise NotImplementedError
 
-    def MovePlate(
+    def Transport(
         self, SourceLayoutItem: LayoutItem, DestinationLayoutItem: LayoutItem
     ):
         raise NotImplementedError
