@@ -26,6 +26,7 @@ def LoadYaml(
 
         if TransportIDs is not None:
             for TransportID in TransportIDs:
+                print(TransportID)
                 LocationTransportDeviceTrackerInstance.ManualLoad(
                     LocationTransportDevice(
                         TransportDeviceTrackerInstance.GetObjectByName(TransportID),

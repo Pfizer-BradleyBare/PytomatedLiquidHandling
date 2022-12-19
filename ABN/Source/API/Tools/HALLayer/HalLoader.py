@@ -1,11 +1,9 @@
-from ....Server.Globals import LOG
-from ....HAL.DeckLocation import DeckLocationLoader, DeckLocationTracker
 from ....HAL.ClosedContainers import ClosedContainersLoader
 from ....HAL.ClosedContainers.BaseClosedContainers import ClosedContainersTracker
+from ....HAL.DeckLocation import DeckLocationLoader, DeckLocationTracker
 from ....HAL.Labware import LabwareLoader, LabwareTracker
 from ....HAL.Layout import LayoutItemLoader, LayoutItemTracker
 from ....HAL.Lid import LidLoader, LidTracker
-from .HALLayer import HALLayer
 
 # from .MagneticRack import MagneticRackLoader, MagneticRackTracker
 from ....HAL.Notify import NotifyLoader, NotifyTracker
@@ -17,6 +15,8 @@ from ....HAL.Tip import TipLoader
 from ....HAL.Tip.BaseTip import TipTracker
 from ....HAL.TransportDevice import TransportDeviceLoader
 from ....HAL.TransportDevice.BaseTransportDevice import TransportDeviceTracker
+from ....Server.Globals import LOG
+from .HALLayer import HALLayer
 
 
 def Load() -> HALLayer:
@@ -145,7 +145,7 @@ def Load() -> HALLayer:
 
     ClosedContainersTrackerInstance = ClosedContainersLoader.LoadYaml(
         LabwareTrackerInstance,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\FlipTube\\FlipTube.yaml",
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\ClosedContainers\\ClosedContainers.yaml",
     )
     HALLayerInstance.ClosedContainersTrackerInstance = ClosedContainersTrackerInstance
     for FlipTube in ClosedContainersTrackerInstance.GetObjectsAsList():

@@ -1,7 +1,6 @@
 # curl -X GET http://localhost:65535/State/Kill
 import web
 
-from ....API.Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
 from ...Globals import LOG
 from ...Globals.HandlerRegistry import HandlerRegistry
 from ...Tools.Parser import Parser
