@@ -13,8 +13,6 @@ class TrackerABC(Generic[T]):
 
     def ManualLoad(self, ObjectABCInstance: T) -> None:
 
-        self.ThreadLock.acquire()
-
         Name = ObjectABCInstance.GetName()
 
         if self.IsTracked(Name) is True:
@@ -26,11 +24,7 @@ class TrackerABC(Generic[T]):
 
         self.Collection[Name] = ObjectABCInstance
 
-        self.ThreadLock.release()
-
     def ManualUnload(self, ObjectABCInstance: T) -> None:
-
-        self.ThreadLock.acquire()
 
         Name = ObjectABCInstance.GetName()
 
@@ -43,49 +37,32 @@ class TrackerABC(Generic[T]):
 
         del self.Collection[Name]
 
-        self.ThreadLock.release()
-
     def IsTracked(self, Name: str | int) -> bool:
-        self.ThreadLock.acquire()
 
         BoolTest = Name in self.Collection
-
-        self.ThreadLock.release()
 
         return BoolTest
 
     def GetNumObjects(self) -> int:
-        self.ThreadLock.acquire()
 
         Length = len(self.Collection)
-
-        self.ThreadLock.release()
 
         return Length
 
     def GetObjectsAsList(self) -> list[T]:
-        self.ThreadLock.acquire()
 
         List = [self.Collection[Key] for Key in self.Collection]
-
-        self.ThreadLock.release()
 
         return List
 
     def GetObjectsAsDictionary(self) -> dict[str | int, T]:
-        self.ThreadLock.acquire()
 
         Dict = self.Collection
-
-        self.ThreadLock.release()
 
         return Dict
 
     def GetObjectByName(self, Name: str | int) -> T:
-        self.ThreadLock.acquire()
 
         Object = self.Collection[Name]
-
-        self.ThreadLock.release()
 
         return Object
