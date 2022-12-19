@@ -2,7 +2,7 @@ from ....Tools.Command.Command import Command
 from .GetTemperatureOptions import GetTemperatureOptions
 
 
-class GetTempertureCommand(Command):
+class GetTemperatureCommand(Command):
     def __init__(
         self,
         Name: str,

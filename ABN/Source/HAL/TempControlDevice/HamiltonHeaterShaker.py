@@ -1,5 +1,13 @@
+from typing import cast
+
+from ...Driver.Handler.DriverHandler import DriverHandler
+from ...Server.Globals.HandlerRegistry import HandlerRegistry
 from ..Layout import LayoutItemTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
+
+__DriverHandlerInstance: DriverHandler = cast(
+    DriverHandler, HandlerRegistry.GetObjectByName("Driver")
+)
 
 
 class HamiltonHeaterShaker(TempControlDevice):
