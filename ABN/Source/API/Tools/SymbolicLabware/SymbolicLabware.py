@@ -2,7 +2,7 @@ from ....Tools.AbstractClasses import ObjectABC
 from .Well.WellTracker import WellTracker
 
 
-class Container(ObjectABC):
+class SymbolicLabware(ObjectABC):
     def __init__(self, Name: str, Filter: str | None):
 
         self.Name: str = Name

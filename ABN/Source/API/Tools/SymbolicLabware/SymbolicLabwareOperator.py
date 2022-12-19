@@ -1,15 +1,28 @@
+from typing import cast
+
+from ....Server.Globals.HandlerRegistry import HandlerRegistry
 from ....Tools.AbstractClasses import ObjectABC
-from ...Workbook.Solution import SolutionPropertyValues, SolutionTracker
-from ...Workbook.Solution.Value.Value import SolutionPropertyValue
-from .Container import Container
-from .Well.Solution.WellSolution import WellSolution
-from .Well.Solution.WellSolutionTracker import WellSolutionTracker
+from ...Handler.APIHandler import APIHandler
+from ..SymbolicSolution.SolutionProperty import (
+    HomogeneitySolutionProperty,
+    LLDSolutionProperty,
+    ViscositySolutionProperty,
+    VolatilitySolutionProperty,
+)
+from ..SymbolicSolution.SymbolicSolutionTracker import SymbolicSolutionTracker
+from .SymbolicLabware import SymbolicLabware
 from .Well.Well import Well
+from .Well.WellSolution.WellSolution import WellSolution
+from .Well.WellSolution.WellSolutionTracker import WellSolutionTracker
+
+SymbolicSolutionTrackerInstance = cast(
+    APIHandler, HandlerRegistry.GetObjectByName("API")
+).SymbolicSolutionTrackerInstance
 
 
-class ContainerOperator:
-    def __init__(self, ContainerInstance: Container):
-        self.ContainerInstance: Container = ContainerInstance
+class SymbolicLabwareOperator:
+    def __init__(self, SymbolicLabwareInstance: SymbolicLabware):
+        self.SymbolicLabwareInstance: SymbolicLabware = SymbolicLabwareInstance
 
     def Aspirate(
         self,
@@ -17,11 +30,11 @@ class ContainerOperator:
         Volume: float,
     ) -> WellSolutionTracker:
 
-        if not self.ContainerInstance.GetWellTracker().IsTracked(WellNumber):
-            self.ContainerInstance.GetWellTracker().ManualLoad(Well(WellNumber))
+        if not self.SymbolicLabwareInstance.GetWellTracker().IsTracked(WellNumber):
+            self.SymbolicLabwareInstance.GetWellTracker().ManualLoad(Well(WellNumber))
         # If it doesn't exist then lets add it
 
-        WellInstance = self.ContainerInstance.GetWellTracker().GetObjectByName(
+        WellInstance = self.SymbolicLabwareInstance.GetWellTracker().GetObjectByName(
             WellNumber
         )
 
@@ -42,7 +55,7 @@ class ContainerOperator:
 
         if WellVolume == 0:
             ReturnWellSolutionTrackerInstance.ManualLoad(
-                WellSolution(self.ContainerInstance.GetName(), Volume)
+                WellSolution(self.SymbolicLabwareInstance.GetName(), Volume)
             )
             # We have to return a unique WellSolution instance because it will be tracked in the destination
             WellInstance.MinWellVolume -= Volume
@@ -78,11 +91,11 @@ class ContainerOperator:
         SourceWellSolutionTrackerInstance: WellSolutionTracker,
     ):
 
-        if not self.ContainerInstance.GetWellTracker().IsTracked(WellNumber):
-            self.ContainerInstance.GetWellTracker().ManualLoad(Well(WellNumber))
+        if not self.SymbolicLabwareInstance.GetWellTracker().IsTracked(WellNumber):
+            self.SymbolicLabwareInstance.GetWellTracker().ManualLoad(Well(WellNumber))
         # If it doesn't exist then lets add it
 
-        WellInstance = self.ContainerInstance.GetWellTracker().GetObjectByName(
+        WellInstance = self.SymbolicLabwareInstance.GetWellTracker().GetObjectByName(
             WellNumber
         )
 
@@ -114,57 +127,61 @@ class ContainerOperator:
             WellInstance.MaxWellVolume = WellVolume
         # We also check if the new volume is greater than the current max
 
-    # This is defined inside the ContainerOperator class because it is only used within this class. We do NOT want to expose this anywhere else.
+    # This is defined inside the SymbolicLabwareOperator class because it is only used within this class. We do NOT want to expose this anywhere else.
     # On the other hand a liquid class is well specific so maybe it should be there... I digress
     class LiquidClass(ObjectABC):
         def __init__(
             self,
-            Volatility: SolutionPropertyValue,
-            Viscosity: SolutionPropertyValue,
-            Homogeneity: SolutionPropertyValue,
-            LLD: SolutionPropertyValue,
+            Volatility: VolatilitySolutionProperty,
+            Viscosity: ViscositySolutionProperty,
+            Homogeneity: HomogeneitySolutionProperty,
+            LLD: LLDSolutionProperty,
         ):
-            self.Volatility: SolutionPropertyValue = Volatility
-            self.Viscosity: SolutionPropertyValue = Viscosity
-            self.Homogeneity: SolutionPropertyValue = Homogeneity
-            self.LLD: SolutionPropertyValue = LLD
+            self.Volatility: VolatilitySolutionProperty = Volatility
+            self.Viscosity: ViscositySolutionProperty = Viscosity
+            self.Homogeneity: HomogeneitySolutionProperty = Homogeneity
+            self.LLD: LLDSolutionProperty = LLD
 
         def GetName(self) -> str:
             return (
-                self.Volatility.GetName()
-                + self.Viscosity.GetName()
-                + self.Homogeneity.GetName()
-                + self.LLD.GetName()
+                "Volatility"
+                + self.Volatility.name
+                + "Viscosity"
+                + self.Viscosity.name
+                + "Homogeneity"
+                + self.Homogeneity.name
+                + "LLD"
+                + self.LLD.name
             ).replace(" ", "")
 
-        def GetVolatility(self) -> SolutionPropertyValue:
+        def GetVolatility(self) -> VolatilitySolutionProperty:
             return self.Volatility
 
-        def GetViscosity(self) -> SolutionPropertyValue:
+        def GetViscosity(self) -> ViscositySolutionProperty:
             return self.Viscosity
 
-        def GetHomogeneity(self) -> SolutionPropertyValue:
+        def GetHomogeneity(self) -> HomogeneitySolutionProperty:
             return self.Homogeneity
 
-        def GetLLD(self) -> SolutionPropertyValue:
+        def GetLLD(self) -> LLDSolutionProperty:
             return self.LLD
 
         def GetMinAspirateMixParam(self):
             ReturnMinMixParam = 0
 
-            MinMixParam = self.GetVolatility().GetMinAspirateMix()
+            MinMixParam = self.GetVolatility().value.GetMinAspirateMix()
             if MinMixParam > ReturnMinMixParam:
                 ReturnMinMixParam = MinMixParam
 
-            MinMixParam = self.GetViscosity().GetMinAspirateMix()
+            MinMixParam = self.GetViscosity().value.GetMinAspirateMix()
             if MinMixParam > ReturnMinMixParam:
                 ReturnMinMixParam = MinMixParam
 
-            MinMixParam = self.GetHomogeneity().GetMinAspirateMix()
+            MinMixParam = self.GetHomogeneity().value.GetMinAspirateMix()
             if MinMixParam > ReturnMinMixParam:
                 ReturnMinMixParam = MinMixParam
 
-            MinMixParam = self.GetLLD().GetMinAspirateMix()
+            MinMixParam = self.GetLLD().value.GetMinAspirateMix()
             if MinMixParam > ReturnMinMixParam:
                 ReturnMinMixParam = MinMixParam
 
@@ -173,19 +190,19 @@ class ContainerOperator:
         def GetMinDispenseMixParam(self):
             ReturnMinMixParam = 0
 
-            MinMixParam = self.GetVolatility().GetMinDispenseMix()
+            MinMixParam = self.GetVolatility().value.GetMinDispenseMix()
             if MinMixParam > ReturnMinMixParam:
                 ReturnMinMixParam = MinMixParam
 
-            MinMixParam = self.GetViscosity().GetMinDispenseMix()
+            MinMixParam = self.GetViscosity().value.GetMinDispenseMix()
             if MinMixParam > ReturnMinMixParam:
                 ReturnMinMixParam = MinMixParam
 
-            MinMixParam = self.GetHomogeneity().GetMinDispenseMix()
+            MinMixParam = self.GetHomogeneity().value.GetMinDispenseMix()
             if MinMixParam > ReturnMinMixParam:
                 ReturnMinMixParam = MinMixParam
 
-            MinMixParam = self.GetLLD().GetMinDispenseMix()
+            MinMixParam = self.GetLLD().value.GetMinDispenseMix()
             if MinMixParam > ReturnMinMixParam:
                 ReturnMinMixParam = MinMixParam
 
@@ -194,10 +211,10 @@ class ContainerOperator:
     # Liquid class is the combo of Volatility, Viscosity, Homogeneity, and LLD
     def GetLiquidClass(
         self,
-        SolutionTrackerInstance: SolutionTracker,
+        SymbolicSolutionTrackerInstance: SymbolicSolutionTracker,
         WellNumber: int,
     ) -> LiquidClass:
-        WellInstance = self.ContainerInstance.GetWellTracker().GetObjectByName(
+        WellInstance = self.SymbolicLabwareInstance.GetWellTracker().GetObjectByName(
             WellNumber
         )
 
@@ -207,17 +224,19 @@ class ContainerOperator:
         # A solution will technically not have a well volume because we never pipette into a solution. Only out of
 
         if WellVolume == 0:
-            ContainerName = self.ContainerInstance.GetName()
-            Volatility = SolutionTrackerInstance.GetObjectByName(
-                ContainerName
+            SymbolicLabwareName = self.SymbolicLabwareInstance.GetName()
+            Volatility = SymbolicSolutionTrackerInstance.GetObjectByName(
+                SymbolicLabwareName
             ).GetVolatility()
-            Viscosity = SolutionTrackerInstance.GetObjectByName(
-                ContainerName
+            Viscosity = SymbolicSolutionTrackerInstance.GetObjectByName(
+                SymbolicLabwareName
             ).GetViscosity()
-            Homogeneity = SolutionTrackerInstance.GetObjectByName(
-                ContainerName
+            Homogeneity = SymbolicSolutionTrackerInstance.GetObjectByName(
+                SymbolicLabwareName
             ).GetHomogeneity()
-            LLD = SolutionTrackerInstance.GetObjectByName(ContainerName).GetLLD()
+            LLD = SymbolicSolutionTrackerInstance.GetObjectByName(
+                SymbolicLabwareName
+            ).GetLLD()
 
         else:
             VolatilityList = list()
@@ -228,49 +247,51 @@ class ContainerOperator:
             for WellSolutionInstance in WellSolutionInstances:
                 Percentage = int(WellSolutionInstance.GetVolume() * 100 / WellVolume)
 
-                SolutionInstance = SolutionTrackerInstance.GetObjectByName(
+                SolutionInstance = SymbolicSolutionTrackerInstance.GetObjectByName(
                     WellSolutionInstance.GetName()
                 )
 
                 VolatilityList += (
-                    [SolutionInstance.GetVolatility().GetNumericValue()]
+                    [SolutionInstance.GetVolatility().value.GetNumericValue()]
                     * Percentage
-                    * SolutionInstance.GetVolatility().GetWeight()
+                    * SolutionInstance.GetVolatility().value.GetWeight()
                 )
 
                 ViscosityList += (
-                    [SolutionInstance.GetViscosity().GetNumericValue()]
+                    [SolutionInstance.GetViscosity().value.GetNumericValue()]
                     * Percentage
-                    * SolutionInstance.GetViscosity().GetWeight()
+                    * SolutionInstance.GetViscosity().value.GetWeight()
                 )
 
                 HomogeneityList += (
-                    [SolutionInstance.GetHomogeneity().GetNumericValue()]
+                    [SolutionInstance.GetHomogeneity().value.GetNumericValue()]
                     * Percentage
-                    * SolutionInstance.GetHomogeneity().GetWeight()
+                    * SolutionInstance.GetHomogeneity().value.GetWeight()
                 )
 
                 LLDList += (
-                    [SolutionInstance.GetLLD().GetNumericValue()]
+                    [SolutionInstance.GetLLD().value.GetNumericValue()]
                     * Percentage
-                    * SolutionInstance.GetLLD().GetWeight()
+                    * SolutionInstance.GetLLD().value.GetWeight()
                 )
 
-            Volatility = SolutionPropertyValues.GetObjectByNumericValue(
+            Volatility = VolatilitySolutionProperty.GetByNumericKey(
                 int(round(sum(VolatilityList) / len(VolatilityList)))
             )
 
-            Viscosity = SolutionPropertyValues.GetObjectByNumericValue(
+            Viscosity = ViscositySolutionProperty.GetByNumericKey(
                 int(round(sum(ViscosityList) / len(ViscosityList)))
             )
 
-            Homogeneity = SolutionPropertyValues.GetObjectByNumericValue(
+            Homogeneity = HomogeneitySolutionProperty.GetByNumericKey(
                 int(round(sum(HomogeneityList) / len(HomogeneityList)))
             )
 
-            LLD = SolutionPropertyValues.GetObjectByNumericValue(
+            LLD = LLDSolutionProperty.GetByNumericKey(
                 int(round(sum(LLDList) / len(LLDList)))
             )
             # We are going to process the whole shebang here
 
-        return ContainerOperator.LiquidClass(Volatility, Viscosity, Homogeneity, LLD)
+        return SymbolicLabwareOperator.LiquidClass(
+            Volatility, Viscosity, Homogeneity, LLD
+        )
