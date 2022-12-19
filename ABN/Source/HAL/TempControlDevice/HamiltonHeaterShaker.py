@@ -9,6 +9,25 @@ __DriverHandlerInstance: DriverHandler = cast(
     DriverHandler, HandlerRegistry.GetObjectByName("Driver")
 )
 
+from ...Driver.TemperatureControl.HeaterShaker import (
+    ConnectCommand,
+    ConnectOptions,
+    GetShakingSpeedCommand,
+    GetShakingSpeedOptions,
+    GetTemperatureCommand,
+    GetTemperatureOptions,
+    SetPlateLockCommand,
+    SetPlateLockOptions,
+    StartShakeControlCommand,
+    StartShakeControlOptions,
+    StartTemperatureControlCommand,
+    StartTemperatureControlOptions,
+    StopShakeControlCommand,
+    StopShakeControlOptions,
+    StopTemperatureControlCommand,
+    StopTemperatureControlOptions,
+)
+
 
 class HamiltonHeaterShaker(TempControlDevice):
     def __init__(
@@ -21,24 +40,97 @@ class HamiltonHeaterShaker(TempControlDevice):
         TempControlDevice.__init__(
             self, Name, ComPort, True, TempLimitsInstance, LayoutItemTrackerInstance
         )
+        self.HandleID: int
 
     def Initialize(self):
-        raise NotImplementedError
+        CommandInstance = ConnectCommand(
+            "", True, ConnectOptions("", self.ComPort)  # type:ignore
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        self.HandleID = CommandInstance.GetResponse().GetAdditional()["HandleID"]
+
+        CommandInstance = SetPlateLockCommand(
+            "",
+            True,
+            SetPlateLockOptions("", self.HandleID, 1),
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        CommandInstance = SetPlateLockCommand(
+            "",
+            True,
+            SetPlateLockOptions("", self.HandleID, 0),
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def Deinitialize(self):
-        raise NotImplementedError
+        CommandInstance = StopTemperatureControlCommand(
+            "", True, StopTemperatureControlOptions("", self.HandleID)
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        CommandInstance = SetPlateLockCommand(
+            "",
+            True,
+            SetPlateLockOptions("", self.HandleID, 0),
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def SetTemperature(self, Temperature: float):
-        raise NotImplementedError
+        CommandInstance = StartTemperatureControlCommand(
+            "",
+            True,
+            StartTemperatureControlOptions("", self.HandleID, Temperature),
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def GetTemperature(self) -> float:
-        raise NotImplementedError
+        CommandInstance = GetTemperatureCommand(
+            "",
+            True,
+            GetTemperatureOptions("", self.HandleID),
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
-    def StartShaking(self, RPM: float):
-        raise NotImplementedError
+        return CommandInstance.GetResponse().GetAdditional()["Temperature"]
+
+    def StartShaking(self, RPM: int):
+        CommandInstance = SetPlateLockCommand(
+            "",
+            True,
+            SetPlateLockOptions("", self.HandleID, 1),
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        CommandInstance = StartShakeControlCommand(
+            "",
+            True,
+            StartShakeControlOptions("", self.HandleID, RPM),
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def StopShaking(self):
-        raise NotImplementedError
+        CommandInstance = StopShakeControlCommand(
+            "",
+            True,
+            StopShakeControlOptions("", self.HandleID),
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        CommandInstance = SetPlateLockCommand(
+            "",
+            True,
+            SetPlateLockOptions("", self.HandleID, 0),
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def GetShakingSpeed(self) -> float:
-        raise NotImplementedError
+        CommandInstance = GetShakingSpeedCommand(
+            "",
+            True,
+            GetShakingSpeedOptions("", self.HandleID),
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        return CommandInstance.GetResponse().GetAdditional()["ShakingSpeed"]

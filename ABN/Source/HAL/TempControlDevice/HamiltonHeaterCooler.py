@@ -8,7 +8,16 @@ from .BaseTempControlDevice import TempControlDevice, TempLimits
 __DriverHandlerInstance: DriverHandler = cast(
     DriverHandler, HandlerRegistry.GetObjectByName("Driver")
 )
-from ...Driver.TemperatureControl.HeaterCooler.Connect import C
+from ...Driver.TemperatureControl.HeaterCooler import (
+    ConnectCommand,
+    ConnectOptions,
+    GetTemperatureCommand,
+    GetTemperatureOptions,
+    StartTemperatureControlCommand,
+    StartTemperatureControlOptions,
+    StopTemperatureControlCommand,
+    StopTemperatureControlOptions,
+)
 
 
 class HamiltonHeaterCooler(TempControlDevice):
@@ -22,18 +31,39 @@ class HamiltonHeaterCooler(TempControlDevice):
         TempControlDevice.__init__(
             self, Name, ComPort, False, TempLimitsInstance, LayoutItemTrackerInstance
         )
+        self.HandleID: str
 
     def Initialize(self):
-        raise NotImplementedError
+        CommandInstance = ConnectCommand(
+            "", True, ConnectOptions("", self.ComPort)  # type:ignore
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        self.HandleID = CommandInstance.GetResponse().GetAdditional()["HandleID"]
 
     def Deinitialize(self):
-        raise NotImplementedError
+        CommandInstance = StopTemperatureControlCommand(
+            "", True, StopTemperatureControlOptions("", self.HandleID)
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def SetTemperature(self, Temperature: float):
-        raise NotImplementedError
+        CommandInstance = StartTemperatureControlCommand(
+            "",
+            True,
+            StartTemperatureControlOptions("", self.HandleID, Temperature),
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def GetTemperature(self) -> float:
-        raise NotImplementedError
+        CommandInstance = GetTemperatureCommand(
+            "",
+            True,
+            GetTemperatureOptions("", self.HandleID),
+        )
+        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+
+        return CommandInstance.GetResponse().GetAdditional()["Temperature"]
 
     def StartShaking(self, RPM: float):
         raise Exception(

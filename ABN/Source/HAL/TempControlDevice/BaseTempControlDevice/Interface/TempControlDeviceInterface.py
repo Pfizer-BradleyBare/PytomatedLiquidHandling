@@ -5,7 +5,7 @@ from .....Tools.AbstractClasses import InterfaceABC
 
 class TempControlDeviceInterface(InterfaceABC):
     def __init__(self):
-        self.HandleID: int
+        self.HandleID: int | str
         self.CurrentTemperature: float
 
     @abstractmethod

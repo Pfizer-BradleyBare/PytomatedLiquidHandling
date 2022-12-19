@@ -15,13 +15,13 @@ class TempControlDevice(ObjectABC, TempControlDeviceInterface):
     def __init__(
         self,
         Name: str,
-        ComPort: str,
+        ComPort: str | int,
         ShakingSupported: bool,
         TempLimitsInstance: TempLimits,
         SupportedLayoutItemTrackerInstance: LayoutItemTracker,
     ):
         self.Name: str = Name
-        self.ComPort: str = ComPort
+        self.ComPort: str | int = ComPort
         self.ShakingSupported: bool = ShakingSupported
         self.TempLimitsInstance: TempLimits = TempLimitsInstance
         self.SupportedLayoutItemTrackerInstance: LayoutItemTracker = (
