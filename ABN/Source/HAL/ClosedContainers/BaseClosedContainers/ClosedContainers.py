@@ -2,13 +2,14 @@ from enum import Enum
 
 from ....Tools.AbstractClasses import ObjectABC
 from ...Labware import LabwareTracker
+from .Interface.ClosedContainersInterface import ClosedContainersInterface
 
 
 class ClosedContainersTypes(Enum):
     FlipTube = "FlipTube"
 
 
-class ClosedContainers(ObjectABC):
+class ClosedContainers(ObjectABC, ClosedContainersInterface):
     def __init__(
         self,
         Type: ClosedContainersTypes,
