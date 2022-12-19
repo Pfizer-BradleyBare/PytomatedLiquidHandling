@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from enum import Enum
 
 from ....Tools.AbstractClasses import ObjectABC
@@ -26,3 +27,7 @@ class TransportDevice(ObjectABC, TransportInterface):
 
     def GetName(self) -> str:
         return self.Name.value
+
+    @abstractmethod
+    def GetConfigKeys(self) -> list[str]:
+        raise NotImplementedError

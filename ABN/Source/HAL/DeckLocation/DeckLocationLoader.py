@@ -3,6 +3,10 @@ import yaml
 from ..Transport.BaseTransportDevice import TransportDeviceTracker
 from .DeckLocation import DeckLocation, LoadingConfig
 from .DeckLocationTracker import DeckLocationTracker
+from .LocationTransportDevice.LocationTransportDevice import LocationTransportDevice
+from .LocationTransportDevice.LocationTransportDeviceTracker import (
+    LocationTransportDeviceTracker,
+)
 
 
 def LoadYaml(
@@ -17,13 +21,18 @@ def LoadYaml(
 
     for LocationID in ConfigFile["Location IDs"]:
 
-        TransportDeviceTrackerInstance = TransportDeviceTracker()
+        LocationTransportDeviceTrackerInstance = LocationTransportDeviceTracker()
         TransportIDs = ConfigFile["Location IDs"][LocationID]["Supported Transport IDs"]
 
         if TransportIDs is not None:
             for TransportID in TransportIDs:
-                TransportDeviceTrackerInstance.ManualLoad(
-                    TransportDeviceTrackerInstance.GetObjectByName(TransportID)
+                LocationTransportDeviceTrackerInstance.ManualLoad(
+                    LocationTransportDevice(
+                        TransportDeviceTrackerInstance.GetObjectByName(TransportID),
+                        ConfigFile["Location IDs"][LocationID][
+                            "Supported Transport IDs"
+                        ][TransportID],
+                    )
                 )
 
         LoadingConfigInstance = None
@@ -40,7 +49,7 @@ def LoadYaml(
         DeckLocationTrackerInstance.ManualLoad(
             DeckLocation(
                 LocationID,
-                TransportDeviceTrackerInstance,
+                LocationTransportDeviceTrackerInstance,
                 LoadingConfigInstance,
                 ConfigFile["Location IDs"][LocationID]["StorageLocation"],
             )

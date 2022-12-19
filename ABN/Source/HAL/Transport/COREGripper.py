@@ -27,3 +27,6 @@ class COREGripper(TransportDevice):
         self, SourceLayoutItem: LayoutItem, DestinationLayoutItem: LayoutItem
     ):
         raise NotImplementedError
+
+    def GetConfigKeys(self) -> list[str]:
+        return []
