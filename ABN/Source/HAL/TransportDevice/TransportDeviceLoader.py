@@ -1,7 +1,7 @@
 import yaml
 
 from ..Labware import LabwareTracker
-from ..Transport import COREGripper, InternalPlateGripper, TrackGripper
+from ..TransportDevice import COREGripper, InternalPlateGripper, TrackGripper
 from .BaseTransportDevice import (
     TransportableLabware,
     TransportableLabwareTracker,

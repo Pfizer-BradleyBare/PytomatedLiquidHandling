@@ -3,14 +3,19 @@ from .Endpoints import GetDevicesState, GetLoadedLabware
 from ..Tools.LoadedLabwareConnection.LoadedLabware.LoadedLabwareTracker import (
     LoadedLabwareTracker,
 )
+from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
+from ..Tools.HALLayer.HALLayer import HALLayer
+from ..Tools.HALLayer import HalLoader
 
 
 class APIHandler(ServerHandlerABC):
     def __init__(self):
         self.LoadedLabwareTrackerInstance: LoadedLabwareTracker = LoadedLabwareTracker()
+        self.ResourceLockTrackerInstance: ResourceLockTracker = ResourceLockTracker()
+        self.HALLayerInstance: HALLayer = HalLoader.Load()
 
     def GetName(self) -> str:
-        return "Driver"
+        return "API"
 
     def GetEndpoints(self) -> tuple:
         urls = ()

@@ -1,6 +1,6 @@
 import yaml
 
-from ..Transport.BaseTransportDevice import TransportDeviceTracker
+from ..TransportDevice.BaseTransportDevice import TransportDeviceTracker
 from .DeckLocation import DeckLocation, LoadingConfig
 from .DeckLocationTracker import DeckLocationTracker
 from .LocationTransportDevice.LocationTransportDevice import LocationTransportDevice

@@ -4,7 +4,9 @@ from .Notify import EmailTextNotify, NotificationTypes
 from .NotifyTracker import NotifyTracker
 
 
-def LoadYaml(NotifyTrackerInstance: NotifyTracker, FilePath: str):
+def LoadYaml(FilePath: str) -> NotifyTracker:
+    NotifyTrackerInstance = NotifyTracker()
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
@@ -29,3 +31,4 @@ def LoadYaml(NotifyTrackerInstance: NotifyTracker, FilePath: str):
                         DeviceID, SMTPServer, SenderEmail, AlwaysNotifyEmails
                     )
                 )
+    return NotifyTrackerInstance

@@ -10,7 +10,9 @@ from ..Labware import (
 from .LabwareTracker import LabwareTracker
 
 
-def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
+def LoadYaml(FilePath: str) -> LabwareTracker:
+    LabwareTrackerInstance = LabwareTracker()
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
@@ -63,6 +65,8 @@ def LoadYaml(LabwareTrackerInstance: LabwareTracker, FilePath: str):
         )
 
         # Create Labware Class and append
+
+    return LabwareTrackerInstance
 
 
 # Populate list of Items

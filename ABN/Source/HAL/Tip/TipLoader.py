@@ -4,7 +4,9 @@ from ..Tip import TipFTR, TipNTR
 from .BaseTip import TipTracker, TipTypes
 
 
-def LoadYaml(TipTrackerInstance: TipTracker, FilePath: str):
+def LoadYaml(FilePath: str) -> TipTracker:
+    TipTrackerInstance = TipTracker()
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
@@ -35,3 +37,5 @@ def LoadYaml(TipTrackerInstance: TipTracker, FilePath: str):
 
             elif TipType == TipTypes.FTR:
                 TipTrackerInstance.ManualLoad(TipFTR(TipID, PickupSequence, MaxVolume))
+
+    return TipTrackerInstance

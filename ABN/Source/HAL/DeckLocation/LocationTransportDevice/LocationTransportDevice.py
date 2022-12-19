@@ -1,5 +1,5 @@
 from ....Tools.AbstractClasses import ObjectABC
-from ...Transport.BaseTransportDevice import TransportDevice
+from ...TransportDevice.BaseTransportDevice import TransportDevice
 
 
 class LocationTransportDevice(ObjectABC):
