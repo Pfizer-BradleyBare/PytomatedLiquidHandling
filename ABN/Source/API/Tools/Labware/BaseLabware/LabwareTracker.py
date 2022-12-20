@@ -12,6 +12,8 @@ from ..Reagent.ReagentTracker import ReagentTracker
 # So if a "reagent" is loaded in a plate then we still need to have a reagent entry for the properties... Lame
 # NOTE
 
+# This could be improved by making it a plate tracker with a reagent tracker as an instance variables. Considerations...
+
 
 class LabwareTracker:
     def __init__(self):
