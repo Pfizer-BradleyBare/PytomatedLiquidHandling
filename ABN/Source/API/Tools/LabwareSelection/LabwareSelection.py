@@ -1,14 +1,18 @@
-from ....HAL.Labware import LabwareTracker
+from ....HAL.Labware import LabwareTracker as HALLabwareTracker
 from ....Tools.AbstractClasses import ObjectABC
+from ..Labware.BaseLabware.Labware import Labware as APILabware
 
 
 class LabwareSelection(ObjectABC):
-    def __init__(self, Name: str):
-        self.Name: str = Name
-        self.LabwareTrackerInstance: LabwareTracker = LabwareTracker()
+    def __init__(self, APILabwareInstance: APILabware):
+        self.APILabwareInstance: APILabware = APILabwareInstance
+        self.HALLabwareTrackerInstance: HALLabwareTracker = HALLabwareTracker()
 
     def GetName(self) -> str:
-        return self.Name
+        return self.APILabwareInstance.GetName()
 
-    def GetLabwareTracker(self) -> LabwareTracker:
-        return self.LabwareTrackerInstance
+    def GetAPILabware(self) -> APILabware:
+        return self.APILabwareInstance
+
+    def GetHALLabwareTracker(self) -> HALLabwareTracker:
+        return self.HALLabwareTrackerInstance

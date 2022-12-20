@@ -44,8 +44,10 @@ def Load(
         ]
         # Gets only the pipettableLabware
 
-        LabwareSelectionInstance = LabwareSelection(APILabwareInstance.GetName())
-        PreferredLabwareTrackerInstance = LabwareSelectionInstance.GetLabwareTracker()
+        LabwareSelectionInstance = LabwareSelection(APILabwareInstance)
+        PreferredLabwareTrackerInstance = (
+            LabwareSelectionInstance.GetHALLabwareTracker()
+        )
 
         for LabwareInstance in sorted(
             HALPipettableLabwareInstances,
