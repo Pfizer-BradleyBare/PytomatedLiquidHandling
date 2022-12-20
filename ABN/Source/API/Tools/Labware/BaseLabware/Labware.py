@@ -13,6 +13,9 @@ class Labware(ObjectABC):
     def GetName(self) -> str:
         return self.Name
 
+    def GetFilter(self) -> list[str]:
+        return [self.Filter]
+
     @abstractmethod
     def GetVolume(self) -> float:
         ...

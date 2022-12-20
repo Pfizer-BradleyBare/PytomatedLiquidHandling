@@ -1,49 +1,54 @@
 from typing import cast
 
-# from .....API.Tools.SymbolicLabware import SymbolicLabwareTracker
-from ....HAL.Labware import LabwareTracker
+from ....HAL.Labware import LabwareTracker as HALLabwareTracker
 from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ..Labware.BaseLabware.LabwareTracker import LabwareTracker as APILabwareTracker
 from .LabwareSelection import LabwareSelection
 from .LabwareSelectionTracker import LabwareSelectionTracker
 
 
 def Load(
-    LabwareSelectionTrackerInstance: LabwareSelectionTracker,
-):
-    for SymbolicLabwareInstance in SymbolicLabwareTrackerInstance.GetObjectsAsList():
-        LabwareTrackerInstance: LabwareTracker = HandlerRegistry.GetObjectByName(
-            "API"
-        ).HALLayerInstance.LabwareTrackerInstance  # type:ignore
+    APILabwareTrackerInstance: APILabwareTracker,
+) -> LabwareSelectionTracker:
+    LabwareSelectionTrackerInstance = LabwareSelectionTracker()
 
-        MaxVolume = SymbolicLabwareInstance.GetMaxWellVolume()
-        MinVolume = SymbolicLabwareInstance.GetMinWellVolume()
+    APILabwareInstances = list(
+        (
+            APILabwareTrackerInstance.GetReagentTracker().GetObjectsAsDictionary()
+            | APILabwareTrackerInstance.GetPlateTracker().GetObjectsAsDictionary()
+        ).values()
+        # This effectively gets all labware then overwrites the reagent with the plate entry if there are duplicates
+    )
+    # First we need to get all our labware to load.
+    # NOTE: reagents and plates can have entries of the same name.
+    # We will always prioritize plate entries, so the reagent entry is ignored.
 
-        SymbolicLabwareFilters = [SymbolicLabwareInstance.GetFilter()]
+    HALLabwareTrackerInstance: HALLabwareTracker = HandlerRegistry.GetObjectByName(
+        "API"
+    ).HALLayerInstance.LabwareTrackerInstance  # type:ignore
 
-        if MaxVolume == 0:
-            Volume = abs(MinVolume)
-            SymbolicLabwareFilters += ["No Preference"]
-            # We add this so we can find the best fit SymbolicLabware as a choice and recommend it to the user
-        else:
-            Volume = MaxVolume
-        # We do not distinguish between plates and reagents. We are just going to load and see what happens
+    for APILabwareInstance in APILabwareInstances:
+
+        Volume = APILabwareInstance.GetVolume()
+
+        SymbolicLabwareFilters = APILabwareInstance.GetFilter()
 
         if Volume == 0:
             continue
         # We don't want to load a SymbolicLabware if it effectively is never used.
 
-        PipettableLabwareInstances = [
-            LabwareInstance
-            for LabwareInstance in LabwareTrackerInstance.GetObjectsAsList()
-            if LabwareInstance.LabwareWells == None
+        HALPipettableLabwareInstances = [
+            HALLabwareInstance
+            for HALLabwareInstance in HALLabwareTrackerInstance.GetObjectsAsList()
+            if HALLabwareInstance.LabwareWells != None
         ]
         # Gets only the pipettableLabware
 
-        LabwareSelectionInstance = LabwareSelection(SymbolicLabwareInstance.GetName())
+        LabwareSelectionInstance = LabwareSelection(APILabwareInstance.GetName())
         PreferredLabwareTrackerInstance = LabwareSelectionInstance.GetLabwareTracker()
 
         for LabwareInstance in sorted(
-            PipettableLabwareInstances,
+            HALPipettableLabwareInstances,
             key=lambda x: x.LabwareWells.MaxVolume,  # type:ignore
         ):
 
@@ -68,7 +73,7 @@ def Load(
 
             PreferredLabwareTrackerInstance.ManualLoad(
                 sorted(
-                    PipettableLabwareInstances,
+                    HALPipettableLabwareInstances,
                     key=lambda x: x.LabwareWells.MaxVolume,  # type:ignore
                     reverse=True,
                 )[0]
@@ -76,7 +81,7 @@ def Load(
         # If the best fit labware does not exist then the largest labware is the best fit
 
         for LabwareInstance in sorted(
-            PipettableLabwareInstances,
+            HALPipettableLabwareInstances,
             key=lambda x: x.LabwareWells.MaxVolume,  # type:ignore
         ):
             if not any(
@@ -99,3 +104,5 @@ def Load(
             # However, the code above requires we add the items in the reverse order
 
             LabwareSelectionTrackerInstance.ManualLoad(LabwareSelectionInstance)
+
+    return LabwareSelectionTrackerInstance
