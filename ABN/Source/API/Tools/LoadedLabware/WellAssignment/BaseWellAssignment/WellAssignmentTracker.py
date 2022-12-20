@@ -9,3 +9,10 @@ class WellAssignmentTracker(TrackerABC[WellAssignment]):
         return super().GetObjectByName(
             MethodName + " - " + str(SampleNumber) + ":" + SampleDescription
         )
+
+    def IsTracked(
+        self, MethodName: str, SampleNumber: int, SampleDescription: str
+    ) -> bool:
+        return super().IsTracked(
+            MethodName + " - " + str(SampleNumber) + ":" + SampleDescription
+        )
