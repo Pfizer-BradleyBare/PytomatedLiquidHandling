@@ -25,11 +25,10 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
         Dimensions = LabwareDimensions(LongSide, ShortSide)
         # Create Dimensions Class
 
-        Filter = None
+        Filters = ConfigFile["Labware IDs"][LabwareID]["Labware Filter"]
         WellsInstance = None
 
         if "Wells" in ConfigFile["Labware IDs"][LabwareID].keys():
-            Filter = ConfigFile["Labware IDs"][LabwareID]["Labware Filter"]
 
             EquationsList = list()
             WellEquationTrackerInstance = WellEquationTracker()
@@ -61,7 +60,7 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
             # Create Wells Class
 
         LabwareTrackerInstance.ManualLoad(
-            Labware(LabwareID, Filter, WellsInstance, Dimensions)
+            Labware(LabwareID, Filters, WellsInstance, Dimensions)
         )
 
         # Create Labware Class and append

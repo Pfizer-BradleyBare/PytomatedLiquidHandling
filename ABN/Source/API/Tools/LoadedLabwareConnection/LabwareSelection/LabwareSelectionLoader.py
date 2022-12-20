@@ -1,6 +1,7 @@
 from typing import cast
 
 from .....API.Tools.SymbolicLabware import SymbolicLabwareTracker
+from .....HAL.Labware import LabwareTracker
 from .....Server.Globals.HandlerRegistry import HandlerRegistry
 from .LabwareSelection import LabwareSelection
 from .LabwareSelectionTracker import LabwareSelectionTracker
@@ -11,7 +12,7 @@ def Load(
     SymbolicLabwareTrackerInstance: SymbolicLabwareTracker,
 ):
     for SymbolicLabwareInstance in SymbolicLabwareTrackerInstance.GetObjectsAsList():
-        LabwareTrackerInstance = HandlerRegistry.GetObjectByName(
+        LabwareTrackerInstance: LabwareTracker = HandlerRegistry.GetObjectByName(
             "API"
         ).HALLayerInstance.LabwareTrackerInstance  # type:ignore
 
@@ -47,7 +48,9 @@ def Load(
             key=lambda x: x.LabwareWells.MaxVolume,  # type:ignore
         ):
 
-            if LabwareInstance.Filter not in SymbolicLabwareFilters:
+            if not any(
+                Filter in SymbolicLabwareFilters for Filter in LabwareInstance.Filters
+            ):
                 continue
 
             LabwareWells = LabwareInstance.LabwareWells
@@ -77,7 +80,9 @@ def Load(
             PipettableLabwareInstances,
             key=lambda x: x.LabwareWells.MaxVolume,  # type:ignore
         ):
-            if LabwareInstance.GetName() not in SymbolicLabwareFilters:
+            if not any(
+                Filter in SymbolicLabwareFilters for Filter in LabwareInstance.Filters
+            ):
                 continue
 
             if not PreferredLabwareTrackerInstance.IsTracked(LabwareInstance.GetName()):
