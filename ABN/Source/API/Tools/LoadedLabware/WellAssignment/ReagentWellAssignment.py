@@ -3,11 +3,12 @@ from .BaseWellAssignment.WellAssignment import WellAssignment
 
 
 class ReagentWellAssignment(WellAssignment):
-    def __init__(
-        self, PhysicalWellNumber: int, MethodName: str, ReagentInstance: Reagent
-    ):
+    def __init__(self, PhysicalWellNumber: int, ReagentInstance: Reagent):
         WellAssignment.__init__(
-            self, PhysicalWellNumber, MethodName, ReagentInstance.GetName()
+            self,
+            PhysicalWellNumber,
+            ReagentInstance.GetMethodName(),
+            ReagentInstance.GetName(),
         )
 
         self.LabwareInstance: Reagent = ReagentInstance

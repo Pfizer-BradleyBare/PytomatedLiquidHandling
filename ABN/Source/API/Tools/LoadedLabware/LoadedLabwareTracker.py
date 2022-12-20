@@ -7,11 +7,12 @@ from .LoadedLabware import LoadedLabware
 
 
 class LoadedLabwareTracker(TrackerABC[LoadedLabware]):
-    def GetLabwareAssignments(
-        self, MethodName: str, APILabwareInstance: APILabware
-    ) -> Self:
+    def GetLabwareAssignments(self, APILabwareInstance: APILabware) -> Self:
 
         ReturnLoadedLabwareTrackerInstance = LoadedLabwareTracker()
+        # We need to keep in mind that there is a very slim possibility that
+        # APIlabware can be loaded in 2 different physical labware. We may prevent
+        # this entirely but it is good to support here
 
         LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
             HandlerRegistry.GetObjectByName(
@@ -25,7 +26,7 @@ class LoadedLabwareTracker(TrackerABC[LoadedLabware]):
                 WellAssignmentInstance
             ) in LoadedLabwareInstance.GetWellAssignmentTracker().GetObjectsAsList():
                 if WellAssignmentInstance.TestAsignment(
-                    MethodName, APILabwareInstance.GetName()
+                    APILabwareInstance.GetMethodName(), APILabwareInstance.GetName()
                 ):
                     ReturnLoadedLabwareTrackerInstance.ManualLoad(LoadedLabwareInstance)
                     break

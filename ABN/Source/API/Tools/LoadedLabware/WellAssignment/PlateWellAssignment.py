@@ -6,12 +6,14 @@ class PlateWellAssignment(WellAssignment):
     def __init__(
         self,
         PhysicalWellNumber: int,
-        MethodName: str,
         PlateInstance: Plate,
         PlateWellNumber: int,
     ):
         WellAssignment.__init__(
-            self, PhysicalWellNumber, MethodName, PlateInstance.GetName()
+            self,
+            PhysicalWellNumber,
+            PlateInstance.GetMethodName(),
+            PlateInstance.GetName(),
         )
 
         self.LabwareInstance: Plate = PlateInstance

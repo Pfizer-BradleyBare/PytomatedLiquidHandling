@@ -14,12 +14,13 @@ class Reagent(Labware):
     def __init__(
         self,
         Name: str,
+        MethodName: str,
         Volatility: VolatilityReagentProperty,
         Viscosity: ViscosityReagentProperty,
         Homogeneity: HomogeneityReagentProperty,
         LLD: LLDReagentProperty,
     ):
-        Labware.__init__(self, Name, "No Preference")
+        Labware.__init__(self, Name, MethodName, "No Preference")
 
         self.Volatility: VolatilityReagentProperty = Volatility
         self.Viscosity: ViscosityReagentProperty = Viscosity

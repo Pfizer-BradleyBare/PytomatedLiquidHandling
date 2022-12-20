@@ -15,8 +15,8 @@ from .Well.WellTracker import WellTracker
 
 
 class Plate(Labware):
-    def __init__(self, Name: str, Filter: str):
-        Labware.__init__(self, Name, Filter)
+    def __init__(self, Name: str, MethodName: str, Filter: str):
+        Labware.__init__(self, Name, MethodName, Filter)
 
         # What solutions and volume is in each well
         self.WellTrackerInstance: WellTracker = WellTracker()

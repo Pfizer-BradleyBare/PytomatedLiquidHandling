@@ -6,12 +6,16 @@ from .LiquidClassCategory.LiquidClassCategory import LiquidClassCategory
 
 
 class Labware(ObjectABC):
-    def __init__(self, Name: str, Filter: str):
+    def __init__(self, Name: str, MethodName: str, Filter: str):
         self.Name: str = Name
+        self.MethodName: str = MethodName
         self.Filter: str = Filter
 
     def GetName(self) -> str:
         return self.Name
+
+    def GetMethodName(self) -> str:
+        return self.MethodName
 
     def GetFilter(self) -> list[str]:
         return [self.Filter]
