@@ -10,4 +10,4 @@ class ReagentWellAssignment(WellAssignment):
             self, PhysicalWellNumber, MethodName, ReagentInstance.GetName()
         )
 
-        self.ReagentInstance: Reagent = ReagentInstance
+        self.LabwareInstance: Reagent = ReagentInstance

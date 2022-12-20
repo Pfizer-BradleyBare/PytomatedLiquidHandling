@@ -4,11 +4,14 @@ from ......Tools.AbstractClasses import ObjectABC
 class WellAssignment(ObjectABC):
     def __init__(self, PhysicalWellNumber: int, MethodName: str, LabwareName: str):
         self.PhysicalWellNumber: int = PhysicalWellNumber
-        self.Assignment: str = MethodName + " - " + LabwareName
+        self.Assignment: str = MethodName + " :: " + LabwareName
         self.MeasuredVolume: float = 0
 
     def GetName(self) -> int:
         return self.PhysicalWellNumber
+
+    def TestAsignment(self, MethodName: str, LabwareName: str) -> bool:
+        return self.Assignment == MethodName + " :: " + LabwareName
 
     def GetAssignment(self) -> str:
         return self.Assignment

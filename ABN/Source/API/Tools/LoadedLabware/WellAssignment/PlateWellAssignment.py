@@ -11,11 +11,8 @@ class PlateWellAssignment(WellAssignment):
         PlateWellNumber: int,
     ):
         WellAssignment.__init__(
-            self,
-            PhysicalWellNumber,
-            MethodName,
-            PlateInstance.GetName() + "-> WellNumber: " + str(PlateWellNumber),
+            self, PhysicalWellNumber, MethodName, PlateInstance.GetName()
         )
 
-        self.PlateInstance: Plate = PlateInstance
+        self.LabwareInstance: Plate = PlateInstance
         self.PlateWellNumber: int = PlateWellNumber

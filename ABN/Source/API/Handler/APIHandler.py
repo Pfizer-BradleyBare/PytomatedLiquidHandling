@@ -1,9 +1,7 @@
 from ...Tools.AbstractClasses import ServerHandlerABC
 from ..Tools.HALLayer import HalLoader
 from ..Tools.HALLayer.HALLayer import HALLayer
-from ..Tools.LoadedLabwareConnection.LoadedLabware.LoadedLabwareTracker import (
-    LoadedLabwareTracker,
-)
+from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 from .Endpoints import GetDevicesState, GetLoadedLabware
 
