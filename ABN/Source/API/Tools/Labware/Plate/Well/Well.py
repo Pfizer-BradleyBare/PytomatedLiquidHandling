@@ -1,4 +1,4 @@
-from .....Tools.AbstractClasses import ObjectABC
+from ......Tools.AbstractClasses import ObjectABC
 from .WellSolution.WellSolutionTracker import WellSolutionTracker
 
 

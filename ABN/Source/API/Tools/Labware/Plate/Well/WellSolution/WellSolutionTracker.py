@@ -1,4 +1,4 @@
-from ......Tools.AbstractClasses import TrackerABC
+from .......Tools.AbstractClasses import TrackerABC
 from .WellSolution import WellSolution
 
 

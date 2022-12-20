@@ -1,4 +1,4 @@
-class SolutionPropertyValue:
+class ReagentPropertyValue:
     NumericValue = 1
 
     def __init__(
@@ -8,11 +8,11 @@ class SolutionPropertyValue:
         MinDispenseMix: int,
     ):
         self.Weight: int = Weight
-        self.NumericValue: int = SolutionPropertyValue.NumericValue
+        self.NumericValue: int = ReagentPropertyValue.NumericValue
         self.MinAspirateMix: int = MinAspirateMix
         self.MinDispenseMix: int = MinDispenseMix
 
-        SolutionPropertyValue.NumericValue += 1
+        ReagentPropertyValue.NumericValue += 1
 
     def GetWeight(self) -> int:
         return self.Weight

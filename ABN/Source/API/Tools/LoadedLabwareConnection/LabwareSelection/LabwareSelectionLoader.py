@@ -1,6 +1,6 @@
 from typing import cast
 
-from .....API.Tools.SymbolicLabware import SymbolicLabwareTracker
+# from .....API.Tools.SymbolicLabware import SymbolicLabwareTracker
 from .....HAL.Labware import LabwareTracker
 from .....Server.Globals.HandlerRegistry import HandlerRegistry
 from .LabwareSelection import LabwareSelection
@@ -9,7 +9,6 @@ from .LabwareSelectionTracker import LabwareSelectionTracker
 
 def Load(
     LabwareSelectionTrackerInstance: LabwareSelectionTracker,
-    SymbolicLabwareTrackerInstance: SymbolicLabwareTracker,
 ):
     for SymbolicLabwareInstance in SymbolicLabwareTrackerInstance.GetObjectsAsList():
         LabwareTrackerInstance: LabwareTracker = HandlerRegistry.GetObjectByName(

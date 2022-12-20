@@ -3,6 +3,7 @@ import os
 import web
 
 import ABN.Source.API.Handler.APIHandler as AH
+import ABN.Source.API.Tools.Labware as LW
 import ABN.Source.Driver.Handler.DriverHandler as DH
 import ABN.Source.Server.Globals.HandlerRegistry as HR
 import ABN.Source.Server.Globals.Logger as Logger

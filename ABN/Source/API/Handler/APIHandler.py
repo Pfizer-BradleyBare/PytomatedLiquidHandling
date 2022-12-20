@@ -1,19 +1,15 @@
 from ...Tools.AbstractClasses import ServerHandlerABC
-from .Endpoints import GetDevicesState, GetLoadedLabware
+from ..Tools.HALLayer import HalLoader
+from ..Tools.HALLayer.HALLayer import HALLayer
 from ..Tools.LoadedLabwareConnection.LoadedLabware.LoadedLabwareTracker import (
     LoadedLabwareTracker,
 )
 from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
-from ..Tools.HALLayer.HALLayer import HALLayer
-from ..Tools.HALLayer import HalLoader
-from ..Tools.SymbolicSolution.SymbolicSolutionTracker import SymbolicSolutionTracker
+from .Endpoints import GetDevicesState, GetLoadedLabware
 
 
 class APIHandler(ServerHandlerABC):
     def __init__(self):
-        self.SymbolicSolutionTrackerInstance: SymbolicSolutionTracker = (
-            SymbolicSolutionTracker()
-        )
         self.LoadedLabwareTrackerInstance: LoadedLabwareTracker = LoadedLabwareTracker()
         self.ResourceLockTrackerInstance: ResourceLockTracker = ResourceLockTracker()
         self.HALLayerInstance: HALLayer = HalLoader.Load()
