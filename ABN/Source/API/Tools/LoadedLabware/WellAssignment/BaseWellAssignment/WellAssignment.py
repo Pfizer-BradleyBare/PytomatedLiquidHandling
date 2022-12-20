@@ -5,7 +5,7 @@ class WellAssignment(ObjectABC):
     def __init__(self, PhysicalWellNumber: int, MethodName: str, LabwareName: str):
         self.PhysicalWellNumber: int = PhysicalWellNumber
         self.Assignment: str = MethodName + " - " + LabwareName
-        self.ActualVolume: float = 0
+        self.MeasuredVolume: float = 0
 
     def GetName(self) -> int:
         return self.PhysicalWellNumber
@@ -13,5 +13,8 @@ class WellAssignment(ObjectABC):
     def GetAssignment(self) -> str:
         return self.Assignment
 
-    def GetActualVolume(self) -> float:
-        return self.ActualVolume
+    def GetMeasuredVolume(self) -> float:
+        return self.MeasuredVolume
+
+    def UpdateMeasuredVolume(self, NewVolume: float):
+        self.MeasuredVolume = NewVolume
