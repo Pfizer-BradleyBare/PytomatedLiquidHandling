@@ -80,10 +80,12 @@ class HamiltonHeaterCooler(TempControlDevice):
         ]
 
     def StartShaking(self, RPM: float):
-        ...
+        raise Exception(
+            "Shaking is not supported on this device. You did something wrong. Pleaes correct"
+        )
 
     def StopShaking(self):
         ...
 
     def UpdateCurrentShakingSpeed(self):
-        ...
+        self.CurrentShakingSpeed = 0
