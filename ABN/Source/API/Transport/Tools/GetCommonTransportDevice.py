@@ -1,7 +1,5 @@
 from ....HAL.Layout import LayoutItem
 from ....HAL.TransportDevice.BaseTransportDevice import TransportDevice
-from ....Server.Globals.HandlerRegistry import HandlerRegistry
-from ...Tools.HALLayer.HALLayer import HALLayer
 
 
 def GetCommonTransportDevice(

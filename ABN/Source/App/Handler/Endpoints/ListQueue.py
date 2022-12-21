@@ -1,6 +1,6 @@
 import web
 
-from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Server.Globals.HandlerRegistry import GetAppHandler
 from ....Server.Tools.Parser import Parser
 from ...Workbook import WorkbookRunTypes, WorkbookTracker
 
@@ -18,9 +18,9 @@ class ListQueue:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        WorkbookTrackerInstance: WorkbookTracker = HandlerRegistry.GetObjectByName(
-            "App"
-        ).WorkbookTrackerInstance  # type:ignore
+        WorkbookTrackerInstance: WorkbookTracker = (
+            GetAppHandler().WorkbookTrackerInstance  # type:ignore
+        )
 
         RunningWorkbookNames = [
             Workbook.GetName()

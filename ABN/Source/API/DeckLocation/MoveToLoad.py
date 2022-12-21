@@ -1,4 +1,4 @@
-from ...Server.Globals.HandlerRegistry import HandlerRegistry
+from ...Server.Globals.HandlerRegistry import GetAPIHandler
 from ..Tools.Container.BaseContainer import Container
 from ..Tools.HALLayer.HALLayer import HALLayer
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
@@ -10,18 +10,14 @@ from ..Transport.Transport import Transport
 def MoveToLoad(ContainerInstance: Container) -> bool:
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
-        HandlerRegistry.GetObjectByName(
-            "API"
-        ).LoadedLabwareTrackerInstance  # type:ignore
+        GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
     )
 
-    ResourceLockTrackerInstance: ResourceLockTracker = HandlerRegistry.GetObjectByName(
-        "API"
-    ).ResourceLockTrackerInstance  # type:ignore
+    ResourceLockTrackerInstance: ResourceLockTracker = (
+        GetAPIHandler().ResourceLockTrackerInstance  # type:ignore
+    )
 
-    HALLayerInstance: HALLayer = HandlerRegistry.GetObjectByName(
-        "API"
-    ).HALLayerInstance  # type:ignore
+    HALLayerInstance: HALLayer = GetAPIHandler().HALLayerInstance  # type:ignore
     # Get our API objects
 
     DeckLocationTrackerInstance = HALLayerInstance.DeckLocationTrackerInstance

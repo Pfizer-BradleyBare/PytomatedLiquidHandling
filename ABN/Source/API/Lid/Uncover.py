@@ -1,5 +1,5 @@
 from ...HAL.Lid import Lid
-from ...Server.Globals.HandlerRegistry import HandlerRegistry
+from ...Server.Globals.HandlerRegistry import GetAPIHandler
 from ..Tools.Container.BaseContainer import Container
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Transport.Transport import Transport
@@ -11,9 +11,7 @@ def Uncover(
 ):
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
-        HandlerRegistry.GetObjectByName(
-            "API"
-        ).LoadedLabwareTrackerInstance  # type:ignore
+        GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
     )
 
     LoadedLabwareAssignmentInstances = (

@@ -2,7 +2,13 @@
 import web
 
 from ...Globals import LOG
-from ...Globals.HandlerRegistry import HandlerRegistry
+from ...Globals.HandlerRegistry import (
+    GetAPIHandler,
+    GetAppHandler,
+    GetDriverHandler,
+    GetHALHandler,
+    GetServerHandler,
+)
 from ...Tools.Parser import Parser
 
 urls = ("/State/Kill", "ABN.Source.Server.Handler.Endpoints.Kill.Kill")
@@ -19,9 +25,42 @@ class Kill:
 
         LOG.info("Starting Kill sequence...")
 
-        for ServerHandlerInstance in HandlerRegistry.GetObjectsAsList():
-            ServerHandlerInstance.IsAliveFlag = False
-            ServerHandlerInstance.Kill()
+        try:
+            ServerHandler = GetServerHandler()
+            ServerHandler.IsAliveFlag = False
+            ServerHandler.Kill()
+        except:
+            pass
+
+        try:
+            DriverHandler = GetDriverHandler()
+            DriverHandler.IsAliveFlag = False
+            DriverHandler.Kill()
+        except:
+            pass
+
+        try:
+            HALHandler = GetHALHandler()
+            HALHandler.IsAliveFlag = False
+            HALHandler.Kill()
+        except:
+            pass
+
+        try:
+            APIHandler = GetAPIHandler()
+            APIHandler.IsAliveFlag = False
+            APIHandler.Kill()
+        except:
+            pass
+
+        try:
+            AppHandler = GetAppHandler()
+            AppHandler.IsAliveFlag = False
+            AppHandler.Kill()
+        except:
+            pass
+
+        # We use try except because we cannot know which handlers are registered
 
         LOG.info("Kill sequence complete! Goodbye!")
 

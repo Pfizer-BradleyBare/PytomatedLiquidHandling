@@ -11,7 +11,7 @@ from ...Driver.ClosedContainers.FlipTube import (
     OpenOptionsTracker,
 )
 from ...Driver.Handler.DriverHandler import DriverHandler
-from ...Server.Globals.HandlerRegistry import HandlerRegistry
+from ...Server.Globals.HandlerRegistry import GetDriverHandler
 from ..Labware import LabwareTracker
 from ..Layout import LayoutItem
 from .BaseClosedContainers.ClosedContainers import (
@@ -32,9 +32,7 @@ class FlipTube(ClosedContainers):
         )
 
     def Initialize(self):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         __DriverHandlerInstance.ExecuteCommand(
             InitializeCommand("", True, InitializeOptions(""))
@@ -44,9 +42,7 @@ class FlipTube(ClosedContainers):
         pass
 
     def Open(self, LayoutItemInstances: list[LayoutItem], Positions: list[int]):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         OpenOptionsTrackerInstance = OpenOptionsTracker()
 
@@ -62,9 +58,7 @@ class FlipTube(ClosedContainers):
         )
 
     def Close(self, LayoutItemInstances: list[LayoutItem], Positions: list[int]):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CloseOptionsTrackerInstance = CloseOptionsTracker()
 

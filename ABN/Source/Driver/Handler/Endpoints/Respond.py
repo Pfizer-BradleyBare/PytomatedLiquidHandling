@@ -2,7 +2,7 @@
 
 import web
 
-from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Server.Globals.HandlerRegistry import GetDriverHandler
 from ....Server.Tools.Parser import Parser
 from ...Tools.Command.CommandTracker import CommandTracker
 from ...Tools.Command.Response.Response import Response as CommandResponse
@@ -14,9 +14,9 @@ class Respond:
     def POST(self):
         ParserObject = Parser("Driver Respond", web.data())
 
-        CommandTrackerInstance: CommandTracker = HandlerRegistry.GetObjectByName(
-            "Driver"
-        ).CommandTrackerInstance  # type:ignore
+        CommandTrackerInstance = (
+            GetDriverHandler().CommandTrackerInstance  # type:ignore
+        )
 
         if CommandTrackerInstance.GetNumObjects() == 0:
             ParserObject.SetAPIReturn(

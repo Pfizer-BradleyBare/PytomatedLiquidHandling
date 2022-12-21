@@ -13,7 +13,7 @@ import os
 
 import web
 
-from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Server.Globals.HandlerRegistry import GetAppHandler
 from ....Server.Tools.Parser import Parser
 from ...Workbook import WorkbookLoader, WorkbookRunTypes, WorkbookTracker
 
@@ -30,9 +30,9 @@ class Queue:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        WorkbookTrackerInstance: WorkbookTracker = HandlerRegistry.GetObjectByName(
-            "App"
-        ).WorkbookTrackerInstance  # type:ignore
+        WorkbookTrackerInstance: WorkbookTracker = (
+            GetAppHandler().WorkbookTrackerInstance  # type:ignore
+        )
 
         MethodPath = ParserObject.GetAPIData()["Method Path"]
         Action = WorkbookRunTypes(ParserObject.GetAPIData()["Action"])

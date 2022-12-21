@@ -1,7 +1,7 @@
 from ....HAL.DeckLocation import DeckLocation
 from ....HAL.Labware import Labware
 from ....HAL.Layout import LayoutItemGrouping
-from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Server.Globals.HandlerRegistry import GetAPIHandler
 from ...Tools.HALLayer.HALLayer import HALLayer
 
 
@@ -9,9 +9,7 @@ def GetLayoutItem(
     DeckLocationInstance: DeckLocation, LabwareInstance: Labware
 ) -> LayoutItemGrouping | None:
 
-    HALLayerInstance: HALLayer = HandlerRegistry.GetObjectByName(
-        "API"
-    ).HALLayerInstance  # type:ignore
+    HALLayerInstance: HALLayer = GetAPIHandler().HALLayerInstance  # type:ignore
 
     LayoutItemTrackerInstance = HALLayerInstance.LayoutItemGroupingTrackerInstance
 

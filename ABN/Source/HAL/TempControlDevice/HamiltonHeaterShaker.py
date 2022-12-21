@@ -19,7 +19,7 @@ from ...Driver.TemperatureControl.HeaterShaker import (
     StopTemperatureControlCommand,
     StopTemperatureControlOptions,
 )
-from ...Server.Globals.HandlerRegistry import HandlerRegistry
+from ...Server.Globals.HandlerRegistry import GetDriverHandler
 from ..Layout import LayoutItemGroupingTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
 
@@ -43,9 +43,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         self.HandleID: int
 
     def Initialize(self):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = ConnectCommand(
             "", True, ConnectOptions("", self.ComPort)  # type:ignore
@@ -69,9 +67,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def Deinitialize(self):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = StopTemperatureControlCommand(
             "", True, StopTemperatureControlOptions("", self.HandleID)
@@ -86,9 +82,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def SetTemperature(self, Temperature: float):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = StartTemperatureControlCommand(
             "",
@@ -98,9 +92,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def UpdateCurrentTemperature(self):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = GetTemperatureCommand(
             "",
@@ -114,9 +106,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         ]
 
     def StartShaking(self, RPM: int):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = SetPlateLockCommand(
             "",
@@ -133,9 +123,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def StopShaking(self):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = StopShakeControlCommand(
             "",
@@ -152,9 +140,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def UpdateCurrentShakingSpeed(self):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = GetShakingSpeedCommand(
             "",

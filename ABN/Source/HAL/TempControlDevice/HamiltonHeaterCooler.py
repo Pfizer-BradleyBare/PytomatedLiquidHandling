@@ -11,7 +11,7 @@ from ...Driver.TemperatureControl.HeaterCooler import (
     StopTemperatureControlCommand,
     StopTemperatureControlOptions,
 )
-from ...Server.Globals.HandlerRegistry import HandlerRegistry
+from ...Server.Globals.HandlerRegistry import GetDriverHandler
 from ..Layout import LayoutItemGroupingTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
 
@@ -35,9 +35,7 @@ class HamiltonHeaterCooler(TempControlDevice):
         self.HandleID: str
 
     def Initialize(self):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = ConnectCommand(
             "", True, ConnectOptions("", self.ComPort)  # type:ignore
@@ -47,9 +45,7 @@ class HamiltonHeaterCooler(TempControlDevice):
         self.HandleID = CommandInstance.GetResponse().GetAdditional()["HandleID"]
 
     def Deinitialize(self):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = StopTemperatureControlCommand(
             "", True, StopTemperatureControlOptions("", self.HandleID)
@@ -57,9 +53,7 @@ class HamiltonHeaterCooler(TempControlDevice):
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def SetTemperature(self, Temperature: float):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = StartTemperatureControlCommand(
             "",
@@ -69,9 +63,7 @@ class HamiltonHeaterCooler(TempControlDevice):
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
     def UpdateCurrentTemperature(self):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = GetTemperatureCommand(
             "",

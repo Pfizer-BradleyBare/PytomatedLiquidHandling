@@ -18,7 +18,7 @@ from ...Driver.Pipette.Pipette8Channel import (
     PickupOptionsTracker,
 )
 from ...Driver.Tools import CommandTracker
-from ...Server.Globals.HandlerRegistry import HandlerRegistry
+from ...Server.Globals.HandlerRegistry import GetDriverHandler
 from ..Labware import LabwareTracker
 from ..Pipette import TransferOptions, TransferOptionsTracker
 from .BasePipette import Pipette, PipetteTip, PipetteTipTracker, PipettingDeviceTypes
@@ -54,9 +54,7 @@ class Pipette8Channel(Pipette):
 
     def Transfer(self, TransferOptionsTrackerInstance: TransferOptionsTracker):
         # NOTE: I played with sorting to make the liquid aspirate and dispense smarter. Trust me not a good idea. Try if you dare
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         SourceLayoutItemInstances = [
             Option.SourceLayoutItemInstance

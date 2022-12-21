@@ -1,5 +1,5 @@
 from ...HAL.Lid.Lid import Lid
-from ...Server.Globals.HandlerRegistry import HandlerRegistry
+from ...Server.Globals.HandlerRegistry import GetAPIHandler
 from ..Tools.Container.BaseContainer import Container
 from ..Tools.HALLayer.HALLayer import HALLayer
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
@@ -9,18 +9,14 @@ from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 def Reserve(ContainerInstance: Container) -> Lid | None:
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
-        HandlerRegistry.GetObjectByName(
-            "API"
-        ).LoadedLabwareTrackerInstance  # type:ignore
+        GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
     )
 
-    HALLayerInstance: HALLayer = HandlerRegistry.GetObjectByName(
-        "API"
-    ).HALLayerInstance  # type:ignore
+    HALLayerInstance: HALLayer = GetAPIHandler().HALLayerInstance  # type:ignore
 
-    ResourceLockTrackerInstance: ResourceLockTracker = HandlerRegistry.GetObjectByName(
-        "API"
-    ).ResourceLockTrackerInstance  # type:ignore
+    ResourceLockTrackerInstance: ResourceLockTracker = (
+        GetAPIHandler().ResourceLockTrackerInstance  # type:ignore
+    )
 
     LoadedLabwareAssignmentInstances = (
         LoadedLabwareTrackerInstance.GetLabwareAssignments(ContainerInstance)

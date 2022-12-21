@@ -2,7 +2,7 @@
 
 import web
 
-from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Server.Globals.HandlerRegistry import GetDriverHandler
 from ....Server.Tools.Parser import Parser
 from ...Pipette.Pipette8Channel.Aspirate.Aspirate import AspirateCommand
 from ...Pipette.Pipette8Channel.Aspirate.AspirateOptionsTracker import (
@@ -21,9 +21,9 @@ class IsReady:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        CommandTrackerInstance = HandlerRegistry.GetObjectByName(
-            "Driver"
-        ).CommandTrackerInstance  # type:ignore
+        CommandTrackerInstance = (
+            GetDriverHandler().CommandTrackerInstance  # type:ignore
+        )
 
         Ops = AspirateOptionsTracker()
 

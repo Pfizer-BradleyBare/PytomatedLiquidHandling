@@ -2,7 +2,7 @@
 
 import web
 
-from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Server.Globals.HandlerRegistry import GetDriverHandler
 from ....Server.Tools.Parser import Parser
 from ...Tools.Command.CommandTracker import CommandTracker
 
@@ -17,9 +17,9 @@ class Request:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        CommandTrackerInstance: CommandTracker = HandlerRegistry.GetObjectByName(
-            "Driver"
-        ).CommandTrackerInstance  # type:ignore
+        CommandTrackerInstance = (
+            GetDriverHandler().CommandTrackerInstance  # type:ignore
+        )
 
         if CommandTrackerInstance.GetNumObjects() == 0:
             ParserObject.SetAPIReturn("Message", "Command not available.")

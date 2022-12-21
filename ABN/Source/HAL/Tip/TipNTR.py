@@ -9,7 +9,7 @@ from ...Driver.Tip.NTR import (
     TipsRemainingCommand,
     TipsRemainingOptions,
 )
-from ...Server.Globals.HandlerRegistry import HandlerRegistry
+from ...Server.Globals.HandlerRegistry import GetDriverHandler
 from .BaseTip import Tip, TipTypes
 
 
@@ -35,9 +35,7 @@ class TipNTR(Tip):
         pass
 
     def Reload(self):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = LoadTipsCommand(
             "",
@@ -59,9 +57,7 @@ class TipNTR(Tip):
         # We also need to show a deck loading dialog, move the autoload, etc.
 
     def UpdateTipPosition(self, NumTips: int):
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = TipsAvailableCommand(
             "",
@@ -87,9 +83,7 @@ class TipNTR(Tip):
             self.UpdateTipPosition(NumTips)
 
     def GetRemainingTips(self) -> int:
-        __DriverHandlerInstance: DriverHandler = cast(
-            DriverHandler, HandlerRegistry.GetObjectByName("Driver")
-        )
+        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
 
         CommandInstance = TipsRemainingCommand(
             "",

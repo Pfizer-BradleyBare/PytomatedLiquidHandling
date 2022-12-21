@@ -1,6 +1,6 @@
 from typing import Self
 
-from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Server.Globals.HandlerRegistry import GetAPIHandler
 from ....Tools.AbstractClasses import TrackerABC
 from ..Container.BaseContainer import Container
 from .LoadedLabware import LoadedLabware
@@ -15,9 +15,7 @@ class LoadedLabwareTracker(TrackerABC[LoadedLabware]):
         # this entirely but it is good to support here
 
         LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
-            HandlerRegistry.GetObjectByName(
-                "API"
-            ).LoadedLabwareTrackerInstance  # type:ignore
+            GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
         )
 
         for LoadedLabwareInstance in LoadedLabwareTrackerInstance.GetObjectsAsList():

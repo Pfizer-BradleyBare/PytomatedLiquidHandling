@@ -2,7 +2,7 @@ import os
 
 import web
 
-from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Server.Globals.HandlerRegistry import GetAppHandler
 from ....Server.Tools.Parser import Parser
 from ...Workbook import WorkbookTracker
 from .AvailableMethods import MethodsPath, TempFolder
@@ -41,9 +41,9 @@ class CleanupMethodProject:
             TempFolder,
         )
 
-        WorkbookTrackerInstance: WorkbookTracker = HandlerRegistry.GetObjectByName(
-            "App"
-        ).WorkbookTrackerInstance  # type:ignore
+        WorkbookTrackerInstance: WorkbookTracker = (
+            GetAppHandler().WorkbookTrackerInstance  # type:ignore
+        )
 
         QueuedFiles = [
             File.GetName() for File in WorkbookTrackerInstance.GetObjectsAsList()

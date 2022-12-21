@@ -1,7 +1,7 @@
 from typing import cast
 
 from ....HAL.Labware import LabwareTracker
-from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Server.Globals.HandlerRegistry import GetAPIHandler
 from ..Container.BaseContainer.ContainerTracker import ContainerTracker
 from .LabwareSelection import LabwareSelection
 from .LabwareSelectionTracker import LabwareSelectionTracker
@@ -23,9 +23,9 @@ def Load(
     # NOTE: reagents and plates can have entries of the same name.
     # We will always prioritize plate entries, so the reagent entry is ignored.
 
-    LabwareTrackerInstance: LabwareTracker = HandlerRegistry.GetObjectByName(
-        "API"
-    ).HALLayerInstance.LabwareTrackerInstance  # type:ignore
+    LabwareTrackerInstance: LabwareTracker = (
+        GetAPIHandler().HALLayerInstance.LabwareTrackerInstance  # type:ignore
+    )
 
     for ContainerInstance in ContainerInstances:
 
