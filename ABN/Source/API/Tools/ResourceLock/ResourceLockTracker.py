@@ -1,5 +1,6 @@
-from ....Tools.AbstractClasses import ObjectABC, TrackerABC
+from ....HAL.DeckLocation import DeckLocation
+from ....Tools.AbstractClasses import TrackerABC
 
 
-class ResourceLockTracker(TrackerABC[ObjectABC]):
+class ResourceLockTracker(TrackerABC[DeckLocation]):
     pass

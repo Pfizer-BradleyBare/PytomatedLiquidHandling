@@ -53,6 +53,7 @@ def LoadYaml(
                 LocationTransportDeviceTrackerInstance,
                 LoadingConfigInstance,
                 ConfigFile["Location IDs"][LocationID]["StorageLocation"],
+                ConfigFile["Location IDs"][LocationID]["PipettingLocation"],
             )
         )
 

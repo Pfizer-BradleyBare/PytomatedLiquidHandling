@@ -7,7 +7,7 @@ from ...Tools.HALLayer.HALLayer import HALLayer
 
 def GetLayoutItem(
     DeckLocationInstance: DeckLocation, LabwareInstance: Labware
-) -> LayoutItem:
+) -> LayoutItem | None:
 
     HALLayerInstance: HALLayer = HandlerRegistry.GetObjectByName(
         "API"
@@ -22,9 +22,7 @@ def GetLayoutItem(
     ]
 
     if len(DeckLocationFiltering) == 0:
-        raise Exception(
-            "Length of DeckLocationFiltering is 0. This should not happen. Please fix."
-        )
+        return None
 
     LabwareFiltering = [
         Item
@@ -33,9 +31,7 @@ def GetLayoutItem(
     ]
 
     if len(LabwareFiltering) == 0:
-        raise Exception(
-            "Length of LabwareFiltering is 0. This should not happen. Please fix."
-        )
+        return None
 
     if len(LabwareFiltering) > 1:
         raise Exception(

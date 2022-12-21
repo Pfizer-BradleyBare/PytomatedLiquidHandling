@@ -12,6 +12,7 @@ class DeckLocation(ObjectABC):
         SupportedLocationTransportDeviceTrackerInstance: LocationTransportDeviceTracker,
         LoadingConfigInstance: LoadingConfig | None,
         IsStorageLocation: bool,
+        IsPipettableLocation: bool,
     ):
         self.Name: str = Name
         self.SupportedLocationTransportDeviceTrackerInstance: LocationTransportDeviceTracker = (
@@ -19,12 +20,16 @@ class DeckLocation(ObjectABC):
         )
         self.LoadingConfigInstance: LoadingConfig | None = LoadingConfigInstance
         self.StorageLocation: bool = IsStorageLocation
+        self.PipettableLocation: bool = IsPipettableLocation
 
     def GetName(self) -> str:
         return self.Name
 
     def IsStorageLocation(self) -> bool:
         return self.StorageLocation
+
+    def IsPipettableLocation(self) -> bool:
+        return self.PipettableLocation
 
     def IsLoadableLocation(self) -> bool:
         return self.LoadingConfigInstance is not None
