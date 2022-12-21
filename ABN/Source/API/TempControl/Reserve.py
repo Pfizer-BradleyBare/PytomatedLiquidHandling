@@ -1,7 +1,4 @@
-from ...HAL.TempControlDevice.BaseTempControlDevice import (
-    TempControlDevice,
-    TempControlDeviceTracker,
-)
+from ...HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
 from ...Server.Globals.HandlerRegistry import HandlerRegistry
 from ..Tools.HALLayer.HALLayer import HALLayer
 from ..Tools.Labware.BaseLabware import Labware as APILabware
@@ -49,7 +46,7 @@ def Reserve(
     TempControlDeviceInstances = [
         Device
         for Device in HALLayerInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
-        if ResourceLockTrackerInstance.IsTracked(Device.GetName())
+        if not ResourceLockTrackerInstance.IsTracked(Device.GetName())
         and Device.ShakingSupported >= RequiresShaking
         and HALLabwareInstance
         in [
