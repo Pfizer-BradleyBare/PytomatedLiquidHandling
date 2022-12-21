@@ -19,10 +19,10 @@ class Pipette96Channel(Pipette):
         )
 
     def Initialize(self):
-        raise NotImplementedError
+        ...
 
     def Deinitialize(self):
-        raise NotImplementedError
+        ...
 
     def Transfer(self, TransferOptionsTrackerInstance: TransferOptionsTracker):
-        raise NotImplementedError
+        ...

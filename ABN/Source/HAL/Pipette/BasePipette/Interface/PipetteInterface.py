@@ -14,7 +14,7 @@ class PipetteInterface(InterfaceABC):
 
     @abstractmethod
     def Transfer(self, TransferOptionsTrackerInstance: TransferOptionsTracker):
-        raise NotImplementedError
+        ...
 
 
 def TestSumLessThanMax(

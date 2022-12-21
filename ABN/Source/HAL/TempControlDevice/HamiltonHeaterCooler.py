@@ -78,16 +78,10 @@ class HamiltonHeaterCooler(TempControlDevice):
         return CommandInstance.GetResponse().GetAdditional()["Temperature"]
 
     def StartShaking(self, RPM: float):
-        raise Exception(
-            "Shaking is not supported on this device. Did you check ShakingSupported?"
-        )
+        ...
 
     def StopShaking(self):
-        raise Exception(
-            "Shaking is not supported on this device. Did you check ShakingSupported?"
-        )
+        ...
 
     def GetShakingSpeed(self) -> float:
-        raise Exception(
-            "Shaking is not supported on this device. Did you check ShakingSupported?"
-        )
+        ...

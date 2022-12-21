@@ -10,20 +10,20 @@ class TempControlDeviceInterface(InterfaceABC):
 
     @abstractmethod
     def SetTemperature(self, Temperature: float):
-        raise NotImplementedError
+        ...
 
     @abstractmethod
     def GetTemperature(self) -> float:
-        raise NotImplementedError
+        ...
 
     @abstractmethod
     def StartShaking(self, RPM: float):
-        raise NotImplementedError
+        ...
 
     @abstractmethod
     def StopShaking(self):
-        raise NotImplementedError
+        ...
 
     @abstractmethod
     def GetShakingSpeed(self) -> float:
-        raise NotImplementedError
+        ...

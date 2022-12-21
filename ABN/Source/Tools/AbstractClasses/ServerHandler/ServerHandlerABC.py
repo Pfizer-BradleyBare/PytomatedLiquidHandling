@@ -12,8 +12,8 @@ class ServerHandlerABC(ObjectABC):
 
     @abstractmethod
     def GetEndpoints(self) -> tuple:
-        raise NotImplementedError
+        ...
 
     @abstractmethod
     def Kill(self):
-        raise NotImplementedError
+        ...

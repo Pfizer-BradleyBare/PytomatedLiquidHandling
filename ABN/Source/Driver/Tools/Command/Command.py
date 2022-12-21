@@ -23,16 +23,16 @@ class Command(ObjectABC):
 
     @abstractmethod
     def GetModuleName(self) -> str:
-        raise NotImplementedError
+        ...
 
     @abstractmethod
     def GetCommandName(self) -> str:
-        raise NotImplementedError
+        ...
 
     @abstractmethod
     def GetResponseKeys(self) -> list[str]:
-        raise NotImplementedError
+        ...
 
     @abstractmethod
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
-        raise NotImplementedError
+        ...

@@ -15,12 +15,12 @@ class TipInterface(InterfaceABC):
 
     @abstractmethod
     def Reload(self):
-        raise NotImplementedError
+        ...
 
     @abstractmethod
     def UpdateTipPosition(self, NumTips: int):
-        raise NotImplementedError
+        ...
 
     @abstractmethod
     def GetRemainingTips(self):
-        raise NotImplementedError
+        ...

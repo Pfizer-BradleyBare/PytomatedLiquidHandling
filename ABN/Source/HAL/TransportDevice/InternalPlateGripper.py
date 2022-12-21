@@ -22,15 +22,15 @@ class InternalPlateGripper(TransportDevice):
         )
 
     def Initialize(self):
-        raise NotImplementedError
+        ...
 
     def Deinitialize(self):
-        raise NotImplementedError
+        ...
 
     def Transport(
         self, SourceLayoutItem: LayoutItem, DestinationLayoutItem: LayoutItem
     ):
-        raise NotImplementedError
+        ...
 
     def GetConfigKeys(self) -> list[str]:
         return []

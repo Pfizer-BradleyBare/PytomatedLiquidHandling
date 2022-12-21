@@ -9,4 +9,4 @@ class TransportInterface(InterfaceABC):
     def Transport(
         self, SourceLayoutItem: LayoutItem, DestinationLayoutItem: LayoutItem
     ):
-        raise NotImplementedError
+        ...

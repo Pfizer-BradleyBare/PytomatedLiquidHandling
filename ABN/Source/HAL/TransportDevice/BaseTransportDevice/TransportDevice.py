@@ -30,4 +30,4 @@ class TransportDevice(ObjectABC, TransportInterface):
 
     @abstractmethod
     def GetConfigKeys(self) -> list[str]:
-        raise NotImplementedError
+        ...
