@@ -56,11 +56,14 @@ def Reserve(
             LayoutItemInstance.LabwareInstance
             for LayoutItemInstance in Device.SupportedLayoutItemTrackerInstance.GetObjectsAsList()
         ]
+        and Temperature >= Device.TempLimitsInstance.MinimumTemp
+        and Temperature <= Device.TempLimitsInstance.MaximumTemp
     ]
     # This is a big one. Not as complex as it looks:
     # 1. The device must not be tracked
     # 2. The device must only support shaking if we require shaking.
     # 3. The HALLabware of our APILabware must be supported by that device
+    # 4 and 5. The temperature must fall within the support temp range of the device
 
     if len(TempControlDeviceInstances) == 0:
         return None
