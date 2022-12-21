@@ -33,7 +33,7 @@ def Reserve(APILabwareInstance: APILabware) -> Lid | None:
 
     HALLabwareInstance = LoadedLabwareAssignmentInstances.GetObjectsAsList()[
         0
-    ].LayoutItemInstance.LabwareInstance
+    ].LayoutItemGroupingInstance.PlateLayoutItemInstance.LabwareInstance
     # Here we are getting the HAL labware of the plate we need to incubate/cool etc.
 
     LidInstances = [
