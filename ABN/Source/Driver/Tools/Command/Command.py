@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from threading import Event
-from typing import Callable
+from typing import Callable, Self
 
 from ....Tools.AbstractClasses import ObjectABC
 from .Response.Response import Response
@@ -11,14 +11,16 @@ class Command(ObjectABC):
         self,
         Name: str,
         CustomErrorHandling: bool,
-        CallbackFunction: Callable[[tuple], None] | None,
+        CallbackFunction: Callable[[Self, tuple], None] | None,
         CallbackArgs: tuple | None,
     ):
         self.ResponseInstance: Response | None = None
         self.ResponseEvent: Event = Event()
         self.Name: str = Name
         self.CustomErrorHandling: bool = CustomErrorHandling
-        self.CallbackFunction: Callable[[tuple], None] | None = CallbackFunction
+        self.CallbackFunction: Callable[
+            [Command, tuple], None
+        ] | None = CallbackFunction
         self.CallbackArgs: tuple | None = CallbackArgs
 
     def GetName(self) -> str:

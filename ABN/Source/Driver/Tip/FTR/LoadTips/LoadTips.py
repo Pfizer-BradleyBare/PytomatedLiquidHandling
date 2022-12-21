@@ -10,7 +10,7 @@ class LoadTipsCommand(Command):
         Name: str,
         CustomErrorHandling: bool,
         OptionsInstance: LoadTipsOptions,
-        CallbackFunction: Callable[[tuple], None] | None = None,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple | None = None,
     ):
         Command.__init__(

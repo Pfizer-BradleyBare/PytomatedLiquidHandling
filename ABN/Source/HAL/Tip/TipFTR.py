@@ -39,6 +39,9 @@ class TipFTR(Tip):
         return ReturnCommandTracker
 
     def UpdateTipPosition(self, NumTips: int) -> CommandTracker:
+        def UpdateTipPositionCallback(args: tuple):
+            pass
+
         ReturnCommandTracker = CommandTracker()
 
         ReturnCommandTracker.ManualLoad(
@@ -57,6 +60,8 @@ class TipFTR(Tip):
         return ReturnCommandTracker
 
     def UpdateRemainingTips(self) -> CommandTracker:
+        def UpdateRemainingTipsCallback(args: tuple):
+            pass
 
         ReturnCommandTracker = CommandTracker()
 

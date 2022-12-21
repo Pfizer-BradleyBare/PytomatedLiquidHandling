@@ -36,7 +36,9 @@ class DriverHandler(ServerHandlerABC):
             and CommandInstance.CallbackArgs is not None
         ):
 
-            CommandInstance.CallbackFunction(CommandInstance.CallbackArgs)
+            CommandInstance.CallbackFunction(
+                CommandInstance, CommandInstance.CallbackArgs
+            )
 
         self.CommandTrackerInstance.ManualUnload(CommandInstance)
 

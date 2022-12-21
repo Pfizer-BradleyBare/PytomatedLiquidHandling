@@ -10,7 +10,7 @@ class GetPressureCommand(Command):
         Name: str,
         CustomErrorHandling: bool,
         OptionsInstance: GetPressureOptions,
-        CallbackFunction: Callable[[tuple], None] | None = None,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple | None = None,
     ):
         Command.__init__(

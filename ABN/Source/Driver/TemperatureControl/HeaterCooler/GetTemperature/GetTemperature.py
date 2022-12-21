@@ -10,7 +10,7 @@ class GetTemperatureCommand(Command):
         Name: str,
         CustomErrorHandling: bool,
         OptionsInstance: GetTemperatureOptions,
-        CallbackFunction: Callable[[tuple], None] | None = None,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple | None = None,
     ):
         Command.__init__(

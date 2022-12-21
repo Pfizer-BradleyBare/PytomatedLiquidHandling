@@ -11,7 +11,7 @@ class CloseCommand(Command):
         Name: str,
         CustomErrorHandling: bool,
         OptionsTrackerInstance: CloseOptionsTracker,
-        CallbackFunction: Callable[[tuple], None] | None = None,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple | None = None,
     ):
         Command.__init__(

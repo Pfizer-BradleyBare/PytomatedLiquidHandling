@@ -10,7 +10,7 @@ class TipsRemainingCommand(Command):
         Name: str,
         CustomErrorHandling: bool,
         OptionsInstance: TipsRemainingOptions,
-        CallbackFunction: Callable[[tuple], None] | None = None,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple | None = None,
     ):
         Command.__init__(
