@@ -6,71 +6,42 @@ from .Tools.GetCommonTransportDevice import GetCommonTransportDevice
 
 
 def Transport(
-    APILabwareInstance: APILabware, DestinationLayoutItemInstance: LayoutItem
+    SourceLayoutItemInstance: LayoutItem, DestinationLayoutItemInstance: LayoutItem
 ):
 
-    LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
-        HandlerRegistry.GetObjectByName(
-            "API"
-        ).LoadedLabwareTrackerInstance  # type:ignore
-    )
+    LayoutItemInstancePathway = list()
+    if (
+        GetCommonTransportDevice(
+            SourceLayoutItemInstance, DestinationLayoutItemInstance
+        )
+        is None
+    ):
 
-    LoadedLabwareAssignmentInstances = (
-        LoadedLabwareTrackerInstance.GetLabwareAssignments(APILabwareInstance)
-    )
+        # TODO This is the hard part. I have literally no clue. Recursion here I come?
 
-    for (
-        LoadedLabwareAssignmentInstance
-    ) in LoadedLabwareAssignmentInstances.GetObjectsAsList():
+        ...
+        # We need to find a pathway then...
+    else:
+        LayoutItemInstancePathway.append(SourceLayoutItemInstance)
+        LayoutItemInstancePathway.append(DestinationLayoutItemInstance)
+    # Does source and destination use the same transport devices?
 
-        SourceLayoutItemInstance = LoadedLabwareAssignmentInstance.LayoutItemInstance
-        SourceDeckLocationInstance = SourceLayoutItemInstance.DeckLocationInstance
+    for Index in range(0, len(LayoutItemInstancePathway) - 1):
+        SourceLayoutItemInstance = LayoutItemInstancePathway[Index]
+        DestinationLayoutItemInstance = LayoutItemInstancePathway[Index + 1]
 
-        DestinationDeckLocationInstance = (
-            DestinationLayoutItemInstance.DeckLocationInstance
+        TransportDeviceInstance = GetCommonTransportDevice(
+            SourceLayoutItemInstance, DestinationLayoutItemInstance
         )
 
-        SourceLocationTransportDevices = (
-            SourceDeckLocationInstance.SupportedLocationTransportDeviceTrackerInstance
-        )
-        DestinationLocationTransportDevices = (
-            DestinationDeckLocationInstance.SupportedLocationTransportDeviceTrackerInstance
-        )
-
-        SourceTransportDevices = [
-            Device.TransportDeviceInstance
-            for Device in SourceLocationTransportDevices.GetObjectsAsList()
-        ]
-        DestinationTransportDevices = [
-            Device.TransportDeviceInstance
-            for Device in DestinationLocationTransportDevices.GetObjectsAsList()
-        ]
-        # Pull just the transport devices
-
-        LayoutItemInstancePathway = list()
-        if not any(
-            Device in DestinationTransportDevices for Device in SourceTransportDevices
-        ):
-
-            # TODO This is the hard part. I have literally no clue. Recursion here I come?
-            ...
-            # We need to find a pathway then...
-        else:
-            LayoutItemInstancePathway.append(SourceLayoutItemInstance)
-            LayoutItemInstancePathway.append(DestinationLayoutItemInstance)
-        # Does source and destination use the same transport devices?
-
-        for Index in range(0, len(LayoutItemInstancePathway) - 1):
-            SourceLayoutItemInstance = LayoutItemInstancePathway[Index]
-            DestinationLayoutItemInstance = LayoutItemInstancePathway[Index + 1]
-
-            TransportDeviceInstance = GetCommonTransportDevice(
-                SourceLayoutItemInstance, DestinationLayoutItemInstance
+        if TransportDeviceInstance is None:
+            raise Exception(
+                "A common transport device was not found. This should not happen, please fix."
             )
 
-            TransportDeviceInstance.Transport(
-                SourceLayoutItemInstance, DestinationLayoutItemInstance
-            )
-        # Do the transports
+        TransportDeviceInstance.Transport(
+            SourceLayoutItemInstance, DestinationLayoutItemInstance
+        )
+    # Do the transports
 
-        # Done
+    # Done

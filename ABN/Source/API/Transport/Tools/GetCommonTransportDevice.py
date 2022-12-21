@@ -6,7 +6,7 @@ from ...Tools.HALLayer.HALLayer import HALLayer
 
 def GetCommonTransportDevice(
     SourceLayoutItemInstance: LayoutItem, DestinationLayoutItemInstance: LayoutItem
-) -> TransportDevice:
+) -> TransportDevice | None:
 
     SourceTransportDevices = [
         LocationDevice.TransportDeviceInstance
@@ -23,6 +23,4 @@ def GetCommonTransportDevice(
             if DestinationTransportDevice == SourceTransportDevice:
                 return SourceTransportDevice
 
-    raise Exception(
-        "A common transport device was not found. This should not happen, please fix."
-    )
+    return None
