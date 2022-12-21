@@ -6,15 +6,19 @@ from .....Tools.AbstractClasses import InterfaceABC
 class TempControlDeviceInterface(InterfaceABC):
     def __init__(self):
         self.HandleID: int | str
-        self.CurrentTemperature: float
+        self.CurrentTemperature: float = 0
+        self.CurrentShakingSpeed: int = 0
 
     @abstractmethod
     def SetTemperature(self, Temperature: float):
         ...
 
     @abstractmethod
-    def GetTemperature(self) -> float:
+    def UpdateCurrentTemperature(self):
         ...
+
+    def GetCurrentTemperature(self) -> float:
+        return self.CurrentTemperature
 
     @abstractmethod
     def StartShaking(self, RPM: float):
@@ -25,5 +29,8 @@ class TempControlDeviceInterface(InterfaceABC):
         ...
 
     @abstractmethod
-    def GetShakingSpeed(self) -> float:
+    def UpdateCurrentShakingSpeed(self):
         ...
+
+    def GetCurrentShakingSpeed(self) -> int:
+        return self.CurrentShakingSpeed

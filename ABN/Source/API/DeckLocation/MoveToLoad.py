@@ -14,6 +14,7 @@ def MoveToLoad(APILabwareInstance: APILabware) -> bool:
             "API"
         ).LoadedLabwareTrackerInstance  # type:ignore
     )
+
     ResourceLockTrackerInstance: ResourceLockTracker = HandlerRegistry.GetObjectByName(
         "API"
     ).ResourceLockTrackerInstance  # type:ignore

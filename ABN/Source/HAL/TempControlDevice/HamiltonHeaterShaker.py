@@ -92,7 +92,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         )
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
-    def GetTemperature(self) -> float:
+    def UpdateCurrentTemperature(self):
         __DriverHandlerInstance: DriverHandler = cast(
             DriverHandler, HandlerRegistry.GetObjectByName("Driver")
         )
@@ -104,7 +104,9 @@ class HamiltonHeaterShaker(TempControlDevice):
         )
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
-        return CommandInstance.GetResponse().GetAdditional()["Temperature"]
+        self.CurrentTemperature = CommandInstance.GetResponse().GetAdditional()[
+            "Temperature"
+        ]
 
     def StartShaking(self, RPM: int):
         __DriverHandlerInstance: DriverHandler = cast(
@@ -144,7 +146,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         )
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
-    def GetShakingSpeed(self) -> float:
+    def UpdateCurrentShakingSpeed(self):
         __DriverHandlerInstance: DriverHandler = cast(
             DriverHandler, HandlerRegistry.GetObjectByName("Driver")
         )
@@ -156,4 +158,6 @@ class HamiltonHeaterShaker(TempControlDevice):
         )
         __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
-        return CommandInstance.GetResponse().GetAdditional()["ShakingSpeed"]
+        self.CurrentShakingSpeed = CommandInstance.GetResponse().GetAdditional()[
+            "ShakingSpeed"
+        ]
