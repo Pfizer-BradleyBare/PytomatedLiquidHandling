@@ -3,23 +3,16 @@ import threading
 from enum import Enum
 
 from ...API.Tools.Container import Container, ContainerTracker
-from ...API.Tools.Context import (
+from ...Server.Globals import LOG  # , AliveStateFlag
+from ...Tools.AbstractClasses import ObjectABC
+from ..Blocks import MergePlates
+from ..Tools.Context import (
     Context,
     ContextTracker,
     WellFactor,
     WellFactorTracker,
     WellSequence,
     WellSequenceTracker,
-)
-from ...HAL import Hal
-from ...Server.Globals import LOG  # , AliveStateFlag
-from ...Tools.AbstractClasses import ObjectABC
-from ..Blocks import MergePlates
-from ..Tools.LoadedLabwareConnection import (
-    LabwareSelectionLoader,
-    LabwareSelectionTracker,
-    LoadedLabwareConnection,
-    LoadedLabwareConnectionTracker,
 )
 from ..Tools.Timer import TimerTracker
 from .Block import Block, BlockTracker
@@ -110,20 +103,17 @@ class WorkbookRunTypes(Enum):
 class Workbook(ObjectABC):
     def __init__(
         self,
-        HalInstance: Hal,
         RunType: WorkbookRunTypes,
         MethodPath: str,
         MethodBlocksTrackerInstance: BlockTracker,
         WorklistInstance: Worklist,
         SolutionTrackerInstance: SolutionTracker,
-        LoadedLabwareConnectionTrackerInstance: LoadedLabwareConnectionTracker,
         PreprocessingBlocksTrackerInstance: BlockTracker,
     ):
 
         # Normal Init Variables
 
         # Variables
-        self.HalInstance: Hal = HalInstance
         self.RunType: WorkbookRunTypes = RunType
         self.MethodPath: str = MethodPath
         self.MethodName: str = os.path.basename(MethodPath)
@@ -137,9 +127,7 @@ class Workbook(ObjectABC):
         )
         self.WorklistInstance: Worklist = WorklistInstance
         self.SolutionTrackerInstance: SolutionTracker = SolutionTrackerInstance
-        self.LoadedLabwareConnectionTrackerInstance: LoadedLabwareConnectionTracker = (
-            LoadedLabwareConnectionTrackerInstance
-        )
+
         # Thread
         self.ProcessingLock: threading.Lock = threading.Lock()
 
@@ -204,12 +192,6 @@ class Workbook(ObjectABC):
     def GetSolutionTracker(self) -> SolutionTracker:
         return self.SolutionTrackerInstance
 
-    def GetHal(self) -> Hal:
-        return self.HalInstance
-
-    def GetLoadedLabwareConnectionTracker(self) -> LoadedLabwareConnectionTracker:
-        return self.LoadedLabwareConnectionTrackerInstance
-
     def GetContainerTracker(self) -> ContainerTracker:
         return self.ContainerTrackerInstance
 
@@ -260,11 +242,11 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # Do some workbook save state stuff here
             #    return
 
-            if all(
-                LoadedLabwareConnection.IsConnected()
-                for LoadedLabwareConnection in WorkbookInstance.GetLoadedLabwareConnectionTracker().GetObjectsAsList()
-            ):
-                break
+            # if all(
+            #    LoadedLabwareConnection.IsConnected()
+            #    for LoadedLabwareConnection in WorkbookInstance.GetLoadedLabwareConnectionTracker().GetObjectsAsList()
+            # ):
+            break
             # if all are connected then we can start running. Boom!
         # This first thing we need to do is check that all labwares are loaded. If not then we sit here and wait.
         # This could be expanded to wait until a set of labware is loaded before proceeding. How? No idea.
@@ -276,23 +258,23 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             for item in WorkbookInstance.GetMethodBlocksTracker().GetObjectsAsList()
         ):
 
-            LoadedLabwareConnectionTrackerInstance = (
-                WorkbookInstance.GetLoadedLabwareConnectionTracker()
-            )
+            # LoadedLabwareConnectionTrackerInstance = (
+            #    WorkbookInstance.GetLoadedLabwareConnectionTracker()
+            # )
 
-            LabwareSelectionTrackerInstance = LabwareSelectionTracker()
-            LabwareSelectionLoader(
-                LabwareSelectionTrackerInstance, WorkbookInstance.GetContainerTracker()
-            )
+            # LabwareSelectionTrackerInstance = LabwareSelectionTracker()
+            # LabwareSelectionLoader(
+            #    LabwareSelectionTrackerInstance, WorkbookInstance.GetContainerTracker()
+            # )
 
-            for (
-                LabwareSelectionInstance
-            ) in LabwareSelectionTrackerInstance.GetObjectsAsList():
-                LoadedLabwareConnectionTrackerInstance.ManualLoad(
-                    LoadedLabwareConnection(
-                        LabwareSelectionInstance.GetName(), LabwareSelectionInstance
-                    )
-                )
+            # for (
+            #    LabwareSelectionInstance
+            # ) in LabwareSelectionTrackerInstance.GetObjectsAsList():
+            #    LoadedLabwareConnectionTrackerInstance.ManualLoad(
+            #        LoadedLabwareConnection(
+            #            LabwareSelectionInstance.GetName(), LabwareSelectionInstance
+            #        )
+            #    )
 
             if WorkbookInstance.GetRunType() == WorkbookRunTypes.PreRun:
 

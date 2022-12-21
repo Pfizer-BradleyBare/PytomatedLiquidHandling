@@ -1,7 +1,7 @@
 from typing import cast
 
-from ....Tools import Excel
 from ...Blocks import Finish, Plate, SplitPlate
+from ...Tools.Excel import Excel
 from .Block import Block, BlockObjectCreationWrapper
 from .BlockTracker import BlockTracker
 

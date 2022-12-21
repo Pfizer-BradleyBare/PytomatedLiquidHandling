@@ -1,8 +1,8 @@
 from typing import Self, cast
 
-from ....Tools import Excel, ExcelHandle
 from ...Blocks import SplitPlate
 from ...Tools.Context import Context
+from ...Tools.Excel import Excel, ExcelHandle
 from ...Workbook import Workbook
 from ...Workbook.Block import (
     Block,

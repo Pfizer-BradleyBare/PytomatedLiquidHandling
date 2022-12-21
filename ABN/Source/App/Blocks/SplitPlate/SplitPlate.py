@@ -1,9 +1,9 @@
 from typing import cast
 
-from ....Tools import Excel, ExcelHandle
 from ...Blocks import Plate
 from ...Tools.Container import Container
 from ...Tools.Context import Context, WellFactor, WellFactorTracker, WellSequenceTracker
+from ...Tools.Excel import Excel, ExcelHandle
 from ...Workbook import Workbook
 from ...Workbook.Block import (
     Block,

@@ -1,6 +1,6 @@
-from ....Tools import Excel, ExcelHandle
 from ...Tools.Container import Container
 from ...Tools.Context import Context
+from ...Tools.Excel import Excel, ExcelHandle
 from ...Workbook import Workbook
 from ...Workbook.Block import (
     Block,

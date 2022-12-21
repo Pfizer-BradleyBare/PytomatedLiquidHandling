@@ -1,4 +1,4 @@
-from ....Tools import Excel
+from ...Tools.Excel import Excel
 
 
 class Worklist:

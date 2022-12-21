@@ -1,6 +1,6 @@
 # from ....Driver.Pipette import Sequence, SequenceTracker
-from ....Tools import Excel, ExcelHandle
 from ...Tools.Container import Container, ContainerOperator
+from ...Tools.Excel import Excel, ExcelHandle
 from ...Workbook import Workbook  # WorkbookRunTypes
 from ...Workbook.Block import (
     Block,

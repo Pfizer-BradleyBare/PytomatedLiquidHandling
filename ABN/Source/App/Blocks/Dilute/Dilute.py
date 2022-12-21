@@ -1,4 +1,4 @@
-from ....Tools import Excel, ExcelHandle
+from ...Tools.Excel import Excel, ExcelHandle
 from ...Workbook import Workbook
 from ...Workbook.Block import (
     Block,
