@@ -1,7 +1,4 @@
-from typing import cast
-
-from ...Driver.Handler.DriverHandler import DriverHandler
-from ...Server.Globals.HandlerRegistry import GetDriverHandler
+from ...Driver.Tools import CommandTracker
 from ..Layout import LayoutItem
 from .BaseTransportDevice import (
     TransportableLabwareTracker,
@@ -21,15 +18,15 @@ class TrackGripper(TransportDevice):
             TransportableLabwareTrackerInstance,
         )
 
-    def Initialize(self):
+    def Initialize(self) -> CommandTracker:
         ...
 
-    def Deinitialize(self):
+    def Deinitialize(self) -> CommandTracker:
         ...
 
     def Transport(
         self, SourceLayoutItem: LayoutItem, DestinationLayoutItem: LayoutItem
-    ):
+    ) -> CommandTracker:
         ...
 
     def GetConfigKeys(self) -> list[str]:

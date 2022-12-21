@@ -1,13 +1,10 @@
-from typing import cast
-
-from ...Driver.Handler.DriverHandler import DriverHandler
+from ...Driver.Tools import CommandTracker
 from ...Driver.Transport.Gripper import (
     GetPlateCommand,
     GetPlateOptions,
     PlacePlateCommand,
     PlacePlateOptions,
 )
-from ...Server.Globals.HandlerRegistry import GetDriverHandler
 from ..Layout import LayoutItem
 from .BaseTransportDevice import (
     TransportableLabwareTracker,
@@ -27,16 +24,17 @@ class COREGripper(TransportDevice):
             self, TransportDevices.COREGripper, TransportableLabwareTrackerInstance
         )
 
-    def Initialize(self):
-        pass
+    def Initialize(self) -> CommandTracker:
+        return CommandTracker()
 
-    def Deinitialize(self):
-        pass
+    def Deinitialize(self) -> CommandTracker:
+        return CommandTracker()
 
     def Transport(
         self, SourceLayoutItem: LayoutItem, DestinationLayoutItem: LayoutItem
-    ):
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+    ) -> CommandTracker:
+
+        ReturnCommandTracker = CommandTracker()
 
         if not SourceLayoutItem.DeckLocationInstance.SupportedLocationTransportDeviceTrackerInstance.IsTracked(
             type(self).__name__
@@ -87,7 +85,7 @@ class COREGripper(TransportDevice):
             SourceTransportableLabware.TransportParametersInstance.PickupHeight
         )
 
-        __DriverHandlerInstance.ExecuteCommand(
+        ReturnCommandTracker.ManualLoad(
             GetPlateCommand(
                 "",
                 True,
@@ -95,7 +93,7 @@ class COREGripper(TransportDevice):
             )
         )
 
-        __DriverHandlerInstance.ExecuteCommand(
+        ReturnCommandTracker.ManualLoad(
             PlacePlateCommand(
                 "",
                 True,
@@ -105,6 +103,8 @@ class COREGripper(TransportDevice):
                 ),
             )
         )
+
+        return ReturnCommandTracker
 
     def GetConfigKeys(self) -> list[str]:
         return []

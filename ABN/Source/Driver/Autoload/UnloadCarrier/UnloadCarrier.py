@@ -1,3 +1,5 @@
+from typing import Callable
+
 from ...Tools.Command.Command import Command
 from .UnloadCarrierOptions import UnloadCarrierOptions
 
@@ -8,9 +10,15 @@ class UnloadCarrierCommand(Command):
         Name: str,
         CustomErrorHandling: bool,
         OptionsInstance: UnloadCarrierOptions,
+        CallbackFunction: Callable[[tuple], None] | None = None,
+        CallbackArgs: tuple | None = None,
     ):
         Command.__init__(
-            self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
+            self,
+            self.__class__.__name__ + ": " + Name,
+            CustomErrorHandling,
+            CallbackFunction,
+            CallbackArgs,
         )
         self.OptionsInstance: UnloadCarrierOptions = OptionsInstance
 

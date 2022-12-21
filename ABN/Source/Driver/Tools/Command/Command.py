@@ -11,15 +11,15 @@ class Command(ObjectABC):
         self,
         Name: str,
         CustomErrorHandling: bool,
-        CallbackFunction: Callable[[list], None] | None = None,
-        CallbackArgs: list | None = None,
+        CallbackFunction: Callable[[tuple], None] | None,
+        CallbackArgs: tuple | None,
     ):
         self.ResponseInstance: Response | None = None
         self.ResponseEvent: Event = Event()
         self.Name: str = Name
         self.CustomErrorHandling: bool = CustomErrorHandling
-        self.CallbackFunction: Callable[[list], None] | None = CallbackFunction
-        self.CallbackArgs: list | None = CallbackArgs
+        self.CallbackFunction: Callable[[tuple], None] | None = CallbackFunction
+        self.CallbackArgs: tuple | None = CallbackArgs
 
     def GetName(self) -> str:
         return self.Name

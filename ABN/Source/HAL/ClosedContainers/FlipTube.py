@@ -1,5 +1,3 @@
-from typing import cast
-
 from ...Driver.ClosedContainers.FlipTube import (
     CloseCommand,
     CloseOptions,
@@ -10,8 +8,7 @@ from ...Driver.ClosedContainers.FlipTube import (
     OpenOptions,
     OpenOptionsTracker,
 )
-from ...Driver.Handler.DriverHandler import DriverHandler
-from ...Server.Globals.HandlerRegistry import GetDriverHandler
+from ...Driver.Tools import CommandTracker
 from ..Labware import LabwareTracker
 from ..Layout import LayoutItem
 from .BaseClosedContainers.ClosedContainers import (
@@ -31,21 +28,26 @@ class FlipTube(ClosedContainers):
             SupportedLabwareTrackerInstance,
         )
 
-    def Initialize(self):
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+    def Initialize(self) -> CommandTracker:
 
-        __DriverHandlerInstance.ExecuteCommand(
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
             InitializeCommand("", True, InitializeOptions(""))
         )
 
-    def Deinitialize(self):
-        pass
+        return ReturnCommandTracker
 
-    def Open(self, LayoutItemInstances: list[LayoutItem], Positions: list[int]):
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+    def Deinitialize(self) -> CommandTracker:
+        return CommandTracker()
+
+    def Open(
+        self, LayoutItemInstances: list[LayoutItem], Positions: list[int]
+    ) -> CommandTracker:
+
+        ReturnCommandTracker = CommandTracker()
 
         OpenOptionsTrackerInstance = OpenOptionsTracker()
-
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
             OpenOptionsTrackerInstance.ManualLoad(
                 OpenOptions(
@@ -53,12 +55,17 @@ class FlipTube(ClosedContainers):
                 )
             )
 
-        __DriverHandlerInstance.ExecuteCommand(
+        ReturnCommandTracker.ManualLoad(
             OpenCommand("", True, OpenOptionsTrackerInstance)
         )
 
-    def Close(self, LayoutItemInstances: list[LayoutItem], Positions: list[int]):
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+        return ReturnCommandTracker
+
+    def Close(
+        self, LayoutItemInstances: list[LayoutItem], Positions: list[int]
+    ) -> CommandTracker:
+
+        ReturnCommandTracker = CommandTracker()
 
         CloseOptionsTrackerInstance = CloseOptionsTracker()
 
@@ -69,6 +76,8 @@ class FlipTube(ClosedContainers):
                 )
             )
 
-        __DriverHandlerInstance.ExecuteCommand(
+        ReturnCommandTracker.ManualLoad(
             CloseCommand("", True, CloseOptionsTrackerInstance)
         )
+
+        return ReturnCommandTracker

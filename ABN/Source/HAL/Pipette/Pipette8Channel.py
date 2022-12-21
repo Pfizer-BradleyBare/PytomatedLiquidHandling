@@ -1,8 +1,5 @@
-from collections import defaultdict
 from math import ceil
-from typing import cast
 
-from ...Driver.Handler.DriverHandler import DriverHandler
 from ...Driver.Pipette.Pipette8Channel import (
     AspirateCommand,
     AspirateOptions,
@@ -18,7 +15,6 @@ from ...Driver.Pipette.Pipette8Channel import (
     PickupOptionsTracker,
 )
 from ...Driver.Tools import CommandTracker
-from ...Server.Globals.HandlerRegistry import GetDriverHandler
 from ..Labware import LabwareTracker
 from ..Pipette import TransferOptions, TransferOptionsTracker
 from .BasePipette import Pipette, PipetteTip, PipetteTipTracker, PipettingDeviceTypes

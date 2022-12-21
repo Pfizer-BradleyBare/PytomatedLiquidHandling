@@ -1,6 +1,3 @@
-from typing import cast
-
-from ...Driver.Handler.DriverHandler import DriverHandler
 from ...Driver.Tip.NTR import (
     LoadTipsCommand,
     LoadTipsOptions,
@@ -9,7 +6,7 @@ from ...Driver.Tip.NTR import (
     TipsRemainingCommand,
     TipsRemainingOptions,
 )
-from ...Server.Globals.HandlerRegistry import GetDriverHandler
+from ...Driver.Tools import CommandTracker
 from .BaseTip import Tip, TipTypes
 
 
@@ -28,72 +25,73 @@ class TipNTR(Tip):
 
         self.GeneratedWasteSequence: str | None = None
 
-    def Initialize(self):
-        self.Reload()
+    def Initialize(self) -> CommandTracker:
+        return self.Reload()
 
-    def Deinitialize(self):
-        pass
+    def Deinitialize(self) -> CommandTracker:
+        return CommandTracker()
 
-    def Reload(self):
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+    def Reload(self) -> CommandTracker:
 
-        CommandInstance = LoadTipsCommand(
-            "",
-            True,
-            LoadTipsOptions(
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            LoadTipsCommand(
                 "",
-                self.PickupSequence,
-                self.NTRWasteSequence,
-                self.GripperSequence,
-            ),
+                True,
+                LoadTipsOptions(
+                    "",
+                    self.PickupSequence,
+                    self.NTRWasteSequence,
+                    self.GripperSequence,
+                ),
+            )
         )
-
-        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
         self.GeneratedWasteSequence = CommandInstance.GetResponse().GetAdditional()[
             "GeneratedWasteSequence"
         ]
 
         # We also need to show a deck loading dialog, move the autoload, etc.
+        return ReturnCommandTracker
 
-    def UpdateTipPosition(self, NumTips: int):
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+    def UpdateTipPosition(self, NumTips: int) -> CommandTracker:
 
-        CommandInstance = TipsAvailableCommand(
-            "",
-            True,
-            TipsAvailableOptions(
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            TipsAvailableCommand(
                 "",
-                self.PickupSequence,
-                self.NTRWasteSequence,
-                self.GripperSequence,
-                NumTips,
-            ),
+                True,
+                TipsAvailableOptions(
+                    "",
+                    self.PickupSequence,
+                    self.NTRWasteSequence,
+                    self.GripperSequence,
+                    NumTips,
+                ),
+            )
         )
+        self.TipPosition = CommandInstance.GetResponse().GetAdditional()["TipPosition"]
 
-        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+        return ReturnCommandTracker
 
-        Response = CommandInstance.GetResponse()
+    def UpdateRemainingTips(self) -> CommandTracker:
 
-        self.TipPosition = Response.GetAdditional()["TipPosition"]
+        ReturnCommandTracker = CommandTracker()
 
-        if Response.GetState() == False:
-            self.Reload()
-
-            self.UpdateTipPosition(NumTips)
-
-    def GetRemainingTips(self) -> int:
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
-
-        CommandInstance = TipsRemainingCommand(
-            "",
-            True,
-            TipsRemainingOptions(
+        ReturnCommandTracker.ManualLoad(
+            TipsRemainingCommand(
                 "",
-                self.PickupSequence,
-            ),
+                True,
+                TipsRemainingOptions(
+                    "",
+                    self.PickupSequence,
+                ),
+            )
         )
+        self.RemainingTips = CommandInstance.GetResponse().GetAdditional()[
+            "NumRemaining"
+        ]
 
-        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
-
-        return CommandInstance.GetResponse().GetAdditional()["NumRemaining"]
+        return ReturnCommandTracker

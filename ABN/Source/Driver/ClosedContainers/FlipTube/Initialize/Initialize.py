@@ -1,13 +1,24 @@
+from typing import Callable
+
 from ....Tools.Command.Command import Command
 from .InitializeOptions import InitializeOptions
 
 
 class InitializeCommand(Command):
     def __init__(
-        self, Name: str, CustomErrorHandling: bool, OptionsInstance: InitializeOptions
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        OptionsInstance: InitializeOptions,
+        CallbackFunction: Callable[[tuple], None] | None = None,
+        CallbackArgs: tuple | None = None,
     ):
         Command.__init__(
-            self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
+            self,
+            self.__class__.__name__ + ": " + Name,
+            CustomErrorHandling,
+            CallbackFunction,
+            CallbackArgs,
         )
         self.OptionsInstance: InitializeOptions = OptionsInstance
 

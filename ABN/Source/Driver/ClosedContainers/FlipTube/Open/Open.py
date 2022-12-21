@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Callable
 
 from ....Tools.Command.Command import Command
 from .OpenOptionsTracker import OpenOptionsTracker
@@ -10,9 +11,15 @@ class OpenCommand(Command):
         Name: str,
         CustomErrorHandling: bool,
         OptionsTrackerInstance: OpenOptionsTracker,
+        CallbackFunction: Callable[[tuple], None] | None = None,
+        CallbackArgs: tuple | None = None,
     ):
         Command.__init__(
-            self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
+            self,
+            self.__class__.__name__ + ": " + Name,
+            CustomErrorHandling,
+            CallbackFunction,
+            CallbackArgs,
         )
         self.OptionsTrackerInstance: OpenOptionsTracker = OptionsTrackerInstance
 

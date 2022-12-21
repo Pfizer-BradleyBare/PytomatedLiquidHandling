@@ -1,6 +1,3 @@
-from typing import cast
-
-from ...Driver.Handler.DriverHandler import DriverHandler
 from ...Driver.TemperatureControl.HeaterCooler import (
     ConnectCommand,
     ConnectOptions,
@@ -11,7 +8,7 @@ from ...Driver.TemperatureControl.HeaterCooler import (
     StopTemperatureControlCommand,
     StopTemperatureControlOptions,
 )
-from ...Server.Globals.HandlerRegistry import GetDriverHandler
+from ...Driver.Tools import CommandTracker
 from ..Layout import LayoutItemGroupingTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
 
@@ -34,55 +31,72 @@ class HamiltonHeaterCooler(TempControlDevice):
         )
         self.HandleID: str
 
-    def Initialize(self):
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+    def Initialize(self) -> CommandTracker:
 
-        CommandInstance = ConnectCommand(
-            "", True, ConnectOptions("", self.ComPort)  # type:ignore
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            ConnectCommand(
+                "", True, ConnectOptions("", self.ComPort)  # type:ignore
+            )
         )
-        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
         self.HandleID = CommandInstance.GetResponse().GetAdditional()["HandleID"]
 
-    def Deinitialize(self):
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+        return ReturnCommandTracker
 
-        CommandInstance = StopTemperatureControlCommand(
-            "", True, StopTemperatureControlOptions("", self.HandleID)
+    def Deinitialize(self) -> CommandTracker:
+
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            StopTemperatureControlCommand(
+                "", True, StopTemperatureControlOptions("", self.HandleID)
+            )
         )
-        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
-    def SetTemperature(self, Temperature: float):
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+        return ReturnCommandTracker
 
-        CommandInstance = StartTemperatureControlCommand(
-            "",
-            True,
-            StartTemperatureControlOptions("", self.HandleID, Temperature),
+    def SetTemperature(self, Temperature: float) -> CommandTracker:
+
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            StartTemperatureControlCommand(
+                "",
+                True,
+                StartTemperatureControlOptions("", self.HandleID, Temperature),
+            )
         )
-        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
-    def UpdateCurrentTemperature(self):
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+        return ReturnCommandTracker
 
-        CommandInstance = GetTemperatureCommand(
-            "",
-            True,
-            GetTemperatureOptions("", self.HandleID),
+    def UpdateCurrentTemperature(self) -> CommandTracker:
+
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            GetTemperatureCommand(
+                "",
+                True,
+                GetTemperatureOptions("", self.HandleID),
+            )
         )
-        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
         self.CurrentTemperature = CommandInstance.GetResponse().GetAdditional()[
             "Temperature"
         ]
 
-    def StartShaking(self, RPM: float):
+        return ReturnCommandTracker
+
+    def StartShaking(self, RPM: float) -> CommandTracker:
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )
 
-    def StopShaking(self):
-        ...
+    def StopShaking(self) -> CommandTracker:
+        return CommandTracker()
 
-    def UpdateCurrentShakingSpeed(self):
+    def UpdateCurrentShakingSpeed(self) -> CommandTracker:
         self.CurrentShakingSpeed = 0
+        return CommandTracker()

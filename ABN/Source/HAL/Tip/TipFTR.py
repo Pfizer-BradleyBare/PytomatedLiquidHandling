@@ -1,6 +1,3 @@
-from typing import cast
-
-from ...Driver.Handler.DriverHandler import DriverHandler
 from ...Driver.Tip.FTR import (
     LoadTipsCommand,
     LoadTipsOptions,
@@ -9,7 +6,7 @@ from ...Driver.Tip.FTR import (
     TipsRemainingCommand,
     TipsRemainingOptions,
 )
-from ...Server.Globals.HandlerRegistry import GetDriverHandler
+from ...Driver.Tools import CommandTracker
 from .BaseTip import Tip, TipTypes
 
 
@@ -17,64 +14,63 @@ class TipFTR(Tip):
     def __init__(self, Name: str, PickupSequence: str, MaxVolume: float):
         Tip.__init__(self, Name, PickupSequence, TipTypes.FTR, MaxVolume)
 
-    def Initialize(self):
-        self.Reload()
+    def Initialize(self) -> CommandTracker:
+        return self.Reload()
 
-    def Deinitialize(self):
-        pass
+    def Deinitialize(self) -> CommandTracker:
+        return CommandTracker()
 
-    def Reload(self):
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+    def Reload(self) -> CommandTracker:
 
-        CommandInstance = LoadTipsCommand(
-            "",
-            True,
-            LoadTipsOptions(
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            LoadTipsCommand(
                 "",
-                self.PickupSequence,
-            ),
+                True,
+                LoadTipsOptions(
+                    "",
+                    self.PickupSequence,
+                ),
+            )
         )
-
-        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
 
         # We also need to show a deck loading dialog, move the autoload, etc.
+        return ReturnCommandTracker
 
-    def UpdateTipPosition(self, NumTips: int):
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+    def UpdateTipPosition(self, NumTips: int) -> CommandTracker:
+        ReturnCommandTracker = CommandTracker()
 
-        CommandInstance = TipsAvailableCommand(
-            "",
-            True,
-            TipsAvailableOptions(
+        ReturnCommandTracker.ManualLoad(
+            TipsAvailableCommand(
                 "",
-                self.PickupSequence,
-                NumTips,
-            ),
+                True,
+                TipsAvailableOptions(
+                    "",
+                    self.PickupSequence,
+                    NumTips,
+                ),
+            )
         )
+        self.TipPosition = CommandInstance.GetResponse().GetAdditional()["TipPosition"]
 
-        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
+        return ReturnCommandTracker
 
-        Response = CommandInstance.GetResponse()
+    def UpdateRemainingTips(self) -> CommandTracker:
 
-        self.TipPosition = Response.GetAdditional()["TipPosition"]
+        ReturnCommandTracker = CommandTracker()
 
-        if Response.GetState() == False:
-            self.Reload()
-
-            self.UpdateTipPosition(NumTips)
-
-    def GetRemainingTips(self) -> int:
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
-
-        CommandInstance = TipsRemainingCommand(
-            "",
-            True,
-            TipsRemainingOptions(
+        ReturnCommandTracker.ManualLoad(
+            TipsRemainingCommand(
                 "",
-                self.PickupSequence,
-            ),
+                True,
+                TipsRemainingOptions(
+                    "",
+                    self.PickupSequence,
+                ),
+            )
         )
-
-        __DriverHandlerInstance.ExecuteCommand(CommandInstance)
-
-        return CommandInstance.GetResponse().GetAdditional()["NumRemaining"]
+        self.RemainingTips = CommandInstance.GetResponse().GetAdditional()[
+            "NumRemaining"
+        ]
+        return ReturnCommandTracker

@@ -1,3 +1,5 @@
+from typing import Callable
+
 from ....Tools.Command.Command import Command
 from .StartTemperatureControlOptions import StartTemperatureControlOptions
 
@@ -8,9 +10,15 @@ class StartTemperatureControlCommand(Command):
         Name: str,
         CustomErrorHandling: bool,
         OptionsInstance: StartTemperatureControlOptions,
+        CallbackFunction: Callable[[tuple], None] | None = None,
+        CallbackArgs: tuple | None = None,
     ):
         Command.__init__(
-            self, self.__class__.__name__ + ": " + Name, CustomErrorHandling
+            self,
+            self.__class__.__name__ + ": " + Name,
+            CustomErrorHandling,
+            CallbackFunction,
+            CallbackArgs,
         )
         self.OptionsInstance: StartTemperatureControlOptions = OptionsInstance
 
