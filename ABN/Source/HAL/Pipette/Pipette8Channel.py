@@ -17,7 +17,7 @@ from ...Driver.Pipette.Pipette8Channel import (
 from ...Driver.Tools import CommandTracker
 from ..Labware import LabwareTracker
 from ..Pipette import TransferOptions, TransferOptionsTracker
-from .BasePipette import Pipette, PipetteTip, PipetteTipTracker, PipettingDeviceTypes
+from .BasePipette import Pipette, PipetteTipTracker, PipettingDeviceTypes
 from .BasePipette.Interface.PipetteInterface import (
     ClampMax,
     TestLabwareSupported,
@@ -42,15 +42,17 @@ class Pipette8Channel(Pipette):
         )
         self.ActiveChannels: list[int] = ActiveChannels
 
-    def Initialize(self):
-        pass
+    def Initialize(self) -> CommandTracker:
+        return CommandTracker()
 
-    def Deinitialize(self):
-        pass
+    def Deinitialize(self) -> CommandTracker:
+        return CommandTracker()
 
-    def Transfer(self, TransferOptionsTrackerInstance: TransferOptionsTracker):
+    def Transfer(
+        self, TransferOptionsTrackerInstance: TransferOptionsTracker
+    ) -> CommandTracker:
         # NOTE: I played with sorting to make the liquid aspirate and dispense smarter. Trust me not a good idea. Try if you dare
-        __DriverHandlerInstance: DriverHandler = cast(DriverHandler, GetDriverHandler())
+        ReturnCommandTrackerInstance = CommandTracker()
 
         SourceLayoutItemInstances = [
             Option.SourceLayoutItemInstance
@@ -181,8 +183,6 @@ class Pipette8Channel(Pipette):
                 # Our transfer volume is larger than our biggest tip. Let's deal with that
         # lets categorize our transfer into tip "buckets"
 
-        CommandTrackerInstance = CommandTracker()
-
         for Key in TipTransferCategories:
             PipetteTipInstance = (
                 self.SupportedPipetteTipTrackerInstance.GetObjectByName(Key)
@@ -196,21 +196,28 @@ class Pipette8Channel(Pipette):
 
             while Counter < NumTransferOptions:
 
+                PickupOptionsTrackerInstance = PickupOptionsTracker()
+                AspirateOptionsTrackerInstance = AspirateOptionsTracker()
+                DispenseOptionsTrackerInstance = DispenseOptionsTracker()
+                EjectOptionsTrackerInstance = EjectOptionsTracker()
+
                 if NumTransferOptions - Counter >= NumActiveChannels:
                     NumRequiredTips = NumActiveChannels
                 else:
                     NumRequiredTips = NumTransferOptions - Counter
 
-                PipetteTipInstance.TipInstance.UpdateTipPosition(NumRequiredTips)
+                # TODO TODO TODO NOTE This probably needs a rewrite
+                for CommandInstance in PipetteTipInstance.TipInstance.UpdateTipPosition(
+                    NumRequiredTips
+                ).GetObjectsAsList():
+                    ReturnCommandTrackerInstance.ManualLoad(CommandInstance)
+                # Add this as a command to our return tracker
+                # TODO TODO TODO NOTE This probably needs a rewrite
+
                 CurrentTipPosition = (
                     PipetteTipInstance.TipInstance.GetCurrentTipPosition()
                 )
-                # Update the tip position and get it
-
-                PickupOptionsTrackerInstance = PickupOptionsTracker()
-                AspirateOptionsTrackerInstance = AspirateOptionsTracker()
-                DispenseOptionsTrackerInstance = DispenseOptionsTracker()
-                EjectOptionsTrackerInstance = EjectOptionsTracker()
+                # Update the tip position and get it. This effectively does nothing
 
                 for PipettingChannel in self.ActiveChannels:
                     TransferOptionsInstance = TransferOptionsInstances[Counter]
@@ -349,19 +356,6 @@ class Pipette8Channel(Pipette):
                     )
                     # Clamp channel number into number of sequence positions for our source. Destination should, hopefully, always be a plate so clamping not needed
 
-                    SourcePosition = (
-                        ClampMax(
-                            PipettingChannel,
-                            SourceLayoutItemInstance.LabwareInstance.LabwareWells.SeqPerWell,  # type:ignore
-                        )
-                        + (
-                            SourcePosition
-                            * SourceLayoutItemInstance.LabwareInstance.LabwareWells.SeqPerWell  # type:ignore
-                        )
-                        - 1
-                    )
-                    # Clamp channel number into number of sequence positions for our source. Destination should, hopefully, always be a plate so clamping not needed
-
                     DestinationPosition *= (
                         DestinationLayoutItemInstance.LabwareInstance.LabwareWells.SeqPerWell  # type: ignore
                     )
@@ -417,21 +411,21 @@ class Pipette8Channel(Pipette):
                     if Counter == TransferOptionsTrackerInstance.GetNumObjects():
                         break
 
-                __DriverHandlerInstance.ExecuteCommand(
+                ReturnCommandTrackerInstance.ManualLoad(
                     PickupCommand("", True, PickupOptionsTrackerInstance),
                 )
 
-                __DriverHandlerInstance.ExecuteCommand(
+                ReturnCommandTrackerInstance.ManualLoad(
                     AspirateCommand("", True, AspirateOptionsTrackerInstance)
                 )
 
-                __DriverHandlerInstance.ExecuteCommand(
+                ReturnCommandTrackerInstance.ManualLoad(
                     DispenseCommand("", True, DispenseOptionsTrackerInstance)
                 )
 
-                __DriverHandlerInstance.ExecuteCommand(
+                ReturnCommandTrackerInstance.ManualLoad(
                     EjectCommand("", True, EjectOptionsTrackerInstance)
                 )
                 # Lets assume this is perfect and will not need error handling yet
 
-        # Now the pipetting junk. aye yi yi
+        return ReturnCommandTrackerInstance

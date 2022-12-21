@@ -1,5 +1,6 @@
 from abc import abstractmethod
 
+from .....Driver.Tools import CommandTracker
 from .....Tools.AbstractClasses import InterfaceABC
 from ....Labware import LabwareTracker
 from ....Layout import LayoutItem
@@ -13,7 +14,9 @@ class PipetteInterface(InterfaceABC):
         pass
 
     @abstractmethod
-    def Transfer(self, TransferOptionsTrackerInstance: TransferOptionsTracker):
+    def Transfer(
+        self, TransferOptionsTrackerInstance: TransferOptionsTracker
+    ) -> CommandTracker:
         ...
 
 

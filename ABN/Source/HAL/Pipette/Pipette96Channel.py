@@ -1,3 +1,4 @@
+from ...Driver.Tools import CommandTracker
 from ..Labware import LabwareTracker
 from ..Pipette import TransferOptionsTracker
 from .BasePipette import Pipette, PipetteTipTracker, PipettingDeviceTypes
@@ -18,11 +19,13 @@ class Pipette96Channel(Pipette):
             SupportedLabwareTrackerInstance,
         )
 
-    def Initialize(self):
-        ...
+    def Initialize(self) -> CommandTracker:
+        return CommandTracker()
 
-    def Deinitialize(self):
-        ...
+    def Deinitialize(self) -> CommandTracker:
+        return CommandTracker()
 
-    def Transfer(self, TransferOptionsTrackerInstance: TransferOptionsTracker):
+    def Transfer(
+        self, TransferOptionsTrackerInstance: TransferOptionsTracker
+    ) -> CommandTracker:
         ...

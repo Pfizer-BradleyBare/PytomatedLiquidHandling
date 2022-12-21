@@ -1,5 +1,6 @@
 from abc import abstractmethod
 
+from .....Driver.Tools import CommandTracker
 from .....Tools.AbstractClasses import InterfaceABC
 
 
@@ -10,26 +11,26 @@ class TempControlDeviceInterface(InterfaceABC):
         self.CurrentShakingSpeed: int = 0
 
     @abstractmethod
-    def SetTemperature(self, Temperature: float):
+    def SetTemperature(self, Temperature: float) -> CommandTracker:
         ...
 
     @abstractmethod
-    def UpdateCurrentTemperature(self):
+    def UpdateCurrentTemperature(self) -> CommandTracker:
         ...
 
     def GetCurrentTemperature(self) -> float:
         return self.CurrentTemperature
 
     @abstractmethod
-    def StartShaking(self, RPM: float):
+    def StartShaking(self, RPM: float) -> CommandTracker:
         ...
 
     @abstractmethod
-    def StopShaking(self):
+    def StopShaking(self) -> CommandTracker:
         ...
 
     @abstractmethod
-    def UpdateCurrentShakingSpeed(self):
+    def UpdateCurrentShakingSpeed(self) -> CommandTracker:
         ...
 
     def GetCurrentShakingSpeed(self) -> int:
