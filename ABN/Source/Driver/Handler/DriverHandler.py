@@ -31,7 +31,7 @@ class DriverHandler(ServerHandlerABC):
         TimeoutFlag = CommandInstance.ResponseEvent.wait(Timeout)
 
         if (
-            TimeoutFlag is True
+            TimeoutFlag is True  # This means it did not timeout
             and CommandInstance.CallbackFunction is not None
             and CommandInstance.CallbackArgs is not None
         ):

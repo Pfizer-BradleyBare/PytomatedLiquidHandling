@@ -29,10 +29,10 @@ if __name__ == "__main__":
     urls += AppHandler.GetEndpoints()
     # Add endpoints as addresses we can access over HTTP
 
-    HR.RegisterServerHandler.ManualLoad(ServerHandler)
-    HR.RegisterDriverHandler.ManualLoad(DriverHandler)
-    HR.RegisterAPIHandler.ManualLoad(APIHandler)
-    HR.RegisterAppHandler.ManualLoad(AppHandler)
+    HR.RegisterServerHandler(ServerHandler)
+    HR.RegisterDriverHandler(DriverHandler)
+    HR.RegisterAPIHandler(APIHandler)
+    HR.RegisterAppHandler(AppHandler)
     # Register each handler with our main server
 
     app = web.application(urls, globals())

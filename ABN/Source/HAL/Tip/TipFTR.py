@@ -8,6 +8,7 @@ from ...Driver.Tip.FTR import (
 )
 from ...Driver.Tools import CommandTracker
 from .BaseTip import Tip, TipTypes
+from .BaseTip.Interface import UpdateRemainingTipsCallback, UpdateTipPositionCallback
 
 
 class TipFTR(Tip):
@@ -39,8 +40,6 @@ class TipFTR(Tip):
         return ReturnCommandTracker
 
     def UpdateTipPosition(self, NumTips: int) -> CommandTracker:
-        def UpdateTipPositionCallback(args: tuple):
-            pass
 
         ReturnCommandTracker = CommandTracker()
 
@@ -53,15 +52,14 @@ class TipFTR(Tip):
                     self.PickupSequence,
                     NumTips,
                 ),
+                UpdateTipPositionCallback,
+                (self, NumTips),
             )
         )
-        self.TipPosition = CommandInstance.GetResponse().GetAdditional()["TipPosition"]
 
         return ReturnCommandTracker
 
     def UpdateRemainingTips(self) -> CommandTracker:
-        def UpdateRemainingTipsCallback(args: tuple):
-            pass
 
         ReturnCommandTracker = CommandTracker()
 
@@ -73,9 +71,8 @@ class TipFTR(Tip):
                     "",
                     self.PickupSequence,
                 ),
+                UpdateRemainingTipsCallback,
+                (self,),
             )
         )
-        self.RemainingTips = CommandInstance.GetResponse().GetAdditional()[
-            "NumRemaining"
-        ]
         return ReturnCommandTracker

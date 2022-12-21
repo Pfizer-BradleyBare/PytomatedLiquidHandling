@@ -6,8 +6,9 @@ from ...Driver.Tip.NTR import (
     TipsRemainingCommand,
     TipsRemainingOptions,
 )
-from ...Driver.Tools import CommandTracker
+from ...Driver.Tools import Command, CommandTracker
 from .BaseTip import Tip, TipTypes
+from .BaseTip.Interface import UpdateRemainingTipsCallback, UpdateTipPositionCallback
 
 
 class TipNTR(Tip):
@@ -32,6 +33,14 @@ class TipNTR(Tip):
         return CommandTracker()
 
     def Reload(self) -> CommandTracker:
+        def NTRReloadCallback(CommandInstance: Command, args: tuple):
+
+            TipInstance: TipNTR = args[0]
+            ResponseInstance = CommandInstance.GetResponse()
+
+            TipInstance.GeneratedWasteSequence = ResponseInstance.GetAdditional()[
+                "GeneratedWasteSequence"
+            ]
 
         ReturnCommandTracker = CommandTracker()
 
@@ -45,12 +54,10 @@ class TipNTR(Tip):
                     self.NTRWasteSequence,
                     self.GripperSequence,
                 ),
+                NTRReloadCallback,
+                (self,),
             )
         )
-
-        self.GeneratedWasteSequence = CommandInstance.GetResponse().GetAdditional()[
-            "GeneratedWasteSequence"
-        ]
 
         # We also need to show a deck loading dialog, move the autoload, etc.
         return ReturnCommandTracker
@@ -70,9 +77,10 @@ class TipNTR(Tip):
                     self.GripperSequence,
                     NumTips,
                 ),
+                UpdateTipPositionCallback,
+                (self, NumTips),
             )
         )
-        self.TipPosition = CommandInstance.GetResponse().GetAdditional()["TipPosition"]
 
         return ReturnCommandTracker
 
@@ -88,10 +96,9 @@ class TipNTR(Tip):
                     "",
                     self.PickupSequence,
                 ),
+                UpdateRemainingTipsCallback,
+                (self,),
             )
         )
-        self.RemainingTips = CommandInstance.GetResponse().GetAdditional()[
-            "NumRemaining"
-        ]
 
         return ReturnCommandTracker

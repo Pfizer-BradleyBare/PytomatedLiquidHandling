@@ -1,5 +1,6 @@
 from abc import abstractmethod
 
+from .....Driver.Tools import CommandTracker
 from .....Tools.AbstractClasses import InterfaceABC
 
 
@@ -18,13 +19,13 @@ class TipInterface(InterfaceABC):
         return self.RemainingTips
 
     @abstractmethod
-    def Reload(self):
+    def Reload(self) -> CommandTracker:
         ...
 
     @abstractmethod
-    def UpdateTipPosition(self, NumTips: int):
+    def UpdateTipPosition(self, NumTips: int) -> CommandTracker:
         ...
 
     @abstractmethod
-    def UpdateRemainingTips(self):
+    def UpdateRemainingTips(self) -> CommandTracker:
         ...
