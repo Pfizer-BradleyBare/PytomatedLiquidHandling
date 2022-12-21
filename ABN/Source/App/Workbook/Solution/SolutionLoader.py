@@ -1,9 +1,11 @@
-from ....Tools import Excel
-from .Solution import Solution
-from .SolutionTracker import SolutionTracker
+from ....API.Tools.Container.Reagent.ReagentTracker import ReagentTracker
+from ...Tools.Container import Reagent
+from ...Tools.Excel import Excel
 
 
-def Load(SolutionTrackerInstance: SolutionTracker, ExcelInstance: Excel):
+def Load(MethodName: str, ExcelInstance: Excel) -> ReagentTracker:
+    ReagentTrackerInstance: ReagentTracker = ReagentTracker()
+
     ExcelInstance.SelectSheet("Solutions")
     SolutionsSheet = ExcelInstance.ReadRangeValues(1, 1, 200, 50)
 
@@ -20,6 +22,15 @@ def Load(SolutionTrackerInstance: SolutionTracker, ExcelInstance: Excel):
 
             Name = Name.replace(" - (Click Here to Update)", "")
 
-            SolutionTrackerInstance.ManualLoad(
-                Solution(ExcelInstance, Name, RowIndex, ColIndex)
+            ReagentTrackerInstance.ManualLoad(
+                Reagent(
+                    Name,
+                    MethodName,
+                    ExcelInstance.ReadCellValue(RowIndex + 2, ColIndex + 2),
+                    ExcelInstance,
+                    RowIndex,
+                    ColIndex,
+                )
             )
+
+    return ReagentTrackerInstance

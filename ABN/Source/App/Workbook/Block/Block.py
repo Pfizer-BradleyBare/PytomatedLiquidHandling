@@ -20,9 +20,9 @@ def FunctionDecorator_ProcessFunction(DecoratedFunction):
         Self = args[0]
         WorkbookInstance = args[1]
 
-        WorkbookInstance.GetContainerTracker().GetObjectByName(
+        WorkbookInstance.GetContainerTracker().PlateTrackerInstance.GetObjectByName(
             Self.GetParentPlateName()
-        ).GetBlockTracker().ManualLoad(Self)
+        ).BlockTrackerInstance.ManualLoad(Self)
 
         return Result
 

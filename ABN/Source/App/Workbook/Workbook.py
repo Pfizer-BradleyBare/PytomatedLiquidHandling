@@ -2,10 +2,11 @@ import os
 import threading
 from enum import Enum
 
-from ...API.Tools.Container import Container, ContainerTracker
+from ...API.Tools.Container.BaseContainer import ContainerTracker
 from ...Server.Globals import LOG  # , AliveStateFlag
 from ...Tools.AbstractClasses import ObjectABC
 from ..Blocks import MergePlates
+from ..Tools.Container import Plate
 from ..Tools.Context import (
     Context,
     ContextTracker,
@@ -16,7 +17,6 @@ from ..Tools.Context import (
 )
 from ..Tools.Timer import TimerTracker
 from .Block import Block, BlockTracker
-from .Solution import SolutionTracker
 from .Worklist import Worklist
 
 
@@ -107,7 +107,6 @@ class Workbook(ObjectABC):
         MethodPath: str,
         MethodBlocksTrackerInstance: BlockTracker,
         WorklistInstance: Worklist,
-        SolutionTrackerInstance: SolutionTracker,
         PreprocessingBlocksTrackerInstance: BlockTracker,
     ):
 
@@ -126,7 +125,6 @@ class Workbook(ObjectABC):
             PreprocessingBlocksTrackerInstance
         )
         self.WorklistInstance: Worklist = WorklistInstance
-        self.SolutionTrackerInstance: SolutionTracker = SolutionTrackerInstance
 
         # Thread
         self.ProcessingLock: threading.Lock = threading.Lock()
@@ -188,9 +186,6 @@ class Workbook(ObjectABC):
 
     def GetWorklist(self) -> Worklist:
         return self.WorklistInstance
-
-    def GetSolutionTracker(self) -> SolutionTracker:
-        return self.SolutionTrackerInstance
 
     def GetContainerTracker(self) -> ContainerTracker:
         return self.ContainerTrackerInstance
@@ -448,13 +443,12 @@ def WorkbookInit(WorkbookInstance: Workbook):
         WorkbookInstance.GetExecutingContext()
     )
 
-    WorkbookInstance.GetContainerTracker().ManualLoad(
-        Container(
-            "__StartingContext__", None
+    WorkbookInstance.GetContainerTracker().PlateTrackerInstance.ManualLoad(
+        Plate(
+            "__StartingContext__", WorkbookInstance.GetName(), "No Preference"
         )  # This will never be loaded so filter doesn't matter
     )
     # Setting initial context and container.
-
     if WorkbookInstance.GetRunType() == WorkbookRunTypes.Run:
         pass
         # WorkbookInstance.ProcessingLock.acquire()

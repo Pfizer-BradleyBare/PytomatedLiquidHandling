@@ -1,7 +1,7 @@
 from typing import cast
 
 from ...Blocks import Plate
-from ...Tools.Container import Container
+from ...Tools.Container import Plate as PlateContainer
 from ...Tools.Context import Context, WellFactor, WellFactorTracker, WellSequenceTracker
 from ...Tools.Excel import Excel, ExcelHandle
 from ...Workbook import Workbook
@@ -141,8 +141,12 @@ class SplitPlate(Block):
 
             Children: list[Plate] = cast(list[Plate], self.GetChildren())
             for Child in Children:
-                ContainerTracker.ManualLoad(
-                    Container(Child.GetPlateName(), Child.GetPlateType())
+                ContainerTracker.PlateTrackerInstance.ManualLoad(
+                    PlateContainer(
+                        Child.GetPlateName(),
+                        WorkbookInstance.GetName(),
+                        Child.GetPlateType(),
+                    )
                 )
                 WorkbookInstance.GetExecutedBlocksTracker().ManualLoad(Child)
                 # We are executing these blocks in the split plate step so we need to track them as executed.

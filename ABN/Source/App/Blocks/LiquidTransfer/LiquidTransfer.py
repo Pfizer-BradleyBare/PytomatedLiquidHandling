@@ -1,5 +1,6 @@
 # from ....Driver.Pipette import Sequence, SequenceTracker
-from ...Tools.Container import Container, ContainerOperator
+# from ...Tools.Container import ContainerOperator
+from ...Tools.Container import Plate as PlateContainer
 from ...Tools.Excel import Excel, ExcelHandle
 from ...Workbook import Workbook  # WorkbookRunTypes
 from ...Workbook.Block import (
@@ -79,16 +80,16 @@ class LiquidTransfer(Block):
 
             ContainerTrackerInstance = WorkbookInstance.GetContainerTracker()
 
-            for Source in Sources:
-                if ContainerTrackerInstance.IsTracked(Source) is not True:
-                    ContainerTrackerInstance.ManualLoad(
-                        Container(
-                            Source,
-                            WorkbookInstance.GetSolutionTracker()
-                            .GetObjectByName(Source)
-                            .GetCategory(),
-                        )
-                    )
+            #            for Source in Sources:
+            #                if ContainerTrackerInstance.IsTracked(Source) is not True:
+            #                    ContainerTrackerInstance.ManualLoad(
+            #                        Container(
+            #                            Source,
+            #                            WorkbookInstance.GetSolutionTracker()
+            #                            .GetObjectByName(Source)
+            #                            .GetCategory(),
+            #                        )
+            #                    )
             # If source is not a container then we need to add it
 
             # SequenceTrackerInstance = SequenceTracker()
@@ -134,19 +135,19 @@ class LiquidTransfer(Block):
                     ).GetSequence()
                 )
 
-                DestinationOperatorInstance = ContainerOperator(Destination)
-                SourceOperatorInstance = ContainerOperator(Source)
+                # DestinationOperatorInstance = ContainerOperator(Destination)
+                # SourceOperatorInstance = ContainerOperator(Source)
 
-                DestinationOperatorInstance.Dispense(
-                    DispenseWellNumber,
-                    SourceOperatorInstance.Aspirate(AspirateWellNumber, Volume),
-                )
+                # DestinationOperatorInstance.Dispense(
+                #    DispenseWellNumber,
+                #    SourceOperatorInstance.Aspirate(AspirateWellNumber, Volume),
+                # )
                 # lets do programmatic pipetting first
 
-                if WorkbookInstance.GetRunType() == "Run":
-                    LoadedLabwareConnectionTrackerInstance = (
-                        WorkbookInstance.GetLoadedLabwareConnectionTracker()
-                    )
+                # if WorkbookInstance.GetRunType() == "Run":
+                #    LoadedLabwareConnectionTrackerInstance = (
+                #        WorkbookInstance.GetLoadedLabwareConnectionTracker()
+                #    )
 
                 # Now we take the programmatic pipetting info and use it to do physical pipetting
 

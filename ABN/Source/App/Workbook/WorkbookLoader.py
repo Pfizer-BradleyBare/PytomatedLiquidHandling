@@ -1,6 +1,5 @@
 from ..Tools.Excel import Excel, ExcelHandle
 from .Block import BlockLoader, BlockTracker
-from .Solution import SolutionLoader, SolutionTracker
 from .Workbook import Workbook, WorkbookRunTypes
 from .WorkbookTracker import WorkbookTracker
 from .Worklist import Worklist
@@ -17,9 +16,6 @@ def Load(
         ExcelInstance.AttachHandle(ExcelHandleInstance)
 
         WorklistInstance = Worklist(ExcelInstance)
-        SolutionTrackerInstance = SolutionTracker()
-
-        SolutionLoader.Load(SolutionTrackerInstance, ExcelInstance)
 
         BlockTrackerInstance = BlockTracker()
         BlockLoader.Load(BlockTrackerInstance, ExcelInstance)
@@ -30,7 +26,6 @@ def Load(
                 ExcelFilePath,
                 BlockTrackerInstance,
                 WorklistInstance,
-                SolutionTrackerInstance,
                 BlockTracker(),
             )
         )

@@ -1,4 +1,4 @@
-from ...Tools.Container import Container
+from ...Tools.Container import Plate as PlateContainer
 from ...Tools.Context import Context
 from ...Tools.Excel import Excel, ExcelHandle
 from ...Workbook import Workbook
@@ -60,6 +60,8 @@ class Plate(Block):
             # Deactivate the previous context and active this new context
 
             ContainerTracker = WorkbookInstance.GetContainerTracker()
-            if ContainerTracker.IsTracked(PlateName) is False:
-                ContainerTracker.ManualLoad(Container(PlateName, PlateFilter))
+            if ContainerTracker.PlateTrackerInstance.IsTracked(PlateName) is False:
+                ContainerTracker.PlateTrackerInstance.ManualLoad(
+                    PlateContainer(PlateName, WorkbookInstance.GetName(), PlateFilter)
+                )
             # Create the container if it does not already exists

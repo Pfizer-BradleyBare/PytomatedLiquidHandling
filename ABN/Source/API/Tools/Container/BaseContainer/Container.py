@@ -9,7 +9,7 @@ class Container(ObjectABC):
     def __init__(self, Name: str, MethodName: str, Filter: str):
         self.Name: str = Name
         self.MethodName: str = MethodName
-        self.Filter: str = Filter
+        self.Filter: list[str] = [Filter]
 
     def GetName(self) -> str:
         return self.Name
@@ -18,7 +18,7 @@ class Container(ObjectABC):
         return self.MethodName
 
     def GetFilter(self) -> list[str]:
-        return [self.Filter]
+        return self.Filter
 
     @abstractmethod
     def GetVolume(self) -> float:
