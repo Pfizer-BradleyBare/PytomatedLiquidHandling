@@ -13,23 +13,26 @@ import os
 
 import web
 
-from ...HAL.Globals.HalInstance import HalInstance
-from ...Server.Tools.Parser import Parser
-from ..Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
-from ..Workbook import WorkbookLoader, WorkbookRunTypes
+from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Server.Tools.Parser import Parser
+from ...Workbook import WorkbookLoader, WorkbookRunTypes, WorkbookTracker
 
-urls = ("/Method/Queue", "ABN.Source.Server.Method.Queue.Queue")
+urls = ("/Method/Queue", "ABN.Source.App.Handler.Endpoints.Queue.Queue")
 
 
 class Queue:
     def POST(self):
-        ParserObject = Parser("Method Queue", web.data())
+        ParserObject = Parser("App Queue", web.data())
 
         if not ParserObject.IsValid(
             ["Method Path", "Action", "User Name", "User Contact Info"]
         ):
             Response = ParserObject.GetHTTPResponse()
             return Response
+
+        WorkbookTrackerInstance: WorkbookTracker = HandlerRegistry.GetObjectByName(
+            "App"
+        ).WorkbookTrackerInstance  # type:ignore
 
         MethodPath = ParserObject.GetAPIData()["Method Path"]
         Action = WorkbookRunTypes(ParserObject.GetAPIData()["Action"])
@@ -65,7 +68,7 @@ class Queue:
         if Action == WorkbookRunTypes.Run:
             Action = WorkbookRunTypes.PreRun
 
-        WorkbookLoader.Load(WorkbookTrackerInstance, HalInstance, MethodPath, Action)
+        WorkbookLoader.Load(WorkbookTrackerInstance, MethodPath, Action)
         # Load the workbook path into the tracker
 
         ParserObject.SetAPIState(True)

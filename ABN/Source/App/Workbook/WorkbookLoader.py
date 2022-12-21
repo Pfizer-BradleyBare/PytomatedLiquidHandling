@@ -1,6 +1,4 @@
-from ...HAL import Hal
-from ...Tools import Excel, ExcelHandle
-from ..Tools.LoadedLabwareConnection import LoadedLabwareConnectionTracker
+from ..Tools.Excel import Excel, ExcelHandle
 from .Block import BlockLoader, BlockTracker
 from .Solution import SolutionLoader, SolutionTracker
 from .Workbook import Workbook, WorkbookRunTypes
@@ -10,7 +8,6 @@ from .Worklist import Worklist
 
 def Load(
     WorkbookTrackerInstance: WorkbookTracker,
-    HalInstance: Hal,
     ExcelFilePath: str,
     RunType: WorkbookRunTypes,
 ):
@@ -29,13 +26,11 @@ def Load(
 
         WorkbookTrackerInstance.ManualLoad(
             Workbook(
-                HalInstance,
                 RunType,
                 ExcelFilePath,
                 BlockTrackerInstance,
                 WorklistInstance,
                 SolutionTrackerInstance,
-                LoadedLabwareConnectionTracker(),  # There will never be a deck loading unless we resume a run. But we havn't gotten there yet...
                 BlockTracker(),
             )
         )

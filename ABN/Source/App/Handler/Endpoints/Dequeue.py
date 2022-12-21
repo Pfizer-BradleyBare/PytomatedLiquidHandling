@@ -2,14 +2,14 @@
 
 import web
 
-from ...Server.Tools.Parser import Parser
+from ....Server.Tools.Parser import Parser
 
-urls = ("/Method/Dequeue", "ABN.Source.Server.Method.Dequeue.Dequeue")
+urls = ("/Method/Dequeue", "ABN.Source.App.Handler.Endpoints.Dequeue.Dequeue")
 
 
 class Dequeue:
     def POST(self):
-        ParserObject = Parser("Method Dequeue", web.data())
+        ParserObject = Parser("App Dequeue", web.data())
 
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()

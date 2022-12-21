@@ -1,22 +1,26 @@
 import web
 
-from ...Server.Tools.Parser import Parser
-from ..Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
-from ..Workbook import WorkbookRunTypes
+from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Server.Tools.Parser import Parser
+from ...Workbook import WorkbookRunTypes, WorkbookTracker
 
 urls = (
     "/Method/ListQueue",
-    "ABN.Source.Server.Method.ListQueue.ListQueue",
+    "ABN.Source.App.Handler.Endpoints.ListQueue.ListQueue",
 )
 
 
 class ListQueue:
     def GET(self):
-        ParserObject = Parser("Method ListQueue", web.data())
+        ParserObject = Parser("App ListQueue", web.data())
 
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()
             return Response
+
+        WorkbookTrackerInstance: WorkbookTracker = HandlerRegistry.GetObjectByName(
+            "App"
+        ).WorkbookTrackerInstance  # type:ignore
 
         RunningWorkbookNames = [
             Workbook.GetName()

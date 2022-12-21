@@ -2,14 +2,14 @@
 
 import web
 
-from ...Server.Tools.Parser import Parser
+from ....Server.Tools.Parser import Parser
 
-urls = ("/Method/Status", "ABN.Source.Server.Method.Status.Status")
+urls = ("/Method/Status", "ABN.Source.App.Handler.Endpoints.Status.Status")
 
 
 class Status:
     def POST(self):
-        ParserObject = Parser("Method Status", web.data())
+        ParserObject = Parser("App Status", web.data())
 
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()

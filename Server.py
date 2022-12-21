@@ -2,11 +2,12 @@ import os
 
 import web
 
-import ABN.Source.API.Handler.APIHandler as AH
-import ABN.Source.Driver.Handler.DriverHandler as DH
+import ABN.Source.API.Handler.APIHandler as APIH
+import ABN.Source.App.Handler.AppHandler as AppH
+import ABN.Source.Driver.Handler.DriverHandler as DriverH
 import ABN.Source.Server.Globals.HandlerRegistry as HR
 import ABN.Source.Server.Globals.Logger as Logger
-import ABN.Source.Server.Handler.ServerHandler as SH
+import ABN.Source.Server.Handler.ServerHandler as ServerH
 
 if __name__ == "__main__":
 
@@ -15,20 +16,23 @@ if __name__ == "__main__":
 
     Logger.LOG.info("Starting Server")
 
-    ServerHandler = SH.ServerHandler()
-    DriverHandler = DH.DriverHandler()
-    APIHandler = AH.APIHandler()
+    ServerHandler = ServerH.ServerHandler()
+    DriverHandler = DriverH.DriverHandler()
+    APIHandler = APIH.APIHandler()
+    AppHandler = AppH.AppHandler()
     # Create our handlers
 
     urls = ()
     urls += ServerHandler.GetEndpoints()
     urls += DriverHandler.GetEndpoints()
     urls += APIHandler.GetEndpoints()
+    urls += AppHandler.GetEndpoints()
     # Add endpoints as addresses we can access over HTTP
 
     HR.HandlerRegistry.ManualLoad(ServerHandler)
     HR.HandlerRegistry.ManualLoad(DriverHandler)
     HR.HandlerRegistry.ManualLoad(APIHandler)
+    HR.HandlerRegistry.ManualLoad(AppHandler)
     # Register each handler with our main server
 
     app = web.application(urls, globals())

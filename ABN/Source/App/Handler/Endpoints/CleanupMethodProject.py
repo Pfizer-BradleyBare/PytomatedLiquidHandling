@@ -2,19 +2,20 @@ import os
 
 import web
 
-from ...Server.Tools.Parser import Parser
-from ..Globals.WorkbookTrackerInstance import WorkbookTrackerInstance
+from ....Server.Globals.HandlerRegistry import HandlerRegistry
+from ....Server.Tools.Parser import Parser
+from ...Workbook import WorkbookTracker
 from .AvailableMethods import MethodsPath, TempFolder
 
 urls = (
     "/Method/CleanupMethodProject",
-    "ABN.Source.Server.Method.CleanupMethodProject.CleanupMethodProject",
+    "ABN.Source.App.Handler.Endpoints.CleanupMethodProject.CleanupMethodProject",
 )
 
 
 class CleanupMethodProject:
     def POST(self):
-        ParserObject = Parser("Method CleanupMethodProject", web.data())
+        ParserObject = Parser("App CleanupMethodProject", web.data())
 
         if not ParserObject.IsValid(["Method", "Project"]):
             Response = ParserObject.GetHTTPResponse()
@@ -39,6 +40,10 @@ class CleanupMethodProject:
             Project,
             TempFolder,
         )
+
+        WorkbookTrackerInstance: WorkbookTracker = HandlerRegistry.GetObjectByName(
+            "App"
+        ).WorkbookTrackerInstance  # type:ignore
 
         QueuedFiles = [
             File.GetName() for File in WorkbookTrackerInstance.GetObjectsAsList()

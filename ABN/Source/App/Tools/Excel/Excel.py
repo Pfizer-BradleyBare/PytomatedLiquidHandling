@@ -1,4 +1,4 @@
-from ...Server.Globals import LOG
+from ....Server.Globals import LOG
 from .ExcelHandle import ExcelHandle
 
 

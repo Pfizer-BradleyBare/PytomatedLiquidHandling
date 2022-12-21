@@ -1,17 +1,17 @@
 import web
 import xlwings
 
-from ...Server.Tools.Parser import Parser
+from ....Server.Tools.Parser import Parser
 
 urls = (
     "/Method/Open",
-    "ABN.Source.Server.Method.Open.Open",
+    "ABN.Source.App.Handler.Endpoints.Open.Open",
 )
 
 
 class Open:
     def POST(self):
-        ParserObject = Parser("Method Open", web.data())
+        ParserObject = Parser("App Open", web.data())
 
         if not ParserObject.IsValid(["Method File Path"]):
             Response = ParserObject.GetHTTPResponse()

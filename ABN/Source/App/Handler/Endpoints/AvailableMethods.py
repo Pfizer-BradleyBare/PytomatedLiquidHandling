@@ -2,7 +2,7 @@ import os
 
 import web
 
-from ...Server.Tools.Parser import Parser
+from ....Server.Tools.Parser import Parser
 
 MethodsPath = "C:\\___MethodsTest"
 TemplateMethodSuffix = "__Template"
@@ -11,13 +11,13 @@ TempFolder = "Temp"
 
 urls = (
     "/Method/AvailableMethods",
-    "ABN.Source.Server.Method.AvailableMethods.AvailableMethods",
+    "ABN.Source.App.Handler.Endpoints.AvailableMethods.AvailableMethods",
 )
 
 
 class AvailableMethods:
     def GET(self):
-        ParserObject = Parser("Method AvailableMethods", web.data())
+        ParserObject = Parser("App AvailableMethods", web.data())
 
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()

@@ -4,12 +4,15 @@ import web
 
 from ....Server.Tools.Parser import Parser
 
-urls = ("/Driver/Request", "ABN.Source.Driver.Handler.Endpoints.Request.Request")
+urls = (
+    "/Driver/Request",
+    "ABN.Source.API.Handler.Endpoints.GetDevicesState.GetDevicesState",
+)
 
 
-class Request:
+class GetDevicesState:
     def GET(self):
-        ParserObject = Parser("Driver Request", web.data())
+        ParserObject = Parser("API GetDevicesState", web.data())
 
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()

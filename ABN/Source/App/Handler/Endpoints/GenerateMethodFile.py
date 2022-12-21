@@ -5,19 +5,19 @@ from typing import cast
 
 import web
 
-from ...Server.Tools.Parser import Parser
-from ...Tools import Excel, ExcelHandle
+from ....Server.Tools.Parser import Parser
+from ...Tools.Excel import Excel, ExcelHandle
 from .AvailableMethods import MethodsPath, TempFolder, TemplateMethodSuffix
 
 urls = (
     "/Method/GenerateMethodFile",
-    "ABN.Source.Server.Method.GenerateMethodFile.GenerateMethodFile",
+    "ABN.Source.App.Handler.Endpoints.GenerateMethodFile.GenerateMethodFile",
 )
 
 
 class GenerateMethodFile:
     def POST(self):
-        ParserObject = Parser("Method GenerateMethodFile", web.data())
+        ParserObject = Parser("App GenerateMethodFile", web.data())
 
         if not ParserObject.IsValid(
             ["Method", "Project", "Desired Filename", "Sample Number"]
