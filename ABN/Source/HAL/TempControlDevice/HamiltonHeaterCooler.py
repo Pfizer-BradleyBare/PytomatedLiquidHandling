@@ -11,6 +11,10 @@ from ...Driver.TemperatureControl.HeaterCooler import (
 from ...Driver.Tools import CommandTracker
 from ..Layout import LayoutItemGroupingTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
+from .BaseTempControlDevice.Interface import (
+    InitializeCallback,
+    UpdateCurrentTemperatureCallback,
+)
 
 
 class HamiltonHeaterCooler(TempControlDevice):
@@ -37,11 +41,13 @@ class HamiltonHeaterCooler(TempControlDevice):
 
         ReturnCommandTracker.ManualLoad(
             ConnectCommand(
-                "", True, ConnectOptions("", self.ComPort)  # type:ignore
+                "",
+                True,
+                ConnectOptions("", self.ComPort),  # type:ignore
+                InitializeCallback,
+                (self,),
             )
         )
-
-        self.HandleID = CommandInstance.GetResponse().GetAdditional()["HandleID"]
 
         return ReturnCommandTracker
 
@@ -80,12 +86,10 @@ class HamiltonHeaterCooler(TempControlDevice):
                 "",
                 True,
                 GetTemperatureOptions("", self.HandleID),
+                UpdateCurrentTemperatureCallback,
+                (self,),
             )
         )
-
-        self.CurrentTemperature = CommandInstance.GetResponse().GetAdditional()[
-            "Temperature"
-        ]
 
         return ReturnCommandTracker
 

@@ -19,6 +19,11 @@ from ...Driver.TemperatureControl.HeaterShaker import (
 from ...Driver.Tools import CommandTracker
 from ..Layout import LayoutItemGroupingTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
+from .BaseTempControlDevice.Interface import (
+    InitializeCallback,
+    UpdateCurrentShakingSpeedCallback,
+    UpdateCurrentTemperatureCallback,
+)
 
 
 class HamiltonHeaterShaker(TempControlDevice):
@@ -45,10 +50,13 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         ReturnCommandTracker.ManualLoad(
             ConnectCommand(
-                "", True, ConnectOptions("", self.ComPort)  # type:ignore
+                "",
+                True,
+                ConnectOptions("", self.ComPort),  # type:ignore
+                InitializeCallback,
+                (self,),
             )
         )
-        self.HandleID = CommandInstance.GetResponse().GetAdditional()["HandleID"]
 
         ReturnCommandTracker.ManualLoad(
             SetPlateLockCommand(
@@ -119,12 +127,10 @@ class HamiltonHeaterShaker(TempControlDevice):
                 "",
                 True,
                 GetTemperatureOptions("", self.HandleID),
+                UpdateCurrentTemperatureCallback,
+                (self,),
             )
         )
-
-        self.CurrentTemperature = CommandInstance.GetResponse().GetAdditional()[
-            "Temperature"
-        ]
 
         return ReturnCommandTracker
 
@@ -181,11 +187,9 @@ class HamiltonHeaterShaker(TempControlDevice):
                 "",
                 True,
                 GetShakingSpeedOptions("", self.HandleID),
+                UpdateCurrentShakingSpeedCallback,
+                (self,),
             )
         )
-
-        self.CurrentShakingSpeed = CommandInstance.GetResponse().GetAdditional()[
-            "ShakingSpeed"
-        ]
 
         return ReturnCommandTracker
