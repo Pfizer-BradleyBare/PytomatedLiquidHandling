@@ -1,5 +1,6 @@
 from ...Tools.AbstractClasses import ObjectABC
 from ..DeckLocation import DeckLocation
+from ..Labware import Labware
 from .LayoutItem.LayoutItem import LayoutItem
 
 
@@ -25,3 +26,6 @@ class LayoutItemGrouping(ObjectABC):
 
     def GetDeckLocation(self) -> DeckLocation:
         return self.PlateLayoutItemInstance.DeckLocationInstance
+
+    def GetLabware(self) -> Labware:
+        return self.PlateLayoutItemInstance.LabwareInstance
