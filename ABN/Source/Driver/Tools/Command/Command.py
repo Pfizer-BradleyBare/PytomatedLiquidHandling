@@ -1,16 +1,25 @@
 from abc import abstractmethod
 from threading import Event
+from typing import Callable
 
 from ....Tools.AbstractClasses import ObjectABC
 from .Response.Response import Response
 
 
 class Command(ObjectABC):
-    def __init__(self, Name: str, CustomErrorHandling: bool):
+    def __init__(
+        self,
+        Name: str,
+        CustomErrorHandling: bool,
+        CallbackFunction: Callable[[list], None] | None = None,
+        CallbackArgs: list | None = None,
+    ):
         self.ResponseInstance: Response | None = None
         self.ResponseEvent: Event = Event()
         self.Name: str = Name
         self.CustomErrorHandling: bool = CustomErrorHandling
+        self.CallbackFunction: Callable[[list], None] | None = CallbackFunction
+        self.CallbackArgs: list | None = CallbackArgs
 
     def GetName(self) -> str:
         return self.Name

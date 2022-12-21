@@ -30,6 +30,14 @@ class DriverHandler(ServerHandlerABC):
 
         TimeoutFlag = CommandInstance.ResponseEvent.wait(Timeout)
 
+        if (
+            TimeoutFlag is True
+            and CommandInstance.CallbackFunction is not None
+            and CommandInstance.CallbackArgs is not None
+        ):
+
+            CommandInstance.CallbackFunction(CommandInstance.CallbackArgs)
+
         self.CommandTrackerInstance.ManualUnload(CommandInstance)
 
         return TimeoutFlag

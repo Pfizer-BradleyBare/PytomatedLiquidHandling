@@ -40,7 +40,7 @@ class Block(ObjectABC, Node):
         self.ExcelInstance: Excel = ExcelInstance
         self.Row: int = Row
         self.Col: int = Col
-        self.Context: str
+        self.Context: str  # This is set automatically in the block loader FIY.
 
     def __eq__(self, other):
         if not isinstance(other, Block):
