@@ -1,4 +1,4 @@
-# curl -H "Content-Type: application/json" -X POST -d "{\"Method Path\":\"C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\_Template_MAM.xlsm\",\"Action\":\"Test\"}" http://localhost:65535/Method/Queue
+# curl -H "Content-Type: application/json" -X POST -d "{\"Method Path\":\"C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\_Template_MAM.xlsm\",\"Action\":\"Test\",\"User Name\":\"Test\",\"User Contact Info\":\"Test\"}" http://localhost:255/Method/Queue
 
 # ##### API Definition #####
 #
