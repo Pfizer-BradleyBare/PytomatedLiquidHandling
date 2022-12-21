@@ -1,6 +1,6 @@
 from .....Tools.AbstractClasses import ObjectABC
-from ..BaseLabware.Labware import Labware
-from ..BaseLabware.LiquidClassCategory.LiquidClassCategory import LiquidClassCategory
+from ..BaseContainer.Container import Container
+from ..BaseContainer.LiquidClassCategory.LiquidClassCategory import LiquidClassCategory
 from ..Plate.Well.WellSolution.WellSolution import WellSolution
 from ..Plate.Well.WellSolution.WellSolutionTracker import WellSolutionTracker
 from ..Reagent.ReagentProperty import (
@@ -14,9 +14,9 @@ from .Well.Well import Well
 from .Well.WellTracker import WellTracker
 
 
-class Plate(Labware):
+class Plate(Container):
     def __init__(self, Name: str, MethodName: str, Filter: str):
-        Labware.__init__(self, Name, MethodName, Filter)
+        Container.__init__(self, Name, MethodName, Filter)
 
         # What solutions and volume is in each well
         self.WellTrackerInstance: WellTracker = WellTracker()

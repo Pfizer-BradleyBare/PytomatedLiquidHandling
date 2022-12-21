@@ -1,12 +1,12 @@
 from ...HAL.Lid import Lid
 from ...Server.Globals.HandlerRegistry import HandlerRegistry
-from ..Tools.Labware.BaseLabware import Labware as APILabware
+from ..Tools.Container.BaseContainer import Container
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Transport.Transport import Transport
 
 
 def Cover(
-    APILabwareInstance: APILabware,
+    ContainerInstance: Container,
     LidInstance: Lid,
 ):
 
@@ -17,7 +17,7 @@ def Cover(
     )
 
     LoadedLabwareAssignmentInstances = (
-        LoadedLabwareTrackerInstance.GetLabwareAssignments(APILabwareInstance)
+        LoadedLabwareTrackerInstance.GetLabwareAssignments(ContainerInstance)
     )
 
     LoadedLabwareInstance = LoadedLabwareAssignmentInstances.GetObjectsAsList()[0]

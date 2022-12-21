@@ -1,14 +1,14 @@
 from ...HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
 from ..DeckLocation.MoveToPipette import MoveToPipette
-from ..Tools.Labware.BaseLabware import Labware as APILabware
+from ..Tools.Container.BaseContainer import Container
 
 
 def End(
-    APILabwareInstance: APILabware,
+    ContainerInstance: Container,
     TempControlDeviceInstance: TempControlDevice,
 ):
 
     TempControlDeviceInstance.SetTemperature(25)
     TempControlDeviceInstance.StopShaking()
 
-    MoveToPipette(APILabwareInstance)
+    MoveToPipette(ContainerInstance)

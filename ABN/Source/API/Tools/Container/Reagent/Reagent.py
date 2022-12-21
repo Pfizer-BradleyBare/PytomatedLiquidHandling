@@ -1,5 +1,5 @@
-from ..BaseLabware.Labware import Labware
-from ..BaseLabware.LiquidClassCategory.LiquidClassCategory import LiquidClassCategory
+from ..BaseContainer.Container import Container
+from ..BaseContainer.LiquidClassCategory.LiquidClassCategory import LiquidClassCategory
 from ..Plate.Well.WellSolution.WellSolution import WellSolution
 from ..Plate.Well.WellSolution.WellSolutionTracker import WellSolutionTracker
 from .ReagentProperty import (
@@ -10,7 +10,7 @@ from .ReagentProperty import (
 )
 
 
-class Reagent(Labware):
+class Reagent(Container):
     def __init__(
         self,
         Name: str,
@@ -20,7 +20,7 @@ class Reagent(Labware):
         Homogeneity: HomogeneityReagentProperty,
         LLD: LLDReagentProperty,
     ):
-        Labware.__init__(self, Name, MethodName, "No Preference")
+        Container.__init__(self, Name, MethodName, "No Preference")
 
         self.Volatility: VolatilityReagentProperty = Volatility
         self.Viscosity: ViscosityReagentProperty = Viscosity

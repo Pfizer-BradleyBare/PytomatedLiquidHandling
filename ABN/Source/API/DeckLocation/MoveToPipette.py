@@ -1,13 +1,13 @@
 from ...Server.Globals.HandlerRegistry import HandlerRegistry
+from ..Tools.Container.BaseContainer import Container
 from ..Tools.HALLayer.HALLayer import HALLayer
-from ..Tools.Labware.BaseLabware import Labware as APILabware
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 from ..Transport.Tools.GetLayoutItem import GetLayoutItem
 from ..Transport.Transport import Transport
 
 
-def MoveToPipette(APILabwareInstance: APILabware) -> bool:
+def MoveToPipette(ContainerInstance: Container) -> bool:
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
         HandlerRegistry.GetObjectByName(
@@ -26,7 +26,7 @@ def MoveToPipette(APILabwareInstance: APILabware) -> bool:
     DeckLocationTrackerInstance = HALLayerInstance.DeckLocationTrackerInstance
 
     LoadedLabwareAssignmentInstances = (
-        LoadedLabwareTrackerInstance.GetLabwareAssignments(APILabwareInstance)
+        LoadedLabwareTrackerInstance.GetLabwareAssignments(ContainerInstance)
     )
 
     for (

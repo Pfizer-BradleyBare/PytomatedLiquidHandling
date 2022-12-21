@@ -5,7 +5,7 @@ from ..Plate.Well.WellSolution.WellSolutionTracker import WellSolutionTracker
 from .LiquidClassCategory.LiquidClassCategory import LiquidClassCategory
 
 
-class Labware(ObjectABC):
+class Container(ObjectABC):
     def __init__(self, Name: str, MethodName: str, Filter: str):
         self.Name: str = Name
         self.MethodName: str = MethodName

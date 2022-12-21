@@ -1,21 +1,21 @@
 from typing import cast
 
-from ....HAL.Labware import LabwareTracker as HALLabwareTracker
+from ....HAL.Labware import LabwareTracker
 from ....Server.Globals.HandlerRegistry import HandlerRegistry
-from ..Labware.BaseLabware.LabwareTracker import LabwareTracker as APILabwareTracker
+from ..Container.BaseContainer.ContainerTracker import ContainerTracker
 from .LabwareSelection import LabwareSelection
 from .LabwareSelectionTracker import LabwareSelectionTracker
 
 
 def Load(
-    APILabwareTrackerInstance: APILabwareTracker,
+    ContainerTrackerInstance: ContainerTracker,
 ) -> LabwareSelectionTracker:
     LabwareSelectionTrackerInstance = LabwareSelectionTracker()
 
-    APILabwareInstances = list(
+    ContainerInstances = list(
         (
-            APILabwareTrackerInstance.GetReagentTracker().GetObjectsAsDictionary()
-            | APILabwareTrackerInstance.GetPlateTracker().GetObjectsAsDictionary()
+            ContainerTrackerInstance.GetReagentTracker().GetObjectsAsDictionary()
+            | ContainerTrackerInstance.GetPlateTracker().GetObjectsAsDictionary()
         ).values()
         # This effectively gets all labware then overwrites the reagent with the plate entry if there are duplicates
     )
@@ -23,31 +23,29 @@ def Load(
     # NOTE: reagents and plates can have entries of the same name.
     # We will always prioritize plate entries, so the reagent entry is ignored.
 
-    HALLabwareTrackerInstance: HALLabwareTracker = HandlerRegistry.GetObjectByName(
+    LabwareTrackerInstance: LabwareTracker = HandlerRegistry.GetObjectByName(
         "API"
     ).HALLayerInstance.LabwareTrackerInstance  # type:ignore
 
-    for APILabwareInstance in APILabwareInstances:
+    for ContainerInstance in ContainerInstances:
 
-        Volume = APILabwareInstance.GetVolume()
+        Volume = ContainerInstance.GetVolume()
 
-        SymbolicLabwareFilters = APILabwareInstance.GetFilter()
+        SymbolicLabwareFilters = ContainerInstance.GetFilter()
 
         if Volume == 0:
             continue
         # We don't want to load a SymbolicLabware if it effectively is never used.
 
         HALPipettableLabwareInstances = [
-            HALLabwareInstance
-            for HALLabwareInstance in HALLabwareTrackerInstance.GetObjectsAsList()
-            if HALLabwareInstance.LabwareWells != None
+            LabwareInstance
+            for LabwareInstance in LabwareTrackerInstance.GetObjectsAsList()
+            if LabwareInstance.LabwareWells != None
         ]
         # Gets only the pipettableLabware
 
-        LabwareSelectionInstance = LabwareSelection(APILabwareInstance)
-        PreferredLabwareTrackerInstance = (
-            LabwareSelectionInstance.GetHALLabwareTracker()
-        )
+        LabwareSelectionInstance = LabwareSelection(ContainerInstance)
+        PreferredLabwareTrackerInstance = LabwareSelectionInstance.GetLabwareTracker()
 
         for LabwareInstance in sorted(
             HALPipettableLabwareInstances,

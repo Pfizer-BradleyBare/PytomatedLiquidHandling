@@ -2,16 +2,16 @@ from typing import Self
 
 from ....Server.Globals.HandlerRegistry import HandlerRegistry
 from ....Tools.AbstractClasses import TrackerABC
-from ..Labware.BaseLabware import Labware as APILabware
+from ..Container.BaseContainer import Container
 from .LoadedLabware import LoadedLabware
 
 
 class LoadedLabwareTracker(TrackerABC[LoadedLabware]):
-    def GetLabwareAssignments(self, APILabwareInstance: APILabware) -> Self:
+    def GetLabwareAssignments(self, ContainerInstance: Container) -> Self:
 
         ReturnLoadedLabwareTrackerInstance = LoadedLabwareTracker()
         # We need to keep in mind that there is a very slim possibility that
-        # APIlabware can be loaded in 2 different physical labware. We may prevent
+        # Container can be loaded in 2 different physical labware. We may prevent
         # this entirely but it is good to support here
 
         LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
@@ -26,7 +26,7 @@ class LoadedLabwareTracker(TrackerABC[LoadedLabware]):
                 WellAssignmentInstance
             ) in LoadedLabwareInstance.GetWellAssignmentTracker().GetObjectsAsList():
                 if WellAssignmentInstance.TestAsignment(
-                    APILabwareInstance.GetMethodName(), APILabwareInstance.GetName()
+                    ContainerInstance.GetMethodName(), ContainerInstance.GetName()
                 ):
                     ReturnLoadedLabwareTrackerInstance.ManualLoad(LoadedLabwareInstance)
                     break

@@ -1,13 +1,13 @@
 from ...HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
 from ...Server.Globals.HandlerRegistry import HandlerRegistry
+from ..Tools.Container.BaseContainer import Container
 from ..Tools.HALLayer.HALLayer import HALLayer
-from ..Tools.Labware.BaseLabware import Labware as APILabware
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 
 
 def Reserve(
-    APILabwareInstance: APILabware, Temperature: float, ShakingSpeed: int
+    ContainerInstance: Container, Temperature: float, ShakingSpeed: int
 ) -> TempControlDevice | None:
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
@@ -25,15 +25,15 @@ def Reserve(
     ).ResourceLockTrackerInstance  # type:ignore
 
     LoadedLabwareAssignmentInstances = (
-        LoadedLabwareTrackerInstance.GetLabwareAssignments(APILabwareInstance)
+        LoadedLabwareTrackerInstance.GetLabwareAssignments(ContainerInstance)
     )
 
     if len(LoadedLabwareAssignmentInstances.GetObjectsAsList()) > 1:
         raise Exception(
-            "There is more than one labware assignment for this APILabware. This must mean this is not a plate. Please Correct"
+            "There is more than one labware assignment for this Container. This must mean this is not a plate. Please Correct"
         )
 
-    HALLabwareInstance = LoadedLabwareAssignmentInstances.GetObjectsAsList()[
+    LabwareInstance = LoadedLabwareAssignmentInstances.GetObjectsAsList()[
         0
     ].LayoutItemGroupingInstance.PlateLayoutItemInstance.LabwareInstance
     # Here we are getting the HAL labware of the plate we need to incubate/cool etc.
@@ -48,7 +48,7 @@ def Reserve(
         for Device in HALLayerInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
         if not ResourceLockTrackerInstance.IsTracked(Device.GetName())
         and Device.ShakingSupported >= RequiresShaking
-        and HALLabwareInstance
+        and LabwareInstance
         in [
             LayoutItemInstance.PlateLayoutItemInstance.LabwareInstance
             for LayoutItemInstance in Device.SupportedLayoutItemGroupingTrackerInstance.GetObjectsAsList()
@@ -59,7 +59,7 @@ def Reserve(
     # This is a big one. Not as complex as it looks:
     # 1. The device must not be tracked
     # 2. The device must only support shaking if we require shaking.
-    # 3. The HALLabware of our APILabware must be supported by that device
+    # 3. The Labware of our Container must be supported by that device
     # 4 and 5. The temperature must fall within the support temp range of the device
 
     if len(TempControlDeviceInstances) == 0:

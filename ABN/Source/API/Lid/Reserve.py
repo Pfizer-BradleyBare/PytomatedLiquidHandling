@@ -1,12 +1,12 @@
 from ...HAL.Lid.Lid import Lid
 from ...Server.Globals.HandlerRegistry import HandlerRegistry
+from ..Tools.Container.BaseContainer import Container
 from ..Tools.HALLayer.HALLayer import HALLayer
-from ..Tools.Labware.BaseLabware import Labware as APILabware
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 
 
-def Reserve(APILabwareInstance: APILabware) -> Lid | None:
+def Reserve(ContainerInstance: Container) -> Lid | None:
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
         HandlerRegistry.GetObjectByName(
@@ -23,15 +23,15 @@ def Reserve(APILabwareInstance: APILabware) -> Lid | None:
     ).ResourceLockTrackerInstance  # type:ignore
 
     LoadedLabwareAssignmentInstances = (
-        LoadedLabwareTrackerInstance.GetLabwareAssignments(APILabwareInstance)
+        LoadedLabwareTrackerInstance.GetLabwareAssignments(ContainerInstance)
     )
 
     if len(LoadedLabwareAssignmentInstances.GetObjectsAsList()) > 1:
         raise Exception(
-            "There is more than one labware assignment for this APILabware. This must mean this is not a plate. Please Correct"
+            "There is more than one labware assignment for this Container. This must mean this is not a plate. Please Correct"
         )
 
-    HALLabwareInstance = LoadedLabwareAssignmentInstances.GetObjectsAsList()[
+    LabwareInstance = LoadedLabwareAssignmentInstances.GetObjectsAsList()[
         0
     ].LayoutItemGroupingInstance.PlateLayoutItemInstance.LabwareInstance
     # Here we are getting the HAL labware of the plate we need to incubate/cool etc.
@@ -40,7 +40,7 @@ def Reserve(APILabwareInstance: APILabware) -> Lid | None:
         Lid
         for Lid in HALLayerInstance.LidTrackerInstance.GetObjectsAsList()
         if not ResourceLockTrackerInstance.IsTracked(Lid.GetName())
-        and Lid.SupportedLabwareTrackerInstance.IsTracked(HALLabwareInstance.GetName())
+        and Lid.SupportedLabwareTrackerInstance.IsTracked(LabwareInstance.GetName())
     ]
     # This is a big one. Not as complex as it looks:
     # 1. The Lid must not be tracked

@@ -1,21 +1,21 @@
 from ....Tools.AbstractClasses import ObjectABC
-from ...Tools.Labware.BaseLabware import Labware as APILabware
+from ...Tools.Container.BaseContainer import Container
 
 
 class TransferOptions(ObjectABC):
     def __init__(
         self,
         Name: str,
-        SourceAPILabware: APILabware,
+        SourceContainerInstance: Container,
         SourceMixCycles: int,
-        DestinationAPILabware: APILabware,
+        DestinationContainerInstance: Container,
         DesitnationMixCycles: int,
         TransferVolume: float,
     ):
         self.Name: str = Name
 
-        self.SourceAPILabware: APILabware = SourceAPILabware
-        self.DestinationAPILabware: APILabware = DestinationAPILabware
+        self.SourceContainerInstance: Container = SourceContainerInstance
+        self.DestinationContainerInstance: Container = DestinationContainerInstance
 
         self.SourceMixCycles: int = SourceMixCycles
         self.DesitnationMixCycles: int = DesitnationMixCycles

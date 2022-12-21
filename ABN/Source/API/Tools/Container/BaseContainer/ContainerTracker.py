@@ -15,7 +15,7 @@ from ..Reagent.ReagentTracker import ReagentTracker
 # This could be improved by making it a plate tracker with a reagent tracker as an instance variables. Considerations...
 
 
-class LabwareTracker:
+class ContainerTracker:
     def __init__(self):
         self.PlateTrackerInstance: PlateTracker = PlateTracker()
         self.ReagentTrackerInstance: ReagentTracker = ReagentTracker()

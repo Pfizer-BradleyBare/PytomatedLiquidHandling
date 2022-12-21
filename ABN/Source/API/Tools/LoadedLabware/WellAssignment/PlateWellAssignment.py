@@ -1,4 +1,4 @@
-from ...Labware.Plate.Plate import Plate
+from ...Container.Plate.Plate import Plate
 from .BaseWellAssignment.WellAssignment import WellAssignment
 
 

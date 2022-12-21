@@ -1,4 +1,4 @@
-from ...Labware.Reagent.Reagent import Reagent
+from ...Container.Reagent.Reagent import Reagent
 from .BaseWellAssignment.WellAssignment import WellAssignment
 
 
