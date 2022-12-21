@@ -2,6 +2,7 @@ from ...HAL.Layout import LayoutItem
 from ...Server.Globals.HandlerRegistry import HandlerRegistry
 from ..Tools.Labware.BaseLabware import Labware as APILabware
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
+from .Tools.GetCommonTransportDevice import GetCommonTransportDevice
 
 
 def Transport(
@@ -46,23 +47,30 @@ def Transport(
         ]
         # Pull just the transport devices
 
+        LayoutItemInstancePathway = list()
         if not any(
             Device in DestinationTransportDevices for Device in SourceTransportDevices
         ):
-            LayoutItemInstancePathway = list()
-            # TODO
+
+            # TODO This is the hard part. I have literally no clue. Recursion here I come?
             ...
             # We need to find a pathway then...
         else:
-            LayoutItemInstancePathway = [
-                SourceLayoutItemInstance,
-                DestinationLayoutItemInstance,
-            ]
-        # Is source and destination use the same transport devices?
+            LayoutItemInstancePathway.append(SourceLayoutItemInstance)
+            LayoutItemInstancePathway.append(DestinationLayoutItemInstance)
+        # Does source and destination use the same transport devices?
 
-        for i in range(0, len(LayoutItemInstancePathway) - 1):
-            # TODO
-            ...
+        for Index in range(0, len(LayoutItemInstancePathway) - 1):
+            SourceLayoutItemInstance = LayoutItemInstancePathway[Index]
+            DestinationLayoutItemInstance = LayoutItemInstancePathway[Index + 1]
+
+            TransportDeviceInstance = GetCommonTransportDevice(
+                SourceLayoutItemInstance, DestinationLayoutItemInstance
+            )
+
+            TransportDeviceInstance.Transport(
+                SourceLayoutItemInstance, DestinationLayoutItemInstance
+            )
         # Do the transports
 
         # Done
