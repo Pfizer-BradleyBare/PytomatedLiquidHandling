@@ -35,7 +35,7 @@ def Reserve(
 
     HALLabwareInstance = LoadedLabwareAssignmentInstances.GetObjectsAsList()[
         0
-    ].LayoutItemInstance.LabwareInstance
+    ].LayoutItemGroupingInstance.PlateLayoutItemInstance.LabwareInstance
     # Here we are getting the HAL labware of the plate we need to incubate/cool etc.
 
     if ShakingSpeed == 0:
@@ -50,8 +50,8 @@ def Reserve(
         and Device.ShakingSupported >= RequiresShaking
         and HALLabwareInstance
         in [
-            LayoutItemInstance.LabwareInstance
-            for LayoutItemInstance in Device.SupportedLayoutItemTrackerInstance.GetObjectsAsList()
+            LayoutItemInstance.PlateLayoutItemInstance.LabwareInstance
+            for LayoutItemInstance in Device.SupportedLayoutItemGroupingTrackerInstance.GetObjectsAsList()
         ]
         and Temperature >= Device.TempLimitsInstance.MinimumTemp
         and Temperature <= Device.TempLimitsInstance.MaximumTemp

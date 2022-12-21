@@ -20,7 +20,7 @@ from ...Driver.TemperatureControl.HeaterShaker import (
     StopTemperatureControlOptions,
 )
 from ...Server.Globals.HandlerRegistry import HandlerRegistry
-from ..Layout import LayoutItemTracker
+from ..Layout import LayoutItemGroupingTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
 
 
@@ -30,10 +30,15 @@ class HamiltonHeaterShaker(TempControlDevice):
         Name: str,
         ComPort: str,
         TempLimitsInstance: TempLimits,
-        LayoutItemTrackerInstance: LayoutItemTracker,
+        LayoutItemGroupingTrackerInstance: LayoutItemGroupingTracker,
     ):
         TempControlDevice.__init__(
-            self, Name, ComPort, True, TempLimitsInstance, LayoutItemTrackerInstance
+            self,
+            Name,
+            ComPort,
+            True,
+            TempLimitsInstance,
+            LayoutItemGroupingTrackerInstance,
         )
         self.HandleID: int
 

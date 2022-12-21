@@ -28,22 +28,28 @@ def Start(
     )
 
     LoadedLabwareInstance = LoadedLabwareAssignmentInstances.GetObjectsAsList()[0]
-    SourceLayoutItemInstance = LoadedLabwareInstance.LayoutItemInstance
+    SourceLayoutItemGroupingInstance = LoadedLabwareInstance.LayoutItemGroupingInstance
 
-    DestinationLayoutItemInstance = [
+    DestinationLayoutItemGroupingInstance = [
         LayoutItem
-        for LayoutItem in TempControlDeviceInstance.SupportedLayoutItemTrackerInstance.GetObjectsAsList()
-        if LayoutItem.LabwareInstance == SourceLayoutItemInstance.LabwareInstance
+        for LayoutItem in TempControlDeviceInstance.SupportedLayoutItemGroupingTrackerInstance.GetObjectsAsList()
+        if LayoutItem.PlateLayoutItemInstance.LabwareInstance
+        == SourceLayoutItemGroupingInstance.PlateLayoutItemInstance.LabwareInstance
     ][0]
 
-    Transport(SourceLayoutItemInstance, DestinationLayoutItemInstance)
+    Transport(
+        SourceLayoutItemGroupingInstance.PlateLayoutItemInstance,
+        DestinationLayoutItemGroupingInstance.PlateLayoutItemInstance,
+    )
     ResourceLockTrackerInstance.ManualUnload(
-        SourceLayoutItemInstance.DeckLocationInstance
+        SourceLayoutItemGroupingInstance.GetDeckLocation()
     )
     ResourceLockTrackerInstance.ManualLoad(
-        DestinationLayoutItemInstance.DeckLocationInstance
+        DestinationLayoutItemGroupingInstance.GetDeckLocation()
     )
-    LoadedLabwareInstance.LayoutItemInstance = DestinationLayoutItemInstance
+    LoadedLabwareInstance.LayoutItemGroupingInstance = (
+        DestinationLayoutItemGroupingInstance
+    )
     # Move first.
 
     TempControlDeviceInstance.SetTemperature(Temperature)

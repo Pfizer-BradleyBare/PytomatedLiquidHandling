@@ -35,7 +35,7 @@ def MoveToLoad(APILabwareInstance: APILabware) -> bool:
     ) in LoadedLabwareAssignmentInstances.GetObjectsAsList():
 
         if (
-            LoadedLabwareAssignmentInstance.LayoutItemInstance.DeckLocationInstance.IsLoadableLocation()
+            LoadedLabwareAssignmentInstance.LayoutItemGroupingInstance.GetDeckLocation().IsLoadableLocation()
         ):
             continue
         # Is it already in the appropriate location?
@@ -52,25 +52,25 @@ def MoveToLoad(APILabwareInstance: APILabware) -> bool:
             return False
 
         for PossibleDeckLocationInstance in PossibleDeckLocationInstances:
-            DestinationLayoutItemInstance = GetLayoutItem(
+            DestinationLayoutGroupingItemInstance = GetLayoutItem(
                 PossibleDeckLocationInstance,
-                LoadedLabwareAssignmentInstance.LayoutItemInstance.LabwareInstance,
+                LoadedLabwareAssignmentInstance.LayoutItemGroupingInstance.PlateLayoutItemInstance.LabwareInstance,
             )
             # Try to get the layout item for this deck location
 
-            if DestinationLayoutItemInstance is None:
+            if DestinationLayoutGroupingItemInstance is None:
                 continue
             # If there isn't a valid item then we will try the next location
 
             ResourceLockTrackerInstance.ManualUnload(
-                LoadedLabwareAssignmentInstance.LayoutItemInstance.DeckLocationInstance
+                LoadedLabwareAssignmentInstance.LayoutItemGroupingInstance.GetDeckLocation()
             )
             ResourceLockTrackerInstance.ManualLoad(PossibleDeckLocationInstance)
             # Unload the old location and load the new location. Old location and now available and new location and reserved
 
             Transport(
-                LoadedLabwareAssignmentInstance.LayoutItemInstance,
-                DestinationLayoutItemInstance,
+                LoadedLabwareAssignmentInstance.LayoutItemGroupingInstance.PlateLayoutItemInstance,
+                DestinationLayoutGroupingItemInstance.PlateLayoutItemInstance,
             )
 
             break

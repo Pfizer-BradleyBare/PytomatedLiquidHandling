@@ -1,7 +1,7 @@
-from ....HAL.DeckLocation import DeckLocationTracker
 from ....HAL.ClosedContainers.BaseClosedContainers import ClosedContainersTracker
+from ....HAL.DeckLocation import DeckLocationTracker
 from ....HAL.Labware import LabwareTracker
-from ....HAL.Layout import LayoutItemTracker
+from ....HAL.Layout import LayoutItemGroupingTracker
 from ....HAL.Lid import LidTracker
 
 # from ....HAL.MagneticRack import MagneticRackTracker
@@ -17,7 +17,7 @@ class HALLayer:
         self.DeckLocationTrackerInstance: DeckLocationTracker
         self.ClosedContainersTrackerInstance: ClosedContainersTracker
         self.LabwareTrackerInstance: LabwareTracker
-        self.LayoutItemTrackerInstance: LayoutItemTracker
+        self.LayoutItemGroupingTrackerInstance: LayoutItemGroupingTracker
         self.LidTrackerInstance: LidTracker
         #   self.MagneticRackTrackerInstance: MagneticRackTracker
         self.NotifyTrackerInstance: NotifyTracker

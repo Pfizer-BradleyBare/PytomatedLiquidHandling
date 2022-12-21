@@ -40,7 +40,7 @@ def LoadYaml(
             LidTrackerInstance.ManualLoad(
                 Lid(
                     LidID,
-                    LayoutItem(LidSequence, None, LidLocation, LidLabware),
+                    LayoutItem(LidSequence, LidLocation, LidLabware),
                     SupportedLabwareTrackerInstance,
                 )
             )

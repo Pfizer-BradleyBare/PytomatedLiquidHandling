@@ -2,7 +2,7 @@ import yaml
 
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker
-from ..Layout import LayoutItem, LayoutItemTracker
+from ..Layout import LayoutItem, LayoutItemGrouping, LayoutItemGroupingTracker
 from ..TempControlDevice import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .BaseTempControlDevice import (
     DeviceTypes,
@@ -40,19 +40,27 @@ def LoadYaml(
                 Device["Deck Location ID"]
             )
 
-            SupportedLayoutItemTrackerInstance = LayoutItemTracker()
+            SupportedLayoutItemGroupingTrackerInstance = LayoutItemGroupingTracker()
 
             for LabwareID in Device["Supported Labware"]:
-                Labware = LabwareTrackerInstance.GetObjectByName(LabwareID)
+                PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(LabwareID)
 
-                Sequence = Device["Supported Labware"][LabwareID]["Plate Sequence"]
+                PlateSequence = Device["Supported Labware"][LabwareID]["Plate Sequence"]
                 LidSequence = Device["Supported Labware"][LabwareID]["Lid Sequence"]
-
-                LayoutItemInstance = LayoutItem(
-                    Sequence, LidSequence, Location, Labware
+                LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
+                    Device["Supported Labware"][LabwareID]["Lid Labware"]
                 )
 
-                SupportedLayoutItemTrackerInstance.ManualLoad(LayoutItemInstance)
+                PlateLayoutItemInstance = LayoutItem(
+                    PlateSequence, Location, PlateLabwareInstance
+                )
+                LidLayoutItemInstance = LayoutItem(
+                    LidSequence, Location, LidLabwareInstance
+                )
+
+                SupportedLayoutItemGroupingTrackerInstance.ManualLoad(
+                    LayoutItemGrouping(PlateLayoutItemInstance, LidLayoutItemInstance)
+                )
                 # add to our list for our item creation and also add it to the layout loader for tracking
 
             ComPort = Device["Com Port"]
@@ -64,7 +72,7 @@ def LoadYaml(
                         DeviceID,
                         ComPort,
                         TempLimitsInstance,
-                        SupportedLayoutItemTrackerInstance,
+                        SupportedLayoutItemGroupingTrackerInstance,
                     )
                 )
 
@@ -74,7 +82,7 @@ def LoadYaml(
                         DeviceID,
                         ComPort,
                         TempLimitsInstance,
-                        SupportedLayoutItemTrackerInstance,
+                        SupportedLayoutItemGroupingTrackerInstance,
                     )
                 )
 

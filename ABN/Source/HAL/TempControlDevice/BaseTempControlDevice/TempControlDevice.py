@@ -1,7 +1,7 @@
 from enum import Enum
 
 from ....Tools.AbstractClasses import ObjectABC
-from ...Layout import LayoutItemTracker
+from ...Layout import LayoutItemGroupingTracker
 from .Interface.TempControlDeviceInterface import TempControlDeviceInterface
 from .TempLimits.TempLimits import TempLimits
 
@@ -18,14 +18,14 @@ class TempControlDevice(ObjectABC, TempControlDeviceInterface):
         ComPort: str | int,
         ShakingSupported: bool,
         TempLimitsInstance: TempLimits,
-        SupportedLayoutItemTrackerInstance: LayoutItemTracker,
+        SupportedLayoutItemGroupingTrackerInstance: LayoutItemGroupingTracker,
     ):
         self.Name: str = Name
         self.ComPort: str | int = ComPort
         self.ShakingSupported: bool = ShakingSupported
         self.TempLimitsInstance: TempLimits = TempLimitsInstance
-        self.SupportedLayoutItemTrackerInstance: LayoutItemTracker = (
-            SupportedLayoutItemTrackerInstance
+        self.SupportedLayoutItemGroupingTrackerInstance: LayoutItemGroupingTracker = (
+            SupportedLayoutItemGroupingTrackerInstance
         )
 
     def GetName(self) -> str:

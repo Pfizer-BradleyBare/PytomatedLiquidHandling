@@ -2,7 +2,7 @@ from ....HAL.ClosedContainers import ClosedContainersLoader
 from ....HAL.ClosedContainers.BaseClosedContainers import ClosedContainersTracker
 from ....HAL.DeckLocation import DeckLocationLoader, DeckLocationTracker
 from ....HAL.Labware import LabwareLoader, LabwareTracker
-from ....HAL.Layout import LayoutItemLoader, LayoutItemTracker
+from ....HAL.Layout import LayoutItemLoader
 from ....HAL.Lid import LidLoader, LidTracker
 
 # from .MagneticRack import MagneticRackLoader, MagneticRackTracker
@@ -63,7 +63,7 @@ def Load() -> HALLayer:
         DeckLocationTrackerInstance,
         "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Layout\\Layout.yaml",
     )
-    HALLayerInstance.LayoutItemTrackerInstance = LayoutItemTrackerInstance
+    HALLayerInstance.LayoutItemGroupingTrackerInstance = LayoutItemTrackerInstance
     for Layout in LayoutItemTrackerInstance.GetObjectsAsList():
         LOG.debug(Layout)
 

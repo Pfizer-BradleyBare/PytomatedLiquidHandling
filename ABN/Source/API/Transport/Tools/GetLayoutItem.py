@@ -1,24 +1,24 @@
 from ....HAL.DeckLocation import DeckLocation
 from ....HAL.Labware import Labware
-from ....HAL.Layout import LayoutItem
+from ....HAL.Layout import LayoutItemGrouping
 from ....Server.Globals.HandlerRegistry import HandlerRegistry
 from ...Tools.HALLayer.HALLayer import HALLayer
 
 
 def GetLayoutItem(
     DeckLocationInstance: DeckLocation, LabwareInstance: Labware
-) -> LayoutItem | None:
+) -> LayoutItemGrouping | None:
 
     HALLayerInstance: HALLayer = HandlerRegistry.GetObjectByName(
         "API"
     ).HALLayerInstance  # type:ignore
 
-    LayoutItemTrackerInstance = HALLayerInstance.LayoutItemTrackerInstance
+    LayoutItemTrackerInstance = HALLayerInstance.LayoutItemGroupingTrackerInstance
 
     DeckLocationFiltering = [
         Item
         for Item in LayoutItemTrackerInstance.GetObjectsAsList()
-        if Item.DeckLocationInstance == DeckLocationInstance
+        if Item.PlateLayoutItemInstance.DeckLocationInstance == DeckLocationInstance
     ]
 
     if len(DeckLocationFiltering) == 0:
@@ -27,7 +27,7 @@ def GetLayoutItem(
     LabwareFiltering = [
         Item
         for Item in DeckLocationFiltering
-        if Item.LabwareInstance == LabwareInstance
+        if Item.PlateLayoutItemInstance.LabwareInstance == LabwareInstance
     ]
 
     if len(LabwareFiltering) == 0:
