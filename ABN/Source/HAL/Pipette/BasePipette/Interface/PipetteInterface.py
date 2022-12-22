@@ -2,9 +2,9 @@ from abc import abstractmethod
 from typing import Callable
 
 from .....Driver.Tools import Command, CommandTracker
-from .....Tools.AbstractClasses import InterfaceABC
 from ....Labware import LabwareTracker
 from ....Layout import LayoutItem
+from ....Tools import InterfaceABC
 from .TransferOptions.TransferOptionsTracker import TransferOptionsTracker
 
 
@@ -40,7 +40,7 @@ def TestSumLessThanMax(
         TransferVolumes,
         MaxSumValues,
     ):
-        KeyName = LayoutItemInstance.GetName() + str(LayoutItemPosition)
+        KeyName = LayoutItemInstance.GetSequence() + str(LayoutItemPosition)
 
         if KeyName not in VolumeSumDict:
             VolumeSumDict[KeyName] = {
@@ -65,7 +65,7 @@ def TestLabwareSupported(
 
     Index = 0
     for LayoutItemInstance in LayoutItems:
-        if LabwareTrackerInstance.IsTracked(LayoutItemInstance.GetName()) is False:
+        if LabwareTrackerInstance.IsTracked(LayoutItemInstance.GetSequence()) is False:
             FailedIndices.append(Index)
 
         Index += 1

@@ -1,5 +1,6 @@
 from typing import Callable
 
+from ...Driver.Handler.DriverHandler import DriverHandler
 from ...Driver.TemperatureControl.HeaterShaker import (
     ConnectCommand,
     ConnectOptions,
@@ -19,10 +20,10 @@ from ...Driver.TemperatureControl.HeaterShaker import (
     StopTemperatureControlOptions,
 )
 from ...Driver.Tools import Command, CommandTracker
+from ...Server.Globals.HandlerRegistry import GetDriverHandler
 from ..Layout import LayoutItemGroupingTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
 from .BaseTempControlDevice.Interface import (
-    InitializeCallback,
     UpdateCurrentShakingSpeedCallback,
     UpdateCurrentTemperatureCallback,
 )
@@ -51,6 +52,34 @@ class HamiltonHeaterShaker(TempControlDevice):
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
+        def InitializeCallback(CommandInstance: Command, args: tuple):
+
+            TempControlDeviceInstance: TempControlDevice = args[0]
+            ResponseInstance = CommandInstance.GetResponse()
+
+            TempControlDeviceInstance.HandleID = ResponseInstance.GetAdditional()[
+                "HandleID"
+            ]
+
+            DriverHandlerInstance: DriverHandler = GetDriverHandler()  # type:ignore
+
+            DriverHandlerInstance.ExecuteCommand(
+                SetPlateLockCommand(
+                    "",
+                    True,
+                    SetPlateLockOptions("", self.HandleID, 1),
+                )
+            )
+
+            DriverHandlerInstance.ExecuteCommand(
+                SetPlateLockCommand(
+                    "",
+                    True,
+                    SetPlateLockOptions("", self.HandleID, 0),
+                    args[1],
+                    args[2],
+                )
+            )
 
         ReturnCommandTracker = CommandTracker()
 
@@ -60,25 +89,7 @@ class HamiltonHeaterShaker(TempControlDevice):
                 True,
                 ConnectOptions("", self.ComPort),  # type:ignore
                 InitializeCallback,
-                (self,),
-            )
-        )
-
-        ReturnCommandTracker.ManualLoad(
-            SetPlateLockCommand(
-                "",
-                True,
-                SetPlateLockOptions("", self.HandleID, 1),
-            )
-        )
-
-        ReturnCommandTracker.ManualLoad(
-            SetPlateLockCommand(
-                "",
-                True,
-                SetPlateLockOptions("", self.HandleID, 0),
-                CallbackFunction,
-                CallbackArgs,
+                (self, CallbackFunction, CallbackArgs),
             )
         )
 

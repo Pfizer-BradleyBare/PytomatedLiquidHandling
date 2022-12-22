@@ -2,8 +2,8 @@ from abc import abstractmethod
 from typing import Callable
 
 from .....Driver.Tools import Command, CommandTracker
-from .....Tools.AbstractClasses import InterfaceABC
 from ....Layout import LayoutItem
+from ....Tools import InterfaceABC
 
 
 class TransportInterface(InterfaceABC):

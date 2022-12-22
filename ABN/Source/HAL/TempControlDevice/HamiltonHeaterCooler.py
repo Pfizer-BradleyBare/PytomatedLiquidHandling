@@ -11,13 +11,10 @@ from ...Driver.TemperatureControl.HeaterCooler import (
     StopTemperatureControlCommand,
     StopTemperatureControlOptions,
 )
-from ...Driver.Tools import Command, CommandTracker
+from ...Driver.Tools import Command, CommandTracker, ExecuteCallback
 from ..Layout import LayoutItemGroupingTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
-from .BaseTempControlDevice.Interface import (
-    InitializeCallback,
-    UpdateCurrentTemperatureCallback,
-)
+from .BaseTempControlDevice.Interface import UpdateCurrentTemperatureCallback
 
 
 class HamiltonHeaterCooler(TempControlDevice):
@@ -43,6 +40,16 @@ class HamiltonHeaterCooler(TempControlDevice):
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
+        def InitializeCallback(CommandInstance: Command, args: tuple):
+
+            TempControlDeviceInstance: TempControlDevice = args[0]
+            ResponseInstance = CommandInstance.GetResponse()
+
+            TempControlDeviceInstance.HandleID = ResponseInstance.GetAdditional()[
+                "HandleID"
+            ]
+
+            ExecuteCallback(args[1], CommandInstance, args[2])
 
         ReturnCommandTracker = CommandTracker()
 

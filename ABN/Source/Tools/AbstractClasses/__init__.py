@@ -1,6 +1,5 @@
-from .Interface.InterfaceABC import InterfaceABC
 from .Object.ObjectABC import ObjectABC
 from .ServerHandler.ServerHandlerABC import ServerHandlerABC
 from .Tracker.TrackerABC import TrackerABC
 
-__all__ = ["TrackerABC", "ObjectABC", "InterfaceABC", "ServerHandlerABC"]
+__all__ = ["TrackerABC", "ObjectABC", "ServerHandlerABC"]

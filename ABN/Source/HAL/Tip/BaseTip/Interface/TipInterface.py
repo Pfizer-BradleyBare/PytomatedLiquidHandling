@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import Callable
 
 from .....Driver.Tools import Command, CommandTracker
-from .....Tools.AbstractClasses import InterfaceABC
+from ....Tools import InterfaceABC
 
 
 class TipInterface(InterfaceABC):

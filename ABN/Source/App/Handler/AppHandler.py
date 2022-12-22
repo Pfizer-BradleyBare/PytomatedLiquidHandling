@@ -5,6 +5,7 @@ from .Endpoints import (
     CleanupMethodProject,
     Close,
     Dequeue,
+    FlexibleTest,
     GenerateMethodFile,
     ListQueue,
     Open,
@@ -31,6 +32,7 @@ class AppHandler(ServerHandlerABC):
         urls += Open.urls
         urls += Queue.urls
         urls += Status.urls
+        urls += FlexibleTest.urls
         return urls
 
     def Kill(self):
