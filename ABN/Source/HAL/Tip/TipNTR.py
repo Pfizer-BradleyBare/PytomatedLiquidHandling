@@ -1,5 +1,6 @@
 from typing import Callable
 
+from ...Driver.NOP import NOPCommand
 from ...Driver.Tip.NTR import (
     LoadTipsCommand,
     LoadTipsOptions,
@@ -33,6 +34,7 @@ class TipNTR(Tip):
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
+
         return self.Reload(CallbackFunction, CallbackArgs)
 
     def Deinitialize(
@@ -40,7 +42,18 @@ class TipNTR(Tip):
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
-        return CommandTracker()
+
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            NOPCommand(
+                "TipNTR Deinitialize NOP",
+                CallbackFunction,
+                CallbackArgs,
+            )
+        )
+
+        return ReturnCommandTracker
 
     def Reload(
         self,

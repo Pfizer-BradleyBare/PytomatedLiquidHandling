@@ -1,5 +1,6 @@
 from typing import Callable
 
+from ...Driver.NOP import NOPCommand
 from ...Driver.Tools import Command, CommandTracker
 from ...Driver.Transport.Gripper import (
     GetPlateCommand,
@@ -31,14 +32,36 @@ class COREGripper(TransportDevice):
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
-        return CommandTracker()
+
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            NOPCommand(
+                "COREGripper Initialize NOP",
+                CallbackFunction,
+                CallbackArgs,
+            )
+        )
+
+        return ReturnCommandTracker
 
     def Deinitialize(
         self,
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
-        return CommandTracker()
+
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            NOPCommand(
+                "COREGripper Deinitialize NOP",
+                CallbackFunction,
+                CallbackArgs,
+            )
+        )
+
+        return ReturnCommandTracker
 
     def Transport(
         self,

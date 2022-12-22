@@ -1,5 +1,6 @@
 from typing import Callable
 
+from ...Driver.NOP import NOPCommand
 from ...Driver.TemperatureControl.HeaterCooler import (
     ConnectCommand,
     ConnectOptions,
@@ -135,7 +136,17 @@ class HamiltonHeaterCooler(TempControlDevice):
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
 
-        return CommandTracker()
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            NOPCommand(
+                "HamiltonHeaterCooler StopShaking NOP",
+                CallbackFunction,
+                CallbackArgs,
+            )
+        )
+
+        return ReturnCommandTracker
 
     def UpdateCurrentShakingSpeed(
         self,
@@ -143,5 +154,14 @@ class HamiltonHeaterCooler(TempControlDevice):
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
 
-        self.CurrentShakingSpeed = 0
-        return CommandTracker()
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            NOPCommand(
+                "HamiltonHeaterCooler UpdateCurrentShakingSpeed NOP",
+                CallbackFunction,
+                CallbackArgs,
+            )
+        )
+
+        return ReturnCommandTracker

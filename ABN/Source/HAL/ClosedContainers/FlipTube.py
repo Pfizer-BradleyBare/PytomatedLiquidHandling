@@ -10,6 +10,7 @@ from ...Driver.ClosedContainers.FlipTube import (
     OpenOptions,
     OpenOptionsTracker,
 )
+from ...Driver.NOP import NOPCommand
 from ...Driver.Tools import Command, CommandTracker
 from ..Labware import LabwareTracker
 from ..Layout import LayoutItem
@@ -55,7 +56,18 @@ class FlipTube(ClosedContainers):
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
-        return CommandTracker()
+
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            NOPCommand(
+                "FlipTube Deinitialize NOP",
+                CallbackFunction,
+                CallbackArgs,
+            )
+        )
+
+        return ReturnCommandTracker
 
     def Open(
         self,

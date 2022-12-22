@@ -25,9 +25,15 @@ class DriverHandler(ServerHandlerABC):
         self, CommandInstance: Command, Timeout: float | None = None
     ) -> bool:
 
-        self.CommandTrackerInstance.ManualLoad(CommandInstance)
+        TimeoutFlag = True
 
-        TimeoutFlag = CommandInstance.ResponseEvent.wait(Timeout)
+        if type(CommandInstance).__name__ != "NOPCommand":
+
+            self.CommandTrackerInstance.ManualLoad(CommandInstance)
+
+            TimeoutFlag = CommandInstance.ResponseEvent.wait(Timeout)
+
+            self.CommandTrackerInstance.ManualUnload(CommandInstance)
 
         if TimeoutFlag is True:  # This means it did not timeout
 
@@ -36,7 +42,5 @@ class DriverHandler(ServerHandlerABC):
                 CommandInstance,
                 CommandInstance.CallbackArgs,
             )
-
-        self.CommandTrackerInstance.ManualUnload(CommandInstance)
 
         return TimeoutFlag

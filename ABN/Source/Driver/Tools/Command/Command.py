@@ -14,13 +14,16 @@ class Command(ObjectABC):
         CallbackFunction: Callable[[Self, tuple], None] | None,
         CallbackArgs: tuple,
     ):
-        self.ResponseInstance: Response | None = None
-        self.ResponseEvent: Event = Event()
         self.Name: str = Name
         self.CustomErrorHandling: bool = CustomErrorHandling
+
+        self.ResponseInstance: Response | None = None
+        self.ResponseEvent: Event = Event()
+
         self.CallbackFunction: Callable[
             [Command, tuple], None
         ] | None = CallbackFunction
+
         self.CallbackArgs: tuple = CallbackArgs
 
     def GetName(self) -> str:

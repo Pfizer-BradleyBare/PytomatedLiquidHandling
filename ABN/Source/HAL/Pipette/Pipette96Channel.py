@@ -1,5 +1,6 @@
 from typing import Callable
 
+from ...Driver.NOP import NOPCommand
 from ...Driver.Tools import Command, CommandTracker
 from ..Labware import LabwareTracker
 from ..Pipette import TransferOptionsTracker
@@ -26,14 +27,36 @@ class Pipette96Channel(Pipette):
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
-        return CommandTracker()
+
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            NOPCommand(
+                "Pipette96Channel Initialize NOP",
+                CallbackFunction,
+                CallbackArgs,
+            )
+        )
+
+        return ReturnCommandTracker
 
     def Deinitialize(
         self,
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
-        return CommandTracker()
+
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            NOPCommand(
+                "Pipette96Channel Deinitialize NOP",
+                CallbackFunction,
+                CallbackArgs,
+            )
+        )
+
+        return ReturnCommandTracker
 
     def Transfer(
         self,

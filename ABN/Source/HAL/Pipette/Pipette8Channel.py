@@ -1,6 +1,7 @@
 from math import ceil
 from typing import Callable
 
+from ...Driver.NOP import NOPCommand
 from ...Driver.Pipette.Pipette8Channel import (
     AspirateCommand,
     AspirateOptions,
@@ -48,14 +49,36 @@ class Pipette8Channel(Pipette):
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
-        return CommandTracker()
+
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            NOPCommand(
+                "Pipette8Channel Initialize NOP",
+                CallbackFunction,
+                CallbackArgs,
+            )
+        )
+
+        return ReturnCommandTracker
 
     def Deinitialize(
         self,
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ) -> CommandTracker:
-        return CommandTracker()
+
+        ReturnCommandTracker = CommandTracker()
+
+        ReturnCommandTracker.ManualLoad(
+            NOPCommand(
+                "Pipette8Channel Deinitialize NOP",
+                CallbackFunction,
+                CallbackArgs,
+            )
+        )
+
+        return ReturnCommandTracker
 
     def Transfer(
         self,
