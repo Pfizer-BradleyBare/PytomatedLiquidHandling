@@ -25,16 +25,6 @@ class IsReady:
             GetDriverHandler().CommandTrackerInstance  # type:ignore
         )
 
-        Ops = AspirateOptionsTracker()
-
-        Ops.ManualLoad(AspirateOptions("Test", 1, "C1", 1, "1", 1))
-        Ops.ManualLoad(AspirateOptions("Test2", 3, "C3", 1, "1", 3))
-        Ops.ManualLoad(AspirateOptions("Test3", 4, "C4", 1, "1", 4))
-        Ops.ManualLoad(AspirateOptions("Test4", 5, "C5", 1, "1", 5))
-        Ops.ManualLoad(AspirateOptions("Test7", 8, "C8", 1, "1", 8))
-
-        CommandTrackerInstance.ManualLoad(AspirateCommand("Test", False, Ops))
-
         CommandReady = False
         for CommandInstance in CommandTrackerInstance.GetObjectsAsList():
             if CommandInstance.ResponseInstance is None:
