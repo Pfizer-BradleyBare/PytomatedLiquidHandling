@@ -9,8 +9,6 @@ import ABN.Source.Server.Globals.HandlerRegistry as HR
 import ABN.Source.Server.Globals.Logger as Logger
 import ABN.Source.Server.Handler.ServerHandler as ServerH
 
-quit()
-
 if __name__ == "__main__":
 
     os.environ["PORT"] = "255"
