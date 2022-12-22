@@ -13,7 +13,7 @@ class NOPCommand(Command):
     ):
         Command.__init__(
             self,
-            self.__class__.__name__ + ": " + Name,
+            self.GetModuleName() + " -> " + self.GetCommandName() + ": " + Name,
             False,
             CallbackFunction,
             CallbackArgs,

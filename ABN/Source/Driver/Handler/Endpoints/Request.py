@@ -40,15 +40,9 @@ class Request:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
+        ParserObject.SetAPIReturn("Request Identifier", OutputCommandInstance.GetName())
         ParserObject.SetAPIReturn(
-            "Request Identifier",
-            OutputCommandInstance.GetModuleName()
-            + " -> "
-            + OutputCommandInstance.GetName(),
-        )
-        ParserObject.SetAPIReturn(
-            "Custom Error Handling",
-            OutputCommandInstance.CustomErrorHandling,
+            "Custom Error Handling", OutputCommandInstance.CustomErrorHandling
         )
         ParserObject.SetAPIReturn("Module Name", OutputCommandInstance.GetModuleName())
         ParserObject.SetAPIReturn(
