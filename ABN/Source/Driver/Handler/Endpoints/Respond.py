@@ -38,6 +38,7 @@ class Respond:
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
+        # Check the command exists in our queue
 
         CommandInstance = CommandTrackerInstance.GetObjectByName(RequestID)
 
@@ -47,6 +48,7 @@ class Respond:
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
+        # Check the command does not already have a response
 
         ExpectedResponseKeys = CommandInstance.GetResponseKeys()
 
