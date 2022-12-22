@@ -35,8 +35,7 @@ class FlexibleTest:
         for Command in CommandTrackerInstance.GetObjectsAsList():
             DriverHandlerInstance.CommandTrackerInstance.ManualLoad(Command)
 
-        ParserObject.SetAPIState(True)
-        ParserObject.SetAPIReturn("Message", "Done")
+        ParserObject.SetEndpointState(True)
 
         Response = ParserObject.GetHTTPResponse()
         return Response

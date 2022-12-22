@@ -17,7 +17,7 @@ class Close:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        MethodFilePath = ParserObject.GetAPIData()["Method File Path"]
+        MethodFilePath = ParserObject.GetEndpointInputData()["Method File Path"]
 
         if xlwings.apps.count != 0:
             for Book in xlwings.books:
@@ -28,8 +28,7 @@ class Close:
                     if len(App.books) == 0:
                         App.quit()
 
-        ParserObject.SetAPIState(True)
-        ParserObject.SetAPIReturn("Message", "Excel Workbook Closed")
+        ParserObject.SetEndpointState(True)
 
         Response = ParserObject.GetHTTPResponse()
         return Response

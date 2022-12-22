@@ -17,7 +17,7 @@ class Open:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        MethodFilePath = ParserObject.GetAPIData()["Method File Path"]
+        MethodFilePath = ParserObject.GetEndpointInputData()["Method File Path"]
 
         BookHandle: xlwings.Book | None = None
         if xlwings.apps.count != 0:
@@ -28,8 +28,7 @@ class Open:
         if BookHandle is None:
             BookHandle = xlwings.Book(MethodFilePath)
 
-        ParserObject.SetAPIState(True)
-        ParserObject.SetAPIReturn("Message", "Excel Workbook Opened")
+        ParserObject.SetEndpointState(True)
 
         Response = ParserObject.GetHTTPResponse()
         return Response

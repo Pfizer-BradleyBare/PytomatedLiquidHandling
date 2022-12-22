@@ -25,8 +25,8 @@ class GenerateMethodFile:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        MethodFolder = ParserObject.GetAPIData()["Method"]
-        ProjectFolder = ParserObject.GetAPIData()["Project"]
+        MethodFolder = ParserObject.GetEndpointInputData()["Method"]
+        ProjectFolder = ParserObject.GetEndpointInputData()["Project"]
 
         TemplateMethodFile = (
             TemplateMethodSuffix + "_" + MethodFolder + "_" + ProjectFolder + ".xlsm"
@@ -41,7 +41,7 @@ class GenerateMethodFile:
             MethodFolder,
             ProjectFolder,
             TempFolder,
-            ParserObject.GetAPIData()["Desired Filename"] + ".xlsm",
+            ParserObject.GetEndpointInputData()["Desired Filename"] + ".xlsm",
         )
 
         try:
@@ -68,14 +68,15 @@ class GenerateMethodFile:
                 tuple[tuple[any]], ExcelInstance.ReadRangeFormulas(2, 1, 2, 3)  # type: ignore
             )
 
-            CopyFormula = CopyFormula * int(ParserObject.GetAPIData()["Sample Number"])
+            CopyFormula = CopyFormula * int(
+                ParserObject.GetEndpointInputData()["Sample Number"]
+            )
             ExcelInstance.WriteRangeFormulas(2, 1, CopyFormula)
 
             ExcelInstance.Save()
 
-        ParserObject.SetAPIState(True)
-        ParserObject.SetAPIReturn("Message", "Method file created successfully")
-        ParserObject.SetAPIReturn("Method File Path", DesiredMethodFilePath)
+        ParserObject.SetEndpointState(True)
+        ParserObject.SetEndpointOutputKey("Method File Path", DesiredMethodFilePath)
 
         Response = ParserObject.GetHTTPResponse()
         return Response

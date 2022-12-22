@@ -21,14 +21,13 @@ class CleanupMethodProject:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        Method = ParserObject.GetAPIData()["Method"]
-        Project = ParserObject.GetAPIData()["Project"]
+        Method = ParserObject.GetEndpointInputData()["Method"]
+        Project = ParserObject.GetEndpointInputData()["Project"]
 
         if Method == "Custom":
-            ParserObject.SetAPIState(True)
-            ParserObject.SetAPIReturn(
-                "Message",
-                "Nothing to clean. User loaded Custom Method",
+            ParserObject.SetEndpointState(True)
+            ParserObject.SetEndpointMessage(
+                "Nothing to clean. User loaded Custom Method"
             )
 
             Response = ParserObject.GetHTTPResponse()
@@ -53,9 +52,9 @@ class CleanupMethodProject:
             if File not in QueuedFiles:
                 os.remove(os.path.join(CleanupPath, File))
 
-        ParserObject.SetAPIState(True)
-        ParserObject.SetAPIReturn(
-            "Message", Method + "-" + Project + "-" + TempFolder + " directory cleaned"
+        ParserObject.SetEndpointState(True)
+        ParserObject.SetEndpointMessage(
+            Method + "-" + Project + "-" + TempFolder + " directory cleaned"
         )
 
         Response = ParserObject.GetHTTPResponse()

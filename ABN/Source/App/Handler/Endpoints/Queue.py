@@ -34,21 +34,20 @@ class Queue:
             GetAppHandler().WorkbookTrackerInstance  # type:ignore
         )
 
-        MethodPath = ParserObject.GetAPIData()["Method Path"]
-        Action = WorkbookRunTypes(ParserObject.GetAPIData()["Action"])
+        MethodPath = ParserObject.GetEndpointInputData()["Method Path"]
+        Action = WorkbookRunTypes(ParserObject.GetEndpointInputData()["Action"])
         # acceptable values are "Test", "PrepList", or "Run"
 
         if ".xlsm" not in MethodPath:
-            ParserObject.SetAPIReturn(
-                "Message", "Method Path is not an xlsm file. (Macro Enabled Excel File)"
+            ParserObject.SetEndpointMessage(
+                "Method Path is not an xlsm file. (Macro Enabled Excel File)"
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
         # Is method actually there
 
         if not (os.access(MethodPath, os.F_OK) and os.access(MethodPath, os.W_OK)):
-            ParserObject.SetAPIReturn(
-                "Message",
+            ParserObject.SetEndpointMessage(
                 "Method Path does not exist or is read only (User Error. Save Excel File?)",
             )
             Response = ParserObject.GetHTTPResponse()
@@ -60,7 +59,7 @@ class Queue:
             for Workbook in WorkbookTrackerInstance.GetObjectsAsList()
         ]
         if MethodPath in PathsList:
-            ParserObject.SetAPIReturn("Message", "Method is already running")
+            ParserObject.SetEndpointMessage("Method is already running")
             Response = ParserObject.GetHTTPResponse()
             return Response
         # Is workbook already running?
@@ -71,8 +70,7 @@ class Queue:
         WorkbookLoader.Load(WorkbookTrackerInstance, MethodPath, Action)
         # Load the workbook path into the tracker
 
-        ParserObject.SetAPIState(True)
-        ParserObject.SetAPIReturn("Message", "Method Queued")
+        ParserObject.SetEndpointState(True)
 
         Response = ParserObject.GetHTTPResponse()
         return Response

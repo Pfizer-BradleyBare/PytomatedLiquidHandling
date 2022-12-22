@@ -19,8 +19,8 @@ class Respond:
         )
 
         if CommandTrackerInstance.GetNumObjects() == 0:
-            ParserObject.SetAPIReturn(
-                "Message", "Command not currently waiting on response."
+            ParserObject.SetEndpointMessage(
+                "Command not currently waiting on response."
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
@@ -30,11 +30,11 @@ class Respond:
             return Response
         # preliminary check. We will check again below
 
-        RequestID = ParserObject.GetAPIData()["Request Identifier"]
+        RequestID = ParserObject.GetEndpointInputData()["Request Identifier"]
 
         if not CommandTrackerInstance.IsTracked(RequestID):
-            ParserObject.SetAPIReturn(
-                "Message", "There is not a command with that ID waiting."
+            ParserObject.SetEndpointMessage(
+                "There is not a command with that ID waiting."
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
@@ -43,8 +43,8 @@ class Respond:
         CommandInstance = CommandTrackerInstance.GetObjectByName(RequestID)
 
         if CommandInstance.GetResponse() is not None:
-            ParserObject.SetAPIReturn(
-                "Message", "Command already has a reponse. This should never happen."
+            ParserObject.SetEndpointMessage(
+                "Command already has a reponse. This should never happen."
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
@@ -61,20 +61,19 @@ class Respond:
 
         Additional = dict()
         for Key in ExpectedResponseKeys:
-            Additional[Key] = ParserObject.GetAPIData()[Key]
+            Additional[Key] = ParserObject.GetEndpointInputData()[Key]
         # Create dict that houses the expected keys so we can create the response object
 
         CommandInstance.ResponseInstance = CommandResponse(
-            ParserObject.GetAPIData()["State"],
-            ParserObject.GetAPIData()["Message"],
+            ParserObject.GetEndpointInputData()["State"],
+            ParserObject.GetEndpointInputData()["Message"],
             Additional,
         )
         # boom
         CommandInstance.ResponseEvent.set()
         # Add response then release threads waiting for a response
 
-        ParserObject.SetAPIState(True)
-        ParserObject.SetAPIReturn("Message", "Response appended to command.")
+        ParserObject.SetEndpointState(True)
 
         Response = ParserObject.GetHTTPResponse()
         return Response

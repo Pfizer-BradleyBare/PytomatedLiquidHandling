@@ -17,7 +17,7 @@ class Dequeue:
 
         # Do something here
 
-        ParserObject.SetAPIState(True)
+        ParserObject.SetEndpointState(True)
 
         Response = ParserObject.GetHTTPResponse()
         return Response

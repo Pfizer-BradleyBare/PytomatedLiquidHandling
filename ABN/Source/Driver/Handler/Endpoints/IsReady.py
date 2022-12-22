@@ -27,8 +27,7 @@ class IsReady:
                 CommandReady = True
                 break
 
-        ParserObject.SetAPIState(True)
-        ParserObject.SetAPIReturn("Message", "Returned Command IsReady status")
-        ParserObject.SetAPIReturn("IsReady", CommandReady)
+        ParserObject.SetEndpointState(True)
+        ParserObject.SetEndpointOutputKey("IsReady", CommandReady)
         Response = ParserObject.GetHTTPResponse()
         return Response

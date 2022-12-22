@@ -51,10 +51,9 @@ class AvailableMethods:
             if len(MethodProjects[Method]) == 0:
                 Methods.remove(Method)
 
-        ParserObject.SetAPIState(True)
-        ParserObject.SetAPIReturn("Methods", Methods)
-        ParserObject.SetAPIReturn("Method Projects", MethodProjects)
-        ParserObject.SetAPIReturn("Message", "Possible methods returned as dict")
+        ParserObject.SetEndpointState(True)
+        ParserObject.SetEndpointOutputKey("Methods", Methods)
+        ParserObject.SetEndpointOutputKey("Method Projects", MethodProjects)
 
         Response = ParserObject.GetHTTPResponse()
         return Response

@@ -35,12 +35,12 @@ class ListQueue:
             Workbook = WorkbookTrackerInstance.GetObjectByName(WorkbookName)
             WorkbookInformation[WorkbookName] = {"State": Workbook.GetState().value}
 
-        ParserObject.SetAPIState(True)
-        ParserObject.SetAPIReturn(
-            "Message", "Returned queued methods and queued method information"
+        ParserObject.SetEndpointState(True)
+        ParserObject.SetEndpointMessage(
+            "Returned queued methods and queued method information"
         )
-        ParserObject.SetAPIReturn("Workbooks", RunningWorkbookNames)
-        ParserObject.SetAPIReturn("Workbook Information", WorkbookInformation)
+        ParserObject.SetEndpointOutputKey("Workbooks", RunningWorkbookNames)
+        ParserObject.SetEndpointOutputKey("Workbook Information", WorkbookInformation)
 
         Response = ParserObject.GetHTTPResponse()
         return Response

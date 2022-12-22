@@ -22,7 +22,7 @@ class Request:
         )
 
         if CommandTrackerInstance.GetNumObjects() == 0:
-            ParserObject.SetAPIReturn("Message", "Command not available.")
+            ParserObject.SetEndpointMessage("Command not available.")
             Response = ParserObject.GetHTTPResponse()
             return Response
 
@@ -33,26 +33,28 @@ class Request:
                 break
 
         if OutputCommandInstance is None:
-            ParserObject.SetAPIReturn(
-                "Message",
+            ParserObject.SetEndpointMessage(
                 "No command available. Please check the IsReady endpoint first...",
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        ParserObject.SetAPIReturn("Request Identifier", OutputCommandInstance.GetName())
-        ParserObject.SetAPIReturn(
+        ParserObject.SetEndpointOutputKey(
+            "Request Identifier", OutputCommandInstance.GetName()
+        )
+        ParserObject.SetEndpointOutputKey(
             "Custom Error Handling", OutputCommandInstance.CustomErrorHandling
         )
-        ParserObject.SetAPIReturn("Module Name", OutputCommandInstance.GetModuleName())
-        ParserObject.SetAPIReturn(
+        ParserObject.SetEndpointOutputKey(
+            "Module Name", OutputCommandInstance.GetModuleName()
+        )
+        ParserObject.SetEndpointOutputKey(
             "Command Name", OutputCommandInstance.GetCommandName()
         )
-        ParserObject.SetAPIReturn(
+        ParserObject.SetEndpointOutputKey(
             "Command Parameters", OutputCommandInstance.GetCommandParameters()
         )
-        ParserObject.SetAPIState(True)
-        ParserObject.SetAPIReturn("Message", "Command returned")
+        ParserObject.SetEndpointState(True)
 
         Response = ParserObject.GetHTTPResponse()
         return Response

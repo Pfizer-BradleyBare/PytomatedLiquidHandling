@@ -4,17 +4,18 @@ from ...Globals import LOG
 
 
 class Parser:
-    def __init__(self, APICallID: str, JSONstring: bytes | None = None):
+    def __init__(self, EndpointID: str, JSONstring: bytes | None = None):
 
         LOG.debug("PARSER: __START__")
-        LOG.info("PARSER: Handling API: %s", APICallID)
+        LOG.info("PARSER: Handling Endpoint: %s", EndpointID)
         LOG.debug("PARSER: Created Parser class with data: %s", str(JSONstring))
 
-        self.APICallID: str = APICallID
-        self.string: bytes | None = JSONstring
+        self.EndpointID: str = EndpointID
+        self.InputString: bytes | None = JSONstring
         self.JSON: dict | None = dict()
-        self.APIState: bool = False
-        self.APIReturn: dict = {"Message": ""}
+        self.EndpointState: bool = False
+        self.EndpointMessage: str = "N/A"
+        self.EndpointReturn: dict = dict()
 
         if not (JSONstring is None or JSONstring == "" or JSONstring == b""):
             try:
@@ -32,15 +33,15 @@ class Parser:
 
     def IsValid(self, ExpectedKeys: list[str]) -> bool:
         if self.JSON is None:
-            self.APIReturn[
-                "Message"
-            ] = "JSON Object could not be loaded correctly. Try again."
+            self.EndpointMessage = (
+                "JSON Object could not be loaded correctly. Try again."
+            )
             return False
 
         InputKeys = self.JSON.keys()
 
         # if len(InputKeys) != len(ExpectedKeys):
-        #    self.APIReturn["Message"] = (
+        #    self.EndpointMessage = (
         #        "Incorrect number of keys. This endpoint expects "
         #        + str(len(ExpectedKeys))
         #        + " keys. Expected: "
@@ -50,7 +51,7 @@ class Parser:
         # Maybe extra keys doesn't matter?
 
         if not all(Key in InputKeys for Key in ExpectedKeys):
-            self.APIReturn["Message"] = (
+            self.EndpointMessage = (
                 "Incorrect keys given to input. Received: "
                 + str(InputKeys)
                 + " Expected: "
@@ -60,24 +61,25 @@ class Parser:
 
         return True
 
-    def GetAPIData(self) -> dict:
+    def GetEndpointInputData(self) -> dict:
         return self.JSON  # type: ignore
 
-    def SetAPIState(self, State: bool):
-        self.APIState = State
+    def SetEndpointState(self, State: bool):
+        self.EndpointState = State
 
-    def SetAPIReturn(self, Key: str, Value: any):  # type: ignore
-        self.APIReturn[Key] = Value
+    def SetEndpointMessage(self, Message: str):
+        self.EndpointMessage = Message
+
+    def SetEndpointOutputKey(self, Key: str, Value: any):  # type: ignore
+        self.EndpointReturn[Key] = Value
 
     def GetHTTPResponse(self) -> str:
-        if self.APIReturn["Message"] == "":
-            raise Exception("APIReturn Message key must be set. ALWAYS!")
-
         Out = dict()
-        Out["APICallID"] = self.APICallID
-        Out["APISuccess"] = self.APIState
-        Out["APIData"] = self.JSON
-        Out["APIReturn"] = self.APIReturn
+        Out["Endpoint ID"] = self.EndpointID
+        Out["Endpoint State"] = self.EndpointState
+        Out["Endpoint Message"] = self.EndpointMessage
+        Out["Endpoint Input Data"] = self.JSON
+        Out["Endpoint Output Data"] = self.EndpointReturn
 
         LOG.debug("Response Data: \n%s", json.dumps(Out, indent=4, sort_keys=True))
         return json.dumps(Out)
