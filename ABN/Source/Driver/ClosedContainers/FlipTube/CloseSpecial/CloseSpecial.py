@@ -35,10 +35,6 @@ class CloseSpecialCommand(Command):
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         OutputDict = defaultdict(list)
 
-        OutputDict["CustomErrorHandling"] = self.CustomErrorHandling  # type:ignore
-        OutputDict["CommandName"] = (  # type:ignore
-            self.GetModuleName() + " -> " + self.GetName()
-        )
         for PickupOption in self.OptionsTrackerInstance.GetObjectsAsList():
             PickupOptionDict = vars(PickupOption)
 

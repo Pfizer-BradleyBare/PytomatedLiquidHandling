@@ -2,31 +2,18 @@ class Response:
     def __init__(
         self,
         State: bool,
-        ErrorDescription: str,
+        Message: str,
         Additional: dict[str, any],  # type:ignore
     ):
         self.State: bool = bool(State)
-        self.ErrorDescription: str = ErrorDescription
+        self.Message: str = Message
         self.Additional: dict[str, any] = Additional  # type:ignore
 
     def GetState(self) -> bool:
         return self.State
 
-    def GetErrorDescription(self) -> str:
-        return self.ErrorDescription
+    def GetMessage(self) -> str:
+        return self.Message
 
     def GetAdditional(self) -> dict[str, any]:  # type: ignore
         return self.Additional
-
-
-def ClampMax(Number, Max):
-    while Number > Max:
-        Number -= Max
-
-    return Number
-
-
-c = 7
-s = 3
-
-print(ClampMax(c, s))

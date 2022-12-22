@@ -4,11 +4,6 @@ import web
 
 from ....Server.Globals.HandlerRegistry import GetDriverHandler
 from ....Server.Tools.Parser import Parser
-from ...Pipette.Pipette8Channel.Aspirate.Aspirate import AspirateCommand
-from ...Pipette.Pipette8Channel.Aspirate.AspirateOptionsTracker import (
-    AspirateOptions,
-    AspirateOptionsTracker,
-)
 
 urls = ("/Driver/IsReady", "ABN.Source.Driver.Handler.Endpoints.IsReady.IsReady")
 

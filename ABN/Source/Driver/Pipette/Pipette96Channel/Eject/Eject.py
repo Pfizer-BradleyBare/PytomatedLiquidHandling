@@ -36,12 +36,6 @@ class EjectCommand(Command):
 
         OutputDict = defaultdict(list)
 
-        OutputDict["CustomErrorHandling"] = self.CustomErrorHandling  # type:ignore
-
-        OutputDict["CommandName"] = (  # type:ignore
-            self.GetModuleName() + " -> " + self.GetName()
-        )
-
         for PickupOption in self.OptionsTrackerInstance.GetObjectsAsList():
             PickupOptionDict = vars(PickupOption)
 

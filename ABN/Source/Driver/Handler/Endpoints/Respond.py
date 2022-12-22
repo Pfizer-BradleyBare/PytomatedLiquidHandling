@@ -42,7 +42,7 @@ class Respond:
         ExpectedResponseKeys = OutputCommandInstance.GetResponseKeys()
 
         if not ParserObject.IsValid(
-            ["State", "ErrorDescription"] + ExpectedResponseKeys
+            ["State", "Message", "Request Identifier"] + ExpectedResponseKeys
         ):
             Response = ParserObject.GetHTTPResponse()
             return Response
@@ -53,9 +53,11 @@ class Respond:
             Additional[Key] = ParserObject.GetAPIData()[Key]
         # Create dict that houses the expected keys so we can create the response object
 
+        # TODO TODO TODO TODO TODO need to rewrite for updated command tracker
+
         OutputCommandInstance.ResponseInstance = CommandResponse(
             ParserObject.GetAPIData()["State"],
-            ParserObject.GetAPIData()["ErrorDescription"],
+            ParserObject.GetAPIData()["Message"],
             Additional,
         )
         # boom

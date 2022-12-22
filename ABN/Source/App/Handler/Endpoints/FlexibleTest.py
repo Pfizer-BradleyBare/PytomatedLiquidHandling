@@ -3,7 +3,8 @@
 import web
 
 from ....API.Handler.APIHandler import APIHandler
-from ....Server.Globals.HandlerRegistry import GetAPIHandler
+from ....Driver.Handler.DriverHandler import DriverHandler
+from ....Server.Globals.HandlerRegistry import GetAPIHandler, GetDriverHandler
 from ....Server.Tools.Parser import Parser
 
 urls = ("/FlexibleTest", "ABN.Source.App.Handler.Endpoints.FlexibleTest.FlexibleTest")
@@ -26,11 +27,13 @@ class FlexibleTest:
 
         CommandTrackerInstance = TestInstance.Initialize()
 
-        for Command in CommandTrackerInstance.GetObjectsAsList():
-            print(Command.GetCommandParameters())
+        DriverHandlerInstance: DriverHandler = GetDriverHandler()  # type:ignore
 
         print("WE ARE HERE")
         # Do something here
+
+        for Command in CommandTrackerInstance.GetObjectsAsList():
+            DriverHandlerInstance.CommandTrackerInstance.ManualLoad(Command)
 
         ParserObject.SetAPIState(True)
         ParserObject.SetAPIReturn("Message", "Done")

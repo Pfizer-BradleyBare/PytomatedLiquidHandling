@@ -1,4 +1,4 @@
-# curl -X GET http://localhost:65535/Command/Request
+# curl -X GET http://localhost:255/Driver/Request
 
 import web
 
@@ -17,7 +17,7 @@ class Request:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        CommandTrackerInstance = (
+        CommandTrackerInstance: CommandTracker = (
             GetDriverHandler().CommandTrackerInstance  # type:ignore
         )
 
@@ -40,6 +40,16 @@ class Request:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
+        ParserObject.SetAPIReturn(
+            "Request Identifier",
+            OutputCommandInstance.GetModuleName()
+            + " -> "
+            + OutputCommandInstance.GetName(),
+        )
+        ParserObject.SetAPIReturn(
+            "Custom Error Handling",
+            OutputCommandInstance.CustomErrorHandling,
+        )
         ParserObject.SetAPIReturn("Module Name", OutputCommandInstance.GetModuleName())
         ParserObject.SetAPIReturn(
             "Command Name", OutputCommandInstance.GetCommandName()
