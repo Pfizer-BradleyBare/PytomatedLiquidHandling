@@ -33,5 +33,9 @@ class LoadTipsCommand(Command):
 
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         OutputDict = vars(self.OptionsInstance)
+
         OutputDict["CustomErrorHandling"] = self.CustomErrorHandling
+
+        OutputDict["CommandName"] = self.GetModuleName() + " -> " + self.GetName()
+
         return OutputDict

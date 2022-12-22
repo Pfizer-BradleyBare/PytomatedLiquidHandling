@@ -31,7 +31,9 @@ class DriverHandler(ServerHandlerABC):
 
             self.CommandTrackerInstance.ManualLoad(CommandInstance)
 
+            print("WAITING")
             TimeoutFlag = CommandInstance.ResponseEvent.wait(Timeout)
+            print("FINISHED")
 
             self.CommandTrackerInstance.ManualUnload(CommandInstance)
 

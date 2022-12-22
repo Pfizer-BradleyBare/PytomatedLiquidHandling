@@ -27,7 +27,7 @@ class FlexibleTest:
         CommandTrackerInstance = TestInstance.Initialize()
 
         for Command in CommandTrackerInstance.GetObjectsAsList():
-            print(Command.GetModuleName())
+            print(Command.GetCommandParameters())
 
         print("WE ARE HERE")
         # Do something here
