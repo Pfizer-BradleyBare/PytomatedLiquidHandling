@@ -39,14 +39,15 @@ class Parser:
 
         InputKeys = self.JSON.keys()
 
-        if len(InputKeys) != len(ExpectedKeys):
-            self.APIReturn["Message"] = (
-                "Incorrect number of keys. This endpoint expects "
-                + str(len(ExpectedKeys))
-                + " keys. Expected: "
-                + str(ExpectedKeys)
-            )
-            return False
+        # if len(InputKeys) != len(ExpectedKeys):
+        #    self.APIReturn["Message"] = (
+        #        "Incorrect number of keys. This endpoint expects "
+        #        + str(len(ExpectedKeys))
+        #        + " keys. Expected: "
+        #        + str(ExpectedKeys)
+        #    )
+        #    return False
+        # Maybe extra keys doesn't matter?
 
         if not all(Key in InputKeys for Key in ExpectedKeys):
             self.APIReturn["Message"] = (

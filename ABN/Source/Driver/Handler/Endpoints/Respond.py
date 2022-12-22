@@ -14,7 +14,7 @@ class Respond:
     def POST(self):
         ParserObject = Parser("Driver Respond", web.data())
 
-        CommandTrackerInstance = (
+        CommandTrackerInstance: CommandTracker = (
             GetDriverHandler().CommandTrackerInstance  # type:ignore
         )
 
@@ -25,21 +25,30 @@ class Respond:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        OutputCommandInstance = None
-        for CommandInstance in CommandTrackerInstance.GetObjectsAsList():
-            if CommandInstance.ResponseInstance is None:
-                OutputCommandInstance = CommandInstance
-                break
+        if not ParserObject.IsValid(["State", "Message", "Request Identifier"]):
+            Response = ParserObject.GetHTTPResponse()
+            return Response
+        # preliminary check. We will check again below
 
-        if OutputCommandInstance is None:
+        RequestID = ParserObject.GetAPIData()["Request Identifier"]
+
+        if not CommandTrackerInstance.IsTracked(RequestID):
             ParserObject.SetAPIReturn(
-                "Message",
-                "Command already has response... How did this even happen???",
+                "Message", "There is not a command with that ID waiting."
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        ExpectedResponseKeys = OutputCommandInstance.GetResponseKeys()
+        CommandInstance = CommandTrackerInstance.GetObjectByName(RequestID)
+
+        if CommandInstance.GetResponse() is not None:
+            ParserObject.SetAPIReturn(
+                "Message", "Command already has a reponse. This should never happen."
+            )
+            Response = ParserObject.GetHTTPResponse()
+            return Response
+
+        ExpectedResponseKeys = CommandInstance.GetResponseKeys()
 
         if not ParserObject.IsValid(
             ["State", "Message", "Request Identifier"] + ExpectedResponseKeys
@@ -53,15 +62,13 @@ class Respond:
             Additional[Key] = ParserObject.GetAPIData()[Key]
         # Create dict that houses the expected keys so we can create the response object
 
-        # TODO TODO TODO TODO TODO need to rewrite for updated command tracker
-
-        OutputCommandInstance.ResponseInstance = CommandResponse(
+        CommandInstance.ResponseInstance = CommandResponse(
             ParserObject.GetAPIData()["State"],
             ParserObject.GetAPIData()["Message"],
             Additional,
         )
         # boom
-        OutputCommandInstance.ResponseEvent.set()
+        CommandInstance.ResponseEvent.set()
         # Add response then release threads waiting for a response
 
         ParserObject.SetAPIState(True)

@@ -4,6 +4,7 @@ import web
 
 from ....Server.Globals.HandlerRegistry import GetDriverHandler
 from ....Server.Tools.Parser import Parser
+from ...Tools.Command.CommandTracker import CommandTracker
 
 urls = ("/Driver/IsReady", "ABN.Source.Driver.Handler.Endpoints.IsReady.IsReady")
 
@@ -16,7 +17,7 @@ class IsReady:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        CommandTrackerInstance = (
+        CommandTrackerInstance: CommandTracker = (
             GetDriverHandler().CommandTrackerInstance  # type:ignore
         )
 
