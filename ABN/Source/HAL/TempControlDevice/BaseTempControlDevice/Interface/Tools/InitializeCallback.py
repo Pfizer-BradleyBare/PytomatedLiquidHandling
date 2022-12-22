@@ -1,4 +1,4 @@
-from ......Driver.Tools import Command
+from ......Driver.Tools import Command, ExecuteCallback
 from ....BaseTempControlDevice import TempControlDevice
 
 
@@ -8,3 +8,5 @@ def InitializeCallback(CommandInstance: Command, args: tuple):
     ResponseInstance = CommandInstance.GetResponse()
 
     TempControlDeviceInstance.HandleID = ResponseInstance.GetAdditional()["HandleID"]
+
+    ExecuteCallback(args[1], CommandInstance, args[2])

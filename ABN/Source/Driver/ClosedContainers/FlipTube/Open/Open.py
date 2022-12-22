@@ -12,7 +12,7 @@ class OpenCommand(Command):
         CustomErrorHandling: bool,
         OptionsTrackerInstance: OpenOptionsTracker,
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple | None = None,
+        CallbackArgs: tuple = (),
     ):
         Command.__init__(
             self,

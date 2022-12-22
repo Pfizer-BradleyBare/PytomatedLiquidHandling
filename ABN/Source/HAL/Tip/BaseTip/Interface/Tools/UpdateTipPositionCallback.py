@@ -1,5 +1,5 @@
 from ......Driver.Handler.DriverHandler import DriverHandler
-from ......Driver.Tools import Command
+from ......Driver.Tools import Command, ExecuteCallback
 from ......Server.Globals import GetDriverHandler
 from ....BaseTip import Tip
 
@@ -15,10 +15,13 @@ def UpdateTipPositionCallback(CommandInstance: Command, args: tuple):
 
         for CommandInstance in (
             TipInstance.Reload().GetObjectsAsList()
-            + TipInstance.UpdateTipPosition(NumTips).GetObjectsAsList()
+            + TipInstance.UpdateTipPosition(
+                NumTips, args[2], args[3]
+            ).GetObjectsAsList()
         ):
             DriverHandlerInstance.ExecuteCommand(CommandInstance)
     # If the function fails that means we need to reload. We will do this automatically in the callback.
 
     else:
         TipInstance.TipPosition = ResponseInstance.GetAdditional()["TipPosition"]
+        ExecuteCallback(args[2], CommandInstance, args[3])

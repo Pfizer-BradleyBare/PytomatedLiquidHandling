@@ -1,6 +1,7 @@
 from abc import abstractmethod
+from typing import Callable
 
-from .....Driver.Tools import CommandTracker
+from .....Driver.Tools import Command, CommandTracker
 from .....Tools.AbstractClasses import InterfaceABC
 
 
@@ -19,13 +20,26 @@ class TipInterface(InterfaceABC):
         return self.RemainingTips
 
     @abstractmethod
-    def Reload(self) -> CommandTracker:
+    def Reload(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         ...
 
     @abstractmethod
-    def UpdateTipPosition(self, NumTips: int) -> CommandTracker:
+    def UpdateTipPosition(
+        self,
+        NumTips: int,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         ...
 
     @abstractmethod
-    def UpdateRemainingTips(self) -> CommandTracker:
+    def UpdateRemainingTips(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         ...

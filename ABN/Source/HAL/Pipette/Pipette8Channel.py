@@ -1,4 +1,5 @@
 from math import ceil
+from typing import Callable
 
 from ...Driver.Pipette.Pipette8Channel import (
     AspirateCommand,
@@ -14,7 +15,7 @@ from ...Driver.Pipette.Pipette8Channel import (
     PickupOptions,
     PickupOptionsTracker,
 )
-from ...Driver.Tools import CommandTracker
+from ...Driver.Tools import Command, CommandTracker
 from ..Labware import LabwareTracker
 from ..Pipette import TransferOptions, TransferOptionsTracker
 from .BasePipette import Pipette, PipetteTipTracker, PipettingDeviceTypes
@@ -42,14 +43,25 @@ class Pipette8Channel(Pipette):
         )
         self.ActiveChannels: list[int] = ActiveChannels
 
-    def Initialize(self) -> CommandTracker:
+    def Initialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         return CommandTracker()
 
-    def Deinitialize(self) -> CommandTracker:
+    def Deinitialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         return CommandTracker()
 
     def Transfer(
-        self, TransferOptionsTrackerInstance: TransferOptionsTracker
+        self,
+        TransferOptionsTrackerInstance: TransferOptionsTracker,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
     ) -> CommandTracker:
         # NOTE: I played with sorting to make the liquid aspirate and dispense smarter. Trust me not a good idea. Try if you dare
         ReturnCommandTrackerInstance = CommandTracker()

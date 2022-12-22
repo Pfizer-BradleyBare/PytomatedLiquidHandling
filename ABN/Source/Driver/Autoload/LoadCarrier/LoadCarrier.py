@@ -11,7 +11,7 @@ class LoadCarrierCommand(Command):
         CustomErrorHandling: bool,
         OptionsInstance: LoadCarrierOptions,
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple | None = None,
+        CallbackArgs: tuple = (),
     ):
         Command.__init__(
             self,

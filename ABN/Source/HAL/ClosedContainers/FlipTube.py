@@ -1,3 +1,5 @@
+from typing import Callable
+
 from ...Driver.ClosedContainers.FlipTube import (
     CloseCommand,
     CloseOptions,
@@ -8,7 +10,7 @@ from ...Driver.ClosedContainers.FlipTube import (
     OpenOptions,
     OpenOptionsTracker,
 )
-from ...Driver.Tools import CommandTracker
+from ...Driver.Tools import Command, CommandTracker
 from ..Labware import LabwareTracker
 from ..Layout import LayoutItem
 from .BaseClosedContainers.ClosedContainers import (
@@ -28,21 +30,39 @@ class FlipTube(ClosedContainers):
             SupportedLabwareTrackerInstance,
         )
 
-    def Initialize(self) -> CommandTracker:
+    def Initialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
 
         ReturnCommandTracker.ManualLoad(
-            InitializeCommand("", True, InitializeOptions(""))
+            InitializeCommand(
+                "",
+                True,
+                InitializeOptions(""),
+                CallbackFunction,
+                CallbackArgs,
+            )
         )
 
         return ReturnCommandTracker
 
-    def Deinitialize(self) -> CommandTracker:
+    def Deinitialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         return CommandTracker()
 
     def Open(
-        self, LayoutItemInstances: list[LayoutItem], Positions: list[int]
+        self,
+        LayoutItemInstances: list[LayoutItem],
+        Positions: list[int],
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
     ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
@@ -56,13 +76,23 @@ class FlipTube(ClosedContainers):
             )
 
         ReturnCommandTracker.ManualLoad(
-            OpenCommand("", True, OpenOptionsTrackerInstance)
+            OpenCommand(
+                "",
+                True,
+                OpenOptionsTrackerInstance,
+                CallbackFunction,
+                CallbackArgs,
+            )
         )
 
         return ReturnCommandTracker
 
     def Close(
-        self, LayoutItemInstances: list[LayoutItem], Positions: list[int]
+        self,
+        LayoutItemInstances: list[LayoutItem],
+        Positions: list[int],
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
     ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
@@ -77,7 +107,13 @@ class FlipTube(ClosedContainers):
             )
 
         ReturnCommandTracker.ManualLoad(
-            CloseCommand("", True, CloseOptionsTrackerInstance)
+            CloseCommand(
+                "",
+                True,
+                CloseOptionsTrackerInstance,
+                CallbackFunction,
+                CallbackArgs,
+            )
         )
 
         return ReturnCommandTracker

@@ -12,7 +12,7 @@ class AspirateCommand(Command):
         CustomErrorHandling: bool,
         OptionsTrackerInstance: AspirateOptionsTracker,
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple | None = None,
+        CallbackArgs: tuple = (),
     ):
         Command.__init__(
             self,

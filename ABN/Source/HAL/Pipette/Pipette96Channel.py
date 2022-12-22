@@ -1,4 +1,6 @@
-from ...Driver.Tools import CommandTracker
+from typing import Callable
+
+from ...Driver.Tools import Command, CommandTracker
 from ..Labware import LabwareTracker
 from ..Pipette import TransferOptionsTracker
 from .BasePipette import Pipette, PipetteTipTracker, PipettingDeviceTypes
@@ -19,13 +21,24 @@ class Pipette96Channel(Pipette):
             SupportedLabwareTrackerInstance,
         )
 
-    def Initialize(self) -> CommandTracker:
+    def Initialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         return CommandTracker()
 
-    def Deinitialize(self) -> CommandTracker:
+    def Deinitialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         return CommandTracker()
 
     def Transfer(
-        self, TransferOptionsTrackerInstance: TransferOptionsTracker
+        self,
+        TransferOptionsTrackerInstance: TransferOptionsTracker,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
     ) -> CommandTracker:
         ...

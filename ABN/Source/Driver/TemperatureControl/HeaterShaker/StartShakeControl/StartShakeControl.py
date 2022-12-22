@@ -11,7 +11,7 @@ class StartShakeControlCommand(Command):
         CustomErrorHandling: bool,
         OptionsInstance: StartShakeControlOptions,
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple | None = None,
+        CallbackArgs: tuple = (),
     ):
         Command.__init__(
             self,

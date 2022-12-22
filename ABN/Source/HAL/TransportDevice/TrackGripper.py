@@ -1,4 +1,6 @@
-from ...Driver.Tools import CommandTracker
+from typing import Callable
+
+from ...Driver.Tools import Command, CommandTracker
 from ..Layout import LayoutItem
 from .BaseTransportDevice import (
     TransportableLabwareTracker,
@@ -18,14 +20,26 @@ class TrackGripper(TransportDevice):
             TransportableLabwareTrackerInstance,
         )
 
-    def Initialize(self) -> CommandTracker:
+    def Initialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         ...
 
-    def Deinitialize(self) -> CommandTracker:
+    def Deinitialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         ...
 
     def Transport(
-        self, SourceLayoutItem: LayoutItem, DestinationLayoutItem: LayoutItem
+        self,
+        SourceLayoutItem: LayoutItem,
+        DestinationLayoutItem: LayoutItem,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
     ) -> CommandTracker:
         ...
 

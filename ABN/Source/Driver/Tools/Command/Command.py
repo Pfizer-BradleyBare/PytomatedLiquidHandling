@@ -12,7 +12,7 @@ class Command(ObjectABC):
         Name: str,
         CustomErrorHandling: bool,
         CallbackFunction: Callable[[Self, tuple], None] | None,
-        CallbackArgs: tuple | None,
+        CallbackArgs: tuple,
     ):
         self.ResponseInstance: Response | None = None
         self.ResponseEvent: Event = Event()
@@ -21,7 +21,7 @@ class Command(ObjectABC):
         self.CallbackFunction: Callable[
             [Command, tuple], None
         ] | None = CallbackFunction
-        self.CallbackArgs: tuple | None = CallbackArgs
+        self.CallbackArgs: tuple = CallbackArgs
 
     def GetName(self) -> str:
         return self.Name

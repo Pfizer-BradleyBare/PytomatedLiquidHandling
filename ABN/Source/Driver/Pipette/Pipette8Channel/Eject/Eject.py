@@ -12,7 +12,7 @@ class EjectCommand(Command):
         CustomErrorHandling: bool,
         OptionsTrackerInstance: EjectOptionsTracker,
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple | None = None,
+        CallbackArgs: tuple = (),
     ):
         Command.__init__(
             self,

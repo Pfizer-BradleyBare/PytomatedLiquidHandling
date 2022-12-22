@@ -1,3 +1,5 @@
+from typing import Callable
+
 from ...Driver.TemperatureControl.HeaterShaker import (
     ConnectCommand,
     ConnectOptions,
@@ -16,7 +18,7 @@ from ...Driver.TemperatureControl.HeaterShaker import (
     StopTemperatureControlCommand,
     StopTemperatureControlOptions,
 )
-from ...Driver.Tools import CommandTracker
+from ...Driver.Tools import Command, CommandTracker
 from ..Layout import LayoutItemGroupingTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
 from .BaseTempControlDevice.Interface import (
@@ -44,7 +46,11 @@ class HamiltonHeaterShaker(TempControlDevice):
         )
         self.HandleID: int
 
-    def Initialize(self) -> CommandTracker:
+    def Initialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
 
@@ -71,18 +77,26 @@ class HamiltonHeaterShaker(TempControlDevice):
                 "",
                 True,
                 SetPlateLockOptions("", self.HandleID, 0),
+                CallbackFunction,
+                CallbackArgs,
             )
         )
 
         return ReturnCommandTracker
 
-    def Deinitialize(self) -> CommandTracker:
+    def Deinitialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
 
         ReturnCommandTracker.ManualLoad(
             StopTemperatureControlCommand(
-                "", True, StopTemperatureControlOptions("", self.HandleID)
+                "",
+                True,
+                StopTemperatureControlOptions("", self.HandleID),
             )
         )
 
@@ -99,12 +113,19 @@ class HamiltonHeaterShaker(TempControlDevice):
                 "",
                 True,
                 SetPlateLockOptions("", self.HandleID, 0),
+                CallbackFunction,
+                CallbackArgs,
             )
         )
 
         return ReturnCommandTracker
 
-    def SetTemperature(self, Temperature: float) -> CommandTracker:
+    def SetTemperature(
+        self,
+        Temperature: float,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
 
@@ -113,12 +134,18 @@ class HamiltonHeaterShaker(TempControlDevice):
                 "",
                 True,
                 StartTemperatureControlOptions("", self.HandleID, Temperature),
+                CallbackFunction,
+                CallbackArgs,
             )
         )
 
         return ReturnCommandTracker
 
-    def UpdateCurrentTemperature(self) -> CommandTracker:
+    def UpdateCurrentTemperature(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
 
@@ -128,13 +155,18 @@ class HamiltonHeaterShaker(TempControlDevice):
                 True,
                 GetTemperatureOptions("", self.HandleID),
                 UpdateCurrentTemperatureCallback,
-                (self,),
+                (self, CallbackFunction, CallbackArgs),
             )
         )
 
         return ReturnCommandTracker
 
-    def StartShaking(self, RPM: int) -> CommandTracker:
+    def StartShaking(
+        self,
+        RPM: int,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
 
@@ -151,12 +183,18 @@ class HamiltonHeaterShaker(TempControlDevice):
                 "",
                 True,
                 StartShakeControlOptions("", self.HandleID, RPM),
+                CallbackFunction,
+                CallbackArgs,
             )
         )
 
         return ReturnCommandTracker
 
-    def StopShaking(self) -> CommandTracker:
+    def StopShaking(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
 
@@ -173,12 +211,18 @@ class HamiltonHeaterShaker(TempControlDevice):
                 "",
                 True,
                 SetPlateLockOptions("", self.HandleID, 0),
+                CallbackFunction,
+                CallbackArgs,
             )
         )
 
         return ReturnCommandTracker
 
-    def UpdateCurrentShakingSpeed(self) -> CommandTracker:
+    def UpdateCurrentShakingSpeed(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
 
@@ -188,7 +232,7 @@ class HamiltonHeaterShaker(TempControlDevice):
                 True,
                 GetShakingSpeedOptions("", self.HandleID),
                 UpdateCurrentShakingSpeedCallback,
-                (self,),
+                (self, CallbackFunction, CallbackArgs),
             )
         )
 

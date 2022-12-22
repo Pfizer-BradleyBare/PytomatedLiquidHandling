@@ -1,4 +1,6 @@
-from ...Driver.Tools import CommandTracker
+from typing import Callable
+
+from ...Driver.Tools import Command, CommandTracker
 from ...Driver.Transport.Gripper import (
     GetPlateCommand,
     GetPlateOptions,
@@ -24,14 +26,26 @@ class COREGripper(TransportDevice):
             self, TransportDevices.COREGripper, TransportableLabwareTrackerInstance
         )
 
-    def Initialize(self) -> CommandTracker:
+    def Initialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         return CommandTracker()
 
-    def Deinitialize(self) -> CommandTracker:
+    def Deinitialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         return CommandTracker()
 
     def Transport(
-        self, SourceLayoutItem: LayoutItem, DestinationLayoutItem: LayoutItem
+        self,
+        SourceLayoutItem: LayoutItem,
+        DestinationLayoutItem: LayoutItem,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
     ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
@@ -101,6 +115,8 @@ class COREGripper(TransportDevice):
                     "",
                     DestinationLayoutItem.Sequence,
                 ),
+                CallbackFunction,
+                CallbackArgs,
             )
         )
 

@@ -1,6 +1,7 @@
 from abc import abstractmethod
+from typing import Callable
 
-from .....Driver.Tools import CommandTracker
+from .....Driver.Tools import Command, CommandTracker
 from .....Tools.AbstractClasses import InterfaceABC
 from ....Labware import LabwareTracker
 from ....Layout import LayoutItem
@@ -15,7 +16,10 @@ class PipetteInterface(InterfaceABC):
 
     @abstractmethod
     def Transfer(
-        self, TransferOptionsTrackerInstance: TransferOptionsTracker
+        self,
+        TransferOptionsTrackerInstance: TransferOptionsTracker,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
     ) -> CommandTracker:
         ...
 

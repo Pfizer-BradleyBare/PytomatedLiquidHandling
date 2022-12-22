@@ -1,6 +1,5 @@
 from ...Tools.AbstractClasses import ServerHandlerABC
-from ..Tools.Command.Command import Command
-from ..Tools.Command.CommandTracker import CommandTracker
+from ..Tools import Command, CommandTracker, ExecuteCallback
 from .Endpoints import IsReady, Request, Respond
 
 
@@ -30,14 +29,12 @@ class DriverHandler(ServerHandlerABC):
 
         TimeoutFlag = CommandInstance.ResponseEvent.wait(Timeout)
 
-        if (
-            TimeoutFlag is True  # This means it did not timeout
-            and CommandInstance.CallbackFunction is not None
-            and CommandInstance.CallbackArgs is not None
-        ):
+        if TimeoutFlag is True:  # This means it did not timeout
 
-            CommandInstance.CallbackFunction(
-                CommandInstance, CommandInstance.CallbackArgs
+            ExecuteCallback(
+                CommandInstance.CallbackFunction,
+                CommandInstance,
+                CommandInstance.CallbackArgs,
             )
 
         self.CommandTrackerInstance.ManualUnload(CommandInstance)

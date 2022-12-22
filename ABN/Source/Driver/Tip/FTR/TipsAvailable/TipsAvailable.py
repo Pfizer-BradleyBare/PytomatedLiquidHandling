@@ -11,7 +11,7 @@ class TipsAvailableCommand(Command):
         CustomErrorHandling: bool,
         OptionsInstance: TipsAvailableOptions,
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple | None = None,
+        CallbackArgs: tuple = (),
     ):
         Command.__init__(
             self,

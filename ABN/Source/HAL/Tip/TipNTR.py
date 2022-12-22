@@ -1,3 +1,5 @@
+from typing import Callable
+
 from ...Driver.Tip.NTR import (
     LoadTipsCommand,
     LoadTipsOptions,
@@ -6,7 +8,7 @@ from ...Driver.Tip.NTR import (
     TipsRemainingCommand,
     TipsRemainingOptions,
 )
-from ...Driver.Tools import Command, CommandTracker
+from ...Driver.Tools import Command, CommandTracker, ExecuteCallback
 from .BaseTip import Tip, TipTypes
 from .BaseTip.Interface import UpdateRemainingTipsCallback, UpdateTipPositionCallback
 
@@ -26,13 +28,25 @@ class TipNTR(Tip):
 
         self.GeneratedWasteSequence: str | None = None
 
-    def Initialize(self) -> CommandTracker:
-        return self.Reload()
+    def Initialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
+        return self.Reload(CallbackFunction, CallbackArgs)
 
-    def Deinitialize(self) -> CommandTracker:
+    def Deinitialize(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         return CommandTracker()
 
-    def Reload(self) -> CommandTracker:
+    def Reload(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
         def NTRReloadCallback(CommandInstance: Command, args: tuple):
 
             TipInstance: TipNTR = args[0]
@@ -41,6 +55,8 @@ class TipNTR(Tip):
             TipInstance.GeneratedWasteSequence = ResponseInstance.GetAdditional()[
                 "GeneratedWasteSequence"
             ]
+
+            ExecuteCallback(args[1], CommandInstance, args[2])
 
         ReturnCommandTracker = CommandTracker()
 
@@ -55,14 +71,19 @@ class TipNTR(Tip):
                     self.GripperSequence,
                 ),
                 NTRReloadCallback,
-                (self,),
+                (self, CallbackFunction, CallbackArgs),
             )
         )
 
         # We also need to show a deck loading dialog, move the autoload, etc.
         return ReturnCommandTracker
 
-    def UpdateTipPosition(self, NumTips: int) -> CommandTracker:
+    def UpdateTipPosition(
+        self,
+        NumTips: int,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
 
@@ -78,13 +99,17 @@ class TipNTR(Tip):
                     NumTips,
                 ),
                 UpdateTipPositionCallback,
-                (self, NumTips),
+                (self, NumTips, CallbackFunction, CallbackArgs),
             )
         )
 
         return ReturnCommandTracker
 
-    def UpdateRemainingTips(self) -> CommandTracker:
+    def UpdateRemainingTips(
+        self,
+        CallbackFunction: Callable[[Command, tuple], None] | None = None,
+        CallbackArgs: tuple = (),
+    ) -> CommandTracker:
 
         ReturnCommandTracker = CommandTracker()
 
@@ -97,7 +122,7 @@ class TipNTR(Tip):
                     self.PickupSequence,
                 ),
                 UpdateRemainingTipsCallback,
-                (self,),
+                (self, CallbackFunction, CallbackArgs),
             )
         )
 
