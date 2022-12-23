@@ -8,6 +8,7 @@ from .Endpoints import GetDevicesState, GetLoadedLabware
 
 class APIHandler(ServerHandlerABC):
     def __init__(self):
+        ServerHandlerABC.__init__(self)
         self.LoadedLabwareTrackerInstance: LoadedLabwareTracker = LoadedLabwareTracker()
         self.ResourceLockTrackerInstance: ResourceLockTracker = ResourceLockTracker()
         self.HALLayerInstance: HALLayer = HalLoader.Load()

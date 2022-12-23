@@ -5,6 +5,7 @@ from .Endpoints import IsReady, Request, Respond
 
 class DriverHandler(ServerHandlerABC):
     def __init__(self):
+        ServerHandlerABC.__init__(self)
         self.CommandTrackerInstance: CommandTracker = CommandTracker()
 
     def GetName(self) -> str:

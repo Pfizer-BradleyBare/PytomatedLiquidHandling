@@ -16,6 +16,7 @@ from .Endpoints import (
 
 class AppHandler(ServerHandlerABC):
     def __init__(self):
+        ServerHandlerABC.__init__(self)
         self.WorkbookTrackerInstance: WorkbookTracker = WorkbookTracker()
 
     def GetName(self) -> str:
