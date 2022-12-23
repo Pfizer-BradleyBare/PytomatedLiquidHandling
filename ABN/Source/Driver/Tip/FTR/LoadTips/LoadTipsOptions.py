@@ -8,5 +8,7 @@ class LoadTipsOptions(ObjectABC):
 
         self.TipSequence: str = TipSequence
 
+        self.LoadingText: str = "Load FTR Tips"
+
     def GetName(self) -> str:
         return self.Name

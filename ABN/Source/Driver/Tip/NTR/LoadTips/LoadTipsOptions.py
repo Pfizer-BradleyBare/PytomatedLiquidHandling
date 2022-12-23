@@ -12,5 +12,7 @@ class LoadTipsOptions(ObjectABC):
         self.RackWasteSequence: str = RackWasteSequence
         self.GripperSequence: str = GripperSequence
 
+        self.LoadingText: str = "Load NTR Tips"
+
     def GetName(self) -> str:
         return self.Name
