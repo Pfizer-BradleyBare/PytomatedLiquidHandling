@@ -10,7 +10,7 @@ ArchiveFolder = "Archive"
 TempFolder = "Temp"
 
 urls = (
-    "/Method/AvailableMethods",
+    "/App/AvailableMethods",
     "ABN.Source.App.Handler.Endpoints.AvailableMethods.AvailableMethods",
 )
 

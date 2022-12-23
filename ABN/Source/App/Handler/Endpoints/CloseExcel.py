@@ -4,14 +4,14 @@ import xlwings
 from ....Server.Tools.Parser import Parser
 
 urls = (
-    "/Method/Open",
-    "ABN.Source.App.Handler.Endpoints.Open.Open",
+    "/App/CloseExcel",
+    "ABN.Source.App.Handler.Endpoints.CloseExcel.CloseExcel",
 )
 
 
-class Open:
+class CloseExcel:
     def POST(self):
-        ParserObject = Parser("App Open", web.data())
+        ParserObject = Parser("App CloseExcel", web.data())
 
         if not ParserObject.IsValid(["Method File Path"]):
             Response = ParserObject.GetHTTPResponse()
@@ -19,14 +19,14 @@ class Open:
 
         MethodFilePath = ParserObject.GetEndpointInputData()["Method File Path"]
 
-        BookHandle: xlwings.Book | None = None
         if xlwings.apps.count != 0:
             for Book in xlwings.books:
                 if Book.fullname == MethodFilePath:
-                    BookHandle = Book
-
-        if BookHandle is None:
-            BookHandle = xlwings.Book(MethodFilePath)
+                    Book.save()
+                    App = Book.app
+                    Book.close()
+                    if len(App.books) == 0:
+                        App.quit()
 
         ParserObject.SetEndpointState(True)
 

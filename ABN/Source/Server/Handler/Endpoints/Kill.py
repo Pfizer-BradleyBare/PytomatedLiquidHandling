@@ -11,13 +11,13 @@ from ...Globals.HandlerRegistry import (
 )
 from ...Tools.Parser import Parser
 
-urls = ("/State/Kill", "ABN.Source.Server.Handler.Endpoints.Kill.Kill")
+urls = ("/Server/Kill", "ABN.Source.Server.Handler.Endpoints.Kill.Kill")
 
 
 class Kill:
     def GET(self):
 
-        ParserObject = Parser("State Kill", web.data())
+        ParserObject = Parser("Server Kill", web.data())
 
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()

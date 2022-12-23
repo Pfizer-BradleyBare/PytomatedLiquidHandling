@@ -8,7 +8,7 @@ from ...Workbook import WorkbookTracker
 from .AvailableMethods import MethodsPath, TempFolder
 
 urls = (
-    "/Method/CleanupMethodProject",
+    "/App/CleanupMethodProject",
     "ABN.Source.App.Handler.Endpoints.CleanupMethodProject.CleanupMethodProject",
 )
 

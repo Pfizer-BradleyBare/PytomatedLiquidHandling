@@ -4,12 +4,12 @@ import web
 
 from ...Tools.Parser import Parser
 
-urls = ("/State/IsActive", "ABN.Source.Server.Handler.Endpoints.IsActive.IsActive")
+urls = ("/Server/IsActive", "ABN.Source.Server.Handler.Endpoints.IsActive.IsActive")
 
 
 class IsActive:
     def GET(self):
-        ParserObject = Parser("State IsActive", web.data())
+        ParserObject = Parser("Server IsActive", web.data())
 
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()

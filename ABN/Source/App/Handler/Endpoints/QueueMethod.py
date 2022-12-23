@@ -17,12 +17,12 @@ from ....Server.Globals.HandlerRegistry import GetAppHandler
 from ....Server.Tools.Parser import Parser
 from ...Workbook import WorkbookLoader, WorkbookRunTypes, WorkbookTracker
 
-urls = ("/Method/Queue", "ABN.Source.App.Handler.Endpoints.Queue.Queue")
+urls = ("/App/QueueMethod", "ABN.Source.App.Handler.Endpoints.QueueMethod.QueueMethod")
 
 
-class Queue:
+class QueueMethod:
     def POST(self):
-        ParserObject = Parser("App Queue", web.data())
+        ParserObject = Parser("App QueueMethod", web.data())
 
         if not ParserObject.IsValid(
             ["Method Path", "Action", "User Name", "User Contact Info"]

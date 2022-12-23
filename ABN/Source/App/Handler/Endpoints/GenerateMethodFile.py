@@ -10,7 +10,7 @@ from ...Tools.Excel import Excel, ExcelHandle
 from .AvailableMethods import MethodsPath, TempFolder, TemplateMethodSuffix
 
 urls = (
-    "/Method/GenerateMethodFile",
+    "/App/GenerateMethodFile",
     "ABN.Source.App.Handler.Endpoints.GenerateMethodFile.GenerateMethodFile",
 )
 

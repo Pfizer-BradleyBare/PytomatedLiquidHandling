@@ -5,7 +5,7 @@ from ....Server.Tools.Parser import Parser
 from ...Workbook import WorkbookRunTypes, WorkbookTracker
 
 urls = (
-    "/Method/ListQueue",
+    "/App/ListQueue",
     "ABN.Source.App.Handler.Endpoints.ListQueue.ListQueue",
 )
 

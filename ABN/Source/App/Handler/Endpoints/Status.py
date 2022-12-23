@@ -4,7 +4,7 @@ import web
 
 from ....Server.Tools.Parser import Parser
 
-urls = ("/Method/Status", "ABN.Source.App.Handler.Endpoints.Status.Status")
+urls = ("/App/Status", "ABN.Source.App.Handler.Endpoints.Status.Status")
 
 
 class Status:
