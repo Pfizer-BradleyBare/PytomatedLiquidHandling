@@ -1,7 +1,8 @@
 import yaml
 
 from ..TransportDevice.BaseTransportDevice import TransportDeviceTracker
-from .DeckLocation import DeckLocation, LoadingConfig
+from .DeckLoadingConfig.DeckLoadingConfig import CarrierTypes, DeckLoadingConfig
+from .DeckLocation import DeckLocation
 from .DeckLocationTracker import DeckLocationTracker
 from .LocationTransportDevice.LocationTransportDevice import LocationTransportDevice
 from .LocationTransportDevice.LocationTransportDeviceTracker import (
@@ -36,22 +37,38 @@ def LoadYaml(
                     )
                 )
 
-        LoadingConfigInstance = None
+        DeckLoadingConfigInstance = None
 
-        if "Loading" in ConfigFile["Location IDs"][LocationID].keys():
-            CarrierString = ConfigFile["Location IDs"][LocationID]["Loading"][
+        if "Deck Loading" in ConfigFile["Location IDs"][LocationID].keys():
+            CarrierString = ConfigFile["Location IDs"][LocationID]["Deck Loading"][
                 "Carrier Labware String"
             ]
-            CarrierPosition = ConfigFile["Location IDs"][LocationID]["Loading"][
-                "Carrier Position"
+            CarrierTrackStart = ConfigFile["Location IDs"][LocationID]["Deck Loading"][
+                "Carrier Track Start"
             ]
-            LoadingConfigInstance = LoadingConfig(CarrierString, CarrierPosition)
+            CarrierTrackEnd = ConfigFile["Location IDs"][LocationID]["Deck Loading"][
+                "Carrier Track End"
+            ]
+            CarrierType = CarrierTypes(
+                ConfigFile["Location IDs"][LocationID]["Deck Loading"]["Carrier Type"]
+            )
+            CarrierPositions = ConfigFile["Location IDs"][LocationID]["Deck Loading"][
+                "Carrier Positions"
+            ]
+
+            DeckLoadingConfigInstance = DeckLoadingConfig(
+                CarrierString,
+                CarrierTrackStart,
+                CarrierTrackEnd,
+                CarrierType,
+                CarrierPositions,
+            )
 
         DeckLocationTrackerInstance.ManualLoad(
             DeckLocation(
                 LocationID,
                 LocationTransportDeviceTrackerInstance,
-                LoadingConfigInstance,
+                DeckLoadingConfigInstance,
                 ConfigFile["Location IDs"][LocationID]["StorageLocation"],
                 ConfigFile["Location IDs"][LocationID]["PipettingLocation"],
             )

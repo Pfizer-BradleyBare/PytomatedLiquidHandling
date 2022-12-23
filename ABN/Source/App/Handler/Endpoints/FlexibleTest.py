@@ -3,6 +3,7 @@
 import web
 
 from ....API.Handler.APIHandler import APIHandler
+from ....Driver.DeckLoadingDialog.Plate5Position import UnloadCommand, UnloadOptions
 from ....Driver.Handler.DriverHandler import DriverHandler
 from ....Server.Globals.HandlerRegistry import GetAPIHandler, GetDriverHandler
 from ....Server.Tools.Parser import Parser
@@ -41,6 +42,16 @@ class FlexibleTest:
 
         for Command in CommandTrackerInstance.GetObjectsAsList():
             DriverHandlerInstance.ExecuteCommand(Command)
+
+        DriverHandlerInstance.ExecuteCommand(
+            UnloadCommand(
+                "",
+                False,
+                UnloadOptions(
+                    "", 5, 12, "400uL Thermo 96 Well PCR Plate", "1", "HSP901"
+                ),
+            )
+        )
 
         ParserObject.SetEndpointState(True)
 

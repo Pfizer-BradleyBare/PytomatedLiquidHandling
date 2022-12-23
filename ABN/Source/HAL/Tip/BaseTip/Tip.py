@@ -7,6 +7,7 @@ from .Interface.TipInterface import TipInterface
 class TipTypes(Enum):
     NTR = "NTR"
     FTR = "FTR"
+    FTRSlim = "FTRSlim"
 
 
 class Tip(ObjectABC, TipInterface):

@@ -17,7 +17,7 @@ def LoadYaml(FilePath: str) -> TipTracker:
 
         if TipItem["Enabled"] is True:
             PickupSequence = TipItem["Pickup Sequence"]
-            MaxVolume = TipItem["Max Pipetting Volume"]
+            MaxVolume = TipItem["Volume"]
 
             TipType = TipTypes(TipItem["Tip Type"])
 
@@ -35,7 +35,7 @@ def LoadYaml(FilePath: str) -> TipTracker:
                     )
                 )
 
-            elif TipType == TipTypes.FTR:
+            elif TipType == TipTypes.FTR or TipType == TipTypes.FTRSlim:
                 TipTrackerInstance.ManualLoad(TipFTR(TipID, PickupSequence, MaxVolume))
 
     return TipTrackerInstance

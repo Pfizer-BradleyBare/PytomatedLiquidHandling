@@ -1,5 +1,5 @@
 from ...Tools.AbstractClasses import ObjectABC
-from .LoadingConfig.LoadingConfig import LoadingConfig
+from .DeckLoadingConfig.DeckLoadingConfig import DeckLoadingConfig
 from .LocationTransportDevice.LocationTransportDeviceTracker import (
     LocationTransportDeviceTracker,
 )
@@ -10,7 +10,7 @@ class DeckLocation(ObjectABC):
         self,
         Name: str,
         SupportedLocationTransportDeviceTrackerInstance: LocationTransportDeviceTracker,
-        LoadingConfigInstance: LoadingConfig | None,
+        DeckLoadingConfigInstance: DeckLoadingConfig | None,
         IsStorageLocation: bool,
         IsPipettableLocation: bool,
     ):
@@ -18,7 +18,9 @@ class DeckLocation(ObjectABC):
         self.SupportedLocationTransportDeviceTrackerInstance: LocationTransportDeviceTracker = (
             SupportedLocationTransportDeviceTrackerInstance
         )
-        self.LoadingConfigInstance: LoadingConfig | None = LoadingConfigInstance
+        self.DeckLoadingConfigInstance: DeckLoadingConfig | None = (
+            DeckLoadingConfigInstance
+        )
         self.StorageLocation: bool = IsStorageLocation
         self.PipettableLocation: bool = IsPipettableLocation
 
@@ -32,11 +34,11 @@ class DeckLocation(ObjectABC):
         return self.PipettableLocation
 
     def IsLoadableLocation(self) -> bool:
-        return self.LoadingConfigInstance is not None
+        return self.DeckLoadingConfigInstance is not None
 
-    def GetLoadingConfig(self) -> LoadingConfig:
-        if self.LoadingConfigInstance is None:
+    def GetDeckLoadingConfig(self) -> DeckLoadingConfig:
+        if self.DeckLoadingConfigInstance is None:
             raise Exception(
                 "This is not a loadable location. Did you check if it is a IsLoadableLocation first?"
             )
-        return self.LoadingConfigInstance
+        return self.DeckLoadingConfigInstance
