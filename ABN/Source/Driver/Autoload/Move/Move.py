@@ -26,7 +26,7 @@ class MoveCommand(Command):
         return "Autoload"
 
     def GetCommandName(self) -> str:
-        return "Move"
+        return "Move Autoload"
 
     def GetResponseKeys(self) -> list[str]:
         return []

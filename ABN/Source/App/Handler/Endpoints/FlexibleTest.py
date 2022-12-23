@@ -33,7 +33,7 @@ class FlexibleTest:
         # Do something here
 
         for Command in CommandTrackerInstance.GetObjectsAsList():
-            DriverHandlerInstance.CommandTrackerInstance.ManualLoad(Command)
+            DriverHandlerInstance.ExecuteCommand(Command)
 
         ParserObject.SetEndpointState(True)
 

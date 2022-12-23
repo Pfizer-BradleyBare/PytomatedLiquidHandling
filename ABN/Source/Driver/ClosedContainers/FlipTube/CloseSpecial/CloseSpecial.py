@@ -24,7 +24,7 @@ class CloseSpecialCommand(Command):
         self.OptionsTrackerInstance: CloseSpecialOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:
-        return "FlipTube"
+        return "Closed Containers FlipTube"
 
     def GetCommandName(self) -> str:
         return "Close Special"

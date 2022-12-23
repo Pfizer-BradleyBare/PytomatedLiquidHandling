@@ -42,7 +42,7 @@ class Respond:
 
         CommandInstance = CommandTrackerInstance.GetObjectByName(RequestID)
 
-        if CommandInstance.GetResponse() is not None:
+        if CommandInstance.ResponseInstance is not None:
             ParserObject.SetEndpointMessage(
                 "Command already has a reponse. This should never happen."
             )

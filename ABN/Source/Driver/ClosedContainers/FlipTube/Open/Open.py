@@ -24,7 +24,7 @@ class OpenCommand(Command):
         self.OptionsTrackerInstance: OpenOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:
-        return "FlipTube"
+        return "Closed Containers FlipTube"
 
     def GetCommandName(self) -> str:
         return "Open"
