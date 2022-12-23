@@ -29,7 +29,7 @@ class ConnectCommand(Command):
         return "Connect"
 
     def GetResponseKeys(self) -> list[str]:
-        return []
+        return ["HandleID"]
 
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
         OutputDict = vars(self.OptionsInstance)

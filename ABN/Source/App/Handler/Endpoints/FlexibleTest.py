@@ -35,6 +35,13 @@ class FlexibleTest:
         for Command in CommandTrackerInstance.GetObjectsAsList():
             DriverHandlerInstance.ExecuteCommand(Command)
 
+        TestInstance = TrackerInstance.GetObjectsAsList()[1]
+
+        CommandTrackerInstance = TestInstance.Initialize()
+
+        for Command in CommandTrackerInstance.GetObjectsAsList():
+            DriverHandlerInstance.ExecuteCommand(Command)
+
         ParserObject.SetEndpointState(True)
 
         Response = ParserObject.GetHTTPResponse()
