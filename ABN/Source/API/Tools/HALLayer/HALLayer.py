@@ -1,4 +1,4 @@
-from ....HAL.ClosedContainers.BaseClosedContainers import ClosedContainersTracker
+from ....HAL.ClosedContainer.BaseClosedContainer import ClosedContainerTracker
 from ....HAL.DeckLocation import DeckLocationTracker
 from ....HAL.Labware import LabwareTracker
 from ....HAL.Layout import LayoutItemGroupingTracker
@@ -15,7 +15,7 @@ from ....HAL.TransportDevice.BaseTransportDevice import TransportDeviceTracker
 class HALLayer:
     def __init__(self):
         self.DeckLocationTrackerInstance: DeckLocationTracker
-        self.ClosedContainersTrackerInstance: ClosedContainersTracker
+        self.ClosedContainerTrackerInstance: ClosedContainerTracker
         self.LabwareTrackerInstance: LabwareTracker
         self.LayoutItemGroupingTrackerInstance: LayoutItemGroupingTracker
         self.LidTrackerInstance: LidTracker

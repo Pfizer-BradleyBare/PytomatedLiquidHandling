@@ -1,6 +1,6 @@
 from typing import Callable
 
-from ...Driver.ClosedContainers.FlipTube import (
+from ...Driver.ClosedContainer.FlipTube import (
     CloseCommand,
     CloseOptions,
     CloseOptionsTracker,
@@ -14,19 +14,16 @@ from ...Driver.NOP import NOPCommand
 from ...Driver.Tools import Command, CommandTracker
 from ..Labware import LabwareTracker
 from ..Layout import LayoutItem
-from .BaseClosedContainers.ClosedContainers import (
-    ClosedContainers,
-    ClosedContainersTypes,
-)
+from .BaseClosedContainer.ClosedContainer import ClosedContainer, ClosedContainerTypes
 
 
-class FlipTube(ClosedContainers):
+class FlipTube(ClosedContainer):
     def __init__(
         self, ToolSequence: str, SupportedLabwareTrackerInstance: LabwareTracker
     ):
-        ClosedContainers.__init__(
+        ClosedContainer.__init__(
             self,
-            ClosedContainersTypes.FlipTube,
+            ClosedContainerTypes.FlipTube,
             ToolSequence,
             SupportedLabwareTrackerInstance,
         )

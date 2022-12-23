@@ -23,7 +23,7 @@ class InitializeCommand(Command):
         self.OptionsInstance: InitializeOptions = OptionsInstance
 
     def GetModuleName(self) -> str:
-        return "Closed Containers FlipTube"
+        return "Closed Container FlipTube"
 
     def GetCommandName(self) -> str:
         return "Initialize"

@@ -2,15 +2,15 @@ from collections import defaultdict
 from typing import Callable
 
 from ....Tools.Command.Command import Command
-from .OpenOptionsTracker import OpenOptionsTracker
+from .CloseOptionsTracker import CloseOptionsTracker
 
 
-class OpenCommand(Command):
+class CloseCommand(Command):
     def __init__(
         self,
         Name: str,
         CustomErrorHandling: bool,
-        OptionsTrackerInstance: OpenOptionsTracker,
+        OptionsTrackerInstance: CloseOptionsTracker,
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ):
@@ -21,13 +21,13 @@ class OpenCommand(Command):
             CallbackFunction,
             CallbackArgs,
         )
-        self.OptionsTrackerInstance: OpenOptionsTracker = OptionsTrackerInstance
+        self.OptionsTrackerInstance: CloseOptionsTracker = OptionsTrackerInstance
 
     def GetModuleName(self) -> str:
-        return "Closed Containers FlipTube"
+        return "Closed Container FlipTube"
 
     def GetCommandName(self) -> str:
-        return "Open"
+        return "Close"
 
     def GetResponseKeys(self) -> list[str]:
         return []

@@ -2,21 +2,21 @@ from enum import Enum
 
 from ....Tools.AbstractClasses import ObjectABC
 from ...Labware import LabwareTracker
-from .Interface.ClosedContainersInterface import ClosedContainersInterface
+from .Interface.ClosedContainerInterface import ClosedContainerInterface
 
 
-class ClosedContainersTypes(Enum):
+class ClosedContainerTypes(Enum):
     FlipTube = "FlipTube"
 
 
-class ClosedContainers(ObjectABC, ClosedContainersInterface):
+class ClosedContainer(ObjectABC, ClosedContainerInterface):
     def __init__(
         self,
-        Type: ClosedContainersTypes,
+        Type: ClosedContainerTypes,
         ToolSequence: str,
         SupportedLabwareTrackerInstance: LabwareTracker,
     ):
-        self.Type: ClosedContainersTypes = Type
+        self.Type: ClosedContainerTypes = Type
         self.ToolSequence: str = ToolSequence
         self.SupportedLabwareTrackerInstance: LabwareTracker = (
             SupportedLabwareTrackerInstance

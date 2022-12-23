@@ -1,14 +1,14 @@
 import yaml
 
 from ..Labware import LabwareTracker
-from .BaseClosedContainers.ClosedContainersTracker import ClosedContainersTracker
+from .BaseClosedContainer.ClosedContainerTracker import ClosedContainerTracker
 from .FlipTube import FlipTube
 
 
 def LoadYaml(
     LabwareTrackerInstance: LabwareTracker, FilePath: str
-) -> ClosedContainersTracker:
-    ClosedContainersTrackerInstance = ClosedContainersTracker()
+) -> ClosedContainerTracker:
+    ClosedContainerTrackerInstance = ClosedContainerTracker()
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
@@ -28,8 +28,8 @@ def LoadYaml(
                 LabwareTrackerInstance.GetObjectByName(LabwareID)
             )
 
-        ClosedContainersTrackerInstance.ManualLoad(
+        ClosedContainerTrackerInstance.ManualLoad(
             FlipTube(ToolSequence, SupportedLabwareTrackerInstance)
         )
 
-    return ClosedContainersTrackerInstance
+    return ClosedContainerTrackerInstance

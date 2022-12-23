@@ -6,7 +6,7 @@ from ....Layout import LayoutItem
 from ....Tools import InterfaceABC
 
 
-class ClosedContainersInterface(InterfaceABC):
+class ClosedContainerInterface(InterfaceABC):
     @abstractmethod
     def Open(
         self,
