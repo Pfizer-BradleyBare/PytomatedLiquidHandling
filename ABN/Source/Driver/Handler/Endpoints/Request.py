@@ -1,5 +1,7 @@
 # curl -X GET http://localhost:255/Driver/Request
 
+import time
+
 import web
 
 from ....Server.Globals.HandlerRegistry import GetDriverHandler
@@ -10,10 +12,10 @@ urls = ("/Driver/Request", "ABN.Source.Driver.Handler.Endpoints.Request.Request"
 
 
 class Request:
-    def GET(self):
+    def POST(self):
         ParserObject = Parser("Driver Request", web.data())
 
-        if not ParserObject.IsValid([]):
+        if not ParserObject.IsValid(["Timeout"]):
             Response = ParserObject.GetHTTPResponse()
             return Response
 
@@ -21,24 +23,28 @@ class Request:
             GetDriverHandler().CommandTrackerInstance  # type:ignore
         )
 
-        if CommandTrackerInstance.GetNumObjects() == 0:
-            ParserObject.SetEndpointMessage("Command not available.")
-            Response = ParserObject.GetHTTPResponse()
-            return Response
-
         OutputCommandInstance: Command | None = None
-        for CommandInstance in CommandTrackerInstance.GetObjectsAsList():
-            if CommandInstance.ResponseInstance is None:
-                OutputCommandInstance = CommandInstance
+        Timeout = ParserObject.GetEndpointInputData()["Timeout"] - 10
+        Counter = 0
+
+        while OutputCommandInstance is None and GetDriverHandler().IsAlive():
+            for CommandInstance in CommandTrackerInstance.GetObjectsAsList():
+                if CommandInstance.ResponseInstance is None:
+                    OutputCommandInstance = CommandInstance
+                    break
+
+            if Counter >= Timeout * 10:
                 break
 
-        if OutputCommandInstance is None:
-            ParserObject.SetEndpointMessage(
-                "No command available. Please check the IsReady endpoint first...",
-            )
+            time.sleep(0.1)
+
+        if OutputCommandInstance is None or not GetDriverHandler().IsAlive():
+            ParserObject.SetEndpointState(False)
+            ParserObject.SetEndpointMessage("Command not available. Please try again.")
             Response = ParserObject.GetHTTPResponse()
             return Response
 
+        ParserObject.SetEndpointState(True)
         ParserObject.SetEndpointOutputKey(
             "Request Identifier", OutputCommandInstance.GetName()
         )
@@ -54,7 +60,6 @@ class Request:
         ParserObject.SetEndpointOutputKey(
             "Command Parameters", OutputCommandInstance.GetCommandParameters()
         )
-        ParserObject.SetEndpointState(True)
 
         Response = ParserObject.GetHTTPResponse()
         return Response

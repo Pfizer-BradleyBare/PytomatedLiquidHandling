@@ -1,6 +1,6 @@
 from ...Tools.AbstractClasses import ServerHandlerABC
 from ..Tools import Command, CommandTracker, ExecuteCallback
-from .Endpoints import IsReady, Request, Respond
+from .Endpoints import Request, Respond
 
 
 class DriverHandler(ServerHandlerABC):
@@ -13,7 +13,6 @@ class DriverHandler(ServerHandlerABC):
 
     def GetEndpoints(self) -> tuple:
         urls = ()
-        urls += IsReady.urls
         urls += Request.urls
         urls += Respond.urls
         return urls

@@ -1,4 +1,4 @@
-# curl -X GET http://localhost:65535/State/Kill
+# curl -X GET http://localhost:255/State/Kill
 import web
 
 from ...Globals import LOG
