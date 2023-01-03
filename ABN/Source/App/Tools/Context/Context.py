@@ -1,4 +1,5 @@
 from ....Tools.AbstractClasses import ObjectABC
+from .States.ContextStates import ContextStates
 from .WellFactor.WellFactorTracker import WellFactorTracker
 from .WellSequence.WellSequenceTracker import WellSequenceTracker
 
@@ -12,6 +13,7 @@ class Context(ObjectABC):
         WellFactorsTrackerInstance: WellFactorTracker,
     ):
         self.Name: str = Name
+        self.State: ContextStates = ContextStates.Running
         self.AspirateWellSequenceTrackerInstance: WellSequenceTracker = (
             AspirateWellSequenceTrackerInstance
         )

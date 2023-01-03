@@ -57,7 +57,7 @@ class MergePlates(Block):
 
             # Do input validation here
 
-            ContextTrackerInstance = WorkbookInstance.GetContextTracker()
+            ContextTrackerInstance = WorkbookInstance.GetActiveContextTracker()
             InactiveContextTrackerInstance = (
                 WorkbookInstance.GetInactiveContextTracker()
             )

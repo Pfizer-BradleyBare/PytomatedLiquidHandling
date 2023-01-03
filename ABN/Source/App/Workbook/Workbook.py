@@ -25,7 +25,6 @@ class WorkbookStates(Enum):
         self.State = a
         self.Reason = b
 
-    # NOTE Fun Fact. The workbook states only matter for the type Run. Otherwise we "ignore" them
     Queued = (
         "Queued",
         "Method is ready for deck loading but space is not available or method is not next in queue.",
@@ -107,7 +106,6 @@ class Workbook(ObjectABC):
         MethodPath: str,
         MethodBlocksTrackerInstance: BlockTracker,
         WorklistInstance: Worklist,
-        PreprocessingBlocksTrackerInstance: BlockTracker,
     ):
 
         # Normal Init Variables
@@ -121,9 +119,6 @@ class Workbook(ObjectABC):
 
         # Trackers
         self.MethodBlocksTrackerInstance: BlockTracker = MethodBlocksTrackerInstance
-        self.PreprocessingBlocksTrackerInstance: BlockTracker = (
-            PreprocessingBlocksTrackerInstance
-        )
         self.WorklistInstance: Worklist = WorklistInstance
 
         # Thread
@@ -137,7 +132,8 @@ class Workbook(ObjectABC):
         # Trackers
         self.ExecutedBlocksTrackerInstance: BlockTracker
         self.ContainerTrackerInstance: ContainerTracker
-        self.ContextTrackerInstance: ContextTracker
+        self.PreprocessingBlocksTrackerInstance: BlockTracker = BlockTracker()
+        self.ActiveContextTrackerInstance: ContextTracker
         self.InactiveContextTrackerInstance: ContextTracker
         self.TimerTrackerInstance: TimerTracker
 
@@ -190,8 +186,8 @@ class Workbook(ObjectABC):
     def GetContainerTracker(self) -> ContainerTracker:
         return self.ContainerTrackerInstance
 
-    def GetContextTracker(self) -> ContextTracker:
-        return self.ContextTrackerInstance
+    def GetActiveContextTracker(self) -> ContextTracker:
+        return self.ActiveContextTrackerInstance
 
     def GetInactiveContextTracker(self) -> ContextTracker:
         return self.InactiveContextTrackerInstance
@@ -214,7 +210,7 @@ class Workbook(ObjectABC):
 
 def WorkbookProcessor(WorkbookInstance: Workbook):
 
-    ContextTrackerInstance = WorkbookInstance.GetContextTracker()
+    ActiveContextTrackerInstance = WorkbookInstance.GetActiveContextTracker()
     InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
     ExecutedBlocksTrackerInstance = WorkbookInstance.GetExecutedBlocksTracker()
     PreprocessingBlocksTrackerInstance = (
@@ -346,12 +342,12 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         ):
             if all(
                 item in InactiveContextTrackerInstance.GetObjectsAsList()
-                for item in ContextTrackerInstance.GetObjectsAsList()
+                for item in ActiveContextTrackerInstance.GetObjectsAsList()
             ):
                 WorkbookInstance.SetState(WorkbookStates.WaitingTimer)
             # If all contexts are inactive then we need to wait on devices to complete. TODO
 
-            for ContextInstance in ContextTrackerInstance.GetObjectsAsList():
+            for ContextInstance in ActiveContextTrackerInstance.GetObjectsAsList():
                 if not InactiveContextTrackerInstance.IsTracked(
                     WorkbookInstance.GetExecutingContext().GetName()
                 ):
@@ -402,7 +398,7 @@ def WorkbookInit(WorkbookInstance: Workbook):
     # Trackers
     WorkbookInstance.ExecutedBlocksTrackerInstance = BlockTracker()
     WorkbookInstance.ContainerTrackerInstance = ContainerTracker()
-    WorkbookInstance.ContextTrackerInstance = ContextTracker()
+    WorkbookInstance.ActiveContextTrackerInstance = ContextTracker()
     WorkbookInstance.InactiveContextTrackerInstance = ContextTracker()
     WorkbookInstance.TimerTrackerInstance = TimerTracker()
 
@@ -439,7 +435,7 @@ def WorkbookInit(WorkbookInstance: Workbook):
         )
     )
 
-    WorkbookInstance.GetContextTracker().ManualLoad(
+    WorkbookInstance.GetActiveContextTracker().ManualLoad(
         WorkbookInstance.GetExecutingContext()
     )
 

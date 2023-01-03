@@ -22,25 +22,15 @@ class ListQueue:
             GetAppHandler().WorkbookTrackerInstance  # type:ignore
         )
 
-        RunningWorkbookNames = [
+        QueuedWorkbookNames = [
             Workbook.GetName()
             for Workbook in WorkbookTrackerInstance.GetObjectsAsList()
             if Workbook.GetRunType() == WorkbookRunTypes.Run
             or Workbook.GetRunType() == WorkbookRunTypes.PreRun
         ]
 
-        WorkbookInformation = dict()
-
-        for WorkbookName in RunningWorkbookNames:
-            Workbook = WorkbookTrackerInstance.GetObjectByName(WorkbookName)
-            WorkbookInformation[WorkbookName] = {"State": Workbook.GetState().value}
-
         ParserObject.SetEndpointState(True)
-        ParserObject.SetEndpointMessage(
-            "Returned queued methods and queued method information"
-        )
-        ParserObject.SetEndpointOutputKey("Workbooks", RunningWorkbookNames)
-        ParserObject.SetEndpointOutputKey("Workbook Information", WorkbookInformation)
+        ParserObject.SetEndpointOutputKey("Queued Workbooks", QueuedWorkbookNames)
 
         Response = ParserObject.GetHTTPResponse()
         return Response
