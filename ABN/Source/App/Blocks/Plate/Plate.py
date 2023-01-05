@@ -42,9 +42,6 @@ class Plate(Block):
             # Do parameter validation here
 
             ContextTrackerInstance = WorkbookInstance.GetActiveContextTracker()
-            InactiveContextTrackerInstance = (
-                WorkbookInstance.GetInactiveContextTracker()
-            )
 
             OldContextInstance = WorkbookInstance.GetExecutingContext()
             NewContextInstance = Context(
@@ -54,10 +51,11 @@ class Plate(Block):
                 OldContextInstance.GetWellFactorTracker(),
             )
             # We only bring forward the dispense well sequences
-            InactiveContextTrackerInstance.ManualLoad(OldContextInstance)
+
+            ContextTrackerInstance.ManualUnload(OldContextInstance)
             ContextTrackerInstance.ManualLoad(NewContextInstance)
             WorkbookInstance.SetExecutingContext(NewContextInstance)
-            # Deactivate the previous context and active this new context
+            # Deactivate the previous context and active this new context by removing and new adding
 
             ContainerTracker = WorkbookInstance.GetContainerTracker()
             if ContainerTracker.PlateTrackerInstance.IsTracked(PlateName) is False:

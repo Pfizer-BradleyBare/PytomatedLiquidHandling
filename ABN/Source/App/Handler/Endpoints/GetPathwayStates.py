@@ -36,7 +36,7 @@ class GetPathwayStates:
         )
 
         Contexts = [
-            ContextInstance.GetName().replace(":__StartingContext__", "")
+            ContextInstance.GetName().replace(":__StartingContext__:", "")
             for ContextInstance in ContextInstances
         ]
         States = [ContextInstance.State.State for ContextInstance in ContextInstances]

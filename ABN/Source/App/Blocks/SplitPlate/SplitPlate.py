@@ -52,13 +52,9 @@ class SplitPlate(Block):
                 PathwayChoices = WorkbookInstance.GetWorklist().ConvertToWorklistColumn(
                     PathwayChoices
                 )
-
             # Do parameter validation here
 
             ContextTrackerInstance = WorkbookInstance.GetActiveContextTracker()
-            InactiveContextTrackerInstance = (
-                WorkbookInstance.GetInactiveContextTracker()
-            )
 
             OldContextInstance = WorkbookInstance.GetExecutingContext()
             NewPathway1ContextInstance = Context(
@@ -130,7 +126,7 @@ class SplitPlate(Block):
 
             # Create the contexts here
 
-            InactiveContextTrackerInstance.ManualLoad(OldContextInstance)
+            ContextTrackerInstance.ManualUnload(OldContextInstance)
             ContextTrackerInstance.ManualLoad(NewPathway1ContextInstance)
             ContextTrackerInstance.ManualLoad(NewPathway2ContextInstance)
             WorkbookInstance.SetExecutingContext(NewPathway1ContextInstance)

@@ -21,7 +21,8 @@ class Finish(Block):
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook):
 
-        WorkbookInstance.GetInactiveContextTracker().ManualLoad(
-            WorkbookInstance.GetExecutingContext()
-        )
+        ContextInstance = WorkbookInstance.GetExecutingContext()
+
+        WorkbookInstance.GetActiveContextTracker().ManualUnload(ContextInstance)
+        WorkbookInstance.GetInactiveContextTracker().ManualLoad(ContextInstance)
         # Deactivate the current context
