@@ -3,6 +3,10 @@ import threading
 from enum import Enum
 
 from ...API.Tools.Container.BaseContainer import ContainerTracker
+from ...API.Tools.LabwareSelection import (
+    LabwareSelectionLoader,
+    LabwareSelectionTracker,
+)
 from ...Server.Globals import LOG  # , AliveStateFlag
 from ...Tools.AbstractClasses import ObjectABC
 from ..Blocks import MergePlates
@@ -120,6 +124,7 @@ class Workbook(ObjectABC):
         # Trackers
         self.MethodBlocksTrackerInstance: BlockTracker = MethodBlocksTrackerInstance
         self.WorklistInstance: Worklist = WorklistInstance
+        self.LabwareSelectionTrackerInstance = LabwareSelectionTracker()
 
         # Thread
         self.ProcessingLock: threading.Lock = threading.Lock()
@@ -249,23 +254,18 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             for item in WorkbookInstance.GetMethodBlocksTracker().GetObjectsAsList()
         ):
 
-            # LoadedLabwareConnectionTrackerInstance = (
-            #    WorkbookInstance.GetLoadedLabwareConnectionTracker()
-            # )
+            print("HERE")
 
-            # LabwareSelectionTrackerInstance = LabwareSelectionTracker()
-            # LabwareSelectionLoader(
-            #    LabwareSelectionTrackerInstance, WorkbookInstance.GetContainerTracker()
-            # )
+            WorkbookInstance.LabwareSelectionTrackerInstance = (
+                LabwareSelectionLoader.Load(
+                    WorkbookInstance.GetContainerTracker(),
+                )
+            )
 
-            # for (
-            #    LabwareSelectionInstance
-            # ) in LabwareSelectionTrackerInstance.GetObjectsAsList():
-            #    LoadedLabwareConnectionTrackerInstance.ManualLoad(
-            #        LoadedLabwareConnection(
-            #            LabwareSelectionInstance.GetName(), LabwareSelectionInstance
-            #        )
-            #    )
+            for (
+                LabwareSelectionInstance
+            ) in WorkbookInstance.LabwareSelectionTrackerInstance.GetObjectsAsList():
+                print(LabwareSelectionInstance.GetName())
 
             if WorkbookInstance.GetRunType() == WorkbookRunTypes.PreRun:
 

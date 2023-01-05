@@ -22,12 +22,14 @@ class ListQueue:
             GetAppHandler().WorkbookTrackerInstance  # type:ignore
         )
 
-        QueuedWorkbookNames = [
-            Workbook.GetName()
-            for Workbook in WorkbookTrackerInstance.GetObjectsAsList()
-            if Workbook.GetRunType() == WorkbookRunTypes.Run
-            or Workbook.GetRunType() == WorkbookRunTypes.PreRun
-        ]
+        QueuedWorkbookNames = sorted(
+            [
+                Workbook.GetName()
+                for Workbook in WorkbookTrackerInstance.GetObjectsAsList()
+                if Workbook.GetRunType() == WorkbookRunTypes.Run
+                or Workbook.GetRunType() == WorkbookRunTypes.PreRun
+            ]
+        )
 
         ParserObject.SetEndpointState(True)
         ParserObject.SetEndpointOutputKey("Queued Workbooks", QueuedWorkbookNames)

@@ -7,6 +7,7 @@ from .Endpoints import (
     Dequeue,
     FlexibleTest,
     GenerateMethodFile,
+    GetPathwayStates,
     GetWorkbookInfo,
     ListQueue,
     OpenExcel,
@@ -34,6 +35,7 @@ class AppHandler(ServerHandlerABC):
         urls += QueueMethod.urls
         urls += FlexibleTest.urls
         urls += GetWorkbookInfo.urls
+        urls += GetPathwayStates.urls
         return urls
 
     def Kill(self):

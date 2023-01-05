@@ -2,7 +2,7 @@ import web
 
 from ....Server.Globals.HandlerRegistry import GetAppHandler
 from ....Server.Tools.Parser import Parser
-from ...Workbook import WorkbookTracker
+from ...Workbook import WorkbookRunTypes, WorkbookTracker
 
 urls = (
     "/App/GetWorkbookInfo",
@@ -28,18 +28,39 @@ class GetWorkbookInfo:
 
         Owner = "STL and AND"
         ContactInfo = [
-            "phone",
-            "Phone2",
-            "Email",
-            "asdasdhvasbdakbdkjabdshbasdjbasbasbdajksbd",
-            "asjkbdakjdsbakjsbdad",
+            "4176641172",
+            "BradleyBare@gmail.com",
+            "Bradley.Bare@pfizer.com",
         ]
         # Get contact info
 
-        Operations = ["op1", "Op2", "op3"]
+        Operations = ["Notify Owner"]
+
+        Operations += ["Show Pending Notifications"]
+        # Have any notifications fired?
+        # Shared Operations
+
+        if WorkbookInstance.GetRunType() == WorkbookRunTypes.PreRun:
+            Operations += ["Dequeue"]
+
+        else:  # Run
+            Operations += [
+                "Show Pathway States",
+                "Deck Loading / Unloading",
+                "Open Method",
+                # "Repeat Step",
+                "Pause",
+                "Abort",
+                "Dequeue",
+            ]
+
         # Possible operations
 
         ParserObject.SetEndpointState(True)
+        ParserObject.SetEndpointOutputKey(
+            "Run Type", WorkbookInstance.GetRunType().value
+        )
+        ParserObject.SetEndpointOutputKey("Full Path", WorkbookInstance.GetPath())
         ParserObject.SetEndpointOutputKey("Owner", Owner)
         ParserObject.SetEndpointOutputKey("Contact Info", ", ".join(ContactInfo))
         ParserObject.SetEndpointOutputKey("Available Operations", Operations)
