@@ -26,6 +26,24 @@ class GetWorkbookContainers:
 
         WorkbookInstance = WorkbookTrackerInstance.GetObjectByName(MethodName)
 
+        LabwareSelectionInstances = sorted(
+            [
+                LabwareSelectionInstance
+                for LabwareSelectionInstance in WorkbookInstance.LabwareSelectionTrackerInstance.GetObjectsAsList()
+            ],
+            key=lambda LabwareSelectionInstance: LabwareSelectionInstance.GetName(),
+        )
+
+        ContainerNames = [
+            LabwareSelectionInstance.GetContainer().GetName()
+            for LabwareSelectionInstance in LabwareSelectionInstances
+        ]
+
+        LabwareNames = [
+            LabwareSelectionInstance.GetContainer().GetName()
+            for LabwareSelectionInstance in LabwareSelectionInstances
+        ]
+
         ParserObject.SetEndpointState(True)
 
         Response = ParserObject.GetHTTPResponse()
