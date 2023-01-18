@@ -28,8 +28,8 @@ def Load(SolutionName: str, MethodName: str, ExcelInstance: Excel) -> ReagentTra
                     MethodName,
                     ExcelInstance.ReadCellValue(RowIndex + 2, ColIndex + 2),
                     ExcelInstance,
-                    RowIndex,
-                    ColIndex,
+                    RowIndex + 1,
+                    ColIndex + 1,
                 )
             )
 

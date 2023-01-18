@@ -23,6 +23,14 @@ class Reagent(APIReagent):
         self.Row: int = Row
         self.Col: int = Col
 
+    def IsCorrectSolution(self) -> bool:
+        with ExcelHandle(False) as ExcelHandleInstance:
+            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
+
+            self.ExcelInstance.SelectSheet("Solutions")
+
+            return self.ExcelInstance.ReadCellValue(self.Row, self.Col) == self.Name
+
     def GetLiquidClassCategory(self) -> LiquidClassCategory:
         with ExcelHandle(False) as ExcelHandleInstance:
             self.ExcelInstance.AttachHandle(ExcelHandleInstance)
