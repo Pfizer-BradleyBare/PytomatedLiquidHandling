@@ -63,6 +63,7 @@ def Load(
                 continue
 
             PreferredLabwareTrackerInstance.ManualLoad(LabwareInstance)
+            SymbolicLabwareFilters.pop(0)
             break
         # This is the best fit labware
 

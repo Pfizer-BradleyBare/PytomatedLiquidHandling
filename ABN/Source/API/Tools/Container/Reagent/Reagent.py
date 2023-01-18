@@ -38,7 +38,7 @@ class Reagent(Container):
         )
 
     def Aspirate(self, WellNumber: int, Volume: float) -> WellSolutionTracker:
-        self.UsedVolume -= Volume
+        self.UsedVolume += Volume
 
         ReturnWellSolutionTrackerInstance = WellSolutionTracker()
         ReturnWellSolutionTrackerInstance.ManualLoad(

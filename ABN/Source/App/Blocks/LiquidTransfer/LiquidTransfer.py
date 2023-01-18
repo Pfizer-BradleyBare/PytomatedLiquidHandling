@@ -95,6 +95,7 @@ class LiquidTransfer(Block):
                 HALLayerInstance.PipetteTrackerInstance
             )
 
+            count = 0
             for (
                 Destination,
                 Source,
@@ -137,10 +138,10 @@ class LiquidTransfer(Block):
                             Source
                         )
                     )
-
+                count += 1
                 TransferOptionsTrackerInstance.ManualLoad(
                     TransferOptions(
-                        "",
+                        "" + str(count),
                         SourceContainerInstance,
                         AspirateMixingParam,
                         AspirateWellNumber,

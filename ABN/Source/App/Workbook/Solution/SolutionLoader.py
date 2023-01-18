@@ -31,6 +31,8 @@ def Load(
                 Names = set([Name])
             # If we have a worklist column then that means the actual name is not a solution. We need to deal with that
 
+            ExcelInstance.SelectSheet("Solutions")
+
             for Name in Names:
                 ReagentTrackerInstance.ManualLoad(
                     Reagent(

@@ -10,7 +10,7 @@ class TransferOptions(ObjectABC):
         SourceMixCycles: int,
         SourceWellPosition: int,
         DestinationContainerInstance: Container,
-        DesitnationMixCycles: int,
+        DestinationMixCycles: int,
         DestinationWellPosition: int,
         TransferVolume: float,
     ):
@@ -20,7 +20,7 @@ class TransferOptions(ObjectABC):
         self.DestinationContainerInstance: Container = DestinationContainerInstance
 
         self.SourceMixCycles: int = SourceMixCycles
-        self.DesitnationMixCycles: int = DesitnationMixCycles
+        self.DestinationMixCycles: int = DestinationMixCycles
 
         self.SourceWellPosition: int = SourceWellPosition
         self.DestinationWellPosition: int = DestinationWellPosition

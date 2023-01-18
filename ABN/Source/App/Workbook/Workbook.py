@@ -269,7 +269,16 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             for (
                 LabwareSelectionInstance
             ) in WorkbookInstance.LabwareSelectionTrackerInstance.GetObjectsAsList():
-                print(LabwareSelectionInstance.GetName())
+                print(
+                    LabwareSelectionInstance.GetName(),
+                    LabwareSelectionInstance.GetContainer().GetVolume(),
+                    str(
+                        [
+                            lab.GetName()
+                            for lab in LabwareSelectionInstance.GetLabwareTracker().GetObjectsAsList()
+                        ]
+                    ),
+                )
 
             if WorkbookInstance.GetRunType() == WorkbookRunTypes.PreRun:
 
