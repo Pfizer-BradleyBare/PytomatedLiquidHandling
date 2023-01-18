@@ -1,5 +1,6 @@
 import yaml
 
+from ..Labware import LabwareTracker
 from ..Pipette import Pipette8Channel, Pipette96Channel
 from ..Tip.BaseTip import TipTracker
 from .BasePipette import (
@@ -15,6 +16,7 @@ from .BasePipette import (
 
 def LoadYaml(
     TipTrackerInstance: TipTracker,
+    LabwareTrackerInstance: LabwareTracker,
     FilePath: str,
 ) -> PipetteTracker:
     PipetteTrackerInstance = PipetteTracker()
@@ -28,6 +30,13 @@ def LoadYaml(
         Enabled = ConfigFile["Device IDs"][Device]["Enabled"]
 
         if ConfigFile["Device IDs"][Device]["Enabled"] is True:
+
+            SupportedLabwareTrackerInstance = LabwareTracker()
+
+            for LabwareName in ConfigFile["Device IDs"][Device]["Supported Labware"]:
+                SupportedLabwareTrackerInstance.ManualLoad(
+                    LabwareTrackerInstance.GetObjectByName(LabwareName)
+                )
 
             PipetteTipTrackerInstance = PipetteTipTracker()
 
@@ -47,21 +56,17 @@ def LoadYaml(
                 LiquidClassCategoryTrackerInstance = LiquidClassCategoryTracker()
 
                 for LiquidClassID in ConfigFile["Device IDs"][Device]["Supported Tips"][
-                    "Liquid Class IDs"
-                ]:
+                    Tip
+                ]["Liquid Class IDs"]:
                     LiquidClassCategoryInstance = LiquidClassCategory(LiquidClassID)
 
                     for LiquidClassItem in ConfigFile["Device IDs"][Device][
                         "Supported Tips"
-                    ]["Liquid Class IDs"][LiquidClassID]:
+                    ][Tip]["Liquid Class IDs"][LiquidClassID]:
 
-                        MaxVolume = ConfigFile["Device IDs"][Device]["Supported Tips"][
-                            "Liquid Class IDs"
-                        ][LiquidClassID][LiquidClassItem]["Max Volume"]
+                        MaxVolume = LiquidClassItem["Max Volume"]
 
-                        Name = ConfigFile["Device IDs"][Device]["Supported Tips"][
-                            "Liquid Class IDs"
-                        ][LiquidClassID][LiquidClassItem]["Max Volume"]
+                        Name = LiquidClassItem["Liquid Class"]
 
                         LiquidClassCategoryInstance.ManualLoad(
                             LiquidClass(Name, MaxVolume)
@@ -89,13 +94,18 @@ def LoadYaml(
                     Pipette8Channel(
                         Enabled,
                         PipetteTipTrackerInstance,
+                        SupportedLabwareTrackerInstance,
                         ConfigFile["Device IDs"][Device]["Active Channels"],
                     )
                 )
 
             if PipetteDeviceType == PipettingDeviceTypes.Pipette96Channel:
                 PipetteTrackerInstance.ManualLoad(
-                    Pipette96Channel(Enabled, PipetteTipTrackerInstance)
+                    Pipette96Channel(
+                        Enabled,
+                        PipetteTipTrackerInstance,
+                        SupportedLabwareTrackerInstance,
+                    )
                 )
 
     return PipetteTrackerInstance

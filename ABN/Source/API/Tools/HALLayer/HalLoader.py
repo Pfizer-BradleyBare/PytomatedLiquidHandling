@@ -1,20 +1,15 @@
 from ....HAL.ClosedContainer import ClosedContainerLoader
-from ....HAL.ClosedContainer.BaseClosedContainer import ClosedContainerTracker
-from ....HAL.DeckLocation import DeckLocationLoader, DeckLocationTracker
-from ....HAL.Labware import LabwareLoader, LabwareTracker
+from ....HAL.DeckLocation import DeckLocationLoader
+from ....HAL.Labware import LabwareLoader
 from ....HAL.Layout import LayoutItemLoader
-from ....HAL.Lid import LidLoader, LidTracker
+from ....HAL.Lid import LidLoader
 
 # from .MagneticRack import MagneticRackLoader, MagneticRackTracker
-from ....HAL.Notify import NotifyLoader, NotifyTracker
-
-# from .Pipette import PipetteLoader, PipetteTracker
+from ....HAL.Notify import NotifyLoader
+from ....HAL.Pipette import PipetteLoader
 from ....HAL.TempControlDevice import TempControlDeviceLoader
-from ....HAL.TempControlDevice.BaseTempControlDevice import TempControlDeviceTracker
 from ....HAL.Tip import TipLoader
-from ....HAL.Tip.BaseTip import TipTracker
 from ....HAL.TransportDevice import TransportDeviceLoader
-from ....HAL.TransportDevice.BaseTransportDevice import TransportDeviceTracker
 from ....Server.Globals import LOG
 from .HALLayer import HALLayer
 
@@ -108,13 +103,14 @@ def Load() -> HALLayer:
 
     LOG.info("Loading Pipette...")
 
-    #    PipetteLoader.LoadYaml(
-    #        Pipettes,
-    #        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Pipette\\Pipette.yaml",
-    #    )
-    #    HALLayerInstance.PipetteTrackerInstance = Pipettes
-    #    for Pipette in Pipettes.GetObjectsAsList():
-    #        LOG.debug(Pipette)
+    PipetteTrackerInstance = PipetteLoader.LoadYaml(
+        TipTrackerInstance,
+        LabwareTrackerInstance,
+        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Pipette\\Pipette.yaml",
+    )
+    HALLayerInstance.PipetteTrackerInstance = PipetteTrackerInstance
+    for Pipette in PipetteTrackerInstance.GetObjectsAsList():
+        LOG.debug(Pipette)
 
     LOG.info("Success!")
 
