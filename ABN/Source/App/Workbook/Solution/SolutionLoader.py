@@ -3,7 +3,7 @@ from ...Tools.Container import Reagent
 from ...Tools.Excel import Excel
 
 
-def Load(MethodName: str, ExcelInstance: Excel) -> ReagentTracker:
+def Load(SolutionName: str, MethodName: str, ExcelInstance: Excel) -> ReagentTracker:
     ReagentTrackerInstance: ReagentTracker = ReagentTracker()
 
     ExcelInstance.SelectSheet("Solutions")

@@ -29,9 +29,9 @@ class Reagent(APIReagent):
 
             self.ExcelInstance.SelectSheet("Solutions")
 
-        return LiquidClassCategory(
-            self.ExcelInstance.ReadCellValue(self.Row + 4, self.Col + 2),
-            self.ExcelInstance.ReadCellValue(self.Row + 5, self.Col + 2),
-            self.ExcelInstance.ReadCellValue(self.Row + 6, self.Col + 2),
-            self.ExcelInstance.ReadCellValue(self.Row + 7, self.Col + 2),
-        )
+            return LiquidClassCategory(
+                self.ExcelInstance.ReadCellValue(self.Row + 3, self.Col + 1),
+                self.ExcelInstance.ReadCellValue(self.Row + 4, self.Col + 1),
+                self.ExcelInstance.ReadCellValue(self.Row + 5, self.Col + 1),
+                self.ExcelInstance.ReadCellValue(self.Row + 6, self.Col + 1),
+            )

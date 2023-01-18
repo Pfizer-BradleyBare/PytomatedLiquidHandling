@@ -11,10 +11,7 @@ from ...Workbook.Block import (
 @ClassDecorator_AvailableBlock
 class Finish(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
-        Block.__init__(self, ExcelInstance, Row, Col)
-
-    def GetName(self) -> str:
-        return "Finish" + str((self.Row, self.Col))
+        Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
     def Preprocess(self, WorkbookInstance: Workbook):
         pass

@@ -32,7 +32,10 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
             Name = Name.replace(" - (Click Here to Update)", "")
 
             Temp.append(
-                BlockObjectCreationWrapper(ExcelInstance, Name, RowIndex, ColIndex)
+                BlockObjectCreationWrapper(
+                    ExcelInstance, Name, RowIndex + 1, ColIndex + 1
+                )
+                # Excel is 1 indexed but python is 0 indexed... Dumb!
             )
 
         if len(Temp) != 0:

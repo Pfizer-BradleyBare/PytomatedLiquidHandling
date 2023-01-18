@@ -27,16 +27,19 @@ def FunctionDecorator_ProcessFunction(DecoratedFunction):
         return Result
 
     return inner
+    # This automatically adds each block to the block tracker for the parent plate container. We will need this info for proper labware selection
 
 
 class Block(ObjectABC, Node):
     def __init__(
         self,
+        Name: str,
         ExcelInstance: Excel,
         Row: int,
         Col: int,
     ):
         Node.__init__(self)
+        self.Name: str = Name
         self.ExcelInstance: Excel = ExcelInstance
         self.Row: int = Row
         self.Col: int = Col
@@ -53,6 +56,9 @@ class Block(ObjectABC, Node):
         for child in self.Children:
             ret += child.__repr__(level + 1)  # type:ignore
         return ret
+
+    def GetName(self) -> str:
+        return self.Name + str((self.Row, self.Col))
 
     def GetRow(self) -> int:
         return self.Row
