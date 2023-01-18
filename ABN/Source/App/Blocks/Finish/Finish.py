@@ -1,3 +1,4 @@
+from ...Tools.Context import ContextStates
 from ...Tools.Excel import Excel
 from ...Workbook import Workbook
 from ...Workbook.Block import (
@@ -22,6 +23,11 @@ class Finish(Block):
     def Process(self, WorkbookInstance: Workbook):
 
         ContextInstance = WorkbookInstance.GetExecutingContext()
+
+        ContextInstance.UpdateContextState(
+            ContextStates.Complete,
+            "Context completed successfully with a Finish block.",
+        )
 
         WorkbookInstance.GetActiveContextTracker().ManualUnload(ContextInstance)
         WorkbookInstance.GetInactiveContextTracker().ManualLoad(ContextInstance)

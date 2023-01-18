@@ -17,7 +17,7 @@ class Context(ObjectABC):
         class ContextState:
             def __init__(self):
                 self.State: ContextStates = ContextStates.Running
-                self.Reason: str = "Context is running normally. No interaction from the user is required."
+                self.Reason: str = "Context is running normally."
 
         self.ContextStateInstance: ContextState = ContextState()
 
