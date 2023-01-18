@@ -1,4 +1,3 @@
-from .....Tools.AbstractClasses import ObjectABC
 from ..BaseContainer.Container import Container
 from ..BaseContainer.LiquidClassCategory.LiquidClassCategory import LiquidClassCategory
 from ..Plate.Well.WellSolution.WellSolution import WellSolution

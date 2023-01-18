@@ -13,7 +13,14 @@ class Context(ObjectABC):
         WellFactorsTrackerInstance: WellFactorTracker,
     ):
         self.Name: str = Name
-        self.State: ContextStates = ContextStates.Running
+
+        class ContextState:
+            def __init__(self):
+                self.State: ContextStates = ContextStates.Running
+                self.Reason: str = "Context is running normally. No interaction from the user is required."
+
+        self.ContextStateInstance: ContextState = ContextState()
+
         self.AspirateWellSequenceTrackerInstance: WellSequenceTracker = (
             AspirateWellSequenceTrackerInstance
         )
@@ -24,6 +31,10 @@ class Context(ObjectABC):
 
     def GetName(self) -> str:
         return self.Name
+
+    def UpdateContextState(self, NewState: ContextStates, Reason: str):
+        self.ContextStateInstance.State = NewState
+        self.ContextStateInstance.Reason = Reason
 
     def GetAspirateWellSequenceTracker(self) -> WellSequenceTracker:
         return self.AspirateWellSequenceTrackerInstance

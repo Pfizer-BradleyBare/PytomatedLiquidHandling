@@ -39,8 +39,14 @@ class GetPathwayStates:
             ContextInstance.GetName().replace(":__StartingContext__:", "")
             for ContextInstance in ContextInstances
         ]
-        States = [ContextInstance.State.State for ContextInstance in ContextInstances]
-        Reasons = [ContextInstance.State.Reason for ContextInstance in ContextInstances]
+        States = [
+            ContextInstance.ContextStateInstance.State.value
+            for ContextInstance in ContextInstances
+        ]
+        Reasons = [
+            ContextInstance.ContextStateInstance.Reason
+            for ContextInstance in ContextInstances
+        ]
         PathwayNames = [
             "Pathway " + str(Index) for Index in range(1, len(Contexts) + 1)
         ]
