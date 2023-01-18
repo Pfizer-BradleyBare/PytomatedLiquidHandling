@@ -19,8 +19,10 @@ from ..Tools.Context import (
     WellSequence,
     WellSequenceTracker,
 )
+from ..Tools.Excel import Excel
 from ..Tools.Timer import TimerTracker
 from .Block import Block, BlockTracker
+from .Solution import SolutionLoader
 from .Worklist import Worklist
 
 
@@ -110,6 +112,7 @@ class Workbook(ObjectABC):
         MethodPath: str,
         MethodBlocksTrackerInstance: BlockTracker,
         WorklistInstance: Worklist,
+        ExcelInstance: Excel,
     ):
 
         # Normal Init Variables
@@ -124,6 +127,7 @@ class Workbook(ObjectABC):
         # Trackers
         self.MethodBlocksTrackerInstance: BlockTracker = MethodBlocksTrackerInstance
         self.WorklistInstance: Worklist = WorklistInstance
+        self.ExcelInstance: Excel = ExcelInstance
         self.LabwareSelectionTrackerInstance = LabwareSelectionTracker()
 
         # Thread
@@ -444,6 +448,15 @@ def WorkbookInit(WorkbookInstance: Workbook):
             "__StartingContext__", WorkbookInstance.GetName(), "No Preference"
         )  # This will never be loaded so filter doesn't matter
     )
+
+    WorkbookInstance.GetContainerTracker().ReagentTrackerInstance = SolutionLoader.Load(
+        WorkbookInstance.GetName(),
+        WorkbookInstance.ExcelInstance,
+        WorkbookInstance.GetWorklist(),
+    )
+    # We do need to do some checks to ensure consistency.
+    # TODO: Are all reagents in the labware selection... Etc.
+
     # Setting initial context and container.
     if WorkbookInstance.GetRunType() == WorkbookRunTypes.Run:
         pass

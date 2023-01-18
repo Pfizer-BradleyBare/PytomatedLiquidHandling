@@ -1,5 +1,11 @@
 from ....API.Tools.Container import Reagent as APIReagent
 from ....API.Tools.Container.BaseContainer import LiquidClassCategory
+from ....API.Tools.Container.Reagent.ReagentProperty import (
+    HomogeneityReagentProperty,
+    LLDReagentProperty,
+    ViscosityReagentProperty,
+    VolatilityReagentProperty,
+)
 from ..Excel import Excel, ExcelHandle
 
 
@@ -14,8 +20,15 @@ class Reagent(APIReagent):
         Col: int,
     ):
         APIReagent.__init__(
-            self, Name, MethodName, None, None, None, None  # type:ignore
-        )
+            self,
+            Name,
+            MethodName,
+            VolatilityReagentProperty.Low,
+            ViscosityReagentProperty.Low,
+            HomogeneityReagentProperty.Homogenous,
+            LLDReagentProperty.Normal,
+        )  # This is a default value.
+
         self.Filter.append(PreferredLabware)
 
         self.PreferredLabware: str = PreferredLabware

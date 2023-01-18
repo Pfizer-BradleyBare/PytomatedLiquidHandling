@@ -75,22 +75,6 @@ class LiquidTransfer(Block):
                 DispenseMixingParams.append(MixParams["Dispense"])
             # Convert mixing strings to mixing params
 
-            ContainerTrackerInstance = WorkbookInstance.GetContainerTracker()
-
-            #            for Source in Sources:
-            #                if ContainerTrackerInstance.IsTracked(Source) is not True:
-            #                    ContainerTrackerInstance.ManualLoad(
-            #                        Container(
-            #                            Source,
-            #                            WorkbookInstance.GetSolutionTracker()
-            #                            .GetObjectByName(Source)
-            #                            .GetCategory(),
-            #                        )
-            #                    )
-            # If source is not a container then we need to add it
-
-            # SequenceTrackerInstance = SequenceTracker()
-
             ContextInstance = WorkbookInstance.GetExecutingContext()
 
             WellFactorTrackerInstance = ContextInstance.GetWellFactorTracker()

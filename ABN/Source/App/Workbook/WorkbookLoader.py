@@ -27,5 +27,6 @@ def Load(
                 ExcelFilePath,
                 BlockTrackerInstance,
                 WorklistInstance,
+                ExcelInstance,
             )
         )
