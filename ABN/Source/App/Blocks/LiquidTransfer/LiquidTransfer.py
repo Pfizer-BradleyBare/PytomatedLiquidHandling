@@ -1,5 +1,6 @@
-# from ....Driver.Pipette import Sequence, SequenceTracker
-# from ...Tools.Container import ContainerOperator
+from ....API.Pipette import Transfer, TransferOptions, TransferOptionsTracker
+from ....API.Tools.HALLayer.HALLayer import HALLayer
+from ....Server.Globals.HandlerRegistry import GetAPIHandler
 from ...Tools.Container import Plate as PlateContainer
 from ...Tools.Excel import Excel, ExcelHandle
 from ...Workbook import Workbook  # WorkbookRunTypes
@@ -75,6 +76,8 @@ class LiquidTransfer(Block):
                 DispenseMixingParams.append(MixParams["Dispense"])
             # Convert mixing strings to mixing params
 
+            ContainerTrackerInstance = WorkbookInstance.GetContainerTracker()
+
             ContextInstance = WorkbookInstance.GetExecutingContext()
 
             WellFactorTrackerInstance = ContextInstance.GetWellFactorTracker()
@@ -87,20 +90,25 @@ class LiquidTransfer(Block):
                 ContextInstance.GetDispenseWellSequenceTracker()
             )
 
-            ProgrammaticDispenseWellNumbers = list()
-            ProgrammaticAspirateWellNumbers = list()
+            HALLayerInstance: HALLayer = GetAPIHandler().HALLayerInstance  # type:ignore
+            TransferOptionsTrackerInstance = TransferOptionsTracker(
+                HALLayerInstance.PipetteTrackerInstance
+            )
 
-            ProgrammaticDispenseMixParams = list()
-            ProgrammaticSourceMixParams = list()
-
-            ProgrammaticDispenseLiquidClassNames = list()
-            ProgrammaticSourceLiquidClassNames = list()
-
-            for Destination, Source, WellNumber, Volume in zip(
+            for (
+                Destination,
+                Source,
+                WellNumber,
+                Volume,
+                AspirateMixingParam,
+                DispenseMixingParam,
+            ) in zip(
                 Destinations,
                 Sources,
                 range(1, WorklistInstance.GetNumSamples() + 1),
                 Volumes,
+                AspirateMixingParams,
+                DispenseMixingParams,
             ):
                 if WellFactorTrackerInstance.GetObjectByName(WellNumber) == 0:
                     continue
@@ -108,34 +116,43 @@ class LiquidTransfer(Block):
                 AspirateWellNumber = (
                     AspirateWellSequencesTrackerInstance.GetObjectByName(
                         WellNumber
-                    ).GetSequence()
+                    ).SequencePosition
                 )
                 DispenseWellNumber = (
                     DispenseWellSequencesTrackerInstance.GetObjectByName(
                         WellNumber
-                    ).GetSequence()
+                    ).SequencePosition
                 )
 
-                # DestinationOperatorInstance = ContainerOperator(Destination)
-                # SourceOperatorInstance = ContainerOperator(Source)
+                # Source can either be a reagent or plate container. Always default to plate first
+                if ContainerTrackerInstance.PlateTrackerInstance.IsTracked(Source):
+                    SourceContainerInstance = (
+                        ContainerTrackerInstance.PlateTrackerInstance.GetObjectByName(
+                            Source
+                        )
+                    )
+                else:
+                    SourceContainerInstance = (
+                        ContainerTrackerInstance.ReagentTrackerInstance.GetObjectByName(
+                            Source
+                        )
+                    )
 
-                # DestinationOperatorInstance.Dispense(
-                #    DispenseWellNumber,
-                #    SourceOperatorInstance.Aspirate(AspirateWellNumber, Volume),
-                # )
-                # lets do programmatic pipetting first
+                TransferOptionsTrackerInstance.ManualLoad(
+                    TransferOptions(
+                        "",
+                        SourceContainerInstance,
+                        AspirateMixingParam,
+                        AspirateWellNumber,
+                        ContainerTrackerInstance.PlateTrackerInstance.GetObjectByName(
+                            Destination
+                        ),
+                        DispenseMixingParam,
+                        DispenseWellNumber,
+                        Volume,
+                    )
+                )
+                # TODO: name must be unique
+                # Destination will always be a "plate." The distinction is beyond subtle but important
 
-                # if WorkbookInstance.GetRunType() == "Run":
-                #    LoadedLabwareConnectionTrackerInstance = (
-                #        WorkbookInstance.GetLoadedLabwareConnectionTracker()
-                #    )
-
-                # Now we take the programmatic pipetting info and use it to do physical pipetting
-
-            # Pipette(
-            #    WorkbookInstance,
-            #    SequenceTrackerInstance,
-            #    HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
-            #    HalInstance.GetPipetteTracker(),  # This is the general pipetting tracker
-            # )
-            # We need to figure out the pipetting first.
+            Transfer(TransferOptionsTrackerInstance)

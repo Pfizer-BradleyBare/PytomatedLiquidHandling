@@ -8,8 +8,10 @@ class TransferOptions(ObjectABC):
         Name: str,
         SourceContainerInstance: Container,
         SourceMixCycles: int,
+        SourceWellPosition: int,
         DestinationContainerInstance: Container,
         DesitnationMixCycles: int,
+        DestinationWellPosition: int,
         TransferVolume: float,
     ):
         self.Name: str = Name
@@ -20,4 +22,10 @@ class TransferOptions(ObjectABC):
         self.SourceMixCycles: int = SourceMixCycles
         self.DesitnationMixCycles: int = DesitnationMixCycles
 
+        self.SourceWellPosition: int = SourceWellPosition
+        self.DestinationWellPosition: int = DestinationWellPosition
+
         self.TransferVolume: float = TransferVolume
+
+    def GetName(self) -> str:
+        return self.Name

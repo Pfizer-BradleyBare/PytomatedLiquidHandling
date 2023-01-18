@@ -51,7 +51,7 @@ class Aliquot(Block):
                 SequenceInstance = DispenseSequencesTrackerInstance.GetObjectByName(
                     WellNumber
                 )
-                if SequenceInstance.GetSequence() != Location:
+                if SequenceInstance.SequencePosition != Location:
                     DispenseSequencesTrackerInstance.ManualUnload(SequenceInstance)
                     DispenseSequencesTrackerInstance.ManualLoad(
                         WellSequence(WellNumber, Location)
