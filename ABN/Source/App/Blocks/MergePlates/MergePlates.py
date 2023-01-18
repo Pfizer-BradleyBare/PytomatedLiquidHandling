@@ -61,8 +61,12 @@ class MergePlates(Block):
             InactiveContextTrackerInstance = (
                 WorkbookInstance.GetInactiveContextTracker()
             )
+            ActiveContextTrackerInstance = WorkbookInstance.GetActiveContextTracker()
             # Get Context Trackers
 
+            ActiveContextTrackerInstance.ManualUnload(
+                WorkbookInstance.GetExecutingContext()
+            )
             InactiveContextTrackerInstance.ManualLoad(
                 WorkbookInstance.GetExecutingContext()
             )
@@ -102,7 +106,9 @@ class MergePlates(Block):
                 InactiveContextTrackerInstance.ManualUnload(
                     ProcessingMergeInstanceContext
                 )
+                ActiveContextTrackerInstance.ManualLoad(ProcessingMergeInstanceContext)
                 InactiveContextTrackerInstance.ManualUnload(WaitingMergeInstanceContext)
+                ActiveContextTrackerInstance.ManualLoad(WaitingMergeInstanceContext)
             # If both merge plate steps continue here then all we need to do is re-enable the pathways
             # This is not an official merge because pathways are not combined
 
@@ -142,6 +148,7 @@ class MergePlates(Block):
                     InactiveContextTrackerInstance.ManualUnload(
                         WaitingMergeInstanceContext
                     )
+                    ActiveContextTrackerInstance.ManualLoad(WaitingMergeInstanceContext)
                     WorkbookInstance.GetExecutedBlocksTracker().ManualLoad(
                         self.GetChildren()[0]
                     )
@@ -155,6 +162,9 @@ class MergePlates(Block):
 
                 elif ProcessingMergeInstanceMergeType == "Yes":
                     InactiveContextTrackerInstance.ManualUnload(
+                        ProcessingMergeInstanceContext
+                    )
+                    ActiveContextTrackerInstance.ManualLoad(
                         ProcessingMergeInstanceContext
                     )
                     WorkbookInstance.GetExecutedBlocksTracker().ManualLoad(
