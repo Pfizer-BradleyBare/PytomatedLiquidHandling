@@ -42,17 +42,16 @@ class DriverHandler(ServerHandlerABC):
             if CommandInstance.ResponseInstance is None:
                 raise Exception("Response is not set. This should never happen...")
 
-            if CommandInstance.ResponseInstance.State is False:
-                if CommandInstance.CustomErrorHandlingFunction is not None:
-                    CommandInstance.CustomErrorHandlingFunction(CommandInstance)
-            # If response indicates a failure then we need to run error handling if it is set.
-
-            # TODO: Check that this is valid across all errors and callbacks. I feel probably not
-
             ExecuteCallback(
                 CommandInstance.CallbackFunction,
                 CommandInstance,
                 CommandInstance.CallbackArgs,
             )
+            # Callback is executed before the error handling. Callback is responsible for checking for errors as well
+
+            if CommandInstance.ResponseInstance.State is False:
+                if CommandInstance.CustomErrorHandlingFunction is not None:
+                    CommandInstance.CustomErrorHandlingFunction(CommandInstance)
+            # If response indicates a failure then we need to run error handling if it is set.
 
         return TimeoutFlag
