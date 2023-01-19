@@ -31,9 +31,7 @@ class DriverHandler(ServerHandlerABC):
 
             self.CommandTrackerInstance.ManualLoad(CommandInstance)
 
-            print("WAITING")
             TimeoutFlag = CommandInstance.ResponseEvent.wait(Timeout)
-            print("FINISHED")
 
             self.CommandTrackerInstance.ManualUnload(CommandInstance)
 
@@ -53,5 +51,6 @@ class DriverHandler(ServerHandlerABC):
                 if CommandInstance.CustomErrorHandlingFunction is not None:
                     CommandInstance.CustomErrorHandlingFunction(CommandInstance)
             # If response indicates a failure then we need to run error handling if it is set.
+            # Most error handling will just rerun the step. FIY
 
         return TimeoutFlag
