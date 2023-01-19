@@ -10,12 +10,14 @@ class Command(ObjectABC):
     def __init__(
         self,
         Name: str,
-        CustomErrorHandling: bool,
+        CustomErrorHandlingFunction: Callable[[Self], None] | None,
         CallbackFunction: Callable[[Self, tuple], None] | None,
         CallbackArgs: tuple,
     ):
         self.Name: str = Name
-        self.CustomErrorHandling: bool = CustomErrorHandling
+        self.CustomErrorHandlingFunction: Callable[
+            [Self], None
+        ] | None = CustomErrorHandlingFunction
 
         self.ResponseInstance: Response | None = None
         self.ResponseEvent: Event = Event()

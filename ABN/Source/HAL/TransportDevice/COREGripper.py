@@ -125,7 +125,6 @@ class COREGripper(TransportDevice):
         ReturnCommandTracker.ManualLoad(
             GetPlateCommand(
                 "",
-                True,
                 GetPlateOptionsInstance,
             )
         )
@@ -133,11 +132,11 @@ class COREGripper(TransportDevice):
         ReturnCommandTracker.ManualLoad(
             PlacePlateCommand(
                 "",
-                True,
                 PlacePlateOptions(
                     "",
                     DestinationLayoutItem.Sequence,
                 ),
+                None,
                 CallbackFunction,
                 CallbackArgs,
             )

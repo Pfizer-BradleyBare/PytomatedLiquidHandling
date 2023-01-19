@@ -46,7 +46,6 @@ class FlexibleTest:
         DriverHandlerInstance.ExecuteCommand(
             UnloadCommand(
                 "",
-                False,
                 UnloadOptions(
                     "", 5, 12, "400uL Thermo 96 Well PCR Plate", "1", "HSP901"
                 ),

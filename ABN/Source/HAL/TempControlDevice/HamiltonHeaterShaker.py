@@ -66,7 +66,6 @@ class HamiltonHeaterShaker(TempControlDevice):
             DriverHandlerInstance.ExecuteCommand(
                 SetPlateLockCommand(
                     "",
-                    True,
                     SetPlateLockOptions("", self.HandleID, 1),
                 )
             )
@@ -74,8 +73,8 @@ class HamiltonHeaterShaker(TempControlDevice):
             DriverHandlerInstance.ExecuteCommand(
                 SetPlateLockCommand(
                     "",
-                    True,
                     SetPlateLockOptions("", self.HandleID, 0),
+                    None,
                     args[1],
                     args[2],
                 )
@@ -86,8 +85,8 @@ class HamiltonHeaterShaker(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             ConnectCommand(
                 "",
-                True,
                 ConnectOptions("", self.ComPort),  # type:ignore
+                None,
                 InitializeCallback,
                 (self, CallbackFunction, CallbackArgs),
             )
@@ -106,7 +105,6 @@ class HamiltonHeaterShaker(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             StopTemperatureControlCommand(
                 "",
-                True,
                 StopTemperatureControlOptions("", self.HandleID),
             )
         )
@@ -114,7 +112,6 @@ class HamiltonHeaterShaker(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             StopShakeControlCommand(
                 "",
-                True,
                 StopShakeControlOptions("", self.HandleID),
             )
         )
@@ -122,8 +119,8 @@ class HamiltonHeaterShaker(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             SetPlateLockCommand(
                 "",
-                True,
                 SetPlateLockOptions("", self.HandleID, 0),
+                None,
                 CallbackFunction,
                 CallbackArgs,
             )
@@ -143,8 +140,8 @@ class HamiltonHeaterShaker(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             StartTemperatureControlCommand(
                 "",
-                True,
                 StartTemperatureControlOptions("", self.HandleID, Temperature),
+                None,
                 CallbackFunction,
                 CallbackArgs,
             )
@@ -163,8 +160,8 @@ class HamiltonHeaterShaker(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             GetTemperatureCommand(
                 "",
-                True,
                 GetTemperatureOptions("", self.HandleID),
+                None,
                 UpdateCurrentTemperatureCallback,
                 (self, CallbackFunction, CallbackArgs),
             )
@@ -184,7 +181,6 @@ class HamiltonHeaterShaker(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             SetPlateLockCommand(
                 "",
-                True,
                 SetPlateLockOptions("", self.HandleID, 1),
             )
         )
@@ -192,8 +188,8 @@ class HamiltonHeaterShaker(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             StartShakeControlCommand(
                 "",
-                True,
                 StartShakeControlOptions("", self.HandleID, RPM),
+                None,
                 CallbackFunction,
                 CallbackArgs,
             )
@@ -212,7 +208,6 @@ class HamiltonHeaterShaker(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             StopShakeControlCommand(
                 "",
-                True,
                 StopShakeControlOptions("", self.HandleID),
             )
         )
@@ -220,8 +215,8 @@ class HamiltonHeaterShaker(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             SetPlateLockCommand(
                 "",
-                True,
                 SetPlateLockOptions("", self.HandleID, 0),
+                None,
                 CallbackFunction,
                 CallbackArgs,
             )
@@ -240,8 +235,8 @@ class HamiltonHeaterShaker(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             GetShakingSpeedCommand(
                 "",
-                True,
                 GetShakingSpeedOptions("", self.HandleID),
+                None,
                 UpdateCurrentShakingSpeedCallback,
                 (self, CallbackFunction, CallbackArgs),
             )

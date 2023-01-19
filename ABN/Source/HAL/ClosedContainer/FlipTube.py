@@ -39,8 +39,8 @@ class FlipTube(ClosedContainer):
         ReturnCommandTracker.ManualLoad(
             InitializeCommand(
                 "",
-                True,
                 InitializeOptions(""),
+                None,
                 CallbackFunction,
                 CallbackArgs,
             )
@@ -87,8 +87,8 @@ class FlipTube(ClosedContainer):
         ReturnCommandTracker.ManualLoad(
             OpenCommand(
                 "",
-                True,
                 OpenOptionsTrackerInstance,
+                None,
                 CallbackFunction,
                 CallbackArgs,
             )
@@ -118,8 +118,8 @@ class FlipTube(ClosedContainer):
         ReturnCommandTracker.ManualLoad(
             CloseCommand(
                 "",
-                True,
                 CloseOptionsTrackerInstance,
+                None,
                 CallbackFunction,
                 CallbackArgs,
             )

@@ -76,13 +76,13 @@ class TipNTR(Tip):
         ReturnCommandTracker.ManualLoad(
             LoadTipsCommand(
                 "",
-                True,
                 LoadTipsOptions(
                     "",
                     self.PickupSequence,
                     self.NTRWasteSequence,
                     self.GripperSequence,
                 ),
+                None,
                 NTRReloadCallback,
                 (self, CallbackFunction, CallbackArgs),
             )
@@ -103,7 +103,6 @@ class TipNTR(Tip):
         ReturnCommandTracker.ManualLoad(
             TipsAvailableCommand(
                 "",
-                True,
                 TipsAvailableOptions(
                     "",
                     self.PickupSequence,
@@ -111,6 +110,7 @@ class TipNTR(Tip):
                     self.GripperSequence,
                     NumTips,
                 ),
+                None,
                 UpdateTipPositionCallback,
                 (self, NumTips, CallbackFunction, CallbackArgs),
             )
@@ -129,11 +129,11 @@ class TipNTR(Tip):
         ReturnCommandTracker.ManualLoad(
             TipsRemainingCommand(
                 "",
-                True,
                 TipsRemainingOptions(
                     "",
                     self.PickupSequence,
                 ),
+                None,
                 UpdateRemainingTipsCallback,
                 (self, CallbackFunction, CallbackArgs),
             )

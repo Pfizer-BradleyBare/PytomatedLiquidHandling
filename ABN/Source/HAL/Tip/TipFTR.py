@@ -55,8 +55,8 @@ class TipFTR(Tip):
         ReturnCommandTracker.ManualLoad(
             LoadTipsCommand(
                 "",
-                True,
                 LoadTipsOptions("", self.PickupSequence),
+                None,
                 CallbackFunction,
                 CallbackArgs,
             )
@@ -77,12 +77,12 @@ class TipFTR(Tip):
         ReturnCommandTracker.ManualLoad(
             TipsAvailableCommand(
                 "",
-                True,
                 TipsAvailableOptions(
                     "",
                     self.PickupSequence,
                     NumTips,
                 ),
+                None,
                 UpdateTipPositionCallback,
                 (self, NumTips, CallbackFunction, CallbackArgs),
             )
@@ -101,11 +101,11 @@ class TipFTR(Tip):
         ReturnCommandTracker.ManualLoad(
             TipsRemainingCommand(
                 "",
-                True,
                 TipsRemainingOptions(
                     "",
                     self.PickupSequence,
                 ),
+                None,
                 UpdateRemainingTipsCallback,
                 (self, CallbackFunction, CallbackArgs),
             )

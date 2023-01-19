@@ -14,7 +14,7 @@ class NOPCommand(Command):
         Command.__init__(
             self,
             self.GetModuleName() + " -> " + self.GetCommandName() + ": " + Name,
-            False,
+            None,
             CallbackFunction,
             CallbackArgs,
         )

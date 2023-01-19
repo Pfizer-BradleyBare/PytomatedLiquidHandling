@@ -56,8 +56,8 @@ class HamiltonHeaterCooler(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             ConnectCommand(
                 "",
-                True,
                 ConnectOptions("", self.ComPort),  # type:ignore
+                None,
                 InitializeCallback,
                 (self, CallbackFunction, CallbackArgs),
             )
@@ -76,8 +76,8 @@ class HamiltonHeaterCooler(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             StopTemperatureControlCommand(
                 "",
-                True,
                 StopTemperatureControlOptions("", self.HandleID),
+                None,
                 CallbackFunction,
                 CallbackArgs,
             )
@@ -97,8 +97,8 @@ class HamiltonHeaterCooler(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             StartTemperatureControlCommand(
                 "",
-                True,
                 StartTemperatureControlOptions("", self.HandleID, Temperature),
+                None,
                 CallbackFunction,
                 CallbackArgs,
             )
@@ -117,8 +117,8 @@ class HamiltonHeaterCooler(TempControlDevice):
         ReturnCommandTracker.ManualLoad(
             GetTemperatureCommand(
                 "",
-                True,
                 GetTemperatureOptions("", self.HandleID),
+                None,
                 UpdateCurrentTemperatureCallback,
                 (self, CallbackFunction, CallbackArgs),
             )

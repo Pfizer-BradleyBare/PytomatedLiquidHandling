@@ -447,19 +447,19 @@ class Pipette8Channel(Pipette):
                         break
 
                 ReturnCommandTrackerInstance.ManualLoad(
-                    PickupCommand("", True, PickupOptionsTrackerInstance),
+                    PickupCommand("", PickupOptionsTrackerInstance),
                 )
 
                 ReturnCommandTrackerInstance.ManualLoad(
-                    AspirateCommand("", True, AspirateOptionsTrackerInstance)
+                    AspirateCommand("", AspirateOptionsTrackerInstance)
                 )
 
                 ReturnCommandTrackerInstance.ManualLoad(
-                    DispenseCommand("", True, DispenseOptionsTrackerInstance)
+                    DispenseCommand("", DispenseOptionsTrackerInstance)
                 )
 
                 ReturnCommandTrackerInstance.ManualLoad(
-                    EjectCommand("", True, EjectOptionsTrackerInstance)
+                    EjectCommand("", EjectOptionsTrackerInstance)
                 )
                 # Lets assume this is perfect and will not need error handling yet
 

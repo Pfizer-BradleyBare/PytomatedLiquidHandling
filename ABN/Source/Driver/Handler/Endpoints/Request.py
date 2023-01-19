@@ -49,7 +49,8 @@ class Request:
             "Request Identifier", OutputCommandInstance.GetName()
         )
         ParserObject.SetEndpointOutputKey(
-            "Custom Error Handling", OutputCommandInstance.CustomErrorHandling
+            "Custom Error Handling",
+            OutputCommandInstance.CustomErrorHandlingFunction is not None,
         )
         ParserObject.SetEndpointOutputKey(
             "Module Name", OutputCommandInstance.GetModuleName()

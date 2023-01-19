@@ -8,15 +8,15 @@ class TipsRemainingCommand(Command):
     def __init__(
         self,
         Name: str,
-        CustomErrorHandling: bool,
         OptionsInstance: TipsRemainingOptions,
+        CustomErrorHandlingFunction: Callable[[Command], None] | None = None,
         CallbackFunction: Callable[[Command, tuple], None] | None = None,
         CallbackArgs: tuple = (),
     ):
         Command.__init__(
             self,
             self.GetModuleName() + " -> " + self.GetCommandName() + ": " + Name,
-            CustomErrorHandling,
+            CustomErrorHandlingFunction,
             CallbackFunction,
             CallbackArgs,
         )
