@@ -8,7 +8,12 @@ LOG_FORMAT = "[%(asctime)s] %(levelname)s\n%(message)s\n(%(threadName)s).%(modul
 
 LOG = logging.getLogger(__name__)
 
-BASE_DIRECTORY = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\HamiltonVisualMethodEditor\\Logging"
+BASE_DIRECTORY = os.path.join(
+    os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+    ),
+    "Logging",
+)
 LOG_DIRECTORY = os.path.join(BASE_DIRECTORY, "LogFiles")
 TIME = str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S"))
 BASE_LOGFILE_NAME = "Log.ansi"
