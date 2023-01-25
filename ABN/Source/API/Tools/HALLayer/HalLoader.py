@@ -1,3 +1,5 @@
+import os
+
 from ....HAL.ClosedContainer import ClosedContainerLoader
 from ....HAL.DeckLocation import DeckLocationLoader
 from ....HAL.Labware import LabwareLoader
@@ -14,12 +16,13 @@ from ....Server.Globals import LOG
 from .HALLayer import HALLayer
 
 
-def Load() -> HALLayer:
+def Load(BasePath: str) -> HALLayer:
+
     HALLayerInstance = HALLayer()
     LOG.info("Loading Labware...")
 
     LabwareTrackerInstance = LabwareLoader.LoadYaml(
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Labware\\Labware.yaml",
+        os.path.join(BasePath, "Labware\\Labware.yaml"),
     )
     HALLayerInstance.LabwareTrackerInstance = LabwareTrackerInstance
     for Labware in LabwareTrackerInstance.GetObjectsAsList():
@@ -31,7 +34,7 @@ def Load() -> HALLayer:
 
     TransportDeviceTrackerInstance = TransportDeviceLoader.LoadYaml(
         LabwareTrackerInstance,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Transport\\Transport.yaml",
+        os.path.join(BasePath, "Transport\\Transport.yaml"),
     )
     HALLayerInstance.TransportDeviceTrackerInstance = TransportDeviceTrackerInstance
     for TransportDevice in TransportDeviceTrackerInstance.GetObjectsAsList():
@@ -43,7 +46,7 @@ def Load() -> HALLayer:
 
     DeckLocationTrackerInstance = DeckLocationLoader.LoadYaml(
         TransportDeviceTrackerInstance,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\DeckLocation\\DeckLocation.yaml",
+        os.path.join(BasePath, "DeckLocation\\DeckLocation.yaml"),
     )
     HALLayerInstance.DeckLocationTrackerInstance = DeckLocationTrackerInstance
     for Location in DeckLocationTrackerInstance.GetObjectsAsList():
@@ -56,7 +59,7 @@ def Load() -> HALLayer:
     LayoutItemTrackerInstance = LayoutItemLoader.LoadYaml(
         LabwareTrackerInstance,
         DeckLocationTrackerInstance,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Layout\\Layout.yaml",
+        os.path.join(BasePath, "Layout\\Layout.yaml"),
     )
     HALLayerInstance.LayoutItemGroupingTrackerInstance = LayoutItemTrackerInstance
     for Layout in LayoutItemTrackerInstance.GetObjectsAsList():
@@ -69,7 +72,7 @@ def Load() -> HALLayer:
     LidTrackerInstance = LidLoader.LoadYaml(
         LabwareTrackerInstance,
         DeckLocationTrackerInstance,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Lid\\Lid.yaml",
+        os.path.join(BasePath, "Lid\\Lid.yaml"),
     )
     HALLayerInstance.LidTrackerInstance = LidTrackerInstance
     for Lid in LidTrackerInstance.GetObjectsAsList():
@@ -82,7 +85,7 @@ def Load() -> HALLayer:
     TempControlDeviceTrackerInstance = TempControlDeviceLoader.LoadYaml(
         LabwareTrackerInstance,
         DeckLocationTrackerInstance,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\TempControlDevice\\TempControlDevice.yaml",
+        os.path.join(BasePath, "TempControlDevice\\TempControlDevice.yaml"),
     )
     HALLayerInstance.TempControlDeviceTrackerInstance = TempControlDeviceTrackerInstance
     for TempControlDevice in TempControlDeviceTrackerInstance.GetObjectsAsList():
@@ -93,7 +96,7 @@ def Load() -> HALLayer:
     LOG.info("Loading Tip...")
 
     TipTrackerInstance = TipLoader.LoadYaml(
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Tip\\Tip.yaml",
+        os.path.join(BasePath, "Tip\\Tip.yaml"),
     )
     HALLayerInstance.TipTrackerInstance = TipTrackerInstance
     for Tip in TipTrackerInstance.GetObjectsAsList():
@@ -106,7 +109,7 @@ def Load() -> HALLayer:
     PipetteTrackerInstance = PipetteLoader.LoadYaml(
         TipTrackerInstance,
         LabwareTrackerInstance,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Pipette\\Pipette.yaml",
+        os.path.join(BasePath, "Pipette\\Pipette.yaml"),
     )
     HALLayerInstance.PipetteTrackerInstance = PipetteTrackerInstance
     for Pipette in PipetteTrackerInstance.GetObjectsAsList():
@@ -118,7 +121,7 @@ def Load() -> HALLayer:
 
     #    MagneticRackLoader.LoadYaml(
     #        MagneticRacks,
-    #        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\MagneticRack\\MagneticRack.yaml",
+    #        os.path.join(BasePath, "\\MagneticRack\\MagneticRack.yaml",
     #    )
     #    HALLayerInstance.MagneticRackTrackerInstance = MagneticRacks
     #    for MagneticRack in MagneticRacks.GetObjectsAsList():
@@ -129,7 +132,7 @@ def Load() -> HALLayer:
     LOG.info("Loading Notify...")
 
     NotifyTrackerInstance = NotifyLoader.LoadYaml(
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\Notify\\Notify.yaml",
+        os.path.join(BasePath, "Notify\\Notify.yaml"),
     )
     HALLayerInstance.NotifyTrackerInstance = NotifyTrackerInstance
     for NotifyDevice in NotifyTrackerInstance.GetObjectsAsList():
@@ -141,7 +144,7 @@ def Load() -> HALLayer:
 
     ClosedContainerTrackerInstance = ClosedContainerLoader.LoadYaml(
         LabwareTrackerInstance,
-        "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesConfiguration\\HAL\\ClosedContainers\\ClosedContainers.yaml",
+        os.path.join(BasePath, "ClosedContainers\\ClosedContainers.yaml"),
     )
     HALLayerInstance.ClosedContainerTrackerInstance = ClosedContainerTrackerInstance
     for FlipTube in ClosedContainerTrackerInstance.GetObjectsAsList():
