@@ -14,7 +14,6 @@ from ...Driver.Pipette.Pipette8Channel import (
     PickupOptions,
     PickupOptionsTracker,
 )
-from ...Driver.Tools import Command, CommandTracker
 from ..Labware import LabwareTracker
 from ..Pipette import TransferOptions, TransferOptionsTracker
 from .BasePipette import Pipette, PipetteTipTracker, PipettingDeviceTypes
@@ -57,7 +56,6 @@ class Pipette8Channel(Pipette):
         TransferOptionsTrackerInstance: TransferOptionsTracker,
     ):
         # NOTE: I played with sorting to make the liquid aspirate and dispense smarter. Trust me not a good idea. Try if you dare
-        ReturnCommandTrackerInstance = CommandTracker()
 
         SourceLayoutItemInstances = [
             Option.SourceLayoutItemInstance
@@ -188,8 +186,6 @@ class Pipette8Channel(Pipette):
                 # Our transfer volume is larger than our biggest tip. Let's deal with that
         # lets categorize our transfer into tip "buckets"
 
-        return
-
         for Key in TipTransferCategories:
             PipetteTipInstance = (
                 self.SupportedPipetteTipTrackerInstance.GetObjectByName(Key)
@@ -213,18 +209,11 @@ class Pipette8Channel(Pipette):
                 else:
                     NumRequiredTips = NumTransferOptions - Counter
 
-                # TODO TODO TODO NOTE This probably needs a rewrite
-                for CommandInstance in PipetteTipInstance.TipInstance.UpdateTipPosition(
-                    NumRequiredTips
-                ).GetObjectsAsList():
-                    ReturnCommandTrackerInstance.ManualLoad(CommandInstance)
-                # Add this as a command to our return tracker
-                # TODO TODO TODO NOTE This probably needs a rewrite
-
+                PipetteTipInstance.TipInstance.UpdateTipPosition(NumRequiredTips)
                 CurrentTipPosition = (
                     PipetteTipInstance.TipInstance.GetCurrentTipPosition()
                 )
-                # Update the tip position and get it. This effectively does nothing
+                # Update the tip position and get it.
 
                 for PipettingChannel in self.ActiveChannels:
                     TransferOptionsInstance = TransferOptionsInstances[Counter]
@@ -418,21 +407,23 @@ class Pipette8Channel(Pipette):
                     if Counter == TransferOptionsTrackerInstance.GetNumObjects():
                         break
 
-                ReturnCommandTrackerInstance.ManualLoad(
-                    PickupCommand("", PickupOptionsTrackerInstance),
-                )
+                try:
+                    PickupCommand("", PickupOptionsTrackerInstance, True).Execute()
+                except:
+                    ...
 
-                ReturnCommandTrackerInstance.ManualLoad(
-                    AspirateCommand("", AspirateOptionsTrackerInstance)
-                )
+                try:
+                    AspirateCommand("", AspirateOptionsTrackerInstance, True)
+                except:
+                    ...
 
-                ReturnCommandTrackerInstance.ManualLoad(
-                    DispenseCommand("", DispenseOptionsTrackerInstance)
-                )
+                try:
+                    DispenseCommand("", DispenseOptionsTrackerInstance, True)
+                except:
+                    ...
 
-                ReturnCommandTrackerInstance.ManualLoad(
-                    EjectCommand("", EjectOptionsTrackerInstance)
-                )
+                try:
+                    EjectCommand("", EjectOptionsTrackerInstance, True)
+                except:
+                    ...
                 # Lets assume this is perfect and will not need error handling yet
-
-        return ReturnCommandTrackerInstance
