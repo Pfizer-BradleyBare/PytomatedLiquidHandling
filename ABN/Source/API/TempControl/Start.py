@@ -2,7 +2,6 @@ from ...HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
 from ...Server.Globals.HandlerRegistry import GetAPIHandler
 from ..Tools.Container.BaseContainer import Container
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
-from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 from ..Transport.Transport import Transport
 
 
@@ -11,14 +10,11 @@ def Start(
     TempControlDeviceInstance: TempControlDevice,
     Temperature: float,
     ShakingSpeed: float,
+    Simulate: bool,
 ):
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
         GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
-    )
-
-    ResourceLockTrackerInstance: ResourceLockTracker = (
-        GetAPIHandler().ResourceLockTrackerInstance  # type:ignore
     )
 
     LoadedLabwareAssignmentInstances = (
@@ -38,17 +34,16 @@ def Start(
     Transport(
         SourceLayoutItemGroupingInstance.PlateLayoutItemInstance,
         DestinationLayoutItemGroupingInstance.PlateLayoutItemInstance,
+        Simulate,
     )
-    ResourceLockTrackerInstance.ManualUnload(
-        SourceLayoutItemGroupingInstance.GetDeckLocation()
-    )
-    ResourceLockTrackerInstance.ManualLoad(
-        DestinationLayoutItemGroupingInstance.GetDeckLocation()
-    )
+
     LoadedLabwareInstance.LayoutItemGroupingInstance = (
         DestinationLayoutItemGroupingInstance
     )
     # Move first.
+
+    if Simulate is True:
+        return
 
     TempControlDeviceInstance.SetTemperature(Temperature)
 

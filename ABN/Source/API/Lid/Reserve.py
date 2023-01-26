@@ -6,7 +6,7 @@ from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 
 
-def Reserve(ContainerInstance: Container) -> Lid | None:
+def Reserve(ContainerInstance: Container, Simulate: bool) -> Lid | None:
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
         GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore

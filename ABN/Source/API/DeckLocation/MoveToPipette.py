@@ -7,7 +7,7 @@ from ..Transport.Tools.GetLayoutItem import GetLayoutItem
 from ..Transport.Transport import Transport
 
 
-def MoveToPipette(ContainerInstance: Container) -> bool:
+def MoveToPipette(ContainerInstance: Container, Simulate: bool) -> bool:
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
         GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
@@ -61,6 +61,7 @@ def MoveToPipette(ContainerInstance: Container) -> bool:
             Transport(
                 LoadedLabwareAssignmentInstance.LayoutItemGroupingInstance.PlateLayoutItemInstance,
                 DestinationLayoutItemGroupingInstance.PlateLayoutItemInstance,
+                Simulate,
             )
 
             break

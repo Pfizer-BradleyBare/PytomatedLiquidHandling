@@ -7,7 +7,9 @@ from .Tools.GetLayoutItem import GetLayoutItem
 
 
 def Transport(
-    SourceLayoutItemInstance: LayoutItem, DestinationLayoutItemInstance: LayoutItem
+    SourceLayoutItemInstance: LayoutItem,
+    DestinationLayoutItemInstance: LayoutItem,
+    Simulate: bool,
 ):
 
     ResourceLockTrackerInstance: ResourceLockTracker = (
@@ -84,13 +86,13 @@ def Transport(
             SourceLayoutItemInstance.DeckLocationInstance.GetName()
         ):
             raise Exception(
-                "Source Deck location is lock. Transport cannot occur. This should not happen."
+                "Source Deck location is locked. Transport cannot occur. This should not happen."
             )
         if ResourceLockTrackerInstance.IsTracked(
             DestinationLayoutItemInstance.DeckLocationInstance.GetName()
         ):
             raise Exception(
-                "Destination Deck location is lock. Transport cannot occur. This should not happen."
+                "Destination Deck location is locked. Transport cannot occur. This should not happen."
             )
         ResourceLockTrackerInstance.ManualUnload(
             SourceLayoutItemInstance.DeckLocationInstance
@@ -101,9 +103,10 @@ def Transport(
         # Before we try to transfer we need to make sure we lock / unlock the resources.
         # Additionally we need to confirm those resources are not already locked
 
-        TransportDeviceInstance.Transport(
-            SourceLayoutItemInstance, DestinationLayoutItemInstance
-        )
+        if Simulate is False:
+            TransportDeviceInstance.Transport(
+                SourceLayoutItemInstance, DestinationLayoutItemInstance
+            )
     # Do the transports
 
     # Done

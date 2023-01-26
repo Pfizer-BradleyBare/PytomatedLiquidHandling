@@ -5,10 +5,7 @@ from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Transport.Transport import Transport
 
 
-def Cover(
-    ContainerInstance: Container,
-    LidInstance: Lid,
-):
+def Cover(ContainerInstance: Container, LidInstance: Lid, Simulate: bool):
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
         GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
@@ -29,5 +26,5 @@ def Cover(
 
     SourceLayoutItemInstance = LidInstance.LidLayoutItem
 
-    Transport(SourceLayoutItemInstance, DestinationLayoutItemInstance)
+    Transport(SourceLayoutItemInstance, DestinationLayoutItemInstance, Simulate)
     # Do the transfer

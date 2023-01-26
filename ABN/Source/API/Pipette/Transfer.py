@@ -4,7 +4,7 @@ from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from .Options.TransferOptionsTracker import TransferOptionsTracker
 
 
-def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker):
+def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, Simulate: bool):
 
     for TransferOptions in TransferOptionsTrackerInstance.GetObjectsAsList():
 
@@ -19,6 +19,9 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker):
             SourceContainerInstance.Aspirate(SourceWellNumber, Volume),
         )
         # First we do the "programmatic" transfer
+
+    if Simulate is True:
+        return
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
         GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore

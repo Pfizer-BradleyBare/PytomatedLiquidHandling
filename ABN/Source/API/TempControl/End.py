@@ -6,9 +6,11 @@ from ..Tools.Container.BaseContainer import Container
 def End(
     ContainerInstance: Container,
     TempControlDeviceInstance: TempControlDevice,
+    Simulate: bool,
 ):
 
-    TempControlDeviceInstance.SetTemperature(25)
-    TempControlDeviceInstance.StopShaking()
+    if Simulate is False:
+        TempControlDeviceInstance.SetTemperature(25)
+        TempControlDeviceInstance.StopShaking()
 
-    MoveToPipette(ContainerInstance)
+    MoveToPipette(ContainerInstance, Simulate)

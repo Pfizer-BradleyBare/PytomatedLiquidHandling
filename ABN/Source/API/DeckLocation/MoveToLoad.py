@@ -7,7 +7,7 @@ from ..Transport.Tools.GetLayoutItem import GetLayoutItem
 from ..Transport.Transport import Transport
 
 
-def MoveToLoad(ContainerInstance: Container) -> bool:
+def MoveToLoad(ContainerInstance: Container, Simulate: bool) -> bool:
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
         GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
@@ -61,6 +61,7 @@ def MoveToLoad(ContainerInstance: Container) -> bool:
             Transport(
                 LoadedLabwareAssignmentInstance.LayoutItemGroupingInstance.PlateLayoutItemInstance,
                 DestinationLayoutGroupingItemInstance.PlateLayoutItemInstance,
+                Simulate,
             )
 
             break

@@ -3,7 +3,7 @@ from ...Server.Globals.HandlerRegistry import GetAPIHandler
 from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 
 
-def Release(LidInstance: Lid):
+def Release(LidInstance: Lid, Simulate: bool):
 
     ResourceLockTrackerInstance: ResourceLockTracker = (
         GetAPIHandler().ResourceLockTrackerInstance  # type:ignore

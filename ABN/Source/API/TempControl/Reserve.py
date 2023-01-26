@@ -7,7 +7,7 @@ from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 
 
 def Reserve(
-    ContainerInstance: Container, Temperature: float, ShakingSpeed: int
+    ContainerInstance: Container, Temperature: float, ShakingSpeed: int, Simulate: bool
 ) -> TempControlDevice | None:
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
@@ -62,8 +62,9 @@ def Reserve(
         return None
     # Nothing is available right now :(
 
-    for TempControlDeviceInstance in TempControlDeviceInstances:
-        TempControlDeviceInstance.UpdateCurrentTemperature()
+    if Simulate is False:
+        for TempControlDeviceInstance in TempControlDeviceInstances:
+            TempControlDeviceInstance.UpdateCurrentTemperature()
     # Lets update the temperatures first
 
     BestFitDevice: TempControlDevice | None = None
@@ -84,6 +85,8 @@ def Reserve(
     # Nothing is available right now :( same as above
 
     ResourceLockTrackerInstance.ManualLoad(BestFitDevice)
-    BestFitDevice.SetTemperature(Temperature)
+
+    if Simulate is False:
+        BestFitDevice.SetTemperature(Temperature)
 
     return BestFitDevice
