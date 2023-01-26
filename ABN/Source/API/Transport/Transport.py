@@ -50,6 +50,10 @@ def Transport(
                 break
                 # Found our intermediate location. Break
 
+        if len(LayoutItemInstancePathway) == 0:
+            raise Exception(
+                "Could not find handoff position... This should never happen"
+            )
         # Ok so we will make it a requirement that there has to be an intermediate transport location. This facilitates handoff between different devices.
         # There cannot be a transport that requires two intermediate positions. That would be unreasonable and slow.
 
