@@ -26,32 +26,20 @@ class FlexibleTest:
 
         TestInstance = TrackerInstance.GetObjectsAsList()[0]
 
-        CommandTrackerInstance = TestInstance.Initialize()
-
-        DriverHandlerInstance: DriverHandler = GetDriverHandler()  # type:ignore
+        TestInstance.Initialize()
 
         print("WE ARE HERE")
         # Do something here
 
-        for Command in CommandTrackerInstance.GetObjectsAsList():
-            DriverHandlerInstance.ExecuteCommand(Command)
-
         TestInstance = TrackerInstance.GetObjectsAsList()[1]
 
-        CommandTrackerInstance = TestInstance.Initialize()
+        TestInstance.Initialize()
 
-        for Command in CommandTrackerInstance.GetObjectsAsList():
-            DriverHandlerInstance.ExecuteCommand(Command)
-
-        DriverHandlerInstance.ExecuteCommand(
-            UnloadCommand(
-                "",
-                UnloadOptions(
-                    "", 5, 12, "400uL Thermo 96 Well PCR Plate", "1", "HSP901"
-                ),
-                False,
-            )
-        )
+        UnloadCommand(
+            "",
+            UnloadOptions("", 5, 12, "400uL Thermo 96 Well PCR Plate", "1", "HSP901"),
+            False,
+        ).Execute()
 
         ParserObject.SetEndpointState(True)
 
