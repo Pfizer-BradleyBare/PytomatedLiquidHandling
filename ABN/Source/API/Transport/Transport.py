@@ -1,5 +1,8 @@
+from ...API.Tools.HALLayer.HALLayer import HALLayer
 from ...HAL.Layout import LayoutItem
+from ...Server.Globals import GetAPIHandler
 from .Tools.GetCommonTransportDevice import GetCommonTransportDevice
+from .Tools.GetLayoutItem import GetLayoutItem
 
 
 def Transport(
@@ -13,11 +16,43 @@ def Transport(
         )
         is None
     ):
+        HALLayerInstance: HALLayer = GetAPIHandler().HALLayerInstance  # type:ignore
+        DeckLocationTrackerInstance = HALLayerInstance.DeckLocationTrackerInstance
 
-        # TODO This is the hard part. I have literally no clue. Recursion here I come?
+        SourceTransportDevices = (
+            SourceLayoutItemInstance.DeckLocationInstance.SupportedLocationTransportDeviceTrackerInstance.GetObjectsAsList()
+        )
+        DestinationTransportDevices = (
+            DestinationLayoutItemInstance.DeckLocationInstance.SupportedLocationTransportDeviceTrackerInstance.GetObjectsAsList()
+        )
 
-        ...
-        # We need to find a pathway then...
+        SupportedTransportDevicesList = (
+            SourceTransportDevices + DestinationTransportDevices
+        )
+
+        for DeckLocationInstance in DeckLocationTrackerInstance.GetObjectsAsList():
+            DeckLocationTransportDeviceInstances = (
+                DeckLocationInstance.SupportedLocationTransportDeviceTrackerInstance.GetObjectsAsList()
+            )
+            if all(
+                DeckLocationTransportDeviceInstance in SupportedTransportDevicesList
+                for DeckLocationTransportDeviceInstance in DeckLocationTransportDeviceInstances
+            ):
+
+                LayoutItemInstancePathway.append(SourceLayoutItemInstance)
+                LayoutItemInstancePathway.append(
+                    GetLayoutItem(
+                        DeckLocationInstance, SourceLayoutItemInstance.GetLabware()
+                    )
+                )
+                LayoutItemInstancePathway.append(DestinationLayoutItemInstance)
+
+                break
+                # Found our intermediate location. Break
+
+        # Ok so we will make it a requirement that there has to be an intermediate transport location. This facilitates handoff between different devices.
+        # There cannot be a transport that requires two intermediate positions. That would be unreasonable and slow.
+
     else:
         LayoutItemInstancePathway.append(SourceLayoutItemInstance)
         LayoutItemInstancePathway.append(DestinationLayoutItemInstance)
