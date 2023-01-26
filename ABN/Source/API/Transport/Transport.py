@@ -1,6 +1,7 @@
 from ...API.Tools.HALLayer.HALLayer import HALLayer
 from ...HAL.Layout import LayoutItem
 from ...Server.Globals import GetAPIHandler
+from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 from .Tools.GetCommonTransportDevice import GetCommonTransportDevice
 from .Tools.GetLayoutItem import GetLayoutItem
 
@@ -8,6 +9,10 @@ from .Tools.GetLayoutItem import GetLayoutItem
 def Transport(
     SourceLayoutItemInstance: LayoutItem, DestinationLayoutItemInstance: LayoutItem
 ):
+
+    ResourceLockTrackerInstance: ResourceLockTracker = (
+        GetAPIHandler().ResourceLockTrackerInstance  # type:ignore
+    )
 
     LayoutItemInstancePathway = list()
     if (
@@ -74,6 +79,27 @@ def Transport(
             raise Exception(
                 "A common transport device was not found. This should not happen, please fix."
             )
+
+        if ResourceLockTrackerInstance.IsTracked(
+            SourceLayoutItemInstance.DeckLocationInstance.GetName()
+        ):
+            raise Exception(
+                "Source Deck location is lock. Transport cannot occur. This should not happen."
+            )
+        if ResourceLockTrackerInstance.IsTracked(
+            DestinationLayoutItemInstance.DeckLocationInstance.GetName()
+        ):
+            raise Exception(
+                "Destination Deck location is lock. Transport cannot occur. This should not happen."
+            )
+        ResourceLockTrackerInstance.ManualUnload(
+            SourceLayoutItemInstance.DeckLocationInstance
+        )
+        ResourceLockTrackerInstance.ManualLoad(
+            DestinationLayoutItemInstance.DeckLocationInstance
+        )
+        # Before we try to transfer we need to make sure we lock / unlock the resources.
+        # Additionally we need to confirm those resources are not already locked
 
         TransportDeviceInstance.Transport(
             SourceLayoutItemInstance, DestinationLayoutItemInstance

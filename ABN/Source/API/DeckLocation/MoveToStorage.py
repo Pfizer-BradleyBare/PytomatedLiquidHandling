@@ -58,12 +58,6 @@ def MoveToStorage(ContainerInstance: Container) -> bool:
                 continue
             # If there isn't a valid item then we will try the next location
 
-            ResourceLockTrackerInstance.ManualUnload(
-                LoadedLabwareAssignmentInstance.LayoutItemGroupingInstance.GetDeckLocation()
-            )
-            ResourceLockTrackerInstance.ManualLoad(PossibleDeckLocationInstance)
-            # Unload the old location and load the new location. Old location and now available and new location and reserved
-
             Transport(
                 LoadedLabwareAssignmentInstance.LayoutItemGroupingInstance.PlateLayoutItemInstance,
                 DestinationLayoutItemGroupingInstance.PlateLayoutItemInstance,
