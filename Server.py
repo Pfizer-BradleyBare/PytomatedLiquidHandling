@@ -6,13 +6,20 @@ import os
 
 import web
 
-import ABN.Source.API.Handler.APIHandler as APIH
-import ABN.Source.App.Handler.AppHandler as AppH
-import ABN.Source.Driver.Handler.DriverHandler as DriverH
-import ABN.Source.Server.Globals.HandlerRegistry as HR
-import ABN.Source.Server.Globals.Logger as Logger
-import ABN.Source.Server.Handler.ServerHandler as ServerH
+#import ABN.Source.API.Handler.APIHandler as APIH
+#import ABN.Source.App.Handler.AppHandler as AppH
+#import ABN.Source.Driver.Handler.DriverHandler as DriverH
+#import ABN.Source.Server.Globals.HandlerRegistry as HR
+#import ABN.Source.Server.Globals.Logger as Logger
+#import ABN.Source.Server.Handler.ServerHandler as ServerH
 
+ #**insert logging module here**
+import ABN.Source.App.Tools.ABNLogger.ABNLogger as ABNLogger
+
+quit()
+
+
+'''
 if __name__ == "__main__":
 
     os.environ["PORT"] = "255"
@@ -41,3 +48,4 @@ if __name__ == "__main__":
 
     app = web.application(urls, globals())
     app.run()
+'''
