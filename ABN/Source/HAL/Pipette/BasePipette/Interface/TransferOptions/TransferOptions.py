@@ -5,6 +5,7 @@ from .....Layout import LayoutItem
 class TransferOptions(ObjectABC):
     def __init__(
         self,
+        Name: str,
         SourceLayoutItemInstance: LayoutItem,
         SourcePosition: int,  # This is the well position. Not sequence position
         CurrentSourceVolume: float,
@@ -17,6 +18,7 @@ class TransferOptions(ObjectABC):
         DestinationLiquidClassCategory: str,
         TransferVolume: float,
     ):
+        self.Name: str = Name
         self.SourceLayoutItemInstance: LayoutItem = SourceLayoutItemInstance
         self.SourcePosition: int = SourcePosition
         self.CurrentSourceVolume: float = CurrentSourceVolume
@@ -31,3 +33,6 @@ class TransferOptions(ObjectABC):
 
         self.TransferVolume: float = TransferVolume
         self.NumTransfers: int = 1
+
+    def GetName(self) -> str:
+        return self.Name

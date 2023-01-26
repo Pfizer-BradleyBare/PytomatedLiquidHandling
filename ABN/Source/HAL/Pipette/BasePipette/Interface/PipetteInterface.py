@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import Callable
 
 from .....Driver.Tools import Command, CommandTracker
-from ....Labware import LabwareTracker
+from ....Labware import Labware, LabwareTracker
 from ....Layout import LayoutItem
 from ....Tools import InterfaceABC
 from .TransferOptions.TransferOptionsTracker import TransferOptionsTracker
@@ -13,6 +13,13 @@ class PipetteInterface(InterfaceABC):
 
     def __init__(self):
         pass
+
+    @abstractmethod
+    def LabwaresSupported(
+        self,
+        LabwareInstances: list[Labware],
+    ) -> bool:
+        ...
 
     @abstractmethod
     def Transfer(

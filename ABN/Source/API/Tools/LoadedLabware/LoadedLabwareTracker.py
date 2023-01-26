@@ -23,8 +23,11 @@ class LoadedLabwareTracker(TrackerABC[LoadedLabware]):
             for (
                 WellAssignmentInstance
             ) in LoadedLabwareInstance.GetWellAssignmentTracker().GetObjectsAsList():
-                if WellAssignmentInstance.TestAsignment(
-                    ContainerInstance.GetMethodName(), ContainerInstance.GetName()
+                if (
+                    ContainerInstance.GetMethodName()
+                    in WellAssignmentInstance.GetAssignment()
+                    and ContainerInstance.GetName()
+                    in WellAssignmentInstance.GetAssignment()
                 ):
                     ReturnLoadedLabwareTrackerInstance.ManualLoad(LoadedLabwareInstance)
                     break

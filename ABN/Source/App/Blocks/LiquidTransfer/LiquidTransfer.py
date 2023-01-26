@@ -156,4 +156,5 @@ class LiquidTransfer(Block):
                 # TODO: name must be unique
                 # Destination will always be a "plate." The distinction is beyond subtle but important
 
-            Transfer(TransferOptionsTrackerInstance)
+            # TODO
+            Transfer(TransferOptionsTrackerInstance, True)

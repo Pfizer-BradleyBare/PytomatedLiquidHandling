@@ -14,7 +14,7 @@ from ...Driver.Pipette.Pipette8Channel import (
     PickupOptions,
     PickupOptionsTracker,
 )
-from ..Labware import LabwareTracker
+from ..Labware import Labware, LabwareTracker
 from ..Pipette import TransferOptions, TransferOptionsTracker
 from .BasePipette import Pipette, PipetteTipTracker, PipettingDeviceTypes
 from .BasePipette.Interface.PipetteInterface import (
@@ -49,6 +49,12 @@ class Pipette8Channel(Pipette):
     def Deinitialize(
         self,
     ):
+        ...
+
+    def LabwaresSupported(
+        self,
+        LabwareInstances: list[Labware],
+    ) -> bool:
         ...
 
     def Transfer(

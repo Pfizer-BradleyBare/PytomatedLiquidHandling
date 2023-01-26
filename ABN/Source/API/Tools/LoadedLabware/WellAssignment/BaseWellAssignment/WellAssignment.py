@@ -1,20 +1,25 @@
+from abc import abstractmethod
+
 from ......Tools.AbstractClasses import ObjectABC
+from .....Tools.Container import Container
 
 
 class WellAssignment(ObjectABC):
-    def __init__(self, PhysicalWellNumber: int, MethodName: str, LabwareName: str):
+    def __init__(self, PhysicalWellNumber: int, ContainerInstance: Container):
         self.PhysicalWellNumber: int = PhysicalWellNumber
-        self.Assignment: str = MethodName + " :: " + LabwareName
+        self.ContainerInstance: Container = ContainerInstance
         self.MeasuredVolume: float = 0
 
     def GetName(self) -> int:
         return self.PhysicalWellNumber
 
-    def TestAsignment(self, MethodName: str, LabwareName: str) -> bool:
-        return self.Assignment == MethodName + " :: " + LabwareName
+    @abstractmethod
+    def TestAsignment(self, ContainerInstance: Container, WellNumber: int) -> bool:
+        ...
 
+    @abstractmethod
     def GetAssignment(self) -> str:
-        return self.Assignment
+        ...
 
     def GetMeasuredVolume(self) -> float:
         return self.MeasuredVolume

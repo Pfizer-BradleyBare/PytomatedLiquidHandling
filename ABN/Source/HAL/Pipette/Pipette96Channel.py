@@ -1,4 +1,4 @@
-from ..Labware import LabwareTracker
+from ..Labware import Labware, LabwareTracker
 from ..Pipette import TransferOptionsTracker
 from .BasePipette import Pipette, PipetteTipTracker, PipettingDeviceTypes
 
@@ -26,6 +26,12 @@ class Pipette96Channel(Pipette):
     def Deinitialize(
         self,
     ):
+        ...
+
+    def LabwaresSupported(
+        self,
+        LabwareInstances: list[Labware],
+    ) -> bool:
         ...
 
     def Transfer(
