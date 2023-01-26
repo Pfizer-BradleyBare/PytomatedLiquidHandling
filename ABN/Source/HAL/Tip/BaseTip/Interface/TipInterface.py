@@ -22,24 +22,18 @@ class TipInterface(InterfaceABC):
     @abstractmethod
     def Reload(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...
 
     @abstractmethod
     def UpdateTipPosition(
         self,
         NumTips: int,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...
 
     @abstractmethod
     def UpdateRemainingTips(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...

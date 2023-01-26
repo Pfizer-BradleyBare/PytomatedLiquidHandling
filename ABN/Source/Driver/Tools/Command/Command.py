@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from threading import Event
-from typing import Callable, Self
 
+from ....Server.Globals import GetDriverHandler
 from ....Tools.AbstractClasses import ObjectABC
 from .Response.Response import Response
 
@@ -10,23 +10,13 @@ class Command(ObjectABC):
     def __init__(
         self,
         Name: str,
-        CustomErrorHandlingFunction: Callable[[Self], None] | None,
-        CallbackFunction: Callable[[Self, tuple], None] | None,
-        CallbackArgs: tuple,
+        CustomErrorHandling: bool,
     ):
         self.Name: str = Name
-        self.CustomErrorHandlingFunction: Callable[
-            [Self], None
-        ] | None = CustomErrorHandlingFunction
+        self.CustomErrorHandling: bool = CustomErrorHandling
 
         self.ResponseInstance: Response | None = None
         self.ResponseEvent: Event = Event()
-
-        self.CallbackFunction: Callable[
-            [Command, tuple], None
-        ] | None = CallbackFunction
-
-        self.CallbackArgs: tuple = CallbackArgs
 
     def GetName(self) -> str:
         return self.Name
@@ -36,6 +26,35 @@ class Command(ObjectABC):
             raise Exception("Response not set. Did the command timeout?")
 
         return self.ResponseInstance
+
+    def Execute(self, Timeout: float | None = None):
+        TimeoutFlag = True
+
+        CommandTrackerInstance = (
+            GetDriverHandler().CommandTrackerInstance  # type:ignore
+        )
+
+        if type(self).__name__ != "NOPCommand":
+
+            CommandTrackerInstance.ManualLoad(self)
+
+            TimeoutFlag = self.ResponseEvent.wait(Timeout)
+
+            CommandTrackerInstance.ManualUnload(self)
+
+        if TimeoutFlag is True:  # This means it did not timeout
+
+            if self.ResponseInstance is None:
+                raise Exception("Response is not set. This should never happen...")
+
+            if self.ResponseInstance.State is False:
+                if self.CustomErrorHandling is not False:
+                    self.HandleErrors()
+            # If response indicates a failure then we need to run error handling if it is set.
+            # Most error handling will just rerun the step. FIY
+
+        else:
+            raise Exception("Command Timed out. Uh oh!")
 
     @abstractmethod
     def GetModuleName(self) -> str:
@@ -51,4 +70,8 @@ class Command(ObjectABC):
 
     @abstractmethod
     def GetCommandParameters(self) -> dict[str, any]:  # type: ignore
+        ...
+
+    @abstractmethod
+    def HandleErrors(self):
         ...

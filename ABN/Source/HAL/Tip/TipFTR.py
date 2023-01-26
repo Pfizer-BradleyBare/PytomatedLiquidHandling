@@ -1,6 +1,3 @@
-from typing import Callable
-
-from ...Driver.NOP import NOPCommand
 from ...Driver.Tip.FTR import (
     LoadTipsCommand,
     LoadTipsOptions,
@@ -9,9 +6,7 @@ from ...Driver.Tip.FTR import (
     TipsRemainingCommand,
     TipsRemainingOptions,
 )
-from ...Driver.Tools import Command, CommandTracker
 from .BaseTip import Tip, TipTypes
-from .BaseTip.Interface import UpdateRemainingTipsCallback, UpdateTipPositionCallback
 
 
 class TipFTR(Tip):
@@ -20,94 +15,69 @@ class TipFTR(Tip):
 
     def Initialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
-        return self.Reload(CallbackFunction, CallbackArgs)
+        self.Reload()
 
     def Deinitialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            NOPCommand(
-                "TipFTR Deinitialize NOP",
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+    ):
+        ...
 
     def Reload(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
+        try:
             LoadTipsCommand(
-                "",
-                LoadTipsOptions("", self.PickupSequence),
-                None,
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
+                "", LoadTipsOptions("", self.PickupSequence), True
+            ).Execute()
+
+        except:
+            ...
 
         # We also need to show a deck loading dialog, move the autoload, etc.
-        return ReturnCommandTracker
 
     def UpdateTipPosition(
         self,
         NumTips: int,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            TipsAvailableCommand(
+        try:
+            Command = TipsAvailableCommand(
                 "",
                 TipsAvailableOptions(
                     "",
                     self.PickupSequence,
                     NumTips,
                 ),
-                None,
-                UpdateTipPositionCallback,
-                (self, NumTips, CallbackFunction, CallbackArgs),
+                True,
             )
-        )
 
-        return ReturnCommandTracker
+            Command.Execute()
+
+            self.TipPosition = Command.GetResponse().GetAdditional()["TipPosition"]
+
+        except:
+            ...
 
     def UpdateRemainingTips(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            TipsRemainingCommand(
+        try:
+            Command = TipsRemainingCommand(
                 "",
                 TipsRemainingOptions(
                     "",
                     self.PickupSequence,
                 ),
-                None,
-                UpdateRemainingTipsCallback,
-                (self, CallbackFunction, CallbackArgs),
+                True,
             )
-        )
-        return ReturnCommandTracker
+
+            Command.Execute()
+
+            self.RemainingTips = Command.GetResponse().GetAdditional()["NumRemaining"]
+
+        except:
+            ...

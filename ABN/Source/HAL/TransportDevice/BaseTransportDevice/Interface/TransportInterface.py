@@ -12,7 +12,5 @@ class TransportInterface(InterfaceABC):
         self,
         SourceLayoutItem: LayoutItem,
         DestinationLayoutItem: LayoutItem,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...

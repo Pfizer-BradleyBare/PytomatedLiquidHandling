@@ -24,44 +24,16 @@ class Pipette96Channel(Pipette):
 
     def Initialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            NOPCommand(
-                "Pipette96Channel Initialize NOP",
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+    ):
+        ...
 
     def Deinitialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            NOPCommand(
-                "Pipette96Channel Deinitialize NOP",
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+    ):
+        ...
 
     def Transfer(
         self,
         TransferOptionsTrackerInstance: TransferOptionsTracker,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...

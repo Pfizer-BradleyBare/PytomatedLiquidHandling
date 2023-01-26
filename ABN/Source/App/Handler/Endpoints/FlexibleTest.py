@@ -49,6 +49,7 @@ class FlexibleTest:
                 UnloadOptions(
                     "", 5, 12, "400uL Thermo 96 Well PCR Plate", "1", "HSP901"
                 ),
+                False,
             )
         )
 

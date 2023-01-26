@@ -29,49 +29,19 @@ class COREGripper(TransportDevice):
 
     def Initialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            NOPCommand(
-                "COREGripper Initialize NOP",
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+    ):
+        ...
 
     def Deinitialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            NOPCommand(
-                "COREGripper Deinitialize NOP",
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+    ):
+        ...
 
     def Transport(
         self,
         SourceLayoutItem: LayoutItem,
         DestinationLayoutItem: LayoutItem,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-
-        ReturnCommandTracker = CommandTracker()
+    ):
 
         if not SourceLayoutItem.DeckLocationInstance.SupportedLocationTransportDeviceTrackerInstance.IsTracked(
             type(self).__name__
@@ -122,27 +92,25 @@ class COREGripper(TransportDevice):
             SourceTransportableLabware.TransportParametersInstance.PickupHeight
         )
 
-        ReturnCommandTracker.ManualLoad(
-            GetPlateCommand(
-                "",
-                GetPlateOptionsInstance,
-            )
-        )
+        try:
+            GetPlateCommand("", GetPlateOptionsInstance, True).Execute()
 
-        ReturnCommandTracker.ManualLoad(
+        except:
+            ...
+
+        try:
+
             PlacePlateCommand(
                 "",
                 PlacePlateOptions(
                     "",
                     DestinationLayoutItem.Sequence,
                 ),
-                None,
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
+                True,
+            ).Execute()
 
-        return ReturnCommandTracker
+        except:
+            ...
 
     def GetConfigKeys(self) -> list[str]:
         return []

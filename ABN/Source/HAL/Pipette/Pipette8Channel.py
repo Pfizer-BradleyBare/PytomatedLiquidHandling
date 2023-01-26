@@ -46,46 +46,18 @@ class Pipette8Channel(Pipette):
 
     def Initialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            NOPCommand(
-                "Pipette8Channel Initialize NOP",
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+    ):
+        ...
 
     def Deinitialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            NOPCommand(
-                "Pipette8Channel Deinitialize NOP",
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+    ):
+        ...
 
     def Transfer(
         self,
         TransferOptionsTrackerInstance: TransferOptionsTracker,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         # NOTE: I played with sorting to make the liquid aspirate and dispense smarter. Trust me not a good idea. Try if you dare
         ReturnCommandTrackerInstance = CommandTracker()
 
@@ -217,6 +189,8 @@ class Pipette8Channel(Pipette):
                     break
                 # Our transfer volume is larger than our biggest tip. Let's deal with that
         # lets categorize our transfer into tip "buckets"
+
+        return
 
         for Key in TipTransferCategories:
             PipetteTipInstance = (

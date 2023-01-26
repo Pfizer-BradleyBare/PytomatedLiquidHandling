@@ -10,16 +10,12 @@ class OpenCommand(Command):
         self,
         Name: str,
         OptionsTrackerInstance: OpenOptionsTracker,
-        CustomErrorHandlingFunction: Callable[[Command], None] | None = None,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
+        CustomErrorHandling: bool,
     ):
         Command.__init__(
             self,
             self.GetModuleName() + " -> " + self.GetCommandName() + ": " + Name,
-            CustomErrorHandlingFunction,
-            CallbackFunction,
-            CallbackArgs,
+            CustomErrorHandling,
         )
         self.OptionsTrackerInstance: OpenOptionsTracker = OptionsTrackerInstance
 
@@ -42,3 +38,10 @@ class OpenCommand(Command):
                 OutputDict[key].append(value)
 
         return OutputDict
+
+    def HandleErrors(self):
+
+        if self.ResponseInstance is None:
+            raise Exception("N/A")
+
+        ErrorMessage = self.ResponseInstance.GetMessage()

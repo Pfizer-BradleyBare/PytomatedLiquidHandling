@@ -1,6 +1,3 @@
-from typing import Callable
-
-from ...Driver.Handler.DriverHandler import DriverHandler
 from ...Driver.TemperatureControl.HeaterShaker import (
     ConnectCommand,
     ConnectOptions,
@@ -19,14 +16,8 @@ from ...Driver.TemperatureControl.HeaterShaker import (
     StopTemperatureControlCommand,
     StopTemperatureControlOptions,
 )
-from ...Driver.Tools import Command, CommandTracker
-from ...Server.Globals.HandlerRegistry import GetDriverHandler
 from ..Layout import LayoutItemGroupingTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
-from .BaseTempControlDevice.Interface import (
-    UpdateCurrentShakingSpeedCallback,
-    UpdateCurrentTemperatureCallback,
-)
 
 
 class HamiltonHeaterShaker(TempControlDevice):
@@ -49,197 +40,138 @@ class HamiltonHeaterShaker(TempControlDevice):
 
     def Initialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-        def InitializeCallback(CommandInstance: Command, args: tuple):
+    ):
 
-            TempControlDeviceInstance: TempControlDevice = args[0]
-            ResponseInstance = CommandInstance.GetResponse()
-
-            TempControlDeviceInstance.HandleID = ResponseInstance.GetAdditional()[
-                "HandleID"
-            ]
-
-            DriverHandlerInstance: DriverHandler = GetDriverHandler()  # type:ignore
-
-            DriverHandlerInstance.ExecuteCommand(
-                SetPlateLockCommand(
-                    "",
-                    SetPlateLockOptions("", self.HandleID, 1),
-                )
-            )
-
-            DriverHandlerInstance.ExecuteCommand(
-                SetPlateLockCommand(
-                    "",
-                    SetPlateLockOptions("", self.HandleID, 0),
-                    None,
-                    args[1],
-                    args[2],
-                )
-            )
-
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            ConnectCommand(
+        try:
+            Command = ConnectCommand(
                 "",
                 ConnectOptions("", self.ComPort),  # type:ignore
-                None,
-                InitializeCallback,
-                (self, CallbackFunction, CallbackArgs),
+                True,
             )
-        )
 
-        return ReturnCommandTracker
+            Command.Execute()
+
+            self.HandleID = Command.GetResponse().GetAdditional()["HandleID"]
+        except:
+            ...
+
+        try:
+            SetPlateLockCommand(
+                "", SetPlateLockOptions("", self.HandleID, 1), True
+            ).Execute()
+        except:
+            ...
+
+        try:
+            SetPlateLockCommand(
+                "", SetPlateLockOptions("", self.HandleID, 0), True
+            ).Execute()
+        except:
+            ...
 
     def Deinitialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
+        try:
             StopTemperatureControlCommand(
-                "",
-                StopTemperatureControlOptions("", self.HandleID),
-            )
-        )
+                "", StopTemperatureControlOptions("", self.HandleID), True
+            ).Execute()
+        except:
+            ...
 
-        ReturnCommandTracker.ManualLoad(
+        try:
             StopShakeControlCommand(
-                "",
-                StopShakeControlOptions("", self.HandleID),
-            )
-        )
+                "", StopShakeControlOptions("", self.HandleID), True
+            ).Execute()
+        except:
+            ...
 
-        ReturnCommandTracker.ManualLoad(
+        try:
             SetPlateLockCommand(
-                "",
-                SetPlateLockOptions("", self.HandleID, 0),
-                None,
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+                "", SetPlateLockOptions("", self.HandleID, 0), True
+            ).Execute()
+        except:
+            ...
 
     def SetTemperature(
         self,
         Temperature: float,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
+        try:
             StartTemperatureControlCommand(
-                "",
-                StartTemperatureControlOptions("", self.HandleID, Temperature),
-                None,
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+                "", StartTemperatureControlOptions("", self.HandleID, Temperature), True
+            ).Execute()
+        except:
+            ...
 
     def UpdateCurrentTemperature(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            GetTemperatureCommand(
-                "",
-                GetTemperatureOptions("", self.HandleID),
-                None,
-                UpdateCurrentTemperatureCallback,
-                (self, CallbackFunction, CallbackArgs),
+    ):
+        try:
+            Command = GetTemperatureCommand(
+                "", GetTemperatureOptions("", self.HandleID), True
             )
-        )
 
-        return ReturnCommandTracker
+            Command.Execute()
+
+            self.CurrentTemperature = Command.GetResponse().GetAdditional()[
+                "Temperature"
+            ]
+        except:
+            ...
 
     def StartShaking(
         self,
         RPM: int,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
+        try:
             SetPlateLockCommand(
-                "",
-                SetPlateLockOptions("", self.HandleID, 1),
-            )
-        )
+                "", SetPlateLockOptions("", self.HandleID, 1), True
+            ).Execute()
+        except:
+            ...
 
-        ReturnCommandTracker.ManualLoad(
+        try:
             StartShakeControlCommand(
-                "",
-                StartShakeControlOptions("", self.HandleID, RPM),
-                None,
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+                "", StartShakeControlOptions("", self.HandleID, RPM), True
+            ).Execute()
+        except:
+            ...
 
     def StopShaking(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
+        try:
             StopShakeControlCommand(
-                "",
-                StopShakeControlOptions("", self.HandleID),
-            )
-        )
+                "", StopShakeControlOptions("", self.HandleID), True
+            ).Execute()
+        except:
+            ...
 
-        ReturnCommandTracker.ManualLoad(
+        try:
             SetPlateLockCommand(
-                "",
-                SetPlateLockOptions("", self.HandleID, 0),
-                None,
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+                "", SetPlateLockOptions("", self.HandleID, 0), True
+            ).Execute()
+        except:
+            ...
 
     def UpdateCurrentShakingSpeed(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            GetShakingSpeedCommand(
-                "",
-                GetShakingSpeedOptions("", self.HandleID),
-                None,
-                UpdateCurrentShakingSpeedCallback,
-                (self, CallbackFunction, CallbackArgs),
+        try:
+            Command = GetShakingSpeedCommand(
+                "", GetShakingSpeedOptions("", self.HandleID), True
             )
-        )
 
-        return ReturnCommandTracker
+            Command.Execute()
+
+            self.CurrentShakingSpeed = Command.GetResponse().GetAdditional()[
+                "ShakingSpeed"
+            ]
+        except:
+            ...

@@ -50,7 +50,7 @@ class Request:
         )
         ParserObject.SetEndpointOutputKey(
             "Custom Error Handling",
-            OutputCommandInstance.CustomErrorHandlingFunction is not None,
+            OutputCommandInstance.CustomErrorHandling is not None,
         )
         ParserObject.SetEndpointOutputKey(
             "Module Name", OutputCommandInstance.GetModuleName()

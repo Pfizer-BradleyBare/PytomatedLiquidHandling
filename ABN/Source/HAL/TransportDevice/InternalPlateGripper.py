@@ -22,25 +22,19 @@ class InternalPlateGripper(TransportDevice):
 
     def Initialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...
 
     def Deinitialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...
 
     def Transport(
         self,
         SourceLayoutItem: LayoutItem,
         DestinationLayoutItem: LayoutItem,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...
 
     def GetConfigKeys(self) -> list[str]:

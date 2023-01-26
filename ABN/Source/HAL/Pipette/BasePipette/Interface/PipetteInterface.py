@@ -18,9 +18,7 @@ class PipetteInterface(InterfaceABC):
     def Transfer(
         self,
         TransferOptionsTrackerInstance: TransferOptionsTracker,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...
 
 

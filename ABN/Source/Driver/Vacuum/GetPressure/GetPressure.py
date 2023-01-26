@@ -9,16 +9,12 @@ class GetPressureCommand(Command):
         self,
         Name: str,
         OptionsInstance: GetPressureOptions,
-        CustomErrorHandlingFunction: Callable[[Command], None] | None = None,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
+        CustomErrorHandling: bool,
     ):
         Command.__init__(
             self,
             self.GetModuleName() + " -> " + self.GetCommandName() + ": " + Name,
-            CustomErrorHandlingFunction,
-            CallbackFunction,
-            CallbackArgs,
+            CustomErrorHandling,
         )
         self.OptionsInstance: GetPressureOptions = OptionsInstance
 
@@ -35,3 +31,10 @@ class GetPressureCommand(Command):
         OutputDict = vars(self.OptionsInstance)
 
         return OutputDict
+
+    def HandleErrors(self):
+
+        if self.ResponseInstance is None:
+            raise Exception("N/A")
+
+        ErrorMessage = self.ResponseInstance.GetMessage()

@@ -1,7 +1,5 @@
 from abc import abstractmethod
-from typing import Callable
 
-from .....Driver.Tools import Command, CommandTracker
 from ....Tools import InterfaceABC
 
 
@@ -21,40 +19,30 @@ class TempControlDeviceInterface(InterfaceABC):
     def SetTemperature(
         self,
         Temperature: float,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...
 
     @abstractmethod
     def UpdateCurrentTemperature(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...
 
     @abstractmethod
     def StartShaking(
         self,
         RPM: float,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...
 
     @abstractmethod
     def StopShaking(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...
 
     @abstractmethod
     def UpdateCurrentShakingSpeed(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...

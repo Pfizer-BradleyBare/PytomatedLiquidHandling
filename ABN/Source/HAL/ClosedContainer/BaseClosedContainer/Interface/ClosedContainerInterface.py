@@ -1,7 +1,5 @@
 from abc import abstractmethod
-from typing import Callable
 
-from .....Driver.Tools import Command, CommandTracker
 from ....Layout import LayoutItem
 from ....Tools import InterfaceABC
 
@@ -12,9 +10,7 @@ class ClosedContainerInterface(InterfaceABC):
         self,
         LayoutItemInstances: list[LayoutItem],
         Positions: list[int],
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...
 
     @abstractmethod
@@ -22,7 +18,5 @@ class ClosedContainerInterface(InterfaceABC):
         self,
         LayoutItemInstances: list[LayoutItem],
         Positions: list[int],
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
         ...

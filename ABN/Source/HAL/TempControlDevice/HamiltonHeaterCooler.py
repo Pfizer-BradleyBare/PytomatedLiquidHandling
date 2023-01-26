@@ -1,6 +1,3 @@
-from typing import Callable
-
-from ...Driver.NOP import NOPCommand
 from ...Driver.TemperatureControl.HeaterCooler import (
     ConnectCommand,
     ConnectOptions,
@@ -11,10 +8,8 @@ from ...Driver.TemperatureControl.HeaterCooler import (
     StopTemperatureControlCommand,
     StopTemperatureControlOptions,
 )
-from ...Driver.Tools import Command, CommandTracker, ExecuteCallback
 from ..Layout import LayoutItemGroupingTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
-from .BaseTempControlDevice.Interface import UpdateCurrentTemperatureCallback
 
 
 class HamiltonHeaterCooler(TempControlDevice):
@@ -37,101 +32,65 @@ class HamiltonHeaterCooler(TempControlDevice):
 
     def Initialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-        def InitializeCallback(CommandInstance: Command, args: tuple):
+    ):
 
-            TempControlDeviceInstance: TempControlDevice = args[0]
-            ResponseInstance = CommandInstance.GetResponse()
-
-            TempControlDeviceInstance.HandleID = ResponseInstance.GetAdditional()[
-                "HandleID"
-            ]
-
-            ExecuteCallback(args[1], CommandInstance, args[2])
-
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            ConnectCommand(
+        try:
+            Command = ConnectCommand(
                 "",
                 ConnectOptions("", self.ComPort),  # type:ignore
-                None,
-                InitializeCallback,
-                (self, CallbackFunction, CallbackArgs),
+                True,
             )
-        )
 
-        return ReturnCommandTracker
+            Command.Execute()
+
+            self.HandleID = Command.GetResponse().GetAdditional()["HandleID"]
+        except:
+            ...
 
     def Deinitialize(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
+        try:
             StopTemperatureControlCommand(
-                "",
-                StopTemperatureControlOptions("", self.HandleID),
-                None,
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+                "", StopTemperatureControlOptions("", self.HandleID), True
+            ).Execute()
+        except:
+            ...
 
     def SetTemperature(
         self,
         Temperature: float,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
+        try:
             StartTemperatureControlCommand(
-                "",
-                StartTemperatureControlOptions("", self.HandleID, Temperature),
-                None,
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+                "", StartTemperatureControlOptions("", self.HandleID, Temperature), True
+            ).Execute()
+        except:
+            ...
 
     def UpdateCurrentTemperature(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            GetTemperatureCommand(
-                "",
-                GetTemperatureOptions("", self.HandleID),
-                None,
-                UpdateCurrentTemperatureCallback,
-                (self, CallbackFunction, CallbackArgs),
+        try:
+            Command = GetTemperatureCommand(
+                "", GetTemperatureOptions("", self.HandleID), True
             )
-        )
 
-        return ReturnCommandTracker
+            Command.Execute()
+
+            self.CurrentTemperature = Command.GetResponse().GetAdditional()[
+                "Temperature"
+            ]
+        except:
+            ...
 
     def StartShaking(
         self,
         RPM: float,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
+    ):
 
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
@@ -139,36 +98,10 @@ class HamiltonHeaterCooler(TempControlDevice):
 
     def StopShaking(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            NOPCommand(
-                "HamiltonHeaterCooler StopShaking NOP",
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+    ):
+        ...
 
     def UpdateCurrentShakingSpeed(
         self,
-        CallbackFunction: Callable[[Command, tuple], None] | None = None,
-        CallbackArgs: tuple = (),
-    ) -> CommandTracker:
-
-        ReturnCommandTracker = CommandTracker()
-
-        ReturnCommandTracker.ManualLoad(
-            NOPCommand(
-                "HamiltonHeaterCooler UpdateCurrentShakingSpeed NOP",
-                CallbackFunction,
-                CallbackArgs,
-            )
-        )
-
-        return ReturnCommandTracker
+    ):
+        ...
