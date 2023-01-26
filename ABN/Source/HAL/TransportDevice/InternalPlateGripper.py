@@ -1,6 +1,3 @@
-from typing import Callable
-
-from ...Driver.Tools import Command, CommandTracker
 from ..Layout import LayoutItem
 from .BaseTransportDevice import (
     TransportableLabwareTracker,
