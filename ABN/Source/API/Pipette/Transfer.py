@@ -1,6 +1,9 @@
 from ...HAL.Pipette import TransferOptions as HALTransferOptions
 from ...HAL.Pipette import TransferOptionsTracker as HALTransferOptionsTracker
 from ...Server.Globals.HandlerRegistry import GetAPIHandler
+from ..DeckLocation.MoveToPipette import MoveToPipette
+from ..DeckLocation.MoveToStorage import MoveToStorage
+from ..Tools.HALLayer.HALLayer import HALLayer
 from ..Tools.LoadedLabware.LoadedLabwareTracker import (
     LoadedLabware,
     LoadedLabwareTracker,
@@ -37,9 +40,6 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, Simulate: b
         # Get the destination liquid class after adding liquid. Becuase that is how it works in real life. DIspense
 
     # First we do the "programmatic" transfer
-
-    if Simulate is True:
-        return
 
     LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
         GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
@@ -230,5 +230,55 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, Simulate: b
         )
         Count += 1
 
+    HALLayerInstance: HALLayer = GetAPIHandler().HALLayer  # type:ignore
+    ClosedContainerTrackerInstance = HALLayerInstance.ClosedContainerTrackerInstance
+
+    if Simulate is True:
+        return
+
+    for TransferOptionsInstance in TransferOptionsTrackerInstance.GetObjectsAsList():
+        MoveToPipette(TransferOptionsInstance.SourceContainerInstance, Simulate)
+    # Move sources to deck. Destination should already be there
+
+    for ClosedContainerInstance in ClosedContainerTrackerInstance.GetObjectsAsList():
+        OpenList = []
+        OpenPositionsList = []
+
+        for (
+            HALTransferOptionsInstance
+        ) in HALTransferOptionsTrackerInstance.GetObjectsAsList():
+
+            Item = HALTransferOptionsInstance.SourceLayoutItemInstance
+            if ClosedContainerInstance.SupportedLabwareTrackerInstance.IsTracked(
+                Item.LabwareInstance.GetName()
+            ):
+                OpenList.append(Item)
+                OpenPositionsList.append(HALTransferOptionsInstance.SourcePosition)
+
+            ClosedContainerInstance.Open(OpenList, OpenPositionsList)
+    # Open the wells if we need to
+
     SuitablePipettingDevice.Transfer(HALTransferOptionsTrackerInstance)
     # Set up the transfer and go
+
+    for ClosedContainerInstance in ClosedContainerTrackerInstance.GetObjectsAsList():
+        CloseList = []
+        ClosePositionsList = []
+
+        for (
+            HALTransferOptionsInstance
+        ) in HALTransferOptionsTrackerInstance.GetObjectsAsList():
+
+            Item = HALTransferOptionsInstance.SourceLayoutItemInstance
+            if ClosedContainerInstance.SupportedLabwareTrackerInstance.IsTracked(
+                Item.LabwareInstance.GetName()
+            ):
+                CloseList.append(Item)
+                ClosePositionsList.append(HALTransferOptionsInstance.SourcePosition)
+
+            ClosedContainerInstance.Close(CloseList, ClosePositionsList)
+    # Close the wells if we need to
+
+    for TransferOptionsInstance in TransferOptionsTrackerInstance.GetObjectsAsList():
+        MoveToStorage(TransferOptionsInstance.SourceContainerInstance, Simulate)
+    # Move sources to storage. Destination stays on the deck
