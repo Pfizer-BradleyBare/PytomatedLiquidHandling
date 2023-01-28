@@ -3,7 +3,7 @@ def ValidateInput(
     Types: list[type] = list(),
     Vals: list[object] = list(),
 ) -> bool:
-    ValidState = False
+    ValidState = True
 
     if not (Types or Vals):
         return True
@@ -15,7 +15,7 @@ def ValidateInput(
                 TestState = True
                 break
 
-        ValidState = ValidState or TestState
+        ValidState = ValidState and TestState
 
     if Vals:
         TestState = False
@@ -24,7 +24,7 @@ def ValidateInput(
                 TestState = True
                 break
 
-        ValidState = ValidState or TestState
+        ValidState = ValidState and TestState
 
     return ValidState
 
@@ -44,3 +44,12 @@ def ValidateListInput(
         ValidState = ValidState and ValidateInput(Input, Types, Vals)
 
     return ValidState
+
+
+print(
+    ValidateListInput(
+        ["Bradley", "Hannah", 4],
+        [int, str],
+        ["Hannah", "Bradley", "Tipper", "Kuni", 1, 2, 3],
+    )
+)
