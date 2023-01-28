@@ -45,14 +45,6 @@ class Incubate(Block):
 
         Simulate = WorkbookInstance.Simulate
 
-        if self.ReservedTempControlDevice is None:
-            self.ReservedTempControlDevice = TempControl.Reserve(
-                ParentContainer, Temperature, ShakeSpeed, Simulate
-            )
-        if self.ReservedLid is None:
-            self.ReservedLid = Lid.Reserve(ParentContainer, Simulate)
-        # Try to reserve something
-
         StepContext = WorkbookInstance.GetContextTracker().GetObjectByName(
             self.GetContext()
         )
@@ -61,60 +53,78 @@ class Incubate(Block):
             GetAppHandler().TimerTrackerInstance  # type:ignore
         )
 
-        if self.ReservedTempControlDevice is None or self.ReservedLid is None:
-            if Wait == "Yes":
-                WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(StepContext)
-        # Did it work?
-        # If not we need to disable this context if Wait is "Yes" Otherwise we can try again during the next step round.
-        else:
-            WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance.ManualLoad(
-                self
-            )
-            # No need to preprocess again!
+        if Temperature == "Ambient":
 
-            if Wait == "Yes":
-                if not TempControl.IsReady(
-                    self.ReservedTempControlDevice, Temperature, Simulate
-                ):
+            if self.ReservedLid is None:
+                self.ReservedLid = Lid.Reserve(ParentContainer, Simulate)
+            # Try to reserve something
+            if self.ReservedLid is not None:
+                WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance.ManualLoad(
+                    self
+                )
+                # No need to preprocess again!
+
+        else:
+
+            if self.ReservedTempControlDevice is None:
+                self.ReservedTempControlDevice = TempControl.Reserve(
+                    ParentContainer, Temperature, ShakeSpeed, Simulate
+                )
+            if self.ReservedLid is None:
+                self.ReservedLid = Lid.Reserve(ParentContainer, Simulate)
+            # Try to reserve something
+
+            if self.ReservedTempControlDevice is None or self.ReservedLid is None:
+                if Wait == "Yes":
                     WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(
                         StepContext
                     )
-
-                    TimerTrackerInstance.ManualLoad(
-                        Timer(
-                            60,
-                            "Waiting for TempControlDevice equilibration",
-                            WorkbookInstance,
-                            self,
-                            PreprocessingWaitCallback,  # type:ignore
-                            (1,),
-                        )
-                    )
-                    # Start timer
-            # If so we need to wait periodically until it is "equilibrated"
+            # Did it work?
+            # If not we need to disable this context if Wait is "Yes" Otherwise we can try again during the next step round.
             else:
-                if WorkbookInstance.InactiveContextTrackerInstance.IsTracked(
-                    StepContext.GetName()
-                ):
-                    WorkbookInstance.InactiveContextTrackerInstance.ManualUnload(
-                        StepContext
-                    )
-            # If not then we can just proceed.
+                WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance.ManualLoad(
+                    self
+                )
+                # No need to preprocess again!
+
+                if Wait == "Yes":
+                    if not TempControl.IsReady(
+                        self.ReservedTempControlDevice, Temperature, Simulate
+                    ):
+                        WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(
+                            StepContext
+                        )
+
+                        TimerTrackerInstance.ManualLoad(
+                            Timer(
+                                60,
+                                "Waiting for TempControlDevice equilibration",
+                                WorkbookInstance,
+                                self,
+                                PreprocessingWaitCallback,  # type:ignore
+                                (1,),
+                            )
+                        )
+                        # Start timer
+                # If so we need to wait periodically until it is "equilibrated"
+                else:
+                    if WorkbookInstance.InactiveContextTrackerInstance.IsTracked(
+                        StepContext.GetName()
+                    ):
+                        WorkbookInstance.InactiveContextTrackerInstance.ManualUnload(
+                            StepContext
+                        )
+                # If not then we can just proceed.
 
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook):
 
-        StepContext = WorkbookInstance.GetContextTracker().GetObjectByName(
-            self.GetContext()
-        )
-
-        if self.ReservedTempControlDevice is None or self.ReservedLid is None:
-            WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(StepContext)
-            return
-        # If we still don't have a TempControlDevice by this point then we need to deactivate the context and wait for the darn preprocess to be successful.
-
         TimerTrackerInstance: TimerTracker = (
             GetAppHandler().TimerTrackerInstance  # type:ignore
+        )
+
+        StepContext = WorkbookInstance.GetContextTracker().GetObjectByName(
+            self.GetContext()
         )
 
         Temperature = float(self.GetTemp())
@@ -126,13 +136,24 @@ class Incubate(Block):
             .GetObjectByName(self.GetParentPlateName())
         )
 
-        TempControl.Start(
-            ParentContainer,
-            self.ReservedTempControlDevice,
-            Temperature,
-            ShakeSpeed,
-            WorkbookInstance.Simulate,
-        )
+        if Temperature == "Ambient":
+            if self.ReservedLid is None:
+                WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(StepContext)
+                return
+            # If we still don't have a TempControlDevice by this point then we need to deactivate the context and wait for the darn preprocess to be successful.
+        else:
+            if self.ReservedTempControlDevice is None or self.ReservedLid is None:
+                WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(StepContext)
+                return
+
+        if Temperature != "Ambient":
+            TempControl.Start(
+                ParentContainer,
+                self.ReservedTempControlDevice,  # type:ignore
+                Temperature,
+                ShakeSpeed,
+                WorkbookInstance.Simulate,
+            )
 
         Lid.Cover(ParentContainer, self.ReservedLid, WorkbookInstance.Simulate)
 
@@ -199,6 +220,7 @@ def ProcessingWaitCallback(
         StepInstance.GetContext()
     )
 
+    Temperature = float(StepInstance.GetTemp())
     ParentContainer = (
         WorkbookInstance.GetContainerTracker()
         .GetPlateTracker()
@@ -211,16 +233,19 @@ def ProcessingWaitCallback(
 
     StepInstance.ReservedLid = None
 
-    TempControl.End(
-        ParentContainer,
-        StepInstance.ReservedTempControlDevice,  # type:ignore
-        WorkbookInstance.Simulate,
-    )
+    if Temperature != "Ambient":
 
-    TempControl.Release(
-        StepInstance.ReservedTempControlDevice, WorkbookInstance.Simulate  # type:ignore
-    )
+        TempControl.End(
+            ParentContainer,
+            StepInstance.ReservedTempControlDevice,  # type:ignore
+            WorkbookInstance.Simulate,
+        )
 
-    StepInstance.ReservedTempControlDevice = None
+        TempControl.Release(
+            StepInstance.ReservedTempControlDevice,  # type:ignore
+            WorkbookInstance.Simulate,
+        )
+
+        StepInstance.ReservedTempControlDevice = None
 
     WorkbookInstance.InactiveContextTrackerInstance.ManualUnload(StepContext)
