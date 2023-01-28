@@ -253,6 +253,11 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                 continue
             # This block has already been preprocessed. Do not do it twice
 
+            if not ContextTrackerInstance.IsTracked(SearchBlockInstance.GetContext()):
+                continue
+            # If the block context is not yet available then we are not going to try to start preprocessing.
+            # I want this to change in the future but it is good enough for now
+
             while True:
                 SearchBlockInstance = SearchBlockInstance.GetParentNode()
 
