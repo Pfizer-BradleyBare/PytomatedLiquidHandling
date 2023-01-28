@@ -26,6 +26,5 @@ class Finish(Block):
             "Context completed successfully with a Finish block.",
         )
 
-        WorkbookInstance.GetActiveContextTracker().ManualUnload(ContextInstance)
         WorkbookInstance.GetInactiveContextTracker().ManualLoad(ContextInstance)
         # Deactivate the current context

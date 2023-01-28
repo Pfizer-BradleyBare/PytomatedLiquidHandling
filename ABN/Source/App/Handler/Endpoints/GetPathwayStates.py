@@ -29,8 +29,7 @@ class GetPathwayStates:
         ContextInstances = sorted(
             [
                 ContextInstance
-                for ContextInstance in WorkbookInstance.GetActiveContextTracker().GetObjectsAsList()
-                + WorkbookInstance.GetInactiveContextTracker().GetObjectsAsList()
+                for ContextInstance in WorkbookInstance.GetContextTracker().GetObjectsAsList()
             ],
             key=lambda ContextInstance: ContextInstance.GetName(),
         )

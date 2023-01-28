@@ -34,7 +34,7 @@ class Plate(Block):
 
         # Do parameter validation here
 
-        ContextTrackerInstance = WorkbookInstance.GetActiveContextTracker()
+        ContextTrackerInstance = WorkbookInstance.GetContextTracker()
 
         OldContextInstance = WorkbookInstance.GetExecutingContext()
         NewContextInstance = Context(

@@ -46,7 +46,7 @@ class SplitPlate(Block):
             )
         # Do parameter validation here
 
-        ContextTrackerInstance = WorkbookInstance.GetActiveContextTracker()
+        ContextTrackerInstance = WorkbookInstance.GetContextTracker()
 
         OldContextInstance = WorkbookInstance.GetExecutingContext()
         NewPathway1ContextInstance = Context(

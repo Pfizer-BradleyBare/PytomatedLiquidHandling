@@ -84,7 +84,7 @@ class Workbook(ObjectABC):
         self.ContainerTrackerInstance: ContainerTracker
         self.CompletedPreprocessingBlocksTrackerInstance: BlockTracker
         self.ContextTrackerInstance: ContextTracker
-        self.ActiveContextTrackerInstance: ContextTracker
+        self.ContextTrackerInstance: ContextTracker
         self.InactiveContextTrackerInstance: ContextTracker
 
         # Thread
@@ -130,8 +130,8 @@ class Workbook(ObjectABC):
     def GetContainerTracker(self) -> ContainerTracker:
         return self.ContainerTrackerInstance
 
-    def GetActiveContextTracker(self) -> ContextTracker:
-        return self.ActiveContextTrackerInstance
+    def GetContextTracker(self) -> ContextTracker:
+        return self.ContextTrackerInstance
 
     def GetInactiveContextTracker(self) -> ContextTracker:
         return self.InactiveContextTrackerInstance
@@ -151,7 +151,7 @@ class Workbook(ObjectABC):
 
 def WorkbookProcessor(WorkbookInstance: Workbook):
 
-    ActiveContextTrackerInstance = WorkbookInstance.GetActiveContextTracker()
+    ContextTrackerInstance = WorkbookInstance.GetContextTracker()
     InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
     ExecutedBlocksTrackerInstance = WorkbookInstance.GetExecutedBlocksTracker()
     PreprocessingBlocksTrackerInstance = (
@@ -291,12 +291,12 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         ):
             if all(
                 item in InactiveContextTrackerInstance.GetObjectsAsList()
-                for item in ActiveContextTrackerInstance.GetObjectsAsList()
+                for item in ContextTrackerInstance.GetObjectsAsList()
             ):
                 ...
             # If all contexts are inactive then we need to wait on devices to complete. TODO
 
-            for ContextInstance in ActiveContextTrackerInstance.GetObjectsAsList():
+            for ContextInstance in ContextTrackerInstance.GetObjectsAsList():
                 if not InactiveContextTrackerInstance.IsTracked(
                     ContextInstance.GetName()
                 ):
@@ -348,7 +348,7 @@ def WorkbookInit(WorkbookInstance: Workbook):
     WorkbookInstance.ExecutedBlocksTrackerInstance = BlockTracker()
     WorkbookInstance.ContainerTrackerInstance = ContainerTracker()
     WorkbookInstance.ContextTrackerInstance = ContextTracker()
-    WorkbookInstance.ActiveContextTrackerInstance = ContextTracker()
+    WorkbookInstance.ContextTrackerInstance = ContextTracker()
     WorkbookInstance.InactiveContextTrackerInstance = ContextTracker()
     WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance = BlockTracker()
 
@@ -385,7 +385,7 @@ def WorkbookInit(WorkbookInstance: Workbook):
         )
     )
 
-    WorkbookInstance.GetActiveContextTracker().ManualLoad(
+    WorkbookInstance.GetContextTracker().ManualLoad(
         WorkbookInstance.GetExecutingContext()
     )
 

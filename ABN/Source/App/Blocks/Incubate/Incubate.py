@@ -20,7 +20,6 @@ def PreprocessingWaitCallback(
     )
 
     WorkbookInstance.InactiveContextTrackerInstance.ManualUnload(BlockContext)
-    WorkbookInstance.ActiveContextTrackerInstance.ManualLoad(BlockContext)
 
 
 @ClassDecorator_AvailableBlock
@@ -70,18 +69,12 @@ class Incubate(Block):
                 WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(
                     ExecutingContext
                 )
-                WorkbookInstance.ActiveContextTrackerInstance.ManualUnload(
-                    ExecutingContext
-                )
         # Did it work?
         # If not we need to disable this context if Wait is "Yes" Otherwise we can try again during the next step round.
         else:
             if Wait == "Yes":
                 if not IsReady(self.ReservedTempControlDevice, Temperature, Simulate):
                     WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(
-                        ExecutingContext
-                    )
-                    WorkbookInstance.ActiveContextTrackerInstance.ManualUnload(
                         ExecutingContext
                     )
 
