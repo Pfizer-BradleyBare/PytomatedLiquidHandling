@@ -22,7 +22,7 @@ class Worklist:
     def GetNumSamples(self) -> int:
         return self.NumSamples
 
-    def IsColumnDataValid(self, Data: list[any]) -> bool:  # type:ignore
+    def IsColumnDataValid(self, Data: list[object]) -> bool:
         return len(Data) == self.GetNumSamples()
 
     def IsWorklistColumn(self, ColumnName: str) -> bool:
@@ -34,7 +34,7 @@ class Worklist:
         except Exception:
             return False
 
-    def ReadWorklistColumn(self, ColumnName: str) -> list[any]:  # type:ignore
+    def ReadWorklistColumn(self, ColumnName: str) -> list[object]:
         Data = self.ExcelInstance.ReadRangeValues("Worklist", 1, 1, 100, 100)
 
         ColIndex = Data[0].index(ColumnName)
@@ -43,10 +43,10 @@ class Worklist:
             Data[RowIndex][ColIndex] for RowIndex in range(1, 1 + self.GetNumSamples())
         ]
 
-    def ConvertToWorklistColumn(self, Value: any) -> list[any]:  # type:ignore
+    def ConvertToWorklistColumn(self, Value: object) -> list[object]:
         return [Value] * self.GetNumSamples()
 
-    def WriteWorklistColumn(self, ColumnName: str, Data: list[any]):  # type:ignore
+    def WriteWorklistColumn(self, ColumnName: str, Data: list[object]):
         ReadData = self.ExcelInstance.ReadRangeValues("Worklist", 1, 1, 100, 100)
 
         Index = ReadData[0].index(ColumnName) + 1

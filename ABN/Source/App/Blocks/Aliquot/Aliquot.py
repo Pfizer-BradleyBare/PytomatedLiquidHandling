@@ -1,4 +1,6 @@
-from ...Tools.Context import WellSequence
+from typing import cast
+
+from ...Tools import InputChecker
 from ...Tools.Excel import Excel
 from ...Workbook import Workbook
 from ...Workbook.Block import (
@@ -13,27 +15,45 @@ class Aliquot(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetLocation(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
+    def GetLocation(self, WorkbookInstance: Workbook) -> list[int]:
 
-    def GetStartPosition(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
+        return InputChecker.CheckAndConvertList(
+            WorkbookInstance,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
+            [int],
+            [],
+            [
+                bool(Factor.GetFactor())
+                for Factor in WorkbookInstance.GetContextTracker()
+                .GetObjectByName(self.GetContext())
+                .GetWellFactorTracker()
+                .GetObjectsAsList()
+            ],
+        )
+
+    def GetStartPosition(self, WorkbookInstance: Workbook) -> str:
+        return InputChecker.CheckAndConvertList(
+            WorkbookInstance,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
+            [str],
+            [],
+            [
+                bool(Factor.GetFactor())
+                for Factor in WorkbookInstance.GetContextTracker()
+                .GetObjectByName(self.GetContext())
+                .GetWellFactorTracker()
+                .GetObjectsAsList()
+            ],
+        )
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
 
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
-        Locations = self.GetLocation()
+        Locations = self.GetLocation(WorkbookInstance)
 
         WorklistInstance = WorkbookInstance.GetWorklist()
-
-        if WorklistInstance.IsWorklistColumn(Locations):
-            Locations = WorklistInstance.ReadWorklistColumn(Locations)
-        else:
-            Locations = WorklistInstance.ConvertToWorklistColumn(int(Locations))
-
-        # do input validation here
 
         DispenseSequencesTrackerInstance = (
             WorkbookInstance.GetExecutingContext().GetDispenseWellSequenceTracker()
