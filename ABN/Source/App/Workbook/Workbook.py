@@ -20,7 +20,6 @@ from ..Tools.Context import (
     WellSequenceTracker,
 )
 from ..Tools.Excel import Excel
-from ..Tools.Timer import TimerTracker
 from .Block import Block, BlockTracker
 from .Solution import SolutionLoader
 from .Worklist import Worklist
@@ -129,6 +128,7 @@ class Workbook(ObjectABC):
         self.WorklistInstance: Worklist = WorklistInstance
         self.ExcelInstance: Excel = ExcelInstance
         self.LabwareSelectionTrackerInstance = LabwareSelectionTracker()
+        self.PreprocessingBlocksTrackerInstance: BlockTracker = BlockTracker()
 
         # Thread
         self.ProcessingLock: threading.Lock = threading.Lock()
@@ -141,10 +141,10 @@ class Workbook(ObjectABC):
         # Trackers
         self.ExecutedBlocksTrackerInstance: BlockTracker
         self.ContainerTrackerInstance: ContainerTracker
-        self.PreprocessingBlocksTrackerInstance: BlockTracker = BlockTracker()
+        self.CompletedPreprocessingBlocksTrackerInstance: BlockTracker
+        self.ContextTrackerInstance: ContextTracker
         self.ActiveContextTrackerInstance: ContextTracker
         self.InactiveContextTrackerInstance: ContextTracker
-        self.TimerTrackerInstance: TimerTracker
 
         # Thread
         self.WorkbookProcessorThread: threading.Thread
@@ -207,9 +207,6 @@ class Workbook(ObjectABC):
     def SetExecutingContext(self, ContextInstance: Context) -> None:
         self.ExecutingContextInstance = ContextInstance
 
-    def GetTimerTracker(self) -> TimerTracker:
-        return self.TimerTrackerInstance
-
     def GetWorkbookProcessorThread(self) -> threading.Thread:
         return self.WorkbookProcessorThread
 
@@ -224,6 +221,9 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
     ExecutedBlocksTrackerInstance = WorkbookInstance.GetExecutedBlocksTracker()
     PreprocessingBlocksTrackerInstance = (
         WorkbookInstance.GetPreprocessingBlocksTracker()
+    )
+    CompletedPreprocessingBlocksTrackerInstance = (
+        WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance
     )
 
     CurrentExecutingBlock: Block = WorkbookInstance.GetMethodTreeRoot()
@@ -317,6 +317,12 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
             SearchBlockInstance = PreprocessingBlockInstance
 
+            if CompletedPreprocessingBlocksTrackerInstance.IsTracked(
+                SearchBlockInstance.GetName()
+            ):
+                continue
+            # This block has already been preprocessed. Do not do it twice
+
             while True:
                 SearchBlockInstance = SearchBlockInstance.GetParentNode()
 
@@ -362,7 +368,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
             for ContextInstance in ActiveContextTrackerInstance.GetObjectsAsList():
                 if not InactiveContextTrackerInstance.IsTracked(
-                    WorkbookInstance.GetExecutingContext().GetName()
+                    ContextInstance.GetName()
                 ):
                     WorkbookInstance.SetExecutingContext(ContextInstance)
                     break
@@ -411,9 +417,10 @@ def WorkbookInit(WorkbookInstance: Workbook):
     # Trackers
     WorkbookInstance.ExecutedBlocksTrackerInstance = BlockTracker()
     WorkbookInstance.ContainerTrackerInstance = ContainerTracker()
+    WorkbookInstance.ContextTrackerInstance = ContextTracker()
     WorkbookInstance.ActiveContextTrackerInstance = ContextTracker()
     WorkbookInstance.InactiveContextTrackerInstance = ContextTracker()
-    WorkbookInstance.TimerTrackerInstance = TimerTracker()
+    WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance = BlockTracker()
 
     # Thread
     WorkbookInstance.WorkbookProcessorThread = threading.Thread(

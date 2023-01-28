@@ -1,3 +1,4 @@
+from ...API.Tools.Timer import TimerTracker
 from ...Tools.AbstractClasses import ServerHandlerABC
 from ..Workbook import WorkbookTracker
 from .Endpoints import (
@@ -19,6 +20,7 @@ class AppHandler(ServerHandlerABC):
     def __init__(self):
         ServerHandlerABC.__init__(self)
         self.WorkbookTrackerInstance: WorkbookTracker = WorkbookTracker()
+        self.TimerTrackerInstance: TimerTracker = TimerTracker()
 
     def GetName(self) -> str:
         return "App"

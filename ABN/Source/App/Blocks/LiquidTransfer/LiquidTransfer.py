@@ -3,7 +3,7 @@ from ....API.Tools.HALLayer.HALLayer import HALLayer
 from ....Server.Globals.HandlerRegistry import GetAPIHandler
 from ...Tools.Container import Plate as PlateContainer
 from ...Tools.Excel import Excel, ExcelHandle
-from ...Workbook import Workbook  # WorkbookRunTypes
+from ...Workbook import Workbook, WorkbookRunTypes
 from ...Workbook.Block import (
     Block,
     ClassDecorator_AvailableBlock,
@@ -157,4 +157,5 @@ class LiquidTransfer(Block):
                 # Destination will always be a "plate." The distinction is beyond subtle but important
 
             # TODO
-            Transfer(TransferOptionsTrackerInstance, True)
+            Simulate = WorkbookInstance.GetRunType() != WorkbookRunTypes.Run
+            Transfer(TransferOptionsTrackerInstance, Simulate)
