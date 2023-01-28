@@ -25,65 +25,6 @@ from .Solution import SolutionLoader
 from .Worklist import Worklist
 
 
-class WorkbookStates(Enum):
-    def __init__(self, a, b):
-        self.State = a
-        self.Reason = b
-
-    Queued = (
-        "Queued",
-        "Method is ready for deck loading but space is not available or method is not next in queue.",
-    )
-
-    Running = (
-        "Running",
-        "Method is running normally. No interaction from the user is required.",
-    )
-
-    WaitingPaused = (
-        "Waiting: Paused",
-        "User paused this method manually. Method will not proceed until unpaused.",
-    )
-
-    WaitingDeckLoading = (
-        "Waiting: Deck Loading",
-        "The method is ready to run but the deck must be loaded first. Please proceed to load the deck.",
-    )
-
-    WaitingTimer = (
-        "Waiting: Timer",
-        "The method is running correctly but no contexts are active. Most likely waiting on a timer of some sort.",
-    )
-
-    WaitingNotification = (
-        "Waiting: Notification",
-        "A notification was fired that waits on the user before proceeding. Please confirm the notification to continue.",
-    )
-
-    WaitingError = (
-        "Waiting: Error",
-        "An error occured. Please correct.",  # TODO
-    )
-
-    Aborted = (
-        "Aborted",
-        "User has aborted this method manually. Only deck unloading is allowed.",
-    )
-    # The user stopped the method but it is still in the list. This allows the user to remove plates and all that jazz
-
-    Complete = (
-        "Complete",
-        "Method execution is complete. Only deck unloading is allowed.",
-    )
-    # The user stopped the method but it is still in the list. This allows the user to remove plates and all that jazz
-
-    Dequeued = (
-        "Dequeued",
-        "Method no longer 'exists' in the system. This is here for book keeping only. User will never see this state.",
-    )
-    # The user stopped the method but it is still in the list. This allows the user to remove plates and all that jazz
-
-
 class WorkbookRunTypes(Enum):
     Test = "Test"  # This is a single programmatic test to check method is compatible with system
     Prep = "Prep"  # This will test with all samples added then generate a preparation list for the user
@@ -120,7 +61,6 @@ class Workbook(ObjectABC):
         self.RunType: WorkbookRunTypes = RunType
         self.MethodPath: str = MethodPath
         self.MethodName: str = os.path.basename(MethodPath)
-        self.State: WorkbookStates = WorkbookStates.Queued
         self.MethodTreeRoot: Block = MethodBlocksTrackerInstance.GetObjectsAsList()[0]
 
         # Trackers
@@ -171,12 +111,6 @@ class Workbook(ObjectABC):
 
     def SetRunType(self, RunType: WorkbookRunTypes):
         self.RunType = RunType
-
-    def GetState(self) -> WorkbookStates:
-        return self.State
-
-    def SetState(self, State: WorkbookStates):
-        self.State = State
 
     def GetMethodTreeRoot(self) -> Block:
         return self.MethodTreeRoot
@@ -234,8 +168,6 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
     while True:
 
-        WorkbookInstance.SetState(WorkbookStates.WaitingDeckLoading)
-
         while True:
             WorkbookInstance.ProcessingLock.acquire()
             WorkbookInstance.ProcessingLock.release()
@@ -251,8 +183,6 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # if all are connected then we can start running. Boom!
         # This first thing we need to do is check that all labwares are loaded. If not then we sit here and wait.
         # This could be expanded to wait until a set of labware is loaded before proceeding. How? No idea.
-
-        WorkbookInstance.SetState(WorkbookStates.Running)
 
         if all(
             item in ExecutedBlocksTrackerInstance.GetObjectsAsList()
@@ -284,7 +214,6 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             if WorkbookInstance.GetRunType() == WorkbookRunTypes.PreRun:
 
                 WorkbookInstance.SetRunType(WorkbookRunTypes.Run)
-                WorkbookInstance.SetState(WorkbookStates.Queued)
 
                 WorkbookInstance.ProcessingLock.acquire()
                 WorkbookInstance.ProcessingLock.release()
@@ -364,7 +293,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
                 item in InactiveContextTrackerInstance.GetObjectsAsList()
                 for item in ActiveContextTrackerInstance.GetObjectsAsList()
             ):
-                WorkbookInstance.SetState(WorkbookStates.WaitingTimer)
+                ...
             # If all contexts are inactive then we need to wait on devices to complete. TODO
 
             for ContextInstance in ActiveContextTrackerInstance.GetObjectsAsList():
