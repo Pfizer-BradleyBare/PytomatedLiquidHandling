@@ -52,7 +52,7 @@ class Incubate(Block):
             .GetObjectByName(self.GetParentPlateName())
         )
 
-        Simulate = WorkbookInstance.GetRunType() != "Run"
+        Simulate = WorkbookInstance.Simulate
 
         self.ReservedTempControlDevice = Reserve(
             ParentContainer, Temperature, ShakeSpeed, Simulate

@@ -137,6 +137,7 @@ class Workbook(ObjectABC):
 
         # Variables
         self.ExecutingContextInstance: Context
+        self.Simulate: bool
 
         # Trackers
         self.ExecutedBlocksTrackerInstance: BlockTracker
@@ -477,5 +478,7 @@ def WorkbookInit(WorkbookInstance: Workbook):
     if WorkbookInstance.GetRunType() == WorkbookRunTypes.Run:
         pass
         # WorkbookInstance.ProcessingLock.acquire()
+
+    WorkbookInstance.Simulate = WorkbookInstance.GetRunType() != WorkbookRunTypes.Run
 
     WorkbookInstance.WorkbookProcessorThread.start()

@@ -146,5 +146,5 @@ class LiquidTransfer(Block):
             # Destination will always be a "plate." The distinction is beyond subtle but important
 
         # TODO
-        Simulate = WorkbookInstance.GetRunType() != "Run"
+        Simulate = WorkbookInstance.Simulate
         Transfer(TransferOptionsTrackerInstance, Simulate)
