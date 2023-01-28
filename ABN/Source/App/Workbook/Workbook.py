@@ -328,10 +328,6 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # Set the tree current node here
         # Find the context we need to process if the current context is exhausted
 
-        CurrentExecutingBlock = CurrentExecutingBlock.GetChildren()[0]
-        # This should always be a single child. Only a split plate wil have 2 children
-        # The two children will be executed in the split plate block
-
         StepStatus = True
         if (
             sum(
@@ -351,8 +347,14 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
         if StepStatus is True:
             ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
-        # We must track all executed blocks even if processing is skipped.
-        # A skipped block is still executed in the mind of the program
+
+            CurrentExecutingBlock = CurrentExecutingBlock.GetChildren()[0]
+            # need to fix with new stepstatus TODO
+            # This should always be a single child. Only a split plate wil have 2 children
+            # The two children will be executed in the split plate block
+            # We must track all executed blocks even if processing is skipped.
+
+        # NOTE: A skipped block is still executed in the mind of the program
 
 
 def WorkbookInit(WorkbookInstance: Workbook):
