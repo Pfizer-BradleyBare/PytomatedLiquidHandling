@@ -287,7 +287,14 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # We are going to walk backward until we find either a merge plates step, a preceeding preprocessing device, or the beginning of the method
 
         for ConfirmedPreprocessingBlockInstance in ConfirmedPreprocessingBlockInstances:
-            ConfirmedPreprocessingBlockInstance.Preprocess(WorkbookInstance)
+            StepPreprocessStatus = ConfirmedPreprocessingBlockInstance.Preprocess(
+                WorkbookInstance
+            )
+
+            if StepPreprocessStatus is True:
+                CompletedPreprocessingBlocksTrackerInstance.ManualLoad(
+                    ConfirmedPreprocessingBlockInstance
+                )
         # Before each round of steps we want to check if we can start heaters / Coolers or other preprocessing devices
         # We can not start a preprocessing device until any preceeding merge steps are completed
 
@@ -325,6 +332,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         # This should always be a single child. Only a split plate wil have 2 children
         # The two children will be executed in the split plate block
 
+        StepStatus = True
         if (
             sum(
                 WellFactor.GetFactor()
@@ -339,8 +347,10 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # Additionally we must always execute a merge plates step no matter what
 
             print("EXECUTING", CurrentExecutingBlock.GetName())
-            CurrentExecutingBlock.Process(WorkbookInstance)
-        ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
+            StepStatus = CurrentExecutingBlock.Process(WorkbookInstance)
+
+        if StepStatus is True:
+            ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
         # We must track all executed blocks even if processing is skipped.
         # A skipped block is still executed in the mind of the program
 

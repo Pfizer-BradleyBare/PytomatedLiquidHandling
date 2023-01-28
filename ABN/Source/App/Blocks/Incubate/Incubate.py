@@ -32,7 +32,7 @@ class Incubate(Block):
     def GetShakeSpeed(self) -> str:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1)
 
-    def Preprocess(self, WorkbookInstance: Workbook):
+    def Preprocess(self, WorkbookInstance: Workbook) -> bool:
 
         Temperature = float(self.GetTemp())
         Wait = self.GetWaitForTempOption()
@@ -58,11 +58,11 @@ class Incubate(Block):
             if self.ReservedLid is None:
                 self.ReservedLid = Lid.Reserve(ParentContainer, Simulate)
             # Try to reserve something
-            if self.ReservedLid is not None:
-                WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance.ManualLoad(
-                    self
-                )
-                # No need to preprocess again!
+            if self.ReservedLid is None:
+                return False
+            # Try again next round
+            else:
+                return True
 
         else:
 
@@ -79,13 +79,11 @@ class Incubate(Block):
                     WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(
                         StepContext
                     )
+
+                return False
             # Did it work?
             # If not we need to disable this context if Wait is "Yes" Otherwise we can try again during the next step round.
             else:
-                WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance.ManualLoad(
-                    self
-                )
-                # No need to preprocess again!
 
                 if Wait == "Yes":
                     if not TempControl.IsReady(
@@ -116,8 +114,14 @@ class Incubate(Block):
                         )
                 # If not then we can just proceed.
 
+                return True
+                # No need to preprocess again!
+
     @FunctionDecorator_ProcessFunction
-    def Process(self, WorkbookInstance: Workbook):
+    def Process(self, WorkbookInstance: Workbook) -> bool:
+
+        WorkbookInstance.PreprocessingBlocksTrackerInstance.ManualLoad(self)
+        # This block requires preprocessing. Let's add it to the list
 
         TimerTrackerInstance: TimerTracker = (
             GetAppHandler().TimerTrackerInstance  # type:ignore
@@ -139,12 +143,12 @@ class Incubate(Block):
         if Temperature == "Ambient":
             if self.ReservedLid is None:
                 WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(StepContext)
-                return
+                return False
             # If we still don't have a TempControlDevice by this point then we need to deactivate the context and wait for the darn preprocess to be successful.
         else:
             if self.ReservedTempControlDevice is None or self.ReservedLid is None:
                 WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(StepContext)
-                return
+                return False
 
         if Temperature != "Ambient":
             TempControl.Start(
@@ -170,6 +174,8 @@ class Incubate(Block):
 
         WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(StepContext)
         # Disable this context while we wait on the timer
+
+        return True
 
 
 def PreprocessingWaitCallback(

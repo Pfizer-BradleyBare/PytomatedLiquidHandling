@@ -19,11 +19,11 @@ class Aliquot(Block):
     def GetStartPosition(self) -> str:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
 
-    def Preprocess(self, WorkbookInstance: Workbook):
+    def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
 
     @FunctionDecorator_ProcessFunction
-    def Process(self, WorkbookInstance: Workbook):
+    def Process(self, WorkbookInstance: Workbook) -> bool:
         Locations = self.GetLocation()
 
         WorklistInstance = WorkbookInstance.GetWorklist()
@@ -51,3 +51,5 @@ class Aliquot(Block):
                     WellSequence(WellNumber, Location)
                 )
         # We just need to update the Sequence in the ones that are different. Easy?
+
+        return True

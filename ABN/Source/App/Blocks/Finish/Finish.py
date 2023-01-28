@@ -13,11 +13,11 @@ class Finish(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def Preprocess(self, WorkbookInstance: Workbook):
+    def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
 
     @FunctionDecorator_ProcessFunction
-    def Process(self, WorkbookInstance: Workbook):
+    def Process(self, WorkbookInstance: Workbook) -> bool:
 
         ContextInstance = WorkbookInstance.GetExecutingContext()
 
@@ -28,3 +28,5 @@ class Finish(Block):
 
         WorkbookInstance.GetInactiveContextTracker().ManualLoad(ContextInstance)
         # Deactivate the current context
+
+        return True

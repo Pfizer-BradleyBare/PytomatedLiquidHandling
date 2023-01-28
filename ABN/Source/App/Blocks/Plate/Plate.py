@@ -23,11 +23,11 @@ class Plate(Block):
     def GetPlateType(self) -> str:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
 
-    def Preprocess(self, WorkbookInstance: Workbook):
+    def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
 
     @FunctionDecorator_ProcessFunction
-    def Process(self, WorkbookInstance: Workbook):
+    def Process(self, WorkbookInstance: Workbook) -> bool:
 
         PlateName = self.GetPlateName()
         PlateFilter = self.GetPlateType()
@@ -56,3 +56,5 @@ class Plate(Block):
                 PlateContainer(PlateName, WorkbookInstance.GetName(), PlateFilter)
             )
         # Create the container if it does not already exists
+
+        return True

@@ -27,9 +27,9 @@ class IMCSSizeXDesalt(Block):
     def GetElutionMethod(self) -> str:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 5, self.Col + 1)
 
-    def Preprocess(self, WorkbookInstance: Workbook):
+    def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
 
     @FunctionDecorator_ProcessFunction
-    def Process(self, WorkbookInstance: Workbook):
+    def Process(self, WorkbookInstance: Workbook) -> bool:
         ...

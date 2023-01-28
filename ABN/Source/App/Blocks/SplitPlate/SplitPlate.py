@@ -26,11 +26,11 @@ class SplitPlate(Block):
     def GetPathway2Name(self) -> str:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1)
 
-    def Preprocess(self, WorkbookInstance: Workbook):
+    def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
 
     @FunctionDecorator_ProcessFunction
-    def Process(self, WorkbookInstance: Workbook):
+    def Process(self, WorkbookInstance: Workbook) -> bool:
 
         Pathway1Name = self.GetPathway1Name()
         Pathway2Name = self.GetPathway2Name()
@@ -140,3 +140,5 @@ class SplitPlate(Block):
             # We are executing these blocks in the split plate step so we need to track them as executed.
         # Create the containers for the plate blocks followin the split plate
         # Split plate pathways must be unique. Thus we are guarenteed that the container does not already exist
+
+        return True

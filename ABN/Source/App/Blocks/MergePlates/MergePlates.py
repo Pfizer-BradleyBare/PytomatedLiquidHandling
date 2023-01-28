@@ -25,11 +25,11 @@ class MergePlates(Block):
     def GetMergeType(self) -> str:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
 
-    def Preprocess(self, WorkbookInstance: Workbook):
+    def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
 
     @FunctionDecorator_ProcessFunction
-    def Process(self, WorkbookInstance: Workbook):
+    def Process(self, WorkbookInstance: Workbook) -> bool:
 
         ProcessingMergeInstanceMergeType = self.GetMergeType()
 
@@ -67,7 +67,7 @@ class MergePlates(Block):
                 WaitingMergeInstance = MergeInstance
 
         if WaitingMergeInstance is None:
-            return
+            return True
         # The other merge plates step hasn't been run yet. We need to wait for it to run. Return
 
         MergePlates.WaitingMergeInstances.remove(self)
@@ -153,3 +153,5 @@ class MergePlates(Block):
                         ProcessingMergeInstanceContext,
                         WaitingMergeInstanceContext,
                     )
+
+        return True
