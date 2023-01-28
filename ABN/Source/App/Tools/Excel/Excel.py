@@ -94,11 +94,11 @@ class Excel:
         self.GetBook().sheets[Name].delete()
 
     @ExcelClassFunctionDecorator_ThreadLock
-    def ReadCellValue(self, SheetName: str, Row: int, Col: int) -> any:  # type:ignore
+    def ReadCellValue(self, SheetName: str, Row: int, Col: int) -> object:
         return self.GetBook().sheets[SheetName].range((Row, Col), (Row, Col)).value
 
     @ExcelClassFunctionDecorator_ThreadLock
-    def ReadCellFormula(self, SheetName: str, Row: int, Col: int) -> any:  # type:ignore
+    def ReadCellFormula(self, SheetName: str, Row: int, Col: int) -> object:
         return self.GetBook().sheets[SheetName].range((Row, Col), (Row, Col)).formula
 
     @ExcelClassFunctionDecorator_ThreadLock
@@ -109,14 +109,14 @@ class Excel:
         ColStart: int,
         RowEnd: int,
         ColEnd: int,
-    ) -> list[list[any]]:  # type:ignore
+    ) -> list[list[object]]:
         return (
             self.GetBook()
             .sheets[SheetName]
             .range((RowStart, ColStart), (RowEnd, ColEnd))
             .options(ndim=2)
             .value
-        )  # type:ignore
+        )
 
     @ExcelClassFunctionDecorator_ThreadLock
     def ReadRangeFormulas(
@@ -126,25 +126,21 @@ class Excel:
         ColStart: int,
         RowEnd: int,
         ColEnd: int,
-    ) -> tuple[tuple[any]]:  # type:ignore
+    ) -> tuple[tuple[object]]:
         return (
             self.GetBook()
             .sheets[SheetName]
             .range((RowStart, ColStart), (RowEnd, ColEnd))
             .options(ndim=2)
             .formula
-        )  # type:ignore
+        )
 
     @ExcelClassFunctionDecorator_ThreadLock
-    def WriteCellValue(
-        self, SheetName: str, Row: int, Col: int, Data: any  # type:ignore
-    ):
+    def WriteCellValue(self, SheetName: str, Row: int, Col: int, Data: object):
         self.GetBook().sheets[SheetName].range((Row, Col), (Row, Col)).value = Data
 
     @ExcelClassFunctionDecorator_ThreadLock
-    def WriteCellFormula(
-        self, SheetName: str, Row: int, Col: int, Data: any  # type:ignore
-    ):
+    def WriteCellFormula(self, SheetName: str, Row: int, Col: int, Data: object):
         self.GetBook().sheets[SheetName].range((Row, Col), (Row, Col)).formula = Data
 
     @ExcelClassFunctionDecorator_ThreadLock
@@ -153,7 +149,7 @@ class Excel:
         SheetName: str,
         RowStart: int,
         ColStart: int,
-        Data: list[list[any]],  # type:ignore
+        Data: list[list[object]],
     ):
         self.__AlignArray(Data)
         NumRows = len(Data)
@@ -169,7 +165,7 @@ class Excel:
         SheetName: str,
         RowStart: int,
         ColStart: int,
-        Data: tuple[tuple[any]],  # type:ignore
+        Data: tuple[tuple[object]],
     ):
         self.__AlignTuple(Data)
         NumRows = len(Data)

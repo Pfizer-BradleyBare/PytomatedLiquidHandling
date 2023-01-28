@@ -20,16 +20,16 @@ class Incubate(Block):
         self.ReservedTempControlDevice: TempControlDevice | None = None
         self.ReservedLid: HALLid | None = None
 
-    def GetTemp(self) -> str:
+    def GetTemp(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
 
-    def GetWaitForTempOption(self) -> str:
+    def GetWaitForTempOption(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
 
-    def GetTime(self) -> str:
+    def GetTime(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1)
 
-    def GetShakeSpeed(self) -> str:
+    def GetShakeSpeed(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1)
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:

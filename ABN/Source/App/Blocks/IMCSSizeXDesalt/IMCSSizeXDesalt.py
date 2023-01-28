@@ -12,19 +12,19 @@ class IMCSSizeXDesalt(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetSource(self) -> str:
+    def GetSource(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
 
-    def GetWaste(self) -> str:
+    def GetWaste(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
 
-    def GetEQBuffer(self) -> str:
+    def GetEQBuffer(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1)
 
-    def GetLoadVolume(self) -> str:
+    def GetLoadVolume(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1)
 
-    def GetElutionMethod(self) -> str:
+    def GetElutionMethod(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 5, self.Col + 1)
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:

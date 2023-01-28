@@ -12,19 +12,19 @@ class MagneticBeads(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetMagneticBeadsPlate(self) -> str:
+    def GetMagneticBeadsPlate(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
 
-    def GetStorageBuffer(self) -> str:
+    def GetStorageBuffer(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
 
-    def GetStorageBufferVolume(self) -> str:
+    def GetStorageBufferVolume(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1)
 
-    def GetHoldTime(self) -> str:
+    def GetHoldTime(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1)
 
-    def GetRepitions(self) -> str:
+    def GetRepitions(self) -> object:
         return self.ExcelInstance.ReadCellValue("Method", self.Row + 5, self.Col + 1)
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
