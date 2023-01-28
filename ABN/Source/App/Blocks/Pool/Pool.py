@@ -47,10 +47,7 @@ class Pool(Block):
                 WellNumber
             )
             if SequenceInstance.SequencePosition != Location:
-                DispenseSequencesTrackerInstance.ManualUnload(SequenceInstance)
-                DispenseSequencesTrackerInstance.ManualLoad(
-                    WellSequence(WellNumber, Location)
-                )
+                SequenceInstance.SequencePosition = Location
         # We just need to update the Sequence in the ones that are different. Easy?
 
         return True
