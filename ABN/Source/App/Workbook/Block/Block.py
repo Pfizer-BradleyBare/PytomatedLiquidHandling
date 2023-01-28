@@ -61,10 +61,10 @@ class Block(ObjectABC, Node):
         return self.Name + str((self.Row, self.Col))
 
     def IsCorrectBlock(self) -> bool:
-        self.ExcelInstance.SelectSheet("Method")
-
         return (
-            self.ExcelInstance.ReadCellValue(self.Row, self.Col).replace(" ", "")
+            self.ExcelInstance.ReadCellValue("Method", self.Row, self.Col).replace(
+                " ", ""
+            )
             == self.Name
         )
 

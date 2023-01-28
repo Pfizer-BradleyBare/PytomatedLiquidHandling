@@ -1,4 +1,4 @@
-from ...Tools.Excel import Excel, ExcelHandle
+from ...Tools.Excel import Excel
 from ...Workbook import Workbook
 from ...Workbook.Block import (
     Block,
@@ -13,34 +13,26 @@ class Vacuum(Block):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
     def GetSource(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 1, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
 
     def GetVolume(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 2, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
 
     def GetVacuumPlate(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 3, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1)
 
     def GetPreVacuumWaitTime(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 4, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1)
 
     def GetPressureDifference(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 5, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 5, self.Col + 1)
 
     def GetVacuumTime(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 6, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 6, self.Col + 1)
 
     def Preprocess(self, WorkbookInstance: Workbook):
-        with ExcelHandle(False) as ExcelHandleInstance:
-            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
+        ...
 
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook):
-        with ExcelHandle(False) as ExcelHandleInstance:
-            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
+        ...

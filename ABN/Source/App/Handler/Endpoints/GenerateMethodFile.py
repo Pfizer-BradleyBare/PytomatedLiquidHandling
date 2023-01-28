@@ -6,7 +6,7 @@ from typing import cast
 import web
 
 from ....Server.Tools.Parser import Parser
-from ...Tools.Excel import Excel, ExcelHandle
+from ...Tools.Excel import Excel
 from .AvailableMethods import MethodsPath, TempFolder, TemplateMethodSuffix
 
 urls = (
@@ -60,20 +60,19 @@ class GenerateMethodFile:
         os.chmod(DesiredMethodFilePath, stat.S_IWRITE)
 
         ExcelInstance = Excel(DesiredMethodFilePath)
-        with ExcelHandle(False) as ExcelHandleInstance:
-            ExcelInstance.AttachHandle(ExcelHandleInstance)
+        ExcelInstance.OpenBook(False)
 
-            ExcelInstance.SelectSheet("Worklist")
-            CopyFormula = cast(
-                tuple[tuple[any]], ExcelInstance.ReadRangeFormulas(2, 1, 2, 3)  # type: ignore
-            )
+        CopyFormula = cast(
+            tuple[tuple[any]], ExcelInstance.ReadRangeFormulas("Worklist", 2, 1, 2, 3)  # type: ignore
+        )
 
-            CopyFormula = CopyFormula * int(
-                ParserObject.GetEndpointInputData()["Sample Number"]
-            )
-            ExcelInstance.WriteRangeFormulas(2, 1, CopyFormula)
+        CopyFormula = CopyFormula * int(
+            ParserObject.GetEndpointInputData()["Sample Number"]
+        )
+        ExcelInstance.WriteRangeFormulas("Worklist", 2, 1, CopyFormula)
 
-            ExcelInstance.Save()
+        ExcelInstance.Save()
+        ExcelInstance.CloseBook()
 
         ParserObject.SetEndpointState(True)
         ParserObject.SetEndpointOutputKey("Method File Path", DesiredMethodFilePath)

@@ -1,5 +1,5 @@
 from ...Tools.Context import WellSequence
-from ...Tools.Excel import Excel, ExcelHandle
+from ...Tools.Excel import Excel
 from ...Workbook import Workbook
 from ...Workbook.Block import (
     Block,
@@ -14,45 +14,41 @@ class Pool(Block):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
     def GetLocation(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 1, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
 
     def GetStartPosition(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 2, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
 
     def Preprocess(self, WorkbookInstance: Workbook):
-        with ExcelHandle(False) as ExcelHandleInstance:
-            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
+        ...
 
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook):
-        with ExcelHandle(False) as ExcelHandleInstance:
-            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
-            Locations = self.GetLocation()
 
-            WorklistInstance = WorkbookInstance.GetWorklist()
+        Locations = self.GetLocation()
 
-            if WorklistInstance.IsWorklistColumn(Locations):
-                Locations = WorklistInstance.ReadWorklistColumn(Locations)
-            else:
-                Locations = WorklistInstance.ConvertToWorklistColumn(int(Locations))
+        WorklistInstance = WorkbookInstance.GetWorklist()
 
-            # do input validation here
+        if WorklistInstance.IsWorklistColumn(Locations):
+            Locations = WorklistInstance.ReadWorklistColumn(Locations)
+        else:
+            Locations = WorklistInstance.ConvertToWorklistColumn(int(Locations))
 
-            DispenseSequencesTrackerInstance = (
-                WorkbookInstance.GetExecutingContext().GetDispenseWellSequenceTracker()
+        # do input validation here
+
+        DispenseSequencesTrackerInstance = (
+            WorkbookInstance.GetExecutingContext().GetDispenseWellSequenceTracker()
+        )
+
+        for WellNumber, Location in zip(
+            range(0, WorklistInstance.GetNumSamples()), Locations
+        ):
+            SequenceInstance = DispenseSequencesTrackerInstance.GetObjectByName(
+                WellNumber
             )
-
-            for WellNumber, Location in zip(
-                range(0, WorklistInstance.GetNumSamples()), Locations
-            ):
-                SequenceInstance = DispenseSequencesTrackerInstance.GetObjectByName(
-                    WellNumber
+            if SequenceInstance.SequencePosition != Location:
+                DispenseSequencesTrackerInstance.ManualUnload(SequenceInstance)
+                DispenseSequencesTrackerInstance.ManualLoad(
+                    WellSequence(WellNumber, Location)
                 )
-                if SequenceInstance.SequencePosition != Location:
-                    DispenseSequencesTrackerInstance.ManualUnload(SequenceInstance)
-                    DispenseSequencesTrackerInstance.ManualLoad(
-                        WellSequence(WellNumber, Location)
-                    )
-            # We just need to update the Sequence in the ones that are different. Easy?
+        # We just need to update the Sequence in the ones that are different. Easy?

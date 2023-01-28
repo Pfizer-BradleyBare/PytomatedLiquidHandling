@@ -7,8 +7,7 @@ from .BlockTracker import BlockTracker
 
 
 def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
-    ExcelInstance.SelectSheet("Method")
-    MethodSheet = ExcelInstance.ReadRangeValues(1, 1, 1500, 100)
+    MethodSheet = ExcelInstance.ReadRangeValues("Method", 1, 1, 1500, 100)
 
     Rows = len(MethodSheet)
     Cols = len(MethodSheet[0])

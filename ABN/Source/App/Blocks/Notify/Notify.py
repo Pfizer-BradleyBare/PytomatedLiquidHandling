@@ -1,4 +1,4 @@
-from ...Tools.Excel import Excel, ExcelHandle
+from ...Tools.Excel import Excel
 from ...Workbook import Workbook
 from ...Workbook.Block import (
     Block,
@@ -13,22 +13,17 @@ class Notify(Block):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
     def GetWaitOnUserOption(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 1, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
 
     def GetSubject(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 2, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
 
     def GetMessage(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 3, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1)
 
     def Preprocess(self, WorkbookInstance: Workbook):
-        with ExcelHandle(False) as ExcelHandleInstance:
-            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
+        ...
 
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook):
-        with ExcelHandle(False) as ExcelHandleInstance:
-            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
+        ...

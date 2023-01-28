@@ -6,7 +6,7 @@ from ....API.Tools.Container.Reagent.ReagentProperty import (
     ViscosityReagentProperty,
     VolatilityReagentProperty,
 )
-from ..Excel import Excel, ExcelHandle
+from ..Excel import Excel
 
 
 class Reagent(APIReagent):
@@ -37,22 +37,16 @@ class Reagent(APIReagent):
         self.Col: int = Col
 
     def IsCorrectSolution(self) -> bool:
-        with ExcelHandle(False) as ExcelHandleInstance:
-            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
-
-            self.ExcelInstance.SelectSheet("Solutions")
-
-            return self.ExcelInstance.ReadCellValue(self.Row, self.Col) == self.Name
+        return (
+            self.ExcelInstance.ReadCellValue("Solutions", self.Row, self.Col)
+            == self.Name
+        )
 
     def GetLiquidClassCategory(self) -> LiquidClassCategory:
-        with ExcelHandle(False) as ExcelHandleInstance:
-            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
 
-            self.ExcelInstance.SelectSheet("Solutions")
-
-            return LiquidClassCategory(
-                self.ExcelInstance.ReadCellValue(self.Row + 3, self.Col + 1),
-                self.ExcelInstance.ReadCellValue(self.Row + 4, self.Col + 1),
-                self.ExcelInstance.ReadCellValue(self.Row + 5, self.Col + 1),
-                self.ExcelInstance.ReadCellValue(self.Row + 6, self.Col + 1),
-            )
+        return LiquidClassCategory(
+            self.ExcelInstance.ReadCellValue("Solutions", self.Row + 3, self.Col + 1),
+            self.ExcelInstance.ReadCellValue("Solutions", self.Row + 4, self.Col + 1),
+            self.ExcelInstance.ReadCellValue("Solutions", self.Row + 5, self.Col + 1),
+            self.ExcelInstance.ReadCellValue("Solutions", self.Row + 6, self.Col + 1),
+        )

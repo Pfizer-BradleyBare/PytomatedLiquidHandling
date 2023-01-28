@@ -1,15 +1,23 @@
+import threading
+
+import pythoncom
+import xlwings
+
 from ....Server.Globals import LOG
-from .ExcelHandle import ExcelHandle
+
+Lock = threading.Lock()
 
 
 def ExcelClassFunctionDecorator_ThreadLock(DecoratedFunction):
     def inner(*args, **kwargs):
         LOG.debug("Excel Function: " + DecoratedFunction.__name__)
 
-        if args[0].ExcelHandleInstance.IsValid() is True:
+        if args[0].Book is not None:
+            Lock.acquire()
             Result = DecoratedFunction(*args, **kwargs)
+            Lock.release()
         else:
-            LOG.critical("Excel handle is not valid! No action performed")
+            LOG.critical("Excel book is not open! No action performed")
             Result = None
 
         LOG.debug("Excel Function: " + DecoratedFunction.__name__)
@@ -21,15 +29,9 @@ def ExcelClassFunctionDecorator_ThreadLock(DecoratedFunction):
 class Excel:
     def __init__(self, ExcelFilePath: str):
         self.ExcelFilePath: str = ExcelFilePath
-        self.ExcelHandleInstance: ExcelHandle = ExcelHandle(False)
-        self.SheetString: str
 
-    def AttachHandle(self, ExcelHandleInstance: ExcelHandle):
-        self.ExcelHandleInstance = ExcelHandleInstance
-        self.ExcelHandleInstance.OpenBook(self.ExcelFilePath)
-
-    def GetExcelFilePath(self) -> str:
-        return self.ExcelFilePath
+        self.Book: xlwings.Book | None = None
+        self.App: xlwings.App | None = None
 
     def __AlignArray(self, Array: list[list[any]]):  # type:ignore
         Max = max(len(i) for i in Array)
@@ -41,50 +43,76 @@ class Excel:
         for Tuple in Array:
             Tuple += (None,) * (Max - len(Tuple))
 
+    def GetExcelFilePath(self) -> str:
+        return self.ExcelFilePath
+
+    def GetBook(self) -> xlwings.Book:
+        if self.Book is None:
+            raise Exception("Book not open. Please correct...")
+
+        return self.Book
+
+    def OpenBook(self, Visible: bool):
+        if self.Book is not None:
+            return
+
+        if xlwings.apps.count != 0:
+            for Book in xlwings.books:
+                if Book.fullname == self.ExcelFilePath:
+                    self.App = Book.app
+                    self.Book = Book
+
+        if self.App is None:
+            pythoncom.CoInitialize()  # Required for some reason.
+            self.App = xlwings.App(visible=Visible, add_book=False)
+            self.Book = self.App.books.open(self.ExcelFilePath)
+
+    def CloseBook(self):
+        Book = self.GetBook()
+        # Check book is open
+
+        Book.save()
+        Book.close()
+
+        if self.App is not None:
+            if len(self.App.books) == 0:
+                self.App.quit()
+
+        self.Book = None
+        self.App = None
+
     @ExcelClassFunctionDecorator_ThreadLock
     def Save(self):
-        self.ExcelHandleInstance.GetBook().save()
+        self.GetBook().save()
 
     @ExcelClassFunctionDecorator_ThreadLock
     def CreateSheet(self, Name: str):
-        self.ExcelHandleInstance.GetBook().sheets.add(name=Name, after="Solutions")
+        self.GetBook().sheets.add(name=Name, after="Solutions")
 
     @ExcelClassFunctionDecorator_ThreadLock
     def DeleteSheet(self, Name: str):
-        self.ExcelHandleInstance.GetBook().sheets[Name].delete()
-
-    def SelectSheet(self, Name: str):
-        self.SheetString = Name
+        self.GetBook().sheets[Name].delete()
 
     @ExcelClassFunctionDecorator_ThreadLock
-    def ReadCellValue(self, Row: int, Col: int) -> any:  # type:ignore
-        return (
-            self.ExcelHandleInstance.GetBook()
-            .sheets[self.SheetString]
-            .range((Row, Col), (Row, Col))
-            .value
-        )
+    def ReadCellValue(self, SheetName: str, Row: int, Col: int) -> any:  # type:ignore
+        return self.GetBook().sheets[SheetName].range((Row, Col), (Row, Col)).value
 
     @ExcelClassFunctionDecorator_ThreadLock
-    def ReadCellFormula(self, Row: int, Col: int) -> any:  # type:ignore
-        return (
-            self.ExcelHandleInstance.GetBook()
-            .sheets[self.SheetString]
-            .range((Row, Col), (Row, Col))
-            .formula
-        )
+    def ReadCellFormula(self, SheetName: str, Row: int, Col: int) -> any:  # type:ignore
+        return self.GetBook().sheets[SheetName].range((Row, Col), (Row, Col)).formula
 
     @ExcelClassFunctionDecorator_ThreadLock
     def ReadRangeValues(
         self,
+        SheetName: str,
         RowStart: int,
         ColStart: int,
         RowEnd: int,
         ColEnd: int,
     ) -> list[list[any]]:  # type:ignore
         return (
-            self.ExcelHandleInstance.GetBook()
-            .sheets[self.SheetString]
+            self.GetBook()
+            .sheets[SheetName]
             .range((RowStart, ColStart), (RowEnd, ColEnd))
             .options(ndim=2)
             .value
@@ -93,34 +121,36 @@ class Excel:
     @ExcelClassFunctionDecorator_ThreadLock
     def ReadRangeFormulas(
         self,
+        SheetName: str,
         RowStart: int,
         ColStart: int,
         RowEnd: int,
         ColEnd: int,
     ) -> tuple[tuple[any]]:  # type:ignore
         return (
-            self.ExcelHandleInstance.GetBook()
-            .sheets[self.SheetString]
+            self.GetBook()
+            .sheets[SheetName]
             .range((RowStart, ColStart), (RowEnd, ColEnd))
             .options(ndim=2)
             .formula
         )  # type:ignore
 
     @ExcelClassFunctionDecorator_ThreadLock
-    def WriteCellValue(self, Row: int, Col: int, Data: any):  # type:ignore
-        self.ExcelHandleInstance.GetBook().sheets[self.SheetString].range(
-            (Row, Col), (Row, Col)
-        ).value = Data
+    def WriteCellValue(
+        self, SheetName: str, Row: int, Col: int, Data: any  # type:ignore
+    ):
+        self.GetBook().sheets[SheetName].range((Row, Col), (Row, Col)).value = Data
 
     @ExcelClassFunctionDecorator_ThreadLock
-    def WriteCellFormula(self, Row: int, Col: int, Data: any):  # type:ignore
-        self.ExcelHandleInstance.GetBook().sheets[self.SheetString].range(
-            (Row, Col), (Row, Col)
-        ).formula = Data
+    def WriteCellFormula(
+        self, SheetName: str, Row: int, Col: int, Data: any  # type:ignore
+    ):
+        self.GetBook().sheets[SheetName].range((Row, Col), (Row, Col)).formula = Data
 
     @ExcelClassFunctionDecorator_ThreadLock
     def WriteRangeValues(
         self,
+        SheetName: str,
         RowStart: int,
         ColStart: int,
         Data: list[list[any]],  # type:ignore
@@ -129,13 +159,14 @@ class Excel:
         NumRows = len(Data)
         NumCols = len(Data[0])
 
-        self.ExcelHandleInstance.GetBook().sheets[self.SheetString].range(
+        self.GetBook().sheets[SheetName].range(
             (RowStart, ColStart), (RowStart + NumRows - 1, ColStart + NumCols - 1)
         ).value = Data
 
     @ExcelClassFunctionDecorator_ThreadLock
     def WriteRangeFormulas(
         self,
+        SheetName: str,
         RowStart: int,
         ColStart: int,
         Data: tuple[tuple[any]],  # type:ignore
@@ -144,6 +175,6 @@ class Excel:
         NumRows = len(Data)
         NumCols = len(Data[0])
 
-        self.ExcelHandleInstance.GetBook().sheets[self.SheetString].range(
+        self.GetBook().sheets[SheetName].range(
             (RowStart, ColStart), (RowStart + NumRows - 1, ColStart + NumCols - 1)
         ).formula = Data

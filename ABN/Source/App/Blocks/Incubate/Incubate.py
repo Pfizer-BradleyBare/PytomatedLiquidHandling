@@ -2,9 +2,9 @@ from ....API.TempControl import End, IsReady, Release, Reserve, Start
 from ....API.Tools.Timer import TimerTracker
 from ....HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
 from ....Server.Globals import GetAppHandler
-from ...Tools.Excel import Excel, ExcelHandle
+from ...Tools.Excel import Excel
 from ...Tools.Timer import Timer
-from ...Workbook import Workbook, WorkbookRunTypes
+from ...Workbook import Workbook
 from ...Workbook.Block import (
     Block,
     ClassDecorator_AvailableBlock,
@@ -30,83 +30,74 @@ class Incubate(Block):
         self.ReservedTempControlDevice: TempControlDevice | None = None
 
     def GetTemp(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 1, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
 
     def GetWaitForTempOption(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 2, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
 
     def GetTime(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 3, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1)
 
     def GetShakeSpeed(self) -> str:
-        self.ExcelInstance.SelectSheet("Method")
-        return self.ExcelInstance.ReadCellValue(self.Row + 4, self.Col + 1)
+        return self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1)
 
     def Preprocess(self, WorkbookInstance: Workbook):
-        with ExcelHandle(False) as ExcelHandleInstance:
-            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
 
-            Temperature = float(self.GetTemp())
-            Wait = self.GetWaitForTempOption()
-            ShakeSpeed = int(self.GetShakeSpeed())
-            ParentContainer = (
-                WorkbookInstance.GetContainerTracker()
-                .GetPlateTracker()
-                .GetObjectByName(self.GetParentPlateName())
-            )
+        Temperature = float(self.GetTemp())
+        Wait = self.GetWaitForTempOption()
+        ShakeSpeed = int(self.GetShakeSpeed())
+        ParentContainer = (
+            WorkbookInstance.GetContainerTracker()
+            .GetPlateTracker()
+            .GetObjectByName(self.GetParentPlateName())
+        )
 
-            Simulate = WorkbookInstance.GetRunType() != WorkbookRunTypes.Run
+        Simulate = WorkbookInstance.GetRunType() != "Run"
 
-            self.ReservedTempControlDevice = Reserve(
-                ParentContainer, Temperature, ShakeSpeed, Simulate
-            )
-            # Try to reserve something
+        self.ReservedTempControlDevice = Reserve(
+            ParentContainer, Temperature, ShakeSpeed, Simulate
+        )
+        # Try to reserve something
 
-            ExecutingContext = WorkbookInstance.GetExecutingContext()
+        ExecutingContext = WorkbookInstance.GetExecutingContext()
 
-            TimerTrackerInstance: TimerTracker = (
-                GetAppHandler().TimerTrackerInstance  # type:ignore
-            )
+        TimerTrackerInstance: TimerTracker = (
+            GetAppHandler().TimerTrackerInstance  # type:ignore
+        )
 
-            if self.ReservedTempControlDevice is None:
-                if Wait == "Yes":
+        if self.ReservedTempControlDevice is None:
+            if Wait == "Yes":
+                WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(
+                    ExecutingContext
+                )
+                WorkbookInstance.ActiveContextTrackerInstance.ManualUnload(
+                    ExecutingContext
+                )
+        # Did it work?
+        # If not we need to disable this context if Wait is "Yes" Otherwise we can try again during the next step round.
+        else:
+            if Wait == "Yes":
+                if not IsReady(self.ReservedTempControlDevice, Temperature, Simulate):
                     WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(
                         ExecutingContext
                     )
                     WorkbookInstance.ActiveContextTrackerInstance.ManualUnload(
                         ExecutingContext
                     )
-            # Did it work?
-            # If not we need to disable this context if Wait is "Yes" Otherwise we can try again during the next step round.
-            else:
-                if Wait == "Yes":
-                    if not IsReady(
-                        self.ReservedTempControlDevice, Temperature, Simulate
-                    ):
-                        WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(
-                            ExecutingContext
-                        )
-                        WorkbookInstance.ActiveContextTrackerInstance.ManualUnload(
-                            ExecutingContext
-                        )
 
-                        TimerTrackerInstance.ManualLoad(
-                            Timer(
-                                60,
-                                "Waiting for TempControlDevice equilibration",
-                                WorkbookInstance,
-                                self,
-                                PreprocessingWaitCallback,
-                                (1,),
-                            )
+                    TimerTrackerInstance.ManualLoad(
+                        Timer(
+                            60,
+                            "Waiting for TempControlDevice equilibration",
+                            WorkbookInstance,
+                            self,
+                            PreprocessingWaitCallback,
+                            (1,),
                         )
-                        # Start timer
-                # If so we need to wait periodically until it is "equilibrated"
+                    )
+                    # Start timer
+            # If so we need to wait periodically until it is "equilibrated"
 
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook):
-        with ExcelHandle(False) as ExcelHandleInstance:
-            self.ExcelInstance.AttachHandle(ExcelHandleInstance)
+        ...

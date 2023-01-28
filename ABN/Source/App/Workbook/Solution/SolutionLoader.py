@@ -9,8 +9,7 @@ def Load(
 ) -> ReagentTracker:
     ReagentTrackerInstance: ReagentTracker = ReagentTracker()
 
-    ExcelInstance.SelectSheet("Solutions")
-    SolutionsSheet = ExcelInstance.ReadRangeValues(1, 1, 200, 50)
+    SolutionsSheet = ExcelInstance.ReadRangeValues("Solutions", 1, 1, 200, 50)
 
     MaxRows = len(SolutionsSheet)
 
@@ -31,14 +30,14 @@ def Load(
                 Names = set([Name])
             # If we have a worklist column then that means the actual name is not a solution. We need to deal with that
 
-            ExcelInstance.SelectSheet("Solutions")
-
             for Name in Names:
                 ReagentTrackerInstance.ManualLoad(
                     Reagent(
                         Name,
                         MethodName,
-                        ExcelInstance.ReadCellValue(RowIndex + 2, ColIndex + 2),
+                        ExcelInstance.ReadCellValue(
+                            "Solutions", RowIndex + 2, ColIndex + 2
+                        ),
                         ExcelInstance,
                         RowIndex + 1,
                         ColIndex + 1,

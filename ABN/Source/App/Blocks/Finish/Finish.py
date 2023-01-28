@@ -14,7 +14,7 @@ class Finish(Block):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
     def Preprocess(self, WorkbookInstance: Workbook):
-        pass
+        ...
 
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook):
