@@ -11,4 +11,5 @@ __all__ = [
     "Pipette96Channel",
     "TransferOptions",
     "TransferOptionsTracker",
+    "PipetteTracker",
 ]

@@ -36,4 +36,6 @@ __all__ = [
     "SetPlateLockOptions",
     "StartShakeControlCommand",
     "StartShakeControlOptions",
+    "StopShakeControlCommand",
+    "StopShakeControlOptions",
 ]

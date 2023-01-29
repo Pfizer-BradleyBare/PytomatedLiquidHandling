@@ -98,6 +98,7 @@ class Workbook(ObjectABC):
 
         # Do the necessary init function.
         # Why do it here? Because all init is handled inside the init function for simplicity sake
+
         WorkbookInit(self)
 
     def GetName(self) -> str:
@@ -151,6 +152,8 @@ class Workbook(ObjectABC):
 
 def WorkbookProcessor(WorkbookInstance: Workbook):
 
+    WorkbookInstance.ExcelInstance.OpenBook(False)
+
     ContextTrackerInstance = WorkbookInstance.GetContextTracker()
     InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
     ExecutedBlocksTrackerInstance = WorkbookInstance.GetExecutedBlocksTracker()
@@ -162,8 +165,8 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
     )
 
     CurrentExecutingBlock: Block = WorkbookInstance.GetMethodTreeRoot()
-    CurrentExecutingBlock.Process(WorkbookInstance)
-    ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
+    # CurrentExecutingBlock.Process(WorkbookInstance)
+    # ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
     # Do the first step processing here. First step is always a plate step.
 
     while True:
@@ -358,7 +361,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
 
 
 def WorkbookInit(WorkbookInstance: Workbook):
-
+    WorkbookInstance.ExcelInstance.OpenBook(False)
     # Setup special varibles
 
     # Trackers
@@ -426,5 +429,7 @@ def WorkbookInit(WorkbookInstance: Workbook):
         # WorkbookInstance.ProcessingLock.acquire()
 
     WorkbookInstance.Simulate = WorkbookInstance.GetRunType() != WorkbookRunTypes.Run
+
+    WorkbookInstance.ExcelInstance.CloseBook()
 
     WorkbookInstance.WorkbookProcessorThread.start()

@@ -12,6 +12,9 @@ def CheckAndConvertItem(
     ValCriterias: list,
 ) -> any:  # type:ignore
 
+    print(Input)
+    print(type(Input))
+
     if WorkbookInstance.WorklistInstance.IsWorklistColumn(str(Input)):
         raise Exception("TODO")
 
