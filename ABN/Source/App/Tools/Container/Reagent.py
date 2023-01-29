@@ -45,8 +45,24 @@ class Reagent(APIReagent):
     def GetLiquidClassCategory(self) -> LiquidClassCategory:
 
         return LiquidClassCategory(
-            self.ExcelInstance.ReadCellValue("Solutions", self.Row + 3, self.Col + 1),
-            self.ExcelInstance.ReadCellValue("Solutions", self.Row + 4, self.Col + 1),
-            self.ExcelInstance.ReadCellValue("Solutions", self.Row + 5, self.Col + 1),
-            self.ExcelInstance.ReadCellValue("Solutions", self.Row + 6, self.Col + 1),
+            VolatilityReagentProperty(
+                self.ExcelInstance.ReadCellValue(
+                    "Solutions", self.Row + 3, self.Col + 1
+                )
+            ),
+            ViscosityReagentProperty(
+                self.ExcelInstance.ReadCellValue(
+                    "Solutions", self.Row + 4, self.Col + 1
+                )
+            ),
+            HomogeneityReagentProperty(
+                self.ExcelInstance.ReadCellValue(
+                    "Solutions", self.Row + 5, self.Col + 1
+                )
+            ),
+            LLDReagentProperty(
+                self.ExcelInstance.ReadCellValue(
+                    "Solutions", self.Row + 6, self.Col + 1
+                )
+            ),
         )

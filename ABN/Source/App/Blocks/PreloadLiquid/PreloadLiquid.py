@@ -1,3 +1,4 @@
+from ...Tools import InputChecker
 from ...Tools.Excel import Excel
 from ...Workbook import Workbook
 from ...Workbook.Block import (
@@ -12,11 +13,23 @@ class PreloadLiquid(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetSource(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
+    def GetSource(self, WorkbookInstance: Workbook) -> str:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
+            [str],
+            [],
+        )
 
-    def GetVolume(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
+    def GetVolume(self, WorkbookInstance: Workbook) -> list[int | float]:
+        return InputChecker.CheckAndConvertList(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
+            [int, float],
+            [],
+        )
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...

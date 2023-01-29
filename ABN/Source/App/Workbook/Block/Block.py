@@ -60,14 +60,6 @@ class Block(ObjectABC, Node):
     def GetName(self) -> str:
         return self.Name + str((self.Row, self.Col))
 
-    def IsCorrectBlock(self) -> bool:
-        return (
-            self.ExcelInstance.ReadCellValue("Method", self.Row, self.Col).replace(
-                " ", ""
-            )
-            == self.Name
-        )
-
     def GetRow(self) -> int:
         return self.Row
 

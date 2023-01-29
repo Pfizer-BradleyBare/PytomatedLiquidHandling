@@ -1,5 +1,3 @@
-from typing import cast
-
 from ...Tools import InputChecker
 from ...Tools.Excel import Excel
 from ...Workbook import Workbook
@@ -19,31 +17,20 @@ class Aliquot(Block):
 
         return InputChecker.CheckAndConvertList(
             WorkbookInstance,
+            self,
             self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
             [int],
             [],
-            [
-                bool(Factor.GetFactor())
-                for Factor in WorkbookInstance.GetContextTracker()
-                .GetObjectByName(self.GetContext())
-                .GetWellFactorTracker()
-                .GetObjectsAsList()
-            ],
         )
 
     def GetStartPosition(self, WorkbookInstance: Workbook) -> str:
-        return InputChecker.CheckAndConvertList(
+
+        return InputChecker.CheckAndConvertItem(
             WorkbookInstance,
+            self,
             self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
             [str],
-            [],
-            [
-                bool(Factor.GetFactor())
-                for Factor in WorkbookInstance.GetContextTracker()
-                .GetObjectByName(self.GetContext())
-                .GetWellFactorTracker()
-                .GetObjectsAsList()
-            ],
+            ["Sample Start Position", "Plate Start Position(A1)"],
         )
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:

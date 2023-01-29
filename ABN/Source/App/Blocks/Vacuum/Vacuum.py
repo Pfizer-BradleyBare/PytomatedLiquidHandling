@@ -1,3 +1,4 @@
+from ...Tools import InputChecker
 from ...Tools.Excel import Excel
 from ...Workbook import Workbook
 from ...Workbook.Block import (
@@ -12,23 +13,59 @@ class Vacuum(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetSource(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
+    def GetSource(self, WorkbookInstance: Workbook) -> list[str]:
+        return InputChecker.CheckAndConvertList(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
+            [str],
+            [],
+        )
 
-    def GetVolume(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
+    def GetVolume(self, WorkbookInstance: Workbook) -> list[int | float]:
+        return InputChecker.CheckAndConvertList(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
+            [int, float],
+            [],
+        )
 
-    def GetVacuumPlate(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1)
+    def GetVacuumPlate(self, WorkbookInstance: Workbook) -> str:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1),
+            [str],
+            [],
+        )
 
-    def GetPreVacuumWaitTime(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1)
+    def GetPreVacuumWaitTime(self, WorkbookInstance: Workbook) -> int | float:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1),
+            [int, float],
+            [],
+        )
 
-    def GetPressureDifference(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 5, self.Col + 1)
+    def GetPressureDifference(self, WorkbookInstance: Workbook) -> str | int | float:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 5, self.Col + 1),
+            [str, int, float],
+            ["Low", "Normal", "High"] + list(range(0, 1500)),
+        )
 
-    def GetVacuumTime(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 6, self.Col + 1)
+    def GetVacuumTime(self, WorkbookInstance: Workbook) -> int | float:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 6, self.Col + 1),
+            [int, float],
+            [],
+        )
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...

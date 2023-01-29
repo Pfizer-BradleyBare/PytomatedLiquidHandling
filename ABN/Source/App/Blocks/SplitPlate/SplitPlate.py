@@ -1,6 +1,7 @@
 from typing import cast
 
 from ...Blocks import Plate
+from ...Tools import InputChecker
 from ...Tools.Container import Plate as PlateContainer
 from ...Tools.Context import Context, WellFactor, WellFactorTracker, WellSequenceTracker
 from ...Tools.Excel import Excel
@@ -17,14 +18,32 @@ class SplitPlate(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetPathwayChoice(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
+    def GetPathwayChoice(self, WorkbookInstance: Workbook) -> list[str]:
+        return InputChecker.CheckAndConvertList(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
+            [str],
+            [],
+        )
 
-    def GetPathway1Name(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
+    def GetPathway1Name(self, WorkbookInstance: Workbook) -> str:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
+            [str],
+            [],
+        )
 
-    def GetPathway2Name(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1)
+    def GetPathway2Name(self, WorkbookInstance: Workbook) -> str:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1),
+            [str],
+            [],
+        )
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
@@ -32,19 +51,9 @@ class SplitPlate(Block):
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
 
-        Pathway1Name = self.GetPathway1Name()
-        Pathway2Name = self.GetPathway2Name()
-        PathwayChoices = self.GetPathwayChoice()
-
-        if WorkbookInstance.GetWorklist().IsWorklistColumn(PathwayChoices) is True:
-            PathwayChoices = WorkbookInstance.GetWorklist().ReadWorklistColumn(
-                PathwayChoices
-            )
-        else:
-            PathwayChoices = WorkbookInstance.GetWorklist().ConvertToWorklistColumn(
-                PathwayChoices
-            )
-        # Do parameter validation here
+        Pathway1Name = self.GetPathway1Name(WorkbookInstance)
+        Pathway2Name = self.GetPathway2Name(WorkbookInstance)
+        PathwayChoices = self.GetPathwayChoice(WorkbookInstance)
 
         ContextTrackerInstance = WorkbookInstance.GetContextTracker()
 
@@ -131,9 +140,9 @@ class SplitPlate(Block):
         for Child in Children:
             ContainerTracker.PlateTrackerInstance.ManualLoad(
                 PlateContainer(
-                    Child.GetPlateName(),
+                    Child.GetPlateName(WorkbookInstance),
                     WorkbookInstance.GetName(),
-                    Child.GetPlateType(),
+                    Child.GetPlateType(WorkbookInstance),
                 )
             )
             WorkbookInstance.GetExecutedBlocksTracker().ManualLoad(Child)

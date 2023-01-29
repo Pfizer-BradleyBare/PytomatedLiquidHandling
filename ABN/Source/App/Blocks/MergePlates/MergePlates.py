@@ -1,6 +1,7 @@
 from typing import Self, cast
 
 from ...Blocks import SplitPlate
+from ...Tools import InputChecker
 from ...Tools.Context import Context
 from ...Tools.Excel import Excel
 from ...Workbook import Workbook
@@ -19,11 +20,23 @@ class MergePlates(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetPlateName(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
+    def GetPlateName(self, WorkbookInstance: Workbook) -> str:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
+            [str],
+            [],
+        )
 
-    def GetMergeType(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
+    def GetMergeType(self, WorkbookInstance: Workbook) -> str:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
+            [str],
+            ["Yes", "No"],
+        )
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
@@ -31,7 +44,7 @@ class MergePlates(Block):
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
 
-        ProcessingMergeInstanceMergeType = self.GetMergeType()
+        ProcessingMergeInstanceMergeType = self.GetMergeType(WorkbookInstance)
 
         SplitPlateBlockInstance: SplitPlate = cast(SplitPlate, self)
         while True:
@@ -63,7 +76,9 @@ class MergePlates(Block):
 
         WaitingMergeInstance: MergePlates | None = None
         for MergeInstance in MergePlates.WaitingMergeInstances:
-            if MergeInstance.GetParentPlateName() == self.GetPlateName():
+            if MergeInstance.GetParentPlateName() == self.GetPlateName(
+                WorkbookInstance
+            ):
                 WaitingMergeInstance = MergeInstance
 
         if WaitingMergeInstance is None:
@@ -82,7 +97,9 @@ class MergePlates(Block):
         )
         # Get Merge Instance Contexts
 
-        WaitingMergeInstanceMergeType = WaitingMergeInstance.GetMergeType()
+        WaitingMergeInstanceMergeType = WaitingMergeInstance.GetMergeType(
+            WorkbookInstance
+        )
 
         if (
             WaitingMergeInstanceMergeType == "Yes"
@@ -99,8 +116,9 @@ class MergePlates(Block):
 
             UpdateContextFactorsFlag = True
             if (
-                SplitPlateBlockInstance.GetPathwayChoice() == "Split"
-                or SplitPlateBlockInstance.GetPathwayChoice() == "Concurrent"
+                SplitPlateBlockInstance.GetPathwayChoice(WorkbookInstance) == "Split"
+                or SplitPlateBlockInstance.GetPathwayChoice(WorkbookInstance)
+                == "Concurrent"
             ):
                 UpdateContextFactorsFlag = False
 

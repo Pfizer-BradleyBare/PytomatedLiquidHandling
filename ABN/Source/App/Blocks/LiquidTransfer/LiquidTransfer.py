@@ -1,6 +1,7 @@
 from ....API.Pipette import Transfer, TransferOptions, TransferOptionsTracker
 from ....API.Tools.HALLayer.HALLayer import HALLayer
 from ....Server.Globals.HandlerRegistry import GetAPIHandler
+from ...Tools import InputChecker
 from ...Tools.Excel import Excel
 from ...Workbook import Workbook
 from ...Workbook.Block import (
@@ -15,14 +16,32 @@ class LiquidTransfer(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetSource(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
+    def GetSource(self, WorkbookInstance: Workbook) -> list[str]:
+        return InputChecker.CheckAndConvertList(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
+            [str],
+            [],
+        )
 
-    def GetVolume(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
+    def GetVolume(self, WorkbookInstance: Workbook) -> list[int | float]:
+        return InputChecker.CheckAndConvertList(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
+            [int, float],
+            [],
+        )
 
-    def GetMix(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1)
+    def GetMix(self, WorkbookInstance: Workbook) -> list[str]:
+        return InputChecker.CheckAndConvertList(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1),
+            [str],
+            [],
+        )
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
@@ -30,27 +49,12 @@ class LiquidTransfer(Block):
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
 
-        Destinations = self.GetParentPlateName()
-        Sources = self.GetSource()
-        Volumes = self.GetVolume()
-        MixingStrings = self.GetMix()
+        Destination = self.GetParentPlateName()
+        Sources = self.GetSource(WorkbookInstance)
+        Volumes = self.GetVolume(WorkbookInstance)
+        MixingStrings = self.GetMix(WorkbookInstance)
 
         WorklistInstance = WorkbookInstance.GetWorklist()
-
-        Destinations = WorklistInstance.ConvertToWorklistColumn(Destinations)
-        MixingStrings = WorklistInstance.ConvertToWorklistColumn(MixingStrings)
-
-        if WorklistInstance.IsWorklistColumn(Sources):
-            Sources = WorklistInstance.ReadWorklistColumn(Sources)
-        else:
-            Sources = WorklistInstance.ConvertToWorklistColumn(Sources)
-
-        if WorklistInstance.IsWorklistColumn(Volumes):
-            Volumes = WorklistInstance.ReadWorklistColumn(Volumes)
-        else:
-            Volumes = WorklistInstance.ConvertToWorklistColumn(Volumes)
-
-        # Input validation here
 
         AspirateMixingParams: list[int] = list()
         DispenseMixingParams: list[int] = list()
@@ -90,14 +94,12 @@ class LiquidTransfer(Block):
 
         count = 0
         for (
-            Destination,
             Source,
             WellNumber,
             Volume,
             AspirateMixingParam,
             DispenseMixingParam,
         ) in zip(
-            Destinations,
             Sources,
             range(1, WorklistInstance.GetNumSamples() + 1),
             Volumes,

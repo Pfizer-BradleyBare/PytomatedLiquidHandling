@@ -17,7 +17,7 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
     for ColIndex in range(0, Cols):
         Temp = list()
         for RowIndex in range(0, Rows):
-            Name: str = MethodSheet[RowIndex][ColIndex]
+            Name = MethodSheet[RowIndex][ColIndex]
 
             if Name is None:
                 continue
@@ -62,18 +62,37 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
         if type(BlockInstance).__name__ != Plate.__name__:
             raise Exception("Method is not valid!")
         else:
-            PlateName = cast(Plate, BlockInstance).GetPlateName()
+            PlateName = str(
+                ExcelInstance.ReadCellValue(
+                    "Method", BlockInstance.Row + 1, BlockInstance.Col + 1
+                )
+            )
             if PlateName in Pathways:
                 raise Exception("Method is not valid!")
-            Pathways.append(cast(Plate, BlockInstance).GetPlateName())
+            Pathways.append(PlateName)
     # Check that the starting Block is a Plate and the name is unique in each list
 
     for BlockInstances in BlockInstancesList:
         BlockInstance = BlockInstances[-1]
         if type(BlockInstance).__name__ == SplitPlate.__name__:
-            if cast(SplitPlate, BlockInstance).GetPathway1Name() not in Pathways:
+
+            if (
+                str(
+                    ExcelInstance.ReadCellValue(
+                        "Method", BlockInstance.Row + 2, BlockInstance.Col + 1
+                    )
+                )
+                not in Pathways  # Pathway 1
+            ):
                 raise Exception("Pathways are not referenced correctly!")
-            if cast(SplitPlate, BlockInstance).GetPathway2Name() not in Pathways:
+            if (
+                str(
+                    ExcelInstance.ReadCellValue(
+                        "Method", BlockInstance.Row + 3, BlockInstance.Col + 1
+                    )
+                )
+                not in Pathways  # Pathway 2
+            ):
                 raise Exception("Pathways are not referenced correctly!")
     # Now we need to confirm that a split plate references the correct pathways
 
@@ -90,7 +109,11 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
             BlockInstance.Context = Context
             PreviousBlock = BlockInstance
             if type(BlockInstance).__name__ == Plate.__name__:
-                Context += ":" + Plate.GetPlateName(BlockInstance)
+                Context += ":" + str(
+                    ExcelInstance.ReadCellValue(
+                        "Method", BlockInstance.Row + 1, BlockInstance.Col + 1
+                    )
+                )
 
             if type(BlockInstance).__name__ == SplitPlate.__name__:
                 Pathways = [

@@ -3,6 +3,7 @@ from ....API.Tools.Timer import TimerTracker
 from ....HAL.Lid import Lid as HALLid
 from ....HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
 from ....Server.Globals import GetAppHandler
+from ...Tools import InputChecker
 from ...Tools.Excel import Excel
 from ...Tools.Timer import Timer
 from ...Workbook import Workbook
@@ -20,23 +21,47 @@ class Incubate(Block):
         self.ReservedTempControlDevice: TempControlDevice | None = None
         self.ReservedLid: HALLid | None = None
 
-    def GetTemp(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1)
+    def GetTemp(self, WorkbookInstance: Workbook) -> str | int | float:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
+            [str, int, float],
+            ["Ambient"] + [Val / 10.0 for Val in range(0, 1100)],
+        )
 
-    def GetWaitForTempOption(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1)
+    def GetWaitForTempOption(self, WorkbookInstance: Workbook) -> str:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
+            [str],
+            ["Yes", "No"],
+        )
 
-    def GetTime(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1)
+    def GetTime(self, WorkbookInstance: Workbook) -> int | float:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1),
+            [int, float],
+            [],
+        )
 
-    def GetShakeSpeed(self) -> object:
-        return self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1)
+    def GetShakeSpeed(self, WorkbookInstance: Workbook) -> int:
+        return InputChecker.CheckAndConvertItem(
+            WorkbookInstance,
+            self,
+            self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1),
+            [int],
+            [],
+        )
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
 
-        Temperature = float(self.GetTemp())
-        Wait = self.GetWaitForTempOption()
-        ShakeSpeed = int(self.GetShakeSpeed())
+        Temperature = self.GetTemp(WorkbookInstance)
+        Wait = self.GetWaitForTempOption(WorkbookInstance)
+        ShakeSpeed = self.GetShakeSpeed(WorkbookInstance)
         ParentContainer = (
             WorkbookInstance.GetContainerTracker()
             .GetPlateTracker()
@@ -53,7 +78,7 @@ class Incubate(Block):
             GetAppHandler().TimerTrackerInstance  # type:ignore
         )
 
-        if Temperature == "Ambient":
+        if type(Temperature) == str and Temperature == "Ambient":
 
             if self.ReservedLid is None:
                 self.ReservedLid = Lid.Reserve(ParentContainer, Simulate)
@@ -68,7 +93,7 @@ class Incubate(Block):
 
             if self.ReservedTempControlDevice is None:
                 self.ReservedTempControlDevice = TempControl.Reserve(
-                    ParentContainer, Temperature, ShakeSpeed, Simulate
+                    ParentContainer, float(Temperature), ShakeSpeed, Simulate
                 )
             if self.ReservedLid is None:
                 self.ReservedLid = Lid.Reserve(ParentContainer, Simulate)
@@ -87,7 +112,7 @@ class Incubate(Block):
 
                 if Wait == "Yes":
                     if not TempControl.IsReady(
-                        self.ReservedTempControlDevice, Temperature, Simulate
+                        self.ReservedTempControlDevice, float(Temperature), Simulate
                     ):
                         WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(
                             StepContext
@@ -131,16 +156,16 @@ class Incubate(Block):
             self.GetContext()
         )
 
-        Temperature = float(self.GetTemp())
-        Time = float(self.GetTime())
-        ShakeSpeed = int(self.GetShakeSpeed())
+        Temperature = self.GetTemp(WorkbookInstance)
+        Time = self.GetTime(WorkbookInstance)
+        ShakeSpeed = self.GetShakeSpeed(WorkbookInstance)
         ParentContainer = (
             WorkbookInstance.GetContainerTracker()
             .GetPlateTracker()
             .GetObjectByName(self.GetParentPlateName())
         )
 
-        if Temperature == "Ambient":
+        if type(Temperature) == str and Temperature == "Ambient":
             if self.ReservedLid is None:
                 WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(StepContext)
                 return False
@@ -150,14 +175,15 @@ class Incubate(Block):
                 WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(StepContext)
                 return False
 
-        if Temperature != "Ambient":
-            TempControl.Start(
-                ParentContainer,
-                self.ReservedTempControlDevice,  # type:ignore
-                Temperature,
-                ShakeSpeed,
-                WorkbookInstance.Simulate,
-            )
+            else:
+
+                TempControl.Start(
+                    ParentContainer,
+                    self.ReservedTempControlDevice,  # type:ignore
+                    float(Temperature),
+                    ShakeSpeed,
+                    WorkbookInstance.Simulate,
+                )
 
         Lid.Cover(ParentContainer, self.ReservedLid, WorkbookInstance.Simulate)
 
@@ -181,7 +207,7 @@ class Incubate(Block):
 def PreprocessingWaitCallback(
     WorkbookInstance: Workbook, StepInstance: Incubate, Extra: tuple
 ):
-    Temperature = float(StepInstance.GetTemp())
+    Temperature = StepInstance.GetTemp(WorkbookInstance)
 
     StepContext = WorkbookInstance.ContextTrackerInstance.GetObjectByName(
         StepInstance.GetContext()
@@ -194,7 +220,7 @@ def PreprocessingWaitCallback(
     if StepInstance.ReservedTempControlDevice is not None:
         if TempControl.IsReady(
             StepInstance.ReservedTempControlDevice,
-            Temperature,
+            float(Temperature),
             WorkbookInstance.Simulate,
         ):
             WorkbookInstance.InactiveContextTrackerInstance.ManualUnload(StepContext)
@@ -226,7 +252,7 @@ def ProcessingWaitCallback(
         StepInstance.GetContext()
     )
 
-    Temperature = float(StepInstance.GetTemp())
+    Temperature = StepInstance.GetTemp(WorkbookInstance)
     ParentContainer = (
         WorkbookInstance.GetContainerTracker()
         .GetPlateTracker()
@@ -239,7 +265,7 @@ def ProcessingWaitCallback(
 
     StepInstance.ReservedLid = None
 
-    if Temperature != "Ambient":
+    if type(Temperature) != str and Temperature != "Ambient":
 
         TempControl.End(
             ParentContainer,

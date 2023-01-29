@@ -19,6 +19,8 @@ def Load(
             if Name is None:
                 break
 
+            Name = str(Name)
+
             if " - (Click Here to Update)" not in Name:
                 break
 
@@ -33,10 +35,12 @@ def Load(
             for Name in Names:
                 ReagentTrackerInstance.ManualLoad(
                     Reagent(
-                        Name,
+                        str(Name),
                         MethodName,
-                        ExcelInstance.ReadCellValue(
-                            "Solutions", RowIndex + 2, ColIndex + 2
+                        str(
+                            ExcelInstance.ReadCellValue(
+                                "Solutions", RowIndex + 2, ColIndex + 2
+                            )
                         ),
                         ExcelInstance,
                         RowIndex + 1,

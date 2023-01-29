@@ -10,19 +10,15 @@ def ValidateInput(
 
     if Types:
         TestState = False
-        for Type in Types:
-            if type(Input) == Type:
-                TestState = True
-                break
+        if type(Input) in Types:
+            TestState = True
 
         ValidState = ValidState and TestState
 
     if Vals:
         TestState = False
-        for Val in Vals:
-            if Input == Val:
-                TestState = True
-                break
+        if Input in Vals:
+            TestState = True
 
         ValidState = ValidState and TestState
 
@@ -53,3 +49,5 @@ print(
         ["Hannah", "Bradley", "Tipper", "Kuni", 1, 2, 3],
     )
 )
+
+print(type(1) == (int | float))
