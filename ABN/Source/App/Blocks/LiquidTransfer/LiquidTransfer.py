@@ -106,7 +106,7 @@ class LiquidTransfer(Block):
             AspirateMixingParams,
             DispenseMixingParams,
         ):
-            if WellFactorTrackerInstance.GetObjectByName(WellNumber) == 0:
+            if WellFactorTrackerInstance.GetObjectByName(WellNumber).GetFactor() == 0:
                 continue
 
             AspirateWellNumber = AspirateWellSequencesTrackerInstance.GetObjectByName(

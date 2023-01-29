@@ -19,7 +19,7 @@ class PreloadLiquid(Block):
             self,
             self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
             [str],
-            [],
+            [self.GetParentPlateName()],
         )
 
     def GetVolume(self, WorkbookInstance: Workbook) -> list[int | float]:
@@ -36,4 +36,28 @@ class PreloadLiquid(Block):
 
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
-        ...
+
+        ParentContainer = (
+            WorkbookInstance.GetContainerTracker()
+            .GetPlateTracker()
+            .GetObjectByName(self.GetParentPlateName())
+        )
+
+        WellFactorTrackerInstance = (
+            WorkbookInstance.GetExecutingContext().GetWellFactorTracker()
+        )
+
+        Volumes = self.GetVolume(WorkbookInstance)
+
+        for WellNumber, Volume in zip(
+            range(1, WorkbookInstance.WorklistInstance.GetNumSamples() + 1), Volumes
+        ):
+            if WellFactorTrackerInstance.GetObjectByName(WellNumber).GetFactor() == 0:
+                continue
+
+            AspirateSolutionTracker = ParentContainer.Aspirate(WellNumber, Volume)
+            ParentContainer.Dispense(WellNumber, AspirateSolutionTracker)
+            ParentContainer.Dispense(WellNumber, AspirateSolutionTracker)
+            # This effectively removes a volume, returns to zero, then adds that additional volume because the plate should contain it.
+
+        return True

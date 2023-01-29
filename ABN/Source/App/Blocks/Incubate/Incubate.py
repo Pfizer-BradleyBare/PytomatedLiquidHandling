@@ -189,7 +189,7 @@ class Incubate(Block):
 
         TimerTrackerInstance.ManualLoad(
             Timer(
-                Time,
+                Time * 60,
                 "Incubation",
                 WorkbookInstance,
                 self,
