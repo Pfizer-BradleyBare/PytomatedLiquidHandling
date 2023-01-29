@@ -1,9 +1,4 @@
-from ...Driver.Transport.Gripper import (
-    GetPlateCommand,
-    GetPlateOptions,
-    PlacePlateCommand,
-    PlacePlateOptions,
-)
+from ...Driver.Transport import Gripper as GripperDriver
 from ..Layout import LayoutItem
 from .BaseTransportDevice import (
     TransportableLabwareTracker,
@@ -75,7 +70,7 @@ class COREGripper(TransportDevice):
             )
         )
 
-        GetPlateOptionsInstance = GetPlateOptions(
+        GetPlateOptionsInstance = GripperDriver.GetPlateOptions(
             "",
             self.GripperToolSequence,
             SourceLayoutItem.Sequence,
@@ -89,16 +84,16 @@ class COREGripper(TransportDevice):
         )
 
         try:
-            GetPlateCommand("", GetPlateOptionsInstance, True).Execute()
+            GripperDriver.GetPlateCommand("", GetPlateOptionsInstance, True).Execute()
 
         except:
             ...
 
         try:
 
-            PlacePlateCommand(
+            GripperDriver.PlacePlateCommand(
                 "",
-                PlacePlateOptions(
+                GripperDriver.PlacePlateOptions(
                     "",
                     DestinationLayoutItem.Sequence,
                 ),

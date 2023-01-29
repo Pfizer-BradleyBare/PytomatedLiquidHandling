@@ -1,13 +1,4 @@
-from ...Driver.TemperatureControl.HeaterCooler import (
-    ConnectCommand,
-    ConnectOptions,
-    GetTemperatureCommand,
-    GetTemperatureOptions,
-    StartTemperatureControlCommand,
-    StartTemperatureControlOptions,
-    StopTemperatureControlCommand,
-    StopTemperatureControlOptions,
-)
+from ...Driver.TemperatureControl import HeaterCooler as HeaterCoolerDriver
 from ..Layout import LayoutItemGroupingTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
 
@@ -35,7 +26,7 @@ class HamiltonHeaterCooler(TempControlDevice):
     ):
 
         try:
-            Command = ConnectCommand(
+            Command = HeaterCoolerDriver.ConnectCommand(
                 "",
                 ConnectOptions("", self.ComPort),  # type:ignore
                 True,
@@ -52,8 +43,10 @@ class HamiltonHeaterCooler(TempControlDevice):
     ):
 
         try:
-            StopTemperatureControlCommand(
-                "", StopTemperatureControlOptions("", self.HandleID), True
+            HeaterCoolerDriver.StopTemperatureControlCommand(
+                "",
+                HeaterCoolerDriver.StopTemperatureControlOptions("", self.HandleID),
+                True,
             ).Execute()
         except:
             ...
@@ -64,8 +57,12 @@ class HamiltonHeaterCooler(TempControlDevice):
     ):
 
         try:
-            StartTemperatureControlCommand(
-                "", StartTemperatureControlOptions("", self.HandleID, Temperature), True
+            HeaterCoolerDriver.StartTemperatureControlCommand(
+                "",
+                HeaterCoolerDriver.StartTemperatureControlOptions(
+                    "", self.HandleID, Temperature
+                ),
+                True,
             ).Execute()
         except:
             ...
@@ -75,8 +72,8 @@ class HamiltonHeaterCooler(TempControlDevice):
     ):
 
         try:
-            Command = GetTemperatureCommand(
-                "", GetTemperatureOptions("", self.HandleID), True
+            Command = HeaterCoolerDriver.GetTemperatureCommand(
+                "", HeaterCoolerDriver.GetTemperatureOptions("", self.HandleID), True
             )
 
             Command.Execute()

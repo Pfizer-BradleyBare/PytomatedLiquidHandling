@@ -151,7 +151,7 @@ class Plate(Container):
             # This seems right but should be double checked TODO
 
             ReturnWellSolutionTrackerInstance.ManualLoad(
-                WellSolution(WellSolutionInstance.GetName(), RemovedVolume)
+                WellSolution(WellSolutionInstance.GetReagent(), RemovedVolume)
             )
             # We have to return a unique WellSolution instance because it will be tracked in the destination
 

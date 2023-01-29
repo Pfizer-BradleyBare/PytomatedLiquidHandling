@@ -1,5 +1,5 @@
 from ....API.Tools.Container import Plate as APIPlate
-from ...Workbook.Block import BlockTracker
+from ...Workbook import BlockTracker
 
 
 class Plate(APIPlate):

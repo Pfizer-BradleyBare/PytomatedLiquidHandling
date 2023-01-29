@@ -3,8 +3,7 @@ from ..Tools.Container.BaseContainer import Container
 from ..Tools.HALLayer.HALLayer import HALLayer
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
-from ..Transport.Tools.GetLayoutItem import GetLayoutItem
-from ..Transport.Transport import Transport
+from ..Transport import GetLayoutItem, Transport
 
 
 def MoveToLoad(ContainerInstance: Container, Simulate: bool) -> bool:

@@ -1,11 +1,11 @@
 from ...Tools import InputChecker
 from ...Tools.Context import WellSequence
 from ...Tools.Excel import Excel
-from ...Workbook import Workbook
-from ...Workbook.Block import (
+from ...Workbook import (
     Block,
     ClassDecorator_AvailableBlock,
     FunctionDecorator_ProcessFunction,
+    Workbook,
 )
 
 

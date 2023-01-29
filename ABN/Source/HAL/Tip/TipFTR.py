@@ -1,11 +1,4 @@
-from ...Driver.Tip.FTR import (
-    LoadTipsCommand,
-    LoadTipsOptions,
-    TipsAvailableCommand,
-    TipsAvailableOptions,
-    TipsRemainingCommand,
-    TipsRemainingOptions,
-)
+from ...Driver.Tip import FTR as FTRDriver
 from .BaseTip import Tip, TipTypes
 
 
@@ -29,8 +22,8 @@ class TipFTR(Tip):
     ):
 
         try:
-            LoadTipsCommand(
-                "", LoadTipsOptions("", self.PickupSequence), True
+            FTRDriver.LoadTipsCommand(
+                "", FTRDriver.LoadTipsOptions("", self.PickupSequence), True
             ).Execute()
 
         except:
@@ -44,9 +37,9 @@ class TipFTR(Tip):
     ):
 
         try:
-            Command = TipsAvailableCommand(
+            Command = FTRDriver.TipsAvailableCommand(
                 "",
-                TipsAvailableOptions(
+                FTRDriver.TipsAvailableOptions(
                     "",
                     self.PickupSequence,
                     NumTips,
@@ -66,9 +59,9 @@ class TipFTR(Tip):
     ):
 
         try:
-            Command = TipsRemainingCommand(
+            Command = FTRDriver.TipsRemainingCommand(
                 "",
-                TipsRemainingOptions(
+                FTRDriver.TipsRemainingOptions(
                     "",
                     self.PickupSequence,
                 ),

@@ -1,19 +1,6 @@
 from math import ceil
 
-from ...Driver.Pipette.Pipette8Channel import (
-    AspirateCommand,
-    AspirateOptions,
-    AspirateOptionsTracker,
-    DispenseCommand,
-    DispenseOptions,
-    DispenseOptionsTracker,
-    EjectCommand,
-    EjectOptions,
-    EjectOptionsTracker,
-    PickupCommand,
-    PickupOptions,
-    PickupOptionsTracker,
-)
+from ...Driver.Pipette import Pipette8Channel as Pipette8ChannelDriver
 from ..Labware import Labware, LabwareTracker
 from ..Pipette import TransferOptions, TransferOptionsTracker
 from .BasePipette import Pipette, PipetteTipTracker, PipettingDeviceTypes
@@ -205,10 +192,18 @@ class Pipette8Channel(Pipette):
 
             while Counter < NumTransferOptions:
 
-                PickupOptionsTrackerInstance = PickupOptionsTracker()
-                AspirateOptionsTrackerInstance = AspirateOptionsTracker()
-                DispenseOptionsTrackerInstance = DispenseOptionsTracker()
-                EjectOptionsTrackerInstance = EjectOptionsTracker()
+                PickupOptionsTrackerInstance = (
+                    Pipette8ChannelDriver.PickupOptionsTracker()
+                )
+                AspirateOptionsTrackerInstance = (
+                    Pipette8ChannelDriver.AspirateOptionsTracker()
+                )
+                DispenseOptionsTrackerInstance = (
+                    Pipette8ChannelDriver.DispenseOptionsTracker()
+                )
+                EjectOptionsTrackerInstance = (
+                    Pipette8ChannelDriver.EjectOptionsTracker()
+                )
 
                 if NumTransferOptions - Counter >= NumActiveChannels:
                     NumRequiredTips = NumActiveChannels
@@ -364,7 +359,7 @@ class Pipette8Channel(Pipette):
                     # Get correct destination position assuming any labware with any number of seq per well can be used
 
                     PickupOptionsTrackerInstance.ManualLoad(
-                        PickupOptions(
+                        Pipette8ChannelDriver.PickupOptions(
                             "",
                             PipetteTipInstance.TipInstance.PickupSequence,
                             PipettingChannel,
@@ -374,7 +369,7 @@ class Pipette8Channel(Pipette):
                     CurrentTipPosition += 1
                     # Pickup
 
-                    AspirateOptionsInstance = AspirateOptions(
+                    AspirateOptionsInstance = Pipette8ChannelDriver.AspirateOptions(
                         "",
                         PipettingChannel,
                         SourceLayoutItemInstance.Sequence,
@@ -386,7 +381,7 @@ class Pipette8Channel(Pipette):
                     AspirateOptionsTrackerInstance.ManualLoad(AspirateOptionsInstance)
                     # Aspirate
 
-                    DispenseOptionsInstance = DispenseOptions(
+                    DispenseOptionsInstance = Pipette8ChannelDriver.DispenseOptions(
                         "",
                         PipettingChannel,
                         SourceLayoutItemInstance.Sequence,
@@ -399,7 +394,7 @@ class Pipette8Channel(Pipette):
                     # Dispense
 
                     EjectOptionsTrackerInstance.ManualLoad(
-                        EjectOptions(
+                        Pipette8ChannelDriver.EjectOptions(
                             "",
                             PipetteTipInstance.WasteSequence,
                             PipettingChannel,
@@ -414,22 +409,30 @@ class Pipette8Channel(Pipette):
                         break
 
                 try:
-                    PickupCommand("", PickupOptionsTrackerInstance, True).Execute()
+                    Pipette8ChannelDriver.PickupCommand(
+                        "", PickupOptionsTrackerInstance, True
+                    ).Execute()
                 except:
                     ...
 
                 try:
-                    AspirateCommand("", AspirateOptionsTrackerInstance, True)
+                    Pipette8ChannelDriver.AspirateCommand(
+                        "", AspirateOptionsTrackerInstance, True
+                    )
                 except:
                     ...
 
                 try:
-                    DispenseCommand("", DispenseOptionsTrackerInstance, True)
+                    Pipette8ChannelDriver.DispenseCommand(
+                        "", DispenseOptionsTrackerInstance, True
+                    )
                 except:
                     ...
 
                 try:
-                    EjectCommand("", EjectOptionsTrackerInstance, True)
+                    Pipette8ChannelDriver.EjectCommand(
+                        "", EjectOptionsTrackerInstance, True
+                    )
                 except:
                     ...
                 # Lets assume this is perfect and will not need error handling yet

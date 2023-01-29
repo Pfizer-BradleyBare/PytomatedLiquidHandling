@@ -1,11 +1,4 @@
-from ...Driver.Tip.NTR import (
-    LoadTipsCommand,
-    LoadTipsOptions,
-    TipsAvailableCommand,
-    TipsAvailableOptions,
-    TipsRemainingCommand,
-    TipsRemainingOptions,
-)
+from ...Driver.Tip import NTR as NTRDriver
 from .BaseTip import Tip, TipTypes
 
 
@@ -40,9 +33,9 @@ class TipNTR(Tip):
     ):
 
         try:
-            LoadTipsCommand(
+            NTRDriver.LoadTipsCommand(
                 "",
-                LoadTipsOptions(
+                NTRDriver.LoadTipsOptions(
                     "",
                     self.PickupSequence,
                     self.NTRWasteSequence,
@@ -62,9 +55,9 @@ class TipNTR(Tip):
     ):
 
         try:
-            Command = TipsAvailableCommand(
+            Command = NTRDriver.TipsAvailableCommand(
                 "",
-                TipsAvailableOptions(
+                NTRDriver.TipsAvailableOptions(
                     "",
                     self.PickupSequence,
                     self.NTRWasteSequence,
@@ -86,9 +79,9 @@ class TipNTR(Tip):
     ):
 
         try:
-            Command = TipsRemainingCommand(
+            Command = NTRDriver.TipsRemainingCommand(
                 "",
-                TipsRemainingOptions(
+                NTRDriver.TipsRemainingOptions(
                     "",
                     self.PickupSequence,
                 ),

@@ -1,7 +1,7 @@
 from ....API.Tools.Container.Reagent.ReagentTracker import ReagentTracker
 from ...Tools.Container import Reagent
 from ...Tools.Excel import Excel
-from ..Worklist import Worklist
+from ...Workbook import Worklist
 
 
 def Load(

@@ -6,11 +6,11 @@ from ....Server.Globals import GetAppHandler
 from ...Tools import InputChecker
 from ...Tools.Excel import Excel
 from ...Tools.Timer import Timer
-from ...Workbook import Workbook
-from ...Workbook.Block import (
+from ...Workbook import (
     Block,
     ClassDecorator_AvailableBlock,
     FunctionDecorator_ProcessFunction,
+    Workbook,
 )
 
 

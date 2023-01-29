@@ -20,9 +20,8 @@ from ..Tools.Context import (
     WellSequenceTracker,
 )
 from ..Tools.Excel import Excel
-from .Block import Block, BlockTracker
+from ..Workbook import Block, BlockTracker, Worklist
 from .Solution import SolutionLoader
-from .Worklist import Worklist
 
 
 class WorkbookRunTypes(Enum):

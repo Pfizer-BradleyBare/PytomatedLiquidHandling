@@ -41,9 +41,7 @@ class Reagent(Container):
         self.UsedVolume += Volume
 
         ReturnWellSolutionTrackerInstance = WellSolutionTracker()
-        ReturnWellSolutionTrackerInstance.ManualLoad(
-            WellSolution(self.GetName(), Volume)
-        )
+        ReturnWellSolutionTrackerInstance.ManualLoad(WellSolution(self, Volume))
 
         return ReturnWellSolutionTrackerInstance
 
