@@ -164,8 +164,8 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
     )
 
     CurrentExecutingBlock: Block = WorkbookInstance.GetMethodTreeRoot()
-    # CurrentExecutingBlock.Process(WorkbookInstance)
-    # ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
+    CurrentExecutingBlock.Process(WorkbookInstance)
+    ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
     # Do the first step processing here. First step is always a plate step.
 
     while True:
@@ -192,7 +192,7 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
         ):
 
             print("HERE")
-
+            return
             WorkbookInstance.LabwareSelectionTrackerInstance = (
                 LabwareSelectionLoader.Load(
                     WorkbookInstance.GetContainerTracker(),
@@ -330,6 +330,8 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # Set the tree current node here
         # Find the context we need to process if the current context is exhausted
 
+        CurrentExecutingBlock = CurrentExecutingBlock.GetChildren()[0]
+
         StepStatus = True
         if (
             sum(
@@ -344,19 +346,24 @@ def WorkbookProcessor(WorkbookInstance: Workbook):
             # We will only execute the step if the factors are not zero
             # Additionally we must always execute a merge plates step no matter what
 
-            print("EXECUTING", CurrentExecutingBlock.GetName())
+            LOG.info("EXECUTING: " + CurrentExecutingBlock.GetName())
             StepStatus = CurrentExecutingBlock.Process(WorkbookInstance)
+
+        else:
+            LOG.info("SKIPPING: " + CurrentExecutingBlock.GetName())
 
         if StepStatus is True:
             ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
 
-            CurrentExecutingBlock = CurrentExecutingBlock.GetChildren()[0]
             # need to fix with new stepstatus TODO
             # This should always be a single child. Only a split plate wil have 2 children
             # The two children will be executed in the split plate block
             # We must track all executed blocks even if processing is skipped.
 
         # NOTE: A skipped block is still executed in the mind of the program
+
+        else:
+            CurrentExecutingBlock = CurrentExecutingBlock.GetParentNode()  # type:ignore
 
 
 def WorkbookInit(WorkbookInstance: Workbook):

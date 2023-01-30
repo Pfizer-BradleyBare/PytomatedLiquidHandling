@@ -77,6 +77,9 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, Simulate: b
     DestinationLoadedLabwareInstances: list[LoadedLabware] = list()
     SourceLoadedLabwareInstances: list[LoadedLabware] = list()
 
+    if Simulate == True:
+        return
+
     for (
         DestinationLoadedLabwareTrackerInstance,
         SourceLoadedLabwareTrackerInstance,

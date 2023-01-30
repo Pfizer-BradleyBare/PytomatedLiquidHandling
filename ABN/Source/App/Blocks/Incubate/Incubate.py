@@ -48,12 +48,12 @@ class Incubate(Block):
             [],
         )
 
-    def GetShakeSpeed(self, WorkbookInstance: Workbook) -> int:
+    def GetShakeSpeed(self, WorkbookInstance: Workbook) -> int | float:
         return InputChecker.CheckAndConvertItem(
             WorkbookInstance,
             self,
             self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1),
-            [int],
+            [int, float],
             [],
         )
 
@@ -93,7 +93,7 @@ class Incubate(Block):
 
             if self.ReservedTempControlDevice is None:
                 self.ReservedTempControlDevice = TempControl.Reserve(
-                    ParentContainer, float(Temperature), ShakeSpeed, Simulate
+                    ParentContainer, float(Temperature), int(ShakeSpeed), Simulate
                 )
             if self.ReservedLid is None:
                 self.ReservedLid = Lid.Reserve(ParentContainer, Simulate)
