@@ -10,7 +10,8 @@ Lock = threading.Lock()
 
 def ExcelClassFunctionDecorator_ThreadLock(DecoratedFunction):
     def inner(*args, **kwargs):
-        LOG.debug("Excel Function: " + DecoratedFunction.__name__)
+        LOG.debug("Start Excel Function: " + DecoratedFunction.__name__)
+        LOG.debug("Args: " + str(args))
 
         if args[0].Book is not None:
             Lock.acquire()
@@ -20,7 +21,7 @@ def ExcelClassFunctionDecorator_ThreadLock(DecoratedFunction):
             LOG.critical("Excel book is not open! No action performed")
             Result = None
 
-        LOG.debug("Excel Function: " + DecoratedFunction.__name__)
+        LOG.debug("End Excel Function: " + DecoratedFunction.__name__)
         return Result
 
     return inner
@@ -61,6 +62,10 @@ class Excel:
                 if Book.fullname == self.ExcelFilePath:
                     self.App = Book.app
                     self.Book = Book
+
+        if self.App is not None:
+            if self.App.visible != Visible:
+                self.CloseBook()
 
         if self.App is None:
             pythoncom.CoInitialize()  # Required for some reason.

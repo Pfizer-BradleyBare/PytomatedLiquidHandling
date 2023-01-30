@@ -1,7 +1,7 @@
 import web
-import xlwings
 
 from ....Server.Tools.Parser import Parser
+from ...Tools import Excel
 
 urls = (
     "/App/OpenExcel",
@@ -19,14 +19,8 @@ class OpenExcel:
 
         MethodFilePath = ParserObject.GetEndpointInputData()["Method File Path"]
 
-        BookHandle: xlwings.Book | None = None
-        if xlwings.apps.count != 0:
-            for Book in xlwings.books:
-                if Book.fullname == MethodFilePath:
-                    BookHandle = Book
-
-        if BookHandle is None:
-            BookHandle = xlwings.Book(MethodFilePath)
+        ExcelInstance = Excel.Excel(MethodFilePath)
+        ExcelInstance.OpenBook(True)
 
         ParserObject.SetEndpointState(True)
 
