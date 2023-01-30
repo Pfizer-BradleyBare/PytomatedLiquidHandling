@@ -42,7 +42,7 @@ class Reagent(APIReagent):
             == self.Name
         )
 
-    def GetLiquidClassCategory(self) -> LiquidClassCategory:
+    def GetLiquidClassCategory(self, WellNumber: int) -> LiquidClassCategory:
 
         return LiquidClassCategory(
             VolatilityReagentProperty[

@@ -25,7 +25,7 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, Simulate: b
         DestinationWellNumber = TransferOptions.DestinationWellPosition
 
         SourceLiquidClassCategories.append(
-            SourceContainerInstance.GetLiquidClassCategory().GetName()
+            SourceContainerInstance.GetLiquidClassCategory(SourceWellNumber).GetName()
         )
         # Get the source liquid class before removing liquid. Becuase that is how it works in real life. Aspirate
 
@@ -35,7 +35,9 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, Simulate: b
         )
 
         DestinationLiquidClassCategories.append(
-            DestinationContainerInstance.GetLiquidClassCategory().GetName()
+            DestinationContainerInstance.GetLiquidClassCategory(
+                DestinationWellNumber
+            ).GetName()
         )
         # Get the destination liquid class after adding liquid. Becuase that is how it works in real life. DIspense
 

@@ -25,7 +25,7 @@ class Container(ObjectABC):
         ...
 
     @abstractmethod
-    def GetLiquidClassCategory(self) -> LiquidClassCategory:
+    def GetLiquidClassCategory(self, WellNumber: int) -> LiquidClassCategory:
         ...
 
     @abstractmethod

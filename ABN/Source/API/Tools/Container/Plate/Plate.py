@@ -44,9 +44,7 @@ class Plate(Container):
     def GetVolume(self) -> float:
         return max(self.GetMaxWellVolume(), abs(self.GetMinWellVolume()))
 
-    def GetLiquidClassCategory(
-        self, WellNumber: int, ReagentTrackerInstance: ReagentTracker
-    ) -> LiquidClassCategory:
+    def GetLiquidClassCategory(self, WellNumber: int) -> LiquidClassCategory:
         WellInstance = self.GetWellTracker().GetObjectByName(WellNumber)
 
         WellSolutionInstances = WellInstance.GetWellSolutionTracker().GetObjectsAsList()
@@ -63,9 +61,7 @@ class Plate(Container):
             Percentage = int(WellSolutionInstance.GetVolume() * 100 / WellVolume)
 
             SolutionLiquidClassCategoryInstance = (
-                ReagentTrackerInstance.GetObjectByName(
-                    WellSolutionInstance.GetName()
-                ).GetLiquidClassCategory()
+                WellSolutionInstance.GetReagent().GetLiquidClassCategory(WellNumber)
             )
 
             VolatilityList += (

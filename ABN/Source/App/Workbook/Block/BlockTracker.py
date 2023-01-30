@@ -1,5 +1,5 @@
 from ....Tools.AbstractClasses import TrackerABC
-from .Block import Block
+from ...Workbook import Block
 
 
 class BlockTracker(TrackerABC[Block]):

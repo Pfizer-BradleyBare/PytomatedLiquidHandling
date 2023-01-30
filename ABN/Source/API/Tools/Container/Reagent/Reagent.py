@@ -32,7 +32,7 @@ class Reagent(Container):
     def GetVolume(self) -> float:
         return self.UsedVolume
 
-    def GetLiquidClassCategory(self) -> LiquidClassCategory:
+    def GetLiquidClassCategory(self, WellNumber: int) -> LiquidClassCategory:
         return LiquidClassCategory(
             self.Volatility, self.Viscosity, self.Homogeneity, self.LLD
         )
