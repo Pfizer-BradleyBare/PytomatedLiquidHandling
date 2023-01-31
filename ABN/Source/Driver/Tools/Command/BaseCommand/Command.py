@@ -18,7 +18,17 @@ def ExpectedResponseProperty(DecoratedFunction):
     return inner
 
 
+def ClassDecorator_Command(__file__: str):
+    def InnerDecorator(DecoratedClass):
+        DecoratedClass.ClassFilePath = __file__
+        return DecoratedClass
+
+    return InnerDecorator
+
+
 class Command(ObjectABC):
+    ClassFilePath: str
+
     def __init__(
         self,
         Name: str,
@@ -27,8 +37,8 @@ class Command(ObjectABC):
         self.Name: str = Name
         self.CustomErrorHandling: bool = CustomErrorHandling
 
-        self.ModuleName: str = GetModuleName(__file__)
-        self.CommandName: str = GetCommandName(__file__)
+        self.ModuleName: str = GetModuleName(self.ClassFilePath)
+        self.CommandName: str = GetCommandName(self.ClassFilePath)
         self.ExpectedResponseProperties: list[str] = GetExpectedResponseProperties(self)
 
         self.ResponseEvent: Event = Event()

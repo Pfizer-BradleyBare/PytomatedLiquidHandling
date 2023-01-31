@@ -1,7 +1,12 @@
-from ...Tools.Command import ExpectedResponseProperty, SingleOptionsCommand
+from ...Tools.Command import (
+    ClassDecorator_Command,
+    ExpectedResponseProperty,
+    SingleOptionsCommand,
+)
 from .Options import Options
 
 
+@ClassDecorator_Command(__file__)
 class Command(SingleOptionsCommand[Options]):
     def HandleErrors(self):
 

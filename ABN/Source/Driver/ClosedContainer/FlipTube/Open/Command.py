@@ -1,7 +1,8 @@
-from ....Tools.Command import MultiOptionsCommand
+from ....Tools.Command import ClassDecorator_Command, MultiOptionsCommand
 from .OptionsTracker import OptionsTracker
 
 
+@ClassDecorator_Command(__file__)
 class Command(MultiOptionsCommand[OptionsTracker]):
     def HandleErrors(self):
 

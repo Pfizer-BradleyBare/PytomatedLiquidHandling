@@ -1,7 +1,8 @@
-from ....Tools.Command import SingleOptionsCommand
+from ....Tools.Command import ClassDecorator_Command, SingleOptionsCommand
 from .Options import Options
 
 
+@ClassDecorator_Command(__file__)
 class Command(SingleOptionsCommand[Options]):
     def HandleErrors(self):
 
