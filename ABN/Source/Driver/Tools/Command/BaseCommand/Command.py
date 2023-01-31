@@ -12,6 +12,9 @@ from .Tools.GetModuleName import GetModuleName
 def ExpectedResponseProperty(DecoratedFunction):
     def inner(*args, **kwargs):
 
+        if not args[0].ResponseEvent.is_set():
+            raise Exception("Response not set yet. Must run command")
+
         return args[0].ResponseProperties[DecoratedFunction.__name__.replace("Get", "")]
 
     inner.Decorated_ExpectedResponseProperty = True
@@ -81,9 +84,15 @@ class Command(ObjectABC):
             raise Exception("Command Timed out. Uh oh!")
 
     def GetResponseState(self) -> bool:
+        if not self.ResponseEvent.is_set():
+            raise Exception("Response not set yet. Must run command")
+
         return self.ResponseState
 
     def GetResponseMessage(self) -> str:
+        if not self.ResponseEvent.is_set():
+            raise Exception("Response not set yet. Must run command")
+
         return self.ResponseMessage
 
     @abstractmethod
