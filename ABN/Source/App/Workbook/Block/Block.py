@@ -16,7 +16,6 @@ def ClassDecorator_AvailableBlock(DecoratedClass):
 def FunctionDecorator_ProcessFunction(DecoratedFunction):
     def inner(*args, **kwargs):
 
-        Result = DecoratedFunction(*args, **kwargs)
         Self = args[0]
         WorkbookInstance = args[1]
 
@@ -24,7 +23,10 @@ def FunctionDecorator_ProcessFunction(DecoratedFunction):
             Self.GetParentPlateName()
         ).BlockTrackerInstance.ManualLoad(Self)
 
-        return Result
+        if WorkbookInstance.Simulated is True:
+            return True
+        else:
+            return DecoratedFunction(*args, **kwargs)
 
     return inner
     # This automatically adds each block to the block tracker for the parent plate container. We will need this info for proper labware selection
