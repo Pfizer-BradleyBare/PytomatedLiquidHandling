@@ -19,8 +19,8 @@ class FlipTube(ClosedContainer):
         self,
     ):
 
-        FlipTubeDriver.InitializeCommand(
-            "", FlipTubeDriver.InitializeOptions(""), True
+        FlipTubeDriver.Initialize.Command(
+            "", FlipTubeDriver.Initialize.Options(""), True
         ).Execute()
 
     def Deinitialize(
@@ -34,16 +34,16 @@ class FlipTube(ClosedContainer):
         Positions: list[int],
     ):
 
-        OpenOptionsTrackerInstance = FlipTubeDriver.OpenOptionsTracker()
+        OpenOptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker()
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
             OpenOptionsTrackerInstance.ManualLoad(
-                FlipTubeDriver.OpenOptions(
+                FlipTubeDriver.Open.Options(
                     "", self.ToolSequence, LayoutItemInstance.Sequence, Position
                 )
             )
 
         try:
-            FlipTubeDriver.OpenCommand("", OpenOptionsTrackerInstance, True).Execute()
+            FlipTubeDriver.Open.Command("", OpenOptionsTrackerInstance, True).Execute()
 
         except:
             ...
@@ -53,17 +53,19 @@ class FlipTube(ClosedContainer):
         LayoutItemInstances: list[LayoutItem],
         Positions: list[int],
     ):
-        CloseOptionsTrackerInstance = FlipTubeDriver.CloseOptionsTracker()
+        CloseOptionsTrackerInstance = FlipTubeDriver.Close.OptionsTracker()
 
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
             CloseOptionsTrackerInstance.ManualLoad(
-                FlipTubeDriver.CloseOptions(
+                FlipTubeDriver.Close.Options(
                     "", self.ToolSequence, LayoutItemInstance.Sequence, Position
                 )
             )
 
         try:
-            FlipTubeDriver.CloseCommand("", CloseOptionsTrackerInstance, True).Execute()
+            FlipTubeDriver.Close.Command(
+                "", CloseOptionsTrackerInstance, True
+            ).Execute()
 
         except:
             ...

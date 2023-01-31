@@ -4,8 +4,7 @@ import web
 
 from ....Server.Globals.HandlerRegistry import GetDriverHandler
 from ....Server.Tools.Parser import Parser
-from ...Tools.Command.CommandTracker import CommandTracker
-from ...Tools.Command.Response.Response import Response as CommandResponse
+from ...Tools.Command import CommandTracker
 
 urls = ("/Driver/Respond", "ABN.Source.Driver.Handler.Endpoints.Respond.Respond")
 
@@ -42,7 +41,7 @@ class Respond:
 
         CommandInstance = CommandTrackerInstance.GetObjectByName(RequestID)
 
-        if CommandInstance.ResponseInstance is not None:
+        if CommandInstance.ResponseEvent.is_set():
             ParserObject.SetEndpointMessage(
                 "Command already has a reponse. This should never happen."
             )
@@ -50,7 +49,7 @@ class Respond:
             return Response
         # Check the command does not already have a response
 
-        ExpectedResponseKeys = CommandInstance.GetResponseKeys()
+        ExpectedResponseKeys = CommandInstance.GetExpectedResponseProperties()
 
         if not ParserObject.IsValid(
             ["State", "Message", "Request Identifier"] + ExpectedResponseKeys
@@ -64,11 +63,9 @@ class Respond:
             Additional[Key] = ParserObject.GetEndpointInputData()[Key]
         # Create dict that houses the expected keys so we can create the response object
 
-        CommandInstance.ResponseInstance = CommandResponse(
-            ParserObject.GetEndpointInputData()["State"],
-            ParserObject.GetEndpointInputData()["Message"],
-            Additional,
-        )
+        CommandInstance.ResponseState = ParserObject.GetEndpointInputData()["State"]
+        CommandInstance.ResponseMessage = ParserObject.GetEndpointInputData()["Message"]
+        CommandInstance.ResponseProperties = Additional
         # boom
         CommandInstance.ResponseEvent.set()
         # Add response then release threads waiting for a response

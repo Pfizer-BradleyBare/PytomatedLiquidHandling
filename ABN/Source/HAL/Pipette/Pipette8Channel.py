@@ -193,16 +193,16 @@ class Pipette8Channel(Pipette):
             while Counter < NumTransferOptions:
 
                 PickupOptionsTrackerInstance = (
-                    Pipette8ChannelDriver.PickupOptionsTracker()
+                    Pipette8ChannelDriver.Pickup.OptionsTracker()
                 )
                 AspirateOptionsTrackerInstance = (
-                    Pipette8ChannelDriver.AspirateOptionsTracker()
+                    Pipette8ChannelDriver.Aspirate.OptionsTracker()
                 )
                 DispenseOptionsTrackerInstance = (
-                    Pipette8ChannelDriver.DispenseOptionsTracker()
+                    Pipette8ChannelDriver.Dispense.OptionsTracker()
                 )
                 EjectOptionsTrackerInstance = (
-                    Pipette8ChannelDriver.EjectOptionsTracker()
+                    Pipette8ChannelDriver.Eject.OptionsTracker()
                 )
 
                 if NumTransferOptions - Counter >= NumActiveChannels:
@@ -359,7 +359,7 @@ class Pipette8Channel(Pipette):
                     # Get correct destination position assuming any labware with any number of seq per well can be used
 
                     PickupOptionsTrackerInstance.ManualLoad(
-                        Pipette8ChannelDriver.PickupOptions(
+                        Pipette8ChannelDriver.Pickup.Options(
                             "",
                             PipetteTipInstance.TipInstance.PickupSequence,
                             PipettingChannel,
@@ -369,7 +369,7 @@ class Pipette8Channel(Pipette):
                     CurrentTipPosition += 1
                     # Pickup
 
-                    AspirateOptionsInstance = Pipette8ChannelDriver.AspirateOptions(
+                    AspirateOptionsInstance = Pipette8ChannelDriver.Aspirate.Options(
                         "",
                         PipettingChannel,
                         SourceLayoutItemInstance.Sequence,
@@ -381,7 +381,7 @@ class Pipette8Channel(Pipette):
                     AspirateOptionsTrackerInstance.ManualLoad(AspirateOptionsInstance)
                     # Aspirate
 
-                    DispenseOptionsInstance = Pipette8ChannelDriver.DispenseOptions(
+                    DispenseOptionsInstance = Pipette8ChannelDriver.Dispense.Options(
                         "",
                         PipettingChannel,
                         SourceLayoutItemInstance.Sequence,
@@ -394,7 +394,7 @@ class Pipette8Channel(Pipette):
                     # Dispense
 
                     EjectOptionsTrackerInstance.ManualLoad(
-                        Pipette8ChannelDriver.EjectOptions(
+                        Pipette8ChannelDriver.Eject.Options(
                             "",
                             PipetteTipInstance.WasteSequence,
                             PipettingChannel,
@@ -409,28 +409,28 @@ class Pipette8Channel(Pipette):
                         break
 
                 try:
-                    Pipette8ChannelDriver.PickupCommand(
+                    Pipette8ChannelDriver.Pickup.Command(
                         "", PickupOptionsTrackerInstance, True
                     ).Execute()
                 except:
                     ...
 
                 try:
-                    Pipette8ChannelDriver.AspirateCommand(
+                    Pipette8ChannelDriver.Aspirate.Command(
                         "", AspirateOptionsTrackerInstance, True
                     )
                 except:
                     ...
 
                 try:
-                    Pipette8ChannelDriver.DispenseCommand(
+                    Pipette8ChannelDriver.Dispense.Command(
                         "", DispenseOptionsTrackerInstance, True
                     )
                 except:
                     ...
 
                 try:
-                    Pipette8ChannelDriver.EjectCommand(
+                    Pipette8ChannelDriver.Eject.Command(
                         "", EjectOptionsTrackerInstance, True
                     )
                 except:

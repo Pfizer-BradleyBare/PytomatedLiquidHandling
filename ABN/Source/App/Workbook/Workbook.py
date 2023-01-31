@@ -3,10 +3,6 @@ import threading
 from enum import Enum
 
 from ...API.Tools.Container.BaseContainer import ContainerTracker
-from ...API.Tools.LabwareSelection import (
-    LabwareSelectionLoader,
-    LabwareSelectionTracker,
-)
 from ...Server.Globals import LOG  # , AliveStateFlag
 from ...Tools.AbstractClasses import ObjectABC
 from ..Blocks import MergePlates
@@ -66,7 +62,6 @@ class Workbook(ObjectABC):
         self.MethodBlocksTrackerInstance: BlockTracker = MethodBlocksTrackerInstance
         self.WorklistInstance: Worklist = WorklistInstance
         self.ExcelInstance: Excel = ExcelInstance
-        self.LabwareSelectionTrackerInstance = LabwareSelectionTracker()
         self.PreprocessingBlocksTrackerInstance: BlockTracker = BlockTracker()
 
         # Thread

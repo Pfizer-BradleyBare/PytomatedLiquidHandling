@@ -3,9 +3,8 @@
 import web
 
 from ....API.Handler.APIHandler import APIHandler
-from ....Driver.DeckLoadingDialog.Plate5Position import UnloadCommand, UnloadOptions
-from ....Driver.Handler.DriverHandler import DriverHandler
-from ....Server.Globals.HandlerRegistry import GetAPIHandler, GetDriverHandler
+from ....Driver.DeckLoadingDialog import Plate5Position
+from ....Server.Globals.HandlerRegistry import GetAPIHandler
 from ....Server.Tools.Parser import Parser
 
 urls = ("/FlexibleTest", "ABN.Source.App.Handler.Endpoints.FlexibleTest.FlexibleTest")
@@ -35,9 +34,11 @@ class FlexibleTest:
 
         TestInstance.Initialize()
 
-        UnloadCommand(
+        Plate5Position.Unload.Command(
             "",
-            UnloadOptions("", 5, 12, "400uL Thermo 96 Well PCR Plate", "1", "HSP901"),
+            Plate5Position.Unload.Options(
+                "", 5, 12, "400uL Thermo 96 Well PCR Plate", "1", "HSP901"
+            ),
             False,
         ).Execute()
 

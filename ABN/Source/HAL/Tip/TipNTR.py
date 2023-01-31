@@ -33,9 +33,9 @@ class TipNTR(Tip):
     ):
 
         try:
-            NTRDriver.LoadTipsCommand(
+            NTRDriver.LoadTips.Command(
                 "",
-                NTRDriver.LoadTipsOptions(
+                NTRDriver.LoadTips.Options(
                     "",
                     self.PickupSequence,
                     self.NTRWasteSequence,
@@ -55,9 +55,9 @@ class TipNTR(Tip):
     ):
 
         try:
-            Command = NTRDriver.TipsAvailableCommand(
+            Command = NTRDriver.TipsAvailable.Command(
                 "",
-                NTRDriver.TipsAvailableOptions(
+                NTRDriver.TipsAvailable.Options(
                     "",
                     self.PickupSequence,
                     self.NTRWasteSequence,
@@ -69,7 +69,7 @@ class TipNTR(Tip):
 
             Command.Execute()
 
-            self.TipPosition = Command.GetResponse().GetAdditional()["TipPosition"]
+            self.TipPosition = Command.GetTipPosition()
 
         except:
             ...
@@ -79,9 +79,9 @@ class TipNTR(Tip):
     ):
 
         try:
-            Command = NTRDriver.TipsRemainingCommand(
+            Command = NTRDriver.TipsRemaining.Command(
                 "",
-                NTRDriver.TipsRemainingOptions(
+                NTRDriver.TipsRemaining.Options(
                     "",
                     self.PickupSequence,
                 ),
@@ -90,7 +90,7 @@ class TipNTR(Tip):
 
             Command.Execute()
 
-            self.RemainingTips = Command.GetResponse().GetAdditional()["NumRemaining"]
+            self.RemainingTips = Command.GetNumRemaining()
 
         except:
             ...

@@ -1,15 +1,3 @@
-from .LoadTips.LoadTips import LoadTipsCommand
-from .LoadTips.LoadTipsOptions import LoadTipsOptions
-from .TipsAvailable.TipsAvailable import TipsAvailableCommand
-from .TipsAvailable.TipsAvailableOptions import TipsAvailableOptions
-from .TipsRemaining.TipsRemaining import TipsRemainingCommand
-from .TipsRemaining.TipsRemainingOptions import TipsRemainingOptions
+from . import LoadTips, TipsAvailable, TipsRemaining
 
-__all__ = [
-    "LoadTipsCommand",
-    "LoadTipsOptions",
-    "TipsAvailableCommand",
-    "TipsAvailableOptions",
-    "TipsRemainingCommand",
-    "TipsRemainingOptions",
-]
+__all__ = ["LoadTips", "TipsAvailable", "TipsRemaining"]

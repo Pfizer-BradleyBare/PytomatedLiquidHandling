@@ -1,4 +1,3 @@
-from .Load.Load import LoadCommand, LoadOptions
-from .Unload.Unload import UnloadCommand, UnloadOptions
+from . import Load, Unload
 
-__all__ = ["LoadCommand", "LoadOptions", "UnloadCommand", "UnloadOptions"]
+__all__ = ["Load", "Unload"]

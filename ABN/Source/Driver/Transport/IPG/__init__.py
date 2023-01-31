@@ -1,11 +1,3 @@
-from .GetPlate.GetPlate import GetPlateCommand
-from .GetPlate.GetPlateOptions import GetPlateOptions
-from .PlacePlate.PlacePlate import PlacePlateCommand
-from .PlacePlate.PlacePlateOptions import PlacePlateOptions
+from . import GetPlate, PlacePlate
 
-__all__ = [
-    "GetPlateCommand",
-    "GetPlateOptions",
-    "PlacePlateCommand",
-    "PlacePlateOptions",
-]
+__all__ = ["GetPlate", "PlacePlate"]

@@ -6,7 +6,7 @@ import web
 
 from ....Server.Globals.HandlerRegistry import GetDriverHandler
 from ....Server.Tools.Parser import Parser
-from ...Tools.Command.CommandTracker import Command, CommandTracker
+from ...Tools.Command import Command, CommandTracker
 
 urls = ("/Driver/Request", "ABN.Source.Driver.Handler.Endpoints.Request.Request")
 
@@ -29,7 +29,7 @@ class Request:
 
         while OutputCommandInstance is None and GetDriverHandler().IsAlive():
             for CommandInstance in CommandTrackerInstance.GetObjectsAsList():
-                if CommandInstance.ResponseInstance is None:
+                if not CommandInstance.ResponseEvent.is_set():
                     OutputCommandInstance = CommandInstance
                     break
 

@@ -1,3 +1,3 @@
-from .StartTimer import StartTimer, StartTimerOptions
+from . import StartTimer
 
-__all__ = ["StartTimer", "StartTimerOptions"]
+__all__ = ["StartTimer"]

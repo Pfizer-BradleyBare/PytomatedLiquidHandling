@@ -26,7 +26,7 @@ class HamiltonHeaterCooler(TempControlDevice):
     ):
 
         try:
-            Command = HeaterCoolerDriver.ConnectCommand(
+            Command = HeaterCoolerDriver.Connect.Command(
                 "",
                 ConnectOptions("", self.ComPort),  # type:ignore
                 True,
@@ -34,7 +34,7 @@ class HamiltonHeaterCooler(TempControlDevice):
 
             Command.Execute()
 
-            self.HandleID = Command.GetResponse().GetAdditional()["HandleID"]
+            self.HandleID = Command.GetHandleID()
         except:
             ...
 
@@ -43,9 +43,9 @@ class HamiltonHeaterCooler(TempControlDevice):
     ):
 
         try:
-            HeaterCoolerDriver.StopTemperatureControlCommand(
+            HeaterCoolerDriver.StopTemperatureControl.Command(
                 "",
-                HeaterCoolerDriver.StopTemperatureControlOptions("", self.HandleID),
+                HeaterCoolerDriver.StopTemperatureControl.Options("", self.HandleID),
                 True,
             ).Execute()
         except:
@@ -57,9 +57,9 @@ class HamiltonHeaterCooler(TempControlDevice):
     ):
 
         try:
-            HeaterCoolerDriver.StartTemperatureControlCommand(
+            HeaterCoolerDriver.StartTemperatureControl.Command(
                 "",
-                HeaterCoolerDriver.StartTemperatureControlOptions(
+                HeaterCoolerDriver.StartTemperatureControl.Options(
                     "", self.HandleID, Temperature
                 ),
                 True,
@@ -72,15 +72,13 @@ class HamiltonHeaterCooler(TempControlDevice):
     ):
 
         try:
-            Command = HeaterCoolerDriver.GetTemperatureCommand(
-                "", HeaterCoolerDriver.GetTemperatureOptions("", self.HandleID), True
+            Command = HeaterCoolerDriver.GetTemperature.Command(
+                "", HeaterCoolerDriver.GetTemperature.Options("", self.HandleID), True
             )
 
             Command.Execute()
 
-            self.CurrentTemperature = Command.GetResponse().GetAdditional()[
-                "Temperature"
-            ]
+            self.CurrentTemperature = Command.GetTemperature()
         except:
             ...
 
