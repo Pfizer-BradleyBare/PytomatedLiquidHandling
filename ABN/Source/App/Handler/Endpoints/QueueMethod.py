@@ -13,9 +13,10 @@ import os
 
 import web
 
+from ....API.Tools.RunTypes.RunTypes import RunTypes
 from ....Server.Globals.HandlerRegistry import GetAppHandler
 from ....Server.Tools.Parser import Parser
-from ...Workbook import WorkbookLoader, WorkbookRunTypes, WorkbookTracker
+from ...Workbook import WorkbookLoader, WorkbookTracker
 
 urls = ("/App/QueueMethod", "ABN.Source.App.Handler.Endpoints.QueueMethod.QueueMethod")
 
@@ -35,7 +36,7 @@ class QueueMethod:
         )
 
         MethodPath = ParserObject.GetEndpointInputData()["Method Path"]
-        Action = WorkbookRunTypes(ParserObject.GetEndpointInputData()["Action"])
+        Action = RunTypes(ParserObject.GetEndpointInputData()["Action"])
         # acceptable values are "Test", "PrepList", or "Run"
 
         if ".xlsm" not in MethodPath:
@@ -64,8 +65,8 @@ class QueueMethod:
             return Response
         # Is workbook already running?
 
-        if Action == WorkbookRunTypes.Run:
-            Action = WorkbookRunTypes.PreRun
+        if Action == RunTypes.Run:
+            Action = RunTypes.SimulatePartial
 
         WorkbookLoader.Load(WorkbookTrackerInstance, MethodPath, Action)
         # Load the workbook path into the tracker

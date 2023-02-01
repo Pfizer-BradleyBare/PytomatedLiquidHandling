@@ -1,8 +1,9 @@
 import web
 
+from ....API.Tools.RunTypes.RunTypes import RunTypes
 from ....Server.Globals.HandlerRegistry import GetAppHandler
 from ....Server.Tools.Parser import Parser
-from ...Workbook import WorkbookRunTypes, WorkbookTracker
+from ...Workbook import WorkbookTracker
 
 urls = (
     "/App/GetWorkbookInfo",
@@ -40,7 +41,7 @@ class GetWorkbookInfo:
         # Have any notifications fired?
         # Shared Operations
 
-        if WorkbookInstance.GetRunType() == WorkbookRunTypes.PreRun:
+        if WorkbookInstance.GetRunType() == RunTypes.SimulateFull:
             Operations += ["Dequeue"]
 
         else:  # Run

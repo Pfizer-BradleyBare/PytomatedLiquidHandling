@@ -5,7 +5,7 @@ from .Block.Block import (
     FunctionDecorator_ProcessFunction,
 )
 from .Block.BlockTracker import BlockTracker
-from .Workbook import Workbook, WorkbookRunTypes
+from .Workbook import Workbook
 from .WorkbookTracker import WorkbookTracker
 from .Worklist.Worklist import Worklist
 
@@ -14,5 +14,4 @@ __all__ = [
     "WorkbookTracker",
     "Block",
     "Worklist",
-    "WorkbookRunTypes",
 ]

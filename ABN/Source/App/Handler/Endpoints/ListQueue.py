@@ -1,8 +1,9 @@
 import web
 
+from ....API.Tools.RunTypes.RunTypes import RunTypes
 from ....Server.Globals.HandlerRegistry import GetAppHandler
 from ....Server.Tools.Parser import Parser
-from ...Workbook import WorkbookRunTypes, WorkbookTracker
+from ...Workbook import WorkbookTracker
 
 urls = (
     "/App/ListQueue",
@@ -26,8 +27,8 @@ class ListQueue:
             [
                 Workbook.GetName()
                 for Workbook in WorkbookTrackerInstance.GetObjectsAsList()
-                if Workbook.GetRunType() == WorkbookRunTypes.Run
-                or Workbook.GetRunType() == WorkbookRunTypes.PreRun
+                if Workbook.GetRunType() == RunTypes.Run
+                or Workbook.GetRunType() == RunTypes.SimulateFull
             ]
         )
 

@@ -1,18 +1,13 @@
+from ...API.Tools.RunTypes.RunTypes import RunTypes
 from ..Tools.Excel import Excel
-from ..Workbook import (
-    BlockTracker,
-    Workbook,
-    WorkbookRunTypes,
-    WorkbookTracker,
-    Worklist,
-)
+from ..Workbook import BlockTracker, Workbook, WorkbookTracker, Worklist
 from .Block import BlockLoader
 
 
 def Load(
     WorkbookTrackerInstance: WorkbookTracker,
     ExcelFilePath: str,
-    RunType: WorkbookRunTypes,
+    RunType: RunTypes,
 ):
 
     ExcelInstance = Excel(ExcelFilePath)
