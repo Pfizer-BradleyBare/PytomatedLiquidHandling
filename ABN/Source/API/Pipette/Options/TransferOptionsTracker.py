@@ -1,9 +1,9 @@
 from ....HAL.Pipette.BasePipette import PipetteTracker
-from ....Tools.AbstractClasses import TrackerABC
+from ....Tools.AbstractClasses import NonUniqueItemTrackerABC
 from .TransferOptions import TransferOptions
 
 
-class TransferOptionsTracker(TrackerABC[TransferOptions]):
+class TransferOptionsTracker(NonUniqueItemTrackerABC[TransferOptions]):
     def __init__(self, PipetteTrackerInstance: PipetteTracker):
-        TrackerABC.__init__(self)
+        NonUniqueItemTrackerABC.__init__(self)
         self.PipetteTrackerInstance: PipetteTracker = PipetteTrackerInstance

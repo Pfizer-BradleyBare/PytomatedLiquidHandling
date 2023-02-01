@@ -1,10 +1,10 @@
-from ......Tools.AbstractClasses import ObjectABC, TrackerABC
+from ......Tools.AbstractClasses import ObjectABC, UniqueItemTrackerABC
 from .LiquidClass import LiquidClass
 
 
-class LiquidClassCategory(TrackerABC[LiquidClass], ObjectABC):
+class LiquidClassCategory(UniqueItemTrackerABC[LiquidClass], ObjectABC):
     def __init__(self, Name: str):
-        TrackerABC.__init__(self)
+        UniqueItemTrackerABC.__init__(self)
         self.Name: str = Name
 
     def GetName(self) -> str:

@@ -1,8 +1,6 @@
-from ....Tools.AbstractClasses import TrackerABC
-from ...DeckLocation import DeckLocationTracker
-from ...Labware import LabwareTracker
+from ....Tools.AbstractClasses import UniqueItemTrackerABC
 from .TempControlDevice import TempControlDevice
 
 
-class TempControlDeviceTracker(TrackerABC[TempControlDevice]):
+class TempControlDeviceTracker(UniqueItemTrackerABC[TempControlDevice]):
     pass

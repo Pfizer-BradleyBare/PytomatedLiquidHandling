@@ -1,12 +1,12 @@
 from typing import Self
 
 from ....Server.Globals.HandlerRegistry import GetAPIHandler
-from ....Tools.AbstractClasses import TrackerABC
+from ....Tools.AbstractClasses import UniqueItemTrackerABC
 from ..Container.BaseContainer import Container
 from .LoadedLabware import LoadedLabware
 
 
-class LoadedLabwareTracker(TrackerABC[LoadedLabware]):
+class LoadedLabwareTracker(UniqueItemTrackerABC[LoadedLabware]):
     def GetLabwareAssignments(self, ContainerInstance: Container) -> Self:
 
         ReturnLoadedLabwareTrackerInstance = LoadedLabwareTracker()

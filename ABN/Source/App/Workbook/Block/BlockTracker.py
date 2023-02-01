@@ -1,6 +1,6 @@
-from ....Tools.AbstractClasses import TrackerABC
+from ....Tools.AbstractClasses import UniqueItemTrackerABC
 from ...Workbook import Block
 
 
-class BlockTracker(TrackerABC[Block]):
+class BlockTracker(UniqueItemTrackerABC[Block]):
     pass

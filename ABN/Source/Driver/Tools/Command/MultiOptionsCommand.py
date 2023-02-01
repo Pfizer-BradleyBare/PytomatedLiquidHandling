@@ -1,10 +1,10 @@
 from collections import defaultdict
 from typing import Generic, TypeVar
 
-from ....Tools.AbstractClasses import TrackerABC
+from ....Tools.AbstractClasses import NonUniqueItemTrackerABC
 from .BaseCommand import Command
 
-T = TypeVar("T", bound="TrackerABC")
+T = TypeVar("T", bound="NonUniqueItemTrackerABC")
 
 
 class MultiOptionsCommand(Command, Generic[T]):

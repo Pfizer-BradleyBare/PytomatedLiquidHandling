@@ -1,6 +1,6 @@
-from ...Tools.AbstractClasses import TrackerABC
+from ...Tools.AbstractClasses import UniqueItemTrackerABC
 from .LayoutItemGrouping import LayoutItemGrouping
 
 
-class LayoutItemGroupingTracker(TrackerABC[LayoutItemGrouping]):
+class LayoutItemGroupingTracker(UniqueItemTrackerABC[LayoutItemGrouping]):
     pass

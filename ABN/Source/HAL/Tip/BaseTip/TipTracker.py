@@ -1,6 +1,6 @@
-from ....Tools.AbstractClasses import TrackerABC
+from ....Tools.AbstractClasses import UniqueItemTrackerABC
 from .Tip import Tip
 
 
-class TipTracker(TrackerABC[Tip]):
+class TipTracker(UniqueItemTrackerABC[Tip]):
     pass

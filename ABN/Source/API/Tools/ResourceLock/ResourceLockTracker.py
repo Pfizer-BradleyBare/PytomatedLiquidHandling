@@ -1,8 +1,8 @@
 from ....HAL.DeckLocation import DeckLocation
 from ....HAL.Lid import Lid
 from ....HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
-from ....Tools.AbstractClasses import TrackerABC
+from ....Tools.AbstractClasses import UniqueItemTrackerABC
 
 
-class ResourceLockTracker(TrackerABC[DeckLocation | TempControlDevice | Lid]):
+class ResourceLockTracker(UniqueItemTrackerABC[DeckLocation | TempControlDevice | Lid]):
     pass

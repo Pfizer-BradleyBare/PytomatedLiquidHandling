@@ -1,8 +1,8 @@
-from .....Tools.AbstractClasses import TrackerABC
+from .....Tools.AbstractClasses import NonUniqueItemTrackerABC
 from .Command import Command
 
 
-class CommandTracker(TrackerABC[Command]):
+class CommandTracker(NonUniqueItemTrackerABC[Command]):
     pass
     # def ManualLoad(self, ObjectABCInstance: Command):
     #    if self.GetNumObjects() != 0:

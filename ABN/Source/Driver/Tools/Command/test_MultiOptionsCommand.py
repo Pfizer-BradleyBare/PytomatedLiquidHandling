@@ -1,6 +1,6 @@
 import pytest
 
-from ....Tools.AbstractClasses import ObjectABC, TrackerABC
+from ....Tools.AbstractClasses import NonUniqueItemTrackerABC, ObjectABC
 from .BaseCommand import ClassDecorator_Command, ExpectedResponseProperty
 from .MultiOptionsCommand import MultiOptionsCommand
 
@@ -17,7 +17,7 @@ class Options(ObjectABC):
         return self.a
 
 
-class OptionsTracker(TrackerABC[Options]):
+class OptionsTracker(NonUniqueItemTrackerABC[Options]):
     ...
 
 

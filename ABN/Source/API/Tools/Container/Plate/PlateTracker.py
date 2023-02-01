@@ -1,6 +1,6 @@
-from .....Tools.AbstractClasses import TrackerABC
+from .....Tools.AbstractClasses import UniqueItemTrackerABC
 from .Plate import Plate
 
 
-class PlateTracker(TrackerABC[Plate]):
+class PlateTracker(UniqueItemTrackerABC[Plate]):
     pass

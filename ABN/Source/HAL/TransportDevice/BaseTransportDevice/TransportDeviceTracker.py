@@ -1,6 +1,6 @@
-from ....Tools.AbstractClasses import TrackerABC
+from ....Tools.AbstractClasses import UniqueItemTrackerABC
 from .TransportDevice import TransportDevice
 
 
-class TransportDeviceTracker(TrackerABC[TransportDevice]):
+class TransportDeviceTracker(UniqueItemTrackerABC[TransportDevice]):
     pass

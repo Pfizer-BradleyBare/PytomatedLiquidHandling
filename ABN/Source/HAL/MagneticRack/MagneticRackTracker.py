@@ -1,4 +1,4 @@
-from ...Tools.AbstractClasses import TrackerABC
+from ...Tools.AbstractClasses import UniqueItemTrackerABC
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker
 from ..Pipette import PipetteTracker
@@ -6,7 +6,7 @@ from ..Tip import TipTracker
 from .MagneticRack import MagneticRack
 
 
-class MagneticRackTracker(TrackerABC[MagneticRack]):
+class MagneticRackTracker(UniqueItemTrackerABC[MagneticRack]):
     def __init__(
         self,
         LabwareTrackerInstance: LabwareTracker,
@@ -14,7 +14,7 @@ class MagneticRackTracker(TrackerABC[MagneticRack]):
         PipetteDeviceTrackerInstance: PipetteTracker,
         TipTrackerInstance: TipTracker,
     ):
-        TrackerABC.__init__(self)
+        UniqueItemTrackerABC.__init__(self)
         self.LabwareTrackerInstance: LabwareTracker = LabwareTrackerInstance
         self.DeckLocationTrackerInstance: DeckLocationTracker = (
             DeckLocationTrackerInstance

@@ -1,8 +1,6 @@
-from ...Tools.AbstractClasses import TrackerABC
-from ..DeckLocation import DeckLocationTracker
-from ..Labware import LabwareTracker
+from ...Tools.AbstractClasses import UniqueItemTrackerABC
 from .Lid import Lid
 
 
-class LidTracker(TrackerABC[Lid]):
+class LidTracker(UniqueItemTrackerABC[Lid]):
     pass

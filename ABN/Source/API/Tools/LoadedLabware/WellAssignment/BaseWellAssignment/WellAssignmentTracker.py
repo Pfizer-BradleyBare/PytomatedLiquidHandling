@@ -1,6 +1,6 @@
-from ......Tools.AbstractClasses import TrackerABC
+from ......Tools.AbstractClasses import UniqueItemTrackerABC
 from .WellAssignment import WellAssignment
 
 
-class WellAssignmentTracker(TrackerABC[WellAssignment]):
+class WellAssignmentTracker(UniqueItemTrackerABC[WellAssignment]):
     pass

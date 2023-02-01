@@ -1,6 +1,6 @@
-from ...Tools.AbstractClasses import TrackerABC
+from ...Tools.AbstractClasses import UniqueItemTrackerABC
 from .Notify import Notify
 
 
-class NotifyTracker(TrackerABC[Notify]):
+class NotifyTracker(UniqueItemTrackerABC[Notify]):
     pass

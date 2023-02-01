@@ -6,7 +6,7 @@ from ..Object.ObjectABC import ObjectABC
 T = TypeVar("T", bound="ObjectABC")
 
 
-class TrackerABC(Generic[T]):
+class UniqueItemTrackerABC(Generic[T]):
     def __init__(self):
         self.Collection: dict[str | int, T] = dict()
         self.ThreadLock: Lock = Lock()
