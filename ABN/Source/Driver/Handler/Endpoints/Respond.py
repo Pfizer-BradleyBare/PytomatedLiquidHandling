@@ -2,7 +2,7 @@
 
 import web
 
-from ....Server.Globals.HandlerRegistry import GetDriverHandler
+from .... import Globals
 from ....Server.Tools.Parser import Parser
 from ...Tools.Command import CommandTracker
 
@@ -13,9 +13,10 @@ class Respond:
     def POST(self):
         ParserObject = Parser("Driver Respond", web.data())
 
-        CommandTrackerInstance: CommandTracker = (
-            GetDriverHandler().CommandTrackerInstance  # type:ignore
-        )
+        CommunicationServerInstance = Globals.GetCommunicationServer()
+        DriverHandlerInstance = CommunicationServerInstance.DriverHandlerInstance
+
+        CommandTrackerInstance = DriverHandlerInstance.CommandTrackerInstance
 
         if CommandTrackerInstance.GetNumObjects() == 0:
             ParserObject.SetEndpointMessage(

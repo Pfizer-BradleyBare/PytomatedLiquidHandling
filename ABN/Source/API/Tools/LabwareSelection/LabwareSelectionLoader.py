@@ -1,7 +1,7 @@
 from typing import cast
 
+from ....Globals import GetCommunicationServer
 from ....HAL.Labware import LabwareTracker
-from ....Server.Globals.HandlerRegistry import GetAPIHandler
 from ..Container.BaseContainer.ContainerTracker import ContainerTracker
 from .LabwareSelection import LabwareSelection
 from .LabwareSelectionTracker import LabwareSelectionTracker
@@ -22,6 +22,10 @@ def Load(
     # First we need to get all our labware to load.
     # NOTE: reagents and plates can have entries of the same name.
     # We will always prioritize plate entries, so the reagent entry is ignored.
+
+    CommunicationServerInstance = GetCommunicationServer()
+    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    LabwareTrackerInstance = APIHandlerInstance.HALLayerInstance.LabwareTrackerInstance
 
     LabwareTrackerInstance: LabwareTracker = (
         GetAPIHandler().HALLayerInstance.LabwareTrackerInstance  # type:ignore

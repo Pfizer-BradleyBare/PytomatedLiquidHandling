@@ -3,25 +3,27 @@ import threading
 import pythoncom
 import xlwings
 
-from ....Server.Globals import LOG
+from ....Globals import GetLogger
 
 Lock = threading.Lock()
 
 
 def ExcelClassFunctionDecorator_ThreadLock(DecoratedFunction):
     def inner(*args, **kwargs):
-        LOG.debug("Start Excel Function: " + DecoratedFunction.__name__)
-        LOG.debug("Args: " + str(args))
+        LoggerInstance = GetLogger()
+
+        LoggerInstance.debug("Start Excel Function: " + DecoratedFunction.__name__)
+        LoggerInstance.debug("Args: " + str(args))
 
         if args[0].Book is not None:
             Lock.acquire()
             Result = DecoratedFunction(*args, **kwargs)
             Lock.release()
         else:
-            LOG.critical("Excel book is not open! No action performed")
+            LoggerInstance.critical("Excel book is not open! No action performed")
             Result = None
 
-        LOG.debug("End Excel Function: " + DecoratedFunction.__name__)
+        LoggerInstance.debug("End Excel Function: " + DecoratedFunction.__name__)
         return Result
 
     return inner

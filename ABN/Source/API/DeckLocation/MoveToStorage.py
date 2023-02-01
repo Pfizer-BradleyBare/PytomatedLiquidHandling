@@ -1,23 +1,15 @@
-from ...Server.Globals.HandlerRegistry import GetAPIHandler
+from ...Globals import GetCommunicationServer
 from ..Tools.Container.BaseContainer import Container
-from ..Tools.HALLayer.HALLayer import HALLayer
-from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
-from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 from ..Transport import GetLayoutItem, Transport
 
 
 def MoveToStorage(ContainerInstance: Container, Simulate: bool) -> bool:
 
-    LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
-        GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
-    )
-
-    ResourceLockTrackerInstance: ResourceLockTracker = (
-        GetAPIHandler().ResourceLockTrackerInstance  # type:ignore
-    )
-
-    HALLayerInstance: HALLayer = GetAPIHandler().HALLayerInstance  # type:ignore
-    # Get our API objects
+    CommunicationServerInstance = GetCommunicationServer()
+    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
+    ResourceLockTrackerInstance = APIHandlerInstance.ResourceLockTrackerInstance
+    HALLayerInstance = APIHandlerInstance.HALLayerInstance
 
     DeckLocationTrackerInstance = HALLayerInstance.DeckLocationTrackerInstance
 

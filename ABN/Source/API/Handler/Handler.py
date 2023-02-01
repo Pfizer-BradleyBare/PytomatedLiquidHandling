@@ -5,10 +5,9 @@ from ..Tools.HALLayer import HalLoader
 from ..Tools.HALLayer.HALLayer import HALLayer
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
-from .Endpoints import GetDevicesState, GetLoadedLabware
 
 
-class APIHandler(ServerHandlerABC):
+class Handler(ServerHandlerABC):
     def __init__(self):
         ServerHandlerABC.__init__(self)
         self.LoadedLabwareTrackerInstance: LoadedLabwareTracker = LoadedLabwareTracker()

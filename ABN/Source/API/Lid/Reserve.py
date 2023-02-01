@@ -1,22 +1,15 @@
+from ...Globals import GetCommunicationServer
 from ...HAL.Lid.Lid import Lid
-from ...Server.Globals.HandlerRegistry import GetAPIHandler
 from ..Tools.Container.BaseContainer import Container
-from ..Tools.HALLayer.HALLayer import HALLayer
-from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
-from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 
 
 def Reserve(ContainerInstance: Container, Simulate: bool) -> Lid | None:
 
-    LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
-        GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
-    )
-
-    HALLayerInstance: HALLayer = GetAPIHandler().HALLayerInstance  # type:ignore
-
-    ResourceLockTrackerInstance: ResourceLockTracker = (
-        GetAPIHandler().ResourceLockTrackerInstance  # type:ignore
-    )
+    CommunicationServerInstance = GetCommunicationServer()
+    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
+    ResourceLockTrackerInstance = APIHandlerInstance.ResourceLockTrackerInstance
+    HALLayerInstance = APIHandlerInstance.HALLayerInstance
 
     LoadedLabwareAssignmentInstances = (
         LoadedLabwareTrackerInstance.GetLabwareAssignments(ContainerInstance)

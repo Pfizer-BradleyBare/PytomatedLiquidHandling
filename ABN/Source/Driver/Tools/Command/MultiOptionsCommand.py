@@ -15,10 +15,10 @@ class MultiOptionsCommand(Command, Generic[T]):
     def GetCommandParameters(self) -> dict[str, any]:  # type:ignore
         OutputDict = defaultdict(list)
 
-        for PickupOption in self.OptionTrackerInstance.GetObjectsAsList():
-            PickupOptionDict = vars(PickupOption)
+        for Options in self.OptionTrackerInstance.GetObjectsAsList():
+            OptionsDict = vars(Options)
 
-            for key, value in PickupOptionDict.items():
+            for key, value in OptionsDict.items():
                 OutputDict[key].append(value)
 
         return OutputDict

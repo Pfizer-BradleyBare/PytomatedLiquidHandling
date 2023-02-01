@@ -1,5 +1,5 @@
+from ...Globals import GetCommunicationServer
 from ...HAL.Lid import Lid
-from ...Server.Globals.HandlerRegistry import GetAPIHandler
 from ..Tools.Container.BaseContainer import Container
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Transport.Transport import Transport
@@ -7,9 +7,9 @@ from ..Transport.Transport import Transport
 
 def Uncover(ContainerInstance: Container, LidInstance: Lid, Simulate: bool):
 
-    LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
-        GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
-    )
+    CommunicationServerInstance = GetCommunicationServer()
+    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
 
     LoadedLabwareAssignmentInstances = (
         LoadedLabwareTrackerInstance.GetLabwareAssignments(ContainerInstance)

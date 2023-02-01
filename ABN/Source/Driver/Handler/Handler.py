@@ -3,7 +3,7 @@ from ..Tools.Command import CommandTracker
 from .Endpoints import Request, Respond
 
 
-class DriverHandler(ServerHandlerABC):
+class Handler(ServerHandlerABC):
     def __init__(self):
         ServerHandlerABC.__init__(self)
         self.CommandTrackerInstance: CommandTracker = CommandTracker()

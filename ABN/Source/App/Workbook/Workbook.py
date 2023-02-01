@@ -1,10 +1,9 @@
 import os
 import threading
-from enum import Enum
 
 from ...API.Tools.Container.BaseContainer import ContainerTracker
 from ...API.Tools.RunTypes.RunTypes import RunTypes
-from ...Server.Globals import LOG
+from ...Globals import GetLogger
 from ...Tools.AbstractClasses import ObjectABC
 from ..Tools.Context import Context, ContextTracker
 from ..Tools.Excel import Excel
@@ -68,7 +67,7 @@ class Workbook(ObjectABC):
         # Thread
         self.WorkbookProcessorThread: threading.Thread
 
-        LOG.debug(
+        GetLogger().debug(
             "The following method tree was determined for %s: \n%s",
             self.MethodName,
             self.MethodTreeRoot,

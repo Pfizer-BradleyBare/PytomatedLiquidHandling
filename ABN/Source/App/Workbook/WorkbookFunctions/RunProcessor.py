@@ -1,4 +1,4 @@
-from ....Server.Globals import LOG
+from ....Globals import GetLogger
 from ...Blocks import MergePlates
 from ...Workbook import Block, Workbook
 
@@ -200,11 +200,11 @@ def RunProcessor(WorkbookInstance: Workbook):
             # We will only execute the step if the factors are not zero
             # Additionally we must always execute a merge plates step no matter what
 
-            LOG.info("EXECUTING: " + CurrentExecutingBlock.GetName())
+            GetLogger().info("EXECUTING: " + CurrentExecutingBlock.GetName())
             StepStatus = CurrentExecutingBlock.Process(WorkbookInstance)
 
         else:
-            LOG.info("SKIPPING: " + CurrentExecutingBlock.GetName())
+            GetLogger().info("SKIPPING: " + CurrentExecutingBlock.GetName())
 
         if StepStatus is True:
             ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)

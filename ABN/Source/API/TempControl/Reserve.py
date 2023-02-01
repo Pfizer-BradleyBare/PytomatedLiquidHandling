@@ -1,5 +1,5 @@
+from ...Globals import GetCommunicationServer
 from ...HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
-from ...Server.Globals.HandlerRegistry import GetAPIHandler
 from ..Tools.Container.BaseContainer import Container
 from ..Tools.HALLayer.HALLayer import HALLayer
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
@@ -10,14 +10,12 @@ def Reserve(
     ContainerInstance: Container, Temperature: float, ShakingSpeed: int, Simulate: bool
 ) -> TempControlDevice | None:
 
-    LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
-        GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
-    )
-
-    HALLayerInstance: HALLayer = GetAPIHandler().HALLayerInstance  # type:ignore
-
-    ResourceLockTrackerInstance: ResourceLockTracker = (
-        GetAPIHandler().ResourceLockTrackerInstance  # type:ignore
+    CommunicationServerInstance = GetCommunicationServer()
+    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    ResourceLockTrackerInstance = APIHandlerInstance.ResourceLockTrackerInstance
+    LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
+    TempControlDeviceTrackerInstance = (
+        APIHandlerInstance.HALLayerInstance.TempControlDeviceTrackerInstance
     )
 
     LoadedLabwareAssignmentInstances = (
@@ -41,7 +39,7 @@ def Reserve(
 
     TempControlDeviceInstances = [
         Device
-        for Device in HALLayerInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
+        for Device in TempControlDeviceTrackerInstance.GetObjectsAsList()
         if not ResourceLockTrackerInstance.IsTracked(Device.GetName())
         and Device.ShakingSupported >= RequiresShaking
         and LabwareInstance

@@ -1,7 +1,7 @@
+from ....Globals import GetCommunicationServer
 from ....HAL.DeckLocation import DeckLocation
 from ....HAL.Labware import Labware
 from ....HAL.Layout import LayoutItemGrouping
-from ....Server.Globals.HandlerRegistry import GetAPIHandler
 from ...Tools.HALLayer.HALLayer import HALLayer
 
 
@@ -9,9 +9,11 @@ def GetLayoutItem(
     DeckLocationInstance: DeckLocation, LabwareInstance: Labware
 ) -> LayoutItemGrouping | None:
 
-    HALLayerInstance: HALLayer = GetAPIHandler().HALLayerInstance  # type:ignore
-
-    LayoutItemTrackerInstance = HALLayerInstance.LayoutItemGroupingTrackerInstance
+    CommunicationServerInstance = GetCommunicationServer()
+    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    LayoutItemTrackerInstance = (
+        APIHandlerInstance.HALLayerInstance.LayoutItemGroupingTrackerInstance
+    )
 
     DeckLocationFiltering = [
         Item

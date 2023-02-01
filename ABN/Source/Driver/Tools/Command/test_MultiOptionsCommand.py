@@ -6,12 +6,12 @@ from .MultiOptionsCommand import MultiOptionsCommand
 
 
 class Options(ObjectABC):
-    def __init__(self, a, b, c):
+    def __init__(self, d, e, f):
         ObjectABC.__init__(self)
 
-        self.a = a
-        self.b = b
-        self.c = c
+        self.a = d
+        self.b = e
+        self.c = f
 
     def GetName(self):
         return self.a

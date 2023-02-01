@@ -1,14 +1,7 @@
 # curl -X GET http://localhost:255/State/Kill
 import web
 
-from ...Globals import LOG
-from ...Globals.HandlerRegistry import (
-    GetAPIHandler,
-    GetAppHandler,
-    GetDriverHandler,
-    GetHALHandler,
-    GetServerHandler,
-)
+from .... import Globals
 from ...Tools.Parser import Parser
 
 urls = ("/Server/Kill", "ABN.Source.Server.Handler.Endpoints.Kill.Kill")
@@ -17,52 +10,20 @@ urls = ("/Server/Kill", "ABN.Source.Server.Handler.Endpoints.Kill.Kill")
 class Kill:
     def GET(self):
 
+        CommunicationServerInstance = Globals.GetCommunicationServer()
+        LoggerInstance = Globals.GetLogger()
+
         ParserObject = Parser("Server Kill", web.data())
 
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        LOG.info("Starting Kill sequence...")
+        LoggerInstance.info("Starting Kill sequence...")
 
-        try:
-            ServerHandler = GetServerHandler()
-            ServerHandler.IsAliveFlag = False
-            ServerHandler.Kill()
-        except:
-            pass
+        CommunicationServerInstance.Kill()
 
-        try:
-            DriverHandler = GetDriverHandler()
-            DriverHandler.IsAliveFlag = False
-            DriverHandler.Kill()
-        except:
-            pass
-
-        try:
-            HALHandler = GetHALHandler()
-            HALHandler.IsAliveFlag = False
-            HALHandler.Kill()
-        except:
-            pass
-
-        try:
-            APIHandler = GetAPIHandler()
-            APIHandler.IsAliveFlag = False
-            APIHandler.Kill()
-        except:
-            pass
-
-        try:
-            AppHandler = GetAppHandler()
-            AppHandler.IsAliveFlag = False
-            AppHandler.Kill()
-        except:
-            pass
-
-        # We use try except because we cannot know which handlers are registered
-
-        LOG.info("Kill sequence complete! Goodbye!")
+        LoggerInstance.info("Kill sequence complete! Goodbye!")
 
         quit()
 

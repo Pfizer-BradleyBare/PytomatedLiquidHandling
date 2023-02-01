@@ -1,14 +1,18 @@
 import json
 
-from ...Globals import LOG
+from .... import Globals
 
 
 class Parser:
     def __init__(self, EndpointID: str, JSONstring: bytes | None = None):
 
-        LOG.debug("PARSER: __START__")
-        LOG.info("PARSER: Handling Endpoint: %s", EndpointID)
-        LOG.debug("PARSER: Created Parser class with data: %s", str(JSONstring))
+        LoggerInstance = Globals.GetLogger()
+
+        LoggerInstance.debug("PARSER: __START__")
+        LoggerInstance.info("PARSER: Handling Endpoint: %s", EndpointID)
+        LoggerInstance.debug(
+            "PARSER: Created Parser class with data: %s", str(JSONstring)
+        )
 
         self.EndpointID: str = EndpointID
         self.InputString: bytes | None = JSONstring
@@ -20,16 +24,18 @@ class Parser:
         if not (JSONstring is None or JSONstring == "" or JSONstring == b""):
             try:
                 self.JSON = json.loads(JSONstring.decode().replace("'", ""))
-                LOG.debug(
+                LoggerInstance.debug(
                     "Request Data: \n%s",
                     json.dumps(self.JSON, indent=4, sort_keys=True),
                 )
             except Exception:
-                LOG.error("PARSER: Error Parsing Data! Bad format.")
+                LoggerInstance.error("PARSER: Error Parsing Data! Bad format.")
                 self.JSON = None
 
     def __del__(self):
-        LOG.debug("PARSER: __END__")
+        LoggerInstance = Globals.GetLogger()
+
+        LoggerInstance.debug("PARSER: __END__")
 
     def IsValid(self, ExpectedKeys: list[str]) -> bool:
         if self.JSON is None:
@@ -74,6 +80,8 @@ class Parser:
         self.EndpointReturn[Key] = Value
 
     def GetHTTPResponse(self) -> str:
+        LoggerInstance = Globals.GetLogger()
+
         Out = dict()
         Out["Endpoint ID"] = self.EndpointID
         Out["Endpoint State"] = self.EndpointState
@@ -81,5 +89,7 @@ class Parser:
         Out["Endpoint Input Data"] = self.JSON
         Out["Endpoint Output Data"] = self.EndpointReturn
 
-        LOG.debug("Response Data: \n%s", json.dumps(Out, indent=4, sort_keys=True))
+        LoggerInstance.debug(
+            "Response Data: \n%s", json.dumps(Out, indent=4, sort_keys=True)
+        )
         return json.dumps(Out)

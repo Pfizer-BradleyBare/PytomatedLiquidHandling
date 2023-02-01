@@ -1,6 +1,6 @@
+from ...Globals import GetCommunicationServer
 from ...HAL.Pipette import TransferOptions as HALTransferOptions
 from ...HAL.Pipette import TransferOptionsTracker as HALTransferOptionsTracker
-from ...Server.Globals.HandlerRegistry import GetAPIHandler
 from ..DeckLocation.MoveToPipette import MoveToPipette
 from ..DeckLocation.MoveToStorage import MoveToStorage
 from ..Tools.HALLayer.HALLayer import HALLayer
@@ -12,6 +12,11 @@ from .Options.TransferOptionsTracker import TransferOptionsTracker
 
 
 def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, Simulate: bool):
+
+    CommunicationServerInstance = GetCommunicationServer()
+    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
+    HALLayerInstance = APIHandlerInstance.HALLayerInstance
 
     SourceLiquidClassCategories = list()
     DestinationLiquidClassCategories = list()
@@ -42,10 +47,6 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, Simulate: b
         # Get the destination liquid class after adding liquid. Becuase that is how it works in real life. DIspense
 
     # First we do the "programmatic" transfer
-
-    LoadedLabwareTrackerInstance: LoadedLabwareTracker = (
-        GetAPIHandler().LoadedLabwareTrackerInstance  # type:ignore
-    )
 
     SourceContainerInstances = [
         Options.SourceContainerInstance
@@ -235,7 +236,6 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, Simulate: b
         )
         Count += 1
 
-    HALLayerInstance: HALLayer = GetAPIHandler().HALLayer  # type:ignore
     ClosedContainerTrackerInstance = HALLayerInstance.ClosedContainerTrackerInstance
 
     if Simulate is True:

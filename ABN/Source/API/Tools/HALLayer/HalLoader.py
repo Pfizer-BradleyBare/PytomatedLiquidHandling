@@ -1,5 +1,6 @@
 import os
 
+from .... import Globals
 from ....HAL.ClosedContainer import ClosedContainerLoader
 from ....HAL.DeckLocation import DeckLocationLoader
 from ....HAL.Labware import LabwareLoader
@@ -12,25 +13,26 @@ from ....HAL.Pipette import PipetteLoader
 from ....HAL.TempControlDevice import TempControlDeviceLoader
 from ....HAL.Tip import TipLoader
 from ....HAL.TransportDevice import TransportDeviceLoader
-from ....Server.Globals import LOG
 from .HALLayer import HALLayer
 
 
 def Load(BasePath: str) -> HALLayer:
 
+    LoggerInstance = Globals.GetLogger()
+
     HALLayerInstance = HALLayer()
-    LOG.info("Loading Labware...")
+    LoggerInstance.info("Loading Labware...")
 
     LabwareTrackerInstance = LabwareLoader.LoadYaml(
         os.path.join(BasePath, "Labware\\Labware.yaml"),
     )
     HALLayerInstance.LabwareTrackerInstance = LabwareTrackerInstance
     for Labware in LabwareTrackerInstance.GetObjectsAsList():
-        LOG.debug(Labware)
+        LoggerInstance.debug(Labware)
 
-    LOG.info("Success!")
+    LoggerInstance.info("Success!")
 
-    LOG.info("Loading Transport...")
+    LoggerInstance.info("Loading Transport...")
 
     TransportDeviceTrackerInstance = TransportDeviceLoader.LoadYaml(
         LabwareTrackerInstance,
@@ -38,11 +40,11 @@ def Load(BasePath: str) -> HALLayer:
     )
     HALLayerInstance.TransportDeviceTrackerInstance = TransportDeviceTrackerInstance
     for TransportDevice in TransportDeviceTrackerInstance.GetObjectsAsList():
-        LOG.debug(TransportDevice)
+        LoggerInstance.debug(TransportDevice)
 
-    LOG.info("Success!")
+    LoggerInstance.info("Success!")
 
-    LOG.info("Loading DeckLocation...")
+    LoggerInstance.info("Loading DeckLocation...")
 
     DeckLocationTrackerInstance = DeckLocationLoader.LoadYaml(
         TransportDeviceTrackerInstance,
@@ -50,11 +52,11 @@ def Load(BasePath: str) -> HALLayer:
     )
     HALLayerInstance.DeckLocationTrackerInstance = DeckLocationTrackerInstance
     for Location in DeckLocationTrackerInstance.GetObjectsAsList():
-        LOG.debug(Location)
+        LoggerInstance.debug(Location)
 
-    LOG.info("Success!")
+    LoggerInstance.info("Success!")
 
-    LOG.info("Loading Layout...")
+    LoggerInstance.info("Loading Layout...")
 
     LayoutItemTrackerInstance = LayoutItemLoader.LoadYaml(
         LabwareTrackerInstance,
@@ -63,11 +65,11 @@ def Load(BasePath: str) -> HALLayer:
     )
     HALLayerInstance.LayoutItemGroupingTrackerInstance = LayoutItemTrackerInstance
     for Layout in LayoutItemTrackerInstance.GetObjectsAsList():
-        LOG.debug(Layout)
+        LoggerInstance.debug(Layout)
 
-    LOG.info("Success!")
+    LoggerInstance.info("Success!")
 
-    LOG.info("Loading Lid...")
+    LoggerInstance.info("Loading Lid...")
 
     LidTrackerInstance = LidLoader.LoadYaml(
         LabwareTrackerInstance,
@@ -76,11 +78,11 @@ def Load(BasePath: str) -> HALLayer:
     )
     HALLayerInstance.LidTrackerInstance = LidTrackerInstance
     for Lid in LidTrackerInstance.GetObjectsAsList():
-        LOG.debug(Lid)
+        LoggerInstance.debug(Lid)
 
-    LOG.info("Success!")
+    LoggerInstance.info("Success!")
 
-    LOG.info("Loading TempControlDevice...")
+    LoggerInstance.info("Loading TempControlDevice...")
 
     TempControlDeviceTrackerInstance = TempControlDeviceLoader.LoadYaml(
         LabwareTrackerInstance,
@@ -89,22 +91,22 @@ def Load(BasePath: str) -> HALLayer:
     )
     HALLayerInstance.TempControlDeviceTrackerInstance = TempControlDeviceTrackerInstance
     for TempControlDevice in TempControlDeviceTrackerInstance.GetObjectsAsList():
-        LOG.debug(TempControlDevice)
+        LoggerInstance.debug(TempControlDevice)
 
-    LOG.info("Success!")
+    LoggerInstance.info("Success!")
 
-    LOG.info("Loading Tip...")
+    LoggerInstance.info("Loading Tip...")
 
     TipTrackerInstance = TipLoader.LoadYaml(
         os.path.join(BasePath, "Tip\\Tip.yaml"),
     )
     HALLayerInstance.TipTrackerInstance = TipTrackerInstance
     for Tip in TipTrackerInstance.GetObjectsAsList():
-        LOG.debug(Tip)
+        LoggerInstance.debug(Tip)
 
-    LOG.info("Success!")
+    LoggerInstance.info("Success!")
 
-    LOG.info("Loading Pipette...")
+    LoggerInstance.info("Loading Pipette...")
 
     PipetteTrackerInstance = PipetteLoader.LoadYaml(
         TipTrackerInstance,
@@ -113,11 +115,11 @@ def Load(BasePath: str) -> HALLayer:
     )
     HALLayerInstance.PipetteTrackerInstance = PipetteTrackerInstance
     for Pipette in PipetteTrackerInstance.GetObjectsAsList():
-        LOG.debug(Pipette)
+        LoggerInstance.debug(Pipette)
 
-    LOG.info("Success!")
+    LoggerInstance.info("Success!")
 
-    LOG.info("Loading Magnetic Rack...")
+    LoggerInstance.info("Loading Magnetic Rack...")
 
     #    MagneticRackLoader.LoadYaml(
     #        MagneticRacks,
@@ -125,22 +127,22 @@ def Load(BasePath: str) -> HALLayer:
     #    )
     #    HALLayerInstance.MagneticRackTrackerInstance = MagneticRacks
     #    for MagneticRack in MagneticRacks.GetObjectsAsList():
-    #        LOG.debug(MagneticRack)
+    #        LoggerInstance.debug(MagneticRack)
 
-    LOG.info("Success!")
+    LoggerInstance.info("Success!")
 
-    LOG.info("Loading Notify...")
+    LoggerInstance.info("Loading Notify...")
 
     NotifyTrackerInstance = NotifyLoader.LoadYaml(
         os.path.join(BasePath, "Notify\\Notify.yaml"),
     )
     HALLayerInstance.NotifyTrackerInstance = NotifyTrackerInstance
     for NotifyDevice in NotifyTrackerInstance.GetObjectsAsList():
-        LOG.debug(NotifyDevice)
+        LoggerInstance.debug(NotifyDevice)
 
-    LOG.info("Success!")
+    LoggerInstance.info("Success!")
 
-    LOG.info("Loading FlipTube...")
+    LoggerInstance.info("Loading FlipTube...")
 
     ClosedContainerTrackerInstance = ClosedContainerLoader.LoadYaml(
         LabwareTrackerInstance,
@@ -148,8 +150,8 @@ def Load(BasePath: str) -> HALLayer:
     )
     HALLayerInstance.ClosedContainerTrackerInstance = ClosedContainerTrackerInstance
     for FlipTube in ClosedContainerTrackerInstance.GetObjectsAsList():
-        LOG.debug(FlipTube)
+        LoggerInstance.debug(FlipTube)
 
-    LOG.info("Success!")
+    LoggerInstance.info("Success!")
 
     return HALLayerInstance
