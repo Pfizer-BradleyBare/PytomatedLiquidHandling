@@ -19,5 +19,7 @@ if __name__ == "__main__":
         )
     )
 
-    CommunicationServerInstance = CommunicationServer("100")
+    CommunicationServerInstance = CommunicationServer()
     RegisterCommunicationServer(CommunicationServerInstance)
+
+    CommunicationServerInstance.StartServer()

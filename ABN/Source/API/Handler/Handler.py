@@ -1,5 +1,3 @@
-import os
-
 from ...Tools.AbstractClasses import ServerHandlerABC
 from ..Tools.HALLayer import HalLoader
 from ..Tools.HALLayer.HALLayer import HALLayer
@@ -8,19 +6,11 @@ from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 
 
 class Handler(ServerHandlerABC):
-    def __init__(self):
+    def __init__(self, HALConfigurationFilesPath: str):
         ServerHandlerABC.__init__(self)
         self.LoadedLabwareTrackerInstance: LoadedLabwareTracker = LoadedLabwareTracker()
         self.ResourceLockTrackerInstance: ResourceLockTracker = ResourceLockTracker()
-        self.HALLayerInstance: HALLayer = HalLoader.Load(
-            os.path.join(
-                os.path.dirname(
-                    os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-                ),
-                "AutomationBareNecessitiesConfiguration",
-                "HAL",
-            )
-        )
+        self.HALLayerInstance: HALLayer = HalLoader.Load(HALConfigurationFilesPath)
 
     def GetName(self) -> str:
         return "API"
