@@ -1,11 +1,12 @@
 import os
 from logging import DEBUG
 
-from ...PytomatedLiquidHandling.API.Handler import GetHandler as APIGetHandler
-from ...PytomatedLiquidHandling.API.Handler import Handler as APIHandler
-from ...PytomatedLiquidHandling.API.Tools.Timer import TimerTracker
-from ...PytomatedLiquidHandling.Tools.AbstractClasses import ServerHandlerABC
-from ...PytomatedLiquidHandling.Tools.Logger import GenerateLogFilePath, Logger
+from PytomatedLiquidHandling.API.Handler import GetHandler as APIGetHandler
+from PytomatedLiquidHandling.API.Handler import Handler as APIHandler
+from PytomatedLiquidHandling.API.Tools.Timer import TimerTracker
+from PytomatedLiquidHandling.Tools.AbstractClasses import ServerHandlerABC
+from PytomatedLiquidHandling.Tools.Logger import GenerateLogFilePath, Logger
+
 from ..Workbook import WorkbookTracker
 from .Endpoints import (
     AvailableMethods,
