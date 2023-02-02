@@ -6,7 +6,7 @@ from ..Transport import GetLayoutItem, Transport
 def MoveToStorage(ContainerInstance: Container, Simulate: bool) -> bool:
 
     CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
     LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
     ResourceLockTrackerInstance = APIHandlerInstance.ResourceLockTrackerInstance
     HALLayerInstance = APIHandlerInstance.HALLayerInstance

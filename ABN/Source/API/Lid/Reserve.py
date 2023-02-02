@@ -6,7 +6,7 @@ from ..Tools.Container.BaseContainer import Container
 def Reserve(ContainerInstance: Container, Simulate: bool) -> Lid | None:
 
     CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
     LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
     ResourceLockTrackerInstance = APIHandlerInstance.ResourceLockTrackerInstance
     HALLayerInstance = APIHandlerInstance.HALLayerInstance

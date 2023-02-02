@@ -15,7 +15,7 @@ class LoadedLabwareTracker(UniqueItemTrackerABC[LoadedLabware]):
         # this entirely but it is good to support here
 
         CommunicationServerInstance = Globals.GetCommunicationServer()
-        APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+        APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
         LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
 
         for LoadedLabwareInstance in LoadedLabwareTrackerInstance.GetObjectsAsList():

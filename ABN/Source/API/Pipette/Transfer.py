@@ -14,7 +14,7 @@ from .Options.TransferOptionsTracker import TransferOptionsTracker
 def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, Simulate: bool):
 
     CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
     LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
     HALLayerInstance = APIHandlerInstance.HALLayerInstance
 

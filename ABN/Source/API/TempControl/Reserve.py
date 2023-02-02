@@ -11,7 +11,7 @@ def Reserve(
 ) -> TempControlDevice | None:
 
     CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
     ResourceLockTrackerInstance = APIHandlerInstance.ResourceLockTrackerInstance
     LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
     TempControlDeviceTrackerInstance = (

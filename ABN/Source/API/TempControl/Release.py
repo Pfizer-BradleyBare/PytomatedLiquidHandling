@@ -6,7 +6,7 @@ from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 def Release(TempControlDeviceInstance: TempControlDevice, Simulate: bool):
 
     CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
     ResourceLockTrackerInstance = APIHandlerInstance.ResourceLockTrackerInstance
 
     ResourceLockTrackerInstance.ManualUnload(TempControlDeviceInstance)

@@ -24,7 +24,7 @@ def Load(
     # We will always prioritize plate entries, so the reagent entry is ignored.
 
     CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
     LabwareTrackerInstance = APIHandlerInstance.HALLayerInstance.LabwareTrackerInstance
 
     LabwareTrackerInstance: LabwareTracker = (

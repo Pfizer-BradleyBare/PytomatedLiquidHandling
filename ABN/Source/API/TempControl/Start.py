@@ -13,7 +13,7 @@ def Start(
     Simulate: bool,
 ):
     CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
     LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
 
     LoadedLabwareAssignmentInstances = (

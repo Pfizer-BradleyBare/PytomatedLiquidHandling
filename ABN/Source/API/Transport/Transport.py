@@ -25,7 +25,7 @@ def Transport(
     ):
 
         CommunicationServerInstance = GetCommunicationServer()
-        APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+        APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
         DeckLocationTrackerInstance = (
             APIHandlerInstance.HALLayerInstance.DeckLocationTrackerInstance
         )

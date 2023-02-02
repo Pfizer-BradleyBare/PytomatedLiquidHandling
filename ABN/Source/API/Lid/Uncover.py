@@ -8,7 +8,7 @@ from ..Transport.Transport import Transport
 def Uncover(ContainerInstance: Container, LidInstance: Lid, Simulate: bool):
 
     CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
     LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
 
     LoadedLabwareAssignmentInstances = (

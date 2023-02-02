@@ -19,6 +19,24 @@ class CommunicationServer:
         self.HALHandlerInstance: HALHandler | None = HALHandlerInstance
         self.APIHandlerInstance: APIHandler | None = APIHandlerInstance
 
+    def GetServerHandler(self) -> ServerHandler:
+        return self.ServerHandlerInstance
+
+    def GetDriverHandler(self) -> DriverHandler:
+        return self.DriverHandlerInstance
+
+    def GetHALHandler(self) -> HALHandler:
+        if self.HALHandlerInstance is None:
+            raise Exception("HalHandler not set. Please fix")
+
+        return self.HALHandlerInstance
+
+    def GetAPIHandler(self) -> APIHandler:
+        if self.APIHandlerInstance is None:
+            raise Exception("APIHandler not set. Please fix")
+
+        return self.APIHandlerInstance
+
     def GetURLS(self) -> tuple:
         urls = ()
 
