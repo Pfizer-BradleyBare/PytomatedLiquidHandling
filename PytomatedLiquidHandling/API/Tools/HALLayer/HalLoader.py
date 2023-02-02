@@ -1,6 +1,5 @@
 import os
 
-from .... import Globals
 from ....HAL.ClosedContainer import ClosedContainerLoader
 from ....HAL.DeckLocation import DeckLocationLoader
 from ....HAL.Labware import LabwareLoader
@@ -17,8 +16,9 @@ from .HALLayer import HALLayer
 
 
 def Load(BasePath: str) -> HALLayer:
+    from ...Handler import GetHandler
 
-    LoggerInstance = Globals.GetLogger()
+    LoggerInstance = GetHandler().GetLogger()
 
     HALLayerInstance = HALLayer()
     LoggerInstance.info("Loading Labware...")

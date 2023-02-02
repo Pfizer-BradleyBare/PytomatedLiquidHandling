@@ -2,9 +2,8 @@
 
 import web
 
-from .... import Globals
 from ....Server.Tools.Parser import Parser
-from ...Tools.Command import CommandTracker
+from ... import Handler as HandlerModule
 
 urls = ("/Driver/Respond", "ABN.Source.Driver.Handler.Endpoints.Respond.Respond")
 
@@ -13,10 +12,11 @@ class Respond:
     def POST(self):
         ParserObject = Parser("Driver Respond", web.data())
 
-        CommunicationServerInstance = Globals.GetCommunicationServer()
-        DriverHandlerInstance = CommunicationServerInstance.DriverHandlerInstance
+        from ..Handler import GetHandler
 
-        CommandTrackerInstance = DriverHandlerInstance.CommandTrackerInstance
+        HandlerInstance = GetHandler()
+
+        CommandTrackerInstance = HandlerInstance.CommandTrackerInstance
 
         if CommandTrackerInstance.GetNumObjects() == 0:
             ParserObject.SetEndpointMessage(

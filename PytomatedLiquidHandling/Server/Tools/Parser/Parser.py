@@ -1,12 +1,11 @@
 import json
 
-from .... import Globals
-
 
 class Parser:
     def __init__(self, EndpointID: str, JSONstring: bytes | None = None):
+        from ...Handler import GetHandler
 
-        LoggerInstance = Globals.GetLogger()
+        LoggerInstance = GetHandler().GetLogger()
 
         LoggerInstance.debug("PARSER: __START__")
         LoggerInstance.info("PARSER: Handling Endpoint: %s", EndpointID)
@@ -33,7 +32,9 @@ class Parser:
                 self.JSON = None
 
     def __del__(self):
-        LoggerInstance = Globals.GetLogger()
+        from ...Handler import GetHandler
+
+        LoggerInstance = GetHandler().GetLogger()
 
         LoggerInstance.debug("PARSER: __END__")
 
@@ -80,7 +81,9 @@ class Parser:
         self.EndpointReturn[Key] = Value
 
     def GetHTTPResponse(self) -> str:
-        LoggerInstance = Globals.GetLogger()
+        from ...Handler import GetHandler
+
+        LoggerInstance = GetHandler().GetLogger()
 
         Out = dict()
         Out["Endpoint ID"] = self.EndpointID

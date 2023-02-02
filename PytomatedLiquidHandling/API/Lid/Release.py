@@ -1,11 +1,10 @@
-from ...Globals import GetCommunicationServer
 from ...HAL.Lid.Lid import Lid
+from ..Handler import GetHandler
 
 
 def Release(LidInstance: Lid, Simulate: bool):
 
-    CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
-    ResourceLockTrackerInstance = APIHandlerInstance.ResourceLockTrackerInstance
+    HandlerInstance = GetHandler()
+    ResourceLockTrackerInstance = HandlerInstance.ResourceLockTrackerInstance
 
     ResourceLockTrackerInstance.ManualUnload(LidInstance)

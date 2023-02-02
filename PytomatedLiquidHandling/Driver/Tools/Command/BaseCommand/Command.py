@@ -2,7 +2,6 @@ import os
 from abc import abstractmethod
 from threading import Event
 
-from ..... import Globals
 from .....Tools.AbstractClasses import ObjectABC
 from .Tools.GetCommandName import GetCommandName
 from .Tools.GetExpectedResponseProperties import GetExpectedResponseProperties
@@ -62,10 +61,10 @@ class Command(ObjectABC):
         return self.ExpectedResponseProperties
 
     def Execute(self, Timeout: float | None = None):
+        from ....Handler import GetHandler
 
-        CommunicationServerInstance = Globals.GetCommunicationServer()
-        DriverHandlerInstance = CommunicationServerInstance.DriverHandlerInstance
-        CommandTrackerInstance = DriverHandlerInstance.CommandTrackerInstance
+        HandlerInstance = GetHandler()
+        CommandTrackerInstance = HandlerInstance.CommandTrackerInstance
 
         CommandTrackerInstance.ManualLoad(self)
 

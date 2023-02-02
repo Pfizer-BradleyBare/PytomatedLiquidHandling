@@ -1,5 +1,5 @@
-from ...Globals import GetCommunicationServer
 from ...HAL.Lid import Lid
+from ..Handler import GetHandler
 from ..Tools.Container.BaseContainer import Container
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Transport.Transport import Transport
@@ -7,9 +7,8 @@ from ..Transport.Transport import Transport
 
 def Cover(ContainerInstance: Container, LidInstance: Lid, Simulate: bool):
 
-    CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
-    LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
+    HandlerInstance = GetHandler()
+    LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance
 
     LoadedLabwareAssignmentInstances = (
         LoadedLabwareTrackerInstance.GetLabwareAssignments(ContainerInstance)

@@ -1,21 +1,17 @@
-from ...Globals import GetCommunicationServer
 from ...HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
+from ..Handler import GetHandler
 from ..Tools.Container.BaseContainer import Container
-from ..Tools.HALLayer.HALLayer import HALLayer
-from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
-from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 
 
 def Reserve(
     ContainerInstance: Container, Temperature: float, ShakingSpeed: int, Simulate: bool
 ) -> TempControlDevice | None:
 
-    CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
-    ResourceLockTrackerInstance = APIHandlerInstance.ResourceLockTrackerInstance
-    LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
+    HandlerInstance = GetHandler()
+    ResourceLockTrackerInstance = HandlerInstance.ResourceLockTrackerInstance
+    LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance
     TempControlDeviceTrackerInstance = (
-        APIHandlerInstance.HALLayerInstance.TempControlDeviceTrackerInstance
+        HandlerInstance.HALLayerInstance.TempControlDeviceTrackerInstance
     )
 
     LoadedLabwareAssignmentInstances = (

@@ -1,6 +1,5 @@
 from typing import Self
 
-from .... import Globals
 from ....Tools.AbstractClasses import UniqueItemTrackerABC
 from ..Container.BaseContainer import Container
 from .LoadedLabware import LoadedLabware
@@ -14,9 +13,10 @@ class LoadedLabwareTracker(UniqueItemTrackerABC[LoadedLabware]):
         # Container can be loaded in 2 different physical labware. We may prevent
         # this entirely but it is good to support here
 
-        CommunicationServerInstance = Globals.GetCommunicationServer()
-        APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
-        LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
+        from ...Handler import GetHandler
+
+        HandlerInstance = GetHandler()
+        LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance
 
         for LoadedLabwareInstance in LoadedLabwareTrackerInstance.GetObjectsAsList():
 

@@ -4,9 +4,7 @@ import time
 
 import web
 
-from .... import Globals
 from ....Server.Tools.Parser import Parser
-from ...Tools.Command import Command, CommandTracker
 
 urls = ("/Driver/Request", "ABN.Source.Driver.Handler.Endpoints.Request.Request")
 
@@ -19,16 +17,16 @@ class Request:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        CommunicationServerInstance = Globals.GetCommunicationServer()
-        DriverHandlerInstance = CommunicationServerInstance.DriverHandlerInstance
+        from ..Handler import GetHandler
 
-        CommandTrackerInstance = DriverHandlerInstance.CommandTrackerInstance
+        HandlerInstance = GetHandler()
+        CommandTrackerInstance = HandlerInstance.CommandTrackerInstance
 
-        OutputCommandInstance: Command | None = None
+        OutputCommandInstance = None
         Timeout = ParserObject.GetEndpointInputData()["Timeout"] - 10
         Counter = 0
 
-        while OutputCommandInstance is None and DriverHandlerInstance.IsAlive():
+        while OutputCommandInstance is None and HandlerInstance.IsAlive():
             for CommandInstance in CommandTrackerInstance.GetObjectsAsList():
                 if not CommandInstance.ResponseEvent.is_set():
                     OutputCommandInstance = CommandInstance
@@ -39,7 +37,7 @@ class Request:
 
             time.sleep(0.1)
 
-        if OutputCommandInstance is None or not DriverHandlerInstance.IsAlive():
+        if OutputCommandInstance is None or not HandlerInstance.IsAlive():
             ParserObject.SetEndpointState(False)
             ParserObject.SetEndpointMessage("Command not available. Please try again.")
             Response = ParserObject.GetHTTPResponse()

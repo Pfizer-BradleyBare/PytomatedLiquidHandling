@@ -1,6 +1,6 @@
 from ...API.Tools.HALLayer.HALLayer import HALLayer
-from ...Globals import GetCommunicationServer
 from ...HAL.Layout import LayoutItem
+from ..Handler import GetHandler
 from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
 from .Tools.GetCommonTransportDevice import GetCommonTransportDevice
 from .Tools.GetLayoutItem import GetLayoutItem
@@ -24,10 +24,9 @@ def Transport(
         is None
     ):
 
-        CommunicationServerInstance = GetCommunicationServer()
-        APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
+        HandlerInstance = GetHandler()
         DeckLocationTrackerInstance = (
-            APIHandlerInstance.HALLayerInstance.DeckLocationTrackerInstance
+            HandlerInstance.HALLayerInstance.DeckLocationTrackerInstance
         )
 
         SourceTransportDevices = (

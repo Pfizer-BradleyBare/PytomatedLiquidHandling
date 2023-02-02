@@ -1,7 +1,6 @@
 # curl -X GET http://localhost:255/State/Kill
 import web
 
-from .... import Globals
 from ...Tools.Parser import Parser
 
 urls = ("/Server/Kill", "ABN.Source.Server.Handler.Endpoints.Kill.Kill")
@@ -9,9 +8,9 @@ urls = ("/Server/Kill", "ABN.Source.Server.Handler.Endpoints.Kill.Kill")
 
 class Kill:
     def GET(self):
+        from ...Handler import GetHandler
 
-        CommunicationServerInstance = Globals.GetCommunicationServer()
-        LoggerInstance = Globals.GetLogger()
+        LoggerInstance = GetHandler().GetLogger()
 
         ParserObject = Parser("Server Kill", web.data())
 
@@ -21,7 +20,7 @@ class Kill:
 
         LoggerInstance.info("Starting Kill sequence...")
 
-        CommunicationServerInstance.Kill()
+        GetHandler().KillServer()
 
         LoggerInstance.info("Kill sequence complete! Goodbye!")
 

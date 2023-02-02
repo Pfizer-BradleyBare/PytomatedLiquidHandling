@@ -1,1 +1,1 @@
-from .ClosedContainer import FlipTube
+from .ClosedContainer import ClosedContainerLoader

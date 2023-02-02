@@ -1,8 +1,8 @@
-from ...Globals import GetCommunicationServer
 from ...HAL.Pipette import TransferOptions as HALTransferOptions
 from ...HAL.Pipette import TransferOptionsTracker as HALTransferOptionsTracker
 from ..DeckLocation.MoveToPipette import MoveToPipette
 from ..DeckLocation.MoveToStorage import MoveToStorage
+from ..Handler import GetHandler
 from ..Tools.HALLayer.HALLayer import HALLayer
 from ..Tools.LoadedLabware.LoadedLabwareTracker import (
     LoadedLabware,
@@ -13,10 +13,9 @@ from .Options.TransferOptionsTracker import TransferOptionsTracker
 
 def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, Simulate: bool):
 
-    CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
-    LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
-    HALLayerInstance = APIHandlerInstance.HALLayerInstance
+    HandlerInstance = GetHandler()
+    LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance
+    HALLayerInstance = HandlerInstance.HALLayerInstance
 
     SourceLiquidClassCategories = list()
     DestinationLiquidClassCategories = list()

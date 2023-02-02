@@ -1,7 +1,6 @@
-from ...Globals import GetCommunicationServer
 from ...HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
+from ..Handler import GetHandler
 from ..Tools.Container.BaseContainer import Container
-from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
 from ..Transport.Transport import Transport
 
 
@@ -12,9 +11,8 @@ def Start(
     ShakingSpeed: float,
     Simulate: bool,
 ):
-    CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
-    LoadedLabwareTrackerInstance = APIHandlerInstance.LoadedLabwareTrackerInstance
+    HandlerInstance = GetHandler()
+    LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance
 
     LoadedLabwareAssignmentInstances = (
         LoadedLabwareTrackerInstance.GetLabwareAssignments(ContainerInstance)
