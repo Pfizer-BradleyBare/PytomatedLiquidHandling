@@ -1,5 +1,11 @@
-from ...API.Tools.Timer import TimerTracker
-from ...Tools.AbstractClasses import ServerHandlerABC
+import os
+from logging import DEBUG
+
+from ...PytomatedLiquidHandling.API.Handler import GetHandler as APIGetHandler
+from ...PytomatedLiquidHandling.API.Handler import Handler as APIHandler
+from ...PytomatedLiquidHandling.API.Tools.Timer import TimerTracker
+from ...PytomatedLiquidHandling.Tools.AbstractClasses import ServerHandlerABC
+from ...PytomatedLiquidHandling.Tools.Logger import GenerateLogFilePath, Logger
 from ..Workbook import WorkbookTracker
 from .Endpoints import (
     AvailableMethods,
@@ -18,7 +24,25 @@ from .Endpoints import (
 
 class Handler(ServerHandlerABC):
     def __init__(self):
-        ServerHandlerABC.__init__(self)
+        LoggerInstance = Logger(
+            "AppLogger",
+            DEBUG,
+            GenerateLogFilePath(os.path.join(os.path.dirname(__file__), "Logging")),
+        )
+
+        ServerHandlerABC.__init__(self, LoggerInstance)
+
+        global _HandlerInstance
+        _HandlerInstance = self
+
+        try:
+            APIGetHandler()
+        except:
+            APIHandler(
+                LoggerInstance,
+                "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\App\\Configuration\\HAL",
+            )
+
         self.WorkbookTrackerInstance: WorkbookTracker = WorkbookTracker()
         self.TimerTrackerInstance: TimerTracker = TimerTracker()
 
@@ -42,3 +66,15 @@ class Handler(ServerHandlerABC):
 
     def Kill(self):
         pass
+
+
+_HandlerInstance: Handler | None = None
+
+
+def GetHandler() -> Handler:
+
+    if _HandlerInstance is None:
+        raise Exception("Driver Handler not created. Please Create")
+
+    else:
+        return _HandlerInstance

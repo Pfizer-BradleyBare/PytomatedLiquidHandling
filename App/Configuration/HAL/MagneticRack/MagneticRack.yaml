@@ -1,0 +1,29 @@
+#############################################################
+#
+# Rack IDs: This identifies the Rack to users
+# Enabled: True: Can be used. False: Cannot be used
+# Default Condense TIme: This is the condense time per 100uL if the chosen condense time is default
+# Supported Labware: These are the plate supported by this Rack. This associates with the deck sequences file
+# Plate Sequence: Sequence for that plate on the rack
+# Supported Tips: The tips that can be used to pipette liquid. This is a tip ID from the pipette config
+# Add Liquid Class: Liquid class that is used to add back liquid and mix the solution
+# Remove Liquid Class: Liquid class that is used to remove all liquid without disturbance
+#
+#############################################################
+
+Rack IDs:
+  Rack 1:
+    Enabled: True
+    Deck Location ID: Carrier14_Pos1
+    Supported Labware:
+      200uL Biorad 96 Well PCR Plate:
+        Plate Sequence: _MagneticRack1_96WellPCRPlate200uL
+        Default Condense Time: 90
+
+    Supported Pipetting IDs:
+      1mL Channels Portrait:
+        Supported Tips:
+          300uL NTR:
+            Liquid Classes:
+              Dispense: MagneticBeads_300uL_LiquidAddClass
+              Aspirate: MagneticBeads_300uL_LiquidRemoveClass

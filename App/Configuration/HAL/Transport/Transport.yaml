@@ -1,0 +1,56 @@
+#############################################################
+#
+# Device IDs: This identifies the Device to users
+# Enabled: True: Can be used. False: Cannot be used
+# Com Port: Port to communicate with the Device
+# Device Type: HeaterShaker or HeaterCooler
+# Ambient Temp: Above ambient temp will heat, below ambient will cool. If device cannot cool then this is ignored
+# Stable Temp Delta: If device temp is +- this value of set temp. Device is considered equilibrated and stable.
+# Supported Plate Types: These are the plate supported by this device. This associates with the deck sequences file
+# Plate Sequence: Sequence for that plate on the device
+# Lid Sequence: Sequence for associated lid on the device
+#
+#############################################################
+
+Device IDs:
+  CORE Gripper:
+    Enabled: True
+    Gripper Sequence: seq_COREGripTool
+    Supported Labware:
+      Agilent Black Lid:
+        Close Offset: 2
+        Open Offset: 2
+        Pickup Height: 4
+
+      200uL Biorad 96 Well PCR Plate:
+        Close Offset: 2
+        Open Offset: 2
+        Pickup Height: 4
+
+      400uL Thermo 96 Well PCR Plate:
+        Close Offset: 2
+        Open Offset: 2
+        Pickup Height: 4
+
+      1200uL DeepWell 96 Well PCR Plate:
+        Close Offset: 2
+        Open Offset: 2
+        Pickup Height: 4
+
+      2000uL Corning 96 Well PCR Plate:
+        Close Offset: 2
+        Open Offset: 2
+        Pickup Height: 4
+
+      400uL Corning Costar 96 Well UV Plate:
+        Close Offset: 2
+        Open Offset: 2
+        Pickup Height: 4
+
+  Internal Plate Gripper:
+    Enabled: False
+    Supported Labware:
+
+  Track Gripper:
+    Enabled: False
+    Supported Labware:

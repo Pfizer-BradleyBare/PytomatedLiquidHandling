@@ -1,0 +1,121 @@
+DeckLocation IDs:
+  Carrier38_Pos1:
+    - Plate Sequence: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
+      Plate Labware: 2000uL Corning 96 Well PCR Plate
+
+    - Plate Sequence: T5
+      Plate Labware: 200mL Reagent Trough
+
+  Carrier38_Pos2:
+    - Plate Sequence: Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel
+      Plate Labware: 2000uL Corning 96 Well PCR Plate
+
+    - Plate Sequence: T4
+      Plate Labware: 200mL Reagent Trough
+
+  Carrier38_Pos3:
+    - Plate Sequence: Carrier38_Pos3_CorningCostar96WellUVPlate360uL
+      Plate Labware: 400uL Corning Costar 96 Well UV Plate
+
+    - Plate Sequence: Carrier38_Pos3_96WellPCRPlate200uL_1mLChannel
+      Plate Labware: 200uL Biorad 96 Well PCR Plate
+
+    - Plate Sequence: Carrier38_Pos3_96WellPCRPlate2000uL_1mLChannel
+      Plate Labware: 2000uL Corning 96 Well PCR Plate
+
+  Carrier38_Pos4:
+    - Plate Sequence: Carrier38_Pos4_96WellPCRPlate1200uL_1mLChannel
+      Plate Labware: 1200uL DeepWell 96 Well PCR Plate
+
+    - Plate Sequence: Carrier38_Pos4_96WellPCRPlate2000uL_1mLChannel
+      Plate Labware: 2000uL Corning 96 Well PCR Plate
+
+  Carrier38_Pos5:
+    - Plate Sequence: Carrier38_Pos5_96WellPCRPlate1200uL_1mLChannel
+      Plate Labware: 1200uL DeepWell 96 Well PCR Plate
+
+    - Plate Sequence: Carrier38_Pos5_96WellPCRPlate2000uL_1mLChannel
+      Plate Labware: 2000uL Corning 96 Well PCR Plate
+
+  Carrier14_Pos1:
+    - Plate Sequence: Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel
+      Plate Labware: 1200uL DeepWell 96 Well PCR Plate
+
+    - Plate Sequence: Carrier14_Pos1_96WellPCRPlate2000uL_1mLChannel
+      Plate Labware: 2000uL Corning 96 Well PCR Plate
+
+    - Plate Sequence: T10
+      Plate Labware: 200mL Reagent Trough
+
+  Carrier14_Pos2:
+    - Plate Sequence: Carrier14_Pos2_96WellPCRPlate1200uL_1mLChannel
+      Plate Labware: 1200uL DeepWell 96 Well PCR Plate
+
+    - Plate Sequence: Carrier14_Pos2_96WellPCRPlate2000uL_1mLChannel
+      Plate Labware: 2000uL Corning 96 Well PCR Plate
+
+    - Plate Sequence: T9
+      Plate Labware: 200mL Reagent Trough
+
+  Carrier14_Pos3:
+    - Plate Sequence: Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel
+      Plate Labware: 200uL Biorad 96 Well PCR Plate
+      Lid Sequence: Carrier14_Pos3_Lid_200uL
+      Lid Labware: Agilent Black Lid
+
+    - Plate Sequence: Carrier14_Pos3_96WellPCRPlate400uL_1mLChannel
+      Plate Labware: 400uL Thermo 96 Well PCR Plate
+      Lid Sequence: Carrier14_Pos3_Lid_400uL
+      Lid Labware: Agilent Black Lid
+
+    - Plate Sequence: Carrier14_Pos3_96WellPCRPlate1200uL_1mLChannel
+      Plate Labware: 1200uL DeepWell 96 Well PCR Plate
+
+    - Plate Sequence: Carrier14_Pos3_96WellPCRPlate2000uL_1mLChannel
+      Plate Labware: 2000uL Corning 96 Well PCR Plate
+
+  Carrier14_Pos4:
+    - Plate Sequence: Carrier14_Pos4_96WellPCRPlate200uL_1mLChannel
+      Plate Labware: 200uL Biorad 96 Well PCR Plate
+      Lid Sequence: Carrier14_Pos4_Lid_200uL
+      Lid Labware: Agilent Black Lid
+
+    - Plate Sequence: Carrier14_Pos4_96WellPCRPlate400uL_1mLChannel
+      Plate Labware: 400uL Thermo 96 Well PCR Plate
+
+    - Plate Sequence: Carrier14_Pos4_96WellPCRPlate1200uL_1mLChannel
+      Plate Labware: 1200uL DeepWell 96 Well PCR Plate
+      Lid Sequence: Carrier14_Pos4_Lid_1200uL
+      Lid Labware: Agilent Black Lid
+
+    - Plate Sequence: Carrier14_Pos4_96WellPCRPlate2000uL_1mLChannel
+      Plate Labware: 2000uL Corning 96 Well PCR Plate
+
+  Carrier14_Pos5:
+    - Plate Sequence: Carrier14_Pos5_96WellPCRPlate200uL_1mLChannel
+      Plate Labware: 200uL Biorad 96 Well PCR Plate
+
+    - Plate Sequence: Carrier14_Pos5_96WellPCRPlate400uL_1mLChannel
+      Plate Labware: 400uL Thermo 96 Well PCR Plate
+
+    - Plate Sequence: Carrier14_Pos5_96WellPCRPlate1200uL_1mLChannel
+      Plate Labware: 1200uL DeepWell 96 Well PCR Plate
+
+    - Plate Sequence: Carrier14_Pos5_96WellPCRPlate2000uL_1mLChannel
+      Plate Labware: 2000uL Corning 96 Well PCR Plate
+
+  FalconTubeCarrier:
+    - Plate Sequence: CentrifugeTubeRack15mL
+      Plate Labware: 15mL Centrifuge Tube
+
+  FlipTubeCarrier:
+    - Plate Sequence: Hamilton_FlipTube_Carrier
+      Plate Labware: Hamilton 1.5mL FlipTube
+
+  HHS_Carrier_Pos1:
+    - Plate Sequence: Hamilton_FlipTube_Carrier_Cold
+      Plate Labware: Hamilton 1.5mL FlipTube
+
+  ReagentReserviorCarrier:
+    - Plate Sequence: ReagentReservoir60mL
+      Plate Labware: 60mL Reagent Reservior
