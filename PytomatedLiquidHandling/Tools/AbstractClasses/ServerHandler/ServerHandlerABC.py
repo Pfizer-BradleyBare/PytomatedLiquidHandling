@@ -1,4 +1,6 @@
 import os
+import threading
+import time
 from abc import ABC, abstractmethod
 from typing import Self
 
@@ -30,10 +32,20 @@ class ServerHandlerABC(ABC):
         # Add endpoints as addresses we can access over HTTP
 
         os.environ["PORT"] = Port
-
         if ServerHandlerABC.__ServerStartedState is not True:
+
+            ThreadInstance = threading.Thread(
+                name="Server", target=_StartServer, args=(ServerHandlerABC.GetURLS(),)
+            )
+            ThreadInstance.daemon = True
+            ThreadInstance.start()
+
             ServerHandlerABC.__ServerStartedState = True
-            web.application(ServerHandlerABC.GetURLS(), globals()).run()
+
+    @classmethod
+    def WaitForKill(cls):
+        while ServerHandlerABC.__ServerStartedState is True:
+            time.sleep(1)
 
     @classmethod
     def KillServer(cls):
@@ -62,3 +74,7 @@ class ServerHandlerABC(ABC):
     @abstractmethod
     def Kill(self):
         ...
+
+
+def _StartServer(Urls: tuple):
+    web.application(Urls, globals()).run()

@@ -4,7 +4,10 @@ import web
 
 from ...Tools.Parser import Parser
 
-urls = ("/Server/IsActive", "ABN.Source.Server.Handler.Endpoints.IsActive.IsActive")
+urls = (
+    "/Server/IsActive",
+    "PytomatedLiquidHandling.Server.Handler.Endpoints.IsActive.IsActive",
+)
 
 
 class IsActive:

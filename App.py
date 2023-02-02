@@ -3,9 +3,10 @@ import sys
 sys.dont_write_bytecode = True
 
 import os
+import time
 from logging import DEBUG
 
-from App.Handler import Handler
+from PytomatedLiquidHandling.Server.Handler import Handler
 from PytomatedLiquidHandling.Tools.Logger import GenerateLogFilePath, Logger
 
 if __name__ == "__main__":
@@ -16,4 +17,9 @@ if __name__ == "__main__":
         GenerateLogFilePath(os.path.join(os.path.dirname(__file__), "Logging")),
     )
 
-    Handler().StartServer()
+    HandlerInstance = Handler(
+        LoggerInstance,
+    )
+
+    HandlerInstance.StartServer()
+    HandlerInstance.WaitForKill()
