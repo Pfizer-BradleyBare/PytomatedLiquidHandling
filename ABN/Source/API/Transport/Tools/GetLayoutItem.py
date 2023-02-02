@@ -10,7 +10,7 @@ def GetLayoutItem(
 ) -> LayoutItemGrouping | None:
 
     CommunicationServerInstance = GetCommunicationServer()
-    APIHandlerInstance = CommunicationServerInstance.APIHandlerInstance
+    APIHandlerInstance = CommunicationServerInstance.GetAPIHandler()
     LayoutItemTrackerInstance = (
         APIHandlerInstance.HALLayerInstance.LayoutItemGroupingTrackerInstance
     )
