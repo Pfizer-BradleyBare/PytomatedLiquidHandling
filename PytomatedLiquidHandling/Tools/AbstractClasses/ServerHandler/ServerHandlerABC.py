@@ -30,9 +30,9 @@ class ServerHandlerABC(ABC):
         # Add endpoints as addresses we can access over HTTP
 
         os.environ["PORT"] = Port
-        ServerHandlerABC.__ServerStartedState = True
 
         if ServerHandlerABC.__ServerStartedState is not True:
+            ServerHandlerABC.__ServerStartedState = True
             web.application(ServerHandlerABC.GetURLS(), globals()).run()
 
     @classmethod
