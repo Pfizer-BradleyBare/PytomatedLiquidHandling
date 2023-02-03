@@ -3,14 +3,14 @@ import threading
 import pythoncom
 import xlwings
 
-from ....Globals import GetLogger
-
 Lock = threading.Lock()
 
 
 def ExcelClassFunctionDecorator_ThreadLock(DecoratedFunction):
     def inner(*args, **kwargs):
-        LoggerInstance = GetLogger()
+        from ...Handler import GetHandler
+
+        LoggerInstance = GetHandler().GetLogger()
 
         LoggerInstance.debug("Start Excel Function: " + DecoratedFunction.__name__)
         LoggerInstance.debug("Args: " + str(args))

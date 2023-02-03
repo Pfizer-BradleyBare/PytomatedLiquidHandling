@@ -3,7 +3,7 @@ import web
 
 from ...Tools.Parser import Parser
 
-urls = ("/Server/Kill", "ABN.Source.Server.Handler.Endpoints.Kill.Kill")
+urls = ("/Server/Kill", "PytomatedLiquidHandling.Server.Handler.Endpoints.Kill.Kill")
 
 
 class Kill:

@@ -1,6 +1,7 @@
 from abc import abstractmethod
 
-from ....Tools.AbstractClasses import ObjectABC
+from PytomatedLiquidHandling.Tools.AbstractClasses import ObjectABC
+
 from ...Tools.Excel import Excel
 from ...Tools.Tree import Node
 

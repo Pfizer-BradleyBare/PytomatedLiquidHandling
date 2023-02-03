@@ -2,17 +2,17 @@
 
 import web
 
-from ....API.Handler.APIHandler import APIHandler
-from ....Driver.DeckLoadingDialog import Plate5Position
-from ....Server.Globals.HandlerRegistry import GetAPIHandler
-from ....Server.Tools.Parser import Parser
+from PytomatedLiquidHandling.Driver.DeckLoadingDialog import Plate5Position
+from PytomatedLiquidHandling.Server.Tools.Parser import Parser
 
-urls = ("/FlexibleTest", "ABN.Source.App.Handler.Endpoints.FlexibleTest.FlexibleTest")
+urls = ("/FlexibleTest", "App.Handler.Endpoints.FlexibleTest.FlexibleTest")
 
 
 class FlexibleTest:
     def GET(self):
         ParserObject = Parser("App FlexibleTest", web.data())
+
+        from ..Handler import GetHandler
 
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()

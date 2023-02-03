@@ -1,6 +1,7 @@
 from typing import cast
 
-from ....API.Tools import Validator
+from PytomatedLiquidHandling.API.Tools import Validator
+
 from ...Workbook import Block, Workbook
 
 

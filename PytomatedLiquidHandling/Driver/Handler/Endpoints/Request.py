@@ -6,7 +6,10 @@ import web
 
 from ....Server.Tools.Parser import Parser
 
-urls = ("/Driver/Request", "ABN.Source.Driver.Handler.Endpoints.Request.Request")
+urls = (
+    "/Driver/Request",
+    "PytomatedLiquidHandling.Driver.Handler.Endpoints.Request.Request",
+)
 
 
 class Request:

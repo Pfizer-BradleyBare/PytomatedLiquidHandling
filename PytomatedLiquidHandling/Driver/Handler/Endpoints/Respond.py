@@ -5,7 +5,10 @@ import web
 from ....Server.Tools.Parser import Parser
 from ... import Handler as HandlerModule
 
-urls = ("/Driver/Respond", "ABN.Source.Driver.Handler.Endpoints.Respond.Respond")
+urls = (
+    "/Driver/Respond",
+    "PytomatedLiquidHandling.Driver.Handler.Endpoints.Respond.Respond",
+)
 
 
 class Respond:

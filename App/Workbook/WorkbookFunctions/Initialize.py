@@ -1,7 +1,8 @@
 import threading
 
-from ....API.Tools.Container import ContainerTracker
-from ....API.Tools.RunTypes.RunTypes import RunTypes
+from PytomatedLiquidHandling.API.Tools.Container import ContainerTracker
+from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
+
 from ...Tools.Container import Plate
 from ...Tools.Context import (
     Context,

@@ -1,7 +1,8 @@
 import time
 from typing import Callable
 
-from ....API.Tools.Timer import Timer as APITimer
+from PytomatedLiquidHandling.API.Tools.Timer import Timer as APITimer
+
 from ...Workbook import Block, Workbook
 
 

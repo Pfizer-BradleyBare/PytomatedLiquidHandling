@@ -1,11 +1,14 @@
-from ....API.Tools.Container import Reagent as APIReagent
-from ....API.Tools.Container.BaseContainer import LiquidClassCategory
-from ....API.Tools.Container.Reagent.ReagentProperty import (
+from PytomatedLiquidHandling.API.Tools.Container import Reagent as APIReagent
+from PytomatedLiquidHandling.API.Tools.Container.BaseContainer import (
+    LiquidClassCategory,
+)
+from PytomatedLiquidHandling.API.Tools.Container.Reagent.ReagentProperty import (
     HomogeneityReagentProperty,
     LLDReagentProperty,
     ViscosityReagentProperty,
     VolatilityReagentProperty,
 )
+
 from ..Excel import Excel
 
 

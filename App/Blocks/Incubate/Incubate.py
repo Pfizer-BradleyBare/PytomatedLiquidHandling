@@ -1,8 +1,9 @@
-from ....API import Lid, TempControl
-from ....API.Tools.Timer import TimerTracker
-from ....HAL.Lid import Lid as HALLid
-from ....HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
-from ....Server.Globals import GetAppHandler
+from PytomatedLiquidHandling.API import Lid, TempControl
+from PytomatedLiquidHandling.HAL.Lid import Lid as HALLid
+from PytomatedLiquidHandling.HAL.TempControlDevice.BaseTempControlDevice import (
+    TempControlDevice,
+)
+
 from ...Tools import InputChecker
 from ...Tools.Excel import Excel
 from ...Tools.Timer import Timer
@@ -68,15 +69,15 @@ class Incubate(Block):
             .GetObjectByName(self.GetParentPlateName())
         )
 
+        from ...Handler import GetHandler
+
         Simulate = WorkbookInstance.Simulate
 
         StepContext = WorkbookInstance.GetContextTracker().GetObjectByName(
             self.GetContext()
         )
 
-        TimerTrackerInstance: TimerTracker = (
-            GetAppHandler().TimerTrackerInstance  # type:ignore
-        )
+        TimerTrackerInstance = GetHandler().TimerTrackerInstance
 
         if type(Temperature) == str and Temperature == "Ambient":
 
@@ -148,9 +149,9 @@ class Incubate(Block):
         WorkbookInstance.PreprocessingBlocksTrackerInstance.ManualLoad(self)
         # This block requires preprocessing. Let's add it to the list
 
-        TimerTrackerInstance: TimerTracker = (
-            GetAppHandler().TimerTrackerInstance  # type:ignore
-        )
+        from ...Handler import GetHandler
+
+        TimerTrackerInstance = GetHandler().TimerTrackerInstance
 
         StepContext = WorkbookInstance.GetContextTracker().GetObjectByName(
             self.GetContext()
@@ -213,9 +214,9 @@ def PreprocessingWaitCallback(
         StepInstance.GetContext()
     )
 
-    TimerTrackerInstance: TimerTracker = (
-        GetAppHandler().TimerTrackerInstance  # type:ignore
-    )
+    from ...Handler import GetHandler
+
+    TimerTrackerInstance = GetHandler().TimerTrackerInstance
 
     if StepInstance.ReservedTempControlDevice is not None:
         if TempControl.IsReady(

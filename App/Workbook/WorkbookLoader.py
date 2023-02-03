@@ -1,4 +1,5 @@
-from ...API.Tools.RunTypes.RunTypes import RunTypes
+from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
+
 from ..Tools.Excel import Excel
 from ..Workbook import BlockTracker, Workbook, WorkbookTracker, Worklist
 from .Block import BlockLoader

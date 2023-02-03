@@ -1,10 +1,10 @@
 import os
 import threading
 
-from ...API.Tools.Container.BaseContainer import ContainerTracker
-from ...API.Tools.RunTypes.RunTypes import RunTypes
-from ...Globals import GetLogger
-from ...Tools.AbstractClasses import ObjectABC
+from PytomatedLiquidHandling.API.Tools.Container.BaseContainer import ContainerTracker
+from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
+from PytomatedLiquidHandling.Tools.AbstractClasses import ObjectABC
+
 from ..Tools.Context import Context, ContextTracker
 from ..Tools.Excel import Excel
 from ..Workbook import Block, BlockTracker, Worklist
@@ -32,9 +32,9 @@ class Workbook(ObjectABC):
         WorklistInstance: Worklist,
         ExcelInstance: Excel,
     ):
+        from ..Handler import GetHandler
 
         # Normal Init Variables
-
         # Variables
         self.RunType: RunTypes = RunType
         self.MethodPath: str = MethodPath
@@ -67,7 +67,7 @@ class Workbook(ObjectABC):
         # Thread
         self.WorkbookProcessorThread: threading.Thread
 
-        GetLogger().debug(
+        GetHandler().GetLogger().debug(
             "The following method tree was determined for %s: \n%s",
             self.MethodName,
             self.MethodTreeRoot,

@@ -2,7 +2,7 @@ import os
 
 import web
 
-from ....Server.Tools.Parser import Parser
+from PytomatedLiquidHandling.Server.Tools.Parser import Parser
 
 MethodsPath = "C:\\___MethodsTest"
 TemplateMethodSuffix = "__Template"
@@ -11,7 +11,7 @@ TempFolder = "Temp"
 
 urls = (
     "/App/AvailableMethods",
-    "ABN.Source.App.Handler.Endpoints.AvailableMethods.AvailableMethods",
+    "App.Handler.Endpoints.AvailableMethods.AvailableMethods",
 )
 
 

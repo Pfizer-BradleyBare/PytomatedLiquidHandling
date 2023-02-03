@@ -1,9 +1,10 @@
-from ....Globals import GetLogger
 from ...Blocks import MergePlates
 from ...Workbook import Block, Workbook
 
 
 def RunProcessor(WorkbookInstance: Workbook):
+
+    from ...Handler import GetHandler
 
     WorkbookInstance.ExcelInstance.OpenBook(False)
 
@@ -200,11 +201,15 @@ def RunProcessor(WorkbookInstance: Workbook):
             # We will only execute the step if the factors are not zero
             # Additionally we must always execute a merge plates step no matter what
 
-            GetLogger().info("EXECUTING: " + CurrentExecutingBlock.GetName())
+            GetHandler().GetLogger().info(
+                "EXECUTING: " + CurrentExecutingBlock.GetName()
+            )
             StepStatus = CurrentExecutingBlock.Process(WorkbookInstance)
 
         else:
-            GetLogger().info("SKIPPING: " + CurrentExecutingBlock.GetName())
+            GetHandler().GetLogger().info(
+                "SKIPPING: " + CurrentExecutingBlock.GetName()
+            )
 
         if StepStatus is True:
             ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)

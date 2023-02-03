@@ -1,13 +1,11 @@
 import web
 
-from ....API.Tools.RunTypes.RunTypes import RunTypes
-from ....Server.Globals.HandlerRegistry import GetAppHandler
-from ....Server.Tools.Parser import Parser
-from ...Workbook import WorkbookTracker
+from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
+from PytomatedLiquidHandling.Server.Tools.Parser import Parser
 
 urls = (
     "/App/GetWorkbookInfo",
-    "ABN.Source.App.Handler.Endpoints.GetWorkbookInfo.GetWorkbookInfo",
+    "App.Handler.Endpoints.GetWorkbookInfo.GetWorkbookInfo",
 )
 
 
@@ -15,15 +13,15 @@ class GetWorkbookInfo:
     def POST(self):
         ParserObject = Parser("App GetWorkbookInfo", web.data())
 
+        from ..Handler import GetHandler
+
         if not ParserObject.IsValid(["Workbook Name"]):
             Response = ParserObject.GetHTTPResponse()
             return Response
 
         MethodName = ParserObject.GetEndpointInputData()["Workbook Name"]
 
-        WorkbookTrackerInstance: WorkbookTracker = (
-            GetAppHandler().WorkbookTrackerInstance  # type:ignore
-        )
+        WorkbookTrackerInstance = GetHandler().WorkbookTrackerInstance
 
         WorkbookInstance = WorkbookTrackerInstance.GetObjectByName(MethodName)
 

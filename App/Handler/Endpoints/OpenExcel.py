@@ -1,11 +1,12 @@
 import web
 
-from ....Server.Tools.Parser import Parser
+from PytomatedLiquidHandling.Server.Tools.Parser import Parser
+
 from ...Tools import Excel
 
 urls = (
     "/App/OpenExcel",
-    "ABN.Source.App.Handler.Endpoints.OpenExcel.OpenExcel",
+    "App.Handler.Endpoints.OpenExcel.OpenExcel",
 )
 
 

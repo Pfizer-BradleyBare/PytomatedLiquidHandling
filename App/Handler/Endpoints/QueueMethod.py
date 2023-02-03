@@ -13,17 +13,19 @@ import os
 
 import web
 
-from ....API.Tools.RunTypes.RunTypes import RunTypes
-from ....Server.Globals.HandlerRegistry import GetAppHandler
-from ....Server.Tools.Parser import Parser
-from ...Workbook import WorkbookLoader, WorkbookTracker
+from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
+from PytomatedLiquidHandling.Server.Tools.Parser import Parser
 
-urls = ("/App/QueueMethod", "ABN.Source.App.Handler.Endpoints.QueueMethod.QueueMethod")
+from ...Workbook import WorkbookLoader
+
+urls = ("/App/QueueMethod", "App.Handler.Endpoints.QueueMethod.QueueMethod")
 
 
 class QueueMethod:
     def POST(self):
         ParserObject = Parser("App QueueMethod", web.data())
+
+        from ..Handler import GetHandler
 
         if not ParserObject.IsValid(
             ["Method Path", "Action", "User Name", "User Contact Info"]
@@ -31,9 +33,7 @@ class QueueMethod:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        WorkbookTrackerInstance: WorkbookTracker = (
-            GetAppHandler().WorkbookTrackerInstance  # type:ignore
-        )
+        WorkbookTrackerInstance = GetHandler().WorkbookTrackerInstance
 
         MethodPath = ParserObject.GetEndpointInputData()["Method Path"]
         Action = RunTypes(ParserObject.GetEndpointInputData()["Action"])

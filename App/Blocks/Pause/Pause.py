@@ -1,5 +1,3 @@
-from ....API.Tools.Timer import TimerTracker
-from ....Server.Globals import GetAppHandler
 from ...Tools import InputChecker
 from ...Tools.Excel import Excel
 from ...Tools.Timer import Timer
@@ -31,9 +29,9 @@ class Pause(Block):
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
 
-        TimerTrackerInstance: TimerTracker = (
-            GetAppHandler().TimerTrackerInstance  # type:ignore
-        )
+        from ...Handler import GetHandler
+
+        TimerTrackerInstance = GetHandler().TimerTrackerInstance
 
         StepContext = WorkbookInstance.GetContextTracker().GetObjectByName(
             self.GetContext()

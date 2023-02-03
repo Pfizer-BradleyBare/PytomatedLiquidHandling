@@ -2,20 +2,21 @@ import os
 
 import web
 
-from ....Server.Globals.HandlerRegistry import GetAppHandler
-from ....Server.Tools.Parser import Parser
-from ...Workbook import WorkbookTracker
+from PytomatedLiquidHandling.Server.Tools.Parser import Parser
+
 from .AvailableMethods import MethodsPath, TempFolder
 
 urls = (
     "/App/CleanupMethodProject",
-    "ABN.Source.App.Handler.Endpoints.CleanupMethodProject.CleanupMethodProject",
+    "App.Handler.Endpoints.CleanupMethodProject.CleanupMethodProject",
 )
 
 
 class CleanupMethodProject:
     def POST(self):
         ParserObject = Parser("App CleanupMethodProject", web.data())
+
+        from ..Handler import GetHandler
 
         if not ParserObject.IsValid(["Method", "Project"]):
             Response = ParserObject.GetHTTPResponse()
@@ -40,9 +41,7 @@ class CleanupMethodProject:
             TempFolder,
         )
 
-        WorkbookTrackerInstance: WorkbookTracker = (
-            GetAppHandler().WorkbookTrackerInstance  # type:ignore
-        )
+        WorkbookTrackerInstance = GetHandler().WorkbookTrackerInstance
 
         QueuedFiles = [
             File.GetName() for File in WorkbookTrackerInstance.GetObjectsAsList()

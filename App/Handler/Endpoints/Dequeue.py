@@ -2,9 +2,9 @@
 
 import web
 
-from ....Server.Tools.Parser import Parser
+from PytomatedLiquidHandling.Server.Tools.Parser import Parser
 
-urls = ("/App/Dequeue", "ABN.Source.App.Handler.Endpoints.Dequeue.Dequeue")
+urls = ("/App/Dequeue", "App.Handler.Endpoints.Dequeue.Dequeue")
 
 
 class Dequeue:

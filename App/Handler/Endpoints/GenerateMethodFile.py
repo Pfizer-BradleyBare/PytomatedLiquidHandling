@@ -5,13 +5,14 @@ from typing import cast
 
 import web
 
-from ....Server.Tools.Parser import Parser
+from PytomatedLiquidHandling.Server.Tools.Parser import Parser
+
 from ...Tools.Excel import Excel
 from .AvailableMethods import MethodsPath, TempFolder, TemplateMethodSuffix
 
 urls = (
     "/App/GenerateMethodFile",
-    "ABN.Source.App.Handler.Endpoints.GenerateMethodFile.GenerateMethodFile",
+    "App.Handler.Endpoints.GenerateMethodFile.GenerateMethodFile",
 )
 
 

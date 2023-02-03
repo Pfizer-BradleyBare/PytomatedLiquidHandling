@@ -6,7 +6,7 @@ from ....Server.Tools.Parser import Parser
 
 urls = (
     "/Driver/Request",
-    "ABN.Source.API.Handler.Endpoints.GetDevicesState.GetDevicesState",
+    "PytomatedLiquidHandling.API.Handler.Endpoints.GetDevicesState.GetDevicesState",
 )
 
 

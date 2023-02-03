@@ -1,13 +1,11 @@
 import web
 
-from ....API.Tools.RunTypes.RunTypes import RunTypes
-from ....Server.Globals.HandlerRegistry import GetAppHandler
-from ....Server.Tools.Parser import Parser
-from ...Workbook import WorkbookTracker
+from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
+from PytomatedLiquidHandling.Server.Tools.Parser import Parser
 
 urls = (
     "/App/ListQueue",
-    "ABN.Source.App.Handler.Endpoints.ListQueue.ListQueue",
+    "App.Handler.Endpoints.ListQueue.ListQueue",
 )
 
 
@@ -15,13 +13,13 @@ class ListQueue:
     def GET(self):
         ParserObject = Parser("App ListQueue", web.data())
 
+        from ..Handler import GetHandler
+
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        WorkbookTrackerInstance: WorkbookTracker = (
-            GetAppHandler().WorkbookTrackerInstance  # type:ignore
-        )
+        WorkbookTrackerInstance = GetHandler().WorkbookTrackerInstance
 
         QueuedWorkbookNames = sorted(
             [

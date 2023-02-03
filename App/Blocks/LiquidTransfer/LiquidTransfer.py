@@ -1,6 +1,10 @@
-from ....API.Pipette import Transfer, TransferOptions, TransferOptionsTracker
-from ....API.Tools.HALLayer.HALLayer import HALLayer
-from ....Server.Globals.HandlerRegistry import GetAPIHandler
+from PytomatedLiquidHandling.API.Handler import GetHandler
+from PytomatedLiquidHandling.API.Pipette import (
+    Transfer,
+    TransferOptions,
+    TransferOptionsTracker,
+)
+
 from ...Tools import InputChecker
 from ...Tools.Excel import Excel
 from ...Workbook import (
@@ -87,7 +91,7 @@ class LiquidTransfer(Block):
             ContextInstance.GetDispenseWellSequenceTracker()
         )
 
-        HALLayerInstance: HALLayer = GetAPIHandler().HALLayerInstance  # type:ignore
+        HALLayerInstance = GetHandler().HALLayerInstance
         TransferOptionsTrackerInstance = TransferOptionsTracker(
             HALLayerInstance.PipetteTrackerInstance
         )

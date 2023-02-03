@@ -1,4 +1,5 @@
-from ....Tools.AbstractClasses import ObjectABC
+from PytomatedLiquidHandling.Tools.AbstractClasses import ObjectABC
+
 from .States.ContextStates import ContextStates
 from .WellFactor.WellFactorTracker import WellFactorTracker
 from .WellSequence.WellSequenceTracker import WellSequenceTracker
