@@ -45,7 +45,7 @@ class ServerHandlerABC(ABC):
     @classmethod
     def WaitForKill(cls):
         while ServerHandlerABC.__ServerStartedState is True:
-            time.sleep(1)
+            time.sleep(123456789)
 
     @classmethod
     def KillServer(cls):
