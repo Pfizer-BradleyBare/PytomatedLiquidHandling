@@ -2,6 +2,7 @@
 
 import web
 
+from PytomatedLiquidHandling.API.Handler import GetHandler
 from PytomatedLiquidHandling.Driver.DeckLoadingDialog import Plate5Position
 from PytomatedLiquidHandling.Server.Tools.Parser import Parser
 
@@ -12,14 +13,11 @@ class FlexibleTest:
     def GET(self):
         ParserObject = Parser("App FlexibleTest", web.data())
 
-        from ..Handler import GetHandler
-
         if not ParserObject.IsValid([]):
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        APIHandlerInstance: APIHandler = GetAPIHandler()  # type:ignore
-        HALLayerInstance = APIHandlerInstance.HALLayerInstance
+        HALLayerInstance = GetHandler().HALLayerInstance
 
         TrackerInstance = HALLayerInstance.TempControlDeviceTrackerInstance
 
