@@ -1,4 +1,4 @@
-from ...Tools import InputChecker
+from ...Tools import BlockParameter
 from ...Tools.Container import Plate as PlateContainer
 from ...Tools.Context import Context
 from ...Tools.Excel import Excel

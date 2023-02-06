@@ -1,4 +1,4 @@
-from ...Tools import InputChecker
+from ...Tools import BlockParameter
 from ...Tools.Context import ContextStates
 from ...Tools.Excel import Excel
 from ...Workbook import (

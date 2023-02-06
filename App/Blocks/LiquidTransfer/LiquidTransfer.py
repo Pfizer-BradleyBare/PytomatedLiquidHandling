@@ -5,7 +5,7 @@ from PytomatedLiquidHandling.API.Pipette import (
     TransferOptionsTracker,
 )
 
-from ...Tools import InputChecker
+from ...Tools import BlockParameter
 from ...Tools.Excel import Excel
 from ...Workbook import (
     Block,

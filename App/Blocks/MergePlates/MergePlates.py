@@ -1,7 +1,7 @@
 from typing import Self, cast
 
 from ...Blocks import SplitPlate
-from ...Tools import InputChecker
+from ...Tools import BlockParameter
 from ...Tools.Context import Context
 from ...Tools.Excel import Excel
 from ...Workbook import (

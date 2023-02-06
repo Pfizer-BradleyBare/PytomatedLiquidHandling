@@ -1,4 +1,4 @@
-from ...Tools import InputChecker
+from ...Tools import BlockParameter
 from ...Tools.Excel import Excel
 from ...Workbook import (
     Block,
@@ -13,23 +13,11 @@ class Aliquot(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetLocation(self, WorkbookInstance: Workbook) -> list[int]:
-
-        return InputChecker.CheckAndConvertList(
-            WorkbookInstance,
+        # Params
+        self.Location = BlockParameter.List[int](self, 1)
+        self.StartPosition = BlockParameter.Item[str](
             self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
-            [int],
-            [],
-        )
-
-    def GetStartPosition(self, WorkbookInstance: Workbook) -> str:
-
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
-            [str],
+            2,
             ["Sample Start Position", "Plate Start Position(A1)"],
         )
 
@@ -38,7 +26,7 @@ class Aliquot(Block):
 
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
-        Locations = self.GetLocation(WorkbookInstance)
+        Locations = self.Location.Read(WorkbookInstance)
 
         WorklistInstance = WorkbookInstance.GetWorklist()
 

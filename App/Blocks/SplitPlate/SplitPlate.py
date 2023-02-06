@@ -1,7 +1,7 @@
 from typing import cast
 
 from ...Blocks import Plate
-from ...Tools import InputChecker
+from ...Tools import BlockParameter
 from ...Tools.Container import Plate as PlateContainer
 from ...Tools.Context import Context, WellFactor, WellFactorTracker, WellSequenceTracker
 from ...Tools.Excel import Excel

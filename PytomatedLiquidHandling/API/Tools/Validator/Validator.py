@@ -1,6 +1,9 @@
+from types import UnionType
+
+
 def ValidateInput(
     Input: object,
-    Types: list[type] = list(),
+    Types: type | UnionType,
     Vals: list[object] = list(),
 ) -> bool:
     ValidState = True
@@ -10,10 +13,14 @@ def ValidateInput(
 
     if Types:
         TestState = False
-        if type(Input) in Types:
+        if isinstance(Input, Types):
             TestState = True
 
         ValidState = ValidState and TestState
+
+    if ValidState is False:
+        return False
+    # If we already failed we can return. No sense in continuing
 
     if Vals:
         TestState = False
@@ -27,7 +34,7 @@ def ValidateInput(
 
 def ValidateListInput(
     Inputs: list[object],
-    Types: list[type] = list(),
+    Types: type | UnionType,
     Vals: list[object] = list(),
 ) -> bool:
 
@@ -39,15 +46,17 @@ def ValidateListInput(
     for Input in Inputs:
         ValidState = ValidState and ValidateInput(Input, Types, Vals)
 
+        if ValidState is False:
+            return False
+        # If we already failed we can return. No sense in continuing
+
     return ValidState
 
 
 print(
     ValidateListInput(
-        ["Bradley", "Hannah", 4],
-        [int, str],
+        ["Bradley", "Hannah", 3],
+        int | str,
         ["Hannah", "Bradley", "Tipper", "Kuni", 1, 2, 3],
     )
 )
-
-print(type(1) == (int | float))

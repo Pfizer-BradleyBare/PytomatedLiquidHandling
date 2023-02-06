@@ -1,4 +1,4 @@
-from ...Tools import InputChecker
+from ...Tools import BlockParameter
 from ...Tools.Excel import Excel
 from ...Tools.Timer import Timer
 from ...Workbook import (
