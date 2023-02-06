@@ -13,23 +13,9 @@ class PreloadLiquid(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetSource(self, WorkbookInstance: Workbook) -> str:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
-            [str],
-            [self.GetParentPlateName()],
-        )
-
-    def GetVolume(self, WorkbookInstance: Workbook) -> list[int | float]:
-        return InputChecker.CheckAndConvertList(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
-            [int, float],
-            [],
-        )
+        # Params
+        self.Source = BlockParameter.Item[str](self, 1, [self.GetParentPlateName()])
+        self.Volume = BlockParameter.List[int | float](self, 2)
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
@@ -40,14 +26,14 @@ class PreloadLiquid(Block):
         ParentContainer = (
             WorkbookInstance.GetContainerTracker()
             .GetPlateTracker()
-            .GetObjectByName(self.GetParentPlateName())
+            .GetObjectByName(self.Source.Read(WorkbookInstance))
         )
 
         WellFactorTrackerInstance = (
             WorkbookInstance.GetExecutingContext().GetWellFactorTracker()
         )
 
-        Volumes = self.GetVolume(WorkbookInstance)
+        Volumes = self.Volume.Read(WorkbookInstance)
 
         for WellNumber, Volume in zip(
             range(1, WorkbookInstance.WorklistInstance.GetNumSamples() + 1), Volumes

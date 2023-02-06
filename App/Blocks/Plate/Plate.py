@@ -18,23 +18,9 @@ class Plate(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetPlateName(self, WorkbookInstance: Workbook) -> str:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
-            [str],
-            [],
-        )
-
-    def GetPlateType(self, WorkbookInstance: Workbook) -> str:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
-            [str],
-            [],
-        )
+        # Params
+        self.PlateName = BlockParameter.Item[str](self, 1)
+        self.PlateType = BlockParameter.Item[str](self, 2)
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
@@ -42,8 +28,8 @@ class Plate(Block):
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
 
-        PlateName = self.GetPlateName(WorkbookInstance)
-        PlateFilter = self.GetPlateType(WorkbookInstance)
+        PlateName = self.PlateName.Read(WorkbookInstance)
+        PlateFilter = self.PlateType.Read(WorkbookInstance)
 
         # Do parameter validation here
 

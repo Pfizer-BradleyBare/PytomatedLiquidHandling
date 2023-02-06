@@ -18,32 +18,10 @@ class SplitPlate(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetPathwayChoice(self, WorkbookInstance: Workbook) -> list[str]:
-        return InputChecker.CheckAndConvertList(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
-            [str],
-            [],
-        )
-
-    def GetPathway1Name(self, WorkbookInstance: Workbook) -> str:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
-            [str],
-            [],
-        )
-
-    def GetPathway2Name(self, WorkbookInstance: Workbook) -> str:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1),
-            [str],
-            [],
-        )
+        # Params
+        self.PathwayChoice = BlockParameter.List[str](self, 1)
+        self.Pathway1Name = BlockParameter.Item[str](self, 2)
+        self.Pathway2Name = BlockParameter.Item[str](self, 3)
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
@@ -51,9 +29,9 @@ class SplitPlate(Block):
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
 
-        Pathway1Name = self.GetPathway1Name(WorkbookInstance)
-        Pathway2Name = self.GetPathway2Name(WorkbookInstance)
-        PathwayChoices = self.GetPathwayChoice(WorkbookInstance)
+        Pathway1Name = self.Pathway1Name.Read(WorkbookInstance)
+        Pathway2Name = self.Pathway2Name.Read(WorkbookInstance)
+        PathwayChoices = self.PathwayChoice.Read(WorkbookInstance)
 
         ContextTrackerInstance = WorkbookInstance.GetContextTracker()
 
@@ -140,9 +118,9 @@ class SplitPlate(Block):
         for Child in Children:
             ContainerTracker.PlateTrackerInstance.ManualLoad(
                 PlateContainer(
-                    Child.GetPlateName(WorkbookInstance),
+                    Child.PlateName.Read(WorkbookInstance),
                     WorkbookInstance.GetName(),
-                    Child.GetPlateType(WorkbookInstance),
+                    Child.PlateType.Read(WorkbookInstance),
                 )
             )
             WorkbookInstance.GetExecutedBlocksTracker().ManualLoad(Child)

@@ -14,14 +14,8 @@ class Pause(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetTime(self, WorkbookInstance: Workbook) -> int | float:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
-            [int, float],
-            [],
-        )
+        # Params
+        self.Time = BlockParameter.Item[int | float](self, 1)
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
@@ -41,7 +35,7 @@ class Pause(Block):
 
         TimerTrackerInstance.ManualLoad(
             Timer(
-                self.GetTime(WorkbookInstance) * 60,
+                self.Time.Read(WorkbookInstance) * 60,
                 "Pause",
                 WorkbookInstance,
                 self,

@@ -22,47 +22,19 @@ class Incubate(Block):
         self.ReservedTempControlDevice: TempControlDevice | None = None
         self.ReservedLid: HALLid | None = None
 
-    def GetTemp(self, WorkbookInstance: Workbook) -> str | int | float:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
-            [str, int, float],
-            ["Ambient"] + [Val / 10.0 for Val in range(0, 1100)],
+        # Params
+        self.Temperature = BlockParameter.Item[str | int | float](
+            self, 1, ["Ambient"] + [Val / 10.0 for Val in range(0, 1100)]
         )
-
-    def GetWaitForTempOption(self, WorkbookInstance: Workbook) -> str:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
-            [str],
-            ["Yes", "No"],
-        )
-
-    def GetTime(self, WorkbookInstance: Workbook) -> int | float:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1),
-            [int, float],
-            [],
-        )
-
-    def GetShakeSpeed(self, WorkbookInstance: Workbook) -> int | float:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1),
-            [int, float],
-            [],
-        )
+        self.WaitForTemp = BlockParameter.Item[str](self, 2, ["Yes", "No"])
+        self.Time = BlockParameter.Item[int | float](self, 3)
+        self.ShakeSpeed = BlockParameter.Item[int | float](self, 4)
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
 
-        Temperature = self.GetTemp(WorkbookInstance)
-        Wait = self.GetWaitForTempOption(WorkbookInstance)
-        ShakeSpeed = self.GetShakeSpeed(WorkbookInstance)
+        Temperature = self.Temperature.Read(WorkbookInstance)
+        Wait = self.WaitForTemp.Read(WorkbookInstance)
+        ShakeSpeed = self.ShakeSpeed.Read(WorkbookInstance)
         ParentContainer = (
             WorkbookInstance.GetContainerTracker()
             .GetPlateTracker()
@@ -157,9 +129,9 @@ class Incubate(Block):
             self.GetContext()
         )
 
-        Temperature = self.GetTemp(WorkbookInstance)
-        Time = self.GetTime(WorkbookInstance)
-        ShakeSpeed = self.GetShakeSpeed(WorkbookInstance)
+        Temperature = self.Temperature.Read(WorkbookInstance)
+        Time = self.Time.Read(WorkbookInstance)
+        ShakeSpeed = self.ShakeSpeed.Read(WorkbookInstance)
         ParentContainer = (
             WorkbookInstance.GetContainerTracker()
             .GetPlateTracker()
@@ -208,7 +180,7 @@ class Incubate(Block):
 def PreprocessingWaitCallback(
     WorkbookInstance: Workbook, StepInstance: Incubate, Extra: tuple
 ):
-    Temperature = StepInstance.GetTemp(WorkbookInstance)
+    Temperature = StepInstance.Temperature.Read(WorkbookInstance)
 
     StepContext = WorkbookInstance.ContextTrackerInstance.GetObjectByName(
         StepInstance.GetContext()
@@ -253,7 +225,7 @@ def ProcessingWaitCallback(
         StepInstance.GetContext()
     )
 
-    Temperature = StepInstance.GetTemp(WorkbookInstance)
+    Temperature = StepInstance.Temperature.Read(WorkbookInstance)
     ParentContainer = (
         WorkbookInstance.GetContainerTracker()
         .GetPlateTracker()

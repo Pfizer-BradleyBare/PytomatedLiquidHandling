@@ -20,23 +20,9 @@ class MergePlates(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetPlateName(self, WorkbookInstance: Workbook) -> str:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
-            [str],
-            [],
-        )
-
-    def GetMergeType(self, WorkbookInstance: Workbook) -> str:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
-            [str],
-            ["Yes", "No"],
-        )
+        # Params
+        self.PlateName = BlockParameter.Item[str](self, 1)
+        self.MergeType = BlockParameter.Item[str](self, 2, ["Yes", "No"])
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
@@ -44,7 +30,7 @@ class MergePlates(Block):
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
 
-        ProcessingMergeInstanceMergeType = self.GetMergeType(WorkbookInstance)
+        ProcessingMergeInstanceMergeType = self.MergeType.Read(WorkbookInstance)
 
         SplitPlateBlockInstance: SplitPlate = cast(SplitPlate, self)
         while True:
@@ -76,7 +62,7 @@ class MergePlates(Block):
 
         WaitingMergeInstance: MergePlates | None = None
         for MergeInstance in MergePlates.WaitingMergeInstances:
-            if MergeInstance.GetParentPlateName() == self.GetPlateName(
+            if MergeInstance.GetParentPlateName() == self.PlateName.Read(
                 WorkbookInstance
             ):
                 WaitingMergeInstance = MergeInstance
@@ -97,7 +83,7 @@ class MergePlates(Block):
         )
         # Get Merge Instance Contexts
 
-        WaitingMergeInstanceMergeType = WaitingMergeInstance.GetMergeType(
+        WaitingMergeInstanceMergeType = WaitingMergeInstance.MergeType.Read(
             WorkbookInstance
         )
 
@@ -116,8 +102,8 @@ class MergePlates(Block):
 
             UpdateContextFactorsFlag = True
             if (
-                SplitPlateBlockInstance.GetPathwayChoice(WorkbookInstance) == "Split"
-                or SplitPlateBlockInstance.GetPathwayChoice(WorkbookInstance)
+                SplitPlateBlockInstance.PathwayChoice.Read(WorkbookInstance) == "Split"
+                or SplitPlateBlockInstance.PathwayChoice.Read(WorkbookInstance)
                 == "Concurrent"
             ):
                 UpdateContextFactorsFlag = False

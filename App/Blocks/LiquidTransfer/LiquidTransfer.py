@@ -20,32 +20,10 @@ class LiquidTransfer(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetSource(self, WorkbookInstance: Workbook) -> list[str]:
-        return InputChecker.CheckAndConvertList(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
-            [str],
-            [],
-        )
-
-    def GetVolume(self, WorkbookInstance: Workbook) -> list[int | float]:
-        return InputChecker.CheckAndConvertList(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
-            [int, float],
-            [],
-        )
-
-    def GetMix(self, WorkbookInstance: Workbook) -> list[str]:
-        return InputChecker.CheckAndConvertList(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1),
-            [str],
-            [],
-        )
+        # Params
+        self.Source = BlockParameter.List[str](self, 1)
+        self.Volume = BlockParameter.List[int | float](self, 2)
+        self.Mix = BlockParameter.List[str](self, 3)
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
@@ -54,9 +32,9 @@ class LiquidTransfer(Block):
     def Process(self, WorkbookInstance: Workbook) -> bool:
 
         Destination = self.GetParentPlateName()
-        Sources = self.GetSource(WorkbookInstance)
-        Volumes = self.GetVolume(WorkbookInstance)
-        MixingStrings = self.GetMix(WorkbookInstance)
+        Sources = self.Source.Read(WorkbookInstance)
+        Volumes = self.Volume.Read(WorkbookInstance)
+        MixingStrings = self.Mix.Read(WorkbookInstance)
 
         WorklistInstance = WorkbookInstance.GetWorklist()
 

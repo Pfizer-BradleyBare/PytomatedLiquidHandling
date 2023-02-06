@@ -13,59 +13,15 @@ class Vacuum(Block):
     def __init__(self, ExcelInstance: Excel, Row: int, Col: int):
         Block.__init__(self, type(self).__name__, ExcelInstance, Row, Col)
 
-    def GetSource(self, WorkbookInstance: Workbook) -> list[str]:
-        return InputChecker.CheckAndConvertList(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 1, self.Col + 1),
-            [str],
-            [],
+        # Params
+        self.Source = BlockParameter.List[str](self, 1)
+        self.Volume = BlockParameter.List[int | float](self, 2)
+        self.VacuumPlate = BlockParameter.Item[str](self, 3)
+        self.HoldTime = BlockParameter.Item[int | float](self, 4)
+        self.PressureDifference = BlockParameter.Item[str | int | float](
+            self, 5, ["Low", "Normal", "High"] + list(range(0, 1500))
         )
-
-    def GetVolume(self, WorkbookInstance: Workbook) -> list[int | float]:
-        return InputChecker.CheckAndConvertList(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 2, self.Col + 1),
-            [int, float],
-            [],
-        )
-
-    def GetVacuumPlate(self, WorkbookInstance: Workbook) -> str:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 3, self.Col + 1),
-            [str],
-            [],
-        )
-
-    def GetPreVacuumWaitTime(self, WorkbookInstance: Workbook) -> int | float:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 4, self.Col + 1),
-            [int, float],
-            [],
-        )
-
-    def GetPressureDifference(self, WorkbookInstance: Workbook) -> str | int | float:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 5, self.Col + 1),
-            [str, int, float],
-            ["Low", "Normal", "High"] + list(range(0, 1500)),
-        )
-
-    def GetVacuumTime(self, WorkbookInstance: Workbook) -> int | float:
-        return InputChecker.CheckAndConvertItem(
-            WorkbookInstance,
-            self,
-            self.ExcelInstance.ReadCellValue("Method", self.Row + 6, self.Col + 1),
-            [int, float],
-            [],
-        )
+        self.VacuumTime = BlockParameter.Item[int | float](self, 6)
 
     def Preprocess(self, WorkbookInstance: Workbook) -> bool:
         ...
