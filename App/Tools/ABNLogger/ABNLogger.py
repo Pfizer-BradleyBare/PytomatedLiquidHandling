@@ -3,6 +3,19 @@ import datetime
 import os
 import sys
 print('Our ABN Logger 2/9/2023')
+
+ABNLoggerDict = {}
+
+class BaseExcelLoggerBlock(ABC):
+    # @abstractmethod
+    # def(GetBlockAttributesForLogging(self) -> str):
+    #     ...
+
+    def ABNloggerLogBlock(ABNLoggerDict, ExcelWBFilePath, BlockName, Row, Col, BlockParams):
+
+        #Add to the dictionary, ABNLoggerDict, a key (if, it already doesn't exist), ExcelWBFilePath. The value of this key
+        #will be the list of lists [[BlockName, Row, Col, BlockParams (this is an list)]].  If the key already exists, append to the already existing list.
+        #Or...the subdictionary creation: ABLoggerDict[[ExcelWBFilePath, BlockName, Row, Col, BlockParams]] = {}
 '''
 LOG_LEVEL = logging.DEBUG
 LOG_FORMAT = "[%(asctime)s] %(levelname)s\n%(message)s\n(%(threadName)s).%(module)s.%(funcName)s:%(lineno)d) <%(pathname)s>"
