@@ -2,7 +2,33 @@ import datetime
 #import logging
 import os
 import sys
-print('Our ABN Logger 1/26/2023')
+print('Our ABN Logger 2/16/2023')
+
+from abc import abstractmethod
+from PytomatedLiquidHandling.Tools.AbstractClasses import ObjectABC
+
+
+class ABNLogger(ObjectABC):
+    def __init__(
+        self,
+        ABNLoggerDict: dict
+    ):
+
+    @abstractmethod
+    def GetBlockAttributesForLogging(self, Block):
+        BlockName = Block.Name
+        BlockExcelInstance = Block.ExcelInstance
+        BlockRow = Block.Row
+        BlockCol = Block.Col
+
+        if [BlockName, BlockExcelInstance, BlockRow, BlockCol] not in self.ABNLoggerDict.keys():
+            self.ABNLoggerDict[[BlockName, BlockExcelInstance, BlockRow, BlockCol]] = {}
+        else:
+            print('ERROR: The following block informatoin already exists in the ABN logging dictionary, ABNLoggerDict')
+            print([BlockName, BlockExcelInstance, BlockRow, BlockCol])
+
+        return self.ABNLoggerDict
+
 '''
 LOG_LEVEL = logging.DEBUG
 LOG_FORMAT = "[%(asctime)s] %(levelname)s\n%(message)s\n(%(threadName)s).%(module)s.%(funcName)s:%(lineno)d) <%(pathname)s>"
