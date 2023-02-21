@@ -2,6 +2,7 @@ from ...API.Tools.HALLayer.HALLayer import HALLayer
 from ...HAL.Layout import LayoutItem
 from ..Handler import GetHandler
 from ..Tools.ResourceLock.ResourceLockTracker import ResourceLockTracker
+from ..Tools.RunTypes import RunTypes
 from .Tools.GetCommonTransportDevice import GetCommonTransportDevice
 from .Tools.GetLayoutItem import GetLayoutItem
 
@@ -9,7 +10,7 @@ from .Tools.GetLayoutItem import GetLayoutItem
 def Transport(
     SourceLayoutItemInstance: LayoutItem,
     DestinationLayoutItemInstance: LayoutItem,
-    Simulate: bool,
+    RunType: RunTypes,
 ):
 
     ResourceLockTrackerInstance: ResourceLockTracker = (

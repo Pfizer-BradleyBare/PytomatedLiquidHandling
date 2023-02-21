@@ -1,9 +1,10 @@
 from ...HAL.Lid.Lid import Lid
 from ..Handler import GetHandler
 from ..Tools.Container.BaseContainer import Container
+from ..Tools.RunTypes import RunTypes
 
 
-def Reserve(ContainerInstance: Container, Simulate: bool) -> Lid | None:
+def Reserve(ContainerInstance: Container, RunType: RunTypes) -> Lid | None:
 
     HandlerInstance = GetHandler()
     LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance

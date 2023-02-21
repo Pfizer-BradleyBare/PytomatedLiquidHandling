@@ -6,7 +6,7 @@ from ..Tools.Container.BaseContainer import Container
 def End(
     ContainerInstance: Container,
     TempControlDeviceInstance: TempControlDevice,
-    Simulate: bool,
+    RunType: RunTypes,
 ):
 
     if Simulate is False:

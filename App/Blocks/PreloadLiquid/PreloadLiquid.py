@@ -23,6 +23,8 @@ class PreloadLiquid(Block):
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
 
+        self.Source.Read(WorkbookInstance)
+
         ParentContainer = (
             WorkbookInstance.GetContainerTracker()
             .GetPlateTracker()

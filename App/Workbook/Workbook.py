@@ -54,7 +54,7 @@ class Workbook(ObjectABC):
 
         # Variables
         self.ExecutingContextInstance: Context
-        self.Simulate: bool
+        self.RunType: RunTypes
 
         # Trackers
         self.ExecutedBlocksTrackerInstance: BlockTracker

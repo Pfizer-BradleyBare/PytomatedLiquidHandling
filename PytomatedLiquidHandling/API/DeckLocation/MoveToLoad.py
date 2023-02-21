@@ -1,9 +1,10 @@
 from ..Handler import GetHandler
 from ..Tools.Container.BaseContainer import Container
+from ..Tools.RunTypes import RunTypes
 from ..Transport import GetLayoutItem, Transport
 
 
-def MoveToLoad(ContainerInstance: Container, Simulate: bool) -> bool:
+def MoveToLoad(ContainerInstance: Container, RunType: RunTypes) -> bool:
 
     HandlerInstance = GetHandler()
     LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance

@@ -1,10 +1,14 @@
 from ...HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
 from ..Handler import GetHandler
 from ..Tools.Container.BaseContainer import Container
+from ..Tools.RunTypes import RunTypes
 
 
 def Reserve(
-    ContainerInstance: Container, Temperature: float, ShakingSpeed: int, Simulate: bool
+    ContainerInstance: Container,
+    Temperature: float,
+    ShakingSpeed: int,
+    RunType: RunTypes,
 ) -> TempControlDevice | None:
 
     HandlerInstance = GetHandler()

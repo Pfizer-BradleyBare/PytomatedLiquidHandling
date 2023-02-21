@@ -1,6 +1,7 @@
 from ...HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
 from ..Handler import GetHandler
 from ..Tools.Container.BaseContainer import Container
+from ..Tools.RunTypes import RunTypes
 from ..Transport.Transport import Transport
 
 
@@ -9,7 +10,7 @@ def Start(
     TempControlDeviceInstance: TempControlDevice,
     Temperature: float,
     ShakingSpeed: float,
-    Simulate: bool,
+    RunType: RunTypes,
 ):
     HandlerInstance = GetHandler()
     LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance

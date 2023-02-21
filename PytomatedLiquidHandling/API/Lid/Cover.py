@@ -2,10 +2,11 @@ from ...HAL.Lid import Lid
 from ..Handler import GetHandler
 from ..Tools.Container.BaseContainer import Container
 from ..Tools.LoadedLabware.LoadedLabwareTracker import LoadedLabwareTracker
+from ..Tools.RunTypes import RunTypes
 from ..Transport.Transport import Transport
 
 
-def Cover(ContainerInstance: Container, LidInstance: Lid, Simulate: bool):
+def Cover(ContainerInstance: Container, LidInstance: Lid, RunType: RunTypes):
 
     HandlerInstance = GetHandler()
     LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance

@@ -8,10 +8,11 @@ from ..Tools.LoadedLabware.LoadedLabwareTracker import (
     LoadedLabware,
     LoadedLabwareTracker,
 )
+from ..Tools.RunTypes import RunTypes
 from .Options.TransferOptionsTracker import TransferOptionsTracker
 
 
-def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, Simulate: bool):
+def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: RunTypes):
 
     HandlerInstance = GetHandler()
     LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance

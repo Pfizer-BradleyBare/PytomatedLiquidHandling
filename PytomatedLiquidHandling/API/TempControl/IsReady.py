@@ -2,7 +2,7 @@ from ...HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
 
 
 def IsReady(
-    TempControlDeviceInstance: TempControlDevice, Temperature: float, Simulate: bool
+    TempControlDeviceInstance: TempControlDevice, Temperature: float, RunType: RunTypes
 ) -> bool:
     StableTempDelta = TempControlDeviceInstance.TempLimitsInstance.StableTempDelta
 
