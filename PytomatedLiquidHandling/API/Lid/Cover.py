@@ -26,5 +26,5 @@ def Cover(ContainerInstance: Container, LidInstance: Lid, RunType: RunTypes):
 
     SourceLayoutItemInstance = LidInstance.LidLayoutItem
 
-    Transport(SourceLayoutItemInstance, DestinationLayoutItemInstance, Simulate)
+    Transport(SourceLayoutItemInstance, DestinationLayoutItemInstance, RunType)
     # Do the transfer

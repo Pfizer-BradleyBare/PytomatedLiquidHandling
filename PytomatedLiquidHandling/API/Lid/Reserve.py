@@ -28,7 +28,10 @@ def Reserve(ContainerInstance: Container, RunType: RunTypes) -> Lid | None:
     LidInstances = [
         Lid
         for Lid in HALLayerInstance.LidTrackerInstance.GetObjectsAsList()
-        if not ResourceLockTrackerInstance.IsTracked(Lid.GetName())
+        if (
+            not ResourceLockTrackerInstance.IsTracked(Lid.GetName())
+            or not RunType is RunTypes.Run
+        )
         and Lid.SupportedLabwareTrackerInstance.IsTracked(LabwareInstance.GetName())
     ]
     # This is a big one. Not as complex as it looks:

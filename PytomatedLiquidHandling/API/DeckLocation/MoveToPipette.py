@@ -30,7 +30,10 @@ def MoveToPipette(ContainerInstance: Container, RunType: RunTypes) -> bool:
         PossibleDeckLocationInstances = [
             Location
             for Location in DeckLocationTrackerInstance.GetObjectsAsList()
-            if not ResourceLockTrackerInstance.IsTracked(Location.GetName())
+            if (
+                not ResourceLockTrackerInstance.IsTracked(Location.GetName())
+                or not RunType is RunTypes.Run
+            )
             and Location.IsPipettableLocation()
         ]
         # Use filtering to get the possible deck locations
@@ -52,7 +55,7 @@ def MoveToPipette(ContainerInstance: Container, RunType: RunTypes) -> bool:
             Transport(
                 LoadedLabwareAssignmentInstance.LayoutItemGroupingInstance.PlateLayoutItemInstance,
                 DestinationLayoutItemGroupingInstance.PlateLayoutItemInstance,
-                Simulate,
+                RunType,
             )
 
             break

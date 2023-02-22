@@ -1,6 +1,7 @@
 from ...HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
 from ..DeckLocation.MoveToPipette import MoveToPipette
 from ..Tools.Container.BaseContainer import Container
+from ..Tools.RunTypes import RunTypes
 
 
 def End(
@@ -9,8 +10,8 @@ def End(
     RunType: RunTypes,
 ):
 
-    if Simulate is False:
+    if RunType is RunTypes.Run:
         TempControlDeviceInstance.SetTemperature(25)
         TempControlDeviceInstance.StopShaking()
 
-    MoveToPipette(ContainerInstance, Simulate)
+    MoveToPipette(ContainerInstance, RunType)

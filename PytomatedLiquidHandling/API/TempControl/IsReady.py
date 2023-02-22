@@ -1,4 +1,5 @@
 from ...HAL.TempControlDevice.BaseTempControlDevice import TempControlDevice
+from ..Tools.RunTypes import RunTypes
 
 
 def IsReady(
@@ -6,7 +7,7 @@ def IsReady(
 ) -> bool:
     StableTempDelta = TempControlDeviceInstance.TempLimitsInstance.StableTempDelta
 
-    if Simulate is True:
+    if not RunType is RunTypes.Run:
         return True
 
     TempControlDeviceInstance.UpdateCurrentTemperature()

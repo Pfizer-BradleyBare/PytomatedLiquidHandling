@@ -78,7 +78,7 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
     DestinationLoadedLabwareInstances: list[LoadedLabware] = list()
     SourceLoadedLabwareInstances: list[LoadedLabware] = list()
 
-    if Simulate == True:
+    if not RunType is RunType.Run:
         return
 
     for (
@@ -238,11 +238,11 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
 
     ClosedContainerTrackerInstance = HALLayerInstance.ClosedContainerTrackerInstance
 
-    if Simulate is True:
+    if not RunType is RunType.Run:
         return
 
     for TransferOptionsInstance in TransferOptionsTrackerInstance.GetObjectsAsList():
-        MoveToPipette(TransferOptionsInstance.SourceContainerInstance, Simulate)
+        MoveToPipette(TransferOptionsInstance.SourceContainerInstance, RunType)
     # Move sources to deck. Destination should already be there
 
     for ClosedContainerInstance in ClosedContainerTrackerInstance.GetObjectsAsList():
@@ -285,5 +285,5 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
     # Close the wells if we need to
 
     for TransferOptionsInstance in TransferOptionsTrackerInstance.GetObjectsAsList():
-        MoveToStorage(TransferOptionsInstance.SourceContainerInstance, Simulate)
+        MoveToStorage(TransferOptionsInstance.SourceContainerInstance, RunType)
     # Move sources to storage. Destination stays on the deck

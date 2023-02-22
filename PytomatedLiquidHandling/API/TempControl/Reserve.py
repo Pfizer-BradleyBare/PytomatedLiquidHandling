@@ -40,7 +40,10 @@ def Reserve(
     TempControlDeviceInstances = [
         Device
         for Device in TempControlDeviceTrackerInstance.GetObjectsAsList()
-        if not ResourceLockTrackerInstance.IsTracked(Device.GetName())
+        if (
+            not ResourceLockTrackerInstance.IsTracked(Device.GetName())
+            or not RunType is RunTypes.Run
+        )
         and Device.ShakingSupported >= RequiresShaking
         and LabwareInstance
         in [
@@ -60,7 +63,7 @@ def Reserve(
         return None
     # Nothing is available right now :(
 
-    if Simulate is False:
+    if RunType is RunTypes.Run:
         for TempControlDeviceInstance in TempControlDeviceInstances:
             TempControlDeviceInstance.UpdateCurrentTemperature()
     # Lets update the temperatures first
@@ -82,9 +85,8 @@ def Reserve(
         return None
     # Nothing is available right now :( same as above
 
-    ResourceLockTrackerInstance.ManualLoad(BestFitDevice)
-
-    if Simulate is False:
+    if RunType is RunTypes.Run:
+        ResourceLockTrackerInstance.ManualLoad(BestFitDevice)
         BestFitDevice.SetTemperature(Temperature)
 
     return BestFitDevice

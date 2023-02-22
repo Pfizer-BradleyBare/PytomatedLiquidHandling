@@ -32,7 +32,7 @@ def Start(
     Transport(
         SourceLayoutItemGroupingInstance.PlateLayoutItemInstance,
         DestinationLayoutItemGroupingInstance.PlateLayoutItemInstance,
-        Simulate,
+        RunType,
     )
 
     LoadedLabwareInstance.LayoutItemGroupingInstance = (
@@ -40,10 +40,8 @@ def Start(
     )
     # Move first.
 
-    if Simulate is True:
-        return
+    if RunType is RunTypes.Run:
+        TempControlDeviceInstance.SetTemperature(Temperature)
 
-    TempControlDeviceInstance.SetTemperature(Temperature)
-
-    if ShakingSpeed != 0:
-        TempControlDeviceInstance.StartShaking(ShakingSpeed)
+        if ShakingSpeed != 0:
+            TempControlDeviceInstance.StartShaking(ShakingSpeed)

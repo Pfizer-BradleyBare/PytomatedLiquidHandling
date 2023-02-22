@@ -8,4 +8,5 @@ def Release(LidInstance: Lid, RunType: RunTypes):
     HandlerInstance = GetHandler()
     ResourceLockTrackerInstance = HandlerInstance.ResourceLockTrackerInstance
 
-    ResourceLockTrackerInstance.ManualUnload(LidInstance)
+    if RunType is RunTypes.Run:
+        ResourceLockTrackerInstance.ManualUnload(LidInstance)

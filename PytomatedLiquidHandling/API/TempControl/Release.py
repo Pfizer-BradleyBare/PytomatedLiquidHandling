@@ -9,4 +9,5 @@ def Release(TempControlDeviceInstance: TempControlDevice, RunType: RunTypes):
     HandlerInstance = GetHandler()
     ResourceLockTrackerInstance = HandlerInstance.ResourceLockTrackerInstance
 
-    ResourceLockTrackerInstance.ManualUnload(TempControlDeviceInstance)
+    if RunType is RunTypes.Run:
+        ResourceLockTrackerInstance.ManualUnload(TempControlDeviceInstance)

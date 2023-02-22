@@ -20,9 +20,10 @@ def Uncover(ContainerInstance: Container, LidInstance: Lid, RunType: RunTypes):
         LoadedLabwareInstance.LayoutItemGroupingInstance.LidLayoutItemInstance
     )
 
+    if SourceLayoutItemInstance is None:
+        raise Exception("This should never happen...")
+
     DestinationLayoutItemInstance = LidInstance.LidLayoutItem
 
-    Transport(
-        SourceLayoutItemInstance, DestinationLayoutItemInstance, Simulate  # type:ignore
-    )
+    Transport(SourceLayoutItemInstance, DestinationLayoutItemInstance, RunType)
     # Do the transfer
