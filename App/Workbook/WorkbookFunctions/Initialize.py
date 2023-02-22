@@ -85,7 +85,7 @@ def Initialize(WorkbookInstance: Workbook):
         pass
         # WorkbookInstance.ProcessingLock.acquire()
 
-    WorkbookInstance.Simulate = WorkbookInstance.GetRunType() != RunTypes.Run
+    # TODO WorkbookInstance.RunType = WorkbookInstance.GetRunType() != RunTypes.Run
 
     WorkbookInstance.ExcelInstance.CloseBook()
 
