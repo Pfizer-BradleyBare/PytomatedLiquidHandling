@@ -53,12 +53,6 @@ class Block(ObjectABC, Node):
         return self.Row == other.Row and self.Col == other.Col
         # Row and Col in excel file is always unique so we can find step using only those parameters.
 
-    def __repr__(self, level=0):
-        ret = "\t" * level + repr(self.GetName()) + "\n"
-        for child in self.Children:
-            ret += child.__repr__(level + 1)  # type:ignore
-        return ret
-
     def GetName(self) -> str:
         return self.Name + str((self.Row, self.Col))
 
@@ -73,6 +67,12 @@ class Block(ObjectABC, Node):
 
     def GetParentPlateName(self) -> str:
         return self.Context[self.Context.rfind(":") + 1 :]  # noqa203
+
+    def PrintBlockTree(self, level=0):
+        ret = "\t" * level + repr(self.GetName()) + "\n"
+        for child in self.Children:
+            ret += child.PrintBlockTree(level + 1)  # type:ignore
+        return ret
 
     @abstractmethod
     # This is where actual block execution should occur
