@@ -27,7 +27,7 @@ def Load(
     LabwareTrackerInstance = APIHandlerInstance.HALLayerInstance.LabwareTrackerInstance
 
     LabwareTrackerInstance: LabwareTracker = (
-        GetAPIHandler().HALLayerInstance.LabwareTrackerInstance  # type:ignore
+        APIHandlerInstance.HALLayerInstance.LabwareTrackerInstance
     )
 
     for ContainerInstance in ContainerInstances:

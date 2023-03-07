@@ -6,6 +6,7 @@ from .Block.Block import (
 )
 from .Block.BlockTracker import BlockTracker
 from .Workbook import Workbook
+from .WorkbookRunTypes import WorkbookRunTypes
 from .WorkbookTracker import WorkbookTracker
 from .Worklist.Worklist import Worklist
 

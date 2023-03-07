@@ -1,14 +1,13 @@
-from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
-
 from ..Tools.Excel import Excel
 from ..Workbook import BlockTracker, Workbook, WorkbookTracker, Worklist
+from . import WorkbookRunTypes
 from .Block import BlockLoader
 
 
 def Load(
     WorkbookTrackerInstance: WorkbookTracker,
     ExcelFilePath: str,
-    RunType: RunTypes,
+    RunType: WorkbookRunTypes,
 ):
 
     ExcelInstance = Excel(ExcelFilePath)

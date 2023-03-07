@@ -2,13 +2,14 @@ import os
 import threading
 
 from PytomatedLiquidHandling.API.Tools.Container.BaseContainer import ContainerTracker
+from PytomatedLiquidHandling.API.Tools.LabwareSelection import LabwareSelectionTracker
 from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
 from PytomatedLiquidHandling.Tools.AbstractClasses import ObjectABC
 
 from ..Tools.Context import Context, ContextTracker
 from ..Tools.Excel import Excel
 from ..Workbook import Block, BlockTracker, Worklist
-from . import WorkbookFunctions
+from . import WorkbookFunctions, WorkbookRunTypes
 
 # NOTE
 #   Workbook contain information about the block pathways, worklist, and solutions
@@ -26,7 +27,7 @@ from . import WorkbookFunctions
 class Workbook(ObjectABC):
     def __init__(
         self,
-        RunType: RunTypes,
+        WorkbookRunType: WorkbookRunTypes,
         MethodPath: str,
         MethodBlocksTrackerInstance: BlockTracker,
         WorklistInstance: Worklist,
@@ -36,7 +37,7 @@ class Workbook(ObjectABC):
 
         # Normal Init Variables
         # Variables
-        self.RunType: RunTypes = RunType
+        self.WorkbookRunType: WorkbookRunTypes = WorkbookRunType
         self.MethodPath: str = MethodPath
         self.MethodName: str = os.path.basename(MethodPath)
         self.MethodTreeRoot: Block = MethodBlocksTrackerInstance.GetObjectsAsList()[0]
@@ -46,6 +47,7 @@ class Workbook(ObjectABC):
         self.WorklistInstance: Worklist = WorklistInstance
         self.ExcelInstance: Excel = ExcelInstance
         self.PreprocessingBlocksTrackerInstance: BlockTracker = BlockTracker()
+        self.LabwareSelectionTrackerInstance: LabwareSelectionTracker
 
         # Thread
         self.ProcessingLock: threading.Lock = threading.Lock()
@@ -70,13 +72,20 @@ class Workbook(ObjectABC):
         GetHandler().GetLogger().debug(
             "The following method tree was determined for %s: \n%s",
             self.MethodName,
-            self.MethodTreeRoot,
+            self.MethodTreeRoot.PrintBlockTree(),
         )
 
-        # Do the necessary init function.
-        # Why do it here? Because all init is handled inside the init function for simplicity sake
-
+        # This is init and starting of the first thread. There are two threads that need to execute before the "system" is ready.
+        # This first thread does a plate volume calculation then selects possible containers. We need this info before we can do a "full" run.
         WorkbookFunctions.Initialize(self)
+
+        self.WorkbookProcessorThread = threading.Thread(
+            name=self.GetName() + "->" + self.GetRunType().value,
+            target=WorkbookFunctions.ProcessorSimulatePartial,
+            args=(self,),  # args must be tuple hence the empty second argument
+        )
+
+        self.WorkbookProcessorThread.start()
 
     def GetName(self) -> str:
         return self.MethodName
@@ -84,11 +93,11 @@ class Workbook(ObjectABC):
     def GetPath(self) -> str:
         return self.MethodPath
 
-    def GetRunType(self) -> RunTypes:
-        return self.RunType
+    def GetRunType(self) -> WorkbookRunTypes:
+        return self.WorkbookRunType
 
-    def SetRunType(self, RunType: RunTypes):
-        self.RunType = RunType
+    def SetRunType(self, WorkbookRunType: WorkbookRunTypes):
+        self.WorkbookRunType = WorkbookRunType
 
     def GetMethodTreeRoot(self) -> Block:
         return self.MethodTreeRoot

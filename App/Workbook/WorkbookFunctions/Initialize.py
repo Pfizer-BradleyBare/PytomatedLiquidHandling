@@ -1,5 +1,3 @@
-import threading
-
 from PytomatedLiquidHandling.API.Tools.Container import ContainerTracker
 from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
 
@@ -13,7 +11,6 @@ from ...Tools.Context import (
     WellSequenceTracker,
 )
 from ...Workbook import BlockTracker, Workbook
-from .. import WorkbookFunctions
 from ..Solution import SolutionLoader
 
 
@@ -28,13 +25,6 @@ def Initialize(WorkbookInstance: Workbook):
     WorkbookInstance.ContextTrackerInstance = ContextTracker()
     WorkbookInstance.InactiveContextTrackerInstance = ContextTracker()
     WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance = BlockTracker()
-
-    # Thread
-    WorkbookInstance.WorkbookProcessorThread = threading.Thread(
-        name=WorkbookInstance.GetName() + "->" + WorkbookInstance.GetRunType().value,
-        target=WorkbookFunctions.RunProcessor,
-        args=(WorkbookInstance,),  # args must be tuple hence the empty second argument
-    )
 
     # Set Initial Active Context
     AspirateWellSequenceTrackerInstance = WellSequenceTracker()
@@ -88,5 +78,3 @@ def Initialize(WorkbookInstance: Workbook):
     # TODO WorkbookInstance.RunType = WorkbookInstance.GetRunType() != RunTypes.Run
 
     WorkbookInstance.ExcelInstance.CloseBook()
-
-    WorkbookInstance.WorkbookProcessorThread.start()
