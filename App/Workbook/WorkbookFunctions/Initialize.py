@@ -13,8 +13,8 @@ from ...Tools.Context import (
     WellSequenceTracker,
 )
 from ...Workbook import BlockTracker, Workbook
+from .. import WorkbookFunctions
 from ..Solution import SolutionLoader
-from ..WorkbookFunctions import RunProcessor
 
 
 def Initialize(WorkbookInstance: Workbook):
@@ -32,7 +32,7 @@ def Initialize(WorkbookInstance: Workbook):
     # Thread
     WorkbookInstance.WorkbookProcessorThread = threading.Thread(
         name=WorkbookInstance.GetName() + "->" + WorkbookInstance.GetRunType().value,
-        target=RunProcessor,
+        target=WorkbookFunctions.RunProcessor,
         args=(WorkbookInstance,),  # args must be tuple hence the empty second argument
     )
 

@@ -8,7 +8,7 @@ from PytomatedLiquidHandling.Tools.AbstractClasses import ObjectABC
 from ..Tools.Context import Context, ContextTracker
 from ..Tools.Excel import Excel
 from ..Workbook import Block, BlockTracker, Worklist
-from .WorkbookFunctions import Initialize
+from . import WorkbookFunctions
 
 # NOTE
 #   Workbook contain information about the block pathways, worklist, and solutions
@@ -76,7 +76,7 @@ class Workbook(ObjectABC):
         # Do the necessary init function.
         # Why do it here? Because all init is handled inside the init function for simplicity sake
 
-        Initialize(self)
+        WorkbookFunctions.Initialize(self)
 
     def GetName(self) -> str:
         return self.MethodName
