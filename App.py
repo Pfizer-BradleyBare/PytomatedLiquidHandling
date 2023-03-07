@@ -10,12 +10,6 @@ from PytomatedLiquidHandling.Tools.Logger import GenerateLogFilePath, Logger
 
 if __name__ == "__main__":
 
-    LoggerInstance = Logger(
-        "",
-        DEBUG,
-        GenerateLogFilePath(os.path.join(os.path.dirname(__file__), "Logging")),
-    )
-
     HandlerInstance = Handler()
 
     HandlerInstance.StartServer()

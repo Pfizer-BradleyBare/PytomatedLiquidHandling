@@ -20,6 +20,7 @@ from .Endpoints import (
     ListQueue,
     OpenExcel,
     QueueMethod,
+    WorkbookTest,
 )
 
 
@@ -28,7 +29,9 @@ class Handler(ServerHandlerABC):
         LoggerInstance = Logger(
             "AppLogger",
             DEBUG,
-            GenerateLogFilePath(os.path.join(os.path.dirname(__file__), "Logging")),
+            GenerateLogFilePath(
+                os.path.join(os.path.dirname(os.path.dirname(__file__)), "Logging")
+            ),
         )
 
         ServerHandlerABC.__init__(self, LoggerInstance)
@@ -63,6 +66,7 @@ class Handler(ServerHandlerABC):
         urls += FlexibleTest.urls
         urls += GetWorkbookInfo.urls
         urls += GetPathwayStates.urls
+        urls += WorkbookTest.urls
         return urls
 
     def Kill(self):
