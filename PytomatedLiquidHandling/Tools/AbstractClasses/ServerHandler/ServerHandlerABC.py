@@ -44,8 +44,11 @@ class ServerHandlerABC(ABC):
 
     @classmethod
     def WaitForKill(cls):
-        while ServerHandlerABC.__ServerStartedState is True:
-            time.sleep(123456789)
+        try:
+            while ServerHandlerABC.__ServerStartedState is True:
+                time.sleep(123456789)
+        except KeyboardInterrupt:
+            ...
 
     @classmethod
     def KillServer(cls):
