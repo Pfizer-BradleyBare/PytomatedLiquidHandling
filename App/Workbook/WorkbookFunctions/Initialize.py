@@ -32,7 +32,7 @@ def Initialize(WorkbookInstance: Workbook):
 
     WellFactorsTrackerInstance = WellFactorTracker()
 
-    for SampleNumber in range(1, WorkbookInstance.GetWorklist().GetNumSamples() + 1):
+    for SampleNumber in range(1, WorkbookInstance.WorklistInstance.GetNumSamples() + 1):
         WellNumber = SampleNumber
 
         WellSequencesInstance = WellSequence(WellNumber, WellNumber)
@@ -52,29 +52,26 @@ def Initialize(WorkbookInstance: Workbook):
         )
     )
 
-    WorkbookInstance.GetContextTracker().ManualLoad(
-        WorkbookInstance.GetExecutingContext()
+    WorkbookInstance.ContextTrackerInstance.ManualLoad(
+        WorkbookInstance.ExecutingContextInstance
     )
 
-    WorkbookInstance.GetContainerTracker().PlateTrackerInstance.ManualLoad(
+    WorkbookInstance.ContainerTrackerInstance.PlateTrackerInstance.ManualLoad(
         Plate(
             "__StartingContext__", WorkbookInstance.GetName(), "No Preference"
         )  # This will never be loaded so filter doesn't matter
     )
 
-    WorkbookInstance.GetContainerTracker().ReagentTrackerInstance = SolutionLoader.Load(
-        WorkbookInstance.GetName(),
-        WorkbookInstance.ExcelInstance,
-        WorkbookInstance.GetWorklist(),
+    WorkbookInstance.ContainerTrackerInstance.ReagentTrackerInstance = (
+        SolutionLoader.Load(
+            WorkbookInstance.GetName(),
+            WorkbookInstance.ExcelInstance,
+            WorkbookInstance.WorklistInstance,
+        )
     )
     # We do need to do some checks to ensure consistency.
     # TODO: Are all reagents in the labware selection... Etc.
 
     # Setting initial context and container.
-    if WorkbookInstance.GetRunType() == RunTypes.Run:
-        pass
-        # WorkbookInstance.ProcessingLock.acquire()
-
-    # TODO WorkbookInstance.RunType = WorkbookInstance.GetRunType() != RunTypes.Run
 
     WorkbookInstance.ExcelInstance.CloseBook()

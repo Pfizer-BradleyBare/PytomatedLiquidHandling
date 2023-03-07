@@ -8,17 +8,17 @@ def RunProcessor(WorkbookInstance: Workbook):
 
     WorkbookInstance.ExcelInstance.OpenBook(False)
 
-    ContextTrackerInstance = WorkbookInstance.GetContextTracker()
-    InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
-    ExecutedBlocksTrackerInstance = WorkbookInstance.GetExecutedBlocksTracker()
+    ContextTrackerInstance = WorkbookInstance.ContextTrackerInstance
+    InactiveContextTrackerInstance = WorkbookInstance.InactiveContextTrackerInstance
+    ExecutedBlocksTrackerInstance = WorkbookInstance.ExecutedBlocksTrackerInstance
     PreprocessingBlocksTrackerInstance = (
-        WorkbookInstance.GetPreprocessingBlocksTracker()
+        WorkbookInstance.PreprocessingBlocksTrackerInstance
     )
     CompletedPreprocessingBlocksTrackerInstance = (
         WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance
     )
 
-    CurrentExecutingBlock: Block = WorkbookInstance.GetMethodTreeRoot()
+    CurrentExecutingBlock: Block = WorkbookInstance.MethodTreeRoot
     CurrentExecutingBlock.Process(WorkbookInstance)
     ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
     # Do the first step processing here. First step is always a plate step.
@@ -43,7 +43,7 @@ def RunProcessor(WorkbookInstance: Workbook):
 
         if all(
             item in ExecutedBlocksTrackerInstance.GetObjectsAsList()
-            for item in WorkbookInstance.GetMethodBlocksTracker().GetObjectsAsList()
+            for item in WorkbookInstance.MethodBlocksTrackerInstance.GetObjectsAsList()
         ):
 
             print("HERE")
@@ -156,7 +156,7 @@ def RunProcessor(WorkbookInstance: Workbook):
         # We can not start a preprocessing device until any preceeding merge steps are completed
 
         if InactiveContextTrackerInstance.IsTracked(
-            WorkbookInstance.GetExecutingContext().GetName()
+            WorkbookInstance.ExecutingContextInstance.GetName()
         ):
             if all(
                 item in InactiveContextTrackerInstance.GetObjectsAsList()
@@ -179,7 +179,10 @@ def RunProcessor(WorkbookInstance: Workbook):
             ReversedExecutedBlocks.reverse()
 
             for BlockInstance in ReversedExecutedBlocks:
-                if BlockInstance.GetContext() == WorkbookInstance.GetExecutingContext():
+                if (
+                    BlockInstance.GetContext()
+                    == WorkbookInstance.ExecutingContextInstance
+                ):
                     CurrentExecutingBlock: Block = BlockInstance
                     break
             # Set the tree current node here
@@ -191,9 +194,7 @@ def RunProcessor(WorkbookInstance: Workbook):
         if (
             sum(
                 WellFactor.GetFactor()
-                for WellFactor in WorkbookInstance.GetExecutingContext()
-                .GetWellFactorTracker()
-                .GetObjectsAsList()
+                for WellFactor in WorkbookInstance.ExecutingContextInstance.GetWellFactorTracker().GetObjectsAsList()
             )
             != 0  # If all the factors are zero then technically the pathway is "dead" so it will never execute
             or type(CurrentExecutingBlock).__name__ == MergePlates.__name__

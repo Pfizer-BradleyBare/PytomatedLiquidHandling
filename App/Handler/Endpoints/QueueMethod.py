@@ -13,10 +13,9 @@ import os
 
 import web
 
-from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
 from PytomatedLiquidHandling.Server.Tools.Parser import Parser
 
-from ...Workbook import WorkbookLoader
+from ...Workbook import WorkbookLoader, WorkbookRunTypes
 
 urls = ("/App/QueueMethod", "App.Handler.Endpoints.QueueMethod.QueueMethod")
 
@@ -36,7 +35,7 @@ class QueueMethod:
         WorkbookTrackerInstance = GetHandler().WorkbookTrackerInstance
 
         MethodPath = ParserObject.GetEndpointInputData()["Method Path"]
-        Action = RunTypes(ParserObject.GetEndpointInputData()["Action"])
+        Action = WorkbookRunTypes(ParserObject.GetEndpointInputData()["Action"])
         # acceptable values are "Test", "PrepList", or "Run"
 
         if ".xlsm" not in MethodPath:
@@ -56,7 +55,7 @@ class QueueMethod:
         # Is valid file path?
 
         PathsList = [
-            Workbook.GetPath()
+            Workbook.MethodPath
             for Workbook in WorkbookTrackerInstance.GetObjectsAsList()
         ]
         if MethodPath in PathsList:
@@ -64,9 +63,6 @@ class QueueMethod:
             Response = ParserObject.GetHTTPResponse()
             return Response
         # Is workbook already running?
-
-        if Action == RunTypes.Run:
-            Action = RunTypes.SimulatePartial
 
         WorkbookLoader.Load(WorkbookTrackerInstance, MethodPath, Action)
         # Load the workbook path into the tracker

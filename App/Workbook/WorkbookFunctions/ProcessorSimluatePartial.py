@@ -1,6 +1,7 @@
 import threading
 
 from PytomatedLiquidHandling.API.Tools.LabwareSelection import LabwareSelectionLoader
+from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
 
 from ...Blocks import MergePlates
 from ...Workbook import Block, Workbook, WorkbookFunctions
@@ -12,11 +13,11 @@ def ProcessorSimulatePartial(WorkbookInstance: Workbook):
 
     WorkbookInstance.ExcelInstance.OpenBook(False)
 
-    ContextTrackerInstance = WorkbookInstance.GetContextTracker()
-    InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
-    ExecutedBlocksTrackerInstance = WorkbookInstance.GetExecutedBlocksTracker()
+    ContextTrackerInstance = WorkbookInstance.ContextTrackerInstance
+    InactiveContextTrackerInstance = WorkbookInstance.InactiveContextTrackerInstance
+    ExecutedBlocksTrackerInstance = WorkbookInstance.ExecutedBlocksTrackerInstance
 
-    CurrentExecutingBlock: Block = WorkbookInstance.GetMethodTreeRoot()
+    CurrentExecutingBlock: Block = WorkbookInstance.MethodTreeRoot
     CurrentExecutingBlock.Process(WorkbookInstance)
     ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
     # Do the first step processing here. First step is always a plate step.
@@ -25,7 +26,7 @@ def ProcessorSimulatePartial(WorkbookInstance: Workbook):
 
         if all(
             item in ExecutedBlocksTrackerInstance.GetObjectsAsList()
-            for item in WorkbookInstance.GetMethodBlocksTracker().GetObjectsAsList()
+            for item in WorkbookInstance.MethodBlocksTrackerInstance.GetObjectsAsList()
         ):
 
             WorkbookInstance.LabwareSelectionTrackerInstance = (
@@ -36,10 +37,14 @@ def ProcessorSimulatePartial(WorkbookInstance: Workbook):
             # This second thread does a simulated run to confirm the method is "correct"
             WorkbookFunctions.Initialize(WorkbookInstance)
 
+            WorkbookInstance.APIRunType = RunTypes.SimulateFull
+
             WorkbookInstance.WorkbookProcessorThread = threading.Thread(
                 name=WorkbookInstance.GetName()
                 + "->"
-                + WorkbookInstance.GetRunType().value,
+                + WorkbookInstance.WorkbookRunType.value
+                + " : "
+                + WorkbookInstance.APIRunType,
                 target=WorkbookFunctions.ProcessorSimulateFull,
                 args=(
                     WorkbookInstance,
@@ -51,8 +56,6 @@ def ProcessorSimulatePartial(WorkbookInstance: Workbook):
             return
         # First thing to do is check if all blocks have been executed.
 
-        WorkbookInstance.ProcessingLock.acquire()
-        WorkbookInstance.ProcessingLock.release()
         # if AliveStateFlag.AliveStateFlag is False: TODO
         # Do some workbook save state stuff here
         #    return
@@ -62,7 +65,7 @@ def ProcessorSimulatePartial(WorkbookInstance: Workbook):
         # After release we must check that the server still wants to execute. If not, we do some save state stuff then kill the thread.
 
         if InactiveContextTrackerInstance.IsTracked(
-            WorkbookInstance.GetExecutingContext().GetName()
+            WorkbookInstance.ExecutingContextInstance.GetName()
         ):
             for ContextInstance in ContextTrackerInstance.GetObjectsAsList():
                 if not InactiveContextTrackerInstance.IsTracked(
@@ -78,7 +81,10 @@ def ProcessorSimulatePartial(WorkbookInstance: Workbook):
             ReversedExecutedBlocks.reverse()
 
             for BlockInstance in ReversedExecutedBlocks:
-                if BlockInstance.GetContext() == WorkbookInstance.GetExecutingContext():
+                if (
+                    BlockInstance.GetContext()
+                    == WorkbookInstance.ExecutingContextInstance
+                ):
                     CurrentExecutingBlock: Block = BlockInstance
                     break
             # Set the tree current node here
@@ -89,9 +95,7 @@ def ProcessorSimulatePartial(WorkbookInstance: Workbook):
         if (
             sum(
                 WellFactor.GetFactor()
-                for WellFactor in WorkbookInstance.GetExecutingContext()
-                .GetWellFactorTracker()
-                .GetObjectsAsList()
+                for WellFactor in WorkbookInstance.ExecutingContextInstance.GetWellFactorTracker().GetObjectsAsList()
             )
             != 0  # If all the factors are zero then technically the pathway is "dead" so it will never execute
             or type(CurrentExecutingBlock).__name__ == MergePlates.__name__

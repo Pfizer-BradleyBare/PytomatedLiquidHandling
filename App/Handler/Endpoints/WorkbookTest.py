@@ -7,7 +7,7 @@ import web
 from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
 from PytomatedLiquidHandling.Server.Tools.Parser import Parser
 
-from ...Workbook import WorkbookLoader
+from ...Workbook import WorkbookLoader, WorkbookRunTypes
 
 urls = ("/WorkbookTest", "App.Handler.Endpoints.WorkbookTest.WorkbookTest")
 
@@ -25,7 +25,7 @@ class WorkbookTest:
         WorkbookTrackerInstance = GetHandler().WorkbookTrackerInstance
 
         MethodPath = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\App\\_Template_MAM.xlsm"
-        Action = RunTypes("Run")
+        Action = WorkbookRunTypes("Run")
         # acceptable values are "Test", "PrepList", or "Run"
 
         if ".xlsm" not in MethodPath:
@@ -45,7 +45,7 @@ class WorkbookTest:
         # Is valid file path?
 
         PathsList = [
-            Workbook.GetPath()
+            Workbook.MethodPath
             for Workbook in WorkbookTrackerInstance.GetObjectsAsList()
         ]
         if MethodPath in PathsList:
@@ -53,9 +53,6 @@ class WorkbookTest:
             Response = ParserObject.GetHTTPResponse()
             return Response
         # Is workbook already running?
-
-        if Action == RunTypes.Run:
-            Action = RunTypes.SimulatePartial
 
         WorkbookLoader.Load(WorkbookTrackerInstance, MethodPath, Action)
         # Load the workbook path into the tracker

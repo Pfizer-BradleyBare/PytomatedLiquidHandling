@@ -26,8 +26,9 @@ class List(BlockParameter, Generic[T]):
 
         Checks = [
             bool(Factor.GetFactor())
-            for Factor in WorkbookInstance.GetContextTracker()
-            .GetObjectByName(self.BlockInstance.GetContext())
+            for Factor in WorkbookInstance.ContextTrackerInstance.GetObjectByName(
+                self.BlockInstance.GetContext()
+            )
             .GetWellFactorTracker()
             .GetObjectsAsList()
         ]

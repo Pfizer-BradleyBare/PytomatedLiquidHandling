@@ -1,7 +1,8 @@
 import web
 
-from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
 from PytomatedLiquidHandling.Server.Tools.Parser import Parser
+
+from ...Workbook import WorkbookRunTypes
 
 urls = (
     "/App/ListQueue",
@@ -25,8 +26,7 @@ class ListQueue:
             [
                 Workbook.GetName()
                 for Workbook in WorkbookTrackerInstance.GetObjectsAsList()
-                if Workbook.GetRunType() == RunTypes.Run
-                or Workbook.GetRunType() == RunTypes.SimulateFull
+                if Workbook.WorkbookRunType == WorkbookRunTypes.Run
             ]
         )
 

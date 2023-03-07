@@ -48,12 +48,12 @@ class MergePlates(Block):
 
         # Do input validation here
 
-        ContextTrackerInstance = WorkbookInstance.GetContextTracker()
-        InactiveContextTrackerInstance = WorkbookInstance.GetInactiveContextTracker()
+        ContextTrackerInstance = WorkbookInstance.ContextTrackerInstance
+        InactiveContextTrackerInstance = WorkbookInstance.InactiveContextTrackerInstance
         # Get Context Trackers
 
         InactiveContextTrackerInstance.ManualLoad(
-            WorkbookInstance.GetExecutingContext()
+            WorkbookInstance.ExecutingContextInstance
         )
         # First thing we need to do is disable this context. If both pathways are merged then we will re-enable the context
 
@@ -113,7 +113,7 @@ class MergePlates(Block):
                 SourceContextInstance: Context,
             ):
                 for WellNumber in range(
-                    0, WorkbookInstance.GetWorklist().GetNumSamples()
+                    0, WorkbookInstance.WorklistInstance.GetNumSamples()
                 ):
                     WellFactorInstance = DestinationContextInstance.GetWellFactorTracker().GetObjectByName(
                         WellNumber
@@ -132,7 +132,7 @@ class MergePlates(Block):
 
             if WaitingMergeInstanceMergeType == "Yes":
                 InactiveContextTrackerInstance.ManualUnload(WaitingMergeInstanceContext)
-                WorkbookInstance.GetExecutedBlocksTracker().ManualLoad(
+                WorkbookInstance.ExecutedBlocksTrackerInstance.ManualLoad(
                     self.GetChildren()[0]
                 )
                 # We load the other pathways finish step as executed because theoretically it should execute
@@ -147,7 +147,7 @@ class MergePlates(Block):
                 InactiveContextTrackerInstance.ManualUnload(
                     ProcessingMergeInstanceContext
                 )
-                WorkbookInstance.GetExecutedBlocksTracker().ManualLoad(
+                WorkbookInstance.ExecutedBlocksTrackerInstance.ManualLoad(
                     WaitingMergeInstance.GetChildren()[0]
                 )
                 # We load the other pathways finish step as executed because theoretically it should execute

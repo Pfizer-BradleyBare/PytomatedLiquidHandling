@@ -38,6 +38,7 @@ class Workbook(ObjectABC):
         # Normal Init Variables
         # Variables
         self.WorkbookRunType: WorkbookRunTypes = WorkbookRunType
+        self.APIRunType: RunTypes
         self.MethodPath: str = MethodPath
         self.MethodName: str = os.path.basename(MethodPath)
         self.MethodTreeRoot: Block = MethodBlocksTrackerInstance.GetObjectsAsList()[0]
@@ -56,7 +57,6 @@ class Workbook(ObjectABC):
 
         # Variables
         self.ExecutingContextInstance: Context
-        self.RunType: RunTypes
 
         # Trackers
         self.ExecutedBlocksTrackerInstance: BlockTracker
@@ -79,8 +79,14 @@ class Workbook(ObjectABC):
         # This first thread does a plate volume calculation then selects possible containers. We need this info before we can do a "full" run.
         WorkbookFunctions.Initialize(self)
 
+        self.APIRunType = RunTypes.SimulatePartial
+
         self.WorkbookProcessorThread = threading.Thread(
-            name=self.GetName() + "->" + self.GetRunType().value,
+            name=self.GetName()
+            + "->"
+            + self.WorkbookRunType.value
+            + " : "
+            + self.APIRunType,
             target=WorkbookFunctions.ProcessorSimulatePartial,
             args=(self,),  # args must be tuple hence the empty second argument
         )
@@ -90,47 +96,5 @@ class Workbook(ObjectABC):
     def GetName(self) -> str:
         return self.MethodName
 
-    def GetPath(self) -> str:
-        return self.MethodPath
-
-    def GetRunType(self) -> WorkbookRunTypes:
-        return self.WorkbookRunType
-
-    def SetRunType(self, WorkbookRunType: WorkbookRunTypes):
-        self.WorkbookRunType = WorkbookRunType
-
-    def GetMethodTreeRoot(self) -> Block:
-        return self.MethodTreeRoot
-
-    def GetMethodBlocksTracker(self) -> BlockTracker:
-        return self.MethodBlocksTrackerInstance
-
-    def GetExecutedBlocksTracker(self) -> BlockTracker:
-        return self.ExecutedBlocksTrackerInstance
-
-    def GetPreprocessingBlocksTracker(self) -> BlockTracker:
-        return self.PreprocessingBlocksTrackerInstance
-
-    def GetWorklist(self) -> Worklist:
-        return self.WorklistInstance
-
-    def GetContainerTracker(self) -> ContainerTracker:
-        return self.ContainerTrackerInstance
-
-    def GetContextTracker(self) -> ContextTracker:
-        return self.ContextTrackerInstance
-
-    def GetInactiveContextTracker(self) -> ContextTracker:
-        return self.InactiveContextTrackerInstance
-
-    def GetExecutingContext(self) -> Context:
-        return self.ExecutingContextInstance
-
     def SetExecutingContext(self, ContextInstance: Context) -> None:
         self.ExecutingContextInstance = ContextInstance
-
-    def GetWorkbookProcessorThread(self) -> threading.Thread:
-        return self.WorkbookProcessorThread
-
-    def GetProcessingLock(self) -> threading.Lock:
-        return self.ProcessingLock

@@ -20,14 +20,14 @@ class Finish(Block):
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
 
-        ContextInstance = WorkbookInstance.GetExecutingContext()
+        ContextInstance = WorkbookInstance.ExecutingContextInstance
 
         ContextInstance.UpdateContextState(
             ContextStates.Complete,
             "Context completed successfully with a Finish block.",
         )
 
-        WorkbookInstance.GetInactiveContextTracker().ManualLoad(ContextInstance)
+        WorkbookInstance.InactiveContextTrackerInstance.ManualLoad(ContextInstance)
         # Deactivate the current context
 
         return True

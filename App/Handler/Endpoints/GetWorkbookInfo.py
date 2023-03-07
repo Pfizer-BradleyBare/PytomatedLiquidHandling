@@ -39,7 +39,7 @@ class GetWorkbookInfo:
         # Have any notifications fired?
         # Shared Operations
 
-        if WorkbookInstance.GetRunType() == RunTypes.SimulateFull:
+        if WorkbookInstance.APIRunType == RunTypes.SimulatePartial:
             Operations += ["Dequeue"]
 
         else:  # Run
@@ -57,9 +57,9 @@ class GetWorkbookInfo:
 
         ParserObject.SetEndpointState(True)
         ParserObject.SetEndpointOutputKey(
-            "Run Type", WorkbookInstance.GetRunType().value
+            "Run Type", WorkbookInstance.WorkbookRunType.value
         )
-        ParserObject.SetEndpointOutputKey("Full Path", WorkbookInstance.GetPath())
+        ParserObject.SetEndpointOutputKey("Full Path", WorkbookInstance.MethodPath)
         ParserObject.SetEndpointOutputKey("Owner", Owner)
         ParserObject.SetEndpointOutputKey("Contact Info", ", ".join(ContactInfo))
         ParserObject.SetEndpointOutputKey("Available Operations", Operations)

@@ -27,7 +27,7 @@ class Pause(Block):
 
         TimerTrackerInstance = GetHandler().TimerTrackerInstance
 
-        StepContext = WorkbookInstance.GetContextTracker().GetObjectByName(
+        StepContext = WorkbookInstance.ContextTrackerInstance.GetObjectByName(
             self.GetContext()
         )
 
@@ -48,7 +48,7 @@ class Pause(Block):
 
 
 def PauseProcessCallback(WorkbookInstance: Workbook, StepInstance: Pause, Extra: tuple):
-    StepContext = WorkbookInstance.GetContextTracker().GetObjectByName(
+    StepContext = WorkbookInstance.ContextTrackerInstance.GetObjectByName(
         StepInstance.GetContext()
     )
 

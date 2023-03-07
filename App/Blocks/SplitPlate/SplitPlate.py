@@ -33,9 +33,9 @@ class SplitPlate(Block):
         Pathway2Name = self.Pathway2Name.Read(WorkbookInstance)
         PathwayChoices = self.PathwayChoice.Read(WorkbookInstance)
 
-        ContextTrackerInstance = WorkbookInstance.GetContextTracker()
+        ContextTrackerInstance = WorkbookInstance.ContextTrackerInstance
 
-        OldContextInstance = WorkbookInstance.GetExecutingContext()
+        OldContextInstance = WorkbookInstance.ExecutingContextInstance
         NewPathway1ContextInstance = Context(
             OldContextInstance.GetName() + ":" + Pathway1Name,
             WellSequenceTracker(),
@@ -50,7 +50,7 @@ class SplitPlate(Block):
         )
         # New Contexts. Now we need to load them
 
-        for WellNumber in range(0, WorkbookInstance.GetWorklist().GetNumSamples()):
+        for WellNumber in range(0, WorkbookInstance.WorklistInstance.GetNumSamples()):
 
             PathwayChoice = PathwayChoices[WellNumber]
 
@@ -112,7 +112,7 @@ class SplitPlate(Block):
         # Deactivate the previous context and active this new context
         # We always execute pathway 1 first. Just easier to remember cause it is like reading a book. Left to right
 
-        ContainerTracker = WorkbookInstance.GetContainerTracker()
+        ContainerTracker = WorkbookInstance.ContainerTrackerInstance
 
         Children: list[Plate] = cast(list[Plate], self.GetChildren())
         for Child in Children:
@@ -123,7 +123,7 @@ class SplitPlate(Block):
                     Child.PlateType.Read(WorkbookInstance),
                 )
             )
-            WorkbookInstance.GetExecutedBlocksTracker().ManualLoad(Child)
+            WorkbookInstance.ExecutedBlocksTrackerInstance.ManualLoad(Child)
             # We are executing these blocks in the split plate step so we need to track them as executed.
         # Create the containers for the plate blocks followin the split plate
         # Split plate pathways must be unique. Thus we are guarenteed that the container does not already exist

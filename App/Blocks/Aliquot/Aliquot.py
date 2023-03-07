@@ -28,10 +28,10 @@ class Aliquot(Block):
     def Process(self, WorkbookInstance: Workbook) -> bool:
         Locations = self.Location.Read(WorkbookInstance)
 
-        WorklistInstance = WorkbookInstance.GetWorklist()
+        WorklistInstance = WorkbookInstance.WorklistInstance
 
         DispenseSequencesTrackerInstance = (
-            WorkbookInstance.GetExecutingContext().GetDispenseWellSequenceTracker()
+            WorkbookInstance.ExecutingContextInstance.GetDispenseWellSequenceTracker()
         )
 
         for WellNumber, Location in zip(

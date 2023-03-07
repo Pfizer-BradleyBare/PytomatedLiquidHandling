@@ -26,13 +26,13 @@ class PreloadLiquid(Block):
         self.Source.Read(WorkbookInstance)
 
         ParentContainer = (
-            WorkbookInstance.GetContainerTracker()
-            .GetPlateTracker()
-            .GetObjectByName(self.Source.Read(WorkbookInstance))
+            WorkbookInstance.ContainerTrackerInstance.GetPlateTracker().GetObjectByName(
+                self.Source.Read(WorkbookInstance)
+            )
         )
 
         WellFactorTrackerInstance = (
-            WorkbookInstance.GetExecutingContext().GetWellFactorTracker()
+            WorkbookInstance.ExecutingContextInstance.GetWellFactorTracker()
         )
 
         Volumes = self.Volume.Read(WorkbookInstance)

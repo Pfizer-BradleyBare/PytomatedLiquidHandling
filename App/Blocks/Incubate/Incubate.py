@@ -36,16 +36,16 @@ class Incubate(Block):
         Wait = self.WaitForTemp.Read(WorkbookInstance)
         ShakeSpeed = self.ShakeSpeed.Read(WorkbookInstance)
         ParentContainer = (
-            WorkbookInstance.GetContainerTracker()
-            .GetPlateTracker()
-            .GetObjectByName(self.GetParentPlateName())
+            WorkbookInstance.ContainerTrackerInstance.GetPlateTracker().GetObjectByName(
+                self.GetParentPlateName()
+            )
         )
 
         from ...Handler import GetHandler
 
-        RunType = WorkbookInstance.RunType
+        RunType = WorkbookInstance.APIRunType
 
-        StepContext = WorkbookInstance.GetContextTracker().GetObjectByName(
+        StepContext = WorkbookInstance.ContextTrackerInstance.GetObjectByName(
             self.GetContext()
         )
 
@@ -125,7 +125,7 @@ class Incubate(Block):
 
         TimerTrackerInstance = GetHandler().TimerTrackerInstance
 
-        StepContext = WorkbookInstance.GetContextTracker().GetObjectByName(
+        StepContext = WorkbookInstance.ContextTrackerInstance.GetObjectByName(
             self.GetContext()
         )
 
@@ -133,9 +133,9 @@ class Incubate(Block):
         Time = self.Time.Read(WorkbookInstance)
         ShakeSpeed = self.ShakeSpeed.Read(WorkbookInstance)
         ParentContainer = (
-            WorkbookInstance.GetContainerTracker()
-            .GetPlateTracker()
-            .GetObjectByName(self.GetParentPlateName())
+            WorkbookInstance.ContainerTrackerInstance.GetPlateTracker().GetObjectByName(
+                self.GetParentPlateName()
+            )
         )
 
         if type(Temperature) == str and Temperature == "Ambient":
@@ -155,10 +155,10 @@ class Incubate(Block):
                     self.ReservedTempControlDevice,  # type:ignore
                     float(Temperature),
                     ShakeSpeed,
-                    WorkbookInstance.RunType,
+                    WorkbookInstance.APIRunType,
                 )
 
-        Lid.Cover(ParentContainer, self.ReservedLid, WorkbookInstance.RunType)
+        Lid.Cover(ParentContainer, self.ReservedLid, WorkbookInstance.APIRunType)
 
         TimerTrackerInstance.ManualLoad(
             Timer(
@@ -194,7 +194,7 @@ def PreprocessingWaitCallback(
         if TempControl.IsReady(
             StepInstance.ReservedTempControlDevice,
             float(Temperature),
-            WorkbookInstance.RunType,
+            WorkbookInstance.APIRunType,
         ):
             WorkbookInstance.InactiveContextTrackerInstance.ManualUnload(StepContext)
 
@@ -227,9 +227,9 @@ def ProcessingWaitCallback(
 
     Temperature = StepInstance.Temperature.Read(WorkbookInstance)
     ParentContainer = (
-        WorkbookInstance.GetContainerTracker()
-        .GetPlateTracker()
-        .GetObjectByName(StepInstance.GetParentPlateName())
+        WorkbookInstance.ContainerTrackerInstance.GetPlateTracker().GetObjectByName(
+            StepInstance.GetParentPlateName()
+        )
     )
 
     Lid.Uncover(ParentContainer, StepInstance.ReservedLid)  # type:ignore
@@ -243,12 +243,12 @@ def ProcessingWaitCallback(
         TempControl.End(
             ParentContainer,
             StepInstance.ReservedTempControlDevice,  # type:ignore
-            WorkbookInstance.RunType,
+            WorkbookInstance.APIRunType,
         )
 
         TempControl.Release(
             StepInstance.ReservedTempControlDevice,  # type:ignore
-            WorkbookInstance.RunType,
+            WorkbookInstance.APIRunType,
         )
 
         StepInstance.ReservedTempControlDevice = None

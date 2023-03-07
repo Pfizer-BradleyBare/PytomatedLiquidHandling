@@ -36,7 +36,7 @@ class LiquidTransfer(Block):
         Volumes = self.Volume.Read(WorkbookInstance)
         MixingStrings = self.Mix.Read(WorkbookInstance)
 
-        WorklistInstance = WorkbookInstance.GetWorklist()
+        WorklistInstance = WorkbookInstance.WorklistInstance
 
         AspirateMixingParams: list[int] = list()
         DispenseMixingParams: list[int] = list()
@@ -55,9 +55,9 @@ class LiquidTransfer(Block):
             DispenseMixingParams.append(MixParams["Dispense"])
         # Convert mixing strings to mixing params
 
-        ContainerTrackerInstance = WorkbookInstance.GetContainerTracker()
+        ContainerTrackerInstance = WorkbookInstance.ContainerTrackerInstance
 
-        ContextInstance = WorkbookInstance.GetExecutingContext()
+        ContextInstance = WorkbookInstance.ExecutingContextInstance
 
         WellFactorTrackerInstance = ContextInstance.GetWellFactorTracker()
 
@@ -130,7 +130,6 @@ class LiquidTransfer(Block):
             # Destination will always be a "plate." The distinction is beyond subtle but important
 
         # TODO
-        RunType = WorkbookInstance.RunType
-        Transfer(TransferOptionsTrackerInstance, RunType)
+        Transfer(TransferOptionsTrackerInstance, WorkbookInstance.APIRunType)
 
         return True

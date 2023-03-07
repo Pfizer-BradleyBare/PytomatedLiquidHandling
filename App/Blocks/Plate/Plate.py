@@ -33,9 +33,9 @@ class Plate(Block):
 
         # Do parameter validation here
 
-        ContextTrackerInstance = WorkbookInstance.GetContextTracker()
+        ContextTrackerInstance = WorkbookInstance.ContextTrackerInstance
 
-        OldContextInstance = WorkbookInstance.GetExecutingContext()
+        OldContextInstance = WorkbookInstance.ExecutingContextInstance
         NewContextInstance = Context(
             OldContextInstance.GetName() + ":" + PlateName,
             OldContextInstance.GetDispenseWellSequenceTracker(),
@@ -49,7 +49,7 @@ class Plate(Block):
         WorkbookInstance.SetExecutingContext(NewContextInstance)
         # Deactivate the previous context and active this new context by removing and new adding
 
-        ContainerTracker = WorkbookInstance.GetContainerTracker()
+        ContainerTracker = WorkbookInstance.ContainerTrackerInstance
         if ContainerTracker.PlateTrackerInstance.IsTracked(PlateName) is False:
             ContainerTracker.PlateTrackerInstance.ManualLoad(
                 PlateContainer(PlateName, WorkbookInstance.GetName(), PlateFilter)

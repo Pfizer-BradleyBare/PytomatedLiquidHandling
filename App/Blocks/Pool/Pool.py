@@ -30,12 +30,12 @@ class Pool(Block):
 
         Locations = self.Location.Read(WorkbookInstance)
 
-        WorklistInstance = WorkbookInstance.GetWorklist()
+        WorklistInstance = WorkbookInstance.WorklistInstance
 
         # do input validation here
 
         DispenseSequencesTrackerInstance = (
-            WorkbookInstance.GetExecutingContext().GetDispenseWellSequenceTracker()
+            WorkbookInstance.ExecutingContextInstance.GetDispenseWellSequenceTracker()
         )
 
         for WellNumber, Location in zip(
