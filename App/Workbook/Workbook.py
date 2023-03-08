@@ -91,6 +91,7 @@ class Workbook(ObjectABC):
             args=(self,),  # args must be tuple hence the empty second argument
         )
 
+        self.ProcessingLock.acquire()
         self.WorkbookProcessorThread.start()
 
     def GetName(self) -> str:

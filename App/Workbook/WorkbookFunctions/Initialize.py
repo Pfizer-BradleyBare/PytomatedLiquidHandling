@@ -69,9 +69,6 @@ def Initialize(WorkbookInstance: Workbook):
             WorkbookInstance.WorklistInstance,
         )
     )
-    # We do need to do some checks to ensure consistency.
-    # TODO: Are all reagents in the labware selection... Etc.
-
     # Setting initial context and container.
 
     WorkbookInstance.ExcelInstance.CloseBook()

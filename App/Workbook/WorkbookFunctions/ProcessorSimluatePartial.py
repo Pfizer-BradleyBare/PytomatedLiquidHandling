@@ -8,7 +8,6 @@ from ...Workbook import Block, Workbook, WorkbookFunctions
 
 
 def ProcessorSimulatePartial(WorkbookInstance: Workbook):
-    ...
     from ...Handler import GetHandler
 
     WorkbookInstance.ExcelInstance.OpenBook(False)
