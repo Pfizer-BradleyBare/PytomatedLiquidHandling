@@ -5,7 +5,7 @@ from PytomatedLiquidHandling.API.Handler import GetHandler as APIGetHandler
 from PytomatedLiquidHandling.API.Handler import Handler as APIHandler
 from PytomatedLiquidHandling.API.Tools.Timer import TimerTracker
 from PytomatedLiquidHandling.Tools.AbstractClasses import ServerHandlerABC
-from PytomatedLiquidHandling.Tools.Logger import GenerateLogFilePath, Logger
+from PytomatedLiquidHandling.Tools.Logger import Logger
 
 from ..Workbook import WorkbookTracker
 from .Endpoints import (
@@ -29,9 +29,7 @@ class Handler(ServerHandlerABC):
         LoggerInstance = Logger(
             "AppLogger",
             DEBUG,
-            GenerateLogFilePath(
-                os.path.join(os.path.dirname(os.path.dirname(__file__)), "Logging")
-            ),
+            os.path.join(os.path.dirname(os.path.dirname(__file__)), "Logging"),
         )
 
         ServerHandlerABC.__init__(self, LoggerInstance)

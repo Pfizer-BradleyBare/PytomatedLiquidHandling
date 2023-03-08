@@ -86,7 +86,7 @@ class Workbook(ObjectABC):
             + "->"
             + self.WorkbookRunType.value
             + " : "
-            + self.APIRunType,
+            + self.APIRunType.value,
             target=WorkbookFunctions.ProcessorSimulatePartial,
             args=(self,),  # args must be tuple hence the empty second argument
         )

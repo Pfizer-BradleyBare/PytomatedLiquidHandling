@@ -44,7 +44,7 @@ def ProcessorSimulatePartial(WorkbookInstance: Workbook):
                 + "->"
                 + WorkbookInstance.WorkbookRunType.value
                 + " : "
-                + WorkbookInstance.APIRunType,
+                + WorkbookInstance.APIRunType.value,
                 target=WorkbookFunctions.ProcessorSimulateFull,
                 args=(
                     WorkbookInstance,

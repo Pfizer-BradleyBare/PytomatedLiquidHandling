@@ -4,34 +4,44 @@ import os
 import sys
 
 
-def GenerateLogFilePath(LogFileFolderPath: str) -> str:
-    return os.path.join(
-        LogFileFolderPath,
-        os.path.join(
-            LogFileFolderPath,
-            str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S")) + "Log.ansi",
-        ),
-    )
-
-
 class Logger(logging.Logger):
-    def __init__(self, LoggerName: str, LogLevel: int, LoggingFilePath: str):
+    def __init__(self, LoggerName: str, LogLevel: int, LoggingFolderPath: str):
         logging.Logger.__init__(self, LoggerName, LogLevel)
 
-        os.makedirs(os.path.dirname(LoggingFilePath), exist_ok=True)
+        os.makedirs(LoggingFolderPath, exist_ok=True)
+        os.makedirs(os.path.join(LoggingFolderPath, "Colored"), exist_ok=True)
+        os.makedirs(os.path.join(LoggingFolderPath, "XML"), exist_ok=True)
         # make directory if it does not exists
 
-        DefaultFormat = "[%(asctime)s] %(levelname)s\n%(message)s\n(%(threadName)s).%(module)s.%(funcName)s:%(lineno)d) <%(pathname)s>"
-
-        file_handler = logging.FileHandler(LoggingFilePath)
+        XMLFormat = ",,,record;;;,,,Time;;;%(asctime)s,,,/Time;;;,,,Level;;;%(levelname)s,,,/Level;;;,,,Message;;;%(message)s,,,/Message;;;,,,Thread;;;%(threadName)s,,,/Thread;;;,,,Module;;;%(module)s,,,/Module;;;,,,Function;;;%(funcName)s,,,/Function;;;,,,Line;;;%(lineno)d,,,/Line;;;,,,Path;;;%(pathname)s,,,/Path;;;,,,/record;;;"
+        XMLPath = os.path.join(
+            LoggingFolderPath,
+            "XML",
+            str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S")) + "Log.xml",
+        )
+        file_handler = XMLHandler(XMLPath)
         file_handler.setLevel(LogLevel)
-        file_handler.setFormatter(CustomFormatter(DefaultFormat))
+        file_handler.setFormatter(XMLFormatter(XMLFormat))
         self.addHandler(file_handler)
-        # This flushes logs to the file path
+        # This flushes logs to the xml file path
+
+        ColoredFormat = "[%(asctime)s] %(levelname)s\n%(message)s\n(%(threadName)s).%(module)s.%(funcName)s:%(lineno)d) <%(pathname)s>"
+        ColoredPath = os.path.join(
+            LoggingFolderPath,
+            "Colored",
+            str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S")) + "Log.ansi",
+        )
+        file_handler = logging.FileHandler(ColoredPath)
+        file_handler.setLevel(LogLevel)
+        file_handler.setFormatter(ColoredFormatter(ColoredFormat))
+        self.addHandler(file_handler)
+        # This flushes logs to the colored file path
+
+        file_handler.emit
 
         stdout_handler = logging.StreamHandler(sys.stdout)
         stdout_handler.setLevel(LogLevel)
-        stdout_handler.setFormatter(CustomFormatter(DefaultFormat))
+        stdout_handler.setFormatter(ColoredFormatter(ColoredFormat))
         self.addHandler(stdout_handler)
         # This flushes logs to stdout
 
@@ -46,19 +56,25 @@ class Logger(logging.Logger):
 
 class STDERRLogger(object):
     def __init__(self, LoggerInstance: Logger):
-        self.Message = ""
         self.LoggerInstance = LoggerInstance
+        self.Buffer = list()
 
-    def write(self, message):
-        self.Message += message
+    def write(self, Message):
+        if len(self.Buffer) == 0 and Message == "\n":
+            return
+
+        if Message.endswith("\n"):
+            self.Buffer.append(Message.removesuffix("\n"))
+            self.LoggerInstance.critical("".join(self.Buffer))
+            self.Buffer = list()
+        else:
+            self.Buffer.append(Message)
 
     def flush(self):
-        if self.Message != "":
-            self.LoggerInstance.critical(self.Message)
-        self.Message = ""
+        pass
 
 
-class CustomFormatter(logging.Formatter):
+class ColoredFormatter(logging.Formatter):
     """Logging colored formatter, adapted from https://stackoverflow.com/a/56944256/3638629"""
 
     debug = "\x1b[38;5;255m"
@@ -83,3 +99,35 @@ class CustomFormatter(logging.Formatter):
         log_fmt = self.FORMATS.get(record.levelno)
         formatter = logging.Formatter(log_fmt)
         return formatter.format(record)
+
+
+class XMLFormatter(logging.Formatter):
+    def __init__(self, fmt):
+        super().__init__(fmt)
+        self.fmt = fmt
+
+    def format(self, record):
+        return (
+            super()
+            .format(record)
+            .replace("<", "")
+            .replace(">", "")
+            .replace(",,,", "<")
+            .replace(";;;", ">")
+        )
+
+
+class XMLHandler(logging.Handler):
+    def __init__(self, FileName: str):
+        logging.Handler.__init__(self)
+        self.FileName: str = FileName
+        self.Buffer = list()
+        self.Buffer.append("<data-set>")
+
+    def emit(self, record):
+        self.Buffer.append(self.format(record))
+        self.Buffer.append("</data-set>")
+        File = open(self.FileName, "w")
+        File.write("\n".join(self.Buffer))
+        File.close()
+        self.Buffer.pop(-1)

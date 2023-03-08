@@ -1,1 +1,1 @@
-from .Logger import GenerateLogFilePath, Logger
+from .Logger import Logger
