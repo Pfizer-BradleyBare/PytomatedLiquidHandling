@@ -68,25 +68,11 @@ class Workbook(ObjectABC):
         # Thread
         self.WorkbookProcessorThread: threading.Thread
 
-        GetHandler().GetLogger().debug(
-            "The following method tree was determined for %s: \n%s",
-            self.MethodName,
-            self.MethodTreeRoot.PrintBlockTree(),
-        )
-
-        self.APIRunType = RunTypes.SimulatePartial
-
         self.WorkbookProcessorThread = threading.Thread(
-            name=self.GetName()
-            + "->"
-            + self.WorkbookRunType.value
-            + " : "
-            + self.APIRunType.value,
-            target=WorkbookProcesses.SimulatePartial,
+            name=self.GetName() + "-> Startup Process",
+            target=WorkbookProcesses.StartupProcess,
             args=(self,),  # args must be tuple hence the empty second argument
         )
-
-        self.ProcessingLock.acquire()
 
         self.WorkbookProcessorThread.start()
 

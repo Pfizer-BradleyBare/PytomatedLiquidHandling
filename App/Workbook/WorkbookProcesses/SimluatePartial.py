@@ -3,7 +3,7 @@ import threading
 from PytomatedLiquidHandling.API.Tools.LabwareSelection import LabwareSelectionLoader
 from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
 
-from ...Workbook import Block, Workbook, WorkbookProcesses
+from ...Workbook import Workbook, WorkbookProcesses
 from . import WorkbookFunctions
 
 
