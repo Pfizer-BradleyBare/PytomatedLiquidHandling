@@ -9,7 +9,7 @@ from PytomatedLiquidHandling.Tools.AbstractClasses import ObjectABC
 from ..Tools.Context import Context, ContextTracker
 from ..Tools.Excel import Excel
 from ..Workbook import Block, BlockTracker, Worklist
-from . import WorkbookFunctions, WorkbookRunTypes
+from . import WorkbookProcesses, WorkbookRunTypes
 
 # NOTE
 #   Workbook contain information about the block pathways, worklist, and solutions
@@ -83,7 +83,7 @@ class Workbook(ObjectABC):
             + self.WorkbookRunType.value
             + " : "
             + self.APIRunType.value,
-            target=WorkbookFunctions.ProcessorSimulatePartial,
+            target=WorkbookProcesses.SimulatePartial,
             args=(self,),  # args must be tuple hence the empty second argument
         )
 

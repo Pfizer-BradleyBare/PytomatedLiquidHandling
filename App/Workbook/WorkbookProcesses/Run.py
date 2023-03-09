@@ -2,7 +2,7 @@ from ...Blocks import MergePlates
 from ...Workbook import Block, Workbook
 
 
-def ProcessorRun(WorkbookInstance: Workbook):
+def Run(WorkbookInstance: Workbook):
 
     from ...Handler import GetHandler
 

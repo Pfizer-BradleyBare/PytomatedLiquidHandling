@@ -50,9 +50,11 @@ class SplitPlate(Block):
         )
         # New Contexts. Now we need to load them
 
-        for WellNumber in range(0, WorkbookInstance.WorklistInstance.GetNumSamples()):
+        for WellNumber in range(
+            1, WorkbookInstance.WorklistInstance.GetNumSamples() + 1
+        ):
 
-            PathwayChoice = PathwayChoices[WellNumber]
+            PathwayChoice = PathwayChoices[WellNumber - 1]
 
             Factor = (
                 OldContextInstance.GetWellFactorTracker()
