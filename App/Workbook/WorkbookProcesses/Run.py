@@ -1,5 +1,6 @@
 from ...Blocks import MergePlates
 from ...Workbook import Block, Workbook
+from . import WorkbookFunctions
 
 
 def Run(WorkbookInstance: Workbook):
@@ -25,27 +26,7 @@ def Run(WorkbookInstance: Workbook):
 
     while True:
 
-        while True:
-            WorkbookInstance.ProcessingLock.acquire()
-            WorkbookInstance.ProcessingLock.release()
-            # if AliveStateFlag.AliveStateFlag is False: TODO
-            # Do some workbook save state stuff here
-            #    return
-
-            # if all(
-            #    LoadedLabwareConnection.IsConnected()
-            #    for LoadedLabwareConnection in WorkbookInstance.GetLoadedLabwareConnectionTracker().GetObjectsAsList()
-            # ):
-            break
-            # if all are connected then we can start running. Boom!
-        # This first thing we need to do is check that all labwares are loaded. If not then we sit here and wait.
-        # This could be expanded to wait until a set of labware is loaded before proceeding. How? No idea.
-
-        if all(
-            item in ExecutedBlocksTrackerInstance.GetObjectsAsList()
-            for item in WorkbookInstance.MethodBlocksTrackerInstance.GetObjectsAsList()
-        ):
-
+        if WorkbookFunctions.AllBlocksExecuted(WorkbookInstance):
             print("HERE")
             return
         # First thing to do is check if all blocks have been executed.

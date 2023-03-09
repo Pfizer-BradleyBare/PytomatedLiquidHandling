@@ -1,10 +1,11 @@
-from typing import cast
-
 from ....Blocks import Plate
 from ....Workbook import Block, Workbook
+from .IsDeadBlock import IsDeadBlock
 
 
 def GetNextBlock(WorkbookInstance: Workbook) -> Block:
+    from ....Handler import GetHandler
+
     InactiveContextTrackerInstance = WorkbookInstance.InactiveContextTrackerInstance
 
     if InactiveContextTrackerInstance.IsTracked(
@@ -24,7 +25,6 @@ def GetNextBlock(WorkbookInstance: Workbook) -> Block:
     ReversedExecutedBlocks.reverse()
 
     for BlockInstance in ReversedExecutedBlocks:
-        print(BlockInstance.GetName())
         if isinstance(BlockInstance, Plate):
             Context = (
                 BlockInstance.GetContext()
@@ -34,12 +34,16 @@ def GetNextBlock(WorkbookInstance: Workbook) -> Block:
         else:
             Context = BlockInstance.GetContext()
 
-        print(Context)
-        print(WorkbookInstance.ExecutingContextInstance.GetName())
-
         if Context == WorkbookInstance.ExecutingContextInstance.GetName():
-            print("HERE")
             LatestExecutedBlock: Block = BlockInstance
+
+            NextBlock = LatestExecutedBlock.GetChildren()[0]
+
+            if IsDeadBlock(WorkbookInstance, NextBlock):
+                WorkbookInstance.ExecutedBlocksTrackerInstance.ManualLoad(NextBlock)
+                return GetNextBlock(WorkbookInstance)
+            # skipping dead blocks
+
             return LatestExecutedBlock.GetChildren()[0]
         # Set the tree current node here
     # Find the context we need to process if the current context is exhausted

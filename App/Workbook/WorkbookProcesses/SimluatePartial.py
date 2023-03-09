@@ -10,14 +10,13 @@ from . import WorkbookFunctions
 def SimulatePartial(WorkbookInstance: Workbook):
     from ...Handler import GetHandler
 
+    GetHandler().GetLogger().info("Starting Simulate Partial")
+
     WorkbookInstance.ExcelInstance.OpenBook(False)
 
     WorkbookFunctions.Initialize(WorkbookInstance)
 
-    CurrentExecutingBlock: Block = WorkbookInstance.MethodTreeRoot
-    CurrentExecutingBlock.Process(WorkbookInstance)
-    WorkbookInstance.ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
-    # Do the first step processing here. First step is always a plate step.
+    WorkbookFunctions.DoFirstBlockProcessing(WorkbookInstance)
 
     while True:
 
@@ -26,7 +25,6 @@ def SimulatePartial(WorkbookInstance: Workbook):
             WorkbookInstance.LabwareSelectionTrackerInstance = (
                 LabwareSelectionLoader.Load(WorkbookInstance.ContainerTrackerInstance)
             )
-
             # This is init and starting of the first thread. There are two threads that need to execute before the "system" is ready.
             # This second thread does a simulated run to confirm the method is "correct"
 
@@ -46,8 +44,6 @@ def SimulatePartial(WorkbookInstance: Workbook):
                 ),  # args must be tuple hence the empty second argument
             )
 
-            GetHandler().GetLogger().info("Starting Simulate Full")
-
             WorkbookInstance.WorkbookProcessorThread.start()
 
             return
@@ -64,4 +60,9 @@ def SimulatePartial(WorkbookInstance: Workbook):
         CurrentExecutingBlock = WorkbookFunctions.GetNextBlock(WorkbookInstance)
         # Find the context we need to process if the current context is exhausted
 
-        WorkbookFunctions.ExecuteBlock(WorkbookInstance, CurrentExecutingBlock)
+        WorkbookFunctions.HandleBlockExecution(
+            WorkbookInstance,
+            CurrentExecutingBlock,
+            WorkbookInstance.ExecutedBlocksTrackerInstance,
+            "Process",
+        )

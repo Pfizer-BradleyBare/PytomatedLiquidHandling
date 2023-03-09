@@ -62,9 +62,8 @@ class Workbook(ObjectABC):
         self.ExecutedBlocksTrackerInstance: BlockTracker
         self.ContainerTrackerInstance: ContainerTracker
         self.CompletedPreprocessingBlocksTrackerInstance: BlockTracker
-        self.ContextTrackerInstance: ContextTracker
-        self.ContextTrackerInstance: ContextTracker
-        self.InactiveContextTrackerInstance: ContextTracker
+        self.ContextTrackerInstance: ContextTracker  # This is all the contexts
+        self.InactiveContextTrackerInstance: ContextTracker  # This is only the inactive ones
 
         # Thread
         self.WorkbookProcessorThread: threading.Thread
@@ -89,7 +88,6 @@ class Workbook(ObjectABC):
 
         self.ProcessingLock.acquire()
 
-        GetHandler().GetLogger().info("Starting Simulate Partial")
         self.WorkbookProcessorThread.start()
 
     def GetName(self) -> str:
