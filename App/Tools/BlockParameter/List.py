@@ -2,6 +2,7 @@ from typing import Generic, TypeVar, cast, get_args
 
 from PytomatedLiquidHandling.API.Tools import Validator
 
+from ...Tools.Excel import Excel
 from ...Workbook import Workbook
 from .BaseBlockParameter import BlockParameter
 
@@ -9,6 +10,11 @@ T = TypeVar("T", bound="int | float | str")
 
 
 class List(BlockParameter, Generic[T]):
+    def ReadRaw(self, ExcelInstance: Excel) -> any:  # type:ignore
+        raise Exception(
+            "Cannot read a list raw. Worklist instance is required to determine list contents..."
+        )
+
     def Read(
         self,
         WorkbookInstance: Workbook,

@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from ....Tools.Excel import Excel
 from ....Workbook import Block, Workbook
 
 
@@ -17,6 +18,10 @@ class BlockParameter(ABC):
         self.Col: int = BlockInstance.Col + 1
 
         self.ValCriterias: list = ValCriterias
+
+    @abstractmethod
+    def ReadRaw(self, ExcelInstance: Excel) -> any:  # type:ignore
+        ...
 
     @abstractmethod
     def Read(self, WorkbookInstance: Workbook) -> any:  # type:ignore

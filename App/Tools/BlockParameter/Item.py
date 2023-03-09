@@ -2,6 +2,7 @@ from typing import Generic, TypeVar, cast, get_args
 
 from PytomatedLiquidHandling.API.Tools import Validator
 
+from ...Tools.Excel import Excel
 from ...Workbook import Workbook
 from .BaseBlockParameter import BlockParameter
 
@@ -9,6 +10,9 @@ T = TypeVar("T", bound="int | float | str")
 
 
 class Item(BlockParameter, Generic[T]):
+    def ReadRaw(self, ExcelInstance: Excel) -> any:  # type:ignore
+        return ExcelInstance.ReadCellValue(self.ExcelSheet, self.Row, self.Col)
+
     def Read(
         self,
         WorkbookInstance: Workbook,

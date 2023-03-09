@@ -7,6 +7,7 @@ from .BlockTracker import BlockTracker
 
 
 def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
+
     MethodSheet = ExcelInstance.ReadRangeValues("Method", 1, 1, 1500, 100)
 
     Rows = len(MethodSheet)
@@ -62,11 +63,7 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
         if not isinstance(BlockInstance, Plate):
             raise Exception("Method is not valid!")
         else:
-            PlateName = str(
-                ExcelInstance.ReadCellValue(
-                    "Method", BlockInstance.Row + 1, BlockInstance.Col + 1
-                )
-            )
+            PlateName = BlockInstance.PlateName.ReadRaw(ExcelInstance)
             if PlateName in Pathways:
                 raise Exception("Method is not valid!")
             Pathways.append(PlateName)
@@ -77,20 +74,12 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
         if isinstance(BlockInstance, SplitPlate):
 
             if (
-                str(
-                    ExcelInstance.ReadCellValue(
-                        "Method", BlockInstance.Row + 2, BlockInstance.Col + 1
-                    )
-                )
+                BlockInstance.Pathway1Name.ReadRaw(ExcelInstance)
                 not in Pathways  # Pathway 1
             ):
                 raise Exception("Pathways are not referenced correctly!")
             if (
-                str(
-                    ExcelInstance.ReadCellValue(
-                        "Method", BlockInstance.Row + 3, BlockInstance.Col + 1
-                    )
-                )
+                BlockInstance.Pathway2Name.ReadRaw(ExcelInstance)
                 not in Pathways  # Pathway 2
             ):
                 raise Exception("Pathways are not referenced correctly!")
@@ -109,32 +98,16 @@ def Load(BlockTrackerInstance: BlockTracker, ExcelInstance: Excel):
             BlockInstance.Context = Context
             PreviousBlock = BlockInstance
             if isinstance(BlockInstance, Plate):
-                Context += ":" + str(
-                    ExcelInstance.ReadCellValue(
-                        "Method", BlockInstance.Row + 1, BlockInstance.Col + 1
-                    )
-                )
+                Context += ":" + BlockInstance.PlateName.ReadRaw(ExcelInstance)
 
             if isinstance(BlockInstance, SplitPlate):
                 Pathways = [
-                    str(
-                        ExcelInstance.ReadCellValue(
-                            "Method", BlockInstance.Row + 2, BlockInstance.Col + 1
-                        )
-                    ),
-                    str(
-                        ExcelInstance.ReadCellValue(
-                            "Method", BlockInstance.Row + 3, BlockInstance.Col + 1
-                        )
-                    ),
+                    BlockInstance.Pathway1Name.ReadRaw(ExcelInstance),
+                    BlockInstance.Pathway2Name.ReadRaw(ExcelInstance),
                 ]
                 for Pathway in PathwaysList[:]:
                     if (
-                        str(
-                            ExcelInstance.ReadCellValue(
-                                "Method", Pathway[0].Row + 1, Pathway[0].Col + 1
-                            )
-                        )
+                        cast(Plate, Pathway[0]).PlateName.ReadRaw(ExcelInstance)
                         in Pathways
                     ):
                         PathwaysList.remove(Pathway)
