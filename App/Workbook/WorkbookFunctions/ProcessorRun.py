@@ -2,7 +2,7 @@ from ...Blocks import MergePlates
 from ...Workbook import Block, Workbook
 
 
-def RunProcessor(WorkbookInstance: Workbook):
+def ProcessorRun(WorkbookInstance: Workbook):
 
     from ...Handler import GetHandler
 
@@ -47,43 +47,6 @@ def RunProcessor(WorkbookInstance: Workbook):
         ):
 
             print("HERE")
-            return
-            WorkbookInstance.LabwareSelectionTrackerInstance = (
-                LabwareSelectionLoader.Load(
-                    WorkbookInstance.GetContainerTracker(),
-                )
-            )
-
-            for (
-                LabwareSelectionInstance
-            ) in WorkbookInstance.LabwareSelectionTrackerInstance.GetObjectsAsList():
-                print(
-                    LabwareSelectionInstance.GetName(),
-                    LabwareSelectionInstance.GetContainer().GetVolume(),
-                    str(
-                        [
-                            lab.GetName()
-                            for lab in LabwareSelectionInstance.GetLabwareTracker().GetObjectsAsList()
-                        ]
-                    ),
-                )
-
-            if WorkbookInstance.GetRunType() == WorkbookRunTypes.PreRun:
-
-                WorkbookInstance.SetRunType(WorkbookRunTypes.Run)
-
-                WorkbookInstance.ProcessingLock.acquire()
-                WorkbookInstance.ProcessingLock.release()
-                # if AliveStateFlag.AliveStateFlag is False: TODO
-                # Do some workbook save state stuff here
-                #    return
-                # Everything is controlled by the server. So we will wait here for the server to tell us we are next to run
-                # Then we will reinit the workbook and wait on deck loading
-
-                WorkbookInit(WorkbookInstance)
-            # If we are prerun then we need to do this another time to actually run the method
-            # else we are done here and can return
-
             return
         # First thing to do is check if all blocks have been executed.
 
@@ -214,12 +177,6 @@ def RunProcessor(WorkbookInstance: Workbook):
 
         if StepStatus is True:
             ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
-
-            # need to fix with new stepstatus TODO
-            # This should always be a single child. Only a split plate wil have 2 children
-            # The two children will be executed in the split plate block
-            # We must track all executed blocks even if processing is skipped.
-
         # NOTE: A skipped block is still executed in the mind of the program
 
         else:

@@ -1,4 +1,5 @@
 from PytomatedLiquidHandling.API import Lid, TempControl
+from PytomatedLiquidHandling.API.Tools.RunTypes import RunTypes
 from PytomatedLiquidHandling.HAL.Lid import Lid as HALLid
 from PytomatedLiquidHandling.HAL.TempControlDevice.BaseTempControlDevice import (
     TempControlDevice,
@@ -118,8 +119,10 @@ class Incubate(Block):
     @FunctionDecorator_ProcessFunction
     def Process(self, WorkbookInstance: Workbook) -> bool:
 
-        WorkbookInstance.PreprocessingBlocksTrackerInstance.ManualLoad(self)
+        if WorkbookInstance.APIRunType == RunTypes.SimulatePartial:
+            WorkbookInstance.PreprocessingBlocksTrackerInstance.ManualLoad(self)
         # This block requires preprocessing. Let's add it to the list
+        # We only add during partial simulation because the partial sim is where we determine "requirements"
 
         from ...Handler import GetHandler
 

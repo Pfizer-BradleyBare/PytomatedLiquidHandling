@@ -15,8 +15,6 @@ from ..Solution import SolutionLoader
 
 
 def Initialize(WorkbookInstance: Workbook):
-    WorkbookInstance.ExcelInstance.OpenBook(False)
-    # Setup special varibles
 
     # Trackers
     WorkbookInstance.ExecutedBlocksTrackerInstance = BlockTracker()
@@ -70,5 +68,3 @@ def Initialize(WorkbookInstance: Workbook):
         )
     )
     # Setting initial context and container.
-
-    WorkbookInstance.ExcelInstance.CloseBook()

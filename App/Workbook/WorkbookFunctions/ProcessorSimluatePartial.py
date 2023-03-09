@@ -12,6 +12,8 @@ def ProcessorSimulatePartial(WorkbookInstance: Workbook):
 
     WorkbookInstance.ExcelInstance.OpenBook(False)
 
+    WorkbookFunctions.Initialize(WorkbookInstance)
+
     ContextTrackerInstance = WorkbookInstance.ContextTrackerInstance
     InactiveContextTrackerInstance = WorkbookInstance.InactiveContextTrackerInstance
     ExecutedBlocksTrackerInstance = WorkbookInstance.ExecutedBlocksTrackerInstance
@@ -34,7 +36,6 @@ def ProcessorSimulatePartial(WorkbookInstance: Workbook):
 
             # This is init and starting of the first thread. There are two threads that need to execute before the "system" is ready.
             # This second thread does a simulated run to confirm the method is "correct"
-            WorkbookFunctions.Initialize(WorkbookInstance)
 
             WorkbookInstance.APIRunType = RunTypes.SimulateFull
 
@@ -49,6 +50,8 @@ def ProcessorSimulatePartial(WorkbookInstance: Workbook):
                     WorkbookInstance,
                 ),  # args must be tuple hence the empty second argument
             )
+
+            GetHandler().GetLogger().info("Starting Simulate Full")
 
             WorkbookInstance.WorkbookProcessorThread.start()
 
@@ -115,12 +118,6 @@ def ProcessorSimulatePartial(WorkbookInstance: Workbook):
 
         if StepStatus is True:
             ExecutedBlocksTrackerInstance.ManualLoad(CurrentExecutingBlock)
-
-            # need to fix with new stepstatus TODO
-            # This should always be a single child. Only a split plate wil have 2 children
-            # The two children will be executed in the split plate block
-            # We must track all executed blocks even if processing is skipped.
-
         # NOTE: A skipped block is still executed in the mind of the program
 
         else:

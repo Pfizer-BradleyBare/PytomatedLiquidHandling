@@ -75,10 +75,6 @@ class Workbook(ObjectABC):
             self.MethodTreeRoot.PrintBlockTree(),
         )
 
-        # This is init and starting of the first thread. There are two threads that need to execute before the "system" is ready.
-        # This first thread does a plate volume calculation then selects possible containers. We need this info before we can do a "full" run.
-        WorkbookFunctions.Initialize(self)
-
         self.APIRunType = RunTypes.SimulatePartial
 
         self.WorkbookProcessorThread = threading.Thread(
@@ -92,6 +88,8 @@ class Workbook(ObjectABC):
         )
 
         self.ProcessingLock.acquire()
+
+        GetHandler().GetLogger().info("Starting Simulate Partial")
         self.WorkbookProcessorThread.start()
 
     def GetName(self) -> str:
