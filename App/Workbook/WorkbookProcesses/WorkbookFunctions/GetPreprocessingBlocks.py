@@ -13,7 +13,7 @@ def GetPreprocessingBlocks(WorkbookInstance: Workbook) -> BlockTracker:
 
         SearchBlockInstance = PreprocessingBlockInstance
 
-        if WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance.IsTracked(
+        if WorkbookInstance.ExecutedPreprocessingBlocksTrackerInstance.IsTracked(
             SearchBlockInstance.GetName()
         ) or WorkbookInstance.ExecutedBlocksTrackerInstance.IsTracked(
             SearchBlockInstance.GetName()
@@ -29,7 +29,7 @@ def GetPreprocessingBlocks(WorkbookInstance: Workbook) -> BlockTracker:
         # I want this to change in the future but it is good enough for now
 
         if IsDeadBlock(WorkbookInstance, SearchBlockInstance):
-            WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance.ManualLoad(
+            WorkbookInstance.ExecutedPreprocessingBlocksTrackerInstance.ManualLoad(
                 SearchBlockInstance
             )
             continue

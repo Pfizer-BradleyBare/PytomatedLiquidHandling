@@ -21,7 +21,7 @@ def Initialize(WorkbookInstance: Workbook):
     WorkbookInstance.ContextTrackerInstance = ContextTracker()
     WorkbookInstance.ContextTrackerInstance = ContextTracker()
     WorkbookInstance.InactiveContextTrackerInstance = ContextTracker()
-    WorkbookInstance.CompletedPreprocessingBlocksTrackerInstance = BlockTracker()
+    WorkbookInstance.ExecutedPreprocessingBlocksTrackerInstance = BlockTracker()
 
     # Set Initial Active Context
     AspirateWellSequenceTrackerInstance = WellSequenceTracker()

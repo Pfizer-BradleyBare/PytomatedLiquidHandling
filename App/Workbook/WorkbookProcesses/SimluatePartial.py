@@ -12,6 +12,8 @@ def SimulatePartial(WorkbookInstance: Workbook):
 
     GetHandler().GetLogger().info("Starting Simulate Partial")
 
+    WorkbookInstance.APIRunType = RunTypes.SimulatePartial
+
     WorkbookInstance.ExcelInstance.OpenBook(False)
 
     WorkbookFunctions.Initialize(WorkbookInstance)
@@ -30,8 +32,6 @@ def SimulatePartial(WorkbookInstance: Workbook):
 
             WorkbookInstance.ExcelInstance.CloseBook()
 
-            WorkbookInstance.APIRunType = RunTypes.SimulateFull
-
             WorkbookInstance.WorkbookProcessorThread = threading.Thread(
                 name=WorkbookInstance.GetName()
                 + "->"
@@ -47,15 +47,10 @@ def SimulatePartial(WorkbookInstance: Workbook):
             WorkbookInstance.WorkbookProcessorThread.start()
 
             return
-        # First thing to do is check if all blocks have been executed.
+            # First thing to do is check if all blocks have been executed.
 
-        # if AliveStateFlag.AliveStateFlag is False: TODO
-        # Do some workbook save state stuff here
-        #    return
-        # The processing lock is used as a pause button to control which workbook executes.
-        # During acquire we wait for the thread to be unpaused.
-        # We immediately release so we do not stall the main process
-        # After release we must check that the server still wants to execute. If not, we do some save state stuff then kill the thread.
+        if not GetHandler().IsAlive():
+            return
 
         CurrentExecutingBlock = WorkbookFunctions.GetNextBlock(WorkbookInstance)
         # Find the context we need to process if the current context is exhausted

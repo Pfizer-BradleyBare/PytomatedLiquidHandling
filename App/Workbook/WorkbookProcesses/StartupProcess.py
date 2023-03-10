@@ -16,14 +16,8 @@ def StartupProcess(WorkbookInstance: Workbook):
         WorkbookInstance.MethodTreeRoot.PrintBlockTree(),
     )
 
-    WorkbookInstance.APIRunType = RunTypes.SimulatePartial
-
     WorkbookInstance.WorkbookProcessorThread = threading.Thread(
-        name=WorkbookInstance.GetName()
-        + "->"
-        + WorkbookInstance.WorkbookRunType.value
-        + " : "
-        + WorkbookInstance.APIRunType.value,
+        name=WorkbookInstance.GetName() + "-> Startup Process",
         target=WorkbookProcesses.SimulatePartial,
         args=(WorkbookInstance,),  # args must be tuple hence the empty second argument
     )
