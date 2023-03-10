@@ -37,8 +37,6 @@ def StartupProcess(WorkbookInstance: Workbook):
         args=(WorkbookInstance,),  # args must be tuple hence the empty second argument
     )
 
-    WorkbookInstance.ProcessingLock.acquire()
-
     WorkbookInstance.WorkbookProcessorThread.start()
 
     return

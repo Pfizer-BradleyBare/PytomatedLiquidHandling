@@ -17,6 +17,8 @@ def Run(WorkbookInstance: Workbook):
 
     WorkbookFunctions.Initialize(WorkbookInstance)
 
+    WorkbookInstance.ProcessingLock.acquire()
+
     WorkbookFunctions.DoFirstBlockProcessing(WorkbookInstance)
 
     while True:
