@@ -71,7 +71,7 @@ class Workbook(ObjectABC):
         self.WorkbookProcessorThread: threading.Thread
 
         self.WorkbookProcessorThread = threading.Thread(
-            name=self.GetName() + "-> Startup Process",
+            name=self.GetName(),
             target=WorkbookProcesses.StartupProcess,
             args=(self,),  # args must be tuple hence the empty second argument
         )

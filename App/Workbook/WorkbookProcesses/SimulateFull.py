@@ -7,12 +7,11 @@ from . import WorkbookFunctions
 
 
 def SimulateFull(WorkbookInstance: Workbook):
-
     from ...Handler import GetHandler
 
-    GetHandler().GetLogger().info("Starting Simulate Full")
-
     WorkbookInstance.APIRunType = RunTypes.SimulateFull
+
+    WorkbookFunctions.SetThreadName(WorkbookInstance)
 
     # We need to create some "Imaginary" plates to do the partial simulation. Should we do this for every combination? Is that practical?
 
@@ -26,7 +25,7 @@ def SimulateFull(WorkbookInstance: Workbook):
 
         if WorkbookFunctions.AllBlocksExecuted(WorkbookInstance):
             WorkbookInstance.ExcelInstance.CloseBook()
-            return
+            break
         # First thing to do is check if all blocks have been executed.
 
         if not GetHandler().IsAlive():

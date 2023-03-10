@@ -1,3 +1,5 @@
+import threading
+
 from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
 
 from .. import Workbook
@@ -5,12 +7,11 @@ from . import WorkbookFunctions
 
 
 def Run(WorkbookInstance: Workbook):
-
     from ...Handler import GetHandler
 
-    GetHandler().GetLogger().info("Starting Run")
-
     WorkbookInstance.APIRunType = RunTypes.Run
+
+    WorkbookFunctions.SetThreadName(WorkbookInstance)
 
     WorkbookInstance.ExcelInstance.OpenBook(False)
 

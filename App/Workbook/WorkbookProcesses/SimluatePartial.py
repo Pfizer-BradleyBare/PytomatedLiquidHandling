@@ -10,9 +10,9 @@ from . import WorkbookFunctions
 def SimulatePartial(WorkbookInstance: Workbook):
     from ...Handler import GetHandler
 
-    GetHandler().GetLogger().info("Starting Simulate Partial")
-
     WorkbookInstance.APIRunType = RunTypes.SimulatePartial
+
+    WorkbookFunctions.SetThreadName(WorkbookInstance)
 
     WorkbookInstance.ExcelInstance.OpenBook(False)
 
@@ -33,11 +33,7 @@ def SimulatePartial(WorkbookInstance: Workbook):
             WorkbookInstance.ExcelInstance.CloseBook()
 
             WorkbookInstance.WorkbookProcessorThread = threading.Thread(
-                name=WorkbookInstance.GetName()
-                + "->"
-                + WorkbookInstance.WorkbookRunType.value
-                + " : "
-                + WorkbookInstance.APIRunType.value,
+                name=WorkbookInstance.GetName(),
                 target=WorkbookProcesses.SimulateFull,
                 args=(
                     WorkbookInstance,
