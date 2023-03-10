@@ -4,7 +4,6 @@ import os
 
 import web
 
-from PytomatedLiquidHandling.API.Tools.RunTypes.RunTypes import RunTypes
 from PytomatedLiquidHandling.Server.Tools.Parser import Parser
 
 from ...Workbook import WorkbookLoader, WorkbookRunTypes

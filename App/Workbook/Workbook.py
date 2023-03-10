@@ -22,6 +22,8 @@ from . import WorkbookProcesses, WorkbookRunTypes
 # ok so this is my plan:
 # Thw thread will only read steps. It will not modify the block tracker list at all.
 # All modification must occur by the workbook somehow
+#
+# NOTE: THIS EXPLANATION IS OUTDATED
 
 
 class Workbook(ObjectABC):
