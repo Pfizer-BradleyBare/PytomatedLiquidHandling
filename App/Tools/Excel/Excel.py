@@ -12,8 +12,8 @@ def ExcelClassFunctionDecorator_ThreadLock(DecoratedFunction):
 
         LoggerInstance = GetHandler().GetLogger()
 
-        LoggerInstance.debug("Start Excel Function: " + DecoratedFunction.__name__)
-        LoggerInstance.debug("Args: " + str(args))
+        # LoggerInstance.debug("Start Excel Function: " + DecoratedFunction.__name__)
+        # LoggerInstance.debug("Args: " + str(args))
 
         if args[0].Book is not None:
             Lock.acquire()
@@ -23,7 +23,7 @@ def ExcelClassFunctionDecorator_ThreadLock(DecoratedFunction):
             LoggerInstance.critical("Excel book is not open! No action performed")
             Result = None
 
-        LoggerInstance.debug("End Excel Function: " + DecoratedFunction.__name__)
+        # LoggerInstance.debug("End Excel Function: " + DecoratedFunction.__name__)
         return Result
 
     return inner
