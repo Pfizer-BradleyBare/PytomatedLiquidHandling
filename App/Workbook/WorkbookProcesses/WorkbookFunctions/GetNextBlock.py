@@ -40,6 +40,10 @@ def GetNextBlock(WorkbookInstance: Workbook) -> Block:
             NextBlock = LatestExecutedBlock.GetChildren()[0]
 
             if IsDeadBlock(WorkbookInstance, NextBlock):
+                GetHandler().GetLogger().info(
+                    "This block is not required for any samples. Skipping: "
+                    + NextBlock.GetName()
+                )
                 WorkbookInstance.ExecutedBlocksTrackerInstance.ManualLoad(NextBlock)
                 return GetNextBlock(WorkbookInstance)
             # skipping dead blocks
