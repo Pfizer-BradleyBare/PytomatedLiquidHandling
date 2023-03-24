@@ -28,22 +28,20 @@ class Respond:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        if not ParserObject.IsValid(["State", "Message", "Request Identifier"]):
+        if not ParserObject.IsValid(["State", "Message"]):
             Response = ParserObject.GetHTTPResponse()
             return Response
         # preliminary check. We will check again below
 
-        RequestID = ParserObject.GetEndpointInputData()["Request Identifier"]
-
-        if not CommandTrackerInstance.IsTracked(RequestID):
+        if CommandTrackerInstance.GetNumObjects() == 0:
             ParserObject.SetEndpointMessage(
-                "There is not a command with that ID waiting."
+                "No commands in queue. This should never happen..."
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
-        # Check the command exists in our queue
+        # Check the command does not already have a response
 
-        CommandInstance = CommandTrackerInstance.GetObjectByName(RequestID)
+        CommandInstance = CommandTrackerInstance.GetObjectsAsList()[0]
 
         if CommandInstance.ResponseEvent.is_set():
             ParserObject.SetEndpointMessage(
@@ -55,9 +53,7 @@ class Respond:
 
         ExpectedResponseKeys = CommandInstance.GetExpectedResponseProperties()
 
-        if not ParserObject.IsValid(
-            ["State", "Message", "Request Identifier"] + ExpectedResponseKeys
-        ):
+        if not ParserObject.IsValid(["State", "Message"] + ExpectedResponseKeys):
             Response = ParserObject.GetHTTPResponse()
             return Response
         # Checking is valid is more complex than normal. Each command has expected keys. We need to add that to the normal keys to confirm the response is valid
