@@ -7,7 +7,7 @@
 
 Coming soon!
 
-## Pacakge installation
+## Package installation
 
 1. **Install 64-bit python >=3.11**
 2. **Update pip and install setuptools**
