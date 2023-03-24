@@ -1,9 +1,9 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 
 setup(
     name="PytomatedLiquidHandling",
     version="3.0",
-    packages=["PytomatedLiquidHandling"],
+    packages=find_packages(exclude=["Examples"]),
     license="MIT",
     description="Python for labware automation",
     install_requires=["xlwings", "pyyaml", "web.py"],
