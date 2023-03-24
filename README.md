@@ -1,10 +1,10 @@
 # PytomatedLiquidHandling
+**Simplify liquid handling with a Python API**
 
 **Disclaimer:** PytomatedLiquidHandling is not supported by Hamilton Company. Please direct all questions to this repo.
 
 ![Automation Python Powered](https://user-images.githubusercontent.com/85904380/227614867-d00eae11-6682-4396-abc5-9561fa85d86d.png)
 
-**Simplify liquid handling with a Python API**
 
 ## Documentation
 
