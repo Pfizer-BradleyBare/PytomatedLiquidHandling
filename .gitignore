@@ -1,12 +1,5 @@
 *.pyc
 *.pyo
 ~*
-CommunicationFolder/*.txt
-HamiltonVisualMethodEditorConfiguration
-HamiltonVisualMethodEditorMethod
-HamiltonVisualMethodEditorWorklists
-AutomationBareNecessitiesConfiguration
-AutomationBareNecessitiesMethod
-Logging
 PytomatedLiquidHandling.egg-info
 build
