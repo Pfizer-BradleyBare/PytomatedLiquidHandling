@@ -27,8 +27,7 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         try:
             Command = HeaterShakerDriver.Connect.Command(
-                "",
-                ConnectOptions("", self.ComPort),  # type:ignore
+                ConnectOptions(self.ComPort),  # type:ignore
                 True,
             )
 
@@ -40,14 +39,14 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         try:
             HeaterShakerDriver.SetPlateLock.Command(
-                "", HeaterShakerDriver.SetPlateLock.Options("", self.HandleID, 1), True
+                HeaterShakerDriver.SetPlateLock.Options(self.HandleID, 1), True
             ).Execute()
         except:
             ...
 
         try:
             HeaterShakerDriver.SetPlateLock.Command(
-                "", HeaterShakerDriver.SetPlateLock.Options("", self.HandleID, 0), True
+                HeaterShakerDriver.SetPlateLock.Options(self.HandleID, 0), True
             ).Execute()
         except:
             ...
@@ -58,8 +57,7 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         try:
             HeaterShakerDriver.StopTemperatureControl.Command(
-                "",
-                HeaterShakerDriver.StopTemperatureControl.Options("", self.HandleID),
+                HeaterShakerDriver.StopTemperatureControl.Options(self.HandleID),
                 True,
             ).Execute()
         except:
@@ -67,14 +65,14 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         try:
             HeaterShakerDriver.StopShakeControl.Command(
-                "", HeaterShakerDriver.StopShakeControl.Options("", self.HandleID), True
+                HeaterShakerDriver.StopShakeControl.Options(self.HandleID), True
             ).Execute()
         except:
             ...
 
         try:
             HeaterShakerDriver.SetPlateLock.Command(
-                "", HeaterShakerDriver.SetPlateLock.Options("", self.HandleID, 0), True
+                HeaterShakerDriver.SetPlateLock.Options(self.HandleID, 0), True
             ).Execute()
         except:
             ...
@@ -86,9 +84,8 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         try:
             HeaterShakerDriver.StartTemperatureControl.Command(
-                "",
                 HeaterShakerDriver.StartTemperatureControl.Options(
-                    "", self.HandleID, Temperature
+                    self.HandleID, Temperature
                 ),
                 True,
             ).Execute()
@@ -100,7 +97,7 @@ class HamiltonHeaterShaker(TempControlDevice):
     ):
         try:
             Command = HeaterShakerDriver.GetTemperature.Command(
-                "", HeaterShakerDriver.GetTemperature.Options("", self.HandleID), True
+                HeaterShakerDriver.GetTemperature.Options(self.HandleID), True
             )
 
             Command.Execute()
@@ -116,15 +113,14 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         try:
             HeaterShakerDriver.SetPlateLock.Command(
-                "", HeaterShakerDriver.SetPlateLock.Options("", self.HandleID, 1), True
+                HeaterShakerDriver.SetPlateLock.Options(self.HandleID, 1), True
             ).Execute()
         except:
             ...
 
         try:
             HeaterShakerDriver.StartShakeControl.Command(
-                "",
-                HeaterShakerDriver.StartShakeControl.Options("", self.HandleID, RPM),
+                HeaterShakerDriver.StartShakeControl.Options(self.HandleID, RPM),
                 True,
             ).Execute()
         except:
@@ -136,14 +132,14 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         try:
             HeaterShakerDriver.StopShakeControl.Command(
-                "", HeaterShakerDriver.StopShakeControl.Options("", self.HandleID), True
+                HeaterShakerDriver.StopShakeControl.Options(self.HandleID), True
             ).Execute()
         except:
             ...
 
         try:
             HeaterShakerDriver.SetPlateLock.Command(
-                "", HeaterShakerDriver.SetPlateLock.Options("", self.HandleID, 0), True
+                HeaterShakerDriver.SetPlateLock.Options(self.HandleID, 0), True
             ).Execute()
         except:
             ...
@@ -154,7 +150,7 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         try:
             Command = HeaterShakerDriver.GetShakingSpeed.Command(
-                "", HeaterShakerDriver.GetShakingSpeed.Options("", self.HandleID), True
+                HeaterShakerDriver.GetShakingSpeed.Options(self.HandleID), True
             )
 
             Command.Execute()

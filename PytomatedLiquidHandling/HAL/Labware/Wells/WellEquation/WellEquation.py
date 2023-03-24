@@ -1,7 +1,7 @@
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import UniqueObjectABC
 
 
-class WellEquation(ObjectABC):
+class WellEquation(UniqueObjectABC):
     def __init__(self, SegmentHeight: float, SegmentEquation: str):
         self.Height = SegmentHeight
         self.Equation = SegmentEquation

@@ -1,12 +1,12 @@
 from threading import Lock
 from typing import Generic, TypeVar
 
-from ..Object.ObjectABC import ObjectABC
+from ..Object.UniqueObjectABC import UniqueObjectABC
 
-T = TypeVar("T", bound="ObjectABC")
+T = TypeVar("T", bound="UniqueObjectABC")
 
 
-class UniqueItemTrackerABC(Generic[T]):
+class UniqueObjectTrackerABC(Generic[T]):
     def __init__(self):
         self.Collection: dict[str | int, T] = dict()
         self.ThreadLock: Lock = Lock()

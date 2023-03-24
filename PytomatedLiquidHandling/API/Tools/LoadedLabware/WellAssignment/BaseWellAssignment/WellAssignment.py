@@ -1,10 +1,10 @@
 from abc import abstractmethod
 
-from ......Tools.AbstractClasses import ObjectABC
+from ......Tools.AbstractClasses import UniqueObjectABC
 from .....Tools.Container import Container
 
 
-class WellAssignment(ObjectABC):
+class WellAssignment(UniqueObjectABC):
     def __init__(self, PhysicalWellNumber: int, ContainerInstance: Container):
         self.PhysicalWellNumber: int = PhysicalWellNumber
         self.ContainerInstance: Container = ContainerInstance

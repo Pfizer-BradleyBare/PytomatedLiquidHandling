@@ -1,13 +1,8 @@
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import NonUniqueObjectABC
 
 
-class Options(ObjectABC):
-    def __init__(self, Name: str, HandleID: int, ShakingSpeed: int):
-
-        self.Name: str = Name
+class Options(NonUniqueObjectABC):
+    def __init__(self, HandleID: int, ShakingSpeed: int):
 
         self.HandleID: int = HandleID
         self.ShakingSpeed: int = ShakingSpeed
-
-    def GetName(self) -> str:
-        return self.Name

@@ -23,7 +23,7 @@ class TipFTR(Tip):
 
         try:
             FTRDriver.LoadTips.Command(
-                "", FTRDriver.LoadTips.Options("", self.PickupSequence), True
+                FTRDriver.LoadTips.Options(self.PickupSequence), True
             ).Execute()
 
         except:
@@ -38,9 +38,7 @@ class TipFTR(Tip):
 
         try:
             Command = FTRDriver.TipsAvailable.Command(
-                "",
                 FTRDriver.TipsAvailable.Options(
-                    "",
                     self.PickupSequence,
                     NumTips,
                 ),
@@ -60,9 +58,7 @@ class TipFTR(Tip):
 
         try:
             Command = FTRDriver.TipsRemaining.Command(
-                "",
                 FTRDriver.TipsRemaining.Options(
-                    "",
                     self.PickupSequence,
                 ),
                 True,

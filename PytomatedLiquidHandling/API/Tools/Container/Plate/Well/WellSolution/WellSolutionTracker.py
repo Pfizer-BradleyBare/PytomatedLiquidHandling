@@ -1,6 +1,6 @@
-from .......Tools.AbstractClasses import UniqueItemTrackerABC
+from .......Tools.AbstractClasses import UniqueObjectTrackerABC
 from .WellSolution import WellSolution
 
 
-class WellSolutionTracker(UniqueItemTrackerABC[WellSolution]):
+class WellSolutionTracker(UniqueObjectTrackerABC[WellSolution]):
     pass

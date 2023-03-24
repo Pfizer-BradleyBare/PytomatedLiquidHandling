@@ -1,6 +1,6 @@
-from .....Tools.AbstractClasses import NonUniqueItemTrackerABC
+from .....Tools.AbstractClasses import NonUniqueObjectTrackerABC
 from .Options import Options
 
 
-class OptionsTracker(NonUniqueItemTrackerABC[Options]):
+class OptionsTracker(NonUniqueObjectTrackerABC[Options]):
     pass

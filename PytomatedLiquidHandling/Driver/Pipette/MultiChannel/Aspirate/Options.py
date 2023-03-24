@@ -1,18 +1,16 @@
 from enum import Enum
 
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import NonUniqueObjectABC
 
 
-class Options(ObjectABC):
+class Options(NonUniqueObjectABC):
     def __init__(
         self,
-        Name: str,
         Sequence: str,
         SequencePosition: int,
         LiquidClass: str,
         Volume: float,
     ):
-        self.Name: str = Name
 
         # Sequence
         self.Sequence: str = Sequence
@@ -32,6 +30,3 @@ class Options(ObjectABC):
         self.MixCycles: int = 0
         self.MixPosition: float = 0
         self.MixVolume: float = 0
-
-    def GetName(self) -> str:
-        return self.Name

@@ -1,9 +1,9 @@
 from ....HAL.Labware import Labware, LabwareTracker
-from ....Tools.AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import UniqueObjectABC
 from ..Container.BaseContainer.Container import Container
 
 
-class LabwareSelection(ObjectABC):
+class LabwareSelection(UniqueObjectABC):
     def __init__(self, ContainerInstance: Container):
         self.ContainerInstance: Container = ContainerInstance
         self.LabwareTrackerInstance: LabwareTracker = LabwareTracker()

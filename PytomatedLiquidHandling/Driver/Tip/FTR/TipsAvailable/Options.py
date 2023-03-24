@@ -1,13 +1,8 @@
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import NonUniqueObjectABC
 
 
-class Options(ObjectABC):
-    def __init__(self, Name: str, TipSequence: str, NumPositions: int):
-
-        self.Name: str = Name
+class Options(NonUniqueObjectABC):
+    def __init__(self, TipSequence: str, NumPositions: int):
 
         self.TipSequence: str = TipSequence
         self.NumPositions: int = NumPositions
-
-    def GetName(self) -> str:
-        return self.Name

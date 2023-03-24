@@ -1,6 +1,6 @@
 from enum import Enum
 
-from ....Tools.AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import UniqueObjectABC
 from .Interface.TipInterface import TipInterface
 
 
@@ -10,7 +10,7 @@ class TipTypes(Enum):
     FTRSlim = "FTRSlim"
 
 
-class Tip(ObjectABC, TipInterface):
+class Tip(UniqueObjectABC, TipInterface):
     def __init__(
         self,
         Name: str,

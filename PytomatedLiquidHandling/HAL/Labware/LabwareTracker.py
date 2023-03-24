@@ -1,6 +1,6 @@
-from ...Tools.AbstractClasses import UniqueItemTrackerABC
+from ...Tools.AbstractClasses import UniqueObjectTrackerABC
 from .Labware import Labware
 
 
-class LabwareTracker(UniqueItemTrackerABC[Labware]):
+class LabwareTracker(UniqueObjectTrackerABC[Labware]):
     pass

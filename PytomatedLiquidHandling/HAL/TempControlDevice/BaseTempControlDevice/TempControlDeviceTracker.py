@@ -1,6 +1,6 @@
-from ....Tools.AbstractClasses import UniqueItemTrackerABC
+from ....Tools.AbstractClasses import UniqueObjectTrackerABC
 from .TempControlDevice import TempControlDevice
 
 
-class TempControlDeviceTracker(UniqueItemTrackerABC[TempControlDevice]):
+class TempControlDeviceTracker(UniqueObjectTrackerABC[TempControlDevice]):
     pass

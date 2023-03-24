@@ -1,15 +1,15 @@
 from collections import defaultdict
 from typing import Generic, TypeVar
 
-from ....Tools.AbstractClasses import NonUniqueItemTrackerABC
+from ....Tools.AbstractClasses import NonUniqueObjectTrackerABC
 from .BaseCommand import Command
 
-T = TypeVar("T", bound="NonUniqueItemTrackerABC")
+T = TypeVar("T", bound="NonUniqueObjectTrackerABC")
 
 
 class MultiOptionsCommand(Command, Generic[T]):
-    def __init__(self, Name: str, OptionsTrackerInstance: T, CustomErrorHandling: bool):
-        Command.__init__(self, Name, CustomErrorHandling)
+    def __init__(self, OptionsTrackerInstance: T, CustomErrorHandling: bool):
+        Command.__init__(self, CustomErrorHandling)
         self.OptionsTrackerInstance: T = OptionsTrackerInstance
 
     def GetCommandParameters(self) -> dict[str, any]:  # type:ignore

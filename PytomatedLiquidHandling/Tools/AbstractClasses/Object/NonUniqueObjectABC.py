@@ -3,13 +3,11 @@ from abc import ABC, abstractmethod
 # This is an abstract loader class for loading configuration files
 
 
+class NonUniqueObjectABC(ABC):
+    ...
 
-class ObjectABC(ABC):
-    @abstractmethod
-    def GetName(self) -> str | int:
-        ...  # this doesn't actually raise an error. This is an abstract method so python will complain
 
-'''This is for Avi and Diane
+"""This is for Avi and Diane
 class myClass(ObjectABC):
     
     def GetName(self):
@@ -36,4 +34,4 @@ class myClass3(ObjectABC):
 listOfInstClasses = [myClass1(), myClass2(), myClass3()]
 for c in listOfInstClasses:
     print(c.GetName())
-'''
+"""

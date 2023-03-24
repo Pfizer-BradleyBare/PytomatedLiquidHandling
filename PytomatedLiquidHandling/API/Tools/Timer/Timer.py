@@ -2,10 +2,10 @@ import time
 from abc import abstractmethod
 from typing import Callable
 
-from ....Tools.AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import UniqueObjectABC
 
 
-class Timer(ObjectABC):
+class Timer(UniqueObjectABC):
     def __init__(
         self,
         WaitTimeSeconds: float,

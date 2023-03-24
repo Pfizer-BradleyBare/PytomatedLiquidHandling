@@ -1,14 +1,11 @@
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import NonUniqueObjectABC
 
 
-class Options(ObjectABC):
+class Options(NonUniqueObjectABC):
     def __init__(
         self,
-        Name: str,
         PlateSequence: str,
     ):
-
-        self.Name: str = Name
 
         self.PlateSequence: str = PlateSequence
 
@@ -18,6 +15,3 @@ class Options(ObjectABC):
         self.ZSpeed: float = 128.7
         self.PressOnDistance: float = 1
         self.CheckPlateExists: int = 0
-
-    def GetName(self) -> str:
-        return self.Name

@@ -1,11 +1,11 @@
-from ...Tools.AbstractClasses import ObjectABC
+from ...Tools.AbstractClasses import UniqueObjectABC
 from .DeckLoadingConfig.DeckLoadingConfig import DeckLoadingConfig
 from .LocationTransportDevice.LocationTransportDeviceTracker import (
     LocationTransportDeviceTracker,
 )
 
 
-class DeckLocation(ObjectABC):
+class DeckLocation(UniqueObjectABC):
     def __init__(
         self,
         Name: str,

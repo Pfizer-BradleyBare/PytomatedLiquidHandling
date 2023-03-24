@@ -71,7 +71,6 @@ class COREGripper(TransportDevice):
         )
 
         GetPlateOptionsInstance = GripperDriver.GetPlate.Options(
-            "",
             self.GripperToolSequence,
             SourceLayoutItem.Sequence,
             SourceLayoutItem.LabwareInstance.Dimensions.ShortSide
@@ -84,7 +83,7 @@ class COREGripper(TransportDevice):
         )
 
         try:
-            GripperDriver.GetPlate.Command("", GetPlateOptionsInstance, True).Execute()
+            GripperDriver.GetPlate.Command(GetPlateOptionsInstance, True).Execute()
 
         except:
             ...
@@ -92,9 +91,7 @@ class COREGripper(TransportDevice):
         try:
 
             GripperDriver.PlacePlate.Command(
-                "",
                 GripperDriver.PlacePlate.Options(
-                    "",
                     DestinationLayoutItem.Sequence,
                 ),
                 True,

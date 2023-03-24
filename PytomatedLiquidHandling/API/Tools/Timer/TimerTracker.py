@@ -1,6 +1,6 @@
-from ....Tools.AbstractClasses import UniqueItemTrackerABC
+from ....Tools.AbstractClasses import UniqueObjectTrackerABC
 from .Timer import Timer
 
 
-class TimerTracker(UniqueItemTrackerABC[Timer]):
+class TimerTracker(UniqueObjectTrackerABC[Timer]):
     pass

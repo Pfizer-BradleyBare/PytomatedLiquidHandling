@@ -1,8 +1,8 @@
-from ......Tools.AbstractClasses import ObjectABC
+from ......Tools.AbstractClasses import UniqueObjectABC
 from .WellSolution.WellSolutionTracker import WellSolutionTracker
 
 
-class Well(ObjectABC):
+class Well(UniqueObjectABC):
     def __init__(self, WellNumber: int):
         self.WellNumber: int = WellNumber
         self.WellSolutionTrackerInstance: WellSolutionTracker = WellSolutionTracker()

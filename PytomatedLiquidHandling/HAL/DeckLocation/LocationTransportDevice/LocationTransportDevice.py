@@ -1,8 +1,8 @@
-from ....Tools.AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import UniqueObjectABC
 from ...TransportDevice.BaseTransportDevice import TransportDevice
 
 
-class LocationTransportDevice(ObjectABC):
+class LocationTransportDevice(UniqueObjectABC):
     def __init__(self, TransportDeviceInstance: TransportDevice, ExtraConfig: dict):
         self.TransportDeviceInstance: TransportDevice = TransportDeviceInstance
         self.ExtraConfig: dict = ExtraConfig

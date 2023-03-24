@@ -2,6 +2,14 @@ import os
 
 
 def GetModuleName(__file__: str) -> str:
+    """Uses the path of the python module to extract a module name
+
+    Args:
+        __file__ (str): The path of the python module
+
+    Returns:
+        str: Module name
+    """
     Modules = list()
     Path = os.path.dirname(os.path.dirname(__file__))
 

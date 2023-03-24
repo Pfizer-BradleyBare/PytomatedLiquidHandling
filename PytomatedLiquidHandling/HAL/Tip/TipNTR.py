@@ -34,9 +34,7 @@ class TipNTR(Tip):
 
         try:
             NTRDriver.LoadTips.Command(
-                "",
                 NTRDriver.LoadTips.Options(
-                    "",
                     self.PickupSequence,
                     self.NTRWasteSequence,
                     self.GripperSequence,
@@ -56,9 +54,7 @@ class TipNTR(Tip):
 
         try:
             Command = NTRDriver.TipsAvailable.Command(
-                "",
                 NTRDriver.TipsAvailable.Options(
-                    "",
                     self.PickupSequence,
                     self.NTRWasteSequence,
                     self.GripperSequence,
@@ -80,9 +76,7 @@ class TipNTR(Tip):
 
         try:
             Command = NTRDriver.TipsRemaining.Command(
-                "",
                 NTRDriver.TipsRemaining.Options(
-                    "",
                     self.PickupSequence,
                 ),
                 True,

@@ -1,6 +1,6 @@
 from enum import Enum
 
-from ....Tools.AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import UniqueObjectABC
 from ...Labware import LabwareTracker
 from .Interface.PipetteInterface import PipetteInterface
 from .PipetteTip.PipetteTipTracker import PipetteTipTracker
@@ -11,7 +11,7 @@ class PipettingDeviceTypes(Enum):
     Pipette96Channel = "96 Core Head"
 
 
-class Pipette(ObjectABC, PipetteInterface):
+class Pipette(UniqueObjectABC, PipetteInterface):
     def __init__(
         self,
         PipettingDeviceType: PipettingDeviceTypes,

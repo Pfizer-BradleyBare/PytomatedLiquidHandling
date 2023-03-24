@@ -2,7 +2,7 @@ import os
 from abc import abstractmethod
 from threading import Event
 
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import NonUniqueObjectABC
 from .Tools.GetCommandName import GetCommandName
 from .Tools.GetExpectedResponseProperties import GetExpectedResponseProperties
 from .Tools.GetModuleName import GetModuleName
@@ -28,15 +28,14 @@ def ClassDecorator_Command(__file__: str):
     return InnerDecorator
 
 
-class Command(ObjectABC):
+class Command(NonUniqueObjectABC):
     ClassFilePath: str
 
     def __init__(
         self,
-        Name: str,
         CustomErrorHandling: bool,
     ):
-        self.Name: str = Name
+
         self.CustomErrorHandling: bool = CustomErrorHandling
 
         self.ModuleName: str = GetModuleName(self.ClassFilePath)
@@ -47,9 +46,6 @@ class Command(ObjectABC):
         self.ResponseState: bool
         self.ResponseMessage: str
         self.ResponseProperties: dict[str, any]  # type:ignore
-
-    def GetName(self) -> str:
-        return self.Name
 
     def GetModuleName(self) -> str:
         return self.ModuleName

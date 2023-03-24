@@ -1,9 +1,9 @@
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import UniqueObjectABC
 from ....Labware import Labware
 from .TransportParameters.TransportParameters import TransportParameters
 
 
-class TransportableLabware(ObjectABC):
+class TransportableLabware(UniqueObjectABC):
     def __init__(
         self, LabwareInstance: Labware, TransportParametersInstance: TransportParameters
     ):

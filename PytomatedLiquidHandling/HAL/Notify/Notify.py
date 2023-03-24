@@ -1,13 +1,13 @@
 from enum import Enum
 
-from ...Tools.AbstractClasses import ObjectABC
+from ...Tools.AbstractClasses import UniqueObjectABC
 
 
 class NotificationTypes(Enum):
     EmailText = "Email/Text Notification"
 
 
-class Notify(ObjectABC):
+class Notify(UniqueObjectABC):
     def __init__(self, NotificationType: NotificationTypes):
         self.NotificationType: NotificationTypes = NotificationType
 

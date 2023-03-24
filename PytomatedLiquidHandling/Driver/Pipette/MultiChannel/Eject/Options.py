@@ -1,13 +1,10 @@
 from enum import Enum
 
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import NonUniqueObjectABC
 
 
-class Options(ObjectABC):
-    def __init__(self, Name: str, Sequence: str, SequencePosition: int):
-        self.Name: str = Name
+class Options(NonUniqueObjectABC):
+    def __init__(self, Sequence: str, SequencePosition: int):
+
         self.Sequence: str = Sequence
         self.SequencePosition: int = SequencePosition
-
-    def GetName(self) -> str:
-        return self.Name
