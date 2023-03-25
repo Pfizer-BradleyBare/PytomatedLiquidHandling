@@ -1,4 +1,3 @@
-from pickle import TRUE
 from PytomatedLiquidHandling import Logger, Driver
 from PytomatedLiquidHandling.Driver.TemperatureControl import HeaterShaker
 import logging
