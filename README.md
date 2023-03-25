@@ -7,7 +7,7 @@
 
 ## Documentation
 
-Coming soon!
+See docstrings
 
 ## Package installation
 
