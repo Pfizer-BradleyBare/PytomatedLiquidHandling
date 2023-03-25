@@ -74,7 +74,7 @@ class Command(NonUniqueObjectABC):
 
         CommandTrackerInstance.ManualLoad(self)
 
-        HandlerInstance.GetLogger().debug(
+        HandlerInstance.GetLogger().info(
             "Queued %s for execution. Waiting until execution is complete or timeout if set.",
             self.GetID(),
         )
@@ -85,7 +85,7 @@ class Command(NonUniqueObjectABC):
 
         if TimeoutFlag is True:  # This means it did not timeout
 
-            HandlerInstance.GetLogger().debug("%s execution complete.", self.GetID())
+            HandlerInstance.GetLogger().info("%s execution complete.", self.GetID())
 
             if self.CustomErrorHandling is not False:
                 self.HandleErrors()
@@ -93,7 +93,7 @@ class Command(NonUniqueObjectABC):
             # Most error handling will just rerun the step. FIY
 
         else:
-            HandlerInstance.GetLogger().debug(
+            HandlerInstance.GetLogger().info(
                 "%s execution timed out. Exception raised.", self.GetID()
             )
             raise Exception("Command Timed out. Uh oh!")
