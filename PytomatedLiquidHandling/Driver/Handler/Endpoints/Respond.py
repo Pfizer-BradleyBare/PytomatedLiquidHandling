@@ -28,7 +28,7 @@ class Respond:
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        if not ParserObject.IsValid(["State", "Message"]):
+        if not ParserObject.IsValid(["State", "Message", "Request Identifier"]):
             Response = ParserObject.GetHTTPResponse()
             return Response
         # preliminary check. We will check again below
@@ -39,9 +39,19 @@ class Respond:
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
-        # Check the command does not already have a response
+        # Check that there is a command in the queue
 
         CommandInstance = CommandTrackerInstance.GetObjectsAsList()[0]
+
+        if CommandInstance.GetID() != ParserObject.GetEndpointInputData(
+            "Request Identifier"
+        ):
+            ParserObject.SetEndpointMessage(
+                "Request Id does not match the command. This should never happen..."
+            )
+            Response = ParserObject.GetHTTPResponse()
+            return Response
+        # Check the request ID matches the command
 
         if CommandInstance.ResponseEvent.is_set():
             ParserObject.SetEndpointMessage(
@@ -53,18 +63,20 @@ class Respond:
 
         ExpectedResponseKeys = CommandInstance.GetExpectedResponseProperties()
 
-        if not ParserObject.IsValid(["State", "Message"] + ExpectedResponseKeys):
+        if not ParserObject.IsValid(
+            ["State", "Message", "Request Identifier"] + ExpectedResponseKeys
+        ):
             Response = ParserObject.GetHTTPResponse()
             return Response
         # Checking is valid is more complex than normal. Each command has expected keys. We need to add that to the normal keys to confirm the response is valid
 
         Additional = dict()
         for Key in ExpectedResponseKeys:
-            Additional[Key] = ParserObject.GetEndpointInputData()[Key]
+            Additional[Key] = ParserObject.GetEndpointInputData(Key)
         # Create dict that houses the expected keys so we can create the response object
 
-        CommandInstance.ResponseState = ParserObject.GetEndpointInputData()["State"]
-        CommandInstance.ResponseMessage = ParserObject.GetEndpointInputData()["Message"]
+        CommandInstance.ResponseState = ParserObject.GetEndpointInputData("State")
+        CommandInstance.ResponseMessage = ParserObject.GetEndpointInputData("Message")
         CommandInstance.ResponseProperties = Additional
         # boom
         CommandInstance.ResponseEvent.set()

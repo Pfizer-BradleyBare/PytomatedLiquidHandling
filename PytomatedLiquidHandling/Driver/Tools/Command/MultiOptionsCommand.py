@@ -8,8 +8,13 @@ T = TypeVar("T", bound="NonUniqueObjectTrackerABC")
 
 
 class MultiOptionsCommand(Command, Generic[T]):
-    def __init__(self, OptionsTrackerInstance: T, CustomErrorHandling: bool):
-        Command.__init__(self, CustomErrorHandling)
+    def __init__(
+        self,
+        OptionsTrackerInstance: T,
+        CustomErrorHandling: bool,
+        Name: str = "No Name",
+    ):
+        Command.__init__(self, CustomErrorHandling, Name)
         self.OptionsTrackerInstance: T = OptionsTrackerInstance
 
     def GetCommandParameters(self) -> dict[str, any]:  # type:ignore

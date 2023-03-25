@@ -68,8 +68,11 @@ class Parser:
 
         return True
 
-    def GetEndpointInputData(self) -> dict:
-        return self.JSON  # type: ignore
+    def GetEndpointInputData(self, Key: str) -> any:  # type: ignore
+        if self.JSON is None:
+            return None
+
+        return self.JSON[Key]
 
     def SetEndpointState(self, State: bool):
         self.EndpointState = State

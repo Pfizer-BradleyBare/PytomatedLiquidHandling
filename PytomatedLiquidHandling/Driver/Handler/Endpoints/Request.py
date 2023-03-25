@@ -26,7 +26,7 @@ class Request:
         CommandTrackerInstance = HandlerInstance.CommandTrackerInstance
 
         OutputCommandInstance = None
-        Timeout = ParserObject.GetEndpointInputData()["Timeout"] - 10
+        Timeout = ParserObject.GetEndpointInputData("Timeout") - 10
         Counter = 0
 
         while OutputCommandInstance is None and HandlerInstance.IsAlive():
@@ -48,6 +48,9 @@ class Request:
 
         ParserObject.SetEndpointState(True)
 
+        ParserObject.SetEndpointOutputKey(
+            "Request Identifier", OutputCommandInstance.GetID()
+        )
         ParserObject.SetEndpointOutputKey(
             "Custom Error Handling",
             OutputCommandInstance.CustomErrorHandling,

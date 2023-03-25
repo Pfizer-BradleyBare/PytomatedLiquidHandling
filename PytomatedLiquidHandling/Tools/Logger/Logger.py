@@ -47,11 +47,11 @@ class Logger(logging.Logger):
 
         sys.stderr = STDERRLogger(self)
 
-        self.debug("Debug Message")
-        self.info("Info Message")
-        self.warning("Warning Message")
-        self.error("Error Message")
-        self.critical("Critical Message")
+        # self.debug("Debug Message")
+        # self.info("Info Message")
+        # self.warning("Warning Message")
+        # self.error("Error Message")
+        # self.critical("Critical Message")
 
 
 class STDERRLogger(object):

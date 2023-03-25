@@ -31,10 +31,8 @@ def ClassDecorator_Command(__file__: str):
 class Command(NonUniqueObjectABC):
     ClassFilePath: str
 
-    def __init__(
-        self,
-        CustomErrorHandling: bool,
-    ):
+    def __init__(self, CustomErrorHandling: bool, Name: str):
+        self.Name: str = Name
 
         self.CustomErrorHandling: bool = CustomErrorHandling
 
@@ -47,11 +45,23 @@ class Command(NonUniqueObjectABC):
         self.ResponseMessage: str
         self.ResponseProperties: dict[str, any]  # type:ignore
 
+    def GetName(self) -> str:
+        return self.Name
+
     def GetModuleName(self) -> str:
         return self.ModuleName
 
     def GetCommandName(self) -> str:
         return self.CommandName
+
+    def GetID(self) -> str:
+        return (
+            self.GetModuleName()
+            + " -> "
+            + self.GetCommandName()
+            + ": "
+            + self.GetName()
+        )
 
     def GetExpectedResponseProperties(self) -> list[str]:
         return self.ExpectedResponseProperties
@@ -64,11 +74,18 @@ class Command(NonUniqueObjectABC):
 
         CommandTrackerInstance.ManualLoad(self)
 
+        HandlerInstance.GetLogger().debug(
+            "Queued %s for execution. Waiting until execution is complete or timeout if set.",
+            self.GetID(),
+        )
+
         TimeoutFlag = self.ResponseEvent.wait(Timeout)
 
         CommandTrackerInstance.ManualUnload(self)
 
         if TimeoutFlag is True:  # This means it did not timeout
+
+            HandlerInstance.GetLogger().debug("%s execution complete.", self.GetID())
 
             if self.CustomErrorHandling is not False:
                 self.HandleErrors()
@@ -76,6 +93,9 @@ class Command(NonUniqueObjectABC):
             # Most error handling will just rerun the step. FIY
 
         else:
+            HandlerInstance.GetLogger().debug(
+                "%s execution timed out. Exception raised.", self.GetID()
+            )
             raise Exception("Command Timed out. Uh oh!")
 
     def GetResponseState(self) -> bool:
