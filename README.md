@@ -46,6 +46,44 @@ StartTempCommand = HeaterShaker.StartTemperatureControl.Command(
 )
 StartTempCommand.Execute()
 # Turn on the Heat
+
+TemperatureOffset = 2
+for i in range(0, 30):
+    time.sleep(10)
+    GetTempCommand = HeaterShaker.GetTemperature.Command(
+        HeaterShaker.GetTemperature.Options(HeaterShakerHandleId), False
+    )
+    GetTempCommand.Execute()
+
+    CurrentTemperature = GetTempCommand.GetTemperature()
+    DriverHandlerInstance.GetLogger().debug("Current Temp: %f", CurrentTemperature)
+
+    if (
+        DesiredTemperature - TemperatureOffset
+        <= CurrentTemperature
+        <= DesiredTemperature + TemperatureOffset
+    ):
+        break
+# Wait for temperature to fall within desired range. Only wait a max of 5 minutes
+
+HeaterShaker.StartShakeControl.Command(
+    HeaterShaker.StartShakeControl.Options(HeaterShakerHandleId, 500), True
+).Execute()
+
+time.sleep(30)
+# run 30 seconds
+
+HeaterShaker.StopShakeControl.Command(
+    HeaterShaker.StopShakeControl.Options(HeaterShakerHandleId), False
+).Execute()
+
+HeaterShaker.StopTemperatureControl.Command(
+    HeaterShaker.StopTemperatureControl.Options(HeaterShakerHandleId), False
+).Execute()
+# Turn off heat
+
+DriverHandlerInstance.KillServer()
+# Done!
 ```
 
 See the Examples folder for more guidance on using the Driver, HAL, and API layers.
