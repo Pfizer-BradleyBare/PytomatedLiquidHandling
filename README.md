@@ -61,7 +61,10 @@ Please note that only the Driver layer is 100% functional. This will be updated 
 ## Acknowledgements
 
 Thanks to the following for inspiration:
+
 https://github.com/dgretton/pyhamilton
+
 https://github.com/PyLabRobot/pylabrobot
+
 https://github.com/sniprbiome/pyvenus
 
