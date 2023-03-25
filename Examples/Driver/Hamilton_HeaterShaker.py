@@ -1,3 +1,4 @@
+from pickle import TRUE
 from PytomatedLiquidHandling import Logger, Driver
 from PytomatedLiquidHandling.Driver.TemperatureControl import HeaterShaker
 import logging
@@ -34,6 +35,7 @@ for i in range(0, 30):
     GetTempCommand.Execute()
 
     CurrentTemperature = GetTempCommand.GetTemperature()
+    DriverHandlerInstance.GetLogger().debug("Current Temp: %f", CurrentTemperature)
 
     if (
         DesiredTemperature - TemperatureOffset
@@ -42,6 +44,17 @@ for i in range(0, 30):
     ):
         break
 # Wait for temperature to fall within desired range. Only wait a max of 5 minutes
+
+HeaterShaker.StartShakeControl.Command(
+    HeaterShaker.StartShakeControl.Options(HeaterShakerHandleId, 500), True
+).Execute()
+
+time.sleep(30)
+# run 30 seconds
+
+HeaterShaker.StopShakeControl.Command(
+    HeaterShaker.StopShakeControl.Options(HeaterShakerHandleId), False
+).Execute()
 
 HeaterShaker.StopTemperatureControl.Command(
     HeaterShaker.StopTemperatureControl.Options(HeaterShakerHandleId), False
