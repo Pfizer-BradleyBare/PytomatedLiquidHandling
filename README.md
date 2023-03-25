@@ -3,7 +3,7 @@
 
 **Disclaimer:** PytomatedLiquidHandling is not supported by Hamilton Company. Please direct all questions to this repo.
 
-![Automation Python Powered](https://user-images.githubusercontent.com/85904380/227614867-d00eae11-6682-4396-abc5-9561fa85d86d.png)
+![Automation Python Powered](https://user-images.githubusercontent.com/85904380/227666692-56c97b56-ec2a-4d2a-9bb7-99341dad405e.png)
 
 
 ## Documentation
