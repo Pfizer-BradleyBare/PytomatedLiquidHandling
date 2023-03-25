@@ -53,3 +53,7 @@ StartTempCommand.Execute()
 ```
 
 See the Examples folder for more guidance on using the Driver, HAL, and API layers.
+
+## Future Directions
+
+Please note that only the Driver layer is 100% functional. This will be updated as HAL and API is finalized.
