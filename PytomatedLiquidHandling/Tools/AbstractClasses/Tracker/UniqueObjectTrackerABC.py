@@ -7,6 +7,9 @@ T = TypeVar("T", bound="UniqueObjectABC")
 
 
 class UniqueObjectTrackerABC(Generic[T]):
+    """This is a 'smart' tracker for classes the extend the unique object class.
+    This class is generic such that it can track any class or set of classes."""
+
     def __init__(self):
         self.Collection: dict[str | int, T] = dict()
         self.ThreadLock: Lock = Lock()

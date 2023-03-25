@@ -5,7 +5,22 @@ import sys
 
 
 class Logger(logging.Logger):
+    """Custom logger that extends the python logging logger.
+
+    This extension creates 3 logs:
+    1. A colored log in the stdout stream
+    2. A colored log in a .ansi format
+    3. An Excel friendly log in .xml format
+    """
+
     def __init__(self, LoggerName: str, LogLevel: int, LoggingFolderPath: str):
+        """Initialize the extended logger.
+
+        Args:
+            LoggerName (str): Name of your logger in case you decide to have more than one
+            LogLevel (int): This is the log level available in the logging module
+            LoggingFolderPath (str): A path to store your log files. NOTE that sub directories will be created.
+        """
         logging.Logger.__init__(self, LoggerName, LogLevel)
 
         os.makedirs(LoggingFolderPath, exist_ok=True)
@@ -17,7 +32,10 @@ class Logger(logging.Logger):
         XMLPath = os.path.join(
             LoggingFolderPath,
             "XML",
-            str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S")) + "Log.xml",
+            str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S"))
+            + "Log_"
+            + LoggerName
+            + ".xml",
         )
         file_handler = XMLHandler(XMLPath)
         file_handler.setLevel(LogLevel)
@@ -29,7 +47,10 @@ class Logger(logging.Logger):
         ColoredPath = os.path.join(
             LoggingFolderPath,
             "Colored",
-            str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S")) + "Log.ansi",
+            str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S"))
+            + "Log_"
+            + LoggerName
+            + ".ansi",
         )
         file_handler = logging.FileHandler(ColoredPath)
         file_handler.setLevel(LogLevel)
