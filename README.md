@@ -19,7 +19,7 @@ See docstrings
 6. **Start playing with the API**
 
 ## Example usage
-'''
+```python
 from PytomatedLiquidHandling import Logger, Driver
 from PytomatedLiquidHandling.Driver.TemperatureControl import HeaterShaker
 import logging
@@ -46,6 +46,6 @@ StartTempCommand = HeaterShaker.StartTemperatureControl.Command(
 )
 StartTempCommand.Execute()
 # Turn on the Heat
-'''
+```
 
 See the Examples folder for more guidance on using the Driver, HAL, and API layers.
