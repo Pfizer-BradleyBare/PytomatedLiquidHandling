@@ -57,3 +57,11 @@ See the Examples folder for more guidance on using the Driver, HAL, and API laye
 ## Future Directions
 
 Please note that only the Driver layer is 100% functional. This will be updated as HAL and API is finalized.
+
+## Acknowledgements
+
+Thanks to the following for inspiration:
+https://github.com/dgretton/pyhamilton
+https://github.com/PyLabRobot/pylabrobot
+https://github.com/sniprbiome/pyvenus
+
