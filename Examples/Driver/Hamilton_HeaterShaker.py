@@ -26,7 +26,7 @@ StartTempCommand.Execute()
 # Turn on the Heat
 
 TemperatureOffset = 2
-while True:
+for i in range(0, 30):
     time.sleep(10)
     GetTempCommand = HeaterShaker.GetTemperature.Command(
         HeaterShaker.GetTemperature.Options(HeaterShakerHandleId), False
@@ -41,7 +41,7 @@ while True:
         <= DesiredTemperature + TemperatureOffset
     ):
         break
-# Wait for temperature to fall within desired range
+# Wait for temperature to fall within desired range. Only wait a max of 5 minutes
 
 HeaterShaker.StopTemperatureControl.Command(
     HeaterShaker.StopTemperatureControl.Options(HeaterShakerHandleId), False
