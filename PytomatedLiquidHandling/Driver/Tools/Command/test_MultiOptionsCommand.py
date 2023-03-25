@@ -26,7 +26,7 @@ class Command(MultiOptionsCommand[OptionsTracker]):
     ...
 
     @ExpectedResponseProperty
-    def GetTemperature(self) -> any:  # type:ignore
+    def GetTemperature(self) -> int:
         ...
 
     def HandleErrors(self):

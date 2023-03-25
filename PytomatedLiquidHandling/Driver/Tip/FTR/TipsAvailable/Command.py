@@ -20,5 +20,5 @@ class Command(SingleOptionsCommand[Options]):
                 raise Exception("Unhandled Error")
 
     @ExpectedResponseProperty
-    def GetTipPosition(self) -> any:  # type:ignore
+    def GetTipPosition(self) -> int:
         ...

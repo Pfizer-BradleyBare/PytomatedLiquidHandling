@@ -4,7 +4,6 @@ import logging
 import os
 import time
 
-
 LoggerInstance = Logger(
     "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__), "Logging")
 )

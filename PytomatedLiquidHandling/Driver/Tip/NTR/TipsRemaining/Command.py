@@ -20,5 +20,5 @@ class Command(SingleOptionsCommand[Options]):
                 raise Exception("Unhandled Error")
 
     @ExpectedResponseProperty
-    def GetNumRemaining(self) -> any:  # type:ignore
+    def GetNumRemaining(self) -> int:
         ...

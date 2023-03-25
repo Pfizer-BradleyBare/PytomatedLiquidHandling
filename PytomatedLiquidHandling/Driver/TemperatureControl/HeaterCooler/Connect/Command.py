@@ -20,5 +20,5 @@ class Command(SingleOptionsCommand[Options]):
                 raise Exception("Unhandled Error")
 
     @ExpectedResponseProperty
-    def GetHandleID(self) -> any:  # type:ignore
+    def GetHandleID(self) -> str:
         ...

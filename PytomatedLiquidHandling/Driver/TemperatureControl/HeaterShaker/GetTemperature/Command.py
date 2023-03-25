@@ -20,5 +20,5 @@ class Command(SingleOptionsCommand[Options]):
                 raise Exception("Unhandled Error")
 
     @ExpectedResponseProperty
-    def GetTemperature(self) -> any:  # type:ignore
+    def GetTemperature(self) -> float:
         ...
