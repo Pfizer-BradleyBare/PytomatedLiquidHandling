@@ -19,4 +19,37 @@ See docstrings
 6. **Start playing with the API**
 
 ## Example usage
-See the Examples folder for guidance on using the Driver, HAL, and API layers.
+```python
+from PytomatedLiquidHandling import Logger, Driver
+from PytomatedLiquidHandling.Driver.TemperatureControl import HeaterShaker
+import logging
+import os
+import time
+
+LoggerInstance = Logger(
+    "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__), "Logging")
+)
+DriverHandlerInstance = Driver.Handler(LoggerInstance)
+# Creates the handler so we can communicate with the Hamilton
+
+ConnectCommand = HeaterShaker.Connect.Command(HeaterShaker.Connect.Options(1), False)
+ConnectCommand.Execute()
+HeaterShakerHandleId = ConnectCommand.GetHandleID()
+# Connect and get our Handle
+
+DesiredTemperature = 37
+StartTempCommand = HeaterShaker.StartTemperatureControl.Command(
+    HeaterShaker.StartTemperatureControl.Options(
+        HeaterShakerHandleId, DesiredTemperature
+    ),
+    False,
+)
+StartTempCommand.Execute()
+# Turn on the Heat
+
+#
+# NOTE: See Examples/Driver/Hamilton_HeaterShaker.py for the rest!
+#
+```
+
+See the Examples folder for more guidance on using the Driver, HAL, and API layers.
