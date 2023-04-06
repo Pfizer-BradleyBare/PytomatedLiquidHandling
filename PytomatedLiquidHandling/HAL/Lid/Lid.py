@@ -1,9 +1,9 @@
-from ...Tools.AbstractClasses import ObjectABC
+from ...Tools.AbstractClasses import UniqueObjectABC
 from ..Labware import LabwareTracker
 from ..Layout import LayoutItem
 
 
-class Lid(ObjectABC):
+class Lid(UniqueObjectABC):
     def __init__(
         self,
         Name: str,

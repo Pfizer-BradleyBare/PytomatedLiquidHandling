@@ -1,4 +1,4 @@
-from ......Tools.AbstractClasses import ObjectABC
+from ......Tools.AbstractClasses import UniqueObjectABC
 from ...Reagent.ReagentProperty import (
     HomogeneityReagentProperty,
     LLDReagentProperty,
@@ -7,7 +7,7 @@ from ...Reagent.ReagentProperty import (
 )
 
 
-class LiquidClassCategory(ObjectABC):
+class LiquidClassCategory(UniqueObjectABC):
     def __init__(
         self,
         Volatility: VolatilityReagentProperty,

@@ -20,5 +20,5 @@ class Command(SingleOptionsCommand[Options]):
                 raise Exception("Unhandled Error")
 
     @ExpectedResponseProperty
-    def GetShakingSpeed(self) -> any:  # type:ignore
+    def GetShakingSpeed(self) -> int:
         ...

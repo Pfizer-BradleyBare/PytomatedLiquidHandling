@@ -1,11 +1,12 @@
+from re import U
 from ....HAL.Layout import LayoutItemGrouping
-from ....Tools.AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import UniqueObjectABC
 from .WellAssignment.BaseWellAssignment.WellAssignmentTracker import (
     WellAssignmentTracker,
 )
 
 
-class LoadedLabware(ObjectABC):
+class LoadedLabware(UniqueObjectABC):
     Counter: int = 1
 
     def __init__(self, LayoutItemGroupingInstance: LayoutItemGrouping):

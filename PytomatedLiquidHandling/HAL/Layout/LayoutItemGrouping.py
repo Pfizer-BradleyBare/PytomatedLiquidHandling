@@ -1,10 +1,10 @@
-from ...Tools.AbstractClasses import ObjectABC
+from ...Tools.AbstractClasses import UniqueObjectABC
 from ..DeckLocation import DeckLocation
 from ..Labware import Labware
 from .LayoutItem.LayoutItem import LayoutItem
 
 
-class LayoutItemGrouping(ObjectABC):
+class LayoutItemGrouping(UniqueObjectABC):
     def __init__(
         self,
         PlateLayoutItemInstance: LayoutItem,

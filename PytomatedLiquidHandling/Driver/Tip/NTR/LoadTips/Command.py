@@ -20,5 +20,5 @@ class Command(SingleOptionsCommand[Options]):
                 raise Exception("Unhandled Error")
 
     @ExpectedResponseProperty
-    def GetGeneratedWasteSequence(self) -> any:  # type:ignore
+    def GetGeneratedWasteSequence(self) -> str:
         ...

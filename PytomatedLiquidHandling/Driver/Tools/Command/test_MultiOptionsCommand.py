@@ -1,13 +1,13 @@
 import pytest
 
-from ....Tools.AbstractClasses import NonUniqueItemTrackerABC, ObjectABC
+from ....Tools.AbstractClasses import NonUniqueObjectTrackerABC, NonUniqueObjectABC
 from .BaseCommand import ClassDecorator_Command, ExpectedResponseProperty
 from .MultiOptionsCommand import MultiOptionsCommand
 
 
-class Options(ObjectABC):
+class Options(NonUniqueObjectABC):
     def __init__(self, d, e, f):
-        ObjectABC.__init__(self)
+        NonUniqueObjectABC.__init__(self)
 
         self.a = d
         self.b = e
@@ -17,7 +17,7 @@ class Options(ObjectABC):
         return self.a
 
 
-class OptionsTracker(NonUniqueItemTrackerABC[Options]):
+class OptionsTracker(NonUniqueObjectTrackerABC[Options]):
     ...
 
 
@@ -26,7 +26,7 @@ class Command(MultiOptionsCommand[OptionsTracker]):
     ...
 
     @ExpectedResponseProperty
-    def GetTemperature(self) -> any:  # type:ignore
+    def GetTemperature(self) -> int:
         ...
 
     def HandleErrors(self):
@@ -41,9 +41,8 @@ def test():
     OptionsTrackerInstance.ManualLoad(Options("T2", 3, 4))
     OptionsTrackerInstance.ManualLoad(Options("T3", 5, 6))
 
-    CommandInstance = Command("Test", OptionsTrackerInstance, True)
+    CommandInstance = Command(OptionsTrackerInstance, True)
 
-    assert CommandInstance.GetName() == "Test"
     assert CommandInstance.GetCommandName() == "Command"
     assert CommandInstance.GetModuleName() == "Tools"
 

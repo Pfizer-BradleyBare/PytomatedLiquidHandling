@@ -1,11 +1,11 @@
 from abc import abstractmethod
 
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import UniqueObjectABC
 from ..Plate.Well.WellSolution.WellSolutionTracker import WellSolutionTracker
 from .LiquidClassCategory.LiquidClassCategory import LiquidClassCategory
 
 
-class Container(ObjectABC):
+class Container(UniqueObjectABC):
     def __init__(self, Name: str, MethodName: str, Filter: str):
         self.Name: str = Name
         self.MethodName: str = MethodName

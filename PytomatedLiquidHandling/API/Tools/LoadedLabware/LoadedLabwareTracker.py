@@ -1,11 +1,11 @@
 from typing import Self
 
-from ....Tools.AbstractClasses import UniqueItemTrackerABC
+from ....Tools.AbstractClasses import UniqueObjectTrackerABC
 from ..Container.BaseContainer import Container
 from .LoadedLabware import LoadedLabware
 
 
-class LoadedLabwareTracker(UniqueItemTrackerABC[LoadedLabware]):
+class LoadedLabwareTracker(UniqueObjectTrackerABC[LoadedLabware]):
     def GetLabwareAssignments(self, ContainerInstance: Container) -> Self:
 
         ReturnLoadedLabwareTrackerInstance = LoadedLabwareTracker()

@@ -2,7 +2,7 @@ import os
 from abc import abstractmethod
 from threading import Event
 
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import NonUniqueObjectABC
 from .Tools.GetCommandName import GetCommandName
 from .Tools.GetExpectedResponseProperties import GetExpectedResponseProperties
 from .Tools.GetModuleName import GetModuleName
@@ -28,15 +28,12 @@ def ClassDecorator_Command(__file__: str):
     return InnerDecorator
 
 
-class Command(ObjectABC):
+class Command(NonUniqueObjectABC):
     ClassFilePath: str
 
-    def __init__(
-        self,
-        Name: str,
-        CustomErrorHandling: bool,
-    ):
+    def __init__(self, CustomErrorHandling: bool, Name: str):
         self.Name: str = Name
+
         self.CustomErrorHandling: bool = CustomErrorHandling
 
         self.ModuleName: str = GetModuleName(self.ClassFilePath)
@@ -57,6 +54,15 @@ class Command(ObjectABC):
     def GetCommandName(self) -> str:
         return self.CommandName
 
+    def GetID(self) -> str:
+        return (
+            self.GetModuleName()
+            + " -> "
+            + self.GetCommandName()
+            + ": "
+            + self.GetName()
+        )
+
     def GetExpectedResponseProperties(self) -> list[str]:
         return self.ExpectedResponseProperties
 
@@ -68,11 +74,18 @@ class Command(ObjectABC):
 
         CommandTrackerInstance.ManualLoad(self)
 
+        HandlerInstance.GetLogger().info(
+            "Queued %s for execution. Waiting until execution is complete or timeout if set.",
+            self.GetID(),
+        )
+
         TimeoutFlag = self.ResponseEvent.wait(Timeout)
 
         CommandTrackerInstance.ManualUnload(self)
 
         if TimeoutFlag is True:  # This means it did not timeout
+
+            HandlerInstance.GetLogger().info("%s execution complete.", self.GetID())
 
             if self.CustomErrorHandling is not False:
                 self.HandleErrors()
@@ -80,6 +93,9 @@ class Command(ObjectABC):
             # Most error handling will just rerun the step. FIY
 
         else:
+            HandlerInstance.GetLogger().info(
+                "%s execution timed out. Exception raised.", self.GetID()
+            )
             raise Exception("Command Timed out. Uh oh!")
 
     def GetResponseState(self) -> bool:

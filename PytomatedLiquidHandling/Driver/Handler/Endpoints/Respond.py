@@ -33,17 +33,25 @@ class Respond:
             return Response
         # preliminary check. We will check again below
 
-        RequestID = ParserObject.GetEndpointInputData()["Request Identifier"]
-
-        if not CommandTrackerInstance.IsTracked(RequestID):
+        if CommandTrackerInstance.GetNumObjects() == 0:
             ParserObject.SetEndpointMessage(
-                "There is not a command with that ID waiting."
+                "No commands in queue. This should never happen..."
             )
             Response = ParserObject.GetHTTPResponse()
             return Response
-        # Check the command exists in our queue
+        # Check that there is a command in the queue
 
-        CommandInstance = CommandTrackerInstance.GetObjectByName(RequestID)
+        CommandInstance = CommandTrackerInstance.GetObjectsAsList()[0]
+
+        if CommandInstance.GetID() != ParserObject.GetEndpointInputData(
+            "Request Identifier"
+        ):
+            ParserObject.SetEndpointMessage(
+                "Request Id does not match the command. This should never happen..."
+            )
+            Response = ParserObject.GetHTTPResponse()
+            return Response
+        # Check the request ID matches the command
 
         if CommandInstance.ResponseEvent.is_set():
             ParserObject.SetEndpointMessage(
@@ -64,11 +72,11 @@ class Respond:
 
         Additional = dict()
         for Key in ExpectedResponseKeys:
-            Additional[Key] = ParserObject.GetEndpointInputData()[Key]
+            Additional[Key] = ParserObject.GetEndpointInputData(Key)
         # Create dict that houses the expected keys so we can create the response object
 
-        CommandInstance.ResponseState = ParserObject.GetEndpointInputData()["State"]
-        CommandInstance.ResponseMessage = ParserObject.GetEndpointInputData()["Message"]
+        CommandInstance.ResponseState = ParserObject.GetEndpointInputData("State")
+        CommandInstance.ResponseMessage = ParserObject.GetEndpointInputData("Message")
         CommandInstance.ResponseProperties = Additional
         # boom
         CommandInstance.ResponseEvent.set()

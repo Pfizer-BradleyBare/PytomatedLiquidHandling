@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from enum import Enum
 
-from ....Tools.AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import UniqueObjectABC
 from .Interface.TransportInterface import TransportInterface
 from .TransportableLabware.TransportableLabwareTracker import (
     TransportableLabwareTracker,
@@ -14,7 +14,7 @@ class TransportDevices(Enum):
     TrackGripper = "Track Gripper"
 
 
-class TransportDevice(ObjectABC, TransportInterface):
+class TransportDevice(UniqueObjectABC, TransportInterface):
     def __init__(
         self,
         Name: TransportDevices,

@@ -1,18 +1,15 @@
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import NonUniqueObjectABC
 
 
-class Options(ObjectABC):
+class Options(NonUniqueObjectABC):
     def __init__(
         self,
-        Name: str,
         CarrierTrackStart: int,
         CarrierTrackEnd: int,
         LabwareName: str,
         LabwareCarrierPositions: str,
         LabwarePartNumber: str,
     ):
-
-        self.Name: str = Name
 
         self.CarrierTrackStart: str = str(CarrierTrackStart)
         self.CarrierTrackEnd: str = str(CarrierTrackEnd)
@@ -22,6 +19,3 @@ class Options(ObjectABC):
         self.LabwarePartNumber: str = LabwarePartNumber
 
         self.ShowExtendedInstructions: bool = False
-
-    def GetName(self) -> str:
-        return self.Name

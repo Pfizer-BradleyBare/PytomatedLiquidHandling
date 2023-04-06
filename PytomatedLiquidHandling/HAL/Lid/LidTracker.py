@@ -1,6 +1,6 @@
-from ...Tools.AbstractClasses import UniqueItemTrackerABC
+from ...Tools.AbstractClasses import UniqueObjectTrackerABC
 from .Lid import Lid
 
 
-class LidTracker(UniqueItemTrackerABC[Lid]):
+class LidTracker(UniqueObjectTrackerABC[Lid]):
     pass

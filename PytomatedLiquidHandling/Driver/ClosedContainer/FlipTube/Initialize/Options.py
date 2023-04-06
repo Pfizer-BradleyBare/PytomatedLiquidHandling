@@ -1,10 +1,5 @@
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import NonUniqueObjectABC
 
 
-class Options(ObjectABC):
-    def __init__(self, Name: str):
-
-        self.Name: str = Name
-
-    def GetName(self) -> str:
-        return self.Name
+class Options(NonUniqueObjectABC):
+    ...

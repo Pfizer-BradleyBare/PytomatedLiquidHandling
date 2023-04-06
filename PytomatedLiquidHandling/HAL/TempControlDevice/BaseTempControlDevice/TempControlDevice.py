@@ -1,6 +1,6 @@
 from enum import Enum
 
-from ....Tools.AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import UniqueObjectABC
 from ...Layout import LayoutItemGroupingTracker
 from .Interface.TempControlDeviceInterface import TempControlDeviceInterface
 from .TempLimits.TempLimits import TempLimits
@@ -11,7 +11,7 @@ class DeviceTypes(Enum):
     HamiltonHeaterCooler = "Hamilton Heater Cooler"
 
 
-class TempControlDevice(ObjectABC, TempControlDeviceInterface):
+class TempControlDevice(UniqueObjectABC, TempControlDeviceInterface):
     def __init__(
         self,
         Name: str,

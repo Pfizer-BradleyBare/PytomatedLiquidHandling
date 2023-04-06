@@ -1,6 +1,6 @@
-from .....Tools.AbstractClasses import UniqueItemTrackerABC
+from .....Tools.AbstractClasses import UniqueObjectTrackerABC
 from .Reagent import Reagent
 
 
-class ReagentTracker(UniqueItemTrackerABC[Reagent]):
+class ReagentTracker(UniqueObjectTrackerABC[Reagent]):
     pass

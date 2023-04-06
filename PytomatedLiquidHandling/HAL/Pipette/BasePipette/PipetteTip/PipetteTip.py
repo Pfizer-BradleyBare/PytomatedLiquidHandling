@@ -1,9 +1,9 @@
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import UniqueObjectABC
 from ....Tip.BaseTip import Tip
 from .LiquidClass.LiquidClassCategoryTracker import LiquidClassCategoryTracker
 
 
-class PipetteTip(ObjectABC):
+class PipetteTip(UniqueObjectABC):
     def __init__(
         self,
         TipInstance: Tip,

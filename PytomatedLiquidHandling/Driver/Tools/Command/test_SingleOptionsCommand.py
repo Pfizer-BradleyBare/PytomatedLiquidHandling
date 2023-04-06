@@ -1,13 +1,13 @@
 import pytest
 
-from ....Tools.AbstractClasses import ObjectABC
+from ....Tools.AbstractClasses import NonUniqueObjectABC
 from .BaseCommand import ClassDecorator_Command, ExpectedResponseProperty
 from .SingleOptionsCommand import SingleOptionsCommand
 
 
-class Options(ObjectABC):
+class Options(NonUniqueObjectABC):
     def __init__(self, a, b, c):
-        ObjectABC.__init__(self)
+        NonUniqueObjectABC.__init__(self)
 
         self.a = a
         self.b = b
@@ -22,7 +22,7 @@ class Command(SingleOptionsCommand[Options]):
     ...
 
     @ExpectedResponseProperty
-    def GetTemperature(self) -> any:  # type:ignore
+    def GetTemperature(self) -> int:
         ...
 
     def HandleErrors(self):
@@ -31,9 +31,8 @@ class Command(SingleOptionsCommand[Options]):
 
 def test():
 
-    CommandInstance = Command("Test", Options("T1", 1, 2), True)
+    CommandInstance = Command(Options("T1", 1, 2), True)
 
-    assert CommandInstance.GetName() == "Test"
     assert CommandInstance.GetCommandName() == "Command"
     assert CommandInstance.GetModuleName() == "Tools"
 

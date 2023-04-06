@@ -1,6 +1,6 @@
-from ......Tools.AbstractClasses import UniqueItemTrackerABC
+from ......Tools.AbstractClasses import UniqueObjectTrackerABC
 from .LiquidClassCategory import LiquidClassCategory
 
 
-class LiquidClassCategoryTracker(UniqueItemTrackerABC[LiquidClassCategory]):
+class LiquidClassCategoryTracker(UniqueObjectTrackerABC[LiquidClassCategory]):
     pass

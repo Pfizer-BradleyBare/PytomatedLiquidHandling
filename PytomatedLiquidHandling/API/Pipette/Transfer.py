@@ -216,7 +216,6 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
     ):
         HALTransferOptionsTrackerInstance.ManualLoad(
             HALTransferOptions(
-                "" + str(Count),
                 SourceLoadedLabwareInstance.LayoutItemGroupingInstance.PlateLayoutItemInstance,
                 SourceLoadedLabwarePhysicalWell,
                 SourceLoadedLabwareInstance.GetWellAssignmentTracker()

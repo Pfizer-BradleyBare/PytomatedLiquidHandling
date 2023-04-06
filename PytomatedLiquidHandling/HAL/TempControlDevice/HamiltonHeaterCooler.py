@@ -27,8 +27,7 @@ class HamiltonHeaterCooler(TempControlDevice):
 
         try:
             Command = HeaterCoolerDriver.Connect.Command(
-                "",
-                ConnectOptions("", self.ComPort),  # type:ignore
+                ConnectOptions(self.ComPort),  # type:ignore
                 True,
             )
 
@@ -44,8 +43,7 @@ class HamiltonHeaterCooler(TempControlDevice):
 
         try:
             HeaterCoolerDriver.StopTemperatureControl.Command(
-                "",
-                HeaterCoolerDriver.StopTemperatureControl.Options("", self.HandleID),
+                HeaterCoolerDriver.StopTemperatureControl.Options(self.HandleID),
                 True,
             ).Execute()
         except:
@@ -58,9 +56,8 @@ class HamiltonHeaterCooler(TempControlDevice):
 
         try:
             HeaterCoolerDriver.StartTemperatureControl.Command(
-                "",
                 HeaterCoolerDriver.StartTemperatureControl.Options(
-                    "", self.HandleID, Temperature
+                    self.HandleID, Temperature
                 ),
                 True,
             ).Execute()
@@ -73,7 +70,7 @@ class HamiltonHeaterCooler(TempControlDevice):
 
         try:
             Command = HeaterCoolerDriver.GetTemperature.Command(
-                "", HeaterCoolerDriver.GetTemperature.Options("", self.HandleID), True
+                HeaterCoolerDriver.GetTemperature.Options(self.HandleID), True
             )
 
             Command.Execute()

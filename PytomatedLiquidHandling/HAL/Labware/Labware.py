@@ -1,9 +1,9 @@
-from ...Tools.AbstractClasses import ObjectABC
+from ...Tools.AbstractClasses import UniqueObjectABC
 from .Dimensions.LabwareDimensions import LabwareDimensions
 from .Wells.Wells import Wells
 
 
-class Labware(ObjectABC):
+class Labware(UniqueObjectABC):
     def __init__(
         self,
         Name: str,

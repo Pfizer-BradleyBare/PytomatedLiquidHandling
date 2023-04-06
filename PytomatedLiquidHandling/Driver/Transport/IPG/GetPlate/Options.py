@@ -1,16 +1,13 @@
-from .....Tools.AbstractClasses import ObjectABC
+from .....Tools.AbstractClasses import NonUniqueObjectABC
 
 
-class Options(ObjectABC):
+class Options(NonUniqueObjectABC):
     def __init__(
         self,
-        Name: str,
         PlateSequence: str,
         GripWidth: float,
         OpenWidth: float,
     ):
-
-        self.Name: str = Name
 
         self.PlateSequence: str = PlateSequence
 
@@ -30,6 +27,3 @@ class Options(ObjectABC):
         self.Tolerance: float = 2
         self.InverseGrip: int = 0
         self.CollisionControl: int = 1
-
-    def GetName(self) -> str:
-        return self.Name

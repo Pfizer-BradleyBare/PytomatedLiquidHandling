@@ -3,4 +3,9 @@
 ~*
 PytomatedLiquidHandling.egg-info
 build
+<<<<<<< HEAD
 .vscode
+=======
+Logging
+.DS_Store
+>>>>>>> 266ea4a0af6ece6ed0eb6c3afc7a002dae0c5486

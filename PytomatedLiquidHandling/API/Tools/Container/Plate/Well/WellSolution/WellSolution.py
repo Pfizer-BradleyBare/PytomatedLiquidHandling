@@ -1,8 +1,8 @@
-from .......Tools.AbstractClasses import ObjectABC
+from .......Tools.AbstractClasses import UniqueObjectABC
 from .....Container import Reagent
 
 
-class WellSolution(ObjectABC):
+class WellSolution(UniqueObjectABC):
     def __init__(self, ReagentInstance: Reagent, Volume: float):
         self.ReagentInstance: Reagent = ReagentInstance
         self.Volume: float = Volume
