@@ -8,4 +8,12 @@ class NonUniqueObjectABC(ABC):
     This class enables compatibility with the non-unique tracker.
     """
 
-    ...
+    def GetName(self) -> str | int:
+        """This method does NOT guarentee a unique value. Instead, this values is used as a search handle
+
+        Returns:
+            str | int: A value
+        """
+        raise Exception(
+            "GetName not overloaded for NonUniqueObject. Cannot use this method"
+        )

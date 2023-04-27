@@ -33,3 +33,13 @@ class NonUniqueObjectTrackerABC(Generic[T]):
         List = self.Collection
 
         return List
+
+    def GetObjectsByName(self, Name: str | int) -> list[T]:
+
+        Objects = list()
+
+        for Object in self.Collection:
+            if Object.GetName() == Name:
+                Objects.append(Object)
+
+        return Objects
