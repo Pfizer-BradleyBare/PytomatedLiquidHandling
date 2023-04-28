@@ -1,7 +1,7 @@
 import yaml
 
 from ..DeckLocation import DeckLocationTracker
-from ..Labware import LabwareTracker
+from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
 from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid, UncoverablePosition
 
 
@@ -28,12 +28,16 @@ def LoadYaml(
             PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(
                 Item["Plate Labware"]
             )
+            if not isinstance(PlateLabwareInstance, PipettableLabware):
+                raise Exception("This should not happen")
 
             if "Lid Sequence" in Item:
                 LidSequence = Item["Lid Sequence"]
                 LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
                     Item["Lid Labware"]
                 )
+                if not isinstance(LidLabwareInstance, NonPipettableLabware):
+                    raise Exception("This should not happen")
 
                 LidInstance = Lid(DeckLocationInstance, LidSequence, LidLabwareInstance)
                 LayoutItemInstance = CoverablePosition(

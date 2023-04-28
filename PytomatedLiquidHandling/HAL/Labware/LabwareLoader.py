@@ -1,13 +1,7 @@
 import yaml
 
-from ..Labware import (
-    Labware,
-    LabwareDimensions,
-    WellEquation,
-    WellEquationTracker,
-    Wells,
-)
-from .LabwareTracker import LabwareTracker
+from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
+from .BaseLabware import LabwareDimensions, WellEquation, WellEquationTracker, Wells
 
 
 def LoadYaml(FilePath: str) -> LabwareTracker:
@@ -22,11 +16,10 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
 
         LongSide = ConfigFile["Labware IDs"][LabwareID]["Dimensions"]["Long Side"]
         ShortSide = ConfigFile["Labware IDs"][LabwareID]["Dimensions"]["Short Side"]
-        Dimensions = LabwareDimensions(LongSide, ShortSide)
+        DimensionsInstance = LabwareDimensions(LongSide, ShortSide)
         # Create Dimensions Class
 
         Filters = ConfigFile["Labware IDs"][LabwareID]["Labware Filter"]
-        WellsInstance = None
 
         if "Wells" in ConfigFile["Labware IDs"][LabwareID].keys():
 
@@ -58,10 +51,16 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
                 WellEquationTrackerInstance,
             )
             # Create Wells Class
+            LabwareInstance = PipettableLabware(
+                LabwareID, Filters, DimensionsInstance, WellsInstance
+            )
 
-        LabwareTrackerInstance.ManualLoad(
-            Labware(LabwareID, Filters, WellsInstance, Dimensions)
-        )
+        else:
+            LabwareInstance = NonPipettableLabware(
+                LabwareID, Filters, DimensionsInstance
+            )
+
+        LabwareTrackerInstance.ManualLoad(LabwareInstance)
 
         # Create Labware Class and append
 

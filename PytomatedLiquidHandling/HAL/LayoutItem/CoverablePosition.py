@@ -1,5 +1,5 @@
 from ..DeckLocation import DeckLocation
-from ..Labware import Labware
+from ..Labware import PipettableLabware
 from .BaseLayoutItem import LayoutItem
 from .Lid import Lid
 
@@ -9,8 +9,10 @@ class CoverablePosition(LayoutItem):
         self,
         DeckLocationInstance: DeckLocation,
         Sequence: str,
-        LabwareInstance: Labware,
+        PipettableLabwareInstance: PipettableLabware,
         LidInstance: Lid,
     ):
-        LayoutItem.__init__(self, DeckLocationInstance, Sequence, LabwareInstance)
+        LayoutItem.__init__(
+            self, DeckLocationInstance, Sequence, PipettableLabwareInstance
+        )
         self.LidInstance: Lid = LidInstance

@@ -1,6 +1,6 @@
 from ....Tools.AbstractClasses import UniqueObjectABC
 from ...DeckLocation import DeckLocation
-from ...Labware import Labware
+from ...Labware.BaseLabware import Labware
 
 
 class LayoutItem(UniqueObjectABC):

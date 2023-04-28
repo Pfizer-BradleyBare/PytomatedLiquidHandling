@@ -1,31 +1,22 @@
-from ...Tools.AbstractClasses import UniqueObjectABC
-from .Dimensions.LabwareDimensions import LabwareDimensions
-from .Wells.Wells import Wells
+from .BaseLabware import Labware, LabwareDimensions, Wells
 
 
-class Labware(UniqueObjectABC):
+class PipettableLabware(Labware):
     def __init__(
         self,
         Name: str,
         Filters: list[str],
-        LabwareWells: Wells | None,
         Dimensions: LabwareDimensions,
+        LabwareWells: Wells,
     ):
-        self.Name: str = Name
-        self.Filters: list[str] = Filters
-        self.Dimensions: LabwareDimensions = Dimensions
-        self.LabwareWells: Wells | None = LabwareWells
+        Labware.__init__(self, Name, Filters, Dimensions)
+        self.LabwareWells: Wells = LabwareWells
 
     def GetName(self) -> str:
         return self.Name
 
     def GetWellHeightFromVolume(self, Volume: float) -> float:
         CalculatedHeight = 0.0
-
-        if self.LabwareWells is None:
-            raise Exception(
-                "Labware Wells is none. You can only use this function on labware with wells."
-            )
 
         WellsEquations = (
             self.LabwareWells.WellEquationTrackerInstance.GetObjectsAsList()
@@ -58,10 +49,6 @@ class Labware(UniqueObjectABC):
         return CalculatedHeight
 
     def GetWellVolumeFromHeight(self, Height: float) -> float:
-        if self.LabwareWells is None:
-            raise Exception(
-                "Labware Wells is none. You can only use this function on labware with wells."
-            )
 
         WellsEquations = (
             self.LabwareWells.WellEquationTrackerInstance.GetObjectsAsList()
