@@ -1,13 +1,16 @@
-from PytomatedLiquidHandling import Logger, Driver
-from PytomatedLiquidHandling.Driver.TemperatureControl import HeaterShaker
 import logging
 import os
 import time
+
+from PytomatedLiquidHandling import Driver, Logger
+from PytomatedLiquidHandling.Driver.TemperatureControl import HeaterShaker
+from PytomatedLiquidHandling.Driver.Timer import StartTimer
 
 LoggerInstance = Logger(
     "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__), "Logging")
 )
 DriverHandlerInstance = Driver.Handler(LoggerInstance)
+DriverHandlerInstance.StartServer()
 # Creates the handler so we can communicate with the Hamilton
 
 ConnectCommand = HeaterShaker.Connect.Command(HeaterShaker.Connect.Options(1), False)
@@ -27,7 +30,8 @@ StartTempCommand.Execute()
 
 TemperatureOffset = 2
 for i in range(0, 30):
-    time.sleep(10)
+    StartTimer.Command(StartTimer.Options(10), False).Execute()
+
     GetTempCommand = HeaterShaker.GetTemperature.Command(
         HeaterShaker.GetTemperature.Options(HeaterShakerHandleId), False
     )
@@ -48,7 +52,7 @@ HeaterShaker.StartShakeControl.Command(
     HeaterShaker.StartShakeControl.Options(HeaterShakerHandleId, 500), True
 ).Execute()
 
-time.sleep(30)
+StartTimer.Command(StartTimer.Options(30), False).Execute()
 # run 30 seconds
 
 HeaterShaker.StopShakeControl.Command(
