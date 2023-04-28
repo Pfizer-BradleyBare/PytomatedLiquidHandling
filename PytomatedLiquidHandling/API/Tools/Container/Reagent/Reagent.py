@@ -14,13 +14,12 @@ class Reagent(Container):
     def __init__(
         self,
         Name: str,
-        MethodName: str,
         Volatility: VolatilityReagentProperty,
         Viscosity: ViscosityReagentProperty,
         Homogeneity: HomogeneityReagentProperty,
         LLD: LLDReagentProperty,
     ):
-        Container.__init__(self, Name, MethodName, "No Preference")
+        Container.__init__(self, Name, "No Preference")
 
         self.Volatility: VolatilityReagentProperty = Volatility
         self.Viscosity: ViscosityReagentProperty = Viscosity
