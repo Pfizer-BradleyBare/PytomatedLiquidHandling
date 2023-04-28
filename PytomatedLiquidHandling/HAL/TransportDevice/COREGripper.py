@@ -1,5 +1,5 @@
 from ...Driver.Transport import Gripper as GripperDriver
-from ..Layout import LayoutItem
+from ..LayoutItem.BaseLayoutItem import LayoutItem
 from .BaseTransportDevice import (
     TransportableLabwareTracker,
     TransportDevice,
@@ -73,9 +73,9 @@ class COREGripper(TransportDevice):
         GetPlateOptionsInstance = GripperDriver.GetPlate.Options(
             self.GripperToolSequence,
             SourceLayoutItem.Sequence,
-            SourceLayoutItem.LabwareInstance.Dimensions.ShortSide
+            SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
             - SourceTransportableLabware.TransportParametersInstance.CloseOffset,
-            SourceLayoutItem.LabwareInstance.Dimensions.ShortSide
+            SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
             + SourceTransportableLabware.TransportParametersInstance.OpenOffset,
         )
         GetPlateOptionsInstance.GripHeight = (

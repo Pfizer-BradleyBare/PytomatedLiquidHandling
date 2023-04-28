@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from ....Layout import LayoutItem
+from ....LayoutItem.BaseLayoutItem import LayoutItem
 from ....Tools import InterfaceABC
 
 

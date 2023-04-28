@@ -1,5 +1,5 @@
 from .....Tools.AbstractClasses import UniqueObjectABC
-from ....Labware import Labware
+from ....Labware.BaseLabware import Labware
 from .TransportParameters.TransportParameters import TransportParameters
 
 

@@ -1,5 +1,5 @@
 from ....Tools.AbstractClasses import UniqueObjectABC
-from .Dimensions.LabwareDimensions import LabwareDimensions
+from .Dimensions.Dimensions import Dimensions
 
 
 class Labware(UniqueObjectABC):
@@ -7,11 +7,11 @@ class Labware(UniqueObjectABC):
         self,
         Name: str,
         Filters: list[str],
-        LabwareDimensionsInstance: LabwareDimensions,
+        DimensionsInstance: Dimensions,
     ):
         self.Name: str = Name
         self.Filters: list[str] = Filters
-        self.LabwareDimensionsInstance: LabwareDimensions = LabwareDimensionsInstance
+        self.DimensionsInstance: Dimensions = DimensionsInstance
 
     def GetName(self) -> str:
         return self.Name

@@ -1,7 +1,7 @@
 import yaml
 
 from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
-from .BaseLabware import LabwareDimensions, WellEquation, WellEquationTracker, Wells
+from .BaseLabware import Dimensions, WellEquation, WellEquationTracker, Wells
 
 
 def LoadYaml(FilePath: str) -> LabwareTracker:
@@ -16,7 +16,7 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
 
         LongSide = ConfigFile["Labware IDs"][LabwareID]["Dimensions"]["Long Side"]
         ShortSide = ConfigFile["Labware IDs"][LabwareID]["Dimensions"]["Short Side"]
-        DimensionsInstance = LabwareDimensions(LongSide, ShortSide)
+        DimensionsInstance = Dimensions(LongSide, ShortSide)
         # Create Dimensions Class
 
         Filters = ConfigFile["Labware IDs"][LabwareID]["Labware Filter"]
