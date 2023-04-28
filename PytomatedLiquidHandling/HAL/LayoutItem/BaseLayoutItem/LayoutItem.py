@@ -1,23 +1,18 @@
+from ....Tools.AbstractClasses import UniqueObjectABC
 from ...DeckLocation import DeckLocation
 from ...Labware import Labware
 
 
-class LayoutItem:
+class LayoutItem(UniqueObjectABC):
     def __init__(
         self,
-        Sequence: str,
         DeckLocationInstance: DeckLocation,
+        Sequence: str,
         LabwareInstance: Labware,
     ):
+        self.DeckLocationInstance: DeckLocation = DeckLocationInstance
         self.Sequence: str = Sequence
         self.LabwareInstance: Labware = LabwareInstance
-        self.DeckLocationInstance: DeckLocation = DeckLocationInstance
 
-    def GetSequence(self) -> str:
+    def GetName(self) -> str:
         return self.Sequence
-
-    def GetLabware(self) -> Labware:
-        return self.LabwareInstance
-
-    def GetDeckLocation(self) -> DeckLocation:
-        return self.DeckLocationInstance

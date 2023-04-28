@@ -2,18 +2,16 @@ import yaml
 
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker
-from .LayoutItem.LayoutItem import LayoutItem
-from .LayoutItemGrouping import LayoutItemGrouping
-from .LayoutItemGroupingTracker import LayoutItemGroupingTracker
+from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid, UncoverablePosition
 
 
 def LoadYaml(
     LabwareTrackerInstance: LabwareTracker,
     DeckLocationTrackerInstance: DeckLocationTracker,
     FilePath: str,
-) -> LayoutItemGroupingTracker:
+) -> LayoutItemTracker:
 
-    LayoutItemGroupingTrackerInstance = LayoutItemGroupingTracker()
+    LayoutItemTrackerInstance = LayoutItemTracker()
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
@@ -31,24 +29,26 @@ def LoadYaml(
                 Item["Plate Labware"]
             )
 
-            PlateLayoutItemInstance = LayoutItem(
-                PlateSequence, DeckLocationInstance, PlateLabwareInstance
-            )
-            LidLayoutItemInstance: LayoutItem | None = None
-
             if "Lid Sequence" in Item:
                 LidSequence = Item["Lid Sequence"]
                 LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
                     Item["Lid Labware"]
                 )
 
-                LidLayoutItemInstance = LayoutItem(
-                    LidSequence, DeckLocationInstance, LidLabwareInstance
+                LidInstance = Lid(DeckLocationInstance, LidSequence, LidLabwareInstance)
+                LayoutItemInstance = CoverablePosition(
+                    DeckLocationInstance,
+                    PlateSequence,
+                    PlateLabwareInstance,
+                    LidInstance,
                 )
 
-            LayoutItemGroupingTrackerInstance.ManualLoad(
-                LayoutItemGrouping(PlateLayoutItemInstance, LidLayoutItemInstance)
-            )
+            else:
+                LayoutItemInstance = UncoverablePosition(
+                    DeckLocationInstance, PlateSequence, PlateLabwareInstance
+                )
+
+            LayoutItemTrackerInstance.ManualLoad(LayoutItemInstance)
 
     print("DONE")
-    return LayoutItemGroupingTrackerInstance
+    return LayoutItemTrackerInstance
