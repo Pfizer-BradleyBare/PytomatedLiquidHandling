@@ -1,5 +1,5 @@
 from ...Driver.TemperatureControl import HeaterShaker as HeaterShakerDriver
-from ..Layout import LayoutItemGroupingTracker
+from ..LayoutItem import LayoutItemTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
 
 
@@ -9,7 +9,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         Name: str,
         ComPort: str,
         TempLimitsInstance: TempLimits,
-        LayoutItemGroupingTrackerInstance: LayoutItemGroupingTracker,
+        LayoutItemTrackerInstance: LayoutItemTracker,
     ):
         TempControlDevice.__init__(
             self,
@@ -17,7 +17,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             ComPort,
             True,
             TempLimitsInstance,
-            LayoutItemGroupingTrackerInstance,
+            LayoutItemTrackerInstance,
         )
         self.HandleID: int
 

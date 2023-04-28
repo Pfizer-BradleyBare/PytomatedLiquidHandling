@@ -1,8 +1,8 @@
 import yaml
 
 from ..DeckLocation import DeckLocationTracker
-from ..Labware import LabwareTracker
-from ..Layout import LayoutItem, LayoutItemGrouping, LayoutItemGroupingTracker
+from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
+from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid
 from ..TempControlDevice import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .BaseTempControlDevice import (
     DeviceTypes,
@@ -36,31 +36,36 @@ def LoadYaml(
             TempLimitsInstance = TempLimits(StableTempDelta, MinTemp, MaxTemp)
             # Create Temp Config
 
-            Location = DeckLocationTrackerInstance.GetObjectByName(
+            SupportedLayoutItemTracker = LayoutItemTracker()
+
+            DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
                 Device["Deck Location ID"]
             )
 
-            SupportedLayoutItemGroupingTrackerInstance = LayoutItemGroupingTracker()
-
             for LabwareID in Device["Supported Labware"]:
+                PlateSequence = Device["Supported Labware"][LabwareID]["Plate Sequence"]
                 PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(LabwareID)
 
-                PlateSequence = Device["Supported Labware"][LabwareID]["Plate Sequence"]
+                if not isinstance(PlateLabwareInstance, PipettableLabware):
+                    raise Exception("This should never happen")
+
                 LidSequence = Device["Supported Labware"][LabwareID]["Lid Sequence"]
                 LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
                     Device["Supported Labware"][LabwareID]["Lid Labware"]
                 )
 
-                PlateLayoutItemInstance = LayoutItem(
-                    PlateSequence, Location, PlateLabwareInstance
-                )
-                LidLayoutItemInstance = LayoutItem(
-                    LidSequence, Location, LidLabwareInstance
-                )
+                if not isinstance(LidLabwareInstance, NonPipettableLabware):
+                    raise Exception("This should never happen")
 
-                SupportedLayoutItemGroupingTrackerInstance.ManualLoad(
-                    LayoutItemGrouping(PlateLayoutItemInstance, LidLayoutItemInstance)
+                LidInstance = Lid(DeckLocationInstance, LidSequence, LidLabwareInstance)
+
+                LayoutItemInstance = CoverablePosition(
+                    DeckLocationInstance,
+                    PlateSequence,
+                    PlateLabwareInstance,
+                    LidInstance,
                 )
+                SupportedLayoutItemTracker.ManualLoad(LayoutItemInstance)
                 # add to our list for our item creation and also add it to the layout loader for tracking
 
             ComPort = Device["Com Port"]
@@ -72,7 +77,7 @@ def LoadYaml(
                         DeviceID,
                         ComPort,
                         TempLimitsInstance,
-                        SupportedLayoutItemGroupingTrackerInstance,
+                        SupportedLayoutItemTracker,
                     )
                 )
 
@@ -82,7 +87,7 @@ def LoadYaml(
                         DeviceID,
                         ComPort,
                         TempLimitsInstance,
-                        SupportedLayoutItemGroupingTrackerInstance,
+                        SupportedLayoutItemTracker,
                     )
                 )
 

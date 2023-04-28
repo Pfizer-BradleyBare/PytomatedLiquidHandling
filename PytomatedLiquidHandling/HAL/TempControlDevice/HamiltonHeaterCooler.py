@@ -1,5 +1,5 @@
 from ...Driver.TemperatureControl import HeaterCooler as HeaterCoolerDriver
-from ..Layout import LayoutItemGroupingTracker
+from ..LayoutItem import LayoutItemTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
 
 
@@ -9,7 +9,7 @@ class HamiltonHeaterCooler(TempControlDevice):
         Name: str,
         ComPort: str,
         TempLimitsInstance: TempLimits,
-        LayoutItemGroupingTrackerInstance: LayoutItemGroupingTracker,
+        LayoutItemTrackerInstance: LayoutItemTracker,
     ):
         TempControlDevice.__init__(
             self,
@@ -17,7 +17,7 @@ class HamiltonHeaterCooler(TempControlDevice):
             ComPort,
             False,
             TempLimitsInstance,
-            LayoutItemGroupingTrackerInstance,
+            LayoutItemTrackerInstance,
         )
         self.HandleID: str
 
