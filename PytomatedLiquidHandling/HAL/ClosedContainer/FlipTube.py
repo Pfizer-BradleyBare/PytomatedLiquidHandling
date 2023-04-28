@@ -1,6 +1,6 @@
 from ...Driver.ClosedContainer import FlipTube as FlipTubeDriver
 from ..Labware import LabwareTracker
-from ..Layout import LayoutItem
+from ..LayoutItem.BaseLayoutItem import LayoutItem
 from .BaseClosedContainer.ClosedContainer import ClosedContainer, ClosedContainerTypes
 
 

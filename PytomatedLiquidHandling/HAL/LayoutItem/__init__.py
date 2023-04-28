@@ -1,4 +1,4 @@
-from .CoverablePosition import CoverablePosition
+from .CoverablePlate import CoverablePlate
 from .LayoutItemTracker import LayoutItemTracker
 from .Lid import Lid
-from .UncoverablePosition import UncoverablePosition
+from .UncoverablePlate import UncoverablePlate

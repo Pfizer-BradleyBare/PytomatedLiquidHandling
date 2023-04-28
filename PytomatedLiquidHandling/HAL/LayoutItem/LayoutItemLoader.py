@@ -2,7 +2,7 @@ import yaml
 
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
-from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid, UncoverablePosition
+from ..LayoutItem import CoverablePlate, LayoutItemTracker, Lid, UncoverablePlate
 
 
 def LoadYaml(
@@ -40,7 +40,7 @@ def LoadYaml(
                     raise Exception("This should not happen")
 
                 LidInstance = Lid(DeckLocationInstance, LidSequence, LidLabwareInstance)
-                LayoutItemInstance = CoverablePosition(
+                LayoutItemInstance = CoverablePlate(
                     DeckLocationInstance,
                     PlateSequence,
                     PlateLabwareInstance,
@@ -48,7 +48,7 @@ def LoadYaml(
                 )
 
             else:
-                LayoutItemInstance = UncoverablePosition(
+                LayoutItemInstance = UncoverablePlate(
                     DeckLocationInstance, PlateSequence, PlateLabwareInstance
                 )
 
