@@ -1,5 +1,3 @@
 from .Command import Command
-from .Options import Options
+from .Options import AdvancedOptions, Options
 from .OptionsTracker import OptionsTracker
-
-__all__ = ["Command", "Options", "OptionsTracker"]
