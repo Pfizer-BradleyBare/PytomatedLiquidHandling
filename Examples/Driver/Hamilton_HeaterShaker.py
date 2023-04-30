@@ -13,7 +13,9 @@ DriverHandlerInstance = Driver.Handler(LoggerInstance)
 DriverHandlerInstance.StartServer()
 # Creates the handler so we can communicate with the Hamilton
 
-ConnectCommand = HeaterShaker.Connect.Command(HeaterShaker.Connect.Options(1), False)
+ConnectCommand = HeaterShaker.Connect.Command(
+    HeaterShaker.Connect.Options(ComPort=1), False
+)
 ConnectCommand.Execute()
 HeaterShakerHandleId = ConnectCommand.GetHandleID()
 # Connect and get our Handle
@@ -21,7 +23,7 @@ HeaterShakerHandleId = ConnectCommand.GetHandleID()
 DesiredTemperature = 37
 StartTempCommand = HeaterShaker.StartTemperatureControl.Command(
     HeaterShaker.StartTemperatureControl.Options(
-        HeaterShakerHandleId, DesiredTemperature
+        HandleID=HeaterShakerHandleId, Temperature=DesiredTemperature
     ),
     False,
 )
@@ -30,10 +32,10 @@ StartTempCommand.Execute()
 
 TemperatureOffset = 2
 for i in range(0, 30):
-    StartTimer.Command(StartTimer.Options(10), False).Execute()
+    StartTimer.Command(StartTimer.Options(WaitTime=10), False).Execute()
 
     GetTempCommand = HeaterShaker.GetTemperature.Command(
-        HeaterShaker.GetTemperature.Options(HeaterShakerHandleId), False
+        HeaterShaker.GetTemperature.Options(HandleID=HeaterShakerHandleId), False
     )
     GetTempCommand.Execute()
 
@@ -49,18 +51,21 @@ for i in range(0, 30):
 # Wait for temperature to fall within desired range. Only wait a max of 5 minutes
 
 HeaterShaker.StartShakeControl.Command(
-    HeaterShaker.StartShakeControl.Options(HeaterShakerHandleId, 500), True
+    HeaterShaker.StartShakeControl.Options(
+        HandleID=HeaterShakerHandleId, ShakingSpeed=500
+    ),
+    True,
 ).Execute()
 
-StartTimer.Command(StartTimer.Options(30), False).Execute()
+StartTimer.Command(StartTimer.Options(WaitTime=30), False).Execute()
 # run 30 seconds
 
 HeaterShaker.StopShakeControl.Command(
-    HeaterShaker.StopShakeControl.Options(HeaterShakerHandleId), False
+    HeaterShaker.StopShakeControl.Options(HandleID=HeaterShakerHandleId), False
 ).Execute()
 
 HeaterShaker.StopTemperatureControl.Command(
-    HeaterShaker.StopTemperatureControl.Options(HeaterShakerHandleId), False
+    HeaterShaker.StopTemperatureControl.Options(HandleID=HeaterShakerHandleId), False
 ).Execute()
 # Turn off heat
 
