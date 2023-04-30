@@ -4,6 +4,7 @@ from .....Tools.AbstractClasses import NonUniqueObjectABC
 class AdvancedOptions:
     def __init__(
         self,
+        *,
         Mode: int | None = None,
         CapacitiveLiquidLevelDetection: int | None = None,
         SubmergeDepth: float | None = None,
@@ -32,6 +33,7 @@ class AdvancedOptions:
 class Options(NonUniqueObjectABC):
     def __init__(
         self,
+        *,
         Sequence: str,
         SequencePosition: int,
         LiquidClass: str,
