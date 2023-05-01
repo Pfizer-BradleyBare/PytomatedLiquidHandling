@@ -1,7 +1,8 @@
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
+from ...Driver.Tools.AbstractOptions import AdvancedOptionsABC
 from ..Labware import LabwareTracker
 from ..LayoutItem.BaseLayoutItem import LayoutItem
-from .BaseClosedContainer.ClosedContainer import ClosedContainer, ClosedContainerTypes
+from .BaseClosedContainer.ClosedContainer import ClosedContainer
 
 
 class HamiltonFlipTube(ClosedContainer):
@@ -32,6 +33,7 @@ class HamiltonFlipTube(ClosedContainer):
 
     def Deinitialize(
         self,
+        AdvancedOptionsInstance: AdvancedOptionsABC = AdvancedOptionsABC(),
     ):
         ...
 
@@ -39,6 +41,7 @@ class HamiltonFlipTube(ClosedContainer):
         self,
         LayoutItemInstances: list[LayoutItem],
         Positions: list[int],
+        AdvancedOptionsInstance: FlipTubeDriver.Open.AdvancedOptions = FlipTubeDriver.Open.AdvancedOptions(),
     ):
         OpenOptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker()
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
@@ -47,6 +50,7 @@ class HamiltonFlipTube(ClosedContainer):
                     ToolSequence=self.ToolSequence,
                     Sequence=LayoutItemInstance.Sequence,
                     SequencePosition=Position,
+                    AdvancedOptionsInstance=AdvancedOptionsInstance,
                 )
             )
 
@@ -60,6 +64,7 @@ class HamiltonFlipTube(ClosedContainer):
         self,
         LayoutItemInstances: list[LayoutItem],
         Positions: list[int],
+        AdvancedOptionsInstance: FlipTubeDriver.Close.AdvancedOptions = FlipTubeDriver.Close.AdvancedOptions(),
     ):
         CloseOptionsTrackerInstance = FlipTubeDriver.Close.OptionsTracker()
 
@@ -69,6 +74,7 @@ class HamiltonFlipTube(ClosedContainer):
                     ToolSequence=self.ToolSequence,
                     Sequence=LayoutItemInstance.Sequence,
                     SequencePosition=Position,
+                    AdvancedOptionsInstance=AdvancedOptionsInstance,
                 )
             )
 
