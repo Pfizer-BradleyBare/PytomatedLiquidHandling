@@ -6,13 +6,15 @@ from ...Labware.BaseLabware import Labware
 class LayoutItem(UniqueObjectABC):
     def __init__(
         self,
-        DeckLocationInstance: DeckLocation,
+        UniqueIdentifier: str,
         Sequence: str,
         LabwareInstance: Labware,
+        DeckLocationInstance: DeckLocation,
     ):
+        self.UniqueIdentifier: str = UniqueIdentifier
         self.DeckLocationInstance: DeckLocation = DeckLocationInstance
         self.Sequence: str = Sequence
         self.LabwareInstance: Labware = LabwareInstance
 
     def GetUniqueIdentifier(self) -> str:
-        return self.Sequence
+        return self.UniqueIdentifier

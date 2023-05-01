@@ -10,7 +10,6 @@ def LoadYaml(
     DeckLocationTrackerInstance: DeckLocationTracker,
     FilePath: str,
 ) -> LayoutItemTracker:
-
     LayoutItemTrackerInstance = LayoutItemTracker()
 
     FileHandle = open(FilePath, "r")
@@ -18,41 +17,51 @@ def LoadYaml(
     FileHandle.close()
     # Get config file contents
 
-    for DeckLocationID in ConfigFile["DeckLocation IDs"]:
+    for LayoutItem in ConfigFile:
+        UniqueIdentifier = LayoutItem["Unique Identifier"]
+        PlateSequence = LayoutItem["Plate Sequence"]
+        PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(
+            LayoutItem["Plate Labware"]
+        )
         DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
-            DeckLocationID
+            LayoutItem["Deck Location"]
         )
 
-        for Item in ConfigFile["DeckLocation IDs"][DeckLocationID]:
-            PlateSequence = Item["Plate Sequence"]
-            PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(
-                Item["Plate Labware"]
+        if not isinstance(PlateLabwareInstance, PipettableLabware):
+            raise Exception("This should not happen")
+        # Plates are technically defined here and all plates should be PipettableLabware
+
+        if "Lid Sequence" in LayoutItem:
+            LidSequence = LayoutItem["Lid Sequence"]
+            LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
+                LayoutItem["Lid Labware"]
             )
-            if not isinstance(PlateLabwareInstance, PipettableLabware):
+
+            if not isinstance(LidLabwareInstance, NonPipettableLabware):
                 raise Exception("This should not happen")
+            # Lids are obviously NonPipettableLabware
 
-            if "Lid Sequence" in Item:
-                LidSequence = Item["Lid Sequence"]
-                LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
-                    Item["Lid Labware"]
-                )
-                if not isinstance(LidLabwareInstance, NonPipettableLabware):
-                    raise Exception("This should not happen")
-
-                LidInstance = Lid(DeckLocationInstance, LidSequence, LidLabwareInstance)
-                LayoutItemInstance = CoverablePosition(
+            LayoutItemInstance = CoverablePosition(
+                UniqueIdentifier,
+                PlateSequence,
+                PlateLabwareInstance,
+                DeckLocationInstance,
+                Lid(
+                    UniqueIdentifier,
+                    LidSequence,
+                    LidLabwareInstance,
                     DeckLocationInstance,
-                    PlateSequence,
-                    PlateLabwareInstance,
-                    LidInstance,
-                )
+                ),
+            )
 
-            else:
-                LayoutItemInstance = UncoverablePosition(
-                    DeckLocationInstance, PlateSequence, PlateLabwareInstance
-                )
+        else:
+            LayoutItemInstance = UncoverablePosition(
+                UniqueIdentifier,
+                PlateSequence,
+                PlateLabwareInstance,
+                DeckLocationInstance,
+            )
 
-            LayoutItemTrackerInstance.ManualLoad(LayoutItemInstance)
+        LayoutItemTrackerInstance.ManualLoad(LayoutItemInstance)
 
-    print("DONE")
     return LayoutItemTrackerInstance

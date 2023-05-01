@@ -6,10 +6,15 @@ from .BaseLayoutItem import LayoutItem
 class UncoverablePosition(LayoutItem):
     def __init__(
         self,
-        DeckLocationInstance: DeckLocation,
+        UniqueIdentifier: str,
         Sequence: str,
         PipettableLabwareInstance: PipettableLabware,
+        DeckLocationInstance: DeckLocation,
     ):
         LayoutItem.__init__(
-            self, DeckLocationInstance, Sequence, PipettableLabwareInstance
+            self,
+            UniqueIdentifier,
+            Sequence,
+            PipettableLabwareInstance,
+            DeckLocationInstance,
         )

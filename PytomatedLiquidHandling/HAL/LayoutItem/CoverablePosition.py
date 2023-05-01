@@ -7,12 +7,17 @@ from .Lid import Lid
 class CoverablePosition(LayoutItem):
     def __init__(
         self,
-        DeckLocationInstance: DeckLocation,
+        UniqueIdentifier: str,
         Sequence: str,
         PipettableLabwareInstance: PipettableLabware,
+        DeckLocationInstance: DeckLocation,
         LidInstance: Lid,
     ):
         LayoutItem.__init__(
-            self, DeckLocationInstance, Sequence, PipettableLabwareInstance
+            self,
+            UniqueIdentifier,
+            Sequence,
+            PipettableLabwareInstance,
+            DeckLocationInstance,
         )
         self.LidInstance: Lid = LidInstance

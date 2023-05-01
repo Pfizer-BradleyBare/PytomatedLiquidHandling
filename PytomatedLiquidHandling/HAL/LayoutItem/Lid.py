@@ -6,10 +6,15 @@ from .BaseLayoutItem import LayoutItem
 class Lid(LayoutItem):
     def __init__(
         self,
-        DeckLocationInstance: DeckLocation,
+        UniqueIdentifier: str,
         Sequence: str,
         NonPipettableLabwareInstance: NonPipettableLabware,
+        DeckLocationInstance: DeckLocation,
     ):
         LayoutItem.__init__(
-            self, DeckLocationInstance, Sequence, NonPipettableLabwareInstance
+            self,
+            UniqueIdentifier,
+            Sequence,
+            NonPipettableLabwareInstance,
+            DeckLocationInstance,
         )
