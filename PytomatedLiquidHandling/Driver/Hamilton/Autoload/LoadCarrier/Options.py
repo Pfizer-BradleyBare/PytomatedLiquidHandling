@@ -6,9 +6,11 @@ class AdvancedOptions(AdvancedOptionsABC):
     def __init__(
         self,
         *,
+        CustomErrorHandling: bool | None = None,
         BarcodeFilePath: str | None = None,
         LabwareScanPositions: str | None = None,
     ):
+        AdvancedOptionsABC.__init__(self, CustomErrorHandling)
         self.BarcodeFilePath: str | None = BarcodeFilePath
         self.LabwareScanPositions: str | None = LabwareScanPositions
 
@@ -23,7 +25,9 @@ class Options(NonUniqueObjectABC):
         self.Sequence: str = Sequence
 
         self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
-            BarcodeFilePath="barcode_1.txt", LabwareScanPositions="?"
+            CustomErrorHandling=False,
+            BarcodeFilePath="barcode_1.txt",
+            LabwareScanPositions="?",
         )
         # These are the default advanced values
 

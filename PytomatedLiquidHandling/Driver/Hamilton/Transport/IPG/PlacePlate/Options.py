@@ -6,12 +6,14 @@ class AdvancedOptions(AdvancedOptionsABC):
     def __init__(
         self,
         *,
+        CustomErrorHandling: bool | None = None,
         Movement: int | None = None,
         RetractDistance: float | None = None,
         LiftupHeight: float | None = None,
         LabwareOrientation: int | None = None,
         CollisionControl: int | None = None,
     ):
+        AdvancedOptionsABC.__init__(self, CustomErrorHandling)
         self.Movement: int | None = Movement
 
         # Only matters if movement is 1
@@ -32,6 +34,7 @@ class Options(NonUniqueObjectABC):
         self.PlateSequence: str = PlateSequence
 
         self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
+            CustomErrorHandling=False,
             Movement=0,
             RetractDistance=0,
             LiftupHeight=0,

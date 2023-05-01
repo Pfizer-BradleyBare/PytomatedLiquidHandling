@@ -3,8 +3,8 @@ from ....Tools.AbstractOptions import AdvancedOptionsABC
 
 
 class AdvancedOptions(AdvancedOptionsABC):
-    def __init__(self):
-        ...
+    def __init__(self, *, CustomErrorHandling: bool | None = None):
+        AdvancedOptionsABC.__init__(self, CustomErrorHandling)
 
 
 class Options(NonUniqueObjectABC):
@@ -18,7 +18,9 @@ class Options(NonUniqueObjectABC):
         self.ShowTimer: bool = True
         self.IsStoppable: bool = True
 
-        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions()
+        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
+            CustomErrorHandling=False,
+        )
         # These are the default advanced values
 
         self.AdvancedOptionsInstance.__dict__.update(

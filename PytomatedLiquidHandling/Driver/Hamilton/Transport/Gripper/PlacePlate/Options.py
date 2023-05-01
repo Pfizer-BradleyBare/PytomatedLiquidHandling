@@ -6,12 +6,14 @@ class AdvancedOptions(AdvancedOptionsABC):
     def __init__(
         self,
         *,
+        CustomErrorHandling: bool | None = None,
         EjectTool: int | None = None,
         XSpeed: int | None = None,
         ZSpeed: float | None = None,
         PressOnDistance: float | None = None,
         CheckPlateExists: int | None = None,
     ):
+        AdvancedOptionsABC.__init__(self, CustomErrorHandling)
         self.EjectTool: int | None = EjectTool
         self.XSpeed: int | None = XSpeed
         self.ZSpeed: float | None = ZSpeed
@@ -36,6 +38,7 @@ class Options(NonUniqueObjectABC):
         self.CheckPlateExists: int = 0
 
         self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
+            CustomErrorHandling=False,
             EjectTool=0,
             XSpeed=4,
             ZSpeed=128.7,

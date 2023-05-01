@@ -3,7 +3,10 @@ from .....Tools.AbstractOptions import AdvancedOptionsABC
 
 
 class AdvancedOptions(AdvancedOptionsABC):
-    def __init__(self, *, MinimumTips: int | None = None):
+    def __init__(
+        self, *, CustomErrorHandling: bool | None = None, MinimumTips: int | None = None
+    ):
+        AdvancedOptionsABC.__init__(self, CustomErrorHandling)
         self.MinimumTips: int | None = MinimumTips
 
 
@@ -22,7 +25,9 @@ class Options(NonUniqueObjectABC):
 
         self.LoadingText: str = "Load NTR Tips"
 
-        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(MinimumTips=0)
+        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
+            CustomErrorHandling=False, MinimumTips=0
+        )
         # These are the default advanced values
 
         self.AdvancedOptionsInstance.__dict__.update(

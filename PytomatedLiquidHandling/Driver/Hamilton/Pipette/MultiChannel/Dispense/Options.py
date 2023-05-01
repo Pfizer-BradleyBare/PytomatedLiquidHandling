@@ -8,6 +8,7 @@ class AdvancedOptions(AdvancedOptionsABC):
     def __init__(
         self,
         *,
+        CustomErrorHandling: bool | None = None,
         Mode: int | None = None,
         FixHeightFromBottom: float | None = None,
         RetractDistanceForTransportAir: float | None = None,
@@ -19,6 +20,7 @@ class AdvancedOptions(AdvancedOptionsABC):
         MixPosition: float | None = None,
         MixVolume: float | None = None,
     ):
+        AdvancedOptionsABC.__init__(self, CustomErrorHandling)
         self.Mode: int | None = Mode
         self.FixHeightFromBottom: float | None = FixHeightFromBottom
         self.RetractDistanceForTransportAir: float | None = (
@@ -52,6 +54,7 @@ class Options(NonUniqueObjectABC):
         self.LiquidClass: str = LiquidClass
 
         self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
+            CustomErrorHandling=False,
             Mode=0,
             FixHeightFromBottom=0,
             RetractDistanceForTransportAir=0,

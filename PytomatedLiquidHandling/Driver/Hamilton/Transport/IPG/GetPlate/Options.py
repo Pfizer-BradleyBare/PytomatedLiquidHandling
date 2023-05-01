@@ -6,6 +6,7 @@ class AdvancedOptions(AdvancedOptionsABC):
     def __init__(
         self,
         *,
+        CustomErrorHandling: bool | None = None,
         GripHeight: float | None = None,
         GripMode: int | None = None,
         Movement: int | None = None,
@@ -17,6 +18,7 @@ class AdvancedOptions(AdvancedOptionsABC):
         InverseGrip: int | None = None,
         CollisionControl: int | None = None,
     ):
+        AdvancedOptionsABC.__init__(self, CustomErrorHandling)
         self.GripHeight: float | None = GripHeight
         self.GripMode: int | None = GripMode
 
@@ -48,6 +50,7 @@ class Options(NonUniqueObjectABC):
         self.OpenWidth: float = OpenWidth
 
         self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
+            CustomErrorHandling=False,
             GripHeight=3,
             GripMode=0,
             Movement=0,
