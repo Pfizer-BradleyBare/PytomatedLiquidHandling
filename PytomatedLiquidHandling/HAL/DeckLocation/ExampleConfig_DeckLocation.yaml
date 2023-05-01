@@ -1,0 +1,211 @@
+
+#HHS Carrier
+- Unique Identifier: HHS_Carrier_Pos1
+  Is Storage Location: False
+  Is Pipettable Location: False
+  Supported Transport IDs:
+    CORE Gripper:
+
+- Unique Identifier: HHS_Carrier_Pos2
+  Is Storage Location: False
+  Is Pipettable Location: False
+  Supported Transport IDs:
+    CORE Gripper:
+
+- Unique Identifier: HHS_Carrier_Pos3
+  Is Storage Location: False
+  Is Pipettable Location: False
+  Supported Transport IDs:
+    CORE Gripper:
+
+- Unique Identifier: HHS_Carrier_Pos4
+  Is Storage Location: False
+  Is Pipettable Location: False
+  Supported Transport IDs:
+    CORE Gripper:
+
+#Vacuum Carrier
+- Unique Identifier: Vacuum_Carrier_Pos1
+  Is Storage Location: False
+  Is Pipettable Location: False
+  Supported Transport IDs:
+    CORE Gripper:
+
+- Unique Identifier: Vacuum_Carrier_Pos2
+  Is Storage Location: False
+  Is Pipettable Location: False
+  Supported Transport IDs:
+    CORE Gripper:
+
+- Unique Identifier: Vacuum_Carrier_Pos3
+  Is Storage Location: False
+  Is Pipettable Location: False
+  Supported Transport IDs:
+    CORE Gripper:
+
+- Unique Identifier: Vacuum_Carrier_Pos4
+  Is Storage Location: False
+  Is Pipettable Location: False
+  Supported Transport IDs:
+    CORE Gripper:
+
+#Carrier 14
+- Unique Identifier: Carrier14_Pos1
+  Is Storage Location: True
+  Is Pipettable Location: True
+  Supported Transport IDs:
+    CORE Gripper:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
+
+- Unique Identifier: Carrier14_Pos2
+  Is Storage Location: True
+  Is Pipettable Location: True
+  Supported Transport IDs:
+    CORE Gripper:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
+
+- Unique Identifier: Carrier14_Pos3
+  Is Storage Location: True
+  Is Pipettable Location: True
+  Supported Transport IDs:
+    CORE Gripper:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
+
+- Unique Identifier: Carrier14_Pos4
+  Is Storage Location: True
+  Is Pipettable Location: True
+  Supported Transport IDs:
+    CORE Gripper:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
+
+- Unique Identifier: Carrier14_Pos5
+  Is Storage Location: True
+  Is Pipettable Location: True
+  Supported Transport IDs:
+    CORE Gripper:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
+
+#Carrier 14
+- Unique Identifier: Carrier38_Pos1
+  Is Storage Location: True
+  Is Pipettable Location: True
+  Supported Transport IDs:
+    CORE Gripper:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
+
+- Unique Identifier: Carrier38_Pos2
+  Is Storage Location: True
+  Is Pipettable Location: True
+  Supported Transport IDs:
+    CORE Gripper:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
+
+- Unique Identifier: Carrier38_Pos3
+  Is Storage Location: True
+  Is Pipettable Location: True
+  Supported Transport IDs:
+    CORE Gripper:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
+
+- Unique Identifier: Carrier38_Pos4
+  Is Storage Location: True
+  Is Pipettable Location: True
+  Supported Transport IDs:
+    CORE Gripper:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
+
+- Unique Identifier: Carrier38_Pos5
+  Is Storage Location: True
+  Is Pipettable Location: True
+  Supported Transport IDs:
+    CORE Gripper:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
+
+#Carrier 47
+- Unique Identifier: FalconTubeCarrier
+  Carrier Position: 0
+  Is Storage Location: False
+  Is Pipettable Location: True
+  Supported Transport IDs:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
+
+#Carrier 48
+- Unique Identifier: ReagentReserviorCarrier
+  Carrier Position: 0
+  Is Storage Location: False
+  Is Pipettable Location: True
+  Supported Transport IDs:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
+
+#Carrier 49
+- Unique Identifier: FlipTubeCarrier
+  Carrier Position: 0
+  Is Storage Location: False
+  Is Pipettable Location: True
+  Supported Transport IDs:
+  Deck Loading:
+    Carrier Labware String: Test
+    Carrier Track Start: 1
+    Carrier Track End: 1
+    Carrier Type: FTRCarrier5Position
+    Carrier Positions: "1"
