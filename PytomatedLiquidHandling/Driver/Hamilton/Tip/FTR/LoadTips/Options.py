@@ -1,7 +1,8 @@
 from ......Tools.AbstractClasses import NonUniqueObjectABC
+from .....Tools.AbstractOptions import AdvancedOptionsABC
 
 
-class AdvancedOptions:
+class AdvancedOptions(AdvancedOptionsABC):
     def __init__(self, *, MinimumTips: int | None = None):
         self.MinimumTips: int | None = MinimumTips
 

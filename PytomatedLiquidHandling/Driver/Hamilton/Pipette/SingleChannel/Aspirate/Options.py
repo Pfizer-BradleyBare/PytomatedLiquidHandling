@@ -1,9 +1,10 @@
 from enum import Enum
 
 from ......Tools.AbstractClasses import NonUniqueObjectABC
+from .....Tools.AbstractOptions import AdvancedOptionsABC
 
 
-class AdvancedOptions:
+class AdvancedOptions(AdvancedOptionsABC):
     def __init__(
         self,
         *,
@@ -19,7 +20,6 @@ class AdvancedOptions:
         MixPosition: float | None = None,
         MixVolume: float | None = None,
     ):
-
         self.Mode: int | None = Mode
         self.CapacitiveLiquidLevelDetection: int | None = CapacitiveLiquidLevelDetection
         self.SubmergeDepth: float | None = SubmergeDepth
