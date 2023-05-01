@@ -1,12 +1,11 @@
 import yaml
 
 from ..TransportDevice.BaseTransportDevice import TransportDeviceTracker
-from .DeckLoadingConfig.DeckLoadingConfig import CarrierTypes, DeckLoadingConfig
-from .DeckLocation import DeckLocation
-from .DeckLocationTracker import DeckLocationTracker
-from .LocationTransportDevice.LocationTransportDevice import LocationTransportDevice
-from .LocationTransportDevice.LocationTransportDeviceTracker import (
-    LocationTransportDeviceTracker,
+from ..DeckLocation import (
+    NonLoadableDeckLocation,
+    LoadableDeckLocation,
+    DeckLocationTracker,
+    DeckLoadingConfig,
 )
 
 
@@ -20,58 +19,36 @@ def LoadYaml(
     FileHandle.close()
     # Get config file contents
 
-    for LocationID in ConfigFile["Location IDs"]:
+    for Location in ConfigFile:
+        UniqueIdentifier = Location["Unique Identifier"]
+        IsStorageLocation = Location["Is Storage Location"]
+        IsPipettableLocation = Location["Is Pipettable Location"]
 
-        LocationTransportDeviceTrackerInstance = LocationTransportDeviceTracker()
-        TransportIDs = ConfigFile["Location IDs"][LocationID]["Supported Transport IDs"]
+        if "Deck Location" in Location:
+            CarrierLabwareString = Location["Carrier Labware String"]
+            CarrierTrackStart = Location["Carrier Track Start"]
+            CarrierTrackEnd = Location["Carrier Track End"]
+            CarrierType = Location["Carrier Type"]
+            CarrierPositions = Location["Carrier Positions"]
 
-        if TransportIDs is not None:
-            for TransportID in TransportIDs:
-                print(TransportID)
-                LocationTransportDeviceTrackerInstance.ManualLoad(
-                    LocationTransportDevice(
-                        TransportDeviceTrackerInstance.GetObjectByName(TransportID),
-                        ConfigFile["Location IDs"][LocationID][
-                            "Supported Transport IDs"
-                        ][TransportID],
-                    )
-                )
-
-        DeckLoadingConfigInstance = None
-
-        if "Deck Loading" in ConfigFile["Location IDs"][LocationID].keys():
-            CarrierString = ConfigFile["Location IDs"][LocationID]["Deck Loading"][
-                "Carrier Labware String"
-            ]
-            CarrierTrackStart = ConfigFile["Location IDs"][LocationID]["Deck Loading"][
-                "Carrier Track Start"
-            ]
-            CarrierTrackEnd = ConfigFile["Location IDs"][LocationID]["Deck Loading"][
-                "Carrier Track End"
-            ]
-            CarrierType = CarrierTypes(
-                ConfigFile["Location IDs"][LocationID]["Deck Loading"]["Carrier Type"]
-            )
-            CarrierPositions = ConfigFile["Location IDs"][LocationID]["Deck Loading"][
-                "Carrier Positions"
-            ]
-
-            DeckLoadingConfigInstance = DeckLoadingConfig(
-                CarrierString,
-                CarrierTrackStart,
-                CarrierTrackEnd,
-                CarrierType,
-                CarrierPositions,
+            DeckLocationInstance = LoadableDeckLocation(
+                UniqueIdentifier,
+                IsStorageLocation,
+                IsPipettableLocation,
+                DeckLoadingConfig(
+                    CarrierLabwareString,
+                    CarrierTrackStart,
+                    CarrierTrackEnd,
+                    CarrierType,
+                    CarrierPositions,
+                ),
             )
 
-        DeckLocationTrackerInstance.ManualLoad(
-            DeckLocation(
-                LocationID,
-                LocationTransportDeviceTrackerInstance,
-                DeckLoadingConfigInstance,
-                ConfigFile["Location IDs"][LocationID]["StorageLocation"],
-                ConfigFile["Location IDs"][LocationID]["PipettingLocation"],
+        else:
+            DeckLocationInstance = NonLoadableDeckLocation(
+                UniqueIdentifier, IsStorageLocation, IsPipettableLocation
             )
-        )
+
+        DeckLocationTrackerInstance.ManualLoad(DeckLocationInstance)
 
     return DeckLocationTrackerInstance
