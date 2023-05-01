@@ -15,8 +15,8 @@ def LoadYaml(
     FileHandle.close()
     # Get config file contents
 
-    for DeviceType in ConfigFile["Closed Container Device Types"]:
-        for Device in ConfigFile["Closed Container Device Types"][DeviceType]:
+    for DeviceType in ConfigFile["Device Types"]:
+        for Device in ConfigFile["Device Types"][DeviceType]:
             UniqueName = Device["Unique Name"]
 
             if DeviceType == ClosedContainerTypes.HamiltonFlipTube.value:
@@ -28,10 +28,13 @@ def LoadYaml(
                         LabwareTrackerInstance.GetObjectByName(LabwareID)
                     )
 
-                ClosedContainerTrackerInstance.ManualLoad(
-                    HamiltonFlipTube(
-                        UniqueName, ToolSequence, SupportedLabwareTrackerInstance
-                    )
+                ClosedContainerInstance = HamiltonFlipTube(
+                    UniqueName, ToolSequence, SupportedLabwareTrackerInstance
                 )
+
+            else:
+                raise Exception("Device Type not known. Please fix.")
+
+            ClosedContainerTrackerInstance.ManualLoad(ClosedContainerInstance)
 
     return ClosedContainerTrackerInstance
