@@ -5,7 +5,6 @@ from ..Transport import GetLayoutItem, Transport
 
 
 def MoveToPipette(ContainerInstance: Container, RunType: RunTypes) -> bool:
-
     HandlerInstance = GetHandler()
     LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance
     ResourceLockTrackerInstance = HandlerInstance.ResourceLockTrackerInstance
@@ -20,7 +19,6 @@ def MoveToPipette(ContainerInstance: Container, RunType: RunTypes) -> bool:
     for (
         LoadedLabwareAssignmentInstance
     ) in LoadedLabwareAssignmentInstances.GetObjectsAsList():
-
         if (
             LoadedLabwareAssignmentInstance.LayoutItemGroupingInstance.GetDeckLocation().IsPipettableLocation()
         ):
@@ -31,7 +29,9 @@ def MoveToPipette(ContainerInstance: Container, RunType: RunTypes) -> bool:
             Location
             for Location in DeckLocationTrackerInstance.GetObjectsAsList()
             if (
-                not ResourceLockTrackerInstance.IsTracked(Location.GetName())
+                not ResourceLockTrackerInstance.IsTracked(
+                    Location.GetUniqueIdentifier()
+                )
                 or not RunType is RunTypes.Run
             )
             and Location.IsPipettableLocation()

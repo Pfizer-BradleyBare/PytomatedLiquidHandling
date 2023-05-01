@@ -24,7 +24,7 @@ class Handler(ServerHandlerABC):
         self.ResourceLockTrackerInstance: ResourceLockTracker = ResourceLockTracker()
         self.HALLayerInstance: HALLayer = HalLoader.Load(HALConfigurationFilesPath)
 
-    def GetName(self) -> str:
+    def GetUniqueIdentifier(self) -> str:
         return "API"
 
     def GetEndpoints(self) -> tuple:
@@ -39,7 +39,6 @@ _HandlerInstance: Handler | None = None
 
 
 def GetHandler() -> Handler:
-
     if _HandlerInstance is None:
         raise Exception("Driver Handler not created. Please Create")
 

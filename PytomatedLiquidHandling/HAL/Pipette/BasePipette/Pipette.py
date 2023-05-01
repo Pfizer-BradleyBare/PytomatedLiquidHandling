@@ -28,5 +28,5 @@ class Pipette(UniqueObjectABC, PipetteInterface):
             SupportedLabwareTrackerInstance
         )
 
-    def GetName(self) -> str:
+    def GetUniqueIdentifier(self) -> str:
         return self.PipettingDeviceType.value

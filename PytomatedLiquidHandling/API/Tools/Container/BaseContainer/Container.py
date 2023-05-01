@@ -7,13 +7,13 @@ from .LiquidClassCategory.LiquidClassCategory import LiquidClassCategory
 
 
 class Container(UniqueObjectABC):
-    def __init__(self, Name: str, Filter: str):
-        self.Name: str = Name
+    def __init__(self, UniqueIdentifier: str, Filter: str):
+        self.UniqueIdentifier: str = UniqueIdentifier
         self.Filter: list[str] = [Filter]
         self.LoadedLabwareInstance: LoadedLabware | None = None
 
-    def GetName(self) -> str:
-        return self.Name
+    def GetUniqueIdentifier(self) -> str:
+        return self.UniqueIdentifier
 
     def GetFilter(self) -> list[str]:
         return self.Filter

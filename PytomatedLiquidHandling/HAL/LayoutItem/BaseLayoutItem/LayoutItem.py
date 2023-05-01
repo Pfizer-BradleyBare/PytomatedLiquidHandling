@@ -14,5 +14,5 @@ class LayoutItem(UniqueObjectABC):
         self.Sequence: str = Sequence
         self.LabwareInstance: Labware = LabwareInstance
 
-    def GetName(self) -> str:
+    def GetUniqueIdentifier(self) -> str:
         return self.Sequence

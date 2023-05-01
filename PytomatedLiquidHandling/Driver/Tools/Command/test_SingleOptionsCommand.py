@@ -13,7 +13,7 @@ class Options(NonUniqueObjectABC):
         self.b = b
         self.c = c
 
-    def GetName(self):
+    def GetUniqueIdentifier(self):
         return self.a
 
 
@@ -30,7 +30,6 @@ class Command(SingleOptionsCommand[Options]):
 
 
 def test():
-
     CommandInstance = Command(Options("T1", 1, 2), True)
 
     assert CommandInstance.GetCommandName() == "Command"

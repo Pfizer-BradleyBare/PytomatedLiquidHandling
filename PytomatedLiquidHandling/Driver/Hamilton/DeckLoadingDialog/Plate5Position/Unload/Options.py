@@ -10,7 +10,6 @@ class Options(NonUniqueObjectABC):
         LabwareCarrierPositions: str,
         LabwarePartNumber: str,
     ):
-
         self.CarrierTrackStart: str = str(CarrierTrackStart)
         self.CarrierTrackEnd: str = str(CarrierTrackEnd)
 

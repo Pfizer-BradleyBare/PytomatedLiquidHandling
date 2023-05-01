@@ -9,8 +9,8 @@ class LabwareSelection(UniqueObjectABC):
         self.LabwareTrackerInstance: LabwareTracker = LabwareTracker()
         self.LabwareInstance: Labware | None = None
 
-    def GetName(self) -> str:
-        return self.ContainerInstance.GetName()
+    def GetUniqueIdentifier(self) -> str:
+        return self.ContainerInstance.GetUniqueIdentifier()
 
     def GetContainer(self) -> Container:
         return self.ContainerInstance

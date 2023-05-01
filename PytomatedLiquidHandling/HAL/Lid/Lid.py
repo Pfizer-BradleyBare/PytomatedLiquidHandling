@@ -6,15 +6,15 @@ from ..Layout import LayoutItem
 class Lid(UniqueObjectABC):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         LidLayoutItem: LayoutItem,
         SupportedLabwareTrackerInstance: LabwareTracker,
     ):
-        self.Name: str = Name
+        self.UniqueIdentifier: str = UniqueIdentifier
         self.LidLayoutItem: LayoutItem = LidLayoutItem
         self.SupportedLabwareTrackerInstance: LabwareTracker = (
             SupportedLabwareTrackerInstance
         )
 
-    def GetName(self) -> str:
-        return self.Name
+    def GetUniqueIdentifier(self) -> str:
+        return self.UniqueIdentifier

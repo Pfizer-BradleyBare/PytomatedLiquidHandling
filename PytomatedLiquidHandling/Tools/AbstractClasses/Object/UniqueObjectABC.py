@@ -9,7 +9,7 @@ class UniqueObjectABC(ABC):
     """
 
     @abstractmethod
-    def GetName(self) -> str | int:
+    def GetUniqueIdentifier(self) -> str | int:
         """This method guarentees a unique value as either a string or an int.
         This guarentee is required for the unique tracker.
 

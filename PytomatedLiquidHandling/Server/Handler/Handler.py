@@ -10,7 +10,7 @@ class Handler(ServerHandlerABC):
         global _HandlerInstance
         _HandlerInstance = self
 
-    def GetName(self) -> str:
+    def GetUniqueIdentifier(self) -> str:
         return "Server"
 
     def GetEndpoints(self) -> tuple:
@@ -27,7 +27,6 @@ _HandlerInstance: Handler | None = None
 
 
 def GetHandler() -> Handler:
-
     if _HandlerInstance is None:
         raise Exception("Driver Handler not created. Please Create")
 

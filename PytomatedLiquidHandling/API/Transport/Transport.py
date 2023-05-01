@@ -12,7 +12,6 @@ def Transport(
     DestinationLayoutItemInstance: LayoutItem,
     RunType: RunTypes,
 ):
-
     ResourceLockTrackerInstance: ResourceLockTracker = (
         GetAPIHandler().ResourceLockTrackerInstance  # type:ignore
     )
@@ -24,7 +23,6 @@ def Transport(
         )
         is None
     ):
-
         HandlerInstance = GetHandler()
         DeckLocationTrackerInstance = (
             HandlerInstance.HALLayerInstance.DeckLocationTrackerInstance
@@ -49,7 +47,6 @@ def Transport(
                 DeckLocationTransportDeviceInstance in SupportedTransportDevicesList
                 for DeckLocationTransportDeviceInstance in DeckLocationTransportDeviceInstances
             ):
-
                 LayoutItemInstancePathway.append(SourceLayoutItemInstance)
                 LayoutItemInstancePathway.append(
                     GetLayoutItem(
@@ -88,13 +85,13 @@ def Transport(
 
         if RunType is RunTypes.Run:
             if ResourceLockTrackerInstance.IsTracked(
-                SourceLayoutItemInstance.DeckLocationInstance.GetName()
+                SourceLayoutItemInstance.DeckLocationInstance.GetUniqueIdentifier()
             ):
                 raise Exception(
                     "Source Deck location is locked. Transport cannot occur. This should not happen."
                 )
             if ResourceLockTrackerInstance.IsTracked(
-                DestinationLayoutItemInstance.DeckLocationInstance.GetName()
+                DestinationLayoutItemInstance.DeckLocationInstance.GetUniqueIdentifier()
             ):
                 raise Exception(
                     "Destination Deck location is locked. Transport cannot occur. This should not happen."

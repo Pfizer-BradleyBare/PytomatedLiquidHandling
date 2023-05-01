@@ -10,7 +10,6 @@ from .Tools.GetModuleName import GetModuleName
 
 def ExpectedResponseProperty(DecoratedFunction):
     def inner(*args, **kwargs):
-
         if not args[0].ResponseEvent.is_set():
             raise Exception("Response not set yet. Must run command")
 
@@ -31,8 +30,8 @@ def ClassDecorator_Command(__file__: str):
 class Command(NonUniqueObjectABC):
     ClassFilePath: str
 
-    def __init__(self, CustomErrorHandling: bool, Name: str):
-        self.Name: str = Name
+    def __init__(self, CustomErrorHandling: bool, UniqueIdentifier: str):
+        self.UniqueIdentifier: str = UniqueIdentifier
 
         self.CustomErrorHandling: bool = CustomErrorHandling
 
@@ -45,8 +44,8 @@ class Command(NonUniqueObjectABC):
         self.ResponseMessage: str
         self.ResponseProperties: dict[str, any]  # type:ignore
 
-    def GetName(self) -> str:
-        return self.Name
+    def GetUniqueIdentifier(self) -> str:
+        return self.UniqueIdentifier
 
     def GetModuleName(self) -> str:
         return self.ModuleName
@@ -60,7 +59,7 @@ class Command(NonUniqueObjectABC):
             + " -> "
             + self.GetCommandName()
             + ": "
-            + self.GetName()
+            + self.GetUniqueIdentifier()
         )
 
     def GetExpectedResponseProperties(self) -> list[str]:
@@ -84,7 +83,6 @@ class Command(NonUniqueObjectABC):
         CommandTrackerInstance.ManualUnload(self)
 
         if TimeoutFlag is True:  # This means it did not timeout
-
             HandlerInstance.GetLogger().info("%s execution complete.", self.GetID())
 
             if self.CustomErrorHandling is not False:

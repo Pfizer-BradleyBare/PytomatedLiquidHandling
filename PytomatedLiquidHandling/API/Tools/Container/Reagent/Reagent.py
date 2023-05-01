@@ -13,7 +13,7 @@ from .ReagentProperty import (
 class Reagent(Container):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         Volatility: VolatilityReagentProperty,
         Viscosity: ViscosityReagentProperty,
         Homogeneity: HomogeneityReagentProperty,

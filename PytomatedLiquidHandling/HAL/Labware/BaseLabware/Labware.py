@@ -5,13 +5,13 @@ from .Dimensions.Dimensions import Dimensions
 class Labware(UniqueObjectABC):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         Filters: list[str],
         DimensionsInstance: Dimensions,
     ):
-        self.Name: str = Name
+        self.UniqueIdentifier: str = UniqueIdentifier
         self.Filters: list[str] = Filters
         self.DimensionsInstance: Dimensions = DimensionsInstance
 
-    def GetName(self) -> str:
-        return self.Name
+    def GetUniqueIdentifier(self) -> str:
+        return self.UniqueIdentifier

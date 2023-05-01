@@ -6,5 +6,5 @@ class WellEquation(UniqueObjectABC):
         self.Height = SegmentHeight
         self.Equation = SegmentEquation
 
-    def GetName(self) -> float:
+    def GetUniqueIdentifier(self) -> float:
         return self.Height

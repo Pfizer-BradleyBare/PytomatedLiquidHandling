@@ -15,31 +15,26 @@ class NonUniqueObjectTrackerABC(Generic[T]):
         self.ThreadLock: Lock = Lock()
 
     def ManualLoad(self, ObjectABCInstance: T) -> None:
-
         self.Collection.append(ObjectABCInstance)
 
     def ManualUnload(self, ObjectABCInstance: T) -> None:
-
         self.Collection.remove(ObjectABCInstance)
 
     def GetNumObjects(self) -> int:
-
         Length = len(self.Collection)
 
         return Length
 
     def GetObjectsAsList(self) -> list[T]:
-
         List = self.Collection
 
         return List
 
-    def GetObjectsByName(self, Name: str | int) -> list[T]:
-
+    def GetObjectsByName(self, UniqueIdentifier: str | int) -> list[T]:
         Objects = list()
 
         for Object in self.Collection:
-            if Object.GetName() == Name:
+            if Object.GetUniqueIdentifier() == UniqueIdentifier:
                 Objects.append(Object)
 
         return Objects

@@ -4,7 +4,7 @@ from .BaseLabware import Dimensions, Labware, Wells
 class PipettableLabware(Labware):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         Filters: list[str],
         DimensionsInstance: Dimensions,
         LabwareWells: Wells,
@@ -12,8 +12,8 @@ class PipettableLabware(Labware):
         Labware.__init__(self, Name, Filters, DimensionsInstance)
         self.LabwareWells: Wells = LabwareWells
 
-    def GetName(self) -> str:
-        return self.Name
+    def GetUniqueIdentifier(self) -> str:
+        return self.UniqueIdentifier
 
     def GetWellHeightFromVolume(self, Volume: float) -> float:
         CalculatedHeight = 0.0
@@ -49,7 +49,6 @@ class PipettableLabware(Labware):
         return CalculatedHeight
 
     def GetWellVolumeFromHeight(self, Height: float) -> float:
-
         WellsEquations = (
             self.LabwareWells.WellEquationTrackerInstance.GetObjectsAsList()
         )

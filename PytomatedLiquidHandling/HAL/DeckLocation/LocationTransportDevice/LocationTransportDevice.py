@@ -14,5 +14,5 @@ class LocationTransportDevice(UniqueObjectABC):
             raise Exception("Keys are missing from device config. Please fix.")
         # Confirm expected keys are in ExtraConfig
 
-    def GetName(self) -> str:
-        return self.TransportDeviceInstance.GetName()
+    def GetUniqueIdentifier(self) -> str:
+        return self.TransportDeviceInstance.GetUniqueIdentifier()

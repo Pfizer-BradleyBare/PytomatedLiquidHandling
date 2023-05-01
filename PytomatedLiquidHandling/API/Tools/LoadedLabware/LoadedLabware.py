@@ -8,16 +8,18 @@ class LoadedLabware(NonUniqueObjectABC):
         self,
         LayoutItemGroupingInstance: LayoutItemGrouping,
         StartingWellVolumes: tuple[float],
-        AppendedName: str | None = None,
+        AppendedUniqueIdentifier: str | None = None,
     ):
         LabwareInstance = (
             LayoutItemGroupingInstance.PlateLayoutItemInstance.LabwareInstance
         )
 
         if AppendedName is None:
-            self.Name: str = LabwareInstance.GetName()
+            self.UniqueIdentifier: str = LabwareInstance.GetUniqueIdentifier()
         else:
-            self.Name: str = LabwareInstance.GetName() + " " + AppendedName
+            self.UniqueIdentifier: str = (
+                LabwareInstance.GetUniqueIdentifier() + " " + AppendedName
+            )
 
         self.LayoutItemGroupingInstance: LayoutItemGrouping = LayoutItemGroupingInstance
         self.WellTrackerInstance = WellTracker()
@@ -39,8 +41,8 @@ class LoadedLabware(NonUniqueObjectABC):
             )
         # Create the wells for this loaded labware
 
-    def GetName(self) -> str:
-        return self.Name
+    def GetUniqueIdentifier(self) -> str:
+        return self.UniqueIdentifier
 
     def GetLayoutItemGrouping(self) -> LayoutItemGrouping:
         return self.LayoutItemGroupingInstance

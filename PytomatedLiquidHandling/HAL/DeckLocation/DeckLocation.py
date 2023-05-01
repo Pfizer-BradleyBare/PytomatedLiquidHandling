@@ -8,13 +8,13 @@ from .LocationTransportDevice.LocationTransportDeviceTracker import (
 class DeckLocation(UniqueObjectABC):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         SupportedLocationTransportDeviceTrackerInstance: LocationTransportDeviceTracker,
         DeckLoadingConfigInstance: DeckLoadingConfig | None,
         IsStorageLocation: bool,
         IsPipettableLocation: bool,
     ):
-        self.Name: str = Name
+        self.UniqueIdentifier: str = UniqueIdentifier
         self.SupportedLocationTransportDeviceTrackerInstance: LocationTransportDeviceTracker = (
             SupportedLocationTransportDeviceTrackerInstance
         )
@@ -24,8 +24,8 @@ class DeckLocation(UniqueObjectABC):
         self.StorageLocation: bool = IsStorageLocation
         self.PipettableLocation: bool = IsPipettableLocation
 
-    def GetName(self) -> str:
-        return self.Name
+    def GetUniqueIdentifier(self) -> str:
+        return self.UniqueIdentifier
 
     def IsStorageLocation(self) -> bool:
         return self.StorageLocation

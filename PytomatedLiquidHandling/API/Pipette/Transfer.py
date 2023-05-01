@@ -13,7 +13,6 @@ from .Options.TransferOptionsTracker import TransferOptionsTracker
 
 
 def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: RunTypes):
-
     HandlerInstance = GetHandler()
     LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance
     HALLayerInstance = HandlerInstance.HALLayerInstance
@@ -22,7 +21,6 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
     DestinationLiquidClassCategories = list()
 
     for TransferOptions in TransferOptionsTrackerInstance.GetObjectsAsList():
-
         Volume = TransferOptions.TransferVolume
         SourceContainerInstance = TransferOptions.SourceContainerInstance
         SourceWellNumber = TransferOptions.SourceWellPosition
@@ -30,7 +28,9 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
         DestinationWellNumber = TransferOptions.DestinationWellPosition
 
         SourceLiquidClassCategories.append(
-            SourceContainerInstance.GetLiquidClassCategory(SourceWellNumber).GetName()
+            SourceContainerInstance.GetLiquidClassCategory(
+                SourceWellNumber
+            ).GetUniqueIdentifier()
         )
         # Get the source liquid class before removing liquid. Becuase that is how it works in real life. Aspirate
 
@@ -42,7 +42,7 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
         DestinationLiquidClassCategories.append(
             DestinationContainerInstance.GetLiquidClassCategory(
                 DestinationWellNumber
-            ).GetName()
+            ).GetUniqueIdentifier()
         )
         # Get the destination liquid class after adding liquid. Becuase that is how it works in real life. DIspense
 
@@ -63,7 +63,6 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
     for SourceContainerInstance, DestinationContainerInstance in zip(
         SourceContainerInstances, DestinationContainerInstances
     ):
-
         SourceLoadedLabwareTrackerInstances.append(
             LoadedLabwareTrackerInstance.GetLabwareAssignments(SourceContainerInstance)
         )
@@ -145,7 +144,9 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
                 )
                 is True
             ):
-                SourceLoadedLabwarePhysicalWells.append(LoadedLabwareWell.GetName())
+                SourceLoadedLabwarePhysicalWells.append(
+                    LoadedLabwareWell.GetUniqueIdentifier()
+                )
                 break
 
         for (
@@ -160,7 +161,7 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
                 is True
             ):
                 DestinationLoadedLabwarePhysicalWells.append(
-                    LoadedLabwareWell.GetName()
+                    LoadedLabwareWell.GetUniqueIdentifier()
                 )
     # figure out the wells
 
@@ -251,10 +252,9 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
         for (
             HALTransferOptionsInstance
         ) in HALTransferOptionsTrackerInstance.GetObjectsAsList():
-
             Item = HALTransferOptionsInstance.SourceLayoutItemInstance
             if ClosedContainerInstance.SupportedLabwareTrackerInstance.IsTracked(
-                Item.LabwareInstance.GetName()
+                Item.LabwareInstance.GetUniqueIdentifier()
             ):
                 OpenList.append(Item)
                 OpenPositionsList.append(HALTransferOptionsInstance.SourcePosition)
@@ -272,10 +272,9 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
         for (
             HALTransferOptionsInstance
         ) in HALTransferOptionsTrackerInstance.GetObjectsAsList():
-
             Item = HALTransferOptionsInstance.SourceLayoutItemInstance
             if ClosedContainerInstance.SupportedLabwareTrackerInstance.IsTracked(
-                Item.LabwareInstance.GetName()
+                Item.LabwareInstance.GetUniqueIdentifier()
             ):
                 CloseList.append(Item)
                 ClosePositionsList.append(HALTransferOptionsInstance.SourcePosition)

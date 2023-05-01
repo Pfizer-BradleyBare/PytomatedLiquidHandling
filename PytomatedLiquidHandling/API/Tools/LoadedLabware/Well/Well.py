@@ -6,5 +6,5 @@ class Well(UniqueObjectABC):
         self.WellNumber: int = WellNumber
         self.Volume: float = Volume
 
-    def GetName(self) -> int:
+    def GetUniqueIdentifier(self) -> int:
         return self.WellNumber

@@ -6,7 +6,7 @@ from .BaseTempControlDevice import TempControlDevice, TempLimits
 class HamiltonHeaterShaker(TempControlDevice):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         ComPort: str,
         TempLimitsInstance: TempLimits,
         LayoutItemTrackerInstance: LayoutItemTracker,
@@ -24,7 +24,6 @@ class HamiltonHeaterShaker(TempControlDevice):
     def Initialize(
         self,
     ):
-
         try:
             Command = HeaterShakerDriver.Connect.Command(
                 ConnectOptions(self.ComPort),  # type:ignore
@@ -54,7 +53,6 @@ class HamiltonHeaterShaker(TempControlDevice):
     def Deinitialize(
         self,
     ):
-
         try:
             HeaterShakerDriver.StopTemperatureControl.Command(
                 HeaterShakerDriver.StopTemperatureControl.Options(self.HandleID),
@@ -81,7 +79,6 @@ class HamiltonHeaterShaker(TempControlDevice):
         self,
         Temperature: float,
     ):
-
         try:
             HeaterShakerDriver.StartTemperatureControl.Command(
                 HeaterShakerDriver.StartTemperatureControl.Options(
@@ -110,7 +107,6 @@ class HamiltonHeaterShaker(TempControlDevice):
         self,
         RPM: int,
     ):
-
         try:
             HeaterShakerDriver.SetPlateLock.Command(
                 HeaterShakerDriver.SetPlateLock.Options(self.HandleID, 1), True
@@ -129,7 +125,6 @@ class HamiltonHeaterShaker(TempControlDevice):
     def StopShaking(
         self,
     ):
-
         try:
             HeaterShakerDriver.StopShakeControl.Command(
                 HeaterShakerDriver.StopShakeControl.Options(self.HandleID), True
@@ -147,7 +142,6 @@ class HamiltonHeaterShaker(TempControlDevice):
     def UpdateCurrentShakingSpeed(
         self,
     ):
-
         try:
             Command = HeaterShakerDriver.GetShakingSpeed.Command(
                 HeaterShakerDriver.GetShakingSpeed.Options(self.HandleID), True

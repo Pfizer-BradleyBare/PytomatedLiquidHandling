@@ -148,7 +148,7 @@ class Pipette8Channel(Pipette):
         for (
             PipetteTipInstance
         ) in self.SupportedPipetteTipTrackerInstance.GetObjectsAsList():
-            TipTransferCategories[PipetteTipInstance.GetName()] = list()
+            TipTransferCategories[PipetteTipInstance.GetUniqueIdentifier()] = list()
 
         for (
             TransferOptionsInstance
@@ -191,7 +191,6 @@ class Pipette8Channel(Pipette):
             Counter = 0
 
             while Counter < NumTransferOptions:
-
                 PickupOptionsTrackerInstance = (
                     Pipette8ChannelDriver.Pickup.OptionsTracker()
                 )
@@ -372,7 +371,7 @@ class Pipette8Channel(Pipette):
                         PipettingChannel,
                         SourceLayoutItemInstance.Sequence,
                         SourcePosition,
-                        SelectedSourceLiquidClass.GetName(),
+                        SelectedSourceLiquidClass.GetUniqueIdentifier(),
                         TransferVolume,
                     )
                     # TODO Configure Options Further
@@ -383,7 +382,7 @@ class Pipette8Channel(Pipette):
                         PipettingChannel,
                         SourceLayoutItemInstance.Sequence,
                         SourcePosition,
-                        SelectedDestinationLiquidClass.GetName(),
+                        SelectedDestinationLiquidClass.GetUniqueIdentifier(),
                         TransferVolume,
                     )
                     # TODO Configure Options Further

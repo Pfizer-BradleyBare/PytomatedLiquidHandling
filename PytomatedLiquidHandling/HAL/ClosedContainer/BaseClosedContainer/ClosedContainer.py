@@ -12,15 +12,15 @@ class ClosedContainerTypes(Enum):
 class ClosedContainer(UniqueObjectABC, ClosedContainerInterface):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         ToolSequence: str,
         SupportedLabwareTrackerInstance: LabwareTracker,
     ):
-        self.Name: str = Name
+        self.UniqueIdentifier: str = UniqueIdentifier
         self.ToolSequence: str = ToolSequence
         self.SupportedLabwareTrackerInstance: LabwareTracker = (
             SupportedLabwareTrackerInstance
         )
 
-    def GetName(self) -> str:
-        return self.Name
+    def GetUniqueIdentifier(self) -> str:
+        return self.UniqueIdentifier

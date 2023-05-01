@@ -14,13 +14,13 @@ class DeviceTypes(Enum):
 class TempControlDevice(UniqueObjectABC, TempControlDeviceInterface):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         ComPort: str | int,
         ShakingSupported: bool,
         TempLimitsInstance: TempLimits,
         SupportedLayoutItemTrackerInstance: LayoutItemTracker,
     ):
-        self.Name: str = Name
+        self.UniqueIdentifier: str = UniqueIdentifier
         self.ComPort: str | int = ComPort
         self.ShakingSupported: bool = ShakingSupported
         self.TempLimitsInstance: TempLimits = TempLimitsInstance
@@ -28,5 +28,5 @@ class TempControlDevice(UniqueObjectABC, TempControlDeviceInterface):
             SupportedLayoutItemTrackerInstance
         )
 
-    def GetName(self) -> str:
-        return self.Name
+    def GetUniqueIdentifier(self) -> str:
+        return self.UniqueIdentifier

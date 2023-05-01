@@ -6,20 +6,20 @@ from ..Pipette import PipettingDevice
 class MagneticRack(UniqueObjectABC):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         Enabled: bool,
         LayoutItems: list[LayoutItem],
         AspiratePipettingDevices: list[PipettingDevice],
         DispensePipettingDevices: list[PipettingDevice],
     ):
-        self.Name: str = Name
+        self.UniqueIdentifier: str = UniqueIdentifier
         self.Enabled: bool = Enabled
         self.LayoutItems: list[LayoutItem] = LayoutItems
         self.AspiratePipettingDevices: list[PipettingDevice] = AspiratePipettingDevices
         self.DispensePipettingDevices: list[PipettingDevice] = DispensePipettingDevices
 
-    def GetName(self) -> str:
-        return self.Name
+    def GetUniqueIdentifier(self) -> str:
+        return self.UniqueIdentifier
 
     def GetEnabledState(self) -> bool:
         return self.Enabled

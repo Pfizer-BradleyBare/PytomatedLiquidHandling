@@ -7,13 +7,13 @@ from .BaseClosedContainer.ClosedContainer import ClosedContainer, ClosedContaine
 class HamiltonFlipTube(ClosedContainer):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         ToolSequence: str,
         SupportedLabwareTrackerInstance: LabwareTracker,
     ):
         ClosedContainer.__init__(
             self,
-            Name,
+            UniqueIdentifier,
             ToolSequence,
             SupportedLabwareTrackerInstance,
         )

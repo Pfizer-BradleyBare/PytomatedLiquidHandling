@@ -20,5 +20,5 @@ class PipetteTip(UniqueObjectABC):
         self.ReuseDropoffSequence: str = ReuseDropoffSequence
         self.WasteSequence: str = WasteSequence
 
-    def GetName(self) -> str:
-        return self.TipInstance.GetName()
+    def GetUniqueIdentifier(self) -> str:
+        return self.TipInstance.GetUniqueIdentifier()

@@ -7,8 +7,8 @@ class WellSolution(UniqueObjectABC):
         self.ReagentInstance: Reagent = ReagentInstance
         self.Volume: float = Volume
 
-    def GetName(self) -> str:
-        return self.ReagentInstance.GetName()
+    def GetUniqueIdentifier(self) -> str:
+        return self.ReagentInstance.GetUniqueIdentifier()
 
     def GetReagent(self) -> Reagent:
         return self.ReagentInstance

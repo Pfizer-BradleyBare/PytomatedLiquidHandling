@@ -13,7 +13,7 @@ class Options(NonUniqueObjectABC):
         self.b = e
         self.c = f
 
-    def GetName(self):
+    def GetUniqueIdentifier(self):
         return self.a
 
 
@@ -34,7 +34,6 @@ class Command(MultiOptionsCommand[OptionsTracker]):
 
 
 def test():
-
     OptionsTrackerInstance = OptionsTracker()
 
     OptionsTrackerInstance.ManualLoad(Options("T1", 1, 2))

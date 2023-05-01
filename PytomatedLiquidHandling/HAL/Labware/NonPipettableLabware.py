@@ -4,7 +4,7 @@ from .BaseLabware import Dimensions, Labware
 class NonPipettableLabware(Labware):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         Filters: list[str],
         DimensionsInstance: Dimensions,
     ):

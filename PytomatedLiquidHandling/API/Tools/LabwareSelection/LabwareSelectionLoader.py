@@ -31,7 +31,6 @@ def Load(
     )
 
     for ContainerInstance in ContainerInstances:
-
         Volume = ContainerInstance.GetVolume()
 
         SymbolicLabwareFilters = ContainerInstance.GetFilter()
@@ -54,7 +53,6 @@ def Load(
             HALPipettableLabwareInstances,
             key=lambda x: x.LabwareWells.MaxVolume,  # type:ignore
         ):
-
             if not any(
                 Filter in SymbolicLabwareFilters for Filter in LabwareInstance.Filters
             ):
@@ -74,7 +72,6 @@ def Load(
             PreferredLabwareTrackerInstance.GetNumObjects() == 0
             and "No Preference" in SymbolicLabwareFilters
         ):
-
             PreferredLabwareTrackerInstance.ManualLoad(
                 sorted(
                     HALPipettableLabwareInstances,
@@ -93,13 +90,14 @@ def Load(
             ):
                 continue
 
-            if not PreferredLabwareTrackerInstance.IsTracked(LabwareInstance.GetName()):
+            if not PreferredLabwareTrackerInstance.IsTracked(
+                LabwareInstance.GetUniqueIdentifier()
+            ):
                 PreferredLabwareTrackerInstance.ManualLoad(LabwareInstance)
             break
         # This is the labware the user prefers if they prefer one
 
         if PreferredLabwareTrackerInstance.GetNumObjects() != 0:
-
             FirstItem = PreferredLabwareTrackerInstance.GetObjectsAsList()[0]
             PreferredLabwareTrackerInstance.ManualUnload(FirstItem)
             PreferredLabwareTrackerInstance.ManualLoad(FirstItem)

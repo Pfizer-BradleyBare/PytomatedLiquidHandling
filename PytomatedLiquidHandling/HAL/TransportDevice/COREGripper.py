@@ -33,7 +33,6 @@ class COREGripper(TransportDevice):
         SourceLayoutItem: LayoutItem,
         DestinationLayoutItem: LayoutItem,
     ):
-
         if not SourceLayoutItem.DeckLocationInstance.SupportedLocationTransportDeviceTrackerInstance.IsTracked(
             type(self).__name__
         ):
@@ -52,21 +51,24 @@ class COREGripper(TransportDevice):
         SourceLabwareInstance = SourceLayoutItem.LabwareInstance
         DestinationLabwareInstance = DestinationLayoutItem.LabwareInstance
 
-        if SourceLabwareInstance.GetName() != DestinationLabwareInstance.GetName():
+        if (
+            SourceLabwareInstance.GetUniqueIdentifier()
+            != DestinationLabwareInstance.GetUniqueIdentifier()
+        ):
             raise Exception(
                 "Your source and destination labware are not the same... How did this happen???"
             )
         # Check that the labware is the same for both source and destination
 
         if not self.TransportableLabwareTrackerInstance.IsTracked(
-            SourceLabwareInstance.GetName()
+            SourceLabwareInstance.GetUniqueIdentifier()
         ):
             raise Exception("The labware is not supported by this transport device")
         # Check that the transport device can move this labware
 
         SourceTransportableLabware = (
             self.TransportableLabwareTrackerInstance.GetObjectByName(
-                SourceLabwareInstance.GetName()
+                SourceLabwareInstance.GetUniqueIdentifier()
             )
         )
 
@@ -89,7 +91,6 @@ class COREGripper(TransportDevice):
             ...
 
         try:
-
             GripperDriver.PlacePlate.Command(
                 GripperDriver.PlacePlate.Options(
                     DestinationLayoutItem.Sequence,

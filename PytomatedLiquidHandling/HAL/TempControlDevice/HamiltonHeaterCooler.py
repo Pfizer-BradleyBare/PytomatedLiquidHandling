@@ -6,7 +6,7 @@ from .BaseTempControlDevice import TempControlDevice, TempLimits
 class HamiltonHeaterCooler(TempControlDevice):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         ComPort: str,
         TempLimitsInstance: TempLimits,
         LayoutItemTrackerInstance: LayoutItemTracker,
@@ -24,7 +24,6 @@ class HamiltonHeaterCooler(TempControlDevice):
     def Initialize(
         self,
     ):
-
         try:
             Command = HeaterCoolerDriver.Connect.Command(
                 ConnectOptions(self.ComPort),  # type:ignore
@@ -40,7 +39,6 @@ class HamiltonHeaterCooler(TempControlDevice):
     def Deinitialize(
         self,
     ):
-
         try:
             HeaterCoolerDriver.StopTemperatureControl.Command(
                 HeaterCoolerDriver.StopTemperatureControl.Options(self.HandleID),
@@ -53,7 +51,6 @@ class HamiltonHeaterCooler(TempControlDevice):
         self,
         Temperature: float,
     ):
-
         try:
             HeaterCoolerDriver.StartTemperatureControl.Command(
                 HeaterCoolerDriver.StartTemperatureControl.Options(
@@ -67,7 +64,6 @@ class HamiltonHeaterCooler(TempControlDevice):
     def UpdateCurrentTemperature(
         self,
     ):
-
         try:
             Command = HeaterCoolerDriver.GetTemperature.Command(
                 HeaterCoolerDriver.GetTemperature.Options(self.HandleID), True
@@ -83,7 +79,6 @@ class HamiltonHeaterCooler(TempControlDevice):
         self,
         RPM: float,
     ):
-
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )

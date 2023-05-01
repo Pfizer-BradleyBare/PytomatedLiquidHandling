@@ -12,5 +12,5 @@ class TransportableLabware(UniqueObjectABC):
             TransportParametersInstance
         )
 
-    def GetName(self) -> str:
-        return self.LabwareInstance.GetName()
+    def GetUniqueIdentifier(self) -> str:
+        return self.LabwareInstance.GetUniqueIdentifier()

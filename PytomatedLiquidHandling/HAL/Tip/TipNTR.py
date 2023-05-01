@@ -5,7 +5,7 @@ from .BaseTip import Tip, TipTypes
 class TipNTR(Tip):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         PickupSequence: str,
         NTRWasteSequence: str,
         GripperSequence: str,
@@ -20,7 +20,6 @@ class TipNTR(Tip):
     def Initialize(
         self,
     ):
-
         self.Reload()
 
     def Deinitialize(
@@ -31,7 +30,6 @@ class TipNTR(Tip):
     def Reload(
         self,
     ):
-
         try:
             NTRDriver.LoadTips.Command(
                 NTRDriver.LoadTips.Options(
@@ -51,7 +49,6 @@ class TipNTR(Tip):
         self,
         NumTips: int,
     ):
-
         try:
             Command = NTRDriver.TipsAvailable.Command(
                 NTRDriver.TipsAvailable.Options(
@@ -73,7 +70,6 @@ class TipNTR(Tip):
     def UpdateRemainingTips(
         self,
     ):
-
         try:
             Command = NTRDriver.TipsRemaining.Command(
                 NTRDriver.TipsRemaining.Options(

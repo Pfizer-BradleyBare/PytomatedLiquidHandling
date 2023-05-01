@@ -8,9 +8,12 @@ T = TypeVar("T", bound="NonUniqueObjectABC")
 
 class SingleOptionsCommand(Command, Generic[T]):
     def __init__(
-        self, OptionsInstance: T, CustomErrorHandling: bool, Name: str = "No Name"
+        self,
+        OptionsInstance: T,
+        CustomErrorHandling: bool,
+        UniqueIdentifier: str = "None",
     ):
-        Command.__init__(self, CustomErrorHandling, Name)
+        Command.__init__(self, CustomErrorHandling, UniqueIdentifier)
         self.OptionsInstance: T = OptionsInstance
 
     def GetCommandParameters(self) -> dict[str, any]:  # type:ignore

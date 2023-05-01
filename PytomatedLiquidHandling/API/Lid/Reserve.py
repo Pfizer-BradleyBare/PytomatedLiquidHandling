@@ -5,7 +5,6 @@ from ..Tools.RunTypes import RunTypes
 
 
 def Reserve(ContainerInstance: Container, RunType: RunTypes) -> Lid | None:
-
     HandlerInstance = GetHandler()
     LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance
     ResourceLockTrackerInstance = HandlerInstance.ResourceLockTrackerInstance
@@ -29,10 +28,12 @@ def Reserve(ContainerInstance: Container, RunType: RunTypes) -> Lid | None:
         Lid
         for Lid in HALLayerInstance.LidTrackerInstance.GetObjectsAsList()
         if (
-            not ResourceLockTrackerInstance.IsTracked(Lid.GetName())
+            not ResourceLockTrackerInstance.IsTracked(Lid.GetUniqueIdentifier())
             or not RunType is RunTypes.Run
         )
-        and Lid.SupportedLabwareTrackerInstance.IsTracked(LabwareInstance.GetName())
+        and Lid.SupportedLabwareTrackerInstance.IsTracked(
+            LabwareInstance.GetUniqueIdentifier()
+        )
     ]
     # This is a big one. Not as complex as it looks:
     # 1. The Lid must not be tracked

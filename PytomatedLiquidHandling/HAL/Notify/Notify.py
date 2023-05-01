@@ -14,7 +14,7 @@ class Notify(UniqueObjectABC):
     def GetNotificationType(self) -> NotificationTypes:
         return self.NotificationType
 
-    def GetName(self) -> str:
+    def GetUniqueIdentifier(self) -> str:
         return self.GetNotificationType().value
 
 

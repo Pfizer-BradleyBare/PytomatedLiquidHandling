@@ -12,9 +12,9 @@ class MultiOptionsCommand(Command, Generic[T]):
         self,
         OptionsTrackerInstance: T,
         CustomErrorHandling: bool,
-        Name: str = "No Name",
+        UniqueIdentifier: str = "None",
     ):
-        Command.__init__(self, CustomErrorHandling, Name)
+        Command.__init__(self, CustomErrorHandling, UniqueIdentifier)
         self.OptionsTrackerInstance: T = OptionsTrackerInstance
 
     def GetCommandParameters(self) -> dict[str, any]:  # type:ignore

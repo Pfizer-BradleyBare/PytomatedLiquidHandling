@@ -16,7 +16,7 @@ class Handler(ServerHandlerABC):
         except:
             DriverHandler(LoggerInstance)
 
-    def GetName(self) -> str:
+    def GetUniqueIdentifier(self) -> str:
         return "HAL"
 
     def GetEndpoints(self) -> tuple:
@@ -31,7 +31,6 @@ _HandlerInstance: Handler | None = None
 
 
 def GetHandler() -> Handler:
-
     if _HandlerInstance is None:
         raise Exception("Driver Handler not created. Please Create")
 

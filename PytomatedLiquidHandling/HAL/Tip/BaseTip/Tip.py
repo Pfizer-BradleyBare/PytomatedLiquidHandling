@@ -13,15 +13,15 @@ class TipTypes(Enum):
 class Tip(UniqueObjectABC, TipInterface):
     def __init__(
         self,
-        Name: str,
+        UniqueIdentifier: str,
         PickupSequence: str,
         Type: TipTypes,
         MaxVolume: float,
     ):
-        self.Name: str = Name
+        self.UniqueIdentifier: str = UniqueIdentifier
         self.PickupSequence: str = PickupSequence
         self.Type: TipTypes = Type
         self.MaxVolume: float = MaxVolume
 
-    def GetName(self) -> str:
-        return self.Name
+    def GetUniqueIdentifier(self) -> str:
+        return self.UniqueIdentifier

@@ -20,7 +20,7 @@ class LiquidClassCategory(UniqueObjectABC):
         self.Homogeneity: HomogeneityReagentProperty = Homogeneity
         self.LLD: LLDReagentProperty = LLD
 
-    def GetName(self) -> str:
+    def GetUniqueIdentifier(self) -> str:
         return (
             "Volatility"
             + self.Volatility.name

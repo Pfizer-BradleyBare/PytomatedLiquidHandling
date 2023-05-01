@@ -10,7 +10,6 @@ def Reserve(
     ShakingSpeed: int,
     RunType: RunTypes,
 ) -> TempControlDevice | None:
-
     HandlerInstance = GetHandler()
     ResourceLockTrackerInstance = HandlerInstance.ResourceLockTrackerInstance
     LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance
@@ -41,7 +40,7 @@ def Reserve(
         Device
         for Device in TempControlDeviceTrackerInstance.GetObjectsAsList()
         if (
-            not ResourceLockTrackerInstance.IsTracked(Device.GetName())
+            not ResourceLockTrackerInstance.IsTracked(Device.GetUniqueIdentifier())
             or not RunType is RunTypes.Run
         )
         and Device.ShakingSupported >= RequiresShaking

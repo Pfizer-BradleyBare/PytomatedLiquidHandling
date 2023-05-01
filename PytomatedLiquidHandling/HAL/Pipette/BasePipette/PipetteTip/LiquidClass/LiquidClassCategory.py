@@ -3,9 +3,9 @@ from .LiquidClass import LiquidClass
 
 
 class LiquidClassCategory(UniqueObjectTrackerABC[LiquidClass], UniqueObjectABC):
-    def __init__(self, Name: str):
+    def __init__(self, UniqueIdentifier: str):
         UniqueObjectTrackerABC.__init__(self)
-        self.Name: str = Name
+        self.UniqueIdentifier: str = UniqueIdentifier
 
-    def GetName(self) -> str:
-        return self.Name
+    def GetUniqueIdentifier(self) -> str:
+        return self.UniqueIdentifier

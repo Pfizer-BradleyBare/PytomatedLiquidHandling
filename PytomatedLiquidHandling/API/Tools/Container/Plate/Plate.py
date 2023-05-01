@@ -14,7 +14,7 @@ from .Well.WellTracker import WellTracker
 
 
 class Plate(Container):
-    def __init__(self, Name: str, Filter: str):
+    def __init__(self, UniqueIdentifier: str, Filter: str):
         Container.__init__(self, Name, Filter)
 
         # What solutions and volume is in each well
@@ -114,7 +114,6 @@ class Plate(Container):
         return LiquidClassCategory(Volatility, Viscosity, Homogeneity, LLD)
 
     def Aspirate(self, WellNumber: int, Volume: float) -> WellSolutionTracker:
-
         if not self.GetWellTracker().IsTracked(WellNumber):
             self.GetWellTracker().ManualLoad(Well(WellNumber))
         # If it doesn't exist then lets add it
@@ -140,7 +139,6 @@ class Plate(Container):
         for (
             WellSolutionInstance
         ) in SourceWellSolutionTrackerInstance.GetObjectsAsList():
-
             OriginalVolume = WellSolutionInstance.GetVolume()
             RemovedVolume = OriginalVolume * (OriginalVolume / WellVolume)
             NewVolume = OriginalVolume - RemovedVolume
@@ -171,11 +169,11 @@ class Plate(Container):
 
         for WellSolutionInstance in WellSolutionTrackerInstance.GetObjectsAsList():
             if DestinationWellSolutionTrackerInstance.IsTracked(
-                WellSolutionInstance.GetName()
+                WellSolutionInstance.GetUniqueIdentifier()
             ):
                 TrackedWellSolutionInstance = (
                     DestinationWellSolutionTrackerInstance.GetObjectByName(
-                        WellSolutionInstance.GetName()
+                        WellSolutionInstance.GetUniqueIdentifier()
                     )
                 )
 

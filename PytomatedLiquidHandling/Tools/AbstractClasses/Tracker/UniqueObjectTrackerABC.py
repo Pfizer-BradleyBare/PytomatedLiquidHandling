@@ -15,57 +15,50 @@ class UniqueObjectTrackerABC(Generic[T]):
         self.ThreadLock: Lock = Lock()
 
     def ManualLoad(self, ObjectABCInstance: T) -> None:
-
-        Name = ObjectABCInstance.GetName()
+        Name = ObjectABCInstance.GetUniqueIdentifier()
 
         if self.IsTracked(Name) is True:
             raise Exception(
                 type(ObjectABCInstance).__name__
-                + " is already tracked. Name: "
+                + " is already tracked. UniqueIdentifier: "
                 + str(Name)
             )
 
         self.Collection[Name] = ObjectABCInstance
 
     def ManualUnload(self, ObjectABCInstance: T) -> None:
-
-        Name = ObjectABCInstance.GetName()
+        Name = ObjectABCInstance.GetUniqueIdentifier()
 
         if self.IsTracked(Name) is False:
             raise Exception(
                 type(ObjectABCInstance).__name__
-                + " is not yet tracked. Name: "
+                + " is not yet tracked. UniqueIdentifier: "
                 + str(Name)
             )
 
         del self.Collection[Name]
 
-    def IsTracked(self, Name: str | int) -> bool:
-
-        BoolTest = Name in self.Collection
+    def IsTracked(self, UniqueIdentifier: str | int) -> bool:
+        BoolTest = UniqueIdentifier in self.Collection
 
         return BoolTest
 
     def GetNumObjects(self) -> int:
-
         Length = len(self.Collection)
 
         return Length
 
     def GetObjectsAsList(self) -> list[T]:
-
         List = [self.Collection[Key] for Key in self.Collection]
 
         return List
 
     def GetObjectsAsDictionary(self) -> dict[str | int, T]:
-
         Dict = self.Collection
 
         return Dict
 
-    def GetObjectByName(self, Name: str | int) -> T:
-
+    def GetObjectByName(self, UniqueIdentifier: str | int) -> T:
         Object = self.Collection[Name]
 
         return Object

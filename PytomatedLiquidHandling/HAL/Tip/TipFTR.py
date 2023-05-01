@@ -3,13 +3,12 @@ from .BaseTip import Tip, TipTypes
 
 
 class TipFTR(Tip):
-    def __init__(self, Name: str, PickupSequence: str, MaxVolume: float):
+    def __init__(self, UniqueIdentifier: str, PickupSequence: str, MaxVolume: float):
         Tip.__init__(self, Name, PickupSequence, TipTypes.FTR, MaxVolume)
 
     def Initialize(
         self,
     ):
-
         self.Reload()
 
     def Deinitialize(
@@ -20,7 +19,6 @@ class TipFTR(Tip):
     def Reload(
         self,
     ):
-
         try:
             FTRDriver.LoadTips.Command(
                 FTRDriver.LoadTips.Options(self.PickupSequence), True
@@ -35,7 +33,6 @@ class TipFTR(Tip):
         self,
         NumTips: int,
     ):
-
         try:
             Command = FTRDriver.TipsAvailable.Command(
                 FTRDriver.TipsAvailable.Options(
@@ -55,7 +52,6 @@ class TipFTR(Tip):
     def UpdateRemainingTips(
         self,
     ):
-
         try:
             Command = FTRDriver.TipsRemaining.Command(
                 FTRDriver.TipsRemaining.Options(
