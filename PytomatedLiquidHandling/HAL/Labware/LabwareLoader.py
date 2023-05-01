@@ -13,6 +13,9 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
     # Get config file contents
 
     for Labware in ConfigFile:
+        if Labware["Enabled"] == False:
+            continue
+
         UniqueIdentifier = Labware["Unique Identifier"]
         LongSide = Labware["Dimensions"]["Long Side"]
         ShortSide = Labware["Dimensions"]["Short Side"]

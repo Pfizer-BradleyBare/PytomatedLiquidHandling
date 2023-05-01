@@ -18,6 +18,8 @@ def LoadYaml(
     # Get config file contents
 
     for LayoutItem in ConfigFile:
+        if LayoutItem["Enabled"] == False:
+            continue
         UniqueIdentifier = LayoutItem["Unique Identifier"]
         PlateSequence = LayoutItem["Plate Sequence"]
         PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(

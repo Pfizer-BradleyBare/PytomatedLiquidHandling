@@ -1,12 +1,14 @@
 
   #ENTRY
-  - Unique Identifier: Agilent Black Lid:
+  - Unique Identifier: Agilent Black Lid
+    Enabled: True
     Dimensions:
       Long Side: 127
       Short Side: 86
 
   #ENTRY
-  - Unique Identifier: 400uL Corning Costar 96 Well UV Plate:
+  - Unique Identifier: 400uL Corning Costar 96 Well UV Plate
+    Enabled: True
     Wells:
       Columns: 12
       Rows: 8
@@ -24,7 +26,8 @@
       Short Side: 86
 
   #ENTRY
-  - Unique Identifier: 200uL Biorad 96 Well PCR Plate:
+  - Unique Identifier: 200uL Biorad 96 Well PCR Plate
+    Enabled: True
     Wells:
       Columns: 12
       Rows: 8
@@ -42,7 +45,8 @@
       Short Side: 86
 
   #ENTRY
-  - Unique Identifier: 400uL Thermo 96 Well PCR Plate:
+  - Unique Identifier: 400uL Thermo 96 Well PCR Plate
+    Enabled: True
     Wells:
       Columns: 12
       Rows: 8
@@ -60,7 +64,8 @@
       Short Side: 86
 
   #ENTRY
-  - Unique Identifier: 1200uL DeepWell 96 Well PCR Plate:
+  - Unique Identifier: 1200uL DeepWell 96 Well PCR Plate
+    Enabled: True
     Wells:
       Columns: 12
       Rows: 8
@@ -78,7 +83,8 @@
       Short Side: 86
 
   #ENTRY
-  - Unique Identifier: 2000uL Corning 96 Well PCR Plate:
+  - Unique Identifier: 2000uL Corning 96 Well PCR Plate
+    Enabled: True
     Wells:
       Columns: 12
       Rows: 8
@@ -96,7 +102,8 @@
       Short Side: 86
 
   #ENTRY
-  - Unique Identifier: Hamilton 1.5mL FlipTube:
+  - Unique Identifier: Hamilton 1.5mL FlipTube
+    Enabled: True
     Wells:
       Columns: 1
       Rows: 32
@@ -114,7 +121,8 @@
       Short Side: 86
 
   #ENTRY
-  - Unique Identifier: 15mL Centrifuge Tube:
+  - Unique Identifier: 15mL Centrifuge Tube
+    Enabled: True
     Wells:
       Columns: 1
       Rows: 24
@@ -132,7 +140,8 @@
       Short Side: 86
 
   #ENTRY
-  - Unique Identifier: 60mL Reagent Reservior:
+  - Unique Identifier: 60mL Reagent Reservior
+    Enabled: True
     Wells:
       Columns: 1
       Rows: 5
@@ -150,7 +159,8 @@
       Short Side: 86
 
   #ENTRY
-  - Unique Identifier: 200mL Reagent Trough:
+  - Unique Identifier: 200mL Reagent Trough
+    Enabled: True
     Wells:
       Columns: 1
       Rows: 1

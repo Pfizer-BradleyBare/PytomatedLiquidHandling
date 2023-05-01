@@ -20,6 +20,9 @@ def LoadYaml(
     # Get config file contents
 
     for Location in ConfigFile:
+        if Location["Enabled"] == False:
+            continue
+
         UniqueIdentifier = Location["Unique Identifier"]
         IsStorageLocation = Location["Is Storage Location"]
         IsPipettableLocation = Location["Is Pipettable Location"]

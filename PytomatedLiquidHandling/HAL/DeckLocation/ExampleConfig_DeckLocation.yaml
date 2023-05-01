@@ -1,24 +1,28 @@
 
 #HHS Carrier
 - Unique Identifier: HHS_Carrier_Pos1
+  Enabled: True
   Is Storage Location: False
   Is Pipettable Location: False
   Supported Transport IDs:
     CORE Gripper:
 
 - Unique Identifier: HHS_Carrier_Pos2
+  Enabled: True
   Is Storage Location: False
   Is Pipettable Location: False
   Supported Transport IDs:
     CORE Gripper:
 
 - Unique Identifier: HHS_Carrier_Pos3
+  Enabled: True
   Is Storage Location: False
   Is Pipettable Location: False
   Supported Transport IDs:
     CORE Gripper:
 
 - Unique Identifier: HHS_Carrier_Pos4
+  Enabled: True
   Is Storage Location: False
   Is Pipettable Location: False
   Supported Transport IDs:
@@ -26,24 +30,28 @@
 
 #Vacuum Carrier
 - Unique Identifier: Vacuum_Carrier_Pos1
+  Enabled: True
   Is Storage Location: False
   Is Pipettable Location: False
   Supported Transport IDs:
     CORE Gripper:
 
 - Unique Identifier: Vacuum_Carrier_Pos2
+  Enabled: True
   Is Storage Location: False
   Is Pipettable Location: False
   Supported Transport IDs:
     CORE Gripper:
 
 - Unique Identifier: Vacuum_Carrier_Pos3
+  Enabled: True
   Is Storage Location: False
   Is Pipettable Location: False
   Supported Transport IDs:
     CORE Gripper:
 
 - Unique Identifier: Vacuum_Carrier_Pos4
+  Enabled: True
   Is Storage Location: False
   Is Pipettable Location: False
   Supported Transport IDs:
@@ -51,6 +59,7 @@
 
 #Carrier 14
 - Unique Identifier: Carrier14_Pos1
+  Enabled: True
   Is Storage Location: True
   Is Pipettable Location: True
   Supported Transport IDs:
@@ -63,6 +72,7 @@
     Carrier Positions: "1"
 
 - Unique Identifier: Carrier14_Pos2
+  Enabled: True
   Is Storage Location: True
   Is Pipettable Location: True
   Supported Transport IDs:
@@ -75,6 +85,7 @@
     Carrier Positions: "1"
 
 - Unique Identifier: Carrier14_Pos3
+  Enabled: True
   Is Storage Location: True
   Is Pipettable Location: True
   Supported Transport IDs:
@@ -87,6 +98,7 @@
     Carrier Positions: "1"
 
 - Unique Identifier: Carrier14_Pos4
+  Enabled: True
   Is Storage Location: True
   Is Pipettable Location: True
   Supported Transport IDs:
@@ -99,6 +111,7 @@
     Carrier Positions: "1"
 
 - Unique Identifier: Carrier14_Pos5
+  Enabled: True
   Is Storage Location: True
   Is Pipettable Location: True
   Supported Transport IDs:
@@ -112,6 +125,7 @@
 
 #Carrier 14
 - Unique Identifier: Carrier38_Pos1
+  Enabled: True
   Is Storage Location: True
   Is Pipettable Location: True
   Supported Transport IDs:
@@ -124,6 +138,7 @@
     Carrier Positions: "1"
 
 - Unique Identifier: Carrier38_Pos2
+  Enabled: True
   Is Storage Location: True
   Is Pipettable Location: True
   Supported Transport IDs:
@@ -136,6 +151,7 @@
     Carrier Positions: "1"
 
 - Unique Identifier: Carrier38_Pos3
+  Enabled: True
   Is Storage Location: True
   Is Pipettable Location: True
   Supported Transport IDs:
@@ -148,6 +164,7 @@
     Carrier Positions: "1"
 
 - Unique Identifier: Carrier38_Pos4
+  Enabled: True
   Is Storage Location: True
   Is Pipettable Location: True
   Supported Transport IDs:
@@ -160,6 +177,7 @@
     Carrier Positions: "1"
 
 - Unique Identifier: Carrier38_Pos5
+  Enabled: True
   Is Storage Location: True
   Is Pipettable Location: True
   Supported Transport IDs:
@@ -173,7 +191,7 @@
 
 #Carrier 47
 - Unique Identifier: FalconTubeCarrier
-  Carrier Position: 0
+  Enabled: True
   Is Storage Location: False
   Is Pipettable Location: True
   Supported Transport IDs:
@@ -186,7 +204,7 @@
 
 #Carrier 48
 - Unique Identifier: ReagentReserviorCarrier
-  Carrier Position: 0
+  Enabled: True
   Is Storage Location: False
   Is Pipettable Location: True
   Supported Transport IDs:
@@ -199,7 +217,7 @@
 
 #Carrier 49
 - Unique Identifier: FlipTubeCarrier
-  Carrier Position: 0
+  Enabled: True
   Is Storage Location: False
   Is Pipettable Location: True
   Supported Transport IDs:

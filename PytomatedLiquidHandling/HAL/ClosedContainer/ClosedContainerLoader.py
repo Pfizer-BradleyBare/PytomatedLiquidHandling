@@ -17,6 +17,9 @@ def LoadYaml(
 
     for DeviceType in ConfigFile:
         for Device in ConfigFile[DeviceType]:
+            if Device["Enabled"] == False:
+                continue
+
             UniqueName = Device["Unique Name"]
 
             if DeviceType == ClosedContainerTypes.HamiltonFlipTube.value:
