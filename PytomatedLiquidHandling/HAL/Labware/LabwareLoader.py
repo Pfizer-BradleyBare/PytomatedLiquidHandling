@@ -12,35 +12,29 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
     FileHandle.close()
     # Get config file contents
 
-    for LabwareID in ConfigFile["Labware IDs"]:
+    for Labware in ConfigFile:
+        UniqueIdentifier = Labware["Unique Identifier"]
+        LongSide = Labware["Dimensions"]["Long Side"]
+        ShortSide = Labware["Dimensions"]["Short Side"]
 
-        LongSide = ConfigFile["Labware IDs"][LabwareID]["Dimensions"]["Long Side"]
-        ShortSide = ConfigFile["Labware IDs"][LabwareID]["Dimensions"]["Short Side"]
         DimensionsInstance = Dimensions(LongSide, ShortSide)
         # Create Dimensions Class
 
-        Filters = ConfigFile["Labware IDs"][LabwareID]["Labware Filter"]
+        if "Wells" in Labware:
+            LabwareWells = Labware["Wells"]
 
-        if "Wells" in ConfigFile["Labware IDs"][LabwareID].keys():
+            Columns = LabwareWells["Columns"]
+            Rows = LabwareWells["Rows"]
+            SequencesPerWell = LabwareWells["Sequences Per Well"]
+            MaxVolume = LabwareWells["Max Volume"]
+            DeadVolume = LabwareWells["Dead Volume"]
 
-            EquationsList = list()
             WellEquationTrackerInstance = WellEquationTracker()
-            SegmentEquations = ConfigFile["Labware IDs"][LabwareID]["Wells"][
-                "Segment Equations"
-            ]
-            for Segment in SegmentEquations:
+            for Segment in LabwareWells["Segment Equations"]:
                 WellEquationTrackerInstance.ManualLoad(
                     WellEquation(Segment["Segment Height"], Segment["Segment Equation"])
                 )
             # Create WellsEquation Class List
-
-            Columns = ConfigFile["Labware IDs"][LabwareID]["Wells"]["Columns"]
-            Rows = ConfigFile["Labware IDs"][LabwareID]["Wells"]["Rows"]
-            SequencesPerWell = ConfigFile["Labware IDs"][LabwareID]["Wells"][
-                "Sequences Per Well"
-            ]
-            MaxVolume = ConfigFile["Labware IDs"][LabwareID]["Wells"]["Max Volume"]
-            DeadVolume = ConfigFile["Labware IDs"][LabwareID]["Wells"]["Dead Volume"]
 
             WellsInstance = Wells(
                 Columns,
@@ -52,13 +46,11 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
             )
             # Create Wells Class
             LabwareInstance = PipettableLabware(
-                LabwareID, Filters, DimensionsInstance, WellsInstance
+                UniqueIdentifier, DimensionsInstance, WellsInstance
             )
 
         else:
-            LabwareInstance = NonPipettableLabware(
-                LabwareID, Filters, DimensionsInstance
-            )
+            LabwareInstance = NonPipettableLabware(UniqueIdentifier, DimensionsInstance)
 
         LabwareTrackerInstance.ManualLoad(LabwareInstance)
 

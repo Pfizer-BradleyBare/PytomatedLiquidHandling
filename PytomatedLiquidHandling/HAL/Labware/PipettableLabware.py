@@ -5,11 +5,10 @@ class PipettableLabware(Labware):
     def __init__(
         self,
         UniqueIdentifier: str,
-        Filters: list[str],
         DimensionsInstance: Dimensions,
         LabwareWells: Wells,
     ):
-        Labware.__init__(self, UniqueIdentifier, Filters, DimensionsInstance)
+        Labware.__init__(self, UniqueIdentifier, DimensionsInstance)
         self.LabwareWells: Wells = LabwareWells
 
     def GetUniqueIdentifier(self) -> str:

@@ -1,0 +1,168 @@
+
+  #ENTRY
+  - Unique Identifier: Agilent Black Lid:
+    Dimensions:
+      Long Side: 127
+      Short Side: 86
+
+  #ENTRY
+  - Unique Identifier: 400uL Corning Costar 96 Well UV Plate:
+    Wells:
+      Columns: 12
+      Rows: 8
+      Sequences Per Well: 1
+      Max Volume: 390
+      Dead Volume: 10
+      Segment Equations:
+        - Segment Height: 0
+          Segment Equation: h * 12.3202
+
+        - Segment Height: 10.67
+          Segment Equation: h * 36.9605
+    Dimensions:
+      Long Side: 127
+      Short Side: 86
+
+  #ENTRY
+  - Unique Identifier: 200uL Biorad 96 Well PCR Plate:
+    Wells:
+      Columns: 12
+      Rows: 8
+      Sequences Per Well: 1
+      Max Volume: 225
+      Dead Volume: 10
+      Segment Equations:
+        - Segment Height: 0
+          Segment Equation: h * 12.3202
+
+        - Segment Height: 14.68
+          Segment Equation: h * 36.9605
+    Dimensions:
+      Long Side: 127
+      Short Side: 86
+
+  #ENTRY
+  - Unique Identifier: 400uL Thermo 96 Well PCR Plate:
+    Wells:
+      Columns: 12
+      Rows: 8
+      Sequences Per Well: 1
+      Max Volume: 450
+      Dead Volume: 25
+      Segment Equations:
+        - Segment Height: 0
+          Segment Equation: h * 12.3202
+
+        - Segment Height: 14.68
+          Segment Equation: h * 36.9605
+    Dimensions:
+      Long Side: 127
+      Short Side: 86
+
+  #ENTRY
+  - Unique Identifier: 1200uL DeepWell 96 Well PCR Plate:
+    Wells:
+      Columns: 12
+      Rows: 8
+      Sequences Per Well: 1
+      Max Volume: 1300
+      Dead Volume: 50
+      Segment Equations:
+        - Segment Height: 0
+          Segment Equation: h * 12.3202
+
+        - Segment Height: 14.68
+          Segment Equation: h * 36.9605
+    Dimensions:
+      Long Side: 127
+      Short Side: 86
+
+  #ENTRY
+  - Unique Identifier: 2000uL Corning 96 Well PCR Plate:
+    Wells:
+      Columns: 12
+      Rows: 8
+      Sequences Per Well: 1
+      Max Volume: 2300
+      Dead Volume: 100
+      Segment Equations:
+        - Segment Height: 0
+          Segment Equation: h * 12.3202
+
+        - Segment Height: 14.68
+          Segment Equation: h * 36.9605
+    Dimensions:
+      Long Side: 127
+      Short Side: 86
+
+  #ENTRY
+  - Unique Identifier: Hamilton 1.5mL FlipTube:
+    Wells:
+      Columns: 1
+      Rows: 32
+      Sequences Per Well: 1
+      Max Volume: 1500
+      Dead Volume: 150
+      Segment Equations:
+        - Segment Height: 0
+          Segment Equation: h * 12.3202
+
+        - Segment Height: 14.68
+          Segment Equation: h * 36.9605
+    Dimensions:
+      Long Side: 127
+      Short Side: 86
+
+  #ENTRY
+  - Unique Identifier: 15mL Centrifuge Tube:
+    Wells:
+      Columns: 1
+      Rows: 24
+      Sequences Per Well: 1
+      Max Volume: 14000
+      Dead Volume: 500
+      Segment Equations:
+        - Segment Height: 0
+          Segment Equation: h * 12.3202
+
+        - Segment Height: 14.68
+          Segment Equation: h * 36.9605
+    Dimensions:
+      Long Side: 127
+      Short Side: 86
+
+  #ENTRY
+  - Unique Identifier: 60mL Reagent Reservior:
+    Wells:
+      Columns: 1
+      Rows: 5
+      Sequences Per Well: 8
+      Max Volume: 50000
+      Dead Volume: 2500
+      Segment Equations:
+        - Segment Height: 0
+          Segment Equation: h * 12.3202
+
+        - Segment Height: 14.68
+          Segment Equation: h * 36.9605
+    Dimensions:
+      Long Side: 127
+      Short Side: 86
+
+  #ENTRY
+  - Unique Identifier: 200mL Reagent Trough:
+    Wells:
+      Columns: 1
+      Rows: 1
+      Sequences Per Well: 96
+      Max Volume: 200000
+      Dead Volume: 6000
+      Segment Equations:
+        - Segment Height: 0
+          Segment Equation: h * 12.3202
+
+        - Segment Height: 14.68
+          Segment Equation: h * 36.9605
+    Dimensions:
+      Long Side: 127
+      Short Side: 86
