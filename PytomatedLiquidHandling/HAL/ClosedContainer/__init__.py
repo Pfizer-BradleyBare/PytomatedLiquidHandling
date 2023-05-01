@@ -1,4 +1,4 @@
 from .BaseClosedContainer import ClosedContainerTracker
-from .FlipTube import FlipTube
+from .HamiltonFlipTube import HamiltonFlipTube
 
-__all__ = ["FlipTube", "ClosedContainerTracker"]
+__all__ = ["HamiltonFlipTube", "ClosedContainerTracker"]

@@ -1,26 +1,33 @@
-from ...Driver.ClosedContainer import FlipTube as FlipTubeDriver
+from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
 from ..Labware import LabwareTracker
 from ..LayoutItem.BaseLayoutItem import LayoutItem
 from .BaseClosedContainer.ClosedContainer import ClosedContainer, ClosedContainerTypes
 
 
-class FlipTube(ClosedContainer):
+class HamiltonFlipTube(ClosedContainer):
     def __init__(
-        self, ToolSequence: str, SupportedLabwareTrackerInstance: LabwareTracker
+        self,
+        Name: str,
+        ToolSequence: str,
+        SupportedLabwareTrackerInstance: LabwareTracker,
     ):
         ClosedContainer.__init__(
             self,
-            ClosedContainerTypes.FlipTube,
+            Name,
             ToolSequence,
             SupportedLabwareTrackerInstance,
         )
 
     def Initialize(
         self,
+        *,
+        AdvancedOptionsInstance: FlipTubeDriver.Initialize.AdvancedOptions = FlipTubeDriver.Initialize.AdvancedOptions()
     ):
-
         FlipTubeDriver.Initialize.Command(
-            FlipTubeDriver.Initialize.Options(), True
+            FlipTubeDriver.Initialize.Options(
+                AdvancedOptionsInstance=AdvancedOptionsInstance
+            ),
+            True,
         ).Execute()
 
     def Deinitialize(
@@ -33,12 +40,13 @@ class FlipTube(ClosedContainer):
         LayoutItemInstances: list[LayoutItem],
         Positions: list[int],
     ):
-
         OpenOptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker()
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
             OpenOptionsTrackerInstance.ManualLoad(
                 FlipTubeDriver.Open.Options(
-                    self.ToolSequence, LayoutItemInstance.Sequence, Position
+                    ToolSequence=self.ToolSequence,
+                    Sequence=LayoutItemInstance.Sequence,
+                    SequencePosition=Position,
                 )
             )
 
@@ -58,7 +66,9 @@ class FlipTube(ClosedContainer):
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
             CloseOptionsTrackerInstance.ManualLoad(
                 FlipTubeDriver.Close.Options(
-                    self.ToolSequence, LayoutItemInstance.Sequence, Position
+                    ToolSequence=self.ToolSequence,
+                    Sequence=LayoutItemInstance.Sequence,
+                    SequencePosition=Position,
                 )
             )
 

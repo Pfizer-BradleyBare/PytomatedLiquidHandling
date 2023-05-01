@@ -6,21 +6,21 @@ from .Interface.ClosedContainerInterface import ClosedContainerInterface
 
 
 class ClosedContainerTypes(Enum):
-    FlipTube = "FlipTube"
+    HamiltonFlipTube = "Hamilton FlipTube"
 
 
 class ClosedContainer(UniqueObjectABC, ClosedContainerInterface):
     def __init__(
         self,
-        Type: ClosedContainerTypes,
+        Name: str,
         ToolSequence: str,
         SupportedLabwareTrackerInstance: LabwareTracker,
     ):
-        self.Type: ClosedContainerTypes = Type
+        self.Name: str = Name
         self.ToolSequence: str = ToolSequence
         self.SupportedLabwareTrackerInstance: LabwareTracker = (
             SupportedLabwareTrackerInstance
         )
 
     def GetName(self) -> str:
-        return self.Type.value
+        return self.Name
