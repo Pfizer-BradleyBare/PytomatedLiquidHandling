@@ -15,8 +15,8 @@ def LoadYaml(
     FileHandle.close()
     # Get config file contents
 
-    for DeviceType in ConfigFile["Device Types"]:
-        for Device in ConfigFile["Device Types"][DeviceType]:
+    for DeviceType in ConfigFile:
+        for Device in ConfigFile[DeviceType]:
             UniqueName = Device["Unique Name"]
 
             if DeviceType == ClosedContainerTypes.HamiltonFlipTube.value:
