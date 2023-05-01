@@ -1,8 +1,8 @@
 from .....Tools.AbstractClasses import NonUniqueObjectABC
-from ....Tools.AbstractOptions import AdvancedOptionsABC
+from ....Tools.AbstractOptions import AdvancedSingleOptionsABC
 
 
-class AdvancedOptions(AdvancedOptionsABC):
+class AdvancedOptions(AdvancedSingleOptionsABC):
     def __init__(
         self,
         *,
@@ -10,7 +10,7 @@ class AdvancedOptions(AdvancedOptionsABC):
         BarcodeFilePath: str | None = None,
         LabwareScanPositions: str | None = None,
     ):
-        AdvancedOptionsABC.__init__(self, CustomErrorHandling)
+        AdvancedSingleOptionsABC.__init__(self, CustomErrorHandling)
         self.BarcodeFilePath: str | None = BarcodeFilePath
         self.LabwareScanPositions: str | None = LabwareScanPositions
 

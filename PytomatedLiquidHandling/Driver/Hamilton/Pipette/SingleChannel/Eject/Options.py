@@ -1,12 +1,12 @@
 from enum import Enum
 
 from ......Tools.AbstractClasses import NonUniqueObjectABC
-from .....Tools.AbstractOptions import AdvancedOptionsABC
+from .....Tools.AbstractOptions import AdvancedMultiOptionsABC
 
 
-class AdvancedOptions(AdvancedOptionsABC):
-    def __init__(self, *, CustomErrorHandling: bool | None = None):
-        AdvancedOptionsABC.__init__(self, CustomErrorHandling)
+class AdvancedOptions(AdvancedMultiOptionsABC):
+    def __init__(self):
+        AdvancedMultiOptionsABC.__init__(self)
 
 
 class Options(NonUniqueObjectABC):
@@ -22,9 +22,7 @@ class Options(NonUniqueObjectABC):
         self.Sequence: str = Sequence
         self.SequencePosition: int = SequencePosition
 
-        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
-            CustomErrorHandling=False,
-        )
+        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions()
         # These are the default advanced values
 
         self.AdvancedOptionsInstance.__dict__.update(

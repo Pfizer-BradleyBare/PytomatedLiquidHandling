@@ -1,19 +1,18 @@
 from ......Tools.AbstractClasses import NonUniqueObjectABC
-from .....Tools.AbstractOptions import AdvancedOptionsABC
+from .....Tools.AbstractOptions import AdvancedMultiOptionsABC
 
 
-class AdvancedOptions(AdvancedOptionsABC):
+class AdvancedOptions(AdvancedMultiOptionsABC):
     def __init__(
         self,
         *,
-        CustomErrorHandling: bool | None = None,
         GripHeight: float | None = None,
         GripForce: int | None = None,
         GripSpeed: float | None = None,
         ZSpeed: float | None = None,
         CheckPlateExists: int | None = None,
     ):
-        AdvancedOptionsABC.__init__(self, CustomErrorHandling)
+        AdvancedMultiOptionsABC.__init__(self)
         self.GripHeight: float | None = GripHeight
         self.GripForce: int | None = GripForce
         self.GripSpeed: float | None = GripSpeed
@@ -38,7 +37,6 @@ class Options(NonUniqueObjectABC):
         self.OpenWidth: float = OpenWidth
 
         self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
-            CustomErrorHandling=False,
             GripHeight=3,
             GripForce=4,
             GripSpeed=277.8,

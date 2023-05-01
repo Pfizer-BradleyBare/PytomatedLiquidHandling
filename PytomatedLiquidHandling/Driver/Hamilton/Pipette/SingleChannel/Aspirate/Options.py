@@ -1,14 +1,13 @@
 from enum import Enum
 
 from ......Tools.AbstractClasses import NonUniqueObjectABC
-from .....Tools.AbstractOptions import AdvancedOptionsABC
+from .....Tools.AbstractOptions import AdvancedMultiOptionsABC
 
 
-class AdvancedOptions(AdvancedOptionsABC):
+class AdvancedOptions(AdvancedMultiOptionsABC):
     def __init__(
         self,
         *,
-        CustomErrorHandling: bool | None = None,
         Mode: int | None = None,
         CapacitiveLiquidLevelDetection: int | None = None,
         SubmergeDepth: float | None = None,
@@ -21,7 +20,7 @@ class AdvancedOptions(AdvancedOptionsABC):
         MixPosition: float | None = None,
         MixVolume: float | None = None,
     ):
-        AdvancedOptionsABC.__init__(self, CustomErrorHandling)
+        AdvancedMultiOptionsABC.__init__(self)
         self.Mode: int | None = Mode
         self.CapacitiveLiquidLevelDetection: int | None = CapacitiveLiquidLevelDetection
         self.SubmergeDepth: float | None = SubmergeDepth
@@ -60,7 +59,6 @@ class Options(NonUniqueObjectABC):
         self.Volume: float = Volume
 
         self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
-            CustomErrorHandling=False,
             Mode=0,
             CapacitiveLiquidLevelDetection=0,
             SubmergeDepth=0,
