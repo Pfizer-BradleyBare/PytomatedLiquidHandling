@@ -9,7 +9,7 @@ class PipettableLabware(Labware):
         DimensionsInstance: Dimensions,
         LabwareWells: Wells,
     ):
-        Labware.__init__(self, Name, Filters, DimensionsInstance)
+        Labware.__init__(self, UniqueIdentifier, Filters, DimensionsInstance)
         self.LabwareWells: Wells = LabwareWells
 
     def GetUniqueIdentifier(self) -> str:

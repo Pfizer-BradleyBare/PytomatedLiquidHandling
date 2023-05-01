@@ -8,4 +8,4 @@ class NonPipettableLabware(Labware):
         Filters: list[str],
         DimensionsInstance: Dimensions,
     ):
-        Labware.__init__(self, Name, Filters, DimensionsInstance)
+        Labware.__init__(self, UniqueIdentifier, Filters, DimensionsInstance)

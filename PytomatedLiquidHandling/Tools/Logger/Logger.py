@@ -13,9 +13,7 @@ class Logger(logging.Logger):
     3. An Excel friendly log in .xml format
     """
 
-    def __init__(
-        self, LoggerUniqueIdentifier: str, LogLevel: int, LoggingFolderPath: str
-    ):
+    def __init__(self, LoggerName: str, LogLevel: int, LoggingFolderPath: str):
         """Initialize the extended logger.
 
         Args:
@@ -141,9 +139,9 @@ class XMLFormatter(logging.Formatter):
 
 
 class XMLHandler(logging.Handler):
-    def __init__(self, FileUniqueIdentifier: str):
+    def __init__(self, FileName: str):
         logging.Handler.__init__(self)
-        self.FileUniqueIdentifier: str = FileName
+        self.FileName: str = FileName
         self.Buffer = list()
         self.Buffer.append("<data-set>")
 

@@ -59,6 +59,6 @@ class UniqueObjectTrackerABC(Generic[T]):
         return Dict
 
     def GetObjectByName(self, UniqueIdentifier: str | int) -> T:
-        Object = self.Collection[Name]
+        Object = self.Collection[UniqueIdentifier]
 
         return Object
