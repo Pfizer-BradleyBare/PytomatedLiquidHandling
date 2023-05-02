@@ -2,7 +2,10 @@ from abc import abstractmethod
 
 from ....LayoutItem.BaseLayoutItem import LayoutItem
 from ....Tools import InterfaceABC
-from .....Driver.Tools.AbstractOptions import AdvancedOptionsABC
+from .....Driver.Tools.AbstractOptions import (
+    AdvancedMultiOptionsABC,
+    AdvancedMultiOptionsTrackerABC,
+)
 
 
 class ClosedContainerInterface(InterfaceABC):
@@ -11,7 +14,9 @@ class ClosedContainerInterface(InterfaceABC):
         self,
         LayoutItemInstances: list[LayoutItem],
         Positions: list[int],
-        AdvancedOptionsInstance: AdvancedOptionsABC = AdvancedOptionsABC(),
+        *,
+        AdvancedOptionsInstance: AdvancedMultiOptionsABC | None = None,
+        AdvancedOptionsTrackerInstance: AdvancedMultiOptionsTrackerABC | None = None,
     ):
         ...
 
@@ -20,6 +25,8 @@ class ClosedContainerInterface(InterfaceABC):
         self,
         LayoutItemInstances: list[LayoutItem],
         Positions: list[int],
-        AdvancedOptionsInstance: AdvancedOptionsABC = AdvancedOptionsABC(),
+        *,
+        AdvancedOptionsInstance: AdvancedMultiOptionsABC | None = None,
+        AdvancedOptionsTrackerInstance: AdvancedMultiOptionsTrackerABC | None = None,
     ):
         ...

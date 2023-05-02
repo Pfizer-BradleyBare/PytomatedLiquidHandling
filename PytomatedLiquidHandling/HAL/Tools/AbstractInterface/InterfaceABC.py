@@ -1,16 +1,16 @@
 from abc import ABC, abstractmethod
-from ....Driver.Tools.AbstractOptions import AdvancedOptionsABC
+from ....Driver.Tools.AbstractOptions import AdvancedSingleOptionsABC
 
 
 class InterfaceABC(ABC):
     @abstractmethod
     def Initialize(
-        self, AdvancedOptionsInstance: AdvancedOptionsABC = AdvancedOptionsABC()
+        self, *, AdvancedOptionsInstance: AdvancedSingleOptionsABC | None = None
     ):
         ...
 
     @abstractmethod
     def Deinitialize(
-        self, AdvancedOptionsInstance: AdvancedOptionsABC = AdvancedOptionsABC()
+        self, *, AdvancedOptionsInstance: AdvancedSingleOptionsABC | None = None
     ):
         ...

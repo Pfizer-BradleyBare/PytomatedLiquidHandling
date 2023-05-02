@@ -1,5 +1,7 @@
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
-from ...Driver.Tools.AbstractOptions import AdvancedOptionsABC
+from ...Driver.Tools.AbstractOptions import (
+    AdvancedSingleOptionsABC,
+)
 from ..Labware import LabwareTracker
 from ..LayoutItem.BaseLayoutItem import LayoutItem
 from .BaseClosedContainer.ClosedContainer import ClosedContainer
@@ -22,18 +24,22 @@ class HamiltonFlipTube(ClosedContainer):
     def Initialize(
         self,
         *,
-        AdvancedOptionsInstance: FlipTubeDriver.Initialize.AdvancedOptions = FlipTubeDriver.Initialize.AdvancedOptions()
+        AdvancedOptionsInstance: FlipTubeDriver.Initialize.AdvancedOptions
+        | None = None,
     ):
         FlipTubeDriver.Initialize.Command(
             FlipTubeDriver.Initialize.Options(
-                AdvancedOptionsInstance=AdvancedOptionsInstance
+                AdvancedOptionsInstance=FlipTubeDriver.Initialize.AdvancedOptions()
+                if AdvancedOptionsInstance is None
+                else AdvancedOptionsInstance
             ),
             True,
         ).Execute()
 
     def Deinitialize(
         self,
-        AdvancedOptionsInstance: AdvancedOptionsABC = AdvancedOptionsABC(),
+        *,
+        AdvancedOptionsInstance: AdvancedSingleOptionsABC | None = None,
     ):
         ...
 
@@ -41,16 +47,27 @@ class HamiltonFlipTube(ClosedContainer):
         self,
         LayoutItemInstances: list[LayoutItem],
         Positions: list[int],
-        AdvancedOptionsInstance: FlipTubeDriver.Open.AdvancedOptions = FlipTubeDriver.Open.AdvancedOptions(),
+        *,
+        AdvancedOptionsInstance: FlipTubeDriver.Open.AdvancedOptions | None = None,
+        AdvancedOptionsTrackerInstance: FlipTubeDriver.Open.AdvancedOptionsTracker
+        | None = None,
     ):
-        OpenOptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker()
+        OpenOptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker(
+            AdvancedOptionsTrackerInstance=FlipTubeDriver.Open.AdvancedOptionsTracker(
+                CustomErrorHandling=True
+            )
+            if AdvancedOptionsTrackerInstance is None
+            else AdvancedOptionsTrackerInstance
+        )
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
             OpenOptionsTrackerInstance.ManualLoad(
                 FlipTubeDriver.Open.Options(
                     ToolSequence=self.ToolSequence,
                     Sequence=LayoutItemInstance.Sequence,
                     SequencePosition=Position,
-                    AdvancedOptionsInstance=AdvancedOptionsInstance,
+                    AdvancedOptionsInstance=FlipTubeDriver.Open.AdvancedOptions()
+                    if AdvancedOptionsInstance is None
+                    else AdvancedOptionsInstance,
                 )
             )
 
@@ -64,9 +81,18 @@ class HamiltonFlipTube(ClosedContainer):
         self,
         LayoutItemInstances: list[LayoutItem],
         Positions: list[int],
-        AdvancedOptionsInstance: FlipTubeDriver.Close.AdvancedOptions = FlipTubeDriver.Close.AdvancedOptions(),
+        *,
+        AdvancedOptionsInstance: FlipTubeDriver.Close.AdvancedOptions | None = None,
+        AdvancedOptionsTrackerInstance: FlipTubeDriver.Close.AdvancedOptionsTracker
+        | None = None,
     ):
-        CloseOptionsTrackerInstance = FlipTubeDriver.Close.OptionsTracker()
+        CloseOptionsTrackerInstance = FlipTubeDriver.Close.OptionsTracker(
+            AdvancedOptionsTrackerInstance=FlipTubeDriver.Close.AdvancedOptionsTracker(
+                CustomErrorHandling=True
+            )
+            if AdvancedOptionsTrackerInstance is None
+            else AdvancedOptionsTrackerInstance
+        )
 
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
             CloseOptionsTrackerInstance.ManualLoad(
@@ -74,7 +100,9 @@ class HamiltonFlipTube(ClosedContainer):
                     ToolSequence=self.ToolSequence,
                     Sequence=LayoutItemInstance.Sequence,
                     SequencePosition=Position,
-                    AdvancedOptionsInstance=AdvancedOptionsInstance,
+                    AdvancedOptionsInstance=FlipTubeDriver.Close.AdvancedOptions()
+                    if AdvancedOptionsInstance is None
+                    else AdvancedOptionsInstance,
                 )
             )
 
