@@ -1,18 +1,19 @@
 from .....Tools.AbstractClasses import NonUniqueObjectABC
-from ....Tools.AbstractOptions import AdvancedSingleOptionsABC
+from ....Tools.AbstractOptions import AdvancedSingleOptionsABC, AdvancedOptionsWrapper
 
 
 class AdvancedOptions(AdvancedSingleOptionsABC):
+    @AdvancedOptionsWrapper
     def __init__(
         self,
         *,
-        CustomErrorHandling: bool | None = None,
-        BarcodeFilePath: str | None = None,
-        LabwareScanPositions: str | None = None,
+        CustomErrorHandling: bool = False,
+        BarcodeFilePath: str = "barcode_1.txt",
+        LabwareScanPositions: str = "?",
     ):
         AdvancedSingleOptionsABC.__init__(self, CustomErrorHandling)
-        self.BarcodeFilePath: str | None = BarcodeFilePath
-        self.LabwareScanPositions: str | None = LabwareScanPositions
+        self.BarcodeFilePath: str = BarcodeFilePath
+        self.LabwareScanPositions: str = LabwareScanPositions
 
 
 class Options(NonUniqueObjectABC):
@@ -24,14 +25,4 @@ class Options(NonUniqueObjectABC):
     ):
         self.Sequence: str = Sequence
 
-        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
-            CustomErrorHandling=False,
-            BarcodeFilePath="barcode_1.txt",
-            LabwareScanPositions="?",
-        )
-        # These are the default advanced values
-
-        self.AdvancedOptionsInstance.__dict__.update(
-            {k: v for k, v in vars(AdvancedOptionsInstance) if v is not None}
-        )
-        # This is used to update the values from the user if the user decided to change any advanced settings
+        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptionsInstance

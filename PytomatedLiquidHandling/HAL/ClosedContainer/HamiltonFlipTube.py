@@ -39,7 +39,9 @@ class HamiltonFlipTube(ClosedContainer):
     def Deinitialize(
         self,
         *,
-        AdvancedOptionsInstance: AdvancedSingleOptionsABC | None = None,
+        AdvancedOptionsInstance: AdvancedSingleOptionsABC = AdvancedSingleOptionsABC(
+            False
+        ),
     ):
         ...
 
@@ -48,16 +50,11 @@ class HamiltonFlipTube(ClosedContainer):
         LayoutItemInstances: list[LayoutItem],
         Positions: list[int],
         *,
-        AdvancedOptionsInstance: FlipTubeDriver.Open.AdvancedOptions | None = None,
-        AdvancedOptionsTrackerInstance: FlipTubeDriver.Open.AdvancedOptionsTracker
-        | None = None,
+        AdvancedOptionsInstance: FlipTubeDriver.Open.AdvancedOptions = FlipTubeDriver.Open.AdvancedOptions(),
+        AdvancedOptionsTrackerInstance: FlipTubeDriver.Open.AdvancedOptionsTracker = FlipTubeDriver.Open.AdvancedOptionsTracker(),
     ):
         OpenOptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker(
-            AdvancedOptionsTrackerInstance=FlipTubeDriver.Open.AdvancedOptionsTracker(
-                CustomErrorHandling=True
-            )
-            if AdvancedOptionsTrackerInstance is None
-            else AdvancedOptionsTrackerInstance
+            AdvancedOptionsTrackerInstance=AdvancedOptionsTrackerInstance
         )
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
             OpenOptionsTrackerInstance.ManualLoad(
@@ -65,9 +62,7 @@ class HamiltonFlipTube(ClosedContainer):
                     ToolSequence=self.ToolSequence,
                     Sequence=LayoutItemInstance.Sequence,
                     SequencePosition=Position,
-                    AdvancedOptionsInstance=FlipTubeDriver.Open.AdvancedOptions()
-                    if AdvancedOptionsInstance is None
-                    else AdvancedOptionsInstance,
+                    AdvancedOptionsInstance=AdvancedOptionsInstance,
                 )
             )
 
