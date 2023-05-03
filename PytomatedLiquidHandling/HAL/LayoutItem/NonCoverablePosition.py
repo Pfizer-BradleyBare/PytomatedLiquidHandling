@@ -3,7 +3,7 @@ from ..Labware import PipettableLabware
 from .BaseLayoutItem import LayoutItem
 
 
-class UncoverablePosition(LayoutItem):
+class NonCoverablePosition(LayoutItem):
     def __init__(
         self,
         UniqueIdentifier: str,

@@ -2,7 +2,7 @@ import yaml
 
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
-from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid, UncoverablePosition
+from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid, NonCoverablePosition
 
 
 def LoadYaml(
@@ -57,7 +57,7 @@ def LoadYaml(
             )
 
         else:
-            LayoutItemInstance = UncoverablePosition(
+            LayoutItemInstance = NonCoverablePosition(
                 UniqueIdentifier,
                 PlateSequence,
                 PlateLabwareInstance,
