@@ -1,1 +1,1 @@
-from . import MultiChannel, SingleChannel
+from . import CORE96Head, PortraitCORE8Channel
