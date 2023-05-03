@@ -10,8 +10,8 @@ class AdvancedOptionsABC(ABC):
 
 
 class AdvancedSingleOptionsABC(AdvancedOptionsABC):
-    def __init__(self, CustomErrorHandling: bool | None):
-        self.CustomErrorHandling: bool | None = CustomErrorHandling
+    def __init__(self, CustomErrorHandling: bool):
+        self.CustomErrorHandling: bool = CustomErrorHandling
 
 
 class AdvancedMultiOptionsABC(AdvancedOptionsABC):
@@ -19,5 +19,5 @@ class AdvancedMultiOptionsABC(AdvancedOptionsABC):
 
 
 class AdvancedMultiOptionsTrackerABC(AdvancedOptionsABC):
-    def __init__(self, CustomErrorHandling: bool | None):
-        self.CustomErrorHandling: bool | None = CustomErrorHandling
+    def __init__(self, CustomErrorHandling: bool):
+        self.CustomErrorHandling: bool = CustomErrorHandling

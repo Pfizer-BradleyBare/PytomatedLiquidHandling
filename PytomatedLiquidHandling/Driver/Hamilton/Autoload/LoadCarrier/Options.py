@@ -1,5 +1,5 @@
 from .....Tools.AbstractClasses import NonUniqueObjectABC
-from ....Tools.AbstractOptions import AdvancedSingleOptionsABC, AdvancedOptionsWrapper
+from ....Tools.AbstractOptions import AdvancedOptionsWrapper, AdvancedSingleOptionsABC
 
 
 class AdvancedOptions(AdvancedSingleOptionsABC):

@@ -1,26 +1,28 @@
 from ......Tools.AbstractClasses import NonUniqueObjectABC
-from .....Tools.AbstractOptions import AdvancedMultiOptionsABC
+from .....Tools.AbstractOptions import AdvancedOptionsWrapper, AdvancedSingleOptionsABC
 
 
-class AdvancedOptions(AdvancedMultiOptionsABC):
+class AdvancedOptions(AdvancedSingleOptionsABC):
+    @AdvancedOptionsWrapper
     def __init__(
         self,
         *,
-        Movement: int | None = None,
-        RetractDistance: float | None = None,
-        LiftupHeight: float | None = None,
-        LabwareOrientation: int | None = None,
-        CollisionControl: int | None = None,
+        CustomErrorHandling: bool = False,
+        Movement: int = 0,
+        RetractDistance: float = 0,
+        LiftupHeight: float = 0,
+        LabwareOrientation: int = 1,
+        CollisionControl: int = 1,
     ):
-        AdvancedMultiOptionsABC.__init__(self)
-        self.Movement: int | None = Movement
+        AdvancedSingleOptionsABC.__init__(self, CustomErrorHandling)
+        self.Movement: int = Movement
 
         # Only matters if movement is 1
-        self.RetractDistance: float | None = RetractDistance
-        self.LiftupHeight: float | None = LiftupHeight
-        self.LabwareOrientation: int | None = LabwareOrientation
+        self.RetractDistance: float = RetractDistance
+        self.LiftupHeight: float = LiftupHeight
+        self.LabwareOrientation: int = LabwareOrientation
 
-        self.CollisionControl: int | None = CollisionControl
+        self.CollisionControl: int = CollisionControl
 
 
 class Options(NonUniqueObjectABC):
@@ -32,16 +34,4 @@ class Options(NonUniqueObjectABC):
     ):
         self.PlateSequence: str = PlateSequence
 
-        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
-            Movement=0,
-            RetractDistance=0,
-            LiftupHeight=0,
-            LabwareOrientation=1,
-            CollisionControl=1,
-        )
-        # These are the default advanced values
-
-        self.AdvancedOptionsInstance.__dict__.update(
-            {k: v for k, v in vars(AdvancedOptionsInstance) if v is not None}
-        )
-        # This is used to update the values from the user if the user decided to change any advanced settings
+        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptionsInstance

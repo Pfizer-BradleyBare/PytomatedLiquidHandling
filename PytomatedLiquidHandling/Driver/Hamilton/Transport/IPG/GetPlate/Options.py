@@ -1,37 +1,39 @@
 from ......Tools.AbstractClasses import NonUniqueObjectABC
-from .....Tools.AbstractOptions import AdvancedMultiOptionsABC
+from .....Tools.AbstractOptions import AdvancedOptionsWrapper, AdvancedSingleOptionsABC
 
 
-class AdvancedOptions(AdvancedMultiOptionsABC):
+class AdvancedOptions(AdvancedSingleOptionsABC):
+    @AdvancedOptionsWrapper
     def __init__(
         self,
         *,
-        GripHeight: float | None = None,
-        GripMode: int | None = None,
-        Movement: int | None = None,
-        RetractDistance: float | None = None,
-        LiftupHeight: float | None = None,
-        LabwareOrientation: int | None = None,
-        GripForce: int | None = None,
-        Tolerance: float | None = None,
-        InverseGrip: int | None = None,
-        CollisionControl: int | None = None,
+        CustomErrorHandling: bool = False,
+        GripHeight: float = 3,
+        GripMode: int = 0,
+        Movement: int = 0,
+        RetractDistance: float = 0,
+        LiftupHeight: float = 0,
+        LabwareOrientation: int = 1,
+        GripForce: int = 4,
+        Tolerance: float = 2,
+        InverseGrip: int = 0,
+        CollisionControl: int = 1,
     ):
-        AdvancedMultiOptionsABC.__init__(self)
-        self.GripHeight: float | None = GripHeight
-        self.GripMode: int | None = GripMode
+        AdvancedSingleOptionsABC.__init__(self, CustomErrorHandling)
+        self.GripHeight: float = GripHeight
+        self.GripMode: int = GripMode
 
-        self.Movement: int | None = Movement
+        self.Movement: int = Movement
 
         # Only matters if movement is 1
-        self.RetractDistance: float | None = RetractDistance
-        self.LiftupHeight: float | None = LiftupHeight
-        self.LabwareOrientation: int | None = LabwareOrientation
+        self.RetractDistance: float = RetractDistance
+        self.LiftupHeight: float = LiftupHeight
+        self.LabwareOrientation: int = LabwareOrientation
 
-        self.GripForce: int | None = GripForce
-        self.Tolerance: float | None = Tolerance
-        self.InverseGrip: int | None = InverseGrip
-        self.CollisionControl: int | None = CollisionControl
+        self.GripForce: int = GripForce
+        self.Tolerance: float = Tolerance
+        self.InverseGrip: int = InverseGrip
+        self.CollisionControl: int = CollisionControl
 
 
 class Options(NonUniqueObjectABC):
@@ -48,21 +50,4 @@ class Options(NonUniqueObjectABC):
         self.GripWidth: float = GripWidth
         self.OpenWidth: float = OpenWidth
 
-        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
-            GripHeight=3,
-            GripMode=0,
-            Movement=0,
-            RetractDistance=0,
-            LiftupHeight=0,
-            LabwareOrientation=1,
-            GripForce=4,
-            Tolerance=2,
-            InverseGrip=0,
-            CollisionControl=1,
-        )
-        # These are the default advanced values
-
-        self.AdvancedOptionsInstance.__dict__.update(
-            {k: v for k, v in vars(AdvancedOptionsInstance) if v is not None}
-        )
-        # This is used to update the values from the user if the user decided to change any advanced settings
+        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptionsInstance

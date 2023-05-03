@@ -1,40 +1,39 @@
 from enum import Enum
 
 from ......Tools.AbstractClasses import NonUniqueObjectABC
-from .....Tools.AbstractOptions import AdvancedMultiOptionsABC
+from .....Tools.AbstractOptions import AdvancedMultiOptionsABC, AdvancedOptionsWrapper
 
 
 class AdvancedOptions(AdvancedMultiOptionsABC):
+    @AdvancedOptionsWrapper
     def __init__(
         self,
         *,
-        Mode: int | None = None,
-        CapacitiveLiquidLevelDetection: int | None = None,
-        SubmergeDepth: float | None = None,
-        PressureLiquidLevelDetection: int | None = None,
-        MaxHeightDifference: float | None = None,
-        FixHeightFromBottom: float | None = None,
-        RetractDistanceForTransportAir: float | None = None,
-        LiquidFollowing: int | None = None,
-        MixCycles: int | None = None,
-        MixPosition: float | None = None,
-        MixVolume: float | None = None,
+        Mode: int = 0,
+        CapacitiveLiquidLevelDetection: int = 0,
+        SubmergeDepth: float = 0,
+        PressureLiquidLevelDetection: int = 0,
+        MaxHeightDifference: float = 0,
+        FixHeightFromBottom: float = 0,
+        RetractDistanceForTransportAir: float = 0,
+        LiquidFollowing: int = 0,
+        MixCycles: int = 0,
+        MixPosition: float = 0,
+        MixVolume: float = 0,
     ):
         AdvancedMultiOptionsABC.__init__(self)
-        self.Mode: int | None = Mode
-        self.CapacitiveLiquidLevelDetection: int | None = CapacitiveLiquidLevelDetection
-        self.SubmergeDepth: float | None = SubmergeDepth
-        self.PressureLiquidLevelDetection: int | None = PressureLiquidLevelDetection
-        self.MaxHeightDifference: float | None = MaxHeightDifference
-        self.FixHeightFromBottom: float | None = FixHeightFromBottom
-        self.RetractDistanceForTransportAir: float | None = (
-            RetractDistanceForTransportAir
-        )
+        self.Mode: int = Mode
+        self.CapacitiveLiquidLevelDetection: int = CapacitiveLiquidLevelDetection
+        self.SubmergeDepth: float = SubmergeDepth
+        self.PressureLiquidLevelDetection: int = PressureLiquidLevelDetection
+        self.MaxHeightDifference: float = MaxHeightDifference
+        self.FixHeightFromBottom: float = FixHeightFromBottom
+        self.RetractDistanceForTransportAir: float = RetractDistanceForTransportAir
 
-        self.LiquidFollowing: int | None = LiquidFollowing
-        self.MixCycles: int | None = MixCycles
-        self.MixPosition: float | None = MixPosition
-        self.MixVolume: float | None = MixVolume
+        self.LiquidFollowing: int = LiquidFollowing
+        self.MixCycles: int = MixCycles
+        self.MixPosition: float = MixPosition
+        self.MixVolume: float = MixVolume
 
 
 class Options(NonUniqueObjectABC):
@@ -58,22 +57,4 @@ class Options(NonUniqueObjectABC):
         self.LiquidClass: str = LiquidClass
         self.Volume: float = Volume
 
-        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
-            Mode=0,
-            CapacitiveLiquidLevelDetection=0,
-            SubmergeDepth=0,
-            PressureLiquidLevelDetection=0,
-            MaxHeightDifference=0,
-            FixHeightFromBottom=0,
-            RetractDistanceForTransportAir=0,
-            LiquidFollowing=0,
-            MixCycles=0,
-            MixPosition=0,
-            MixVolume=0,
-        )
-        # These are the default advanced values
-
-        self.AdvancedOptionsInstance.__dict__.update(
-            {k: v for k, v in vars(AdvancedOptionsInstance) if v is not None}
-        )
-        # This is used to update the values from the user if the user decided to change any advanced settings
+        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptionsInstance

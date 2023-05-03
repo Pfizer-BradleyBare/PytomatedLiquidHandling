@@ -1,23 +1,25 @@
 from ......Tools.AbstractClasses import NonUniqueObjectABC
-from .....Tools.AbstractOptions import AdvancedMultiOptionsABC
+from .....Tools.AbstractOptions import AdvancedOptionsWrapper, AdvancedSingleOptionsABC
 
 
-class AdvancedOptions(AdvancedMultiOptionsABC):
+class AdvancedOptions(AdvancedSingleOptionsABC):
+    @AdvancedOptionsWrapper
     def __init__(
         self,
         *,
-        GripHeight: float | None = None,
-        GripForce: int | None = None,
-        GripSpeed: float | None = None,
-        ZSpeed: float | None = None,
-        CheckPlateExists: int | None = None,
+        CustomErrorHandling: bool = False,
+        GripHeight: float = 3,
+        GripForce: int = 4,
+        GripSpeed: float = 277.8,
+        ZSpeed: float = 128.7,
+        CheckPlateExists: int = 0,
     ):
-        AdvancedMultiOptionsABC.__init__(self)
-        self.GripHeight: float | None = GripHeight
-        self.GripForce: int | None = GripForce
-        self.GripSpeed: float | None = GripSpeed
-        self.ZSpeed: float | None = ZSpeed
-        self.CheckPlateExists: int | None = CheckPlateExists
+        AdvancedSingleOptionsABC.__init__(self, CustomErrorHandling)
+        self.GripHeight: float = GripHeight
+        self.GripForce: int = GripForce
+        self.GripSpeed: float = GripSpeed
+        self.ZSpeed: float = ZSpeed
+        self.CheckPlateExists: int = CheckPlateExists
 
 
 class Options(NonUniqueObjectABC):
@@ -36,16 +38,4 @@ class Options(NonUniqueObjectABC):
         self.GripWidth: float = GripWidth
         self.OpenWidth: float = OpenWidth
 
-        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
-            GripHeight=3,
-            GripForce=4,
-            GripSpeed=277.8,
-            ZSpeed=128.7,
-            CheckPlateExists=0,
-        )
-        # These are the default advanced values
-
-        self.AdvancedOptionsInstance.__dict__.update(
-            {k: v for k, v in vars(AdvancedOptionsInstance) if v is not None}
-        )
-        # This is used to update the values from the user if the user decided to change any advanced settings
+        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptionsInstance

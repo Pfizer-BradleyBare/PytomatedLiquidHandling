@@ -1,13 +1,12 @@
 from ......Tools.AbstractClasses import NonUniqueObjectABC
-from .....Tools.AbstractOptions import AdvancedSingleOptionsABC
+from .....Tools.AbstractOptions import AdvancedOptionsWrapper, AdvancedSingleOptionsABC
 
 
 class AdvancedOptions(AdvancedSingleOptionsABC):
-    def __init__(
-        self, *, CustomErrorHandling: bool | None = None, MinimumTips: int | None = None
-    ):
+    @AdvancedOptionsWrapper
+    def __init__(self, *, CustomErrorHandling: bool = False, MinimumTips: int = 0):
         AdvancedSingleOptionsABC.__init__(self, CustomErrorHandling)
-        self.MinimumTips: int | None = MinimumTips
+        self.MinimumTips: int = MinimumTips
 
 
 class Options(NonUniqueObjectABC):
@@ -21,12 +20,4 @@ class Options(NonUniqueObjectABC):
 
         self.LoadingText: str = "Load FTR Tips"
 
-        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(
-            CustomErrorHandling=False, MinimumTips=0
-        )
-        # These are the default advanced values
-
-        self.AdvancedOptionsInstance.__dict__.update(
-            {k: v for k, v in vars(AdvancedOptionsInstance) if v is not None}
-        )
-        # This is used to update the values from the user if the user decided to change any advanced settings
+        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptionsInstance
