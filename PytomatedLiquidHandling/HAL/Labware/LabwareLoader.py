@@ -34,7 +34,7 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
 
             WellEquationTrackerInstance = WellEquationTracker()
             for Segment in LabwareWells["Segment Equations"]:
-                WellEquationTrackerInstance.ManualLoad(
+                WellEquationTrackerInstance.LoadSingle(
                     WellEquation(Segment["Segment Height"], Segment["Segment Equation"])
                 )
             # Create WellsEquation Class List
@@ -55,7 +55,7 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
         else:
             LabwareInstance = NonPipettableLabware(UniqueIdentifier, DimensionsInstance)
 
-        LabwareTrackerInstance.ManualLoad(LabwareInstance)
+        LabwareTrackerInstance.LoadSingle(LabwareInstance)
 
         # Create Labware Class and append
 

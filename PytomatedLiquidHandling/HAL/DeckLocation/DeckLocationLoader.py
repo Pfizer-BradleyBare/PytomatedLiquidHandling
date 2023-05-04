@@ -1,12 +1,12 @@
 import yaml
 
-from ..TransportDevice.BaseTransportDevice import TransportDeviceTracker
 from ..DeckLocation import (
-    NonLoadableDeckLocation,
-    LoadableDeckLocation,
-    DeckLocationTracker,
     DeckLoadingConfig,
+    DeckLocationTracker,
+    LoadableDeckLocation,
+    NonLoadableDeckLocation,
 )
+from ..TransportDevice.BaseTransportDevice import TransportDeviceTracker
 
 
 def LoadYaml(
@@ -52,6 +52,6 @@ def LoadYaml(
                 UniqueIdentifier, IsStorageLocation, IsPipettableLocation
             )
 
-        DeckLocationTrackerInstance.ManualLoad(DeckLocationInstance)
+        DeckLocationTrackerInstance.LoadSingle(DeckLocationInstance)
 
     return DeckLocationTrackerInstance

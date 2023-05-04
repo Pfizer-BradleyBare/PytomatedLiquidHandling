@@ -25,7 +25,7 @@ def LoadYaml(FilePath: str) -> TipTracker:
                 NTRWasteSequence = TipItem["NTR Waste Sequence"]
                 GripperSequence = TipItem["Gripper Sequence"]
 
-                TipTrackerInstance.ManualLoad(
+                TipTrackerInstance.LoadSingle(
                     TipNTR(
                         TipID,
                         PickupSequence,
@@ -36,6 +36,6 @@ def LoadYaml(FilePath: str) -> TipTracker:
                 )
 
             elif TipType == TipTypes.FTR or TipType == TipTypes.FTRSlim:
-                TipTrackerInstance.ManualLoad(TipFTR(TipID, PickupSequence, MaxVolume))
+                TipTrackerInstance.LoadSingle(TipFTR(TipID, PickupSequence, MaxVolume))
 
     return TipTrackerInstance

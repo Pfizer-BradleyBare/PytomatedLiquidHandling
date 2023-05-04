@@ -65,14 +65,14 @@ def LoadYaml(
                     PlateLabwareInstance,
                     LidInstance,
                 )
-                SupportedLayoutItemTracker.ManualLoad(LayoutItemInstance)
+                SupportedLayoutItemTracker.LoadSingle(LayoutItemInstance)
                 # add to our list for our item creation and also add it to the layout loader for tracking
 
             ComPort = Device["Com Port"]
             DeviceType = DeviceTypes(Device["Device Type"])
 
             if DeviceType == DeviceTypes.HamiltonHeaterCooler:
-                TempControlDeviceTrackerInstance.ManualLoad(
+                TempControlDeviceTrackerInstance.LoadSingle(
                     HamiltonHeaterCooler(
                         DeviceID,
                         ComPort,
@@ -82,7 +82,7 @@ def LoadYaml(
                 )
 
             if DeviceType == DeviceTypes.HamiltonHeaterShaker:
-                TempControlDeviceTrackerInstance.ManualLoad(
+                TempControlDeviceTrackerInstance.LoadSingle(
                     HamiltonHeaterShaker(
                         DeviceID,
                         ComPort,

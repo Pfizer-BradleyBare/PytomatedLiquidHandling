@@ -85,7 +85,7 @@ def Reserve(
     # Nothing is available right now :( same as above
 
     if RunType is RunTypes.Run:
-        ResourceLockTrackerInstance.ManualLoad(BestFitDevice)
+        ResourceLockTrackerInstance.LoadSingle(BestFitDevice)
         BestFitDevice.SetTemperature(Temperature)
 
     return BestFitDevice

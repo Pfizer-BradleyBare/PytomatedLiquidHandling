@@ -14,7 +14,7 @@ class UniqueObjectTrackerABC(Generic[T]):
         self.Collection: dict[str | int, T] = dict()
         self.ThreadLock: Lock = Lock()
 
-    def ManualLoad(self, ObjectABCInstance: T) -> None:
+    def LoadSingle(self, ObjectABCInstance: T) -> None:
         Name = ObjectABCInstance.GetUniqueIdentifier()
 
         if self.IsTracked(Name) is True:
@@ -26,7 +26,7 @@ class UniqueObjectTrackerABC(Generic[T]):
 
         self.Collection[Name] = ObjectABCInstance
 
-    def ManualUnload(self, ObjectABCInstance: T) -> None:
+    def UnloadSingle(self, ObjectABCInstance: T) -> None:
         Name = ObjectABCInstance.GetUniqueIdentifier()
 
         if self.IsTracked(Name) is False:
@@ -37,6 +37,14 @@ class UniqueObjectTrackerABC(Generic[T]):
             )
 
         del self.Collection[Name]
+
+    def LoadList(self, ObjectABCInstances: list[T]) -> None:
+        for ObjectABCInstance in ObjectABCInstances:
+            self.LoadSingle(ObjectABCInstance)
+
+    def UnloadList(self, ObjectABCInstances: list[T]) -> None:
+        for ObjectABCInstance in ObjectABCInstances:
+            self.UnloadSingle(ObjectABCInstance)
 
     def IsTracked(self, UniqueIdentifier: str | int) -> bool:
         BoolTest = UniqueIdentifier in self.Collection

@@ -99,8 +99,8 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
         SourceLoadedLabwareInstance = (
             SourceLoadedLabwareTrackerInstance.GetObjectsAsList()[0]
         )
-        SourceLoadedLabwareTrackerInstance.ManualUnload(SourceLoadedLabwareInstance)
-        SourceLoadedLabwareTrackerInstance.ManualLoad(SourceLoadedLabwareInstance)
+        SourceLoadedLabwareTrackerInstance.UnloadSingle(SourceLoadedLabwareInstance)
+        SourceLoadedLabwareTrackerInstance.LoadSingle(SourceLoadedLabwareInstance)
         # We effectively want to use each container equally so we unload and reload to put the first at the end
         SourceLoadedLabwareInstances.append(SourceLoadedLabwareInstance)
 
@@ -215,7 +215,7 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
         DestinationLiquidClassCategories,
         TransferOptionsTrackerInstance.GetObjectsAsList(),
     ):
-        HALTransferOptionsTrackerInstance.ManualLoad(
+        HALTransferOptionsTrackerInstance.LoadSingle(
             HALTransferOptions(
                 SourceLoadedLabwareInstance.LayoutItemGroupingInstance.PlateLayoutItemInstance,
                 SourceLoadedLabwarePhysicalWell,

@@ -27,7 +27,7 @@ def LoadYaml(
 
                 SupportedLabwareTrackerInstance = LabwareTracker()
                 for LabwareID in Device["Supported Labware"]:
-                    SupportedLabwareTrackerInstance.ManualLoad(
+                    SupportedLabwareTrackerInstance.LoadSingle(
                         LabwareTrackerInstance.GetObjectByName(LabwareID)
                     )
 
@@ -38,6 +38,6 @@ def LoadYaml(
             else:
                 raise Exception("Device Type not known. Please fix.")
 
-            ClosedContainerTrackerInstance.ManualLoad(ClosedContainerInstance)
+            ClosedContainerTrackerInstance.LoadSingle(ClosedContainerInstance)
 
     return ClosedContainerTrackerInstance

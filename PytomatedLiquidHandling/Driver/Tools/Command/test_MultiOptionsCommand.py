@@ -1,6 +1,6 @@
 import pytest
 
-from ....Tools.AbstractClasses import NonUniqueObjectTrackerABC, NonUniqueObjectABC
+from ....Tools.AbstractClasses import NonUniqueObjectABC, NonUniqueObjectTrackerABC
 from .BaseCommand import ClassDecorator_Command, ExpectedResponseProperty
 from .MultiOptionsCommand import MultiOptionsCommand
 
@@ -36,9 +36,9 @@ class Command(MultiOptionsCommand[OptionsTracker]):
 def test():
     OptionsTrackerInstance = OptionsTracker()
 
-    OptionsTrackerInstance.ManualLoad(Options("T1", 1, 2))
-    OptionsTrackerInstance.ManualLoad(Options("T2", 3, 4))
-    OptionsTrackerInstance.ManualLoad(Options("T3", 5, 6))
+    OptionsTrackerInstance.LoadSingle(Options("T1", 1, 2))
+    OptionsTrackerInstance.LoadSingle(Options("T2", 3, 4))
+    OptionsTrackerInstance.LoadSingle(Options("T3", 5, 6))
 
     CommandInstance = Command(OptionsTrackerInstance, True)
 

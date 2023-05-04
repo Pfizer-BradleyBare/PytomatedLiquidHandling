@@ -46,6 +46,6 @@ def Reserve(ContainerInstance: Container, RunType: RunTypes) -> Lid | None:
     BestFitLid = LidInstances[0]
     # Just take the first available one
 
-    ResourceLockTrackerInstance.ManualLoad(BestFitLid)
+    ResourceLockTrackerInstance.LoadSingle(BestFitLid)
 
     return BestFitLid

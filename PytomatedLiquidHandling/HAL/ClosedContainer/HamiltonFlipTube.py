@@ -1,7 +1,5 @@
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
-from ...Driver.Tools.AbstractOptions import (
-    AdvancedSingleOptionsABC,
-)
+from ...Driver.Tools.AbstractOptions import AdvancedSingleOptionsABC
 from ..Labware import LabwareTracker
 from ..LayoutItem.BaseLayoutItem import LayoutItem
 from .BaseClosedContainer.ClosedContainer import ClosedContainer
@@ -57,7 +55,7 @@ class HamiltonFlipTube(ClosedContainer):
             AdvancedOptionsTrackerInstance=AdvancedOptionsTrackerInstance
         )
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
-            OpenOptionsTrackerInstance.ManualLoad(
+            OpenOptionsTrackerInstance.LoadSingle(
                 FlipTubeDriver.Open.Options(
                     ToolSequence=self.ToolSequence,
                     Sequence=LayoutItemInstance.Sequence,
@@ -90,7 +88,7 @@ class HamiltonFlipTube(ClosedContainer):
         )
 
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
-            CloseOptionsTrackerInstance.ManualLoad(
+            CloseOptionsTrackerInstance.LoadSingle(
                 FlipTubeDriver.Close.Options(
                     ToolSequence=self.ToolSequence,
                     Sequence=LayoutItemInstance.Sequence,

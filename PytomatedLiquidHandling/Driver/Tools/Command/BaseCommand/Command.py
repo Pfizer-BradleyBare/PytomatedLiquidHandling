@@ -68,7 +68,7 @@ class Command(NonUniqueObjectABC):
         HandlerInstance = GetHandler()
         CommandTrackerInstance = HandlerInstance.CommandTrackerInstance
 
-        CommandTrackerInstance.ManualLoad(self)
+        CommandTrackerInstance.LoadSingle(self)
 
         HandlerInstance.GetLogger().info(
             "Queued %s for execution. Waiting until execution is complete or timeout if set.",
@@ -77,7 +77,7 @@ class Command(NonUniqueObjectABC):
 
         TimeoutFlag = self.ResponseEvent.wait(Timeout)
 
-        CommandTrackerInstance.ManualUnload(self)
+        CommandTrackerInstance.UnloadSingle(self)
 
         if TimeoutFlag is True:  # This means it did not timeout
             HandlerInstance.GetLogger().info("%s execution complete.", self.GetID())

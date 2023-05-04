@@ -41,24 +41,24 @@ def LoadYaml(
 
                 Parameters = TransportParameters(CloseOffset, OpenOffset, PickupHeight)
 
-                TransportableLabwareTrackerInstance.ManualLoad(
+                TransportableLabwareTrackerInstance.LoadSingle(
                     TransportableLabware(LabwareObject, Parameters)
                 )
 
             TransportDevice = TransportDevices(DeviceID)
             if TransportDevice == TransportDevices.COREGripper:
                 GripperSequence = DeviceConfig["Gripper Sequence"]
-                TransportDeviceTrackerInstance.ManualLoad(
+                TransportDeviceTrackerInstance.LoadSingle(
                     COREGripper(TransportableLabwareTrackerInstance, GripperSequence)
                 )
 
             elif TransportDevice == TransportDevices.InternalPlateGripper:
-                TransportDeviceTrackerInstance.ManualLoad(
+                TransportDeviceTrackerInstance.LoadSingle(
                     InternalPlateGripper(TransportableLabwareTrackerInstance)
                 )
 
             elif TransportDevice == TransportDevices.TrackGripper:
-                TransportDeviceTrackerInstance.ManualLoad(
+                TransportDeviceTrackerInstance.LoadSingle(
                     TrackGripper(TransportableLabwareTrackerInstance)
                 )
 

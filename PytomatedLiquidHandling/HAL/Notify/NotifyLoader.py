@@ -26,7 +26,7 @@ def LoadYaml(FilePath: str) -> NotifyTracker:
                     "Always Notify Emails"
                 ]
 
-                NotifyTrackerInstance.ManualLoad(
+                NotifyTrackerInstance.LoadSingle(
                     EmailTextNotify(
                         DeviceID, SMTPServer, SenderEmail, AlwaysNotifyEmails
                     )

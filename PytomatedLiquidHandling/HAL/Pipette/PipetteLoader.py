@@ -34,7 +34,7 @@ def LoadYaml(
             SupportedLabwareTrackerInstance = LabwareTracker()
 
             for LabwareName in ConfigFile["Device IDs"][Device]["Supported Labware"]:
-                SupportedLabwareTrackerInstance.ManualLoad(
+                SupportedLabwareTrackerInstance.LoadSingle(
                     LabwareTrackerInstance.GetObjectByName(LabwareName)
                 )
 
@@ -68,15 +68,15 @@ def LoadYaml(
 
                         Name = LiquidClassItem["Liquid Class"]
 
-                        LiquidClassCategoryInstance.ManualLoad(
+                        LiquidClassCategoryInstance.LoadSingle(
                             LiquidClass(Name, MaxVolume)
                         )
 
-                    LiquidClassCategoryTrackerInstance.ManualLoad(
+                    LiquidClassCategoryTrackerInstance.LoadSingle(
                         LiquidClassCategoryInstance
                     )
 
-                PipetteTipTrackerInstance.ManualLoad(
+                PipetteTipTrackerInstance.LoadSingle(
                     PipetteTip(
                         TipInstance,
                         LiquidClassCategoryTrackerInstance,
@@ -90,7 +90,7 @@ def LoadYaml(
 
             if PipetteDeviceType == PipettingDeviceTypes.Pipette8Channel:
 
-                PipetteTrackerInstance.ManualLoad(
+                PipetteTrackerInstance.LoadSingle(
                     Pipette8Channel(
                         Enabled,
                         PipetteTipTrackerInstance,
@@ -100,7 +100,7 @@ def LoadYaml(
                 )
 
             if PipetteDeviceType == PipettingDeviceTypes.Pipette96Channel:
-                PipetteTrackerInstance.ManualLoad(
+                PipetteTrackerInstance.LoadSingle(
                     Pipette96Channel(
                         Enabled,
                         PipetteTipTrackerInstance,

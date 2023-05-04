@@ -96,10 +96,10 @@ def Transport(
                 raise Exception(
                     "Destination Deck location is locked. Transport cannot occur. This should not happen."
                 )
-            ResourceLockTrackerInstance.ManualUnload(
+            ResourceLockTrackerInstance.UnloadSingle(
                 SourceLayoutItemInstance.DeckLocationInstance
             )
-            ResourceLockTrackerInstance.ManualLoad(
+            ResourceLockTrackerInstance.LoadSingle(
                 DestinationLayoutItemInstance.DeckLocationInstance
             )
             # Before we try to transfer we need to make sure we lock / unlock the resources.

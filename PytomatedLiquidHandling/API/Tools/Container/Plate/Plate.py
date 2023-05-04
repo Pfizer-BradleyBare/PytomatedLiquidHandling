@@ -115,7 +115,7 @@ class Plate(Container):
 
     def Aspirate(self, WellNumber: int, Volume: float) -> WellSolutionTracker:
         if not self.GetWellTracker().IsTracked(WellNumber):
-            self.GetWellTracker().ManualLoad(Well(WellNumber))
+            self.GetWellTracker().LoadSingle(Well(WellNumber))
         # If it doesn't exist then lets add it
 
         SourceWellSolutionTrackerInstance = (
@@ -144,7 +144,7 @@ class Plate(Container):
             NewVolume = OriginalVolume - RemovedVolume
             # This seems right but should be double checked TODO
 
-            ReturnWellSolutionTrackerInstance.ManualLoad(
+            ReturnWellSolutionTrackerInstance.LoadSingle(
                 WellSolution(WellSolutionInstance.GetReagent(), RemovedVolume)
             )
             # We have to return a unique WellSolution instance because it will be tracked in the destination
@@ -152,7 +152,7 @@ class Plate(Container):
             WellSolutionInstance.Volume = NewVolume
 
             if NewVolume <= 0:
-                SourceWellSolutionTrackerInstance.ManualUnload(WellSolutionInstance)
+                SourceWellSolutionTrackerInstance.UnloadSingle(WellSolutionInstance)
 
         return ReturnWellSolutionTrackerInstance
 
@@ -160,7 +160,7 @@ class Plate(Container):
         self, WellNumber: int, WellSolutionTrackerInstance: WellSolutionTracker
     ):
         if not self.GetWellTracker().IsTracked(WellNumber):
-            self.GetWellTracker().ManualLoad(Well(WellNumber))
+            self.GetWellTracker().LoadSingle(Well(WellNumber))
         # If it doesn't exist then lets add it
 
         WellInstance = self.GetWellTracker().GetObjectByName(WellNumber)
@@ -180,7 +180,7 @@ class Plate(Container):
                 TrackedWellSolutionInstance.Volume += WellSolutionInstance.GetVolume()
 
             else:
-                DestinationWellSolutionTrackerInstance.ManualLoad(WellSolutionInstance)
+                DestinationWellSolutionTrackerInstance.LoadSingle(WellSolutionInstance)
             # If the solution is already tracked then we remove it and add a new updated solution. Basically updating the volume of the solution
 
         WellVolume = sum(

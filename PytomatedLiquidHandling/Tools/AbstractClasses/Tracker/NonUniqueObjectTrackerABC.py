@@ -14,11 +14,19 @@ class NonUniqueObjectTrackerABC(Generic[T]):
         self.Collection: list[T] = list()
         self.ThreadLock: Lock = Lock()
 
-    def ManualLoad(self, ObjectABCInstance: T) -> None:
+    def LoadSingle(self, ObjectABCInstance: T) -> None:
         self.Collection.append(ObjectABCInstance)
 
-    def ManualUnload(self, ObjectABCInstance: T) -> None:
+    def UnloadSingle(self, ObjectABCInstance: T) -> None:
         self.Collection.remove(ObjectABCInstance)
+
+    def LoadList(self, ObjectABCInstances: list[T]) -> None:
+        for ObjectABCInstance in ObjectABCInstances:
+            self.LoadSingle(ObjectABCInstance)
+
+    def UnloadList(self, ObjectABCInstances: list[T]) -> None:
+        for ObjectABCInstance in ObjectABCInstances:
+            self.UnloadSingle(ObjectABCInstance)
 
     def GetNumObjects(self) -> int:
         Length = len(self.Collection)

@@ -357,7 +357,7 @@ class Pipette8Channel(Pipette):
                     )
                     # Get correct destination position assuming any labware with any number of seq per well can be used
 
-                    PickupOptionsTrackerInstance.ManualLoad(
+                    PickupOptionsTrackerInstance.LoadSingle(
                         Pipette8ChannelDriver.Pickup.Options(
                             PipetteTipInstance.TipInstance.PickupSequence,
                             PipettingChannel,
@@ -375,7 +375,7 @@ class Pipette8Channel(Pipette):
                         TransferVolume,
                     )
                     # TODO Configure Options Further
-                    AspirateOptionsTrackerInstance.ManualLoad(AspirateOptionsInstance)
+                    AspirateOptionsTrackerInstance.LoadSingle(AspirateOptionsInstance)
                     # Aspirate
 
                     DispenseOptionsInstance = Pipette8ChannelDriver.Dispense.Options(
@@ -386,10 +386,10 @@ class Pipette8Channel(Pipette):
                         TransferVolume,
                     )
                     # TODO Configure Options Further
-                    DispenseOptionsTrackerInstance.ManualLoad(DispenseOptionsInstance)
+                    DispenseOptionsTrackerInstance.LoadSingle(DispenseOptionsInstance)
                     # Dispense
 
-                    EjectOptionsTrackerInstance.ManualLoad(
+                    EjectOptionsTrackerInstance.LoadSingle(
                         Pipette8ChannelDriver.Eject.Options(
                             PipetteTipInstance.WasteSequence,
                             PipettingChannel,

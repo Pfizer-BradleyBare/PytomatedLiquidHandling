@@ -37,7 +37,7 @@ class LoadedLabware(NonUniqueObjectABC):
         for WellNumber, StartingWellVolume in zip(
             range(0, LabwareWells.Columns * LabwareWells.Rows), StartingWellVolumes
         ):
-            self.WellTrackerInstance.ManualLoad(
+            self.WellTrackerInstance.LoadSingle(
                 Well(WellNumber + 1, StartingWellVolume)
             )
         # Create the wells for this loaded labware

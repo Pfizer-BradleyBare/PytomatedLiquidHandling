@@ -63,7 +63,7 @@ def Load(
             if Volume > LabwareWells.MaxVolume - LabwareWells.DeadVolume:  # type:ignore
                 continue
 
-            PreferredLabwareTrackerInstance.ManualLoad(LabwareInstance)
+            PreferredLabwareTrackerInstance.LoadSingle(LabwareInstance)
             SymbolicLabwareFilters.pop(0)
             break
         # This is the best fit labware
@@ -72,7 +72,7 @@ def Load(
             PreferredLabwareTrackerInstance.GetNumObjects() == 0
             and "No Preference" in SymbolicLabwareFilters
         ):
-            PreferredLabwareTrackerInstance.ManualLoad(
+            PreferredLabwareTrackerInstance.LoadSingle(
                 sorted(
                     HALPipettableLabwareInstances,
                     key=lambda x: x.LabwareWells.MaxVolume,  # type:ignore
@@ -93,18 +93,18 @@ def Load(
             if not PreferredLabwareTrackerInstance.IsTracked(
                 LabwareInstance.GetUniqueIdentifier()
             ):
-                PreferredLabwareTrackerInstance.ManualLoad(LabwareInstance)
+                PreferredLabwareTrackerInstance.LoadSingle(LabwareInstance)
             break
         # This is the labware the user prefers if they prefer one
 
         if PreferredLabwareTrackerInstance.GetNumObjects() != 0:
             FirstItem = PreferredLabwareTrackerInstance.GetObjectsAsList()[0]
-            PreferredLabwareTrackerInstance.ManualUnload(FirstItem)
-            PreferredLabwareTrackerInstance.ManualLoad(FirstItem)
+            PreferredLabwareTrackerInstance.UnloadSingle(FirstItem)
+            PreferredLabwareTrackerInstance.LoadSingle(FirstItem)
             # We need to reverse the order of the tracker. There will only be 2 items so we can remove the first and re-add it
             # We do this because we want the user preferred item to be first if there is one.
             # However, the code above requires we add the items in the reverse order
 
-            LabwareSelectionTrackerInstance.ManualLoad(LabwareSelectionInstance)
+            LabwareSelectionTrackerInstance.LoadSingle(LabwareSelectionInstance)
 
     return LabwareSelectionTrackerInstance

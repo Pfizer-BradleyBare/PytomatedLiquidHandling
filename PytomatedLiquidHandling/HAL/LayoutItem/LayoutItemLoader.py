@@ -64,6 +64,6 @@ def LoadYaml(
                 DeckLocationInstance,
             )
 
-        LayoutItemTrackerInstance.ManualLoad(LayoutItemInstance)
+        LayoutItemTrackerInstance.LoadSingle(LayoutItemInstance)
 
     return LayoutItemTrackerInstance

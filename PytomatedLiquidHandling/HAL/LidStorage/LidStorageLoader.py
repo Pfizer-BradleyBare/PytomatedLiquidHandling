@@ -33,11 +33,11 @@ def LoadYaml(
             SupportedLabwareTrackerInstance = LabwareTracker()
 
             for LabwareID in LidItem["Supported Labware"]:
-                SupportedLabwareTrackerInstance.ManualLoad(
+                SupportedLabwareTrackerInstance.LoadSingle(
                     LabwareTrackerInstance.GetObjectByName(LabwareID)
                 )
 
-            LidTrackerInstance.ManualLoad(
+            LidTrackerInstance.LoadSingle(
                 Lid(
                     LidID,
                     LayoutItem(LidSequence, LidLocation, LidLabware),
