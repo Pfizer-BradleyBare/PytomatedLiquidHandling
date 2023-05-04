@@ -4,12 +4,7 @@ from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
 from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid
 from ..TempControlDevice import HamiltonHeaterCooler, HamiltonHeaterShaker
-from .BaseTempControlDevice import (
-    DeviceTypes,
-    TempControlDevice,
-    TempControlDeviceTracker,
-    TempLimits,
-)
+from .BaseTempControlDevice import TempControlDeviceTracker, TempLimits
 
 
 def LoadYaml(
