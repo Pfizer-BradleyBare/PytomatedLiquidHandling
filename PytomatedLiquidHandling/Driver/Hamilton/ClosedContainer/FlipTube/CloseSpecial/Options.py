@@ -12,13 +12,10 @@ class Options(NonUniqueObjectABC):
     def __init__(
         self,
         *,
-        ToolSequence: str,
         Sequence: str,
         SequencePosition: int,
         AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(),
     ):
-        self.ToolSequence: str = ToolSequence
-
         self.Sequence: str = Sequence
         self.SequencePosition: int = SequencePosition
 

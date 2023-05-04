@@ -16,9 +16,12 @@ class OptionsTracker(NonUniqueObjectTrackerABC[Options]):
     def __init__(
         self,
         *,
+        ToolSequence: str,
         AdvancedOptionsTrackerInstance: AdvancedOptionsTracker = AdvancedOptionsTracker()
     ):
         NonUniqueObjectTrackerABC.__init__(self)
+
+        self.ToolSequence: str = ToolSequence
 
         self.AdvancedOptionsTrackerInstance: AdvancedOptionsTracker = (
             AdvancedOptionsTrackerInstance
