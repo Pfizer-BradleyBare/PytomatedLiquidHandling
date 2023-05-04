@@ -52,12 +52,12 @@ class HamiltonFlipTube(ClosedContainer):
         AdvancedOptionsTrackerInstance: FlipTubeDriver.Open.AdvancedOptionsTracker = FlipTubeDriver.Open.AdvancedOptionsTracker(),
     ):
         OpenOptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker(
-            AdvancedOptionsTrackerInstance=AdvancedOptionsTrackerInstance
+            ToolSequence=self.ToolSequence,
+            AdvancedOptionsTrackerInstance=AdvancedOptionsTrackerInstance,
         )
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
             OpenOptionsTrackerInstance.LoadSingle(
                 FlipTubeDriver.Open.Options(
-                    ToolSequence=self.ToolSequence,
                     Sequence=LayoutItemInstance.Sequence,
                     SequencePosition=Position,
                     AdvancedOptionsInstance=AdvancedOptionsInstance,
@@ -80,17 +80,17 @@ class HamiltonFlipTube(ClosedContainer):
         | None = None,
     ):
         CloseOptionsTrackerInstance = FlipTubeDriver.Close.OptionsTracker(
+            ToolSequence=self.ToolSequence,
             AdvancedOptionsTrackerInstance=FlipTubeDriver.Close.AdvancedOptionsTracker(
                 CustomErrorHandling=True
             )
             if AdvancedOptionsTrackerInstance is None
-            else AdvancedOptionsTrackerInstance
+            else AdvancedOptionsTrackerInstance,
         )
 
         for LayoutItemInstance, Position in zip(LayoutItemInstances, Positions):
             CloseOptionsTrackerInstance.LoadSingle(
                 FlipTubeDriver.Close.Options(
-                    ToolSequence=self.ToolSequence,
                     Sequence=LayoutItemInstance.Sequence,
                     SequencePosition=Position,
                     AdvancedOptionsInstance=FlipTubeDriver.Close.AdvancedOptions()
