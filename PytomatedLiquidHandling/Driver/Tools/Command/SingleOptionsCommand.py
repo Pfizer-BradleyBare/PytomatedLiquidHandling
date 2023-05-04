@@ -10,10 +10,9 @@ class SingleOptionsCommand(Command, Generic[T]):
     def __init__(
         self,
         OptionsInstance: T,
-        CustomErrorHandling: bool,
         UniqueIdentifier: str = "None",
     ):
-        Command.__init__(self, CustomErrorHandling, UniqueIdentifier)
+        Command.__init__(self, UniqueIdentifier)
         self.OptionsInstance: T = OptionsInstance
 
     def GetCommandParameters(self) -> dict[str, any]:  # type:ignore

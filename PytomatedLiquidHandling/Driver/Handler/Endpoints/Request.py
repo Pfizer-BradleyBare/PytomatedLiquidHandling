@@ -51,10 +51,10 @@ class Request:
         ParserObject.SetEndpointOutputKey(
             "Request Identifier", OutputCommandInstance.GetID()
         )
-        ParserObject.SetEndpointOutputKey(
-            "Custom Error Handling",
-            OutputCommandInstance.CustomErrorHandling,
-        )
+        # ParserObject.SetEndpointOutputKey(
+        #    "Custom Error Handling",
+        #    OutputCommandInstance.CustomErrorHandling,
+        # )
         ParserObject.SetEndpointOutputKey(
             "Module Name", OutputCommandInstance.GetModuleName()
         )

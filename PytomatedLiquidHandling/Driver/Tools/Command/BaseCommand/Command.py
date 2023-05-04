@@ -30,10 +30,8 @@ def ClassDecorator_Command(__file__: str):
 class Command(NonUniqueObjectABC):
     ClassFilePath: str
 
-    def __init__(self, CustomErrorHandling: bool, UniqueIdentifier: str):
+    def __init__(self, UniqueIdentifier: str):
         NonUniqueObjectABC.__init__(self, UniqueIdentifier)
-
-        self.CustomErrorHandling: bool = CustomErrorHandling
 
         self.ModuleName: str = GetModuleName(self.ClassFilePath)
         self.CommandName: str = GetCommandName(self.ClassFilePath)
@@ -82,8 +80,8 @@ class Command(NonUniqueObjectABC):
         if TimeoutFlag is True:  # This means it did not timeout
             HandlerInstance.GetLogger().info("%s execution complete.", self.GetID())
 
-            if self.CustomErrorHandling is not False:
-                self.HandleErrors()
+            # if self.CustomErrorHandling is not False:
+            #    self.HandleErrors()
             # If response indicates a failure then we need to run error handling if it is set.
             # Most error handling will just rerun the step. FIY
 

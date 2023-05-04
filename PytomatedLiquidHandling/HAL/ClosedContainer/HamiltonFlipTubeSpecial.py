@@ -76,12 +76,12 @@ class HamiltonFlipTube(ClosedContainer):
         self,
         OpenCloseOptionsTrackerInstance: OpenCloseOptionsTracker,
         *,
-        AdvancedOptionsInstance: FlipTubeDriver.Close.AdvancedOptions = FlipTubeDriver.Close.AdvancedOptions(),
-        AdvancedOptionsTrackerInstance: FlipTubeDriver.Close.AdvancedOptionsTracker = FlipTubeDriver.Close.AdvancedOptionsTracker(),
+        AdvancedOptionsInstance: FlipTubeDriver.CloseSpecial.AdvancedOptions = FlipTubeDriver.CloseSpecial.AdvancedOptions(),
+        AdvancedOptionsTrackerInstance: FlipTubeDriver.CloseSpecial.AdvancedOptionsTracker = FlipTubeDriver.CloseSpecial.AdvancedOptionsTracker(),
     ):
-        OptionsTrackerInstance = FlipTubeDriver.Close.OptionsTracker(
+        OptionsTrackerInstance = FlipTubeDriver.CloseSpecial.OptionsTracker(
             ToolSequence=self.ToolSequence,
-            AdvancedOptionsTrackerInstance=FlipTubeDriver.Close.AdvancedOptionsTracker().UpdateOptions(
+            AdvancedOptionsTrackerInstance=FlipTubeDriver.CloseSpecial.AdvancedOptionsTracker().UpdateOptions(
                 AdvancedOptionsTrackerInstance
             ),
         )
@@ -91,7 +91,7 @@ class HamiltonFlipTube(ClosedContainer):
                 in self.SupportedLabwareTrackerInstance.GetObjectsAsList()
             ):
                 OptionsTrackerInstance.LoadSingle(
-                    FlipTubeDriver.Close.Options(
+                    FlipTubeDriver.CloseSpecial.Options(
                         Sequence=OpenCloseOptions.LayoutItemInstance.Sequence,
                         SequencePosition=OpenCloseOptions.Position,
                         AdvancedOptionsInstance=AdvancedOptionsInstance,
@@ -99,7 +99,7 @@ class HamiltonFlipTube(ClosedContainer):
                 )
 
         try:
-            FlipTubeDriver.Close.Command(OptionsTrackerInstance).Execute()
+            FlipTubeDriver.CloseSpecial.Command(OptionsTrackerInstance).Execute()
 
         except:
             ...
