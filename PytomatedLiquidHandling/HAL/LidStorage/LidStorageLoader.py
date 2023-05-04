@@ -1,49 +1,60 @@
 import yaml
 
 from ..DeckLocation import DeckLocationTracker
-from ..Labware import LabwareTracker
-from ..Layout import LayoutItem
-from .Lid import Lid
-from .LidTracker import LidTracker
+from ..Labware import LabwareTracker, NonPipettableLabware
+from ..LidStorage import LidStorageTracker, RandomAccessLidStorage
+from .BaseLidStorage import ReservableLid
 
 
 def LoadYaml(
     LabwareTrackerInstance: LabwareTracker,
     DeckLocationTrackerInstance: DeckLocationTracker,
     FilePath: str,
-) -> LidTracker:
-    LidTrackerInstance = LidTracker()
+) -> LidStorageTracker:
+    LidStorageTrackerInstance = LidStorageTracker()
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
 
-    for LidID in ConfigFile["Lid IDs"]:
-        LidItem = ConfigFile["Lid IDs"][LidID]
+    for StorageTypeID in ConfigFile:
+        for Storage in ConfigFile[StorageTypeID]:
+            if Storage["Enabled"] == False:
+                continue
 
-        if LidItem["Enabled"] is True:
+            UniqueIdentifier = Storage["Unique Identifier"]
 
-            LidLabware = LabwareTrackerInstance.GetObjectByName(LidItem["Labware"])
-            LidLocation = DeckLocationTrackerInstance.GetObjectByName(
-                LidItem["Deck Location ID"]
-            )
-            LidSequence = LidItem["Sequence"]
+            if StorageTypeID == "Random Access Lid Storage":
 
-            SupportedLabwareTrackerInstance = LabwareTracker()
+                LidStorageInstance = RandomAccessLidStorage(UniqueIdentifier)
 
-            for LabwareID in LidItem["Supported Labware"]:
-                SupportedLabwareTrackerInstance.LoadSingle(
-                    LabwareTrackerInstance.GetObjectByName(LabwareID)
+                LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
+                    Storage["Lid Labware"]
                 )
 
-            LidTrackerInstance.LoadSingle(
-                Lid(
-                    LidID,
-                    LayoutItem(LidSequence, LidLocation, LidLabware),
-                    SupportedLabwareTrackerInstance,
-                )
-            )
-            # Create Labware Class and append
+                if not isinstance(LidLabwareInstance, NonPipettableLabware):
+                    raise Exception("Wrong labware")
 
-    return LidTrackerInstance
+                LidCount = 1
+                for LidPosition in Storage["Lid Positions"]:
+                    Sequence = LidPosition["Sequence"]
+                    DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
+                        LidPosition["Deck Location"]
+                    )
+
+                    LidStorageInstance.LoadSingle(
+                        ReservableLid(
+                            StorageTypeID + " -> Lid Position #" + str(LidCount),
+                            Sequence,
+                            LidLabwareInstance,
+                            DeckLocationInstance,
+                        )
+                    )
+
+            else:
+                raise Exception("Storage Type not found. Try agian.")
+
+            LidStorageTrackerInstance.LoadSingle(LidStorageInstance)
+
+    return LidStorageTrackerInstance
