@@ -5,10 +5,6 @@ from ...Labware import LabwareTracker
 from .Interface.ClosedContainerInterface import ClosedContainerInterface
 
 
-class ClosedContainerTypes(Enum):
-    HamiltonFlipTube = "Hamilton FlipTube"
-
-
 class ClosedContainer(UniqueObjectABC, ClosedContainerInterface):
     def __init__(
         self,

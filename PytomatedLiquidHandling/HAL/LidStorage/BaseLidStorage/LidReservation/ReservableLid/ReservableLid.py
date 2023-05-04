@@ -8,13 +8,14 @@ from .....LayoutItem import Lid
 class ReservableLid(Lid, NonUniqueObjectABC):
     def __init__(
         self,
+        UniqueIdentifer: str,
         Sequence: str,
         NonPipettableLabwareInstance: NonPipettableLabware,
         DeckLocationInstance: DeckLocation,
     ):
         Lid.__init__(
             self,
-            Sequence,
+            UniqueIdentifer,
             Sequence,
             NonPipettableLabwareInstance,
             DeckLocationInstance,

@@ -1,7 +1,7 @@
 import yaml
 
 from ..Labware import LabwareTracker
-from .BaseClosedContainer import ClosedContainerTracker, ClosedContainerTypes
+from .BaseClosedContainer import ClosedContainerTracker
 from .HamiltonFlipTube import HamiltonFlipTube
 
 
@@ -22,7 +22,7 @@ def LoadYaml(
 
             UniqueName = Device["Unique Name"]
 
-            if DeviceType == ClosedContainerTypes.HamiltonFlipTube.value:
+            if DeviceType == "Hamilton FlipTube":
                 ToolSequence = Device["Tool Sequence"]
 
                 SupportedLabwareTrackerInstance = LabwareTracker()

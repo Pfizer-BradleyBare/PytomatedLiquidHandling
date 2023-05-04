@@ -1,2 +1,2 @@
-from .LidReservation import ReservableLid
+from .LidReservation import LidReservation, ReservableLid
 from .LidStorage import LidStorage

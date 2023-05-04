@@ -17,6 +17,13 @@ class LidStorage(UniqueObjectABC, NonUniqueObjectTrackerABC[ReservableLid]):
         UniqueObjectABC.__init__(self, UniqueIdentifier)
         self.LidReservationTrackerInstance = UniqueObjectTrackerABC[LidReservation]()
 
+    def __CheckReservationExists(self, UniqueIdentifier: str) -> bool:
+        try:
+            self.LidReservationTrackerInstance.GetObjectByName(UniqueIdentifier)
+            return True
+        except:
+            return False
+
     @abstractmethod
     def Reserve(self, UniqueIdentifier: str) -> Lid:
         ...

@@ -1,0 +1,17 @@
+#############################################################
+#
+# Devices: The pipetting devices available on this system. Options per device are different.
+# Enabled: True: Can be used. False: Cannot be used
+#
+#############################################################
+
+Random Access:
+  - Unique Identifier: Random Access Lid Storage 1
+    Enabled: True
+    Lid Labware: Agilent Black Lid
+    Lid Positions:
+      - Sequence: Lid_Home1
+        Deck Location: Vacuum_Carrier_Pos1
+
+      - Sequence: Lid_Home2
+        Deck Location: Vacuum_Carrier_Pos2
