@@ -1,8 +1,12 @@
 from abc import abstractmethod
 
-from ....Tools.AbstractClasses import NonUniqueObjectTrackerABC, UniqueObjectABC
+from ....Tools.AbstractClasses import (
+    NonUniqueObjectTrackerABC,
+    UniqueObjectABC,
+    UniqueObjectTrackerABC,
+)
 from ...LayoutItem import Lid
-from .ReservableLid import ReservableLid
+from .LidReservation import LidReservation, ReservableLid
 
 
 class LidStorage(UniqueObjectABC, NonUniqueObjectTrackerABC[ReservableLid]):
@@ -10,11 +14,15 @@ class LidStorage(UniqueObjectABC, NonUniqueObjectTrackerABC[ReservableLid]):
         self,
         UniqueIdentifier: str,
     ):
-
-        self.UniqueIdentifier: str = UniqueIdentifier
+        UniqueObjectABC.__init__(self, UniqueIdentifier)
+        self.LidReservationTrackerInstance = UniqueObjectTrackerABC[LidReservation]()
 
     @abstractmethod
     def Reserve(self, UniqueIdentifier: str) -> Lid:
+        ...
+
+    @abstractmethod
+    def PreTransportCheck(self, UniqueIndentifier: str):
         ...
 
     @abstractmethod
