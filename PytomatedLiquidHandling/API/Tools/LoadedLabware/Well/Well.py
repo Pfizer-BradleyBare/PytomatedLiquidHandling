@@ -3,8 +3,5 @@ from .....Tools.AbstractClasses import UniqueObjectABC
 
 class Well(UniqueObjectABC):
     def __init__(self, WellNumber: int, Volume: float):
-        self.WellNumber: int = WellNumber
+        UniqueObjectABC.__init__(self, WellNumber)
         self.Volume: float = Volume
-
-    def GetUniqueIdentifier(self) -> int:
-        return self.WellNumber

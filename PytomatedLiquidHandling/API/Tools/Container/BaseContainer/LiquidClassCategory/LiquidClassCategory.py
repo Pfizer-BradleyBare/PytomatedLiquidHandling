@@ -15,22 +15,23 @@ class LiquidClassCategory(UniqueObjectABC):
         Homogeneity: HomogeneityReagentProperty,
         LLD: LLDReagentProperty,
     ):
+        UniqueObjectABC.__init__(
+            self,
+            (
+                "Volatility"
+                + self.Volatility.name
+                + "Viscosity"
+                + self.Viscosity.name
+                + "Homogeneity"
+                + self.Homogeneity.name
+                + "LLD"
+                + self.LLD.name
+            ).replace(" ", ""),
+        )
         self.Volatility: VolatilityReagentProperty = Volatility
         self.Viscosity: ViscosityReagentProperty = Viscosity
         self.Homogeneity: HomogeneityReagentProperty = Homogeneity
         self.LLD: LLDReagentProperty = LLD
-
-    def GetUniqueIdentifier(self) -> str:
-        return (
-            "Volatility"
-            + self.Volatility.name
-            + "Viscosity"
-            + self.Viscosity.name
-            + "Homogeneity"
-            + self.Homogeneity.name
-            + "LLD"
-            + self.LLD.name
-        ).replace(" ", "")
 
     def GetVolatility(self) -> VolatilityReagentProperty:
         return self.Volatility

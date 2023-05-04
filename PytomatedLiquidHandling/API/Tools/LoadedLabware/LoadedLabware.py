@@ -14,11 +14,12 @@ class LoadedLabware(NonUniqueObjectABC):
             LayoutItemGroupingInstance.PlateLayoutItemInstance.LabwareInstance
         )
 
-        if AppendedName is None:
-            self.UniqueIdentifier: str = LabwareInstance.GetUniqueIdentifier()
+        if AppendedUniqueIdentifier is None:
+            NonUniqueObjectABC.__init__(self, LabwareInstance.GetUniqueIdentifier())
         else:
-            self.UniqueIdentifier: str = (
-                LabwareInstance.GetUniqueIdentifier() + " " + AppendedName
+            NonUniqueObjectABC.__init__(
+                self,
+                LabwareInstance.GetUniqueIdentifier() + " " + AppendedUniqueIdentifier,
             )
 
         self.LayoutItemGroupingInstance: LayoutItemGrouping = LayoutItemGroupingInstance
@@ -40,9 +41,6 @@ class LoadedLabware(NonUniqueObjectABC):
                 Well(WellNumber + 1, StartingWellVolume)
             )
         # Create the wells for this loaded labware
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.UniqueIdentifier
 
     def GetLayoutItemGrouping(self) -> LayoutItemGrouping:
         return self.LayoutItemGroupingInstance

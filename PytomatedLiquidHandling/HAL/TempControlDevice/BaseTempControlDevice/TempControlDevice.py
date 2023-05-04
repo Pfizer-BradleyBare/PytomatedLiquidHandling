@@ -20,13 +20,10 @@ class TempControlDevice(UniqueObjectABC, TempControlDeviceInterface):
         TempLimitsInstance: TempLimits,
         SupportedLayoutItemTrackerInstance: LayoutItemTracker,
     ):
-        self.UniqueIdentifier: str = UniqueIdentifier
+        UniqueObjectABC.__init__(self, UniqueIdentifier)
         self.ComPort: str | int = ComPort
         self.ShakingSupported: bool = ShakingSupported
         self.TempLimitsInstance: TempLimits = TempLimitsInstance
         self.SupportedLayoutItemTrackerInstance: LayoutItemTracker = (
             SupportedLayoutItemTrackerInstance
         )
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.UniqueIdentifier

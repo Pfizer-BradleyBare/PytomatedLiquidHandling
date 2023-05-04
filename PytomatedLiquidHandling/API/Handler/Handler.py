@@ -24,9 +24,6 @@ class Handler(ServerHandlerABC):
         self.ResourceLockTrackerInstance: ResourceLockTracker = ResourceLockTracker()
         self.HALLayerInstance: HALLayer = HalLoader.Load(HALConfigurationFilesPath)
 
-    def GetUniqueIdentifier(self) -> str:
-        return "API"
-
     def GetEndpoints(self) -> tuple:
         urls = ()
         return urls

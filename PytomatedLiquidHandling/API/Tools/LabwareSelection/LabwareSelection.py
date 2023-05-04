@@ -5,12 +5,10 @@ from ..Container.BaseContainer.Container import Container
 
 class LabwareSelection(UniqueObjectABC):
     def __init__(self, ContainerInstance: Container):
+        UniqueObjectABC.__init__(self, ContainerInstance.GetUniqueIdentifier())
         self.ContainerInstance: Container = ContainerInstance
         self.LabwareTrackerInstance: LabwareTracker = LabwareTracker()
         self.LabwareInstance: Labware | None = None
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.ContainerInstance.GetUniqueIdentifier()
 
     def GetContainer(self) -> Container:
         return self.ContainerInstance

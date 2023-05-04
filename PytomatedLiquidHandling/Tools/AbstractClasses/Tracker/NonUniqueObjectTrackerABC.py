@@ -34,7 +34,7 @@ class NonUniqueObjectTrackerABC(Generic[T]):
         Objects = list()
 
         for Object in self.Collection:
-            if Object.GetUniqueIdentifier() == UniqueIdentifier:
+            if Object.GetIdentifier() == UniqueIdentifier:
                 Objects.append(Object)
 
         return Objects

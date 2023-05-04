@@ -1,10 +1,8 @@
-from ......Tools.AbstractClasses import UniqueObjectABC
+from ......Tools.AbstractClasses import NonUniqueObjectABC
 
 
-class WellEquation(UniqueObjectABC):
+class WellEquation(NonUniqueObjectABC):
     def __init__(self, SegmentHeight: float, SegmentEquation: str):
-        self.Height = SegmentHeight
-        self.Equation = SegmentEquation
-
-    def GetUniqueIdentifier(self) -> float:
-        return self.Height
+        NonUniqueObjectABC.__init__(self, "Well Equation")
+        self.SegmentHeight = SegmentHeight
+        self.SegmentEquation = SegmentEquation

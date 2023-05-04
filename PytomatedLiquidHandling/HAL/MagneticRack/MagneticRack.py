@@ -12,14 +12,11 @@ class MagneticRack(UniqueObjectABC):
         AspiratePipettingDevices: list[PipettingDevice],
         DispensePipettingDevices: list[PipettingDevice],
     ):
-        self.UniqueIdentifier: str = UniqueIdentifier
+        UniqueObjectABC.__init__(self, UniqueIdentifier)
         self.Enabled: bool = Enabled
         self.LayoutItems: list[LayoutItem] = LayoutItems
         self.AspiratePipettingDevices: list[PipettingDevice] = AspiratePipettingDevices
         self.DispensePipettingDevices: list[PipettingDevice] = DispensePipettingDevices
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.UniqueIdentifier
 
     def GetEnabledState(self) -> bool:
         return self.Enabled

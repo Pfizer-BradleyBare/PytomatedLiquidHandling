@@ -8,8 +8,5 @@ class Labware(UniqueObjectABC):
         UniqueIdentifier: str,
         DimensionsInstance: Dimensions,
     ):
-        self.UniqueIdentifier: str = UniqueIdentifier
+        UniqueObjectABC.__init__(self, UniqueIdentifier)
         self.DimensionsInstance: Dimensions = DimensionsInstance
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.UniqueIdentifier

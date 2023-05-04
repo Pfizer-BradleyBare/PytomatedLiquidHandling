@@ -20,9 +20,6 @@ class Handler(ServerHandlerABC):
 
         self.CommandTrackerInstance: Command.CommandTracker = Command.CommandTracker()
 
-    def GetUniqueIdentifier(self) -> str:
-        return "Driver"
-
     def GetEndpoints(self) -> tuple:
         urls = ()
         urls += Request.urls

@@ -11,10 +11,7 @@ class LayoutItem(UniqueObjectABC):
         LabwareInstance: Labware,
         DeckLocationInstance: DeckLocation,
     ):
-        self.UniqueIdentifier: str = UniqueIdentifier
+        UniqueObjectABC.__init__(self, UniqueIdentifier)
         self.DeckLocationInstance: DeckLocation = DeckLocationInstance
         self.Sequence: str = Sequence
         self.LabwareInstance: Labware = LabwareInstance
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.UniqueIdentifier

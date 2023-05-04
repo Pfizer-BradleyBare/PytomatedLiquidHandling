@@ -10,9 +10,6 @@ class Handler(ServerHandlerABC):
         global _HandlerInstance
         _HandlerInstance = self
 
-    def GetUniqueIdentifier(self) -> str:
-        return "Server"
-
     def GetEndpoints(self) -> tuple:
         urls = ()
         urls += IsActive.urls

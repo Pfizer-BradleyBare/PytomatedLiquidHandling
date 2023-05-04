@@ -8,12 +8,9 @@ from .LiquidClassCategory.LiquidClassCategory import LiquidClassCategory
 
 class Container(UniqueObjectABC):
     def __init__(self, UniqueIdentifier: str, Filter: str):
-        self.UniqueIdentifier: str = UniqueIdentifier
+        UniqueObjectABC.__init__(self, UniqueIdentifier)
         self.Filter: list[str] = [Filter]
         self.LoadedLabwareInstance: LoadedLabware | None = None
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.UniqueIdentifier
 
     def GetFilter(self) -> list[str]:
         return self.Filter

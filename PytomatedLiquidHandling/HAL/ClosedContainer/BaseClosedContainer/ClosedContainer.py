@@ -16,11 +16,8 @@ class ClosedContainer(UniqueObjectABC, ClosedContainerInterface):
         ToolSequence: str,
         SupportedLabwareTrackerInstance: LabwareTracker,
     ):
-        self.UniqueIdentifier: str = UniqueIdentifier
+        UniqueObjectABC.__init__(self, UniqueIdentifier)
         self.ToolSequence: str = ToolSequence
         self.SupportedLabwareTrackerInstance: LabwareTracker = (
             SupportedLabwareTrackerInstance
         )
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.UniqueIdentifier

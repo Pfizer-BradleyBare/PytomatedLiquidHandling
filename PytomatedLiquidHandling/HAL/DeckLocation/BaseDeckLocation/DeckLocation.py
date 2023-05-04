@@ -8,9 +8,6 @@ class DeckLocation(UniqueObjectABC):
         IsStorageLocation: bool,
         IsPipettableLocation: bool,
     ):
-        self.UniqueIdentifier: str = UniqueIdentifier
+        UniqueObjectABC.__init__(self, UniqueIdentifier)
         self.IsStorageLocation: bool = IsStorageLocation
         self.IsPipettableLocation: bool = IsPipettableLocation
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.UniqueIdentifier

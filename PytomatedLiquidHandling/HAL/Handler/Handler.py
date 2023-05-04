@@ -16,9 +16,6 @@ class Handler(ServerHandlerABC):
         except:
             DriverHandler(LoggerInstance)
 
-    def GetUniqueIdentifier(self) -> str:
-        return "HAL"
-
     def GetEndpoints(self) -> tuple:
         urls = ()
         return urls

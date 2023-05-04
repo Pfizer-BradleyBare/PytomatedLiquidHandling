@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 
 # This is an abstract loader class for loading configuration files
 
@@ -8,7 +8,9 @@ class UniqueObjectABC(ABC):
     This class enables compatibility with the unique tracker.
     """
 
-    @abstractmethod
+    def __init__(self, UniqueIdentifier: str | int):
+        self.__UniqueObjectABC_Identifier: str | int = UniqueIdentifier
+
     def GetUniqueIdentifier(self) -> str | int:
         """This method guarentees a unique value as either a string or an int.
         This guarentee is required for the unique tracker.
@@ -16,4 +18,4 @@ class UniqueObjectABC(ABC):
         Returns:
             str | int: A unique value
         """
-        ...  # this doesn't actually raise an error. This is an abstract method so python will complain
+        return self.__UniqueObjectABC_Identifier

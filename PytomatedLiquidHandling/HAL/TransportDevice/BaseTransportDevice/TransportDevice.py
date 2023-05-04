@@ -17,16 +17,13 @@ class TransportDevices(Enum):
 class TransportDevice(UniqueObjectABC, TransportInterface):
     def __init__(
         self,
-        UniqueIdentifier: TransportDevices,
+        TransportDevice: TransportDevices,
         TransportableLabwareTrackerInstance: TransportableLabwareTracker,
     ):
-        self.UniqueIdentifier: TransportDevices = UniqueIdentifier
+        UniqueObjectABC.__init__(self, TransportDevice.value)
         self.TransportableLabwareTrackerInstance: TransportableLabwareTracker = (
             TransportableLabwareTrackerInstance
         )
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.UniqueIdentifier.value
 
     @abstractmethod
     def GetConfigKeys(self) -> list[str]:

@@ -7,10 +7,8 @@ class TransportableLabware(UniqueObjectABC):
     def __init__(
         self, LabwareInstance: Labware, TransportParametersInstance: TransportParameters
     ):
+        UniqueObjectABC.__init__(self, LabwareInstance.GetUniqueIdentifier())
         self.LabwareInstance: Labware = LabwareInstance
         self.TransportParametersInstance: TransportParameters = (
             TransportParametersInstance
         )
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.LabwareInstance.GetUniqueIdentifier()

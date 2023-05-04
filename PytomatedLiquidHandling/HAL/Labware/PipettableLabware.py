@@ -11,9 +11,6 @@ class PipettableLabware(Labware):
         Labware.__init__(self, UniqueIdentifier, DimensionsInstance)
         self.LabwareWells: Wells = LabwareWells
 
-    def GetUniqueIdentifier(self) -> str:
-        return self.UniqueIdentifier
-
     def GetWellHeightFromVolume(self, Volume: float) -> float:
         CalculatedHeight = 0.0
 
@@ -27,14 +24,14 @@ class PipettableLabware(Labware):
             # reset each round
 
             for Segment in WellsEquations:
-                SegmentHeight = Segment.Height
+                SegmentHeight = Segment.SegmentHeight
                 EvalHeight = TempHeight
 
                 if EvalHeight > SegmentHeight:
                     EvalHeight = SegmentHeight
                 # Make sure we do not exceed the segment height during the calc
 
-                CalculatedVolume += eval(Segment.Equation, {}, {"h": EvalHeight})
+                CalculatedVolume += eval(Segment.SegmentEquation, {}, {"h": EvalHeight})
                 TempHeight -= SegmentHeight
 
                 if TempHeight <= 0:
@@ -54,7 +51,7 @@ class PipettableLabware(Labware):
         CalculatedVolume = 0
 
         for Segment in WellsEquations:
-            SegmentHeight = Segment.Height
+            SegmentHeight = Segment.SegmentHeight
 
             if Height > SegmentHeight:
                 EvalHeight = SegmentHeight
@@ -63,6 +60,6 @@ class PipettableLabware(Labware):
 
             Height -= SegmentHeight
 
-            CalculatedVolume += eval(Segment.Equation, {}, {"h": EvalHeight})
+            CalculatedVolume += eval(Segment.SegmentEquation, {}, {"h": EvalHeight})
 
         return CalculatedVolume

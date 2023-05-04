@@ -18,10 +18,7 @@ class Tip(UniqueObjectABC, TipInterface):
         Type: TipTypes,
         MaxVolume: float,
     ):
-        self.UniqueIdentifier: str = UniqueIdentifier
+        UniqueObjectABC.__init__(self, UniqueIdentifier)
         self.PickupSequence: str = PickupSequence
         self.Type: TipTypes = Type
         self.MaxVolume: float = MaxVolume
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.UniqueIdentifier

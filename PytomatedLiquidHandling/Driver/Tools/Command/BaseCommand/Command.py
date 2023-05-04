@@ -31,7 +31,7 @@ class Command(NonUniqueObjectABC):
     ClassFilePath: str
 
     def __init__(self, CustomErrorHandling: bool, UniqueIdentifier: str):
-        self.UniqueIdentifier: str = UniqueIdentifier
+        NonUniqueObjectABC.__init__(self, UniqueIdentifier)
 
         self.CustomErrorHandling: bool = CustomErrorHandling
 
@@ -43,9 +43,6 @@ class Command(NonUniqueObjectABC):
         self.ResponseState: bool
         self.ResponseMessage: str
         self.ResponseProperties: dict[str, any]  # type:ignore
-
-    def GetUniqueIdentifier(self) -> str:
-        return self.UniqueIdentifier
 
     def GetModuleName(self) -> str:
         return self.ModuleName
@@ -59,7 +56,7 @@ class Command(NonUniqueObjectABC):
             + " -> "
             + self.GetCommandName()
             + ": "
-            + self.GetUniqueIdentifier()
+            + str(self.GetIdentifier())
         )
 
     def GetExpectedResponseProperties(self) -> list[str]:
