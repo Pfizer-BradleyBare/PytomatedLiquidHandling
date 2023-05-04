@@ -24,11 +24,14 @@ def LoadYaml(
     FileHandle.close()
     # Get config file contents
 
-    for DeviceID in ConfigFile["Device IDs"]:
+    for DeviceType in ConfigFile:
 
-        Device = ConfigFile["Device IDs"][DeviceID]
+        for Device in ConfigFile[DeviceType]:
+            if Device["Enabled"] == False:
+                continue
 
-        if Device["Enabled"] is True:
+            UniqueIdentifier = Device["Unique Identifier"]
+            ComPort = Device["Com Port"]
 
             StableTempDelta = Device["Temp Limits"]["Stable Delta"]
             MaxTemp = Device["Temp Limits"]["Maximum"]
@@ -36,59 +39,68 @@ def LoadYaml(
             TempLimitsInstance = TempLimits(StableTempDelta, MinTemp, MaxTemp)
             # Create Temp Config
 
-            SupportedLayoutItemTracker = LayoutItemTracker()
-
             DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
                 Device["Deck Location ID"]
             )
 
-            for LabwareID in Device["Supported Labware"]:
-                PlateSequence = Device["Supported Labware"][LabwareID]["Plate Sequence"]
-                PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(LabwareID)
+            SupportedLayoutItemTracker = LayoutItemTracker()
+
+            for Labware in Device["Supported Labware"]:
+                LabwareName = Labware["Labware"]
+                PlateSequence = Labware["Plate Sequence"]
+                PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(
+                    LabwareName
+                )
 
                 if not isinstance(PlateLabwareInstance, PipettableLabware):
                     raise Exception("This should never happen")
 
-                LidSequence = Device["Supported Labware"][LabwareID]["Lid Sequence"]
+                LidSequence = Labware["Lid Sequence"]
                 LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
-                    Device["Supported Labware"][LabwareID]["Lid Labware"]
+                    Labware["Lid Labware"]
                 )
 
                 if not isinstance(LidLabwareInstance, NonPipettableLabware):
                     raise Exception("This should never happen")
 
-                LidInstance = Lid(DeckLocationInstance, LidSequence, LidLabwareInstance)
+                LidInstance = Lid(
+                    UniqueIdentifier + " " + LabwareName + " Lid",
+                    LidSequence,
+                    LidLabwareInstance,
+                    DeckLocationInstance,
+                )
 
                 LayoutItemInstance = CoverablePosition(
-                    DeckLocationInstance,
+                    UniqueIdentifier + " " + LabwareName,
                     PlateSequence,
                     PlateLabwareInstance,
+                    DeckLocationInstance,
                     LidInstance,
                 )
                 SupportedLayoutItemTracker.LoadSingle(LayoutItemInstance)
                 # add to our list for our item creation and also add it to the layout loader for tracking
 
-            ComPort = Device["Com Port"]
-            DeviceType = DeviceTypes(Device["Device Type"])
-
-            if DeviceType == DeviceTypes.HamiltonHeaterCooler:
-                TempControlDeviceTrackerInstance.LoadSingle(
-                    HamiltonHeaterCooler(
-                        DeviceID,
-                        ComPort,
-                        TempLimitsInstance,
-                        SupportedLayoutItemTracker,
-                    )
-                )
-
-            if DeviceType == DeviceTypes.HamiltonHeaterShaker:
+            if DeviceType == "Hamilton Heater Shaker":
                 TempControlDeviceTrackerInstance.LoadSingle(
                     HamiltonHeaterShaker(
-                        DeviceID,
+                        UniqueIdentifier,
                         ComPort,
                         TempLimitsInstance,
                         SupportedLayoutItemTracker,
                     )
                 )
+
+            elif DeviceType == "Hamilton Heater Cooler":
+                TempControlDeviceTrackerInstance.LoadSingle(
+                    HamiltonHeaterCooler(
+                        UniqueIdentifier,
+                        ComPort,
+                        TempLimitsInstance,
+                        SupportedLayoutItemTracker,
+                    )
+                )
+
+            else:
+                raise Exception("Device type is unknown")
 
     return TempControlDeviceTrackerInstance

@@ -1,0 +1,62 @@
+#############################################################
+#
+# Device IDs: This identifies the Device to users
+# Enabled: True: Can be used. False: Cannot be used
+# Com Port: Port to communicate with the Device
+# Device Type: HeaterShaker or HeaterCooler
+# Ambient Temp: Above ambient temp will heat, below ambient will cool. If device cannot cool then this is ignored
+# Stable Temp Delta: If device temp is +- this value of set temp. Device is considered equilibrated and stable.
+# Supported Labware: These are the plate supported by this device. This associates with the deck sequences file
+# Plate Sequence: Sequence for that plate on the device
+# Lid Sequence: Sequence for associated lid on the device
+#
+#############################################################
+
+Hamilton Heater Shaker:
+  - UniqueIdentifier: Heater 1
+    Enabled: True
+    Com Port: 1
+    Deck Location ID: HHS_Carrier_Pos3
+    Temp Limits:
+      Stable Delta: 2
+      Minimum: 0
+      Maximum: 100
+    Supported Labware:
+      - Labware: 200uL Biorad 96 Well PCR Plate
+        Plate Sequence: _HHS1_96WellPCRPlate200uL
+        Lid Sequence: _HHS1_96WellPCRPlate200uL_Lid
+        Lid Labware: Agilent Black Lid
+
+      - Labware: 400uL Thermo 96 Well PCR Plate
+        Plate Sequence: _HHS1_96WellPCRPlate400uL
+        Lid Sequence: _HHS1_96WellPCRPlate400uL_Lid
+        Lid Labware: Agilent Black Lid
+
+      - Labware: 1200uL DeepWell 96 Well PCR Plate
+        Plate Sequence: _HHS1_96WellPCRPlate1200uL
+        Lid Sequence: _HHS1_96WellPCRPlate1200uL_Lid
+        Lid Labware: Agilent Black Lid
+
+  - Unique Identifier: Heater 2
+    Enabled: True
+    Com Port: 2
+    Deck Location ID: HHS_Carrier_Pos4
+    Temp Limits:
+      Stable Delta: 2
+      Minimum: 0
+      Maximum: 100
+    Supported Labware:
+      - Labware: 200uL Biorad 96 Well PCR Plate
+        Plate Sequence: _HHS2_96WellPCRPlate200uL
+        Lid Sequence: _HHS2_96WellPCRPlate200uL_Lid
+        Lid Labware: Agilent Black Lid
+
+      - Labware: 400uL Thermo 96 Well PCR Plate
+        Plate Sequence: _HHS2_96WellPCRPlate400uL
+        Lid Sequence: _HHS2_96WellPCRPlate400uL_Lid
+        Lid Labware: Agilent Black Lid
+
+      - Labware: 1200uL DeepWell 96 Well PCR Plate
+        Plate Sequence: _HHS2_96WellPCRPlate1200uL
+        Lid Sequence: _HHS2_96WellPCRPlate1200uL_Lid
+        Lid Labware: Agilent Black Lid
