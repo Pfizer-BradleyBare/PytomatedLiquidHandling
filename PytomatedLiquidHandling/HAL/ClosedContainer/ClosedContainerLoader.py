@@ -1,8 +1,8 @@
 import yaml
 
+from ..ClosedContainer import HamiltonFlipTube, HamiltonFlipTubeSpecial
 from ..Labware import LabwareTracker
 from .BaseClosedContainer import ClosedContainerTracker
-from .HamiltonFlipTube import HamiltonFlipTube
 
 
 def LoadYaml(
@@ -32,6 +32,19 @@ def LoadYaml(
                     )
 
                 ClosedContainerInstance = HamiltonFlipTube(
+                    UniqueName, ToolSequence, SupportedLabwareTrackerInstance
+                )
+
+            elif DeviceType == "Hamilton FlipTube Special":
+                ToolSequence = Device["Tool Sequence"]
+
+                SupportedLabwareTrackerInstance = LabwareTracker()
+                for LabwareID in Device["Supported Labware"]:
+                    SupportedLabwareTrackerInstance.LoadSingle(
+                        LabwareTrackerInstance.GetObjectByName(LabwareID)
+                    )
+
+                ClosedContainerInstance = HamiltonFlipTubeSpecial(
                     UniqueName, ToolSequence, SupportedLabwareTrackerInstance
                 )
 

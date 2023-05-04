@@ -4,7 +4,7 @@ from ..Labware import LabwareTracker
 from .BaseClosedContainer import ClosedContainer, OpenCloseOptionsTracker
 
 
-class HamiltonFlipTube(ClosedContainer):
+class HamiltonFlipTubeSpecial(ClosedContainer):
     def __init__(
         self,
         UniqueIdentifier: str,

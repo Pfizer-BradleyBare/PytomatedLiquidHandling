@@ -5,8 +5,14 @@
 #
 #############################################################
 
-
 Hamilton FlipTube:
+  - Unique Identifier: Fliptube 1
+    Enabled: True
+    Tool Sequence: Ham_4_FlipTubeTools_OnWaste_0001
+    Supported Labware:
+      - Hamilton 1.5mL FlipTube
+
+Hamilton FlipTube Special:
   - Unique Identifier: Fliptube 1
     Enabled: True
     Tool Sequence: Ham_4_FlipTubeTools_OnWaste_0001
