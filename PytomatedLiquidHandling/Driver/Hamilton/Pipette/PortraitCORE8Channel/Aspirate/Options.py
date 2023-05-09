@@ -1,14 +1,17 @@
 from enum import Enum
 
 from ......Tools.AbstractClasses import NonUniqueObjectABC
-from .....Tools.AbstractOptions import AdvancedMultiOptionsABC, AdvancedOptionsWrapper
 
 
-class AdvancedOptions(AdvancedMultiOptionsABC):
-    @AdvancedOptionsWrapper
+class Options(NonUniqueObjectABC):
     def __init__(
         self,
         *,
+        ChannelNumber: int,
+        Sequence: str,
+        SequencePosition: int,
+        LiquidClass: str,
+        Volume: float,
         Mode: int = 0,
         CapacitiveLiquidLevelDetection: int = 0,
         SubmergeDepth: float = 0,
@@ -21,7 +24,16 @@ class AdvancedOptions(AdvancedMultiOptionsABC):
         MixPosition: float = 0,
         MixVolume: float = 0,
     ):
-        AdvancedMultiOptionsABC.__init__(self)
+        # Channel Settings
+        self.ChannelNumber: int = ChannelNumber
+
+        # Sequence
+        self.Sequence: str = Sequence
+        self.SequencePosition: int = SequencePosition
+
+        self.LiquidClass: str = LiquidClass
+        self.Volume: float = Volume
+
         self.Mode: int = Mode
         self.CapacitiveLiquidLevelDetection: int = CapacitiveLiquidLevelDetection
         self.SubmergeDepth: float = SubmergeDepth
@@ -34,27 +46,3 @@ class AdvancedOptions(AdvancedMultiOptionsABC):
         self.MixCycles: int = MixCycles
         self.MixPosition: float = MixPosition
         self.MixVolume: float = MixVolume
-
-
-class Options(NonUniqueObjectABC):
-    def __init__(
-        self,
-        *,
-        ChannelNumber: int,
-        Sequence: str,
-        SequencePosition: int,
-        LiquidClass: str,
-        Volume: float,
-        AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(),
-    ):
-        # Channel Settings
-        self.ChannelNumber: int = ChannelNumber
-
-        # Sequence
-        self.Sequence: str = Sequence
-        self.SequencePosition: int = SequencePosition
-
-        self.LiquidClass: str = LiquidClass
-        self.Volume: float = Volume
-
-        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptionsInstance

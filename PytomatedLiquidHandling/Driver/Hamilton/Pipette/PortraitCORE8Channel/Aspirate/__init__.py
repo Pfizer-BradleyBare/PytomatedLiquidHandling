@@ -1,3 +1,3 @@
 from .Command import Command
-from .Options import AdvancedOptions, Options
+from .Options import Options
 from .OptionsTracker import OptionsTracker

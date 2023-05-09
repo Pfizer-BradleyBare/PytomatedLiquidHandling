@@ -1,12 +1,11 @@
 from ......Tools.AbstractClasses import NonUniqueObjectABC
-from .....Tools.AbstractOptions import AdvancedOptionsWrapper, AdvancedSingleOptionsABC
 
 
-class AdvancedOptions(AdvancedSingleOptionsABC):
-    @AdvancedOptionsWrapper
+class Options(NonUniqueObjectABC):
     def __init__(
         self,
         *,
+        PlateSequence: str,
         CustomErrorHandling: bool = False,
         Movement: int = 0,
         RetractDistance: float = 0,
@@ -14,7 +13,8 @@ class AdvancedOptions(AdvancedSingleOptionsABC):
         LabwareOrientation: int = 1,
         CollisionControl: int = 1,
     ):
-        AdvancedSingleOptionsABC.__init__(self, CustomErrorHandling)
+        self.PlateSequence: str = PlateSequence
+
         self.Movement: int = Movement
 
         # Only matters if movement is 1
@@ -23,15 +23,3 @@ class AdvancedOptions(AdvancedSingleOptionsABC):
         self.LabwareOrientation: int = LabwareOrientation
 
         self.CollisionControl: int = CollisionControl
-
-
-class Options(NonUniqueObjectABC):
-    def __init__(
-        self,
-        *,
-        PlateSequence: str,
-        AdvancedOptionsInstance: AdvancedOptions = AdvancedOptions(),
-    ):
-        self.PlateSequence: str = PlateSequence
-
-        self.AdvancedOptionsInstance: AdvancedOptions = AdvancedOptionsInstance

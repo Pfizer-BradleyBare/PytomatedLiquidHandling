@@ -1,16 +1,15 @@
 from ......Tools.AbstractClasses import NonUniqueObjectTrackerABC
-from .....Tools.AbstractOptions import (
-    AdvancedMultiOptionsTrackerABC,
-    AdvancedOptionsWrapper,
-)
+
 from .Options import Options
 
 
-class AdvancedOptionsTracker(AdvancedMultiOptionsTrackerABC):
-    @AdvancedOptionsWrapper
+class OptionsTracker(NonUniqueObjectTrackerABC[Options]):
     def __init__(
         self,
         *,
+        Sequence: str,
+        LiquidClass: str,
+        Volume: float,
         CustomErrorHandling: bool = False,
         Mode: int = 0,
         FixHeightFromBottom: float = 0,
@@ -23,7 +22,13 @@ class AdvancedOptionsTracker(AdvancedMultiOptionsTrackerABC):
         MixPosition: float = 0,
         MixVolume: float = 0,
     ):
-        AdvancedMultiOptionsTrackerABC.__init__(self, CustomErrorHandling)
+        NonUniqueObjectTrackerABC.__init__(self)
+
+        self.Sequence: str = Sequence
+
+        self.Volume: float = Volume
+
+        self.LiquidClass: str = LiquidClass
 
         self.Mode: int = Mode
         self.FixHeightFromBottom: float = FixHeightFromBottom
@@ -36,25 +41,3 @@ class AdvancedOptionsTracker(AdvancedMultiOptionsTrackerABC):
         self.MixCycles: int = MixCycles
         self.MixPosition: float = MixPosition
         self.MixVolume: float = MixVolume
-
-
-class OptionsTracker(NonUniqueObjectTrackerABC[Options]):
-    def __init__(
-        self,
-        *,
-        Sequence: str,
-        LiquidClass: str,
-        Volume: float,
-        AdvancedOptionsTrackerInstance: AdvancedOptionsTracker = AdvancedOptionsTracker(),
-    ):
-        NonUniqueObjectTrackerABC.__init__(self)
-
-        self.Sequence: str = Sequence
-
-        self.Volume: float = Volume
-
-        self.LiquidClass: str = LiquidClass
-
-        self.AdvancedOptionsTrackerInstance: AdvancedOptionsTracker = (
-            AdvancedOptionsTrackerInstance
-        )
