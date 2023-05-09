@@ -4,7 +4,8 @@ from ....Tools import InterfaceABC
 
 
 class TipInterface(InterfaceABC):
-    def __init__(self):
+    def __init__(self, CustomErrorHandling: bool):
+        InterfaceABC.__init__(self, CustomErrorHandling)
         self.TipPosition: int = 0
         self.RemainingTips: int = 0
 

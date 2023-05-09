@@ -1,27 +1,37 @@
-from ...Driver.Tip import FTR as FTRDriver
+from ...Driver.Hamilton.Tip import FTR as FTRDriver
 from .BaseTip import Tip, TipTypes
 
 
 class TipFTR(Tip):
-    def __init__(self, UniqueIdentifier: str, PickupSequence: str, MaxVolume: float):
-        Tip.__init__(self, Name, PickupSequence, TipTypes.FTR, MaxVolume)
-
-    def Initialize(
+    def __init__(
         self,
+        UniqueIdentifier: str,
+        CustomErrorHandling: bool,
+        PickupSequence: str,
+        MaxVolume: float,
     ):
+        Tip.__init__(
+            self,
+            UniqueIdentifier,
+            CustomErrorHandling,
+            PickupSequence,
+            TipTypes.FTR,
+            MaxVolume,
+        )
+
+    def Initialize(self):
         self.Reload()
 
-    def Deinitialize(
-        self,
-    ):
+    def Deinitialize(self):
         ...
 
-    def Reload(
-        self,
-    ):
+    def Reload(self):
         try:
             FTRDriver.LoadTips.Command(
-                FTRDriver.LoadTips.Options(self.PickupSequence), True
+                OptionsInstance=FTRDriver.LoadTips.Options(
+                    TipSequence=self.PickupSequence
+                ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
 
         except:
@@ -31,15 +41,16 @@ class TipFTR(Tip):
 
     def UpdateTipPosition(
         self,
+        *,
         NumTips: int,
     ):
         try:
             Command = FTRDriver.TipsAvailable.Command(
-                FTRDriver.TipsAvailable.Options(
-                    self.PickupSequence,
-                    NumTips,
+                OptionsInstance=FTRDriver.TipsAvailable.Options(
+                    TipSequence=self.PickupSequence,
+                    NumPositions=NumTips,
                 ),
-                True,
+                CustomErrorHandling=self.CustomErrorHandling,
             )
 
             Command.Execute()
@@ -49,15 +60,13 @@ class TipFTR(Tip):
         except:
             ...
 
-    def UpdateRemainingTips(
-        self,
-    ):
+    def UpdateRemainingTips(self):
         try:
             Command = FTRDriver.TipsRemaining.Command(
-                FTRDriver.TipsRemaining.Options(
-                    self.PickupSequence,
+                OptionsInstance=FTRDriver.TipsRemaining.Options(
+                    TipSequence=self.PickupSequence,
                 ),
-                True,
+                CustomErrorHandling=self.CustomErrorHandling,
             )
 
             Command.Execute()

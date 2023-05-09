@@ -12,30 +12,38 @@ def LoadYaml(FilePath: str) -> TipTracker:
     FileHandle.close()
     # Get config file contents
 
-    for TipID in ConfigFile["Tip IDs"]:
-        TipItem = ConfigFile["Tip IDs"][TipID]
+    for Tip in ConfigFile:
+        if Tip["Enabled"] == False:
+            continue
 
-        if TipItem["Enabled"] is True:
-            PickupSequence = TipItem["Pickup Sequence"]
-            MaxVolume = TipItem["Volume"]
+        UniqueIdentifier = Tip["Unique Identifier"]
+        CustomErrorHandling = Tip["Custom Error Handling"]
+        TipType = Tip["Tip Type"]
 
-            TipType = TipTypes(TipItem["Tip Type"])
+        PickupSequence = Tip["Pickup Sequence"]
+        MaxVolume = Tip["Volume"]
 
-            if TipType == TipTypes.NTR:
-                NTRWasteSequence = TipItem["NTR Waste Sequence"]
-                GripperSequence = TipItem["Gripper Sequence"]
+        if TipType == "NTR":
+            NTRWasteSequence = Tip["NTR Waste Sequence"]
+            GripperSequence = Tip["Gripper Sequence"]
 
-                TipTrackerInstance.LoadSingle(
-                    TipNTR(
-                        TipID,
-                        PickupSequence,
-                        NTRWasteSequence,
-                        GripperSequence,
-                        MaxVolume,
-                    )
-                )
+            TipInstance = TipNTR(
+                UniqueIdentifier,
+                CustomErrorHandling,
+                PickupSequence,
+                NTRWasteSequence,
+                GripperSequence,
+                MaxVolume,
+            )
 
-            elif TipType == TipTypes.FTR or TipType == TipTypes.FTRSlim:
-                TipTrackerInstance.LoadSingle(TipFTR(TipID, PickupSequence, MaxVolume))
+        elif TipType == "FTR":
+            TipInstance = TipFTR(
+                UniqueIdentifier, CustomErrorHandling, PickupSequence, MaxVolume
+            )
+
+        else:
+            raise Exception("Tip type not recognized")
+
+        TipTrackerInstance.LoadSingle(TipInstance)
 
     return TipTrackerInstance

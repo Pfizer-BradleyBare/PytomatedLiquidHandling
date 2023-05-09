@@ -1,0 +1,35 @@
+#############################################################
+#
+# Tip IDs: This identifies the tip to the users and associating libraries
+# Enabled: True: Can be used. False: Cannot be used
+# Pickup Sequence: Sequence to pickup these tips
+# Tip Type: NTR or FTR
+# NTR Waste Sequence: The waste sequence for the NTR tip
+# Max Pipetting Volume: Max volume this tip can pipette
+# Liquid Classes: Volume dependent liquid classes
+# Volume Cutoffs: Max volume for each liquid class
+# Liquid Class: The liquid class for a given volume cutoff
+#
+#############################################################
+
+- Unique Identifier: 50uL NTR
+  Enabled: True
+  Custom Error Handling: False
+  Tip Type: NTR
+  Volume: 50
+  NTR Waste Sequence: Tip50_NTR_Waste
+  Gripper Sequence: Gripper
+
+- Unique Identifier: 300uL NTR
+  Enabled: True
+  Custom Error Handling: False
+  Tip Type: NTR
+  Volume: 300
+  NTR Waste Sequence: Tip300_NTR_Waste
+  Gripper Sequence: Gripper
+
+- Unique Identifier: 1000uL FTR
+  Enabled: True
+  Custom Error Handling: False
+  Tip Type: FTR
+  Volume: 1000
