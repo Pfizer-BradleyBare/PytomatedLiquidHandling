@@ -1,5 +1,4 @@
 from . import (
-    Autoload,
     ClosedContainer,
     DeckLoadingDialog,
     Pipette,
