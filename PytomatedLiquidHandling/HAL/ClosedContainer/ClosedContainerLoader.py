@@ -20,7 +20,8 @@ def LoadYaml(
             if Device["Enabled"] == False:
                 continue
 
-            UniqueName = Device["Unique Name"]
+            UniqueIdentifier = Device["Unique Identifier"]
+            CustomErrorHandling = Device["Custom Error Handling"]
 
             if DeviceType == "Hamilton FlipTube":
                 ToolSequence = Device["Tool Sequence"]
@@ -32,7 +33,10 @@ def LoadYaml(
                     )
 
                 ClosedContainerInstance = HamiltonFlipTube(
-                    UniqueName, ToolSequence, SupportedLabwareTrackerInstance
+                    UniqueIdentifier,
+                    CustomErrorHandling,
+                    ToolSequence,
+                    SupportedLabwareTrackerInstance,
                 )
 
             elif DeviceType == "Hamilton FlipTube Special":
@@ -45,7 +49,10 @@ def LoadYaml(
                     )
 
                 ClosedContainerInstance = HamiltonFlipTubeSpecial(
-                    UniqueName, ToolSequence, SupportedLabwareTrackerInstance
+                    UniqueIdentifier,
+                    CustomErrorHandling,
+                    ToolSequence,
+                    SupportedLabwareTrackerInstance,
                 )
 
             else:

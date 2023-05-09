@@ -7,7 +7,7 @@
 
 Hamilton FlipTube:
   - Unique Identifier: Fliptube 1
-
+    CustomErrorHandling: False
     Enabled: True
     Tool Sequence: Ham_4_FlipTubeTools_OnWaste_0001
     Supported Labware:
@@ -15,6 +15,7 @@ Hamilton FlipTube:
 
 Hamilton FlipTube Special:
   - Unique Identifier: Fliptube 1
+    CustomErrorHandling: False
     Enabled: True
     Tool Sequence: Ham_4_FlipTubeTools_OnWaste_0001
     Supported Labware:

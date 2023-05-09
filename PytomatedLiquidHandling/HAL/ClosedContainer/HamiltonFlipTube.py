@@ -1,5 +1,4 @@
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
-from ...Driver.Tools.AbstractOptions import AdvancedSingleOptionsABC
 from ..Labware import LabwareTracker
 from .BaseClosedContainer import ClosedContainer, OpenCloseOptionsTracker
 
@@ -8,50 +7,34 @@ class HamiltonFlipTube(ClosedContainer):
     def __init__(
         self,
         UniqueIdentifier: str,
+        CustomErrorHandling: bool,
         ToolSequence: str,
         SupportedLabwareTrackerInstance: LabwareTracker,
     ):
         ClosedContainer.__init__(
             self,
             UniqueIdentifier,
+            CustomErrorHandling,
             ToolSequence,
             SupportedLabwareTrackerInstance,
         )
 
-    def Initialize(
-        self,
-        *,
-        AdvancedOptionsInstance: FlipTubeDriver.Initialize.AdvancedOptions = FlipTubeDriver.Initialize.AdvancedOptions(),
-    ):
+    def Initialize(self):
         FlipTubeDriver.Initialize.Command(
-            FlipTubeDriver.Initialize.Options(
-                AdvancedOptionsInstance=FlipTubeDriver.Initialize.AdvancedOptions().UpdateOptions(
-                    AdvancedOptionsInstance
-                )
-            )
+            OptionsInstance=FlipTubeDriver.Initialize.Options(),
+            CustomErrorHandling=self.CustomErrorHandling,
         ).Execute()
 
-    def Deinitialize(
-        self,
-        *,
-        AdvancedOptionsInstance: AdvancedSingleOptionsABC = AdvancedSingleOptionsABC(
-            False
-        ),
-    ):
+    def Deinitialize(self):
         ...
 
     def Open(
         self,
-        OpenCloseOptionsTrackerInstance: OpenCloseOptionsTracker,
         *,
-        AdvancedOptionsInstance: FlipTubeDriver.Open.AdvancedOptions = FlipTubeDriver.Open.AdvancedOptions(),
-        AdvancedOptionsTrackerInstance: FlipTubeDriver.Open.AdvancedOptionsTracker = FlipTubeDriver.Open.AdvancedOptionsTracker(),
+        OpenCloseOptionsTrackerInstance: OpenCloseOptionsTracker,
     ):
         OptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker(
-            ToolSequence=self.ToolSequence,
-            AdvancedOptionsTrackerInstance=FlipTubeDriver.Open.AdvancedOptionsTracker().UpdateOptions(
-                AdvancedOptionsTrackerInstance
-            ),
+            ToolSequence=self.ToolSequence
         )
         for OpenCloseOptions in OpenCloseOptionsTrackerInstance.GetObjectsAsList():
             if (
@@ -62,28 +45,25 @@ class HamiltonFlipTube(ClosedContainer):
                     FlipTubeDriver.Open.Options(
                         Sequence=OpenCloseOptions.LayoutItemInstance.Sequence,
                         SequencePosition=OpenCloseOptions.Position,
-                        AdvancedOptionsInstance=AdvancedOptionsInstance,
                     )
                 )
 
         try:
-            FlipTubeDriver.Open.Command(OptionsTrackerInstance).Execute()
+            FlipTubeDriver.Open.Command(
+                OptionsTrackerInstance=OptionsTrackerInstance,
+                CustomErrorHandling=self.CustomErrorHandling,
+            ).Execute()
 
         except:
             ...
 
     def Close(
         self,
-        OpenCloseOptionsTrackerInstance: OpenCloseOptionsTracker,
         *,
-        AdvancedOptionsInstance: FlipTubeDriver.Close.AdvancedOptions = FlipTubeDriver.Close.AdvancedOptions(),
-        AdvancedOptionsTrackerInstance: FlipTubeDriver.Close.AdvancedOptionsTracker = FlipTubeDriver.Close.AdvancedOptionsTracker(),
+        OpenCloseOptionsTrackerInstance: OpenCloseOptionsTracker,
     ):
         OptionsTrackerInstance = FlipTubeDriver.Close.OptionsTracker(
-            ToolSequence=self.ToolSequence,
-            AdvancedOptionsTrackerInstance=FlipTubeDriver.Close.AdvancedOptionsTracker().UpdateOptions(
-                AdvancedOptionsTrackerInstance
-            ),
+            ToolSequence=self.ToolSequence
         )
         for OpenCloseOptions in OpenCloseOptionsTrackerInstance.GetObjectsAsList():
             if (
@@ -94,12 +74,14 @@ class HamiltonFlipTube(ClosedContainer):
                     FlipTubeDriver.Close.Options(
                         Sequence=OpenCloseOptions.LayoutItemInstance.Sequence,
                         SequencePosition=OpenCloseOptions.Position,
-                        AdvancedOptionsInstance=AdvancedOptionsInstance,
                     )
                 )
 
         try:
-            FlipTubeDriver.Close.Command(OptionsTrackerInstance).Execute()
+            FlipTubeDriver.Close.Command(
+                OptionsTrackerInstance=OptionsTrackerInstance,
+                CustomErrorHandling=self.CustomErrorHandling,
+            ).Execute()
 
         except:
             ...
