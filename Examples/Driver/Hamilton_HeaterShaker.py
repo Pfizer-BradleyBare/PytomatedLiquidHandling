@@ -3,8 +3,8 @@ import os
 import time
 
 from PytomatedLiquidHandling import Driver, Logger
-from PytomatedLiquidHandling.Driver.TemperatureControl import HeaterShaker
-from PytomatedLiquidHandling.Driver.Timer import StartTimer
+from PytomatedLiquidHandling.Driver.Hamilton.TemperatureControl import HeaterShaker
+from PytomatedLiquidHandling.Driver.Hamilton.Timer import StartTimer
 
 LoggerInstance = Logger(
     "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__), "Logging")
@@ -14,7 +14,7 @@ DriverHandlerInstance.StartServer()
 # Creates the handler so we can communicate with the Hamilton
 
 ConnectCommand = HeaterShaker.Connect.Command(
-    HeaterShaker.Connect.Options(ComPort=1), False
+    OptionsInstance=HeaterShaker.Connect.Options(ComPort=1), CustomErrorHandling=False
 )
 ConnectCommand.Execute()
 HeaterShakerHandleId = ConnectCommand.GetHandleID()
@@ -22,20 +22,25 @@ HeaterShakerHandleId = ConnectCommand.GetHandleID()
 
 DesiredTemperature = 37
 StartTempCommand = HeaterShaker.StartTemperatureControl.Command(
-    HeaterShaker.StartTemperatureControl.Options(
+    OptionsInstance=HeaterShaker.StartTemperatureControl.Options(
         HandleID=HeaterShakerHandleId, Temperature=DesiredTemperature
     ),
-    False,
+    CustomErrorHandling=False,
 )
 StartTempCommand.Execute()
 # Turn on the Heat
 
 TemperatureOffset = 2
 for i in range(0, 30):
-    StartTimer.Command(StartTimer.Options(WaitTime=10), False).Execute()
+    StartTimer.Command(
+        OptionsInstance=StartTimer.Options(WaitTime=10), CustomErrorHandling=False
+    ).Execute()
 
     GetTempCommand = HeaterShaker.GetTemperature.Command(
-        HeaterShaker.GetTemperature.Options(HandleID=HeaterShakerHandleId), False
+        OptionsInstance=HeaterShaker.GetTemperature.Options(
+            HandleID=HeaterShakerHandleId
+        ),
+        CustomErrorHandling=False,
     )
     GetTempCommand.Execute()
 
@@ -51,21 +56,29 @@ for i in range(0, 30):
 # Wait for temperature to fall within desired range. Only wait a max of 5 minutes
 
 HeaterShaker.StartShakeControl.Command(
-    HeaterShaker.StartShakeControl.Options(
+    OptionsInstance=HeaterShaker.StartShakeControl.Options(
         HandleID=HeaterShakerHandleId, ShakingSpeed=500
     ),
-    True,
+    CustomErrorHandling=True,
 ).Execute()
 
-StartTimer.Command(StartTimer.Options(WaitTime=30), False).Execute()
+StartTimer.Command(
+    OptionsInstance=StartTimer.Options(WaitTime=30), CustomErrorHandling=False
+).Execute()
 # run 30 seconds
 
 HeaterShaker.StopShakeControl.Command(
-    HeaterShaker.StopShakeControl.Options(HandleID=HeaterShakerHandleId), False
+    OptionsInstance=HeaterShaker.StopShakeControl.Options(
+        HandleID=HeaterShakerHandleId
+    ),
+    CustomErrorHandling=False,
 ).Execute()
 
 HeaterShaker.StopTemperatureControl.Command(
-    HeaterShaker.StopTemperatureControl.Options(HandleID=HeaterShakerHandleId), False
+    OptionsInstance=HeaterShaker.StopTemperatureControl.Options(
+        HandleID=HeaterShakerHandleId
+    ),
+    CustomErrorHandling=False,
 ).Execute()
 # Turn off heat
 
