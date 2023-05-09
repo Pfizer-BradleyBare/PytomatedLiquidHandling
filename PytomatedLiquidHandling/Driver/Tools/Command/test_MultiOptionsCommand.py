@@ -7,14 +7,11 @@ from .MultiOptionsCommand import MultiOptionsCommand
 
 class Options(NonUniqueObjectABC):
     def __init__(self, d, e, f):
-        NonUniqueObjectABC.__init__(self)
+        NonUniqueObjectABC.__init__(self, d)
 
         self.a = d
         self.b = e
         self.c = f
-
-    def GetUniqueIdentifier(self):
-        return self.a
 
 
 class OptionsTracker(NonUniqueObjectTrackerABC[Options]):
@@ -40,7 +37,9 @@ def test():
     OptionsTrackerInstance.LoadSingle(Options("T2", 3, 4))
     OptionsTrackerInstance.LoadSingle(Options("T3", 5, 6))
 
-    CommandInstance = Command(OptionsTrackerInstance, True)
+    CommandInstance = Command(
+        OptionsTrackerInstance=OptionsTrackerInstance, CustomErrorHandling=True
+    )
 
     assert CommandInstance.GetCommandName() == "Command"
     assert CommandInstance.GetModuleName() == "Tools"

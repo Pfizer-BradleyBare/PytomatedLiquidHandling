@@ -9,7 +9,6 @@ class Options(NonUniqueObjectABC):
         PlateSequence: str,
         GripWidth: float,
         OpenWidth: float,
-        CustomErrorHandling: bool = False,
         GripHeight: float = 3,
         GripForce: int = 4,
         GripSpeed: float = 277.8,

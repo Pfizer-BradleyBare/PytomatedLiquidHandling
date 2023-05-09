@@ -6,7 +6,6 @@ class Options(NonUniqueObjectABC):
         self,
         *,
         PlateSequence: str,
-        CustomErrorHandling: bool = False,
         EjectTool: int = 0,
         XSpeed: int = 4,
         ZSpeed: float = 128.7,

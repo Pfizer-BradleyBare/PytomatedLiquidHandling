@@ -10,7 +10,6 @@ class OptionsTracker(NonUniqueObjectTrackerABC[Options]):
         Sequence: str,
         LiquidClass: str,
         Volume: float,
-        CustomErrorHandling: bool = False,
         Mode: int = 0,
         FixHeightFromBottom: float = 0,
         RetractDistanceForTransportAir: float = 0,

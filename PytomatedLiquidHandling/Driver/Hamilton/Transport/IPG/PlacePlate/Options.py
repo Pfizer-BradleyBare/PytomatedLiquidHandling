@@ -6,7 +6,6 @@ class Options(NonUniqueObjectABC):
         self,
         *,
         PlateSequence: str,
-        CustomErrorHandling: bool = False,
         Movement: int = 0,
         RetractDistance: float = 0,
         LiftupHeight: float = 0,

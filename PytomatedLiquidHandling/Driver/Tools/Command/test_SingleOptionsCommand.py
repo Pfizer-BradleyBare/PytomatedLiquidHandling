@@ -7,14 +7,11 @@ from .SingleOptionsCommand import SingleOptionsCommand
 
 class Options(NonUniqueObjectABC):
     def __init__(self, a, b, c):
-        NonUniqueObjectABC.__init__(self)
+        NonUniqueObjectABC.__init__(self, a)
 
         self.a = a
         self.b = b
         self.c = c
-
-    def GetUniqueIdentifier(self):
-        return self.a
 
 
 @ClassDecorator_Command(__file__)
@@ -30,7 +27,9 @@ class Command(SingleOptionsCommand[Options]):
 
 
 def test():
-    CommandInstance = Command(Options("T1", 1, 2), True)
+    CommandInstance = Command(
+        OptionsInstance=Options("T1", 1, 2), CustomErrorHandling=True
+    )
 
     assert CommandInstance.GetCommandName() == "Command"
     assert CommandInstance.GetModuleName() == "Tools"

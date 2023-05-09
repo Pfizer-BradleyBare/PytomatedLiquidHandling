@@ -10,7 +10,6 @@ class OptionsTracker(NonUniqueObjectTrackerABC[Options]):
         Sequence: str,
         LiquidClass: str,
         Volume: float,
-        CustomErrorHandling: bool = False,
         Mode: int = 0,
         CapacitiveLiquidLevelDetection: int = 0,
         SubmergeDepth: float = 0,
