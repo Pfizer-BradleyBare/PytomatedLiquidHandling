@@ -1,5 +1,5 @@
 from ...Driver.Hamilton.Tip import NTR as NTRDriver
-from .BaseTip import Tip, TipTypes
+from .BaseTip import Tip
 
 
 class TipNTR(Tip):
@@ -17,7 +17,6 @@ class TipNTR(Tip):
             UniqueIdentifier,
             CustomErrorHandling,
             PickupSequence,
-            TipTypes.NTR,
             MaxVolume,
         )
         self.NTRWasteSequence: str = NTRWasteSequence

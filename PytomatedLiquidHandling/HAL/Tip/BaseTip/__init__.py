@@ -1,4 +1,4 @@
-from .Tip import Tip, TipTypes
+from .Tip import Tip
 from .TipTracker import TipTracker
 
-__all__ = ["Tip", "TipTypes", "TipTracker"]
+__all__ = ["Tip", "TipTracker"]

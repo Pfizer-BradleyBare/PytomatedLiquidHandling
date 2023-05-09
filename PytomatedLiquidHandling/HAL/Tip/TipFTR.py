@@ -1,5 +1,5 @@
 from ...Driver.Hamilton.Tip import FTR as FTRDriver
-from .BaseTip import Tip, TipTypes
+from .BaseTip import Tip
 
 
 class TipFTR(Tip):
@@ -15,7 +15,6 @@ class TipFTR(Tip):
             UniqueIdentifier,
             CustomErrorHandling,
             PickupSequence,
-            TipTypes.FTR,
             MaxVolume,
         )
 

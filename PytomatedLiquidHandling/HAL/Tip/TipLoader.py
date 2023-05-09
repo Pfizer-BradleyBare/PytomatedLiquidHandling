@@ -1,7 +1,7 @@
 import yaml
 
 from ..Tip import TipFTR, TipNTR
-from .BaseTip import TipTracker, TipTypes
+from .BaseTip import TipTracker
 
 
 def LoadYaml(FilePath: str) -> TipTracker:
