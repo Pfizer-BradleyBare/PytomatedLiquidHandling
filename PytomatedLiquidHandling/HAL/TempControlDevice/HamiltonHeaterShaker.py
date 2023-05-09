@@ -7,6 +7,7 @@ class HamiltonHeaterShaker(TempControlDevice):
     def __init__(
         self,
         UniqueIdentifier: str,
+        CustomErrorHandling: bool,
         ComPort: str,
         TempLimitsInstance: TempLimits,
         LayoutItemTrackerInstance: LayoutItemTracker,
@@ -14,6 +15,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         TempControlDevice.__init__(
             self,
             UniqueIdentifier,
+            CustomErrorHandling,
             ComPort,
             True,
             TempLimitsInstance,
@@ -21,23 +23,16 @@ class HamiltonHeaterShaker(TempControlDevice):
         )
         self.HandleID: int
 
-    def Initialize(
-        self,
-        *,
-        ConnectAdvancedOptionsInstance: HeaterShakerDriver.Connect.AdvancedOptions = HeaterShakerDriver.Connect.AdvancedOptions(),
-        SetPlateLockAdvancedOptionsInstance: HeaterShakerDriver.SetPlateLock.AdvancedOptions = HeaterShakerDriver.SetPlateLock.AdvancedOptions()
-    ):
+    def Initialize(self):
         if not isinstance(self.ComPort, int):
             raise Exception("Should never happen")
 
         try:
             Command = HeaterShakerDriver.Connect.Command(
-                HeaterShakerDriver.Connect.Options(
+                OptionsInstance=HeaterShakerDriver.Connect.Options(
                     ComPort=self.ComPort,
-                    AdvancedOptionsInstance=HeaterShakerDriver.Connect.AdvancedOptions().UpdateOptions(
-                        ConnectAdvancedOptionsInstance
-                    ),
                 ),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
 
             Command.Execute()
@@ -48,106 +43,77 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         try:
             HeaterShakerDriver.SetPlateLock.Command(
-                HeaterShakerDriver.SetPlateLock.Options(
+                OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
                     HandleID=self.HandleID,
                     PlateLockState=1,
-                    AdvancedOptionsInstance=HeaterShakerDriver.SetPlateLock.AdvancedOptions().UpdateOptions(
-                        SetPlateLockAdvancedOptionsInstance
-                    ),
                 ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
         except:
             ...
 
         try:
             HeaterShakerDriver.SetPlateLock.Command(
-                HeaterShakerDriver.SetPlateLock.Options(
+                OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
                     HandleID=self.HandleID,
                     PlateLockState=0,
-                    AdvancedOptionsInstance=HeaterShakerDriver.SetPlateLock.AdvancedOptions().UpdateOptions(
-                        SetPlateLockAdvancedOptionsInstance
-                    ),
-                )
+                ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
         except:
             ...
 
-    def Deinitialize(
-        self,
-        *,
-        StopTempControlAdvancedOptionsInstance: HeaterShakerDriver.StopTemperatureControl.AdvancedOptions = HeaterShakerDriver.StopTemperatureControl.AdvancedOptions(),
-        StopShakeControlAdvancedOptionsInstance: HeaterShakerDriver.StopShakeControl.AdvancedOptions = HeaterShakerDriver.StopShakeControl.AdvancedOptions(),
-        SetPlateLockAdvancedOptionsInstance: HeaterShakerDriver.SetPlateLock.AdvancedOptions = HeaterShakerDriver.SetPlateLock.AdvancedOptions()
-    ):
+    def Deinitialize(self):
         try:
             HeaterShakerDriver.StopTemperatureControl.Command(
-                HeaterShakerDriver.StopTemperatureControl.Options(
+                OptionsInstance=HeaterShakerDriver.StopTemperatureControl.Options(
                     HandleID=self.HandleID,
-                    AdvancedOptionsInstance=HeaterShakerDriver.StopTemperatureControl.AdvancedOptions().UpdateOptions(
-                        StopTempControlAdvancedOptionsInstance
-                    ),
                 ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
         except:
             ...
 
         try:
             HeaterShakerDriver.StopShakeControl.Command(
-                HeaterShakerDriver.StopShakeControl.Options(
-                    HandleID=self.HandleID,
-                    AdvancedOptionsInstance=HeaterShakerDriver.StopShakeControl.AdvancedOptions().UpdateOptions(
-                        StopShakeControlAdvancedOptionsInstance
-                    ),
-                )
+                OptionsInstance=HeaterShakerDriver.StopShakeControl.Options(
+                    HandleID=self.HandleID
+                ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
         except:
             ...
 
         try:
             HeaterShakerDriver.SetPlateLock.Command(
-                HeaterShakerDriver.SetPlateLock.Options(
+                OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
                     HandleID=self.HandleID,
                     PlateLockState=0,
-                    AdvancedOptionsInstance=HeaterShakerDriver.SetPlateLock.AdvancedOptions().UpdateOptions(
-                        SetPlateLockAdvancedOptionsInstance
-                    ),
                 ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
         except:
             ...
 
-    def SetTemperature(
-        self,
-        Temperature: float,
-        *,
-        AdvancedOptionsInstance: HeaterShakerDriver.StartTemperatureControl.AdvancedOptions = HeaterShakerDriver.StartTemperatureControl.AdvancedOptions()
-    ):
+    def SetTemperature(self, *, Temperature: float):
         try:
             HeaterShakerDriver.StartTemperatureControl.Command(
-                HeaterShakerDriver.StartTemperatureControl.Options(
+                OptionsInstance=HeaterShakerDriver.StartTemperatureControl.Options(
                     HandleID=self.HandleID,
                     Temperature=Temperature,
-                    AdvancedOptionsInstance=HeaterShakerDriver.StartTemperatureControl.AdvancedOptions().UpdateOptions(
-                        AdvancedOptionsInstance
-                    ),
                 ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
         except:
             ...
 
-    def UpdateCurrentTemperature(
-        self,
-        *,
-        AdvancedOptionsInstance: HeaterShakerDriver.GetTemperature.AdvancedOptions = HeaterShakerDriver.GetTemperature.AdvancedOptions()
-    ):
+    def UpdateCurrentTemperature(self):
         try:
             Command = HeaterShakerDriver.GetTemperature.Command(
-                HeaterShakerDriver.GetTemperature.Options(
+                OptionsInstance=HeaterShakerDriver.GetTemperature.Options(
                     HandleID=self.HandleID,
-                    AdvancedOptionsInstance=HeaterShakerDriver.GetTemperature.AdvancedOptions().UpdateOptions(
-                        AdvancedOptionsInstance
-                    ),
-                )
+                ),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
 
             Command.Execute()
@@ -156,83 +122,57 @@ class HamiltonHeaterShaker(TempControlDevice):
         except:
             ...
 
-    def StartShaking(
-        self,
-        RPM: int,
-        *,
-        StartShakeControlAdvancedOptionsInstance: HeaterShakerDriver.StartShakeControl.AdvancedOptions = HeaterShakerDriver.StartShakeControl.AdvancedOptions(),
-        SetPlateLockAdvancedOptionsInstance: HeaterShakerDriver.SetPlateLock.AdvancedOptions = HeaterShakerDriver.SetPlateLock.AdvancedOptions()
-    ):
+    def StartShaking(self, *, RPM: int):
         try:
             HeaterShakerDriver.SetPlateLock.Command(
-                HeaterShakerDriver.SetPlateLock.Options(
+                OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
                     HandleID=self.HandleID,
                     PlateLockState=1,
-                    AdvancedOptionsInstance=HeaterShakerDriver.SetPlateLock.AdvancedOptions().UpdateOptions(
-                        SetPlateLockAdvancedOptionsInstance
-                    ),
                 ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
         except:
             ...
 
         try:
             HeaterShakerDriver.StartShakeControl.Command(
-                HeaterShakerDriver.StartShakeControl.Options(
+                OptionsInstance=HeaterShakerDriver.StartShakeControl.Options(
                     HandleID=self.HandleID,
                     ShakingSpeed=RPM,
-                    AdvancedOptionsInstance=HeaterShakerDriver.StartShakeControl.AdvancedOptions().UpdateOptions(
-                        StartShakeControlAdvancedOptionsInstance
-                    ),
                 ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
         except:
             ...
 
-    def StopShaking(
-        self,
-        *,
-        StopShakeControlAdvancedOptionsInstance: HeaterShakerDriver.StopShakeControl.AdvancedOptions = HeaterShakerDriver.StopShakeControl.AdvancedOptions(),
-        SetPlateLockAdvancedOptionsInstance: HeaterShakerDriver.SetPlateLock.AdvancedOptions = HeaterShakerDriver.SetPlateLock.AdvancedOptions()
-    ):
+    def StopShaking(self):
         try:
             HeaterShakerDriver.StopShakeControl.Command(
-                HeaterShakerDriver.StopShakeControl.Options(
+                OptionsInstance=HeaterShakerDriver.StopShakeControl.Options(
                     HandleID=self.HandleID,
-                    AdvancedOptionsInstance=HeaterShakerDriver.StopShakeControl.AdvancedOptions().UpdateOptions(
-                        StopShakeControlAdvancedOptionsInstance
-                    ),
                 ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
         except:
             ...
 
         try:
             HeaterShakerDriver.SetPlateLock.Command(
-                HeaterShakerDriver.SetPlateLock.Options(
-                    HandleID=self.HandleID,
-                    PlateLockState=0,
-                    AdvancedOptionsInstance=HeaterShakerDriver.SetPlateLock.AdvancedOptions().UpdateOptions(
-                        SetPlateLockAdvancedOptionsInstance
-                    ),
-                )
+                OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
+                    HandleID=self.HandleID, PlateLockState=0
+                ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
         except:
             ...
 
-    def UpdateCurrentShakingSpeed(
-        self,
-        *,
-        AdvancedOptionsInstance: HeaterShakerDriver.GetShakingSpeed.AdvancedOptions = HeaterShakerDriver.GetShakingSpeed.AdvancedOptions()
-    ):
+    def UpdateCurrentShakingSpeed(self):
         try:
             Command = HeaterShakerDriver.GetShakingSpeed.Command(
-                HeaterShakerDriver.GetShakingSpeed.Options(
+                OptionsInstance=HeaterShakerDriver.GetShakingSpeed.Options(
                     HandleID=self.HandleID,
-                    AdvancedOptionsInstance=HeaterShakerDriver.GetShakingSpeed.AdvancedOptions().UpdateOptions(
-                        AdvancedOptionsInstance
-                    ),
                 ),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
 
             Command.Execute()

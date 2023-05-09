@@ -7,6 +7,7 @@ class HamiltonHeaterCooler(TempControlDevice):
     def __init__(
         self,
         UniqueIdentifier: str,
+        CustomErrorHandling: bool,
         ComPort: str,
         TempLimitsInstance: TempLimits,
         LayoutItemTrackerInstance: LayoutItemTracker,
@@ -14,6 +15,7 @@ class HamiltonHeaterCooler(TempControlDevice):
         TempControlDevice.__init__(
             self,
             UniqueIdentifier,
+            CustomErrorHandling,
             ComPort,
             False,
             TempLimitsInstance,
@@ -21,22 +23,16 @@ class HamiltonHeaterCooler(TempControlDevice):
         )
         self.HandleID: str
 
-    def Initialize(
-        self,
-        *,
-        AdvancedOptionsInstance: HeaterCoolerDriver.Connect.AdvancedOptions = HeaterCoolerDriver.Connect.AdvancedOptions(),
-    ):
+    def Initialize(self):
         if not isinstance(self.ComPort, str):
             raise Exception("Should never happen")
 
         try:
             Command = HeaterCoolerDriver.Connect.Command(
-                HeaterCoolerDriver.Connect.Options(
+                OptionsInstance=HeaterCoolerDriver.Connect.Options(
                     ComPort=self.ComPort,
-                    AdvancedOptionsInstance=HeaterCoolerDriver.Connect.AdvancedOptions().UpdateOptions(
-                        AdvancedOptionsInstance
-                    ),
                 ),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
 
             Command.Execute()
@@ -45,55 +41,42 @@ class HamiltonHeaterCooler(TempControlDevice):
         except:
             ...
 
-    def Deinitialize(
-        self,
-        *,
-        AdvancedOptionsInstance: HeaterCoolerDriver.StopTemperatureControl.AdvancedOptions = HeaterCoolerDriver.StopTemperatureControl.AdvancedOptions(),
-    ):
+    def Deinitialize(self):
         try:
             HeaterCoolerDriver.StopTemperatureControl.Command(
-                HeaterCoolerDriver.StopTemperatureControl.Options(
-                    HandleID=self.HandleID,
-                    AdvancedOptionsInstance=HeaterCoolerDriver.StopTemperatureControl.AdvancedOptions().UpdateOptions(
-                        AdvancedOptionsInstance
-                    ),
+                OptionsInstance=HeaterCoolerDriver.StopTemperatureControl.Options(
+                    HandleID=self.HandleID
                 ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
         except:
             ...
 
     def SetTemperature(
         self,
-        Temperature: float,
         *,
-        AdvancedOptionsInstance: HeaterCoolerDriver.StartTemperatureControl.AdvancedOptions = HeaterCoolerDriver.StartTemperatureControl.AdvancedOptions(),
+        Temperature: float,
     ):
         try:
             HeaterCoolerDriver.StartTemperatureControl.Command(
-                HeaterCoolerDriver.StartTemperatureControl.Options(
+                OptionsInstance=HeaterCoolerDriver.StartTemperatureControl.Options(
                     HandleID=self.HandleID,
                     Temperature=Temperature,
-                    AdvancedOptionsInstance=HeaterCoolerDriver.StartTemperatureControl.AdvancedOptions().UpdateOptions(
-                        AdvancedOptionsInstance
-                    ),
                 ),
+                CustomErrorHandling=self.CustomErrorHandling,
             ).Execute()
         except:
             ...
 
     def UpdateCurrentTemperature(
         self,
-        *,
-        AdvancedOptionsInstance: HeaterCoolerDriver.GetTemperature.AdvancedOptions = HeaterCoolerDriver.GetTemperature.AdvancedOptions(),
     ):
         try:
             Command = HeaterCoolerDriver.GetTemperature.Command(
-                HeaterCoolerDriver.GetTemperature.Options(
+                OptionsInstance=HeaterCoolerDriver.GetTemperature.Options(
                     HandleID=self.HandleID,
-                    AdvancedOptionsInstance=HeaterCoolerDriver.GetTemperature.AdvancedOptions().UpdateOptions(
-                        AdvancedOptionsInstance
-                    ),
-                )
+                ),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
 
             Command.Execute()
@@ -102,26 +85,13 @@ class HamiltonHeaterCooler(TempControlDevice):
         except:
             ...
 
-    def StartShaking(
-        self,
-        RPM: float,
-        *,
-        AdvancedOptionsInstance: HeaterCoolerDriver.StopTemperatureControl.AdvancedOptions = HeaterCoolerDriver.StopTemperatureControl.AdvancedOptions(),
-    ):
+    def StartShaking(self, *, RPM: float):
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )
 
-    def StopShaking(
-        self,
-        *,
-        AdvancedOptionsInstance: HeaterCoolerDriver.StopTemperatureControl.AdvancedOptions = HeaterCoolerDriver.StopTemperatureControl.AdvancedOptions(),
-    ):
+    def StopShaking(self):
         ...
 
-    def UpdateCurrentShakingSpeed(
-        self,
-        *,
-        AdvancedOptionsInstance: HeaterCoolerDriver.StopTemperatureControl.AdvancedOptions = HeaterCoolerDriver.StopTemperatureControl.AdvancedOptions(),
-    ):
+    def UpdateCurrentShakingSpeed(self):
         ...

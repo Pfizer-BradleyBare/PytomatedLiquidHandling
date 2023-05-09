@@ -15,6 +15,7 @@
 Hamilton Heater Shaker:
   - UniqueIdentifier: Heater 1
     Enabled: True
+    Custom Error Handling: False
     Com Port: 1
     Deck Location ID: HHS_Carrier_Pos3
     Temp Limits:
@@ -39,6 +40,7 @@ Hamilton Heater Shaker:
 
   - Unique Identifier: Heater 2
     Enabled: True
+    Custom Error Handling: False
     Com Port: 2
     Deck Location ID: HHS_Carrier_Pos4
     Temp Limits:

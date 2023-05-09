@@ -4,7 +4,8 @@ from ....Tools import InterfaceABC
 
 
 class TempControlDeviceInterface(InterfaceABC):
-    def __init__(self):
+    def __init__(self, CustomErrorHandling: bool):
+        InterfaceABC.__init__(self, CustomErrorHandling)
         self.HandleID: int | str
         self.CurrentTemperature: float = 0
         self.CurrentShakingSpeed: int = 0

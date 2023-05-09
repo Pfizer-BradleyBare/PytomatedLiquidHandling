@@ -7,16 +7,16 @@
 
 Hamilton FlipTube:
   - Unique Identifier: Fliptube 1
-    CustomErrorHandling: False
     Enabled: True
+    Custom Error Handling: False
     Tool Sequence: Ham_4_FlipTubeTools_OnWaste_0001
     Supported Labware:
       - Hamilton 1.5mL FlipTube
 
 Hamilton FlipTube Special:
   - Unique Identifier: Fliptube 1
-    CustomErrorHandling: False
     Enabled: True
+    Custom Error Handling: False
     Tool Sequence: Ham_4_FlipTubeTools_OnWaste_0001
     Supported Labware:
       - Hamilton 1.5mL FlipTube

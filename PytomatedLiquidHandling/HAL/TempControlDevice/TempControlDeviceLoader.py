@@ -20,12 +20,12 @@ def LoadYaml(
     # Get config file contents
 
     for DeviceType in ConfigFile:
-
         for Device in ConfigFile[DeviceType]:
             if Device["Enabled"] == False:
                 continue
 
             UniqueIdentifier = Device["Unique Identifier"]
+            CustomErrorHandling = Device["Custom Error Handling"]
             ComPort = Device["Com Port"]
 
             StableTempDelta = Device["Temp Limits"]["Stable Delta"]
@@ -79,6 +79,7 @@ def LoadYaml(
                 TempControlDeviceTrackerInstance.LoadSingle(
                     HamiltonHeaterShaker(
                         UniqueIdentifier,
+                        CustomErrorHandling,
                         ComPort,
                         TempLimitsInstance,
                         SupportedLayoutItemTracker,
@@ -89,6 +90,7 @@ def LoadYaml(
                 TempControlDeviceTrackerInstance.LoadSingle(
                     HamiltonHeaterCooler(
                         UniqueIdentifier,
+                        CustomErrorHandling,
                         ComPort,
                         TempLimitsInstance,
                         SupportedLayoutItemTracker,
