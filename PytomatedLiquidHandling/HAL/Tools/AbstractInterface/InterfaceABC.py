@@ -1,16 +1,14 @@
 from abc import ABC, abstractmethod
-from ....Driver.Tools.AbstractOptions import AdvancedSingleOptionsABC
 
 
 class InterfaceABC(ABC):
+    def __init__(self, CustomErrorHandling: bool):
+        self.CustomErrorHandling: bool = CustomErrorHandling
+
     @abstractmethod
-    def Initialize(
-        self, *, AdvancedOptionsInstance: AdvancedSingleOptionsABC | None = None
-    ):
+    def Initialize(self):
         ...
 
     @abstractmethod
-    def Deinitialize(
-        self, *, AdvancedOptionsInstance: AdvancedSingleOptionsABC | None = None
-    ):
+    def Deinitialize(self):
         ...

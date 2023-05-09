@@ -9,10 +9,12 @@ class ClosedContainer(UniqueObjectABC, ClosedContainerInterface):
     def __init__(
         self,
         UniqueIdentifier: str,
+        CustomErrorHandling: bool,
         ToolSequence: str,
         SupportedLabwareTrackerInstance: LabwareTracker,
     ):
         UniqueObjectABC.__init__(self, UniqueIdentifier)
+        ClosedContainerInterface.__init__(self, CustomErrorHandling)
         self.ToolSequence: str = ToolSequence
         self.SupportedLabwareTrackerInstance: LabwareTracker = (
             SupportedLabwareTrackerInstance

@@ -2,31 +2,14 @@ from abc import abstractmethod
 
 from ....LayoutItem.BaseLayoutItem import LayoutItem
 from ....Tools import InterfaceABC
-from .....Driver.Tools.AbstractOptions import (
-    AdvancedMultiOptionsABC,
-    AdvancedMultiOptionsTrackerABC,
-)
+from .OpenCloseOptions import OpenCloseOptionsTracker
 
 
 class ClosedContainerInterface(InterfaceABC):
     @abstractmethod
-    def Open(
-        self,
-        LayoutItemInstances: list[LayoutItem],
-        Positions: list[int],
-        *,
-        AdvancedOptionsInstance: AdvancedMultiOptionsABC | None = None,
-        AdvancedOptionsTrackerInstance: AdvancedMultiOptionsTrackerABC | None = None,
-    ):
+    def Open(self, *, OpenCloseOptionsTrackerInstance: OpenCloseOptionsTracker):
         ...
 
     @abstractmethod
-    def Close(
-        self,
-        LayoutItemInstances: list[LayoutItem],
-        Positions: list[int],
-        *,
-        AdvancedOptionsInstance: AdvancedMultiOptionsABC | None = None,
-        AdvancedOptionsTrackerInstance: AdvancedMultiOptionsTrackerABC | None = None,
-    ):
+    def Close(self, *, OpenCloseOptionsTrackerInstance: OpenCloseOptionsTracker):
         ...
