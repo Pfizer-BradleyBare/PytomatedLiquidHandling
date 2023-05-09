@@ -10,8 +10,8 @@ class SingleOptionsCommand(Command, Generic[T]):
     def __init__(
         self,
         *,
-        OptionsInstance: T,
         CustomErrorHandling: bool,
+        OptionsInstance: T,
         UniqueIdentifier: str = "None",
     ):
         Command.__init__(self, UniqueIdentifier, CustomErrorHandling)

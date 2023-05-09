@@ -11,8 +11,8 @@ class MultiOptionsCommand(Command, Generic[T]):
     def __init__(
         self,
         *,
-        OptionsTrackerInstance: T,
         CustomErrorHandling: bool,
+        OptionsTrackerInstance: T,
         UniqueIdentifier: str = "None",
     ):
         Command.__init__(self, UniqueIdentifier, CustomErrorHandling)
