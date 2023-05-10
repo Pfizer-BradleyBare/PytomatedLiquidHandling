@@ -12,24 +12,23 @@
 #
 #############################################################
 
-- Unique Identifier: 50uL NTR
-  Enabled: True
-  Custom Error Handling: False
-  Tip Type: NTR
-  Volume: 50
-  NTR Waste Sequence: Tip50_NTR_Waste
-  Gripper Sequence: Gripper
+NTR:
+  - Unique Identifier: 50uL NTR
+    Enabled: True
+    Custom Error Handling: False
+    Volume: 50
+    NTR Waste Sequence: Tip50_NTR_Waste
+    Gripper Sequence: Gripper
 
-- Unique Identifier: 300uL NTR
-  Enabled: True
-  Custom Error Handling: False
-  Tip Type: NTR
-  Volume: 300
-  NTR Waste Sequence: Tip300_NTR_Waste
-  Gripper Sequence: Gripper
+  - Unique Identifier: 300uL NTR
+    Enabled: True
+    Custom Error Handling: False
+    Volume: 300
+    NTR Waste Sequence: Tip300_NTR_Waste
+    Gripper Sequence: Gripper
 
-- Unique Identifier: 1000uL FTR
-  Enabled: True
-  Custom Error Handling: False
-  Tip Type: FTR
-  Volume: 1000
+FTR:
+  - Unique Identifier: 1000uL FTR
+    Enabled: True
+    Custom Error Handling: False
+    Volume: 1000

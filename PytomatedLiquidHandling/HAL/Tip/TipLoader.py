@@ -12,38 +12,38 @@ def LoadYaml(FilePath: str) -> TipTracker:
     FileHandle.close()
     # Get config file contents
 
-    for Tip in ConfigFile:
-        if Tip["Enabled"] == False:
-            continue
+    for TipType in ConfigFile:
+        for Tip in ConfigFile[TipType]:
+            if Tip["Enabled"] == False:
+                continue
 
-        UniqueIdentifier = Tip["Unique Identifier"]
-        CustomErrorHandling = Tip["Custom Error Handling"]
-        TipType = Tip["Tip Type"]
+            UniqueIdentifier = Tip["Unique Identifier"]
+            CustomErrorHandling = Tip["Custom Error Handling"]
 
-        PickupSequence = Tip["Pickup Sequence"]
-        MaxVolume = Tip["Volume"]
+            PickupSequence = Tip["Pickup Sequence"]
+            MaxVolume = Tip["Volume"]
 
-        if TipType == "NTR":
-            NTRWasteSequence = Tip["NTR Waste Sequence"]
-            GripperSequence = Tip["Gripper Sequence"]
+            if TipType == "NTR":
+                NTRWasteSequence = Tip["NTR Waste Sequence"]
+                GripperSequence = Tip["Gripper Sequence"]
 
-            TipInstance = TipNTR(
-                UniqueIdentifier,
-                CustomErrorHandling,
-                PickupSequence,
-                NTRWasteSequence,
-                GripperSequence,
-                MaxVolume,
-            )
+                TipInstance = TipNTR(
+                    UniqueIdentifier,
+                    CustomErrorHandling,
+                    PickupSequence,
+                    NTRWasteSequence,
+                    GripperSequence,
+                    MaxVolume,
+                )
 
-        elif TipType == "FTR":
-            TipInstance = TipFTR(
-                UniqueIdentifier, CustomErrorHandling, PickupSequence, MaxVolume
-            )
+            elif TipType == "FTR":
+                TipInstance = TipFTR(
+                    UniqueIdentifier, CustomErrorHandling, PickupSequence, MaxVolume
+                )
 
-        else:
-            raise Exception("Tip type not recognized")
+            else:
+                raise Exception("Tip type not recognized")
 
-        TipTrackerInstance.LoadSingle(TipInstance)
+            TipTrackerInstance.LoadSingle(TipInstance)
 
     return TipTrackerInstance
