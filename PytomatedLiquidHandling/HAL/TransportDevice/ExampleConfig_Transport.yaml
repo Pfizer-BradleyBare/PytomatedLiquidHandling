@@ -14,7 +14,9 @@
 
 
 CORE Gripper:
+  Unique Identifier: Gripper 1
   Enabled: True
+  Custom Error Handling: False
   Gripper Sequence: seq_COREGripTool
   Supported Labware:
     Agilent Black Lid:
@@ -48,9 +50,13 @@ CORE Gripper:
       Pickup Height: 4
 
 Internal Plate Gripper:
+  Unique Identifier: Gripper 2
   Enabled: False
+  Custom Error Handling: False
   Supported Labware:
 
 Track Gripper:
+  Unique Identifier: Gripper 3
   Enabled: False
+  Custom Error Handling: False
   Supported Labware:

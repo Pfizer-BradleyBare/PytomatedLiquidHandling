@@ -5,7 +5,6 @@ from ..TransportDevice import COREGripper, InternalPlateGripper, TrackGripper
 from .BaseTransportDevice import (
     TransportableLabware,
     TransportableLabwareTracker,
-    TransportDevices,
     TransportDeviceTracker,
     TransportParameters,
 )
@@ -21,45 +20,56 @@ def LoadYaml(
     FileHandle.close()
     # Get config file contents
 
-    for DeviceID in ConfigFile["Device IDs"]:
+    for DeviceType in ConfigFile:
+        Device = ConfigFile[DeviceType]
 
-        DeviceConfig = ConfigFile["Device IDs"][DeviceID]
+        if Device["Enabled"] == False:
+            continue
 
-        if DeviceConfig["Enabled"] is True:
+        UniqueIdentifier = Device["Unique Identifier"]
+        CustomErrorHandling = Device["Custom Error Handling"]
 
-            TransportableLabwareTrackerInstance = TransportableLabwareTracker()
-            for LabwareID in DeviceConfig["Supported Labware"]:
-                LabwareObject = LabwareTrackerInstance.GetObjectByName(LabwareID)
+        TransportableLabwareTrackerInstance = TransportableLabwareTracker()
+        for LabwareID in Device["Supported Labware"]:
+            LabwareObject = LabwareTrackerInstance.GetObjectByName(LabwareID)
 
-                CloseOffset = DeviceConfig["Supported Labware"][LabwareID][
-                    "Close Offset"
-                ]
-                OpenOffset = DeviceConfig["Supported Labware"][LabwareID]["Open Offset"]
-                PickupHeight = DeviceConfig["Supported Labware"][LabwareID][
-                    "Pickup Height"
-                ]
+            CloseOffset = Device["Supported Labware"][LabwareID]["Close Offset"]
+            OpenOffset = Device["Supported Labware"][LabwareID]["Open Offset"]
+            PickupHeight = Device["Supported Labware"][LabwareID]["Pickup Height"]
 
-                Parameters = TransportParameters(CloseOffset, OpenOffset, PickupHeight)
+            Parameters = TransportParameters(CloseOffset, OpenOffset, PickupHeight)
 
-                TransportableLabwareTrackerInstance.LoadSingle(
-                    TransportableLabware(LabwareObject, Parameters)
+            TransportableLabwareTrackerInstance.LoadSingle(
+                TransportableLabware(LabwareObject, Parameters)
+            )
+
+        if DeviceType == "CORE Gripper":
+            GripperSequence = Device["Gripper Sequence"]
+            TransportDeviceTrackerInstance.LoadSingle(
+                COREGripper(
+                    UniqueIdentifier,
+                    CustomErrorHandling,
+                    TransportableLabwareTrackerInstance,
+                    GripperSequence,
                 )
+            )
 
-            TransportDevice = TransportDevices(DeviceID)
-            if TransportDevice == TransportDevices.COREGripper:
-                GripperSequence = DeviceConfig["Gripper Sequence"]
-                TransportDeviceTrackerInstance.LoadSingle(
-                    COREGripper(TransportableLabwareTrackerInstance, GripperSequence)
+        elif DeviceType == "Internal Plate Gripper":
+            TransportDeviceTrackerInstance.LoadSingle(
+                InternalPlateGripper(
+                    UniqueIdentifier,
+                    CustomErrorHandling,
+                    TransportableLabwareTrackerInstance,
                 )
+            )
 
-            elif TransportDevice == TransportDevices.InternalPlateGripper:
-                TransportDeviceTrackerInstance.LoadSingle(
-                    InternalPlateGripper(TransportableLabwareTrackerInstance)
+        elif DeviceType == "Track Gripper":
+            TransportDeviceTrackerInstance.LoadSingle(
+                TrackGripper(
+                    UniqueIdentifier,
+                    CustomErrorHandling,
+                    TransportableLabwareTrackerInstance,
                 )
-
-            elif TransportDevice == TransportDevices.TrackGripper:
-                TransportDeviceTrackerInstance.LoadSingle(
-                    TrackGripper(TransportableLabwareTrackerInstance)
-                )
+            )
 
     return TransportDeviceTrackerInstance
