@@ -1,19 +1,18 @@
 from ..LayoutItem.BaseLayoutItem import LayoutItem
-from .BaseTransportDevice import (
-    TransportableLabwareTracker,
-    TransportDevice,
-    TransportDevices,
-)
+from .BaseTransportDevice import TransportableLabwareTracker, TransportDevice
 
 
 class InternalPlateGripper(TransportDevice):
     def __init__(
         self,
+        UniqueIdentifier: str,
+        CustomErrorHandling: bool,
         TransportableLabwareTrackerInstance: TransportableLabwareTracker,
     ):
         TransportDevice.__init__(
             self,
-            TransportDevices.InternalPlateGripper,
+            UniqueIdentifier,
+            CustomErrorHandling,
             TransportableLabwareTrackerInstance,
         )
 

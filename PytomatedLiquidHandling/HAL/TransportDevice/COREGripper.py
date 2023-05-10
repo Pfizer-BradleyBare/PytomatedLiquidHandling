@@ -1,21 +1,22 @@
-from ...Driver.Transport import Gripper as GripperDriver
+from ...Driver.Hamilton.Transport import Gripper as GripperDriver
 from ..LayoutItem.BaseLayoutItem import LayoutItem
-from .BaseTransportDevice import (
-    TransportableLabwareTracker,
-    TransportDevice,
-    TransportDevices,
-)
+from .BaseTransportDevice import TransportableLabwareTracker, TransportDevice
 
 
 class COREGripper(TransportDevice):
     def __init__(
         self,
+        UniqueIdentifier: str,
+        CustomErrorHandling: bool,
         TransportableLabwareTrackerInstance: TransportableLabwareTracker,
         GripperToolSequence: str,
     ):
         self.GripperToolSequence: str = GripperToolSequence
         TransportDevice.__init__(
-            self, TransportDevices.COREGripper, TransportableLabwareTrackerInstance
+            self,
+            UniqueIdentifier,
+            CustomErrorHandling,
+            TransportableLabwareTrackerInstance,
         )
 
     def Initialize(

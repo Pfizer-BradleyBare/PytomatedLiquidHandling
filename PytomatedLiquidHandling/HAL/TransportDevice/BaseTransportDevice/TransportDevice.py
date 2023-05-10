@@ -8,22 +8,18 @@ from .TransportableLabware.TransportableLabwareTracker import (
 )
 
 
-class TransportDevices(Enum):
-    COREGripper = "CORE Gripper"
-    InternalPlateGripper = "Internal Plate Gripper"
-    TrackGripper = "Track Gripper"
-
-
 class TransportDevice(UniqueObjectABC, TransportInterface):
     def __init__(
         self,
-        TransportDevice: TransportDevices,
+        UniqueIdentifier: str,
+        CustomErrorHandling: bool,
         TransportableLabwareTrackerInstance: TransportableLabwareTracker,
     ):
-        UniqueObjectABC.__init__(self, TransportDevice.value)
+        UniqueObjectABC.__init__(self, UniqueIdentifier)
         self.TransportableLabwareTrackerInstance: TransportableLabwareTracker = (
             TransportableLabwareTrackerInstance
         )
+        TransportInterface.__init__(self, CustomErrorHandling)
 
     @abstractmethod
     def GetConfigKeys(self) -> list[str]:

@@ -5,14 +5,13 @@ from .TransportableLabware.TransportableLabwareTracker import (
 from .TransportableLabware.TransportParameters.TransportParameters import (
     TransportParameters,
 )
-from .TransportDevice import TransportDevice, TransportDevices
+from .TransportDevice import TransportDevice
 from .TransportDeviceTracker import TransportDeviceTracker
 
 __all__ = [
     "TransportParameters",
     "TransportableLabware",
     "TransportableLabwareTracker",
-    "TransportDevices",
     "TransportDevice",
     "TransportDeviceTracker",
 ]
