@@ -1,0 +1,35 @@
+Experiment:
+  Experiment Name: Test
+  Application ID: Single Point
+  DLS Acquisition Time: 5
+  DLS Num Acquisitions: 4
+
+  Results:
+    Column Names:
+      - a
+      - b
+
+Samples:
+  - Sample Name: S1
+    Plate Name: P1
+    Sample Well: A1
+    Blank Sample Name: S1
+    Sample Meta Data: None
+    Buffer Meta Data: None
+    Extinction Coefficient: 1.454
+
+  - Sample Name: S2
+    Plate Name: P1
+    Sample Well: B1
+    Blank Sample Name: S1
+    Sample Meta Data: None
+    Buffer Meta Data: None
+    Extinction Coefficient: 1.454
+
+  - Sample Name: S3
+    Plate Name: P1
+    Sample Well: C1
+    Blank Sample Name: S1
+    Sample Meta Data: None
+    Buffer Meta Data: None
+    Extinction Coefficient: 1.454

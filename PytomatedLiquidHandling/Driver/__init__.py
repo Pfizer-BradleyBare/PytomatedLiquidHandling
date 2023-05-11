@@ -1,2 +1,2 @@
-from . import Hamilton
-from .Handler import Handler, GetHandler
+from . import ExternalDevices, Hamilton
+from .Handler import GetHandler, Handler
