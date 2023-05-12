@@ -4,15 +4,20 @@ from typing import Any
 
 import clr
 
-from ....Tools.AbstractBackend import BackendABC
+from ....Tools.AbstractClasses import BackendABC
+from .. import UnchainedLabsCommand
 
 
 class Stunner(BackendABC):
-    def __init__(self, InstrumentIPAddress: str, InstrumentPort: int):
-
+    def __init__(
+        self, UniqueIdentifier: str, InstrumentIPAddress: str, InstrumentPort: int
+    ):
+        BackendABC.__init__(self, UniqueIdentifier)
         self.InstrumentIPAddress: str = InstrumentIPAddress
         self.InstrumentPort: int = InstrumentPort
-        self.CurrentExperimentDefinition: dict[str, Any] | None = None
+
+        self.CurrentCommand: UnchainedLabsCommand | None = None
+        self.Response: UnchainedLabsCommand.Response
 
         BasePath = os.path.dirname(__file__)
 
@@ -23,11 +28,16 @@ class Stunner(BackendABC):
             + '"'
         )
         subprocess.call(Args)
+        # The stunner API access uses a .DLL library. This step cleans the .dll.
+        # Microsoft will not let you load a .dll without cleaning it first.
 
         clr.AddReference(os.path.join(BasePath, "Stunner.dll"))  # type: ignore
         from UnchainedLabs_Instruments import Stunner  # type: ignore
 
+        # The stunner API access uses a .DLL library. This step loads the .dll as a module.
+
         self.StunnerDLLObject = Stunner(InstrumentIPAddress, InstrumentPort)
+        # The stunner API access uses a .DLL library. This step creates the stunner class present in the .dll.
 
     def StartBackend(self):
         StatusCode = self.StunnerDLLObject.Request_Access()
@@ -64,21 +74,28 @@ class Stunner(BackendABC):
                 "Backend was not reachable over the network. Is the Stunner turn on and configured for API mode?"
             )
 
-    def GetRawStatus(self) -> int:
-        return self.StunnerDLLObject.Get_Status()
+    def ExecuteCommand(self, CommandInstance: UnchainedLabsCommand):
+        self.CurrentCommand = CommandInstance
 
-    def SendCommand(self, CommandParams: dict[str, Any]):
-        ...
+        StatusCode = CommandInstance.ExecuteCommandHelper(self.StunnerDLLObject)
 
-    # No def because this will never be used in this backend
+        self.Response = UnchainedLabsCommand.Response(
+            {"StatusCode": StatusCode, "Details": StatusCode}
+        )
 
-    def ResponseReady(self) -> bool:
-        StatusCode = self.GetRawStatus()
+    def GetStatus(self) -> UnchainedLabsCommand.Response:
+        StatusCode = self.StunnerDLLObject.Get_Status()
 
-        if StatusCode == 0:
-            return True
-        else:
-            return False
+        return UnchainedLabsCommand.Response(
+            {"StatusCode": StatusCode, "Details": StatusCode}
+        )
 
-    def GetResponse(self) -> dict[str, list[Any]]:
-        return super().GetResponse()
+    def GetResponse(self) -> UnchainedLabsCommand.Response:
+        if self.CurrentCommand is None:
+            raise Exception("No Command has been executed yet. Execute a command first")
+
+        Response = self.Response
+
+        self.CurrentCommand = None
+
+        return Response

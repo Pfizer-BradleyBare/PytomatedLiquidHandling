@@ -30,7 +30,18 @@ class StunnerSampleTracker(UniqueObjectABC, UniqueObjectTrackerABC[StunnerSample
         self.DLSNumAquisitions: int = DLSNumAquisitions
         self.ResultColumnCategories: list[str] = ResultColumnCategories
 
-    def GetDefinitions(self) -> dict[str, Any]:
+    class __Definitions:
+        def __init__(
+            self,
+            SampleDefinition: str,
+            ExperimentDefinition: str,
+            ResultsDefinition: str,
+        ):
+            self.SampleDefinition: str = SampleDefinition
+            self.ExperimentDefinition: str = ExperimentDefinition
+            self.ResultsDefinition: str = ResultsDefinition
+
+    def GetDefinitions(self) -> __Definitions:
 
         SampleDefinitionText = ""
 
@@ -122,8 +133,6 @@ class StunnerSampleTracker(UniqueObjectABC, UniqueObjectTrackerABC[StunnerSample
         ResultDefinitionText += 'undefined_column_name="remove"\n'
         ResultDefinitionText += 'no_result_value="-"\n'
 
-        return {
-            "Sample Definition": SampleDefinitionText,
-            "Experiment Definition": ExperimentDefinitionText,
-            "Results Definition": ResultDefinitionText,
-        }
+        return StunnerSampleTracker.__Definitions(
+            SampleDefinitionText, ExperimentDefinitionText, ResultDefinitionText
+        )
