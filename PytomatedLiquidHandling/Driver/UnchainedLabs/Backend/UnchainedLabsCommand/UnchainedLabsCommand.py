@@ -1,9 +1,12 @@
 from abc import abstractmethod
-
 from ....Tools.AbstractClasses import CommandABC
 
 
 class UnchainedLabsCommand(CommandABC):
+    @classmethod
+    def ParseResponse(cls, Response: str) -> CommandABC.Response:
+        ...
+
     @abstractmethod
-    def ExecuteCommandHelper(self, StunnerDLLObject):
+    def ExecuteCommandHelper(self, StunnerDLLObject) -> CommandABC.Response:
         ...

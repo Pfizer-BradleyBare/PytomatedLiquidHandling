@@ -1,9 +1,9 @@
 from typing import Any
 
-from ..Backend import UnchainedLabsCommand
+from ..Backend import UnchainedLabsOptionsCommand
 
 
-class Command(UnchainedLabsCommand):
+class Command(UnchainedLabsOptionsCommand):
     def ExecuteCommandHelper(self, StunnerDLLObject) -> Any:
         return StunnerDLLObject.Open_Tray()
 

@@ -1,5 +1,5 @@
 import os
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from typing import Any
 
 from .....Tools.AbstractClasses import NonUniqueObjectABC
@@ -67,7 +67,6 @@ class CommandABC(NonUniqueObjectABC):
         @staticmethod
         def Decorator_ExpectedResponseProperty(DecoratedFunction):
             def inner(*args, **kwargs):
-
                 return args[0].Properties[DecoratedFunction.__name__.replace("Get", "")]
 
             inner.Decorated_ExpectedResponseProperty = True
@@ -93,6 +92,9 @@ class CommandABC(NonUniqueObjectABC):
 
         def __init__(self, Properties: dict[str, Any]):
             self.Properties: dict[str, Any] = Properties
+
+        def UpdateProperties(self, Key: str, Value: Any):
+            self.Properties.update({Key: Value})
 
         @Decorator_ExpectedResponseProperty
         def GetStatusCode(self) -> int:

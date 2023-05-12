@@ -16,9 +16,6 @@ class Stunner(BackendABC):
         self.InstrumentIPAddress: str = InstrumentIPAddress
         self.InstrumentPort: int = InstrumentPort
 
-        self.CurrentCommand: UnchainedLabsCommand | None = None
-        self.Response: UnchainedLabsCommand.Response
-
         BasePath = os.path.dirname(__file__)
 
         Args = (
@@ -74,28 +71,11 @@ class Stunner(BackendABC):
                 "Backend was not reachable over the network. Is the Stunner turn on and configured for API mode?"
             )
 
+    @BackendABC.Decorator_ExecuteCommand
     def ExecuteCommand(self, CommandInstance: UnchainedLabsCommand):
-        self.CurrentCommand = CommandInstance
-
-        StatusCode = CommandInstance.ExecuteCommandHelper(self.StunnerDLLObject)
-
-        self.Response = UnchainedLabsCommand.Response(
-            {"StatusCode": StatusCode, "Details": StatusCode}
-        )
+        self.Response = CommandInstance.ExecuteCommandHelper(self.StunnerDLLObject)
 
     def GetStatus(self) -> UnchainedLabsCommand.Response:
         StatusCode = self.StunnerDLLObject.Get_Status()
 
-        return UnchainedLabsCommand.Response(
-            {"StatusCode": StatusCode, "Details": StatusCode}
-        )
-
-    def GetResponse(self) -> UnchainedLabsCommand.Response:
-        if self.CurrentCommand is None:
-            raise Exception("No Command has been executed yet. Execute a command first")
-
-        Response = self.Response
-
-        self.CurrentCommand = None
-
-        return Response
+        return UnchainedLabsCommand.ParseResponse(StatusCode)

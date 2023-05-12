@@ -5,7 +5,7 @@ from ..Backend import UnchainedLabsCommand
 
 class Command(UnchainedLabsCommand):
     def ExecuteCommandHelper(self, StunnerDLLObject) -> Any:
-        return StunnerDLLObject.Close_Tray()
+        return UnchainedLabsCommand.ParseResponse(StunnerDLLObject.Close_Tray())
 
     def HandleErrors(self):
         ...
