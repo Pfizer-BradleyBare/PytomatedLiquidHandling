@@ -1,15 +1,10 @@
-from .....Tools.Command import ClassDecorator_Command, SingleOptionsCommand
-from .Options import Options
+from ....Backend import HamiltonCommandABC
 
 
-@ClassDecorator_Command(__file__)
-class Command(SingleOptionsCommand[Options]):
+@HamiltonCommandABC.Decorator_Command(__file__)
+class Command(HamiltonCommandABC):
+    def __init__(self, *, CustomErrorHandling: bool, Identifier: str = "None"):
+        HamiltonCommandABC.__init__(self, Identifier, CustomErrorHandling)
+
     def HandleErrors(self):
-        if self.GetResponseState() is False:
-            ErrorMessage = self.GetResponseMessage()
-
-            if ErrorMessage == "":
-                ...
-
-            else:
-                raise Exception("Unhandled Error")
+        ...

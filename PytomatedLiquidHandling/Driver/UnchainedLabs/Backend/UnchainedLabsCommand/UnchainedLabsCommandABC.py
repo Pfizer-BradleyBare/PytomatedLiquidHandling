@@ -2,7 +2,7 @@ from abc import abstractmethod
 from ....Tools.AbstractClasses import CommandABC
 
 
-class UnchainedLabsCommand(CommandABC):
+class UnchainedLabsCommandABC(CommandABC):
     @classmethod
     def ParseResponse(cls, Response: str) -> CommandABC.Response:
         ...

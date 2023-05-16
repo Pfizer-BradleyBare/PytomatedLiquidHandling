@@ -1,1 +1,1 @@
-from .UnchainedLabsCommand import UnchainedLabsCommand
+from .UnchainedLabsCommandABC import UnchainedLabsCommandABC

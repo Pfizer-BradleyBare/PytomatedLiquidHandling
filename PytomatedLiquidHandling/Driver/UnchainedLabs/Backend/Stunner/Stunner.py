@@ -2,13 +2,13 @@ import os
 import subprocess
 from typing import Any
 
-import clr
+# import clr
 
 from ....Tools.AbstractClasses import BackendABC
-from .. import UnchainedLabsCommand
+from ..UnchainedLabsCommand import UnchainedLabsCommandABC
 
 
-class Stunner(BackendABC):
+class StunnerBackend(BackendABC):
     def __init__(
         self, UniqueIdentifier: str, InstrumentIPAddress: str, InstrumentPort: int
     ):
@@ -68,14 +68,14 @@ class Stunner(BackendABC):
 
         elif int(StatusCode) == 0:
             raise Exception(
-                "Backend was not reachable over the network. Is the Stunner turn on and configured for API mode?"
+                "Backend was not reachable over the network. Is the Stunner turned on and configured for API mode?"
             )
 
     @BackendABC.Decorator_ExecuteCommand
-    def ExecuteCommand(self, CommandInstance: UnchainedLabsCommand):
+    def ExecuteCommand(self, CommandInstance: UnchainedLabsCommandABC):
         self.Response = CommandInstance.ExecuteCommandHelper(self.StunnerDLLObject)
 
-    def GetStatus(self) -> UnchainedLabsCommand.Response:
+    def GetStatus(self) -> UnchainedLabsCommandABC.Response:
         StatusCode = self.StunnerDLLObject.Get_Status()
 
-        return UnchainedLabsCommand.ParseResponse(StatusCode)
+        return UnchainedLabsCommandABC.ParseResponse(StatusCode)

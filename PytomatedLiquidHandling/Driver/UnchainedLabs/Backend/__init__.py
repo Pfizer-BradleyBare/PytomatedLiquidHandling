@@ -1,2 +1,2 @@
 from .Stunner import Stunner
-from .UnchainedLabsCommand import UnchainedLabsCommand
+from .UnchainedLabsCommand import UnchainedLabsCommandABC

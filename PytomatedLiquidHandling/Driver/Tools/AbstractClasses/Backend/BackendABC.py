@@ -1,8 +1,7 @@
 from abc import abstractmethod
 
 from .....Tools.AbstractClasses import UniqueObjectABC
-from ...AbstractClasses import CommandABC
-import time
+from ..Command import CommandABC
 
 
 class BackendABC(UniqueObjectABC):

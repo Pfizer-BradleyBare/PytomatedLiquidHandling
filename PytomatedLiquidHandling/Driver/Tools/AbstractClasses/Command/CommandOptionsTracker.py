@@ -1,8 +1,8 @@
 from typing import Generic, TypeVar
 
-from .....Tools.AbstractClasses import NonUniqueObjectTrackerABC
+from ..Options import OptionsTrackerABC
 
-T = TypeVar("T", bound="NonUniqueObjectTrackerABC")
+T = TypeVar("T", bound="OptionsTrackerABC")
 
 
 class CommandOptionsTracker(Generic[T]):

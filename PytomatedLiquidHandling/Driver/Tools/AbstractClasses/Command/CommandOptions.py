@@ -1,8 +1,8 @@
 from typing import Generic, TypeVar
 
-from .....Tools.AbstractClasses import NonUniqueObjectABC
+from ..Options import OptionsABC
 
-T = TypeVar("T", bound="NonUniqueObjectABC")
+T = TypeVar("T", bound="OptionsABC")
 
 
 class CommandOptions(Generic[T]):

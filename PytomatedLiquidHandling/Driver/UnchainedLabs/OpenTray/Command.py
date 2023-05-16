@@ -1,11 +1,11 @@
 from typing import Any
 
-from ..Backend import UnchainedLabsCommand
+from ..Backend import UnchainedLabsCommandABC
 
 
-class Command(UnchainedLabsCommand):
+class Command(UnchainedLabsCommandABC):
     def ExecuteCommandHelper(self, StunnerDLLObject) -> Any:
-        return UnchainedLabsCommand.ParseResponse(StunnerDLLObject.Open_Tray())
+        return UnchainedLabsCommandABC.ParseResponse(StunnerDLLObject.Open_Tray())
 
     def HandleErrors(self):
         ...

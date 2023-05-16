@@ -1,14 +1,13 @@
-from ......Tools.AbstractClasses import NonUniqueObjectTrackerABC
-
+from .....Tools.AbstractClasses import OptionsTrackerABC
 from .Options import Options
 
 
-class OptionsTracker(NonUniqueObjectTrackerABC[Options]):
+class OptionsTracker(OptionsTrackerABC[Options]):
     def __init__(
         self,
         *,
         ToolSequence: str,
     ):
-        NonUniqueObjectTrackerABC.__init__(self)
+        OptionsTrackerABC.__init__(self)
 
         self.ToolSequence: str = ToolSequence
