@@ -1,6 +1,6 @@
+from .....Tools.Logger import Logger
 from ..BaseHamiltonBackend import HamiltonBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
-from .....Tools.Logger import Logger
 
 
 class VantageBackend(HamiltonBackendABC):
@@ -12,10 +12,6 @@ class VantageBackend(HamiltonBackendABC):
             "/Hamilton/Vantage/",
             Port=Port,
         )
-
-    @HamiltonBackendABC.Decorator_ExecuteCommand
-    def ExecuteCommand(self, CommandInstance: HamiltonCommandABC):
-        ...
 
     def GetStatus(self) -> HamiltonCommandABC.Response:
         ...

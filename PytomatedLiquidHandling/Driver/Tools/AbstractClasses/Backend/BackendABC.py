@@ -12,22 +12,6 @@ class BackendABC(UniqueObjectABC):
         self.CurrentCommand: CommandABC | None = None
         self.Response: CommandABC.Response | None = None
 
-    @staticmethod
-    def Decorator_ExecuteCommand(DecoratedFunction):
-        def inner(*args, **kwargs):
-            self = args[0]
-            if not isinstance(self, BackendABC):
-                raise Exception("You used this decorator incorrectly...")
-
-            if self.CurrentCommand is not None:
-                raise Exception(
-                    "Command is already being executed. Wait on command to compelete..."
-                )
-
-            return DecoratedFunction(*args, **kwargs)
-
-        return inner
-
     @abstractmethod
     def StartBackend(self):
         ...
@@ -38,7 +22,15 @@ class BackendABC(UniqueObjectABC):
 
     @abstractmethod
     def ExecuteCommand(self, CommandInstance: CommandABC):
-        ...
+        if not isinstance(self, BackendABC):
+            raise Exception("You used this decorator incorrectly...")
+
+        if self.CurrentCommand is not None:
+            raise Exception(
+                "Command is already being executed. Wait on command to compelete..."
+            )
+
+        self.CurrentCommand = CommandInstance
 
     @abstractmethod
     def GetStatus(self) -> CommandABC.Response:

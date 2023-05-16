@@ -2,17 +2,20 @@ import os
 import subprocess
 from typing import Any
 
-# import clr
-
+from .....Tools.Logger import Logger
 from ....Tools.AbstractClasses import BackendABC
 from ..UnchainedLabsCommand import UnchainedLabsCommandABC
 
 
 class StunnerBackend(BackendABC):
     def __init__(
-        self, UniqueIdentifier: str, InstrumentIPAddress: str, InstrumentPort: int
+        self,
+        UniqueIdentifier: str,
+        LoggerInstance: Logger,
+        InstrumentIPAddress: str,
+        InstrumentPort: int,
     ):
-        BackendABC.__init__(self, UniqueIdentifier)
+        BackendABC.__init__(self, UniqueIdentifier, LoggerInstance)
         self.InstrumentIPAddress: str = InstrumentIPAddress
         self.InstrumentPort: int = InstrumentPort
 
@@ -27,6 +30,8 @@ class StunnerBackend(BackendABC):
         subprocess.call(Args)
         # The stunner API access uses a .DLL library. This step cleans the .dll.
         # Microsoft will not let you load a .dll without cleaning it first.
+
+        import clr
 
         clr.AddReference(os.path.join(BasePath, "Stunner.dll"))  # type: ignore
         from UnchainedLabs_Instruments import Stunner  # type: ignore
@@ -71,8 +76,8 @@ class StunnerBackend(BackendABC):
                 "Backend was not reachable over the network. Is the Stunner turned on and configured for API mode?"
             )
 
-    @BackendABC.Decorator_ExecuteCommand
     def ExecuteCommand(self, CommandInstance: UnchainedLabsCommandABC):
+        BackendABC.ExecuteCommand(self, CommandInstance)
         self.Response = CommandInstance.ExecuteCommandHelper(self.StunnerDLLObject)
 
     def GetStatus(self) -> UnchainedLabsCommandABC.Response:

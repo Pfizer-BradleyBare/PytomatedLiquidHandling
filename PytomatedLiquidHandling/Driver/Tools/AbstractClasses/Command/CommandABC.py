@@ -1,5 +1,5 @@
 import os
-from abc import abstractmethod, ABC
+from abc import abstractmethod
 from typing import Any
 
 from .....Tools.AbstractClasses import NonUniqueObjectABC
