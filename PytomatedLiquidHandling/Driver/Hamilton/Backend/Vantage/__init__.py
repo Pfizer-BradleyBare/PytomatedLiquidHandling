@@ -1,1 +1,1 @@
-from .Vantage import Vantage
+from .Vantage import VantageBackend

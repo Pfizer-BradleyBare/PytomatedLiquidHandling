@@ -1,12 +1,14 @@
 from abc import abstractmethod
 
 from .....Tools.AbstractClasses import UniqueObjectABC
+from .....Tools.Logger import Logger
 from ..Command import CommandABC
 
 
 class BackendABC(UniqueObjectABC):
-    def __init__(self, UniqueIdentifier: str):
+    def __init__(self, UniqueIdentifier: str, LoggerInstance: Logger):
         UniqueObjectABC.__init__(self, UniqueIdentifier)
+        self.LoggerInstance: Logger = LoggerInstance
         self.CurrentCommand: CommandABC | None = None
         self.Response: CommandABC.Response | None = None
 
