@@ -1,10 +1,6 @@
-import os
-import subprocess
 import time
 
 from flask import request
-
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
 
 from .....Tools.Logger import Logger
 from ....Tools.AbstractClasses import ServerBackendABC
@@ -27,45 +23,6 @@ class HamiltonServerBackendABC(ServerBackendABC):
             PathPrefix,
             Port=Port,
         )
-        self.CurrentCommand: HamiltonCommandABC | None = None
-        self.Response: HamiltonCommandABC.Response | None = None
-
-    def StartBackend(self):
-        ServerBackendABC.StartBackend(self)
-
-    def ExecuteCommand(self, CommandInstance: HamiltonCommandABC):
-        if self.CurrentCommand is not None:
-            raise Exception(
-                "Command is already being executed. Wait on command to compelete..."
-            )
-
-        self.CurrentCommand = CommandInstance
-
-    def GetStatus(self) -> CommandABC.Response:
-        ...
-
-    def GetResponse(
-        self, CommandInstance: HamiltonCommandABC
-    ) -> HamiltonCommandABC.Response:
-        if self.CurrentCommand is None:
-            raise Exception(
-                "No Command currently executing. Execute a command first..."
-            )
-
-        if self.CurrentCommand == CommandInstance:
-            raise Exception(
-                "You can only get a response for the currently executing command."
-            )
-
-        if self.Response is None:
-            raise Exception("Response not available. Check status first...")
-
-        Response = self.Response
-
-        self.CurrentCommand = None
-        self.Response = None
-
-        return Response
 
     def GetNextCommand(self):
         ParserObject = ServerBackendABC.Parser(
@@ -75,6 +32,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
         )
 
         if not ParserObject.IsValid(["Timeout"]):
+            ParserObject.SetEndpointDetails("Key missing. Accepted keys: [Timeout]")
             Response = ParserObject.GetHTTPResponse()
             return Response
 
@@ -91,7 +49,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         if CommandInstance is None:
             ParserObject.SetEndpointState(False)
-            ParserObject.SetEndpointMessage("Command not available. Please try again.")
+            ParserObject.SetEndpointDetails("Command not available. Please try again.")
             Response = ParserObject.GetHTTPResponse()
             return Response
 
@@ -126,7 +84,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
             raise Exception("This should never happen")
 
         if self.Response is not None:
-            ParserObject.SetEndpointMessage(
+            ParserObject.SetEndpointDetails(
                 "Command already has a reponse. This should never happen."
             )
             Response = ParserObject.GetHTTPResponse()
@@ -136,6 +94,9 @@ class HamiltonServerBackendABC(ServerBackendABC):
         ExpectedResponseKeys = CommandInstance.Response.GetExpectedResponseProperties()
 
         if not ParserObject.IsValid(ExpectedResponseKeys):
+            ParserObject.SetEndpointDetails(
+                "Key missing. Accepted keys: " + str(ExpectedResponseKeys)
+            )
             Response = ParserObject.GetHTTPResponse()
             return Response
         # check we have required info

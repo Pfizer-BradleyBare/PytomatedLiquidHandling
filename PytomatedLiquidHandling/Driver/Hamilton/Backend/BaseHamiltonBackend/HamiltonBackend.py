@@ -1,14 +1,12 @@
-import os
 import subprocess
-import time
-
-from flask import request
-
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
 
 from .....Tools.Logger import Logger
 from ....Tools.AbstractClasses import BackendABC
-from ..HamiltonCommand import HamiltonActionCommandABC, HamiltonStateCommandABC
+from ..HamiltonCommand import (
+    HamiltonActionCommandABC,
+    HamiltonCommandABC,
+    HamiltonStateCommandABC,
+)
 from .HamiltonServerBackend import HamiltonServerBackendABC
 
 
@@ -37,7 +35,7 @@ class HamiltonBackendABC(BackendABC):
             UniqueIdentifier + " State Server",
             LoggerInstance,
             PathPrefix + "StateServer/",
-            Port,
+            Port + 1,
         )
 
         self.MethodPath: str = MethodPath
@@ -57,9 +55,26 @@ class HamiltonBackendABC(BackendABC):
     def ExecuteCommand(
         self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
     ):
-        return BackendABC.ExecuteCommand(self, CommandInstance)
+
+        if isinstance(CommandInstance, HamiltonStateCommandABC):
+            self.StateServer.ExecuteCommand(CommandInstance)
+        else:
+            self.ActionServer.ExecuteCommand(CommandInstance)
+
+    def GetStatus(
+        self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
+    ) -> HamiltonCommandABC.Response:
+
+        if isinstance(CommandInstance, HamiltonStateCommandABC):
+            return self.StateServer.GetStatus(CommandInstance)
+        else:
+            return self.ActionServer.GetStatus(CommandInstance)
 
     def GetResponse(
         self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
     ) -> HamiltonActionCommandABC.Response | HamiltonStateCommandABC.Response:
-        return super().GetResponse(CommandInstance)
+
+        if isinstance(CommandInstance, HamiltonStateCommandABC):
+            return self.StateServer.GetResponse(CommandInstance)
+        else:
+            return self.ActionServer.GetResponse(CommandInstance)

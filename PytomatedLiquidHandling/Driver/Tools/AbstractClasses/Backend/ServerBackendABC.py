@@ -29,8 +29,9 @@ class ServerBackendABC(BackendABC):
         self.PathPrefix: str = PathPrefix
         self.Address: str = Address
         self.Port: int = Port
-        self.Views: list[Callable] = Views + [self.Kill, self.IsActive]
+        self.Views: list[Callable] = [self.IsActive, self.Kill] + Views
 
+        self.__App.add_url_rule(PathPrefix, "Index", self.Index)
         for View in self.Views:
             self.__App.add_url_rule(PathPrefix + View.__name__, View.__name__, View)
 
@@ -56,7 +57,7 @@ class ServerBackendABC(BackendABC):
         )
 
     def StartBackend(self):
-        Host = (self.Address, self.Port, self.PathPrefix)
+        Host = (self.Address, self.Port)
         if Host in ServerBackendABC.__Hosts:
             raise Exception(
                 "This host is already taken. Choose a different address and/or port."
@@ -72,13 +73,23 @@ class ServerBackendABC(BackendABC):
         ).start()
 
     def StopBackend(self):
-        Host = (self.Address, self.Port, self.PathPrefix)
+        Host = (self.Address, self.Port)
         if Host not in ServerBackendABC.__Hosts:
             raise Exception("This backend not currently running. Run it first")
 
         self.__AppParentThreadRunnerFlag.set()
 
         ServerBackendABC.__Hosts.remove(Host)
+
+    def Index(self):
+        Out = ""
+        Out += "<H1>Hello!</H1>"
+        Out += "<H3>Endpoints:</H3>"
+        Out += "<ol>"
+        for View in self.Views:
+            Out += "<li>" + View.__name__ + "</li>"
+        Out += "</ol>"
+        return Out
 
     def IsActive(self):
         ParserInstance = ServerBackendABC.Parser(
