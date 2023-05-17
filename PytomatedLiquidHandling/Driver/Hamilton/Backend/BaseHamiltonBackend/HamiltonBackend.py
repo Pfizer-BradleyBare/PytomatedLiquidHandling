@@ -43,13 +43,12 @@ class HamiltonBackendABC(ServerBackendABC):
     def GetNextCommand(self):
         ParserObject = ServerBackendABC.Parser(
             self.LoggerInstance,
-            self.__class__.__name__ + " HamiltonBackend GetNextCommand",
+            self.GetEndpointID("GetNextCommand"),
             request.get_data(),
         )
 
         if not ParserObject.IsValid(["Timeout"]):
-            Response = ParserObject.GetHTTPResponse()
-            return Response
+            return ParserObject.GetHTTPResponse()
 
         Timeout = ParserObject.GetEndpointInputData("Timeout") - 10
         Counter = 0
@@ -64,16 +63,15 @@ class HamiltonBackendABC(ServerBackendABC):
 
         if CommandInstance is None:
             ParserObject.SetEndpointState(False)
-            ParserObject.SetEndpointMessage("Command not available. Please try again.")
-            Response = ParserObject.GetHTTPResponse()
-            return Response
+            ParserObject.SetEndpointDetails("Command not available. Please try again.")
+            return ParserObject.GetHTTPResponse()
 
         if not isinstance(CommandInstance, HamiltonCommandABC):
             raise Exception("This will never happen")
 
         ParserObject.SetEndpointState(True)
+        ParserObject.SetEndpointDetails("Command Available")
 
-        # ParserObject.SetEndpointOutputKey("Request Identifier", CommandInstance.GetID())
         ParserObject.SetEndpointOutputKey(
             "Custom Error Handling", CommandInstance.CustomErrorHandling
         )
@@ -83,13 +81,12 @@ class HamiltonBackendABC(ServerBackendABC):
             "Command Parameters", CommandInstance.GetVars()
         )
 
-        Response = ParserObject.GetHTTPResponse()
-        return Response
+        return ParserObject.GetHTTPResponse()
 
     def RespondToCommand(self):
         ParserObject = ServerBackendABC.Parser(
             self.LoggerInstance,
-            self.__class__.__name__ + " HamiltonBackend RespondToCommand",
+            self.GetEndpointID("RespondToCommand"),
             request.get_data(),
         )
 
@@ -99,18 +96,16 @@ class HamiltonBackendABC(ServerBackendABC):
             raise Exception("This should never happen")
 
         if self.Response is not None:
-            ParserObject.SetEndpointMessage(
+            ParserObject.SetEndpointDetails(
                 "Command already has a reponse. This should never happen."
             )
-            Response = ParserObject.GetHTTPResponse()
-            return Response
+            return ParserObject.GetHTTPResponse()
         # Check the command does not already have a response
 
         ExpectedResponseKeys = CommandInstance.Response.GetExpectedResponseProperties()
 
         if not ParserObject.IsValid(ExpectedResponseKeys):
-            Response = ParserObject.GetHTTPResponse()
-            return Response
+            return ParserObject.GetHTTPResponse()
         # check we have required info
 
         Properties = dict()
@@ -122,6 +117,6 @@ class HamiltonBackendABC(ServerBackendABC):
         # Add response then release threads waiting for a response
 
         ParserObject.SetEndpointState(True)
+        ParserObject.SetEndpointDetails("Response Accepted.")
 
-        Response = ParserObject.GetHTTPResponse()
-        return Response
+        return ParserObject.GetHTTPResponse()
