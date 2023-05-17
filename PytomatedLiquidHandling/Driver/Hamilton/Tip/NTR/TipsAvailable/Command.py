@@ -1,23 +1,24 @@
-from .....Tools.Command import (
-    ClassDecorator_Command,
-    ExpectedResponseProperty,
-    SingleOptionsCommand,
-)
+from .....Tools.AbstractClasses import CommandOptions
+from ....Backend import HamiltonActionCommandABC
 from .Options import Options
 
 
-@ClassDecorator_Command(__file__)
-class Command(SingleOptionsCommand[Options]):
+@HamiltonActionCommandABC.Decorator_Command(__file__)
+class Command(HamiltonActionCommandABC, CommandOptions[Options]):
+    def __init__(
+        self,
+        *,
+        CustomErrorHandling: bool,
+        OptionsInstance: Options,
+        Identifier: str = "None"
+    ):
+        HamiltonActionCommandABC.__init__(self, Identifier, CustomErrorHandling)
+        CommandOptions.__init__(self, OptionsInstance)
+
     def HandleErrors(self):
-        if self.GetResponseState() is False:
-            ErrorMessage = self.GetResponseMessage()
-
-            if ErrorMessage == "":
-                ...
-
-            else:
-                raise Exception("Unhandled Error")
-
-    @ExpectedResponseProperty
-    def GetTipPosition(self) -> int:
         ...
+
+    class Response(HamiltonActionCommandABC.Response):
+        @HamiltonActionCommandABC.Response.Decorator_ExpectedResponseProperty
+        def GetTipPosition(self) -> int:
+            ...

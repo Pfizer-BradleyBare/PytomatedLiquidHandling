@@ -1,23 +1,24 @@
-from ....Tools.Command import (
-    ClassDecorator_Command,
-    ExpectedResponseProperty,
-    SingleOptionsCommand,
-)
+from ....Tools.AbstractClasses import CommandOptions
+from ...Backend import HamiltonStateCommandABC
 from .Options import Options
 
 
-@ClassDecorator_Command(__file__)
-class Command(SingleOptionsCommand[Options]):
+@HamiltonStateCommandABC.Decorator_Command(__file__)
+class Command(HamiltonStateCommandABC, CommandOptions[Options]):
+    def __init__(
+        self,
+        *,
+        CustomErrorHandling: bool,
+        OptionsInstance: Options,
+        Identifier: str = "None"
+    ):
+        HamiltonStateCommandABC.__init__(self, Identifier, CustomErrorHandling)
+        CommandOptions.__init__(self, OptionsInstance)
+
     def HandleErrors(self):
-        if self.GetResponseState() is False:
-            ErrorMessage = self.GetResponseMessage()
-
-            if ErrorMessage == "":
-                ...
-
-            else:
-                raise Exception("Unhandled Error")
-
-    @ExpectedResponseProperty
-    def GetPressure(self) -> float:
         ...
+
+    class Response(HamiltonStateCommandABC.Response):
+        @HamiltonStateCommandABC.Response.Decorator_ExpectedResponseProperty
+        def GetPressure(self) -> float:
+            ...

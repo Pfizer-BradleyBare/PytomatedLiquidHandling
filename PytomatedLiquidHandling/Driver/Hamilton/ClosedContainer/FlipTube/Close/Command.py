@@ -1,10 +1,10 @@
-from ....Backend import HamiltonCommandABC
 from .....Tools.AbstractClasses import CommandOptionsTracker
+from ....Backend import HamiltonActionCommandABC
 from .OptionsTracker import OptionsTracker
 
 
-@HamiltonCommandABC.Decorator_Command(__file__)
-class Command(HamiltonCommandABC, CommandOptionsTracker[OptionsTracker]):
+@HamiltonActionCommandABC.Decorator_Command(__file__)
+class Command(HamiltonActionCommandABC, CommandOptionsTracker[OptionsTracker]):
     def __init__(
         self,
         *,
@@ -12,7 +12,7 @@ class Command(HamiltonCommandABC, CommandOptionsTracker[OptionsTracker]):
         OptionsTrackerInstance: OptionsTracker,
         Identifier: str = "None"
     ):
-        HamiltonCommandABC.__init__(self, Identifier, CustomErrorHandling)
+        HamiltonActionCommandABC.__init__(self, Identifier, CustomErrorHandling)
         CommandOptionsTracker.__init__(self, OptionsTrackerInstance)
 
     def HandleErrors(self):

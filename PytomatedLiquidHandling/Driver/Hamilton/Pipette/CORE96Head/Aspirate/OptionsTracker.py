@@ -1,9 +1,8 @@
-from ......Tools.AbstractClasses import NonUniqueObjectTrackerABC
-
+from .....Tools.AbstractClasses import OptionsTrackerABC
 from .Options import Options
 
 
-class OptionsTracker(NonUniqueObjectTrackerABC[Options]):
+class OptionsTracker(OptionsTrackerABC[Options]):
     def __init__(
         self,
         *,
@@ -20,7 +19,7 @@ class OptionsTracker(NonUniqueObjectTrackerABC[Options]):
         MixPosition: float = 0,
         MixVolume: float = 0,
     ):
-        NonUniqueObjectTrackerABC.__init__(self)
+        OptionsTrackerABC.__init__(self)
 
         self.Sequence: str = Sequence
 

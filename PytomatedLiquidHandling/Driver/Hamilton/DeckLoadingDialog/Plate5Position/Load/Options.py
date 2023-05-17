@@ -1,7 +1,7 @@
-from ......Tools.AbstractClasses import NonUniqueObjectABC
+from .....Tools.AbstractClasses import OptionsABC
 
 
-class Options(NonUniqueObjectABC):
+class Options(OptionsABC):
     def __init__(
         self,
         CarrierTrackStart: int,
