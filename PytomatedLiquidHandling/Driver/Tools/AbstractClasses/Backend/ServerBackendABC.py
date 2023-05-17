@@ -4,6 +4,8 @@ from typing import Callable
 
 from flask import Flask
 
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
+
 from .....Tools.Logger import Logger
 from .BackendABC import BackendABC
 
@@ -27,7 +29,7 @@ class ServerBackendABC(BackendABC):
         self.PathPrefix: str = PathPrefix
         self.Address: str = Address
         self.Port: int = Port
-        self.Views: list[Callable] = Views + [self.Kill]
+        self.Views: list[Callable] = Views + [self.Kill, self.IsActive]
 
         for View in self.Views:
             self.__App.add_url_rule(PathPrefix + View.__name__, View.__name__, View)
@@ -43,6 +45,15 @@ class ServerBackendABC(BackendABC):
 
     def __Run(self):
         self.__App.run(self.Address, self.Port)
+
+    def GetEndpointID(self, Endpoint: str):
+        return (
+            self.__class__.__name__
+            + ": "
+            + str(self.GetUniqueIdentifier())
+            + "-> "
+            + Endpoint
+        )
 
     def StartBackend(self):
         Host = (self.Address, self.Port, self.PathPrefix)
@@ -69,9 +80,26 @@ class ServerBackendABC(BackendABC):
 
         ServerBackendABC.__Hosts.remove(Host)
 
+    def IsActive(self):
+        ParserInstance = ServerBackendABC.Parser(
+            self.LoggerInstance,
+            self.GetEndpointID("IsActive"),
+            None,
+        )
+        ParserInstance.SetEndpointState(True)
+        ParserInstance.SetEndpointDetails("Backend is Active")
+        return ParserInstance.GetHTTPResponse()
+
     def Kill(self):
         self.StopBackend()
-        return "App killed for server with ID: " + str(self.GetUniqueIdentifier())
+        ParserInstance = ServerBackendABC.Parser(
+            self.LoggerInstance,
+            self.GetEndpointID("Kill"),
+            None,
+        )
+        ParserInstance.SetEndpointState(True)
+        ParserInstance.SetEndpointDetails("Backend Killed")
+        return ParserInstance.GetHTTPResponse()
 
     class Parser:
         def __init__(
@@ -91,7 +119,7 @@ class ServerBackendABC(BackendABC):
             self.InputString: bytes | None = JSONstring
             self.JSON: dict | None = dict()
             self.EndpointState: bool = False
-            self.EndpointMessage: str = "N/A"
+            self.EndpointDetails: str = "N/A"
             self.EndpointReturn: dict = dict()
 
             if not (JSONstring is None or JSONstring == "" or JSONstring == b""):
@@ -106,7 +134,6 @@ class ServerBackendABC(BackendABC):
                     self.JSON = None
 
         def __del__(self):
-
             self.LoggerInstance.debug("PARSER: __END__")
 
         def IsValid(self, ExpectedKeys: list[str]) -> bool:
@@ -148,18 +175,17 @@ class ServerBackendABC(BackendABC):
         def SetEndpointState(self, State: bool):
             self.EndpointState = State
 
-        def SetEndpointMessage(self, Message: str):
-            self.EndpointMessage = Message
+        def SetEndpointDetails(self, Details: str):
+            self.EndpointDetails = Details
 
         def SetEndpointOutputKey(self, Key: str, Value: any):  # type: ignore
             self.EndpointReturn[Key] = Value
 
         def GetHTTPResponse(self) -> str:
-
             Out = dict()
             Out["Endpoint ID"] = self.EndpointID
             Out["Endpoint State"] = self.EndpointState
-            Out["Endpoint Message"] = self.EndpointMessage
+            Out["Endpoint Detauls"] = self.EndpointDetails
             Out["Endpoint Input Data"] = self.JSON
             Out["Endpoint Output Data"] = self.EndpointReturn
 
