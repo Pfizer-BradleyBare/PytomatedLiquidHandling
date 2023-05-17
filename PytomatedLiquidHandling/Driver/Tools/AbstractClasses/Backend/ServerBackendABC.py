@@ -196,7 +196,7 @@ class ServerBackendABC(BackendABC):
             Out = dict()
             Out["Endpoint ID"] = self.EndpointID
             Out["Endpoint State"] = self.EndpointState
-            Out["Endpoint Detauls"] = self.EndpointDetails
+            Out["Endpoint Details"] = self.EndpointDetails
             Out["Endpoint Input Data"] = self.JSON
             Out["Endpoint Output Data"] = self.EndpointReturn
 

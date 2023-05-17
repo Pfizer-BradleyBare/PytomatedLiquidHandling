@@ -1,0 +1,187 @@
+// {{{ 2 "IncludeGuard" "PragmaOnce"
+#pragma once
+// }} ""
+#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesMethod\\Library\\ABNWebServerCommands\\JSONParser\\WebServerJSONParser.hs_"
+#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesMethod\\Library\\ABNWebServerCommands\\ABNWebServerCommands.hs_"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+#include "HSLMETEDLib.hs_"
+#include "HSLMECCLib.hs_"
+#include "HSLPTLLib.hsl"
+// }} ""
+// {{{ 2 "LibraryNamespace" "Begin"
+namespace TIMER {
+// }} ""
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{{ 2 "SubmethodForwardDeclaration" ""
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void ;
+private function StartTimer( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+// }} ""
+function _InitLibrary() {
+// {{ 2 "AutoInitBlock" ""
+PTL::SetWashingStateDefault("RinseTime1", 5);
+PTL::SetWashingStateDefault("SoakTime1", 5);
+PTL::SetWashingStateDefault("FlowRate1", 11);
+PTL::SetWashingStateDefault("RinseTime2", 0);
+PTL::SetWashingStateDefault("SoakTime2", 0);
+PTL::SetWashingStateDefault("FlowRate2", 11);
+PTL::SetWashingStateDefault("DrainingTime", 10);
+PTL::SetWashingStateDefault("StartWashLiquid", 0);
+PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
+PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
+WEBSERVERJSONPARSER::_InitLibrary();
+ABNWEBSERVERCOMMANDS::_InitLibrary();
+// }} ""
+}
+function _ExitLibrary() {
+// {{ 2 "AutoExitBlock" ""
+WEBSERVERJSONPARSER::_ExitLibrary();
+ABNWEBSERVERCOMMANDS::_ExitLibrary();
+// }} ""
+}
+// {{{ 5 "StartTimer" "Begin"
+private function StartTimer( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable WaitTime;
+private variable Name;
+private variable IsStoppable;
+private variable ShowTimer;
+private timer Timer;
+private variable CustomErrorHandling;
+private variable State;
+private variable Values[];
+private variable Keys[];
+private variable Message;
+private variable RequestID;
+// {{ 5 "StartTimer" "InitLocals"
+// }} ""
+// {{{ 8 1 0 "dcd60f64_68b8_4fbf_9b44d51588f6dd6f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+RequestID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
+// }} ""
+// {{{ 9 1 0 "a70accb9_574f_4f3f_8ffed384a5f77830" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Name = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
+// }} ""
+// {{{ 10 1 0 "972c2da1_ce8e_4bea_8977782a7a8ddf66" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+WaitTime = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:WaitTime:"));
+// }} ""
+// {{{ 11 1 0 "3a16bf6a_2b45_44d9_b8031e82f82e36e1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ShowTimer = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ShowTimer:"));
+// }} ""
+// {{{ 12 1 0 "8ef6166c_f144_49d3_b2b49606405a7744" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+IsStoppable = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:IsStoppable:"));
+// }} ""
+// {{ 13 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 14 1 0 "aa720931_7e38_412b_af5bd60cf611e469" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// }} ""
+// {{ 15 1 0 "d91c3acb_d3c5_43c0_8dc9bb9a6fd757ee" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 1;
+// }} ""
+// {{ 16 1 0 "a7620655_4849_443d_b88a502a056a14f9" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Success");
+// }} ""
+// {{ 17 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 18 1 0 "577556ee_4f1c_48de_90d33dedc9a1d8f1" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == Timer.SetTimer(WaitTime) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 19 1 0 "62fe1d17_8760_4b19_92f26cf12ffb7762" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (ShowTimer == 1)
+{
+// }} ""
+// {{ 20 1 0 "aaaedd76_f11f_4c5c_9cee68a84b6c1f91" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (IsStoppable == 1)
+{
+// }} ""
+// {{ 21 1 0 "1237c5e6_02f9_426a_93171856c36fc05c" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == Timer.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 22 1 0 "aaaedd76_f11f_4c5c_9cee68a84b6c1f91" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 23 1 0 "7f2cb149_9754_4d45_b52fcbe6c468d98e" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == Timer.WaitTimer(hslTrue, hslFalse) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 24 1 0 "aaaedd76_f11f_4c5c_9cee68a84b6c1f91" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 25 1 0 "62fe1d17_8760_4b19_92f26cf12ffb7762" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 26 1 0 "4aba21ea_92cd_454b_88e1660f0fd57be7" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == Timer.WaitTimer(hslFalse, hslFalse) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 27 1 0 "62fe1d17_8760_4b19_92f26cf12ffb7762" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 28 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 29 1 0 "9a5d388d_d6b5_48ad_b729ed05c6912175" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Keys.SetSize(0);
+// }} ""
+// {{ 30 1 0 "9f4a5af9_fcb9_43ff_b1bcee1ca01064ee" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Values.SetSize(0);
+// }} ""
+// {{{ 31 1 0 "6bb854f1_97c4_44d3_8e277a176fd4e8de" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ABNWEBSERVERCOMMANDS::DriverRespond(State, RequestID, Message, Keys, Values);
+// }} ""
+// {{ 32 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "StartTimer" "End"
+}
+// }} ""
+// {{{ 5 "HandleCommand" "Begin"
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+// {{ 5 "HandleCommand" "InitLocals"
+// }} ""
+// {{ 1 1 0 "fe6a4a04_ab00_48a0_808905a40fc04e9b" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "StartTimer")
+{
+// }} ""
+// {{{ 2 1 0 "78dc0e80_0c8b_4cb5_b77ebb66f7f54bfb" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StartTimer(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 3 1 0 "70160f8d_a9e8_4e2b_b7590a4a5ef2aa32" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 4 1 0 "fe6a4a04_ab00_48a0_808905a40fc04e9b" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 5 1 0 "7eba0f5d_73bc_4c95_9aaf8fb35768504f" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nCommand not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+// }} ""
+// {{ 6 1 0 "60a5dee6_353e_4d2f_88d4468acb0b851f" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+abort;
+// }} ""
+// {{{ 5 "HandleCommand" "End"
+}
+// }} ""
+/* {{ 2 "SubmethodInsertLine" "" */ // }} ""
+// {{{ 2 "LibraryNamespace" "End"
+} // library namespace
+// }} ""
+// $$author=BAREB$$valid=0$$time=2023-01-30 21:57$$checksum=a6af1c23$$length=084$$

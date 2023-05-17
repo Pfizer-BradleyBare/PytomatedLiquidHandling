@@ -15,8 +15,6 @@ class HamiltonBackendABC(BackendABC):
         self,
         UniqueIdentifier: str,
         LoggerInstance: Logger,
-        PathPrefix: str = "/",
-        Port: int = 8080,
         MethodPath: str = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\test.hsl",
     ):
         BackendABC.__init__(
@@ -28,14 +26,14 @@ class HamiltonBackendABC(BackendABC):
         self.ActionServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
             UniqueIdentifier + " Action Server",
             LoggerInstance,
-            PathPrefix + "ActionServer/",
-            Port,
+            "/ActionServer/",
+            767,
         )
         self.StateServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
             UniqueIdentifier + " State Server",
             LoggerInstance,
-            PathPrefix + "StateServer/",
-            Port + 1,
+            "/StateServer/",
+            768,
         )
 
         self.MethodPath: str = MethodPath

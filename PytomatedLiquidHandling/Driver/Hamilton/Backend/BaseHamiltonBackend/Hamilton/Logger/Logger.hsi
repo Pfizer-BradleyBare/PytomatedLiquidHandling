@@ -1,0 +1,111 @@
+// {{{ 2 "IncludeGuard" "PragmaOnce"
+#pragma once
+// }} ""
+#include "HSLTrcLib.hsl"
+#include "HSLUtilLib2.hsl"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+#include "HSLMETEDLib.hs_"
+#include "HSLMECCLib.hs_"
+// }} ""
+// {{{ 2 "LibraryNamespace" "Begin"
+namespace LOGGER {
+// }} ""
+global variable _DEBUGGING_State("False");
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{{ 2 "SubmethodForwardDeclaration" ""
+function EnableOutput( variable State ) void ;
+function TraceArray( variable Description, variable & Array[] ) void ;
+function TraceComment( variable Comment ) void ;
+function TraceSequence( sequence Sequence ) void ;
+function TraceVariable( variable Description, variable Variable ) void ;
+// }} ""
+function _InitLibrary() {
+// {{ 2 "AutoInitBlock" ""
+// }} ""
+}
+function _ExitLibrary() {
+// {{ 2 "AutoExitBlock" ""
+// }} ""
+}
+// {{{ 5 "EnableOutput" "Begin"
+function EnableOutput( variable State ) void {
+// }} ""
+// {{ 5 "EnableOutput" "InitLocals"
+// }} ""
+// {{ 1 1 0 "b57d0905_1ccf_41f2_bf70ab87c55a1296" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+_DEBUGGING_State = State;
+// }} ""
+// {{{ 5 "EnableOutput" "End"
+}
+// }} ""
+// {{{ 5 "TraceSequence" "Begin"
+function TraceSequence( sequence Sequence ) void {
+// }} ""
+// {{ 5 "TraceSequence" "InitLocals"
+// }} ""
+// {{ 9 1 0 "714f0384_3ff0_4cc3_afc58ee2f2447aa3" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (_DEBUGGING_State == "True")
+{
+// }} ""
+// {{{ 10 1 0 "beecd1e3_b026_4375_99e7f7ba3d4c43d6" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+TrcTraceSequence(Sequence);
+// }} ""
+// {{ 11 1 0 "714f0384_3ff0_4cc3_afc58ee2f2447aa3" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 5 "TraceSequence" "End"
+}
+// }} ""
+// {{{ 5 "TraceArray" "Begin"
+function TraceArray( variable Description, variable & Array[] ) void {
+// }} ""
+// {{ 5 "TraceArray" "InitLocals"
+// }} ""
+// {{ 3 1 0 "667e4ac8_398d_4c61_930439cdd7ff8a83" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (_DEBUGGING_State == "True")
+{
+// }} ""
+// {{{ 4 1 0 "6e48595b_9fc7_4629_b3f7e193e2e43e21" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Util2::Debug::TraceArray(Description, Array);
+// }} ""
+// {{ 5 1 0 "667e4ac8_398d_4c61_930439cdd7ff8a83" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 5 "TraceArray" "End"
+}
+// }} ""
+// {{{ 5 "TraceVariable" "Begin"
+function TraceVariable( variable Description, variable Variable ) void {
+// }} ""
+// {{ 5 "TraceVariable" "InitLocals"
+// }} ""
+// {{ 13 1 0 "bbf64b9e_7083_4ca8_aa59d036d5bf7e0d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (_DEBUGGING_State == "True")
+{
+// }} ""
+// {{{ 14 1 0 "0fb1614b_5301_40ba_a92386bd119e7b7b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+TrcTrace(Description, Variable);
+// }} ""
+// {{ 15 1 0 "bbf64b9e_7083_4ca8_aa59d036d5bf7e0d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 5 "TraceVariable" "End"
+}
+// }} ""
+// {{{ 5 "TraceComment" "Begin"
+function TraceComment( variable Comment ) void {
+// }} ""
+// {{ 5 "TraceComment" "InitLocals"
+// }} ""
+// {{{ 7 1 0 "0c6b8965_97ac_42ef_8450b5bd4fd8d1ce" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+TrcTrace(Translate(""), Comment);
+// }} ""
+// {{{ 5 "TraceComment" "End"
+}
+// }} ""
+/* {{ 2 "SubmethodInsertLine" "" */ // }} ""
+// {{{ 2 "LibraryNamespace" "End"
+} // library namespace
+// }} ""
+// $$author=BAREB$$valid=0$$time=2023-05-17 14:55$$checksum=3293e0af$$length=084$$

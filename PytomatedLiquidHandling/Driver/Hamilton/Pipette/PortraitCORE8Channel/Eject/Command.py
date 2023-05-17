@@ -24,7 +24,7 @@ class Command(HamiltonActionCommandABC, CommandOptionsTracker[OptionsTracker]):
             ChannelNumberList[ChannelNumber - 1] = "1"
 
         OutputDict["ChannelNumber"] = ChannelNumberList
-        OutputDict["ChannelNumberString"] = "".join(ChannelNumberList)  # type:ignore
+        OutputDict["ChannelNumberString"] = "".join(ChannelNumberList)
 
         return OutputDict
 

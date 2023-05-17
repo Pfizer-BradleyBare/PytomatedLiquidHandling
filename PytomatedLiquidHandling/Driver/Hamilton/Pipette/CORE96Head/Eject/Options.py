@@ -7,6 +7,6 @@ class Options(OptionsABC):
     def __init__(
         self,
         *,
-        SequencePosition: int,
+        Sequence: str,
     ):
-        self.SequencePosition: int = SequencePosition
+        self.Sequence: str = Sequence

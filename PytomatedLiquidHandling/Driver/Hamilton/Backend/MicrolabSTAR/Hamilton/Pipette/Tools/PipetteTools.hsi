@@ -1,0 +1,173 @@
+// {{{ 2 "IncludeGuard" "PragmaOnce"
+#pragma once
+// }} ""
+#include "HSLSeqLib.hsl"
+#include "HSLDevLib.hsl"
+#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesMethod\\Library\\ABNWebServerCommands\\JSONParser\\WebServerJSONParser.hs_"
+#include "HSLUtilLib2.hsl"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+#include "HSLMETEDLib.hs_"
+#include "HSLMECCLib.hs_"
+#include "HSLPTLLib.hsl"
+// }} ""
+// {{{ 2 "LibraryNamespace" "Begin"
+namespace PIPETTETOOLS {
+// }} ""
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{{ 2 "SubmethodForwardDeclaration" ""
+function CreateSequence( device & ML_STAR, variable & i_SequenceNameArray[], variable & i_SequencePositionArray[], sequence & o_Sequence ) void ;
+function PadArray( variable & io_Array[], variable & PadIndices[] ) void ;
+// }} ""
+function _InitLibrary() {
+// {{ 2 "AutoInitBlock" ""
+PTL::SetWashingStateDefault("RinseTime1", 5);
+PTL::SetWashingStateDefault("SoakTime1", 5);
+PTL::SetWashingStateDefault("FlowRate1", 11);
+PTL::SetWashingStateDefault("RinseTime2", 0);
+PTL::SetWashingStateDefault("SoakTime2", 0);
+PTL::SetWashingStateDefault("FlowRate2", 11);
+PTL::SetWashingStateDefault("DrainingTime", 10);
+PTL::SetWashingStateDefault("StartWashLiquid", 0);
+PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
+PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
+WEBSERVERJSONPARSER::_InitLibrary();
+// }} ""
+}
+function _ExitLibrary() {
+// {{ 2 "AutoExitBlock" ""
+WEBSERVERJSONPARSER::_ExitLibrary();
+// }} ""
+}
+// {{{ 5 "CreateSequence" "Begin"
+function CreateSequence( device & ML_STAR, variable & i_SequenceNameArray[], variable & i_SequencePositionArray[], sequence & o_Sequence ) void {
+// }} ""
+private variable Counter;
+private variable NumPositions;
+private variable LabID;
+private variable PosID;
+private sequence Out;
+// {{ 5 "CreateSequence" "InitLocals"
+{ sequence __temp; o_Sequence = __temp; }
+// }} ""
+// {{ 1 1 0 "fc0e41ed_ee3f_45b5_aa705b918d77befc" "{72EACF88-8D49-43e3-92C8-2F90E81E3260}"
+NumPositions=i_SequencePositionArray.GetSize();
+// }} ""
+// {{ 2 1 0 "6e795149_cc73_4166_ad8b3648895de38f" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+for(Counter = 0; Counter < NumPositions;)
+{
+Counter = Counter + 1;
+// }} ""
+// {{{ 3 1 0 "ce4f5798_d1e9_4061_93d7beb7bad31eff" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+DevGetSequenceRef(ML_STAR, i_SequenceNameArray.ElementAt( Counter -1), Out);
+// }} ""
+// {{ 4 1 0 "943485a7_c20b_4feb_ba8c03643c79a4bf" "{B31F353C-5D80-11d4-A5EB-0050DA737D89}"
+Out.SetCount(i_SequencePositionArray.ElementAt( Counter -1));
+// }} ""
+// {{ 5 1 0 "9a14375c_cd65_487f_aeb90f44ca54ddd3" "{B31F353A-5D80-11d4-A5EB-0050DA737D89}"
+Out.SetCurrentPosition(i_SequencePositionArray.ElementAt( Counter -1));
+// }} ""
+// {{{ 6 1 0 "5f251066_8d53_4a7e_b5b949905d74b44e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+LabID = SeqGetLabwareId(Out);
+// }} ""
+// {{{ 7 1 0 "a983c7d8_5093_4799_97eedd7b17fd6256" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+PosID = SeqGetPositionId(Out);
+// }} ""
+// {{{ 8 1 0 "f39d382b_2840_4dbc_93c18c1f6f84bbff" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SeqAdd(o_Sequence, LabID, PosID);
+// }} ""
+// {{ 9 1 0 "6e795149_cc73_4166_ad8b3648895de38f" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+}
+}
+// }} ""
+// {{{ 5 "CreateSequence" "End"
+}
+// }} ""
+// {{{ 5 "PadArray" "Begin"
+function PadArray( variable & io_Array[], variable & PadIndices[] ) void {
+// }} ""
+private variable IndiceCounter;
+private variable Counter;
+private variable NumIndices;
+private variable Temp[];
+private variable PadValue;
+// {{ 5 "PadArray" "InitLocals"
+// }} ""
+/* {{ 1 "" "0" */ if(0){  /* }} "" */
+// {{ 11 1 0 "613bfa33_1b36_49f0_bb183ec8f8da9765" "{DB5A2B39-67F2-4a78-A78F-DAF3FB056366}"
+Temp=io_Array;
+// }} ""
+// {{ 12 1 0 "e94e0c7a_95e3_4b18_bce29ac934a499a5" "{67A8F1C9-6546-41e9-AD2F-3C54F7818853}"
+PadValue=Temp.GetAt(1-1);
+// }} ""
+// {{ 13 1 0 "0cafba42_20a8_4fed_898eaed56f78194f" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+io_Array.SetSize(0);
+// }} ""
+// {{ 14 1 0 "12a95c8f_dd4b_4017_9cf3ca41f17bcee8" "{72EACF88-8D49-43e3-92C8-2F90E81E3260}"
+NumIndices=PadIndices.GetSize();
+// }} ""
+// {{ 15 1 0 "1ad432b4_3874_4a58_b77c474df78f7eb9" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Counter = 1;
+// }} ""
+// {{ 16 1 0 "c12476f7_d6aa_431a_83091ca35a42fe2f" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+for(IndiceCounter = 0; IndiceCounter < NumIndices;)
+{
+IndiceCounter = IndiceCounter + 1;
+// }} ""
+// {{ 17 1 0 "0cd30437_165f_4ec8_8bf9bbb12ed7b31a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (PadIndices.ElementAt( IndiceCounter -1) == "0")
+{
+// }} ""
+// {{ 18 1 0 "e6cb1ced_0259_4a9d_abe531a42fbd0fef" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
+io_Array.AddAsLast(PadValue);
+// }} ""
+// {{ 19 1 0 "0cd30437_165f_4ec8_8bf9bbb12ed7b31a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 20 1 0 "1c474740_64da_44e3_83597e829f5d12ac" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
+io_Array.AddAsLast(Temp.ElementAt( Counter -1));
+// }} ""
+// {{ 21 1 0 "8f38ff15_e325_470b_83c6d65e91ee8e00" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+Counter = Counter + 1;
+// }} ""
+// {{ 22 1 0 "0cd30437_165f_4ec8_8bf9bbb12ed7b31a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 23 1 0 "c12476f7_d6aa_431a_83091ca35a42fe2f" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+}
+}
+// }} ""
+/* {{ 1 "" "1" */ } /* }} "" */
+Temp=io_Array;
+PadValue=Temp.GetAt(1-1);
+io_Array.SetSize(0);
+NumIndices=PadIndices.GetSize();
+
+Counter = 1;
+for(IndiceCounter = 0; IndiceCounter < NumIndices;)
+{
+   IndiceCounter = IndiceCounter + 1;
+   if (PadIndices.ElementAt( IndiceCounter -1) == "0")
+   {
+      io_Array.AddAsLast(PadValue);
+   }
+   else
+   {
+   io_Array.AddAsLast(Temp.ElementAt( Counter -1));
+   Counter = Counter + 1;
+   }
+}
+// {{{ 5 "PadArray" "End"
+}
+// }} ""
+/* {{ 2 "SubmethodInsertLine" "" */ // }} ""
+// {{{ 2 "LibraryNamespace" "End"
+} // library namespace
+// }} ""
+// $$author=BAREB$$valid=0$$time=2022-11-29 10:20$$checksum=ed271475$$length=084$$

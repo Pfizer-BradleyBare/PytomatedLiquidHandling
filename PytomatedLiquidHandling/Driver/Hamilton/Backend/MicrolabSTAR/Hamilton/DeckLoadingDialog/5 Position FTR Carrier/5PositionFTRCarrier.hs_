@@ -1,0 +1,17 @@
+
+// this ALWAYS GENERATED file contains the sub-method library header
+// Generated at 1/3/2023 1:52:19 PM
+
+#pragma once
+#ifndef HSL_RUNTIME
+namespace _5POSITIONFTRCARRIER {
+function _InitLibrary() { }
+function _ExitLibrary() { }
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void { }
+} // namespace
+#endif
+
+#ifdef HSL_RUNTIME
+#include __filename__ ".hsi"
+#endif
+// $$author=BAREB$$valid=0$$time=2023-01-03 13:52$$checksum=13ee9cc6$$length=082$$

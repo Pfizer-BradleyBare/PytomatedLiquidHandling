@@ -1,0 +1,350 @@
+// {{{ 2 "IncludeGuard" "PragmaOnce"
+#pragma once
+// }} ""
+#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesMethod\\Library\\ABNWebServerCommands\\JSONParser\\WebServerJSONParser.hs_"
+#include "HSLStrLib.hsl"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+#include "HSLMETEDLib.hs_"
+#include "HSLMECCLib.hs_"
+#include "HSLPTLLib.hsl"
+// }} ""
+// {{{ 2 "LibraryNamespace" "Begin"
+namespace _5POSITIONFTRCARRIER {
+// }} ""
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{{ 2 "SubmethodForwardDeclaration" ""
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void ;
+private function Load( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function Unload( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+// }} ""
+function _InitLibrary() {
+// {{ 2 "AutoInitBlock" ""
+PTL::SetWashingStateDefault("RinseTime1", 5);
+PTL::SetWashingStateDefault("SoakTime1", 5);
+PTL::SetWashingStateDefault("FlowRate1", 11);
+PTL::SetWashingStateDefault("RinseTime2", 0);
+PTL::SetWashingStateDefault("SoakTime2", 0);
+PTL::SetWashingStateDefault("FlowRate2", 11);
+PTL::SetWashingStateDefault("DrainingTime", 10);
+PTL::SetWashingStateDefault("StartWashLiquid", 0);
+PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
+PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
+WEBSERVERJSONPARSER::_InitLibrary();
+// }} ""
+}
+function _ExitLibrary() {
+// {{ 2 "AutoExitBlock" ""
+WEBSERVERJSONPARSER::_ExitLibrary();
+// }} ""
+}
+// {{{ 5 "Load" "Begin"
+private function Load( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable Pos4ArrowVisibility;
+private variable Pos5ArrowVisibility;
+private variable LabwareCarrierPositionText;
+private variable Pos1ArrowVisibility;
+private variable Pos2ArrowVisibility;
+private variable CarrierTrackStartPositionText;
+private variable Pos3ArrowVisibility;
+private variable CarrierTrackEndPositionText;
+private variable LabwarePartNumberText;
+private variable LabwareNameText;
+private variable ExtendedLoadingInstructionsVisibility;
+private dialog customDialogF2D62AAD52F2433e8D0DDE7AF4765C39;
+private variable SearchResult;
+// {{ 5 "Load" "InitLocals"
+// }} ""
+// {{{ 12 1 0 "7561ae3e_5f70_4d9c_991082f8c5953ab7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CarrierTrackStartPositionText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierTrackStart:"));
+// }} ""
+// {{{ 13 1 0 "91dc55af_08ee_487a_98f095753e1200d0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CarrierTrackEndPositionText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierTrackEnd:"));
+// }} ""
+// {{{ 14 1 0 "c8311794_fdab_4205_8836444a50bd17e9" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareNameText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareName:"));
+// }} ""
+// {{{ 15 1 0 "ffd712e2_f921_43fe_ae196ff3606d69ee" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareCarrierPositionText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareCarrierPositions:"));
+// }} ""
+// {{{ 16 1 0 "ef73db56_03a3_479a_9810e9237214f3b5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwarePartNumberText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwarePartNumber:"));
+// }} ""
+// {{{ 17 1 0 "cb0f8cee_b67b_48f8_be70fec4671f4836" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ExtendedLoadingInstructionsVisibility = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ShowExtendedInstructions:"));
+// }} ""
+// {{ 18 1 0 "fc7370bd_5afb_4a0a_a2f3178ae94ff114" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 19 1 0 "8a3e5698_aa6c_4936_ad9ecf9c3fbbcc0c" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SearchResult = StrFind(LabwareCarrierPositionText, Translate("1"));
+// }} ""
+// {{ 20 1 0 "63f11372_ab25_4ea5_85d1f880a2217780" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (SearchResult != -1)
+{
+// }} ""
+// {{ 21 1 0 "bd91eceb_2b9f_408f_b6454d4f6267efba" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos1ArrowVisibility = 1;
+// }} ""
+// {{ 22 1 0 "63f11372_ab25_4ea5_85d1f880a2217780" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 23 1 0 "6031e5ed_e86f_4149_a2d17e3194f146f1" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SearchResult = StrFind(LabwareCarrierPositionText, Translate("2"));
+// }} ""
+// {{ 24 1 0 "4165c23f_3606_4f62_bfa76d4db4bb8749" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (SearchResult != -1)
+{
+// }} ""
+// {{ 25 1 0 "7878998a_eae9_470c_b5bcad51196f58fb" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos2ArrowVisibility = 1;
+// }} ""
+// {{ 26 1 0 "4165c23f_3606_4f62_bfa76d4db4bb8749" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 27 1 0 "e56893f5_833c_4940_8b714aa6ba064714" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SearchResult = StrFind(LabwareCarrierPositionText, Translate("3"));
+// }} ""
+// {{ 28 1 0 "03d502a6_8401_410a_943422c43515f307" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (SearchResult != -1)
+{
+// }} ""
+// {{ 29 1 0 "de75ed41_c3bc_4203_947c6a3368635687" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos3ArrowVisibility = 1;
+// }} ""
+// {{ 30 1 0 "03d502a6_8401_410a_943422c43515f307" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 31 1 0 "6218ee7e_363b_4442_a94ad6463eac156a" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SearchResult = StrFind(LabwareCarrierPositionText, Translate("4"));
+// }} ""
+// {{ 32 1 0 "3cfad8a5_7c2d_48a7_a982557a4dc2e54a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (SearchResult != -1)
+{
+// }} ""
+// {{ 33 1 0 "8c34cf4b_af84_4eff_8cf5512a714e9af3" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos4ArrowVisibility = 1;
+// }} ""
+// {{ 34 1 0 "3cfad8a5_7c2d_48a7_a982557a4dc2e54a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 35 1 0 "d03bd1a0_b4af_4d27_a13914362cabee74" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SearchResult = StrFind(LabwareCarrierPositionText, Translate("5"));
+// }} ""
+// {{ 36 1 0 "1dbcb6c0_0792_4578_8bf253f0dec30ff4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (SearchResult != -1)
+{
+// }} ""
+// {{ 37 1 0 "189d9070_b945_4f91_8447dff5e8b5bad3" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos5ArrowVisibility = 1;
+// }} ""
+// {{ 38 1 0 "1dbcb6c0_0792_4578_8bf253f0dec30ff4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 39 1 0 "fc7370bd_5afb_4a0a_a2f3178ae94ff114" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 40 1 0 "04ed02c2_7109_4c3e_a26d0f0fb6d17a22" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.InitCustomDialog( "04ed02c2_7109_4c3e_a26d0f0fb6d17a22" );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "image2.IsVisible", Pos1ArrowVisibility );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "image3.Source", LabwareNameText );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "image4.IsVisible", Pos2ArrowVisibility );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "image5.IsVisible", Pos3ArrowVisibility );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "image6.IsVisible", Pos4ArrowVisibility );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "image7.IsVisible", Pos5ArrowVisibility );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "textBlock9.Text", CarrierTrackStartPositionText );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "textBlock10.Text", CarrierTrackEndPositionText );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "textBlock11.Text", LabwareCarrierPositionText );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "textBlock12.Text", LabwarePartNumberText );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "textBlock13.Text", LabwareNameText );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "button4.IsVisible", ExtendedLoadingInstructionsVisibility );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "textBlock3.IsVisible", Pos1ArrowVisibility );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "textBlock14.IsVisible", Pos2ArrowVisibility );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "textBlock15.IsVisible", Pos3ArrowVisibility );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "textBlock16.IsVisible", Pos4ArrowVisibility );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.SetCustomDialogProperty( "textBlock17.IsVisible", Pos5ArrowVisibility );
+customDialogF2D62AAD52F2433e8D0DDE7AF4765C39.ShowCustomDialog();
+// }} ""
+// {{{ 5 "Load" "End"
+}
+// }} ""
+// {{{ 5 "Unload" "Begin"
+private function Unload( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable Pos4ArrowVisibility;
+private variable Pos5ArrowVisibility;
+private variable LabwareCarrierPositionText;
+private variable Pos1ArrowVisibility;
+private variable Pos2ArrowVisibility;
+private variable CarrierTrackStartPositionText;
+private variable Pos3ArrowVisibility;
+private variable CarrierTrackEndPositionText;
+private variable LabwarePartNumberText;
+private variable LabwareNameText;
+private dialog customDialog99E3B96A78784947B8B85DDE0CD3253E;
+private variable SearchResult;
+private variable ExtendedLoadingInstructionsVisibility;
+// {{ 5 "Unload" "InitLocals"
+// }} ""
+// {{{ 42 1 0 "afaf1be1_dc0a_4a71_957af6ef936e20f0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CarrierTrackStartPositionText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierTrackStart:"));
+// }} ""
+// {{{ 43 1 0 "0a63a696_bc76_4f9d_96b203a576ef0de6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CarrierTrackEndPositionText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierTrackEnd:"));
+// }} ""
+// {{{ 44 1 0 "e5f62b48_4bd0_4e0f_837969f040d9a8a0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareNameText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareName:"));
+// }} ""
+// {{{ 45 1 0 "1b2a2009_08e0_4e63_a661a3fe48b1ce12" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareCarrierPositionText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareCarrierPositions:"));
+// }} ""
+// {{{ 46 1 0 "46fed670_9e8a_4599_943ca84bbc46efdb" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwarePartNumberText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwarePartNumber:"));
+// }} ""
+// {{{ 47 1 0 "1a193649_8abd_45c2_a80270982cb55c28" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ExtendedLoadingInstructionsVisibility = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ShowExtendedInstructions:"));
+// }} ""
+// {{ 48 1 0 "b2c09990_16d6_480a_bc9437cc9f353b77" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 49 1 0 "c2f75f78_733d_417f_a85b49f393b037e8" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SearchResult = StrFind(LabwareCarrierPositionText, Translate("1"));
+// }} ""
+// {{ 50 1 0 "596aa525_71c1_45bb_906e644b8ff21ffd" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (SearchResult != -1)
+{
+// }} ""
+// {{ 51 1 0 "8e7c223b_226a_490e_800e1015efab4792" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos1ArrowVisibility = 1;
+// }} ""
+// {{ 52 1 0 "596aa525_71c1_45bb_906e644b8ff21ffd" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 53 1 0 "098e4dfc_26ad_4338_bbc0a92449570878" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SearchResult = StrFind(LabwareCarrierPositionText, Translate("2"));
+// }} ""
+// {{ 54 1 0 "efbdba42_4c09_4b71_bd803b33f4ae41e5" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (SearchResult != -1)
+{
+// }} ""
+// {{ 55 1 0 "fec288b1_fbb4_4714_a86e8843a98f8d68" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos2ArrowVisibility = 1;
+// }} ""
+// {{ 56 1 0 "efbdba42_4c09_4b71_bd803b33f4ae41e5" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 57 1 0 "399da2b6_c824_470d_873d6f7f1bfc1dfb" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SearchResult = StrFind(LabwareCarrierPositionText, Translate("3"));
+// }} ""
+// {{ 58 1 0 "b947562d_a7d4_4225_8f933f35037de481" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (SearchResult != -1)
+{
+// }} ""
+// {{ 59 1 0 "87bf5d2d_0358_4351_b1ef02f497c04273" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos3ArrowVisibility = 1;
+// }} ""
+// {{ 60 1 0 "b947562d_a7d4_4225_8f933f35037de481" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 61 1 0 "ae1dd632_448a_4f67_ab58910e81246b10" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SearchResult = StrFind(LabwareCarrierPositionText, Translate("4"));
+// }} ""
+// {{ 62 1 0 "da92670e_8420_447f_8ac98807d8e2c260" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (SearchResult != -1)
+{
+// }} ""
+// {{ 63 1 0 "9c2c6afc_8690_498e_bd822b369f088468" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos4ArrowVisibility = 1;
+// }} ""
+// {{ 64 1 0 "da92670e_8420_447f_8ac98807d8e2c260" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 65 1 0 "c00af828_0cce_436e_aee97c9ffa88d008" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SearchResult = StrFind(LabwareCarrierPositionText, Translate("5"));
+// }} ""
+// {{ 66 1 0 "0b4cf5ca_d299_4db1_bdcaeb440baa5902" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (SearchResult != -1)
+{
+// }} ""
+// {{ 67 1 0 "fc074f93_3c67_47ed_93cdc0d5a9748085" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos5ArrowVisibility = 1;
+// }} ""
+// {{ 68 1 0 "0b4cf5ca_d299_4db1_bdcaeb440baa5902" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 69 1 0 "b2c09990_16d6_480a_bc9437cc9f353b77" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 70 1 0 "cb255c26_fa09_4adc_852028a2d1c3f833" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialog99E3B96A78784947B8B85DDE0CD3253E.InitCustomDialog( "cb255c26_fa09_4adc_852028a2d1c3f833" );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "image2.IsVisible", Pos1ArrowVisibility );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "image3.Source", LabwareNameText );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "image4.IsVisible", Pos2ArrowVisibility );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "image5.IsVisible", Pos3ArrowVisibility );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "image6.IsVisible", Pos4ArrowVisibility );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "image7.IsVisible", Pos5ArrowVisibility );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "textBlock9.Text", CarrierTrackStartPositionText );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "textBlock10.Text", CarrierTrackEndPositionText );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "textBlock11.Text", LabwareCarrierPositionText );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "textBlock12.Text", LabwarePartNumberText );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "textBlock13.Text", LabwareNameText );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "button4.IsVisible", ExtendedLoadingInstructionsVisibility );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "button4.Content", ExtendedLoadingInstructionsVisibility );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "textBlock3.IsVisible", Pos1ArrowVisibility );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "textBlock14.IsVisible", Pos2ArrowVisibility );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "textBlock15.IsVisible", Pos3ArrowVisibility );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "textBlock16.IsVisible", Pos4ArrowVisibility );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.SetCustomDialogProperty( "textBlock17.IsVisible", Pos5ArrowVisibility );
+customDialog99E3B96A78784947B8B85DDE0CD3253E.ShowCustomDialog();
+// }} ""
+// {{{ 5 "Unload" "End"
+}
+// }} ""
+// {{{ 5 "HandleCommand" "Begin"
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+// {{ 5 "HandleCommand" "InitLocals"
+// }} ""
+// {{ 1 1 0 "8a207a00_4497_447b_9bd9d2a415b4fd02" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "Load")
+{
+// }} ""
+// {{{ 2 1 0 "82f63a96_0157_4cac_a5ae2c36bcb2504f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Load(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 3 1 0 "84f60ab2_8927_4713_8da864a487a1c835" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 4 1 0 "8a207a00_4497_447b_9bd9d2a415b4fd02" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 5 1 0 "548e8324_ce0d_4cd8_8ca7d7f54345c593" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "Unload")
+{
+// }} ""
+// {{{ 6 1 0 "49beabe0_6436_4cfb_9524b2a1ee9444db" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Unload(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 7 1 0 "de56527a_c40a_4ac4_adc6030e2542b0c7" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 8 1 0 "548e8324_ce0d_4cd8_8ca7d7f54345c593" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 9 1 0 "8b64fdc0_ce16_413d_a74ca6e0fb752936" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nCommand not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+// }} ""
+// {{ 10 1 0 "45cb71d3_6916_4429_aae781028ebb7151" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+abort;
+// }} ""
+// {{{ 5 "HandleCommand" "End"
+}
+// }} ""
+/* {{ 2 "SubmethodInsertLine" "" */ // }} ""
+// {{{ 2 "LibraryNamespace" "End"
+} // library namespace
+// }} ""
+// $$author=BAREB$$valid=0$$time=2023-01-03 13:52$$checksum=5f185062$$length=084$$

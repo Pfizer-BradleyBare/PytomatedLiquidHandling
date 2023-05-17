@@ -18,13 +18,13 @@ class Command(HamiltonActionCommandABC, CommandOptionsTracker[OptionsTracker]):
     def GetVars(self) -> dict[str, list]:
         OutputDict = HamiltonActionCommandABC.GetVars(self)
 
-        ChannelNumberList = ["0"] * 16
+        ChannelNumberList = ["0"] * 96
 
-        for ChannelNumber in OutputDict["ChannelNumber"]:
-            ChannelNumberList[ChannelNumber - 1] = "1"
+        for Position in OutputDict["SequencePosition"]:
+            ChannelNumberList[Position - 1] = "1"
 
         OutputDict["ChannelNumber"] = ChannelNumberList
-        OutputDict["ChannelNumberString"] = "".join(ChannelNumberList)  # type:ignore
+        OutputDict["ChannelNumberString"] = "".join(ChannelNumberList)
 
         return OutputDict
 

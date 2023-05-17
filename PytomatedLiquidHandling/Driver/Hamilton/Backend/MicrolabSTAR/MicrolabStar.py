@@ -4,13 +4,11 @@ from ..HamiltonCommand import HamiltonCommandABC
 
 
 class MicrolabStarBackend(HamiltonBackendABC):
-    def __init__(self, UniqueIdentifier: str, LoggerInstance: Logger, Port: int = 7286):
+    def __init__(self, UniqueIdentifier: str, LoggerInstance: Logger):
         HamiltonBackendABC.__init__(
             self,
             UniqueIdentifier,
             LoggerInstance,
-            "/",
-            Port,
         )
 
     def GetStatus(self) -> HamiltonCommandABC.Response:

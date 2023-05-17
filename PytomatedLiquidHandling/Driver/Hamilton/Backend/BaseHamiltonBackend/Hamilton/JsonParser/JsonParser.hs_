@@ -1,0 +1,23 @@
+
+// this ALWAYS GENERATED file contains the sub-method library header
+// Generated at 5/17/2023 3:13:50 PM
+
+#pragma once
+#ifndef HSL_RUNTIME
+namespace JSONPARSER {
+function _InitLibrary() { }
+function _ExitLibrary() { }
+function GetEndpointDetails( object & i_JSONObject ) variable {  return (0); }
+function GetEndpointID( object & i_JSONObject ) variable {  return (0); }
+function GetEndpointInputData( object & i_JSONObject, object & o_JSONObject ) void { }
+function GetEndpointOutputData( object & i_JSONObject, object & o_JSONObject ) void { }
+function GetEndpointState( object & i_JSONObject ) variable {  return (0); }
+function GetJSONArrayElement( object & i_JSONObject, variable KeyPathway, variable & o_Array[] ) variable {  return (0); }
+function GetJSONElement( object & i_JSONObject, variable KeyPathway ) variable {  return (0); }
+} // namespace
+#endif
+
+#ifdef HSL_RUNTIME
+#include __filename__ ".hsi"
+#endif
+// $$author=BAREB$$valid=0$$time=2023-05-17 15:13$$checksum=ec991dda$$length=082$$

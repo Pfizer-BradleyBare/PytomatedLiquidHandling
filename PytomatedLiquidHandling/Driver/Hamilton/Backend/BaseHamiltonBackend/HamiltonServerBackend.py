@@ -12,8 +12,8 @@ class HamiltonServerBackendABC(ServerBackendABC):
         self,
         UniqueIdentifier: str,
         LoggerInstance: Logger,
-        PathPrefix: str = "/",
-        Port: int = 8080,
+        PathPrefix: str,
+        Port: int,
     ):
         ServerBackendABC.__init__(
             self,

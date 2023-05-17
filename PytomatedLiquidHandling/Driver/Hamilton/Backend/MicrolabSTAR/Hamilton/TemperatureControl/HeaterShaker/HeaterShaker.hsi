@@ -1,0 +1,672 @@
+// {{{ 2 "IncludeGuard" "PragmaOnce"
+#pragma once
+// }} ""
+#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesMethod\\Library\\ABNWebServerCommands\\JSONParser\\WebServerJSONParser.hs_"
+#include "HslHamHeaterShakerLib.hsl"
+#include "HSLStrLib.hsl"
+#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesMethod\\Library\\ABNWebServerCommands\\ABNWebServerCommands.hs_"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+#include "HSLMETEDLib.hs_"
+#include "HSLMECCLib.hs_"
+#include "HSLPTLLib.hsl"
+// }} ""
+// {{{ 2 "LibraryNamespace" "Begin"
+namespace HEATERSHAKER {
+// }} ""
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{{ 2 "SubmethodForwardDeclaration" ""
+private function Connect( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function GetShakingSpeed( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function GetTemperature( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void ;
+private function SetPlateLock( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function StartShakeControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function StartTemperatureControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function StopShakeControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function StopTemperatureControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+// }} ""
+function _InitLibrary() {
+// {{ 2 "AutoInitBlock" ""
+PTL::SetWashingStateDefault("RinseTime1", 5);
+PTL::SetWashingStateDefault("SoakTime1", 5);
+PTL::SetWashingStateDefault("FlowRate1", 11);
+PTL::SetWashingStateDefault("RinseTime2", 0);
+PTL::SetWashingStateDefault("SoakTime2", 0);
+PTL::SetWashingStateDefault("FlowRate2", 11);
+PTL::SetWashingStateDefault("DrainingTime", 10);
+PTL::SetWashingStateDefault("StartWashLiquid", 0);
+PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
+PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
+WEBSERVERJSONPARSER::_InitLibrary();
+ABNWEBSERVERCOMMANDS::_InitLibrary();
+// }} ""
+}
+function _ExitLibrary() {
+// {{ 2 "AutoExitBlock" ""
+WEBSERVERJSONPARSER::_ExitLibrary();
+ABNWEBSERVERCOMMANDS::_ExitLibrary();
+// }} ""
+}
+// {{{ 5 "Connect" "Begin"
+private function Connect( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable ComPort;
+private variable Name;
+private variable HandleID;
+private variable CustomErrorHandling;
+private variable State;
+private variable Values[];
+private variable Keys[];
+private variable Message;
+private variable RequestID;
+// {{ 5 "Connect" "InitLocals"
+// }} ""
+// {{{ 1 1 0 "efb8650a_3751_4f8a_8dc75d8cbb2cccd9" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+RequestID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
+// }} ""
+// {{{ 2 1 0 "64e89fc4_655e_4ed3_bd66dcecfdc46323" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Name = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
+// }} ""
+// {{{ 3 1 0 "f094fe84_ed06_424d_872ffe54abe0e779" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ComPort = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ComPort:"));
+// }} ""
+// {{ 4 1 0 "4927b127_fdac_4e11_971b050a08670fc2" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 1 0 "805ca2fc_5e9d_4bb9_bb252396834ba9f1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// }} ""
+// {{ 6 1 0 "52cc9d9b_9f92_4186_9ae55ff4cbe84185" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 1;
+// }} ""
+// {{ 7 1 0 "e16edf1e_62c6_4d34_886ded7f5db4ecc0" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Success");
+// }} ""
+// {{ 8 1 0 "232c6af8_a8fe_4049_bb707b18126e4d72" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 9 1 0 "1bfa7da9_5348_47b6_9e9a0fafc00457dc" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::CreateUsbDevice(ComPort, HandleID);
+// }} ""
+// {{ 10 1 0 "232c6af8_a8fe_4049_bb707b18126e4d72" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 11 1 0 "3cdc51cb_6c5c_4a00_9f253a6a605bb7f7" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Keys.SetSize(0);
+// }} ""
+// {{ 12 1 0 "434ba344_96ef_4280_a53945817cad4777" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
+Keys.AddAsLast(Translate("HandleID"));
+// }} ""
+// {{ 13 1 0 "34f271ee_e969_482f_af7d8d7a55ab8690" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Values.SetSize(0);
+// }} ""
+// {{ 14 1 0 "659ce146_5b10_4fb2_ace3141bc7df9bde" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
+Values.AddAsLast(HandleID);
+// }} ""
+// {{{ 15 1 0 "3922e544_cd0a_433f_b5eae33c880324f6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ABNWEBSERVERCOMMANDS::DriverRespond(State, RequestID, Message, Keys, Values);
+// }} ""
+// {{ 16 1 0 "4927b127_fdac_4e11_971b050a08670fc2" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "Connect" "End"
+}
+// }} ""
+// {{{ 5 "StartTemperatureControl" "Begin"
+private function StartTemperatureControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable HandleID;
+private variable Temperature;
+private variable Name;
+private variable CustomErrorHandling;
+private variable State;
+private variable Values[];
+private variable Keys[];
+private variable Message;
+private variable RequestID;
+// {{ 5 "StartTemperatureControl" "InitLocals"
+// }} ""
+// {{{ 119 1 0 "869ab15d_b303_4d78_89d67786d64c07ad" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+RequestID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
+// }} ""
+// {{{ 120 1 0 "7ed2970d_7e57_4a62_a5c43b2a7b905ad0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Name = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
+// }} ""
+// {{{ 121 1 0 "9409014a_7a31_42c2_82a1a54f4dcbadd7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HandleID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:HandleID:"));
+// }} ""
+// {{{ 122 1 0 "25b9061a_e6fa_4e05_9070f1a9069c84f8" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Temperature = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Temperature:"));
+// }} ""
+// {{ 123 1 0 "b1ddbc08_7bdf_4e2c_bf1966d14ba63d88" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 124 1 0 "44ad23bf_f6c1_437f_8e9ff2e136535dde" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// }} ""
+// {{ 125 1 0 "6d41b0ef_3481_4beb_8ca4c016110ad77a" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 1;
+// }} ""
+// {{ 126 1 0 "84747507_8a8c_4b30_908d1501a293481d" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Success");
+// }} ""
+// {{ 127 1 0 "9940da02_2840_4a50_a3ef7d9eae578729" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 128 1 0 "3fc70405_f181_46fe_9d8a4801468f4531" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StartTempCtrl(HandleID, Temperature, 0);
+// }} ""
+// {{ 129 1 0 "9940da02_2840_4a50_a3ef7d9eae578729" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 130 1 0 "cdec85fb_8504_4014_aa2d13b5a8c346ff" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Keys.SetSize(0);
+// }} ""
+// {{ 131 1 0 "23789e02_d935_46b8_b915afdcc7048f54" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Values.SetSize(0);
+// }} ""
+// {{{ 132 1 0 "e1ff2d20_d974_4d43_870d4b2422144561" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ABNWEBSERVERCOMMANDS::DriverRespond(State, RequestID, Message, Keys, Values);
+// }} ""
+// {{ 133 1 0 "b1ddbc08_7bdf_4e2c_bf1966d14ba63d88" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "StartTemperatureControl" "End"
+}
+// }} ""
+// {{{ 5 "StopTemperatureControl" "Begin"
+private function StopTemperatureControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable HandleID;
+private variable Name;
+private variable CustomErrorHandling;
+private variable State;
+private variable Values[];
+private variable Keys[];
+private variable Message;
+private variable RequestID;
+// {{ 5 "StopTemperatureControl" "InitLocals"
+// }} ""
+// {{{ 150 1 0 "2bb1557f_fe0f_459f_bf27fae744828390" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+RequestID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
+// }} ""
+// {{{ 151 1 0 "667f3694_a9a9_48a2_a316625dd7f970e6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Name = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
+// }} ""
+// {{{ 152 1 0 "41eb29aa_3f9f_418d_a36333ef7c1d4edd" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HandleID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:HandleID:"));
+// }} ""
+// {{ 153 1 0 "267d2d11_8596_408a_99d16a5c8e6206a7" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 154 1 0 "b211fc58_9948_4d6c_a9749c5979d29ec9" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// }} ""
+// {{ 155 1 0 "b3fc47c4_ff23_43d2_8d80bac5891efdb0" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 1;
+// }} ""
+// {{ 156 1 0 "30909a27_9026_4915_84145996ebe6b1de" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Success");
+// }} ""
+// {{ 157 1 0 "d99fa13e_c3c5_4e33_91a582744b220ad2" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 158 1 0 "75f20be9_c7fa_47b6_b6cdff3f1055d6a4" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StopTempCtrl(HandleID);
+// }} ""
+// {{ 159 1 0 "d99fa13e_c3c5_4e33_91a582744b220ad2" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 160 1 0 "27d8d97d_b483_4c9a_86b3ab0e9b5200cd" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Keys.SetSize(0);
+// }} ""
+// {{ 161 1 0 "b2e3b0f5_3a6a_4ee1_a212576320334099" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Values.SetSize(0);
+// }} ""
+// {{{ 162 1 0 "9dcb9e7c_ad6d_429c_ac43e78a73c7a05a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ABNWEBSERVERCOMMANDS::DriverRespond(State, RequestID, Message, Keys, Values);
+// }} ""
+// {{ 163 1 0 "267d2d11_8596_408a_99d16a5c8e6206a7" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "StopTemperatureControl" "End"
+}
+// }} ""
+// {{{ 5 "StartShakeControl" "Begin"
+private function StartShakeControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable HandleID;
+private variable ShakingSpeed;
+private variable Name;
+private variable CustomErrorHandling;
+private variable State;
+private variable Values[];
+private variable Keys[];
+private variable Message;
+private variable RequestID;
+// {{ 5 "StartShakeControl" "InitLocals"
+// }} ""
+// {{{ 103 1 0 "36a1f53b_6a25_450f_9e53e369267b77dc" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+RequestID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
+// }} ""
+// {{{ 104 1 0 "3a37ff02_b6cb_433c_af7e9cb7e89d5c72" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Name = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
+// }} ""
+// {{{ 105 1 0 "967c93ec_b4bb_42a0_a6520e69894708c6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HandleID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:HandleID:"));
+// }} ""
+// {{{ 106 1 0 "8eb326b0_4e52_44cd_8f0eab3f9b445d45" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ShakingSpeed = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ShakingSpeed:"));
+// }} ""
+// {{ 107 1 0 "9fbc2334_cf0b_4689_b59206f5034c5668" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 108 1 0 "1f21c182_dc3c_4f40_b5a39642f129629d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// }} ""
+// {{ 109 1 0 "3414e2ce_ef91_4581_b3c8928971565cd3" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 1;
+// }} ""
+// {{ 110 1 0 "e85a929b_ad34_4687_9b5c19f167eeb2b8" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Success");
+// }} ""
+// {{ 111 1 0 "70a0e81e_3013_4ee0_8855ef650e832fe3" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 112 1 0 "87d46a50_9dd2_4dcf_8a878a43c963e952" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StartShaker(HandleID, ShakingSpeed);
+// }} ""
+// {{ 113 1 0 "70a0e81e_3013_4ee0_8855ef650e832fe3" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 114 1 0 "ea5f4144_1f75_4873_9a88bde1130fba32" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Keys.SetSize(0);
+// }} ""
+// {{ 115 1 0 "80e43bdd_47b7_487f_95d99255ee12d150" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Values.SetSize(0);
+// }} ""
+// {{{ 116 1 0 "11883534_9e1a_42c4_9efd6ae13b5f0d4c" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ABNWEBSERVERCOMMANDS::DriverRespond(State, RequestID, Message, Keys, Values);
+// }} ""
+// {{ 117 1 0 "9fbc2334_cf0b_4689_b59206f5034c5668" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "StartShakeControl" "End"
+}
+// }} ""
+// {{{ 5 "StopShakeControl" "Begin"
+private function StopShakeControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable HandleID;
+private variable Name;
+private variable CustomErrorHandling;
+private variable State;
+private variable Values[];
+private variable Keys[];
+private variable Message;
+private variable RequestID;
+// {{ 5 "StopShakeControl" "InitLocals"
+// }} ""
+// {{{ 135 1 0 "e4c5f3f1_30a7_43f6_b20ca46231b724d5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+RequestID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
+// }} ""
+// {{{ 136 1 0 "884fb5ce_440f_421b_9e279e3a1cda31a1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Name = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
+// }} ""
+// {{{ 137 1 0 "e5382043_4377_41ab_80b2776e9bb1a5b5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HandleID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:HandleID:"));
+// }} ""
+// {{ 138 1 0 "f5a04bee_c62b_41dd_9a2501e33c0a37ba" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 139 1 0 "572f6551_6268_4e56_8df1ee688a8ab437" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// }} ""
+// {{ 140 1 0 "2de7d179_a9a8_4c9d_8d9130768f54756a" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 1;
+// }} ""
+// {{ 141 1 0 "54af3511_1bd7_45bc_8d8bdfcede9b2ddc" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Success");
+// }} ""
+// {{ 142 1 0 "fb3f2c19_d6f9_4ee0_b65e7bcc69947b08" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 143 1 0 "d681353f_4cd9_4ec9_b96b711cdf0d67d7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StopShaker(HandleID);
+// }} ""
+// {{ 144 1 0 "fb3f2c19_d6f9_4ee0_b65e7bcc69947b08" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 145 1 0 "779bbfa1_9be2_4178_b69adb1c4be5d7cc" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Keys.SetSize(0);
+// }} ""
+// {{ 146 1 0 "ccde2242_7afa_465a_baf28884cec63ac8" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Values.SetSize(0);
+// }} ""
+// {{{ 147 1 0 "c6aaf101_1047_4402_a95440882e2aea26" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ABNWEBSERVERCOMMANDS::DriverRespond(State, RequestID, Message, Keys, Values);
+// }} ""
+// {{ 148 1 0 "f5a04bee_c62b_41dd_9a2501e33c0a37ba" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "StopShakeControl" "End"
+}
+// }} ""
+// {{{ 5 "GetTemperature" "Begin"
+private function GetTemperature( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable HandleID;
+private variable Name;
+private variable Temperature;
+private variable CustomErrorHandling;
+private variable State;
+private variable Values[];
+private variable Keys[];
+private variable Message;
+private variable RequestID;
+// {{ 5 "GetTemperature" "InitLocals"
+// }} ""
+// {{{ 35 1 0 "a0d33afc_44fd_48f1_9b08355f1dac6648" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+RequestID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
+// }} ""
+// {{{ 36 1 0 "2e8ee9cf_032d_4a40_9ad4ceaa5de4cc0d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Name = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
+// }} ""
+// {{{ 37 1 0 "384df979_66be_4847_ac1bf5ec2036601d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HandleID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:HandleID:"));
+// }} ""
+// {{ 38 1 0 "01c8cfba_a824_495b_9c8444bce57393a0" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 39 1 0 "f850baf4_b8ba_4843_bbfa201ffe4e4994" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// }} ""
+// {{ 40 1 0 "86093c46_6aeb_4f2d_8c665bd36d116b4e" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 1;
+// }} ""
+// {{ 41 1 0 "ab027861_2f85_4728_bbbb4e3488c849db" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Success");
+// }} ""
+// {{ 42 1 0 "547b0fd6_89cb_48a8_a647f27bdb45d1b3" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 43 1 0 "fc5e8d77_afa5_4450_9ff31e89090755e8" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::GetTemperature(HandleID, Temperature);
+// }} ""
+// {{ 44 1 0 "547b0fd6_89cb_48a8_a647f27bdb45d1b3" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 45 1 0 "fbb64676_00cd_4cf8_b1e8c6b8b1e89c12" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Keys.SetSize(0);
+// }} ""
+// {{ 46 1 0 "0ecde560_cb3b_41af_844b10d14f5d7097" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
+Keys.AddAsLast(Translate("Temperature"));
+// }} ""
+// {{ 47 1 0 "f56d6a8e_975f_4329_97035e5735760a2e" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Values.SetSize(0);
+// }} ""
+// {{ 48 1 0 "7b87754a_84cb_4386_8518cbda6a1283ee" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
+Values.AddAsLast(Temperature);
+// }} ""
+// {{{ 49 1 0 "0e91aa28_0d1e_4c03_ab0b1ec0d409f528" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ABNWEBSERVERCOMMANDS::DriverRespond(State, RequestID, Message, Keys, Values);
+// }} ""
+// {{ 50 1 0 "01c8cfba_a824_495b_9c8444bce57393a0" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "GetTemperature" "End"
+}
+// }} ""
+// {{{ 5 "GetShakingSpeed" "Begin"
+private function GetShakingSpeed( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable HandleID;
+private variable Name;
+private variable ShakingSpeed;
+private variable CustomErrorHandling;
+private variable State;
+private variable Values[];
+private variable Keys[];
+private variable Message;
+private variable RequestID;
+// {{ 5 "GetShakingSpeed" "InitLocals"
+// }} ""
+// {{{ 18 1 0 "ceca512b_92de_4215_a5d1208faef8ce9c" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+RequestID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
+// }} ""
+// {{{ 19 1 0 "a54a2b96_fb14_4aa6_8532d825c72bd6b1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Name = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
+// }} ""
+// {{{ 20 1 0 "4bcfd167_c6db_49cc_9f9c29537aec51c1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HandleID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:HandleID:"));
+// }} ""
+// {{ 21 1 0 "c9f10233_f46b_4481_b1b3b1bb14eddff6" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 22 1 0 "b0ed43ff_215b_427b_84f0e5e58319d154" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// }} ""
+// {{ 23 1 0 "5d6e4db8_828e_41e4_a8d6def3228f7acb" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 1;
+// }} ""
+// {{ 24 1 0 "b10380a0_6dc6_4cd6_9a473b4476b5f63f" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Success");
+// }} ""
+// {{ 25 1 0 "9e5bca6f_de9d_40ed_a37fe511b8c9ce10" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 26 1 0 "b80c159a_9a82_4598_9e075c26fadb500b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::GetShakerSpeed(HandleID, ShakingSpeed);
+// }} ""
+// {{ 27 1 0 "9e5bca6f_de9d_40ed_a37fe511b8c9ce10" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 28 1 0 "bf0fc306_156e_432e_9e0c4f0a60bac87b" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Keys.SetSize(0);
+// }} ""
+// {{ 29 1 0 "5d2be8ec_0f39_4c6c_bfa5029d376e9ec6" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
+Keys.AddAsLast(Translate("ShakingSpeed"));
+// }} ""
+// {{ 30 1 0 "67f98f44_3990_4bac_8db73d97d39b9c7b" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Values.SetSize(0);
+// }} ""
+// {{ 31 1 0 "e48b42cd_c382_4d79_985813ff86fd3d1d" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
+Values.AddAsLast(ShakingSpeed);
+// }} ""
+// {{{ 32 1 0 "bba6560f_54cb_4311_94f18eff05ad91c0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ABNWEBSERVERCOMMANDS::DriverRespond(State, RequestID, Message, Keys, Values);
+// }} ""
+// {{ 33 1 0 "c9f10233_f46b_4481_b1b3b1bb14eddff6" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "GetShakingSpeed" "End"
+}
+// }} ""
+// {{{ 5 "HandleCommand" "Begin"
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+// {{ 5 "HandleCommand" "InitLocals"
+// }} ""
+// {{ 52 1 0 "4070c6c6_ded0_4338_a626bc72b2adfd29" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "Connect")
+{
+// }} ""
+// {{{ 53 1 0 "2aa5affb_376d_4788_a7b8baef0770a860" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Connect(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 54 1 0 "5d52a75f_9257_4990_9ed0fd3e91ad5527" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 55 1 0 "4070c6c6_ded0_4338_a626bc72b2adfd29" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 56 1 0 "2c5d3461_3f22_40da_9575777284c080e4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "SetPlateLock")
+{
+// }} ""
+// {{{ 57 1 0 "61ecbc4c_0a4e_4abc_afedd7da9372cc8c" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+SetPlateLock(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 58 1 0 "234c76b9_0279_4efa_af2a729c3020cbea" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 59 1 0 "2c5d3461_3f22_40da_9575777284c080e4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 60 1 0 "c5f86395_f357_45a1_903756470be5f57a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "StartTemperatureControl")
+{
+// }} ""
+// {{{ 61 1 0 "b8b8c3e4_e9a5_4f93_b20ac3601d51db32" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StartTemperatureControl(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 62 1 0 "9862b9fd_5823_4498_b5d814a526dad9e2" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 63 1 0 "c5f86395_f357_45a1_903756470be5f57a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 64 1 0 "e1c0a7f2_2bee_40cb_94cdce2f6a730694" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "GetTemperature")
+{
+// }} ""
+// {{{ 65 1 0 "948a19cd_1bdb_4b16_aae063845eb356c4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+GetTemperature(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 66 1 0 "dd2e964c_6491_4d4d_b124e1bfb47ccbe9" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 67 1 0 "e1c0a7f2_2bee_40cb_94cdce2f6a730694" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 68 1 0 "f2ccd9ec_ed04_41e4_aa5209e150d370c2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "StopTemperatureControl")
+{
+// }} ""
+// {{{ 69 1 0 "26f89560_adac_4bbf_b7f3384ee97821d8" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StopTemperatureControl(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 70 1 0 "808c95c6_cff9_4f38_a224f0079309adcf" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 71 1 0 "f2ccd9ec_ed04_41e4_aa5209e150d370c2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 72 1 0 "c3539c50_48b5_48a6_a5b2f1dac8dce44d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "StartShakeControl")
+{
+// }} ""
+// {{{ 73 1 0 "3cdfc791_a5f0_41ab_b218894f02790c85" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StartShakeControl(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 74 1 0 "24ffae4e_88f0_424e_8f7ef2ad0e197af7" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 75 1 0 "c3539c50_48b5_48a6_a5b2f1dac8dce44d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 76 1 0 "b118e98c_188d_45e0_91791ff215777f95" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "GetShakingSpeed")
+{
+// }} ""
+// {{{ 77 1 0 "87def83d_19d0_4467_8cb9376cee840ee0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+GetShakingSpeed(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 78 1 0 "d6149140_d4a7_4fc7_8417aa0e94739a8b" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 79 1 0 "b118e98c_188d_45e0_91791ff215777f95" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 80 1 0 "ab2699aa_98bd_40c3_b0af4b7c310ea063" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "StopShakeControl")
+{
+// }} ""
+// {{{ 81 1 0 "c49a1267_afd8_44a7_80a1a35345fbd2a3" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StopShakeControl(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 82 1 0 "26598c57_911f_4da1_bb3af6165e79798c" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 83 1 0 "ab2699aa_98bd_40c3_b0af4b7c310ea063" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 84 1 0 "40fedf2c_e1bc_4e62_8e4e71780327997d" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nCommand not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+// }} ""
+// {{ 85 1 0 "888d084f_38d4_4a5e_ac067b1a256d7eec" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+abort;
+// }} ""
+// {{{ 5 "HandleCommand" "End"
+}
+// }} ""
+// {{{ 5 "SetPlateLock" "Begin"
+private function SetPlateLock( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable PlateLockState;
+private variable CustomErrorHandling;
+private variable HandleID;
+private variable Name;
+private variable Message;
+private variable State;
+private variable RequestID;
+private variable Values[];
+private variable Keys[];
+// {{ 5 "SetPlateLock" "InitLocals"
+// }} ""
+// {{{ 87 1 0 "c46d5feb_19da_4432_81d37ec8381643cb" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+RequestID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
+// }} ""
+// {{{ 88 1 0 "93778000_e83e_4588_b8f04d27aa011e93" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Name = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
+// }} ""
+// {{{ 89 1 0 "c6eb0a8d_2383_47f3_b4abe61d8d2ba53e" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HandleID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:HandleID:"));
+// }} ""
+// {{{ 90 1 0 "90ffd0a9_e127_47cc_ab2e77e7565d9f85" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+PlateLockState = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PlateLockState:"));
+// }} ""
+// {{ 91 1 0 "d4d86132_4aad_4096_98519f563aee375f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 92 1 0 "9be39916_baa2_4fb3_b20856691f704a81" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// }} ""
+// {{ 93 1 0 "2ec00c51_081b_4ff5_83382f42ea67dcb3" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 1;
+// }} ""
+// {{ 94 1 0 "b108256d_603f_4ddc_aed96b7277438d85" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Success");
+// }} ""
+// {{ 95 1 0 "856f7330_8585_4385_9f6cf6f5dfac13e6" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 96 1 0 "e6480af1_ca12_4326_b722892c765528ed" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::SetPlateLock(HandleID, PlateLockState);
+// }} ""
+// {{ 97 1 0 "856f7330_8585_4385_9f6cf6f5dfac13e6" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 98 1 0 "5cfa1370_95c9_414c_bf5f36b8379a58d8" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Keys.SetSize(0);
+// }} ""
+// {{ 99 1 0 "8406b9b2_455b_4d43_a43ee525fd59ff43" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+Values.SetSize(0);
+// }} ""
+// {{{ 100 1 0 "407b2b19_8abd_4fb9_90da6d995a5cd2af" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ABNWEBSERVERCOMMANDS::DriverRespond(State, RequestID, Message, Keys, Values);
+// }} ""
+// {{ 101 1 0 "d4d86132_4aad_4096_98519f563aee375f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "SetPlateLock" "End"
+}
+// }} ""
+/* {{ 2 "SubmethodInsertLine" "" */ // }} ""
+// {{{ 2 "LibraryNamespace" "End"
+} // library namespace
+// }} ""
+// $$author=BAREB$$valid=0$$time=2023-01-30 21:57$$checksum=539f8626$$length=084$$

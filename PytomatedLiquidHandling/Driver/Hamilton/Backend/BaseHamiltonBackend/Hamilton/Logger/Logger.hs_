@@ -1,0 +1,22 @@
+
+// this ALWAYS GENERATED file contains the sub-method library header
+// Generated at 5/17/2023 2:55:58 PM
+
+#pragma once
+#ifndef HSL_RUNTIME
+namespace LOGGER {
+function _InitLibrary() { }
+function _ExitLibrary() { }
+function EnableOutput( variable State ) void { }
+function TraceArray( variable Description, variable & Array[] ) void { }
+function TraceComment( variable Comment ) void { }
+function TraceSequence( sequence Sequence ) void { }
+function TraceVariable( variable Description, variable Variable ) void { }
+global variable _DEBUGGING_State("False");
+} // namespace
+#endif
+
+#ifdef HSL_RUNTIME
+#include __filename__ ".hsi"
+#endif
+// $$author=BAREB$$valid=0$$time=2023-05-17 14:55$$checksum=17473f72$$length=082$$
