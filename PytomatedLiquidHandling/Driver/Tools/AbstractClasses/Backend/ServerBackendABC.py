@@ -4,6 +4,8 @@ from typing import Callable
 
 from flask import Flask
 
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
+
 from .....Tools.Logger import Logger
 from .BackendABC import BackendABC
 
@@ -27,7 +29,7 @@ class ServerBackendABC(BackendABC):
         self.PathPrefix: str = PathPrefix
         self.Address: str = Address
         self.Port: int = Port
-        self.Views: list[Callable] = Views + [self.Kill]
+        self.Views: list[Callable] = Views + [self.Kill, self.IsActive]
 
         for View in self.Views:
             self.__App.add_url_rule(PathPrefix + View.__name__, View.__name__, View)
@@ -69,6 +71,9 @@ class ServerBackendABC(BackendABC):
 
         ServerBackendABC.__Hosts.remove((self.Address, self.Port))
 
+    def IsActive(self):
+        return True
+
     def Kill(self):
         self.StopBackend()
         return "App killed for server with ID: " + str(self.GetUniqueIdentifier())
@@ -106,7 +111,6 @@ class ServerBackendABC(BackendABC):
                     self.JSON = None
 
         def __del__(self):
-
             self.LoggerInstance.debug("PARSER: __END__")
 
         def IsValid(self, ExpectedKeys: list[str]) -> bool:
@@ -155,7 +159,6 @@ class ServerBackendABC(BackendABC):
             self.EndpointReturn[Key] = Value
 
         def GetHTTPResponse(self) -> str:
-
             Out = dict()
             Out["Endpoint ID"] = self.EndpointID
             Out["Endpoint State"] = self.EndpointState
