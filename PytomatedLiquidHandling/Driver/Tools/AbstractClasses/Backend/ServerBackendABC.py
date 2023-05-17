@@ -45,7 +45,7 @@ class ServerBackendABC(BackendABC):
         self.__App.run(self.Address, self.Port)
 
     def StartBackend(self):
-        Host = (self.Address, self.Port)
+        Host = (self.Address, self.Port, self.PathPrefix)
         if Host in ServerBackendABC.__Hosts:
             raise Exception(
                 "This host is already taken. Choose a different address and/or port."
@@ -61,13 +61,13 @@ class ServerBackendABC(BackendABC):
         ).start()
 
     def StopBackend(self):
-        Host = (self.Address, self.Port)
+        Host = (self.Address, self.Port, self.PathPrefix)
         if Host not in ServerBackendABC.__Hosts:
             raise Exception("This backend not currently running. Run it first")
 
         self.__AppParentThreadRunnerFlag.set()
 
-        ServerBackendABC.__Hosts.remove((self.Address, self.Port))
+        ServerBackendABC.__Hosts.remove(Host)
 
     def Kill(self):
         self.StopBackend()

@@ -1,6 +1,7 @@
+import os
+
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import VantageBackend
 from PytomatedLiquidHandling.Tools.Logger import Logger
-import os
 
 LoggerInstance = Logger("Name", 0, os.path.dirname(__file__))
 
@@ -10,5 +11,6 @@ v.StartBackend()
 
 print("DONE")
 
+import time
 
-v.StopBackend()
+time.sleep(10)

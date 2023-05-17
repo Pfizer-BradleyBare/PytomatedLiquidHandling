@@ -9,8 +9,6 @@ class BackendABC(UniqueObjectABC):
     def __init__(self, UniqueIdentifier: str, LoggerInstance: Logger):
         UniqueObjectABC.__init__(self, UniqueIdentifier)
         self.LoggerInstance: Logger = LoggerInstance
-        self.CurrentCommand: CommandABC | None = None
-        self.Response: CommandABC.Response | None = None
 
     @abstractmethod
     def StartBackend(self):
@@ -22,32 +20,12 @@ class BackendABC(UniqueObjectABC):
 
     @abstractmethod
     def ExecuteCommand(self, CommandInstance: CommandABC):
-        if not isinstance(self, BackendABC):
-            raise Exception("You used this decorator incorrectly...")
-
-        if self.CurrentCommand is not None:
-            raise Exception(
-                "Command is already being executed. Wait on command to compelete..."
-            )
-
-        self.CurrentCommand = CommandInstance
+        ...
 
     @abstractmethod
     def GetStatus(self) -> CommandABC.Response:
         ...
 
-    def GetResponse(self) -> CommandABC.Response:
-        if self.CurrentCommand is None:
-            raise Exception(
-                "No Command currently executing. Execute a command first..."
-            )
-
-        if self.Response is None:
-            raise Exception("Response not available. Check status first...")
-
-        Response = self.Response
-
-        self.CurrentCommand = None
-        self.Response = None
-
-        return Response
+    @abstractmethod
+    def GetResponse(self, CommandInstance: CommandABC) -> CommandABC.Response:
+        ...

@@ -93,6 +93,9 @@ class CommandABC(NonUniqueObjectABC):
         def __init__(self, Properties: dict[str, Any]):
             self.Properties: dict[str, Any] = Properties
 
+        def SetProperty(self, Key: str, Value: Any):
+            self.Properties[Key] = Value
+
         def UpdateProperties(self, Key: str, Value: Any):
             self.Properties.update({Key: Value})
 

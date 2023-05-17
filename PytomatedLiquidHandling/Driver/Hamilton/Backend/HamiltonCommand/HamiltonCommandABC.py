@@ -1,6 +1,7 @@
-from ....Tools.AbstractClasses import CommandABC, CommandOptions, CommandOptionsTracker
-from typing import Any
 from collections import defaultdict
+from typing import Any
+
+from ....Tools.AbstractClasses import CommandABC, CommandOptions, CommandOptionsTracker
 
 
 class HamiltonCommandABC(CommandABC):
