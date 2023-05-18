@@ -1,7 +1,7 @@
 // {{{ 2 "IncludeGuard" "PragmaOnce"
 #pragma once
 // }} ""
-#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesMethod\\Library\\ABNWebServerCommands\\JSONParser\\WebServerJSONParser.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
 #include "HSLStrLib.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
@@ -32,12 +32,12 @@ PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
 PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
 PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
 PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
-WEBSERVERJSONPARSER::_InitLibrary();
+JSONPARSER::_InitLibrary();
 // }} ""
 }
 function _ExitLibrary() {
 // {{ 2 "AutoExitBlock" ""
-WEBSERVERJSONPARSER::_ExitLibrary();
+JSONPARSER::_ExitLibrary();
 // }} ""
 }
 // {{{ 5 "Load" "Begin"
@@ -58,23 +58,23 @@ private variable SearchResult;
 private dialog customDialog4B5F67874FE348dfB42F23F94C252E84;
 // {{ 5 "Load" "InitLocals"
 // }} ""
-// {{{ 12 1 0 "7561ae3e_5f70_4d9c_991082f8c5953ab7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-CarrierTrackStartPositionText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierTrackStart:"));
+// {{{ 12 1 0 "b54daa4e_3a32_458e_a582845a16256138" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CarrierTrackStartPositionText = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierTrackStart:"));
 // }} ""
-// {{{ 13 1 0 "91dc55af_08ee_487a_98f095753e1200d0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-CarrierTrackEndPositionText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierTrackEnd:"));
+// {{{ 13 1 0 "a32d0bcd_eb48_4a83_b4c940a24ec26bb8" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CarrierTrackEndPositionText = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierTrackEnd:"));
 // }} ""
-// {{{ 14 1 0 "c8311794_fdab_4205_8836444a50bd17e9" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-LabwareNameText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareName:"));
+// {{{ 14 1 0 "5ac4065f_0d8f_40cb_909393c30df2ba7f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareNameText = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareName:"));
 // }} ""
-// {{{ 15 1 0 "ffd712e2_f921_43fe_ae196ff3606d69ee" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-LabwareCarrierPositionText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareCarrierPositions:"));
+// {{{ 15 1 0 "7a26fac6_f203_4c0d_8edb2027ee6fd44f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareCarrierPositionText = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareCarrierPositions:"));
 // }} ""
-// {{{ 16 1 0 "ef73db56_03a3_479a_9810e9237214f3b5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-LabwarePartNumberText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwarePartNumber:"));
+// {{{ 16 1 0 "952aec8d_bfff_4bf3_8a1beebfff891626" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwarePartNumberText = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwarePartNumber:"));
 // }} ""
-// {{{ 17 1 0 "cb0f8cee_b67b_48f8_be70fec4671f4836" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ExtendedLoadingInstructionsVisibility = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ShowExtendedInstructions:"));
+// {{{ 17 1 0 "afbb5926_fb50_43e5_9e570d1047e97544" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ExtendedLoadingInstructionsVisibility = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ShowExtendedInstructions:"));
 // }} ""
 // {{ 18 1 0 "fc7370bd_5afb_4a0a_a2f3178ae94ff114" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -189,23 +189,23 @@ private variable ExtendedLoadingInstructionsVisibility;
 private dialog customDialog6B3162C6B7AE4afa89F59A2AA90BEA2A;
 // {{ 5 "Unload" "InitLocals"
 // }} ""
-// {{{ 42 1 0 "afaf1be1_dc0a_4a71_957af6ef936e20f0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-CarrierTrackStartPositionText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierTrackStart:"));
+// {{{ 42 1 0 "2f48730e_3444_4a62_a2f77ab6c115aa05" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CarrierTrackStartPositionText = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierTrackStart:"));
 // }} ""
-// {{{ 43 1 0 "0a63a696_bc76_4f9d_96b203a576ef0de6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-CarrierTrackEndPositionText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierTrackEnd:"));
+// {{{ 43 1 0 "3b4e0978_7cf8_47f4_b02504436df9b2af" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CarrierTrackEndPositionText = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierTrackEnd:"));
 // }} ""
-// {{{ 44 1 0 "e5f62b48_4bd0_4e0f_837969f040d9a8a0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-LabwareNameText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareName:"));
+// {{{ 44 1 0 "13ad1ea6_851a_4091_b2bae5803a6899d7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareNameText = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareName:"));
 // }} ""
-// {{{ 45 1 0 "1b2a2009_08e0_4e63_a661a3fe48b1ce12" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-LabwareCarrierPositionText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareCarrierPositions:"));
+// {{{ 45 1 0 "d39b2bce_c69c_4fac_ba1c8ca6a91bd8c9" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareCarrierPositionText = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareCarrierPositions:"));
 // }} ""
-// {{{ 46 1 0 "46fed670_9e8a_4599_943ca84bbc46efdb" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-LabwarePartNumberText = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwarePartNumber:"));
+// {{{ 46 1 0 "9c027c4b_e4b2_4654_b0508ef90083b190" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwarePartNumberText = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwarePartNumber:"));
 // }} ""
-// {{{ 47 1 0 "1a193649_8abd_45c2_a80270982cb55c28" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ExtendedLoadingInstructionsVisibility = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ShowExtendedInstructions:"));
+// {{{ 47 1 0 "26e5484f_e719_48f5_83d8062e6d09223e" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ExtendedLoadingInstructionsVisibility = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ShowExtendedInstructions:"));
 // }} ""
 // {{ 48 1 0 "b2c09990_16d6_480a_bc9437cc9f353b77" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -346,4 +346,4 @@ abort;
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-01-03 13:51$$checksum=c0bf9a29$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-05-18 03:31$$checksum=41638ee0$$length=084$$

@@ -1,6 +1,6 @@
 
 // this ALWAYS GENERATED file contains the sub-method library header
-// Generated at 5/17/2023 2:34:06 PM
+// Generated at 5/18/2023 3:39:40 AM
 
 #pragma once
 #ifndef HSL_RUNTIME
@@ -15,4 +15,4 @@ function RequestPOST( variable Port, variable EndpointString, variable Timeout, 
 #ifdef HSL_RUNTIME
 #include __filename__ ".hsi"
 #endif
-// $$author=BAREB$$valid=0$$time=2023-05-17 14:34$$checksum=5385c265$$length=082$$
+// $$author=BAREB$$valid=0$$time=2023-05-18 03:39$$checksum=dec457b5$$length=082$$

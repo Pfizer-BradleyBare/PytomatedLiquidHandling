@@ -1,0 +1,20 @@
+
+// this ALWAYS GENERATED file contains the sub-method library header
+// Generated at 5/18/2023 3:47:55 AM
+
+#pragma once
+#ifndef HSL_RUNTIME
+namespace DRIVER {
+function _InitLibrary() { }
+function _ExitLibrary() { }
+function Abort(  ) void { }
+function ActionServerProcess( device & ML_STAR ) void { }
+function ServeRequest( device & ML_STAR, object & i_JSONObject ) void { }
+function StateServerProcess( device & ML_STAR ) void { }
+} // namespace
+#endif
+
+#ifdef HSL_RUNTIME
+#include __filename__ ".hsi"
+#endif
+// $$author=BAREB$$valid=0$$time=2023-05-18 03:47$$checksum=55f3faa6$$length=082$$

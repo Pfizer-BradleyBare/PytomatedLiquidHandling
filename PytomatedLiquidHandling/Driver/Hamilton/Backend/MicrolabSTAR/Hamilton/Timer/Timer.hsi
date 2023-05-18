@@ -1,8 +1,9 @@
 // {{{ 2 "IncludeGuard" "PragmaOnce"
 #pragma once
 // }} ""
-#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesMethod\\Library\\ABNWebServerCommands\\JSONParser\\WebServerJSONParser.hs_"
-#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesMethod\\Library\\ABNWebServerCommands\\ABNWebServerCommands.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "HSLJson\\HSLJson.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -31,14 +32,14 @@ PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
 PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
 PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
 PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
-WEBSERVERJSONPARSER::_InitLibrary();
-ABNWEBSERVERCOMMANDS::_InitLibrary();
+JSONPARSER::_InitLibrary();
+ACTIONSERVERENDPOINTS::_InitLibrary();
 // }} ""
 }
 function _ExitLibrary() {
 // {{ 2 "AutoExitBlock" ""
-WEBSERVERJSONPARSER::_ExitLibrary();
-ABNWEBSERVERCOMMANDS::_ExitLibrary();
+JSONPARSER::_ExitLibrary();
+ACTIONSERVERENDPOINTS::_ExitLibrary();
 // }} ""
 }
 // {{{ 5 "StartTimer" "Begin"
@@ -55,28 +56,29 @@ private variable Values[];
 private variable Keys[];
 private variable Message;
 private variable RequestID;
+private object o_JSONObject;
 // {{ 5 "StartTimer" "InitLocals"
 // }} ""
-// {{{ 8 1 0 "dcd60f64_68b8_4fbf_9b44d51588f6dd6f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-RequestID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
+// {{{ 8 1 0 "1cdf9072_383a_4dda_9925e745d21dbde4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+RequestID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
 // }} ""
-// {{{ 9 1 0 "a70accb9_574f_4f3f_8ffed384a5f77830" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-Name = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
+// {{{ 9 1 0 "1c94fd39_805f_41cb_86500f6384c736e3" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Name = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
 // }} ""
-// {{{ 10 1 0 "972c2da1_ce8e_4bea_8977782a7a8ddf66" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-WaitTime = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:WaitTime:"));
+// {{{ 10 1 0 "183886ef_69a3_48e1_933e4c4e5b1bef2d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+WaitTime = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:WaitTime:"));
 // }} ""
-// {{{ 11 1 0 "3a16bf6a_2b45_44d9_b8031e82f82e36e1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ShowTimer = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ShowTimer:"));
+// {{{ 11 1 0 "4affb36d_30c2_4654_ba43f10d223c9e9a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ShowTimer = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ShowTimer:"));
 // }} ""
-// {{{ 12 1 0 "8ef6166c_f144_49d3_b2b49606405a7744" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-IsStoppable = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:IsStoppable:"));
+// {{{ 12 1 0 "e63d3e17_2d79_424c_bdff02f6bbe9ac27" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+IsStoppable = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:IsStoppable:"));
 // }} ""
 // {{ 13 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 14 1 0 "aa720931_7e38_412b_af5bd60cf611e469" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-CustomErrorHandling = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// {{{ 14 1 0 "2c080b81_e588_49c0_94f0bb7e95f6ed14" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
 // }} ""
 // {{ 15 1 0 "d91c3acb_d3c5_43c0_8dc9bb9a6fd757ee" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
 State = 1;
@@ -138,14 +140,14 @@ if( 0 == Timer.WaitTimer(hslFalse, hslFalse) )
 // {{ 28 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 29 1 0 "9a5d388d_d6b5_48ad_b729ed05c6912175" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
-Keys.SetSize(0);
+// {{{ 29 1 0 "8be5f2de_0edf_4a70_91aafe3c38f2859b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{ 30 1 0 "9f4a5af9_fcb9_43ff_b1bcee1ca01064ee" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
-Values.SetSize(0);
+// {{{ 30 1 0 "cfc5791d_c185_4a33_adfaeb7a74882c86" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(State, Message, o_JSONObject);
 // }} ""
-// {{{ 31 1 0 "6bb854f1_97c4_44d3_8e277a176fd4e8de" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ABNWEBSERVERCOMMANDS::DriverRespond(State, RequestID, Message, Keys, Values);
+// {{{ 31 1 0 "3adf1c5a_3721_4546_8457254f90e6b3a9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
 // }} ""
 // {{ 32 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -184,4 +186,4 @@ abort;
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-01-30 21:57$$checksum=a6af1c23$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-05-18 03:35$$checksum=88848023$$length=084$$

@@ -47,13 +47,13 @@ class HamiltonBackendABC(BackendABC):
         self.StateServer.StartBackend()
 
     def StopBackend(self):
+        print("WE WENT HERE")
         self.ActionServer.StopBackend()
         self.StateServer.StopBackend()
 
     def ExecuteCommand(
         self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
     ):
-
         if isinstance(CommandInstance, HamiltonStateCommandABC):
             self.StateServer.ExecuteCommand(CommandInstance)
         else:
@@ -62,7 +62,6 @@ class HamiltonBackendABC(BackendABC):
     def GetStatus(
         self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
     ) -> HamiltonCommandABC.Response:
-
         if isinstance(CommandInstance, HamiltonStateCommandABC):
             return self.StateServer.GetStatus(CommandInstance)
         else:
@@ -71,7 +70,6 @@ class HamiltonBackendABC(BackendABC):
     def GetResponse(
         self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
     ) -> HamiltonActionCommandABC.Response | HamiltonStateCommandABC.Response:
-
         if isinstance(CommandInstance, HamiltonStateCommandABC):
             return self.StateServer.GetResponse(CommandInstance)
         else:

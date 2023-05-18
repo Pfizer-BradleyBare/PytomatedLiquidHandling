@@ -4,11 +4,11 @@
 #include "Hamilton FlipTubeTool\\Hamilton FlipTubeTool.hsl"
 #include "VirtualLabware_V2.hsl"
 #include "HSLTrcLib.hsl"
-#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\Temp\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
 #include "HSLDevLib.hsl"
 #include "HSLSeqLib.hsl"
-#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\Temp\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Pipette\\Tools\\PipetteTools.hs_"
-#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\Temp\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Pipette\\Tools\\PipetteTools.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLErrLib.hsl"
 #include "HSLJson\\HSLJson.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
@@ -679,4 +679,4 @@ abort;
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-05-17 15:19$$checksum=2ed7fc74$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-05-18 03:30$$checksum=c1b56c71$$length=084$$

@@ -1,0 +1,86 @@
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Driver\\Driver.hs_" } 
+ namespace _ActionServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Driver\\Driver.hs_" } 
+ namespace _StateServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Driver\\Driver.hs_" } 
+#include "Layout\\ExampleLayout.res"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+variable ActionServer;
+variable StateServer;
+global device ML_STAR ("Layout\\ExampleLayout.lay", "ML_STAR", hslTrue);
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+ namespace _Method { #include "HSLMETEDLib.hs_" } 
+ namespace _ActionServer { #include "HSLMETEDLib.hs_" } 
+ namespace _StateServer { #include "HSLMETEDLib.hs_" } 
+ namespace _Method { #include "HSLMECCLib.hs_" } 
+ namespace _ActionServer { #include "HSLMECCLib.hs_" } 
+ namespace _StateServer { #include "HSLMECCLib.hs_" } 
+ namespace _Method { #include "HSLPTLLib.hsl" } 
+ namespace _ActionServer { #include "HSLPTLLib.hsl" } 
+ namespace _StateServer { #include "HSLPTLLib.hsl" } 
+// }} ""
+// {{{ 2 "LocalSubmethodInclude" ""
+ namespace _Method {  #include __filename__ ".sub"  } 
+ namespace _ActionServer {  #include __filename__ ".sub"  } 
+ namespace _StateServer {  #include __filename__ ".sub"  } 
+// }} ""
+// {{{ 3 "tfn_ActionServer" "0"
+namespace _ActionServer{ function tfn_ActionServer () {
+// }} ""
+// {{{ 2 2 0 "e962a5d8_5fba_46ba_be2bd191edd912ee" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+DRIVER::ActionServerProcess(ML_STAR);
+// }} ""
+// {{{ 3 "tfn_ActionServer" "1"
+} }
+// }} ""
+// {{{ 3 "tfn_StateServer" "0"
+namespace _StateServer{ function tfn_StateServer () {
+// }} ""
+// {{{ 3 3 0 "43e66842_dd2d_4568_b1d92b7cf817fb6d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+DRIVER::StateServerProcess(ML_STAR);
+// }} ""
+// {{{ 3 "tfn_StateServer" "1"
+} }
+// }} ""
+/* {{ 2 "ProcessInsertLine" "" */ // }} ""
+// {{{ 5 "main" "Begin"
+namespace _Method { method main(  ) void {
+// }} ""
+// {{ 5 "main" "InitLocals"
+// }} ""
+// {{ 2 "AutoInitBlock" ""
+PTL::SetWashingStateDefault("RinseTime1", 5);
+PTL::SetWashingStateDefault("SoakTime1", 5);
+PTL::SetWashingStateDefault("FlowRate1", 11);
+PTL::SetWashingStateDefault("RinseTime2", 0);
+PTL::SetWashingStateDefault("SoakTime2", 0);
+PTL::SetWashingStateDefault("FlowRate2", 11);
+PTL::SetWashingStateDefault("DrainingTime", 10);
+PTL::SetWashingStateDefault("StartWashLiquid", 0);
+PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
+PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
+DRIVER::_InitLibrary();
+::RegisterAbortHandler( "OnAbort");
+// }} ""
+// {{ 1 1 0 "7c336a2e_f9bb_4c52_be1f253d8c25737f" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
+ActionServer = Fork("_ActionServer::tfn_ActionServer");
+if( ActionServer == 0 )
+{
+    MECC::RaiseRuntimeErrorEx(-1590820608, MECC::IDS::stepNameThreadBegin, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 2 1 0 "b57677fd_57d1_4b2d_ba6466ccefce6026" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
+StateServer = Fork("_StateServer::tfn_StateServer");
+if( StateServer == 0 )
+{
+    MECC::RaiseRuntimeErrorEx(-1590820608, MECC::IDS::stepNameThreadBegin, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 2 "AutoExitBlock" ""
+DRIVER::_ExitLibrary();
+// }} ""
+// {{{ 5 "main" "End"
+} }
+// }} ""
+// $$author=BAREB$$valid=0$$time=2023-05-18 03:43$$checksum=4c5378fd$$length=084$$

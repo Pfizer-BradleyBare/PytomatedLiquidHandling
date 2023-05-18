@@ -1,4 +1,5 @@
 import json
+import time
 from threading import Event, Thread
 from typing import Callable
 
@@ -33,7 +34,9 @@ class ServerBackendABC(BackendABC):
 
         self.__App.add_url_rule(PathPrefix, "Index", self.Index)
         for View in self.Views:
-            self.__App.add_url_rule(PathPrefix + View.__name__, View.__name__, View)
+            self.__App.add_url_rule(
+                PathPrefix + View.__name__, View.__name__, View, methods=["GET", "POST"]
+            )
 
     def __ServerThreadRunner(self):
         Thread(
@@ -43,6 +46,7 @@ class ServerBackendABC(BackendABC):
         ).start()
 
         self.__AppParentThreadRunnerFlag.wait()
+        time.sleep(1)
 
     def __Run(self):
         self.__App.run(self.Address, self.Port)
@@ -102,7 +106,7 @@ class ServerBackendABC(BackendABC):
         return ParserInstance.GetHTTPResponse()
 
     def Kill(self):
-        self.StopBackend()
+        ServerBackendABC.StopBackend(self)
         ParserInstance = ServerBackendABC.Parser(
             self.LoggerInstance,
             self.GetEndpointID("Kill"),

@@ -5,7 +5,7 @@
 #include "HSLStrLib.hsl"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLUtilLib2.hsl"
-#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesMethod\\Library\\Debugging\\Debugging.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\Logger\\Logger.hs_"
 #include "HSLTrcLib.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
@@ -22,12 +22,12 @@ function RequestPOST( variable Port, variable EndpointString, variable Timeout, 
 // }} ""
 function _InitLibrary() {
 // {{ 2 "AutoInitBlock" ""
-DEBUGGING::_InitLibrary();
+LOGGER::_InitLibrary();
 // }} ""
 }
 function _ExitLibrary() {
 // {{ 2 "AutoExitBlock" ""
-DEBUGGING::_ExitLibrary();
+LOGGER::_ExitLibrary();
 // }} ""
 }
 // {{{ 5 "RequestGET" "Begin"
@@ -164,4 +164,4 @@ return (0);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-05-17 14:34$$checksum=b301e8a3$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-05-18 03:39$$checksum=97d5e2de$$length=084$$

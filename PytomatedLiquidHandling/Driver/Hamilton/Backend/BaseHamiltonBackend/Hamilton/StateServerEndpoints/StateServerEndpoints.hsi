@@ -4,8 +4,8 @@
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLStrLib.hsl"
 #include "HSLTrcLib.hsl"
-#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\Temp\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\ServerFunctions\\ServerFunctions.hs_"
-#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\Temp\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\ServerFunctions\\ServerFunctions.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -40,11 +40,11 @@ private object o_JSONObject;
 private variable StatusCode;
 // {{ 5 "ServerIsAlive" "InitLocals"
 // }} ""
-// {{{ 20 1 0 "3c4d1607_5042_4a6c_b131fd22766d282f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-StatusCode = SERVERFUNCTIONS::RequestGET(768, Translate("/ActionServer/IsActive"), 5, o_JSONObject);
+// {{{ 20 1 0 "278b1113_860b_4d47_99f661224a8d8a80" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StatusCode = SERVERFUNCTIONS::RequestGET(768, Translate("/StateServer/IsActive"), 5, o_JSONObject);
 // }} ""
-// {{{ 21 1 0 "2cf4fc28_f3cc_49a2_b63ef5e2b5f40dfe" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-JSONPARSER::Release(o_JSONObject);
+// {{{ 21 1 0 "7b91235b_0a77_4286_83412e2dc579f670" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
 // }} ""
 // {{{ 22 1 0 "323e317e_0a18_4dd4_87d1973aa32dc0f0" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return (StatusCode);
@@ -59,11 +59,11 @@ private object o_JSONObject;
 private variable StatusCode;
 // {{ 5 "ServerKill" "InitLocals"
 // }} ""
-// {{{ 24 1 0 "76cd7472_8dcb_4cea_b1e27d63f8dda09a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-StatusCode = SERVERFUNCTIONS::RequestGET(768, Translate("/ActionServer/Kill"), 5, o_JSONObject);
+// {{{ 24 1 0 "ba125e1a_cf84_4d6e_b924faa72f43d095" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StatusCode = SERVERFUNCTIONS::RequestGET(768, Translate("/StateServer/Kill"), 5, o_JSONObject);
 // }} ""
-// {{{ 25 1 0 "28bf5f41_f12f_4993_a55253821a54f757" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-JSONPARSER::Release(o_JSONObject);
+// {{{ 25 1 0 "3b657026_3895_4834_85d46036784eb567" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
 // }} ""
 // {{{ 26 1 0 "90c7b1ff_87ca_4ae8_b908bda810e0c09b" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return (1);
@@ -74,7 +74,6 @@ return (1);
 // {{{ 5 "GetNextCommand" "Begin"
 function GetNextCommand( variable Timeout, object & o_JSONObject ) variable {
 // }} ""
-private variable StatusCode;
 private object JSONObject;
 private variable IsReady;
 // {{ 5 "GetNextCommand" "InitLocals"
@@ -85,14 +84,14 @@ HSLJsonLib::Create(JSONObject);
 // {{{ 2 1 0 "23060a60_1607_4613_a7a87b4da8ec3144" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::SetIntegerProperty(JSONObject, Translate("Timeout"), Timeout);
 // }} ""
-// {{{ 3 1 0 "a49f6fef_2d54_44ca_827344a01bb33d14" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-SERVERFUNCTIONS::RequestPOST(768, Translate("/ActionServer/GetNextCommand"), Timeout, JSONObject, o_JSONObject);
+// {{{ 3 1 0 "a4b54375_62d4_4eb0_b902b0406dd58939" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+SERVERFUNCTIONS::RequestPOST(768, Translate("/StateServer/GetNextCommand"), Timeout, JSONObject, o_JSONObject);
 // }} ""
 // {{{ 4 1 0 "c07bbcec_a5d3_43e5_8273304b36aab0a2" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 IsReady = JSONPARSER::GetJSONElement(o_JSONObject, Translate("Endpoint State:"));
 // }} ""
-// {{{ 5 1 0 "4e1b1576_125a_43ff_bf7c0c4ba695b5a8" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-JSONPARSER::Release(JSONObject);
+// {{{ 5 1 0 "c499fe26_54cb_471c_a0491ccdd22e4487" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(JSONObject);
 // }} ""
 // {{{ 6 1 0 "5aff1933_385c_4c8f_8214055f7cc3310a" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return (IsReady);
@@ -106,13 +105,7 @@ function RespondToCommand( variable i_State, variable i_Details, object & i_Resp
 private object JSONObject;
 private object o_JSONObject;
 private variable StatusCode;
-private variable Counter;
-private variable NumExtras;
-private variable ValueType;
-private variable Key;
-private variable Value;
 private variable JSONObjectString;
-private variable Timeout;
 // {{ 5 "RespondToCommand" "InitLocals"
 // }} ""
 // {{ 8 1 0 "476cedfa_d3da_40cf_95f2b6339bf369d0" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
@@ -136,8 +129,8 @@ TrcTrace(Translate(""), JSONObjectString);
 // {{ 14 1 0 "fe329372_f8c9_4239_a8f119d4c0f4de6e" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
 MECC::TraceComment(Translate("###################### END RESPONSE ###################### \n\n"));
 // }} ""
-// {{{ 15 1 0 "1557e260_907c_43a3_80be242365d6a7c6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-SERVERFUNCTIONS::RequestPOST(768, Translate("/ActionServer/RespondToCommand"), 5, i_ResponseData_JSONObject, o_JSONObject);
+// {{{ 15 1 0 "1c65b6d0_e050_4614_a9c08bb0ed9df4b9" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+SERVERFUNCTIONS::RequestPOST(768, Translate("/StateServer/RespondToCommand"), 5, i_ResponseData_JSONObject, o_JSONObject);
 // }} ""
 // {{{ 16 1 0 "54d9c5f5_d369_4483_ae2af680214302f4" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(i_ResponseData_JSONObject);
@@ -155,4 +148,4 @@ return (StatusCode);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-05-17 14:55$$checksum=8762aa78$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-05-18 03:49$$checksum=b42a9d58$$length=084$$

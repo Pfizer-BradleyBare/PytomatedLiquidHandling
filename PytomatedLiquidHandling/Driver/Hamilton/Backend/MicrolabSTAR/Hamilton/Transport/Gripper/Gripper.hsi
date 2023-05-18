@@ -1,10 +1,11 @@
 // {{{ 2 "IncludeGuard" "PragmaOnce"
 #pragma once
 // }} ""
-#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesMethod\\Library\\ABNWebServerCommands\\JSONParser\\WebServerJSONParser.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
 #include "HSLDevLib.hsl"
-#include "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\AutomationBareNecessities\\ABN\\AutomationBareNecessitiesMethod\\Library\\ABNWebServerCommands\\ABNWebServerCommands.hs_"
 #include "HSLErrLib.hsl"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "HSLJson\\HSLJson.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -34,14 +35,14 @@ PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
 PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
 PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
 PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
-WEBSERVERJSONPARSER::_InitLibrary();
-ABNWEBSERVERCOMMANDS::_InitLibrary();
+JSONPARSER::_InitLibrary();
+ACTIONSERVERENDPOINTS::_InitLibrary();
 // }} ""
 }
 function _ExitLibrary() {
 // {{ 2 "AutoExitBlock" ""
-WEBSERVERJSONPARSER::_ExitLibrary();
-ABNWEBSERVERCOMMANDS::_ExitLibrary();
+JSONPARSER::_ExitLibrary();
+ACTIONSERVERENDPOINTS::_ExitLibrary();
 // }} ""
 }
 // {{{ 5 "GetPlate" "Begin"
@@ -65,40 +66,41 @@ private variable Values[];
 private variable Keys[];
 private variable Message;
 private variable RequestID;
+private object o_JSONObject;
 // {{ 5 "GetPlate" "InitLocals"
 // }} ""
-// {{{ 1 1 0 "382dbb6f_b810_4d7e_8881a1477f96deb5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-RequestID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
+// {{{ 1 1 0 "c4ff9d2f_83c0_42ec_baf19c2f58f9a787" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+RequestID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
 // }} ""
-// {{{ 2 1 0 "b6961cf9_c238_4f85_a740c71b24edfb3b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-Name = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
+// {{{ 2 1 0 "5f9566b0_f5ad_4f94_aad0531f1cb9d824" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Name = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
 // }} ""
-// {{{ 3 1 0 "d7ab38e8_e808_4d55_a594a03223ad7b06" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-PlateSequence = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PlateSequence:"));
+// {{{ 3 1 0 "d0706597_1703_4e6c_87923966fd202c3f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+PlateSequence = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PlateSequence:"));
 // }} ""
-// {{{ 4 1 0 "45296742_1492_4da8_a74e6a9985bb0fae" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-GripperSequence = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:GripperSequence:"));
+// {{{ 4 1 0 "89bb3cbe_f268_410a_9c73bc1d669b886a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+GripperSequence = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:GripperSequence:"));
 // }} ""
-// {{{ 5 1 0 "cafc561b_a837_43b7_a068787db90de2dd" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-GripHeight = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:GripHeight:"));
+// {{{ 5 1 0 "ff3a2fa5_7582_4a9e_a3523615185343e6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+GripHeight = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:GripHeight:"));
 // }} ""
-// {{{ 6 1 0 "a82adf12_240e_49ab_b02e2c3954e78b62" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-GripWidth = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:GripWidth:"));
+// {{{ 6 1 0 "defb6110_adbc_4a81_991df23a19ad6f43" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+GripWidth = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:GripWidth:"));
 // }} ""
-// {{{ 7 1 0 "47ab0f02_4f2c_473d_8f3c5004ba7662bd" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-OpenWidth = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:OpenWidth:"));
+// {{{ 7 1 0 "b2d509a3_e3d8_4c60_bdaf1a038af19847" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+OpenWidth = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:OpenWidth:"));
 // }} ""
-// {{{ 8 1 0 "9b0d6380_ad6e_47dd_bc9d694b23a9871a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-GripForce = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:GripForce:"));
+// {{{ 8 1 0 "2d6513d4_2e58_4473_81d70e3a03152504" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+GripForce = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:GripForce:"));
 // }} ""
-// {{{ 9 1 0 "8a1120ad_d24c_4a54_abba180203dea45d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-GripSpeed = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:GripSpeed:"));
+// {{{ 9 1 0 "e8d21ddf_00a4_498c_a061425b66b5aea0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+GripSpeed = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:GripSpeed:"));
 // }} ""
-// {{{ 10 1 0 "89bb2995_c3c0_4a9f_8f9794c8c590211d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ZSpeed = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ZSpeed:"));
+// {{{ 10 1 0 "a7c3f580_fa32_4f85_a33273fde814aeb8" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ZSpeed = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ZSpeed:"));
 // }} ""
-// {{{ 11 1 0 "1ced2919_3b83_4289_a0119b1e480ca0c8" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-CheckPlateExists = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CheckPlateExists:"));
+// {{{ 11 1 0 "ace64732_de02_4355_a43694de5b155939" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CheckPlateExists = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CheckPlateExists:"));
 // }} ""
 // {{{ 12 1 0 "59bb678c_8e1c_428c_97876678d11df1bb" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 DevGetSequenceRef(ML_STAR, PlateSequence, Sequence);
@@ -109,8 +111,8 @@ DevGetSequenceRef(ML_STAR, GripperSequence, ToolSequence);
 // {{ 14 1 0 "4d791135_cd08_47f5_8523723526fcff3e" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 15 1 0 "86468c55_e831_4fc4_baa58f60efcff127" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-CustomErrorHandling = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// {{{ 15 1 0 "1d189bd8_7b7f_4ba2_ad81dd4a376c0776" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
 // }} ""
 // {{ 16 1 0 "536cd9f6_00d1_4870_8326cfae1f0fc9ed" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
 State = 1;
@@ -161,14 +163,14 @@ else
 // {{ 27 1 0 "9a706d39_2bc4_46dc_affec00cd038a6f2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 28 1 0 "541d53d0_2c9c_4ea9_8b42d6be8700ed54" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
-Keys.SetSize(0);
+// {{{ 28 1 0 "2e759d69_4d00_4b7c_9be97f6dba47c120" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{ 29 1 0 "2be99c6d_10ec_4bb4_a9cf2d9718272d8f" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
-Values.SetSize(0);
+// {{{ 29 1 0 "3fbde822_27c7_4ff4_98fe46aa923e52e7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(State, Message, o_JSONObject);
 // }} ""
-// {{{ 30 1 0 "6e03a692_1b37_49fc_b946a0df2c44c584" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ABNWEBSERVERCOMMANDS::DriverRespond(State, RequestID, Message, Keys, Values);
+// {{{ 30 1 0 "16ff0a1f_7089_4892_8c075472588ab3a9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
 // }} ""
 // {{ 31 1 0 "4d791135_cd08_47f5_8523723526fcff3e" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -193,31 +195,32 @@ private variable Values[];
 private variable Keys[];
 private variable Message;
 private variable RequestID;
+private object o_JSONObject;
 // {{ 5 "PlacePlate" "InitLocals"
 // }} ""
-// {{{ 44 1 0 "9c1c93d6_7694_4c80_855f08783dea45cd" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-RequestID = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
+// {{{ 44 1 0 "f4e7ea1a_531c_4ed5_994fad11a0266bea" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+RequestID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Request Identifier:"));
 // }} ""
-// {{{ 45 1 0 "aa5d5b3d_24f8_4b0e_ba95fe08043ca8e4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-Name = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
+// {{{ 45 1 0 "2926b0a7_2c90_4e3a_9bed0993fd330cd1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Name = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Name:"));
 // }} ""
-// {{{ 46 1 0 "259deb05_9992_440e_900d0536174edfb1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-PlateSequence = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PlateSequence:"));
+// {{{ 46 1 0 "00d4e970_9544_4db4_9cd1e2ee5026a1fe" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+PlateSequence = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PlateSequence:"));
 // }} ""
-// {{{ 47 1 0 "ceb28319_0e90_4b90_b4a6b87fef9bd511" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-EjectTool = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:EjectTool:"));
+// {{{ 47 1 0 "bc39dba4_b25d_4268_9b8484c53c33b6a4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+EjectTool = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:EjectTool:"));
 // }} ""
-// {{{ 48 1 0 "76259984_b0fb_4db5_8e85f23de9f7edf4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-XSpeed = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:XSpeed:"));
+// {{{ 48 1 0 "1913333c_1b93_41ce_bdcf911d90512840" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+XSpeed = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:XSpeed:"));
 // }} ""
-// {{{ 49 1 0 "4e442d32_8287_4a8d_9732bc9e6169b76f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ZSpeed = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ZSpeed:"));
+// {{{ 49 1 0 "054bcb03_950f_4e97_86eb11f1b8042fef" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ZSpeed = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ZSpeed:"));
 // }} ""
-// {{{ 50 1 0 "fca5c99b_dbb1_4f0b_8990a9b2c5bb36cf" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-PressOnDistance = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PressOnDistance:"));
+// {{{ 50 1 0 "ed20ce2d_894d_4f48_8616d4508f2018e4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+PressOnDistance = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PressOnDistance:"));
 // }} ""
-// {{{ 51 1 0 "0465d6fc_7f78_4aaf_a9f4ffc7cee989b3" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-CheckPlateExists = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CheckPlateExists:"));
+// {{{ 51 1 0 "c1b0b80d_0993_4f6f_8105c257eeb81e09" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CheckPlateExists = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CheckPlateExists:"));
 // }} ""
 // {{{ 52 1 0 "28c48e65_64e4_43c5_936c451a72761a35" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 DevGetSequenceRef(ML_STAR, PlateSequence, Sequence);
@@ -225,8 +228,8 @@ DevGetSequenceRef(ML_STAR, PlateSequence, Sequence);
 // {{ 53 1 0 "89f832ca_190d_4d70_8b38966ed89d8599" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 54 1 0 "ccb16067_10d6_4098_9533e9f8bef6fc46" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-CustomErrorHandling = WEBSERVERJSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// {{{ 54 1 0 "58990f93_8cb8_4f9e_af3d9a1235a5c1c5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
 // }} ""
 // {{ 55 1 0 "3a78ca67_9e26_436f_b0f3a7e3dfe949cb" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
 State = 1;
@@ -277,14 +280,14 @@ else
 // {{ 66 1 0 "29b8ac2f_a79a_46ad_a9fd84a418bb7caa" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 67 1 0 "3a2af78b_e36c_4857_b715e1390a272623" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
-Keys.SetSize(0);
+// {{{ 67 1 0 "c52f1dda_d4bd_41f0_b649d325f35b1eaa" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{ 68 1 0 "a9a1da17_c428_4b38_ae975497e004e6a5" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
-Values.SetSize(0);
+// {{{ 68 1 0 "07829652_e3a9_4919_ba256a064307ae3c" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(State, Message, o_JSONObject);
 // }} ""
-// {{{ 69 1 0 "54eb72ca_29cf_403f_a7d56ed687c58fe1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ABNWEBSERVERCOMMANDS::DriverRespond(State, RequestID, Message, Keys, Values);
+// {{{ 69 1 0 "ef5777d8_69ab_45be_9e6f3653862d99c7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
 // }} ""
 // {{ 70 1 0 "89f832ca_190d_4d70_8b38966ed89d8599" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -336,4 +339,4 @@ abort;
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-01-30 21:58$$checksum=3bd0e2ce$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-05-18 03:36$$checksum=3fecca6a$$length=084$$
