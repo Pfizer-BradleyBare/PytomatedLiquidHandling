@@ -1,7 +1,8 @@
 import subprocess
+from typing import Type, TypeVar, cast
 
 from .....Tools.Logger import Logger
-from ....Tools.AbstractClasses import BackendABC
+from ....Tools.AbstractClasses import BackendABC, CommandABC
 from ..HamiltonCommand import (
     HamiltonActionCommandABC,
     HamiltonCommandABC,
@@ -9,6 +10,7 @@ from ..HamiltonCommand import (
 )
 from .HamiltonServerBackend import HamiltonServerBackendABC
 
+T= TypeVar("T",bound=CommandABC.Response)
 
 class HamiltonBackendABC(BackendABC):
     def __init__(
@@ -66,10 +68,17 @@ class HamiltonBackendABC(BackendABC):
         else:
             return self.ActionServer.GetStatus(CommandInstance)
 
-    def GetResponse(
-        self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
-    ) -> HamiltonActionCommandABC.Response | HamiltonStateCommandABC.Response:
+    def WaitForResponseBlocking(self, CommandInstance: CommandABC):
         if isinstance(CommandInstance, HamiltonStateCommandABC):
-            return self.StateServer.GetResponse(CommandInstance)
+            self.StateServer.WaitForResponseBlocking(CommandInstance)
         else:
-            return self.ActionServer.GetResponse(CommandInstance)
+            self.ActionServer.WaitForResponseBlocking(CommandInstance)
+
+    def GetResponse(
+        self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC, ResponseType: Type[T] 
+    ) -> T:
+        
+        if isinstance(CommandInstance, HamiltonStateCommandABC):
+            return self.StateServer.GetResponse(CommandInstance,ResponseType)
+        else:
+            return self.ActionServer.GetResponse(CommandInstance,ResponseType)

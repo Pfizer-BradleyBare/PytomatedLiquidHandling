@@ -1,13 +1,12 @@
+import time
 from abc import abstractmethod
-from typing import Generic, TypeVar
+from typing import Type, TypeVar, cast
 
 from .....Tools.AbstractClasses import UniqueObjectABC
 from .....Tools.Logger import Logger
 from ..Command import CommandABC
 
-T = TypeVar("T", bound="CommandABC")
-
-
+T= TypeVar("T",bound=CommandABC.Response)
 
 class BackendABC(UniqueObjectABC):
     def __init__(self, UniqueIdentifier: str, LoggerInstance: Logger):
@@ -53,10 +52,19 @@ class BackendABC(UniqueObjectABC):
             Response.SetProperty("StatusCode", -1)
             Response.SetProperty("Details", "Respose not available")
 
-
         return Response
 
-    def GetResponse(self, CommandInstance: CommandABC) -> CommandABC.Response:
+    def WaitForResponseBlocking(self, CommandInstance: CommandABC):
+        if self.CurrentCommand != CommandInstance:
+            raise Exception(
+                "You can only wait on a response for the currently executing command."
+            )
+
+
+        while self.GetStatus(CommandInstance).GetStatusCode() != 0:
+            ...
+
+    def GetResponse(self, CommandInstance: CommandABC, ResponseType: Type[T]) -> T:
         if self.CurrentCommand is None:
             raise Exception(
                 "No Command currently executing. Execute a command first..."
@@ -75,4 +83,4 @@ class BackendABC(UniqueObjectABC):
         self.CurrentCommand = None
         self.Response = None
 
-        return Response
+        return cast(ResponseType,Response) 

@@ -1,62 +1,60 @@
 import logging
-import os
-import time
 
-from PytomatedLiquidHandling import Driver, Logger
+from PytomatedLiquidHandling import Logger
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
 from PytomatedLiquidHandling.Driver.Hamilton.TemperatureControl import HeaterShaker
 from PytomatedLiquidHandling.Driver.Hamilton.Timer import StartTimer
 
 LoggerInstance = Logger(
-    "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__), "Logging")
-)
+    "MyLogger", logging.DEBUG, "C:\\Program Files (x86)\\HAMILTON\\Library\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Logging")
+#create a logger to log all actions
+
 Backend = MicrolabStarBackend("Example Star",LoggerInstance)
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
-time.sleep(1)
-
-ConnectCommand = HeaterShaker.Connect.Command(
+Command = HeaterShaker.Connect.Command(
     OptionsInstance=HeaterShaker.Connect.Options(ComPort=1), CustomErrorHandling=False
 )
-
-
-Backend.ExecuteCommand(ConnectCommand)
-while Backend.GetStatus(ConnectCommand).GetStatusCode() != 0:
-    ...
-Response = Backend.GetResponse(ConnectCommand)
-if not isinstance(Response,HeaterShaker.Connect.Command.Response):
-    raise Exception()
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Response = Backend.GetResponse(Command, Command.Response)
 HeaterShakerHandleId = Response.GetHandleID()
 # Connect and get our Handle
 
-""" 
 DesiredTemperature = 37
-StartTempCommand = HeaterShaker.StartTemperatureControl.Command(
+Command = HeaterShaker.StartTemperatureControl.Command(
     OptionsInstance=HeaterShaker.StartTemperatureControl.Options(
         HandleID=HeaterShakerHandleId, Temperature=DesiredTemperature
     ),
     CustomErrorHandling=False,
 )
-StartTempCommand.Execute()
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Response = Backend.GetResponse(Command, Command.Response)
 # Turn on the Heat
 
 TemperatureOffset = 2
 for i in range(0, 30):
-    StartTimer.Command(
+    Command = StartTimer.Command(
         OptionsInstance=StartTimer.Options(WaitTime=10), CustomErrorHandling=False
-    ).Execute()
+    )
+    Backend.ExecuteCommand(Command)
+    Backend.WaitForResponseBlocking(Command)
+    Backend.GetResponse(Command, Command.Response)
 
-    GetTempCommand = HeaterShaker.GetTemperature.Command(
+    Command = HeaterShaker.GetTemperature.Command(
         OptionsInstance=HeaterShaker.GetTemperature.Options(
             HandleID=HeaterShakerHandleId
         ),
         CustomErrorHandling=False,
     )
-    GetTempCommand.Execute()
+    Backend.ExecuteCommand(Command)
+    Backend.WaitForResponseBlocking(Command)
+    Response = Backend.GetResponse(Command, Command.Response)
 
-    CurrentTemperature = GetTempCommand.GetTemperature()
-    DriverHandlerInstance.GetLogger().debug("Current Temp: %f", CurrentTemperature)
+    CurrentTemperature = Response.GetTemperature()
+    LoggerInstance.debug("Current Temp: %f", CurrentTemperature)
 
     if (
         DesiredTemperature - TemperatureOffset
@@ -66,33 +64,43 @@ for i in range(0, 30):
         break
 # Wait for temperature to fall within desired range. Only wait a max of 5 minutes
 
-HeaterShaker.StartShakeControl.Command(
+Command = HeaterShaker.StartShakeControl.Command(
     OptionsInstance=HeaterShaker.StartShakeControl.Options(
         HandleID=HeaterShakerHandleId, ShakingSpeed=500
     ),
     CustomErrorHandling=True,
-).Execute()
+    )
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Response = Backend.GetResponse(Command, Command.Response)
 
-StartTimer.Command(
+Command = StartTimer.Command(
     OptionsInstance=StartTimer.Options(WaitTime=30), CustomErrorHandling=False
-).Execute()
+)
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Response = Backend.GetResponse(Command, Command.Response)
 # run 30 seconds
 
-HeaterShaker.StopShakeControl.Command(
+Command=HeaterShaker.StopShakeControl.Command(
     OptionsInstance=HeaterShaker.StopShakeControl.Options(
         HandleID=HeaterShakerHandleId
     ),
     CustomErrorHandling=False,
-).Execute()
+)
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Response = Backend.GetResponse(Command, Command.Response)
 
-HeaterShaker.StopTemperatureControl.Command(
+Command = HeaterShaker.StopTemperatureControl.Command(
     OptionsInstance=HeaterShaker.StopTemperatureControl.Options(
         HandleID=HeaterShakerHandleId
     ),
     CustomErrorHandling=False,
-).Execute()
+)
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Response = Backend.GetResponse(Command, Command.Response)
 # Turn off heat
 
-DriverHandlerInstance.KillServer()
 # Done!
- """
