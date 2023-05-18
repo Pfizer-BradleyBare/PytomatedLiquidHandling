@@ -11,6 +11,3 @@ class MicrolabStarBackend(HamiltonBackendABC):
             LoggerInstance,
             "C:\\Program Files (x86)\\HAMILTON\\Library\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Method\\BasicMethod.med",
         )
-
-    def GetStatus(self) -> HamiltonCommandABC.Response:
-        ...

@@ -13,9 +13,6 @@ class HamiltonCommandABC(CommandABC):
         if isinstance(self, CommandOptions):
             OutputDict = vars(self.OptionsInstance)
 
-            del OutputDict["_NonUniqueObjectABC__NonUniqueObjectABC_Identifier"]
-            # removes junk from parent classes
-
             return OutputDict
 
         elif isinstance(self, CommandOptionsTracker):

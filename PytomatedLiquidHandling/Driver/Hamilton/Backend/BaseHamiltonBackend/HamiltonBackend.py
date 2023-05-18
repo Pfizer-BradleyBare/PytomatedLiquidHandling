@@ -47,7 +47,6 @@ class HamiltonBackendABC(BackendABC):
         self.StateServer.StartBackend()
 
     def StopBackend(self):
-        print("WE WENT HERE")
         self.ActionServer.StopBackend()
         self.StateServer.StopBackend()
 

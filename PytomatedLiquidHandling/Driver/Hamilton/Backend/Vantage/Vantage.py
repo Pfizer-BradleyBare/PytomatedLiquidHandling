@@ -10,6 +10,3 @@ class VantageBackend(HamiltonBackendABC):
             UniqueIdentifier,
             LoggerInstance,
         )
-
-    def GetStatus(self) -> HamiltonCommandABC.Response:
-        ...

@@ -120,8 +120,8 @@ HSLJsonLib::SetBooleanProperty(i_ResponseData_JSONObject, Translate("StatusCode"
 // {{{ 11 1 0 "75150d89_6e09_4c3e_b31e6fe7822671f5" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::SetStringProperty(i_ResponseData_JSONObject, Translate("Details"), i_Details);
 // }} ""
-// {{{ 12 1 0 "5020c3d9_805a_40e3_ba62c560ad286409" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::GetJson(JSONObject, JSONObjectString);
+// {{{ 12 1 0 "1e6996ce_d526_4d07_b60714d958516ecf" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::GetJson(i_ResponseData_JSONObject, JSONObjectString);
 // }} ""
 // {{{ 13 1 0 "31e966bd_f504_4751_9ad4488e76c5ac90" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 TrcTrace(Translate(""), JSONObjectString);
@@ -145,4 +145,4 @@ return (StatusCode);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-05-18 03:39$$checksum=f38d56b0$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-05-18 05:25$$checksum=fba3972f$$length=084$$

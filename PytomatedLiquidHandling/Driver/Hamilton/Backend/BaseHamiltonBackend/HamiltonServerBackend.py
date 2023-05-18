@@ -39,7 +39,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
         Timeout = ParserObject.GetEndpointInputData("Timeout") - 10
         Counter = 0
 
-        while self.CurrentCommand is None:
+        while self.CurrentCommand is None or not self.Response is None:
             if Counter >= Timeout * 10:
                 break
 

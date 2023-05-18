@@ -1,8 +1,12 @@
 from abc import abstractmethod
+from typing import Generic, TypeVar
 
 from .....Tools.AbstractClasses import UniqueObjectABC
 from .....Tools.Logger import Logger
 from ..Command import CommandABC
+
+T = TypeVar("T", bound="CommandABC")
+
 
 
 class BackendABC(UniqueObjectABC):
@@ -34,20 +38,21 @@ class BackendABC(UniqueObjectABC):
                 "No Command currently executing. Execute a command first..."
             )
 
-        if self.CurrentCommand == CommandInstance:
+        if self.CurrentCommand != CommandInstance:
             raise Exception(
-                "You can only get a response for the currently executing command."
+                "You can only get a status for the currently executing command."
             )
 
         Response = CommandABC.Response({})
 
-        if self.Response is None:
+        if not self.Response is None:
             Response.SetProperty("StatusCode", 0)
             Response.SetProperty("Details", "Respose available")
 
         else:
             Response.SetProperty("StatusCode", -1)
             Response.SetProperty("Details", "Respose not available")
+
 
         return Response
 
@@ -57,7 +62,7 @@ class BackendABC(UniqueObjectABC):
                 "No Command currently executing. Execute a command first..."
             )
 
-        if self.CurrentCommand == CommandInstance:
+        if self.CurrentCommand != CommandInstance:
             raise Exception(
                 "You can only get a response for the currently executing command."
             )

@@ -2,6 +2,12 @@
  namespace _ActionServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Driver\\Driver.hs_" } 
  namespace _StateServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Driver\\Driver.hs_" } 
 #include "Layout\\ExampleLayout.res"
+ namespace _Method { #include "HSLHttp\\HSLHttp.hsl" } 
+ namespace _ActionServer { #include "HSLHttp\\HSLHttp.hsl" } 
+ namespace _StateServer { #include "HSLHttp\\HSLHttp.hsl" } 
+ namespace _Method { #include "HSLJson\\HSLJson.hsl" } 
+ namespace _ActionServer { #include "HSLJson\\HSLJson.hsl" } 
+ namespace _StateServer { #include "HSLJson\\HSLJson.hsl" } 
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable ActionServer;
 variable StateServer;
@@ -26,7 +32,7 @@ global device ML_STAR ("Layout\\ExampleLayout.lay", "ML_STAR", hslTrue);
 // {{{ 3 "tfn_ActionServer" "0"
 namespace _ActionServer{ function tfn_ActionServer () {
 // }} ""
-// {{{ 2 2 0 "e962a5d8_5fba_46ba_be2bd191edd912ee" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 4 2 0 "e962a5d8_5fba_46ba_be2bd191edd912ee" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 DRIVER::ActionServerProcess(ML_STAR);
 // }} ""
 // {{{ 3 "tfn_ActionServer" "1"
@@ -35,7 +41,7 @@ DRIVER::ActionServerProcess(ML_STAR);
 // {{{ 3 "tfn_StateServer" "0"
 namespace _StateServer{ function tfn_StateServer () {
 // }} ""
-// {{{ 3 3 0 "43e66842_dd2d_4568_b1d92b7cf817fb6d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 5 3 0 "43e66842_dd2d_4568_b1d92b7cf817fb6d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 DRIVER::StateServerProcess(ML_STAR);
 // }} ""
 // {{{ 3 "tfn_StateServer" "1"
@@ -63,14 +69,20 @@ PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
 DRIVER::_InitLibrary();
 ::RegisterAbortHandler( "OnAbort");
 // }} ""
-// {{ 1 1 0 "7c336a2e_f9bb_4c52_be1f253d8c25737f" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
+// {{{ 1 1 0 "8378617e_cfd6_4024_9223af8e1d9f6b71" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHttp::SetTraceLevel(0);
+// }} ""
+// {{{ 2 1 0 "18e6ee76_e1a4_444d_94d83b3518784ab7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetTraceLevel(0);
+// }} ""
+// {{ 3 1 0 "7c336a2e_f9bb_4c52_be1f253d8c25737f" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
 ActionServer = Fork("_ActionServer::tfn_ActionServer");
 if( ActionServer == 0 )
 {
     MECC::RaiseRuntimeErrorEx(-1590820608, MECC::IDS::stepNameThreadBegin, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
 }
 // }} ""
-// {{ 2 1 0 "b57677fd_57d1_4b2d_ba6466ccefce6026" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
+// {{ 4 1 0 "b57677fd_57d1_4b2d_ba6466ccefce6026" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
 StateServer = Fork("_StateServer::tfn_StateServer");
 if( StateServer == 0 )
 {
@@ -83,4 +95,4 @@ DRIVER::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-05-18 03:43$$checksum=4c5378fd$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-05-18 05:17$$checksum=8a5eb186$$length=084$$

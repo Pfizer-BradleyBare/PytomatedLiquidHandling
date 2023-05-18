@@ -3,23 +3,34 @@ import os
 import time
 
 from PytomatedLiquidHandling import Driver, Logger
+from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
 from PytomatedLiquidHandling.Driver.Hamilton.TemperatureControl import HeaterShaker
 from PytomatedLiquidHandling.Driver.Hamilton.Timer import StartTimer
 
 LoggerInstance = Logger(
     "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__), "Logging")
 )
-DriverHandlerInstance = Driver.Handler(LoggerInstance)
-DriverHandlerInstance.StartServer()
-# Creates the handler so we can communicate with the Hamilton
+Backend = MicrolabStarBackend("Example Star",LoggerInstance)
+Backend.StartBackend()
+# Creates the Backend so we can communicate with the Hamilton
+
+time.sleep(1)
 
 ConnectCommand = HeaterShaker.Connect.Command(
     OptionsInstance=HeaterShaker.Connect.Options(ComPort=1), CustomErrorHandling=False
 )
-ConnectCommand.Execute()
-HeaterShakerHandleId = ConnectCommand.GetHandleID()
+
+
+Backend.ExecuteCommand(ConnectCommand)
+while Backend.GetStatus(ConnectCommand).GetStatusCode() != 0:
+    ...
+Response = Backend.GetResponse(ConnectCommand)
+if not isinstance(Response,HeaterShaker.Connect.Command.Response):
+    raise Exception()
+HeaterShakerHandleId = Response.GetHandleID()
 # Connect and get our Handle
 
+""" 
 DesiredTemperature = 37
 StartTempCommand = HeaterShaker.StartTemperatureControl.Command(
     OptionsInstance=HeaterShaker.StartTemperatureControl.Options(
@@ -84,3 +95,4 @@ HeaterShaker.StopTemperatureControl.Command(
 
 DriverHandlerInstance.KillServer()
 # Done!
+ """
