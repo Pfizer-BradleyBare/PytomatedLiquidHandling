@@ -20,5 +20,5 @@ class Command(HamiltonActionCommandABC, CommandOptions[Options]):
 
     class Response(HamiltonActionCommandABC.Response):
         @HamiltonActionCommandABC.Response.Decorator_ExpectedResponseProperty
-        def GetTipPosition(self) -> int:
+        def GetTipPositions(self) -> int:
             ...
