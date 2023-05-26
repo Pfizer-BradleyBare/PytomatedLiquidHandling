@@ -14,37 +14,45 @@ See docstrings
 1. **Install 64-bit python >=3.11**
 2. **Update pip and install setuptools**
 3. **Install git**
-4. **Clone this repo to your PC**
+4. **Clone this repo to your PC in the HAMILTON/Library folder**
 5. **cd into the repo folder and run 'pip install .'**
 6. **Start playing with the API**
 
 ## Example usage
 ```python
-from PytomatedLiquidHandling import Logger, Driver
-from PytomatedLiquidHandling.Driver.TemperatureControl import HeaterShaker
 import logging
-import os
-import time
+from PytomatedLiquidHandling import Logger
+from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
+from PytomatedLiquidHandling.Driver.Hamilton.TemperatureControl import HeaterShaker
+from PytomatedLiquidHandling.Driver.Hamilton.Timer import StartTimer
 
 LoggerInstance = Logger(
-    "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__), "Logging")
-)
-DriverHandlerInstance = Driver.Handler(LoggerInstance)
-# Creates the handler so we can communicate with the Hamilton
+    "MyLogger", logging.DEBUG, "C:\\Program Files (x86)\\HAMILTON\\Library\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Logging")
+#create a logger to log all actions
 
-ConnectCommand = HeaterShaker.Connect.Command(HeaterShaker.Connect.Options(1), False)
-ConnectCommand.Execute()
-HeaterShakerHandleId = ConnectCommand.GetHandleID()
+Backend = MicrolabStarBackend("Example Star",LoggerInstance)
+Backend.StartBackend()
+# Creates the Backend so we can communicate with the Hamilton
+
+Command = HeaterShaker.Connect.Command(
+    OptionsInstance=HeaterShaker.Connect.Options(ComPort=1), CustomErrorHandling=False
+)
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Response = Backend.GetResponse(Command, Command.Response)
+HeaterShakerHandleId = Response.GetHandleID()
 # Connect and get our Handle
 
 DesiredTemperature = 37
-StartTempCommand = HeaterShaker.StartTemperatureControl.Command(
-    HeaterShaker.StartTemperatureControl.Options(
-        HeaterShakerHandleId, DesiredTemperature
+Command = HeaterShaker.StartTemperatureControl.Command(
+    OptionsInstance=HeaterShaker.StartTemperatureControl.Options(
+        HandleID=HeaterShakerHandleId, Temperature=DesiredTemperature
     ),
-    False,
+    CustomErrorHandling=False,
 )
-StartTempCommand.Execute()
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Response = Backend.GetResponse(Command, Command.Response)
 # Turn on the Heat
 
 #
