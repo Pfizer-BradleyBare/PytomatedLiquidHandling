@@ -1,10 +1,10 @@
-from .BaseLabware import Dimensions, Labware
+from .BaseLabware import Dimensions, LabwareABC
 
 
-class NonPipettableLabware(Labware):
+class NonPipettableLabware(LabwareABC):
     def __init__(
         self,
         UniqueIdentifier: str,
         DimensionsInstance: Dimensions,
     ):
-        Labware.__init__(self, UniqueIdentifier, DimensionsInstance)
+        LabwareABC.__init__(self, UniqueIdentifier, DimensionsInstance)

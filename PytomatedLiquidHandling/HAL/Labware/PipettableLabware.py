@@ -1,14 +1,14 @@
-from .BaseLabware import Dimensions, Labware, Wells
+from .BaseLabware import Dimensions, LabwareABC, Wells
 
 
-class PipettableLabware(Labware):
+class PipettableLabware(LabwareABC):
     def __init__(
         self,
         UniqueIdentifier: str,
         DimensionsInstance: Dimensions,
         LabwareWells: Wells,
     ):
-        Labware.__init__(self, UniqueIdentifier, DimensionsInstance)
+        LabwareABC.__init__(self, UniqueIdentifier, DimensionsInstance)
         self.LabwareWells: Wells = LabwareWells
 
     def GetWellHeightFromVolume(self, Volume: float) -> float:

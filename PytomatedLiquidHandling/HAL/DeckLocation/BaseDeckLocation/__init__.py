@@ -1,2 +1,2 @@
-from .DeckLocation import DeckLocation
+from .DeckLocationABC import DeckLocationABC
 from .DeckLoadingConfig.DeckLoadingConfig import DeckLoadingConfig

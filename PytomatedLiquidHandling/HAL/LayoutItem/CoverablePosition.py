@@ -1,19 +1,19 @@
-from ..DeckLocation import DeckLocation
+from ..DeckLocation.BaseDeckLocation import DeckLocationABC
 from ..Labware import PipettableLabware
-from .BaseLayoutItem import LayoutItem
+from .BaseLayoutItem import LayoutItemABC
 from .Lid import Lid
 
 
-class CoverablePosition(LayoutItem):
+class CoverablePosition(LayoutItemABC):
     def __init__(
         self,
         UniqueIdentifier: str,
         Sequence: str,
         PipettableLabwareInstance: PipettableLabware,
-        DeckLocationInstance: DeckLocation,
+        DeckLocationInstance: DeckLocationABC,
         LidInstance: Lid,
     ):
-        LayoutItem.__init__(
+        LayoutItemABC.__init__(
             self,
             UniqueIdentifier,
             Sequence,

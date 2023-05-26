@@ -1,4 +1,3 @@
-from .BaseDeckLocation import DeckLoadingConfig, DeckLocation
+from .BaseDeckLocation import DeckLoadingConfig
 from .DeckLocationTracker import DeckLocationTracker
-from .LoadableDeckLocation import LoadableDeckLocation
-from .NonLoadableDeckLocation import NonLoadableDeckLocation
+from .DeckLocation import DeckLocation

@@ -1,11 +1,6 @@
 import yaml
 
-from ..DeckLocation import (
-    DeckLoadingConfig,
-    DeckLocationTracker,
-    LoadableDeckLocation,
-    NonLoadableDeckLocation,
-)
+from ..DeckLocation import DeckLoadingConfig, DeckLocationTracker, DeckLocation
 from ..TransportDevice.BaseTransportDevice import TransportDeviceTracker
 
 
@@ -24,33 +19,8 @@ def LoadYaml(
             continue
 
         UniqueIdentifier = Location["Unique Identifier"]
-        IsStorageLocation = Location["Is Storage Location"]
-        IsPipettableLocation = Location["Is Pipettable Location"]
 
-        if "Deck Location" in Location:
-            CarrierLabwareString = Location["Carrier Labware String"]
-            CarrierTrackStart = Location["Carrier Track Start"]
-            CarrierTrackEnd = Location["Carrier Track End"]
-            CarrierType = Location["Carrier Type"]
-            CarrierPositions = Location["Carrier Positions"]
-
-            DeckLocationInstance = LoadableDeckLocation(
-                UniqueIdentifier,
-                IsStorageLocation,
-                IsPipettableLocation,
-                DeckLoadingConfig(
-                    CarrierLabwareString,
-                    CarrierTrackStart,
-                    CarrierTrackEnd,
-                    CarrierType,
-                    CarrierPositions,
-                ),
-            )
-
-        else:
-            DeckLocationInstance = NonLoadableDeckLocation(
-                UniqueIdentifier, IsStorageLocation, IsPipettableLocation
-            )
+        DeckLocationInstance = DeckLocation(UniqueIdentifier)
 
         DeckLocationTrackerInstance.LoadSingle(DeckLocationInstance)
 

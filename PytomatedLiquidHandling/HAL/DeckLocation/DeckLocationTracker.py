@@ -1,6 +1,6 @@
 from ...Tools.AbstractClasses import UniqueObjectTrackerABC
-from .BaseDeckLocation import DeckLocation
+from .BaseDeckLocation import DeckLocationABC
 
 
-class DeckLocationTracker(UniqueObjectTrackerABC[DeckLocation]):
+class DeckLocationTracker(UniqueObjectTrackerABC[DeckLocationABC]):
     pass

@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
 from ....LayoutItem.BaseLayoutItem import LayoutItem
-from ....Tools import InterfaceABC
+from ....Tools.AbstractClasses import InterfaceABC
 
 
 class TransportInterface(InterfaceABC):

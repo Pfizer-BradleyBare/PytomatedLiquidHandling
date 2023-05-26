@@ -1,6 +1,6 @@
 from ...Tools.AbstractClasses import UniqueObjectTrackerABC
-from .BaseLayoutItem import LayoutItem
+from .BaseLayoutItem import LayoutItemABC
 
 
-class LayoutItemTracker(UniqueObjectTrackerABC[LayoutItem]):
+class LayoutItemTracker(UniqueObjectTrackerABC[LayoutItemABC]):
     pass

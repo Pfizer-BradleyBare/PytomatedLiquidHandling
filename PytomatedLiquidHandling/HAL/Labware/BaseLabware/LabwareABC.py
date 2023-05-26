@@ -2,7 +2,7 @@ from ....Tools.AbstractClasses import UniqueObjectABC
 from .Dimensions.Dimensions import Dimensions
 
 
-class Labware(UniqueObjectABC):
+class LabwareABC(UniqueObjectABC):
     def __init__(
         self,
         UniqueIdentifier: str,

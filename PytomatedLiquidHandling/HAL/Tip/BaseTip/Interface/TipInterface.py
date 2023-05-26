@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from ....Tools import InterfaceABC
+from ....Tools.AbstractClasses import InterfaceABC
 
 
 class TipInterface(InterfaceABC):
