@@ -3,10 +3,14 @@ import yaml
 from ..ClosedContainer import HamiltonFlipTube, HamiltonFlipTubeSpecial
 from ..Labware import LabwareTracker
 from .BaseClosedContainer import ClosedContainerTracker
+from ..Backend import BackendTracker
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
 def LoadYaml(
-    LabwareTrackerInstance: LabwareTracker, FilePath: str
+    BackendTrackerInstance: BackendTracker,
+    LabwareTrackerInstance: LabwareTracker,
+    FilePath: str,
 ) -> ClosedContainerTracker:
     ClosedContainerTrackerInstance = ClosedContainerTracker()
 
@@ -21,9 +25,15 @@ def LoadYaml(
                 continue
 
             UniqueIdentifier = Device["Unique Identifier"]
+            BackendIdentifier = Device["Backend Identifier"]
             CustomErrorHandling = Device["Custom Error Handling"]
 
+            BackendInstance = BackendTrackerInstance.GetObjectByName(BackendIdentifier)
+
             if DeviceType == "Hamilton FlipTube":
+                if not isinstance(BackendInstance, HamiltonBackendABC):
+                    raise Exception("Hamilton FlipTube only accepts Hamilton backends")
+
                 ToolSequence = Device["Tool Sequence"]
 
                 SupportedLabwareTrackerInstance = LabwareTracker()
@@ -34,12 +44,18 @@ def LoadYaml(
 
                 ClosedContainerInstance = HamiltonFlipTube(
                     UniqueIdentifier,
+                    BackendInstance,
                     CustomErrorHandling,
                     ToolSequence,
                     SupportedLabwareTrackerInstance,
                 )
 
             elif DeviceType == "Hamilton FlipTube Special":
+                if not isinstance(BackendInstance, HamiltonBackendABC):
+                    raise Exception(
+                        "Hamilton FlipTube Special only accepts Hamilton backends"
+                    )
+
                 ToolSequence = Device["Tool Sequence"]
 
                 SupportedLabwareTrackerInstance = LabwareTracker()
@@ -50,6 +66,7 @@ def LoadYaml(
 
                 ClosedContainerInstance = HamiltonFlipTubeSpecial(
                     UniqueIdentifier,
+                    BackendInstance,
                     CustomErrorHandling,
                     ToolSequence,
                     SupportedLabwareTrackerInstance,

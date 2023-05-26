@@ -1,12 +1,14 @@
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
 from ..Labware import LabwareTracker
 from .BaseClosedContainer import ClosedContainer, OpenCloseOptionsTracker
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
 class HamiltonFlipTube(ClosedContainer):
     def __init__(
         self,
         UniqueIdentifier: str,
+        BackendInstance: HamiltonBackendABC,
         CustomErrorHandling: bool,
         ToolSequence: str,
         SupportedLabwareTrackerInstance: LabwareTracker,
@@ -14,6 +16,7 @@ class HamiltonFlipTube(ClosedContainer):
         ClosedContainer.__init__(
             self,
             UniqueIdentifier,
+            BackendInstance,
             CustomErrorHandling,
             ToolSequence,
             SupportedLabwareTrackerInstance,
