@@ -2,6 +2,7 @@ import yaml
 
 from ..ClosedContainer import HamiltonFlipTube, HamiltonFlipTubeSpecial
 from ..Labware import LabwareTracker
+from ..DeckLocation import DeckLocationTracker
 from .BaseClosedContainer import ClosedContainerTracker
 from ..Backend import BackendTracker
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
@@ -9,6 +10,7 @@ from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 def LoadYaml(
     BackendTrackerInstance: BackendTracker,
+    DeckLocationTrackerInstance: DeckLocationTracker,
     LabwareTrackerInstance: LabwareTracker,
     FilePath: str,
 ) -> ClosedContainerTracker:
@@ -30,23 +32,30 @@ def LoadYaml(
 
             BackendInstance = BackendTrackerInstance.GetObjectByName(BackendIdentifier)
 
+            SupportedDeckLocationTrackerInstance = DeckLocationTracker()
+            for DeckLocationID in Device["Supported Deck Locations"]:
+                SupportedDeckLocationTrackerInstance.LoadSingle(
+                    SupportedDeckLocationTrackerInstance.GetObjectByName(DeckLocationID)
+                )
+
+            SupportedLabwareTrackerInstance = LabwareTracker()
+            for LabwareID in Device["Supported Labware"]:
+                SupportedLabwareTrackerInstance.LoadSingle(
+                    LabwareTrackerInstance.GetObjectByName(LabwareID)
+                )
+
             if DeviceType == "Hamilton FlipTube":
                 if not isinstance(BackendInstance, HamiltonBackendABC):
                     raise Exception("Hamilton FlipTube only accepts Hamilton backends")
 
                 ToolSequence = Device["Tool Sequence"]
 
-                SupportedLabwareTrackerInstance = LabwareTracker()
-                for LabwareID in Device["Supported Labware"]:
-                    SupportedLabwareTrackerInstance.LoadSingle(
-                        LabwareTrackerInstance.GetObjectByName(LabwareID)
-                    )
-
                 ClosedContainerInstance = HamiltonFlipTube(
                     UniqueIdentifier,
                     BackendInstance,
                     CustomErrorHandling,
                     ToolSequence,
+                    SupportedDeckLocationTrackerInstance,
                     SupportedLabwareTrackerInstance,
                 )
 
@@ -58,17 +67,12 @@ def LoadYaml(
 
                 ToolSequence = Device["Tool Sequence"]
 
-                SupportedLabwareTrackerInstance = LabwareTracker()
-                for LabwareID in Device["Supported Labware"]:
-                    SupportedLabwareTrackerInstance.LoadSingle(
-                        LabwareTrackerInstance.GetObjectByName(LabwareID)
-                    )
-
                 ClosedContainerInstance = HamiltonFlipTubeSpecial(
                     UniqueIdentifier,
                     BackendInstance,
                     CustomErrorHandling,
                     ToolSequence,
+                    SupportedDeckLocationTrackerInstance,
                     SupportedLabwareTrackerInstance,
                 )
 

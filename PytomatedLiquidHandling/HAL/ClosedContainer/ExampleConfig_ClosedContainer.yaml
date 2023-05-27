@@ -13,6 +13,10 @@ Hamilton FlipTube:
     Tool Sequence: Ham_4_FlipTubeTools_OnWaste_0001
     Supported Labware:
       - Hamilton 1.5mL FlipTube
+    Supported Deck Locations:
+      - a
+      - b
+      - c
 
 Hamilton FlipTube Special:
   - Unique Identifier: Fliptube 1
@@ -22,3 +26,7 @@ Hamilton FlipTube Special:
     Tool Sequence: Ham_4_FlipTubeTools_OnWaste_0001
     Supported Labware:
       - Hamilton 1.5mL FlipTube
+    Supported Deck Locations:
+      - a
+      - b
+      - c

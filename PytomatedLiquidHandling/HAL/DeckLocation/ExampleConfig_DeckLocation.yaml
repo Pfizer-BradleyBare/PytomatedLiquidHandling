@@ -46,142 +46,64 @@
   Enabled: True
   Supported Transport IDs:
     CORE Gripper:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
 
 - Unique Identifier: Carrier14_Pos2
   Enabled: True
   Supported Transport IDs:
     CORE Gripper:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
 
 - Unique Identifier: Carrier14_Pos3
   Enabled: True
   Supported Transport IDs:
     CORE Gripper:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
 
 - Unique Identifier: Carrier14_Pos4
   Enabled: True
   Supported Transport IDs:
     CORE Gripper:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
 
 - Unique Identifier: Carrier14_Pos5
   Enabled: True
   Supported Transport IDs:
     CORE Gripper:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
 
 #Carrier 14
 - Unique Identifier: Carrier38_Pos1
   Enabled: True
   Supported Transport IDs:
     CORE Gripper:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
 
 - Unique Identifier: Carrier38_Pos2
   Enabled: True
   Supported Transport IDs:
     CORE Gripper:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
 
 - Unique Identifier: Carrier38_Pos3
   Enabled: True
   Supported Transport IDs:
     CORE Gripper:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
 
 - Unique Identifier: Carrier38_Pos4
   Enabled: True
   Supported Transport IDs:
     CORE Gripper:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
 
 - Unique Identifier: Carrier38_Pos5
   Enabled: True
   Supported Transport IDs:
     CORE Gripper:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
 
 #Carrier 47
 - Unique Identifier: FalconTubeCarrier
   Enabled: True
   Supported Transport IDs:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
 
 #Carrier 48
 - Unique Identifier: ReagentReserviorCarrier
   Enabled: True
   Supported Transport IDs:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
 
 #Carrier 49
 - Unique Identifier: FlipTubeCarrier
   Enabled: True
   Supported Transport IDs:
-  Deck Loading:
-    Carrier Labware String: Test
-    Carrier Track Start: 1
-    Carrier Track End: 1
-    Carrier Type: FTRCarrier5Position
-    Carrier Positions: "1"
