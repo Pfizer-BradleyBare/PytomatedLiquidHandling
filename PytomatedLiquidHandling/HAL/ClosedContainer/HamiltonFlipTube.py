@@ -23,10 +23,12 @@ class HamiltonFlipTube(ClosedContainer):
         )
 
     def Initialize(self):
-        FlipTubeDriver.Initialize.Command(
-            OptionsInstance=FlipTubeDriver.Initialize.Options(),
-            CustomErrorHandling=self.CustomErrorHandling,
-        ).Execute()
+        Command = FlipTubeDriver.Initialize.Command(
+            CustomErrorHandling=self.GetErrorHandlingSetting(),
+        )
+        self.GetBackend().ExecuteCommand(Command)
+        self.GetBackend().WaitForResponseBlocking(Command)
+        self.GetBackend().GetResponse(Command, Command.Response)
 
     def Deinitialize(self):
         ...
@@ -52,10 +54,13 @@ class HamiltonFlipTube(ClosedContainer):
                 )
 
         try:
-            FlipTubeDriver.Open.Command(
+            Command = FlipTubeDriver.Open.Command(
                 OptionsTrackerInstance=OptionsTrackerInstance,
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(Command)
+            self.GetBackend().WaitForResponseBlocking(Command)
+            self.GetBackend().GetResponse(Command, Command.Response)
 
         except:
             ...
@@ -81,10 +86,13 @@ class HamiltonFlipTube(ClosedContainer):
                 )
 
         try:
-            FlipTubeDriver.Close.Command(
+            Command = FlipTubeDriver.Close.Command(
                 OptionsTrackerInstance=OptionsTrackerInstance,
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(Command)
+            self.GetBackend().WaitForResponseBlocking(Command)
+            self.GetBackend().GetResponse(Command, Command.Response)
 
         except:
             ...
