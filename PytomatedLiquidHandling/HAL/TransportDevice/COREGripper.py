@@ -1,12 +1,14 @@
 from ...Driver.Hamilton.Transport import Gripper as GripperDriver
-from ..LayoutItem.BaseLayoutItem import LayoutItem
+from .BaseTransportDevice import Options, OptionsTracker
 from .BaseTransportDevice import TransportableLabwareTracker, TransportDevice
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
 class COREGripper(TransportDevice):
     def __init__(
         self,
         UniqueIdentifier: str,
+        BackendInstance: HamiltonBackendABC,
         CustomErrorHandling: bool,
         TransportableLabwareTrackerInstance: TransportableLabwareTracker,
         GripperToolSequence: str,
@@ -15,6 +17,7 @@ class COREGripper(TransportDevice):
         TransportDevice.__init__(
             self,
             UniqueIdentifier,
+            BackendInstance,
             CustomErrorHandling,
             TransportableLabwareTrackerInstance,
         )
@@ -29,11 +32,7 @@ class COREGripper(TransportDevice):
     ):
         ...
 
-    def Transport(
-        self,
-        SourceLayoutItem: LayoutItem,
-        DestinationLayoutItem: LayoutItem,
-    ):
+    def Transport(self, OptionsInstance: Options):
         if not SourceLayoutItem.DeckLocationInstance.SupportedLocationTransportDeviceTrackerInstance.IsTracked(
             type(self).__name__
         ):

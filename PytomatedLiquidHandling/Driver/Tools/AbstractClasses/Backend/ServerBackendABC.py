@@ -8,10 +8,10 @@ from flask import Flask
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
 
 from .....Tools.Logger import Logger
-from .BackendABC import BackendABC
+from .SimpleBackendABC import SimpleBackendABC
 
 
-class ServerBackendABC(BackendABC):
+class ServerBackendABC(SimpleBackendABC):
     __Hosts: list[tuple] = list()
 
     def __init__(
@@ -23,7 +23,7 @@ class ServerBackendABC(BackendABC):
         Address: str = "localhost",
         Port: int = 8080,
     ):
-        BackendABC.__init__(self, UniqueIdentifier, LoggerInstance)
+        SimpleBackendABC.__init__(self, UniqueIdentifier, LoggerInstance)
         self.__App = Flask(UniqueIdentifier)
         self.__AppParentThreadRunnerFlag: Event = Event()
 
@@ -61,6 +61,7 @@ class ServerBackendABC(BackendABC):
         )
 
     def StartBackend(self):
+        SimpleBackendABC.StartBackend(self)
         Host = (self.Address, self.Port)
         if Host in ServerBackendABC.__Hosts:
             raise Exception(
@@ -77,6 +78,7 @@ class ServerBackendABC(BackendABC):
         ).start()
 
     def StopBackend(self):
+        SimpleBackendABC.StopBackend(self)
         Host = (self.Address, self.Port)
         if Host not in ServerBackendABC.__Hosts:
             raise Exception("This backend not currently running. Run it first")
@@ -97,7 +99,7 @@ class ServerBackendABC(BackendABC):
 
     def IsActive(self):
         ParserInstance = ServerBackendABC.Parser(
-            self.LoggerInstance,
+            self.GetLogger(),
             self.GetEndpointID("IsActive"),
             None,
         )
@@ -108,7 +110,7 @@ class ServerBackendABC(BackendABC):
     def Kill(self):
         ServerBackendABC.StopBackend(self)
         ParserInstance = ServerBackendABC.Parser(
-            self.LoggerInstance,
+            self.GetLogger(),
             self.GetEndpointID("Kill"),
             None,
         )

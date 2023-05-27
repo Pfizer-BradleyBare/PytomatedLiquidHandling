@@ -10,7 +10,8 @@ from ..HamiltonCommand import (
 )
 from .HamiltonServerBackend import HamiltonServerBackendABC
 
-T= TypeVar("T",bound=CommandABC.Response)
+T = TypeVar("T", bound=CommandABC.Response)
+
 
 class HamiltonBackendABC(BackendABC):
     def __init__(
@@ -41,6 +42,7 @@ class HamiltonBackendABC(BackendABC):
         self.MethodPath: str = MethodPath
 
     def StartBackend(self):
+        BackendABC.StartBackend(self)
         subprocess.Popen(
             ["C:\\Program Files (x86)\\HAMILTON\\Bin\\HxRun.exe", "-t", self.MethodPath]
         )
@@ -49,12 +51,14 @@ class HamiltonBackendABC(BackendABC):
         self.StateServer.StartBackend()
 
     def StopBackend(self):
+        BackendABC.StopBackend(self)
         self.ActionServer.StopBackend()
         self.StateServer.StopBackend()
 
     def ExecuteCommand(
         self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
     ):
+        BackendABC.ExecuteCommand(self, CommandInstance)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
             self.StateServer.ExecuteCommand(CommandInstance)
         else:
@@ -63,22 +67,26 @@ class HamiltonBackendABC(BackendABC):
     def GetStatus(
         self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
     ) -> HamiltonCommandABC.Response:
+        BackendABC.GetStatus(self, CommandInstance)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
             return self.StateServer.GetStatus(CommandInstance)
         else:
             return self.ActionServer.GetStatus(CommandInstance)
 
     def WaitForResponseBlocking(self, CommandInstance: CommandABC):
+        BackendABC.WaitForResponseBlocking(self, CommandInstance)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
             self.StateServer.WaitForResponseBlocking(CommandInstance)
         else:
             self.ActionServer.WaitForResponseBlocking(CommandInstance)
 
     def GetResponse(
-        self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC, ResponseType: Type[T] 
+        self,
+        CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC,
+        ResponseType: Type[T],
     ) -> T:
-        
+        BackendABC.GetResponse(self, CommandInstance, ResponseType)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
-            return self.StateServer.GetResponse(CommandInstance,ResponseType)
+            return self.StateServer.GetResponse(CommandInstance, ResponseType)
         else:
-            return self.ActionServer.GetResponse(CommandInstance,ResponseType)
+            return self.ActionServer.GetResponse(CommandInstance, ResponseType)

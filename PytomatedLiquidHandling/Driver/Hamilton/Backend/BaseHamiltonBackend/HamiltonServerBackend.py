@@ -26,7 +26,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
     def GetNextCommand(self):
         ParserObject = ServerBackendABC.Parser(
-            self.LoggerInstance,
+            self.GetLogger(),
             self.__class__.__name__ + " HamiltonBackend GetNextCommand",
             request.get_data(),
         )
@@ -34,7 +34,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
         if not ParserObject.IsValid(["Timeout"]):
             ParserObject.SetEndpointDetails("Key missing. Accepted keys: [Timeout]")
             Response = ParserObject.GetHTTPResponse()
-            self.LoggerInstance.warning(Response)
+            self.GetLogger().warning(Response)
             return Response
 
         Timeout = ParserObject.GetEndpointInputData("Timeout") - 10
@@ -74,7 +74,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
     def RespondToCommand(self):
         ParserObject = ServerBackendABC.Parser(
-            self.LoggerInstance,
+            self.GetLogger(),
             self.__class__.__name__ + " HamiltonBackend RespondToCommand",
             request.get_data(),
         )
@@ -99,7 +99,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
                 "Key missing. Accepted keys: " + str(ExpectedResponseKeys)
             )
             Response = ParserObject.GetHTTPResponse()
-            self.LoggerInstance.warning(Response)
+            self.GetLogger().warning(Response)
             return Response
         # check we have required info
 

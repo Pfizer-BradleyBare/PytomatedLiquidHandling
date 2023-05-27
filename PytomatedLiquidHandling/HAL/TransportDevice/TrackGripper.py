@@ -1,20 +1,23 @@
-from ..LayoutItem.BaseLayoutItem import LayoutItem
+from ..LayoutItem.BaseLayoutItem import LayoutItemABC
 from .BaseTransportDevice import (
     TransportableLabwareTracker,
     TransportDevice,
 )
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
 class TrackGripper(TransportDevice):
     def __init__(
         self,
         UniqueIdentifier: str,
+        BackendInstance: HamiltonBackendABC,
         CustomErrorHandling: bool,
         TransportableLabwareTrackerInstance: TransportableLabwareTracker,
     ):
         TransportDevice.__init__(
             self,
             UniqueIdentifier,
+            BackendInstance,
             CustomErrorHandling,
             TransportableLabwareTrackerInstance,
         )

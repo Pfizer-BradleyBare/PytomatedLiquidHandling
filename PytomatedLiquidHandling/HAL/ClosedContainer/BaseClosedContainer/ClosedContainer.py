@@ -2,14 +2,14 @@ from ....Tools.AbstractClasses import UniqueObjectABC
 from ...Labware import LabwareTracker
 from ...DeckLocation import DeckLocationTracker
 from .Interface.ClosedContainerInterface import ClosedContainerInterface
-from ....Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from ....Driver.Tools.AbstractClasses import BackendABC
 
 
 class ClosedContainer(UniqueObjectABC, ClosedContainerInterface):
     def __init__(
         self,
         UniqueIdentifier: str,
-        BackendInstance: HamiltonBackendABC,
+        BackendInstance: BackendABC,
         CustomErrorHandling: bool,
         ToolSequence: str,
         SupportedDeckLocationTrackerInstance: DeckLocationTracker,
