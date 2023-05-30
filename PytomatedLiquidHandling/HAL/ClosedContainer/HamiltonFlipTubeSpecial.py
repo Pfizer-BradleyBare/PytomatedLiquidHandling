@@ -1,11 +1,11 @@
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
 from ..Labware import LabwareTracker
-from .BaseClosedContainer import ClosedContainer, OpenCloseOptionsTracker
+from .BaseClosedContainer import ClosedContainerABC, OpenCloseOptions
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ..DeckLocation import DeckLocationTracker
 
 
-class HamiltonFlipTubeSpecial(ClosedContainer):
+class HamiltonFlipTubeSpecial(ClosedContainerABC):
     def __init__(
         self,
         UniqueIdentifier: str,
@@ -15,7 +15,7 @@ class HamiltonFlipTubeSpecial(ClosedContainer):
         SupportedDeckLocationTrackerInstance: DeckLocationTracker,
         SupportedLabwareTrackerInstance: LabwareTracker,
     ):
-        ClosedContainer.__init__(
+        ClosedContainerABC.__init__(
             self,
             UniqueIdentifier,
             BackendInstance,
@@ -39,7 +39,7 @@ class HamiltonFlipTubeSpecial(ClosedContainer):
     def Open(
         self,
         *,
-        OpenCloseOptionsTrackerInstance: OpenCloseOptionsTracker,
+        OpenCloseOptionsTrackerInstance: OpenCloseOptions.OptionsTracker,
     ):
         OptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker(
             ToolSequence=self.ToolSequence,
@@ -71,7 +71,7 @@ class HamiltonFlipTubeSpecial(ClosedContainer):
     def Close(
         self,
         *,
-        OpenCloseOptionsTrackerInstance: OpenCloseOptionsTracker,
+        OpenCloseOptionsTrackerInstance: OpenCloseOptions.OptionsTracker,
     ):
         OptionsTrackerInstance = FlipTubeDriver.CloseSpecial.OptionsTracker(
             ToolSequence=self.ToolSequence,

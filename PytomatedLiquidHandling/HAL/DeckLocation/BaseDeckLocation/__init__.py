@@ -1,2 +1,3 @@
 from .DeckLocationABC import DeckLocationABC
 from .DeckLoadingConfig.DeckLoadingConfig import DeckLoadingConfig
+from .TransportDeviceConfig import TransportDeviceConfig

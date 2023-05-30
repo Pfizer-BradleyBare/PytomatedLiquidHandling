@@ -2,108 +2,153 @@
 #HHS Carrier
 - Unique Identifier: HHS_Carrier_Pos1
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: HHS_Carrier_Pos2
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: HHS_Carrier_Pos3
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: HHS_Carrier_Pos4
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 #Vacuum Carrier
 - Unique Identifier: Vacuum_Carrier_Pos1
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: Vacuum_Carrier_Pos2
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: Vacuum_Carrier_Pos3
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: Vacuum_Carrier_Pos4
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 #Carrier 14
 - Unique Identifier: Carrier14_Pos1
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: Carrier14_Pos2
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: Carrier14_Pos3
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: Carrier14_Pos4
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: Carrier14_Pos5
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 #Carrier 14
 - Unique Identifier: Carrier38_Pos1
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: Carrier38_Pos2
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: Carrier38_Pos3
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: Carrier38_Pos4
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 - Unique Identifier: Carrier38_Pos5
   Enabled: True
-  Supported Transport IDs:
-    CORE Gripper:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 #Carrier 47
 - Unique Identifier: FalconTubeCarrier
   Enabled: True
-  Supported Transport IDs:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 #Carrier 48
 - Unique Identifier: ReagentReserviorCarrier
   Enabled: True
-  Supported Transport IDs:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:
 
 #Carrier 49
 - Unique Identifier: FlipTubeCarrier
   Enabled: True
-  Supported Transport IDs:
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+    Away Config:

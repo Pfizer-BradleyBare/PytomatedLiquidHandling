@@ -2,7 +2,7 @@ from .BaseTransportDevice import TransportDeviceTracker
 from .COREGripper import COREGripper
 from .InternalPlateGripper import InternalPlateGripper
 from .TrackGripper import TrackGripper
-from .BaseTransportDevice import Options, OptionsTracker
+from .BaseTransportDevice import TransportOptions
 
 __all__ = [
     "COREGripper",

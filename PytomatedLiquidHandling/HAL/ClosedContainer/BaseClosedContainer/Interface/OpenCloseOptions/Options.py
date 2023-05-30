@@ -2,7 +2,7 @@ from ......Tools.AbstractClasses import NonUniqueObjectABC
 from .....LayoutItem import CoverablePosition, NonCoverablePosition
 
 
-class OpenCloseOptions(NonUniqueObjectABC):
+class Options(NonUniqueObjectABC):
     def __init__(
         self,
         *,

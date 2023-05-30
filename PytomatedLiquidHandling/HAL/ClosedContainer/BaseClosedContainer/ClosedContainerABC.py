@@ -1,11 +1,13 @@
 from ....Tools.AbstractClasses import UniqueObjectABC
 from ...Labware import LabwareTracker
 from ...DeckLocation import DeckLocationTracker
-from .Interface.ClosedContainerInterface import ClosedContainerInterface
+from ...Tools.AbstractClasses import InterfaceABC
 from ....Driver.Tools.AbstractClasses import BackendABC
+from .Interface import OpenCloseOptions
+from abc import abstractmethod
 
 
-class ClosedContainer(UniqueObjectABC, ClosedContainerInterface):
+class ClosedContainerABC(UniqueObjectABC, InterfaceABC):
     def __init__(
         self,
         UniqueIdentifier: str,
@@ -16,7 +18,7 @@ class ClosedContainer(UniqueObjectABC, ClosedContainerInterface):
         SupportedLabwareTrackerInstance: LabwareTracker,
     ):
         UniqueObjectABC.__init__(self, UniqueIdentifier)
-        ClosedContainerInterface.__init__(self, BackendInstance, CustomErrorHandling)
+        InterfaceABC.__init__(self, BackendInstance, CustomErrorHandling)
         self.ToolSequence: str = ToolSequence
         self.SupportedDeckLocationTrackerInstance: DeckLocationTracker = (
             SupportedDeckLocationTrackerInstance
@@ -24,3 +26,13 @@ class ClosedContainer(UniqueObjectABC, ClosedContainerInterface):
         self.SupportedLabwareTrackerInstance: LabwareTracker = (
             SupportedLabwareTrackerInstance
         )
+
+    @abstractmethod
+    def Open(self, *, OpenCloseOptionsTrackerInstance: OpenCloseOptions.OptionsTracker):
+        ...
+
+    @abstractmethod
+    def Close(
+        self, *, OpenCloseOptionsTrackerInstance: OpenCloseOptions.OptionsTracker
+    ):
+        ...

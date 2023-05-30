@@ -1,6 +1,7 @@
 import yaml
 
 from ..DeckLocation import DeckLoadingConfig, DeckLocationTracker, DeckLocation
+from .BaseDeckLocation import TransportDeviceConfig
 from ..TransportDevice.BaseTransportDevice import TransportDeviceTracker
 
 
@@ -20,7 +21,19 @@ def LoadYaml(
 
         UniqueIdentifier = Location["Unique Identifier"]
 
-        DeckLocationInstance = DeckLocation(UniqueIdentifier)
+        TransportDeviceID = Location["Transport Device"]["Unique Identifier"]
+        HomeConfig = Location["Transport Device"]["Home Config"]
+        AwayConfig = Location["Transport Device"]["Away Config"]
+
+        TransportDeviceConfigInstance = TransportDeviceConfig(
+            TransportDeviceTrackerInstance.GetObjectByName(TransportDeviceID),
+            HomeConfig,
+            AwayConfig,
+        )
+
+        DeckLocationInstance = DeckLocation(
+            UniqueIdentifier, TransportDeviceConfigInstance
+        )
 
         DeckLocationTrackerInstance.LoadSingle(DeckLocationInstance)
 

@@ -1,6 +1,6 @@
 from ....Tools.AbstractClasses import UniqueObjectTrackerABC
-from .ClosedContainer import ClosedContainer
+from .ClosedContainerABC import ClosedContainerABC
 
 
-class ClosedContainerTracker(UniqueObjectTrackerABC[ClosedContainer]):
+class ClosedContainerTracker(UniqueObjectTrackerABC[ClosedContainerABC]):
     pass

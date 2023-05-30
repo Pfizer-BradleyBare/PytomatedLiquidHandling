@@ -1,5 +1,5 @@
-from ...Driver.Hamilton.Transport import Gripper as GripperDriver
-from .BaseTransportDevice import Options, OptionsTracker
+from ...Driver.Hamilton.Transport import COREGripper as COREGripperDriver
+from .BaseTransportDevice import TransportOptions
 from .BaseTransportDevice import TransportableLabwareTracker, TransportDevice
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
@@ -32,74 +32,50 @@ class COREGripper(TransportDevice):
     ):
         ...
 
-    def Transport(self, OptionsInstance: Options):
-        if not SourceLayoutItem.DeckLocationInstance.SupportedLocationTransportDeviceTrackerInstance.IsTracked(
-            type(self).__name__
-        ):
-            raise Exception(
-                "This transport device is not supported for this source deck location"
-            )
+    def Transport(self, OptionsInstance: TransportOptions.Options):
+        self._CheckIsValid(OptionsInstance)
 
-        if not DestinationLayoutItem.DeckLocationInstance.SupportedLocationTransportDeviceTrackerInstance.IsTracked(
-            type(self).__name__
-        ):
-            raise Exception(
-                "This transport device is not supported for this source deck location"
-            )
-        # Check that this is a supported transport device for the deck locations
-
-        SourceLabwareInstance = SourceLayoutItem.LabwareInstance
-        DestinationLabwareInstance = DestinationLayoutItem.LabwareInstance
-
-        if (
-            SourceLabwareInstance.GetUniqueIdentifier()
-            != DestinationLabwareInstance.GetUniqueIdentifier()
-        ):
-            raise Exception(
-                "Your source and destination labware are not the same... How did this happen???"
-            )
-        # Check that the labware is the same for both source and destination
-
-        if not self.TransportableLabwareTrackerInstance.IsTracked(
-            SourceLabwareInstance.GetUniqueIdentifier()
-        ):
-            raise Exception("The labware is not supported by this transport device")
-        # Check that the transport device can move this labware
+        SourceLayoutItem = OptionsInstance.SourceLayoutItem
+        DestinationLayoutItem = OptionsInstance.DestinationLayoutItem
 
         SourceTransportableLabware = (
             self.TransportableLabwareTrackerInstance.GetObjectByName(
-                SourceLabwareInstance.GetUniqueIdentifier()
+                SourceLayoutItem.LabwareInstance.GetUniqueIdentifier()
             )
         )
 
-        GetPlateOptionsInstance = GripperDriver.GetPlate.Options(
-            self.GripperToolSequence,
-            SourceLayoutItem.Sequence,
-            SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
+        GetPlateOptionsInstance = COREGripperDriver.GetPlate.Options(
+            GripperSequence=self.GripperToolSequence,
+            PlateSequence=SourceLayoutItem.Sequence,
+            GripWidth=SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
             - SourceTransportableLabware.TransportParametersInstance.CloseOffset,
-            SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
+            OpenWidth=SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
             + SourceTransportableLabware.TransportParametersInstance.OpenOffset,
-        )
-        GetPlateOptionsInstance.GripHeight = (
-            SourceTransportableLabware.TransportParametersInstance.PickupHeight
+            GripHeight=SourceTransportableLabware.TransportParametersInstance.PickupHeight,
         )
 
         try:
-            GripperDriver.GetPlate.Command(GetPlateOptionsInstance, True).Execute()
+            CommandInstance = COREGripperDriver.GetPlate.Command(
+                OptionsInstance=GetPlateOptionsInstance,
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            self.GetBackend().GetResponse(CommandInstance, CommandInstance.Response)
 
         except:
             ...
 
         try:
-            GripperDriver.PlacePlate.Command(
-                GripperDriver.PlacePlate.Options(
-                    DestinationLayoutItem.Sequence,
+            COREGripperDriver.PlacePlate.Command(
+                OptionsInstance=COREGripperDriver.PlacePlate.Options(
+                    PlateSequence=DestinationLayoutItem.Sequence
                 ),
-                True,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
 
         except:
             ...
 
     def GetConfigKeys(self) -> list[str]:
-        return []
+        return ["CheckPlateExists"]

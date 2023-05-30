@@ -7,7 +7,7 @@ from .TransportableLabware.TransportParameters.TransportParameters import (
 )
 from .TransportDevice import TransportDevice
 from .TransportDeviceTracker import TransportDeviceTracker
-from .Interface import OptionsTracker, Options
+from .Interface import TransportOptions
 
 __all__ = [
     "TransportParameters",

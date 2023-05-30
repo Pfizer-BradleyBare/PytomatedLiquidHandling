@@ -1,2 +1,1 @@
-from .ClosedContainerInterface import ClosedContainerInterface
-from .OpenCloseOptions import OpenCloseOptions, OpenCloseOptionsTracker
+from . import OpenCloseOptions
