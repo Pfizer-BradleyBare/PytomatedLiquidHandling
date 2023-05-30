@@ -12,6 +12,10 @@
 #
 #############################################################
 
+Transition Points:
+  - Enabled: True
+    Plate Sequence: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
+    Plate Labware: 2000uL Corning 96 Well PCR Plate
 
 CORE Gripper:
   Unique Identifier: Gripper 1

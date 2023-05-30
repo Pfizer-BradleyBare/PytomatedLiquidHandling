@@ -6,23 +6,51 @@ class TransportDeviceConfig(UniqueObjectABC):
     def __init__(
         self,
         TransportDeviceInstance: TransportDevice,
-        HomeConfig: dict,
-        AwayConfig: dict,
+        HomeGetConfig: dict,
+        HomePlaceConfig: dict,
+        AwayGetConfig: dict,
+        AwayPlaceConfig: dict,
     ):
         UniqueObjectABC.__init__(self, TransportDeviceInstance.GetUniqueIdentifier())
         self.TransportDeviceInstance: TransportDevice = TransportDeviceInstance
-        self.HomeConfig: dict = HomeConfig
-        self.AwayConfig: dict = AwayConfig
+        self.HomeGetConfig: dict = HomeGetConfig
+        self.HomePlaceConfig: dict = HomePlaceConfig
+        self.AwayGetConfig: dict = AwayGetConfig
+        self.AwayPlaceConfig: dict = AwayPlaceConfig
 
         if not all(
-            Key in self.HomeConfig
-            for Key in self.TransportDeviceInstance.GetConfigKeys()
+            Key in self.HomeGetConfig
+            for Key in self.TransportDeviceInstance.GetGetConfigKeys()
         ):
-            raise Exception("Keys are missing from Home Config. Please fix.")
+            raise Exception(
+                "Keys are missing from Home Get Config. Please fix. Expected: "
+                + str(self.TransportDeviceInstance.GetGetConfigKeys())
+            )
 
         if not all(
-            Key in self.AwayConfig
-            for Key in self.TransportDeviceInstance.GetConfigKeys()
+            Key in self.HomePlaceConfig
+            for Key in self.TransportDeviceInstance.GetPlaceConfigKeys()
         ):
-            raise Exception("Keys are missing from Away Config. Please fix.")
+            raise Exception(
+                "Keys are missing from Home Place Config. Please fix. Expected: "
+                + str(self.TransportDeviceInstance.GetPlaceConfigKeys())
+            )
+
+        if not all(
+            Key in self.AwayGetConfig
+            for Key in self.TransportDeviceInstance.GetGetConfigKeys()
+        ):
+            raise Exception(
+                "Keys are missing from Away Get Config. Please fix. Expected: "
+                + str(self.TransportDeviceInstance.GetGetConfigKeys())
+            )
+
+        if not all(
+            Key in self.AwayPlaceConfig
+            for Key in self.TransportDeviceInstance.GetPlaceConfigKeys()
+        ):
+            raise Exception(
+                "Keys are missing from Away Place Config. Please fix. Expected: "
+                + str(self.TransportDeviceInstance.GetPlaceConfigKeys())
+            )
         # Confirm expected keys are in ExtraConfig

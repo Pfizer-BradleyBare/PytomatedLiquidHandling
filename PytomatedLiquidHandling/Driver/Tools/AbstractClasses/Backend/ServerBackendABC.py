@@ -2,7 +2,7 @@ import json
 import time
 from threading import Event, Thread
 from typing import Callable
-
+import logging
 from flask import Flask
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
@@ -25,6 +25,7 @@ class ServerBackendABC(SimpleBackendABC):
     ):
         SimpleBackendABC.__init__(self, UniqueIdentifier, LoggerInstance)
         self.__App = Flask(UniqueIdentifier)
+        logging.getLogger("werkzeug").disabled = True
         self.__AppParentThreadRunnerFlag: Event = Event()
 
         self.PathPrefix: str = PathPrefix

@@ -24,9 +24,9 @@ class TransportDevice(UniqueObjectABC, InterfaceABC):
 
         self._LastTransportFlag: bool = True
 
-    def _CheckIsValid(self, OptionsInstance: TransportOptions.Options):
-        SourceLayoutItem = OptionsInstance.SourceLayoutItem
-        DestinationLayoutItem = OptionsInstance.DestinationLayoutItem
+    def _CheckIsValid(self, TransportOptionsInstance: TransportOptions.Options):
+        SourceLayoutItem = TransportOptionsInstance.SourceLayoutItem
+        DestinationLayoutItem = TransportOptionsInstance.DestinationLayoutItem
 
         if (
             SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.GetUniqueIdentifier()
@@ -46,13 +46,14 @@ class TransportDevice(UniqueObjectABC, InterfaceABC):
         # Check that this is a supported transport device for the deck locations
 
         if (
-            SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayConfig
-            == DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayConfig
+            SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig
+            == DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig
         ):
             raise Exception(
                 "Source and destination extra options are not compatible. Use a transition point to properly orient."
             )
         # I am comparing away configs because the way we pickup before the transfer must be the same orientation
+        # This indicates a seamless transition from source home to destination home configs
 
         SourceLabwareInstance = SourceLayoutItem.LabwareInstance
         DestinationLabwareInstance = DestinationLayoutItem.LabwareInstance
@@ -73,9 +74,13 @@ class TransportDevice(UniqueObjectABC, InterfaceABC):
         # Check that the transport device can move this labware
 
     @abstractmethod
-    def GetConfigKeys(self) -> list[str]:
+    def GetGetConfigKeys(self) -> list[str]:
         ...
 
     @abstractmethod
-    def Transport(self, OptionsInstance: TransportOptions.Options):
+    def GetPlaceConfigKeys(self) -> list[str]:
+        ...
+
+    @abstractmethod
+    def Transport(self, TransportOptionsInstance: TransportOptions.Options):
         ...

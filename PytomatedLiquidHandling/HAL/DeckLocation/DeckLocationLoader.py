@@ -22,13 +22,17 @@ def LoadYaml(
         UniqueIdentifier = Location["Unique Identifier"]
 
         TransportDeviceID = Location["Transport Device"]["Unique Identifier"]
-        HomeConfig = Location["Transport Device"]["Home Config"]
-        AwayConfig = Location["Transport Device"]["Away Config"]
+        HomeGetConfig = Location["Transport Device"]["Home Config"]["Get"]
+        HomePlaceConfig = Location["Transport Device"]["Home Config"]["Place"]
+        AwayGetConfig = Location["Transport Device"]["Away Config"]["Get"]
+        AwayPlaceConfig = Location["Transport Device"]["Away Config"]["Place"]
 
         TransportDeviceConfigInstance = TransportDeviceConfig(
             TransportDeviceTrackerInstance.GetObjectByName(TransportDeviceID),
-            HomeConfig,
-            AwayConfig,
+            HomeGetConfig,
+            HomePlaceConfig,
+            AwayGetConfig,
+            AwayPlaceConfig,
         )
 
         DeckLocationInstance = DeckLocation(

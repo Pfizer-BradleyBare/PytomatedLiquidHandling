@@ -1,6 +1,6 @@
 from ......Driver.Tools.AbstractClasses import OptionsTrackerABC
-from .....LayoutItem.BaseLayoutItem import LayoutItemABC
+from .Options import Options
 
 
-class OptionsTracker(OptionsTrackerABC):
+class OptionsTracker(OptionsTrackerABC[Options]):
     ...

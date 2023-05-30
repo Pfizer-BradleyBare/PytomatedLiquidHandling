@@ -32,11 +32,11 @@ class COREGripper(TransportDevice):
     ):
         ...
 
-    def Transport(self, OptionsInstance: TransportOptions.Options):
-        self._CheckIsValid(OptionsInstance)
+    def Transport(self, TransportOptionsInstance: TransportOptions.Options):
+        self._CheckIsValid(TransportOptionsInstance)
 
-        SourceLayoutItem = OptionsInstance.SourceLayoutItem
-        DestinationLayoutItem = OptionsInstance.DestinationLayoutItem
+        SourceLayoutItem = TransportOptionsInstance.SourceLayoutItem
+        DestinationLayoutItem = TransportOptionsInstance.DestinationLayoutItem
 
         SourceTransportableLabware = (
             self.TransportableLabwareTrackerInstance.GetObjectByName(
@@ -67,15 +67,25 @@ class COREGripper(TransportDevice):
             ...
 
         try:
-            COREGripperDriver.PlacePlate.Command(
+            CommandInstance = COREGripperDriver.PlacePlate.Command(
                 OptionsInstance=COREGripperDriver.PlacePlate.Options(
-                    PlateSequence=DestinationLayoutItem.Sequence
+                    PlateSequence=DestinationLayoutItem.Sequence,
+                    CheckPlateExists=DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.HomePlaceConfig[
+                        "CheckPlateExists"
+                    ],
+                    EjectTool=int(self._LastTransportFlag),
                 ),
                 CustomErrorHandling=self.GetErrorHandlingSetting(),
             )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            self.GetBackend().GetResponse(CommandInstance, CommandInstance.Response)
 
         except:
             ...
 
-    def GetConfigKeys(self) -> list[str]:
+    def GetGetConfigKeys(self) -> list[str]:
+        ...
+
+    def GetPlaceConfigKeys(self) -> list[str]:
         return ["CheckPlateExists"]
