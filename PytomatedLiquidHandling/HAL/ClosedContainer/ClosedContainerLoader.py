@@ -35,7 +35,7 @@ def LoadYaml(
             SupportedDeckLocationTrackerInstance = DeckLocationTracker()
             for DeckLocationID in Device["Supported Deck Locations"]:
                 SupportedDeckLocationTrackerInstance.LoadSingle(
-                    SupportedDeckLocationTrackerInstance.GetObjectByName(DeckLocationID)
+                    DeckLocationTrackerInstance.GetObjectByName(DeckLocationID)
                 )
 
             SupportedLabwareTrackerInstance = LabwareTracker()
