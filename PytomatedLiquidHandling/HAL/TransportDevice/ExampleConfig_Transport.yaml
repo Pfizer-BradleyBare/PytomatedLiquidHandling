@@ -20,6 +20,7 @@ Transition Points:
 CORE Gripper:
   Unique Identifier: Gripper 1
   Enabled: True
+  Backend Unique Identifier: a
   Custom Error Handling: False
   Gripper Sequence: seq_COREGripTool
   Supported Labware:
@@ -56,11 +57,13 @@ CORE Gripper:
 Internal Plate Gripper:
   Unique Identifier: Gripper 2
   Enabled: False
+  Backend Unique Identifier: a
   Custom Error Handling: False
   Supported Labware:
 
 Track Gripper:
   Unique Identifier: Gripper 3
   Enabled: False
+  Backend Unique Identifier: a
   Custom Error Handling: False
   Supported Labware:

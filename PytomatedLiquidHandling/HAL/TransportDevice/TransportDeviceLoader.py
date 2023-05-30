@@ -11,6 +11,8 @@ from .BaseTransportDevice import (
     TransportParameters,
 )
 from ..Backend import BackendTracker
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from ...Driver.Hamilton.Backend import VantageBackend
 
 
 def LoadYaml(
@@ -65,6 +67,9 @@ def LoadYaml(
             continue
 
         UniqueIdentifier = Device["Unique Identifier"]
+        BackendInstance = BackendTrackerInstance.GetObjectByName(
+            Device["Backend Unique Identifier"]
+        )
         CustomErrorHandling = Device["Custom Error Handling"]
 
         TransportableLabwareTrackerInstance = TransportableLabwareTracker()
@@ -83,9 +88,14 @@ def LoadYaml(
 
         if DeviceType == "CORE Gripper":
             GripperSequence = Device["Gripper Sequence"]
+
+            if not isinstance(BackendInstance, HamiltonBackendABC):
+                raise Exception("Backend not correct. Must be of Hamilton backend type")
+
             TransportDeviceTrackerInstance.LoadSingle(
                 COREGripper(
                     UniqueIdentifier,
+                    BackendInstance,
                     CustomErrorHandling,
                     TransportableLabwareTrackerInstance,
                     GripperSequence,
@@ -93,18 +103,26 @@ def LoadYaml(
             )
 
         elif DeviceType == "Internal Plate Gripper":
+            if not isinstance(BackendInstance, HamiltonBackendABC):
+                raise Exception("Backend not correct. Must be of Hamilton backend type")
+
             TransportDeviceTrackerInstance.LoadSingle(
                 InternalPlateGripper(
                     UniqueIdentifier,
+                    BackendInstance,
                     CustomErrorHandling,
                     TransportableLabwareTrackerInstance,
                 )
             )
 
         elif DeviceType == "Track Gripper":
+            if not isinstance(BackendInstance, VantageBackend):
+                raise Exception("Backend not correct. Must be of Vantage backend type")
+
             TransportDeviceTrackerInstance.LoadSingle(
                 TrackGripper(
                     UniqueIdentifier,
+                    BackendInstance,
                     CustomErrorHandling,
                     TransportableLabwareTrackerInstance,
                 )
