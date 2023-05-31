@@ -1,12 +1,14 @@
 from ...Driver.Hamilton.TemperatureControl import HeaterShaker as HeaterShakerDriver
 from ..LayoutItem import LayoutItemTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
 class HamiltonHeaterShaker(TempControlDevice):
     def __init__(
         self,
         UniqueIdentifier: str,
+        BackendInstance: HamiltonBackendABC,
         CustomErrorHandling: bool,
         ComPort: str,
         TempLimitsInstance: TempLimits,
@@ -15,168 +17,237 @@ class HamiltonHeaterShaker(TempControlDevice):
         TempControlDevice.__init__(
             self,
             UniqueIdentifier,
+            BackendInstance,
             CustomErrorHandling,
             ComPort,
             True,
             TempLimitsInstance,
             LayoutItemTrackerInstance,
         )
-        self.HandleID: int
 
     def Initialize(self):
         if not isinstance(self.ComPort, int):
             raise Exception("Should never happen")
 
         try:
-            Command = HeaterShakerDriver.Connect.Command(
+            CommandInstance = HeaterShakerDriver.Connect.Command(
                 OptionsInstance=HeaterShakerDriver.Connect.Options(
                     ComPort=self.ComPort,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
             )
 
-            Command.Execute()
-
-            self.HandleID = Command.GetHandleID()
+            self.HandleID = ResponseInstance.GetHandleID()
         except:
             ...
 
         try:
-            HeaterShakerDriver.SetPlateLock.Command(
+            CommandInstance = HeaterShakerDriver.SetPlateLock.Command(
                 OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
-                    HandleID=self.HandleID,
+                    HandleID=int(self.HandleID),
                     PlateLockState=1,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
+
         except:
             ...
 
         try:
-            HeaterShakerDriver.SetPlateLock.Command(
+            CommandInstance = HeaterShakerDriver.SetPlateLock.Command(
                 OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
-                    HandleID=self.HandleID,
+                    HandleID=int(self.HandleID),
                     PlateLockState=0,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
+
         except:
             ...
 
     def Deinitialize(self):
         try:
-            HeaterShakerDriver.StopTemperatureControl.Command(
+            CommandInstance = HeaterShakerDriver.StopTemperatureControl.Command(
                 OptionsInstance=HeaterShakerDriver.StopTemperatureControl.Options(
-                    HandleID=self.HandleID,
+                    HandleID=int(self.HandleID),
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
+
         except:
             ...
 
         try:
-            HeaterShakerDriver.StopShakeControl.Command(
+            CommandInstance = HeaterShakerDriver.StopShakeControl.Command(
                 OptionsInstance=HeaterShakerDriver.StopShakeControl.Options(
-                    HandleID=self.HandleID
+                    HandleID=int(self.HandleID)
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
+
         except:
             ...
 
         try:
-            HeaterShakerDriver.SetPlateLock.Command(
+            CommandInstance = HeaterShakerDriver.SetPlateLock.Command(
                 OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
-                    HandleID=self.HandleID,
+                    HandleID=int(self.HandleID),
                     PlateLockState=0,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
+
         except:
             ...
 
     def SetTemperature(self, *, Temperature: float):
         try:
-            HeaterShakerDriver.StartTemperatureControl.Command(
+            CommandInstance = HeaterShakerDriver.StartTemperatureControl.Command(
                 OptionsInstance=HeaterShakerDriver.StartTemperatureControl.Options(
-                    HandleID=self.HandleID,
+                    HandleID=int(self.HandleID),
                     Temperature=Temperature,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
+
         except:
             ...
 
     def UpdateCurrentTemperature(self):
         try:
-            Command = HeaterShakerDriver.GetTemperature.Command(
+            CommandInstance = HeaterShakerDriver.GetTemperature.Command(
                 OptionsInstance=HeaterShakerDriver.GetTemperature.Options(
-                    HandleID=self.HandleID,
+                    HandleID=int(self.HandleID),
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
             )
 
-            Command.Execute()
-
-            self.CurrentTemperature = Command.GetTemperature()
+            self.CurrentTemperature = ResponseInstance.GetTemperature()
         except:
             ...
 
     def StartShaking(self, *, RPM: int):
         try:
-            HeaterShakerDriver.SetPlateLock.Command(
+            CommandInstance = HeaterShakerDriver.SetPlateLock.Command(
                 OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
-                    HandleID=self.HandleID,
+                    HandleID=int(self.HandleID),
                     PlateLockState=1,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
+
         except:
             ...
 
         try:
-            HeaterShakerDriver.StartShakeControl.Command(
+            CommandInstance = HeaterShakerDriver.StartShakeControl.Command(
                 OptionsInstance=HeaterShakerDriver.StartShakeControl.Options(
-                    HandleID=self.HandleID,
+                    HandleID=int(self.HandleID),
                     ShakingSpeed=RPM,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
+
         except:
             ...
 
     def StopShaking(self):
         try:
-            HeaterShakerDriver.StopShakeControl.Command(
+            CommandInstance = HeaterShakerDriver.StopShakeControl.Command(
                 OptionsInstance=HeaterShakerDriver.StopShakeControl.Options(
-                    HandleID=self.HandleID,
+                    HandleID=int(self.HandleID),
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
+
         except:
             ...
 
         try:
-            HeaterShakerDriver.SetPlateLock.Command(
+            CommandInstance = HeaterShakerDriver.SetPlateLock.Command(
                 OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
-                    HandleID=self.HandleID, PlateLockState=0
+                    HandleID=int(self.HandleID), PlateLockState=0
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
+
         except:
             ...
 
     def UpdateCurrentShakingSpeed(self):
         try:
-            Command = HeaterShakerDriver.GetShakingSpeed.Command(
+            CommandInstance = HeaterShakerDriver.GetShakingSpeed.Command(
                 OptionsInstance=HeaterShakerDriver.GetShakingSpeed.Options(
-                    HandleID=self.HandleID,
+                    HandleID=int(self.HandleID),
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
             )
 
-            Command.Execute()
-
-            self.CurrentShakingSpeed = Command.GetShakingSpeed()
+            self.CurrentShakingSpeed = ResponseInstance.GetShakingSpeed()
         except:
             ...

@@ -1,12 +1,14 @@
 from ...Driver.Hamilton.TemperatureControl import HeaterCooler as HeaterCoolerDriver
 from ..LayoutItem import LayoutItemTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
 class HamiltonHeaterCooler(TempControlDevice):
     def __init__(
         self,
         UniqueIdentifier: str,
+        BackendInstance: HamiltonBackendABC,
         CustomErrorHandling: bool,
         ComPort: str,
         TempLimitsInstance: TempLimits,
@@ -15,40 +17,48 @@ class HamiltonHeaterCooler(TempControlDevice):
         TempControlDevice.__init__(
             self,
             UniqueIdentifier,
+            BackendInstance,
             CustomErrorHandling,
             ComPort,
             False,
             TempLimitsInstance,
             LayoutItemTrackerInstance,
         )
-        self.HandleID: str
 
     def Initialize(self):
         if not isinstance(self.ComPort, str):
             raise Exception("Should never happen")
 
         try:
-            Command = HeaterCoolerDriver.Connect.Command(
+            CommandInstance = HeaterCoolerDriver.Connect.Command(
                 OptionsInstance=HeaterCoolerDriver.Connect.Options(
                     ComPort=self.ComPort,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
             )
 
-            Command.Execute()
-
-            self.HandleID = Command.GetHandleID()
+            self.HandleID = ResponseInstance.GetHandleID()
         except:
             ...
 
     def Deinitialize(self):
         try:
-            HeaterCoolerDriver.StopTemperatureControl.Command(
+            CommandInstance = HeaterCoolerDriver.StopTemperatureControl.Command(
                 OptionsInstance=HeaterCoolerDriver.StopTemperatureControl.Options(
-                    HandleID=self.HandleID
+                    HandleID=str(self.HandleID)
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
         except:
             ...
 
@@ -58,13 +68,18 @@ class HamiltonHeaterCooler(TempControlDevice):
         Temperature: float,
     ):
         try:
-            HeaterCoolerDriver.StartTemperatureControl.Command(
+            CommandInstance = HeaterCoolerDriver.StartTemperatureControl.Command(
                 OptionsInstance=HeaterCoolerDriver.StartTemperatureControl.Options(
-                    HandleID=self.HandleID,
+                    HandleID=str(self.HandleID),
                     Temperature=Temperature,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
         except:
             ...
 
@@ -72,16 +87,19 @@ class HamiltonHeaterCooler(TempControlDevice):
         self,
     ):
         try:
-            Command = HeaterCoolerDriver.GetTemperature.Command(
+            CommandInstance = HeaterCoolerDriver.GetTemperature.Command(
                 OptionsInstance=HeaterCoolerDriver.GetTemperature.Options(
-                    HandleID=self.HandleID,
+                    HandleID=str(self.HandleID),
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
             )
 
-            Command.Execute()
-
-            self.CurrentTemperature = Command.GetTemperature()
+            self.CurrentTemperature = ResponseInstance.GetTemperature()
         except:
             ...
 

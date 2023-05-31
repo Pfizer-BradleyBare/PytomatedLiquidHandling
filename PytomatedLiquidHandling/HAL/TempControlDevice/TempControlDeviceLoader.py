@@ -5,9 +5,12 @@ from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
 from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid
 from ..TempControlDevice import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .BaseTempControlDevice import TempControlDeviceTracker, TempLimits
+from ..Backend import BackendTracker
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
 def LoadYaml(
+    BackendTrackerInstance: BackendTracker,
     LabwareTrackerInstance: LabwareTracker,
     DeckLocationTrackerInstance: DeckLocationTracker,
     FilePath: str,
@@ -25,6 +28,9 @@ def LoadYaml(
                 continue
 
             UniqueIdentifier = Device["Unique Identifier"]
+            BackendInstance = BackendTrackerInstance.GetObjectByName(
+                Device["Backend Unique Identifier"]
+            )
             CustomErrorHandling = Device["Custom Error Handling"]
             ComPort = Device["Com Port"]
 
@@ -76,9 +82,13 @@ def LoadYaml(
                 # add to our list for our item creation and also add it to the layout loader for tracking
 
             if DeviceType == "Hamilton Heater Shaker":
+                if not isinstance(BackendInstance, HamiltonBackendABC):
+                    raise Exception("Must be Hamilton Backend")
+
                 TempControlDeviceTrackerInstance.LoadSingle(
                     HamiltonHeaterShaker(
                         UniqueIdentifier,
+                        BackendInstance,
                         CustomErrorHandling,
                         ComPort,
                         TempLimitsInstance,
@@ -87,9 +97,13 @@ def LoadYaml(
                 )
 
             elif DeviceType == "Hamilton Heater Cooler":
+                if not isinstance(BackendInstance, HamiltonBackendABC):
+                    raise Exception("Must be Hamilton Backend")
+
                 TempControlDeviceTrackerInstance.LoadSingle(
                     HamiltonHeaterCooler(
                         UniqueIdentifier,
+                        BackendInstance,
                         CustomErrorHandling,
                         ComPort,
                         TempLimitsInstance,

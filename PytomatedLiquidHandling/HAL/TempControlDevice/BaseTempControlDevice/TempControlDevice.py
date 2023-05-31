@@ -1,20 +1,16 @@
-from enum import Enum
-
+from abc import abstractmethod
 from ....Tools.AbstractClasses import UniqueObjectABC
 from ...LayoutItem import LayoutItemTracker
-from .Interface.TempControlDeviceInterface import TempControlDeviceInterface
 from .TempLimits.TempLimits import TempLimits
+from ...Tools.AbstractClasses import InterfaceABC
+from ....Driver.Tools.AbstractClasses import BackendABC
 
 
-class DeviceTypes(Enum):
-    HamiltonHeaterShaker = "Hamilton Heater Shaker"
-    HamiltonHeaterCooler = "Hamilton Heater Cooler"
-
-
-class TempControlDevice(UniqueObjectABC, TempControlDeviceInterface):
+class TempControlDevice(UniqueObjectABC, InterfaceABC):
     def __init__(
         self,
         UniqueIdentifier: str,
+        BackendInstance: BackendABC,
         CustomErrorHandling: bool,
         ComPort: str | int,
         ShakingSupported: bool,
@@ -22,10 +18,52 @@ class TempControlDevice(UniqueObjectABC, TempControlDeviceInterface):
         SupportedLayoutItemTrackerInstance: LayoutItemTracker,
     ):
         UniqueObjectABC.__init__(self, UniqueIdentifier)
-        TempControlDeviceInterface.__init__(self, CustomErrorHandling)
+        InterfaceABC.__init__(self, BackendInstance, CustomErrorHandling)
         self.ComPort: str | int = ComPort
         self.ShakingSupported: bool = ShakingSupported
         self.TempLimitsInstance: TempLimits = TempLimitsInstance
         self.SupportedLayoutItemTrackerInstance: LayoutItemTracker = (
             SupportedLayoutItemTrackerInstance
         )
+
+        self.HandleID: int | str
+        self.CurrentTemperature: float = 0
+        self.CurrentShakingSpeed: int = 0
+
+    def GetCurrentShakingSpeed(self) -> int:
+        return self.CurrentShakingSpeed
+
+    def GetCurrentTemperature(self) -> float:
+        return self.CurrentTemperature
+
+    @abstractmethod
+    def SetTemperature(
+        self,
+        Temperature: float,
+    ):
+        ...
+
+    @abstractmethod
+    def UpdateCurrentTemperature(
+        self,
+    ):
+        ...
+
+    @abstractmethod
+    def StartShaking(
+        self,
+        RPM: float,
+    ):
+        ...
+
+    @abstractmethod
+    def StopShaking(
+        self,
+    ):
+        ...
+
+    @abstractmethod
+    def UpdateCurrentShakingSpeed(
+        self,
+    ):
+        ...
