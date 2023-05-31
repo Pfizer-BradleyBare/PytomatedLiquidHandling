@@ -1,5 +1,7 @@
+import os
+import shutil
 import subprocess
-from typing import Type, TypeVar, cast
+from typing import Type, TypeVar
 
 from .....Tools.Logger import Logger
 from ....Tools.AbstractClasses import BackendABC, CommandABC
@@ -18,7 +20,8 @@ class HamiltonBackendABC(BackendABC):
         self,
         UniqueIdentifier: str,
         LoggerInstance: Logger,
-        MethodPath: str = "C:\\Program Files (x86)\\HAMILTON\\BAREB\\Script\\test.hsl",
+        MethodPath: str,
+        DeckLayoutPath: str,
     ):
         BackendABC.__init__(
             self,
@@ -40,9 +43,25 @@ class HamiltonBackendABC(BackendABC):
         )
 
         self.MethodPath: str = MethodPath
+        self.DeckLayoutPath: str = DeckLayoutPath
 
     def StartBackend(self):
         BackendABC.StartBackend(self)
+
+        HamiltonDeckLayoutBasePath = "C:\\Program Files (x86)\\HAMILTON\\Library\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\Layout\\Temp\\ExampleLayout.lay"
+
+        if not os.path.exists(self.DeckLayoutPath):
+            raise Exception(
+                "Layout File not found. Ensure the layout file exists in this location: "
+                + self.DeckLayoutPath
+            )
+        shutil.copyfile(self.DeckLayoutPath, HamiltonDeckLayoutBasePath)
+        shutil.copyfile(
+            self.DeckLayoutPath.replace(".lay", ".res"),
+            HamiltonDeckLayoutBasePath.replace(".lay", ".res"),
+        )
+        # Move layout file into temp folder. Layouts are comprised of 2 files: .lay, and .res
+
         subprocess.Popen(
             ["C:\\Program Files (x86)\\HAMILTON\\Bin\\HxRun.exe", "-t", self.MethodPath]
         )

@@ -1,8 +1,9 @@
 import json
+import logging
 import time
 from threading import Event, Thread
 from typing import Callable
-import logging
+
 from flask import Flask
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
