@@ -1,8 +1,11 @@
 import yaml
 
+from ...Driver.Hamilton.Backend import VantageBackend
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from ..Backend import BackendTracker
+from ..DeckLocation import DeckLocation
 from ..Labware import LabwareTracker, PipettableLabware
 from ..LayoutItem import LayoutItemTracker, NonCoverablePosition
-from ..DeckLocation import DeckLocation
 from ..TransportDevice import COREGripper, InternalPlateGripper, TrackGripper
 from .BaseTransportDevice import (
     TransportableLabware,
@@ -10,9 +13,6 @@ from .BaseTransportDevice import (
     TransportDeviceTracker,
     TransportParameters,
 )
-from ..Backend import BackendTracker
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ...Driver.Hamilton.Backend import VantageBackend
 
 
 def LoadYaml(
@@ -73,12 +73,12 @@ def LoadYaml(
         CustomErrorHandling = Device["Custom Error Handling"]
 
         TransportableLabwareTrackerInstance = TransportableLabwareTracker()
-        for LabwareID in Device["Supported Labware"]:
-            LabwareObject = LabwareTrackerInstance.GetObjectByName(LabwareID)
+        for LabwareInformation in Device["Supported Labware Information"]:
+            LabwareObject = LabwareTrackerInstance.GetObjectByName(LabwareInformation["Labware Unique Identifier"])
 
-            CloseOffset = Device["Supported Labware"][LabwareID]["Close Offset"]
-            OpenOffset = Device["Supported Labware"][LabwareID]["Open Offset"]
-            PickupHeight = Device["Supported Labware"][LabwareID]["Pickup Height"]
+            CloseOffset = LabwareInformation["Close Offset"]
+            OpenOffset = LabwareInformation["Open Offset"]
+            PickupHeight = LabwareInformation["Pickup Height"]
 
             Parameters = TransportParameters(CloseOffset, OpenOffset, PickupHeight)
 

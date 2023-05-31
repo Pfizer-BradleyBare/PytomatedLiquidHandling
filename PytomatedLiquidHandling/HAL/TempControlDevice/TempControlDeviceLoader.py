@@ -1,12 +1,12 @@
 import yaml
 
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from ..Backend import BackendTracker
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
 from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid
 from ..TempControlDevice import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .BaseTempControlDevice import TempControlDeviceTracker, TempLimits
-from ..Backend import BackendTracker
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
 def LoadYaml(
@@ -41,13 +41,13 @@ def LoadYaml(
             # Create Temp Config
 
             DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
-                Device["Deck Location ID"]
+                Device["Deck Location Unique Identifier"]
             )
 
             SupportedLayoutItemTracker = LayoutItemTracker()
 
-            for Labware in Device["Supported Labware"]:
-                LabwareName = Labware["Labware"]
+            for Labware in Device["Supported Labware Information"]:
+                LabwareName = Labware["Plate Labware Unique Identifier"]
                 PlateSequence = Labware["Plate Sequence"]
                 PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(
                     LabwareName
@@ -58,7 +58,7 @@ def LoadYaml(
 
                 LidSequence = Labware["Lid Sequence"]
                 LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
-                    Labware["Lid Labware"]
+                    Labware["Lid Labware Unique Identifier"]
                 )
 
                 if not isinstance(LidLabwareInstance, NonPipettableLabware):

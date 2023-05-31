@@ -15,7 +15,7 @@
 Transition Points:
   - Enabled: True
     Plate Sequence: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
-    Plate Labware: 2000uL Corning 96 Well PCR Plate
+    Plate Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
 
 CORE Gripper:
   Unique Identifier: Gripper 1
@@ -23,33 +23,33 @@ CORE Gripper:
   Backend Unique Identifier: a
   Custom Error Handling: False
   Gripper Sequence: seq_COREGripTool
-  Supported Labware:
-    Agilent Black Lid:
+  Supported Labware Information:
+    - Labware Unique Identifier: Agilent Black Lid
       Close Offset: 2
       Open Offset: 2
       Pickup Height: 4
 
-    200uL Biorad 96 Well PCR Plate:
+    - Labware Unique Identifier: 200uL Biorad 96 Well PCR Plate
       Close Offset: 2
       Open Offset: 2
       Pickup Height: 4
 
-    400uL Thermo 96 Well PCR Plate:
+    - Labware Unique Identifier: 400uL Thermo 96 Well PCR Plate
       Close Offset: 2
       Open Offset: 2
       Pickup Height: 4
 
-    1200uL DeepWell 96 Well PCR Plate:
+    - Labware Unique Identifier: 1200uL DeepWell 96 Well PCR Plate
       Close Offset: 2
       Open Offset: 2
       Pickup Height: 4
 
-    2000uL Corning 96 Well PCR Plate:
+    - Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
       Close Offset: 2
       Open Offset: 2
       Pickup Height: 4
 
-    400uL Corning Costar 96 Well UV Plate:
+    - Labware Unique Identifier: 400uL Corning Costar 96 Well UV Plate
       Close Offset: 2
       Open Offset: 2
       Pickup Height: 4
@@ -59,11 +59,11 @@ Internal Plate Gripper:
   Enabled: False
   Backend Unique Identifier: a
   Custom Error Handling: False
-  Supported Labware:
+  Supported Labware Information:
 
 Track Gripper:
   Unique Identifier: Gripper 3
   Enabled: False
   Backend Unique Identifier: a
   Custom Error Handling: False
-  Supported Labware:
+  Supported Labware Information:

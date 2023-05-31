@@ -1,6 +1,5 @@
 from .Object.NonUniqueObjectABC import NonUniqueObjectABC
 from .Object.UniqueObjectABC import UniqueObjectABC
-from .ServerHandler.ServerHandlerABC import ServerHandlerABC
 from .Tracker.NonUniqueObjectTrackerABC import NonUniqueObjectTrackerABC
 from .Tracker.UniqueObjectTrackerABC import UniqueObjectTrackerABC
 
@@ -9,5 +8,4 @@ __all__ = [
     "NonUniqueObjectTrackerABC",
     "NonUniqueObjectABC",
     "UniqueObjectABC",
-    "ServerHandlerABC",
 ]

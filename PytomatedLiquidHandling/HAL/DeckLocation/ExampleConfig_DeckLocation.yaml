@@ -1,4 +1,3 @@
-
 #HHS Carrier
 - Unique Identifier: HHS_Carrier_Pos1
   Enabled: True
@@ -10,7 +9,7 @@
     Away Config:
       Get:
       Place:
-      
+
 - Unique Identifier: HHS_Carrier_Pos2
   Enabled: True
   Transport Device:

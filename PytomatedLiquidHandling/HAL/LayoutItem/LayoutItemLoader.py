@@ -23,10 +23,10 @@ def LoadYaml(
         UniqueIdentifier = LayoutItem["Unique Identifier"]
         PlateSequence = LayoutItem["Plate Sequence"]
         PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(
-            LayoutItem["Plate Labware"]
+            LayoutItem["Plate Labware Unique Identifier"]
         )
         DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
-            LayoutItem["Deck Location"]
+            LayoutItem["Deck Location Unique Identifier"]
         )
 
         if not isinstance(PlateLabwareInstance, PipettableLabware):
@@ -36,7 +36,7 @@ def LoadYaml(
         if "Lid Sequence" in LayoutItem:
             LidSequence = LayoutItem["Lid Sequence"]
             LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
-                LayoutItem["Lid Labware"]
+                LayoutItem["Lid Labware Unique Identifier"]
             )
 
             if not isinstance(LidLabwareInstance, NonPipettableLabware):

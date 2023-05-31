@@ -1,11 +1,11 @@
 import yaml
 
-from ..ClosedContainer import HamiltonFlipTube, HamiltonFlipTubeSpecial
-from ..Labware import LabwareTracker
-from ..DeckLocation import DeckLocationTracker
-from .BaseClosedContainer import ClosedContainerTracker
-from ..Backend import BackendTracker
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from ..Backend import BackendTracker
+from ..ClosedContainer import HamiltonFlipTube, HamiltonFlipTubeSpecial
+from ..DeckLocation import DeckLocationTracker
+from ..Labware import LabwareTracker
+from .BaseClosedContainer import ClosedContainerTracker
 
 
 def LoadYaml(
@@ -27,19 +27,19 @@ def LoadYaml(
                 continue
 
             UniqueIdentifier = Device["Unique Identifier"]
-            BackendIdentifier = Device["Backend Identifier"]
+            BackendIdentifier = Device["Backend Unique Identifier"]
             CustomErrorHandling = Device["Custom Error Handling"]
 
             BackendInstance = BackendTrackerInstance.GetObjectByName(BackendIdentifier)
 
             SupportedDeckLocationTrackerInstance = DeckLocationTracker()
-            for DeckLocationID in Device["Supported Deck Locations"]:
+            for DeckLocationID in Device["Supported Deck Location Unique Identifiers"]:
                 SupportedDeckLocationTrackerInstance.LoadSingle(
                     DeckLocationTrackerInstance.GetObjectByName(DeckLocationID)
                 )
 
             SupportedLabwareTrackerInstance = LabwareTracker()
-            for LabwareID in Device["Supported Labware"]:
+            for LabwareID in Device["Supported Labware Unique Identifiers"]:
                 SupportedLabwareTrackerInstance.LoadSingle(
                     LabwareTrackerInstance.GetObjectByName(LabwareID)
                 )
