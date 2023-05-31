@@ -15,6 +15,7 @@
 NTR:
   - Unique Identifier: 50uL NTR
     Enabled: True
+    Backend Unique Identifier: Hammy
     Custom Error Handling: False
     Volume: 50
     NTR Waste Sequence: Tip50_NTR_Waste
@@ -22,6 +23,7 @@ NTR:
 
   - Unique Identifier: 300uL NTR
     Enabled: True
+    Backend Unique Identifier: Hammy
     Custom Error Handling: False
     Volume: 300
     NTR Waste Sequence: Tip300_NTR_Waste
@@ -30,5 +32,6 @@ NTR:
 FTR:
   - Unique Identifier: 1000uL FTR
     Enabled: True
+    Backend Unique Identifier: Hammy
     Custom Error Handling: False
     Volume: 1000

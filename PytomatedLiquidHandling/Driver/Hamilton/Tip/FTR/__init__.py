@@ -1,3 +1,1 @@
-from . import LoadTips, TipsAvailable, TipsRemaining
-
-__all__ = ["LoadTips", "TipsAvailable", "TipsRemaining"]
+from . import LoadTips, GetNumTips, GetTipPositions

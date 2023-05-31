@@ -1,11 +1,13 @@
 from ...Driver.Hamilton.Tip import FTR as FTRDriver
 from .BaseTip import Tip
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
 class TipFTR(Tip):
     def __init__(
         self,
         UniqueIdentifier: str,
+        BackendInstance: HamiltonBackendABC,
         CustomErrorHandling: bool,
         PickupSequence: str,
         MaxVolume: float,
@@ -13,6 +15,7 @@ class TipFTR(Tip):
         Tip.__init__(
             self,
             UniqueIdentifier,
+            BackendInstance,
             CustomErrorHandling,
             PickupSequence,
             MaxVolume,
@@ -26,51 +29,56 @@ class TipFTR(Tip):
 
     def Reload(self):
         try:
-            FTRDriver.LoadTips.Command(
+            CommandInstance = FTRDriver.LoadTips.Command(
                 OptionsInstance=FTRDriver.LoadTips.Options(
                     TipSequence=self.PickupSequence
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            self.GetBackend().GetResponse(CommandInstance, CommandInstance.Response)
 
         except:
             ...
 
         # We also need to show a deck loading dialog, move the autoload, etc.
 
-    def UpdateTipPosition(
-        self,
-        *,
-        NumTips: int,
-    ):
+    def UpdateTipPositions(self, *, NumTips: int):
         try:
-            Command = FTRDriver.TipsAvailable.Command(
-                OptionsInstance=FTRDriver.TipsAvailable.Options(
+            CommandInstance = FTRDriver.GetTipPositions.Command(
+                OptionsInstance=FTRDriver.GetTipPositions.Options(
                     TipSequence=self.PickupSequence,
                     NumPositions=NumTips,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
             )
 
-            Command.Execute()
-
-            self.TipPosition = Command.GetTipPosition()
+            self.TipPositions = ResponseInstance.GetTipPositions()
 
         except:
             ...
 
     def UpdateRemainingTips(self):
         try:
-            Command = FTRDriver.TipsRemaining.Command(
-                OptionsInstance=FTRDriver.TipsRemaining.Options(
+            CommandInstance = FTRDriver.GetNumTips.Command(
+                OptionsInstance=FTRDriver.GetNumTips.Options(
                     TipSequence=self.PickupSequence,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
             )
 
-            Command.Execute()
-
-            self.RemainingTips = Command.GetNumRemaining()
+            self.RemainingTips = ResponseInstance.GetNumRemaining()
 
         except:
             ...

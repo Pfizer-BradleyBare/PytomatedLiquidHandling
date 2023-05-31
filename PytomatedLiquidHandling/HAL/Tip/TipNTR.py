@@ -1,11 +1,13 @@
 from ...Driver.Hamilton.Tip import NTR as NTRDriver
 from .BaseTip import Tip
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
 class TipNTR(Tip):
     def __init__(
         self,
         UniqueIdentifier: str,
+        BackendInstance: HamiltonBackendABC,
         CustomErrorHandling: bool,
         PickupSequence: str,
         NTRWasteSequence: str,
@@ -15,6 +17,7 @@ class TipNTR(Tip):
         Tip.__init__(
             self,
             UniqueIdentifier,
+            BackendInstance,
             CustomErrorHandling,
             PickupSequence,
             MaxVolume,
@@ -32,51 +35,61 @@ class TipNTR(Tip):
 
     def Reload(self):
         try:
-            NTRDriver.LoadTips.Command(
+            CommandInstance = NTRDriver.LoadTips.Command(
                 OptionsInstance=NTRDriver.LoadTips.Options(
                     TipSequence=self.PickupSequence,
                     RackWasteSequence=self.NTRWasteSequence,
                     GripperSequence=self.GripperSequence,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            ).Execute()
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            self.GetBackend().GetResponse(CommandInstance, CommandInstance.Response)
 
         except:
             ...
 
         # We also need to show a deck loading dialog, move the autoload, etc.
 
-    def UpdateTipPosition(self, *, NumTips: int):
+    def UpdateTipPositions(self, *, NumTips: int):
         try:
-            Command = NTRDriver.TipsAvailable.Command(
-                OptionsInstance=NTRDriver.TipsAvailable.Options(
+            CommandInstance = NTRDriver.GetTipPositions.Command(
+                OptionsInstance=NTRDriver.GetTipPositions.Options(
                     TipSequence=self.PickupSequence,
                     GeneratedRackWasteSequence=self.GeneratedWasteSequence,
                     GripperSequence=self.GripperSequence,
                     NumPositions=NumTips,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
             )
 
-            Command.Execute()
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
+            )
 
-            self.TipPosition = Command.GetTipPosition()
+            self.TipPositions = ResponseInstance.GetTipPositions()
 
         except:
             ...
 
     def UpdateRemainingTips(self):
         try:
-            Command = NTRDriver.TipsRemaining.Command(
-                OptionsInstance=NTRDriver.TipsRemaining.Options(
+            CommandInstance = NTRDriver.GetNumTips.Command(
+                OptionsInstance=NTRDriver.GetNumTips.Options(
                     TipSequence=self.PickupSequence,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
+                CustomErrorHandling=self.GetErrorHandlingSetting(),
+            )
+            self.GetBackend().ExecuteCommand(CommandInstance)
+            self.GetBackend().WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.GetBackend().GetResponse(
+                CommandInstance, CommandInstance.Response
             )
 
-            Command.Execute()
-
-            self.RemainingTips = Command.GetNumRemaining()
+            self.RemainingTips = ResponseInstance.GetNumRemaining()
 
         except:
             ...

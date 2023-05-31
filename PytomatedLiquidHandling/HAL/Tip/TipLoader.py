@@ -2,9 +2,11 @@ import yaml
 
 from ..Tip import TipFTR, TipNTR
 from .BaseTip import TipTracker
+from ..Backend import BackendTracker
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
-def LoadYaml(FilePath: str) -> TipTracker:
+def LoadYaml(FilePath: str, BackendTrackerInstance: BackendTracker) -> TipTracker:
     TipTrackerInstance = TipTracker()
 
     FileHandle = open(FilePath, "r")
@@ -18,6 +20,9 @@ def LoadYaml(FilePath: str) -> TipTracker:
                 continue
 
             UniqueIdentifier = Tip["Unique Identifier"]
+            BackendInstance = BackendTrackerInstance.GetObjectByName(
+                Tip["Backend Unique Identifier"]
+            )
             CustomErrorHandling = Tip["Custom Error Handling"]
 
             PickupSequence = Tip["Pickup Sequence"]
@@ -27,8 +32,12 @@ def LoadYaml(FilePath: str) -> TipTracker:
                 NTRWasteSequence = Tip["NTR Waste Sequence"]
                 GripperSequence = Tip["Gripper Sequence"]
 
+                if not isinstance(BackendInstance, HamiltonBackendABC):
+                    raise Exception("Must be a Hamilton Backend")
+
                 TipInstance = TipNTR(
                     UniqueIdentifier,
+                    BackendInstance,
                     CustomErrorHandling,
                     PickupSequence,
                     NTRWasteSequence,
@@ -37,8 +46,15 @@ def LoadYaml(FilePath: str) -> TipTracker:
                 )
 
             elif TipType == "FTR":
+                if not isinstance(BackendInstance, HamiltonBackendABC):
+                    raise Exception("Must be a Hamilton Backend")
+
                 TipInstance = TipFTR(
-                    UniqueIdentifier, CustomErrorHandling, PickupSequence, MaxVolume
+                    UniqueIdentifier,
+                    BackendInstance,
+                    CustomErrorHandling,
+                    PickupSequence,
+                    MaxVolume,
                 )
 
             else:
