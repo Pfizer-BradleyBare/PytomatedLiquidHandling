@@ -91,7 +91,6 @@ for i, Position in enumerate(TipPositions):
             SequencePosition=i + 1,
             LiquidClass="Tip_50ul_Water_DispenseSurface_Empty",
             Volume=25,
-            Mode=3,
         )
     )
 CommandInstance = PortraitCORE8Channel.Dispense.Command(
