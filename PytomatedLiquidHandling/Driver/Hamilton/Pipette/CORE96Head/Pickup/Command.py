@@ -1,32 +1,19 @@
-from .....Tools.AbstractClasses import CommandOptionsTracker
+from .....Tools.AbstractClasses import CommandOptions
 from ....Backend import HamiltonActionCommandABC
-from .OptionsTracker import OptionsTracker
+from .Options import Options
 
 
 @HamiltonActionCommandABC.Decorator_Command(__file__)
-class Command(HamiltonActionCommandABC, CommandOptionsTracker[OptionsTracker]):
+class Command(HamiltonActionCommandABC, CommandOptions[Options]):
     def __init__(
         self,
         *,
         CustomErrorHandling: bool,
-        OptionsTrackerInstance: OptionsTracker,
+        OptionsInstance: Options,
         Identifier: str = "None"
     ):
         HamiltonActionCommandABC.__init__(self, Identifier, CustomErrorHandling)
-        CommandOptionsTracker.__init__(self, OptionsTrackerInstance)
-
-    def GetVars(self) -> dict[str, list]:
-        OutputDict = HamiltonActionCommandABC.GetVars(self)
-
-        ChannelNumberList = ["0"] * 96
-
-        for Position in OutputDict["SequencePosition"]:
-            ChannelNumberList[Position - 1] = "1"
-
-        OutputDict["ChannelNumber"] = ChannelNumberList
-        OutputDict["ChannelNumberString"] = "".join(ChannelNumberList)
-
-        return OutputDict
+        CommandOptions.__init__(self, OptionsInstance)
 
     def HandleErrors(self):
         ...
