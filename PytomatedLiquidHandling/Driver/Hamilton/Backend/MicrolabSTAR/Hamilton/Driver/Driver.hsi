@@ -171,8 +171,8 @@ return;
 // {{ 34 1 0 "e7c554b9_fa95_4ea1_86e8fd830d0624ba" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 35 1 0 "6d9cd102_d401_4297_b5ca056fd07c12a7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (ModuleName == "Hamilton Pipette Pipette8Channel")
+// {{ 35 1 0 "2259f410_c0e7_46ba_a71d2ee248843d93" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (ModuleName == "Hamilton Pipette PortraitCORE8Channel")
 {
 // }} ""
 // {{{ 36 1 0 "d131fe0d_1c54_4378_a7a1aacb248e978a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -181,11 +181,11 @@ _8CHANNEL::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // {{{ 37 1 0 "3704dedc_4752_4729_abfe9d30e8a1779f" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 38 1 0 "6d9cd102_d401_4297_b5ca056fd07c12a7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 38 1 0 "2259f410_c0e7_46ba_a71d2ee248843d93" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 39 1 0 "1c4b2a44_1a17_4151_b1fee91a11c8d7bc" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (ModuleName == "Hamilton Pipette Pipette96Channel")
+// {{ 39 1 0 "9d3b09c2_19d5_41c6_b93a4ef23d17ffeb" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (ModuleName == "Hamilton Pipette CORE96Head")
 {
 // }} ""
 // {{{ 40 1 0 "b1413362_946a_47f6_8c3104ba4e9942be" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -194,7 +194,7 @@ _96CHANNEL::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // {{{ 41 1 0 "f97e7ee2_635c_4c92_af15cb0b112c5a6a" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 42 1 0 "1c4b2a44_1a17_4151_b1fee91a11c8d7bc" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 42 1 0 "9d3b09c2_19d5_41c6_b93a4ef23d17ffeb" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
 // {{ 43 1 0 "e7c554b9_fa95_4ea1_86e8fd830d0624ba" "{586C3429-F931-405f-9938-928E22C90BFA}"
@@ -349,7 +349,6 @@ function ActionServerProcess( device & ML_STAR ) void {
 private variable None;
 private object JSONObject;
 private variable IsReady;
-private timer timer1;
 // {{ 5 "ActionServerProcess" "InitLocals"
 // }} ""
 // {{ 4 1 0 "b6a46497_9d7f_4de6_af41a6e3d6f45681" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
@@ -388,7 +387,6 @@ function StateServerProcess( device & ML_STAR ) void {
 private object JSONObject;
 private variable IsReady;
 private variable None;
-private timer timer1;
 // {{ 5 "StateServerProcess" "InitLocals"
 // }} ""
 // {{ 89 1 0 "e729d1ce_823e_43e9_8b5e16a3cb81d25c" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
@@ -439,4 +437,4 @@ ACTIONSERVERENDPOINTS::ServerKill();
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-05-18 05:27$$checksum=9cbe996f$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-05-31 15:49$$checksum=00713212$$length=084$$

@@ -28,9 +28,7 @@ class HamiltonCommandABC(CommandABC):
 
             del OutputDict["Collection"]
             del OutputDict["ThreadLock"]
-            del OutputDict["_NonUniqueObjectABC__NonUniqueObjectABC_Identifier"]
             # removes junk from parent classes
-
             return dict(OutputDict)
 
         else:

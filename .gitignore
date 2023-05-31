@@ -6,3 +6,5 @@ build
 .vscode
 Logging
 .DS_Store
+Temp
+temp

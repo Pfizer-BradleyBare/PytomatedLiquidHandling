@@ -65,7 +65,6 @@ private variable SubmergeDepthArray[];
 private variable cLLDArray[];
 private variable ModeArray[];
 private variable SequencePositionArray[];
-private variable NameArray[];
 private variable pLLDArray[];
 private variable MixVolumeArray[];
 private variable MixPositionArray[];
@@ -267,7 +266,6 @@ private variable SubmergeDepthArray[];
 private variable cLLDArray[];
 private variable ModeArray[];
 private variable ChannelNumberArray[];
-private variable NameArray[];
 private variable SequencePositionArray[];
 private variable MixVolumeArray[];
 private variable MixPositionArray[];
@@ -453,7 +451,6 @@ private variable SeqEnd;
 private sequence Sequence;
 private variable SequenceArray[];
 private variable ChannelNumberArray[];
-private variable NameArray[];
 private variable SequencePositionArray[];
 private variable CustomErrorHandling;
 private variable State;
@@ -563,7 +560,6 @@ private variable SeqEnd;
 private sequence Sequence;
 private variable SequenceArray[];
 private variable ChannelNumberArray[];
-private variable NameArray[];
 private variable SequencePositionArray[];
 private variable CustomErrorHandling;
 private variable State;
@@ -670,8 +666,8 @@ function HandleCommand( device & ML_STAR, variable CommandName, object & i_Endpo
 // }} ""
 // {{ 5 "HandleCommand" "InitLocals"
 // }} ""
-// {{ 132 1 0 "f581b294_41c5_42f8_b606cf5a76561d4b" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "'Pickup")
+// {{ 132 1 0 "a69ff64f_749a_41d1_926ca5cc436f5964" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "Pickup")
 {
 // }} ""
 // {{{ 133 1 0 "8da4d8db_60c2_4e17_a65f6558338fea4c" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -680,7 +676,7 @@ Pickup(ML_STAR, i_EndpointOutputDataJSONObject);
 // {{{ 134 1 0 "e6aceaea_8c64_4d23_84d729b9c9d391b0" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 135 1 0 "f581b294_41c5_42f8_b606cf5a76561d4b" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 135 1 0 "a69ff64f_749a_41d1_926ca5cc436f5964" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
 // {{ 136 1 0 "709a1afc_f7f4_4b93_89e60c7ff64f4c70" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
@@ -735,4 +731,4 @@ abort;
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-05-18 04:09$$checksum=36785872$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-05-31 15:50$$checksum=66303dac$$length=084$$

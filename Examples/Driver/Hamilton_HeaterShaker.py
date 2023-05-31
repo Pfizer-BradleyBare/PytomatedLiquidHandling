@@ -7,10 +7,11 @@ from PytomatedLiquidHandling.Driver.Hamilton.TemperatureControl import HeaterSha
 from PytomatedLiquidHandling.Driver.Hamilton.Timer import StartTimer
 
 LoggerInstance = Logger(
-    "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__),"Logging"))
-#create a logger to log all actions
+    "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__), "Logging")
+)
+# create a logger to log all actions
 
-Backend = MicrolabStarBackend("Example Star",LoggerInstance)
+Backend = MicrolabStarBackend("Example Star", LoggerInstance)
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
@@ -70,7 +71,7 @@ Command = HeaterShaker.StartShakeControl.Command(
         HandleID=HeaterShakerHandleId, ShakingSpeed=500
     ),
     CustomErrorHandling=True,
-    )
+)
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
 Response = Backend.GetResponse(Command, Command.Response)
@@ -83,7 +84,7 @@ Backend.WaitForResponseBlocking(Command)
 Response = Backend.GetResponse(Command, Command.Response)
 # run 30 seconds
 
-Command=HeaterShaker.StopShakeControl.Command(
+Command = HeaterShaker.StopShakeControl.Command(
     OptionsInstance=HeaterShaker.StopShakeControl.Options(
         HandleID=HeaterShakerHandleId
     ),
