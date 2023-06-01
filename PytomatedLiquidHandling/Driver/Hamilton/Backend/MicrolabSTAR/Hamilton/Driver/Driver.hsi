@@ -286,8 +286,8 @@ return;
 // {{ 70 1 0 "36d56d88_458d_4c2f_87cc70c4b1abec80" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 71 1 0 "7f5ff700_7540_414d_90237732cc98a17b" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (ModuleName == "Hamilton Transport Gripper")
+// {{ 71 1 0 "ae9dd340_c6e1_4d63_bf16f4818f32b470" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (ModuleName == "Hamilton Transport COREGripper")
 {
 // }} ""
 // {{{ 72 1 0 "d6d11152_07a7_476c_8b1b4b3a1bb8908a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -296,7 +296,7 @@ GRIPPER::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // {{{ 73 1 0 "449ca4d8_8005_4872_a4f9a8695937b0ab" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 74 1 0 "7f5ff700_7540_414d_90237732cc98a17b" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 74 1 0 "ae9dd340_c6e1_4d63_bf16f4818f32b470" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
 // {{ 75 1 0 "86552cf2_cefa_4c9c_96eb8e3f47399942" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
@@ -437,4 +437,4 @@ ACTIONSERVERENDPOINTS::ServerKill();
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-05-31 15:49$$checksum=00713212$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-06-01 15:50$$checksum=27ace415$$length=084$$
