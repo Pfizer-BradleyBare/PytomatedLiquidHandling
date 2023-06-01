@@ -54,7 +54,7 @@ CommandInstance = CORE96Head.Aspirate.Command(
     CustomErrorHandling=False,
     OptionsInstance=CORE96Head.Aspirate.Options(
         Sequence="Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel",
-        LiquidClass="Tip_50ul_Water_DispenseSurface_Empty",
+        LiquidClass="HighVolume_Water_DispenseSurface_Empty",
         Volume=25,
     ),
 )
@@ -67,7 +67,7 @@ CommandInstance = CORE96Head.Dispense.Command(
     CustomErrorHandling=False,
     OptionsInstance=CORE96Head.Dispense.Options(
         Sequence="Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel",
-        LiquidClass="Tip_50ul_Water_DispenseSurface_Empty",
+        LiquidClass="HighVolume_Water_DispenseSurface_Empty",
         Volume=25,
     ),
 )
