@@ -37,7 +37,7 @@ Response = Backend.GetResponse(Command, Command.Response)
 # Turn on the Heat
 
 TemperatureOffset = 2
-for i in range(0, 30):
+for i in range(0, 1):
     Command = StartTimer.Command(
         OptionsInstance=StartTimer.Options(WaitTime=10), CustomErrorHandling=False
     )
