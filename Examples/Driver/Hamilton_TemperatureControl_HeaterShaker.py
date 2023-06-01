@@ -64,7 +64,7 @@ for i in range(0, 1):
         <= DesiredTemperature + TemperatureOffset
     ):
         break
-# Wait for temperature to fall within desired range. Only wait a max of 5 minutes
+# Wait for temperature to fall within desired range.
 
 Command = HeaterShaker.StartShakeControl.Command(
     OptionsInstance=HeaterShaker.StartShakeControl.Options(
