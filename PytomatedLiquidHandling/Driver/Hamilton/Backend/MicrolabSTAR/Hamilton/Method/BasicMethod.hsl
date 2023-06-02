@@ -14,6 +14,9 @@
  namespace _Method { #include "HSLTrcLib.hsl" } 
  namespace _ActionServer { #include "HSLTrcLib.hsl" } 
  namespace _StateServer { #include "HSLTrcLib.hsl" } 
+ namespace _Method { #include "HSLUtilLib.hsl" } 
+ namespace _ActionServer { #include "HSLUtilLib.hsl" } 
+ namespace _StateServer { #include "HSLUtilLib.hsl" } 
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable ActionServer;
 variable StateServer;
@@ -112,4 +115,4 @@ LOGGER::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-05-31 15:58$$checksum=7a9e98cf$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-06-02 10:19$$checksum=b0bc17cb$$length=084$$

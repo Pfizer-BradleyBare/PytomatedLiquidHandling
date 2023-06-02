@@ -1,6 +1,6 @@
 
 // this ALWAYS GENERATED file contains the sub-method library header
-// Generated at 6/1/2023 9:30:02 AM
+// Generated at 6/2/2023 12:39:37 PM
 
 #pragma once
 #ifndef HSL_RUNTIME
@@ -15,4 +15,4 @@ function _Get96PositionSequence( device & ML_STAR, variable SequenceString, sequ
 #ifdef HSL_RUNTIME
 #include __filename__ ".hsi"
 #endif
-// $$author=BAREB$$valid=0$$time=2023-06-01 09:30$$checksum=b8a033bd$$length=082$$
+// $$author=BAREB$$valid=0$$time=2023-06-02 12:39$$checksum=be9f7af6$$length=082$$

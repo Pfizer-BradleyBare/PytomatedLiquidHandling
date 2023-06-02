@@ -1,0 +1,18 @@
+
+// this ALWAYS GENERATED file contains the sub-method library header
+// Generated at 6/2/2023 11:10:25 AM
+
+#pragma once
+#ifndef HSL_RUNTIME
+namespace STAR_CHANNEL_MPH_FWCMD {
+function _InitLibrary() { }
+function _ExitLibrary() { }
+function _96HeadAsp_Disp( variable _LabwareID, variable _Aspirate, variable _Dispense, variable _GotoTraverseBeforeAsp, variable _GotoTraverseAfterAsp, variable _LLDSearchHeight, variable _FixedHeightDuringAsp, variable _RetractHeight, variable _AspirationVolume, variable _liquidClass, variable _sleepBetweenPlungerMove, variable _GotoTraverseHeightBeforeDisp, variable _GotoTraverseHeightAfterDisp, variable _DispenseVolume, variable _fixedHeightDuringDispense, device & System, sequence & _sequenceLabWareID, variable _AspirateBlowoutVolume, variable _DispenseBlowoutVolume, variable _sequencePosition, variable _sleepDispense, variable _sleepStoppable, variable _TrackingDistanceDuringAsp ) void { }
+function _Channels_Asp_Disp( variable _ChannelPattern, variable _Aspirate, variable _Dispense, sequence _sequenceAspDisp, variable _GotoTraverseBeforeAsp, variable _GotoTraverseAfterAsp, variable _GotoTraverseHeightBeforeDisp, variable _GotoTraverseHeightAfterDisp, variable _liquidClass, variable _LLDSearchHeight, variable _FixedHeightDuringAsp, variable _RetractHeight, variable _AspirationVolume, variable _AspirateBlowoutVolume, variable _sleepBetweenPlungerMove, variable _fixedHeightDuringDispense, variable _DispenseVolume, variable _DispenseBlowoutVolume, variable _sleepDispense, variable _sleepStoppable, device & System ) void { }
+} // namespace
+#endif
+
+#ifdef HSL_RUNTIME
+#include __filename__ ".hsi"
+#endif
+// $$author=BAREB$$valid=0$$time=2023-06-02 11:10$$checksum=59661553$$length=082$$
