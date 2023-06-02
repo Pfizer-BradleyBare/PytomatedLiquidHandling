@@ -40,11 +40,11 @@ class SimpleBackendABC(BackendABC):
         Response = CommandABC.Response({})
 
         if not self.Response is None:
-            Response.SetProperty("StatusCode", 0)
+            Response.SetProperty("State", True)
             Response.SetProperty("Details", "Respose available")
 
         else:
-            Response.SetProperty("StatusCode", -1)
+            Response.SetProperty("State", False)
             Response.SetProperty("Details", "Respose not available")
 
         return Response
@@ -56,7 +56,7 @@ class SimpleBackendABC(BackendABC):
                 "You can only wait on a response for the currently executing command."
             )
 
-        while self.GetStatus(CommandInstance).GetStatusCode() != 0:
+        while self.GetStatus(CommandInstance).GetState() != True:
             ...
 
     def GetResponse(self, CommandInstance: CommandABC, ResponseType: Type[T]) -> T:

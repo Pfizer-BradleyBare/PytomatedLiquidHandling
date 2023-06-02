@@ -15,7 +15,9 @@ class Command(HamiltonActionCommandABC, CommandOptions[Options]):
         HamiltonActionCommandABC.__init__(self, Identifier, CustomErrorHandling)
         CommandOptions.__init__(self, OptionsInstance)
 
-    def HandleErrors(self):
+    def ParseResponseThrowExceptions(
+        self, ResponseInstance: HamiltonActionCommandABC.Response
+    ):
         ...
 
     class Response(HamiltonActionCommandABC.Response):

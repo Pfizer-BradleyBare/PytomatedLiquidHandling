@@ -8,6 +8,50 @@ from .....Tools.AbstractClasses import NonUniqueObjectABC
 class CommandABC(NonUniqueObjectABC):
     ClassFilePath: str
 
+    class Response:
+        @staticmethod
+        def Decorator_ExpectedResponseProperty(DecoratedFunction):
+            def inner(*args, **kwargs):
+                return args[0].Properties[DecoratedFunction.__name__.replace("Get", "")]
+
+            inner.Decorated_ExpectedResponseProperty = True
+            return inner
+
+        @classmethod
+        def GetExpectedResponseProperties(cls) -> list[str]:
+            """Extracts the response properties, which are decorated in the class definition, from the class
+
+            Args:
+                cls (object): Any object that inherits from CommandABC.ResponseABC
+
+            Returns:
+                list[str]: A list of response properties as strings
+            """
+            Out = list()
+
+            for Name in dir(cls):
+                if hasattr(getattr(cls, Name), "Decorated_ExpectedResponseProperty"):
+                    Out.append(Name.replace("Get", ""))
+
+            return Out
+
+        def __init__(self, Properties: dict[str, Any]):
+            self.Properties: dict[str, Any] = Properties
+
+        def SetProperty(self, Key: str, Value: Any):
+            self.Properties[Key] = Value
+
+        def UpdateProperties(self, Key: str, Value: Any):
+            self.Properties.update({Key: Value})
+
+        @Decorator_ExpectedResponseProperty
+        def GetState(self) -> bool:
+            ...
+
+        @Decorator_ExpectedResponseProperty
+        def GetDetails(self) -> str:
+            ...
+
     @staticmethod
     def Decorator_Command(__file__: str):
         def InnerDecorator(DecoratedClass):
@@ -60,49 +104,5 @@ class CommandABC(NonUniqueObjectABC):
         self.CommandName: str = CommandABC.__GetCommandName(self.ClassFilePath)
 
     @abstractmethod
-    def HandleErrors(self):
+    def ParseResponseThrowExceptions(self, ResponseInstance: Response):
         ...
-
-    class Response:
-        @staticmethod
-        def Decorator_ExpectedResponseProperty(DecoratedFunction):
-            def inner(*args, **kwargs):
-                return args[0].Properties[DecoratedFunction.__name__.replace("Get", "")]
-
-            inner.Decorated_ExpectedResponseProperty = True
-            return inner
-
-        @classmethod
-        def GetExpectedResponseProperties(cls) -> list[str]:
-            """Extracts the response properties, which are decorated in the class definition, from the class
-
-            Args:
-                cls (object): Any object that inherits from CommandABC.ResponseABC
-
-            Returns:
-                list[str]: A list of response properties as strings
-            """
-            Out = list()
-
-            for Name in dir(cls):
-                if hasattr(getattr(cls, Name), "Decorated_ExpectedResponseProperty"):
-                    Out.append(Name.replace("Get", ""))
-
-            return Out
-
-        def __init__(self, Properties: dict[str, Any]):
-            self.Properties: dict[str, Any] = Properties
-
-        def SetProperty(self, Key: str, Value: Any):
-            self.Properties[Key] = Value
-
-        def UpdateProperties(self, Key: str, Value: Any):
-            self.Properties.update({Key: Value})
-
-        @Decorator_ExpectedResponseProperty
-        def GetStatusCode(self) -> int:
-            ...
-
-        @Decorator_ExpectedResponseProperty
-        def GetDetails(self) -> str:
-            ...

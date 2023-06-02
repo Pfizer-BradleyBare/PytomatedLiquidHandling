@@ -28,5 +28,7 @@ class Command(HamiltonActionCommandABC, CommandOptionsTracker[OptionsTracker]):
 
         return OutputDict
 
-    def HandleErrors(self):
+    def ParseResponseThrowExceptions(
+        self, ResponseInstance: HamiltonActionCommandABC.Response
+    ):
         ...
