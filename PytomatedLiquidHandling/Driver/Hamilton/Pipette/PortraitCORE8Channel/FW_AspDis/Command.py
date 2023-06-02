@@ -9,11 +9,11 @@ class Command(HamiltonActionCommandABC, CommandOptionsTracker[OptionsTracker]):
         self,
         *,
         CustomErrorHandling: bool,
-        OptionsInstance: OptionsTracker,
+        OptionsTrackerInstance: OptionsTracker,
         Identifier: str = "None"
     ):
         HamiltonActionCommandABC.__init__(self, Identifier, CustomErrorHandling)
-        CommandOptionsTracker.__init__(self, OptionsInstance)
+        CommandOptionsTracker.__init__(self, OptionsTrackerInstance)
 
     def ParseResponseRaiseExceptions(
         self, ResponseInstance: HamiltonActionCommandABC.Response
