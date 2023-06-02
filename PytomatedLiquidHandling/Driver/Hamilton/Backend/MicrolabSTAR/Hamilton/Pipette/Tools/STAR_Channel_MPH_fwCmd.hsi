@@ -1,13 +1,13 @@
 // {{{ 2 "IncludeGuard" "PragmaOnce"
 #pragma once
 // }} ""
-#include "389118_Pfizer\\IMCS\\JustBio\\HSLTrcLib.hsl"
+#include "HSLTrcLib.hsl"
 #include "HSL_LiquidClassLib.hsl"
 #include "HSLMthLib.hsl"
 #include "HSLStrLib.hsl"
 #include "HSLSeqLib.hsl"
-#include "389118_Pfizer\\IMCS\\JustBio\\HSLDevLib.hsl"
-#include "389118_Pfizer\\IMCS\\JustBio\\HSLLabwrAccess\\HSLLabwrAccess.hsl"
+#include "HSLDevLib.hsl"
+#include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -3403,4 +3403,4 @@ if( 0 == timer2.WaitTimer(hslTrue, hslFalse) )
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-06-02 11:10$$checksum=f4fe507d$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-06-02 13:01$$checksum=0d873328$$length=084$$
