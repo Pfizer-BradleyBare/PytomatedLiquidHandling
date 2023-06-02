@@ -21,6 +21,6 @@ class Command(HamiltonStateCommandABC, CommandOptions[Options]):
         HamiltonStateCommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)
 
     class Response(HamiltonStateCommandABC.Response):
-        @HamiltonStateCommandABC.Response.Decorator_ExpectedResponseProperty
+        @HamiltonStateCommandABC.Response.Decorator_ExpectedSuccessResponseProperty
         def GetTemperature(self) -> float:
             ...

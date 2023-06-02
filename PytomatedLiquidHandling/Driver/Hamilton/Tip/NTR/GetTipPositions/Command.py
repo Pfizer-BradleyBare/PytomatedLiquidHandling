@@ -21,6 +21,6 @@ class Command(HamiltonActionCommandABC, CommandOptions[Options]):
         HamiltonActionCommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)
 
     class Response(HamiltonActionCommandABC.Response):
-        @HamiltonActionCommandABC.Response.Decorator_ExpectedResponseProperty
+        @HamiltonActionCommandABC.Response.Decorator_ExpectedSuccessResponseProperty
         def GetTipPositions(self) -> list[int]:
             ...

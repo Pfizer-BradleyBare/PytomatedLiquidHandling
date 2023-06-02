@@ -103,7 +103,24 @@ class HamiltonServerBackendABC(ServerBackendABC):
             return Response
         # Check the command does not already have a response
 
-        ExpectedResponseKeys = CommandInstance.Response.GetExpectedResponseProperties()
+        BaseKeys = ["State", "Details"]
+        if not ParserObject.IsValid(BaseKeys):
+            ParserObject.SetEndpointDetails(
+                "Key missing. Accepted keys: " + str(BaseKeys)
+            )
+            Response = ParserObject.GetHTTPResponse()
+            self.GetLogger().warning(Response)
+            return Response
+        # check we have required info
+
+        if ParserObject.GetEndpointInputData("State") == False:
+            ExpectedResponseKeys = (
+                CommandInstance.Response.GetExpectedErrorResponseProperties()
+            )
+        else:
+            ExpectedResponseKeys = (
+                CommandInstance.Response.GetExpectedSuccessResponseProperties()
+            )
 
         if not ParserObject.IsValid(ExpectedResponseKeys):
             ParserObject.SetEndpointDetails(

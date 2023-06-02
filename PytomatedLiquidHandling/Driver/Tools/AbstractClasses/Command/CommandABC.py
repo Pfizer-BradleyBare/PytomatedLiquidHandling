@@ -10,27 +10,41 @@ class CommandABC(NonUniqueObjectABC):
 
     class Response:
         @staticmethod
-        def Decorator_ExpectedResponseProperty(DecoratedFunction):
+        def Decorator_ExpectedSuccessResponseProperty(DecoratedFunction):
             def inner(*args, **kwargs):
                 return args[0].Properties[DecoratedFunction.__name__.replace("Get", "")]
 
-            inner.Decorated_ExpectedResponseProperty = True
+            inner.Decorated_ExpectedSuccessResponseProperty = True
+            return inner
+
+        @staticmethod
+        def Decorator_ExpectedErrorResponseProperty(DecoratedFunction):
+            def inner(*args, **kwargs):
+                return args[0].Properties[DecoratedFunction.__name__.replace("Get", "")]
+
+            inner.Decorated_ExpectedErrorResponseProperty = True
             return inner
 
         @classmethod
-        def GetExpectedResponseProperties(cls) -> list[str]:
-            """Extracts the response properties, which are decorated in the class definition, from the class
-
-            Args:
-                cls (object): Any object that inherits from CommandABC.ResponseABC
-
-            Returns:
-                list[str]: A list of response properties as strings
-            """
+        def GetExpectedSuccessResponseProperties(cls) -> list[str]:
             Out = list()
 
             for Name in dir(cls):
-                if hasattr(getattr(cls, Name), "Decorated_ExpectedResponseProperty"):
+                if hasattr(
+                    getattr(cls, Name), "Decorated_ExpectedSuccessResponseProperty"
+                ):
+                    Out.append(Name.replace("Get", ""))
+
+            return Out
+
+        @classmethod
+        def GetExpectedErrorResponseProperties(cls) -> list[str]:
+            Out = list()
+
+            for Name in dir(cls):
+                if hasattr(
+                    getattr(cls, Name), "Decorated_ExpectedErrorResponseProperty"
+                ):
                     Out.append(Name.replace("Get", ""))
 
             return Out
@@ -44,11 +58,13 @@ class CommandABC(NonUniqueObjectABC):
         def UpdateProperties(self, Key: str, Value: Any):
             self.Properties.update({Key: Value})
 
-        @Decorator_ExpectedResponseProperty
+        @Decorator_ExpectedSuccessResponseProperty
+        @Decorator_ExpectedErrorResponseProperty
         def GetState(self) -> bool:
             ...
 
-        @Decorator_ExpectedResponseProperty
+        @Decorator_ExpectedSuccessResponseProperty
+        @Decorator_ExpectedErrorResponseProperty
         def GetDetails(self) -> str:
             ...
 
