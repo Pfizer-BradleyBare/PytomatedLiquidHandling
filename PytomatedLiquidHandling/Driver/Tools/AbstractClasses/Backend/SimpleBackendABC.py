@@ -2,10 +2,10 @@ import time
 from abc import abstractmethod
 from typing import Type, TypeVar, cast
 
-from .BackendABC import BackendABC
 from .....Tools.AbstractClasses import UniqueObjectABC
 from .....Tools.Logger import Logger
 from ..Command import CommandABC
+from .BackendABC import BackendABC
 
 T = TypeVar("T", bound=CommandABC.Response)
 
@@ -78,5 +78,7 @@ class SimpleBackendABC(BackendABC):
 
         self.CurrentCommand = None
         self.Response = None
+
+        CommandInstance.ParseResponseRaiseExceptions(Response)
 
         return cast(ResponseType, Response)

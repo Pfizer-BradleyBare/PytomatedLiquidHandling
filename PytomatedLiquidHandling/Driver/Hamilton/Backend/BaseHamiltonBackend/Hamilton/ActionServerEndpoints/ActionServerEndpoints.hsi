@@ -102,7 +102,6 @@ return (IsReady);
 // {{{ 5 "RespondToCommand" "Begin"
 function RespondToCommand( variable i_State, variable i_Details, object & i_ResponseData_JSONObject ) variable {
 // }} ""
-private object JSONObject;
 private object o_JSONObject;
 private variable StatusCode;
 private variable JSONObjectString;
@@ -114,8 +113,8 @@ MECC::TraceComment(Translate("###################### END COMMAND ###############
 // {{ 9 1 0 "ee2ba724_345a_4d5b_bf30dc2f30940579" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
 MECC::TraceComment(Translate("###################### START RESPONSE ###################### "));
 // }} ""
-// {{{ 10 1 0 "916f15c3_2a37_4c4e_b109eedc961efd81" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetBooleanProperty(i_ResponseData_JSONObject, Translate("StatusCode"), i_State);
+// {{{ 10 1 0 "452fdde9_c2dc_4cd2_8212140c2d114d77" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetBooleanProperty(i_ResponseData_JSONObject, Translate("State"), i_State);
 // }} ""
 // {{{ 11 1 0 "75150d89_6e09_4c3e_b31e6fe7822671f5" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::SetStringProperty(i_ResponseData_JSONObject, Translate("Details"), i_Details);
@@ -145,4 +144,4 @@ return (StatusCode);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-05-18 05:25$$checksum=fba3972f$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-06-02 08:55$$checksum=ec839b0f$$length=084$$

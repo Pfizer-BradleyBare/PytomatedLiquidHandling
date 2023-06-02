@@ -104,5 +104,5 @@ class CommandABC(NonUniqueObjectABC):
         self.CommandName: str = CommandABC.__GetCommandName(self.ClassFilePath)
 
     @abstractmethod
-    def ParseResponseThrowExceptions(self, ResponseInstance: Response):
+    def ParseResponseRaiseExceptions(self, ResponseInstance: Response):
         ...

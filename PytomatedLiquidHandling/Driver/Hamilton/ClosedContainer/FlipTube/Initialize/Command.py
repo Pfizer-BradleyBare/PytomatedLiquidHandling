@@ -6,7 +6,7 @@ class Command(HamiltonActionCommandABC):
     def __init__(self, *, CustomErrorHandling: bool, Identifier: str = "None"):
         HamiltonActionCommandABC.__init__(self, Identifier, CustomErrorHandling)
 
-    def ParseResponseThrowExceptions(
+    def ParseResponseRaiseExceptions(
         self, ResponseInstance: HamiltonActionCommandABC.Response
     ):
-        ...
+        HamiltonActionCommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)

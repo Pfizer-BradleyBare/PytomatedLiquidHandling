@@ -15,10 +15,10 @@ class Command(HamiltonActionCommandABC, CommandOptions[Options]):
         HamiltonActionCommandABC.__init__(self, Identifier, CustomErrorHandling)
         CommandOptions.__init__(self, OptionsInstance)
 
-    def ParseResponseThrowExceptions(
+    def ParseResponseRaiseExceptions(
         self, ResponseInstance: HamiltonActionCommandABC.Response
     ):
-        ...
+        HamiltonActionCommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)
 
     class Response(HamiltonActionCommandABC.Response):
         @HamiltonActionCommandABC.Response.Decorator_ExpectedResponseProperty

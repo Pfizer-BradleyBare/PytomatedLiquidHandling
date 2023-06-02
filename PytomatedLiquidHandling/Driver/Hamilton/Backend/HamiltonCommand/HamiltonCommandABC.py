@@ -1,13 +1,31 @@
 from collections import defaultdict
 from typing import Any
 
-from ....Tools.AbstractClasses import CommandABC, CommandOptions, CommandOptionsTracker
+from ....Tools.AbstractClasses import (
+    CommandABC,
+    CommandOptions,
+    CommandOptionsTracker,
+    ExceptionABC,
+)
 
 
 class HamiltonCommandABC(CommandABC):
     def __init__(self, Identifier: str, CustomErrorHandling: bool):
         CommandABC.__init__(self, Identifier)
         self.CustomErrorHandling: bool = CustomErrorHandling
+
+    class Exception_NoOptionsInTracker(ExceptionABC):
+        ...
+
+    def ParseResponseRaiseExceptions(self, ResponseInstance: CommandABC.Response):
+        CommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)
+        if ResponseInstance.GetState() == False:
+            Details = ResponseInstance.GetDetails()
+
+            if "not options in the options tracker" in Details:
+                raise HamiltonCommandABC.Exception_NoOptionsInTracker(
+                    self, ResponseInstance
+                )
 
     def GetVars(self) -> dict[str, Any]:
         if isinstance(self, CommandOptions):

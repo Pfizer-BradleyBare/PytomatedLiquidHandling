@@ -7,7 +7,7 @@ class Command(UnchainedLabsCommandABC):
     def ExecuteCommandHelper(self, StunnerDLLObject) -> Any:
         return StunnerDLLObject.Open_Tray()
 
-    def ParseResponseThrowExceptions(
+    def ParseResponseRaiseExceptions(
         self, ResponseInstance: UnchainedLabsCommandABC.Response
     ):
         ...

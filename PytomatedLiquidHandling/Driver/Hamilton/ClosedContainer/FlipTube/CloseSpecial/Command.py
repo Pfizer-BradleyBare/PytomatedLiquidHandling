@@ -15,7 +15,7 @@ class Command(HamiltonActionCommandABC, CommandOptionsTracker[OptionsTracker]):
         HamiltonActionCommandABC.__init__(self, Identifier, CustomErrorHandling)
         CommandOptionsTracker.__init__(self, OptionsTrackerInstance)
 
-    def ParseResponseThrowExceptions(
+    def ParseResponseRaiseExceptions(
         self, ResponseInstance: HamiltonActionCommandABC.Response
     ):
-        ...
+        HamiltonActionCommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)

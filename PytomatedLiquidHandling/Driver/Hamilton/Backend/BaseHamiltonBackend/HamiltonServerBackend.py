@@ -3,7 +3,7 @@ import time
 from flask import request
 
 from .....Tools.Logger import Logger
-from ....Tools.AbstractClasses import ServerBackendABC
+from ....Tools.AbstractClasses import CommandOptionsTracker, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
 
 
@@ -53,6 +53,17 @@ class HamiltonServerBackendABC(ServerBackendABC):
             ParserObject.SetEndpointDetails("Command not available. Please try again.")
             Response = ParserObject.GetHTTPResponse()
             return Response
+
+        if isinstance(CommandInstance, CommandOptionsTracker):
+            if CommandInstance.OptionsTrackerInstance.GetNumObjects() == 0:
+                self.Response = CommandInstance.Response(
+                    {
+                        "State": False,
+                        "Details": "There are not options in the options tracker. Please fix...",
+                    }
+                )
+                return self.GetNextCommand()
+        # This makes sure there are actually options. It could be possible for a user to submit a command with an options tracker without actul options
 
         if not isinstance(CommandInstance, HamiltonCommandABC):
             raise Exception("This will never happen")
