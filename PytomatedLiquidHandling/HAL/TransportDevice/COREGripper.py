@@ -73,7 +73,9 @@ class COREGripper(TransportDevice):
                     CheckPlateExists=DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.HomePlaceConfig[
                         "CheckPlateExists"
                     ],
-                    EjectTool=int(self._LastTransportFlag),
+                    EjectTool=COREGripperDriver.PlacePlate.Options.YesNoOptions(
+                        self._LastTransportFlag
+                    ),
                 ),
                 CustomErrorHandling=self.GetErrorHandlingSetting(),
             )
