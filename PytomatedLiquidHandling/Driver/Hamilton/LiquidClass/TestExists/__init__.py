@@ -1,4 +1,4 @@
-from .Command import Command
+from .Command import Command, Exception_LiquidClassDoesNotExist
 from .Options import Options
 from .OptionsTracker import OptionsTracker
 

@@ -14,18 +14,13 @@ class HamiltonCommandABC(CommandABC):
         CommandABC.__init__(self, Identifier)
         self.CustomErrorHandling: bool = CustomErrorHandling
 
-    class Exception_NoOptionsInTracker(ExceptionABC):
-        ...
-
     def ParseResponseRaiseExceptions(self, ResponseInstance: CommandABC.Response):
         CommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)
         if ResponseInstance.GetState() == False:
             Details = ResponseInstance.GetDetails()
 
             if "not options in the options tracker" in Details:
-                raise HamiltonCommandABC.Exception_NoOptionsInTracker(
-                    self, ResponseInstance
-                )
+                raise Exception_NoOptionsInTracker(self, ResponseInstance)
 
     def GetVars(self) -> dict[str, Any]:
         if isinstance(self, CommandOptions):
@@ -51,3 +46,9 @@ class HamiltonCommandABC(CommandABC):
 
         else:
             return {}
+
+
+class Exception_NoOptionsInTracker(
+    ExceptionABC[HamiltonCommandABC, HamiltonCommandABC.Response]
+):
+    ...

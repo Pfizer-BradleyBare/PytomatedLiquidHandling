@@ -1,6 +1,6 @@
 import os
 from abc import abstractmethod
-from typing import Any, Self
+from typing import Any
 
 from .....Tools.AbstractClasses import NonUniqueObjectABC
 from ...AbstractClasses import ExceptionABC
@@ -8,9 +8,6 @@ from ...AbstractClasses import ExceptionABC
 
 class CommandABC(NonUniqueObjectABC):
     ClassFilePath: str
-
-    class Exception_Unhandled(ExceptionABC):
-        ...
 
     class Response:
         @staticmethod
@@ -126,3 +123,7 @@ class CommandABC(NonUniqueObjectABC):
     @abstractmethod
     def ParseResponseRaiseExceptions(self, ResponseInstance: Response):
         ...
+
+
+class Exception_Unhandled(ExceptionABC[CommandABC, CommandABC.Response]):
+    ...

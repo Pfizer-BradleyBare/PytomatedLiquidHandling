@@ -1,4 +1,8 @@
-from ....Tools.AbstractClasses import CommandOptionsTracker, ExceptionABC
+from ....Tools.AbstractClasses import (
+    CommandOptionsTracker,
+    Exception_Unhandled,
+    ExceptionABC,
+)
 from ...Backend import HamiltonActionCommandABC
 from .OptionsTracker import OptionsTracker
 
@@ -20,9 +24,6 @@ class Command(HamiltonActionCommandABC, CommandOptionsTracker[OptionsTracker]):
         def GetFailedLiquidClasses(self) -> list[str]:
             ...
 
-    class Exception_LiquidClassDoesNotExist(ExceptionABC):
-        ...
-
     def ParseResponseRaiseExceptions(self, ResponseInstance: Response):
         HamiltonActionCommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)
 
@@ -30,6 +31,10 @@ class Command(HamiltonActionCommandABC, CommandOptionsTracker[OptionsTracker]):
             Details = ResponseInstance.GetDetails()
 
             if "Liquid class does not exist" in Details:
-                raise Command.Exception_LiquidClassDoesNotExist(self, ResponseInstance)
+                raise Exception_LiquidClassDoesNotExist(self, ResponseInstance)
 
-            raise Command.Exception_Unhandled(self, ResponseInstance)
+            raise Exception_Unhandled(self, ResponseInstance)
+
+
+class Exception_LiquidClassDoesNotExist(ExceptionABC[Command, Command.Response]):
+    ...
