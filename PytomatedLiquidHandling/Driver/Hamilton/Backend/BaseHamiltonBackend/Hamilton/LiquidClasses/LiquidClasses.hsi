@@ -1,0 +1,206 @@
+// {{{ 2 "IncludeGuard" "PragmaOnce"
+#pragma once
+// }} ""
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "HSLJson\\HSLJson.hsl"
+#include "HSL_LiquidClassLib.hsl"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+#include "HSLMETEDLib.hs_"
+#include "HSLMECCLib.hs_"
+#include "HSLPTLLib.hsl"
+// }} ""
+// {{{ 2 "LibraryNamespace" "Begin"
+namespace LIQUIDCLASSES {
+// }} ""
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{{ 2 "SubmethodForwardDeclaration" ""
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void ;
+private function TestExists( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+// }} ""
+function _InitLibrary() {
+// {{ 2 "AutoInitBlock" ""
+PTL::SetWashingStateDefault("RinseTime1", 5);
+PTL::SetWashingStateDefault("SoakTime1", 5);
+PTL::SetWashingStateDefault("FlowRate1", 11);
+PTL::SetWashingStateDefault("RinseTime2", 0);
+PTL::SetWashingStateDefault("SoakTime2", 0);
+PTL::SetWashingStateDefault("FlowRate2", 11);
+PTL::SetWashingStateDefault("DrainingTime", 10);
+PTL::SetWashingStateDefault("StartWashLiquid", 0);
+PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
+PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
+JSONPARSER::_InitLibrary();
+ACTIONSERVERENDPOINTS::_InitLibrary();
+// }} ""
+}
+function _ExitLibrary() {
+// {{ 2 "AutoExitBlock" ""
+JSONPARSER::_ExitLibrary();
+ACTIONSERVERENDPOINTS::_ExitLibrary();
+// }} ""
+}
+// {{{ 5 "TestExists" "Begin"
+private function TestExists( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable CustomErrorHandling;
+private variable State;
+private variable Message;
+private object o_JSONObject;
+private variable LiquidClassesArray[];
+private variable Counter;
+private variable LiquidClass;
+private variable NumClasses;
+private variable FailedLiquidClasses[];
+// {{ 5 "TestExists" "InitLocals"
+// }} ""
+// {{{ 8 1 0 "74f92fe9_8f02_47ad_9f618dc7f3e99633" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+JSONPARSER::GetJSONArrayElement(i_EndpointOutputDataJSONObject, Translate("CommandParameters:LiquidClass:"), LiquidClassesArray);
+// }} ""
+// {{ 9 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 10 1 0 "2c080b81_e588_49c0_94f0bb7e95f6ed14" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// }} ""
+// {{ 11 1 0 "d91c3acb_d3c5_43c0_8dc9bb9a6fd757ee" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 1;
+// }} ""
+// {{ 12 1 0 "a7620655_4849_443d_b88a502a056a14f9" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Success");
+// }} ""
+// {{ 13 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 14 1 0 "a8dcffe8_6ba0_46fc_96b4f6517a95a7f9" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+FailedLiquidClasses.SetSize(0);
+// }} ""
+// {{{ 15 1 0 "58b78fb8_363c_4b0b_a8c1619709577477" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+LiquidClassLib::Initialize(ML_STAR, 0);
+// }} ""
+// {{ 16 1 0 "64fd85a5_2764_4fe5_9a6ae3d1335038c8" "{72EACF88-8D49-43e3-92C8-2F90E81E3260}"
+NumClasses=LiquidClassesArray.GetSize();
+// }} ""
+// {{ 17 1 0 "60ceefea_fcd0_41db_96279caf17cde998" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+for(Counter = 0; Counter < NumClasses;)
+{
+Counter = Counter + 1;
+// }} ""
+// {{ 18 1 0 "1603a806_becc_45a2_a5f21389298fe42b" "{67A8F1C9-6546-41e9-AD2F-3C54F7818853}"
+LiquidClass=LiquidClassesArray.GetAt(Counter-1);
+// }} ""
+// {{ 19 1 0 "521e3b51_5744_4550_a3be622263d3d13c" "{3293659E-F71E-472f-AFB4-6A674E32B114}"
+onerror goto errLabel_3489BB9D987145c9A08529F4BC670EA6 ;
+err.Clear();
+// }} ""
+// {{{ 20 1 0 "8dbda48b_b595_4b4a_a47bc23859295f62" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+LiquidClassLib::SelectLiquidClass(LiquidClass);
+// }} ""
+// {{ 21 1 0 "521e3b51_5744_4550_a3be622263d3d13c" "{3293659E-F71E-472f-AFB4-6A674E32B114}"
+errLabel_3489BB9D987145c9A08529F4BC670EA6 : {}
+onerror goto 0;
+if (err.GetId() != 0)   /* skip handler if no error */
+{
+// }} ""
+// {{ 22 1 0 "48d25776_aca5_4ffe_a26b2bf75dcc574b" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
+FailedLiquidClasses.AddAsLast(LiquidClass);
+// }} ""
+// {{ 23 1 0 "521e3b51_5744_4550_a3be622263d3d13c" "{3293659E-F71E-472f-AFB4-6A674E32B114}"
+}   /* end if from skip handler if no error */
+// }} ""
+// {{ 24 1 0 "60ceefea_fcd0_41db_96279caf17cde998" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+}
+}
+// }} ""
+// {{ 25 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 26 1 0 "8be5f2de_0edf_4a70_91aafe3c38f2859b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Create(o_JSONObject);
+// }} ""
+// {{ 27 1 0 "d1cedab2_0de0_48c5_b2f422ac8c093a68" "{72EACF88-8D49-43e3-92C8-2F90E81E3260}"
+NumClasses=FailedLiquidClasses.GetSize();
+// }} ""
+// {{ 28 1 0 "29be7712_d53d_450c_9b75469f546c3449" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (NumClasses != 0)
+{
+// }} ""
+// {{ 29 1 0 "94c08fb8_274c_4d2e_9f658d3359f7505b" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 0;
+// }} ""
+// {{ 30 1 0 "3cc9ac4c_3922_4e3b_bf87c532dcdd860c" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Liquid class does not exist");
+// }} ""
+// {{{ 31 1 0 "c0b97b07_6a54_4325_92e0edafe78c0f87" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetArray(o_JSONObject, Translate("FailedLiquidClasses"));
+// }} ""
+// {{{ 32 1 0 "7d2fba3a_ae94_41ec_bf9b1f241c0f968c" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetArrayLength(o_JSONObject, Translate("FailedLiquidClasses"), NumClasses);
+// }} ""
+// {{ 33 1 0 "865b7a3c_7532_4b37_a24cff0e990676ab" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+for(Counter = 0; Counter < NumClasses;)
+{
+Counter = Counter + 1;
+// }} ""
+// {{ 34 1 0 "f6e4c161_5891_46d6_a29d1d0e6deae4d8" "{67A8F1C9-6546-41e9-AD2F-3C54F7818853}"
+LiquidClass=FailedLiquidClasses.GetAt(Counter-1);
+// }} ""
+// {{{ 35 1 0 "cac9e4ae_0c6e_44aa_8b6effe97985a35e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetStringArrayElement(o_JSONObject, Translate("FailedLiquidClasses"), Counter, LiquidClass);
+// }} ""
+// {{ 36 1 0 "865b7a3c_7532_4b37_a24cff0e990676ab" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+}
+}
+// }} ""
+// {{ 37 1 0 "29be7712_d53d_450c_9b75469f546c3449" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 38 1 0 "cfc5791d_c185_4a33_adfaeb7a74882c86" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(State, Message, o_JSONObject);
+// }} ""
+// {{{ 39 1 0 "3adf1c5a_3721_4546_8457254f90e6b3a9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
+// }} ""
+// {{ 40 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "TestExists" "End"
+}
+// }} ""
+// {{{ 5 "HandleCommand" "Begin"
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+// {{ 5 "HandleCommand" "InitLocals"
+// }} ""
+// {{ 1 1 0 "f056f6ae_0246_4521_8ed4e60744ac83e7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "TestExists")
+{
+// }} ""
+// {{{ 2 1 0 "b96f181b_398f_421b_8cacd70a9338a535" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+TestExists(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 3 1 0 "70160f8d_a9e8_4e2b_b7590a4a5ef2aa32" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 4 1 0 "f056f6ae_0246_4521_8ed4e60744ac83e7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 5 1 0 "7eba0f5d_73bc_4c95_9aaf8fb35768504f" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nCommand not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+// }} ""
+// {{ 6 1 0 "60a5dee6_353e_4d2f_88d4468acb0b851f" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+abort;
+// }} ""
+// {{{ 5 "HandleCommand" "End"
+}
+// }} ""
+/* {{ 2 "SubmethodInsertLine" "" */ // }} ""
+// {{{ 2 "LibraryNamespace" "End"
+} // library namespace
+// }} ""
+// $$author=BAREB$$valid=0$$time=2023-06-02 21:24$$checksum=2e414b6b$$length=084$$

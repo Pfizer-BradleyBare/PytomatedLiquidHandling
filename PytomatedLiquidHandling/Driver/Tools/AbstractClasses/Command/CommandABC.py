@@ -3,10 +3,14 @@ from abc import abstractmethod
 from typing import Any, Self
 
 from .....Tools.AbstractClasses import NonUniqueObjectABC
+from ...AbstractClasses import ExceptionABC
 
 
 class CommandABC(NonUniqueObjectABC):
     ClassFilePath: str
+
+    class Exception_Unhandled(ExceptionABC):
+        ...
 
     class Response:
         @staticmethod
