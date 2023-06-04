@@ -92,7 +92,7 @@ def LoadYaml(
                 TransportableLabware(LabwareObject, Parameters)
             )
 
-        if DeviceType == "CORE Gripper":
+        if DeviceType == "Hamilton CORE Gripper":
             GripperSequence = Device["Gripper Sequence"]
 
             if not isinstance(BackendInstance, HamiltonBackendABC):
@@ -108,7 +108,7 @@ def LoadYaml(
                 )
             )
 
-        elif DeviceType == "Internal Plate Gripper":
+        elif DeviceType == "Hamilton Internal Plate Gripper":
             if not isinstance(BackendInstance, HamiltonBackendABC):
                 raise Exception("Backend not correct. Must be of Hamilton backend type")
 
@@ -121,7 +121,7 @@ def LoadYaml(
                 )
             )
 
-        elif DeviceType == "Track Gripper":
+        elif DeviceType == "Vantage Track Gripper":
             if not isinstance(BackendInstance, VantageBackend):
                 raise Exception("Backend not correct. Must be of Vantage backend type")
 

@@ -28,7 +28,7 @@ def LoadYaml(FilePath: str, BackendTrackerInstance: BackendTracker) -> TipTracke
             PickupSequence = Tip["Pickup Sequence"]
             MaxVolume = Tip["Volume"]
 
-            if TipType == "NTR":
+            if TipType == "Hamilton NTR":
                 NTRWasteSequence = Tip["NTR Waste Sequence"]
                 GripperSequence = Tip["Gripper Sequence"]
 
@@ -45,7 +45,7 @@ def LoadYaml(FilePath: str, BackendTrackerInstance: BackendTracker) -> TipTracke
                     MaxVolume,
                 )
 
-            elif TipType == "FTR":
+            elif TipType == "Hamilton FTR":
                 if not isinstance(BackendInstance, HamiltonBackendABC):
                     raise Exception("Must be a Hamilton Backend")
 
