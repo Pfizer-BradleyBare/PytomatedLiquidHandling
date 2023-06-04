@@ -1,7 +1,10 @@
 import yaml
 
 from ..Labware import LabwareTracker
-from ..Pipette import Pipette8Channel, Pipette96Channel
+from ..DeckLocation import DeckLocationTracker
+from ..Backend import BackendTracker
+from .HamiltonCORE96Head import HamiltonCORE96Head
+from .HamiltonPortraitCORE8Channel import HamiltonPortraitCORE8Channel
 from ..Tip.BaseTip import TipTracker
 from .BasePipette import (
     LiquidClass,
@@ -10,13 +13,16 @@ from .BasePipette import (
     PipetteTip,
     PipetteTipTracker,
     PipetteTracker,
-    PipettingDeviceTypes,
+    Pipette,
 )
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
 def LoadYaml(
-    TipTrackerInstance: TipTracker,
+    BackendTrackerInstance: BackendTracker,
+    DeckLocationTrackerInstance: DeckLocationTracker,
     LabwareTrackerInstance: LabwareTracker,
+    TipTrackerInstance: TipTracker,
     FilePath: str,
 ) -> PipetteTracker:
     PipetteTrackerInstance = PipetteTracker()
@@ -26,50 +32,49 @@ def LoadYaml(
     FileHandle.close()
     # Get config file contents
 
-    for Device in ConfigFile["Device IDs"]:
-        Enabled = ConfigFile["Device IDs"][Device]["Enabled"]
+    PipetteDevices: dict[int, Pipette] = dict()
+    for DeviceType in ConfigFile:
+        for Device in ConfigFile[DeviceType]:
+            if Device["Enabled"] == False:
+                continue
 
-        if ConfigFile["Device IDs"][Device]["Enabled"] is True:
+            UniqueIdentifier = Device["Unique Identifier"]
+            BackendIdentifier = Device["Backend Unique Identifier"]
+            BackendInstance = BackendTrackerInstance.GetObjectByName(BackendIdentifier)
+            CustomErrorHandling = Device["Custom Error Handling"]
+            NumberOfChannels = Device["Number of Channels"]
 
             SupportedLabwareTrackerInstance = LabwareTracker()
-
-            for LabwareName in ConfigFile["Device IDs"][Device]["Supported Labware"]:
+            for LabwareIdentifier in Device["Supported Labware Unique Identifiers"]:
                 SupportedLabwareTrackerInstance.LoadSingle(
-                    LabwareTrackerInstance.GetObjectByName(LabwareName)
+                    LabwareTrackerInstance.GetObjectByName(LabwareIdentifier)
+                )
+
+            SupportedDeckLocationTrackerInstance = DeckLocationTracker()
+            for DeckLocationIdentifier in Device[
+                "Supported Deck Location Unique Identifier"
+            ]:
+                SupportedDeckLocationTrackerInstance.LoadSingle(
+                    DeckLocationTrackerInstance.GetObjectByName(DeckLocationIdentifier)
                 )
 
             PipetteTipTrackerInstance = PipetteTipTracker()
-
-            for Tip in ConfigFile["Device IDs"][Device]["Supported Tips"]:
-
-                TipInstance = TipTrackerInstance.GetObjectByName(Tip)
-                PickupSequence = ConfigFile["Device IDs"][Device]["Supported Tips"][
-                    Tip
-                ]["Pickup Sequence"]
-                DropoffSequence = ConfigFile["Device IDs"][Device]["Supported Tips"][
-                    Tip
-                ]["Drop Off Sequence"]
-                WasteSequence = ConfigFile["Device IDs"][Device]["Supported Tips"][Tip][
-                    "Waste Sequence"
-                ]
+            for Tip in Device["Supported Tips"]:
+                TipIdentifier = Tip["Tip Unique Identifier"]
+                WasteSequence = Tip["Waste Sequence"]
+                TipInstance = TipTrackerInstance.GetObjectByName(TipIdentifier)
 
                 LiquidClassCategoryTrackerInstance = LiquidClassCategoryTracker()
+                for Category in Tip["Liquid Class Categories"]:
+                    CategoryID = Category["Unique Identifier"]
 
-                for LiquidClassID in ConfigFile["Device IDs"][Device]["Supported Tips"][
-                    Tip
-                ]["Liquid Class IDs"]:
-                    LiquidClassCategoryInstance = LiquidClassCategory(LiquidClassID)
-
-                    for LiquidClassItem in ConfigFile["Device IDs"][Device][
-                        "Supported Tips"
-                    ][Tip]["Liquid Class IDs"][LiquidClassID]:
-
-                        MaxVolume = LiquidClassItem["Max Volume"]
-
-                        Name = LiquidClassItem["Liquid Class"]
+                    LiquidClassCategoryInstance = LiquidClassCategory(CategoryID)
+                    for Class in Category["Liquid Classes"]:
+                        ClassIdentifier = Class["Unique Identifier"]
+                        ClassMaxVolume = Class["Max Volume"]
 
                         LiquidClassCategoryInstance.LoadSingle(
-                            LiquidClass(Name, MaxVolume)
+                            LiquidClass(ClassIdentifier, ClassMaxVolume)
                         )
 
                     LiquidClassCategoryTrackerInstance.LoadSingle(
@@ -78,34 +83,45 @@ def LoadYaml(
 
                 PipetteTipTrackerInstance.LoadSingle(
                     PipetteTip(
-                        TipInstance,
-                        LiquidClassCategoryTrackerInstance,
-                        PickupSequence,
-                        DropoffSequence,
-                        WasteSequence,
+                        TipInstance, LiquidClassCategoryTrackerInstance, WasteSequence
                     )
                 )
 
-            PipetteDeviceType = PipettingDeviceTypes(Device)
+            if DeviceType == "Hamilton 96 Core Head":
+                if not isinstance(BackendInstance, HamiltonBackendABC):
+                    raise Exception("Wrong backend selected")
 
-            if PipetteDeviceType == PipettingDeviceTypes.Pipette8Channel:
-
-                PipetteTrackerInstance.LoadSingle(
-                    Pipette8Channel(
-                        Enabled,
-                        PipetteTipTrackerInstance,
-                        SupportedLabwareTrackerInstance,
-                        ConfigFile["Device IDs"][Device]["Active Channels"],
-                    )
+                PipetteDevices[NumberOfChannels] = HamiltonCORE96Head(
+                    UniqueIdentifier,
+                    BackendInstance,
+                    CustomErrorHandling,
+                    PipetteTipTrackerInstance,
+                    LabwareTrackerInstance,
+                    DeckLocationTrackerInstance,
                 )
 
-            if PipetteDeviceType == PipettingDeviceTypes.Pipette96Channel:
-                PipetteTrackerInstance.LoadSingle(
-                    Pipette96Channel(
-                        Enabled,
-                        PipetteTipTrackerInstance,
-                        SupportedLabwareTrackerInstance,
-                    )
+            elif DeviceType == "Hamilton 1mL Channels Portrait":
+                ActiveChannels = Device["Active Channels"]
+
+                if not isinstance(BackendInstance, HamiltonBackendABC):
+                    raise Exception("Wrong backend selected")
+
+                PipetteDevices[NumberOfChannels] = HamiltonPortraitCORE8Channel(
+                    UniqueIdentifier,
+                    BackendInstance,
+                    CustomErrorHandling,
+                    PipetteTipTrackerInstance,
+                    LabwareTrackerInstance,
+                    DeckLocationTrackerInstance,
+                    ActiveChannels,
                 )
+            else:
+                raise Exception("Device type not recognized")
+
+    for NumberOfChannels, PipetteInstance in sorted(
+        PipetteDevices.items()
+    ):  # Note the () after items!
+        PipetteTrackerInstance.LoadSingle(PipetteInstance)
+    # This sorts the devices by number of channels from largest to smallest.
 
     return PipetteTrackerInstance

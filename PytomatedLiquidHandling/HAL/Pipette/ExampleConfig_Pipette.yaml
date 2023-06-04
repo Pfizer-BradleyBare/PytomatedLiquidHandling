@@ -1,0 +1,108 @@
+#############################################################
+#
+# Devices: The pipetting devices available on this system. Options per device are different.
+# Enabled: True: Can be used. False: Cannot be used
+#
+#############################################################
+
+Hamilton 96 Core Head:
+  - Unique Identifier: test
+    Enabled: True
+    Backend Unique Identifier: Hammy
+    Custom Error Handling: False
+
+    Number of Channels: 96
+
+    Supported Labware Unique Identifiers:
+      - 400uL Corning Costar 96 Well UV Plate
+      - 200uL Biorad 96 Well PCR Plate
+      - 400uL Thermo 96 Well PCR Plate
+      - 1200uL DeepWell 96 Well PCR Plate
+      - 2000uL Corning 96 Well PCR Plate
+
+    Supported Deck Location Unique Identifiers:
+      - a
+      - b
+
+    Supported Tips:
+      - Tip Unique Identifier: 50uL NTR
+        Waste Sequence: Test
+
+        Liquid Class Categories:
+          - Unique Identifier: Default
+            Liquid Classes:
+              - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
+                Max Volume: 50
+
+      - Tip Unique Identifier: 300uL NTR
+        Waste Sequence: Test
+
+        Liquid Class Categories:
+          - Unique Identifier: Default
+            Liquid Classes:
+              - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
+                Max Volume: 300
+
+      - Tip Unique Identifier: 1000uL FTR
+        Waste Sequence: Test
+
+        Liquid Class Categories:
+          - Unique Identifier: Default
+            Liquid Classes:
+              - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
+                Max Volume: 1000
+
+Hamilton 1mL Channels Portrait:
+  - Unique Identifier: Test
+    Enabled: True
+    Backend Unique Identifier: Hammy
+    Custom Error Handling: False
+
+    Number of Channels: 8
+    Active Channels: [1, 2, 3, 4, 5, 6, 7, 8]
+
+    Supported Labware Unique Identifiers:
+      - 400uL Corning Costar 96 Well UV Plate
+      - 200uL Biorad 96 Well PCR Plate
+      - 400uL Thermo 96 Well PCR Plate
+      - 1200uL DeepWell 96 Well PCR Plate
+      - 2000uL Corning 96 Well PCR Plate
+      - Hamilton 1.5mL FlipTube
+      - 15mL Centrifuge Tube
+      - 60mL Reagent Reservior
+      - 200mL Reagent Trough
+    
+    Supported Deck Location Unique Identifiers:
+      - a
+      - b
+
+      Supported Tips:
+        - Tip Unique Identifier: 50uL NTR
+          Waste Sequence: Test
+
+          Liquid Class Categories:
+            - Unique Identifier: Default
+              Liquid Classes:
+                - Unique Identifier: Tip_50_TrisTweenBuffer_SurfaceEmpty_Normalization
+                  Max Volume: 5
+
+                - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
+                  Max Volume: 50
+
+        - Tip Unique Identifier: 300uL NTR
+          Waste Sequence: Test
+
+          Liquid Class Categories:
+            - Unique Identifier: Default
+              Liquid Classes:
+                - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
+                  Max Volume: 300
+
+        - Tip Unique Identifier: 1000uL FTR
+          Waste Sequence: Test
+
+          Liquid Class Categories:
+            - Unique Identifier: Default
+              Liquid Classes:
+                - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
+                  Max Volume: 1000

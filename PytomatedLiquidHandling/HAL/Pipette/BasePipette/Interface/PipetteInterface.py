@@ -1,34 +1,11 @@
 from abc import abstractmethod
 
-from ....Labware import Labware, LabwareTracker
-from ....Layout import LayoutItem
-from ....Tools.AbstractClasses import InterfaceABC
-from .TransferOptions.TransferOptionsTracker import TransferOptionsTracker
-
-
-class PipetteInterface(InterfaceABC):
-    TipsStored: bool = False
-
-    def __init__(self):
-        pass
-
-    @abstractmethod
-    def LabwaresSupported(
-        self,
-        LabwareInstances: list[Labware],
-    ) -> bool:
-        ...
-
-    @abstractmethod
-    def Transfer(
-        self,
-        TransferOptionsTrackerInstance: TransferOptionsTracker,
-    ):
-        ...
+from ....Labware import LabwareTracker
+from ....LayoutItem import CoverablePosition, NonCoverablePosition
 
 
 def TestSumLessThanMax(
-    LayoutItemInstances: list[LayoutItem],
+    LayoutItemInstances: list[CoverablePosition] | list[NonCoverablePosition],
     LayoutItemPositions: list[int],
     TransferVolumes: list[float],
     MaxSumValues: list[float],
@@ -48,7 +25,7 @@ def TestSumLessThanMax(
         TransferVolumes,
         MaxSumValues,
     ):
-        KeyName = LayoutItemInstance.GetSequence() + str(LayoutItemPosition)
+        KeyName = LayoutItemInstance.Sequence + str(LayoutItemPosition)
 
         if KeyName not in VolumeSumDict:
             VolumeSumDict[KeyName] = {
@@ -67,13 +44,14 @@ def TestSumLessThanMax(
 
 
 def TestLabwareSupported(
-    LabwareTrackerInstance: LabwareTracker, LayoutItems: list[LayoutItem]
+    LabwareTrackerInstance: LabwareTracker,
+    LayoutItems: list[CoverablePosition] | list[NonCoverablePosition],
 ) -> list[int]:
     FailedIndices = list()
 
     Index = 0
     for LayoutItemInstance in LayoutItems:
-        if LabwareTrackerInstance.IsTracked(LayoutItemInstance.GetSequence()) is False:
+        if LabwareTrackerInstance.IsTracked(LayoutItemInstance.Sequence) is False:
             FailedIndices.append(Index)
 
         Index += 1

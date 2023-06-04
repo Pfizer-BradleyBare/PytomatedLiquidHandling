@@ -1,30 +1,31 @@
 from math import ceil
 
-from ...Driver.Pipette import SingleChannel as Pipette8ChannelDriver
-from ..Labware import Labware, LabwareTracker
-from ..Pipette import TransferOptions, TransferOptionsTracker
-from .BasePipette import Pipette, PipetteTipTracker, PipettingDeviceTypes
-from .BasePipette.Interface.PipetteInterface import (
-    ClampMax,
-    TestLabwareSupported,
-    TestSumLessThanMax,
-)
+from ..Labware import LabwareTracker
+from ..Pipette import TransferOptions
+from .BasePipette import Pipette, PipetteTipTracker
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from ..DeckLocation import DeckLocationTracker
 
 
-class Pipette8Channel(Pipette):
+class HamiltonPortraitCORE8Channel(Pipette):
     def __init__(
         self,
-        Enabled: bool,
-        SupoortedPipetteTipTrackerInstance: PipetteTipTracker,
+        UniqueIdentifier: str,
+        BackendInstance: HamiltonBackendABC,
+        CustomErrorHandling: bool,
+        SupportedPipetteTipTrackerInstance: PipetteTipTracker,
         SupportedLabwareTrackerInstance: LabwareTracker,
+        SupportedDeckLocationTrackerInstance: DeckLocationTracker,
         ActiveChannels: list[int],
     ):
         Pipette.__init__(
             self,
-            PipettingDeviceTypes.Pipette8Channel,
-            Enabled,
-            SupoortedPipetteTipTrackerInstance,
+            UniqueIdentifier,
+            BackendInstance,
+            CustomErrorHandling,
+            SupportedPipetteTipTrackerInstance,
             SupportedLabwareTrackerInstance,
+            SupportedDeckLocationTrackerInstance,
         )
         self.ActiveChannels: list[int] = ActiveChannels
 

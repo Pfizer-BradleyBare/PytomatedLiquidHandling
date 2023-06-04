@@ -1,4 +1,4 @@
-from .Pipette import Pipette, PipettingDeviceTypes
+from .Pipette import Pipette
 from .PipetteTip.LiquidClass.LiquidClass import LiquidClass
 from .PipetteTip.LiquidClass.LiquidClassCategory import LiquidClassCategory
 from .PipetteTip.LiquidClass.LiquidClassCategoryTracker import (
@@ -7,10 +7,10 @@ from .PipetteTip.LiquidClass.LiquidClassCategoryTracker import (
 from .PipetteTip.PipetteTip import PipetteTip
 from .PipetteTip.PipetteTipTracker import PipetteTipTracker
 from .PipetteTracker import PipetteTracker
+from .Interface import TransferOptions
 
 __all__ = [
     "Pipette",
-    "PipettingDeviceTypes",
     "LiquidClass",
     "LiquidClassCategory",
     "LiquidClassCategoryTracker",

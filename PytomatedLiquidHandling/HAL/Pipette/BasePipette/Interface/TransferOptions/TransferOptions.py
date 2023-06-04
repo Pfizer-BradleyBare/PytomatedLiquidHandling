@@ -1,29 +1,33 @@
 from ......Tools.AbstractClasses import NonUniqueObjectABC
-from .....Layout import LayoutItem
+from .....LayoutItem import CoverablePosition, NonCoverablePosition
 
 
-class TransferOptions(NonUniqueObjectABC):
+class Options(NonUniqueObjectABC):
     def __init__(
         self,
-        SourceLayoutItemInstance: LayoutItem,
+        SourceLayoutItemInstance: CoverablePosition | NonCoverablePosition,
         SourcePosition: int,  # This is the well position. Not sequence position
         CurrentSourceVolume: float,
         SourceMixCycles: int,
         SourceLiquidClassCategory: str,
-        DestinationLayoutItemInstance: LayoutItem,
+        DestinationLayoutItemInstance: CoverablePosition | NonCoverablePosition,
         DestinationPosition: int,  # This is the well position. Not sequence position
         CurrentDestinationVolume: float,
         DestinationMixCycles: int,
         DestinationLiquidClassCategory: str,
         TransferVolume: float,
     ):
-        self.SourceLayoutItemInstance: LayoutItem = SourceLayoutItemInstance
+        self.SourceLayoutItemInstance: CoverablePosition | NonCoverablePosition = (
+            SourceLayoutItemInstance
+        )
         self.SourcePosition: int = SourcePosition
         self.CurrentSourceVolume: float = CurrentSourceVolume
         self.SourceMixCycles: int = SourceMixCycles
         self.SourceLiquidClassCategory: str = SourceLiquidClassCategory
 
-        self.DestinationLayoutItemInstance: LayoutItem = DestinationLayoutItemInstance
+        self.DestinationLayoutItemInstance: CoverablePosition | NonCoverablePosition = (
+            DestinationLayoutItemInstance
+        )
         self.DestinationPosition: int = DestinationPosition
         self.CurrentDestinationVolume: float = CurrentDestinationVolume
         self.DestinationMixCycles: int = DestinationMixCycles

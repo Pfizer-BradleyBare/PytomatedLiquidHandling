@@ -1,32 +1,36 @@
-from enum import Enum
-
 from ....Tools.AbstractClasses import UniqueObjectABC
 from ...Labware import LabwareTracker
-from .Interface.PipetteInterface import PipetteInterface
 from .PipetteTip.PipetteTipTracker import PipetteTipTracker
+from .Interface import TransferOptions
+from ...Tools.AbstractClasses import InterfaceABC
+from ...DeckLocation import DeckLocationTracker
+from ....Driver.Tools.AbstractClasses import BackendABC
 
 
-class PipettingDeviceTypes(Enum):
-    Pipette8Channel = "1mL Channels Portrait"
-    Pipette96Channel = "96 Core Head"
-
-
-class Pipette(UniqueObjectABC, PipetteInterface):
+class Pipette(UniqueObjectABC, InterfaceABC):
     def __init__(
         self,
-        PipettingDeviceType: PipettingDeviceTypes,
-        Enabled: bool,
+        UniqueIdentifier: str,
+        BackendInstance: BackendABC,
+        CustomErrorHandling: bool,
         SupportedPipetteTipTrackerInstance: PipetteTipTracker,
         SupportedLabwareTrackerInstance: LabwareTracker,
+        SupportedDeckLocationTrackerInstance: DeckLocationTracker,
     ):
-        self.PipettingDeviceType: PipettingDeviceTypes = PipettingDeviceType
-        self.Enabled: bool = Enabled
+        UniqueObjectABC.__init__(self, UniqueIdentifier)
+        InterfaceABC.__init__(self, BackendInstance, CustomErrorHandling)
         self.SupportedPipetteTipTrackerInstance: PipetteTipTracker = (
             SupportedPipetteTipTrackerInstance
         )
         self.SupportedLabwareTrackerInstance: LabwareTracker = (
             SupportedLabwareTrackerInstance
         )
+        self.SupportedDeckLocationTrackerInstance: DeckLocationTracker = (
+            SupportedDeckLocationTrackerInstance
+        )
 
-    def GetUniqueIdentifier(self) -> str:
-        return self.PipettingDeviceType.value
+    def Transfer(
+        self,
+        TransferOptionsTrackerInstance: TransferOptions.OptionsTracker,
+    ):
+        ...

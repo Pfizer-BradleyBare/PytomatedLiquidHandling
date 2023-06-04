@@ -1,15 +1,11 @@
-from .BasePipette.Interface.TransferOptions.TransferOptions import TransferOptions
-from .BasePipette.Interface.TransferOptions.TransferOptionsTracker import (
-    TransferOptionsTracker,
-)
+from .BasePipette.Interface import TransferOptions
 from .BasePipette.PipetteTracker import PipetteTracker
-from .Pipette8Channel import Pipette8Channel
-from .Pipette96Channel import Pipette96Channel
+from .HamiltonCORE96Head import HamiltonCORE96Head
+from .HamiltonPortraitCORE8Channel import HamiltonPortraitCORE8Channel
 
 __all__ = [
-    "Pipette8Channel",
-    "Pipette96Channel",
+    "HamiltonCORE96Head",
+    "HamiltonPortraitCORE8Channel",
     "TransferOptions",
-    "TransferOptionsTracker",
     "PipetteTracker",
 ]

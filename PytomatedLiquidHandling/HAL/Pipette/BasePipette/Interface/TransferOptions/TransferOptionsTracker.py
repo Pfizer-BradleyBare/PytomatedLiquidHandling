@@ -1,7 +1,6 @@
 from ......Tools.AbstractClasses import NonUniqueObjectTrackerABC
-from .TransferOptions import TransferOptions
+from .TransferOptions import Options
 
 
-class TransferOptionsTracker(NonUniqueObjectTrackerABC[TransferOptions]):
-    def __init__(self, StoreTips: bool):
-        self.StoreTips: bool = StoreTips
+class OptionsTracker(NonUniqueObjectTrackerABC[Options]):
+    ...
