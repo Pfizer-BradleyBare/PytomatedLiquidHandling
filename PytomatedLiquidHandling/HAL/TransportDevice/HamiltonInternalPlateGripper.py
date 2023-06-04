@@ -4,7 +4,7 @@ from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Transport import IPG as IPGDriver
 
 
-class InternalPlateGripper(TransportDevice):
+class HamiltonInternalPlateGripper(TransportDevice):
     def __init__(
         self,
         UniqueIdentifier: str,

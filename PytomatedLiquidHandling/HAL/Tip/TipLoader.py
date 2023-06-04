@@ -1,6 +1,6 @@
 import yaml
 
-from ..Tip import TipFTR, TipNTR
+from ..Tip import HamiltonTipNTR, HamiltonTipFTR
 from .BaseTip import TipTracker
 from ..Backend import BackendTracker
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
@@ -35,7 +35,7 @@ def LoadYaml(FilePath: str, BackendTrackerInstance: BackendTracker) -> TipTracke
                 if not isinstance(BackendInstance, HamiltonBackendABC):
                     raise Exception("Must be a Hamilton Backend")
 
-                TipInstance = TipNTR(
+                TipInstance = HamiltonTipNTR(
                     UniqueIdentifier,
                     BackendInstance,
                     CustomErrorHandling,
@@ -49,7 +49,7 @@ def LoadYaml(FilePath: str, BackendTrackerInstance: BackendTracker) -> TipTracke
                 if not isinstance(BackendInstance, HamiltonBackendABC):
                     raise Exception("Must be a Hamilton Backend")
 
-                TipInstance = TipFTR(
+                TipInstance = HamiltonTipFTR(
                     UniqueIdentifier,
                     BackendInstance,
                     CustomErrorHandling,

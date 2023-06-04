@@ -1,12 +1,12 @@
 from .BaseTransportDevice import TransportDeviceTracker
-from .COREGripper import COREGripper
-from .InternalPlateGripper import InternalPlateGripper
-from .TrackGripper import TrackGripper
+from .HamiltonCOREGripper import HamiltonCOREGripper
+from .HamiltonInternalPlateGripper import HamiltonInternalPlateGripper
+from .VantageTrackGripper import VantageTrackGripper
 from .BaseTransportDevice import TransportOptions
 
 __all__ = [
-    "COREGripper",
-    "InternalPlateGripper",
-    "TrackGripper",
+    "HamiltonCOREGripper",
+    "HamiltonInternalPlateGripper",
+    "VantageTrackGripper",
     "TransportDeviceTracker",
 ]

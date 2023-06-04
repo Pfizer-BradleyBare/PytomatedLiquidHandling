@@ -6,7 +6,11 @@ from ..Backend import BackendTracker
 from ..DeckLocation import DeckLocation
 from ..Labware import LabwareTracker, PipettableLabware
 from ..LayoutItem import LayoutItemTracker, NonCoverablePosition
-from ..TransportDevice import COREGripper, InternalPlateGripper, TrackGripper
+from ..TransportDevice import (
+    HamiltonCOREGripper,
+    HamiltonInternalPlateGripper,
+    VantageTrackGripper,
+)
 from .BaseTransportDevice import (
     TransportableLabware,
     TransportableLabwareTracker,
@@ -74,7 +78,9 @@ def LoadYaml(
 
         TransportableLabwareTrackerInstance = TransportableLabwareTracker()
         for LabwareInformation in Device["Supported Labware Information"]:
-            LabwareObject = LabwareTrackerInstance.GetObjectByName(LabwareInformation["Labware Unique Identifier"])
+            LabwareObject = LabwareTrackerInstance.GetObjectByName(
+                LabwareInformation["Labware Unique Identifier"]
+            )
 
             CloseOffset = LabwareInformation["Close Offset"]
             OpenOffset = LabwareInformation["Open Offset"]
@@ -93,7 +99,7 @@ def LoadYaml(
                 raise Exception("Backend not correct. Must be of Hamilton backend type")
 
             TransportDeviceTrackerInstance.LoadSingle(
-                COREGripper(
+                HamiltonCOREGripper(
                     UniqueIdentifier,
                     BackendInstance,
                     CustomErrorHandling,
@@ -107,7 +113,7 @@ def LoadYaml(
                 raise Exception("Backend not correct. Must be of Hamilton backend type")
 
             TransportDeviceTrackerInstance.LoadSingle(
-                InternalPlateGripper(
+                HamiltonInternalPlateGripper(
                     UniqueIdentifier,
                     BackendInstance,
                     CustomErrorHandling,
@@ -120,7 +126,7 @@ def LoadYaml(
                 raise Exception("Backend not correct. Must be of Vantage backend type")
 
             TransportDeviceTrackerInstance.LoadSingle(
-                TrackGripper(
+                VantageTrackGripper(
                     UniqueIdentifier,
                     BackendInstance,
                     CustomErrorHandling,

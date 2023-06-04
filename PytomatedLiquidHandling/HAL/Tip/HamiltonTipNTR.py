@@ -3,7 +3,7 @@ from .BaseTip import Tip
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
-class TipNTR(Tip):
+class HamiltonTipNTR(Tip):
     def __init__(
         self,
         UniqueIdentifier: str,

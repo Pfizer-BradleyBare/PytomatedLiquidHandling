@@ -1,5 +1,5 @@
 from .BaseTip import TipTracker
-from .TipFTR import TipFTR
-from .TipNTR import TipNTR
+from .HamiltonTipFTR import HamiltonTipFTR
+from .HamiltonTipNTR import HamiltonTipNTR
 
-__all__ = ["TipFTR", "TipNTR", "TipTracker"]
+__all__ = ["HamiltonTipFTR", "HamiltonTipNTR", "TipTracker"]

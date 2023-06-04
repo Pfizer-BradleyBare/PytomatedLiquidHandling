@@ -6,7 +6,7 @@ from .BaseTransportDevice import (
 from ...Driver.Hamilton.Backend import VantageBackend
 
 
-class TrackGripper(TransportDevice):
+class VantageTrackGripper(TransportDevice):
     def __init__(
         self,
         UniqueIdentifier: str,

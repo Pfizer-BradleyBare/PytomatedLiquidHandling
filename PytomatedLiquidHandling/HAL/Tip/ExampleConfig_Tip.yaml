@@ -12,7 +12,7 @@
 #
 #############################################################
 
-NTR:
+Hamilton NTR:
   - Unique Identifier: 50uL NTR
     Enabled: True
     Backend Unique Identifier: Hammy
@@ -29,7 +29,7 @@ NTR:
     NTR Waste Sequence: Tip300_NTR_Waste
     Gripper Sequence: Gripper
 
-FTR:
+Hamilton FTR:
   - Unique Identifier: 1000uL FTR
     Enabled: True
     Backend Unique Identifier: Hammy
