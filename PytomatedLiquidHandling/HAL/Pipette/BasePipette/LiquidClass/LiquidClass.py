@@ -1,4 +1,4 @@
-from ......Tools.AbstractClasses import UniqueObjectABC
+from .....Tools.AbstractClasses import UniqueObjectABC
 
 
 class LiquidClass(UniqueObjectABC):

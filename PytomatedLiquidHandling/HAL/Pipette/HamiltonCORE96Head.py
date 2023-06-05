@@ -1,8 +1,8 @@
-from ..Labware import LabwareTracker
-from ..Pipette import TransferOptions
-from .BasePipette import Pipette, PipetteTipTracker
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ..DeckLocation import DeckLocationTracker
+from ..Labware import LabwareTracker
+from ..Pipette import TransferOptions
+from .BasePipette import LiquidClassCategoryTracker, Pipette, PipetteTipTracker
 
 
 class HamiltonCORE96Head(Pipette):
@@ -11,18 +11,20 @@ class HamiltonCORE96Head(Pipette):
         UniqueIdentifier: str,
         BackendInstance: HamiltonBackendABC,
         CustomErrorHandling: bool,
-        SupportedPipetteTipTrackerInstance: PipetteTipTracker,
+        SupportedTipTrackerInstance: PipetteTipTracker,
         SupportedLabwareTrackerInstance: LabwareTracker,
         SupportedDeckLocationTrackerInstance: DeckLocationTracker,
+        SupportedLiquidClassCategoryTrackerInstance: LiquidClassCategoryTracker,
     ):
         Pipette.__init__(
             self,
             UniqueIdentifier,
             BackendInstance,
             CustomErrorHandling,
-            SupportedPipetteTipTrackerInstance,
+            SupportedTipTrackerInstance,
             SupportedLabwareTrackerInstance,
             SupportedDeckLocationTrackerInstance,
+            SupportedLiquidClassCategoryTrackerInstance,
         )
 
     def Initialize(

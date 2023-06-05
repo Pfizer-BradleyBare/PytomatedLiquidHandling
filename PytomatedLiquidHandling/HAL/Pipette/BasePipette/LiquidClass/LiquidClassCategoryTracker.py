@@ -1,4 +1,4 @@
-from ......Tools.AbstractClasses import UniqueObjectTrackerABC
+from .....Tools.AbstractClasses import UniqueObjectTrackerABC
 from .LiquidClassCategory import LiquidClassCategory
 
 

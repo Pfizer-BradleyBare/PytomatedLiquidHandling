@@ -28,29 +28,23 @@ Hamilton 96 Core Head:
       - Tip Unique Identifier: 50uL NTR
         Waste Sequence: Test
 
-        Liquid Class Categories:
-          - Unique Identifier: Default
-            Liquid Classes:
-              - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
-                Max Volume: 50
-
       - Tip Unique Identifier: 300uL NTR
         Waste Sequence: Test
-
-        Liquid Class Categories:
-          - Unique Identifier: Default
-            Liquid Classes:
-              - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
-                Max Volume: 300
 
       - Tip Unique Identifier: 1000uL FTR
         Waste Sequence: Test
 
-        Liquid Class Categories:
-          - Unique Identifier: Default
-            Liquid Classes:
-              - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
-                Max Volume: 1000
+    Supported Liquid Class Categories:
+      - Unique Identifier: Default
+        Liquid Classes:
+          - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
+            Max Volume: 50
+
+          - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
+            Max Volume: 300
+
+          - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
+            Max Volume: 1000
 
 Hamilton 1mL Channels Portrait:
   - Unique Identifier: Test
@@ -71,38 +65,29 @@ Hamilton 1mL Channels Portrait:
       - 15mL Centrifuge Tube
       - 60mL Reagent Reservior
       - 200mL Reagent Trough
-    
+
     Supported Deck Location Unique Identifiers:
       - a
       - b
 
-      Supported Tips:
-        - Tip Unique Identifier: 50uL NTR
-          Waste Sequence: Test
+    Supported Tips:
+      - Tip Unique Identifier: 50uL NTR
+        Waste Sequence: Test
 
-          Liquid Class Categories:
-            - Unique Identifier: Default
-              Liquid Classes:
-                - Unique Identifier: Tip_50_TrisTweenBuffer_SurfaceEmpty_Normalization
-                  Max Volume: 5
+      - Tip Unique Identifier: 300uL NTR
+        Waste Sequence: Test
 
-                - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
-                  Max Volume: 50
+      - Tip Unique Identifier: 1000uL FTR
+        Waste Sequence: Test
 
-        - Tip Unique Identifier: 300uL NTR
-          Waste Sequence: Test
+    Supported Liquid Class Categories:
+      - Unique Identifier: Default
+        Liquid Classes:
+          - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
+            Max Volume: 50
 
-          Liquid Class Categories:
-            - Unique Identifier: Default
-              Liquid Classes:
-                - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
-                  Max Volume: 300
+          - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
+            Max Volume: 300
 
-        - Tip Unique Identifier: 1000uL FTR
-          Waste Sequence: Test
-
-          Liquid Class Categories:
-            - Unique Identifier: Default
-              Liquid Classes:
-                - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
-                  Max Volume: 1000
+          - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
+            Max Volume: 1000

@@ -1,21 +1,21 @@
 import yaml
 
-from ..Labware import LabwareTracker
-from ..DeckLocation import DeckLocationTracker
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ..Backend import BackendTracker
-from .HamiltonCORE96Head import HamiltonCORE96Head
-from .HamiltonPortraitCORE8Channel import HamiltonPortraitCORE8Channel
-from ..Tip.BaseTip import TipTracker
+from ..DeckLocation import DeckLocationTracker
+from ..Labware import LabwareTracker
+from ..Tip.BaseTip import Tip, TipTracker
 from .BasePipette import (
     LiquidClass,
     LiquidClassCategory,
     LiquidClassCategoryTracker,
+    Pipette,
     PipetteTip,
     PipetteTipTracker,
     PipetteTracker,
-    Pipette,
 )
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from .HamiltonCORE96Head import HamiltonCORE96Head
+from .HamiltonPortraitCORE8Channel import HamiltonPortraitCORE8Channel
 
 
 def LoadYaml(
@@ -59,32 +59,41 @@ def LoadYaml(
                 )
 
             PipetteTipTrackerInstance = PipetteTipTracker()
-            for Tip in Device["Supported Tips"]:
-                TipIdentifier = Tip["Tip Unique Identifier"]
-                WasteSequence = Tip["Waste Sequence"]
+            Tips: dict[float, PipetteTip] = dict()
+            for TipDevice in Device["Supported Tips"]:
+                TipIdentifier = TipDevice["Tip Unique Identifier"]
+                WasteSequence = TipDevice["Waste Sequence"]
                 TipInstance = TipTrackerInstance.GetObjectByName(TipIdentifier)
+                Tips[TipInstance.MaxVolume] = PipetteTip(TipInstance, WasteSequence)
 
-                LiquidClassCategoryTrackerInstance = LiquidClassCategoryTracker()
-                for Category in Tip["Liquid Class Categories"]:
-                    CategoryID = Category["Unique Identifier"]
+            for Volume, PipetteTipInstance in sorted(
+                Tips.items()
+            ):  # Note the () after items!
+                PipetteTipTrackerInstance.LoadSingle(PipetteTipInstance)
+            # This sorts the liquid class volumes from smallest to largest
 
-                    LiquidClassCategoryInstance = LiquidClassCategory(CategoryID)
-                    for Class in Category["Liquid Classes"]:
-                        ClassIdentifier = Class["Unique Identifier"]
-                        ClassMaxVolume = Class["Max Volume"]
+            LiquidClassCategoryTrackerInstance = LiquidClassCategoryTracker()
+            for Category in Device["Supported Liquid Class Categories"]:
+                CategoryID = Category["Unique Identifier"]
 
-                        LiquidClassCategoryInstance.LoadSingle(
-                            LiquidClass(ClassIdentifier, ClassMaxVolume)
-                        )
+                LiquidClassCategoryInstance = LiquidClassCategory(CategoryID)
+                LiquidClasses: dict[float, LiquidClass] = dict()
+                for Class in Category["Liquid Classes"]:
+                    ClassIdentifier = Class["Unique Identifier"]
+                    ClassMaxVolume = Class["Max Volume"]
 
-                    LiquidClassCategoryTrackerInstance.LoadSingle(
-                        LiquidClassCategoryInstance
+                    LiquidClasses[ClassMaxVolume] = LiquidClass(
+                        ClassIdentifier, ClassMaxVolume
                     )
 
-                PipetteTipTrackerInstance.LoadSingle(
-                    PipetteTip(
-                        TipInstance, LiquidClassCategoryTrackerInstance, WasteSequence
-                    )
+                for Volume, LiquidClassInstance in sorted(
+                    LiquidClasses.items()
+                ):  # Note the () after items!
+                    LiquidClassCategoryInstance.LoadSingle(LiquidClassInstance)
+                # This sorts the liquid class volumes from smallest to largest
+
+                LiquidClassCategoryTrackerInstance.LoadSingle(
+                    LiquidClassCategoryInstance
                 )
 
             if DeviceType == "Hamilton 96 Core Head":
@@ -98,6 +107,7 @@ def LoadYaml(
                     PipetteTipTrackerInstance,
                     LabwareTrackerInstance,
                     DeckLocationTrackerInstance,
+                    LiquidClassCategoryTrackerInstance,
                 )
 
             elif DeviceType == "Hamilton 1mL Channels Portrait":
@@ -113,6 +123,7 @@ def LoadYaml(
                     PipetteTipTrackerInstance,
                     LabwareTrackerInstance,
                     DeckLocationTrackerInstance,
+                    LiquidClassCategoryTrackerInstance,
                     ActiveChannels,
                 )
             else:
