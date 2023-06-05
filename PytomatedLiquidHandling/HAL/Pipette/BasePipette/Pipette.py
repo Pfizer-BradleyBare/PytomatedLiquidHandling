@@ -5,6 +5,7 @@ from .Interface import TransferOptions
 from ...Tools.AbstractClasses import InterfaceABC
 from ...DeckLocation import DeckLocationTracker
 from ....Driver.Tools.AbstractClasses import BackendABC
+from abc import abstractmethod
 
 
 class Pipette(UniqueObjectABC, InterfaceABC):
@@ -29,6 +30,13 @@ class Pipette(UniqueObjectABC, InterfaceABC):
             SupportedDeckLocationTrackerInstance
         )
 
+    def LabwaresSupported(
+        self,
+        LabwareInstances: list[Labware],
+    ) -> bool:
+        ...
+
+    @abstractmethod
     def Transfer(
         self,
         TransferOptionsTrackerInstance: TransferOptions.OptionsTracker,

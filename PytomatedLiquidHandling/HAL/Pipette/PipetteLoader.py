@@ -119,7 +119,7 @@ def LoadYaml(
                 raise Exception("Device type not recognized")
 
     for NumberOfChannels, PipetteInstance in sorted(
-        PipetteDevices.items()
+        PipetteDevices.items(), reverse=True
     ):  # Note the () after items!
         PipetteTrackerInstance.LoadSingle(PipetteInstance)
     # This sorts the devices by number of channels from largest to smallest.

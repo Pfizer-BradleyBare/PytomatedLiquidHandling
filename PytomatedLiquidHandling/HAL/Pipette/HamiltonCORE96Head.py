@@ -35,14 +35,8 @@ class HamiltonCORE96Head(Pipette):
     ):
         ...
 
-    def LabwaresSupported(
-        self,
-        LabwareInstances: list[Labware],
-    ) -> bool:
-        ...
-
     def Transfer(
         self,
-        TransferOptionsTrackerInstance: TransferOptionsTracker,
+        TransferOptionsTrackerInstance: TransferOptions.OptionsTracker,
     ):
         ...
