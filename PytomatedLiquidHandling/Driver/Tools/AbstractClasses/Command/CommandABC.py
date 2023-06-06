@@ -4,7 +4,6 @@ from dataclasses import dataclass, field
 from typing import Any, ClassVar
 
 from .....Tools.AbstractClasses import NonUniqueObjectABC
-from ...AbstractClasses import ExceptionABC
 
 
 @dataclass()
@@ -12,20 +11,23 @@ class CommandABC(NonUniqueObjectABC):
     @dataclass
     class Response:
         @staticmethod
-        def Decorator_ExpectedSuccessResponseProperty(DecoratedFunction):
-            def inner(*args, **kwargs):
-                return args[0].Properties[DecoratedFunction.__name__.replace("Get", "")]
+        def Decorator_ExpectedResponseProperty(
+            *, SuccessProperty: bool = False, ErrorProperty: bool = False
+        ):
+            def Decorator_inner(DecoratedFunction):
+                def inner(*args, **kwargs):
+                    return args[0].Properties[
+                        DecoratedFunction.__name__.replace("Get", "")
+                    ]
 
-            inner.Decorated_ExpectedSuccessResponseProperty = True
-            return inner
+                if SuccessProperty == True:
+                    inner.Decorated_ExpectedSuccessResponseProperty = True
 
-        @staticmethod
-        def Decorator_ExpectedErrorResponseProperty(DecoratedFunction):
-            def inner(*args, **kwargs):
-                return args[0].Properties[DecoratedFunction.__name__.replace("Get", "")]
+                if ErrorProperty == True:
+                    inner.Decorated_ExpectedErrorResponseProperty = True
+                return inner
 
-            inner.Decorated_ExpectedErrorResponseProperty = True
-            return inner
+            return Decorator_inner
 
         @classmethod
         def GetExpectedSuccessResponseProperties(cls) -> list[str]:
@@ -51,7 +53,7 @@ class CommandABC(NonUniqueObjectABC):
 
             return Out
 
-        Properties: dict[str, Any]
+        Properties: dict[str, Any] = field(default_factory=dict)
 
         def SetProperty(self, Key: str, Value: Any):
             self.Properties[Key] = Value
@@ -59,13 +61,11 @@ class CommandABC(NonUniqueObjectABC):
         def UpdateProperties(self, Key: str, Value: Any):
             self.Properties.update({Key: Value})
 
-        @Decorator_ExpectedSuccessResponseProperty
-        @Decorator_ExpectedErrorResponseProperty
+        @Decorator_ExpectedResponseProperty(SuccessProperty=True, ErrorProperty=True)
         def GetState(self) -> bool:
             ...
 
-        @Decorator_ExpectedSuccessResponseProperty
-        @Decorator_ExpectedErrorResponseProperty
+        @Decorator_ExpectedResponseProperty(SuccessProperty=True, ErrorProperty=True)
         def GetDetails(self) -> str:
             ...
 
@@ -129,5 +129,5 @@ class CommandABC(NonUniqueObjectABC):
 
 
 @dataclass
-class Exception_Unhandled(ExceptionABC[CommandABC, CommandABC.Response]):
+class Exception_Unhandled:
     ...

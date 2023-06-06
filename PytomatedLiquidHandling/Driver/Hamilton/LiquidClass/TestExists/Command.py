@@ -1,9 +1,10 @@
+from dataclasses import dataclass
+
 from ....Tools.AbstractClasses import (
     CommandOptionsTracker,
     Exception_Unhandled,
     ExceptionABC,
 )
-from dataclasses import dataclass
 from ...Backend import HamiltonActionCommandABC
 from .OptionsTracker import OptionsTracker
 
@@ -12,7 +13,9 @@ from .OptionsTracker import OptionsTracker
 @dataclass
 class Command(CommandOptionsTracker[OptionsTracker], HamiltonActionCommandABC):
     class Response(HamiltonActionCommandABC.Response):
-        @HamiltonActionCommandABC.Response.Decorator_ExpectedErrorResponseProperty
+        @HamiltonActionCommandABC.Response.Decorator_ExpectedResponseProperty(
+            ErrorProperty=True
+        )
         def GetFailedLiquidClasses(self) -> list[str]:
             ...
 

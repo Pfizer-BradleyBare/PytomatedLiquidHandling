@@ -1,4 +1,6 @@
 from collections import defaultdict
+from dataclasses import dataclass, field
+from enum import Enum
 from typing import Any
 
 from ....Tools.AbstractClasses import (
@@ -7,7 +9,6 @@ from ....Tools.AbstractClasses import (
     CommandOptionsTracker,
     ExceptionABC,
 )
-from dataclasses import dataclass, field
 
 
 @dataclass(kw_only=True)
@@ -27,6 +28,12 @@ class HamiltonCommandABC(CommandABC):
         if isinstance(self, CommandOptions):
             OutputDict = vars(self.OptionsInstance)
 
+            for key, value in OutputDict.items():
+                if isinstance(value, Enum):
+                    OutputDict[key] = value.value
+                else:
+                    OutputDict[key] = value
+
             return OutputDict
 
         elif isinstance(self, CommandOptionsTracker):
@@ -36,12 +43,14 @@ class HamiltonCommandABC(CommandABC):
                 OptionsDict = vars(Options)
 
                 for key, value in OptionsDict.items():
-                    OutputDict[key].append(value)
+                    if isinstance(value, Enum):
+                        OutputDict[key].append(value.value)
+                    else:
+                        OutputDict[key].append(value)
 
             OutputDict = OutputDict | vars(self.OptionsTrackerInstance)
 
             del OutputDict["Collection"]
-            del OutputDict["ThreadLock"]
             # removes junk from parent classes
             return dict(OutputDict)
 

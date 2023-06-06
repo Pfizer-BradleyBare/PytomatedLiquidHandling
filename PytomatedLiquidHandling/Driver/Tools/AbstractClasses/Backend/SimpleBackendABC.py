@@ -1,5 +1,6 @@
-from typing import Type, TypeVar, cast
 from dataclasses import dataclass, field
+from typing import Type, TypeVar, cast
+
 from .....Tools.AbstractClasses import UniqueObjectABC
 from .....Tools.Logger import Logger
 from ..Command import CommandABC
@@ -52,6 +53,8 @@ class SimpleBackendABC(BackendABC):
             raise Exception(
                 "You can only wait on a response for the currently executing command."
             )
+
+        import time
 
         while self.GetStatus(CommandInstance).GetState() != True:
             ...

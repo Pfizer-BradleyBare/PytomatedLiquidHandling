@@ -1,9 +1,10 @@
 import json
 import logging
 import time
+from dataclasses import dataclass, field
 from threading import Event, Thread
 from typing import Callable, ClassVar
-from dataclasses import dataclass, field
+
 from flask import Flask
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC

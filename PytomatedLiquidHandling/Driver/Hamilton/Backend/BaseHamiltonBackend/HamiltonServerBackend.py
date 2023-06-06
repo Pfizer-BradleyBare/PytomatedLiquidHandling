@@ -1,7 +1,9 @@
 import time
 from dataclasses import dataclass, field
-from flask import request
 from typing import Callable
+
+from flask import request
+
 from .....Tools.Logger import Logger
 from ....Tools.AbstractClasses import CommandOptionsTracker, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
@@ -129,7 +131,9 @@ class HamiltonServerBackendABC(ServerBackendABC):
         Response = ParserObject.GetHTTPResponse()
         return Response
 
-    Views: list[Callable] = field(
-        init=False, default=[GetNextCommand, RespondToCommand]
-    )
+    Views: list[Callable] = field(init=False, default_factory=list)
     Address: str = field(init=False, default="localhost")
+
+    def __post_init__(self):
+        self.Views = [self.GetNextCommand, self.RespondToCommand]
+        ServerBackendABC.__post_init__(self)

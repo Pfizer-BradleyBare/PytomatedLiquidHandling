@@ -1,9 +1,8 @@
+from dataclasses import dataclass
+
 from .....Tools.AbstractClasses import CommandOptions
 from ....Backend import HamiltonActionCommandABC
 from .Options import Options
-
-
-from dataclasses import dataclass
 
 
 @HamiltonActionCommandABC.Decorator_Command(__file__)
@@ -12,6 +11,8 @@ class Command(CommandOptions[Options], HamiltonActionCommandABC):
     ...
 
     class Response(HamiltonActionCommandABC.Response):
-        @HamiltonActionCommandABC.Response.Decorator_ExpectedSuccessResponseProperty
+        @HamiltonActionCommandABC.Response.Decorator_ExpectedResponseProperty(
+            SuccessProperty=True
+        )
         def GetHandleID(self) -> int:
             ...

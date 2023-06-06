@@ -1,9 +1,8 @@
+from dataclasses import dataclass
+
 from .....Tools.AbstractClasses import CommandOptions
 from ....Backend import HamiltonStateCommandABC
 from .Options import Options
-
-
-from dataclasses import dataclass
 
 
 @HamiltonStateCommandABC.Decorator_Command(__file__)
@@ -15,6 +14,8 @@ class Command(CommandOptions[Options], HamiltonStateCommandABC):
         HamiltonStateCommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)
 
     class Response(HamiltonStateCommandABC.Response):
-        @HamiltonStateCommandABC.Response.Decorator_ExpectedSuccessResponseProperty
+        @HamiltonStateCommandABC.Response.Decorator_ExpectedResponseProperty(
+            SuccessProperty=True
+        )
         def GetTemperature(self) -> float:
             ...
