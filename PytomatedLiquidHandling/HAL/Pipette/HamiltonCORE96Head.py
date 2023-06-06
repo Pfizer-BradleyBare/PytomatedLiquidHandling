@@ -5,7 +5,7 @@ from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker
 from ..Pipette import TransferOptions
 from .BasePipette import LiquidClassCategoryTracker, Pipette, PipetteTipTracker
-from ...Driver.Hamilton.Pipette import CORE96Head
+from ...Driver.Hamilton.Pipette import CORE96Head, PortraitCORE8Channel
 
 
 class HamiltonCORE96Head(Pipette):
