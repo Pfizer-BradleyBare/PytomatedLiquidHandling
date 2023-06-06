@@ -12,8 +12,8 @@ from .BasePipette import (
     Pipette,
     PipetteTip,
     PipetteTipTracker,
-    PipetteTracker,
 )
+from . import PipetteTracker
 from .HamiltonCORE96Head import HamiltonCORE96Head
 from .HamiltonPortraitCORE8Channel import HamiltonPortraitCORE8Channel
 

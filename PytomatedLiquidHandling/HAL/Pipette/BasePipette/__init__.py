@@ -12,5 +12,4 @@ __all__ = [
     "LiquidClassCategoryTracker",
     "PipetteTip",
     "PipetteTipTracker",
-    "PipetteTracker",
 ]

@@ -1,3 +1,3 @@
 from .BaseDeckLocation import DeckLoadingConfig, TransportDeviceConfig
-from .DeckLocationTracker import DeckLocationTracker
+from .BaseDeckLocation import DeckLocationTracker
 from .DeckLocation import DeckLocation

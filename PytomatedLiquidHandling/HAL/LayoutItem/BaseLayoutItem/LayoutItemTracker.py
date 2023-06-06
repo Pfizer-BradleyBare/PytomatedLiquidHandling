@@ -1,8 +1,8 @@
 from ....Tools.AbstractClasses import UniqueObjectTrackerABC
-from . import ClosedContainerABC
+from . import LayoutItemABC
 from dataclasses import dataclass
 
 
 @dataclass
-class ClosedContainerTracker(UniqueObjectTrackerABC[ClosedContainerABC]):
+class LayoutItemTracker(UniqueObjectTrackerABC[LayoutItemABC]):
     pass

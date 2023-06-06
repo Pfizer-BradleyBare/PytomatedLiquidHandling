@@ -1,5 +1,5 @@
-from ...Tools.AbstractClasses import UniqueObjectTrackerABC
-from .BaseLabware import LabwareABC
+from ....Tools.AbstractClasses import UniqueObjectTrackerABC
+from . import LabwareABC
 from dataclasses import dataclass
 
 

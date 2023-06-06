@@ -1,5 +1,5 @@
 from ....Tools.AbstractClasses import UniqueObjectTrackerABC
-from .Pipette import Pipette
+from . import Pipette
 
 
 class PipetteTracker(UniqueObjectTrackerABC[Pipette]):

@@ -1,7 +1,7 @@
 from .BaseClosedContainer import (
-    ClosedContainerTracker,
     OpenCloseOptions,
 )
+from .BaseClosedContainer import ClosedContainerTracker
 from .HamiltonFlipTube import HamiltonFlipTube
 from .HamiltonFlipTubeSpecial import HamiltonFlipTubeSpecial
 

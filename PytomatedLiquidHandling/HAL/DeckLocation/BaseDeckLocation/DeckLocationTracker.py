@@ -1,5 +1,5 @@
-from ...Tools.AbstractClasses import UniqueObjectTrackerABC
-from .BaseDeckLocation import DeckLocationABC
+from ....Tools.AbstractClasses import UniqueObjectTrackerABC
+from . import DeckLocationABC
 from dataclasses import dataclass
 
 
