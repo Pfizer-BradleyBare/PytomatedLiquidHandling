@@ -52,14 +52,10 @@ class HamiltonPortraitCORE8Channel(Pipette):
 
         UpdatedOptionsTrackerInstance = TransferOptions.OptionsTracker()
         for OptionsInstance in OptionsTrackerInstance.GetObjectsAsList():
-            if OptionsInstance.TransferVolume > MaxVolume:
-                NumTransfers = ceil(OptionsInstance.TransferVolume / MaxVolume)
-                OptionsInstance.NumTransfers = NumTransfers
-                OptionsInstance.TransferVolume /= NumTransfers
+            NumTransfers = ceil(OptionsInstance.TransferVolume / MaxVolume)
+            OptionsInstance.TransferVolume /= NumTransfers
 
-                for _ in range(0, NumTransfers):
-                    UpdatedOptionsTrackerInstance.LoadSingle(OptionsInstance)
-            else:
+            for _ in range(0, NumTransfers):
                 UpdatedOptionsTrackerInstance.LoadSingle(OptionsInstance)
 
         return UpdatedOptionsTrackerInstance
@@ -68,8 +64,6 @@ class HamiltonPortraitCORE8Channel(Pipette):
         self,
         OptionsTrackerInstance: TransferOptions.OptionsTracker,
     ):
-        # NOTE: I played with sorting to make the liquid aspirate and dispense smarter. Trust me not a good idea. Try if you dare
-
         OptionsTrackerInstance = self.ConvertTransferVolumesToSupportedRange(
             OptionsTrackerInstance
         )
