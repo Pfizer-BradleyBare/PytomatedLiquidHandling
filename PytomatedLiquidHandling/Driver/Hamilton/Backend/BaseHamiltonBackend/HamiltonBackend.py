@@ -2,7 +2,7 @@ import os
 import shutil
 import subprocess
 from typing import Type, TypeVar
-
+from dataclasses import dataclass, field
 from .....Tools.Logger import Logger
 from ....Tools.AbstractClasses import BackendABC, CommandABC
 from ..HamiltonCommand import (
@@ -15,35 +15,26 @@ from .HamiltonServerBackend import HamiltonServerBackendABC
 T = TypeVar("T", bound=CommandABC.Response)
 
 
+@dataclass
 class HamiltonBackendABC(BackendABC):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        LoggerInstance: Logger,
-        MethodPath: str,
-        DeckLayoutPath: str,
-    ):
-        BackendABC.__init__(
-            self,
-            UniqueIdentifier,
-            LoggerInstance,
-        )
+    MethodPath: str
+    DeckLayoutPath: str
+    ActionServer: HamiltonServerBackendABC = field(init=False)
+    StateServer: HamiltonServerBackendABC = field(init=False)
 
+    def __post_init__(self):
         self.ActionServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
-            UniqueIdentifier + " Action Server",
-            LoggerInstance,
+            str(self.GetUniqueIdentifier()) + " Action Server",
+            self.LoggerInstance,
             "/ActionServer/",
             767,
         )
         self.StateServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
-            UniqueIdentifier + " State Server",
-            LoggerInstance,
+            str(self.GetUniqueIdentifier()) + " State Server",
+            self.LoggerInstance,
             "/StateServer/",
             768,
         )
-
-        self.MethodPath: str = MethodPath
-        self.DeckLayoutPath: str = DeckLayoutPath
 
     def StartBackend(self):
         BackendABC.StartBackend(self)

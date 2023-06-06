@@ -1,12 +1,8 @@
 from .....Tools.AbstractClasses import OptionsABC
+from dataclasses import dataclass
 
 
+@dataclass(kw_only=True)
 class Options(OptionsABC):
-    def __init__(
-        self,
-        *,
-        TipSequence: str,
-    ):
-        self.TipSequence: str = TipSequence
-
-        self.LoadingText: str = "Load FTR Tips"
+    TipSequence: str
+    LoadingText: str = "Load FTR Tips"

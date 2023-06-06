@@ -1,10 +1,7 @@
 from .....Tools.AbstractClasses import OptionsABC
+from dataclasses import dataclass
 
 
+@dataclass(kw_only=True)
 class Options(OptionsABC):
-    def __init__(
-        self,
-        *,
-        ComPort: str,
-    ):
-        self.ComPort: str = ComPort
+    ComPort: str

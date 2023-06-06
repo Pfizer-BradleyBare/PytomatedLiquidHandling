@@ -1,13 +1,10 @@
 from typing import Generic, TypeVar
-
+from dataclasses import dataclass
 from ..Options import OptionsTrackerABC
 
 T = TypeVar("T", bound="OptionsTrackerABC")
 
 
+@dataclass(kw_only=True)
 class CommandOptionsTracker(Generic[T]):
-    def __init__(
-        self,
-        OptionsTrackerInstance: T,
-    ):
-        self.OptionsTrackerInstance: T = OptionsTrackerInstance
+    OptionsTrackerInstance: T

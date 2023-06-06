@@ -1,14 +1,15 @@
 import os
 from abc import abstractmethod
-from typing import Any
+from dataclasses import dataclass, field
+from typing import Any, ClassVar
 
 from .....Tools.AbstractClasses import NonUniqueObjectABC
 from ...AbstractClasses import ExceptionABC
 
 
+@dataclass()
 class CommandABC(NonUniqueObjectABC):
-    ClassFilePath: str
-
+    @dataclass
     class Response:
         @staticmethod
         def Decorator_ExpectedSuccessResponseProperty(DecoratedFunction):
@@ -50,8 +51,7 @@ class CommandABC(NonUniqueObjectABC):
 
             return Out
 
-        def __init__(self, Properties: dict[str, Any]):
-            self.Properties: dict[str, Any] = Properties
+        Properties: dict[str, Any]
 
         def SetProperty(self, Key: str, Value: Any):
             self.Properties[Key] = Value
@@ -115,15 +115,19 @@ class CommandABC(NonUniqueObjectABC):
 
         return Output[:-1]
 
-    def __init__(self, Identifier: str):
-        NonUniqueObjectABC.__init__(self, Identifier)
-        self.ModuleName: str = CommandABC.__GetModuleName(self.ClassFilePath)
-        self.CommandName: str = CommandABC.__GetCommandName(self.ClassFilePath)
+    ClassFilePath: ClassVar[str]
+    ModuleName: str = field(init=False)
+    CommandName: str = field(init=False)
+
+    def __post_init__(self):
+        self.ModuleName = CommandABC.__GetModuleName(self.ClassFilePath)
+        self.CommandName = CommandABC.__GetCommandName(self.ClassFilePath)
 
     @abstractmethod
     def ParseResponseRaiseExceptions(self, ResponseInstance: Response):
         ...
 
 
+@dataclass
 class Exception_Unhandled(ExceptionABC[CommandABC, CommandABC.Response]):
     ...

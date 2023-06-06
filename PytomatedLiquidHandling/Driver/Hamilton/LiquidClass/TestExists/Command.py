@@ -3,22 +3,14 @@ from ....Tools.AbstractClasses import (
     Exception_Unhandled,
     ExceptionABC,
 )
+from dataclasses import dataclass
 from ...Backend import HamiltonActionCommandABC
 from .OptionsTracker import OptionsTracker
 
 
 @HamiltonActionCommandABC.Decorator_Command(__file__)
-class Command(HamiltonActionCommandABC, CommandOptionsTracker[OptionsTracker]):
-    def __init__(
-        self,
-        *,
-        CustomErrorHandling: bool,
-        OptionsTrackerInstance: OptionsTracker,
-        Identifier: str = "None"
-    ):
-        HamiltonActionCommandABC.__init__(self, Identifier, CustomErrorHandling)
-        CommandOptionsTracker.__init__(self, OptionsTrackerInstance)
-
+@dataclass
+class Command(CommandOptionsTracker[OptionsTracker], HamiltonActionCommandABC):
     class Response(HamiltonActionCommandABC.Response):
         @HamiltonActionCommandABC.Response.Decorator_ExpectedErrorResponseProperty
         def GetFailedLiquidClasses(self) -> list[str]:
@@ -36,5 +28,6 @@ class Command(HamiltonActionCommandABC, CommandOptionsTracker[OptionsTracker]):
             raise Exception_Unhandled(self, ResponseInstance)
 
 
+@dataclass
 class Exception_LiquidClassDoesNotExist(ExceptionABC[Command, Command.Response]):
     ...

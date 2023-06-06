@@ -1,12 +1,8 @@
 from .....Tools.AbstractClasses import OptionsABC
+from dataclasses import dataclass
 
 
+@dataclass(kw_only=True)
 class Options(OptionsABC):
-    def __init__(
-        self,
-        *,
-        HandleID: int,
-        ShakingSpeed: int,
-    ):
-        self.HandleID: int = HandleID
-        self.ShakingSpeed: int = ShakingSpeed
+    HandleID: int
+    ShakingSpeed: int

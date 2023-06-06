@@ -3,18 +3,12 @@ from ....Backend import HamiltonStateCommandABC
 from .Options import Options
 
 
-@HamiltonStateCommandABC.Decorator_Command(__file__)
-class Command(HamiltonStateCommandABC, CommandOptions[Options]):
-    def __init__(
-        self,
-        *,
-        CustomErrorHandling: bool,
-        OptionsInstance: Options,
-        Identifier: str = "None"
-    ):
-        HamiltonStateCommandABC.__init__(self, Identifier, CustomErrorHandling)
-        CommandOptions.__init__(self, OptionsInstance)
+from dataclasses import dataclass
 
+
+@HamiltonStateCommandABC.Decorator_Command(__file__)
+@dataclass
+class Command(CommandOptions[Options], HamiltonStateCommandABC):
     def ParseResponseRaiseExceptions(
         self, ResponseInstance: HamiltonStateCommandABC.Response
     ):

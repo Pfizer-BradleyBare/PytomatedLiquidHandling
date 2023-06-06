@@ -2,8 +2,8 @@ import json
 import logging
 import time
 from threading import Event, Thread
-from typing import Callable
-
+from typing import Callable, ClassVar
+from dataclasses import dataclass, field
 from flask import Flask
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
@@ -12,32 +12,29 @@ from .....Tools.Logger import Logger
 from .SimpleBackendABC import SimpleBackendABC
 
 
+@dataclass()
 class ServerBackendABC(SimpleBackendABC):
-    __Hosts: list[tuple] = list()
+    __Hosts: ClassVar[list[tuple]] = list()
 
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        LoggerInstance: Logger,
-        Views: list[Callable],
-        PathPrefix: str = "/",
-        Address: str = "localhost",
-        Port: int = 8080,
-    ):
-        SimpleBackendABC.__init__(self, UniqueIdentifier, LoggerInstance)
-        self.__App = Flask(UniqueIdentifier)
+    Views: list[Callable]
+    PathPrefix: str = "/"
+    Address: str = "localhost"
+    Port: int = 8080
+    __App: Flask = field(init=False)
+    __AppParentThreadRunnerFlag: Event = field(init=False, default=Event())
+
+    def __post_init__(self):
+        self.__App = Flask(str(self.GetUniqueIdentifier()))
         logging.getLogger("werkzeug").disabled = True
-        self.__AppParentThreadRunnerFlag: Event = Event()
+        self.Views += [self.IsActive, self.Kill]
 
-        self.PathPrefix: str = PathPrefix
-        self.Address: str = Address
-        self.Port: int = Port
-        self.Views: list[Callable] = [self.IsActive, self.Kill] + Views
-
-        self.__App.add_url_rule(PathPrefix, "Index", self.Index)
+        self.__App.add_url_rule(self.PathPrefix, "Index", self.Index)
         for View in self.Views:
             self.__App.add_url_rule(
-                PathPrefix + View.__name__, View.__name__, View, methods=["GET", "POST"]
+                self.PathPrefix + View.__name__,
+                View.__name__,
+                View,
+                methods=["GET", "POST"],
             )
 
     def __ServerThreadRunner(self):
@@ -101,7 +98,7 @@ class ServerBackendABC(SimpleBackendABC):
 
     def IsActive(self):
         ParserInstance = ServerBackendABC.Parser(
-            self.GetLogger(),
+            self.LoggerInstance,
             self.GetEndpointID("IsActive"),
             None,
         )
@@ -112,7 +109,7 @@ class ServerBackendABC(SimpleBackendABC):
     def Kill(self):
         ServerBackendABC.StopBackend(self)
         ParserInstance = ServerBackendABC.Parser(
-            self.GetLogger(),
+            self.LoggerInstance,
             self.GetEndpointID("Kill"),
             None,
         )
@@ -120,6 +117,7 @@ class ServerBackendABC(SimpleBackendABC):
         ParserInstance.SetEndpointDetails("Backend Killed")
         return ParserInstance.GetHTTPResponse()
 
+    @dataclass
     class Parser:
         def __init__(
             self,

@@ -1,8 +1,9 @@
 from enum import Enum
-
+from dataclasses import dataclass
 from ....Tools.AbstractClasses import OptionsABC
 
 
+@dataclass(kw_only=True)
 class Options(OptionsABC):
     class TipTypeOptions(Enum):
         uL300 = 0
@@ -12,6 +13,5 @@ class Options(OptionsABC):
         uL50 = 22
         uL50Filter = 23
 
-    def __init__(self, *, TipType: TipTypeOptions, CutLength: float):
-        self.TipType: int = TipType.value
-        self.CutLength: float = CutLength
+    TipType: TipTypeOptions
+    CutLength: float

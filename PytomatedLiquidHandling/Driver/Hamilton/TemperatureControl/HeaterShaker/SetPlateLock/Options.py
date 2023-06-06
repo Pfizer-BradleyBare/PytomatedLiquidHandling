@@ -1,12 +1,8 @@
 from .....Tools.AbstractClasses import OptionsABC
+from dataclasses import dataclass
 
 
+@dataclass(kw_only=True)
 class Options(OptionsABC):
-    def __init__(
-        self,
-        *,
-        HandleID: int,
-        PlateLockState: int,
-    ):
-        self.HandleID: int = HandleID
-        self.PlateLockState: int = PlateLockState
+    HandleID: int
+    PlateLockState: int

@@ -1,8 +1,9 @@
 from enum import Enum
-
+from dataclasses import dataclass
 from .....Tools.AbstractClasses import OptionsABC
 
 
+@dataclass(kw_only=True)
 class Options(OptionsABC):
     class YesNoOptions(Enum):
         No = 0
@@ -15,20 +16,9 @@ class Options(OptionsABC):
         XSpeed4 = 4
         XSpeed5 = 5
 
-    def __init__(
-        self,
-        *,
-        PlateSequence: str,
-        EjectTool: YesNoOptions = YesNoOptions.No,
-        XSpeed: XSpeedOptions = XSpeedOptions.XSpeed4,
-        ZSpeed: float = 128.7,
-        PressOnDistance: float = 1,
-        CheckPlateExists: YesNoOptions = YesNoOptions.No,
-    ):
-        self.PlateSequence: str = PlateSequence
-
-        self.EjectTool: int = EjectTool.value
-        self.XSpeed: int = XSpeed.value
-        self.ZSpeed: float = ZSpeed
-        self.PressOnDistance: float = PressOnDistance
-        self.CheckPlateExists: int = CheckPlateExists.value
+    PlateSequence: str
+    EjectTool: YesNoOptions = YesNoOptions.No
+    XSpeed: XSpeedOptions = XSpeedOptions.XSpeed4
+    ZSpeed: float = 128.7
+    PressOnDistance: float = 1
+    CheckPlateExists: YesNoOptions = YesNoOptions.No

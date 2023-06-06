@@ -7,12 +7,13 @@ from ....Tools.AbstractClasses import (
     CommandOptionsTracker,
     ExceptionABC,
 )
+from dataclasses import dataclass, field
 
 
+@dataclass(kw_only=True)
 class HamiltonCommandABC(CommandABC):
-    def __init__(self, Identifier: str, CustomErrorHandling: bool):
-        CommandABC.__init__(self, Identifier)
-        self.CustomErrorHandling: bool = CustomErrorHandling
+    Identifier: str | int = field(default="None")
+    CustomErrorHandling: bool
 
     def ParseResponseRaiseExceptions(self, ResponseInstance: CommandABC.Response):
         CommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)

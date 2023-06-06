@@ -1,7 +1,8 @@
 from .....Tools.AbstractClasses import OptionsTrackerABC
 from .Options import Options
+from dataclasses import dataclass
 
 
+@dataclass
 class OptionsTracker(OptionsTrackerABC[Options]):
-    def __init__(self):
-        OptionsTrackerABC.__init__(self)
+    ...

@@ -1,15 +1,16 @@
 from abc import ABC
+from dataclasses import dataclass
 
 # This is an abstract loader class for loading configuration files
 
 
+@dataclass
 class UniqueObjectABC(ABC):
     """This is a unique object abstract base class.
     This class enables compatibility with the unique tracker.
     """
 
-    def __init__(self, UniqueIdentifier: str | int):
-        self.__UniqueObjectABC_Identifier: str | int = UniqueIdentifier
+    UniqueIdentifier: str | int
 
     def GetUniqueIdentifier(self) -> str | int:
         """This method guarentees a unique value as either a string or an int.
@@ -18,4 +19,4 @@ class UniqueObjectABC(ABC):
         Returns:
             str | int: A unique value
         """
-        return self.__UniqueObjectABC_Identifier
+        return self.UniqueIdentifier

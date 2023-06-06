@@ -1,20 +1,12 @@
 from .....Tools.AbstractClasses import CommandOptionsTracker
 from ....Backend import HamiltonActionCommandABC
 from .OptionsTracker import OptionsTracker
+from dataclasses import dataclass
 
 
 @HamiltonActionCommandABC.Decorator_Command(__file__)
-class Command(HamiltonActionCommandABC, CommandOptionsTracker[OptionsTracker]):
-    def __init__(
-        self,
-        *,
-        CustomErrorHandling: bool,
-        OptionsTrackerInstance: OptionsTracker,
-        Identifier: str = "None"
-    ):
-        HamiltonActionCommandABC.__init__(self, Identifier, CustomErrorHandling)
-        CommandOptionsTracker.__init__(self, OptionsTrackerInstance)
-
+@dataclass
+class Command(CommandOptionsTracker[OptionsTracker], HamiltonActionCommandABC):
     def GetVars(self) -> dict[str, list]:
         OutputDict = HamiltonActionCommandABC.GetVars(self)
 

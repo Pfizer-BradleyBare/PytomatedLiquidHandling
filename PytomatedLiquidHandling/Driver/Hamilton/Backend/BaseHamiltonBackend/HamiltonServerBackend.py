@@ -1,32 +1,17 @@
 import time
-
+from dataclasses import dataclass, field
 from flask import request
-
+from typing import Callable
 from .....Tools.Logger import Logger
 from ....Tools.AbstractClasses import CommandOptionsTracker, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
 
 
+@dataclass
 class HamiltonServerBackendABC(ServerBackendABC):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        LoggerInstance: Logger,
-        PathPrefix: str,
-        Port: int,
-    ):
-        ServerBackendABC.__init__(
-            self,
-            UniqueIdentifier,
-            LoggerInstance,
-            [self.GetNextCommand, self.RespondToCommand],
-            PathPrefix,
-            Port=Port,
-        )
-
     def GetNextCommand(self):
         ParserObject = ServerBackendABC.Parser(
-            self.GetLogger(),
+            self.LoggerInstance,
             self.__class__.__name__ + " HamiltonBackend GetNextCommand",
             request.get_data(),
         )
@@ -34,7 +19,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
         if not ParserObject.IsValid(["Timeout"]):
             ParserObject.SetEndpointDetails("Key missing. Accepted keys: [Timeout]")
             Response = ParserObject.GetHTTPResponse()
-            self.GetLogger().warning(Response)
+            self.LoggerInstance.warning(Response)
             return Response
 
         Timeout = ParserObject.GetEndpointInputData("Timeout") - 10
@@ -85,7 +70,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
     def RespondToCommand(self):
         ParserObject = ServerBackendABC.Parser(
-            self.GetLogger(),
+            self.LoggerInstance,
             self.__class__.__name__ + " HamiltonBackend RespondToCommand",
             request.get_data(),
         )
@@ -109,7 +94,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
                 "Key missing. Accepted keys: " + str(BaseKeys)
             )
             Response = ParserObject.GetHTTPResponse()
-            self.GetLogger().warning(Response)
+            self.LoggerInstance.warning(Response)
             return Response
         # check we have required info
 
@@ -127,7 +112,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
                 "Key missing. Accepted keys: " + str(ExpectedResponseKeys)
             )
             Response = ParserObject.GetHTTPResponse()
-            self.GetLogger().warning(Response)
+            self.LoggerInstance.warning(Response)
             return Response
         # check we have required info
 
@@ -143,3 +128,8 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         Response = ParserObject.GetHTTPResponse()
         return Response
+
+    Views: list[Callable] = field(
+        init=False, default=[GetNextCommand, RespondToCommand]
+    )
+    Address: str = field(init=False, default="localhost")

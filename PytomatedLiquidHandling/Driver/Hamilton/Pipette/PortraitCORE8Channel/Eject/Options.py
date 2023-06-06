@@ -1,16 +1,10 @@
-from enum import Enum
+from dataclasses import dataclass
 
 from .....Tools.AbstractClasses import OptionsABC
 
 
+@dataclass(kw_only=True)
 class Options(OptionsABC):
-    def __init__(
-        self,
-        *,
-        Sequence: str,
-        ChannelNumber: int,
-        SequencePosition: int,
-    ):
-        self.ChannelNumber: int = ChannelNumber
-        self.Sequence: str = Sequence
-        self.SequencePosition: int = SequencePosition
+    Sequence: str
+    ChannelNumber: int
+    SequencePosition: int

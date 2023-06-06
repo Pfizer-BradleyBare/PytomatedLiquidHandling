@@ -1,8 +1,9 @@
 from ....Tools.AbstractClasses import OptionsABC
+from dataclasses import dataclass
 
 
+@dataclass(kw_only=True)
 class Options(OptionsABC):
-    def __init__(self, *, Sequence: str, PropertyKey: str, PropertyValue: str):
-        self.Sequence: str = Sequence
-        self.PropertyKey: str = PropertyKey
-        self.PropertyValue: str = PropertyValue
+    Sequence: str
+    PropertyKey: str
+    PropertyValue: str

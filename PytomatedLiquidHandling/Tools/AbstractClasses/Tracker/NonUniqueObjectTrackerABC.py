@@ -1,18 +1,18 @@
 from threading import Lock
 from typing import Generic, TypeVar
-
+from dataclasses import dataclass, field
 from ..Object.NonUniqueObjectABC import NonUniqueObjectABC
 
 T = TypeVar("T", bound="NonUniqueObjectABC")
 
 
+@dataclass
 class NonUniqueObjectTrackerABC(Generic[T]):
     """This is a 'smart' tracker for classes the extend the non-unique object class.
     This class is generic such that it can track any class or set of classes."""
 
-    def __init__(self):
-        self.Collection: list[T] = list()
-        self.ThreadLock: Lock = Lock()
+    Collection: list[T] = field(init=False, default=list())
+    ThreadLock: Lock = field(init=False, default=Lock())
 
     def LoadSingle(self, ObjectABCInstance: T) -> None:
         self.Collection.append(ObjectABCInstance)

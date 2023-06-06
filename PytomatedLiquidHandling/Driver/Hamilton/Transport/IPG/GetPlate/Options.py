@@ -1,8 +1,9 @@
 from enum import Enum
-
+from dataclasses import dataclass
 from .....Tools.AbstractClasses import OptionsABC
 
 
+@dataclass(kw_only=True)
 class Options(OptionsABC):
     class YesNoOptions(Enum):
         No = 0
@@ -34,39 +35,18 @@ class Options(OptionsABC):
         PositiveYAxis = 3
         NegativeXAxis = 4
 
-    def __init__(
-        self,
-        *,
-        PlateSequence: str,
-        GripWidth: float,
-        OpenWidth: float,
-        GripHeight: float = 3,
-        GripMode: GripModeOptions = GripModeOptions.GripOnShortSide,
-        Movement: MovementOptions = MovementOptions.Simple,
-        RetractDistance: float = 0,
-        LiftupHeight: float = 0,
-        LabwareOrientation: LabwareOrientationOptions = LabwareOrientationOptions.NegativeYAxis,
-        GripForce: int = 4,
-        Tolerance: float = 2,
-        InverseGrip: YesNoOptions = YesNoOptions.No,
-        CollisionControl: YesNoOptions = YesNoOptions.Yes,
-    ):
-        self.PlateSequence: str = PlateSequence
-
-        self.GripWidth: float = GripWidth
-        self.OpenWidth: float = OpenWidth
-
-        self.GripHeight: float = GripHeight
-        self.GripMode: int = GripMode.value
-
-        self.Movement: int = Movement.value
-
-        # Only matters if movement is 1
-        self.RetractDistance: float = RetractDistance
-        self.LiftupHeight: float = LiftupHeight
-        self.LabwareOrientation: int = LabwareOrientation.value
-
-        self.GripForce: int = GripForce
-        self.Tolerance: float = Tolerance
-        self.InverseGrip: int = InverseGrip.value
-        self.CollisionControl: int = CollisionControl.value
+    PlateSequence: str
+    GripWidth: float
+    OpenWidth: float
+    GripHeight: float = 3
+    GripMode: GripModeOptions = GripModeOptions.GripOnShortSide
+    Movement: MovementOptions = MovementOptions.Simple
+    RetractDistance: float = 0
+    LiftupHeight: float = 0
+    LabwareOrientation: LabwareOrientationOptions = (
+        LabwareOrientationOptions.NegativeYAxis
+    )
+    GripForce: int = 4
+    Tolerance: float = 2
+    InverseGrip: YesNoOptions = YesNoOptions.No
+    CollisionControl: YesNoOptions = YesNoOptions.Yes

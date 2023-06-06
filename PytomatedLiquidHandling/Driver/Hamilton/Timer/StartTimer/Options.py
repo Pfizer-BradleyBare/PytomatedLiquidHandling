@@ -1,10 +1,9 @@
 from ....Tools.AbstractClasses import OptionsABC
+from dataclasses import dataclass
 
 
+@dataclass(kw_only=True)
 class Options(OptionsABC):
-    def __init__(
-        self, *, WaitTime: float, ShowTimer: bool = True, IsStoppable: bool = True
-    ):
-        self.WaitTime: float = WaitTime
-        self.ShowTimer: bool = ShowTimer
-        self.IsStoppable: bool = IsStoppable
+    WaitTime: float
+    ShowTimer: bool = True
+    IsStoppable: bool = True

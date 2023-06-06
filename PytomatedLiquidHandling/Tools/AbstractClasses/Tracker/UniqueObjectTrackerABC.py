@@ -1,18 +1,18 @@
 from threading import Lock
 from typing import Generic, TypeVar
-
+from dataclasses import dataclass, field
 from ..Object.UniqueObjectABC import UniqueObjectABC
 
 T = TypeVar("T", bound="UniqueObjectABC")
 
 
+@dataclass
 class UniqueObjectTrackerABC(Generic[T]):
     """This is a 'smart' tracker for classes the extend the unique object class.
     This class is generic such that it can track any class or set of classes."""
 
-    def __init__(self):
-        self.Collection: dict[str | int, T] = dict()
-        self.ThreadLock: Lock = Lock()
+    Collection: dict[str | int, T] = field(init=False, default=dict())
+    ThreadLock: Lock = field(init=False, default=Lock())
 
     def LoadSingle(self, ObjectABCInstance: T) -> None:
         Name = ObjectABCInstance.GetUniqueIdentifier()

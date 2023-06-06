@@ -1,12 +1,10 @@
-from ....Tools.AbstractClasses import CommandOptions
 from ...Backend import HamiltonActionCommandABC
+from dataclasses import dataclass
 
 
 @HamiltonActionCommandABC.Decorator_Command(__file__)
+@dataclass
 class Command(HamiltonActionCommandABC):
-    def __init__(self, *, CustomErrorHandling: bool, Identifier: str = "None"):
-        HamiltonActionCommandABC.__init__(self, Identifier, CustomErrorHandling)
-
     def ParseResponseRaiseExceptions(
         self, ResponseInstance: HamiltonActionCommandABC.Response
     ):

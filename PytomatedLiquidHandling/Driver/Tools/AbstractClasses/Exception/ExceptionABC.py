@@ -1,19 +1,21 @@
 from typing import Generic, TypeVar
-
+from dataclasses import dataclass
 from ...AbstractClasses import CommandABC
 
 T = TypeVar("T", bound="CommandABC")
 S = TypeVar("S", bound="CommandABC.Response")
 
 
+@dataclass
 class ExceptionABC(Exception, Generic[T, S]):
-    def __init__(self, CommandInstance: T, ResponseInstance: S):
-        self.CommandInstance: T = CommandInstance
-        self.ResponseInstance: S = ResponseInstance
+    CommandInstance: T
+    ResponseInstance: S
+
+    def __post_init__(self):
         ExceptionMessage = ""
-        ExceptionMessage += CommandInstance.ModuleName
+        ExceptionMessage += self.CommandInstance.ModuleName
         ExceptionMessage += ": "
-        ExceptionMessage += CommandInstance.CommandName
+        ExceptionMessage += self.CommandInstance.CommandName
         ExceptionMessage += "-> "
-        ExceptionMessage += ResponseInstance.GetDetails()
+        ExceptionMessage += self.ResponseInstance.GetDetails()
         Exception.__init__(self, ExceptionMessage)

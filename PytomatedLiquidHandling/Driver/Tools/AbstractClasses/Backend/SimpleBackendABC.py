@@ -1,7 +1,5 @@
-import time
-from abc import abstractmethod
 from typing import Type, TypeVar, cast
-
+from dataclasses import dataclass, field
 from .....Tools.AbstractClasses import UniqueObjectABC
 from .....Tools.Logger import Logger
 from ..Command import CommandABC
@@ -10,11 +8,10 @@ from .BackendABC import BackendABC
 T = TypeVar("T", bound=CommandABC.Response)
 
 
+@dataclass
 class SimpleBackendABC(BackendABC):
-    def __init__(self, UniqueIdentifier: str, LoggerInstance: Logger):
-        BackendABC.__init__(self, UniqueIdentifier, LoggerInstance)
-        self.CurrentCommand: CommandABC | None = None
-        self.Response: CommandABC.Response | None = None
+    CurrentCommand: CommandABC | None = field(init=False, default=None)
+    Response: CommandABC.Response | None = field(init=False, default=None)
 
     def ExecuteCommand(self, CommandInstance: CommandABC):
         BackendABC.ExecuteCommand(self, CommandInstance)

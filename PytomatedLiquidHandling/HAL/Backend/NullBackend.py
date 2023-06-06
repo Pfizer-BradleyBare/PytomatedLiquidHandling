@@ -1,10 +1,12 @@
 from typing import Type, TypeVar
+from dataclasses import dataclass
 from ...Driver.Tools.AbstractClasses import CommandABC
 from ...Driver.Tools.AbstractClasses import BackendABC
 
 T = TypeVar("T", bound=CommandABC.Response)
 
 
+@dataclass
 class NullBackend(BackendABC):
     def StartBackend(self):
         ...
