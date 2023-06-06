@@ -1,13 +1,31 @@
 import os
 from abc import abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, ClassVar
+from typing import Any, ClassVar, Generic, TypeVar
 
 from .....Tools.AbstractClasses import NonUniqueObjectABC
+
+T = TypeVar("T", bound="CommandABC")
+S = TypeVar("S", bound="CommandABC.Response")
+CommandSelf = TypeVar("CommandSelf", bound="CommandABC")
 
 
 @dataclass()
 class CommandABC(NonUniqueObjectABC):
+    @dataclass
+    class ExceptionABC(Exception, Generic[T, S]):
+        CommandInstance: T
+        ResponseInstance: S
+
+        def __post_init__(self):
+            ExceptionMessage = ""
+            ExceptionMessage += self.CommandInstance.ModuleName
+            ExceptionMessage += ": "
+            ExceptionMessage += self.CommandInstance.CommandName
+            ExceptionMessage += "-> "
+            ExceptionMessage += self.ResponseInstance.GetDetails()
+            Exception.__init__(self, ExceptionMessage)
+
     @dataclass
     class Response:
         @staticmethod
@@ -127,7 +145,6 @@ class CommandABC(NonUniqueObjectABC):
     def ParseResponseRaiseExceptions(self, ResponseInstance: Response):
         ...
 
-
-@dataclass
-class Exception_Unhandled:
-    ...
+    @dataclass
+    class Exception_Unhandled(ExceptionABC[CommandSelf, Response]):
+        ...

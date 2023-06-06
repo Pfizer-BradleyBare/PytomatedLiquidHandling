@@ -1,14 +1,11 @@
 from collections import defaultdict
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import Any, TypeVar
 
-from ....Tools.AbstractClasses import (
-    CommandABC,
-    CommandOptions,
-    CommandOptionsTracker,
-    ExceptionABC,
-)
+from ....Tools.AbstractClasses import CommandABC, CommandOptions, CommandOptionsTracker
+
+CommandSelf = TypeVar("CommandSelf", bound="HamiltonCommandABC")
 
 
 @dataclass(kw_only=True)
@@ -22,7 +19,9 @@ class HamiltonCommandABC(CommandABC):
             Details = ResponseInstance.GetDetails()
 
             if "not options in the options tracker" in Details:
-                raise Exception_NoOptionsInTracker(self, ResponseInstance)
+                raise HamiltonCommandABC.Exception_NoOptionsInTracker(
+                    self, ResponseInstance
+                )
 
     def GetVars(self) -> dict[str, Any]:
         if isinstance(self, CommandOptions):
@@ -57,8 +56,7 @@ class HamiltonCommandABC(CommandABC):
         else:
             return {}
 
-
-class Exception_NoOptionsInTracker(
-    ExceptionABC[HamiltonCommandABC, HamiltonCommandABC.Response]
-):
-    ...
+    class Exception_NoOptionsInTracker(
+        CommandABC.ExceptionABC[CommandSelf, CommandABC.Response]
+    ):
+        ...

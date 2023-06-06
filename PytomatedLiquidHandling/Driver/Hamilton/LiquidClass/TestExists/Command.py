@@ -1,12 +1,11 @@
 from dataclasses import dataclass
+from typing import TypeVar
 
-from ....Tools.AbstractClasses import (
-    CommandOptionsTracker,
-    Exception_Unhandled,
-    ExceptionABC,
-)
+from ....Tools.AbstractClasses import CommandOptionsTracker
 from ...Backend import HamiltonActionCommandABC
 from .OptionsTracker import OptionsTracker
+
+CommandSelf = TypeVar("CommandSelf", bound="Command")
 
 
 @HamiltonActionCommandABC.Decorator_Command(__file__)
@@ -26,11 +25,12 @@ class Command(CommandOptionsTracker[OptionsTracker], HamiltonActionCommandABC):
             Details = ResponseInstance.GetDetails()
 
             if "Liquid class does not exist" in Details:
-                raise Exception_LiquidClassDoesNotExist(self, ResponseInstance)
+                raise self.Exception_LiquidClassDoesNotExist(self, ResponseInstance)
 
-            raise Exception_Unhandled(self, ResponseInstance)
+            raise self.Exception_Unhandled(self, ResponseInstance)
 
-
-@dataclass
-class Exception_LiquidClassDoesNotExist(ExceptionABC[Command, Command.Response]):
-    ...
+    @dataclass
+    class Exception_LiquidClassDoesNotExist(
+        HamiltonActionCommandABC.ExceptionABC[CommandSelf, Response]
+    ):
+        ...
