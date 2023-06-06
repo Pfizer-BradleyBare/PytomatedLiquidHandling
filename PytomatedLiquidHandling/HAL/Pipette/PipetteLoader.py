@@ -62,9 +62,13 @@ def LoadYaml(
             Tips: dict[float, PipetteTip] = dict()
             for TipDevice in Device["Supported Tips"]:
                 TipIdentifier = TipDevice["Tip Unique Identifier"]
+                DropoffSequence = TipDevice["Tip Support Dropoff Sequence"]
+                PickupSequence = TipDevice["Tip Support Pickup Sequence"]
                 WasteSequence = TipDevice["Waste Sequence"]
                 TipInstance = TipTrackerInstance.GetObjectByName(TipIdentifier)
-                Tips[TipInstance.MaxVolume] = PipetteTip(TipInstance, WasteSequence)
+                Tips[TipInstance.MaxVolume] = PipetteTip(
+                    TipInstance, DropoffSequence, PickupSequence, WasteSequence
+                )
 
             for Volume, PipetteTipInstance in sorted(
                 Tips.items()

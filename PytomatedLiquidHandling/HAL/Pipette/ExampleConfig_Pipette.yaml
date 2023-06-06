@@ -26,12 +26,18 @@ Hamilton 96 Core Head:
 
     Supported Tips:
       - Tip Unique Identifier: 50uL NTR
+        Tip Support Dropoff Sequence: Test
+        Tip Support Pickup Sequence: Test
         Waste Sequence: Test
 
       - Tip Unique Identifier: 300uL NTR
+        Tip Support Dropoff Sequence: Test
+        Tip Support Pickup Sequence: Test
         Waste Sequence: Test
 
       - Tip Unique Identifier: 1000uL FTR
+        Tip Support Dropoff Sequence: Test
+        Tip Support Pickup Sequence: Test
         Waste Sequence: Test
 
     Supported Liquid Class Categories:
@@ -72,12 +78,18 @@ Hamilton 1mL Channels Portrait:
 
     Supported Tips:
       - Tip Unique Identifier: 50uL NTR
+        Tip Support Dropoff Sequence: Test
+        Tip Support Pickup Sequence: Test
         Waste Sequence: Test
 
       - Tip Unique Identifier: 300uL NTR
+        Tip Support Dropoff Sequence: Test
+        Tip Support Pickup Sequence: Test
         Waste Sequence: Test
 
       - Tip Unique Identifier: 1000uL FTR
+        Tip Support Dropoff Sequence: Test
+        Tip Support Pickup Sequence: Test
         Waste Sequence: Test
 
     Supported Liquid Class Categories:
