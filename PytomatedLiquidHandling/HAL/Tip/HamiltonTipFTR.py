@@ -1,25 +1,12 @@
 from ...Driver.Hamilton.Tip import FTR as FTRDriver
 from .BaseTip import Tip
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from dataclasses import dataclass
 
 
+@dataclass
 class HamiltonTipFTR(Tip):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: HamiltonBackendABC,
-        CustomErrorHandling: bool,
-        PickupSequence: str,
-        MaxVolume: float,
-    ):
-        Tip.__init__(
-            self,
-            UniqueIdentifier,
-            BackendInstance,
-            CustomErrorHandling,
-            PickupSequence,
-            MaxVolume,
-        )
+    BackendInstance: HamiltonBackendABC
 
     def Initialize(self):
         self.Reload()
@@ -33,11 +20,11 @@ class HamiltonTipFTR(Tip):
                 OptionsInstance=FTRDriver.LoadTips.Options(
                     TipSequence=self.PickupSequence
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            self.GetBackend().GetResponse(CommandInstance, CommandInstance.Response)
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            self.BackendInstance.GetResponse(CommandInstance, CommandInstance.Response)
 
         except:
             ...
@@ -51,11 +38,11 @@ class HamiltonTipFTR(Tip):
                     TipSequence=self.PickupSequence,
                     NumPositions=NumTips,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -70,11 +57,11 @@ class HamiltonTipFTR(Tip):
                 OptionsInstance=FTRDriver.GetNumTips.Options(
                     TipSequence=self.PickupSequence,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 

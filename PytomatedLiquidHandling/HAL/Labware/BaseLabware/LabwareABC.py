@@ -1,12 +1,8 @@
 from ....Tools.AbstractClasses import UniqueObjectABC
 from .Dimensions.Dimensions import Dimensions
+from dataclasses import dataclass
 
 
+@dataclass
 class LabwareABC(UniqueObjectABC):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        DimensionsInstance: Dimensions,
-    ):
-        UniqueObjectABC.__init__(self, UniqueIdentifier)
-        self.DimensionsInstance: Dimensions = DimensionsInstance
+    DimensionsInstance: Dimensions

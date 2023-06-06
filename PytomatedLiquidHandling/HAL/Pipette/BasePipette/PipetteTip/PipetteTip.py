@@ -1,17 +1,15 @@
 from .....Tools.AbstractClasses import UniqueObjectABC
 from ....Tip.BaseTip import Tip
+from dataclasses import dataclass, field
 
 
+@dataclass
 class PipetteTip(UniqueObjectABC):
-    def __init__(
-        self,
-        TipInstance: Tip,
-        TipSupportDropoffSequence: str,
-        TipSupportPickupSequence: str,
-        WasteSequence: str,
-    ):
-        UniqueObjectABC.__init__(self, self.TipInstance.GetUniqueIdentifier())
-        self.TipInstance: Tip = TipInstance
-        self.TipSupportDropoffSequence: str = TipSupportDropoffSequence
-        self.TipSupportPickupSequence: str = TipSupportPickupSequence
-        self.WasteSequence: str = WasteSequence
+    UniqueIdentifier: str | int = field(init=False)
+    TipInstance: Tip
+    TipSupportDropoffSequence: str
+    TipSupportPickupSequence: str
+    WasteSequence: str
+
+    def __post_init__(self):
+        self.UniqueIdentifier = self.TipInstance.GetUniqueIdentifier()

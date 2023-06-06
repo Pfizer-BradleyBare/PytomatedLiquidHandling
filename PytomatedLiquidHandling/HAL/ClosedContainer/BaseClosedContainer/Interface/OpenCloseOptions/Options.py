@@ -1,15 +1,9 @@
 from ......Tools.AbstractClasses import NonUniqueObjectABC
 from .....LayoutItem import CoverablePosition, NonCoverablePosition
+from dataclasses import dataclass
 
 
+@dataclass(kw_only=True)
 class Options(NonUniqueObjectABC):
-    def __init__(
-        self,
-        *,
-        LayoutItemInstance: CoverablePosition | NonCoverablePosition,
-        Position: int,
-    ):
-        self.LayoutItemInstance: CoverablePosition | NonCoverablePosition = (
-            LayoutItemInstance
-        )
-        self.Position: int = Position
+    LayoutItemInstance: CoverablePosition | NonCoverablePosition
+    Position: int

@@ -4,25 +4,14 @@ from .Interface import TransportOptions
 from .TransportableLabware.TransportableLabwareTracker import (
     TransportableLabwareTracker,
 )
-from ....Driver.Tools.AbstractClasses import BackendABC
 from ...Tools.AbstractClasses import InterfaceABC
+from dataclasses import dataclass, field
 
 
-class TransportDevice(UniqueObjectABC, InterfaceABC):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: BackendABC,
-        CustomErrorHandling: bool,
-        TransportableLabwareTrackerInstance: TransportableLabwareTracker,
-    ):
-        UniqueObjectABC.__init__(self, UniqueIdentifier)
-        self.TransportableLabwareTrackerInstance: TransportableLabwareTracker = (
-            TransportableLabwareTrackerInstance
-        )
-        InterfaceABC.__init__(self, BackendInstance, CustomErrorHandling)
-
-        self._LastTransportFlag: bool = True
+@dataclass
+class TransportDevice(InterfaceABC, UniqueObjectABC):
+    TransportableLabwareTrackerInstance: TransportableLabwareTracker
+    _LastTransportFlag: bool = field(init=False, default=True)
 
     def _CheckIsValid(self, TransportOptionsInstance: TransportOptions.Options):
         SourceLayoutItem = TransportOptionsInstance.SourceLayoutItem

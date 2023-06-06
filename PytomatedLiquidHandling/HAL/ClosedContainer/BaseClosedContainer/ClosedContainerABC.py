@@ -5,27 +5,14 @@ from ...Tools.AbstractClasses import InterfaceABC
 from ....Driver.Tools.AbstractClasses import BackendABC
 from .Interface import OpenCloseOptions
 from abc import abstractmethod
+from dataclasses import dataclass
 
 
-class ClosedContainerABC(UniqueObjectABC, InterfaceABC):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: BackendABC,
-        CustomErrorHandling: bool,
-        ToolSequence: str,
-        SupportedDeckLocationTrackerInstance: DeckLocationTracker,
-        SupportedLabwareTrackerInstance: LabwareTracker,
-    ):
-        UniqueObjectABC.__init__(self, UniqueIdentifier)
-        InterfaceABC.__init__(self, BackendInstance, CustomErrorHandling)
-        self.ToolSequence: str = ToolSequence
-        self.SupportedDeckLocationTrackerInstance: DeckLocationTracker = (
-            SupportedDeckLocationTrackerInstance
-        )
-        self.SupportedLabwareTrackerInstance: LabwareTracker = (
-            SupportedLabwareTrackerInstance
-        )
+@dataclass
+class ClosedContainerABC(InterfaceABC, UniqueObjectABC):
+    ToolSequence: str
+    SupportedDeckLocationTrackerInstance: DeckLocationTracker
+    SupportedLabwareTrackerInstance: LabwareTracker
 
     @abstractmethod
     def Open(self, *, OpenCloseOptionsTrackerInstance: OpenCloseOptions.OptionsTracker):

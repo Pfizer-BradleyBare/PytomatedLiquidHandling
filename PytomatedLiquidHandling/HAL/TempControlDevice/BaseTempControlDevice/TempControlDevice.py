@@ -3,38 +3,19 @@ from ....Tools.AbstractClasses import UniqueObjectABC
 from ...LayoutItem import LayoutItemTracker
 from .TempLimits.TempLimits import TempLimits
 from ...Tools.AbstractClasses import InterfaceABC
-from ....Driver.Tools.AbstractClasses import BackendABC
+from dataclasses import dataclass, field
 
 
-class TempControlDevice(UniqueObjectABC, InterfaceABC):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: BackendABC,
-        CustomErrorHandling: bool,
-        ComPort: str | int,
-        ShakingSupported: bool,
-        TempLimitsInstance: TempLimits,
-        SupportedLayoutItemTrackerInstance: LayoutItemTracker,
-    ):
-        UniqueObjectABC.__init__(self, UniqueIdentifier)
-        InterfaceABC.__init__(self, BackendInstance, CustomErrorHandling)
-        self.ComPort: str | int = ComPort
-        self.ShakingSupported: bool = ShakingSupported
-        self.TempLimitsInstance: TempLimits = TempLimitsInstance
-        self.SupportedLayoutItemTrackerInstance: LayoutItemTracker = (
-            SupportedLayoutItemTrackerInstance
-        )
+@dataclass
+class TempControlDevice(InterfaceABC, UniqueObjectABC):
+    ComPort: str | int
+    ShakingSupported: bool
+    TempLimitsInstance: TempLimits
+    SupportedLayoutItemTrackerInstance: LayoutItemTracker
 
-        self.HandleID: int | str
-        self.CurrentTemperature: float = 0
-        self.CurrentShakingSpeed: int = 0
-
-    def GetCurrentShakingSpeed(self) -> int:
-        return self.CurrentShakingSpeed
-
-    def GetCurrentTemperature(self) -> float:
-        return self.CurrentTemperature
+    HandleID: int | str = field(init=False)
+    Temperature: float = field(init=False, default=0)
+    ShakingSpeed: int = field(init=False, default=0)
 
     @abstractmethod
     def SetTemperature(
@@ -44,7 +25,7 @@ class TempControlDevice(UniqueObjectABC, InterfaceABC):
         ...
 
     @abstractmethod
-    def UpdateCurrentTemperature(
+    def UpdateTemperature(
         self,
     ):
         ...
@@ -63,7 +44,7 @@ class TempControlDevice(UniqueObjectABC, InterfaceABC):
         ...
 
     @abstractmethod
-    def UpdateCurrentShakingSpeed(
+    def UpdateShakingSpeed(
         self,
     ):
         ...

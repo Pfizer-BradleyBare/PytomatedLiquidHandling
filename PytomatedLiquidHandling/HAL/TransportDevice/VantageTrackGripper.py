@@ -1,26 +1,14 @@
 from .BaseTransportDevice import (
-    TransportableLabwareTracker,
     TransportDevice,
     TransportOptions,
 )
 from ...Driver.Hamilton.Backend import VantageBackend
+from dataclasses import dataclass
 
 
+@dataclass
 class VantageTrackGripper(TransportDevice):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: VantageBackend,
-        CustomErrorHandling: bool,
-        TransportableLabwareTrackerInstance: TransportableLabwareTracker,
-    ):
-        TransportDevice.__init__(
-            self,
-            UniqueIdentifier,
-            BackendInstance,
-            CustomErrorHandling,
-            TransportableLabwareTrackerInstance,
-        )
+    BackendInstance: VantageBackend
 
     def Initialize(
         self,

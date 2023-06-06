@@ -1,7 +1,7 @@
 from .....Tools.AbstractClasses import UniqueObjectABC
+from dataclasses import dataclass
 
 
+@dataclass
 class LiquidClass(UniqueObjectABC):
-    def __init__(self, UniqueIdentifier: str, MaxVolume: float):
-        UniqueObjectABC.__init__(self, UniqueIdentifier)
-        self.MaxVolume: float = MaxVolume
+    MaxVolume: float

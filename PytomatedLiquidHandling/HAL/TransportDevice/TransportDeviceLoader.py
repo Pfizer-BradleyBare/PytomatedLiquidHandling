@@ -52,8 +52,8 @@ def LoadYaml(
             NonCoverablePosition(
                 str(PlateLabwareInstance.GetUniqueIdentifier()),
                 PlateSequence,
-                PlateLabwareInstance,
                 FillerDeckLocationInstance,
+                PlateLabwareInstance,
             )
         )
 

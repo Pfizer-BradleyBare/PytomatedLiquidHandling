@@ -1,34 +1,15 @@
 from math import ceil
 from PytomatedLiquidHandling.HAL.Pipette.BasePipette.Interface import TransferOptions
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ..DeckLocation import DeckLocationTracker
-from ..Labware import LabwareTracker
 from ..Pipette import TransferOptions
-from .BasePipette import LiquidClassCategoryTracker, Pipette, PipetteTipTracker
+from .BasePipette import Pipette
 from ...Driver.Hamilton.Pipette import CORE96Head, PortraitCORE8Channel
+from dataclasses import dataclass
 
 
+@dataclass
 class HamiltonCORE96Head(Pipette):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: HamiltonBackendABC,
-        CustomErrorHandling: bool,
-        SupportedTipTrackerInstance: PipetteTipTracker,
-        SupportedLabwareTrackerInstance: LabwareTracker,
-        SupportedDeckLocationTrackerInstance: DeckLocationTracker,
-        SupportedLiquidClassCategoryTrackerInstance: LiquidClassCategoryTracker,
-    ):
-        Pipette.__init__(
-            self,
-            UniqueIdentifier,
-            BackendInstance,
-            CustomErrorHandling,
-            SupportedTipTrackerInstance,
-            SupportedLabwareTrackerInstance,
-            SupportedDeckLocationTrackerInstance,
-            SupportedLiquidClassCategoryTrackerInstance,
-        )
+    BackendInstance: HamiltonBackendABC
 
     def Initialize(
         self,
@@ -181,21 +162,21 @@ class HamiltonCORE96Head(Pipette):
 
         for _ in range(0, NumTransfers):
             CORE96Head.Pickup.Command(
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
                 OptionsInstance=PickupOptions,
             )
 
             CORE96Head.Aspirate.Command(
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
                 OptionsInstance=AspirateOptions,
             )
 
             CORE96Head.Dispense.Command(
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
                 OptionsInstance=DispenseOptions,
             )
 
             CORE96Head.Eject.Command(
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
                 OptionsInstance=EjectOptions,
             )

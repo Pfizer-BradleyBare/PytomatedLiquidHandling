@@ -1,18 +1,12 @@
 from abc import ABC, abstractmethod
-
+from dataclasses import dataclass
 from .....Driver.Tools.AbstractClasses import BackendABC
 
 
+@dataclass
 class InterfaceABC(ABC):
-    def __init__(self, BackendInstance: BackendABC, CustomErrorHandling: bool):
-        self.__BackendInstance: BackendABC = BackendInstance
-        self.__CustomErrorHandling: bool = CustomErrorHandling
-
-    def GetBackend(self) -> BackendABC:
-        return self.__BackendInstance
-
-    def GetErrorHandlingSetting(self) -> bool:
-        return self.__CustomErrorHandling
+    BackendInstance: BackendABC
+    CustomErrorHandling: bool
 
     @abstractmethod
     def Initialize(self):

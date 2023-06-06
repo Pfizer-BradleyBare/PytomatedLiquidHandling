@@ -2,35 +2,15 @@ from math import ceil
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import PortraitCORE8Channel
-from ..DeckLocation import DeckLocationTracker
-from ..Labware import LabwareTracker
 from ..Pipette import TransferOptions
-from .BasePipette import LiquidClassCategoryTracker, Pipette, PipetteTipTracker
+from .BasePipette import Pipette
+from dataclasses import dataclass
 
 
+@dataclass
 class HamiltonPortraitCORE8Channel(Pipette):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: HamiltonBackendABC,
-        CustomErrorHandling: bool,
-        SupportedTipTrackerInstance: PipetteTipTracker,
-        SupportedLabwareTrackerInstance: LabwareTracker,
-        SupportedDeckLocationTrackerInstance: DeckLocationTracker,
-        SupportedLiquidClassCategoryTrackerInstance: LiquidClassCategoryTracker,
-        ActiveChannels: list[int],
-    ):
-        Pipette.__init__(
-            self,
-            UniqueIdentifier,
-            BackendInstance,
-            CustomErrorHandling,
-            SupportedTipTrackerInstance,
-            SupportedLabwareTrackerInstance,
-            SupportedDeckLocationTrackerInstance,
-            SupportedLiquidClassCategoryTrackerInstance,
-        )
-        self.ActiveChannels: list[int] = ActiveChannels
+    BackendInstance: HamiltonBackendABC
+    ActiveChannels: list[int]
 
     def Initialize(
         self,
@@ -96,7 +76,7 @@ class HamiltonPortraitCORE8Channel(Pipette):
                     Tip
                 ).TipInstance
                 TipInstance.UpdateTipPositions(Count)
-                TipPositions[Tip] = TipInstance.GetCurrentTipPositions()
+                TipPositions[Tip] = TipInstance.TipPositions
             # Get our updated tip positions!
 
             PickupOptionsTracker = PortraitCORE8Channel.Pickup.OptionsTracker()
@@ -155,18 +135,18 @@ class HamiltonPortraitCORE8Channel(Pipette):
                 )
 
             PortraitCORE8Channel.Pickup.Command(
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
                 OptionsTrackerInstance=PickupOptionsTracker,
             )
             PortraitCORE8Channel.Aspirate.Command(
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
                 OptionsTrackerInstance=AspirateOptionsTracker,
             )
             PortraitCORE8Channel.Dispense.Command(
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
                 OptionsTrackerInstance=DispenseOptionsTracker,
             )
             PortraitCORE8Channel.Eject.Command(
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
                 OptionsTrackerInstance=EjectOptionsTracker,
             )

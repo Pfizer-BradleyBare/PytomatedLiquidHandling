@@ -1,31 +1,15 @@
 from ...Driver.Hamilton.Tip import NTR as NTRDriver
 from .BaseTip import Tip
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from dataclasses import dataclass, field
 
 
+@dataclass
 class HamiltonTipNTR(Tip):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: HamiltonBackendABC,
-        CustomErrorHandling: bool,
-        PickupSequence: str,
-        NTRWasteSequence: str,
-        GripperSequence: str,
-        MaxVolume: float,
-    ):
-        Tip.__init__(
-            self,
-            UniqueIdentifier,
-            BackendInstance,
-            CustomErrorHandling,
-            PickupSequence,
-            MaxVolume,
-        )
-        self.NTRWasteSequence: str = NTRWasteSequence
-        self.GripperSequence: str = GripperSequence
-
-        self.GeneratedWasteSequence: str
+    BackendInstance: HamiltonBackendABC
+    NTRWasteSequence: str
+    GripperSequence: str
+    GeneratedWasteSequence: str = field(init=False)
 
     def Initialize(self):
         self.Reload()
@@ -41,11 +25,11 @@ class HamiltonTipNTR(Tip):
                     RackWasteSequence=self.NTRWasteSequence,
                     GripperSequence=self.GripperSequence,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            self.GetBackend().GetResponse(CommandInstance, CommandInstance.Response)
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            self.BackendInstance.GetResponse(CommandInstance, CommandInstance.Response)
 
         except:
             ...
@@ -61,12 +45,12 @@ class HamiltonTipNTR(Tip):
                     GripperSequence=self.GripperSequence,
                     NumPositions=NumTips,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
 
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -81,11 +65,11 @@ class HamiltonTipNTR(Tip):
                 OptionsInstance=NTRDriver.GetNumTips.Options(
                     TipSequence=self.PickupSequence,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 

@@ -1,26 +1,14 @@
 from ...Driver.Hamilton.Transport import COREGripper as COREGripperDriver
 from .BaseTransportDevice import TransportOptions
-from .BaseTransportDevice import TransportableLabwareTracker, TransportDevice
+from .BaseTransportDevice import TransportDevice
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from dataclasses import dataclass
 
 
+@dataclass
 class HamiltonCOREGripper(TransportDevice):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: HamiltonBackendABC,
-        CustomErrorHandling: bool,
-        TransportableLabwareTrackerInstance: TransportableLabwareTracker,
-        GripperToolSequence: str,
-    ):
-        self.GripperToolSequence: str = GripperToolSequence
-        TransportDevice.__init__(
-            self,
-            UniqueIdentifier,
-            BackendInstance,
-            CustomErrorHandling,
-            TransportableLabwareTrackerInstance,
-        )
+    BackendInstance: HamiltonBackendABC
+    GripperToolSequence: str
 
     def Initialize(
         self,
@@ -57,11 +45,11 @@ class HamiltonCOREGripper(TransportDevice):
         try:
             CommandInstance = COREGripperDriver.GetPlate.Command(
                 OptionsInstance=GetPlateOptionsInstance,
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            self.GetBackend().GetResponse(CommandInstance, CommandInstance.Response)
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            self.BackendInstance.GetResponse(CommandInstance, CommandInstance.Response)
 
         except:
             ...
@@ -77,11 +65,11 @@ class HamiltonCOREGripper(TransportDevice):
                         self._LastTransportFlag
                     ),
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            self.GetBackend().GetResponse(CommandInstance, CommandInstance.Response)
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            self.BackendInstance.GetResponse(CommandInstance, CommandInstance.Response)
 
         except:
             ...

@@ -1,16 +1,14 @@
 from .....Tools.AbstractClasses import UniqueObjectABC
 from ....Labware.BaseLabware import LabwareABC
 from .TransportParameters.TransportParameters import TransportParameters
+from dataclasses import dataclass, field
 
 
+@dataclass
 class TransportableLabware(UniqueObjectABC):
-    def __init__(
-        self,
-        LabwareInstance: LabwareABC,
-        TransportParametersInstance: TransportParameters,
-    ):
-        UniqueObjectABC.__init__(self, LabwareInstance.GetUniqueIdentifier())
-        self.LabwareInstance: LabwareABC = LabwareInstance
-        self.TransportParametersInstance: TransportParameters = (
-            TransportParametersInstance
-        )
+    UniqueIdentifier: str | int = field(init=False)
+    LabwareInstance: LabwareABC
+    TransportParametersInstance: TransportParameters
+
+    def __post_init__(self):
+        self.UniqueIdentifier = self.LabwareInstance.UniqueIdentifier

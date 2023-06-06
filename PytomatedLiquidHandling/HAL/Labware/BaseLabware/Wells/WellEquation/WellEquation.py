@@ -1,8 +1,9 @@
 from ......Tools.AbstractClasses import NonUniqueObjectABC
+from dataclasses import dataclass, field
 
 
+@dataclass
 class WellEquation(NonUniqueObjectABC):
-    def __init__(self, SegmentHeight: float, SegmentEquation: str):
-        NonUniqueObjectABC.__init__(self, "Well Equation")
-        self.SegmentHeight = SegmentHeight
-        self.SegmentEquation = SegmentEquation
+    Identifier: str | int = field(init=False, default="Well Equation")
+    SegmentHeight: float
+    SegmentEquation: str

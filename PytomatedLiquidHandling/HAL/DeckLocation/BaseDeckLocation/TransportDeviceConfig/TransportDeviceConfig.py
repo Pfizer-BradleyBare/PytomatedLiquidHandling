@@ -1,22 +1,19 @@
 from .....Tools.AbstractClasses import UniqueObjectABC
 from ....TransportDevice.BaseTransportDevice import TransportDevice
+from dataclasses import dataclass, field
 
 
+@dataclass
 class TransportDeviceConfig(UniqueObjectABC):
-    def __init__(
-        self,
-        TransportDeviceInstance: TransportDevice,
-        HomeGetConfig: dict,
-        HomePlaceConfig: dict,
-        AwayGetConfig: dict,
-        AwayPlaceConfig: dict,
-    ):
-        UniqueObjectABC.__init__(self, TransportDeviceInstance.GetUniqueIdentifier())
-        self.TransportDeviceInstance: TransportDevice = TransportDeviceInstance
-        self.HomeGetConfig: dict = HomeGetConfig
-        self.HomePlaceConfig: dict = HomePlaceConfig
-        self.AwayGetConfig: dict = AwayGetConfig
-        self.AwayPlaceConfig: dict = AwayPlaceConfig
+    UniqueIdentifier: str | int = field(init=False)
+    TransportDeviceInstance: TransportDevice
+    HomeGetConfig: dict
+    HomePlaceConfig: dict
+    AwayGetConfig: dict
+    AwayPlaceConfig: dict
+
+    def __post_init__(self):
+        self.UniqueIdentifier = TransportDevice.UniqueIdentifier
 
         if not all(
             Key in self.HomeGetConfig

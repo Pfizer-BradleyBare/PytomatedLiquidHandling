@@ -3,14 +3,12 @@ from .TransportDevice import TransportDevice
 from .Interface import TransportOptions
 from ...LayoutItem import LayoutItemTracker, NonCoverablePosition
 from ...DeckLocation import DeckLocation, TransportDeviceConfig
+from dataclasses import dataclass
 
 
+@dataclass
 class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
-    def __init__(self, TransitionPointsTrackerInstance: LayoutItemTracker):
-        UniqueObjectTrackerABC.__init__(self)
-        self.TransitionPointsTrackerInstance: LayoutItemTracker = (
-            TransitionPointsTrackerInstance
-        )
+    TransitionPointsTrackerInstance: LayoutItemTracker
 
     def Transport(
         self, TransportOptionsTrackerInstance: TransportOptions.OptionsTracker
@@ -60,7 +58,6 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                 IntermediateDestinationLayoutItem = NonCoverablePosition(
                     "Intermediate Destination",
                     LabwareDestinationLayoutItem.Sequence,
-                    LabwareDestinationLayoutItem.LabwareInstance,  # type: ignore
                     DeckLocation(
                         "Intermediate Destination",
                         TransportDeviceConfig(
@@ -72,6 +69,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                             # We only use the away config. TODO Explain
                         ),
                     ),
+                    LabwareDestinationLayoutItem.LabwareInstance,
                 )
                 IntermediateDestinationTransportDeviceInstance.Transport(
                     TransportOptions.Options(
@@ -103,7 +101,6 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                 IntermediateSourceLayoutItem = NonCoverablePosition(
                     "Intermediate Source",
                     LabwareSourceLayoutItem.Sequence,
-                    LabwareSourceLayoutItem.LabwareInstance,  # type: ignore
                     DeckLocation(
                         "Intermediate Source",
                         TransportDeviceConfig(
@@ -115,6 +112,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                             # We only use the away config. TODO Explain
                         ),
                     ),
+                    LabwareSourceLayoutItem.LabwareInstance,
                 )
                 IntermediateDestinationTransportDeviceInstance.Transport(
                     TransportOptions.Options(

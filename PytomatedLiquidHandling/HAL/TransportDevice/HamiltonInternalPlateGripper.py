@@ -1,24 +1,13 @@
 from .BaseTransportDevice import TransportOptions
-from .BaseTransportDevice import TransportableLabwareTracker, TransportDevice
+from .BaseTransportDevice import TransportDevice
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Transport import IPG as IPGDriver
+from dataclasses import dataclass
 
 
+@dataclass
 class HamiltonInternalPlateGripper(TransportDevice):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: HamiltonBackendABC,
-        CustomErrorHandling: bool,
-        TransportableLabwareTrackerInstance: TransportableLabwareTracker,
-    ):
-        TransportDevice.__init__(
-            self,
-            UniqueIdentifier,
-            BackendInstance,
-            CustomErrorHandling,
-            TransportableLabwareTrackerInstance,
-        )
+    BackendInstance: HamiltonBackendABC
 
     def Initialize(
         self,
@@ -70,11 +59,11 @@ class HamiltonInternalPlateGripper(TransportDevice):
                         "InverseGrip"
                     ],
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            self.GetBackend().GetResponse(CommandInstance, CommandInstance.Response)
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            self.BackendInstance.GetResponse(CommandInstance, CommandInstance.Response)
 
         except:
             ...
@@ -96,11 +85,11 @@ class HamiltonInternalPlateGripper(TransportDevice):
                         "LabwareOrientation"
                     ],
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            self.GetBackend().GetResponse(CommandInstance, CommandInstance.Response)
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            self.BackendInstance.GetResponse(CommandInstance, CommandInstance.Response)
 
         except:
             ...

@@ -46,13 +46,13 @@ def LoadYaml(
             LayoutItemInstance = CoverablePosition(
                 UniqueIdentifier,
                 PlateSequence,
-                PlateLabwareInstance,
                 DeckLocationInstance,
+                PlateLabwareInstance,
                 Lid(
                     UniqueIdentifier,
                     LidSequence,
-                    LidLabwareInstance,
                     DeckLocationInstance,
+                    LidLabwareInstance,
                 ),
             )
 
@@ -60,8 +60,8 @@ def LoadYaml(
             LayoutItemInstance = NonCoverablePosition(
                 UniqueIdentifier,
                 PlateSequence,
-                PlateLabwareInstance,
                 DeckLocationInstance,
+                PlateLabwareInstance,
             )
 
         LayoutItemTrackerInstance.LoadSingle(LayoutItemInstance)

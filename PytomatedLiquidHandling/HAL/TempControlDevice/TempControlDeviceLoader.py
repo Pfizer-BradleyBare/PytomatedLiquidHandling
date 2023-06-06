@@ -67,15 +67,15 @@ def LoadYaml(
                 LidInstance = Lid(
                     UniqueIdentifier + " " + LabwareName + " Lid",
                     LidSequence,
-                    LidLabwareInstance,
                     DeckLocationInstance,
+                    LidLabwareInstance,
                 )
 
                 LayoutItemInstance = CoverablePosition(
                     UniqueIdentifier + " " + LabwareName,
                     PlateSequence,
-                    PlateLabwareInstance,
                     DeckLocationInstance,
+                    PlateLabwareInstance,
                     LidInstance,
                 )
                 SupportedLayoutItemTracker.LoadSingle(LayoutItemInstance)

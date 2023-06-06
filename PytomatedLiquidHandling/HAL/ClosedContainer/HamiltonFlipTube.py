@@ -1,37 +1,17 @@
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
-from ..Labware import LabwareTracker
-from ..DeckLocation import DeckLocationTracker
 from .BaseClosedContainer import ClosedContainerABC, OpenCloseOptions
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from dataclasses import dataclass
 
 
+@dataclass
 class HamiltonFlipTube(ClosedContainerABC):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: HamiltonBackendABC,
-        CustomErrorHandling: bool,
-        ToolSequence: str,
-        SupportedDeckLocationTrackerInstance: DeckLocationTracker,
-        SupportedLabwareTrackerInstance: LabwareTracker,
-    ):
-        ClosedContainerABC.__init__(
-            self,
-            UniqueIdentifier,
-            BackendInstance,
-            CustomErrorHandling,
-            ToolSequence,
-            SupportedDeckLocationTrackerInstance,
-            SupportedLabwareTrackerInstance,
-        )
-
     def Initialize(self):
         Command = FlipTubeDriver.Initialize.Command(
-            CustomErrorHandling=self.GetErrorHandlingSetting(),
+            CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.GetBackend().ExecuteCommand(Command)
-        self.GetBackend().WaitForResponseBlocking(Command)
-        self.GetBackend().GetResponse(Command, Command.Response)
+        self.BackendInstance.ExecuteCommand(Command)
+        self.BackendInstance.WaitForResponseBlocking(Command)
+        self.BackendInstance.GetResponse(Command, Command.Response)
 
     def Deinitialize(self):
         ...
@@ -59,11 +39,11 @@ class HamiltonFlipTube(ClosedContainerABC):
         try:
             Command = FlipTubeDriver.Open.Command(
                 OptionsTrackerInstance=OptionsTrackerInstance,
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(Command)
-            self.GetBackend().WaitForResponseBlocking(Command)
-            self.GetBackend().GetResponse(Command, Command.Response)
+            self.BackendInstance.ExecuteCommand(Command)
+            self.BackendInstance.WaitForResponseBlocking(Command)
+            self.BackendInstance.GetResponse(Command, Command.Response)
 
         except:
             ...
@@ -91,11 +71,11 @@ class HamiltonFlipTube(ClosedContainerABC):
         try:
             Command = FlipTubeDriver.Close.Command(
                 OptionsTrackerInstance=OptionsTrackerInstance,
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(Command)
-            self.GetBackend().WaitForResponseBlocking(Command)
-            self.GetBackend().GetResponse(Command, Command.Response)
+            self.BackendInstance.ExecuteCommand(Command)
+            self.BackendInstance.WaitForResponseBlocking(Command)
+            self.BackendInstance.GetResponse(Command, Command.Response)
 
         except:
             ...

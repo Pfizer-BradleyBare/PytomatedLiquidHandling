@@ -1,29 +1,14 @@
 from ...Driver.Hamilton.TemperatureControl import HeaterCooler as HeaterCoolerDriver
-from ..LayoutItem import LayoutItemTracker
-from .BaseTempControlDevice import TempControlDevice, TempLimits
+from .BaseTempControlDevice import TempControlDevice
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from dataclasses import dataclass, field
 
 
+@dataclass
 class HamiltonHeaterCooler(TempControlDevice):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: HamiltonBackendABC,
-        CustomErrorHandling: bool,
-        ComPort: str,
-        TempLimitsInstance: TempLimits,
-        LayoutItemTrackerInstance: LayoutItemTracker,
-    ):
-        TempControlDevice.__init__(
-            self,
-            UniqueIdentifier,
-            BackendInstance,
-            CustomErrorHandling,
-            ComPort,
-            False,
-            TempLimitsInstance,
-            LayoutItemTrackerInstance,
-        )
+    BackendInstance: HamiltonBackendABC
+    ShakingSupported: bool = field(init=False, default=False)
+    HandleID: str = field(init=False)
 
     def Initialize(self):
         if not isinstance(self.ComPort, str):
@@ -34,11 +19,11 @@ class HamiltonHeaterCooler(TempControlDevice):
                 OptionsInstance=HeaterCoolerDriver.Connect.Options(
                     ComPort=self.ComPort,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -52,11 +37,11 @@ class HamiltonHeaterCooler(TempControlDevice):
                 OptionsInstance=HeaterCoolerDriver.StopTemperatureControl.Options(
                     HandleID=str(self.HandleID)
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
         except:
@@ -73,17 +58,17 @@ class HamiltonHeaterCooler(TempControlDevice):
                     HandleID=str(self.HandleID),
                     Temperature=Temperature,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
         except:
             ...
 
-    def UpdateCurrentTemperature(
+    def UpdateTemperature(
         self,
     ):
         try:
@@ -91,11 +76,11 @@ class HamiltonHeaterCooler(TempControlDevice):
                 OptionsInstance=HeaterCoolerDriver.GetTemperature.Options(
                     HandleID=str(self.HandleID),
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -111,5 +96,5 @@ class HamiltonHeaterCooler(TempControlDevice):
     def StopShaking(self):
         ...
 
-    def UpdateCurrentShakingSpeed(self):
+    def UpdateShakingSpeed(self):
         ...

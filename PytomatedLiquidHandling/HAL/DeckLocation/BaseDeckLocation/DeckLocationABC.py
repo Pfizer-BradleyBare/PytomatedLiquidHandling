@@ -1,14 +1,8 @@
 from ....Tools.AbstractClasses import UniqueObjectABC
 from .TransportDeviceConfig import TransportDeviceConfig
+from dataclasses import dataclass
 
 
+@dataclass
 class DeckLocationABC(UniqueObjectABC):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        TransportDeviceConfigInstance: TransportDeviceConfig,
-    ):
-        UniqueObjectABC.__init__(self, UniqueIdentifier)
-        self.TransportDeviceConfigInstance: TransportDeviceConfig = (
-            TransportDeviceConfigInstance
-        )
+    TransportDeviceConfigInstance: TransportDeviceConfig

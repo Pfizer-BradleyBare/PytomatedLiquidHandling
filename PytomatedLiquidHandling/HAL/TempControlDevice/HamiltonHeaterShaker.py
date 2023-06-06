@@ -2,28 +2,14 @@ from ...Driver.Hamilton.TemperatureControl import HeaterShaker as HeaterShakerDr
 from ..LayoutItem import LayoutItemTracker
 from .BaseTempControlDevice import TempControlDevice, TempLimits
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from dataclasses import dataclass, field
 
 
+@dataclass
 class HamiltonHeaterShaker(TempControlDevice):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: HamiltonBackendABC,
-        CustomErrorHandling: bool,
-        ComPort: str,
-        TempLimitsInstance: TempLimits,
-        LayoutItemTrackerInstance: LayoutItemTracker,
-    ):
-        TempControlDevice.__init__(
-            self,
-            UniqueIdentifier,
-            BackendInstance,
-            CustomErrorHandling,
-            ComPort,
-            True,
-            TempLimitsInstance,
-            LayoutItemTrackerInstance,
-        )
+    BackendInstance: HamiltonBackendABC
+    ShakingSupported: bool = field(init=False, default=True)
+    HandleID: int = field(init=False)
 
     def Initialize(self):
         if not isinstance(self.ComPort, int):
@@ -34,11 +20,11 @@ class HamiltonHeaterShaker(TempControlDevice):
                 OptionsInstance=HeaterShakerDriver.Connect.Options(
                     ComPort=self.ComPort,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -52,11 +38,11 @@ class HamiltonHeaterShaker(TempControlDevice):
                     HandleID=int(self.HandleID),
                     PlateLockState=1,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -69,11 +55,11 @@ class HamiltonHeaterShaker(TempControlDevice):
                     HandleID=int(self.HandleID),
                     PlateLockState=0,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -86,11 +72,11 @@ class HamiltonHeaterShaker(TempControlDevice):
                 OptionsInstance=HeaterShakerDriver.StopTemperatureControl.Options(
                     HandleID=int(self.HandleID),
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -102,11 +88,11 @@ class HamiltonHeaterShaker(TempControlDevice):
                 OptionsInstance=HeaterShakerDriver.StopShakeControl.Options(
                     HandleID=int(self.HandleID)
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -119,11 +105,11 @@ class HamiltonHeaterShaker(TempControlDevice):
                     HandleID=int(self.HandleID),
                     PlateLockState=0,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -137,28 +123,28 @@ class HamiltonHeaterShaker(TempControlDevice):
                     HandleID=int(self.HandleID),
                     Temperature=Temperature,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
         except:
             ...
 
-    def UpdateCurrentTemperature(self):
+    def UpdateTemperature(self):
         try:
             CommandInstance = HeaterShakerDriver.GetTemperature.Command(
                 OptionsInstance=HeaterShakerDriver.GetTemperature.Options(
                     HandleID=int(self.HandleID),
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -173,11 +159,11 @@ class HamiltonHeaterShaker(TempControlDevice):
                     HandleID=int(self.HandleID),
                     PlateLockState=1,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -190,11 +176,11 @@ class HamiltonHeaterShaker(TempControlDevice):
                     HandleID=int(self.HandleID),
                     ShakingSpeed=RPM,
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -207,11 +193,11 @@ class HamiltonHeaterShaker(TempControlDevice):
                 OptionsInstance=HeaterShakerDriver.StopShakeControl.Options(
                     HandleID=int(self.HandleID),
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
@@ -223,28 +209,28 @@ class HamiltonHeaterShaker(TempControlDevice):
                 OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
                     HandleID=int(self.HandleID), PlateLockState=0
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 
         except:
             ...
 
-    def UpdateCurrentShakingSpeed(self):
+    def UpdateShakingSpeed(self):
         try:
             CommandInstance = HeaterShakerDriver.GetShakingSpeed.Command(
                 OptionsInstance=HeaterShakerDriver.GetShakingSpeed.Options(
                     HandleID=int(self.HandleID),
                 ),
-                CustomErrorHandling=self.GetErrorHandlingSetting(),
+                CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.GetBackend().ExecuteCommand(CommandInstance)
-            self.GetBackend().WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.GetBackend().GetResponse(
+            self.BackendInstance.ExecuteCommand(CommandInstance)
+            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.BackendInstance.GetResponse(
                 CommandInstance, CommandInstance.Response
             )
 

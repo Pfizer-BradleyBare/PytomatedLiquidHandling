@@ -1,6 +1,5 @@
 from abc import abstractmethod
 
-from ....Driver.Tools.AbstractClasses import BackendABC
 from ....Tools.AbstractClasses import UniqueObjectABC
 from ...DeckLocation import DeckLocationTracker
 from ...Labware import LabwareTracker, PipettableLabware
@@ -8,33 +7,15 @@ from ...Tools.AbstractClasses import InterfaceABC
 from .Interface import TransferOptions
 from .LiquidClass import LiquidClass, LiquidClassCategoryTracker
 from .PipetteTip import PipetteTip, PipetteTipTracker
+from dataclasses import dataclass
 
 
-class Pipette(UniqueObjectABC, InterfaceABC):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        BackendInstance: BackendABC,
-        CustomErrorHandling: bool,
-        SupportedTipTrackerInstance: PipetteTipTracker,
-        SupportedLabwareTrackerInstance: LabwareTracker,
-        SupportedDeckLocationTrackerInstance: DeckLocationTracker,
-        SupportedLiquidClassCategoryTrackerInstance: LiquidClassCategoryTracker,
-    ):
-        UniqueObjectABC.__init__(self, UniqueIdentifier)
-        InterfaceABC.__init__(self, BackendInstance, CustomErrorHandling)
-        self.SupportedTipTrackerInstance: PipetteTipTracker = (
-            SupportedTipTrackerInstance
-        )
-        self.SupportedLabwareTrackerInstance: LabwareTracker = (
-            SupportedLabwareTrackerInstance
-        )
-        self.SupportedDeckLocationTrackerInstance: DeckLocationTracker = (
-            SupportedDeckLocationTrackerInstance
-        )
-        self.SupportedLiquidClassCategoryTrackerInstance: LiquidClassCategoryTracker = (
-            SupportedLiquidClassCategoryTrackerInstance
-        )
+@dataclass
+class Pipette(InterfaceABC, UniqueObjectABC):
+    SupportedTipTrackerInstance: PipetteTipTracker
+    SupportedLabwareTrackerInstance: LabwareTracker
+    SupportedDeckLocationTrackerInstance: DeckLocationTracker
+    SupportedLiquidClassCategoryTrackerInstance: LiquidClassCategoryTracker
 
     def GetTip(self, Volume: float) -> PipetteTip:
         for PipetteTipInstance in self.SupportedTipTrackerInstance.GetObjectsAsList():
