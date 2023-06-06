@@ -27,7 +27,7 @@ class HamiltonInternalPlateGripper(TransportDevice):
 
         SourceTransportableLabware = (
             self.TransportableLabwareTrackerInstance.GetObjectByName(
-                SourceLayoutItem.LabwareInstance.GetUniqueIdentifier()
+                SourceLayoutItem.LabwareInstance.UniqueIdentifier
             )
         )
 

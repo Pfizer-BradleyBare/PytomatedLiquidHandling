@@ -42,7 +42,6 @@ class StunnerSampleTracker(UniqueObjectABC, UniqueObjectTrackerABC[StunnerSample
             self.ResultsDefinition: str = ResultsDefinition
 
     def GetDefinitions(self) -> __Definitions:
-
         SampleDefinitionText = ""
 
         WellInfo = dict()
@@ -88,7 +87,7 @@ class StunnerSampleTracker(UniqueObjectABC, UniqueObjectTrackerABC[StunnerSample
 
         ExperimentDefinitionText = "[Experiment definition]\n"
         ExperimentDefinitionText += (
-            'experiment_name="' + str(self.GetUniqueIdentifier()) + '"\n'
+            'experiment_name="' + str(self.UniqueIdentifier) + '"\n'
         )
         ExperimentDefinitionText += 'application_name="' + self.ApplicationID + '"\n'
         ExperimentDefinitionText += 'dropplate_type="Stunner Plate"\n'

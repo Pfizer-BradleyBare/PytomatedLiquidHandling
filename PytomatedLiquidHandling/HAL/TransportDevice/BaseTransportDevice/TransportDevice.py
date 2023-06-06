@@ -18,16 +18,16 @@ class TransportDevice(InterfaceABC, UniqueObjectABC):
         DestinationLayoutItem = TransportOptionsInstance.DestinationLayoutItem
 
         if (
-            SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.GetUniqueIdentifier()
-            != self.GetUniqueIdentifier()
+            SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
+            != self.UniqueIdentifier
         ):
             raise Exception(
                 "This transport device is not supported for this source deck location"
             )
 
         if (
-            DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.GetUniqueIdentifier()
-            != self.GetUniqueIdentifier()
+            DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
+            != self.UniqueIdentifier
         ):
             raise Exception(
                 "This transport device is not supported for this destination deck location"
@@ -48,8 +48,8 @@ class TransportDevice(InterfaceABC, UniqueObjectABC):
         DestinationLabwareInstance = DestinationLayoutItem.LabwareInstance
 
         if (
-            SourceLabwareInstance.GetUniqueIdentifier()
-            != DestinationLabwareInstance.GetUniqueIdentifier()
+            SourceLabwareInstance.UniqueIdentifier
+            != DestinationLabwareInstance.UniqueIdentifier
         ):
             raise Exception(
                 "Your source and destination labware are not the same... How did this happen???"
@@ -57,7 +57,7 @@ class TransportDevice(InterfaceABC, UniqueObjectABC):
         # Check that the labware is the same for both source and destination
 
         if not self.TransportableLabwareTrackerInstance.IsTracked(
-            SourceLabwareInstance.GetUniqueIdentifier()
+            SourceLabwareInstance.UniqueIdentifier
         ):
             raise Exception("The labware is not supported by this transport device")
         # Check that the transport device can move this labware

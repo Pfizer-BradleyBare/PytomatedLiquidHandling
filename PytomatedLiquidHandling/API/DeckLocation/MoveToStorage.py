@@ -29,9 +29,7 @@ def MoveToStorage(ContainerInstance: Container, RunType: RunTypes) -> bool:
             Location
             for Location in DeckLocationTrackerInstance.GetObjectsAsList()
             if (
-                not ResourceLockTrackerInstance.IsTracked(
-                    Location.GetUniqueIdentifier()
-                )
+                not ResourceLockTrackerInstance.IsTracked(Location.UniqueIdentifier)
                 or not RunType is RunTypes.Run
             )
             and Location.IsStorageLocation()

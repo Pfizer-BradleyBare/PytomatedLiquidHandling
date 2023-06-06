@@ -4,7 +4,7 @@ from .....Container import Reagent
 
 class WellSolution(UniqueObjectABC):
     def __init__(self, ReagentInstance: Reagent, Volume: float):
-        UniqueObjectABC.__init__(self, ReagentInstance.GetUniqueIdentifier())
+        UniqueObjectABC.__init__(self, ReagentInstance.UniqueIdentifier)
         self.ReagentInstance: Reagent = ReagentInstance
         self.Volume: float = Volume
 

@@ -40,7 +40,7 @@ def Reserve(
         Device
         for Device in TempControlDeviceTrackerInstance.GetObjectsAsList()
         if (
-            not ResourceLockTrackerInstance.IsTracked(Device.GetUniqueIdentifier())
+            not ResourceLockTrackerInstance.IsTracked(Device.UniqueIdentifier)
             or not RunType is RunTypes.Run
         )
         and Device.ShakingSupported >= RequiresShaking

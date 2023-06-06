@@ -141,7 +141,7 @@ class HamiltonCORE96Head(Pipette):
             LiquidClass=str(
                 self.GetLiquidClass(
                     Options.SourceLiquidClassCategory, TransferVolume
-                ).GetUniqueIdentifier()
+                ).UniqueIdentifier
             ),
             Volume=TransferVolume,
         )
@@ -151,7 +151,7 @@ class HamiltonCORE96Head(Pipette):
             LiquidClass=str(
                 self.GetLiquidClass(
                     Options.SourceLiquidClassCategory, TransferVolume
-                ).GetUniqueIdentifier()
+                ).UniqueIdentifier
             ),
             Volume=TransferVolume,
         )

@@ -85,13 +85,13 @@ def Transport(
 
         if RunType is RunTypes.Run:
             if ResourceLockTrackerInstance.IsTracked(
-                SourceLayoutItemInstance.DeckLocationInstance.GetUniqueIdentifier()
+                SourceLayoutItemInstance.DeckLocationInstance.UniqueIdentifier
             ):
                 raise Exception(
                     "Source Deck location is locked. Transport cannot occur. This should not happen."
                 )
             if ResourceLockTrackerInstance.IsTracked(
-                DestinationLayoutItemInstance.DeckLocationInstance.GetUniqueIdentifier()
+                DestinationLayoutItemInstance.DeckLocationInstance.UniqueIdentifier
             ):
                 raise Exception(
                     "Destination Deck location is locked. Transport cannot occur. This should not happen."

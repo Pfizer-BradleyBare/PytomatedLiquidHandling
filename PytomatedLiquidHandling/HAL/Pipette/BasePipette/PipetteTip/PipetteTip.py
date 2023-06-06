@@ -12,4 +12,4 @@ class PipetteTip(UniqueObjectABC):
     WasteSequence: str
 
     def __post_init__(self):
-        self.UniqueIdentifier = self.TipInstance.GetUniqueIdentifier()
+        self.UniqueIdentifier = self.TipInstance.UniqueIdentifier

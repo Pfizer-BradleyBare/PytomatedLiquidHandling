@@ -30,7 +30,7 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
         SourceLiquidClassCategories.append(
             SourceContainerInstance.GetLiquidClassCategory(
                 SourceWellNumber
-            ).GetUniqueIdentifier()
+            ).UniqueIdentifier
         )
         # Get the source liquid class before removing liquid. Becuase that is how it works in real life. Aspirate
 
@@ -42,7 +42,7 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
         DestinationLiquidClassCategories.append(
             DestinationContainerInstance.GetLiquidClassCategory(
                 DestinationWellNumber
-            ).GetUniqueIdentifier()
+            ).UniqueIdentifier
         )
         # Get the destination liquid class after adding liquid. Becuase that is how it works in real life. DIspense
 
@@ -145,7 +145,7 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
                 is True
             ):
                 SourceLoadedLabwarePhysicalWells.append(
-                    LoadedLabwareWell.GetUniqueIdentifier()
+                    LoadedLabwareWell.UniqueIdentifier
                 )
                 break
 
@@ -161,7 +161,7 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
                 is True
             ):
                 DestinationLoadedLabwarePhysicalWells.append(
-                    LoadedLabwareWell.GetUniqueIdentifier()
+                    LoadedLabwareWell.UniqueIdentifier
                 )
     # figure out the wells
 
@@ -254,7 +254,7 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
         ) in HALTransferOptionsTrackerInstance.GetObjectsAsList():
             Item = HALTransferOptionsInstance.SourceLayoutItemInstance
             if ClosedContainerInstance.SupportedLabwareTrackerInstance.IsTracked(
-                Item.LabwareInstance.GetUniqueIdentifier()
+                Item.LabwareInstance.UniqueIdentifier
             ):
                 OpenList.append(Item)
                 OpenPositionsList.append(HALTransferOptionsInstance.SourcePosition)
@@ -274,7 +274,7 @@ def Transfer(TransferOptionsTrackerInstance: TransferOptionsTracker, RunType: Ru
         ) in HALTransferOptionsTrackerInstance.GetObjectsAsList():
             Item = HALTransferOptionsInstance.SourceLayoutItemInstance
             if ClosedContainerInstance.SupportedLabwareTrackerInstance.IsTracked(
-                Item.LabwareInstance.GetUniqueIdentifier()
+                Item.LabwareInstance.UniqueIdentifier
             ):
                 CloseList.append(Item)
                 ClosePositionsList.append(HALTransferOptionsInstance.SourcePosition)

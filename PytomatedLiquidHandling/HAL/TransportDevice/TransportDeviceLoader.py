@@ -50,7 +50,7 @@ def LoadYaml(
 
         TransitionPointTrackerInstance.LoadSingle(
             NonCoverablePosition(
-                str(PlateLabwareInstance.GetUniqueIdentifier()),
+                str(PlateLabwareInstance.UniqueIdentifier),
                 PlateSequence,
                 FillerDeckLocationInstance,
                 PlateLabwareInstance,

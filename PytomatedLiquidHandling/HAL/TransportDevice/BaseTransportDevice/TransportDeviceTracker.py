@@ -16,7 +16,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
         DeviceLastUseIndices: dict[str, int] = dict()
 
         for Device in self.GetObjectsAsList():
-            DeviceLastUseIndices[str(Device.GetUniqueIdentifier())] = 0
+            DeviceLastUseIndices[str(Device.UniqueIdentifier)] = 0
             Device._LastTransportFlag = False
         # Setup the devices
 
@@ -25,12 +25,12 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
         ):
             DeviceLastUseIndices[
                 str(
-                    Options.SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.GetUniqueIdentifier()
+                    Options.SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
                 )
             ] = Index
             DeviceLastUseIndices[
                 str(
-                    Options.DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.GetUniqueIdentifier()
+                    Options.DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
                 )
             ] = Index
         # Figure out the last time each device is used to I can reset the last transport flag
@@ -48,7 +48,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
             if SourceAwayConfig != DestinationAwayConfig:
                 LabwareDestinationLayoutItem = (
                     self.TransitionPointsTrackerInstance.GetObjectByName(
-                        Options.SourceLayoutItem.LabwareInstance.GetUniqueIdentifier()
+                        Options.SourceLayoutItem.LabwareInstance.UniqueIdentifier
                     )
                 )
 
@@ -81,7 +81,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
 
                 LabwareSourceLayoutItem = (
                     self.TransitionPointsTrackerInstance.GetObjectByName(
-                        Options.SourceLayoutItem.LabwareInstance.GetUniqueIdentifier()
+                        Options.SourceLayoutItem.LabwareInstance.UniqueIdentifier
                     )
                 )
                 IntermediateSourceTransportDeviceInstance = (
@@ -90,9 +90,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
 
                 if (
                     DeviceLastUseIndices[
-                        str(
-                            IntermediateSourceTransportDeviceInstance.GetUniqueIdentifier()
-                        )
+                        str(IntermediateSourceTransportDeviceInstance.UniqueIdentifier)
                     ]
                     == Index
                 ):
@@ -127,9 +125,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                     Options.SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.TransportDeviceInstance
                 )
                 if (
-                    DeviceLastUseIndices[
-                        str(TransportDeviceInstance.GetUniqueIdentifier())
-                    ]
+                    DeviceLastUseIndices[str(TransportDeviceInstance.UniqueIdentifier)]
                     == Index
                 ):
                     TransportDeviceInstance._LastTransportFlag = True

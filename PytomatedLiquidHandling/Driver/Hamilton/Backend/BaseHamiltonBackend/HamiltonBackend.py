@@ -24,13 +24,13 @@ class HamiltonBackendABC(BackendABC):
 
     def __post_init__(self):
         self.ActionServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
-            str(self.GetUniqueIdentifier()) + " Action Server",
+            str(self.UniqueIdentifier) + " Action Server",
             self.LoggerInstance,
             "/ActionServer/",
             767,
         )
         self.StateServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
-            str(self.GetUniqueIdentifier()) + " State Server",
+            str(self.UniqueIdentifier) + " State Server",
             self.LoggerInstance,
             "/StateServer/",
             768,

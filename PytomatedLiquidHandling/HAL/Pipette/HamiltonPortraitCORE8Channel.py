@@ -59,14 +59,12 @@ class HamiltonPortraitCORE8Channel(Pipette):
 
         for OptionsList in OptionsListList:
             RequiredTips: dict[str | int, int] = {
-                Tip.TipInstance.GetUniqueIdentifier(): 0
+                Tip.TipInstance.UniqueIdentifier: 0
                 for Tip in self.SupportedTipTrackerInstance.GetObjectsAsList()
             }
             for Options in OptionsList:
                 RequiredTips[
-                    self.GetTip(
-                        Options.TransferVolume
-                    ).TipInstance.GetUniqueIdentifier()
+                    self.GetTip(Options.TransferVolume).TipInstance.UniqueIdentifier
                 ] += 1
             # How many tips of each volume do we need?
 
@@ -91,7 +89,7 @@ class HamiltonPortraitCORE8Channel(Pipette):
                         Sequence=PipetteTipInstance.TipInstance.PickupSequence,
                         ChannelNumber=Count,
                         SequencePosition=TipPositions[
-                            PipetteTipInstance.GetUniqueIdentifier()
+                            PipetteTipInstance.UniqueIdentifier
                         ].pop(0),
                     )
                 )
@@ -105,7 +103,7 @@ class HamiltonPortraitCORE8Channel(Pipette):
                             self.GetLiquidClass(
                                 Options.SourceLiquidClassCategory,
                                 Options.TransferVolume,
-                            ).GetUniqueIdentifier()
+                            ).UniqueIdentifier
                         ),
                         Volume=Options.TransferVolume,
                     )
@@ -120,7 +118,7 @@ class HamiltonPortraitCORE8Channel(Pipette):
                             self.GetLiquidClass(
                                 Options.DestinationLiquidClassCategory,
                                 Options.TransferVolume,
-                            ).GetUniqueIdentifier()
+                            ).UniqueIdentifier
                         ),
                         Volume=Options.TransferVolume,
                     )

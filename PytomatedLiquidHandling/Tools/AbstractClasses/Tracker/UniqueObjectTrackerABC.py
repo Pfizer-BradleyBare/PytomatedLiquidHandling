@@ -15,7 +15,7 @@ class UniqueObjectTrackerABC(Generic[T]):
     ThreadLock: Lock = field(init=False, default=Lock())
 
     def LoadSingle(self, ObjectABCInstance: T) -> None:
-        Name = ObjectABCInstance.GetUniqueIdentifier()
+        Name = ObjectABCInstance.UniqueIdentifier
 
         if self.IsTracked(Name) is True:
             raise Exception(
@@ -27,7 +27,7 @@ class UniqueObjectTrackerABC(Generic[T]):
         self.Collection[Name] = ObjectABCInstance
 
     def UnloadSingle(self, ObjectABCInstance: T) -> None:
-        Name = ObjectABCInstance.GetUniqueIdentifier()
+        Name = ObjectABCInstance.UniqueIdentifier
 
         if self.IsTracked(Name) is False:
             raise Exception(

@@ -15,11 +15,11 @@ class LoadedLabware(NonUniqueObjectABC):
         )
 
         if AppendedUniqueIdentifier is None:
-            NonUniqueObjectABC.__init__(self, LabwareInstance.GetUniqueIdentifier())
+            NonUniqueObjectABC.__init__(self, LabwareInstance.UniqueIdentifier)
         else:
             NonUniqueObjectABC.__init__(
                 self,
-                LabwareInstance.GetUniqueIdentifier() + " " + AppendedUniqueIdentifier,
+                LabwareInstance.UniqueIdentifier + " " + AppendedUniqueIdentifier,
             )
 
         self.LayoutItemGroupingInstance: LayoutItemGrouping = LayoutItemGroupingInstance

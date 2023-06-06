@@ -62,21 +62,21 @@ class Pipette(InterfaceABC, UniqueObjectABC):
             # Check destination has enough room for volume
 
             if not self.SupportedLabwareTrackerInstance.IsTracked(
-                OptionsInstance.SourceLayoutItemInstance.LabwareInstance.GetUniqueIdentifier()
+                OptionsInstance.SourceLayoutItemInstance.LabwareInstance.UniqueIdentifier
             ):
                 return False
             if not self.SupportedLabwareTrackerInstance.IsTracked(
-                OptionsInstance.DestinationLayoutItemInstance.LabwareInstance.GetUniqueIdentifier()
+                OptionsInstance.DestinationLayoutItemInstance.LabwareInstance.UniqueIdentifier
             ):
                 return False
             # Labwares are supported
 
             if not self.SupportedDeckLocationTrackerInstance.IsTracked(
-                OptionsInstance.SourceLayoutItemInstance.DeckLocationInstance.GetUniqueIdentifier()
+                OptionsInstance.SourceLayoutItemInstance.DeckLocationInstance.UniqueIdentifier
             ):
                 return False
             if not self.SupportedDeckLocationTrackerInstance.IsTracked(
-                OptionsInstance.DestinationLayoutItemInstance.DeckLocationInstance.GetUniqueIdentifier()
+                OptionsInstance.DestinationLayoutItemInstance.DeckLocationInstance.UniqueIdentifier
             ):
                 return False
             # Check Deck locations are supported

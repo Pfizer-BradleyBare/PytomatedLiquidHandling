@@ -169,11 +169,11 @@ class Plate(Container):
 
         for WellSolutionInstance in WellSolutionTrackerInstance.GetObjectsAsList():
             if DestinationWellSolutionTrackerInstance.IsTracked(
-                WellSolutionInstance.GetUniqueIdentifier()
+                WellSolutionInstance.UniqueIdentifier
             ):
                 TrackedWellSolutionInstance = (
                     DestinationWellSolutionTrackerInstance.GetObjectByName(
-                        WellSolutionInstance.GetUniqueIdentifier()
+                        WellSolutionInstance.UniqueIdentifier
                     )
                 )
 

@@ -91,7 +91,7 @@ def Load(
                 continue
 
             if not PreferredLabwareTrackerInstance.IsTracked(
-                LabwareInstance.GetUniqueIdentifier()
+                LabwareInstance.UniqueIdentifier
             ):
                 PreferredLabwareTrackerInstance.LoadSingle(LabwareInstance)
             break

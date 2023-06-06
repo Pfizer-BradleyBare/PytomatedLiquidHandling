@@ -11,12 +11,3 @@ class UniqueObjectABC(ABC):
     """
 
     UniqueIdentifier: str | int
-
-    def GetUniqueIdentifier(self) -> str | int:
-        """This method guarentees a unique value as either a string or an int.
-        This guarentee is required for the unique tracker.
-
-        Returns:
-            str | int: A unique value
-        """
-        return self.UniqueIdentifier
