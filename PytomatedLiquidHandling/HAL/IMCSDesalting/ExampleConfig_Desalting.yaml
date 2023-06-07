@@ -1,0 +1,102 @@
+
+300uL Tip Unique Identifier: Tip
+300uL Tip Support Drop Off Sequence: Carrier32_Pos1_TipSupportRack_300Standard_DropOff
+300uL Tip Support Pickup Sequence: Carier32_Pos1_TipSupportRack_Pickup_300Standard_Pickup
+IMCS Tip Support Drop Off Sequence: Carrier32_Pos1_TipSupportRack_IMCSSizeX_DropOff
+IMCS Tip Support Pickup Off Sequence: Carier32_Pos1_TipSupportRack_Pickup_IMCSSizeX_Pickup
+
+Hamilton CORE 96 Head IMCS Desalting:
+  
+  Load Liquid Class: IMCS_Desalting_NTR
+  Elute Liquid Class: IMCS_SEC_T1_FastDispense
+  Supported Source Labware Unique Identifiers:
+    -
+  Supported Destination Labware Unique Identifiers:
+    -
+  Supported Deck Location Unique Identifiers:
+    -
+
+  Elution Method Tip Types:
+    - Unique Identifier: SizeX100
+      Elution Methods:
+        - Unique Identifier: MAM/Low Artifact
+          Equilibration Dispense Height: 30
+          Sample Dispense Height: 30
+          Chaser Dispense Height: 30
+          Equilibration Load Volume: 300
+          Sample Load Volume: 100
+          Chaser Load Volume: 100
+          Equilibration Dispense Volume: 950
+          Sample Dispense Volume: 150
+          Chaser Dispense Volume: 150
+
+        - Unique Identifier: HCP/Proteomics
+          Equilibration Dispense Height: 30
+          Sample Dispense Height: 30
+          Chaser Dispense Height: 30
+          Equilibration Load Volume: 300
+          Sample Load Volume: 100
+          Chaser Load Volume: 100
+          Equilibration Dispense Volume: 950
+          Sample Dispense Volume: 150
+          Chaser Dispense Volume: 200
+
+  - Unique Identifier: Position 1
+    Enabled: True
+    Backend Unique Identifier: Hammy
+    Custom Error Handling: False
+      
+    IMCS Tip Drop Off Sequence: Carrier32_Pos5_IMCSTipsRack_DropOff
+    IMCS Tip Pickup Sequence: Carrier32_Pos5_IMCSTipsRack_Pickup
+    IMCS Tip Pipette Sequence: Carrier32_Pos5_IMCSTips_PipetteDestination
+
+Hamilton Portrait CORE 8 Channel IMCS Desalting:
+  
+  Load Liquid Class: IMCS_Desalting_NTR
+  Elute Liquid Class: IMCS_SEC_T1_FastDispense
+  Supported Source Labware Unique Identifiers:
+    -
+  Supported Destination Labware Unique Identifiers:
+    -
+  Supported Deck Location Unique Identifiers:
+    -
+
+  Elution Method Tip Types:
+    - Unique Identifier: SizeX100
+      Elution Methods:
+        - Unique Identifier: MAM/Low Artifact
+          Equilibration Dispense Height: 30
+          Sample Dispense Height: 30
+          Chaser Dispense Height: 30
+          Equilibration Load Volume: 300
+          Sample Load Volume: 100
+          Chaser Load Volume: 100
+          Equilibration Dispense Volume: 950
+          Sample Dispense Volume: 150
+          Chaser Dispense Volume: 150
+
+        - Unique Identifier: HCP/Proteomics
+          Equilibration Dispense Height: 30
+          Sample Dispense Height: 30
+          Chaser Dispense Height: 30
+          Equilibration Load Volume: 300
+          Sample Load Volume: 100
+          Chaser Load Volume: 100
+          Equilibration Dispense Volume: 950
+          Sample Dispense Volume: 150
+          Chaser Dispense Volume: 200
+
+  - Unique Identifier: Position 1
+    Enabled: True
+    Backend Unique Identifier: Hammy
+    Custom Error Handling: False
+      
+    IMCS Tip Drop Off Sequence: Carrier32_Pos5_IMCSTipsRack_DropOff
+    IMCS Tip Pickup Sequence: Carrier32_Pos5_IMCSTipsRack_Pickup
+    IMCS Tip Pipette Sequence: Carrier32_Pos5_IMCSTips_PipetteDestination
+
+
+
+
+        
+

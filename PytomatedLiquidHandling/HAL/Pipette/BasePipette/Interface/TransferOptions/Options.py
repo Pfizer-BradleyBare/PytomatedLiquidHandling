@@ -1,10 +1,10 @@
-from ......Tools.AbstractClasses import NonUniqueObjectABC
+from ......Driver.Tools.AbstractClasses import OptionsABC
 from .....LayoutItem import CoverablePosition, NonCoverablePosition
 from dataclasses import dataclass
 
 
 @dataclass(kw_only=True)
-class Options(NonUniqueObjectABC):
+class Options(OptionsABC):
     SourceLayoutItemInstance: CoverablePosition | NonCoverablePosition
     SourcePosition: int  # This is the well position. Not sequence position
     CurrentSourceVolume: float
