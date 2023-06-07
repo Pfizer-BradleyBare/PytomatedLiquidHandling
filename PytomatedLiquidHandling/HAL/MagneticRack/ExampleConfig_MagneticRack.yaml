@@ -21,7 +21,7 @@
   Pipette Unique Identifiers:
     - Unique Identifier: 96 Head Hammy
       Liquid Classes:
-        Aspirate:
+        Remove Buffer:
           - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
             Max Volume: 50
 
@@ -31,7 +31,7 @@
           - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
             Max Volume: 1000
         
-        Dispense:
+        Add Buffer:
           - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
             Max Volume: 50
 
