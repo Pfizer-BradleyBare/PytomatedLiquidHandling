@@ -11,19 +11,32 @@
 #
 #############################################################
 
-Rack IDs:
-  Rack 1:
-    Enabled: True
-    Deck Location ID: Carrier14_Pos1
-    Supported Labware:
-      200uL Biorad 96 Well PCR Plate:
-        Plate Sequence: _MagneticRack1_96WellPCRPlate200uL
-        Default Condense Time: 90
+- Unique Identifier: Rack 1
+  Enabled: True
+  Deck Location Unique Identifier: HHS_Carrier_Pos3
+  Supported Labware Information:
+    - Plate Sequence: _HHS1_96WellPCRPlate200uL
+      Plate Labware Unique Identifier: 200uL Biorad 96 Well PCR Plate
 
-    Supported Pipetting IDs:
-      1mL Channels Portrait:
-        Supported Tips:
-          300uL NTR:
-            Liquid Classes:
-              Dispense: MagneticBeads_300uL_LiquidAddClass
-              Aspirate: MagneticBeads_300uL_LiquidRemoveClass
+  Pipette Unique Identifiers:
+    - Unique Identifier: 96 Head Hammy
+      Liquid Classes:
+        Aspirate:
+          - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
+            Max Volume: 50
+
+          - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
+            Max Volume: 300
+
+          - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
+            Max Volume: 1000
+        
+        Dispense:
+          - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
+            Max Volume: 50
+
+          - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
+            Max Volume: 300
+
+          - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
+            Max Volume: 1000
