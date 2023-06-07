@@ -19,5 +19,5 @@ class HamiltonPortraitCORE8ChannelIMCSDesalting(IMCSDesaltingABC):
     def Equilibrate(self, OptionsTrackerInstance: IMCSDesaltingOptions.OptionsTracker):
         ...
 
-    def Process(self, OptionsTrackerInstance: IMCSDesaltingOptions.OptionsTracker):
+    def Desalt(self, OptionsTrackerInstance: IMCSDesaltingOptions.OptionsTracker):
         ...

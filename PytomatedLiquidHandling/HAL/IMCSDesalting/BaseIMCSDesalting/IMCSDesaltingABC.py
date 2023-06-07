@@ -6,7 +6,6 @@ from ...Labware import LabwareTracker
 from dataclasses import dataclass, field
 from .IMCSTip import DesaltingTipTracker
 from .Interface import IMCSDesaltingOptions
-
 from abc import abstractmethod
 
 
@@ -28,13 +27,10 @@ class IMCSDesaltingABC(InterfaceABC, UniqueObjectABC):
     IMCSTipPipetteSequence: str
     IsEquilibrated: bool = field(init=False, default=False)
 
-    def MoveTips(self, OptionsTrackerInstance: IMCSDesaltingOptions.OptionsTracker):
-        ...
-
     @abstractmethod
     def Equilibrate(self, OptionsTrackerInstance: IMCSDesaltingOptions.OptionsTracker):
-        ...
+        self.IsEquilibrated = True
 
     @abstractmethod
-    def Process(self, OptionsTrackerInstance: IMCSDesaltingOptions.OptionsTracker):
-        ...
+    def Desalt(self, OptionsTrackerInstance: IMCSDesaltingOptions.OptionsTracker):
+        self.IsEquilibrated = False
