@@ -1,31 +1,56 @@
-from ...Tools.AbstractClasses import UniqueObjectABC
-from ..Layout import LayoutItem
-from ..Pipette import PipettingDevice
+from dataclasses import dataclass
+from .BaseMagneticRack import MagneticRackABC
+from ..Pipette import TransferOptions
+from ..LayoutItem import NonCoverablePosition, CoverablePosition
+from ..TransportDevice import TransportOptions
 
 
-class MagneticRack(UniqueObjectABC):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        Enabled: bool,
-        LayoutItems: list[LayoutItem],
-        AspiratePipettingDevices: list[PipettingDevice],
-        DispensePipettingDevices: list[PipettingDevice],
+@dataclass
+class MagneticRack(MagneticRackABC):
+    def MoveToDevice(self, SourceLayoutItem: CoverablePosition | NonCoverablePosition):
+        OptionsTrackerInstance = TransportOptions.OptionsTracker()
+
+        DestinationLayoutItem = self.GetCompatibleLayoutItem(SourceLayoutItem)
+        if DestinationLayoutItem == None:
+            raise Exception(
+                "This heater is not compatible with your layout item labware"
+            )
+
+        OptionsTrackerInstance.LoadSingle(
+            TransportOptions.Options(
+                SourceLayoutItem=SourceLayoutItem,
+                DestinationLayoutItem=DestinationLayoutItem,
+            )
+        )
+        self.TransportDeviceTrackerInstance.Transport(OptionsTrackerInstance)
+
+    def MoveFromDevice(
+        self, DestinationLayoutItem: CoverablePosition | NonCoverablePosition
     ):
-        UniqueObjectABC.__init__(self, UniqueIdentifier)
-        self.Enabled: bool = Enabled
-        self.LayoutItems: list[LayoutItem] = LayoutItems
-        self.AspiratePipettingDevices: list[PipettingDevice] = AspiratePipettingDevices
-        self.DispensePipettingDevices: list[PipettingDevice] = DispensePipettingDevices
+        OptionsTrackerInstance = TransportOptions.OptionsTracker()
 
-    def GetEnabledState(self) -> bool:
-        return self.Enabled
+        SourceLayoutItem = self.GetCompatibleLayoutItem(DestinationLayoutItem)
+        if SourceLayoutItem == None:
+            raise Exception(
+                "This heater is not compatible with your layout item labware"
+            )
 
-    def GetLayoutItems(self) -> list[LayoutItem]:
-        return self.LayoutItems
+        OptionsTrackerInstance.LoadSingle(
+            TransportOptions.Options(
+                SourceLayoutItem=SourceLayoutItem,
+                DestinationLayoutItem=DestinationLayoutItem,
+            )
+        )
+        self.TransportDeviceTrackerInstance.Transport(OptionsTrackerInstance)
 
-    def GetAspiratePipettingDevices(self) -> list[PipettingDevice]:
-        return self.AspiratePipettingDevices
+    def Initialize(self):
+        return super().Initialize()
 
-    def GetDispensePipettingDevices(self) -> list[PipettingDevice]:
-        return self.DispensePipettingDevices
+    def Deinitialize(self):
+        return super().Deinitialize()
+
+    def RemoveStorageBuffer(self, OptionsTracker: TransferOptions.OptionsTracker):
+        ...
+
+    def AddStorageBuffer(self, OptionsTracker: TransferOptions.OptionsTracker):
+        ...

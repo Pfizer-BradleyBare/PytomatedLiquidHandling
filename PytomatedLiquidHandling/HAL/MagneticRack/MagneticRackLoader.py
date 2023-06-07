@@ -1,88 +1,56 @@
 import yaml
-
-from ..Layout import LayoutItem
-from ..Pipette import LiquidClass, PipettingDevice, PipettingTip
 from .MagneticRack import MagneticRack
-from .MagneticRackTracker import MagneticRackTracker
+from .BaseMagneticRack import MagneticRackTracker
+from ..DeckLocation import DeckLocationTracker
+from ..Labware import LabwareTracker
+from ..TransportDevice import TransportDeviceTracker
+from ..Pipette import PipetteTracker
+from ..LayoutItem import NonCoverablePosition, LayoutItemTracker
 
 
-def LoadYaml(MagneticRackTrackerInstance: MagneticRackTracker, FilePath: str):
+def LoadYaml(
+    FilePath: str,
+    DeckLocationTrackerInstance: DeckLocationTracker,
+    LabwareTrackerInstance: LabwareTracker,
+    TransportDeviceTrackerInstance: TransportDeviceTracker,
+    PipetteTrackerInstance: PipetteTracker,
+) -> MagneticRackTracker:
+    MagneticRackTrackerInstance = MagneticRackTracker()
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
 
-    for RackID in ConfigFile["Rack IDs"]:
-        Rack = ConfigFile["Rack IDs"][RackID]
-
-        Enabled = Rack["Enabled"]
-        DeckLocation = (
-            MagneticRackTrackerInstance.DeckLocationTrackerInstance.GetObjectByName(
-                Rack["Deck Location ID"]
-            )
+    for Rack in ConfigFile["Rack IDs"]:
+        UniqueIdentifier = Rack["Unique Identifier"]
+        DeckLocationID = Rack["Deck Location Unique Identifier"]
+        DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
+            DeckLocationID
         )
 
-        LayoutItems = list()
-        for LabwareID in Rack["Supported Labware"]:
-            Labware = (
-                MagneticRackTrackerInstance.LabwareTrackerInstance.GetObjectByName(
-                    LabwareID
+        SupportedLayoutItemTrackerInstance = LayoutItemTracker()
+        for LayoutItemInfo in Rack["Supported Labware Information"]:
+            Sequence = LayoutItemInfo["Plate Sequence"]
+            LabwareID = LayoutItemInfo["Plate Labware Unique Identifier"]
+            LabwareInstance = LabwareTrackerInstance.GetObjectByName(LabwareID)
+
+            SupportedLayoutItemTrackerInstance.LoadSingle(
+                NonCoverablePosition(
+                    UniqueIdentifier + " " + Sequence,
+                    Sequence,
+                    DeckLocationInstance,
+                    LabwareInstance,
                 )
-            )
-            Seqeunce = Rack["Supported Labware"][LabwareID]["Plate Sequence"]
-
-            LayoutItems.append(LayoutItem(Seqeunce, DeckLocation, Labware))
-
-        AspiratePipettingDevices = list()
-        DispensePipettingDevices = list()
-
-        for PipetteDeviceID in Rack["Supported Pipetting IDs"]:
-            PipetteDevice = MagneticRackTrackerInstance.PipetteDeviceTrackerInstance.GetObjectByName(
-                PipetteDeviceID
-            ).GetPipettingChannel()
-
-            AspiratePipettingTips = list()
-            DispensePipettingTips = list()
-            for TipID in Rack["Supported Pipetting IDs"][PipetteDeviceID][
-                "Supported Tips"
-            ]:
-                LiquidClasses = Rack["Supported Pipetting IDs"][PipetteDeviceID][
-                    "Supported Tips"
-                ][TipID]["Liquid Classes"]
-
-                Tip = MagneticRackTrackerInstance.TipTrackerInstance.GetObjectByName(
-                    TipID
-                )
-                MaxVolume = Tip.GetMaxVolume()
-
-                AspiratePipettingTips.append(
-                    PipettingTip(
-                        Tip,
-                        [LiquidClass("Default", MaxVolume, LiquidClasses["Aspirate"])],
-                    )
-                )
-
-                DispensePipettingTips.append(
-                    PipettingTip(
-                        Tip,
-                        [LiquidClass("Default", MaxVolume, LiquidClasses["Dispense"])],
-                    )
-                )
-
-            AspiratePipettingDevices.append(
-                PipettingDevice(PipetteDevice, AspiratePipettingTips)
-            )
-
-            DispensePipettingDevices.append(
-                PipettingDevice(PipetteDevice, DispensePipettingTips)
             )
 
         MagneticRackTrackerInstance.LoadSingle(
             MagneticRack(
-                RackID,
-                Enabled,
-                LayoutItems,
-                AspiratePipettingDevices,
-                DispensePipettingDevices,
+                UniqueIdentifier,
+                SupportedLayoutItemTrackerInstance,
+                TransportDeviceTrackerInstance,
+                PipetteTrackerInstance,
             )
         )
+
+    return MagneticRackTrackerInstance
