@@ -31,7 +31,6 @@ def LoadYaml(
     # Get config file contents
 
     TipUniqueIdentifier = ConfigFile["300uL Tip Unique Identifier"]
-    TipInstance = TipTrackerInstance.GetObjectByName(TipUniqueIdentifier)
     TipSupportDropOffSequence = ConfigFile["300uL Tip Support Drop Off Sequence"]
     TipSupportPickupSequence = ConfigFile["300uL Tip Support Pickup Sequence"]
     IMCSTipSupportDropOffSequence = ConfigFile["IMCS Tip Support Drop Off Sequence"]
@@ -43,6 +42,10 @@ def LoadYaml(
     del ConfigFile["IMCS Tip Support Drop Off Sequence"]
     del ConfigFile["IMCS Tip Support Pickup Off Sequence"]
     # pull shared info then remove it
+
+    TipInstance = TipTrackerInstance.GetObjectByName(TipUniqueIdentifier)
+    if not TipInstance.MaxVolume == 300:
+        raise Exception("Wrong tip selected...")
 
     for DeviceType in ConfigFile:
         Device = ConfigFile[DeviceType]
