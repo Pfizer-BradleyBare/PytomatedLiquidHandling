@@ -44,13 +44,31 @@ class MagneticRack(MagneticRackABC):
         self.TransportDeviceTrackerInstance.Transport(OptionsTrackerInstance)
 
     def Initialize(self):
-        return super().Initialize()
+        ...
 
     def Deinitialize(self):
-        return super().Deinitialize()
-
-    def RemoveStorageBuffer(self, OptionsTracker: TransferOptions.OptionsTracker):
         ...
 
-    def AddStorageBuffer(self, OptionsTracker: TransferOptions.OptionsTracker):
-        ...
+    def RemoveStorageBuffer(
+        self, OptionsTrackerInstance: TransferOptions.OptionsTracker
+    ):
+        for Options in OptionsTrackerInstance.GetObjectsAsList():
+            Options.SourceLiquidClassCategory = str(self.UniqueIdentifier) + ": Remove"
+            Options.DestinationLiquidClassCategory = (
+                str(self.UniqueIdentifier) + ": Remove"
+            )
+
+        for PipetteDevice in self.PipetteTrackerInstance.GetObjectsAsList():
+            if PipetteDevice.OptionsSupported(OptionsTrackerInstance):
+                PipetteDevice.Transfer(OptionsTrackerInstance)
+
+    def AddStorageBuffer(self, OptionsTrackerInstance: TransferOptions.OptionsTracker):
+        for Options in OptionsTrackerInstance.GetObjectsAsList():
+            Options.SourceLiquidClassCategory = str(self.UniqueIdentifier) + ": Add"
+            Options.DestinationLiquidClassCategory = (
+                str(self.UniqueIdentifier) + ": Add"
+            )
+
+        for PipetteDevice in self.PipetteTrackerInstance.GetObjectsAsList():
+            if PipetteDevice.OptionsSupported(OptionsTrackerInstance):
+                PipetteDevice.Transfer(OptionsTrackerInstance)
