@@ -1,9 +1,7 @@
 from ...Driver.Hamilton.TemperatureControl import HeaterShaker as HeaterShakerDriver
-from ..LayoutItem import LayoutItemTracker
-from .BaseTempControlDevice import TempControlDevice, TempLimits
+from .BaseTempControlDevice import TempControlDevice
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from dataclasses import dataclass, field
-from ..LayoutItem import CoverablePosition, NonCoverablePosition
 
 
 @dataclass
@@ -116,14 +114,6 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         except:
             ...
-
-    def MoveToDevice(self, SourceLayoutItem: CoverablePosition | NonCoverablePosition):
-        ...
-
-    def MoveFromDevice(
-        self, DestinationLayoutItem: CoverablePosition | NonCoverablePosition
-    ):
-        ...
 
     def SetTemperature(self, *, Temperature: float):
         try:
