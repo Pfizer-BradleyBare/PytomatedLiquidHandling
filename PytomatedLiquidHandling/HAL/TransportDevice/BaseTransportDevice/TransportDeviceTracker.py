@@ -38,18 +38,6 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
         for Index, Options in enumerate(
             TransportOptionsTrackerInstance.GetObjectsAsList()
         ):
-            if not type(Options.SourceLayoutItem) == type(
-                Options.DestinationLayoutItem
-            ):
-                if (
-                    type(Options.SourceLayoutItem) == CoverablePosition
-                    and type(Options.DestinationLayoutItem) == NonCoverablePosition
-                    and Options.SourceLayoutItem.IsCovered == True
-                ):
-                    raise Exception(
-                        "Source and Destination are not compatible layout items"
-                    )
-
             SourceAwayConfig = (
                 Options.SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig
             )

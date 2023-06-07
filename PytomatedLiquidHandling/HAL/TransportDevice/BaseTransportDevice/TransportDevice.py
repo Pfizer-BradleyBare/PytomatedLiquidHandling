@@ -6,6 +6,7 @@ from .TransportableLabware.TransportableLabwareTracker import (
 )
 from ...Tools.AbstractClasses import InterfaceABC
 from dataclasses import dataclass, field
+from ...LayoutItem import CoverablePosition, NonCoverablePosition
 
 
 @dataclass
@@ -61,6 +62,16 @@ class TransportDevice(InterfaceABC, UniqueObjectABC):
         ):
             raise Exception("The labware is not supported by this transport device")
         # Check that the transport device can move this labware
+
+        if not type(SourceLayoutItem) == type(DestinationLayoutItem):
+            if (
+                type(SourceLayoutItem) == CoverablePosition
+                and type(DestinationLayoutItem) == NonCoverablePosition
+                and SourceLayoutItem.IsCovered == True
+            ):
+                raise Exception(
+                    "Source and Destination are not compatible layout items"
+                )
 
     @abstractmethod
     def GetGetConfigKeys(self) -> list[str]:
