@@ -7,12 +7,14 @@ from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
 from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid
 from ..TempControlDevice import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .BaseTempControlDevice import TempControlDeviceTracker, TempLimits
+from ..TransportDevice import TransportDeviceTracker
 
 
 def LoadYaml(
     BackendTrackerInstance: BackendTracker,
     LabwareTrackerInstance: LabwareTracker,
     DeckLocationTrackerInstance: DeckLocationTracker,
+    TransportDeviceTrackerInstance: TransportDeviceTracker,
     FilePath: str,
 ) -> TempControlDeviceTracker:
     TempControlDeviceTrackerInstance = TempControlDeviceTracker()
@@ -93,6 +95,7 @@ def LoadYaml(
                         ComPort,
                         TempLimitsInstance,
                         SupportedLayoutItemTracker,
+                        TransportDeviceTrackerInstance,
                     )
                 )
 
@@ -108,6 +111,7 @@ def LoadYaml(
                         ComPort,
                         TempLimitsInstance,
                         SupportedLayoutItemTracker,
+                        TransportDeviceTrackerInstance,
                     )
                 )
 

@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from ....Tools.AbstractClasses import UniqueObjectABC
-from ...LayoutItem import LayoutItemTracker
+from ...LayoutItem import LayoutItemTracker, CoverablePosition, NonCoverablePosition
+from ...TransportDevice import TransportDeviceTracker
 from .TempLimits.TempLimits import TempLimits
 from ...Tools.AbstractClasses import InterfaceABC
 from dataclasses import dataclass, field
@@ -12,10 +13,21 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
     ShakingSupported: bool
     TempLimitsInstance: TempLimits
     SupportedLayoutItemTrackerInstance: LayoutItemTracker
+    TransportDeviceTrackerInstance: TransportDeviceTracker
 
     HandleID: int | str = field(init=False)
     Temperature: float = field(init=False, default=0)
     ShakingSpeed: int = field(init=False, default=0)
+
+    @abstractmethod
+    def MoveToDevice(self, SourceLayoutItem: CoverablePosition | NonCoverablePosition):
+        ...
+
+    @abstractmethod
+    def MoveFromDevice(
+        self, DestinationLayoutItem: CoverablePosition | NonCoverablePosition
+    ):
+        ...
 
     @abstractmethod
     def SetTemperature(
