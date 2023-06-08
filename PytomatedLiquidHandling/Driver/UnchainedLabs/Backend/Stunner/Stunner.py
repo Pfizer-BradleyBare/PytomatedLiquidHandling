@@ -1,10 +1,14 @@
 import os
 import subprocess
-from typing import Any
+from typing import Any, Type, TypeVar
+
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
 
 from .....Tools.Logger import Logger
 from ....Tools.AbstractClasses import BackendABC
 from ..UnchainedLabsCommand import UnchainedLabsCommandABC
+
+T = TypeVar("T", bound=CommandABC.Response)
 
 
 class StunnerBackend(BackendABC):
@@ -84,3 +88,9 @@ class StunnerBackend(BackendABC):
         StatusCode = self.StunnerDLLObject.Get_Status()
 
         return UnchainedLabsCommandABC.ParseResponse(StatusCode)
+
+    def WaitForResponseBlocking(self, CommandInstance: CommandABC):
+        return super().WaitForResponseBlocking(CommandInstance)
+
+    def GetResponse(self, CommandInstance: CommandABC, ResponseType: Type[T]) -> T:
+        return super().GetResponse(CommandInstance, ResponseType)
