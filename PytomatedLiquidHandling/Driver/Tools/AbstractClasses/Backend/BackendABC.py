@@ -1,6 +1,7 @@
 from abc import abstractmethod
-from typing import Type, TypeVar
 from dataclasses import dataclass, field
+from typing import Type, TypeVar
+
 from .....Tools.AbstractClasses import UniqueObjectABC
 from .....Tools.Logger import Logger
 from ..Command import CommandABC
@@ -14,16 +15,16 @@ class BackendABC(UniqueObjectABC):
     IsRunning: bool = field(init=False, default=False)
 
     def __CheckRunning(self):
-        if self.__IsRunning == False:
+        if self.IsRunning == False:
             raise Exception("You must start the backend before interacting")
 
     @abstractmethod
     def StartBackend(self):
-        self.__IsRunning = True
+        self.IsRunning = True
 
     @abstractmethod
     def StopBackend(self):
-        self.__IsRunning = False
+        self.IsRunning = False
 
     @abstractmethod
     def ExecuteCommand(self, CommandInstance: CommandABC):

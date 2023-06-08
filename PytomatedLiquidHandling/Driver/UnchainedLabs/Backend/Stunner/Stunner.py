@@ -1,5 +1,6 @@
 import os
 import subprocess
+from dataclasses import dataclass, field
 from typing import Any, Type, TypeVar
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
@@ -11,18 +12,13 @@ from ..UnchainedLabsCommand import UnchainedLabsCommandABC
 T = TypeVar("T", bound=CommandABC.Response)
 
 
+@dataclass
 class StunnerBackend(BackendABC):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-        LoggerInstance: Logger,
-        InstrumentIPAddress: str,
-        InstrumentPort: int,
-    ):
-        BackendABC.__init__(self, UniqueIdentifier, LoggerInstance)
-        self.InstrumentIPAddress: str = InstrumentIPAddress
-        self.InstrumentPort: int = InstrumentPort
+    InstrumentIPAddress: str
+    InstrumentPort: int
+    StunnerDLLObject: Any = field(init=False)
 
+    def __post_init__(self):
         BasePath = os.path.dirname(__file__)
 
         Args = (
@@ -42,10 +38,11 @@ class StunnerBackend(BackendABC):
 
         # The stunner API access uses a .DLL library. This step loads the .dll as a module.
 
-        self.StunnerDLLObject = Stunner(InstrumentIPAddress, InstrumentPort)
+        self.StunnerDLLObject = Stunner(self.InstrumentIPAddress, self.InstrumentPort)
         # The stunner API access uses a .DLL library. This step creates the stunner class present in the .dll.
 
     def StartBackend(self):
+        BackendABC.StartBackend(self)
         StatusCode = self.StunnerDLLObject.Request_Access()
 
         if int(StatusCode) == 0:
@@ -65,6 +62,7 @@ class StunnerBackend(BackendABC):
             )
 
     def StopBackend(self):
+        BackendABC.StopBackend(self)
         StatusCode = self.StunnerDLLObject.Release_Access()
 
         if int(StatusCode) == 0:
@@ -82,10 +80,11 @@ class StunnerBackend(BackendABC):
 
     def ExecuteCommand(self, CommandInstance: UnchainedLabsCommandABC):
         BackendABC.ExecuteCommand(self, CommandInstance)
-        self.Response = CommandInstance.ExecuteCommandHelper(self.StunnerDLLObject)
+        print(CommandInstance.ExecuteCommandHelper(self.StunnerDLLObject))
 
     def GetStatus(self) -> UnchainedLabsCommandABC.Response:
-        StatusCode = self.StunnerDLLObject.Get_Status()
+        MeasurementInfo: str = ""
+        StatusCode = self.StunnerDLLObject.Get_Status(MeasurementInfo)
 
         return UnchainedLabsCommandABC.ParseResponse(StatusCode)
 

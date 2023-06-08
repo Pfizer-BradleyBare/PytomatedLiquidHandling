@@ -1,6 +1,5 @@
 import logging
 import os
-import time
 
 from PytomatedLiquidHandling import Logger
 from PytomatedLiquidHandling.Driver.UnchainedLabs import CloseTray, OpenTray
@@ -12,12 +11,11 @@ LoggerInstance = Logger(
 # create a logger to log all actions
 
 Backend = StunnerBackend("Example Stunner", LoggerInstance, "10.37.145.113", 6300)
+
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
-time.sleep(10)
 
-Backend.ExecuteCommand(OpenTray.Command(""))
-Backend.ExecuteCommand(CloseTray.Command(""))
+print(type(Backend.GetStatus()[0]))
 
 
 Backend.StopBackend()
