@@ -1,4 +1,5 @@
 from abc import abstractmethod
+
 from ....Tools.AbstractClasses import CommandABC
 
 
@@ -10,3 +11,6 @@ class UnchainedLabsCommandABC(CommandABC):
     @abstractmethod
     def ExecuteCommandHelper(self, StunnerDLLObject) -> CommandABC.Response:
         ...
+
+    def ParseResponseRaiseExceptions(self, ResponseInstance: CommandABC.Response):
+        CommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)
