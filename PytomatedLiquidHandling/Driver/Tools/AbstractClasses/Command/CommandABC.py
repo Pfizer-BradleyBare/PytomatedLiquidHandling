@@ -1,8 +1,8 @@
 import os
 from abc import abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Generic, TypeVar
-
+from typing import Any, ClassVar, Generic, TypeVar, Self
+import inspect
 from .....Tools.AbstractClasses import NonUniqueObjectABC
 
 T = TypeVar("T", bound="CommandABC")
@@ -10,12 +10,13 @@ S = TypeVar("S", bound="CommandABC.Response")
 CommandSelf = TypeVar("CommandSelf", bound="CommandABC")
 
 
-@dataclass()
+@dataclass
 class CommandABC(NonUniqueObjectABC):
     @dataclass
     class ExceptionABC(Exception, Generic[T, S]):
         CommandInstance: T
         ResponseInstance: S
+        __Exceptions: ClassVar[dict[str, Self]] = dict()
 
         def __post_init__(self):
             ExceptionMessage = ""
@@ -88,14 +89,6 @@ class CommandABC(NonUniqueObjectABC):
             ...
 
     @staticmethod
-    def Decorator_Command(__file__: str):
-        def InnerDecorator(DecoratedClass):
-            DecoratedClass.ClassFilePath = __file__
-            return DecoratedClass
-
-        return InnerDecorator
-
-    @staticmethod
     def __GetCommandName(__file__: str) -> str:
         """Uses the path of the python module to extract a command name
 
@@ -133,13 +126,17 @@ class CommandABC(NonUniqueObjectABC):
 
         return Output[:-1]
 
-    ClassFilePath: ClassVar[str]
-    ModuleName: str = field(init=False)
-    CommandName: str = field(init=False)
+    ModuleName: ClassVar[str] = "Not Set"
+    CommandName: ClassVar[str] = "Not Set"
 
     def __post_init__(self):
-        self.ModuleName = CommandABC.__GetModuleName(self.ClassFilePath)
-        self.CommandName = CommandABC.__GetCommandName(self.ClassFilePath)
+        ModuleType = inspect.getmodule(type(self))
+        if ModuleType is None:
+            raise Exception("inspect.getmodule failed... This should never happen")
+        FilePath = ModuleType.__file__
+
+        CommandABC.ModuleName = CommandABC.__GetModuleName(str(FilePath))
+        CommandABC.CommandName = CommandABC.__GetCommandName(str(FilePath))
 
     @abstractmethod
     def ParseResponseRaiseExceptions(self, ResponseInstance: Response):

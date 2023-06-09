@@ -5,7 +5,6 @@ from ...Backend import HamiltonStateCommandABC
 from .Options import Options
 
 
-@HamiltonStateCommandABC.Decorator_Command(__file__)
 @dataclass
 class Command(CommandOptions[Options], HamiltonStateCommandABC):
     def ParseResponseRaiseExceptions(

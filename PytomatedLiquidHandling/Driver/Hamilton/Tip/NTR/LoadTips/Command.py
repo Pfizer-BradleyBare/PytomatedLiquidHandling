@@ -5,7 +5,6 @@ from ....Backend import HamiltonActionCommandABC
 from .Options import Options
 
 
-@HamiltonActionCommandABC.Decorator_Command(__file__)
 @dataclass
 class Command(CommandOptions[Options], HamiltonActionCommandABC):
     ...

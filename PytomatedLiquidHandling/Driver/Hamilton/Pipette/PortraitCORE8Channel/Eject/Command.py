@@ -4,7 +4,6 @@ from .OptionsTracker import OptionsTracker
 from dataclasses import dataclass
 
 
-@HamiltonActionCommandABC.Decorator_Command(__file__)
 @dataclass
 class Command(CommandOptionsTracker[OptionsTracker], HamiltonActionCommandABC):
     def GetVars(self) -> dict[str, list]:

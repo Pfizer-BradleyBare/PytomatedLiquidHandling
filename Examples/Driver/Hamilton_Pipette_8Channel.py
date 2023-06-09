@@ -16,7 +16,7 @@ Backend = MicrolabStarBackend(
     LoggerInstance,
     os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
 )
-Backend.StartBackend()
+# Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
 CommandInstance = NTR.LoadTips.Command(
@@ -27,6 +27,10 @@ CommandInstance = NTR.LoadTips.Command(
         GripperSequence="seq_COREGripTool",
     ),
 )
+print(CommandInstance.ModuleName)
+print(CommandInstance.CommandName)
+quit()
+
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
 ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)

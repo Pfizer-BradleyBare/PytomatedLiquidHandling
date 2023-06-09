@@ -4,7 +4,6 @@ from .Options import Options
 from dataclasses import dataclass
 
 
-@HamiltonActionCommandABC.Decorator_Command(__file__)
 @dataclass
 class Command(CommandOptions[Options], HamiltonActionCommandABC):
     ...

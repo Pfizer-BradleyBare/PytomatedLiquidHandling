@@ -8,7 +8,6 @@ from .OptionsTracker import OptionsTracker
 CommandSelf = TypeVar("CommandSelf", bound="Command")
 
 
-@HamiltonActionCommandABC.Decorator_Command(__file__)
 @dataclass
 class Command(CommandOptionsTracker[OptionsTracker], HamiltonActionCommandABC):
     class Response(HamiltonActionCommandABC.Response):
