@@ -46,7 +46,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
                 self.Response = CommandInstance.Response(
                     {
                         "State": False,
-                        "Details": "There are not options in the options tracker. Please fix...",
+                        "Details": "There are no options in the options tracker.",
                     }
                 )
                 return self.GetNextCommand()

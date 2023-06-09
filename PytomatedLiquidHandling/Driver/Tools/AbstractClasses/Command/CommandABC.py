@@ -16,7 +16,31 @@ class CommandABC(NonUniqueObjectABC):
     class ExceptionABC(Exception, Generic[T, S]):
         CommandInstance: T
         ResponseInstance: S
-        __Exceptions: ClassVar[dict[str, Self]] = dict()
+        __Exceptions: ClassVar[dict[str | int, type[Self]]] = dict()
+
+        @classmethod
+        @abstractmethod
+        def ResponseDetailsErrorValue(cls) -> str | int:
+            raise Exception("Abstract method not implemented")
+
+        def __init_subclass__(cls: type[Self]):
+            try:
+                cls.ResponseDetailsErrorValue()
+            except:
+                ModuleType = inspect.getmodule(cls)
+                if ModuleType is None:
+                    raise Exception(
+                        "inspect.getmodule failed... This should never happen"
+                    )
+                FilePath = ModuleType.__file__
+
+                raise Exception(
+                    '"ResponseDetailsErrorValue" Function is not implemented in Exception: '
+                    + cls.__name__
+                    + ". FilePath: "
+                    + str(FilePath)
+                )
+            cls.__Exceptions[cls.ResponseDetailsErrorValue()] = cls
 
         def __post_init__(self):
             ExceptionMessage = ""
@@ -138,10 +162,8 @@ class CommandABC(NonUniqueObjectABC):
         CommandABC.ModuleName = CommandABC.__GetModuleName(str(FilePath))
         CommandABC.CommandName = CommandABC.__GetCommandName(str(FilePath))
 
-    @abstractmethod
-    def ParseResponseRaiseExceptions(self, ResponseInstance: Response):
-        ...
-
     @dataclass
     class Exception_Unhandled(ExceptionABC[CommandSelf, Response]):
-        ...
+        @classmethod
+        def ResponseDetailsErrorValue(cls) -> str | int:
+            return "Exception_Unhandled"

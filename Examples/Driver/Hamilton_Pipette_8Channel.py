@@ -27,9 +27,6 @@ CommandInstance = NTR.LoadTips.Command(
         GripperSequence="seq_COREGripTool",
     ),
 )
-print(CommandInstance.ModuleName)
-print(CommandInstance.CommandName)
-quit()
 
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)

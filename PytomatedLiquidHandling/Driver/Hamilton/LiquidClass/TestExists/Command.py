@@ -17,17 +17,6 @@ class Command(CommandOptionsTracker[OptionsTracker], HamiltonActionCommandABC):
         def GetFailedLiquidClasses(self) -> list[str]:
             ...
 
-    def ParseResponseRaiseExceptions(self, ResponseInstance: Response):
-        HamiltonActionCommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)
-
-        if ResponseInstance.GetState() == False:
-            Details = ResponseInstance.GetDetails()
-
-            if "Liquid class does not exist" in Details:
-                raise self.Exception_LiquidClassDoesNotExist(self, ResponseInstance)
-
-            raise self.Exception_Unhandled(self, ResponseInstance)
-
     @dataclass
     class Exception_LiquidClassDoesNotExist(
         HamiltonActionCommandABC.ExceptionABC[CommandSelf, Response]

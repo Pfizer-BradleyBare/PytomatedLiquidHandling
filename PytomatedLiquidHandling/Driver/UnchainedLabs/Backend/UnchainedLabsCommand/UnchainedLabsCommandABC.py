@@ -12,8 +12,5 @@ class UnchainedLabsCommandABC(CommandABC):
     def ExecuteCommandHelper(self, StunnerDLLObject) -> CommandABC.Response:
         StatusCodes[1]
 
-    def ParseResponseRaiseExceptions(self, ResponseInstance: CommandABC.Response):
-        CommandABC.ParseResponseRaiseExceptions(self, ResponseInstance)
-
 
 StatusCodes = {-904: "Plate type cannot be used with this instrument"}
