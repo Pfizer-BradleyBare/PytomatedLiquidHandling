@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, TypeVar
 
 from ....Tools.AbstractClasses import CommandABC
@@ -7,8 +7,10 @@ from ....Tools.AbstractClasses import CommandABC
 CommandSelf = TypeVar("CommandSelf", bound="UnchainedLabsCommandABC")
 
 
-@dataclass
+@dataclass(kw_only=True)
 class UnchainedLabsCommandABC(CommandABC):
+    Identifier: str | int = field(default="None")
+
     @dataclass
     class Response(CommandABC.Response):
         @CommandABC.Response.Decorator_ExpectedResponseProperty
@@ -39,7 +41,7 @@ class UnchainedLabsCommandABC(CommandABC):
         return ResponseInstance
 
     @abstractmethod
-    def ExecuteCommandHelper(self, StunnerDLLObject) -> CommandABC.Response:
+    def ExecuteCommandHelper(self, StunnerDLLObject) -> Any:
         ...
 
     @dataclass

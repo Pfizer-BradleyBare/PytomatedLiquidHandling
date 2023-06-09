@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Type, TypeVar, cast
 
-from .....Tools.AbstractClasses import UniqueObjectABC
-from .....Tools.Logger import Logger
 from ..Command import CommandABC
 from .BackendABC import BackendABC
 
@@ -11,33 +9,33 @@ T = TypeVar("T", bound=CommandABC.Response)
 
 @dataclass
 class SimpleBackendABC(BackendABC):
-    CurrentCommand: CommandABC | None = field(init=False, default=None)
-    Response: CommandABC.Response | None = field(init=False, default=None)
+    CommandInstance: CommandABC | None = field(init=False, default=None)
+    ResponseInstance: CommandABC.Response | None = field(init=False, default=None)
 
     def ExecuteCommand(self, CommandInstance: CommandABC):
         BackendABC.ExecuteCommand(self, CommandInstance)
-        if self.CurrentCommand is not None:
+        if self.CommandInstance is not None:
             raise Exception(
                 "Command is already being executed. Wait on command to compelete..."
             )
 
-        self.CurrentCommand = CommandInstance
+        self.CommandInstance = CommandInstance
 
     def GetCommandStatus(self, CommandInstance: CommandABC) -> CommandABC.Response:
         BackendABC.GetCommandStatus(self, CommandInstance)
-        if self.CurrentCommand is None:
+        if self.CommandInstance is None:
             raise Exception(
                 "No Command currently executing. Execute a command first..."
             )
 
-        if self.CurrentCommand != CommandInstance:
+        if self.CommandInstance != CommandInstance:
             raise Exception(
                 "You can only get a status for the currently executing command."
             )
 
         Response = CommandABC.Response({})
 
-        if not self.Response is None:
+        if not self.ResponseInstance is None:
             Response.SetProperty("State", True)
             Response.SetProperty("Details", "Respose available")
 
@@ -49,42 +47,51 @@ class SimpleBackendABC(BackendABC):
 
     def WaitForResponseBlocking(self, CommandInstance: CommandABC):
         BackendABC.WaitForResponseBlocking(self, CommandInstance)
-        if self.CurrentCommand != CommandInstance:
+        if self.CommandInstance != CommandInstance:
             raise Exception(
                 "You can only wait on a response for the currently executing command."
             )
 
-        import time
-
         while self.GetCommandStatus(CommandInstance).GetState() != True:
             ...
 
+    @staticmethod
+    def CheckExceptions(
+        CommandInstance: CommandABC, ResponseInstance: CommandABC.Response
+    ):
+        if ResponseInstance.GetState() == False:
+            if (
+                ResponseInstance.GetDetails()
+                in CommandInstance.ExceptionABC.__Exceptions
+            ):
+                raise CommandInstance.ExceptionABC.__Exceptions[
+                    ResponseInstance.GetDetails()
+                ](CommandInstance, ResponseInstance)
+            else:
+                raise CommandInstance.UnhandledException(
+                    CommandInstance, ResponseInstance
+                )
+
     def GetResponse(self, CommandInstance: CommandABC, ResponseType: Type[T]) -> T:
         BackendABC.GetResponse(self, CommandInstance, ResponseType)
-        if self.CurrentCommand is None:
+        if self.CommandInstance is None:
             raise Exception(
                 "No Command currently executing. Execute a command first..."
             )
 
-        if self.CurrentCommand != CommandInstance:
+        if self.CommandInstance != CommandInstance:
             raise Exception(
                 "You can only get a response for the currently executing command."
             )
 
-        if self.Response is None:
+        if self.ResponseInstance is None:
             raise Exception("Response not available. Check status first...")
 
-        Response = self.Response
+        Response = self.ResponseInstance
 
-        self.CurrentCommand = None
-        self.Response = None
+        self.CommandInstance = None
+        self.ResponseInstance = None
 
-        if Response.GetState() == False:
-            if Response.GetDetails() in CommandInstance.ExceptionABC.__Exceptions:
-                raise CommandInstance.ExceptionABC.__Exceptions[Response.GetDetails()](
-                    CommandInstance, Response
-                )
-            else:
-                raise CommandInstance.UnhandledException(CommandInstance, Response)
+        SimpleBackendABC.CheckExceptions(CommandInstance, Response)
 
         return cast(ResponseType, Response)

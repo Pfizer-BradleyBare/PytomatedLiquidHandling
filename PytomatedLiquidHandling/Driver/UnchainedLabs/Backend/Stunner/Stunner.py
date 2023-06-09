@@ -1,18 +1,19 @@
 import os
 import subprocess
+import threading
 from dataclasses import dataclass, field
-from typing import Any, Type, TypeVar
+from typing import Any, TypeVar
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
 
-from ....Tools.AbstractClasses import BackendABC
+from ....Tools.AbstractClasses import SimpleBackendABC
 from ..UnchainedLabsCommand import UnchainedLabsCommandABC
 
 T = TypeVar("T", bound=CommandABC.Response)
 
 
 @dataclass
-class StunnerBackend(BackendABC):
+class StunnerBackend(SimpleBackendABC):
     InstrumentIPAddress: str
     InstrumentPort: int
     StunnerDLLObject: Any = field(init=False)
@@ -40,39 +41,36 @@ class StunnerBackend(BackendABC):
         self.StunnerDLLObject = Stunner(self.InstrumentIPAddress, self.InstrumentPort)
         # The stunner API access uses a .DLL library. This step creates the stunner class present in the .dll.
 
+    def StunnerRunnerThread(self):
+        CommandInstance = self.CommandInstance
+
+        if not isinstance(CommandInstance, UnchainedLabsCommandABC):
+            raise Exception("This should never happen")
+
+        self.ResponseInstance = CommandInstance.ParseResponse(
+            CommandInstance.ExecuteCommandHelper(self.StunnerDLLObject)
+        )
+
     def StartBackend(self):
-        BackendABC.StartBackend(self)
-        StatusCode = self.StunnerDLLObject.Request_Access()
+        SimpleBackendABC.StartBackend(self)
 
-        if int(StatusCode) == 0:
-            return
-
-        elif int(StatusCode) == 1:
-            raise Exception("You already have access. Do not start the backend twice.")
-
-        elif int(StatusCode) == -1:
-            raise Exception(
-                "Another device currently has access. Please try again later."
-            )
-
-        elif int(StatusCode) == 0:
-            raise Exception(
-                "Backend was not reachable over the network. Is the Stunner turn on and configured for API mode?"
-            )
+        ResponseInstance = UnchainedLabsCommandABC.ParseResponse(
+            self.StunnerDLLObject.Request_Access()
+        )
+        CommandInstance = CommandABC("Start Backend")
+        SimpleBackendABC.CheckExceptions(CommandInstance, ResponseInstance)
 
     def StopBackend(self):
-        BackendABC.StopBackend(self)
-        StatusCode = self.StunnerDLLObject.Release_Access()
+        SimpleBackendABC.StopBackend(self)
 
-        if int(StatusCode) == 0:
-            return
+        ResponseInstance = UnchainedLabsCommandABC.ParseResponse(
+            self.StunnerDLLObject.Release_Access()
+        )
+        CommandInstance = CommandABC("Start Backend")
+        SimpleBackendABC.CheckExceptions(CommandInstance, ResponseInstance)
 
-        elif int(StatusCode) == -1:
-            raise Exception(
-                "You need to start the backend first. You do not have access"
-            )
-
-        elif int(StatusCode) == 0:
-            raise Exception(
-                "Backend was not reachable over the network. Is the Stunner turned on and configured for API mode?"
-            )
+    def ExecuteCommand(self, CommandInstance: UnchainedLabsCommandABC):
+        SimpleBackendABC.ExecuteCommand(self, CommandInstance)
+        threading.Thread(
+            target=StunnerBackend.StunnerRunnerThread, args=(self,)
+        ).start()

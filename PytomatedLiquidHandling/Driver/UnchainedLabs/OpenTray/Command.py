@@ -7,4 +7,4 @@ from ..Backend import UnchainedLabsCommandABC
 @dataclass
 class Command(UnchainedLabsCommandABC):
     def ExecuteCommandHelper(self, StunnerDLLObject) -> Any:
-        return UnchainedLabsCommandABC.ParseResponse(StunnerDLLObject.Open_Tray())
+        return StunnerDLLObject.Open_Tray()

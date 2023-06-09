@@ -15,8 +15,15 @@ Backend = StunnerBackend("Example Stunner", LoggerInstance, "10.37.145.113", 630
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
-print(str(Backend.GetCommandStatus()))
+Command = OpenTray.Command()
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Backend.GetResponse(Command, Command.Response)
 
+Command = CloseTray.Command()
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Backend.GetResponse(Command, Command.Response)
 
 Backend.StopBackend()
 # Done!

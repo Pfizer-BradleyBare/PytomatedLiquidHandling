@@ -6,10 +6,5 @@ from ..Backend import UnchainedLabsCommandABC
 
 @dataclass
 class Command(UnchainedLabsCommandABC):
-    def ExecuteCommandHelper(
-        self, StunnerDLLObject
-    ) -> UnchainedLabsCommandABC.Response:
-        return cast(
-            UnchainedLabsCommandABC.Response,
-            UnchainedLabsCommandABC.ParseResponse(StunnerDLLObject.Close_Tray()),
-        )
+    def ExecuteCommandHelper(self, StunnerDLLObject) -> Any:
+        return StunnerDLLObject.Close_Tray()

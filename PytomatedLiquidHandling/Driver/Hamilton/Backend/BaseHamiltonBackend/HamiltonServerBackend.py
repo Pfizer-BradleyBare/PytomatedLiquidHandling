@@ -27,13 +27,13 @@ class HamiltonServerBackendABC(ServerBackendABC):
         Timeout = ParserObject.GetEndpointInputData("Timeout") - 10
         Counter = 0
 
-        while self.CurrentCommand is None or not self.Response is None:
+        while self.CommandInstance is None or not self.ResponseInstance is None:
             if Counter >= Timeout * 10:
                 break
 
             time.sleep(0.1)
 
-        CommandInstance = self.CurrentCommand
+        CommandInstance = self.CommandInstance
 
         if CommandInstance is None:
             ParserObject.SetEndpointState(False)
@@ -43,7 +43,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         if isinstance(CommandInstance, CommandOptionsTracker):
             if CommandInstance.OptionsTrackerInstance.GetNumObjects() == 0:
-                self.Response = CommandInstance.Response(
+                self.ResponseInstance = CommandInstance.Response(
                     {
                         "State": False,
                         "Details": "There are no options in the options tracker.",
@@ -77,12 +77,12 @@ class HamiltonServerBackendABC(ServerBackendABC):
             request.get_data(),
         )
 
-        CommandInstance = self.CurrentCommand
+        CommandInstance = self.CommandInstance
 
         if not isinstance(CommandInstance, HamiltonCommandABC):
             raise Exception("This should never happen")
 
-        if self.Response is not None:
+        if self.ResponseInstance is not None:
             ParserObject.SetEndpointDetails(
                 "Command already has a reponse. This should never happen."
             )
@@ -125,7 +125,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         Properties["Details"] = "Hamilton: " + Properties["Details"]
 
-        self.Response = CommandInstance.Response(Properties)
+        self.ResponseInstance = CommandInstance.Response(Properties)
         # Add response then release threads waiting for a response
 
         ParserObject.SetEndpointState(True)
