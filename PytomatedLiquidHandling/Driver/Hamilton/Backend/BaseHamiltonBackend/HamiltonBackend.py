@@ -2,7 +2,7 @@ import os
 import shutil
 import subprocess
 from dataclasses import dataclass, field
-from typing import Type, TypeVar
+from typing import Type, TypeVar, cast
 
 from .....Tools.Logger import Logger
 from ....Tools.AbstractClasses import BackendABC, CommandABC
@@ -80,9 +80,14 @@ class HamiltonBackendABC(BackendABC):
     ) -> HamiltonCommandABC.Response:
         BackendABC.GetStatus(self, CommandInstance)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
-            return self.StateServer.GetStatus(CommandInstance)
+            return cast(
+                HamiltonCommandABC.Response, self.StateServer.GetStatus(CommandInstance)
+            )
         else:
-            return self.ActionServer.GetStatus(CommandInstance)
+            return cast(
+                HamiltonCommandABC.Response,
+                self.ActionServer.GetStatus(CommandInstance),
+            )
 
     def WaitForResponseBlocking(self, CommandInstance: CommandABC):
         BackendABC.WaitForResponseBlocking(self, CommandInstance)

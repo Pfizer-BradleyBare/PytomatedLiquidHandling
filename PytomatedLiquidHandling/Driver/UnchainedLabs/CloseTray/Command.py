@@ -1,10 +1,15 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from ..Backend import UnchainedLabsCommandABC
 
 
 @dataclass
 class Command(UnchainedLabsCommandABC):
-    def ExecuteCommandHelper(self, StunnerDLLObject) -> Any:
-        return UnchainedLabsCommandABC.ParseResponse(StunnerDLLObject.Close_Tray())
+    def ExecuteCommandHelper(
+        self, StunnerDLLObject
+    ) -> UnchainedLabsCommandABC.Response:
+        return cast(
+            UnchainedLabsCommandABC.Response,
+            UnchainedLabsCommandABC.ParseResponse(StunnerDLLObject.Close_Tray()),
+        )

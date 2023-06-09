@@ -80,11 +80,11 @@ class SimpleBackendABC(BackendABC):
         self.Response = None
 
         if Response.GetState() == False:
-            try:
+            if Response.GetDetails() in CommandInstance.ExceptionABC.__Exceptions:
                 raise CommandInstance.ExceptionABC.__Exceptions[Response.GetDetails()](
                     CommandInstance, Response
                 )
-            except KeyError:
-                raise CommandInstance.Exception_Unhandled(CommandInstance, Response)
+            else:
+                raise CommandInstance.UnhandledException(CommandInstance, Response)
 
         return cast(ResponseType, Response)

@@ -79,7 +79,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         CommandInstance = self.CurrentCommand
 
-        if CommandInstance is None:
+        if not isinstance(CommandInstance, HamiltonCommandABC):
             raise Exception("This should never happen")
 
         if self.Response is not None:
@@ -122,6 +122,8 @@ class HamiltonServerBackendABC(ServerBackendABC):
         for Key in ExpectedResponseKeys:
             Properties[Key] = ParserObject.GetEndpointInputData(Key)
         # Create dict that houses the expected keys so we can create the response object
+
+        Properties["Details"] = "Hamilton: " + Properties["Details"]
 
         self.Response = CommandInstance.Response(Properties)
         # Add response then release threads waiting for a response

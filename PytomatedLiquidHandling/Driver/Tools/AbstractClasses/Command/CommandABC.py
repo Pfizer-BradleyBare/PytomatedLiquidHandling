@@ -1,8 +1,9 @@
+import inspect
 import os
 from abc import abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Generic, TypeVar, Self
-import inspect
+from typing import Any, ClassVar, Generic, Self, TypeVar
+
 from .....Tools.AbstractClasses import NonUniqueObjectABC
 
 T = TypeVar("T", bound="CommandABC")
@@ -20,12 +21,12 @@ class CommandABC(NonUniqueObjectABC):
 
         @classmethod
         @abstractmethod
-        def ResponseDetailsErrorValue(cls) -> str | int:
+        def DetailsErrorValue(cls) -> str | int:
             raise Exception("Abstract method not implemented")
 
         def __init_subclass__(cls: type[Self]):
             try:
-                cls.ResponseDetailsErrorValue()
+                cls.DetailsErrorValue()
             except:
                 ModuleType = inspect.getmodule(cls)
                 if ModuleType is None:
@@ -35,12 +36,12 @@ class CommandABC(NonUniqueObjectABC):
                 FilePath = ModuleType.__file__
 
                 raise Exception(
-                    '"ResponseDetailsErrorValue" Function is not implemented in Exception: '
+                    '"DetailsErrorValue" Function is not implemented in Exception: '
                     + cls.__name__
                     + ". FilePath: "
                     + str(FilePath)
                 )
-            cls.__Exceptions[cls.ResponseDetailsErrorValue()] = cls
+            cls.__Exceptions[cls.DetailsErrorValue()] = cls
 
         def __post_init__(self):
             ExceptionMessage = ""
@@ -54,47 +55,11 @@ class CommandABC(NonUniqueObjectABC):
     @dataclass
     class Response:
         @staticmethod
-        def Decorator_ExpectedResponseProperty(
-            *, SuccessProperty: bool = False, ErrorProperty: bool = False
-        ):
-            def Decorator_inner(DecoratedFunction):
-                def inner(*args, **kwargs):
-                    return args[0].Properties[
-                        DecoratedFunction.__name__.replace("Get", "")
-                    ]
+        def Decorator_ExpectedResponseProperty(DecoratedFunction):
+            def inner(*args, **kwargs):
+                return args[0].Properties[DecoratedFunction.__name__.replace("Get", "")]
 
-                if SuccessProperty == True:
-                    inner.Decorated_ExpectedSuccessResponseProperty = True
-
-                if ErrorProperty == True:
-                    inner.Decorated_ExpectedErrorResponseProperty = True
-                return inner
-
-            return Decorator_inner
-
-        @classmethod
-        def GetExpectedSuccessResponseProperties(cls) -> list[str]:
-            Out = list()
-
-            for Name in dir(cls):
-                if hasattr(
-                    getattr(cls, Name), "Decorated_ExpectedSuccessResponseProperty"
-                ):
-                    Out.append(Name.replace("Get", ""))
-
-            return Out
-
-        @classmethod
-        def GetExpectedErrorResponseProperties(cls) -> list[str]:
-            Out = list()
-
-            for Name in dir(cls):
-                if hasattr(
-                    getattr(cls, Name), "Decorated_ExpectedErrorResponseProperty"
-                ):
-                    Out.append(Name.replace("Get", ""))
-
-            return Out
+            return inner
 
         Properties: dict[str, Any] = field(default_factory=dict)
 
@@ -104,11 +69,11 @@ class CommandABC(NonUniqueObjectABC):
         def UpdateProperties(self, Key: str, Value: Any):
             self.Properties.update({Key: Value})
 
-        @Decorator_ExpectedResponseProperty(SuccessProperty=True, ErrorProperty=True)
+        @Decorator_ExpectedResponseProperty
         def GetState(self) -> bool:
             ...
 
-        @Decorator_ExpectedResponseProperty(SuccessProperty=True, ErrorProperty=True)
+        @Decorator_ExpectedResponseProperty
         def GetDetails(self) -> str:
             ...
 
@@ -163,7 +128,7 @@ class CommandABC(NonUniqueObjectABC):
         CommandABC.CommandName = CommandABC.__GetCommandName(str(FilePath))
 
     @dataclass
-    class Exception_Unhandled(ExceptionABC[CommandSelf, Response]):
+    class UnhandledException(ExceptionABC[CommandSelf, Response]):
         @classmethod
-        def ResponseDetailsErrorValue(cls) -> str | int:
-            return "Exception_Unhandled"
+        def DetailsErrorValue(cls) -> str | int:
+            return "__UnhandledException"

@@ -5,7 +5,6 @@ from typing import Any, Type, TypeVar
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
 
-from .....Tools.Logger import Logger
 from ....Tools.AbstractClasses import BackendABC
 from ..UnchainedLabsCommand import UnchainedLabsCommandABC
 
@@ -77,19 +76,3 @@ class StunnerBackend(BackendABC):
             raise Exception(
                 "Backend was not reachable over the network. Is the Stunner turned on and configured for API mode?"
             )
-
-    def ExecuteCommand(self, CommandInstance: UnchainedLabsCommandABC):
-        BackendABC.ExecuteCommand(self, CommandInstance)
-        print(CommandInstance.ExecuteCommandHelper(self.StunnerDLLObject))
-
-    def GetStatus(self) -> UnchainedLabsCommandABC.Response:
-        MeasurementInfo: str = ""
-        StatusCode = self.StunnerDLLObject.Get_Status(MeasurementInfo)
-
-        return UnchainedLabsCommandABC.ParseResponse(StatusCode)
-
-    def WaitForResponseBlocking(self, CommandInstance: CommandABC):
-        return super().WaitForResponseBlocking(CommandInstance)
-
-    def GetResponse(self, CommandInstance: CommandABC, ResponseType: Type[T]) -> T:
-        return super().GetResponse(CommandInstance, ResponseType)
