@@ -75,18 +75,19 @@ class HamiltonBackendABC(BackendABC):
         else:
             self.ActionServer.ExecuteCommand(CommandInstance)
 
-    def GetStatus(
+    def GetCommandStatus(
         self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
     ) -> HamiltonCommandABC.Response:
-        BackendABC.GetStatus(self, CommandInstance)
+        BackendABC.GetCommandStatus(self, CommandInstance)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
             return cast(
-                HamiltonCommandABC.Response, self.StateServer.GetStatus(CommandInstance)
+                HamiltonCommandABC.Response,
+                self.StateServer.GetCommandStatus(CommandInstance),
             )
         else:
             return cast(
                 HamiltonCommandABC.Response,
-                self.ActionServer.GetStatus(CommandInstance),
+                self.ActionServer.GetCommandStatus(CommandInstance),
             )
 
     def WaitForResponseBlocking(self, CommandInstance: CommandABC):

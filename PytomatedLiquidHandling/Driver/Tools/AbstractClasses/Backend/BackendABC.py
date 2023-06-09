@@ -31,7 +31,7 @@ class BackendABC(UniqueObjectABC):
         self.__CheckRunning()
 
     @abstractmethod
-    def GetStatus(self, CommandInstance: CommandABC) -> CommandABC.Response:
+    def GetCommandStatus(self, CommandInstance: CommandABC) -> CommandABC.Response:
         self.__CheckRunning()
 
     @abstractmethod

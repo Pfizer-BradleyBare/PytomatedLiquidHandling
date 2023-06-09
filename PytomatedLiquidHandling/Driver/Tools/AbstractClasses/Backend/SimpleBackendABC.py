@@ -23,8 +23,8 @@ class SimpleBackendABC(BackendABC):
 
         self.CurrentCommand = CommandInstance
 
-    def GetStatus(self, CommandInstance: CommandABC) -> CommandABC.Response:
-        BackendABC.GetStatus(self, CommandInstance)
+    def GetCommandStatus(self, CommandInstance: CommandABC) -> CommandABC.Response:
+        BackendABC.GetCommandStatus(self, CommandInstance)
         if self.CurrentCommand is None:
             raise Exception(
                 "No Command currently executing. Execute a command first..."
@@ -56,7 +56,7 @@ class SimpleBackendABC(BackendABC):
 
         import time
 
-        while self.GetStatus(CommandInstance).GetState() != True:
+        while self.GetCommandStatus(CommandInstance).GetState() != True:
             ...
 
     def GetResponse(self, CommandInstance: CommandABC, ResponseType: Type[T]) -> T:
