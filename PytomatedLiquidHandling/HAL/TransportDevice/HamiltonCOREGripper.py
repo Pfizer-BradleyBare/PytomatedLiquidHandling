@@ -42,43 +42,35 @@ class HamiltonCOREGripper(TransportDevice):
             GripHeight=SourceTransportableLabware.TransportParametersInstance.PickupHeight,
         )
 
-        try:
-            CommandInstance = COREGripperDriver.GetPlate.Command(
-                OptionsInstance=GetPlateOptionsInstance,
-                CustomErrorHandling=self.CustomErrorHandling,
-            )
-            self.BackendInstance.ExecuteCommand(CommandInstance)
-            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-            self.BackendInstance.GetResponse(
-                CommandInstance, COREGripperDriver.GetPlate.Response
-            )
+        CommandInstance = COREGripperDriver.GetPlate.Command(
+            OptionsInstance=GetPlateOptionsInstance,
+            CustomErrorHandling=self.CustomErrorHandling,
+        )
+        self.BackendInstance.ExecuteCommand(CommandInstance)
+        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+        self.BackendInstance.GetResponse(
+            CommandInstance, COREGripperDriver.GetPlate.Response
+        )
 
-        except:
-            ...
-
-        try:
-            CommandInstance = COREGripperDriver.PlacePlate.Command(
-                OptionsInstance=COREGripperDriver.PlacePlate.Options(
-                    PlateSequence=DestinationLayoutItem.Sequence,
-                    CheckPlateExists=COREGripperDriver.PlacePlate.Options.YesNoOptions[
-                        DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.HomePlaceConfig[
-                            "CheckPlateExists"
-                        ]
-                    ],
-                    EjectTool=COREGripperDriver.PlacePlate.Options.YesNoOptions(
-                        int(self._LastTransportFlag)
-                    ),
+        CommandInstance = COREGripperDriver.PlacePlate.Command(
+            OptionsInstance=COREGripperDriver.PlacePlate.Options(
+                PlateSequence=DestinationLayoutItem.Sequence,
+                CheckPlateExists=COREGripperDriver.PlacePlate.Options.YesNoOptions[
+                    DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.HomePlaceConfig[
+                        "CheckPlateExists"
+                    ]
+                ],
+                EjectTool=COREGripperDriver.PlacePlate.Options.YesNoOptions(
+                    int(self._LastTransportFlag)
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            )
-            self.BackendInstance.ExecuteCommand(CommandInstance)
-            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-            self.BackendInstance.GetResponse(
-                CommandInstance, COREGripperDriver.PlacePlate.Response
-            )
-
-        except:
-            ...
+            ),
+            CustomErrorHandling=self.CustomErrorHandling,
+        )
+        self.BackendInstance.ExecuteCommand(CommandInstance)
+        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+        self.BackendInstance.GetResponse(
+            CommandInstance, COREGripperDriver.PlacePlate.Response
+        )
 
     def GetGetConfigKeys(self) -> list[str]:
         return []

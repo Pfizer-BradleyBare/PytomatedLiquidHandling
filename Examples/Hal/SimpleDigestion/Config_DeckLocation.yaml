@@ -5,12 +5,12 @@
     Unique Identifier: Gripper
     Home Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
     Away Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
 
 #Carrier 14
 - Unique Identifier: Carrier14_Pos3
@@ -19,12 +19,12 @@
     Unique Identifier: Gripper
     Home Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
     Away Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
 
 - Unique Identifier: Carrier14_Pos4
   Enabled: True
@@ -32,12 +32,12 @@
     Unique Identifier: Gripper
     Home Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
     Away Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
 
 - Unique Identifier: Carrier14_Pos5
   Enabled: True
@@ -45,12 +45,12 @@
     Unique Identifier: Gripper
     Home Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
     Away Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
 
 #Carrier 48
 - Unique Identifier: ReagentReserviorCarrier
@@ -59,12 +59,12 @@
     Unique Identifier: Gripper
     Home Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
     Away Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
 
 #Carrier 49
 - Unique Identifier: FlipTubeCarrier
@@ -73,12 +73,12 @@
     Unique Identifier: Gripper
     Home Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
     Away Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
 
 - Unique Identifier: SpecialFlipTubeCarrier
   Enabled: True
@@ -86,9 +86,9 @@
     Unique Identifier: Gripper
     Home Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"
     Away Config:
       Get: {}
-      Place: 
-        CheckPlateExists: No
+      Place:
+        CheckPlateExists: "No"

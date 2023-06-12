@@ -63,7 +63,7 @@ PipetteTrackerInstance = HAL.Pipette.PipetteLoader.LoadYaml(
     os.path.join(os.path.dirname(__file__), "Config_Pipette.yaml"),
 )
 
-# BackendTrackerInstance.GetObjectByName("Hammy").StartBackend()
+BackendTrackerInstance.GetObjectByName("Hammy").StartBackend()
 
 TransportOptionsTrackerInstance = HAL.TransportDevice.TransportOptions.OptionsTracker()
 TransportOptionsTrackerInstance.LoadSingle(
