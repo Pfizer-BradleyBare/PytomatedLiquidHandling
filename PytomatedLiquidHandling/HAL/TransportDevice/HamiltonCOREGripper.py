@@ -1,8 +1,8 @@
-from ...Driver.Hamilton.Transport import COREGripper as COREGripperDriver
-from .BaseTransportDevice import TransportOptions
-from .BaseTransportDevice import TransportDevice
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from dataclasses import dataclass
+
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from ...Driver.Hamilton.Transport import COREGripper as COREGripperDriver
+from .BaseTransportDevice import TransportDevice, TransportOptions
 
 
 @dataclass
@@ -60,11 +60,13 @@ class HamiltonCOREGripper(TransportDevice):
             CommandInstance = COREGripperDriver.PlacePlate.Command(
                 OptionsInstance=COREGripperDriver.PlacePlate.Options(
                     PlateSequence=DestinationLayoutItem.Sequence,
-                    CheckPlateExists=DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.HomePlaceConfig[
-                        "CheckPlateExists"
+                    CheckPlateExists=COREGripperDriver.PlacePlate.Options.YesNoOptions[
+                        DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.HomePlaceConfig[
+                            "CheckPlateExists"
+                        ]
                     ],
                     EjectTool=COREGripperDriver.PlacePlate.Options.YesNoOptions(
-                        self._LastTransportFlag
+                        int(self._LastTransportFlag)
                     ),
                 ),
                 CustomErrorHandling=self.CustomErrorHandling,
