@@ -1,0 +1,17 @@
+- Unique Identifier: Sample Plate
+  Enabled: True
+  Plate Sequence: PlatePosition1
+  Plate Labware Unique Identifier: 200uL Biorad 96 Well PCR Plate
+  Deck Location Unique Identifier: Carrier14_Pos3
+
+- Unique Identifier: Denaturation Plate
+  Enabled: True
+  Plate Sequence: PlatePosition2
+  Plate Labware Unique Identifier: 200uL Biorad 96 Well PCR Plate
+  Deck Location Unique Identifier: Carrier14_Pos4
+
+- Unique Identifier: Digestion Plate
+  Enabled: True
+  Plate Sequence: PlatePosition3
+  Plate Labware Unique Identifier: 200uL Biorad 96 Well PCR Plate
+  Deck Location Unique Identifier: Carrier14_Pos5

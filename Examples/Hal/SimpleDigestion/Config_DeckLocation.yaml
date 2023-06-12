@@ -1,0 +1,80 @@
+#HHS Carrier
+- Unique Identifier: HeaterShaker Position 1
+  Enabled: True
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+      Get:
+      Place:
+    Away Config:
+      Get:
+      Place:
+
+#Carrier 14
+- Unique Identifier: Carrier14_Pos3
+  Enabled: True
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+      Get:
+      Place:
+    Away Config:
+      Get:
+      Place:
+
+- Unique Identifier: Carrier14_Pos4
+  Enabled: True
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+      Get:
+      Place:
+    Away Config:
+      Get:
+      Place:
+
+- Unique Identifier: Carrier14_Pos5
+  Enabled: True
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+      Get:
+      Place:
+    Away Config:
+      Get:
+      Place:
+
+#Carrier 48
+- Unique Identifier: ReagentReserviorCarrier
+  Enabled: True
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+      Get:
+      Place:
+    Away Config:
+      Get:
+      Place:
+
+#Carrier 49
+- Unique Identifier: FlipTubeCarrier
+  Enabled: True
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+      Get:
+      Place:
+    Away Config:
+      Get:
+      Place:
+
+- Unique Identifier: SpecialFlipTubeCarrier
+  Enabled: True
+  Transport Device:
+    Unique Identifier: CORE Gripper
+    Home Config:
+      Get:
+      Place:
+    Away Config:
+      Get:
+      Place:

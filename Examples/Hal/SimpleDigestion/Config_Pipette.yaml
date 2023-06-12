@@ -1,0 +1,51 @@
+#############################################################
+#
+# Devices: The pipetting devices available on this system. Options per device are different.
+# Enabled: True: Can be used. False: Cannot be used
+#
+#############################################################
+
+Hamilton 1mL Channels Portrait:
+  - Unique Identifier: Pipette
+    Enabled: True
+    Backend Unique Identifier: Hammy
+    Custom Error Handling: False
+
+    Number of Channels: 8
+    Active Channels: [1, 2, 3, 4, 5, 6, 7, 8]
+
+    Supported Labware Unique Identifiers:
+      - 200uL Biorad 96 Well PCR Plate
+      - Hamilton 1.5mL FlipTube
+      - Hamilton 1.5mL FlipTube Special
+
+    Supported Deck Location Unique Identifiers:
+      - Carrier14_Pos3
+      - Carrier14_Pos4
+      - Carrier14_Pos5
+      - ReagentReserviorCarrier
+      - FlipTubeCarrier
+      - SpecialFlipTubeCarrier
+
+    Supported Tips:
+      - Tip Unique Identifier: 50uL NTR
+        Tip Support Dropoff Sequence: None
+        Tip Support Pickup Sequence: None
+        Waste Sequence: None
+
+      - Tip Unique Identifier: 300uL NTR
+        Tip Support Dropoff Sequence: None
+        Tip Support Pickup Sequence: None
+        Waste Sequence: None
+
+    Supported Liquid Class Categories:
+      - Unique Identifier: Default
+        Liquid Classes:
+          - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
+            Max Volume: 50
+
+          - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
+            Max Volume: 300
+
+          - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
+            Max Volume: 1000

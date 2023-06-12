@@ -1,0 +1,16 @@
+Hamilton Heater Shaker:
+  - Unique Identifier: Heater
+    Enabled: True
+    Backend Unique Identifier: Hammy
+    Custom Error Handling: False
+    Com Port: 1
+    Deck Location Unique Identifier: HeaterShaker Position 1
+    Temp Limits:
+      Stable Delta: 2
+      Minimum: 25
+      Maximum: 100
+    Supported Labware Information:
+      - Plate Sequence: HeaterShakerPosition1
+        Plate Labware Unique Identifier: 200uL Biorad 96 Well PCR Plate
+        Lid Sequence: HeaterShakerPosition1
+        Lid Labware Unique Identifier: Agilent Black Lid

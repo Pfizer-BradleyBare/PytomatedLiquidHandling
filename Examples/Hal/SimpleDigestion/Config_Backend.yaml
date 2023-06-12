@@ -1,0 +1,11 @@
+#############################################################
+#
+# Devices: The pipetting devices available on this system. Options per device are different.
+# Enabled: True: Can be used. False: Cannot be used
+#
+#############################################################
+
+Microlab Star:
+  Enabled: True
+  Unique Identifier: Hammy
+  Deck Layout Path: Path

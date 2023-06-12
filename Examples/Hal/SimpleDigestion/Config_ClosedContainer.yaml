@@ -1,0 +1,28 @@
+#############################################################
+#
+# Devices: The pipetting devices available on this system. Options per device are different.
+# Enabled: True: Can be used. False: Cannot be used
+#
+#############################################################
+
+Hamilton FlipTube:
+  - Unique Identifier: Fliptube 1
+    Enabled: True
+    Backend Unique Identifier: Hammy
+    Custom Error Handling: False
+    Tool Sequence: seq_FlipTubeTool_1
+    Supported Labware Unique Identifiers:
+      - Hamilton 1.5mL FlipTube
+    Supported Deck Location Unique Identifiers:
+      - FlipTubeCarrier
+
+Hamilton FlipTube Special:
+  - Unique Identifier: Fliptube 1
+    Enabled: True
+    Backend Unique Identifier: Hammy
+    Custom Error Handling: False
+    Tool Sequence: seq_FlipTubeTool_1
+    Supported Labware Unique Identifiers:
+      - Hamilton 1.5mL FlipTube Special
+    Supported Deck Location Unique Identifiers:
+      - SpecialFlipTubeCarrier
