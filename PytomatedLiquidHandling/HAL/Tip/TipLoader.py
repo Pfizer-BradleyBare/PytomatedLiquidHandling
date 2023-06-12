@@ -40,9 +40,9 @@ def LoadYaml(BackendTrackerInstance: BackendTracker, FilePath: str) -> TipTracke
                     BackendInstance,
                     CustomErrorHandling,
                     PickupSequence,
+                    MaxVolume,
                     NTRWasteSequence,
                     GripperSequence,
-                    MaxVolume,
                 )
 
             elif TipType == "Hamilton FTR":

@@ -16,15 +16,12 @@ Hamilton 1mL Channels Portrait:
 
     Supported Labware Unique Identifiers:
       - 200uL Biorad 96 Well PCR Plate
-      - Hamilton 1.5mL FlipTube
       - Hamilton 1.5mL FlipTube Special
 
     Supported Deck Location Unique Identifiers:
       - Carrier14_Pos3
-      - Carrier14_Pos4
       - Carrier14_Pos5
       - ReagentReserviorCarrier
-      - FlipTubeCarrier
       - SpecialFlipTubeCarrier
 
     Supported Tips:

@@ -26,19 +26,6 @@
       Place:
         CheckPlateExists: "No"
 
-- Unique Identifier: Carrier14_Pos4
-  Enabled: True
-  Transport Device:
-    Unique Identifier: Gripper
-    Home Config:
-      Get: {}
-      Place:
-        CheckPlateExists: "No"
-    Away Config:
-      Get: {}
-      Place:
-        CheckPlateExists: "No"
-
 - Unique Identifier: Carrier14_Pos5
   Enabled: True
   Transport Device:
@@ -54,20 +41,6 @@
 
 #Carrier 48
 - Unique Identifier: ReagentReserviorCarrier
-  Enabled: True
-  Transport Device:
-    Unique Identifier: Gripper
-    Home Config:
-      Get: {}
-      Place:
-        CheckPlateExists: "No"
-    Away Config:
-      Get: {}
-      Place:
-        CheckPlateExists: "No"
-
-#Carrier 49
-- Unique Identifier: FlipTubeCarrier
   Enabled: True
   Transport Device:
     Unique Identifier: Gripper

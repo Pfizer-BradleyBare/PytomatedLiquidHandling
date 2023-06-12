@@ -9,7 +9,7 @@ class HamiltonTipNTR(Tip):
     BackendInstance: HamiltonBackendABC
     NTRWasteSequence: str
     GripperSequence: str
-    GeneratedWasteSequence: str = field(init=False)
+    GeneratedWasteSequence: str = field(init=False, default="")
 
     def Initialize(self):
         self.Reload()

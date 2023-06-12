@@ -5,17 +5,6 @@
 #
 #############################################################
 
-Hamilton FlipTube:
-  - Unique Identifier: Fliptube
-    Enabled: True
-    Backend Unique Identifier: Hammy
-    Custom Error Handling: False
-    Tool Sequence: seq_FlipTubeTool_1
-    Supported Labware Unique Identifiers:
-      - Hamilton 1.5mL FlipTube
-    Supported Deck Location Unique Identifiers:
-      - FlipTubeCarrier
-
 Hamilton FlipTube Special:
   - Unique Identifier: Special Fliptube
     Enabled: True

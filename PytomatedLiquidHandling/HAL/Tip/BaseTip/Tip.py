@@ -23,6 +23,7 @@ class Tip(InterfaceABC, UniqueObjectABC):
     @abstractmethod
     def UpdateTipPositions(
         self,
+        *,
         NumTips: int,
     ):
         ...

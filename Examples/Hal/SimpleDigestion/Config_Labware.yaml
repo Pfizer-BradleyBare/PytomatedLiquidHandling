@@ -22,25 +22,6 @@
     Long Side: 127
     Short Side: 86
 
-#ENTRY
-- Unique Identifier: Hamilton 1.5mL FlipTube
-  Enabled: True
-  Wells:
-    Columns: 1
-    Rows: 32
-    Sequences Per Well: 1
-    Max Volume: 1500
-    Dead Volume: 150
-    Segment Equations:
-      - Segment Height: 0
-        Segment Equation: h * 12.3202
-
-      - Segment Height: 14.68
-        Segment Equation: h * 36.9605
-  Dimensions:
-    Long Side: 127
-    Short Side: 86
-
 - Unique Identifier: Hamilton 1.5mL FlipTube Special
   Enabled: True
   Wells:

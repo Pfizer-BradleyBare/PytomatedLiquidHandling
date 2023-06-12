@@ -74,7 +74,7 @@ class HamiltonPortraitCORE8Channel(Pipette):
                 TipInstance = self.SupportedTipTrackerInstance.GetObjectByName(
                     Tip
                 ).TipInstance
-                TipInstance.UpdateTipPositions(Count)
+                TipInstance.UpdateTipPositions(NumTips=Count)
                 TipPositions[Tip] = TipInstance.TipPositions
             # Get our updated tip positions!
 
