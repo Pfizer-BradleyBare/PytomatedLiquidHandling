@@ -5,12 +5,9 @@ from dataclasses import dataclass, field
 from typing import Type, TypeVar
 
 from ....Tools.AbstractClasses import BackendABC, CommandABC, ResponseABC
-from ..HamiltonCommand import (
-    HamiltonActionCommandABC,
-    HamiltonStateCommandABC,
-)
-from ..HamiltonResponse import HamiltonResponseABC
 from .. import HamiltonExceptions
+from ..HamiltonCommand import HamiltonActionCommandABC, HamiltonStateCommandABC
+from ..HamiltonResponse import HamiltonResponseABC
 from .HamiltonServerBackend import HamiltonServerBackendABC
 
 HamiltonResponseABCType = TypeVar("HamiltonResponseABCType", bound=HamiltonResponseABC)
@@ -103,6 +100,10 @@ class HamiltonBackendABC(BackendABC):
     ) -> HamiltonResponseABCType:
         BackendABC.GetResponse(self, CommandInstance, ResponseType)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
-            return self.StateServer.GetResponse(CommandInstance, ResponseType)
+            return ResponseType(
+                self.StateServer.GetResponse(CommandInstance, ResponseType).Properties
+            )
         else:
-            return self.ActionServer.GetResponse(CommandInstance, ResponseType)
+            return ResponseType(
+                self.ActionServer.GetResponse(CommandInstance, ResponseType).Properties
+            )

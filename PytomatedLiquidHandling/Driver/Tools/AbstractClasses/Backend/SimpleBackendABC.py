@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
-from typing import Type, TypeVar, cast
+from typing import Type, TypeVar
 
 from ..Command import CommandABC
+from ..Exception import UnhandledException
 from ..Response import ResponseABC
 from .BackendABC import BackendABC
-from ..Exception import UnhandledException
 
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
@@ -91,4 +91,4 @@ class SimpleBackendABC(BackendABC):
 
         self.CheckExceptions(CommandInstance, Response)
 
-        return cast(ResponseType, Response)
+        return ResponseType(Response.Properties)

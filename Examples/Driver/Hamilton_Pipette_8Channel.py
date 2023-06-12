@@ -16,7 +16,7 @@ Backend = MicrolabStarBackend(
     LoggerInstance,
     os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
 )
-# Backend.StartBackend()
+Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
 CommandInstance = NTR.LoadTips.Command(

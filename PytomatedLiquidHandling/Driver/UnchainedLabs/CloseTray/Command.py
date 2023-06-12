@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, cast
+from typing import Any
 
 from ..Backend import UnchainedLabsCommandABC
 
