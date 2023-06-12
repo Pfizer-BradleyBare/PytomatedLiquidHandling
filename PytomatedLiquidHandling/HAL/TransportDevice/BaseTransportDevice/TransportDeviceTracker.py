@@ -52,8 +52,8 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                     )
                 )
 
-                IntermediateDestinationTransportDeviceInstance = (
-                    LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.TransportDeviceInstance
+                IntermediateDestinationTransportDeviceInstance = self.GetObjectByName(
+                    LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
                 )
                 IntermediateDestinationLayoutItem = NonCoverablePosition(
                     "Intermediate Destination",
@@ -61,7 +61,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                     DeckLocation(
                         "Intermediate Destination",
                         TransportDeviceConfig(
-                            IntermediateDestinationTransportDeviceInstance,
+                            IntermediateDestinationTransportDeviceInstance.UniqueIdentifier,
                             LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig,
                             LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayPlaceConfig,
                             LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig,
@@ -84,8 +84,8 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                         Options.SourceLayoutItem.LabwareInstance.UniqueIdentifier
                     )
                 )
-                IntermediateSourceTransportDeviceInstance = (
-                    LabwareSourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.TransportDeviceInstance
+                IntermediateSourceTransportDeviceInstance = self.GetObjectByName(
+                    LabwareSourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
                 )
 
                 if (
@@ -102,7 +102,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                     DeckLocation(
                         "Intermediate Source",
                         TransportDeviceConfig(
-                            IntermediateSourceTransportDeviceInstance,
+                            IntermediateSourceTransportDeviceInstance.UniqueIdentifier,
                             LabwareSourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig,
                             LabwareSourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayPlaceConfig,
                             LabwareSourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig,
@@ -121,8 +121,8 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                 # Transport to the destination from the transition point
             # The two sites are not compatible. We need to use a transition point
             else:
-                TransportDeviceInstance = (
-                    Options.SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.TransportDeviceInstance
+                TransportDeviceInstance = self.GetObjectByName(
+                    Options.SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
                 )
                 if (
                     DeviceLastUseIndices[str(TransportDeviceInstance.UniqueIdentifier)]

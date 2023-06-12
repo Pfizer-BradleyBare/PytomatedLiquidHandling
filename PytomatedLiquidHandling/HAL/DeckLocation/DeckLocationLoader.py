@@ -27,13 +27,54 @@ def LoadYaml(
         AwayGetConfig = Location["Transport Device"]["Away Config"]["Get"]
         AwayPlaceConfig = Location["Transport Device"]["Away Config"]["Place"]
 
+        TransportDeviceInstance = TransportDeviceTrackerInstance.GetObjectByName(
+            TransportDeviceID
+        )
+
         TransportDeviceConfigInstance = TransportDeviceConfig(
-            TransportDeviceTrackerInstance.GetObjectByName(TransportDeviceID),
+            TransportDeviceInstance.UniqueIdentifier,
             HomeGetConfig,
             HomePlaceConfig,
             AwayGetConfig,
             AwayPlaceConfig,
         )
+
+        if not all(
+            Key in TransportDeviceConfigInstance.HomeGetConfig
+            for Key in TransportDeviceInstance.GetGetConfigKeys()
+        ):
+            raise Exception(
+                "Keys are missing from Home Get Config. Please fix. Expected: "
+                + str(TransportDeviceInstance.GetGetConfigKeys())
+            )
+
+        if not all(
+            Key in TransportDeviceConfigInstance.HomePlaceConfig
+            for Key in TransportDeviceInstance.GetPlaceConfigKeys()
+        ):
+            raise Exception(
+                "Keys are missing from Home Place Config. Please fix. Expected: "
+                + str(TransportDeviceInstance.GetPlaceConfigKeys())
+            )
+
+        if not all(
+            Key in TransportDeviceConfigInstance.AwayGetConfig
+            for Key in TransportDeviceInstance.GetGetConfigKeys()
+        ):
+            raise Exception(
+                "Keys are missing from Away Get Config. Please fix. Expected: "
+                + str(TransportDeviceInstance.GetGetConfigKeys())
+            )
+
+        if not all(
+            Key in TransportDeviceConfigInstance.AwayPlaceConfig
+            for Key in TransportDeviceInstance.GetPlaceConfigKeys()
+        ):
+            raise Exception(
+                "Keys are missing from Away Place Config. Please fix. Expected: "
+                + str(TransportDeviceInstance.GetPlaceConfigKeys())
+            )
+        # Confirm expected keys are in ExtraConfig
 
         DeckLocationInstance = DeckLocation(
             UniqueIdentifier, TransportDeviceConfigInstance
