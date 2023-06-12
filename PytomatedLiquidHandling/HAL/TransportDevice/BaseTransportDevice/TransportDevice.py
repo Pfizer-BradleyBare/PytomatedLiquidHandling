@@ -35,7 +35,7 @@ class TransportDevice(InterfaceABC, UniqueObjectABC):
             )
         # Check that this is a supported transport device for the deck locations
 
-        if (
+        if not (
             SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig
             == DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig
         ):

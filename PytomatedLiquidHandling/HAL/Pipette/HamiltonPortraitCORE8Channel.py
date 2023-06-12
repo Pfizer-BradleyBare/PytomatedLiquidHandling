@@ -2,6 +2,7 @@ from math import ceil
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import PortraitCORE8Channel
+from ..Labware import PipettableLabware
 from ..Pipette import TransferOptions
 from .BasePipette import Pipette
 from dataclasses import dataclass
@@ -87,18 +88,29 @@ class HamiltonPortraitCORE8Channel(Pipette):
                 PickupOptionsTracker.LoadSingle(
                     PortraitCORE8Channel.Pickup.Options(
                         Sequence=PipetteTipInstance.TipInstance.PickupSequence,
-                        ChannelNumber=Count,
+                        ChannelNumber=Count + 1,
                         SequencePosition=TipPositions[
                             PipetteTipInstance.UniqueIdentifier
                         ].pop(0),
                     )
                 )
 
+                AspirateLabware = Options.SourceLayoutItemInstance.LabwareInstance
+                if not isinstance(AspirateLabware, PipettableLabware):
+                    raise Exception("This should never happen")
+
+                AspiratePosition = (
+                    Options.SourcePosition
+                    * AspirateLabware.LabwareWells.SequencesPerWell
+                    + Count
+                    + 1
+                )
+
                 AspirateOptionsTracker.LoadSingle(
                     PortraitCORE8Channel.Aspirate.Options(
-                        ChannelNumber=Count,
+                        ChannelNumber=Count + 1,
                         Sequence=Options.SourceLayoutItemInstance.Sequence,
-                        SequencePosition=Options.SourcePosition,
+                        SequencePosition=AspiratePosition,
                         LiquidClass=str(
                             self.GetLiquidClass(
                                 Options.SourceLiquidClassCategory,
@@ -109,11 +121,22 @@ class HamiltonPortraitCORE8Channel(Pipette):
                     )
                 )
 
+                DispenseLabware = Options.SourceLayoutItemInstance.LabwareInstance
+                if not isinstance(DispenseLabware, PipettableLabware):
+                    raise Exception("This should never happen")
+
+                DispensePosition = (
+                    Options.SourcePosition
+                    * DispenseLabware.LabwareWells.SequencesPerWell
+                    + Count
+                    + 1
+                )
+
                 DispenseOptionsTracker.LoadSingle(
                     PortraitCORE8Channel.Dispense.Options(
-                        ChannelNumber=Count,
+                        ChannelNumber=Count + 1,
                         Sequence=Options.DestinationLayoutItemInstance.Sequence,
-                        SequencePosition=Options.DestinationPosition,
+                        SequencePosition=DispensePosition,
                         LiquidClass=str(
                             self.GetLiquidClass(
                                 Options.DestinationLiquidClassCategory,
@@ -127,24 +150,32 @@ class HamiltonPortraitCORE8Channel(Pipette):
                 EjectOptionsTracker.LoadSingle(
                     PortraitCORE8Channel.Eject.Options(
                         Sequence=PipetteTipInstance.WasteSequence,
-                        ChannelNumber=Count,
-                        SequencePosition=Count,
+                        ChannelNumber=Count + 1,
+                        SequencePosition=Count + 1,
                     )
                 )
 
-            PortraitCORE8Channel.Pickup.Command(
-                CustomErrorHandling=self.CustomErrorHandling,
-                OptionsTrackerInstance=PickupOptionsTracker,
+            print(
+                PortraitCORE8Channel.Pickup.Command(
+                    CustomErrorHandling=self.CustomErrorHandling,
+                    OptionsTrackerInstance=PickupOptionsTracker,
+                )
             )
-            PortraitCORE8Channel.Aspirate.Command(
-                CustomErrorHandling=self.CustomErrorHandling,
-                OptionsTrackerInstance=AspirateOptionsTracker,
+            print(
+                PortraitCORE8Channel.Aspirate.Command(
+                    CustomErrorHandling=self.CustomErrorHandling,
+                    OptionsTrackerInstance=AspirateOptionsTracker,
+                )
             )
-            PortraitCORE8Channel.Dispense.Command(
-                CustomErrorHandling=self.CustomErrorHandling,
-                OptionsTrackerInstance=DispenseOptionsTracker,
+            print(
+                PortraitCORE8Channel.Dispense.Command(
+                    CustomErrorHandling=self.CustomErrorHandling,
+                    OptionsTrackerInstance=DispenseOptionsTracker,
+                )
             )
-            PortraitCORE8Channel.Eject.Command(
-                CustomErrorHandling=self.CustomErrorHandling,
-                OptionsTrackerInstance=EjectOptionsTracker,
+            print(
+                PortraitCORE8Channel.Eject.Command(
+                    CustomErrorHandling=self.CustomErrorHandling,
+                    OptionsTrackerInstance=EjectOptionsTracker,
+                )
             )

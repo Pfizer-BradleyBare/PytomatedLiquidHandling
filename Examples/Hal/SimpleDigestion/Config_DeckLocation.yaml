@@ -4,11 +4,11 @@
   Transport Device:
     Unique Identifier: Gripper
     Home Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
     Away Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
 
@@ -18,11 +18,11 @@
   Transport Device:
     Unique Identifier: Gripper
     Home Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
     Away Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
 
@@ -31,11 +31,11 @@
   Transport Device:
     Unique Identifier: Gripper
     Home Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
     Away Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
 
@@ -44,11 +44,11 @@
   Transport Device:
     Unique Identifier: Gripper
     Home Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
     Away Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
 
@@ -58,11 +58,11 @@
   Transport Device:
     Unique Identifier: Gripper
     Home Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
     Away Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
 
@@ -72,11 +72,11 @@
   Transport Device:
     Unique Identifier: Gripper
     Home Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
     Away Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
 
@@ -85,10 +85,10 @@
   Transport Device:
     Unique Identifier: Gripper
     Home Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
     Away Config:
-      Get: []
+      Get: {}
       Place: 
         CheckPlateExists: No
