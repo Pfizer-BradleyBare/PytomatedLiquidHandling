@@ -62,3 +62,16 @@ PipetteTrackerInstance = HAL.Pipette.PipetteLoader.LoadYaml(
     TipTrackerInstance,
     os.path.join(os.path.dirname(__file__), "Config_Pipette.yaml"),
 )
+
+# BackendTrackerInstance.GetObjectByName("Hammy").StartBackend()
+
+TransportOptionsTrackerInstance = HAL.TransportDevice.TransportOptions.OptionsTracker()
+TransportOptionsTrackerInstance.LoadSingle(
+    HAL.TransportDevice.TransportOptions.Options(
+        SourceLayoutItem=LayoutItemTrackerInstance.GetObjectByName("Sample Plate"),
+        DestinationLayoutItem=LayoutItemTrackerInstance.GetObjectByName(
+            "Digestion Plate"
+        ),
+    )
+)
+TransportDeviceTrackerInstance.Transport(TransportOptionsTrackerInstance)
