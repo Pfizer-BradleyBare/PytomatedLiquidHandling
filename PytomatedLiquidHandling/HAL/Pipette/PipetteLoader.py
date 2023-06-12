@@ -52,7 +52,7 @@ def LoadYaml(
 
             SupportedDeckLocationTrackerInstance = DeckLocationTracker()
             for DeckLocationIdentifier in Device[
-                "Supported Deck Location Unique Identifier"
+                "Supported Deck Location Unique Identifiers"
             ]:
                 SupportedDeckLocationTrackerInstance.LoadSingle(
                     DeckLocationTrackerInstance.GetObjectByName(DeckLocationIdentifier)

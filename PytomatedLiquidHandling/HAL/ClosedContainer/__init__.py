@@ -4,5 +4,4 @@ from .BaseClosedContainer import (
 from .BaseClosedContainer import ClosedContainerTracker
 from .HamiltonFlipTube import HamiltonFlipTube
 from .HamiltonFlipTubeSpecial import HamiltonFlipTubeSpecial
-
-__all__ = ["HamiltonFlipTube", "ClosedContainerTracker"]
+from . import ClosedContainerLoader

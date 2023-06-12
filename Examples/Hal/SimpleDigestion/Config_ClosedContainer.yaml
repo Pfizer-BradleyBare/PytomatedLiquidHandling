@@ -6,7 +6,7 @@
 #############################################################
 
 Hamilton FlipTube:
-  - Unique Identifier: Fliptube 1
+  - Unique Identifier: Fliptube
     Enabled: True
     Backend Unique Identifier: Hammy
     Custom Error Handling: False
@@ -17,7 +17,7 @@ Hamilton FlipTube:
       - FlipTubeCarrier
 
 Hamilton FlipTube Special:
-  - Unique Identifier: Fliptube 1
+  - Unique Identifier: Special Fliptube
     Enabled: True
     Backend Unique Identifier: Hammy
     Custom Error Handling: False

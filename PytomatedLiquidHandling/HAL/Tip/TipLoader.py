@@ -6,7 +6,7 @@ from ..Backend import BackendTracker
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 
 
-def LoadYaml(FilePath: str, BackendTrackerInstance: BackendTracker) -> TipTracker:
+def LoadYaml(BackendTrackerInstance: BackendTracker, FilePath: str) -> TipTracker:
     TipTrackerInstance = TipTracker()
 
     FileHandle = open(FilePath, "r")

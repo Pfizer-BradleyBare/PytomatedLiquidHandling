@@ -79,7 +79,7 @@ class HamiltonCOREGripper(TransportDevice):
             ...
 
     def GetGetConfigKeys(self) -> list[str]:
-        ...
+        return []
 
     def GetPlaceConfigKeys(self) -> list[str]:
         return ["CheckPlateExists"]
