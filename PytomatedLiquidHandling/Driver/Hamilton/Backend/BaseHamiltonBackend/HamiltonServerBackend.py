@@ -4,9 +4,9 @@ from typing import Callable
 
 from flask import request
 
-from .....Tools.Logger import Logger
 from ....Tools.AbstractClasses import CommandOptionsTracker, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
+from ..HamiltonResponse import HamiltonResponseABC
 
 
 @dataclass
@@ -43,10 +43,11 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         if isinstance(CommandInstance, CommandOptionsTracker):
             if CommandInstance.OptionsTrackerInstance.GetNumObjects() == 0:
-                self.ResponseInstance = CommandInstance.Response(
+                self.ResponseInstance = HamiltonResponseABC(
                     {
                         "State": False,
                         "Details": "There are no options in the options tracker.",
+                        "ErrorCode": -65535,
                     }
                 )
                 return self.GetNextCommand()
@@ -90,42 +91,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
             return Response
         # Check the command does not already have a response
 
-        BaseKeys = ["State", "Details"]
-        if not ParserObject.IsValid(BaseKeys):
-            ParserObject.SetEndpointDetails(
-                "Key missing. Accepted keys: " + str(BaseKeys)
-            )
-            Response = ParserObject.GetHTTPResponse()
-            self.LoggerInstance.warning(Response)
-            return Response
-        # check we have required info
-
-        if ParserObject.GetEndpointInputData("State") == False:
-            ExpectedResponseKeys = (
-                CommandInstance.Response.GetExpectedErrorResponseProperties()
-            )
-        else:
-            ExpectedResponseKeys = (
-                CommandInstance.Response.GetExpectedSuccessResponseProperties()
-            )
-
-        if not ParserObject.IsValid(ExpectedResponseKeys):
-            ParserObject.SetEndpointDetails(
-                "Key missing. Accepted keys: " + str(ExpectedResponseKeys)
-            )
-            Response = ParserObject.GetHTTPResponse()
-            self.LoggerInstance.warning(Response)
-            return Response
-        # check we have required info
-
-        Properties = dict()
-        for Key in ExpectedResponseKeys:
-            Properties[Key] = ParserObject.GetEndpointInputData(Key)
-        # Create dict that houses the expected keys so we can create the response object
-
-        Properties["Details"] = "Hamilton: " + Properties["Details"]
-
-        self.ResponseInstance = CommandInstance.Response(Properties)
+        self.ResponseInstance = HamiltonResponseABC(ParserObject.JSON)
         # Add response then release threads waiting for a response
 
         ParserObject.SetEndpointState(True)

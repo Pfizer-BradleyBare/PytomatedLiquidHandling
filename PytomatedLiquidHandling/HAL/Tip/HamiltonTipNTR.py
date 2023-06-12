@@ -29,7 +29,9 @@ class HamiltonTipNTR(Tip):
             )
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-            self.BackendInstance.GetResponse(CommandInstance, CommandInstance.Response)
+            self.BackendInstance.GetResponse(
+                CommandInstance, NTRDriver.LoadTips.Response
+            )
 
         except:
             ...
@@ -51,7 +53,7 @@ class HamiltonTipNTR(Tip):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, NTRDriver.GetTipPositions.Response
             )
 
             self.TipPositions = ResponseInstance.GetTipPositions()
@@ -70,7 +72,7 @@ class HamiltonTipNTR(Tip):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, NTRDriver.GetNumTips.Response
             )
 
             self.RemainingTips = ResponseInstance.GetNumRemaining()

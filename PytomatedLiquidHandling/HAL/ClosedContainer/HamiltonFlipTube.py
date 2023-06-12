@@ -11,7 +11,7 @@ class HamiltonFlipTube(ClosedContainerABC):
         )
         self.BackendInstance.ExecuteCommand(Command)
         self.BackendInstance.WaitForResponseBlocking(Command)
-        self.BackendInstance.GetResponse(Command, Command.Response)
+        self.BackendInstance.GetResponse(Command, FlipTubeDriver.Initialize.Response)
 
     def Deinitialize(self):
         ...
@@ -43,7 +43,7 @@ class HamiltonFlipTube(ClosedContainerABC):
             )
             self.BackendInstance.ExecuteCommand(Command)
             self.BackendInstance.WaitForResponseBlocking(Command)
-            self.BackendInstance.GetResponse(Command, Command.Response)
+            self.BackendInstance.GetResponse(Command, FlipTubeDriver.Open.Response)
 
         except:
             ...
@@ -75,7 +75,7 @@ class HamiltonFlipTube(ClosedContainerABC):
             )
             self.BackendInstance.ExecuteCommand(Command)
             self.BackendInstance.WaitForResponseBlocking(Command)
-            self.BackendInstance.GetResponse(Command, Command.Response)
+            self.BackendInstance.GetResponse(Command, FlipTubeDriver.Close.Response)
 
         except:
             ...

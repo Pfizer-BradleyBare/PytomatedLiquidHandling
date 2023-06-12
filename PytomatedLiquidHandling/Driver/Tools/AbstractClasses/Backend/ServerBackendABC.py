@@ -135,7 +135,7 @@ class ServerBackendABC(SimpleBackendABC):
             self.LoggerInstance: Logger = LoggerInstance
             self.EndpointID: str = EndpointID
             self.InputString: bytes | None = JSONstring
-            self.JSON: dict | None = dict()
+            self.JSON: dict
             self.EndpointState: bool = False
             self.EndpointDetails: str = "N/A"
             self.EndpointReturn: dict = dict()
@@ -149,13 +149,13 @@ class ServerBackendABC(SimpleBackendABC):
                     )
                 except Exception:
                     LoggerInstance.error("PARSER: Error Parsing Data! Bad format.")
-                    self.JSON = None
+                    self.JSON = {}
 
         def __del__(self):
             self.LoggerInstance.debug("PARSER: __END__")
 
         def IsValid(self, ExpectedKeys: list[str]) -> bool:
-            if self.JSON is None:
+            if self.JSON == {}:
                 self.EndpointMessage = (
                     "JSON Object could not be loaded correctly. Try again."
                 )
@@ -185,7 +185,7 @@ class ServerBackendABC(SimpleBackendABC):
             return True
 
         def GetEndpointInputData(self, Key: str) -> any:  # type: ignore
-            if self.JSON is None:
+            if self.JSON == {}:
                 return None
 
             return self.JSON[Key]

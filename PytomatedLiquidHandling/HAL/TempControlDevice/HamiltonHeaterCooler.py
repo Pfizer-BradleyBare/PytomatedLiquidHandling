@@ -24,7 +24,7 @@ class HamiltonHeaterCooler(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterCoolerDriver.Connect.Response
             )
 
             self.HandleID = ResponseInstance.GetHandleID()
@@ -42,7 +42,7 @@ class HamiltonHeaterCooler(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterCoolerDriver.StopTemperatureControl.Response
             )
         except:
             ...
@@ -63,7 +63,7 @@ class HamiltonHeaterCooler(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterCoolerDriver.StartTemperatureControl.Response
             )
         except:
             ...
@@ -81,7 +81,7 @@ class HamiltonHeaterCooler(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterCoolerDriver.GetTemperature.Response
             )
 
             self.CurrentTemperature = ResponseInstance.GetTemperature()

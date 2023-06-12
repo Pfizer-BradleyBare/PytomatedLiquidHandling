@@ -63,7 +63,9 @@ class HamiltonInternalPlateGripper(TransportDevice):
             )
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-            self.BackendInstance.GetResponse(CommandInstance, CommandInstance.Response)
+            self.BackendInstance.GetResponse(
+                CommandInstance, IPGDriver.GetPlate.Response
+            )
 
         except:
             ...
@@ -89,7 +91,9 @@ class HamiltonInternalPlateGripper(TransportDevice):
             )
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-            self.BackendInstance.GetResponse(CommandInstance, CommandInstance.Response)
+            self.BackendInstance.GetResponse(
+                CommandInstance, IPGDriver.PlacePlate.Response
+            )
 
         except:
             ...

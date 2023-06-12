@@ -7,9 +7,4 @@ from .Options import Options
 
 @dataclass
 class Command(CommandOptions[Options], HamiltonStateCommandABC):
-    class Response(HamiltonStateCommandABC.Response):
-        @HamiltonStateCommandABC.Response.Decorator_ExpectedResponseProperty(
-            SuccessProperty=True
-        )
-        def GetTemperature(self) -> float:
-            ...
+    ...

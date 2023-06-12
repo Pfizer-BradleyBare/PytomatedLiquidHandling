@@ -24,7 +24,9 @@ class HamiltonTipFTR(Tip):
             )
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-            self.BackendInstance.GetResponse(CommandInstance, CommandInstance.Response)
+            self.BackendInstance.GetResponse(
+                CommandInstance, FTRDriver.LoadTips.Response
+            )
 
         except:
             ...
@@ -43,7 +45,7 @@ class HamiltonTipFTR(Tip):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, FTRDriver.GetTipPositions.Response
             )
 
             self.TipPositions = ResponseInstance.GetTipPositions()
@@ -62,7 +64,7 @@ class HamiltonTipFTR(Tip):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, FTRDriver.GetNumTips.Response
             )
 
             self.RemainingTips = ResponseInstance.GetNumRemaining()

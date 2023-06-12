@@ -24,7 +24,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.Connect.Response
             )
 
             self.HandleID = ResponseInstance.GetHandleID()
@@ -42,7 +42,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.SetPlateLock.Response
             )
 
         except:
@@ -59,7 +59,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.SetPlateLock.Response
             )
 
         except:
@@ -76,7 +76,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.StopTemperatureControl.Response
             )
 
         except:
@@ -92,7 +92,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.StopShakeControl.Response
             )
 
         except:
@@ -109,7 +109,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.SetPlateLock.Response
             )
 
         except:
@@ -127,7 +127,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.StartTemperatureControl.Response
             )
 
         except:
@@ -144,7 +144,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.GetTemperature.Response
             )
 
             self.CurrentTemperature = ResponseInstance.GetTemperature()
@@ -163,7 +163,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.SetPlateLock.Response
             )
 
         except:
@@ -180,7 +180,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.StartShakeControl.Response
             )
 
         except:
@@ -197,7 +197,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.StopShakeControl.Response
             )
 
         except:
@@ -213,7 +213,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.SetPlateLock.Response
             )
 
         except:
@@ -230,7 +230,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
             ResponseInstance = self.BackendInstance.GetResponse(
-                CommandInstance, CommandInstance.Response
+                CommandInstance, HeaterShakerDriver.GetShakingSpeed.Response
             )
 
             self.CurrentShakingSpeed = ResponseInstance.GetShakingSpeed()

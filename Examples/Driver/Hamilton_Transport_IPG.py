@@ -24,7 +24,7 @@ CommandInstance = IPG.GetPlate.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-Response = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+Response = Backend.GetResponse(CommandInstance, IPG.GetPlate.Response)
 # Grab the plate.
 
 CommandInstance = IPG.PlacePlate.Command(
@@ -35,7 +35,7 @@ CommandInstance = IPG.PlacePlate.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-Response = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+Response = Backend.GetResponse(CommandInstance, IPG.PlacePlate.Response)
 # Put it back
 
 # Done!

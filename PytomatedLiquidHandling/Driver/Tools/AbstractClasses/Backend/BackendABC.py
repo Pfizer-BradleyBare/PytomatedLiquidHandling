@@ -5,14 +5,17 @@ from typing import Type, TypeVar
 from .....Tools.AbstractClasses import UniqueObjectABC
 from .....Tools.Logger import Logger
 from ..Command import CommandABC
+from ..Response import ResponseABC
+from ..Exception import ExceptionABC
 
-T = TypeVar("T", bound=CommandABC.Response)
+ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 
 @dataclass
 class BackendABC(UniqueObjectABC):
     LoggerInstance: Logger
     IsRunning: bool = field(init=False, default=False)
+    Exceptions: list[type[ExceptionABC]] = field(init=False, default_factory=list)
 
     def __CheckRunning(self):
         if self.IsRunning == False:
@@ -31,7 +34,7 @@ class BackendABC(UniqueObjectABC):
         self.__CheckRunning()
 
     @abstractmethod
-    def GetCommandStatus(self, CommandInstance: CommandABC) -> CommandABC.Response:
+    def GetCommandStatus(self, CommandInstance: CommandABC) -> ResponseABC:
         self.__CheckRunning()
 
     @abstractmethod
@@ -39,5 +42,7 @@ class BackendABC(UniqueObjectABC):
         self.__CheckRunning()
 
     @abstractmethod
-    def GetResponse(self, CommandInstance: CommandABC, ResponseType: Type[T]) -> T:
+    def GetResponse(
+        self, CommandInstance: CommandABC, ResponseType: Type[ResponseABCType]
+    ) -> ResponseABCType:
         self.__CheckRunning()

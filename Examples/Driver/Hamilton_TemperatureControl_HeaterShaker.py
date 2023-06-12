@@ -20,7 +20,7 @@ Command = HeaterShaker.Connect.Command(
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(Command, Command.Response)
+Response = Backend.GetResponse(Command, HeaterShaker.Connect.Response)
 HeaterShakerHandleId = Response.GetHandleID()
 # Connect and get our Handle
 
@@ -33,7 +33,7 @@ Command = HeaterShaker.StartTemperatureControl.Command(
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(Command, Command.Response)
+Response = Backend.GetResponse(Command, HeaterShaker.StartTemperatureControl.Response)
 # Turn on the Heat
 
 TemperatureOffset = 2
@@ -43,7 +43,7 @@ for i in range(0, 1):
     )
     Backend.ExecuteCommand(Command)
     Backend.WaitForResponseBlocking(Command)
-    Backend.GetResponse(Command, Command.Response)
+    Backend.GetResponse(Command, StartTimer.Response)
 
     Command = HeaterShaker.GetTemperature.Command(
         OptionsInstance=HeaterShaker.GetTemperature.Options(
@@ -53,7 +53,7 @@ for i in range(0, 1):
     )
     Backend.ExecuteCommand(Command)
     Backend.WaitForResponseBlocking(Command)
-    Response = Backend.GetResponse(Command, Command.Response)
+    Response = Backend.GetResponse(Command, HeaterShaker.GetTemperature.Response)
 
     CurrentTemperature = Response.GetTemperature()
     LoggerInstance.debug("Current Temp: %f", CurrentTemperature)
@@ -74,14 +74,14 @@ Command = HeaterShaker.StartShakeControl.Command(
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(Command, Command.Response)
+Response = Backend.GetResponse(Command, HeaterShaker.StartShakeControl.Response)
 
 Command = StartTimer.Command(
     OptionsInstance=StartTimer.Options(WaitTime=30), CustomErrorHandling=False
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(Command, Command.Response)
+Response = Backend.GetResponse(Command, StartTimer.Response)
 # run 30 seconds
 
 Command = HeaterShaker.StopShakeControl.Command(
@@ -92,7 +92,7 @@ Command = HeaterShaker.StopShakeControl.Command(
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(Command, Command.Response)
+Response = Backend.GetResponse(Command, HeaterShaker.StopShakeControl.Response)
 
 Command = HeaterShaker.StopTemperatureControl.Command(
     OptionsInstance=HeaterShaker.StopTemperatureControl.Options(
@@ -102,7 +102,7 @@ Command = HeaterShaker.StopTemperatureControl.Command(
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(Command, Command.Response)
+Response = Backend.GetResponse(Command, HeaterShaker.StopTemperatureControl.Response)
 # Turn off heat
 
 # Done!

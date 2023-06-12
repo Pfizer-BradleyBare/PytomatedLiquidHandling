@@ -2,18 +2,18 @@ import os
 import shutil
 import subprocess
 from dataclasses import dataclass, field
-from typing import Type, TypeVar, cast
+from typing import Type, TypeVar
 
-from .....Tools.Logger import Logger
-from ....Tools.AbstractClasses import BackendABC, CommandABC
+from ....Tools.AbstractClasses import BackendABC, CommandABC, ResponseABC
 from ..HamiltonCommand import (
     HamiltonActionCommandABC,
-    HamiltonCommandABC,
     HamiltonStateCommandABC,
 )
+from ..HamiltonResponse import HamiltonResponseABC
+from .. import HamiltonExceptions
 from .HamiltonServerBackend import HamiltonServerBackendABC
 
-T = TypeVar("T", bound=CommandABC.Response)
+HamiltonResponseABCType = TypeVar("HamiltonResponseABCType", bound=HamiltonResponseABC)
 
 
 @dataclass
@@ -36,6 +36,11 @@ class HamiltonBackendABC(BackendABC):
             "/StateServer/",
             768,
         )
+
+        self.Exceptions = [
+            HamiltonExceptions.UnhandledException,
+            HamiltonExceptions.NoOptionsInTracker,
+        ]
 
     def StartBackend(self):
         BackendABC.StartBackend(self)
@@ -77,7 +82,7 @@ class HamiltonBackendABC(BackendABC):
 
     def GetCommandStatus(
         self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
-    ) -> CommandABC.Response:
+    ) -> ResponseABC:
         BackendABC.GetCommandStatus(self, CommandInstance)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
             return self.StateServer.GetCommandStatus(CommandInstance)
@@ -94,8 +99,8 @@ class HamiltonBackendABC(BackendABC):
     def GetResponse(
         self,
         CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC,
-        ResponseType: Type[T],
-    ) -> T:
+        ResponseType: Type[HamiltonResponseABCType],
+    ) -> HamiltonResponseABCType:
         BackendABC.GetResponse(self, CommandInstance, ResponseType)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
             return self.StateServer.GetResponse(CommandInstance, ResponseType)

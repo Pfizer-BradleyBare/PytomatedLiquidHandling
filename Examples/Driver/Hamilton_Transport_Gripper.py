@@ -25,7 +25,7 @@ CommandInstance = COREGripper.GetPlate.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-Response = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+Response = Backend.GetResponse(CommandInstance, COREGripper.GetPlate.Response)
 # Grab the plate.
 
 CommandInstance = COREGripper.PlacePlate.Command(
@@ -37,7 +37,7 @@ CommandInstance = COREGripper.PlacePlate.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-Response = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+Response = Backend.GetResponse(CommandInstance, COREGripper.PlacePlate.Response)
 # Put it back
 
 # Done!

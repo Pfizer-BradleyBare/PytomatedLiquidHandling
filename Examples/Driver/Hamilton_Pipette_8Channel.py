@@ -30,7 +30,7 @@ CommandInstance = NTR.LoadTips.Command(
 
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+ResponseInstance = Backend.GetResponse(CommandInstance, NTR.LoadTips.Response)
 GeneratedWasteSequence = ResponseInstance.GetGeneratedWasteSequence()
 # Load the tips on the deck. This makes sure the tip sequence is setup correctly
 
@@ -45,7 +45,7 @@ CommandInstance = NTR.GetTipPositions.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+ResponseInstance = Backend.GetResponse(CommandInstance, NTR.GetTipPositions.Response)
 TipPositions = ResponseInstance.GetTipPositions()
 # Get the tip positions for our tip pickup
 
@@ -61,7 +61,9 @@ CommandInstance = PortraitCORE8Channel.Pickup.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+ResponseInstance = Backend.GetResponse(
+    CommandInstance, PortraitCORE8Channel.Pickup.Response
+)
 # pickup some tips
 
 OptionsTrackerInstance = PortraitCORE8Channel.Aspirate.OptionsTracker()
@@ -80,7 +82,9 @@ CommandInstance = PortraitCORE8Channel.Aspirate.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+ResponseInstance = Backend.GetResponse(
+    CommandInstance, PortraitCORE8Channel.Aspirate.Response
+)
 # Aspirate some liquid
 
 OptionsTrackerInstance = PortraitCORE8Channel.Dispense.OptionsTracker()
@@ -99,7 +103,9 @@ CommandInstance = PortraitCORE8Channel.Dispense.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+ResponseInstance = Backend.GetResponse(
+    CommandInstance, PortraitCORE8Channel.Dispense.Response
+)
 # Dispense some liquid
 
 OptionsTrackerInstance = PortraitCORE8Channel.Eject.OptionsTracker()
@@ -114,5 +120,7 @@ CommandInstance = PortraitCORE8Channel.Eject.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+ResponseInstance = Backend.GetResponse(
+    CommandInstance, PortraitCORE8Channel.Eject.Response
+)
 # Eject some tips

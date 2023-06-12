@@ -2,14 +2,10 @@ import os
 import subprocess
 import threading
 from dataclasses import dataclass, field
-from typing import Any, TypeVar
-
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
+from typing import Any
 
 from ....Tools.AbstractClasses import SimpleBackendABC
 from ..UnchainedLabsCommand import UnchainedLabsCommandABC
-
-T = TypeVar("T", bound=CommandABC.Response)
 
 
 @dataclass
@@ -57,8 +53,8 @@ class StunnerBackend(SimpleBackendABC):
         ResponseInstance = UnchainedLabsCommandABC.ParseResponse(
             self.StunnerDLLObject.Request_Access()
         )
-        CommandInstance = CommandABC("Start Backend")
-        SimpleBackendABC.CheckExceptions(CommandInstance, ResponseInstance)
+        CommandInstance = UnchainedLabsCommandABC()
+        self.CheckExceptions(CommandInstance, ResponseInstance)
 
     def StopBackend(self):
         SimpleBackendABC.StopBackend(self)
@@ -66,8 +62,8 @@ class StunnerBackend(SimpleBackendABC):
         ResponseInstance = UnchainedLabsCommandABC.ParseResponse(
             self.StunnerDLLObject.Release_Access()
         )
-        CommandInstance = CommandABC("Start Backend")
-        SimpleBackendABC.CheckExceptions(CommandInstance, ResponseInstance)
+        CommandInstance = UnchainedLabsCommandABC()
+        self.CheckExceptions(CommandInstance, ResponseInstance)
 
     def ExecuteCommand(self, CommandInstance: UnchainedLabsCommandABC):
         SimpleBackendABC.ExecuteCommand(self, CommandInstance)

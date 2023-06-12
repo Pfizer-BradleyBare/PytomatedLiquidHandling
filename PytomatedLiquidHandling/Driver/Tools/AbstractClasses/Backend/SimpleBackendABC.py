@@ -2,15 +2,17 @@ from dataclasses import dataclass, field
 from typing import Type, TypeVar, cast
 
 from ..Command import CommandABC
+from ..Response import ResponseABC
 from .BackendABC import BackendABC
+from ..Exception import UnhandledException
 
-T = TypeVar("T", bound=CommandABC.Response)
+ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 
 @dataclass
 class SimpleBackendABC(BackendABC):
     CommandInstance: CommandABC | None = field(init=False, default=None)
-    ResponseInstance: CommandABC.Response | None = field(init=False, default=None)
+    ResponseInstance: ResponseABC | None = field(init=False, default=None)
 
     def ExecuteCommand(self, CommandInstance: CommandABC):
         BackendABC.ExecuteCommand(self, CommandInstance)
@@ -21,7 +23,7 @@ class SimpleBackendABC(BackendABC):
 
         self.CommandInstance = CommandInstance
 
-    def GetCommandStatus(self, CommandInstance: CommandABC) -> CommandABC.Response:
+    def GetCommandStatus(self, CommandInstance: CommandABC) -> ResponseABC:
         BackendABC.GetCommandStatus(self, CommandInstance)
         if self.CommandInstance is None:
             raise Exception(
@@ -33,7 +35,7 @@ class SimpleBackendABC(BackendABC):
                 "You can only get a status for the currently executing command."
             )
 
-        Response = CommandABC.Response({})
+        Response = ResponseABC({})
 
         if not self.ResponseInstance is None:
             Response.SetProperty("State", True)
@@ -55,24 +57,19 @@ class SimpleBackendABC(BackendABC):
         while self.GetCommandStatus(CommandInstance).GetState() != True:
             ...
 
-    @staticmethod
     def CheckExceptions(
-        CommandInstance: CommandABC, ResponseInstance: CommandABC.Response
+        self, CommandInstance: CommandABC, ResponseInstance: ResponseABC
     ):
         if ResponseInstance.GetState() == False:
-            if (
-                ResponseInstance.GetDetails()
-                in CommandInstance.ExceptionABC.__Exceptions
-            ):
-                raise CommandInstance.ExceptionABC.__Exceptions[
-                    ResponseInstance.GetDetails()
-                ](CommandInstance, ResponseInstance)
-            else:
-                raise CommandInstance.UnhandledException(
-                    CommandInstance, ResponseInstance
-                )
+            for Exception in self.Exceptions:
+                if Exception.ErrorCode in ResponseInstance.GetDetails():
+                    raise Exception(CommandInstance, ResponseInstance)
 
-    def GetResponse(self, CommandInstance: CommandABC, ResponseType: Type[T]) -> T:
+            raise UnhandledException(CommandInstance, ResponseInstance)
+
+    def GetResponse(
+        self, CommandInstance: CommandABC, ResponseType: Type[ResponseABCType]
+    ) -> ResponseABCType:
         BackendABC.GetResponse(self, CommandInstance, ResponseType)
         if self.CommandInstance is None:
             raise Exception(
@@ -92,6 +89,6 @@ class SimpleBackendABC(BackendABC):
         self.CommandInstance = None
         self.ResponseInstance = None
 
-        SimpleBackendABC.CheckExceptions(CommandInstance, Response)
+        self.CheckExceptions(CommandInstance, Response)
 
         return cast(ResponseType, Response)

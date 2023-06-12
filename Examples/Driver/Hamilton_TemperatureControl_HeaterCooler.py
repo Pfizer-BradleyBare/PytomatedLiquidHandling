@@ -21,7 +21,7 @@ Command = HeaterCooler.Connect.Command(
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(Command, Command.Response)
+Response = Backend.GetResponse(Command, HeaterCooler.Connect.Response)
 HeaterShakerHandleId = Response.GetHandleID()
 # Connect and get our Handle
 
@@ -34,7 +34,7 @@ Command = HeaterCooler.StartTemperatureControl.Command(
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(Command, Command.Response)
+Response = Backend.GetResponse(Command, HeaterCooler.StartTemperatureControl.Response)
 # Turn on the Heat
 
 TemperatureOffset = 2
@@ -44,7 +44,7 @@ for i in range(0, 1):
     )
     Backend.ExecuteCommand(Command)
     Backend.WaitForResponseBlocking(Command)
-    Backend.GetResponse(Command, Command.Response)
+    Backend.GetResponse(Command, StartTimer.Response)
 
     Command = HeaterCooler.GetTemperature.Command(
         OptionsInstance=HeaterCooler.GetTemperature.Options(
@@ -54,7 +54,7 @@ for i in range(0, 1):
     )
     Backend.ExecuteCommand(Command)
     Backend.WaitForResponseBlocking(Command)
-    Response = Backend.GetResponse(Command, Command.Response)
+    Response = Backend.GetResponse(Command, HeaterCooler.GetTemperature.Response)
 
     CurrentTemperature = Response.GetTemperature()
     LoggerInstance.debug("Current Temp: %f", CurrentTemperature)
@@ -72,7 +72,7 @@ Command = StartTimer.Command(
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(Command, Command.Response)
+Response = Backend.GetResponse(Command, StartTimer.Response)
 # run 30 seconds
 
 Command = HeaterCooler.StopTemperatureControl.Command(
@@ -83,7 +83,7 @@ Command = HeaterCooler.StopTemperatureControl.Command(
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(Command, Command.Response)
+Response = Backend.GetResponse(Command, HeaterCooler.StopTemperatureControl.Response)
 # Turn off heat
 
 # Done!

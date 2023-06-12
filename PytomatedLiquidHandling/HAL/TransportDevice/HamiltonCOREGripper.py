@@ -49,7 +49,9 @@ class HamiltonCOREGripper(TransportDevice):
             )
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-            self.BackendInstance.GetResponse(CommandInstance, CommandInstance.Response)
+            self.BackendInstance.GetResponse(
+                CommandInstance, COREGripperDriver.GetPlate.Response
+            )
 
         except:
             ...
@@ -69,7 +71,9 @@ class HamiltonCOREGripper(TransportDevice):
             )
             self.BackendInstance.ExecuteCommand(CommandInstance)
             self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-            self.BackendInstance.GetResponse(CommandInstance, CommandInstance.Response)
+            self.BackendInstance.GetResponse(
+                CommandInstance, COREGripperDriver.PlacePlate.Response
+            )
 
         except:
             ...

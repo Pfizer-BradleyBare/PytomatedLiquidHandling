@@ -10,49 +10,6 @@ CommandSelf = TypeVar("CommandSelf", bound="HamiltonCommandABC")
 
 @dataclass(kw_only=True)
 class HamiltonCommandABC(CommandABC):
-    @dataclass
-    class Response(CommandABC.Response):
-        def Decorator_ExpectedResponseProperty(
-            *, SuccessProperty: bool = False, ErrorProperty: bool = False
-        ):
-            def Decorator_inner(DecoratedFunction):
-                Function = CommandABC.Response.Decorator_ExpectedResponseProperty(
-                    DecoratedFunction
-                )
-
-                if SuccessProperty == True:
-                    Function.Decorated_ExpectedSuccessResponseProperty = True
-
-                if ErrorProperty == True:
-                    Function.Decorated_ExpectedErrorResponseProperty = True
-                return Function
-
-            return Decorator_inner
-
-        @classmethod
-        def GetExpectedSuccessResponseProperties(cls) -> list[str]:
-            Out = ["State", "Details"]
-
-            for Name in dir(cls):
-                if hasattr(
-                    getattr(cls, Name), "Decorated_ExpectedSuccessResponseProperty"
-                ):
-                    Out.append(Name.replace("Get", ""))
-
-            return Out
-
-        @classmethod
-        def GetExpectedErrorResponseProperties(cls) -> list[str]:
-            Out = ["State", "Details"]
-
-            for Name in dir(cls):
-                if hasattr(
-                    getattr(cls, Name), "Decorated_ExpectedErrorResponseProperty"
-                ):
-                    Out.append(Name.replace("Get", ""))
-
-            return Out
-
     Identifier: str | int = field(default="None")
     CustomErrorHandling: bool
 
@@ -88,10 +45,3 @@ class HamiltonCommandABC(CommandABC):
 
         else:
             return {}
-
-    class Exception_NoOptionsInTracker(
-        CommandABC.ExceptionABC[CommandSelf, CommandABC.Response]
-    ):
-        @classmethod
-        def DetailsErrorValue(cls) -> str | int:
-            return "There are no options in the options tracker."

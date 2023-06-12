@@ -18,12 +18,12 @@ Backend.StartBackend()
 Command = OpenTray.Command()
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Backend.GetResponse(Command, Command.Response)
+Backend.GetResponse(Command, OpenTray.Response)
 
 Command = CloseTray.Command()
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Backend.GetResponse(Command, Command.Response)
+Backend.GetResponse(Command, CloseTray.Response)
 
 Backend.StopBackend()
 # Done!

@@ -25,7 +25,7 @@ CommandInstance = FTR.LoadTips.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+ResponseInstance = Backend.GetResponse(CommandInstance, FTR.LoadTips.Response)
 # Load the tips on the deck. This makes sure the tip sequence is setup correctly
 
 CommandInstance = FTR.GetTipPositions.Command(
@@ -37,7 +37,7 @@ CommandInstance = FTR.GetTipPositions.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+ResponseInstance = Backend.GetResponse(CommandInstance, FTR.GetTipPositions.Response)
 TipPositions = ResponseInstance.GetTipPositions()
 # Get the tip positions for our tip pickup
 
@@ -47,7 +47,7 @@ CommandInstance = CORE96Head.Pickup.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+ResponseInstance = Backend.GetResponse(CommandInstance, CORE96Head.Pickup.Response)
 # pickup some tips
 
 CommandInstance = CORE96Head.Aspirate.Command(
@@ -60,7 +60,7 @@ CommandInstance = CORE96Head.Aspirate.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+ResponseInstance = Backend.GetResponse(CommandInstance, CORE96Head.Aspirate.Response)
 # Aspirate some liquid
 
 CommandInstance = CORE96Head.Dispense.Command(
@@ -73,7 +73,7 @@ CommandInstance = CORE96Head.Dispense.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+ResponseInstance = Backend.GetResponse(CommandInstance, CORE96Head.Dispense.Response)
 # Dispense some liquid
 
 CommandInstance = CORE96Head.Eject.Command(
@@ -82,5 +82,5 @@ CommandInstance = CORE96Head.Eject.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, CommandInstance.Response)
+ResponseInstance = Backend.GetResponse(CommandInstance, CORE96Head.Eject.Response)
 # Eject some tips

@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from typing import Type, TypeVar
 
-from ...Driver.Tools.AbstractClasses import BackendABC, CommandABC
+from ...Driver.Tools.AbstractClasses import BackendABC, CommandABC, ResponseABC
 
-T = TypeVar("T", bound=CommandABC.Response)
+ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 
 @dataclass
@@ -17,11 +17,13 @@ class NullBackend(BackendABC):
     def ExecuteCommand(self, CommandInstance: CommandABC):
         ...
 
-    def GetCommandStatus(self, CommandInstance: CommandABC) -> CommandABC.Response:
+    def GetCommandStatus(self, CommandInstance: CommandABC) -> ResponseABC:
         ...
 
     def WaitForResponseBlocking(self, CommandInstance: CommandABC):
         ...
 
-    def GetResponse(self, CommandInstance: CommandABC, ResponseType: Type[T]) -> T:
+    def GetResponse(
+        self, CommandInstance: CommandABC, ResponseType: Type[ResponseABCType]
+    ) -> ResponseABCType:
         ...
