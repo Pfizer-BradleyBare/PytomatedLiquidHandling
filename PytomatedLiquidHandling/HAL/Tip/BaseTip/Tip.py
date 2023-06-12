@@ -11,7 +11,7 @@ class Tip(InterfaceABC, UniqueObjectABC):
     PickupSequence: str
     MaxVolume: float
 
-    TipPositions: list[int] = field(init=False, default=list())
+    TipPositions: list[int] = field(init=False, default_factory=list)
     RemainingTips: int = field(init=False, default=0)
 
     @abstractmethod
