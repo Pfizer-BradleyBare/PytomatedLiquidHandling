@@ -3,7 +3,7 @@ import yaml
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker, NonPipettableLabware
 from ..LidStorage import LidStorageTracker, RandomAccessLidStorage
-from .BaseLidStorage import ReservableLid
+from ..LayoutItem import Lid, LayoutItemTracker
 
 
 def LoadYaml(
@@ -26,9 +26,6 @@ def LoadYaml(
             UniqueIdentifier = Storage["Unique Identifier"]
 
             if StorageTypeID == "Random Access Lid Storage":
-
-                LidStorageInstance = RandomAccessLidStorage(UniqueIdentifier)
-
                 LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
                     Storage["Lid Labware"]
                 )
@@ -37,20 +34,25 @@ def LoadYaml(
                     raise Exception("Wrong labware")
 
                 LidCount = 1
+                ReservableLidTrackerInstance = LayoutItemTracker()
                 for LidPosition in Storage["Lid Positions"]:
                     Sequence = LidPosition["Sequence"]
                     DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
                         LidPosition["Deck Location"]
                     )
 
-                    LidStorageInstance.LoadSingle(
-                        ReservableLid(
+                    ReservableLidTrackerInstance.LoadSingle(
+                        Lid(
                             StorageTypeID + " -> Lid Position #" + str(LidCount),
                             Sequence,
-                            LidLabwareInstance,
                             DeckLocationInstance,
+                            LidLabwareInstance,
                         )
                     )
+
+                LidStorageInstance = RandomAccessLidStorage(
+                    UniqueIdentifier, ReservableLidTrackerInstance
+                )
 
             else:
                 raise Exception("Storage Type not found. Try agian.")

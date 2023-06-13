@@ -2,40 +2,43 @@ from PytomatedLiquidHandling.HAL.LayoutItem import Lid
 
 from ..LayoutItem import Lid
 from .BaseLidStorage import LidReservation, LidStorage
+from dataclasses import dataclass
 
 
+@dataclass
 class RandomAccessLidStorage(LidStorage):
-    def __init__(self, UniqueIdentifier: str):
-        LidStorage.__init__(self, UniqueIdentifier)
-
     def Reserve(self, UniqueIdentifier: str) -> Lid:
-        if self.__CheckReservationExists(UniqueIdentifier) == True:
+        if self.CheckReservationExists(UniqueIdentifier) == True:
             raise Exception(
                 "Lid reservation with this UniqueIdentifier already found. Use a different ID."
             )
 
+        Lids = lambda l: [i.LidInstance for i in l]
         AvailableLids = [
             Lid
-            for Lid in self.GetObjectsAsList()
-            if Lid not in self.LidReservationTrackerInstance.GetObjectsAsList()
+            for Lid in self.ReservableLidTrackerInstance.GetObjectsAsList()
+            if Lid not in Lids(self.LidReservationTrackerInstance.GetObjectsAsList())
         ]
 
         if len(AvailableLids) == 0:
             raise Exception("No more lid storage positions available")
 
-        ReservableLidInstance = AvailableLids[0]
+        LidInstance = AvailableLids[0]
+        if not isinstance(LidInstance, Lid):
+            raise Exception("This should never happen")
+
         self.LidReservationTrackerInstance.LoadSingle(
-            LidReservation(UniqueIdentifier, ReservableLidInstance)
+            LidReservation(UniqueIdentifier, LidInstance)
         )
 
-        return ReservableLidInstance
+        return LidInstance
 
     def PreTransportCheck(self, UniqueIdentifier: str):
-        if self.__CheckReservationExists(UniqueIdentifier) == False:
+        if self.CheckReservationExists(UniqueIdentifier) == False:
             raise Exception("No lid storage reservation found. Please reserve first.")
 
     def Release(self, UniqueIdentifier: str):
-        if self.__CheckReservationExists(UniqueIdentifier) == False:
+        if self.CheckReservationExists(UniqueIdentifier) == False:
             raise Exception("No lid storage reservation found. Please reserve first.")
 
         self.LidReservationTrackerInstance.UnloadSingle(

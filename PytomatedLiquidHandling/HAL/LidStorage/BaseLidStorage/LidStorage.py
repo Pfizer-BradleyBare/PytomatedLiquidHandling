@@ -1,23 +1,18 @@
 from abc import abstractmethod
-
-from ....Tools.AbstractClasses import (
-    NonUniqueObjectTrackerABC,
-    UniqueObjectABC,
-    UniqueObjectTrackerABC,
-)
-from ...LayoutItem import Lid
-from .LidReservation import LidReservation, ReservableLid
+from dataclasses import dataclass, field
+from ....Tools.AbstractClasses import UniqueObjectABC
+from ...LayoutItem import Lid, LayoutItemTracker
+from .LidReservation import LidReservationTracker
 
 
-class LidStorage(UniqueObjectABC, NonUniqueObjectTrackerABC[ReservableLid]):
-    def __init__(
-        self,
-        UniqueIdentifier: str,
-    ):
-        UniqueObjectABC.__init__(self, UniqueIdentifier)
-        self.LidReservationTrackerInstance = UniqueObjectTrackerABC[LidReservation]()
+@dataclass
+class LidStorage(UniqueObjectABC):
+    ReservableLidTrackerInstance: LayoutItemTracker
+    LidReservationTrackerInstance: LidReservationTracker = field(
+        init=False, default=LidReservationTracker()
+    )
 
-    def __CheckReservationExists(self, UniqueIdentifier: str) -> bool:
+    def CheckReservationExists(self, UniqueIdentifier: str) -> bool:
         try:
             self.LidReservationTrackerInstance.GetObjectByName(UniqueIdentifier)
             return True
