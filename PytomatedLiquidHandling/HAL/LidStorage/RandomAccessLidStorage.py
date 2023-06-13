@@ -13,11 +13,14 @@ class RandomAccessLidStorage(LidStorage):
                 "Lid reservation with this UniqueIdentifier already found. Use a different ID."
             )
 
-        Lids = lambda l: [i.LidInstance for i in l]
         AvailableLids = [
             Lid
             for Lid in self.ReservableLidTrackerInstance.GetObjectsAsList()
-            if Lid not in Lids(self.LidReservationTrackerInstance.GetObjectsAsList())
+            if Lid
+            not in [
+                Reservation.LidInstance
+                for Reservation in self.LidReservationTrackerInstance.GetObjectsAsList()
+            ]
         ]
 
         if len(AvailableLids) == 0:
