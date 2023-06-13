@@ -20,9 +20,3 @@ class DeckLoadingConfig:
         self.CarrierTrackEnd: int = CarrierTrackEnd
         self.CarrierType: CarrierTypes = CarrierType
         self.CarrierPositions: str = CarrierPositions
-
-    def GetCarrierLabwareString(self) -> str:
-        return self.CarrierLabwareString
-
-    def GetCarrierPositions(self) -> str:
-        return self.CarrierPositions
