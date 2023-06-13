@@ -36,17 +36,13 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
                     )
                 )
 
-        try:
-            Command = FlipTubeDriver.Open.Command(
-                OptionsTrackerInstance=OptionsTrackerInstance,
-                CustomErrorHandling=self.CustomErrorHandling,
-            )
-            self.BackendInstance.ExecuteCommand(Command)
-            self.BackendInstance.WaitForResponseBlocking(Command)
-            self.BackendInstance.GetResponse(Command, FlipTubeDriver.Open.Response)
-
-        except:
-            ...
+        Command = FlipTubeDriver.Open.Command(
+            OptionsTrackerInstance=OptionsTrackerInstance,
+            CustomErrorHandling=self.CustomErrorHandling,
+        )
+        self.BackendInstance.ExecuteCommand(Command)
+        self.BackendInstance.WaitForResponseBlocking(Command)
+        self.BackendInstance.GetResponse(Command, FlipTubeDriver.Open.Response)
 
     def Close(
         self,
@@ -68,16 +64,10 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
                     )
                 )
 
-        try:
-            Command = FlipTubeDriver.CloseSpecial.Command(
-                OptionsTrackerInstance=OptionsTrackerInstance,
-                CustomErrorHandling=self.CustomErrorHandling,
-            )
-            self.BackendInstance.ExecuteCommand(Command)
-            self.BackendInstance.WaitForResponseBlocking(Command)
-            self.BackendInstance.GetResponse(
-                Command, FlipTubeDriver.CloseSpecial.Response
-            )
-
-        except:
-            ...
+        Command = FlipTubeDriver.CloseSpecial.Command(
+            OptionsTrackerInstance=OptionsTrackerInstance,
+            CustomErrorHandling=self.CustomErrorHandling,
+        )
+        self.BackendInstance.ExecuteCommand(Command)
+        self.BackendInstance.WaitForResponseBlocking(Command)
+        self.BackendInstance.GetResponse(Command, FlipTubeDriver.CloseSpecial.Response)
