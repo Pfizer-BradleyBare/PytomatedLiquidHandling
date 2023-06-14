@@ -15,11 +15,13 @@
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Vacuum\\Vacuum.hs_"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLTrcLib.hsl"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\DeckLoadingDialog\\5 Position FTR Carrier\\5PositionFTRCarrier.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\DeckLoadingDialog\\5 Position Plate Carrier\\5PositionPlateCarrier.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\StateServerEndpoints\\StateServerEndpoints.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\Logger\\Logger.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\DeckLoadingDialog\\DeckLoadingDialog.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\CuttedTipType\\CuttedTipType.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\LabwareAccess\\LabwareAccess.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\LiquidClasses\\LiquidClasses.hs_"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -62,11 +64,13 @@ NTR::_InitLibrary();
 GRIPPER::_InitLibrary();
 IPG::_InitLibrary();
 VACUUM::_InitLibrary();
-_5POSITIONFTRCARRIER::_InitLibrary();
-_5POSITIONPLATECARRIER::_InitLibrary();
 ACTIONSERVERENDPOINTS::_InitLibrary();
 STATESERVERENDPOINTS::_InitLibrary();
 LOGGER::_InitLibrary();
+DECKLOADINGDIALOG::_InitLibrary();
+CUTTEDTIPTYPE::_InitLibrary();
+LABWAREACCESS::_InitLibrary();
+LIQUIDCLASSES::_InitLibrary();
 // }} ""
 }
 function _ExitLibrary() {
@@ -83,11 +87,13 @@ NTR::_ExitLibrary();
 GRIPPER::_ExitLibrary();
 IPG::_ExitLibrary();
 VACUUM::_ExitLibrary();
-_5POSITIONFTRCARRIER::_ExitLibrary();
-_5POSITIONPLATECARRIER::_ExitLibrary();
 ACTIONSERVERENDPOINTS::_ExitLibrary();
 STATESERVERENDPOINTS::_ExitLibrary();
 LOGGER::_ExitLibrary();
+DECKLOADINGDIALOG::_ExitLibrary();
+CUTTEDTIPTYPE::_ExitLibrary();
+LABWAREACCESS::_ExitLibrary();
+LIQUIDCLASSES::_ExitLibrary();
 // }} ""
 }
 // {{{ 5 "ServeRequest" "Begin"
@@ -117,227 +123,271 @@ ModuleName = JSONPARSER::GetJSONElement(EndpointOutputDataJSONObject, Translate(
 // {{{ 17 1 0 "1acbdebf_eb3d_41e0_9fc5a7f57108ef7f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 CommandName = JSONPARSER::GetJSONElement(EndpointOutputDataJSONObject, Translate("Command Name:"));
 // }} ""
-// {{ 18 1 0 "7b632f16_16be_4d54_9e539ff59a017dca" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 18 1 0 "b04dae7d_dffa_4577_928586ba056b7d19" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 19 1 0 "ccd6201f_ea40_427b_b1e821d052d5477c" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 19 1 0 "b512ed34_4d0f_49f2_85e95fb6ae38d2ce" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (ModuleName == "Hamilton ClosedContainer FlipTube")
 {
 // }} ""
-// {{{ 20 1 0 "b8908b0d_ded3_4ef4_b547d7a8f2af316e" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 20 1 0 "cfbd5d3a_9c84_4eae_b1aa0e64add50223" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 FLIPTUBE::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 21 1 0 "29c672f1_e9d0_471a_b556e05023703116" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 21 1 0 "6630fce1_929a_459f_9ed5f8042e038cc4" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 22 1 0 "ccd6201f_ea40_427b_b1e821d052d5477c" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 22 1 0 "b512ed34_4d0f_49f2_85e95fb6ae38d2ce" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 23 1 0 "7b632f16_16be_4d54_9e539ff59a017dca" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 23 1 0 "b04dae7d_dffa_4577_928586ba056b7d19" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 24 1 0 "cd5dff4c_a48d_42d3_abd84dabdeb4551f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 24 1 0 "9746af3f_6bc7_43d3_99f8b4cb87db7d36" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 25 1 0 "d97d64a7_24a3_45f5_abe5a9be21c30dd6" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (ModuleName == "Hamilton DeckLoadingDialog FTR5Position")
+// {{ 25 1 0 "bf092af7_0700_41aa_8fe2150e91843159" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (ModuleName == "Hamilton CuttedTipType")
 {
 // }} ""
-// {{{ 26 1 0 "60211bae_9987_4df2_be3c2d5699e64142" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-_5POSITIONFTRCARRIER::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
+// {{{ 26 1 0 "7a03862c_d950_4aa0_ba134c1f9924ccad" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CUTTEDTIPTYPE::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 27 1 0 "862b2f67_b56f_4531_a25e9132e387462e" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 27 1 0 "ae889e6a_e931_4d39_bc5903da6d9b8ddf" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 28 1 0 "d97d64a7_24a3_45f5_abe5a9be21c30dd6" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 28 1 0 "bf092af7_0700_41aa_8fe2150e91843159" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 29 1 0 "03562769_e8ac_4a67_a37795069890fe6a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (ModuleName == "Hamilton DeckLoadingDialog Plate5Position")
+// {{ 29 1 0 "9746af3f_6bc7_43d3_99f8b4cb87db7d36" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 30 1 0 "f4b88f35_fbca_443a_8ba6a242998608a3" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 31 1 0 "4c63f2cf_7076_43c1_a0d76c77f54fa4b4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (ModuleName == "Hamilton LabwareAccess")
 {
 // }} ""
-// {{{ 30 1 0 "b9f78777_45fd_4768_9f480b3865fe3684" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-_5POSITIONPLATECARRIER::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
+// {{{ 32 1 0 "e9f58757_8558_4493_9386b87c59b13d34" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LABWAREACCESS::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 31 1 0 "8a3c49eb_1e59_46bb_842c30a83cae3e42" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 33 1 0 "1c9652c9_da18_4044_a98c9da2aa749397" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 32 1 0 "03562769_e8ac_4a67_a37795069890fe6a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 34 1 0 "4c63f2cf_7076_43c1_a0d76c77f54fa4b4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 33 1 0 "cd5dff4c_a48d_42d3_abd84dabdeb4551f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 35 1 0 "f4b88f35_fbca_443a_8ba6a242998608a3" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 34 1 0 "e7c554b9_fa95_4ea1_86e8fd830d0624ba" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 36 1 0 "b133e608_3c43_43fd_8daf82247e7ab1dd" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 35 1 0 "2259f410_c0e7_46ba_a71d2ee248843d93" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 37 1 0 "af7ffaba_75a1_4daf_9cfa0bb533eafbac" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (ModuleName == "Hamilton LiquidClass")
+{
+// }} ""
+// {{{ 38 1 0 "3385cb4f_c959_49e8_ae74fa5a85053b51" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LIQUIDCLASSES::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 39 1 0 "29c672f1_e9d0_471a_b556e05023703116" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 40 1 0 "af7ffaba_75a1_4daf_9cfa0bb533eafbac" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 41 1 0 "b133e608_3c43_43fd_8daf82247e7ab1dd" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 42 1 0 "cd5dff4c_a48d_42d3_abd84dabdeb4551f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 43 1 0 "01740a45_1200_45a0_b69b70bcd0e35d59" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (ModuleName == "Hamilton DeckLoadingDialog")
+{
+// }} ""
+// {{{ 44 1 0 "ac1f522a_d577_45da_b4a6d3fd9892114b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+DECKLOADINGDIALOG::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 45 1 0 "8a3c49eb_1e59_46bb_842c30a83cae3e42" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 46 1 0 "01740a45_1200_45a0_b69b70bcd0e35d59" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 47 1 0 "cd5dff4c_a48d_42d3_abd84dabdeb4551f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 48 1 0 "e7c554b9_fa95_4ea1_86e8fd830d0624ba" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 49 1 0 "2259f410_c0e7_46ba_a71d2ee248843d93" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (ModuleName == "Hamilton Pipette PortraitCORE8Channel")
 {
 // }} ""
-// {{{ 36 1 0 "d131fe0d_1c54_4378_a7a1aacb248e978a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 50 1 0 "d131fe0d_1c54_4378_a7a1aacb248e978a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 _8CHANNEL::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 37 1 0 "3704dedc_4752_4729_abfe9d30e8a1779f" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 51 1 0 "3704dedc_4752_4729_abfe9d30e8a1779f" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 38 1 0 "2259f410_c0e7_46ba_a71d2ee248843d93" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 52 1 0 "2259f410_c0e7_46ba_a71d2ee248843d93" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 39 1 0 "9d3b09c2_19d5_41c6_b93a4ef23d17ffeb" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 53 1 0 "9d3b09c2_19d5_41c6_b93a4ef23d17ffeb" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (ModuleName == "Hamilton Pipette CORE96Head")
 {
 // }} ""
-// {{{ 40 1 0 "b1413362_946a_47f6_8c3104ba4e9942be" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 54 1 0 "b1413362_946a_47f6_8c3104ba4e9942be" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 _96CHANNEL::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 41 1 0 "f97e7ee2_635c_4c92_af15cb0b112c5a6a" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 55 1 0 "f97e7ee2_635c_4c92_af15cb0b112c5a6a" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 42 1 0 "9d3b09c2_19d5_41c6_b93a4ef23d17ffeb" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 56 1 0 "9d3b09c2_19d5_41c6_b93a4ef23d17ffeb" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 43 1 0 "e7c554b9_fa95_4ea1_86e8fd830d0624ba" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 57 1 0 "e7c554b9_fa95_4ea1_86e8fd830d0624ba" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 44 1 0 "5b1467a0_683a_400b_8fe0d969ec8b4090" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 58 1 0 "5b1467a0_683a_400b_8fe0d969ec8b4090" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 45 1 0 "17b357ac_fae1_4807_81cf63de79d029e4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 59 1 0 "17b357ac_fae1_4807_81cf63de79d029e4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (ModuleName == "Hamilton TemperatureControl HeaterCooler")
 {
 // }} ""
-// {{{ 46 1 0 "81484ddd_c67d_44b4_be78bf02d7544f3e" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 60 1 0 "81484ddd_c67d_44b4_be78bf02d7544f3e" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 HEATERCOOLER::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 47 1 0 "14aefac1_a592_4c5f_8850c987b6395060" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 61 1 0 "14aefac1_a592_4c5f_8850c987b6395060" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 48 1 0 "17b357ac_fae1_4807_81cf63de79d029e4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 62 1 0 "17b357ac_fae1_4807_81cf63de79d029e4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 49 1 0 "874cd745_2ef8_4875_9231fbdfb32c39da" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 63 1 0 "874cd745_2ef8_4875_9231fbdfb32c39da" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (ModuleName == "Hamilton TemperatureControl HeaterShaker")
 {
 // }} ""
-// {{{ 50 1 0 "ebcc8c23_2c27_45eb_b8c5f4d1b621a680" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 64 1 0 "ebcc8c23_2c27_45eb_b8c5f4d1b621a680" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 HEATERSHAKER::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 51 1 0 "7f7acb59_4009_45e9_9a6f507c86b9d159" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 65 1 0 "7f7acb59_4009_45e9_9a6f507c86b9d159" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 52 1 0 "874cd745_2ef8_4875_9231fbdfb32c39da" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 66 1 0 "874cd745_2ef8_4875_9231fbdfb32c39da" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 53 1 0 "5b1467a0_683a_400b_8fe0d969ec8b4090" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 67 1 0 "5b1467a0_683a_400b_8fe0d969ec8b4090" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 54 1 0 "91cf29a4_2b99_408e_bcc03253c204fc60" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 68 1 0 "91cf29a4_2b99_408e_bcc03253c204fc60" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 55 1 0 "720aeb1c_74d4_4e4e_84d80a110edb59db" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 69 1 0 "720aeb1c_74d4_4e4e_84d80a110edb59db" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (ModuleName == "Hamilton Timer")
 {
 // }} ""
-// {{{ 56 1 0 "a673a7b6_f0da_44a8_9e85c66849467828" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 70 1 0 "a673a7b6_f0da_44a8_9e85c66849467828" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 TIMER::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 57 1 0 "03df8295_6984_4fe9_af2013d634904ca7" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 71 1 0 "03df8295_6984_4fe9_af2013d634904ca7" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 58 1 0 "720aeb1c_74d4_4e4e_84d80a110edb59db" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 72 1 0 "720aeb1c_74d4_4e4e_84d80a110edb59db" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 59 1 0 "91cf29a4_2b99_408e_bcc03253c204fc60" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 73 1 0 "91cf29a4_2b99_408e_bcc03253c204fc60" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 60 1 0 "34417adc_a51c_44e4_bc34f81e5fb3a018" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 74 1 0 "34417adc_a51c_44e4_bc34f81e5fb3a018" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 61 1 0 "d7547067_58e5_48bf_99f68a194a142fbc" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 75 1 0 "d7547067_58e5_48bf_99f68a194a142fbc" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (ModuleName == "Hamilton Tip FTR")
 {
 // }} ""
-// {{{ 62 1 0 "c810f7a7_0e70_4f32_b9126e262c303454" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 76 1 0 "c810f7a7_0e70_4f32_b9126e262c303454" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 FTR::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 63 1 0 "926e171f_0b61_431d_8ac015cb11a18e54" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 77 1 0 "926e171f_0b61_431d_8ac015cb11a18e54" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 64 1 0 "d7547067_58e5_48bf_99f68a194a142fbc" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 78 1 0 "d7547067_58e5_48bf_99f68a194a142fbc" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 65 1 0 "ce22dc71_e877_4e4f_9ff2336c00de53c2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 79 1 0 "ce22dc71_e877_4e4f_9ff2336c00de53c2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (ModuleName == "Hamilton Tip NTR")
 {
 // }} ""
-// {{{ 66 1 0 "24790ab2_2ccd_4b30_a0bae1e70ce739c5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 80 1 0 "24790ab2_2ccd_4b30_a0bae1e70ce739c5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 NTR::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 67 1 0 "6e940c5b_a7da_4e6b_bb7c7acbc299d65e" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 81 1 0 "6e940c5b_a7da_4e6b_bb7c7acbc299d65e" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 68 1 0 "ce22dc71_e877_4e4f_9ff2336c00de53c2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 82 1 0 "ce22dc71_e877_4e4f_9ff2336c00de53c2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 69 1 0 "34417adc_a51c_44e4_bc34f81e5fb3a018" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 83 1 0 "34417adc_a51c_44e4_bc34f81e5fb3a018" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 70 1 0 "36d56d88_458d_4c2f_87cc70c4b1abec80" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 84 1 0 "36d56d88_458d_4c2f_87cc70c4b1abec80" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 71 1 0 "ae9dd340_c6e1_4d63_bf16f4818f32b470" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 85 1 0 "ae9dd340_c6e1_4d63_bf16f4818f32b470" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (ModuleName == "Hamilton Transport COREGripper")
 {
 // }} ""
-// {{{ 72 1 0 "d6d11152_07a7_476c_8b1b4b3a1bb8908a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 86 1 0 "d6d11152_07a7_476c_8b1b4b3a1bb8908a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 GRIPPER::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 73 1 0 "449ca4d8_8005_4872_a4f9a8695937b0ab" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 87 1 0 "449ca4d8_8005_4872_a4f9a8695937b0ab" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 74 1 0 "ae9dd340_c6e1_4d63_bf16f4818f32b470" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 88 1 0 "ae9dd340_c6e1_4d63_bf16f4818f32b470" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 75 1 0 "86552cf2_cefa_4c9c_96eb8e3f47399942" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 89 1 0 "86552cf2_cefa_4c9c_96eb8e3f47399942" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (ModuleName == "Hamilton Transport IPG")
 {
 // }} ""
-// {{{ 76 1 0 "e7ca0682_4f8c_49cb_b0c65d7febba60c4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 90 1 0 "e7ca0682_4f8c_49cb_b0c65d7febba60c4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 IPG::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 77 1 0 "499cd506_a65a_4c8b_a15385ab93b1a254" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 91 1 0 "499cd506_a65a_4c8b_a15385ab93b1a254" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 78 1 0 "86552cf2_cefa_4c9c_96eb8e3f47399942" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 92 1 0 "86552cf2_cefa_4c9c_96eb8e3f47399942" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 79 1 0 "36d56d88_458d_4c2f_87cc70c4b1abec80" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 93 1 0 "36d56d88_458d_4c2f_87cc70c4b1abec80" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 80 1 0 "8c17740a_68de_41d8_a498f1c710906a12" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 94 1 0 "8c17740a_68de_41d8_a498f1c710906a12" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 81 1 0 "3a23b804_96a2_4449_b7706631d3340a0a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 95 1 0 "3a23b804_96a2_4449_b7706631d3340a0a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (ModuleName == "Hamilton Vacuum")
 {
 // }} ""
-// {{{ 82 1 0 "f915fac6_6957_48a6_a763e67a60d8fdbf" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 96 1 0 "f915fac6_6957_48a6_a763e67a60d8fdbf" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 VACUUM::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 83 1 0 "cf213aae_2575_4f33_8b96fd5f69cc9058" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 97 1 0 "cf213aae_2575_4f33_8b96fd5f69cc9058" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 84 1 0 "3a23b804_96a2_4449_b7706631d3340a0a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 98 1 0 "3a23b804_96a2_4449_b7706631d3340a0a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 85 1 0 "8c17740a_68de_41d8_a498f1c710906a12" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 99 1 0 "8c17740a_68de_41d8_a498f1c710906a12" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 86 1 0 "ca74bf1a_48d2_4156_a6deb007be3e829e" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+// {{ 100 1 0 "ca74bf1a_48d2_4156_a6deb007be3e829e" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
 MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nModule not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
 // }} ""
-// {{ 87 1 0 "bbf7be84_03c5_4ecb_beca057072fffd9d" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+// {{ 101 1 0 "bbf7be84_03c5_4ecb_beca057072fffd9d" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
 abort;
 // }} ""
 // {{{ 5 "ServeRequest" "End"
@@ -389,30 +439,30 @@ private variable IsReady;
 private variable None;
 // {{ 5 "StateServerProcess" "InitLocals"
 // }} ""
-// {{ 89 1 0 "e729d1ce_823e_43e9_8b5e16a3cb81d25c" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 103 1 0 "e729d1ce_823e_43e9_8b5e16a3cb81d25c" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
 {
 None = 0;
 while ("Infinite" == "Infinite")
 {
 None = None + 1;
 // }} ""
-// {{{ 90 1 0 "4abc0d2c_84dd_4bdf_a32ddcd6479f6d46" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 104 1 0 "4abc0d2c_84dd_4bdf_a32ddcd6479f6d46" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 IsReady = STATESERVERENDPOINTS::GetNextCommand(600, JSONObject);
 // }} ""
-// {{ 91 1 0 "f4355d72_6f13_4dc6_a6be8bc6a73a346a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 105 1 0 "f4355d72_6f13_4dc6_a6be8bc6a73a346a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (IsReady != 0)
 {
 // }} ""
-// {{{ 92 1 0 "760ac631_e602_4189_86c761863232b5e7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 106 1 0 "760ac631_e602_4189_86c761863232b5e7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 LOGGER::TraceComment(Translate("State Server Command Processing"));
 // }} ""
-// {{{ 93 1 0 "f1d53863_0fdf_4180_a987148358f7aff6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 107 1 0 "f1d53863_0fdf_4180_a987148358f7aff6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ServeRequest(ML_STAR, JSONObject);
 // }} ""
-// {{ 94 1 0 "f4355d72_6f13_4dc6_a6be8bc6a73a346a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 108 1 0 "f4355d72_6f13_4dc6_a6be8bc6a73a346a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 95 1 0 "e729d1ce_823e_43e9_8b5e16a3cb81d25c" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 109 1 0 "e729d1ce_823e_43e9_8b5e16a3cb81d25c" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
 }
 }
 // }} ""
@@ -437,4 +487,4 @@ ACTIONSERVERENDPOINTS::ServerKill();
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-06-01 15:50$$checksum=27ace415$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-06-14 13:06$$checksum=dcf83bc9$$length=084$$
