@@ -20,10 +20,14 @@
  namespace _Method { #include "HSL_LiquidClassLib.hsl" } 
  namespace _ActionServer { #include "HSL_LiquidClassLib.hsl" } 
  namespace _StateServer { #include "HSL_LiquidClassLib.hsl" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_" } 
+ namespace _ActionServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_" } 
+ namespace _StateServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_" } 
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable ActionServer;
 variable StateServer;
 global device ML_STAR ("PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\Layout\\Temp\\ExampleLayout.lay", "ML_STAR", hslTrue);
+object In;
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
  namespace _Method { #include "HSLMETEDLib.hs_" } 
@@ -44,7 +48,7 @@ global device ML_STAR ("PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver
 // {{{ 3 "tfn_ActionServer" "0"
 namespace _ActionServer{ function tfn_ActionServer () {
 // }} ""
-// {{{ 6 2 0 "e962a5d8_5fba_46ba_be2bd191edd912ee" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 7 2 0 "e962a5d8_5fba_46ba_be2bd191edd912ee" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 DRIVER::ActionServerProcess(ML_STAR);
 // }} ""
 // {{{ 3 "tfn_ActionServer" "1"
@@ -53,7 +57,7 @@ DRIVER::ActionServerProcess(ML_STAR);
 // {{{ 3 "tfn_StateServer" "0"
 namespace _StateServer{ function tfn_StateServer () {
 // }} ""
-// {{{ 7 3 0 "43e66842_dd2d_4568_b1d92b7cf817fb6d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 8 3 0 "43e66842_dd2d_4568_b1d92b7cf817fb6d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 DRIVER::StateServerProcess(ML_STAR);
 // }} ""
 // {{{ 3 "tfn_StateServer" "1"
@@ -80,6 +84,7 @@ PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
 PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
 DRIVER::_InitLibrary();
 LOGGER::_InitLibrary();
+JSONPARSER::_InitLibrary();
 ::RegisterAbortHandler( "OnAbort");
 // }} ""
 // {{ 1 1 0 "62ffc1ee_87f1_4777_bdbf6988152c0a4d" "ML_STAR:{1C0C0CB0-7C87-11D3-AD83-0004ACB1DCB2}"
@@ -88,23 +93,26 @@ LOGGER::_InitLibrary();
 	arrRetValues = ML_STAR._1C0C0CB0_7C87_11D3_AD83_0004ACB1DCB2("62ffc1ee_87f1_4777_bdbf6988152c0a4d"); // Initialize
 }
 // }} ""
-// {{{ 2 1 0 "3c7d2db7_3ef4_4ca5_b3aaab38d91437dc" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 2 1 0 "f8ef7ade_c3bf_4961_83befdedc3c98282" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Carrier5Position(ML_STAR, In);
+// }} ""
+// {{{ 3 1 0 "3c7d2db7_3ef4_4ca5_b3aaab38d91437dc" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 LOGGER::EnableOutput(Translate("True"));
 // }} ""
-// {{{ 3 1 0 "8378617e_cfd6_4024_9223af8e1d9f6b71" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 4 1 0 "8378617e_cfd6_4024_9223af8e1d9f6b71" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLHttp::SetTraceLevel(0);
 // }} ""
-// {{{ 4 1 0 "5005cfea_8171_4442_9dd45cf0a69594f9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 5 1 0 "5005cfea_8171_4442_9dd45cf0a69594f9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::SetTraceLevel(0);
 // }} ""
-// {{ 5 1 0 "7c336a2e_f9bb_4c52_be1f253d8c25737f" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
+// {{ 6 1 0 "7c336a2e_f9bb_4c52_be1f253d8c25737f" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
 ActionServer = Fork("_ActionServer::tfn_ActionServer");
 if( ActionServer == 0 )
 {
     MECC::RaiseRuntimeErrorEx(-1590820608, MECC::IDS::stepNameThreadBegin, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
 }
 // }} ""
-// {{ 6 1 0 "b57677fd_57d1_4b2d_ba6466ccefce6026" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
+// {{ 7 1 0 "b57677fd_57d1_4b2d_ba6466ccefce6026" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
 StateServer = Fork("_StateServer::tfn_StateServer");
 if( StateServer == 0 )
 {
@@ -114,8 +122,9 @@ if( StateServer == 0 )
 // {{ 2 "AutoExitBlock" ""
 DRIVER::_ExitLibrary();
 LOGGER::_ExitLibrary();
+JSONPARSER::_ExitLibrary();
 // }} ""
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-06-02 20:49$$checksum=21aea01a$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-06-14 11:42$$checksum=8c23ce06$$length=084$$

@@ -1,0 +1,559 @@
+// {{{ 2 "IncludeGuard" "PragmaOnce"
+#pragma once
+// }} ""
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
+#include "HSLStrLib.hsl"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+#include "HSLMETEDLib.hs_"
+#include "HSLMECCLib.hs_"
+#include "HSLPTLLib.hsl"
+// }} ""
+// {{{ 2 "LibraryNamespace" "Begin"
+namespace DECKLOADINGDIALOG {
+// }} ""
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{{ 2 "SubmethodForwardDeclaration" ""
+private function Carrier5Position( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void ;
+// }} ""
+function _InitLibrary() {
+// {{ 2 "AutoInitBlock" ""
+PTL::SetWashingStateDefault("RinseTime1", 5);
+PTL::SetWashingStateDefault("SoakTime1", 5);
+PTL::SetWashingStateDefault("FlowRate1", 11);
+PTL::SetWashingStateDefault("RinseTime2", 0);
+PTL::SetWashingStateDefault("SoakTime2", 0);
+PTL::SetWashingStateDefault("FlowRate2", 11);
+PTL::SetWashingStateDefault("DrainingTime", 10);
+PTL::SetWashingStateDefault("StartWashLiquid", 0);
+PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
+PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
+JSONPARSER::_InitLibrary();
+// }} ""
+}
+function _ExitLibrary() {
+// {{ 2 "AutoExitBlock" ""
+JSONPARSER::_ExitLibrary();
+// }} ""
+}
+// {{{ 5 "HandleCommand" "Begin"
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+// {{ 5 "HandleCommand" "InitLocals"
+// }} ""
+// {{ 121 1 0 "0e239f14_bae8_4002_a84fbcd3a6720053" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "Carrier5Position")
+{
+// }} ""
+// {{{ 122 1 0 "84f60ab2_8927_4713_8da864a487a1c835" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 123 1 0 "0e239f14_bae8_4002_a84fbcd3a6720053" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 124 1 0 "8b64fdc0_ce16_413d_a74ca6e0fb752936" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nCommand not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+// }} ""
+// {{ 125 1 0 "45cb71d3_6916_4429_aae781028ebb7151" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+abort;
+// }} ""
+// {{{ 5 "HandleCommand" "End"
+}
+// }} ""
+// {{{ 5 "Carrier5Position" "Begin"
+private function Carrier5Position( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private dialog customDialog9922190FDA0C4177A3A664940A6604A6;
+private variable Pos2LabwareSupportingText;
+private variable Pos2LabwareInfoVisibility;
+private variable Pos2LabwareVisibility;
+private variable Pos1LabwareImage;
+private variable Pos4LabwareImage;
+private variable Pos3LabwareVisibility;
+private variable Pos4LabwareSupportingText;
+private variable Pos4LabwareInfoVisibility;
+private variable Pos1LabwareSupportingText;
+private variable Pos4LabwareVisibility;
+private variable Pos1LabwareInfoVisibility;
+private variable Pos2LabwareImage;
+private variable Pos5LabwareImage;
+private variable Pos5LabwareVisibility;
+private variable Pos3LabwareSupportingText;
+private variable Pos3LabwareInfoVisibility;
+private variable CarrierSupportingText;
+private variable Step1Text;
+private variable Step2Text;
+private variable Pos3LabwareImage;
+private variable DialogTitleText;
+private variable Pos1LabwareVisibility;
+private variable Pos5LabwareSupportingText;
+private variable Pos5LabwareInfoVisibility;
+private variable Carrier2DImage;
+private variable Carrier3DImage;
+private variable CarrierPositions[];
+private variable LabwareImages[];
+private variable LabwareExtendedInformations[];
+private variable LabwareSupportingTexts[];
+private variable Counter;
+private variable NumCarrierPositions;
+private variable LabwareSupportingText;
+private variable LabwareExtendedInformation;
+private variable LabwareImage;
+private variable CarrierPosition;
+private dialog customDialogCFC7AAA802F9440cB1874C96A8D6E78D;
+private variable Pos5LabwareCheckState;
+private variable DialogOut;
+private variable Pos1LabwareCheckState;
+private variable DialogReturn;
+private variable Pos2LabwareCheckState;
+private variable _;
+private variable Pos3LabwareCheckState;
+private variable Pos4LabwareCheckState;
+private dialog customDialog42017EFE19BC40858825DAE03FE50896;
+// {{ 5 "Carrier5Position" "InitLocals"
+// }} ""
+// {{ 1 1 0 "36177958_0eee_4a56_9b4746c694bba0b2" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 2 1 0 "ca9fda08_45a1_4615_b939c0f2a13f5a6f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 3 1 0 "5d577780_7849_402c_b83592f2b6c621f1" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+DialogTitleText = Translate("");
+// }} ""
+// {{ 4 1 0 "472d36e1_488e_4171_b793702ccefd2a00" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Step1Text = Translate("");
+// }} ""
+// {{ 5 1 0 "457c8f19_53ad_4bb0_828d6949ce227480" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Step2Text = Translate("");
+// }} ""
+// {{ 6 1 0 "82c6903f_f888_41d7_86d05bc621770278" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+CarrierSupportingText = Translate("");
+// }} ""
+// {{ 7 1 0 "646c0818_2861_4051_80da78bc6a40c3f1" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Carrier2DImage = Translate("");
+// }} ""
+// {{ 8 1 0 "7b5c9659_d43d_448b_a1fe59f7389c1a49" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Carrier3DImage = Translate("");
+// }} ""
+// {{ 9 1 0 "ca9fda08_45a1_4615_b939c0f2a13f5a6f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 10 1 0 "fda5bb2e_c457_4813_979d22a7f9b68baa" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 11 1 0 "c20916b7_9d2e_419c_bc94d80c7c74dda2" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos1LabwareImage = Translate("");
+// }} ""
+// {{ 12 1 0 "3ba3056a_311e_4d6e_8add18a724f145ec" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos2LabwareImage = Translate("");
+// }} ""
+// {{ 13 1 0 "6ee6b3a6_db7d_42fb_989e72232ea43d45" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos3LabwareImage = Translate("");
+// }} ""
+// {{ 14 1 0 "04fb7607_420b_4252_9df5933e9308a711" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos4LabwareImage = Translate("");
+// }} ""
+// {{ 15 1 0 "77a076e7_8129_42f9_8d9b0d64f91905eb" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos5LabwareImage = Translate("");
+// }} ""
+// {{ 16 1 0 "fda5bb2e_c457_4813_979d22a7f9b68baa" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 17 1 0 "1fca5d8e_293a_4ca7_ba9569e2916696a7" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 18 1 0 "30599a3d_c3af_4726_b300e4baa3124e4d" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos1LabwareCheckState = 0;
+// }} ""
+// {{ 19 1 0 "9a8f2b9e_4f00_444f_8ea7ca20f03bd8aa" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos2LabwareCheckState = 0;
+// }} ""
+// {{ 20 1 0 "c7f5c039_a8d0_4623_bfdee79970dc2206" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos3LabwareCheckState = 0;
+// }} ""
+// {{ 21 1 0 "0ff237cb_b7f5_44d6_bddee95a092803e3" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos4LabwareCheckState = 0;
+// }} ""
+// {{ 22 1 0 "e8d7e27e_796a_4995_bb3009ab915fdf1b" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos5LabwareCheckState = 0;
+// }} ""
+// {{ 23 1 0 "1fca5d8e_293a_4ca7_ba9569e2916696a7" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 24 1 0 "64f60142_a0db_4da1_9d2dd4109da26d22" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 25 1 0 "be5ca10f_6fc1_4790_be1d9f37dbd5f6a6" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos1LabwareInfoVisibility = 0;
+// }} ""
+// {{ 26 1 0 "f53dcb35_d1b1_48df_9e544697692157de" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos2LabwareInfoVisibility = 0;
+// }} ""
+// {{ 27 1 0 "021170bd_2259_4a71_85d16f01cecb738c" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos3LabwareInfoVisibility = 0;
+// }} ""
+// {{ 28 1 0 "25cb35a3_c246_41f9_89a73ffea2ea8005" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos4LabwareInfoVisibility = 0;
+// }} ""
+// {{ 29 1 0 "12fbf13f_ecae_40b5_9588ada3dec96fec" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos5LabwareInfoVisibility = 0;
+// }} ""
+// {{ 30 1 0 "64f60142_a0db_4da1_9d2dd4109da26d22" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 31 1 0 "9f5d01cb_2b54_4db9_971209bed1891c48" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 32 1 0 "fc75ecdd_eb98_4a41_8949b17009d0b066" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos1LabwareSupportingText = Translate("");
+// }} ""
+// {{ 33 1 0 "4aa03a91_5ee5_4887_867c34293e002b53" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos2LabwareSupportingText = Translate("");
+// }} ""
+// {{ 34 1 0 "b3db7e8b_c6a6_4e79_a9e27745b9408669" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos3LabwareSupportingText = Translate("");
+// }} ""
+// {{ 35 1 0 "e52b94db_9a8f_46a1_8ed22a9fd47b5472" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos4LabwareSupportingText = Translate("");
+// }} ""
+// {{ 36 1 0 "b01a83be_3650_4a87_bd413b25d5a79327" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos5LabwareSupportingText = Translate("");
+// }} ""
+// {{ 37 1 0 "9f5d01cb_2b54_4db9_971209bed1891c48" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 38 1 0 "f333eaa2_b41a_4467_b9d2a73dfb21e86c" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 39 1 0 "cd2e8568_84be_43f2_88a7d75cc7b6449e" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos1LabwareVisibility = 0;
+// }} ""
+// {{ 40 1 0 "2820e819_ba13_492b_bab05addea9e1c06" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos2LabwareVisibility = 0;
+// }} ""
+// {{ 41 1 0 "495b9cf9_93f7_4e66_b9ef2e0d6e5ff9a8" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos3LabwareVisibility = 0;
+// }} ""
+// {{ 42 1 0 "3c5d7a15_f244_46ba_afbea17291e7cec8" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos4LabwareVisibility = 0;
+// }} ""
+// {{ 43 1 0 "bb1f6ce6_6b10_4841_bb6efb27fe2b1664" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos5LabwareVisibility = 0;
+// }} ""
+// {{ 44 1 0 "f333eaa2_b41a_4467_b9d2a73dfb21e86c" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 45 1 0 "36177958_0eee_4a56_9b4746c694bba0b2" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 46 1 0 "664299b9_b845_443f_9e4c136421c4a311" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+DialogTitleText = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:DialogTitleText:"));
+// }} ""
+// {{{ 47 1 0 "b4711510_8578_4847_bf461ba1f9974882" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Step1Text = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Step1Text:"));
+// }} ""
+// {{{ 48 1 0 "0d070dac_d2fc_434f_9e153e987620d74a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Step2Text = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Step2Text:"));
+// }} ""
+// {{{ 49 1 0 "c9bf7ea2_3e78_4221_aaf7c88561766ad1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CarrierSupportingText = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierSupportingText:"));
+// }} ""
+// {{{ 50 1 0 "93b3edd7_6bca_451d_9014258a8398bad1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Carrier2DImage = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Carrier2DImage:"));
+// }} ""
+// {{{ 51 1 0 "0792f9fb_e7d5_4ad5_917409d6d189d529" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Carrier3DImage = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Carrier3DImage:"));
+// }} ""
+// {{{ 52 1 0 "acf96b40_a8e2_4e16_aad21a3e251d60e6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+JSONPARSER::GetJSONArrayElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CarrierPosition:"), CarrierPositions);
+// }} ""
+// {{{ 53 1 0 "8a8444df_fde0_4f40_9b4dd0ce10578918" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+JSONPARSER::GetJSONArrayElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareImage:"), LabwareImages);
+// }} ""
+// {{{ 54 1 0 "dc0bb762_7169_4d58_b709705f4f49f432" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+JSONPARSER::GetJSONArrayElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareSupportingText:"), LabwareSupportingTexts);
+// }} ""
+// {{{ 55 1 0 "f67970b4_d100_4ece_b0083bfb0c23abc2" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+JSONPARSER::GetJSONArrayElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareExtendedInformation:"), LabwareExtendedInformations);
+// }} ""
+// {{ 56 1 0 "ee5aebba_2784_4e1f_893f1c59b569d06d" "{72EACF88-8D49-43e3-92C8-2F90E81E3260}"
+NumCarrierPositions=CarrierPositions.GetSize();
+// }} ""
+// {{ 57 1 0 "33196569_c4e8_4098_a0370e557527128b" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+for(Counter = 0; Counter < NumCarrierPositions;)
+{
+Counter = Counter + 1;
+// }} ""
+// {{ 58 1 0 "711156ee_999e_4dd1_a491c6efdbfd5871" "{67A8F1C9-6546-41e9-AD2F-3C54F7818853}"
+CarrierPosition=CarrierPositions.GetAt(Counter-1);
+// }} ""
+// {{ 59 1 0 "db2e951c_ac3f_42d9_823e6fd7ab5773d7" "{67A8F1C9-6546-41e9-AD2F-3C54F7818853}"
+LabwareImage=LabwareImages.GetAt(Counter-1);
+// }} ""
+// {{ 60 1 0 "748ec372_5d10_4922_ab23417b791c406e" "{67A8F1C9-6546-41e9-AD2F-3C54F7818853}"
+LabwareSupportingText=LabwareSupportingTexts.GetAt(Counter-1);
+// }} ""
+// {{ 61 1 0 "badcfab6_2799_480a_aa4f8ff7b4174dc0" "{67A8F1C9-6546-41e9-AD2F-3C54F7818853}"
+LabwareExtendedInformation=LabwareExtendedInformations.GetAt(Counter-1);
+// }} ""
+// {{ 62 1 0 "a44669af_bf5a_44b5_995562e10d79e6e4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CarrierPosition == 1)
+{
+// }} ""
+// {{ 63 1 0 "9ab230f6_b5d9_458c_b6d1aa091c32f280" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos1LabwareVisibility = 1;
+// }} ""
+// {{ 64 1 0 "b916bfee_bcd8_4fea_bf58a68885eef0dd" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos1LabwareImage = LabwareImage;
+// }} ""
+// {{ 65 1 0 "71d330d9_1229_45b4_9eb5c6335c63c7c1" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos1LabwareSupportingText = LabwareSupportingText;
+// }} ""
+// {{ 66 1 0 "126f7526_e609_437c_97b6e088fe9278a9" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (LabwareExtendedInformation != "None")
+{
+// }} ""
+// {{ 67 1 0 "40592a9f_1e83_4ace_a0956a39044b05fa" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos1LabwareInfoVisibility = 1;
+// }} ""
+// {{ 68 1 0 "126f7526_e609_437c_97b6e088fe9278a9" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 69 1 0 "a44669af_bf5a_44b5_995562e10d79e6e4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 70 1 0 "c9405014_b1c2_420b_bcce054b28434021" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CarrierPosition == 2)
+{
+// }} ""
+// {{ 71 1 0 "ba727c43_4f88_46bb_886b4357144d7af6" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos2LabwareVisibility = 1;
+// }} ""
+// {{ 72 1 0 "5d2f7eb4_ef3e_4bc9_9ef657836d33c725" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos2LabwareImage = LabwareImage;
+// }} ""
+// {{ 73 1 0 "a9349bd3_1814_4354_a2120f5ad2f457f2" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos2LabwareSupportingText = LabwareSupportingText;
+// }} ""
+// {{ 74 1 0 "847a44e8_b118_409d_a4f16524cf662b73" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (LabwareExtendedInformation != "None")
+{
+// }} ""
+// {{ 75 1 0 "b8a23d9e_e26c_4e37_8bc150ace9b8ecda" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos2LabwareInfoVisibility = 1;
+// }} ""
+// {{ 76 1 0 "847a44e8_b118_409d_a4f16524cf662b73" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 77 1 0 "c9405014_b1c2_420b_bcce054b28434021" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 78 1 0 "f0d080ee_8220_4d17_bcb088469897be6c" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CarrierPosition == 3)
+{
+// }} ""
+// {{ 79 1 0 "9a76fd40_463c_4dd0_976253db30eb153a" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos3LabwareVisibility = 1;
+// }} ""
+// {{ 80 1 0 "a6309fa3_d7f0_4b86_82f2456f174496ac" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos3LabwareImage = LabwareImage;
+// }} ""
+// {{ 81 1 0 "3cb01ffb_29df_4bf1_89110eb57d6f2107" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos3LabwareSupportingText = LabwareSupportingText;
+// }} ""
+// {{ 82 1 0 "f34d12b6_dd67_40df_9fc85682a3e19b6c" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (LabwareExtendedInformation != "None")
+{
+// }} ""
+// {{ 83 1 0 "4a617e64_6a18_4fe0_b02b14d331f14ce1" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos3LabwareInfoVisibility = 1;
+// }} ""
+// {{ 84 1 0 "f34d12b6_dd67_40df_9fc85682a3e19b6c" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 85 1 0 "f0d080ee_8220_4d17_bcb088469897be6c" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 86 1 0 "2c35afc1_c641_4b69_b580a705d99b9824" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CarrierPosition == 4)
+{
+// }} ""
+// {{ 87 1 0 "62fc6531_6670_4b5b_9f362e2646f7a23c" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos4LabwareVisibility = 1;
+// }} ""
+// {{ 88 1 0 "85e68c8e_6173_45b4_b220c1edf29bbfc0" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos4LabwareImage = LabwareImage;
+// }} ""
+// {{ 89 1 0 "9d68146f_0cb7_4642_bff83b800c0d0c51" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos4LabwareSupportingText = LabwareSupportingText;
+// }} ""
+// {{ 90 1 0 "4287f2d8_d699_49bf_a3a80204ea21f473" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (LabwareExtendedInformation != "None")
+{
+// }} ""
+// {{ 91 1 0 "46206b55_7f55_417b_9a2b72fb77eb6be6" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos4LabwareInfoVisibility = 1;
+// }} ""
+// {{ 92 1 0 "4287f2d8_d699_49bf_a3a80204ea21f473" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 93 1 0 "2c35afc1_c641_4b69_b580a705d99b9824" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 94 1 0 "7b6a1e57_c1a3_46d2_added84cbf110511" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CarrierPosition == 5)
+{
+// }} ""
+// {{ 95 1 0 "da960440_484e_4b9c_bf172975cc82c7b6" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos5LabwareVisibility = 1;
+// }} ""
+// {{ 96 1 0 "feeb3e27_6c4d_4377_bf7483b33fa52aa8" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos5LabwareImage = LabwareImage;
+// }} ""
+// {{ 97 1 0 "3ff366fc_62e6_4744_ab04db6e0a35a267" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos5LabwareSupportingText = LabwareSupportingText;
+// }} ""
+// {{ 98 1 0 "4fa8b99f_e64f_46ac_81b911ba0aaf33e5" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (LabwareExtendedInformation != "None")
+{
+// }} ""
+// {{ 99 1 0 "f01e9a67_0972_4c90_b4ddcb6e195886a2" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Pos5LabwareInfoVisibility = 1;
+// }} ""
+// {{ 100 1 0 "4fa8b99f_e64f_46ac_81b911ba0aaf33e5" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 101 1 0 "7b6a1e57_c1a3_46d2_added84cbf110511" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 102 1 0 "33196569_c4e8_4098_a0370e557527128b" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+}
+}
+// }} ""
+// {{ 103 1 0 "20b5747e_3fe6_450d_88d8b6eabadaf044" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+_ = 0;
+while ("" == "")
+{
+_ = _ + 1;
+// }} ""
+// {{ 104 1 0 "f1095436_738f_4a02_a3f74c3cc3f7a053" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.InitCustomDialog( "f1095436_738f_4a02_a3f74c3cc3f7a053" );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "DialogTitleText.Text", DialogTitleText );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Step1Text.Text", Step1Text );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Step2Text.Text", Step2Text );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Carrier2DImage.Source", Carrier2DImage );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Carrier3DImage.Source", Carrier3DImage );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos1LabwareArrow.IsVisible", Pos1LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos1LabwareImage.Source", Pos1LabwareImage );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos1LabwareImage.IsVisible", Pos1LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos2LabwareImage.IsVisible", Pos2LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos2LabwareImage.Source", Pos2LabwareImage );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos3LabwareImage.Source", Pos3LabwareImage );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos3LabwareImage.IsVisible", Pos3LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos4LabwareImage.IsVisible", Pos4LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos4LabwareImage.Source", Pos4LabwareImage );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos5LabwareImage.Source", Pos5LabwareImage );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos5LabwareImage.IsVisible", Pos5LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos1LabwareSupportingText.Text", Pos1LabwareSupportingText );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos1LabwareSupportingText.IsVisible", Pos1LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos2LabwareArrow.IsVisible", Pos2LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos3LabwareArrow.IsVisible", Pos3LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos4LabwareArrow.IsVisible", Pos4LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos5LabwareArrow.IsVisible", Pos5LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos1LabwareMoreInfo.IsVisible", Pos1LabwareInfoVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos3LabwareMoreInfo.IsVisible", Pos3LabwareInfoVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos2LabwareSupportingText.IsVisible", Pos2LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos2LabwareSupportingText.Text", Pos2LabwareSupportingText );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos3LabwareSupportingText.Text", Pos3LabwareSupportingText );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos3LabwareSupportingText.IsVisible", Pos3LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos4LabwareSupportingText.Text", Pos4LabwareSupportingText );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos4LabwareSupportingText.IsVisible", Pos4LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos5LabwareSupportingText.IsVisible", Pos5LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos5LabwareSupportingText.Text", Pos5LabwareSupportingText );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos1LabwareCheckState.IsChecked", Pos1LabwareCheckState );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos1LabwareCheckState.IsVisible", Pos1LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos2LabwareCheckState.IsChecked", Pos2LabwareCheckState );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos2LabwareCheckState.IsVisible", Pos2LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos3LabwareCheckState.IsVisible", Pos3LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos3LabwareCheckState.IsChecked", Pos3LabwareCheckState );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos4LabwareCheckState.IsChecked", Pos4LabwareCheckState );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos4LabwareCheckState.IsVisible", Pos4LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos5LabwareCheckState.IsVisible", Pos5LabwareVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos5LabwareCheckState.IsChecked", Pos5LabwareCheckState );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos2LabwareMoreInfo.IsVisible", Pos2LabwareInfoVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos4LabwareMoreInfo.IsVisible", Pos4LabwareInfoVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "Pos5LabwareMoreInfo.IsVisible", Pos5LabwareInfoVisibility );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.SetCustomDialogProperty( "CarrierSupportingText.Text", CarrierSupportingText );
+customDialogCFC7AAA802F9440cB1874C96A8D6E78D.ShowCustomDialog();
+DialogReturn = customDialogCFC7AAA802F9440cB1874C96A8D6E78D.GetCustomDialogProperty( "ReturnValue" );
+Pos1LabwareCheckState = customDialogCFC7AAA802F9440cB1874C96A8D6E78D.GetCustomDialogProperty( "Pos1LabwareCheckState.IsChecked" );
+Pos2LabwareCheckState = customDialogCFC7AAA802F9440cB1874C96A8D6E78D.GetCustomDialogProperty( "Pos2LabwareCheckState.IsChecked" );
+Pos3LabwareCheckState = customDialogCFC7AAA802F9440cB1874C96A8D6E78D.GetCustomDialogProperty( "Pos3LabwareCheckState.IsChecked" );
+Pos4LabwareCheckState = customDialogCFC7AAA802F9440cB1874C96A8D6E78D.GetCustomDialogProperty( "Pos4LabwareCheckState.IsChecked" );
+Pos5LabwareCheckState = customDialogCFC7AAA802F9440cB1874C96A8D6E78D.GetCustomDialogProperty( "Pos5LabwareCheckState.IsChecked" );
+// }} ""
+// {{ 105 1 0 "c7f29f44_e51f_4eff_9e0894f8be6c4f64" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (DialogOut == 1)
+{
+// }} ""
+// {{ 106 1 0 "1515d171_8274_4298_b34b5cff80fe7de2" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+
+// }} ""
+// {{ 107 1 0 "5476d5ba_3656_4991_bb948147c77e2e7a" "{B31F3533-5D80-11d4-A5EB-0050DA737D89}"
+break;
+// }} ""
+// {{ 108 1 0 "c7f29f44_e51f_4eff_9e0894f8be6c4f64" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 109 1 0 "27515d89_15b0_495a_b9cffbfe6264908a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (DialogOut == 2)
+{
+// }} ""
+// {{ 110 1 0 "d2dc008c_0eeb_4f37_aa97ea4169ec5495" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+
+// }} ""
+// {{ 111 1 0 "27515d89_15b0_495a_b9cffbfe6264908a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 112 1 0 "c135680c_65c5_4922_ab41205ae3be0ef9" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (DialogOut == 3)
+{
+// }} ""
+// {{ 113 1 0 "dfa67e89_0cf0_46c4_835e82aa36154272" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+
+// }} ""
+// {{ 114 1 0 "c135680c_65c5_4922_ab41205ae3be0ef9" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 115 1 0 "cc32e220_9c72_408c_8a427d36afede4f0" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (DialogOut == 4)
+{
+// }} ""
+// {{ 116 1 0 "686ecd14_dee0_428c_97c1894ca06b55aa" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+
+// }} ""
+// {{ 117 1 0 "9f0a9c9e_882b_4839_ba956ffc0c2203c5" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialog42017EFE19BC40858825DAE03FE50896.InitCustomDialog( "9f0a9c9e_882b_4839_ba956ffc0c2203c5" );
+customDialog42017EFE19BC40858825DAE03FE50896.ShowCustomDialog();
+// }} ""
+// {{ 118 1 0 "cc32e220_9c72_408c_8a427d36afede4f0" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 119 1 0 "20b5747e_3fe6_450d_88d8b6eabadaf044" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+}
+}
+// }} ""
+// {{{ 5 "Carrier5Position" "End"
+}
+// }} ""
+/* {{ 2 "SubmethodInsertLine" "" */ // }} ""
+// {{{ 2 "LibraryNamespace" "End"
+} // library namespace
+// }} ""
+// $$author=BAREB$$valid=0$$time=2023-06-14 12:54$$checksum=4ae8ba30$$length=084$$
