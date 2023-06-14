@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from typing import Literal
 
 from ....Tools.AbstractClasses import OptionsABC
 
@@ -12,4 +13,5 @@ class Options(OptionsABC):
     CarrierPosition: int
     LabwareImage: LabwareImageOptions
     LabwareSupportingText: str
-    LabwareExtendedInformation: str | None = None
+    LabwareExtendedInformation: str | Literal["None"] = "None"
+    LabwareActionText: Literal["Load", "Unload", "Add To", "Take From", "Discard"]

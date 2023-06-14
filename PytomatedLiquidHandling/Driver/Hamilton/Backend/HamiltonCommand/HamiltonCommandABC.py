@@ -39,6 +39,12 @@ class HamiltonCommandABC(CommandABC):
 
             OutputDict = OutputDict | vars(self.OptionsTrackerInstance)
 
+            for key, value in OutputDict.items():
+                if isinstance(value, Enum):
+                    OutputDict[key] = value.value
+                else:
+                    OutputDict[key] = value
+
             del OutputDict["Collection"]
             # removes junk from parent classes
             return dict(OutputDict)
