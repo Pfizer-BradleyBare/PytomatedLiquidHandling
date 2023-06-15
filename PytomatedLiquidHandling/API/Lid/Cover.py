@@ -7,7 +7,6 @@ from ..Transport.Transport import Transport
 
 
 def Cover(ContainerInstance: Container, LidInstance: Lid, RunType: RunTypes):
-
     HandlerInstance = GetHandler()
     LoadedLabwareTrackerInstance = HandlerInstance.LoadedLabwareTrackerInstance
 
