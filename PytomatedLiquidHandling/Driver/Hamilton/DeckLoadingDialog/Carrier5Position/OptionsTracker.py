@@ -8,10 +8,12 @@ from .Options import Options
 @dataclass(kw_only=True)
 class OptionsTracker(OptionsTrackerABC[Options]):
     class Carrier3DImageOptions(Enum):
-        FTR5Position3D = "FTR5Position3D"
+        Carrier5PositionFTR3D = "Carrier5PositionFTR3D"
+        Carrier5PositionPlate3D = "Carrier5PositionPlate3D"
 
     class Carrier2DImageOptions(Enum):
-        FTR5Position2D = "FTR5Position2D"
+        Carrier5PositionFTR2D = "Carrier5PositionFTR2D"
+        Carrier5PositionPlate2D = "Carrier5PositionPlate2D"
 
     DialogTitleText: str = "Please follow the instructions to load / unload the carrier with labware at the correct position(s). Use the instructions below for guidance."
     Step1Text: str = "1. Confirm a carrier was removed from the deck at the correct track number.\nNOTE: If you do not have an autoload you will need to remove the carrier manually."

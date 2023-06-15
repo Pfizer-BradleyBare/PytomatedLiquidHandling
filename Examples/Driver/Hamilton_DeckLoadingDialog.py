@@ -19,23 +19,21 @@ Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
 OptionsTrackerInstance = Carrier5Position.OptionsTracker(
-    Carrier3DImage=Carrier5Position.OptionsTracker.Carrier3DImageOptions.FTR5Position3D,
-    Carrier2DImage=Carrier5Position.OptionsTracker.Carrier2DImageOptions.FTR5Position2D,
+    Carrier3DImage=Carrier5Position.OptionsTracker.Carrier3DImageOptions.Carrier5PositionPlate3D,
+    Carrier2DImage=Carrier5Position.OptionsTracker.Carrier2DImageOptions.Carrier5PositionPlate2D,
 )
 OptionsTrackerInstance.LoadSingle(
     Carrier5Position.Options(
         CarrierPosition=1,
-        LabwareImage=Carrier5Position.Options.LabwareImageOptions.Biorad200uL96WellPlate,
+        LabwareImage=Carrier5Position.Options.LabwareImageOptions.PlateThermo1200uL96Well,
         LabwareSupportingText="Hello!",
-        LabwareActionText="Unload",
     )
 )
 OptionsTrackerInstance.LoadSingle(
     Carrier5Position.Options(
         CarrierPosition=4,
-        LabwareImage=Carrier5Position.Options.LabwareImageOptions.Biorad200uL96WellPlate,
+        LabwareImage=Carrier5Position.Options.LabwareImageOptions.PlateBiorad200uL96Well,
         LabwareSupportingText="Hello!",
-        LabwareActionText="Unload",
     )
 )
 CommandInstance = Carrier5Position.Command(
