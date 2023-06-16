@@ -17,6 +17,7 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
             continue
 
         UniqueIdentifier = Labware["Unique Identifier"]
+        ImageFilename = Labware["Image Filename"]
         LongSide = Labware["Dimensions"]["Long Side"]
         ShortSide = Labware["Dimensions"]["Short Side"]
 
@@ -49,11 +50,13 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
             )
             # Create Wells Class
             LabwareInstance = PipettableLabware(
-                UniqueIdentifier, DimensionsInstance, WellsInstance
+                UniqueIdentifier, ImageFilename, DimensionsInstance, WellsInstance
             )
 
         else:
-            LabwareInstance = NonPipettableLabware(UniqueIdentifier, DimensionsInstance)
+            LabwareInstance = NonPipettableLabware(
+                UniqueIdentifier, ImageFilename, DimensionsInstance
+            )
 
         LabwareTrackerInstance.LoadSingle(LabwareInstance)
 
