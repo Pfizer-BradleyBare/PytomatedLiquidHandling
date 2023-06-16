@@ -1,4 +1,4 @@
+from .CarrierConfig import CarrierConfig
 from .DeckLocationABC import DeckLocationABC
-from .DeckLoadingConfig.DeckLoadingConfig import DeckLoadingConfig
-from .TransportDeviceConfig import TransportDeviceConfig
 from .DeckLocationTracker import DeckLocationTracker
+from .TransportDeviceConfig import TransportDeviceConfig

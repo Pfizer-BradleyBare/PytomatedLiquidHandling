@@ -1,7 +1,8 @@
+from dataclasses import dataclass, field
+
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.TemperatureControl import HeaterCooler as HeaterCoolerDriver
 from .BaseTempControlDevice import TempControlDevice
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from dataclasses import dataclass, field
 
 
 @dataclass

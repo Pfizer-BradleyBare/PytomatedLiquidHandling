@@ -1,12 +1,15 @@
 import yaml
 
-from ..DeckLocation import DeckLoadingConfig, DeckLocationTracker, DeckLocation
-from .BaseDeckLocation import TransportDeviceConfig
+from ..Carrier import CarrierTracker
+from ..DeckLocation import CarrierConfig, DeckLocation, DeckLocationTracker
 from ..TransportDevice.BaseTransportDevice import TransportDeviceTracker
+from .BaseDeckLocation import TransportDeviceConfig
 
 
 def LoadYaml(
-    TransportDeviceTrackerInstance: TransportDeviceTracker, FilePath: str
+    CarrierTrackerInstance: CarrierTracker,
+    TransportDeviceTrackerInstance: TransportDeviceTracker,
+    FilePath: str,
 ) -> DeckLocationTracker:
     DeckLocationTrackerInstance = DeckLocationTracker()
 
@@ -20,6 +23,12 @@ def LoadYaml(
             continue
 
         UniqueIdentifier = Location["Unique Identifier"]
+
+        CarrierUniqueID = Location["Carrier"]["Unique Identifier"]
+        CarrierPosition = Location["Carrier"]["Position"]
+
+        CarrierInstance = CarrierTrackerInstance.GetObjectByName(CarrierUniqueID)
+        CarrierConfigInstance = CarrierConfig(CarrierInstance, CarrierPosition)
 
         TransportDeviceID = Location["Transport Device"]["Unique Identifier"]
         HomeGetConfig = Location["Transport Device"]["Home Config"]["Get"]
@@ -77,7 +86,7 @@ def LoadYaml(
         # Confirm expected keys are in ExtraConfig
 
         DeckLocationInstance = DeckLocation(
-            UniqueIdentifier, TransportDeviceConfigInstance
+            UniqueIdentifier, CarrierConfigInstance, TransportDeviceConfigInstance
         )
 
         DeckLocationTrackerInstance.LoadSingle(DeckLocationInstance)

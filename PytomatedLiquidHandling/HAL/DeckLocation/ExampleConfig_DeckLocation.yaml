@@ -1,6 +1,9 @@
 #HHS Carrier
 - Unique Identifier: HHS_Carrier_Pos1
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -12,6 +15,9 @@
 
 - Unique Identifier: HHS_Carrier_Pos2
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -23,6 +29,9 @@
 
 - Unique Identifier: HHS_Carrier_Pos3
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -34,6 +43,9 @@
 
 - Unique Identifier: HHS_Carrier_Pos4
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -46,6 +58,9 @@
 #Vacuum Carrier
 - Unique Identifier: Vacuum_Carrier_Pos1
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -57,6 +72,9 @@
 
 - Unique Identifier: Vacuum_Carrier_Pos2
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -68,6 +86,9 @@
 
 - Unique Identifier: Vacuum_Carrier_Pos3
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -79,6 +100,9 @@
 
 - Unique Identifier: Vacuum_Carrier_Pos4
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -91,6 +115,9 @@
 #Carrier 14
 - Unique Identifier: Carrier14_Pos1
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -102,6 +129,9 @@
 
 - Unique Identifier: Carrier14_Pos2
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -113,6 +143,9 @@
 
 - Unique Identifier: Carrier14_Pos3
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -124,6 +157,9 @@
 
 - Unique Identifier: Carrier14_Pos4
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -135,6 +171,9 @@
 
 - Unique Identifier: Carrier14_Pos5
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -147,6 +186,9 @@
 #Carrier 14
 - Unique Identifier: Carrier38_Pos1
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -158,6 +200,9 @@
 
 - Unique Identifier: Carrier38_Pos2
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -169,6 +214,9 @@
 
 - Unique Identifier: Carrier38_Pos3
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -180,6 +228,9 @@
 
 - Unique Identifier: Carrier38_Pos4
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -191,6 +242,9 @@
 
 - Unique Identifier: Carrier38_Pos5
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -203,6 +257,9 @@
 #Carrier 47
 - Unique Identifier: FalconTubeCarrier
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -215,6 +272,9 @@
 #Carrier 48
 - Unique Identifier: ReagentReserviorCarrier
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
@@ -227,6 +287,9 @@
 #Carrier 49
 - Unique Identifier: FlipTubeCarrier
   Enabled: True
+  Carrier:
+    Unique Identifier: C1
+    Position: 1
   Transport Device:
     Unique Identifier: CORE Gripper
     Home Config:
