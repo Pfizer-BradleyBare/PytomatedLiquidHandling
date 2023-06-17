@@ -7,6 +7,7 @@ from ..TransportDevice import TransportDeviceTracker
 from ..Pipette import PipetteTracker
 from ..Pipette.BasePipette import LiquidClass, LiquidClassCategory
 from ..LayoutItem import NonCoverablePosition, LayoutItemTracker
+from ..Backend import NullBackend
 
 
 def LoadYaml(
@@ -75,6 +76,7 @@ def LoadYaml(
         MagneticRackTrackerInstance.LoadSingle(
             MagneticRack(
                 UniqueIdentifier,
+                NullBackend(),
                 SupportedLayoutItemTrackerInstance,
                 TransportDeviceTrackerInstance,
                 PipetteTrackerInstance,

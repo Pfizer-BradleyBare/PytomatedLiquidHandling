@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Type, TypeVar
 
 from ...Driver.Tools.AbstractClasses import BackendABC, CommandABC, ResponseABC
@@ -8,6 +8,9 @@ ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 @dataclass
 class NullBackend(BackendABC):
+    UniqueIdentifier: str | int = "Null Backend"
+    LoggerInstance: None = field(init=False, default=None)
+
     def StartBackend(self):
         ...
 
