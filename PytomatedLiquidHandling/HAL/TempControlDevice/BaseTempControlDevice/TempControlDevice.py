@@ -13,15 +13,14 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
     ShakingSupported: bool
     TempLimitsInstance: TempLimits
     SupportedLayoutItemTrackerInstance: LayoutItemTracker
-    TransportDeviceTrackerInstance: TransportDeviceTracker
 
     HandleID: int | str = field(init=False)
     Temperature: float = field(init=False, default=0)
     ShakingSpeed: int = field(init=False, default=0)
 
-    def GetCompatibleLayoutItem(
+    def GetLayoutItem(
         self, LayoutItemInstance: CoverablePosition | NonCoverablePosition
-    ) -> CoverablePosition | None:
+    ) -> CoverablePosition:
         for (
             SupportedLayoutItemInstance
         ) in self.SupportedLayoutItemTrackerInstance.GetObjectsAsList():
@@ -33,43 +32,7 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
                     raise Exception("This should never happen")
                 return SupportedLayoutItemInstance
 
-        return None
-
-    def MoveToDevice(self, SourceLayoutItem: CoverablePosition | NonCoverablePosition):
-        OptionsTrackerInstance = TransportOptions.OptionsTracker()
-
-        DestinationLayoutItem = self.GetCompatibleLayoutItem(SourceLayoutItem)
-        if DestinationLayoutItem == None:
-            raise Exception(
-                "This heater is not compatible with your layout item labware"
-            )
-
-        OptionsTrackerInstance.LoadSingle(
-            TransportOptions.Options(
-                SourceLayoutItem=SourceLayoutItem,
-                DestinationLayoutItem=DestinationLayoutItem,
-            )
-        )
-        self.TransportDeviceTrackerInstance.Transport(OptionsTrackerInstance)
-
-    def MoveFromDevice(
-        self, DestinationLayoutItem: CoverablePosition | NonCoverablePosition
-    ):
-        OptionsTrackerInstance = TransportOptions.OptionsTracker()
-
-        SourceLayoutItem = self.GetCompatibleLayoutItem(DestinationLayoutItem)
-        if SourceLayoutItem == None:
-            raise Exception(
-                "This heater is not compatible with your layout item labware"
-            )
-
-        OptionsTrackerInstance.LoadSingle(
-            TransportOptions.Options(
-                SourceLayoutItem=SourceLayoutItem,
-                DestinationLayoutItem=DestinationLayoutItem,
-            )
-        )
-        self.TransportDeviceTrackerInstance.Transport(OptionsTrackerInstance)
+        raise Exception("This heater does not support your layout item")
 
     @abstractmethod
     def SetTemperature(

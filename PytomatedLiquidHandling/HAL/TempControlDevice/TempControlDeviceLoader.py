@@ -95,7 +95,6 @@ def LoadYaml(
                         ComPort,
                         TempLimitsInstance,
                         SupportedLayoutItemTracker,
-                        TransportDeviceTrackerInstance,
                     )
                 )
 
@@ -111,7 +110,6 @@ def LoadYaml(
                         ComPort,
                         TempLimitsInstance,
                         SupportedLayoutItemTracker,
-                        TransportDeviceTrackerInstance,
                     )
                 )
 
