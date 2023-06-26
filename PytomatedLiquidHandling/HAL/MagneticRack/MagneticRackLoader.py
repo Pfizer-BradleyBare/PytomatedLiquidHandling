@@ -3,7 +3,6 @@ from .MagneticRack import MagneticRack
 from .BaseMagneticRack import MagneticRackTracker
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker
-from ..TransportDevice import TransportDeviceTracker
 from ..Pipette import PipetteTracker
 from ..Pipette.BasePipette import LiquidClass, LiquidClassCategory
 from ..LayoutItem import NonCoverablePosition, LayoutItemTracker
@@ -14,7 +13,6 @@ def LoadYaml(
     FilePath: str,
     DeckLocationTrackerInstance: DeckLocationTracker,
     LabwareTrackerInstance: LabwareTracker,
-    TransportDeviceTrackerInstance: TransportDeviceTracker,
     PipetteTrackerInstance: PipetteTracker,
 ) -> MagneticRackTracker:
     MagneticRackTrackerInstance = MagneticRackTracker()
@@ -78,8 +76,6 @@ def LoadYaml(
                 UniqueIdentifier,
                 NullBackend(),
                 SupportedLayoutItemTrackerInstance,
-                TransportDeviceTrackerInstance,
-                PipetteTrackerInstance,
             )
         )
 

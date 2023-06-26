@@ -1,9 +1,6 @@
 from ....Tools.AbstractClasses import UniqueObjectABC
 from ...LayoutItem import LayoutItemTracker, CoverablePosition, NonCoverablePosition
-from ...Pipette import PipetteTracker, TransferOptions
 from dataclasses import dataclass, field
-from ...TransportDevice import TransportDeviceTracker, TransportOptions
-from abc import abstractmethod
 from ...Tools.AbstractClasses import InterfaceABC
 from ...Backend import NullBackend
 
@@ -13,12 +10,10 @@ class MagneticRackABC(InterfaceABC, UniqueObjectABC):
     BackendInstance: NullBackend
     CustomErrorHandling: bool = field(init=False, default=False)
     SupportedLayoutItemTrackerInstance: LayoutItemTracker
-    TransportDeviceTrackerInstance: TransportDeviceTracker
-    PipetteTrackerInstance: PipetteTracker
 
-    def GetCompatibleLayoutItem(
+    def GetLayoutItem(
         self, LayoutItemInstance: CoverablePosition | NonCoverablePosition
-    ) -> CoverablePosition | None:
+    ) -> CoverablePosition:
         for (
             SupportedLayoutItemInstance
         ) in self.SupportedLayoutItemTrackerInstance.GetObjectsAsList():
@@ -28,24 +23,18 @@ class MagneticRackABC(InterfaceABC, UniqueObjectABC):
             ):
                 if not isinstance(SupportedLayoutItemInstance, CoverablePosition):
                     raise Exception("This should never happen")
+
+                if isinstance(LayoutItemInstance, CoverablePosition):
+                    SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered
+                else:
+                    SupportedLayoutItemInstance.IsCovered = False
+
                 return SupportedLayoutItemInstance
 
-        return None
+        raise Exception("This rack does not support your layout item")
 
-    @abstractmethod
-    def MoveToDevice(self, SourceLayoutItem: CoverablePosition | NonCoverablePosition):
-        ...
+    def GetRemoveStorageBufferLiquidClassCategory(self):
+        return str(self.UniqueIdentifier) + ": Remove"
 
-    @abstractmethod
-    def MoveFromDevice(
-        self, DestinationLayoutItem: CoverablePosition | NonCoverablePosition
-    ):
-        ...
-
-    @abstractmethod
-    def RemoveStorageBuffer(self, OptionsTracker: TransferOptions.OptionsTracker):
-        ...
-
-    @abstractmethod
-    def AddStorageBuffer(self, OptionsTracker: TransferOptions.OptionsTracker):
-        ...
+    def GetAddStorageBufferLiquidClassCategory(self):
+        return str(self.UniqueIdentifier) + ": Add"
