@@ -30,6 +30,12 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
             ):
                 if not isinstance(SupportedLayoutItemInstance, CoverablePosition):
                     raise Exception("This should never happen")
+
+                if isinstance(LayoutItemInstance, CoverablePosition):
+                    SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered
+                else:
+                    SupportedLayoutItemInstance.IsCovered = False
+
                 return SupportedLayoutItemInstance
 
         raise Exception("This heater does not support your layout item")
