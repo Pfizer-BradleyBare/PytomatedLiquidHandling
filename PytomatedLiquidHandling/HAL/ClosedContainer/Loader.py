@@ -2,7 +2,7 @@ import yaml
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ..Backend import BackendTracker
-from ..ClosedContainer import HamiltonFlipTube, HamiltonFlipTubeSpecial
+from . import HamiltonFlipTube, HamiltonFlipTubeSpecial
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker
 from .BaseClosedContainer import ClosedContainerTracker

@@ -1,6 +1,6 @@
 import yaml
 
-from ..Tip import HamiltonTipNTR, HamiltonTipFTR
+from . import HamiltonTipNTR, HamiltonTipFTR
 from .BaseTip import TipTracker
 from ..Backend import BackendTracker
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC

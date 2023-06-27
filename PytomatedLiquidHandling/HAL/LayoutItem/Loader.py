@@ -2,7 +2,7 @@ import yaml
 
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
-from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid, NonCoverablePosition
+from . import CoverablePosition, LayoutItemTracker, Lid, NonCoverablePosition
 
 
 def LoadYaml(

@@ -1,7 +1,7 @@
 import yaml
 
 from ..Carrier import CarrierTracker
-from ..DeckLocation import CarrierConfig, DeckLocation, DeckLocationTracker
+from . import CarrierConfig, DeckLocation, DeckLocationTracker
 from ..TransportDevice.BaseTransportDevice import TransportDeviceTracker
 from .BaseDeckLocation import TransportDeviceConfig
 

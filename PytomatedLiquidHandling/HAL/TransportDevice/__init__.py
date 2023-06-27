@@ -3,4 +3,4 @@ from .HamiltonCOREGripper import HamiltonCOREGripper
 from .HamiltonInternalPlateGripper import HamiltonInternalPlateGripper
 from .VantageTrackGripper import VantageTrackGripper
 from .BaseTransportDevice import TransportOptions
-from . import TransportDeviceLoader
+from . import Loader

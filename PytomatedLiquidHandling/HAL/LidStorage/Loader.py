@@ -2,7 +2,7 @@ import yaml
 
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker, NonPipettableLabware
-from ..LidStorage import LidStorageTracker, RandomAccessLidStorage
+from . import LidStorageTracker, RandomAccessLidStorage
 from ..LayoutItem import Lid, LayoutItemTracker
 
 

@@ -1,17 +1,17 @@
 import os
 
-from ....HAL.ClosedContainer import ClosedContainerLoader
-from ....HAL.DeckLocation import DeckLocationLoader
-from ....HAL.Labware import LabwareLoader
+from ....HAL.ClosedContainer import Loader
+from ....HAL.DeckLocation import Loader
+from ....HAL.Labware import Loader
 from ....HAL.Layout import LayoutItemLoader
 from ....HAL.Lid import LidLoader
 
 # from .MagneticRack import MagneticRackLoader, MagneticRackTracker
-from ....HAL.Notify import NotifyLoader
-from ....HAL.Pipette import PipetteLoader
-from ....HAL.TempControlDevice import TempControlDeviceLoader
-from ....HAL.Tip import TipLoader
-from ....HAL.TransportDevice import TransportDeviceLoader
+from ....HAL.Notify import Loader
+from ....HAL.Pipette import Loader
+from ....HAL.TempControlDevice import Loader
+from ....HAL.Tip import Loader
+from ....HAL.TransportDevice import Loader
 from .HALLayer import HALLayer
 
 
@@ -23,7 +23,7 @@ def Load(BasePath: str) -> HALLayer:
     HALLayerInstance = HALLayer()
     LoggerInstance.info("Loading Labware...")
 
-    LabwareTrackerInstance = LabwareLoader.LoadYaml(
+    LabwareTrackerInstance = Loader.LoadYaml(
         os.path.join(BasePath, "Labware\\Labware.yaml"),
     )
     HALLayerInstance.LabwareTrackerInstance = LabwareTrackerInstance
@@ -34,7 +34,7 @@ def Load(BasePath: str) -> HALLayer:
 
     LoggerInstance.info("Loading Transport...")
 
-    TransportDeviceTrackerInstance = TransportDeviceLoader.LoadYaml(
+    TransportDeviceTrackerInstance = Loader.LoadYaml(
         LabwareTrackerInstance,
         os.path.join(BasePath, "Transport\\Transport.yaml"),
     )
@@ -46,7 +46,7 @@ def Load(BasePath: str) -> HALLayer:
 
     LoggerInstance.info("Loading DeckLocation...")
 
-    DeckLocationTrackerInstance = DeckLocationLoader.LoadYaml(
+    DeckLocationTrackerInstance = Loader.LoadYaml(
         TransportDeviceTrackerInstance,
         os.path.join(BasePath, "DeckLocation\\DeckLocation.yaml"),
     )
@@ -84,7 +84,7 @@ def Load(BasePath: str) -> HALLayer:
 
     LoggerInstance.info("Loading TempControlDevice...")
 
-    TempControlDeviceTrackerInstance = TempControlDeviceLoader.LoadYaml(
+    TempControlDeviceTrackerInstance = Loader.LoadYaml(
         LabwareTrackerInstance,
         DeckLocationTrackerInstance,
         os.path.join(BasePath, "TempControlDevice\\TempControlDevice.yaml"),
@@ -97,7 +97,7 @@ def Load(BasePath: str) -> HALLayer:
 
     LoggerInstance.info("Loading Tip...")
 
-    TipTrackerInstance = TipLoader.LoadYaml(
+    TipTrackerInstance = Loader.LoadYaml(
         os.path.join(BasePath, "Tip\\Tip.yaml"),
     )
     HALLayerInstance.TipTrackerInstance = TipTrackerInstance
@@ -108,7 +108,7 @@ def Load(BasePath: str) -> HALLayer:
 
     LoggerInstance.info("Loading Pipette...")
 
-    PipetteTrackerInstance = PipetteLoader.LoadYaml(
+    PipetteTrackerInstance = Loader.LoadYaml(
         TipTrackerInstance,
         LabwareTrackerInstance,
         os.path.join(BasePath, "Pipette\\Pipette.yaml"),
@@ -133,7 +133,7 @@ def Load(BasePath: str) -> HALLayer:
 
     LoggerInstance.info("Loading Notify...")
 
-    NotifyTrackerInstance = NotifyLoader.LoadYaml(
+    NotifyTrackerInstance = Loader.LoadYaml(
         os.path.join(BasePath, "Notify\\Notify.yaml"),
     )
     HALLayerInstance.NotifyTrackerInstance = NotifyTrackerInstance
@@ -144,7 +144,7 @@ def Load(BasePath: str) -> HALLayer:
 
     LoggerInstance.info("Loading FlipTube...")
 
-    ClosedContainerTrackerInstance = ClosedContainerLoader.LoadYaml(
+    ClosedContainerTrackerInstance = Loader.LoadYaml(
         LabwareTrackerInstance,
         os.path.join(BasePath, "ClosedContainers\\ClosedContainers.yaml"),
     )

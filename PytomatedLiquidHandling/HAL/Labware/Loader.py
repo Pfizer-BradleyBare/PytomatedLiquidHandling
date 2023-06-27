@@ -1,6 +1,6 @@
 import yaml
 
-from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
+from . import LabwareTracker, NonPipettableLabware, PipettableLabware
 from .BaseLabware import Dimensions, WellEquation, WellEquationTracker, Wells
 
 

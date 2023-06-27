@@ -8,54 +8,52 @@ LoggerInstance = Logger(
 )
 # create a logger to log all actions
 
-BackendTrackerInstance = HAL.Backend.BackendLoader.LoadYaml(
+BackendTrackerInstance = HAL.Backend.Loader.LoadYaml(
     LoggerInstance, os.path.join(os.path.dirname(__file__), "Config_Backend.yaml")
 )
 
-LabwareTrackerInstance = HAL.Labware.LabwareLoader.LoadYaml(
+LabwareTrackerInstance = HAL.Labware.Loader.LoadYaml(
     os.path.join(os.path.dirname(__file__), "Config_Labware.yaml")
 )
 
-TransportDeviceTrackerInstance = HAL.TransportDevice.TransportDeviceLoader.LoadYaml(
+TransportDeviceTrackerInstance = HAL.TransportDevice.Loader.LoadYaml(
     BackendTrackerInstance,
     LabwareTrackerInstance,
     os.path.join(os.path.dirname(__file__), "Config_Transport.yaml"),
 )
 
-DeckLocationTrackerInstance = HAL.DeckLocation.DeckLocationLoader.LoadYaml(
+DeckLocationTrackerInstance = HAL.DeckLocation.Loader.LoadYaml(
     TransportDeviceTrackerInstance,
     os.path.join(os.path.dirname(__file__), "Config_DeckLocation.yaml"),
 )
 
-LayoutItemTrackerInstance = HAL.LayoutItem.LayoutItemLoader.LoadYaml(
+LayoutItemTrackerInstance = HAL.LayoutItem.Loader.LoadYaml(
     LabwareTrackerInstance,
     DeckLocationTrackerInstance,
     os.path.join(os.path.dirname(__file__), "Config_LayoutItem.yaml"),
 )
 
-ClosedContainerTrackerInstance = HAL.ClosedContainer.ClosedContainerLoader.LoadYaml(
+ClosedContainerTrackerInstance = HAL.ClosedContainer.Loader.LoadYaml(
     BackendTrackerInstance,
     DeckLocationTrackerInstance,
     LabwareTrackerInstance,
     os.path.join(os.path.dirname(__file__), "Config_ClosedContainer.yaml"),
 )
 
-TempControlDeviceTrackerInstance = (
-    HAL.TempControlDevice.TempControlDeviceLoader.LoadYaml(
-        BackendTrackerInstance,
-        LabwareTrackerInstance,
-        DeckLocationTrackerInstance,
-        TransportDeviceTrackerInstance,
-        os.path.join(os.path.dirname(__file__), "Config_TempControlDevice.yaml"),
-    )
+TempControlDeviceTrackerInstance = HAL.TempControlDevice.Loader.LoadYaml(
+    BackendTrackerInstance,
+    LabwareTrackerInstance,
+    DeckLocationTrackerInstance,
+    TransportDeviceTrackerInstance,
+    os.path.join(os.path.dirname(__file__), "Config_TempControlDevice.yaml"),
 )
 
-TipTrackerInstance = HAL.Tip.TipLoader.LoadYaml(
+TipTrackerInstance = HAL.Tip.Loader.LoadYaml(
     BackendTrackerInstance,
     os.path.join(os.path.dirname(__file__), "Config_Tip.yaml"),
 )
 
-PipetteTrackerInstance = HAL.Pipette.PipetteLoader.LoadYaml(
+PipetteTrackerInstance = HAL.Pipette.Loader.LoadYaml(
     BackendTrackerInstance,
     DeckLocationTrackerInstance,
     LabwareTrackerInstance,

@@ -5,7 +5,7 @@ from ..Backend import BackendTracker
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
 from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid
-from ..TempControlDevice import HamiltonHeaterCooler, HamiltonHeaterShaker
+from . import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .BaseTempControlDevice import TempControlDeviceTracker, TempLimits
 from ..TransportDevice import TransportDeviceTracker
 

@@ -6,7 +6,7 @@ from ..Backend import BackendTracker
 from ..DeckLocation import DeckLocation
 from ..Labware import LabwareTracker, PipettableLabware
 from ..LayoutItem import LayoutItemTracker, NonCoverablePosition
-from ..TransportDevice import (
+from . import (
     HamiltonCOREGripper,
     HamiltonInternalPlateGripper,
     VantageTrackGripper,
