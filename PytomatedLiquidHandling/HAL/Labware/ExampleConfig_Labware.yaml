@@ -1,187 +1,95 @@
-#ENTRY
 - Unique Identifier: Agilent Black Lid
   Enabled: True
-  Image Filename: Image
+  Image Filename: LidAgilentBlack
+  Part Number: TODO
   Dimensions:
-    Long Side: 127
-    Short Side: 86
+    Long Side: 136
+    Short Side: 95
 
-#ENTRY
-- Unique Identifier: 400uL Corning Costar 96 Well UV Plate
+- Unique Identifier: Vacuum Manifold
   Enabled: True
   Image Filename: Image
+  Part Number: TODO
+  Dimensions:
+    Long Side: 250
+    Short Side: 89
+
+- Unique Identifier: Biorad 200uL 96 Well PCR Plate
+  Enabled: True
+  Image Filename: PlateBiorad200uL96Well
+  Part Number: HSP9601
   Wells:
     Columns: 12
     Rows: 8
     Sequences Per Well: 1
-    Max Volume: 390
+    Max Volume: 200
     Dead Volume: 10
     Segment Equations:
       - Segment Height: 0
-        Segment Equation: h * 12.3202
+        Segment Equation: h * 2.3562
 
-      - Segment Height: 10.67
-        Segment Equation: h * 36.9605
+      - Segment Height: 15
+        Segment Equation: h * 14.5953
   Dimensions:
     Long Side: 127
     Short Side: 86
 
-#ENTRY
-- Unique Identifier: 200uL Biorad 96 Well PCR Plate
+- Unique Identifier: Thermo 400uL 96 Well PCR Plate
   Enabled: True
-  Image Filename: Image
+  Image Filename: PlateThermo400uL96Well
+  Part Number: 12-656-440
   Wells:
     Columns: 12
     Rows: 8
     Sequences Per Well: 1
-    Max Volume: 225
+    Max Volume: 400
     Dead Volume: 10
     Segment Equations:
-      - Segment Height: 0
-        Segment Equation: h * 12.3202
+      - Segment Height: 3
+        Segment Equation: h * 18.9150
 
-      - Segment Height: 14.68
-        Segment Equation: h * 36.9605
+      - Segment Height: 8
+        Segment Equation: h * 56.7450
   Dimensions:
     Long Side: 127
     Short Side: 86
 
-#ENTRY
-- Unique Identifier: 400uL Thermo 96 Well PCR Plate
+- Unique Identifier: Thermo 1200uL 96 Well PCR Plate
   Enabled: True
-  Image Filename: Image
+  Image Filename: PlateThermo1200uL96Well
+  Part Number: AB1127
   Wells:
     Columns: 12
     Rows: 8
     Sequences Per Well: 1
-    Max Volume: 450
-    Dead Volume: 25
-    Segment Equations:
-      - Segment Height: 0
-        Segment Equation: h * 12.3202
-
-      - Segment Height: 14.68
-        Segment Equation: h * 36.9605
-  Dimensions:
-    Long Side: 127
-    Short Side: 86
-
-#ENTRY
-- Unique Identifier: 1200uL DeepWell 96 Well PCR Plate
-  Enabled: True
-  Image Filename: Image
-  Wells:
-    Columns: 12
-    Rows: 8
-    Sequences Per Well: 1
-    Max Volume: 1300
+    Max Volume: 1200
     Dead Volume: 50
     Segment Equations:
-      - Segment Height: 0
-        Segment Equation: h * 12.3202
+      - Segment Height: 3
+        Segment Equation: h * h * (12.5664 - (1.0472 * h))
 
-      - Segment Height: 14.68
-        Segment Equation: h * 36.9605
+      - Segment Height: 18
+        Segment Equation: h * 70.5600
   Dimensions:
     Long Side: 127
     Short Side: 86
 
-#ENTRY
-- Unique Identifier: 2000uL Corning 96 Well PCR Plate
+- Unique Identifier: Corning Costar 2000uL 96 Well PCR Plate
   Enabled: True
-  Image Filename: Image
+  Image Filename: PlateCorning2000uL96Well
+  Part Number: 6604337-01
   Wells:
     Columns: 12
     Rows: 8
     Sequences Per Well: 1
-    Max Volume: 2300
-    Dead Volume: 100
+    Max Volume: 2000
+    Dead Volume: 50
     Segment Equations:
-      - Segment Height: 0
-        Segment Equation: h * 12.3202
+      - Segment Height: 4
+        Segment Equation: h * h * (12.5664 - (1.0472 * h))
 
-      - Segment Height: 14.68
-        Segment Equation: h * 36.9605
-  Dimensions:
-    Long Side: 127
-    Short Side: 86
-
-#ENTRY
-- Unique Identifier: Hamilton 1.5mL FlipTube
-  Enabled: True
-  Image Filename: Image
-  Wells:
-    Columns: 1
-    Rows: 32
-    Sequences Per Well: 1
-    Max Volume: 1500
-    Dead Volume: 150
-    Segment Equations:
-      - Segment Height: 0
-        Segment Equation: h * 12.3202
-
-      - Segment Height: 14.68
-        Segment Equation: h * 36.9605
-  Dimensions:
-    Long Side: 127
-    Short Side: 86
-
-#ENTRY
-- Unique Identifier: 15mL Centrifuge Tube
-  Enabled: True
-  Image Filename: Image
-  Wells:
-    Columns: 1
-    Rows: 24
-    Sequences Per Well: 1
-    Max Volume: 14000
-    Dead Volume: 500
-    Segment Equations:
-      - Segment Height: 0
-        Segment Equation: h * 12.3202
-
-      - Segment Height: 14.68
-        Segment Equation: h * 36.9605
-  Dimensions:
-    Long Side: 127
-    Short Side: 86
-
-#ENTRY
-- Unique Identifier: 60mL Reagent Reservior
-  Enabled: True
-  Image Filename: Image
-  Wells:
-    Columns: 1
-    Rows: 5
-    Sequences Per Well: 8
-    Max Volume: 50000
-    Dead Volume: 2500
-    Segment Equations:
-      - Segment Height: 0
-        Segment Equation: h * 12.3202
-
-      - Segment Height: 14.68
-        Segment Equation: h * 36.9605
-  Dimensions:
-    Long Side: 127
-    Short Side: 86
-
-#ENTRY
-- Unique Identifier: 200mL Reagent Trough
-  Enabled: True
-  Image Filename: Image
-  Wells:
-    Columns: 1
-    Rows: 1
-    Sequences Per Well: 96
-    Max Volume: 200000
-    Dead Volume: 6000
-    Segment Equations:
-      - Segment Height: 0
-        Segment Equation: h * 12.3202
-
-      - Segment Height: 14.68
-        Segment Equation: h * 36.9605
+      - Segment Height: 38
+        Segment Equation: h * 64.0000
   Dimensions:
     Long Side: 127
     Short Side: 86
