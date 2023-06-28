@@ -1,12 +1,13 @@
 from abc import abstractmethod
+from dataclasses import dataclass, field
+
 from ....Tools.AbstractClasses import UniqueObjectABC
+from ...LayoutItem import CoverableItem, NonCoverableItem
+from ...Tools.AbstractClasses import InterfaceABC
 from .Interface import TransportOptions
 from .TransportableLabware.TransportableLabwareTracker import (
     TransportableLabwareTracker,
 )
-from ...Tools.AbstractClasses import InterfaceABC
-from dataclasses import dataclass, field
-from ...LayoutItem import CoverablePosition, NonCoverablePosition
 
 
 @dataclass
@@ -65,8 +66,8 @@ class TransportDevice(InterfaceABC, UniqueObjectABC):
 
         if not type(SourceLayoutItem) == type(DestinationLayoutItem):
             if (
-                type(SourceLayoutItem) == CoverablePosition
-                and type(DestinationLayoutItem) == NonCoverablePosition
+                type(SourceLayoutItem) == CoverableItem
+                and type(DestinationLayoutItem) == NonCoverableItem
                 and SourceLayoutItem.IsCovered == True
             ):
                 raise Exception(

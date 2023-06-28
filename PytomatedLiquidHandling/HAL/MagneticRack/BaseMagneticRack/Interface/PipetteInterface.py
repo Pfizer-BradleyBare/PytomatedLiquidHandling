@@ -1,11 +1,11 @@
 from abc import abstractmethod
 
 from ....Labware import LabwareTracker
-from ....LayoutItem import CoverablePosition, NonCoverablePosition
+from ....LayoutItem import CoverableItem, NonCoverableItem
 
 
 def TestSumLessThanMax(
-    LayoutItemInstances: list[CoverablePosition] | list[NonCoverablePosition],
+    LayoutItemInstances: list[CoverableItem] | list[NonCoverableItem],
     LayoutItemPositions: list[int],
     TransferVolumes: list[float],
     MaxSumValues: list[float],
@@ -45,7 +45,7 @@ def TestSumLessThanMax(
 
 def TestLabwareSupported(
     LabwareTrackerInstance: LabwareTracker,
-    LayoutItems: list[CoverablePosition] | list[NonCoverablePosition],
+    LayoutItems: list[CoverableItem] | list[NonCoverableItem],
 ) -> list[int]:
     FailedIndices = list()
 

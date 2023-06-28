@@ -1,16 +1,17 @@
-from ......Driver.Tools.AbstractClasses import OptionsABC
-from .....LayoutItem import CoverablePosition, NonCoverablePosition
 from dataclasses import dataclass
+
+from ......Driver.Tools.AbstractClasses import OptionsABC
+from .....LayoutItem import CoverableItem, NonCoverableItem
 
 
 @dataclass(kw_only=True)
 class Options(OptionsABC):
-    SourceLayoutItemInstance: CoverablePosition | NonCoverablePosition
+    SourceLayoutItemInstance: CoverableItem | NonCoverableItem
     SourcePosition: int  # This is the well position. Not sequence position
     CurrentSourceVolume: float
     SourceMixCycles: int
     SourceLiquidClassCategory: str
-    DestinationLayoutItemInstance: CoverablePosition | NonCoverablePosition
+    DestinationLayoutItemInstance: CoverableItem | NonCoverableItem
     DestinationPosition: int  # This is the well position. Not sequence position
     CurrentDestinationVolume: float
     DestinationMixCycles: int

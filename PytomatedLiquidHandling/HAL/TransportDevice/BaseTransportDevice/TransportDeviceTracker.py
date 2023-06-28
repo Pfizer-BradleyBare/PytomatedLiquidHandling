@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from ....Tools.AbstractClasses import UniqueObjectTrackerABC
 from ...Carrier import CarrierABC
 from ...DeckLocation import CarrierConfig, DeckLocation, TransportDeviceConfig
-from ...LayoutItem import CoverablePosition, LayoutItemTracker, NonCoverablePosition
+from ...LayoutItem import CoverableItem, LayoutItemTracker, NonCoverableItem
 from .Interface import TransportOptions
 from .TransportDevice import TransportDevice
 
@@ -57,7 +57,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                 IntermediateDestinationTransportDeviceInstance = self.GetObjectByName(
                     LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
                 )
-                IntermediateDestinationLayoutItem = NonCoverablePosition(
+                IntermediateDestinationLayoutItem = NonCoverableItem(
                     "Intermediate Destination",
                     LabwareDestinationLayoutItem.Sequence,
                     DeckLocation(
@@ -99,7 +99,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                 ):
                     IntermediateSourceTransportDeviceInstance._LastTransportFlag = True
 
-                IntermediateSourceLayoutItem = NonCoverablePosition(
+                IntermediateSourceLayoutItem = NonCoverableItem(
                     "Intermediate Source",
                     LabwareSourceLayoutItem.Sequence,
                     DeckLocation(

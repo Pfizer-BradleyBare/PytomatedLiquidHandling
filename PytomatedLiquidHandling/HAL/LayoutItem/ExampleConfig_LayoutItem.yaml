@@ -1,13 +1,21 @@
-- Unique Identifier: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
-  Enabled: True
-  Plate Sequence: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
-  Plate Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
-  Deck Location Unique Identifier: Carrier38_Pos1
+Lid:
+  - Unique Identifier: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
+    Enabled: True
+    Sequence: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
+    Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
+    Deck Location Unique Identifier: Carrier38_Pos1
 
-- Unique Identifier: Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel
-  Enabled: True
-  Plate Sequence: Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel
-  Plate Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
-  Lid Sequence: Carrier14_Pos3_Lid_400uL
-  Lid Labware Unique Identifier: Agilent Black Lid
-  Deck Location Unique Identifier: Carrier38_Pos2
+NonCoverable Position:
+  - Unique Identifier: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
+    Enabled: True
+    Sequence: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
+    Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
+    Deck Location Unique Identifier: Carrier38_Pos1
+
+Coverable Position:
+  - Unique Identifier: Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel
+    Enabled: True
+    Sequence: Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel
+    Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
+    Deck Location Unique Identifier: Carrier38_Pos2
+    Lid Unique Identifier: Lid

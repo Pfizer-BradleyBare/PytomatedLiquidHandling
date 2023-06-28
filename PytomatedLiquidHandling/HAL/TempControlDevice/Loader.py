@@ -4,10 +4,10 @@ from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ..Backend import BackendTracker
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
-from ..LayoutItem import CoverablePosition, LayoutItemTracker, Lid
+from ..LayoutItem import CoverableItem, LayoutItemTracker, Lid
+from ..TransportDevice import TransportDeviceTracker
 from . import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .BaseTempControlDevice import TempControlDeviceTracker, TempLimits
-from ..TransportDevice import TransportDeviceTracker
 
 
 def LoadYaml(
@@ -73,7 +73,7 @@ def LoadYaml(
                     LidLabwareInstance,
                 )
 
-                LayoutItemInstance = CoverablePosition(
+                LayoutItemInstance = CoverableItem(
                     UniqueIdentifier + " " + LabwareName,
                     PlateSequence,
                     DeckLocationInstance,

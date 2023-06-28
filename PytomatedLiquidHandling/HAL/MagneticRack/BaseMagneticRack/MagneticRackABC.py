@@ -1,8 +1,9 @@
-from ....Tools.AbstractClasses import UniqueObjectABC
-from ...LayoutItem import LayoutItemTracker, CoverablePosition, NonCoverablePosition
 from dataclasses import dataclass, field
-from ...Tools.AbstractClasses import InterfaceABC
+
+from ....Tools.AbstractClasses import UniqueObjectABC
 from ...Backend import NullBackend
+from ...LayoutItem import CoverableItem, LayoutItemTracker, NonCoverableItem
+from ...Tools.AbstractClasses import InterfaceABC
 
 
 @dataclass
@@ -12,8 +13,8 @@ class MagneticRackABC(InterfaceABC, UniqueObjectABC):
     SupportedLayoutItemTrackerInstance: LayoutItemTracker
 
     def GetLayoutItem(
-        self, LayoutItemInstance: CoverablePosition | NonCoverablePosition
-    ) -> CoverablePosition:
+        self, LayoutItemInstance: CoverableItem | NonCoverableItem
+    ) -> CoverableItem:
         for (
             SupportedLayoutItemInstance
         ) in self.SupportedLayoutItemTrackerInstance.GetObjectsAsList():
@@ -21,10 +22,10 @@ class MagneticRackABC(InterfaceABC, UniqueObjectABC):
                 SupportedLayoutItemInstance.LabwareInstance
                 == LayoutItemInstance.LabwareInstance
             ):
-                if not isinstance(SupportedLayoutItemInstance, CoverablePosition):
+                if not isinstance(SupportedLayoutItemInstance, CoverableItem):
                     raise Exception("This should never happen")
 
-                if isinstance(LayoutItemInstance, CoverablePosition):
+                if isinstance(LayoutItemInstance, CoverableItem):
                     SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered
                 else:
                     SupportedLayoutItemInstance.IsCovered = False

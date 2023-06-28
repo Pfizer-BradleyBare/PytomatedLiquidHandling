@@ -1,10 +1,11 @@
+from dataclasses import dataclass, field
+
 from .BaseLayoutItem import LayoutItemABC
 from .Lid import Lid
-from dataclasses import dataclass, field
 
 
 @dataclass
-class CoverablePosition(LayoutItemABC):
+class CoverableItem(LayoutItemABC):
     LidInstance: Lid
     IsCovered: bool = field(init=False, default=False)
 

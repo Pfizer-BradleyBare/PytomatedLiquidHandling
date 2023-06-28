@@ -1,9 +1,10 @@
-from ......Driver.Tools.AbstractClasses import OptionsABC
-from .....LayoutItem import CoverablePosition, NonCoverablePosition
 from dataclasses import dataclass
+
+from ......Driver.Tools.AbstractClasses import OptionsABC
+from .....LayoutItem import CoverableItem, NonCoverableItem
 
 
 @dataclass(kw_only=True)
 class Options(OptionsABC):
-    LayoutItemInstance: CoverablePosition | NonCoverablePosition
+    LayoutItemInstance: CoverableItem | NonCoverableItem
     Position: int

@@ -5,12 +5,8 @@ from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ..Backend import BackendTracker
 from ..DeckLocation import DeckLocation
 from ..Labware import LabwareTracker, PipettableLabware
-from ..LayoutItem import LayoutItemTracker, NonCoverablePosition
-from . import (
-    HamiltonCOREGripper,
-    HamiltonInternalPlateGripper,
-    VantageTrackGripper,
-)
+from ..LayoutItem import LayoutItemTracker, NonCoverableItem
+from . import HamiltonCOREGripper, HamiltonInternalPlateGripper, VantageTrackGripper
 from .BaseTransportDevice import (
     TransportableLabware,
     TransportableLabwareTracker,
@@ -49,7 +45,7 @@ def LoadYaml(
             raise Exception("This should never happen")
 
         TransitionPointTrackerInstance.LoadSingle(
-            NonCoverablePosition(
+            NonCoverableItem(
                 str(PlateLabwareInstance.UniqueIdentifier),
                 PlateSequence,
                 FillerDeckLocationInstance,

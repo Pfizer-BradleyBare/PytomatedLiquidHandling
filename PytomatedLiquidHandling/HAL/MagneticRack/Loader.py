@@ -1,12 +1,13 @@
 import yaml
-from .MagneticRack import MagneticRack
-from .BaseMagneticRack import MagneticRackTracker
+
+from ..Backend import NullBackend
 from ..DeckLocation import DeckLocationTracker
 from ..Labware import LabwareTracker
+from ..LayoutItem import LayoutItemTracker, NonCoverableItem
 from ..Pipette import PipetteTracker
 from ..Pipette.BasePipette import LiquidClass, LiquidClassCategory
-from ..LayoutItem import NonCoverablePosition, LayoutItemTracker
-from ..Backend import NullBackend
+from .BaseMagneticRack import MagneticRackTracker
+from .MagneticRack import MagneticRack
 
 
 def LoadYaml(
@@ -36,7 +37,7 @@ def LoadYaml(
             LabwareInstance = LabwareTrackerInstance.GetObjectByName(LabwareID)
 
             SupportedLayoutItemTrackerInstance.LoadSingle(
-                NonCoverablePosition(
+                NonCoverableItem(
                     UniqueIdentifier + " " + Sequence,
                     Sequence,
                     DeckLocationInstance,
