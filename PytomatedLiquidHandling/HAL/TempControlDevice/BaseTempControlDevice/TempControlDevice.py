@@ -16,8 +16,10 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
     SupportedLayoutItemTrackerInstance: LayoutItemTracker
 
     HandleID: int | str = field(init=False)
-    ActualTemperature: float = field(init=False, default=0)
-    ActualShakingSpeed: int = field(init=False, default=0)
+    _ActualTemperature: float = field(init=False, default=0)
+    _ActualShakingSpeed: int = field(init=False, default=0)
+    _SetTemperature: float = field(init=False, default=0)
+    _SetShakingSpeed: int = field(init=False, default=0)
 
     def GetLayoutItem(
         self, LayoutItemInstance: CoverablePosition | NonCoverablePosition
@@ -41,34 +43,42 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
 
         raise Exception("This heater does not support your layout item")
 
+    @property
+    def Temperature(self) -> float:
+        return self._SetTemperature
+
+    @Temperature.setter
     @abstractmethod
-    def SetTemperature(
-        self,
-        Temperature: float,
-    ):
+    def Temperature(self, NewTemperature: float):
         ...
 
-    @abstractmethod
-    def UpdateActualTemperature(
-        self,
-    ):
-        ...
+    @property
+    def ActualTemperature(self) -> float:
+        self._UpdateActualTemperature()
+        return self._ActualTemperature
 
     @abstractmethod
-    def StartShaking(
-        self,
-        RPM: float,
-    ):
-        ...
-
-    @abstractmethod
-    def StopShaking(
+    def _UpdateActualTemperature(
         self,
     ):
         ...
 
+    @property
+    def ShakingSpeed(self) -> int:
+        return self._SetShakingSpeed
+
+    @ShakingSpeed.setter
     @abstractmethod
-    def UpdateActualShakingSpeed(
+    def ShakingSpeed(self, NewRPM: int):
+        ...
+
+    @property
+    def ActualShakingSpeed(self) -> int:
+        self._UpdateActualShakingSpeed()
+        return self._ActualShakingSpeed
+
+    @abstractmethod
+    def _UpdateActualShakingSpeed(
         self,
     ):
         ...
