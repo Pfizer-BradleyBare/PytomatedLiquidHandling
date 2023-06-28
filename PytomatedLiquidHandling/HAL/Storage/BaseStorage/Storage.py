@@ -1,20 +1,21 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field
+
 from ....Tools.AbstractClasses import UniqueObjectABC
-from ...LayoutItem import Lid, LayoutItemTracker
-from .LidReservation import LidReservationTracker
+from ...LayoutItem import LayoutItemTracker, Lid
+from .Reservation import ReservationTracker
 
 
 @dataclass
-class LidStorage(UniqueObjectABC):
+class Storage(UniqueObjectABC):
     ReservableLidTrackerInstance: LayoutItemTracker
-    LidReservationTrackerInstance: LidReservationTracker = field(
-        init=False, default=LidReservationTracker()
+    ReservationTrackerInstance: ReservationTracker = field(
+        init=False, default=ReservationTracker()
     )
 
     def CheckReservationExists(self, UniqueIdentifier: str) -> bool:
         try:
-            self.LidReservationTrackerInstance.GetObjectByName(UniqueIdentifier)
+            self.ReservationTrackerInstance.GetObjectByName(UniqueIdentifier)
             return True
         except:
             return False

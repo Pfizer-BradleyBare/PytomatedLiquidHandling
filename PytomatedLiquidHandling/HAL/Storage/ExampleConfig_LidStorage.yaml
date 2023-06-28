@@ -5,13 +5,9 @@
 #
 #############################################################
 
-Random Access Lid Storage:
+Random Access Deck Storage:
   - Unique Identifier: Random Access Lid Storage 1
     Enabled: True
-    Lid Labware: Agilent Black Lid
-    Lid Positions:
-      - Sequence: Lid_Home1
-        Deck Location: Vacuum_Carrier_Pos1
-
-      - Sequence: Lid_Home2
-        Deck Location: Vacuum_Carrier_Pos2
+    Supported Labware Layout Item Unique Identifiers:
+      - Item1
+      - Item2
