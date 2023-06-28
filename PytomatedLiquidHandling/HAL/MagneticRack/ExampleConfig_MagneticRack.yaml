@@ -13,10 +13,9 @@
 
 - Unique Identifier: Rack 1
   Enabled: True
-  Deck Location Unique Identifier: HHS_Carrier_Pos3
-  Supported Labware Information:
-    - Plate Sequence: _HHS1_96WellPCRPlate200uL
-      Plate Labware Unique Identifier: 200uL Biorad 96 Well PCR Plate
+  Supported Labware Layout Item Unique Identifiers:
+    - Item1
+    - Item2
 
   Pipette Unique Identifiers:
     - Unique Identifier: 96 Head Hammy
@@ -30,7 +29,7 @@
 
           - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
             Max Volume: 1000
-        
+
         Add Buffer:
           - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
             Max Volume: 50

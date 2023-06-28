@@ -1,9 +1,7 @@
 import yaml
 
 from ..Backend import NullBackend
-from ..DeckLocation import DeckLocationTracker
-from ..Labware import LabwareTracker
-from ..LayoutItem import LayoutItemTracker, NonCoverableItem
+from ..LayoutItem import LayoutItemTracker, Lid
 from ..Pipette import PipetteTracker
 from ..Pipette.BasePipette import LiquidClass, LiquidClassCategory
 from .BaseMagneticRack import MagneticRackTracker
@@ -12,8 +10,7 @@ from .MagneticRack import MagneticRack
 
 def LoadYaml(
     FilePath: str,
-    DeckLocationTrackerInstance: DeckLocationTracker,
-    LabwareTrackerInstance: LabwareTracker,
+    LayoutItemTrackerInstance: LayoutItemTracker,
     PipetteTrackerInstance: PipetteTracker,
 ) -> MagneticRackTracker:
     MagneticRackTrackerInstance = MagneticRackTracker()
@@ -25,25 +22,22 @@ def LoadYaml(
 
     for Rack in ConfigFile["Rack IDs"]:
         UniqueIdentifier = Rack["Unique Identifier"]
-        DeckLocationID = Rack["Deck Location Unique Identifier"]
-        DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
-            DeckLocationID
-        )
 
         SupportedLayoutItemTrackerInstance = LayoutItemTracker()
-        for LayoutItemInfo in Rack["Supported Labware Information"]:
-            Sequence = LayoutItemInfo["Plate Sequence"]
-            LabwareID = LayoutItemInfo["Plate Labware Unique Identifier"]
-            LabwareInstance = LabwareTrackerInstance.GetObjectByName(LabwareID)
 
-            SupportedLayoutItemTrackerInstance.LoadSingle(
-                NonCoverableItem(
-                    UniqueIdentifier + " " + Sequence,
-                    Sequence,
-                    DeckLocationInstance,
-                    LabwareInstance,
-                )
+        for LayoutItemUniqueID in Rack[
+            "Supported Labware Layout Item Unique Identifiers"
+        ]:
+            LayoutItemInstance = LayoutItemTrackerInstance.GetObjectByName(
+                LayoutItemUniqueID
             )
+
+            if isinstance(LayoutItemInstance, Lid):
+                raise Exception(
+                    "Only coverable or nonCoverable layout items are supported"
+                )
+
+            SupportedLayoutItemTrackerInstance.LoadSingle(LayoutItemInstance)
 
         for PipetteDevice in Rack["Pipette Unique Identifiers"]:
             PipetteID = PipetteDevice["Unique Identifier"]
