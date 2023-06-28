@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from math import ceil
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
@@ -5,7 +6,6 @@ from ...Driver.Hamilton.Pipette import PortraitCORE8Channel
 from ..Labware import PipettableLabware
 from ..Pipette import TransferOptions
 from .BasePipette import Pipette
-from dataclasses import dataclass
 
 
 @dataclass
@@ -74,8 +74,7 @@ class HamiltonPortraitCORE8Channel(Pipette):
                 TipInstance = self.SupportedTipTrackerInstance.GetObjectByName(
                     Tip
                 ).TipInstance
-                TipInstance.UpdateTipPositions(NumTips=Count)
-                TipPositions[Tip] = TipInstance.TipPositions
+                TipPositions[Tip] = TipInstance.GetTipPositions(NumTips=Count)
             # Get our updated tip positions!
 
             PickupOptionsTracker = PortraitCORE8Channel.Pickup.OptionsTracker()

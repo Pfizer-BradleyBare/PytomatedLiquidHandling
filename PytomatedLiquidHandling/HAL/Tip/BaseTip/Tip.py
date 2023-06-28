@@ -1,9 +1,9 @@
 from abc import abstractmethod
+from dataclasses import dataclass, field
 
+from ....Driver.Tools.AbstractClasses.Backend import BackendABC
 from ....Tools.AbstractClasses import UniqueObjectABC
 from ...Tools.AbstractClasses import InterfaceABC
-from ....Driver.Tools.AbstractClasses.Backend import BackendABC
-from dataclasses import dataclass, field
 
 
 @dataclass
@@ -11,7 +11,6 @@ class Tip(InterfaceABC, UniqueObjectABC):
     PickupSequence: str
     MaxVolume: float
 
-    TipPositions: list[int] = field(init=False, default_factory=list)
     RemainingTips: int = field(init=False, default=0)
 
     @abstractmethod
@@ -21,11 +20,11 @@ class Tip(InterfaceABC, UniqueObjectABC):
         ...
 
     @abstractmethod
-    def UpdateTipPositions(
+    def GetTipPositions(
         self,
         *,
         NumTips: int,
-    ):
+    ) -> list[int]:
         ...
 
     @abstractmethod

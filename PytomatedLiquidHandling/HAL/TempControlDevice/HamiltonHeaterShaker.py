@@ -1,7 +1,8 @@
+from dataclasses import dataclass, field
+
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.TemperatureControl import HeaterShaker as HeaterShakerDriver
 from .BaseTempControlDevice import TempControlDevice
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from dataclasses import dataclass, field
 
 
 @dataclass
@@ -106,7 +107,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             CommandInstance, HeaterShakerDriver.StartTemperatureControl.Response
         )
 
-    def UpdateTemperature(self):
+    def UpdateActualTemperature(self):
         CommandInstance = HeaterShakerDriver.GetTemperature.Command(
             OptionsInstance=HeaterShakerDriver.GetTemperature.Options(
                 HandleID=int(self.HandleID),
@@ -119,7 +120,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             CommandInstance, HeaterShakerDriver.GetTemperature.Response
         )
 
-        self.CurrentTemperature = ResponseInstance.GetTemperature()
+        self.ActualTemperature = ResponseInstance.GetTemperature()
 
     def StartShaking(self, *, RPM: int):
         CommandInstance = HeaterShakerDriver.SetPlateLock.Command(
@@ -173,7 +174,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             CommandInstance, HeaterShakerDriver.SetPlateLock.Response
         )
 
-    def UpdateShakingSpeed(self):
+    def UpdateActualShakingSpeed(self):
         CommandInstance = HeaterShakerDriver.GetShakingSpeed.Command(
             OptionsInstance=HeaterShakerDriver.GetShakingSpeed.Options(
                 HandleID=int(self.HandleID),
@@ -186,4 +187,4 @@ class HamiltonHeaterShaker(TempControlDevice):
             CommandInstance, HeaterShakerDriver.GetShakingSpeed.Response
         )
 
-        self.CurrentShakingSpeed = ResponseInstance.GetShakingSpeed()
+        self.ActualShakingSpeed = ResponseInstance.GetShakingSpeed()

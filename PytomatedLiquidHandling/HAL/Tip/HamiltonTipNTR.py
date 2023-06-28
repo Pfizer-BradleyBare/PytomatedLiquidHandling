@@ -1,7 +1,8 @@
+from dataclasses import dataclass, field
+
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Tip import NTR as NTRDriver
 from .BaseTip import Tip
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from dataclasses import dataclass, field
 
 
 @dataclass
@@ -32,7 +33,7 @@ class HamiltonTipNTR(Tip):
 
     # We also need to show a deck loading dialog, move the autoload, etc.
 
-    def UpdateTipPositions(self, *, NumTips: int):
+    def GetTipPositions(self, *, NumTips: int) -> list[int]:
         CommandInstance = NTRDriver.GetTipPositions.Command(
             OptionsInstance=NTRDriver.GetTipPositions.Options(
                 TipSequence=self.PickupSequence,
@@ -49,7 +50,7 @@ class HamiltonTipNTR(Tip):
             CommandInstance, NTRDriver.GetTipPositions.Response
         )
 
-        self.TipPositions = ResponseInstance.GetTipPositions()
+        return ResponseInstance.GetTipPositions()
 
     def UpdateRemainingTips(self):
         CommandInstance = NTRDriver.GetNumTips.Command(

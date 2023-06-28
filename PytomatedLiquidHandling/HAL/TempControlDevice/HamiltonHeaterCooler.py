@@ -60,7 +60,7 @@ class HamiltonHeaterCooler(TempControlDevice):
             CommandInstance, HeaterCoolerDriver.StartTemperatureControl.Response
         )
 
-    def UpdateTemperature(
+    def UpdateActualTemperature(
         self,
     ):
         CommandInstance = HeaterCoolerDriver.GetTemperature.Command(
@@ -75,7 +75,7 @@ class HamiltonHeaterCooler(TempControlDevice):
             CommandInstance, HeaterCoolerDriver.GetTemperature.Response
         )
 
-        self.CurrentTemperature = ResponseInstance.GetTemperature()
+        self.ActualTemperature = ResponseInstance.GetTemperature()
 
     def StartShaking(self, *, RPM: float):
         raise Exception(
@@ -85,5 +85,5 @@ class HamiltonHeaterCooler(TempControlDevice):
     def StopShaking(self):
         ...
 
-    def UpdateShakingSpeed(self):
+    def UpdateActualShakingSpeed(self):
         ...
