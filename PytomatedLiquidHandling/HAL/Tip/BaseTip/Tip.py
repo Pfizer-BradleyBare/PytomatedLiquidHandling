@@ -11,7 +11,7 @@ class Tip(InterfaceABC, UniqueObjectABC):
     PickupSequence: str
     MaxVolume: float
 
-    RemainingTips: int = field(init=False, default=0)
+    _RemainingTips: int = field(init=False, default=0)
 
     @abstractmethod
     def Reload(
@@ -27,8 +27,12 @@ class Tip(InterfaceABC, UniqueObjectABC):
     ) -> list[int]:
         ...
 
+    @property
+    def RemainingTips(self) -> int:
+        return self._RemainingTips
+
     @abstractmethod
-    def UpdateRemainingTips(
+    def _UpdateRemainingTips(
         self,
     ):
         ...

@@ -42,7 +42,7 @@ class HamiltonTipFTR(Tip):
 
         return ResponseInstance.GetTipPositions()
 
-    def UpdateRemainingTips(self):
+    def _UpdateRemainingTips(self):
         CommandInstance = FTRDriver.GetNumTips.Command(
             OptionsInstance=FTRDriver.GetNumTips.Options(
                 TipSequence=self.PickupSequence,
@@ -55,4 +55,4 @@ class HamiltonTipFTR(Tip):
             CommandInstance, FTRDriver.GetNumTips.Response
         )
 
-        self.RemainingTips = ResponseInstance.GetNumRemaining()
+        self._RemainingTips = ResponseInstance.GetNumRemaining()

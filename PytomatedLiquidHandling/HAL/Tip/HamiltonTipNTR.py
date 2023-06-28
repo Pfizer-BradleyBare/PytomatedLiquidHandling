@@ -52,7 +52,7 @@ class HamiltonTipNTR(Tip):
 
         return ResponseInstance.GetTipPositions()
 
-    def UpdateRemainingTips(self):
+    def _UpdateRemainingTips(self):
         CommandInstance = NTRDriver.GetNumTips.Command(
             OptionsInstance=NTRDriver.GetNumTips.Options(
                 TipSequence=self.PickupSequence,
@@ -65,4 +65,4 @@ class HamiltonTipNTR(Tip):
             CommandInstance, NTRDriver.GetNumTips.Response
         )
 
-        self.RemainingTips = ResponseInstance.GetNumRemaining()
+        self._RemainingTips = ResponseInstance.GetNumRemaining()
