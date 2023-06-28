@@ -17,53 +17,71 @@ def LoadYaml(
     FileHandle.close()
     # Get config file contents
 
-    for LayoutItem in ConfigFile:
-        if LayoutItem["Enabled"] == False:
-            continue
-        UniqueIdentifier = LayoutItem["Unique Identifier"]
-        PlateSequence = LayoutItem["Plate Sequence"]
-        PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(
-            LayoutItem["Plate Labware Unique Identifier"]
-        )
-        DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
-            LayoutItem["Deck Location Unique Identifier"]
-        )
+    OldConfigFile = ConfigFile
+    ConfigFile = dict()
 
-        if not isinstance(PlateLabwareInstance, PipettableLabware):
-            raise Exception("This should not happen")
-        # Plates are technically defined here and all plates should be PipettableLabware
+    if "Coverable Item" in OldConfigFile:
+        if "Lid" not in OldConfigFile:
+            raise Exception(
+                "You are defining Coverable items but not lids. Lids are required for coverable items."
+            )
+        ConfigFile["Lid"] = OldConfigFile["Lid"]
+        ConfigFile["Coverable Item"] = OldConfigFile["Coverable Item"]
 
-        if "Lid Sequence" in LayoutItem:
-            LidSequence = LayoutItem["Lid Sequence"]
-            LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
-                LayoutItem["Lid Labware Unique Identifier"]
+    if "NonCoverable Item" in OldConfigFile:
+        ConfigFile["NonCoverable Item"] = OldConfigFile["NonCoverable Item"]
+    # Reorder input config as needed
+
+    for LayoutItemID in ConfigFile:
+        for LayoutItem in ConfigFile[LayoutItemID]:
+            if LayoutItem["Enabled"] == False:
+                continue
+            UniqueIdentifier = LayoutItem["Unique Identifier"]
+            Sequence = LayoutItem["Sequence"]
+            LabwareInstance = LabwareTrackerInstance.GetObjectByName(
+                LayoutItem["Labware Unique Identifier"]
+            )
+            DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
+                LayoutItem["Deck Location Unique Identifier"]
             )
 
-            if not isinstance(LidLabwareInstance, NonPipettableLabware):
-                raise Exception("This should not happen")
-            # Lids are obviously NonPipettableLabware
+            if LayoutItemID == "NonCoverable Item":
+                if not isinstance(LabwareInstance, PipettableLabware):
+                    raise Exception("This should not happen")
+                # Plates are technically defined here and all plates should be PipettableLabware
+                LayoutItemInstance = NonCoverableItem(
+                    UniqueIdentifier, Sequence, DeckLocationInstance, LabwareInstance
+                )
 
-            LayoutItemInstance = CoverableItem(
-                UniqueIdentifier,
-                PlateSequence,
-                DeckLocationInstance,
-                PlateLabwareInstance,
-                Lid(
+            elif LayoutItemID == "Coverable Item":
+                if not isinstance(LabwareInstance, PipettableLabware):
+                    raise Exception("This should not happen")
+                # Plates are technically defined here and all plates should be PipettableLabware
+                LidInstance = LayoutItemTrackerInstance.GetObjectByName(
+                    LayoutItem["Lid Unique Identifier"]
+                )
+                if not isinstance(LidInstance, Lid):
+                    raise Exception("This lid unique ID is not a lid. Please fix.")
+
+                LayoutItemInstance = CoverableItem(
                     UniqueIdentifier,
-                    LidSequence,
+                    Sequence,
                     DeckLocationInstance,
-                    LidLabwareInstance,
-                ),
-            )
+                    LabwareInstance,
+                    LidInstance,
+                )
 
-        else:
-            LayoutItemInstance = NonCoverableItem(
-                UniqueIdentifier,
-                PlateSequence,
-                DeckLocationInstance,
-                PlateLabwareInstance,
-            )
+            elif LayoutItemID == "Lid":
+                if not isinstance(LabwareInstance, NonPipettableLabware):
+                    raise Exception("This should not happen")
+                # Lids are obviously NonPipettableLabware
+                LayoutItemInstance = Lid(
+                    UniqueIdentifier, Sequence, DeckLocationInstance, LabwareInstance
+                )
 
-        LayoutItemTrackerInstance.LoadSingle(LayoutItemInstance)
+            else:
+                raise Exception("Layout item ID not recognized")
+
+            LayoutItemTrackerInstance.LoadSingle(LayoutItemInstance)
 
     return LayoutItemTrackerInstance
