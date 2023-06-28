@@ -2,19 +2,14 @@ import yaml
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ..Backend import BackendTracker
-from ..DeckLocation import DeckLocationTracker
-from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
-from ..LayoutItem import CoverableItem, LayoutItemTracker, Lid
-from ..TransportDevice import TransportDeviceTracker
+from ..LayoutItem import CoverableItem, LayoutItemTracker
 from . import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .BaseTempControlDevice import TempControlDeviceTracker, TempLimits
 
 
 def LoadYaml(
     BackendTrackerInstance: BackendTracker,
-    LabwareTrackerInstance: LabwareTracker,
-    DeckLocationTrackerInstance: DeckLocationTracker,
-    TransportDeviceTrackerInstance: TransportDeviceTracker,
+    LayoutItemTrackerInstance: LayoutItemTracker,
     FilePath: str,
 ) -> TempControlDeviceTracker:
     TempControlDeviceTrackerInstance = TempControlDeviceTracker()
@@ -42,46 +37,19 @@ def LoadYaml(
             TempLimitsInstance = TempLimits(StableTempDelta, MinTemp, MaxTemp)
             # Create Temp Config
 
-            DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
-                Device["Deck Location Unique Identifier"]
-            )
-
             SupportedLayoutItemTracker = LayoutItemTracker()
 
-            for Labware in Device["Supported Labware Information"]:
-                LabwareName = Labware["Plate Labware Unique Identifier"]
-                PlateSequence = Labware["Plate Sequence"]
-                PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(
-                    LabwareName
+            for CoverableLayoutItemUniqueID in Device[
+                "Supported Labware Coverable Layout Item Unique Identifiers"
+            ]:
+                LayoutItemInstance = LayoutItemTrackerInstance.GetObjectByName(
+                    CoverableLayoutItemUniqueID
                 )
 
-                if not isinstance(PlateLabwareInstance, PipettableLabware):
-                    raise Exception("This should never happen")
+                if not isinstance(LayoutItemInstance, CoverableItem):
+                    raise Exception("Only coverable layout items are supported")
 
-                LidSequence = Labware["Lid Sequence"]
-                LidLabwareInstance = LabwareTrackerInstance.GetObjectByName(
-                    Labware["Lid Labware Unique Identifier"]
-                )
-
-                if not isinstance(LidLabwareInstance, NonPipettableLabware):
-                    raise Exception("This should never happen")
-
-                LidInstance = Lid(
-                    UniqueIdentifier + " " + LabwareName + " Lid",
-                    LidSequence,
-                    DeckLocationInstance,
-                    LidLabwareInstance,
-                )
-
-                LayoutItemInstance = CoverableItem(
-                    UniqueIdentifier + " " + LabwareName,
-                    PlateSequence,
-                    DeckLocationInstance,
-                    PlateLabwareInstance,
-                    LidInstance,
-                )
                 SupportedLayoutItemTracker.LoadSingle(LayoutItemInstance)
-                # add to our list for our item creation and also add it to the layout loader for tracking
 
             if DeviceType == "Hamilton Heater Shaker":
                 if not isinstance(BackendInstance, HamiltonBackendABC):
