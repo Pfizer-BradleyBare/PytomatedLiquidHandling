@@ -44,12 +44,12 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
         raise Exception("This heater does not support your layout item")
 
     @property
-    def Temperature(self) -> float:
+    def SetTemperature(self) -> float:
         return self._SetTemperature
 
-    @Temperature.setter
+    @SetTemperature.setter
     @abstractmethod
-    def Temperature(self, NewTemperature: float):
+    def SetTemperature(self, NewTemperature: float):
         ...
 
     @property
@@ -64,12 +64,12 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
         ...
 
     @property
-    def ShakingSpeed(self) -> int:
+    def SetShakingSpeed(self) -> int:
         return self._SetShakingSpeed
 
-    @ShakingSpeed.setter
+    @SetShakingSpeed.setter
     @abstractmethod
-    def ShakingSpeed(self, NewRPM: int):
+    def SetShakingSpeed(self, NewRPM: int):
         ...
 
     @property

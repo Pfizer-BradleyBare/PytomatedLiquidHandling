@@ -93,8 +93,8 @@ class HamiltonHeaterShaker(TempControlDevice):
             CommandInstance, HeaterShakerDriver.SetPlateLock.Response
         )
 
-    @TempControlDevice.Temperature.setter
-    def Temperature(self, *, NewTemperature: float):
+    @TempControlDevice.SetTemperature.setter
+    def SetTemperature(self, *, NewTemperature: float):
         CommandInstance = HeaterShakerDriver.StartTemperatureControl.Command(
             OptionsInstance=HeaterShakerDriver.StartTemperatureControl.Options(
                 HandleID=int(self.HandleID),
@@ -123,8 +123,8 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         self._ActualTemperature = ResponseInstance.GetTemperature()
 
-    @TempControlDevice.ShakingSpeed.setter
-    def ShakingSpeed(self, NewRPM: int):
+    @TempControlDevice.SetShakingSpeed.setter
+    def SetShakingSpeed(self, NewRPM: int):
         if NewRPM == 0:
             CommandInstance = HeaterShakerDriver.StopShakeControl.Command(
                 OptionsInstance=HeaterShakerDriver.StopShakeControl.Options(

@@ -42,8 +42,8 @@ class HamiltonHeaterCooler(TempControlDevice):
             CommandInstance, HeaterCoolerDriver.StopTemperatureControl.Response
         )
 
-    @TempControlDevice.Temperature.setter
-    def Temperature(
+    @TempControlDevice.SetTemperature.setter
+    def SetTemperature(
         self,
         *,
         NewTemperature: float,
@@ -78,8 +78,8 @@ class HamiltonHeaterCooler(TempControlDevice):
 
         self._ActualTemperature = ResponseInstance.GetTemperature()
 
-    @TempControlDevice.ShakingSpeed.setter
-    def ShakingSpeed(self, NewRPM: int):
+    @TempControlDevice.SetShakingSpeed.setter
+    def SetShakingSpeed(self, NewRPM: int):
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )
