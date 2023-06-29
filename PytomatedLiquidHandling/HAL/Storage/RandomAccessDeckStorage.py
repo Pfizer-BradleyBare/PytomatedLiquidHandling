@@ -6,18 +6,26 @@ from .BaseStorage import Reservation, Storage
 
 @dataclass
 class RandomAccessDeckStorage(Storage):
-    def Reserve(self, UniqueIdentifier: str) -> LayoutItemABC:
-        if self.CheckReservationExists(UniqueIdentifier) == True:
+    def Reserve(self, LayoutItemInstance: LayoutItemABC) -> LayoutItemABC:
+        if self.CheckReservationExists(LayoutItemInstance) == True:
             raise Exception(
-                "Lid reservation with this UniqueIdentifier already found. Use a different ID."
+                "Reservation with this UniqueIdentifier already found. Use a different ID."
             )
+
+        SupportedLabwareInstances = [
+            LayoutItemInstance.LabwareInstance
+            for LayoutItemInstance in self.ReservableLayoutItemTrackerInstance.GetObjectsAsList()
+        ]
+
+        if not LayoutItemInstance.LabwareInstance in SupportedLabwareInstances:
+            raise Exception("This labware is not supported by this storage object")
 
         AvailablePositions = [
             Position
-            for Position in self.ReservableLidTrackerInstance.GetObjectsAsList()
-            if Position
+            for Position in self.ReservableLayoutItemTrackerInstance.GetObjectsAsList()
+            if Position.DeckLocationInstance
             not in [
-                Reservation.LayoutItemInstance
+                Reservation.LayoutItemInstance.DeckLocationInstance
                 for Reservation in self.ReservationTrackerInstance.GetObjectsAsList()
             ]
         ]
@@ -28,19 +36,21 @@ class RandomAccessDeckStorage(Storage):
         LayoutItemInstance = AvailablePositions[0]
 
         self.ReservationTrackerInstance.LoadSingle(
-            Reservation(UniqueIdentifier, LayoutItemInstance)
+            Reservation(LayoutItemInstance.UniqueIdentifier, LayoutItemInstance)
         )
 
         return LayoutItemInstance
 
-    def PreTransportCheck(self, UniqueIdentifier: str):
-        if self.CheckReservationExists(UniqueIdentifier) == False:
+    def PreTransportCheck(self, LayoutItemInstance: LayoutItemABC):
+        if self.CheckReservationExists(LayoutItemInstance) == False:
             raise Exception("No lid storage reservation found. Please reserve first.")
 
-    def Release(self, UniqueIdentifier: str):
-        if self.CheckReservationExists(UniqueIdentifier) == False:
+    def Release(self, LayoutItemInstance: LayoutItemABC):
+        if self.CheckReservationExists(LayoutItemInstance) == False:
             raise Exception("No lid storage reservation found. Please reserve first.")
 
         self.ReservationTrackerInstance.UnloadSingle(
-            self.ReservationTrackerInstance.GetObjectByName(UniqueIdentifier)
+            self.ReservationTrackerInstance.GetObjectByName(
+                LayoutItemInstance.UniqueIdentifier
+            )
         )
