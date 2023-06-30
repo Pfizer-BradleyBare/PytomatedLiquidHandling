@@ -1,5 +1,6 @@
+from dataclasses import dataclass
+
 from .....Tools.AbstractClasses import UniqueObjectABC
-from dataclasses import dataclass, field
 
 
 @dataclass

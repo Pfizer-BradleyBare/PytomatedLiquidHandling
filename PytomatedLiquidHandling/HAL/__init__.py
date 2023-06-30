@@ -1,6 +1,8 @@
 from . import (
     Backend,
+    Carrier,
     ClosedContainer,
+    DeckLoader,
     DeckLocation,
     IMCSDesalting,
     Labware,

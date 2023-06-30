@@ -1,10 +1,10 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field
 
+from PytomatedLiquidHandling.HAL import LayoutItem
+
 from ....Tools.AbstractClasses import UniqueObjectABC
-from ...LayoutItem import CoverableItem, LayoutItemTracker, NonCoverableItem
 from ...Tools.AbstractClasses import InterfaceABC
-from ...TransportDevice import TransportDeviceTracker, TransportOptions
 from .TempLimits.TempLimits import TempLimits
 
 
@@ -13,7 +13,7 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
     ComPort: str | int
     ShakingSupported: bool
     TempLimitsInstance: TempLimits
-    SupportedLayoutItemTrackerInstance: LayoutItemTracker
+    SupportedLayoutItemTrackerInstance: LayoutItem.LayoutItemTracker
 
     HandleID: int | str = field(init=False)
     _ActualTemperature: float = field(init=False, default=0)
@@ -22,8 +22,8 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
     _SetShakingSpeed: int = field(init=False, default=0)
 
     def GetLayoutItem(
-        self, LayoutItemInstance: CoverableItem | NonCoverableItem
-    ) -> CoverableItem:
+        self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+    ) -> LayoutItem.CoverableItem:
         for (
             SupportedLayoutItemInstance
         ) in self.SupportedLayoutItemTrackerInstance.GetObjectsAsList():
@@ -31,10 +31,12 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
                 SupportedLayoutItemInstance.LabwareInstance
                 == LayoutItemInstance.LabwareInstance
             ):
-                if not isinstance(SupportedLayoutItemInstance, CoverableItem):
+                if not isinstance(
+                    SupportedLayoutItemInstance, LayoutItem.CoverableItem
+                ):
                     raise Exception("This should never happen")
 
-                if isinstance(LayoutItemInstance, CoverableItem):
+                if isinstance(LayoutItemInstance, LayoutItem.CoverableItem):
                     SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered
                 else:
                     SupportedLayoutItemInstance.IsCovered = False

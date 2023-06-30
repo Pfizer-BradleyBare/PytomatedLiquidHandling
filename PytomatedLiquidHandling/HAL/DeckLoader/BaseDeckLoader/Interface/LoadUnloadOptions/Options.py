@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 
+from PytomatedLiquidHandling.HAL import LayoutItem
+
 from ......Driver.Tools.AbstractClasses import OptionsABC
-from .....LayoutItem.BaseLayoutItem import LayoutItemABC
 
 
 @dataclass(kw_only=True)
 class Options(OptionsABC):
-    LayoutItemInstance: LayoutItemABC
+    LayoutItemInstance: LayoutItem.BaseLayoutItem.LayoutItemABC

@@ -1,10 +1,10 @@
-from math import ceil
-from PytomatedLiquidHandling.HAL.Pipette.BasePipette.Interface import TransferOptions
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ..Pipette import TransferOptions
-from .BasePipette import Pipette
-from ...Driver.Hamilton.Pipette import CORE96Head, PortraitCORE8Channel
 from dataclasses import dataclass
+from math import ceil
+
+from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from ...Driver.Hamilton.Pipette import CORE96Head
+from . import TransferOptions
+from .BasePipette import Pipette, TransferOptions
 
 
 @dataclass

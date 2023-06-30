@@ -1,17 +1,17 @@
 import yaml
 
+from PytomatedLiquidHandling.HAL import DeckLocation, Labware
+
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ..Backend import BackendTracker
 from . import HamiltonFlipTube, HamiltonFlipTubeSpecial
-from ..DeckLocation import DeckLocationTracker
-from ..Labware import LabwareTracker
 from .BaseClosedContainer import ClosedContainerTracker
 
 
 def LoadYaml(
     BackendTrackerInstance: BackendTracker,
-    DeckLocationTrackerInstance: DeckLocationTracker,
-    LabwareTrackerInstance: LabwareTracker,
+    DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
+    LabwareTrackerInstance: Labware.LabwareTracker,
     FilePath: str,
 ) -> ClosedContainerTracker:
     ClosedContainerTrackerInstance = ClosedContainerTracker()
@@ -32,13 +32,13 @@ def LoadYaml(
 
             BackendInstance = BackendTrackerInstance.GetObjectByName(BackendIdentifier)
 
-            SupportedDeckLocationTrackerInstance = DeckLocationTracker()
+            SupportedDeckLocationTrackerInstance = DeckLocation.DeckLocationTracker()
             for DeckLocationID in Device["Supported Deck Location Unique Identifiers"]:
                 SupportedDeckLocationTrackerInstance.LoadSingle(
                     DeckLocationTrackerInstance.GetObjectByName(DeckLocationID)
                 )
 
-            SupportedLabwareTrackerInstance = LabwareTracker()
+            SupportedLabwareTrackerInstance = Labware.LabwareTracker()
             for LabwareID in Device["Supported Labware Unique Identifiers"]:
                 SupportedLabwareTrackerInstance.LoadSingle(
                     LabwareTrackerInstance.GetObjectByName(LabwareID)

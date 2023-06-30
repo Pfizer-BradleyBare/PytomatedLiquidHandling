@@ -1,20 +1,20 @@
 from dataclasses import dataclass, field
 
+from PytomatedLiquidHandling.HAL import Backend, LayoutItem
+
 from ....Tools.AbstractClasses import UniqueObjectABC
-from ...Backend import NullBackend
-from ...LayoutItem import CoverableItem, LayoutItemTracker, NonCoverableItem
 from ...Tools.AbstractClasses import InterfaceABC
 
 
 @dataclass
 class MagneticRackABC(InterfaceABC, UniqueObjectABC):
-    BackendInstance: NullBackend
+    BackendInstance: Backend.NullBackend
     CustomErrorHandling: bool = field(init=False, default=False)
-    SupportedLayoutItemTrackerInstance: LayoutItemTracker
+    SupportedLayoutItemTrackerInstance: LayoutItem.LayoutItemTracker
 
     def GetLayoutItem(
-        self, LayoutItemInstance: CoverableItem | NonCoverableItem
-    ) -> CoverableItem:
+        self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+    ) -> LayoutItem.CoverableItem:
         for (
             SupportedLayoutItemInstance
         ) in self.SupportedLayoutItemTrackerInstance.GetObjectsAsList():
@@ -22,10 +22,12 @@ class MagneticRackABC(InterfaceABC, UniqueObjectABC):
                 SupportedLayoutItemInstance.LabwareInstance
                 == LayoutItemInstance.LabwareInstance
             ):
-                if not isinstance(SupportedLayoutItemInstance, CoverableItem):
+                if not isinstance(
+                    SupportedLayoutItemInstance, LayoutItem.CoverableItem
+                ):
                     raise Exception("This should never happen")
 
-                if isinstance(LayoutItemInstance, CoverableItem):
+                if isinstance(LayoutItemInstance, LayoutItem.CoverableItem):
                     SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered
                 else:
                     SupportedLayoutItemInstance.IsCovered = False

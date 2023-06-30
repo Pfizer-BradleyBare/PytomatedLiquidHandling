@@ -1,15 +1,15 @@
 import yaml
 
+from PytomatedLiquidHandling.HAL import Backend, LayoutItem
+
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ..Backend import BackendTracker
-from ..LayoutItem import CoverableItem, LayoutItemTracker
 from . import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .BaseTempControlDevice import TempControlDeviceTracker, TempLimits
 
 
 def LoadYaml(
-    BackendTrackerInstance: BackendTracker,
-    LayoutItemTrackerInstance: LayoutItemTracker,
+    BackendTrackerInstance: Backend.BackendTracker,
+    LayoutItemTrackerInstance: LayoutItem.LayoutItemTracker,
     FilePath: str,
 ) -> TempControlDeviceTracker:
     TempControlDeviceTrackerInstance = TempControlDeviceTracker()
@@ -37,7 +37,7 @@ def LoadYaml(
             TempLimitsInstance = TempLimits(StableTempDelta, MinTemp, MaxTemp)
             # Create Temp Config
 
-            SupportedLayoutItemTracker = LayoutItemTracker()
+            SupportedLayoutItemTracker = LayoutItem.LayoutItemTracker()
 
             for CoverableLayoutItemUniqueID in Device[
                 "Supported Labware Coverable Layout Item Unique Identifiers"
@@ -46,7 +46,7 @@ def LoadYaml(
                     CoverableLayoutItemUniqueID
                 )
 
-                if not isinstance(LayoutItemInstance, CoverableItem):
+                if not isinstance(LayoutItemInstance, LayoutItem.CoverableItem):
                     raise Exception("Only coverable layout items are supported")
 
                 SupportedLayoutItemTracker.LoadSingle(LayoutItemInstance)

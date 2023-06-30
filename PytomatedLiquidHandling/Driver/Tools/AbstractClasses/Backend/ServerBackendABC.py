@@ -7,9 +7,8 @@ from typing import Callable, ClassVar
 
 from flask import Flask
 
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
+from PytomatedLiquidHandling.Tools import Logger
 
-from .....Tools.Logger import Logger
 from .SimpleBackendABC import SimpleBackendABC
 
 
@@ -122,7 +121,7 @@ class ServerBackendABC(SimpleBackendABC):
     class Parser:
         def __init__(
             self,
-            LoggerInstance: Logger,
+            LoggerInstance: Logger.Logger,
             EndpointID: str,
             JSONstring: bytes | None = None,
         ):
@@ -132,7 +131,7 @@ class ServerBackendABC(SimpleBackendABC):
                 "PARSER: Created Parser class with data: %s", str(JSONstring)
             )
 
-            self.LoggerInstance: Logger = LoggerInstance
+            self.LoggerInstance: Logger.Logger = LoggerInstance
             self.EndpointID: str = EndpointID
             self.InputString: bytes | None = JSONstring
             self.JSON: dict

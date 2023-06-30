@@ -1,9 +1,7 @@
-from PytomatedLiquidHandling.HAL.IMCSDesalting.BaseIMCSDesalting.Interface import (
-    IMCSDesaltingOptions,
-)
-from .BaseIMCSDesalting import IMCSDesaltingABC
 from dataclasses import dataclass
+
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from .BaseIMCSDesalting import IMCSDesaltingABC, IMCSDesaltingOptions
 
 
 @dataclass

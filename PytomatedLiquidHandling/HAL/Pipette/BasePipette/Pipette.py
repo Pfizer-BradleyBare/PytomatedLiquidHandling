@@ -1,20 +1,20 @@
 from abc import abstractmethod
+from dataclasses import dataclass
+
+from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 
 from ....Tools.AbstractClasses import UniqueObjectABC
-from ...DeckLocation import DeckLocationTracker
-from ...Labware import LabwareTracker, PipettableLabware
 from ...Tools.AbstractClasses import InterfaceABC
 from .Interface import TransferOptions
 from .LiquidClass import LiquidClass, LiquidClassCategoryTracker
 from .PipetteTip import PipetteTip, PipetteTipTracker
-from dataclasses import dataclass
 
 
 @dataclass
 class Pipette(InterfaceABC, UniqueObjectABC):
     SupportedTipTrackerInstance: PipetteTipTracker
-    SupportedLabwareTrackerInstance: LabwareTracker
-    SupportedDeckLocationTrackerInstance: DeckLocationTracker
+    SupportedLabwareTrackerInstance: Labware.LabwareTracker
+    SupportedDeckLocationTrackerInstance: DeckLocation.DeckLocationTracker
     SupportedLiquidClassCategoryTrackerInstance: LiquidClassCategoryTracker
 
     def GetTip(self, Volume: float) -> PipetteTip:
@@ -49,7 +49,7 @@ class Pipette(InterfaceABC, UniqueObjectABC):
             DestinationLabware = (
                 OptionsInstance.DestinationLayoutItemInstance.LabwareInstance
             )
-            if not isinstance(DestinationLabware, PipettableLabware):
+            if not isinstance(DestinationLabware, Labware.PipettableLabware):
                 raise Exception("This should never happen")
             if (
                 OptionsInstance.CurrentDestinationVolume

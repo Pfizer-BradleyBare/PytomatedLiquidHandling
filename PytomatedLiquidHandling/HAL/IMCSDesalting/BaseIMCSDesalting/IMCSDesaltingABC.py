@@ -1,26 +1,26 @@
+from abc import abstractmethod
+from dataclasses import dataclass, field
+
+from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
+
 from ....Tools.AbstractClasses import UniqueObjectABC
 from ...Tools.AbstractClasses import InterfaceABC
-from ...DeckLocation import DeckLocationTracker
-from ...Tip.BaseTip import Tip
-from ...Labware import LabwareTracker
-from dataclasses import dataclass, field
 from .IMCSTip import DesaltingTipTracker
 from .Interface import IMCSDesaltingOptions
-from abc import abstractmethod
 
 
 @dataclass
 class IMCSDesaltingABC(InterfaceABC, UniqueObjectABC):
-    TipInstance: Tip
+    TipInstance: Tip.BaseTip.Tip
     PipetteTipSupportDropOffSequence: str
     PipetteTipSupportPickupSequence: str
     IMCSTipSupportDropOffSequence: str
     IMCSTipSupportPickupSequence: str
     LoadLiquidClass: str
     EluteLiquidClass: str
-    SupportedSourceLabwareTrackerInstance: LabwareTracker
-    SupportedDestinationLabwareTrackerInstance: LabwareTracker
-    SupportedDeckLocationTrackerInstance: DeckLocationTracker
+    SupportedSourceLabwareTrackerInstance: Labware.LabwareTracker
+    SupportedDestinationLabwareTrackerInstance: Labware.LabwareTracker
+    SupportedDeckLocationTrackerInstance: DeckLocation.DeckLocationTracker
     DesaltingTipTrackerInstance: DesaltingTipTracker
     IMCSTipDropOffSequence: str
     IMCSTipPickupSequence: str

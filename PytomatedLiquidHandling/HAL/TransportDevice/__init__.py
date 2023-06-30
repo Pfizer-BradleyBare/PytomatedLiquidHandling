@@ -1,6 +1,5 @@
-from .BaseTransportDevice import TransportDeviceTracker
+from . import Loader
+from .BaseTransportDevice import TransportDeviceTracker, TransportOptions
 from .HamiltonCOREGripper import HamiltonCOREGripper
 from .HamiltonInternalPlateGripper import HamiltonInternalPlateGripper
 from .VantageTrackGripper import VantageTrackGripper
-from .BaseTransportDevice import TransportOptions
-from . import Loader

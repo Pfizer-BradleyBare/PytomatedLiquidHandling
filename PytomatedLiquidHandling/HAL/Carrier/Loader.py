@@ -1,6 +1,7 @@
 import yaml
 
-from ..DeckLoader import DeckLoaderTracker
+from PytomatedLiquidHandling.HAL import DeckLoader
+
 from .AutoloadCarrier import AutoloadCarrier
 from .BaseCarrier import CarrierTracker
 from .MoveableCarrier import MoveableCarrier
@@ -8,7 +9,7 @@ from .NonMoveableCarrier import NonMoveableCarrier
 
 
 def LoadYaml(
-    DeckLoaderTrackerInstance: DeckLoaderTracker, FilePath: str
+    DeckLoaderTrackerInstance: DeckLoader.DeckLoaderTracker, FilePath: str
 ) -> CarrierTracker:
     CarrierTrackerInstance = CarrierTracker()
 

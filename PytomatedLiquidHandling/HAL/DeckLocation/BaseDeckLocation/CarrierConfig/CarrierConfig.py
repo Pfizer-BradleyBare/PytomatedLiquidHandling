@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from ....Carrier import CarrierABC
+from PytomatedLiquidHandling.HAL import Carrier
 
 
 @dataclass
 class CarrierConfig:
-    CarrierInstance: CarrierABC
+    CarrierInstance: Carrier.CarrierABC
     CarrierPosition: int

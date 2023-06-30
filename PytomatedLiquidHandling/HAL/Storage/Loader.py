@@ -1,11 +1,12 @@
 import yaml
 
-from ..LayoutItem import LayoutItemTracker
+from PytomatedLiquidHandling.HAL import LayoutItem
+
 from . import RandomAccessDeckStorage, StorageTracker
 
 
 def LoadYaml(
-    LayoutItemTrackerInstance: LayoutItemTracker,
+    LayoutItemTrackerInstance: LayoutItem.LayoutItemTracker,
     FilePath: str,
 ) -> StorageTracker:
     StorageTrackerInstance = StorageTracker()
@@ -24,7 +25,7 @@ def LoadYaml(
 
             if StorageTypeID == "Random Access Deck Storage":
                 ItemCount = 0
-                ReservableItemTrackerInstance = LayoutItemTracker()
+                ReservableItemTrackerInstance = LayoutItem.LayoutItemTracker()
                 for LayoutItemUniqueID in Storage[
                     "Supported Labware Layout Item Unique Identifiers"
                 ]:

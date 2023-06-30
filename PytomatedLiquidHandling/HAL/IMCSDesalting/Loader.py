@@ -1,10 +1,8 @@
 import yaml
 
+from PytomatedLiquidHandling.HAL import Backend, DeckLocation, Labware, Tip
+
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ..Backend import BackendTracker
-from ..DeckLocation import DeckLocationTracker
-from ..Labware import LabwareTracker
-from ..Tip import TipTracker
 from .BaseIMCSDesalting import (
     DesaltingTip,
     DesaltingTipTracker,
@@ -18,10 +16,10 @@ from .HamiltonPortraitCORE8ChannelIMCSDesalting import (
 
 
 def LoadYaml(
-    BackendTrackerInstance: BackendTracker,
-    DeckLocationTrackerInstance: DeckLocationTracker,
-    LabwareTrackerInstance: LabwareTracker,
-    TipTrackerInstance: TipTracker,
+    BackendTrackerInstance: Backend.BackendTracker,
+    DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
+    LabwareTrackerInstance: Labware.LabwareTracker,
+    TipTrackerInstance: Tip.TipTracker,
     FilePath: str,
 ) -> IMCSDesaltingTracker:
     IMCSDesaltingTrackerInstance = IMCSDesaltingTracker()
@@ -56,21 +54,21 @@ def LoadYaml(
         del Device["Load Liquid Class"]
         del Device["Elute Liquid Class"]
 
-        SupportedSourceLabwareTrackerInstance = LabwareTracker()
+        SupportedSourceLabwareTrackerInstance = Labware.LabwareTracker()
         for LabwareID in Device["Supported Source Labware Unique Identifiers"]:
             SupportedSourceLabwareTrackerInstance.LoadSingle(
                 LabwareTrackerInstance.GetObjectByName(LabwareID)
             )
         del Device["Supported Source Labware Unique Identifiers"]
 
-        SupportedDestinationLabwareTrackerInstance = LabwareTracker()
+        SupportedDestinationLabwareTrackerInstance = Labware.LabwareTracker()
         for LabwareID in Device["Supported Destination Labware Unique Identifiers"]:
             SupportedDestinationLabwareTrackerInstance.LoadSingle(
                 LabwareTrackerInstance.GetObjectByName(LabwareID)
             )
         del Device["Supported Destination Labware Unique Identifiers"]
 
-        SupportedDeckLocationTrackerInstance = DeckLocationTracker()
+        SupportedDeckLocationTrackerInstance = DeckLocation.DeckLocationTracker()
         for DeckLocationID in Device["Supported Deck Location Unique Identifiers"]:
             SupportedDeckLocationTrackerInstance.LoadSingle(
                 DeckLocationTrackerInstance.GetObjectByName(DeckLocationID)

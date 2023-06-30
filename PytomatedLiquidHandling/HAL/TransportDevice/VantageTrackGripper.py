@@ -1,9 +1,7 @@
-from .BaseTransportDevice import (
-    TransportDevice,
-    TransportOptions,
-)
-from ...Driver.Hamilton.Backend import VantageBackend
 from dataclasses import dataclass
+
+from ...Driver.Hamilton.Backend import VantageBackend
+from .BaseTransportDevice import TransportDevice, TransportOptions
 
 
 @dataclass

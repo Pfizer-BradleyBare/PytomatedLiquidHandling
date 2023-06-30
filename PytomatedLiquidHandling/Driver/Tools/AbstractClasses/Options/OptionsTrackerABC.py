@@ -1,7 +1,7 @@
-from .....Tools.AbstractClasses import NonUniqueObjectTrackerABC
-
 from dataclasses import dataclass
 from typing import TypeVar
+
+from PytomatedLiquidHandling.Tools.AbstractClasses import NonUniqueObjectTrackerABC
 
 from .OptionsABC import OptionsABC
 

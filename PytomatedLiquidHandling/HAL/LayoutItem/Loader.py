@@ -1,13 +1,13 @@
 import yaml
 
-from ..DeckLocation import DeckLocationTracker
-from ..Labware import LabwareTracker, NonPipettableLabware, PipettableLabware
+from PytomatedLiquidHandling.HAL import DeckLocation, Labware
+
 from . import CoverableItem, LayoutItemTracker, Lid, NonCoverableItem
 
 
 def LoadYaml(
-    LabwareTrackerInstance: LabwareTracker,
-    DeckLocationTrackerInstance: DeckLocationTracker,
+    LabwareTrackerInstance: Labware.LabwareTracker,
+    DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
     FilePath: str,
 ) -> LayoutItemTracker:
     LayoutItemTrackerInstance = LayoutItemTracker()
@@ -46,7 +46,7 @@ def LoadYaml(
             )
 
             if LayoutItemID == "NonCoverable Item":
-                if not isinstance(LabwareInstance, PipettableLabware):
+                if not isinstance(LabwareInstance, Labware.PipettableLabware):
                     raise Exception("This should not happen")
                 # Plates are technically defined here and all plates should be PipettableLabware
                 LayoutItemInstance = NonCoverableItem(
@@ -54,7 +54,7 @@ def LoadYaml(
                 )
 
             elif LayoutItemID == "Coverable Item":
-                if not isinstance(LabwareInstance, PipettableLabware):
+                if not isinstance(LabwareInstance, Labware.PipettableLabware):
                     raise Exception("This should not happen")
                 # Plates are technically defined here and all plates should be PipettableLabware
                 LidInstance = LayoutItemTrackerInstance.GetObjectByName(
@@ -72,7 +72,7 @@ def LoadYaml(
                 )
 
             elif LayoutItemID == "Lid":
-                if not isinstance(LabwareInstance, NonPipettableLabware):
+                if not isinstance(LabwareInstance, Labware.NonPipettableLabware):
                     raise Exception("This should not happen")
                 # Lids are obviously NonPipettableLabware
                 LayoutItemInstance = Lid(

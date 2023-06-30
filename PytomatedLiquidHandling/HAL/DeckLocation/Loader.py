@@ -1,14 +1,14 @@
 import yaml
 
-from ..Carrier import CarrierTracker
-from . import CarrierConfig, DeckLocation, DeckLocationTracker
-from ..TransportDevice.BaseTransportDevice import TransportDeviceTracker
-from .BaseDeckLocation import TransportDeviceConfig
+from PytomatedLiquidHandling.HAL import Carrier, TransportDevice
+
+from . import DeckLocation
+from .BaseDeckLocation import CarrierConfig, DeckLocationTracker, TransportDeviceConfig
 
 
 def LoadYaml(
-    CarrierTrackerInstance: CarrierTracker,
-    TransportDeviceTrackerInstance: TransportDeviceTracker,
+    CarrierTrackerInstance: Carrier.CarrierTracker,
+    TransportDeviceTrackerInstance: TransportDevice.TransportDeviceTracker,
     FilePath: str,
 ) -> DeckLocationTracker:
     DeckLocationTrackerInstance = DeckLocationTracker()

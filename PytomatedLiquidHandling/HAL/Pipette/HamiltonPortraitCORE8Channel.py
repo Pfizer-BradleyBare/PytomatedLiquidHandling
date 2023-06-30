@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from math import ceil
 
+from PytomatedLiquidHandling.HAL import Labware
+
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import PortraitCORE8Channel
-from ..Labware import PipettableLabware
-from ..Pipette import TransferOptions
+from . import TransferOptions
 from .BasePipette import Pipette
 
 
@@ -95,7 +96,7 @@ class HamiltonPortraitCORE8Channel(Pipette):
                 )
 
                 AspirateLabware = Options.SourceLayoutItemInstance.LabwareInstance
-                if not isinstance(AspirateLabware, PipettableLabware):
+                if not isinstance(AspirateLabware, Labware.PipettableLabware):
                     raise Exception("This should never happen")
 
                 AspiratePosition = (
@@ -121,7 +122,7 @@ class HamiltonPortraitCORE8Channel(Pipette):
                 )
 
                 DispenseLabware = Options.SourceLayoutItemInstance.LabwareInstance
-                if not isinstance(DispenseLabware, PipettableLabware):
+                if not isinstance(DispenseLabware, Labware.PipettableLabware):
                     raise Exception("This should never happen")
 
                 DispensePosition = (

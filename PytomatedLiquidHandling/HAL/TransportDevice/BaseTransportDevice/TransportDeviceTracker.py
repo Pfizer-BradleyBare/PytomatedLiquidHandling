@@ -1,16 +1,15 @@
 from dataclasses import dataclass
 
+from PytomatedLiquidHandling.HAL import Carrier, DeckLocation, LayoutItem
+
 from ....Tools.AbstractClasses import UniqueObjectTrackerABC
-from ...Carrier import CarrierABC
-from ...DeckLocation import CarrierConfig, DeckLocation, TransportDeviceConfig
-from ...LayoutItem import CoverableItem, LayoutItemTracker, NonCoverableItem
 from .Interface import TransportOptions
 from .TransportDevice import TransportDevice
 
 
 @dataclass
 class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
-    TransitionPointsTrackerInstance: LayoutItemTracker
+    TransitionPointsTrackerInstance: LayoutItem.LayoutItemTracker
 
     def Transport(
         self, TransportOptionsTrackerInstance: TransportOptions.OptionsTracker
@@ -57,13 +56,15 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                 IntermediateDestinationTransportDeviceInstance = self.GetObjectByName(
                     LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
                 )
-                IntermediateDestinationLayoutItem = NonCoverableItem(
+                IntermediateDestinationLayoutItem = LayoutItem.NonCoverableItem(
                     "Intermediate Destination",
                     LabwareDestinationLayoutItem.Sequence,
-                    DeckLocation(
+                    DeckLocation.DeckLocation(
                         "Intermediate Destination",
-                        CarrierConfig(CarrierABC("", "", 0, 0, 0, "", ""), 0),
-                        TransportDeviceConfig(
+                        DeckLocation.CarrierConfig(
+                            Carrier.CarrierABC("", "", 0, 0, 0, "", ""), 0
+                        ),
+                        DeckLocation.TransportDeviceConfig(
                             IntermediateDestinationTransportDeviceInstance.UniqueIdentifier,
                             LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig,
                             LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayPlaceConfig,
@@ -99,13 +100,15 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                 ):
                     IntermediateSourceTransportDeviceInstance._LastTransportFlag = True
 
-                IntermediateSourceLayoutItem = NonCoverableItem(
+                IntermediateSourceLayoutItem = LayoutItem.NonCoverableItem(
                     "Intermediate Source",
                     LabwareSourceLayoutItem.Sequence,
-                    DeckLocation(
+                    DeckLocation.DeckLocation(
                         "Intermediate Source",
-                        CarrierConfig(CarrierABC("", "", 0, 0, 0, "", ""), 0),
-                        TransportDeviceConfig(
+                        DeckLocation.CarrierConfig(
+                            Carrier.CarrierABC("", "", 0, 0, 0, "", ""), 0
+                        ),
+                        DeckLocation.TransportDeviceConfig(
                             IntermediateSourceTransportDeviceInstance.UniqueIdentifier,
                             LabwareSourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig,
                             LabwareSourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayPlaceConfig,

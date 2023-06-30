@@ -1,11 +1,9 @@
-from abc import abstractmethod
-
-from ....Labware import LabwareTracker
-from ....LayoutItem import CoverableItem, NonCoverableItem
+from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 
 
 def TestSumLessThanMax(
-    LayoutItemInstances: list[CoverableItem] | list[NonCoverableItem],
+    LayoutItemInstances: list[LayoutItem.CoverableItem]
+    | list[LayoutItem.NonCoverableItem],
     LayoutItemPositions: list[int],
     TransferVolumes: list[float],
     MaxSumValues: list[float],
@@ -44,8 +42,8 @@ def TestSumLessThanMax(
 
 
 def TestLabwareSupported(
-    LabwareTrackerInstance: LabwareTracker,
-    LayoutItems: list[CoverableItem] | list[NonCoverableItem],
+    LabwareTrackerInstance: Labware.LabwareTracker,
+    LayoutItems: list[LayoutItem.CoverableItem] | list[LayoutItem.NonCoverableItem],
 ) -> list[int]:
     FailedIndices = list()
 

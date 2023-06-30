@@ -1,17 +1,18 @@
-from ....Tools.AbstractClasses import UniqueObjectABC
-from ...Labware import LabwareTracker
-from ...DeckLocation import DeckLocationTracker
-from ...Tools.AbstractClasses import InterfaceABC
-from .Interface import OpenCloseOptions
 from abc import abstractmethod
 from dataclasses import dataclass
+
+from PytomatedLiquidHandling.HAL import DeckLocation, Labware
+
+from ....Tools.AbstractClasses import UniqueObjectABC
+from ...Tools.AbstractClasses import InterfaceABC
+from .Interface import OpenCloseOptions
 
 
 @dataclass
 class ClosedContainerABC(InterfaceABC, UniqueObjectABC):
     ToolSequence: str
-    SupportedDeckLocationTrackerInstance: DeckLocationTracker
-    SupportedLabwareTrackerInstance: LabwareTracker
+    SupportedDeckLocationTrackerInstance: DeckLocation.DeckLocationTracker
+    SupportedLabwareTrackerInstance: Labware.LabwareTracker
 
     @abstractmethod
     def Open(self, *, OpenCloseOptionsTrackerInstance: OpenCloseOptions.OptionsTracker):

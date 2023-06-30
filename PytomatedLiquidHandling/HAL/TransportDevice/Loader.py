@@ -1,11 +1,17 @@
 import yaml
 
-from ...Driver.Hamilton.Backend import VantageBackend
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ..Backend import BackendTracker
-from ..DeckLocation import DeckLocation
-from ..Labware import LabwareTracker, PipettableLabware
-from ..LayoutItem import LayoutItemTracker, NonCoverableItem
+from PytomatedLiquidHandling.Driver.Hamilton.Backend import (
+    HamiltonBackendABC,
+    VantageBackend,
+)
+from PytomatedLiquidHandling.HAL import (
+    Backend,
+    Carrier,
+    DeckLocation,
+    Labware,
+    LayoutItem,
+)
+
 from . import HamiltonCOREGripper, HamiltonInternalPlateGripper, VantageTrackGripper
 from .BaseTransportDevice import (
     TransportableLabware,
@@ -16,8 +22,8 @@ from .BaseTransportDevice import (
 
 
 def LoadYaml(
-    BackendTrackerInstance: BackendTracker,
-    LabwareTrackerInstance: LabwareTracker,
+    BackendTrackerInstance: Backend.BackendTracker,
+    LabwareTrackerInstance: Labware.LabwareTracker,
     FilePath: str,
 ) -> TransportDeviceTracker:
     FileHandle = open(FilePath, "r")
@@ -25,12 +31,18 @@ def LoadYaml(
     FileHandle.close()
     # Get config file contents
 
-    FillerDeckLocationInstance = DeckLocation("TransitionPoint", None)  # type:ignore
+    FillerDeckLocationInstance = DeckLocation.DeckLocation(
+        "TransitionPoint",
+        DeckLocation.CarrierConfig(
+            Carrier.NonMoveableCarrier("", "", 0, 0, 0, "", ""), 0
+        ),
+        DeckLocation.TransportDeviceConfig("", {}, {}, {}, {}),
+    )
     # This filler is only used so we can create a layout item. The deck location info will never actually be used
 
     TransitionPoints = ConfigFile["Transition Points"]
 
-    TransitionPointTrackerInstance = LayoutItemTracker()
+    TransitionPointTrackerInstance = LayoutItem.LayoutItemTracker()
 
     for TransitionPoint in TransitionPoints:
         if TransitionPoint["Enabled"] == False:
@@ -38,14 +50,14 @@ def LoadYaml(
 
         PlateSequence = TransitionPoint["Plate Sequence"]
         PlateLabwareInstance = LabwareTrackerInstance.GetObjectByName(
-            TransitionPoint["Plate Sequence"]
+            TransitionPoint["Plate Labware Unique Identifier"]
         )
 
-        if not isinstance(PlateLabwareInstance, PipettableLabware):
+        if not isinstance(PlateLabwareInstance, Labware.PipettableLabware):
             raise Exception("This should never happen")
 
         TransitionPointTrackerInstance.LoadSingle(
-            NonCoverableItem(
+            LayoutItem.NonCoverableItem(
                 str(PlateLabwareInstance.UniqueIdentifier),
                 PlateSequence,
                 FillerDeckLocationInstance,

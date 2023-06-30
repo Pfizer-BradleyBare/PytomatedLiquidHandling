@@ -1,12 +1,14 @@
-from .....Tools.AbstractClasses import UniqueObjectABC
-from ....Tip.BaseTip import Tip
 from dataclasses import dataclass, field
+
+from PytomatedLiquidHandling.HAL import Tip
+
+from .....Tools.AbstractClasses import UniqueObjectABC
 
 
 @dataclass
 class PipetteTip(UniqueObjectABC):
     UniqueIdentifier: str | int = field(init=False)
-    TipInstance: Tip
+    TipInstance: Tip.BaseTip.Tip
     TipSupportDropoffSequence: str
     TipSupportPickupSequence: str
     WasteSequence: str

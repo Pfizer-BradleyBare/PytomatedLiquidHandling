@@ -4,7 +4,12 @@ import subprocess
 from dataclasses import dataclass, field
 from typing import Type, TypeVar
 
-from ....Tools.AbstractClasses import BackendABC, CommandABC, ResponseABC
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
+    BackendABC,
+    CommandABC,
+    ResponseABC,
+)
+
 from .. import HamiltonExceptions
 from ..HamiltonCommand import HamiltonActionCommandABC, HamiltonStateCommandABC
 from ..HamiltonResponse import HamiltonResponseABC

@@ -1,10 +1,9 @@
 import yaml
 
+from PytomatedLiquidHandling.HAL import Backend, DeckLocation, Labware, Tip
+
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ..Backend import BackendTracker
-from ..DeckLocation import DeckLocationTracker
-from ..Labware import LabwareTracker
-from ..Tip.BaseTip import Tip, TipTracker
+from . import PipetteTracker
 from .BasePipette import (
     LiquidClass,
     LiquidClassCategory,
@@ -13,16 +12,15 @@ from .BasePipette import (
     PipetteTip,
     PipetteTipTracker,
 )
-from . import PipetteTracker
 from .HamiltonCORE96Head import HamiltonCORE96Head
 from .HamiltonPortraitCORE8Channel import HamiltonPortraitCORE8Channel
 
 
 def LoadYaml(
-    BackendTrackerInstance: BackendTracker,
-    DeckLocationTrackerInstance: DeckLocationTracker,
-    LabwareTrackerInstance: LabwareTracker,
-    TipTrackerInstance: TipTracker,
+    BackendTrackerInstance: Backend.BackendTracker,
+    DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
+    LabwareTrackerInstance: Labware.LabwareTracker,
+    TipTrackerInstance: Tip.TipTracker,
     FilePath: str,
 ) -> PipetteTracker:
     PipetteTrackerInstance = PipetteTracker()
@@ -44,13 +42,13 @@ def LoadYaml(
             CustomErrorHandling = Device["Custom Error Handling"]
             NumberOfChannels = Device["Number of Channels"]
 
-            SupportedLabwareTrackerInstance = LabwareTracker()
+            SupportedLabwareTrackerInstance = Labware.LabwareTracker()
             for LabwareIdentifier in Device["Supported Labware Unique Identifiers"]:
                 SupportedLabwareTrackerInstance.LoadSingle(
                     LabwareTrackerInstance.GetObjectByName(LabwareIdentifier)
                 )
 
-            SupportedDeckLocationTrackerInstance = DeckLocationTracker()
+            SupportedDeckLocationTrackerInstance = DeckLocation.DeckLocationTracker()
             for DeckLocationIdentifier in Device[
                 "Supported Deck Location Unique Identifiers"
             ]:

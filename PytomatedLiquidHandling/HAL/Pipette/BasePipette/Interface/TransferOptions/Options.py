@@ -1,17 +1,18 @@
 from dataclasses import dataclass
 
+from PytomatedLiquidHandling.HAL import LayoutItem
+
 from ......Driver.Tools.AbstractClasses import OptionsABC
-from .....LayoutItem import CoverableItem, NonCoverableItem
 
 
 @dataclass(kw_only=True)
 class Options(OptionsABC):
-    SourceLayoutItemInstance: CoverableItem | NonCoverableItem
+    SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
     SourcePosition: int  # This is the well position. Not sequence position
     CurrentSourceVolume: float
     SourceMixCycles: int
     SourceLiquidClassCategory: str
-    DestinationLayoutItemInstance: CoverableItem | NonCoverableItem
+    DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
     DestinationPosition: int  # This is the well position. Not sequence position
     CurrentDestinationVolume: float
     DestinationMixCycles: int

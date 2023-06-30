@@ -1,12 +1,15 @@
 from dataclasses import dataclass
 
-from ..LayoutItem.BaseLayoutItem import LayoutItemABC
+from PytomatedLiquidHandling.HAL import LayoutItem
+
 from .BaseStorage import Reservation, Storage
 
 
 @dataclass
 class RandomAccessDeckStorage(Storage):
-    def Reserve(self, LayoutItemInstance: LayoutItemABC) -> LayoutItemABC:
+    def Reserve(
+        self, LayoutItemInstance: LayoutItem.BaseLayoutItem.LayoutItemABC
+    ) -> LayoutItem.BaseLayoutItem.LayoutItemABC:
         if self.CheckReservationExists(LayoutItemInstance) == True:
             raise Exception(
                 "Reservation with this UniqueIdentifier already found. Use a different ID."
@@ -41,11 +44,13 @@ class RandomAccessDeckStorage(Storage):
 
         return LayoutItemInstance
 
-    def PreTransportCheck(self, LayoutItemInstance: LayoutItemABC):
+    def PreTransportCheck(
+        self, LayoutItemInstance: LayoutItem.BaseLayoutItem.LayoutItemABC
+    ):
         if self.CheckReservationExists(LayoutItemInstance) == False:
             raise Exception("No lid storage reservation found. Please reserve first.")
 
-    def Release(self, LayoutItemInstance: LayoutItemABC):
+    def Release(self, LayoutItemInstance: LayoutItem.BaseLayoutItem.LayoutItemABC):
         if self.CheckReservationExists(LayoutItemInstance) == False:
             raise Exception("No lid storage reservation found. Please reserve first.")
 

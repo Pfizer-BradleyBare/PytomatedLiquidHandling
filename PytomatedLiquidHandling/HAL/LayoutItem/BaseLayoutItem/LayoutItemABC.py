@@ -1,11 +1,12 @@
-from ....Tools.AbstractClasses import UniqueObjectABC
-from ...DeckLocation.BaseDeckLocation import DeckLocationABC
-from ...Labware.BaseLabware import LabwareABC
 from dataclasses import dataclass
+
+from PytomatedLiquidHandling.HAL import DeckLocation, Labware
+
+from ....Tools.AbstractClasses import UniqueObjectABC
 
 
 @dataclass
 class LayoutItemABC(UniqueObjectABC):
     Sequence: str
-    DeckLocationInstance: DeckLocationABC
-    LabwareInstance: LabwareABC
+    DeckLocationInstance: DeckLocation.BaseDeckLocation.DeckLocationABC
+    LabwareInstance: Labware.BaseLabware.LabwareABC
