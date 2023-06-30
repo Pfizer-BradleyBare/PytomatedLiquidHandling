@@ -1,0 +1,42 @@
+Hamilton 1mL Channels Portrait:
+  - Unique Identifier: Pipette
+    Enabled: True
+    Backend Unique Identifier: Hammy
+    Custom Error Handling: False
+
+    Number of Channels: 8
+    Active Channels: [1, 2, 3, 4, 5, 6, 7, 8]
+
+    Supported Labware Unique Identifiers:
+      - 200uL Biorad 96 Well PCR Plate
+      - Hamilton 1.5mL FlipTube
+      - 200mL Reagent Trough
+
+    Supported Deck Location Unique Identifiers:
+      - Plate 1
+      - Plate 2
+      - Fliptube
+      - Reservoir
+
+    Supported Tips:
+      - Tip Unique Identifier: 50uL NTR
+        Tip Support Dropoff Sequence: Test
+        Tip Support Pickup Sequence: Test
+        Waste Sequence: Waste08
+
+      - Tip Unique Identifier: 300uL NTR
+        Tip Support Dropoff Sequence: Test
+        Tip Support Pickup Sequence: Test
+        Waste Sequence: Waste08
+
+    Supported Liquid Class Categories:
+      - Unique Identifier: Default
+        Liquid Classes:
+          - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
+            Max Volume: 50
+
+          - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
+            Max Volume: 300
+
+          - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
+            Max Volume: 1000

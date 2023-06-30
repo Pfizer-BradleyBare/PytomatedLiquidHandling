@@ -1,0 +1,52 @@
+NonCoverable Item:
+  - Unique Identifier: FlipTubes
+    Enabled: True
+    Sequence: FlipTubes
+    Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
+    Deck Location Unique Identifier: Fliptube
+
+  - Unique Identifier: Reservoirs
+    Enabled: True
+    Sequence: ReagentReservoirs
+    Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
+    Deck Location Unique Identifier: Reservoir
+
+  - Unique Identifier: Plate1
+    Enabled: True
+    Sequence: Plate1
+    Labware Unique Identifier: Biorad 200uL 96 Well PCR Plate
+    Deck Location Unique Identifier: Plate 1
+
+Lid:
+  - Unique Identifier: Lid Storage 1
+    Enabled: True
+    Sequence: _Storage_Lid
+    Labware Unique Identifier: Agilent Black Lid
+    Deck Location Unique Identifier: Lid Storage
+
+  - Unique Identifier: HHS Lid
+    Enabled: True
+    Sequence: _HHS_Lid
+    Labware Unique Identifier: Agilent Black Lid
+    Deck Location Unique Identifier: HHS
+
+  - Unique Identifier: Plate2 Lid
+    Enabled: True
+    Sequence: Plate2_Lid
+    Labware Unique Identifier: Agilent Black Lid
+    Deck Location Unique Identifier: Plate 2
+
+Coverable Item:
+  - Unique Identifier: Plate2
+    Enabled: True
+    Sequence: Plate2
+    Labware Unique Identifier: Biorad 200uL 96 Well PCR Plate
+    Deck Location Unique Identifier: Plate 2
+    Lid Unique Identifier: Plate2 Lid
+
+  - Unique Identifier: HHS Plate
+    Enabled: True
+    Sequence: _HHS_Plate
+    Labware Unique Identifier: Biorad 200uL 96 Well PCR Plate
+    Deck Location Unique Identifier: HHS
+    Lid Unique Identifier: HHS Lid

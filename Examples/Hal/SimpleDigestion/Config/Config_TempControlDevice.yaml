@@ -1,0 +1,26 @@
+#############################################################
+#
+# Device IDs: This identifies the Device to users
+# Enabled: True: Can be used. False: Cannot be used
+# Com Port: Port to communicate with the Device
+# Device Type: HeaterShaker or HeaterCooler
+# Ambient Temp: Above ambient temp will heat, below ambient will cool. If device cannot cool then this is ignored
+# Stable Temp Delta: If device temp is +- this value of set temp. Device is considered equilibrated and stable.
+# Supported Labware: These are the plate supported by this device. This associates with the deck sequences file
+# Plate Sequence: Sequence for that plate on the device
+# Lid Sequence: Sequence for associated lid on the device
+#
+#############################################################
+
+Hamilton Heater Shaker:
+  - Unique Identifier: Heater 1
+    Enabled: True
+    Backend Unique Identifier: Hammy
+    Custom Error Handling: False
+    Com Port: 1
+    Temp Limits:
+      Stable Delta: 2
+      Minimum: 0
+      Maximum: 100
+    Supported Labware Coverable Layout Item Unique Identifiers:
+      - HHS Plate

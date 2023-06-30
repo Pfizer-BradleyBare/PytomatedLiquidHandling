@@ -5,15 +5,8 @@
 #
 #############################################################
 
-Microlab Star:
-  Unique Identifier: Hammy
-  Deck Layout Path: Path
-
-Vantage:
-  Unique Identifier: Hammy
-  Deck Layout Path: Path
-
-Stunner:
-  Unique Identifier: Stunny
-  IP Address: "192.168.1.1"
-  Port: 1234
+Random Access Deck Storage:
+  - Unique Identifier: Random Access Lid Storage 1
+    Enabled: True
+    Supported Labware Layout Item Unique Identifiers:
+      - Lid Storage 1
