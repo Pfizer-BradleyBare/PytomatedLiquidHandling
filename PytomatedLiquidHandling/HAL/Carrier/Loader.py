@@ -1,16 +1,12 @@
 import yaml
 
-from PytomatedLiquidHandling.HAL import DeckLoader
-
 from .AutoloadCarrier import AutoloadCarrier
 from .BaseCarrier import CarrierTracker
 from .MoveableCarrier import MoveableCarrier
 from .NonMoveableCarrier import NonMoveableCarrier
 
 
-def LoadYaml(
-    DeckLoaderTrackerInstance: DeckLoader.DeckLoaderTracker, FilePath: str
-) -> CarrierTracker:
+def LoadYaml(FilePath: str) -> CarrierTracker:
     CarrierTrackerInstance = CarrierTracker()
 
     FileHandle = open(FilePath, "r")
@@ -25,8 +21,7 @@ def LoadYaml(
 
             UniqueID = Device["Unique Identifier"]
             DeckLoaderID = Device["Deck Loader Unique Identifier"]
-            DeckLoaderInstance = DeckLoaderTrackerInstance.GetObjectByName(DeckLoaderID)
-            # check that the deck loader exists
+
             TrackStart = Device["Track Start"]
             TrackEnd = Device["Track End"]
             NumPositions = Device["Num Labware Positions"]

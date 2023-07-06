@@ -5,6 +5,10 @@
   Dimensions:
     Long Side: 136
     Short Side: 95
+  Transport Offsets:
+    Open: 2
+    Close: 2
+    Height: 4
 
 - Unique Identifier: Vacuum Manifold
   Enabled: True
@@ -13,6 +17,10 @@
   Dimensions:
     Long Side: 250
     Short Side: 89
+  Transport Offsets:
+    Open: 2
+    Close: 2
+    Height: 4
 
 - Unique Identifier: Biorad 200uL 96 Well PCR Plate
   Enabled: True
@@ -33,6 +41,10 @@
   Dimensions:
     Long Side: 127
     Short Side: 86
+  Transport Offsets:
+    Open: 2
+    Close: 2
+    Height: 4
 
 - Unique Identifier: Thermo 400uL 96 Well PCR Plate
   Enabled: True
@@ -53,6 +65,10 @@
   Dimensions:
     Long Side: 127
     Short Side: 86
+  Transport Offsets:
+    Open: 2
+    Close: 2
+    Height: 4
 
 - Unique Identifier: Thermo 1200uL 96 Well PCR Plate
   Enabled: True
@@ -73,6 +89,10 @@
   Dimensions:
     Long Side: 127
     Short Side: 86
+  Transport Offsets:
+    Open: 2
+    Close: 2
+    Height: 4
 
 - Unique Identifier: Corning Costar 2000uL 96 Well PCR Plate
   Enabled: True
@@ -93,3 +113,7 @@
   Dimensions:
     Long Side: 127
     Short Side: 86
+  Transport Offsets:
+    Open: 2
+    Close: 2
+    Height: 4

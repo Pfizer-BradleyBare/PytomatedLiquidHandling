@@ -27,7 +27,7 @@ class HamiltonCOREGripper(TransportDevice):
         DestinationLayoutItem = TransportOptionsInstance.DestinationLayoutItem
 
         SourceTransportableLabware = (
-            self.TransportableLabwareTrackerInstance.GetObjectByName(
+            self.SupportedLabwareTrackerInstance.GetObjectByName(
                 SourceLayoutItem.LabwareInstance.UniqueIdentifier
             )
         )
@@ -36,10 +36,10 @@ class HamiltonCOREGripper(TransportDevice):
             GripperSequence=self.GripperToolSequence,
             PlateSequence=SourceLayoutItem.Sequence,
             GripWidth=SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
-            - SourceTransportableLabware.TransportParametersInstance.CloseOffset,
+            - SourceTransportableLabware.TransportOffsetsInstance.Close,
             OpenWidth=SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
-            + SourceTransportableLabware.TransportParametersInstance.OpenOffset,
-            GripHeight=SourceTransportableLabware.TransportParametersInstance.PickupHeight,
+            + SourceTransportableLabware.TransportOffsetsInstance.Open,
+            GripHeight=SourceTransportableLabware.TransportOffsetsInstance.Height,
         )
 
         CommandInstance = COREGripperDriver.GetPlate.Command(

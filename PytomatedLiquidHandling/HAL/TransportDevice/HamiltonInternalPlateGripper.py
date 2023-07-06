@@ -1,8 +1,8 @@
-from .BaseTransportDevice import TransportOptions
-from .BaseTransportDevice import TransportDevice
+from dataclasses import dataclass
+
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Transport import IPG as IPGDriver
-from dataclasses import dataclass
+from .BaseTransportDevice import TransportDevice, TransportOptions
 
 
 @dataclass
@@ -26,7 +26,7 @@ class HamiltonInternalPlateGripper(TransportDevice):
         DestinationLayoutItem = TransportOptionsInstance.DestinationLayoutItem
 
         SourceTransportableLabware = (
-            self.TransportableLabwareTrackerInstance.GetObjectByName(
+            self.SupportedLabwareTrackerInstance.GetObjectByName(
                 SourceLayoutItem.LabwareInstance.UniqueIdentifier
             )
         )
@@ -35,10 +35,10 @@ class HamiltonInternalPlateGripper(TransportDevice):
             OptionsInstance=IPGDriver.GetPlate.Options(
                 PlateSequence=SourceLayoutItem.Sequence,
                 GripWidth=SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
-                - SourceTransportableLabware.TransportParametersInstance.CloseOffset,
+                - SourceTransportableLabware.TransportOffsetsInstance.Close,
                 OpenWidth=SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
-                + SourceTransportableLabware.TransportParametersInstance.OpenOffset,
-                GripHeight=SourceTransportableLabware.TransportParametersInstance.PickupHeight,
+                + SourceTransportableLabware.TransportOffsetsInstance.Open,
+                GripHeight=SourceTransportableLabware.TransportOffsetsInstance.Height,
                 GripMode=SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig[
                     "GripMode"
                 ],

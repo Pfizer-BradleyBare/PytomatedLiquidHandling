@@ -14,16 +14,16 @@ from PytomatedLiquidHandling.HAL import (
 
 from . import HamiltonCOREGripper, HamiltonInternalPlateGripper, VantageTrackGripper
 from .BaseTransportDevice import (
-    TransportableLabware,
-    TransportableLabwareTracker,
+    DeckLocationTransportConfig,
+    DeckLocationTransportConfigTracker,
     TransportDeviceTracker,
-    TransportParameters,
 )
 
 
 def LoadYaml(
     BackendTrackerInstance: Backend.BackendTracker,
     LabwareTrackerInstance: Labware.LabwareTracker,
+    DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
     FilePath: str,
 ) -> TransportDeviceTracker:
     FileHandle = open(FilePath, "r")
@@ -84,20 +84,26 @@ def LoadYaml(
         )
         CustomErrorHandling = Device["Custom Error Handling"]
 
-        TransportableLabwareTrackerInstance = TransportableLabwareTracker()
-        for LabwareInformation in Device["Supported Labware Information"]:
-            LabwareObject = LabwareTrackerInstance.GetObjectByName(
-                LabwareInformation["Labware Unique Identifier"]
-            )
+        SupportedLabwareTrackerInstance = Labware.LabwareTracker()
+        for LabwareID in Device["Supported Labware Unique Identifiers"]:
+            LabwareInstance = LabwareTrackerInstance.GetObjectByName(LabwareID)
 
-            CloseOffset = LabwareInformation["Close Offset"]
-            OpenOffset = LabwareInformation["Open Offset"]
-            PickupHeight = LabwareInformation["Pickup Height"]
+            SupportedLabwareTrackerInstance.LoadSingle(LabwareInstance)
 
-            Parameters = TransportParameters(CloseOffset, OpenOffset, PickupHeight)
+        DeckLocationTransportConfigTrackerInstance = (
+            DeckLocationTransportConfigTracker()
+        )
+        for DeckLocationConfig in Device["Supported Deck Locations Config"]:
+            DeckLocationID = DeckLocationConfig["Deck Location Unique Identifier"]
 
-            TransportableLabwareTrackerInstance.LoadSingle(
-                TransportableLabware(LabwareObject, Parameters)
+            DeckLocationTrackerInstance.GetObjectByName(DeckLocationID)
+            # Does this deck location exist?
+
+            GetConfig = DeckLocationConfig["Get Configuration"]
+            PlaceConfig = DeckLocationConfig["Place Configuration"]
+
+            DeckLocationTransportConfigTrackerInstance.LoadSingle(
+                DeckLocationTransportConfig(DeckLocationID, GetConfig, PlaceConfig)
             )
 
         if DeviceType == "Hamilton CORE Gripper":
@@ -111,7 +117,8 @@ def LoadYaml(
                     UniqueIdentifier,
                     BackendInstance,
                     CustomErrorHandling,
-                    TransportableLabwareTrackerInstance,
+                    DeckLocationTransportConfigTrackerInstance,
+                    SupportedLabwareTrackerInstance,
                     GripperSequence,
                 )
             )
@@ -125,7 +132,8 @@ def LoadYaml(
                     UniqueIdentifier,
                     BackendInstance,
                     CustomErrorHandling,
-                    TransportableLabwareTrackerInstance,
+                    DeckLocationTransportConfigTrackerInstance,
+                    SupportedLabwareTrackerInstance,
                 )
             )
 
@@ -138,7 +146,8 @@ def LoadYaml(
                     UniqueIdentifier,
                     BackendInstance,
                     CustomErrorHandling,
-                    TransportableLabwareTrackerInstance,
+                    DeckLocationTransportConfigTrackerInstance,
+                    SupportedLabwareTrackerInstance,
                 )
             )
 

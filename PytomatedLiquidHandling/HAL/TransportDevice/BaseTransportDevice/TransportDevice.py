@@ -1,45 +1,68 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field
 
-from PytomatedLiquidHandling.HAL import LayoutItem
+from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 
 from ....Tools.AbstractClasses import UniqueObjectABC
 from ...Tools.AbstractClasses import InterfaceABC
+from . import DeckLocationTransportConfigTracker
 from .Interface import TransportOptions
-from .TransportableLabware.TransportableLabwareTracker import (
-    TransportableLabwareTracker,
-)
 
 
 @dataclass
 class TransportDevice(InterfaceABC, UniqueObjectABC):
-    TransportableLabwareTrackerInstance: TransportableLabwareTracker
+    DeckLocationTransportConfigTrackerInstance: DeckLocationTransportConfigTracker
+    SupportedLabwareTrackerInstance: Labware.LabwareTracker
     _LastTransportFlag: bool = field(init=False, default=True)
+
+    def __post_init__(self):
+        for (
+            DeckLocationTransportConfig
+        ) in self.DeckLocationTransportConfigTrackerInstance.GetObjectsAsList():
+            if not all(
+                Key in DeckLocationTransportConfig.GetConfig
+                for Key in self.GetGetConfigKeys()
+            ):
+                raise Exception(
+                    "Keys are missing from Home Get Config. Please fix. Expected: "
+                    + str(self.GetGetConfigKeys())
+                )
+
+            if not all(
+                Key in DeckLocationTransportConfig.PlaceConfig
+                for Key in self.GetPlaceConfigKeys()
+            ):
+                raise Exception(
+                    "Keys are missing from Home Place Config. Please fix. Expected: "
+                    + str(self.GetPlaceConfigKeys())
+                )
 
     def _CheckIsValid(self, TransportOptionsInstance: TransportOptions.Options):
         SourceLayoutItem = TransportOptionsInstance.SourceLayoutItem
         DestinationLayoutItem = TransportOptionsInstance.DestinationLayoutItem
 
-        if (
-            SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
-            != self.UniqueIdentifier
+        if not self.DeckLocationTransportConfigTrackerInstance.IsTracked(
+            SourceLayoutItem.DeckLocationInstance.UniqueIdentifier
         ):
             raise Exception(
                 "This transport device is not supported for this source deck location"
             )
 
-        if (
-            DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
-            != self.UniqueIdentifier
+        if not self.DeckLocationTransportConfigTrackerInstance.IsTracked(
+            DestinationLayoutItem.DeckLocationInstance.UniqueIdentifier
         ):
             raise Exception(
                 "This transport device is not supported for this destination deck location"
             )
         # Check that this is a supported transport device for the deck locations
 
-        if not (
-            SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig
-            == DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig
+        if (
+            self.DeckLocationTransportConfigTrackerInstance.GetObjectByName(
+                SourceLayoutItem.DeckLocationInstance.UniqueIdentifier
+            ).GetConfig
+            != self.DeckLocationTransportConfigTrackerInstance.GetObjectByName(
+                DestinationLayoutItem.DeckLocationInstance.UniqueIdentifier
+            ).GetConfig
         ):
             raise Exception(
                 "Source and destination extra options are not compatible. Use a transition point to properly orient."
@@ -59,7 +82,7 @@ class TransportDevice(InterfaceABC, UniqueObjectABC):
             )
         # Check that the labware is the same for both source and destination
 
-        if not self.TransportableLabwareTrackerInstance.IsTracked(
+        if not self.SupportedLabwareTrackerInstance.IsTracked(
             SourceLabwareInstance.UniqueIdentifier
         ):
             raise Exception("The labware is not supported by this transport device")

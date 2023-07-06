@@ -1,7 +1,6 @@
 Moveable Carrier:
   - Unique Identifier: h
     Enabled: True
-    DeckLoader Unique Identifier: loader
     Track Start: 32
     Track End: 37
     Num Labware Positions: 5
@@ -11,7 +10,6 @@ Moveable Carrier:
 Non-Moveable Carrier:
   - Unique Identifier: h
     Enabled: True
-    DeckLoader Unique Identifier: loader
     Track Start: 32
     Track End: 37
     Num Labware Positions: 5
@@ -21,7 +19,6 @@ Non-Moveable Carrier:
 Autoload Carrier:
   - Unique Identifier: h
     Enabled: True
-    DeckLoader Unique Identifier: loader
     Labware ID: LabID
     Track Start: 32
     Track End: 37

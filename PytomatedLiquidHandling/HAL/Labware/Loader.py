@@ -1,7 +1,13 @@
 import yaml
 
 from . import LabwareTracker, NonPipettableLabware, PipettableLabware
-from .BaseLabware import Dimensions, WellEquation, WellEquationTracker, Wells
+from .BaseLabware import (
+    Dimensions,
+    TransportOffsets,
+    WellEquation,
+    WellEquationTracker,
+    Wells,
+)
 
 
 def LoadYaml(FilePath: str) -> LabwareTracker:
@@ -20,9 +26,16 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
         ImageFilename = Labware["Image Filename"]
         LongSide = Labware["Dimensions"]["Long Side"]
         ShortSide = Labware["Dimensions"]["Short Side"]
+        OpenOffset = Labware["Transport Offsets"]["Open"]
+        CloseOffset = Labware["Transport Offsets"]["Close"]
+        HeightOffset = Labware["Transport Offsets"]["Height"]
 
         DimensionsInstance = Dimensions(LongSide, ShortSide)
         # Create Dimensions Class
+
+        TransportOffsetsInstance = TransportOffsets(
+            OpenOffset, CloseOffset, HeightOffset
+        )
 
         if "Wells" in Labware:
             LabwareWells = Labware["Wells"]
@@ -50,12 +63,19 @@ def LoadYaml(FilePath: str) -> LabwareTracker:
             )
             # Create Wells Class
             LabwareInstance = PipettableLabware(
-                UniqueIdentifier, ImageFilename, DimensionsInstance, WellsInstance
+                UniqueIdentifier,
+                ImageFilename,
+                DimensionsInstance,
+                TransportOffsetsInstance,
+                WellsInstance,
             )
 
         else:
             LabwareInstance = NonPipettableLabware(
-                UniqueIdentifier, ImageFilename, DimensionsInstance
+                UniqueIdentifier,
+                ImageFilename,
+                DimensionsInstance,
+                TransportOffsetsInstance,
             )
 
         LabwareTrackerInstance.LoadSingle(LabwareInstance)

@@ -23,36 +23,19 @@ Hamilton CORE Gripper:
   Backend Unique Identifier: a
   Custom Error Handling: False
   Gripper Sequence: seq_COREGripTool
-  Supported Labware Information:
-    - Labware Unique Identifier: Agilent Black Lid
-      Close Offset: 2
-      Open Offset: 2
-      Pickup Height: 4
+  Supported Labware Unique Identifiers:
+    - Agilent Black Lid
+    - 200uL Biorad 96 Well PCR Plate
+    - 400uL Thermo 96 Well PCR Plate
+    - 1200uL DeepWell 96 Well PCR Plate
+    - 2000uL Corning 96 Well PCR Plate
+    - 400uL Corning Costar 96 Well UV Plate
 
-    - Labware Unique Identifier: 200uL Biorad 96 Well PCR Plate
-      Close Offset: 2
-      Open Offset: 2
-      Pickup Height: 4
-
-    - Labware Unique Identifier: 400uL Thermo 96 Well PCR Plate
-      Close Offset: 2
-      Open Offset: 2
-      Pickup Height: 4
-
-    - Labware Unique Identifier: 1200uL DeepWell 96 Well PCR Plate
-      Close Offset: 2
-      Open Offset: 2
-      Pickup Height: 4
-
-    - Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
-      Close Offset: 2
-      Open Offset: 2
-      Pickup Height: 4
-
-    - Labware Unique Identifier: 400uL Corning Costar 96 Well UV Plate
-      Close Offset: 2
-      Open Offset: 2
-      Pickup Height: 4
+  Supported Deck Locations Config:
+    - Deck Location Unique Identifier:
+      Get Configuration:
+        Check Plate Exists: False
+      Place Configuration:
 
 Hamilton Internal Plate Gripper:
   Unique Identifier: Gripper 2
@@ -61,9 +44,40 @@ Hamilton Internal Plate Gripper:
   Custom Error Handling: False
   Supported Labware Information:
 
+  Supported Deck Locations Config:
+    - Deck Location Unique Identifier:
+      Get Configuration:
+        GripMode:
+        Movement:
+        RetractDistance:
+        LiftupHeight:
+        LabwareOrientation:
+        InverseGrip:
+
+      Place Configuration:
+        Movement:
+        RetractDistance:
+        LiftupHeight:
+        LabwareOrientation:
+
 Vantage Track Gripper:
   Unique Identifier: Gripper 3
   Enabled: False
   Backend Unique Identifier: a
   Custom Error Handling: False
   Supported Labware Information:
+  Supported Deck Locations Config:
+    - Deck Location Unique Identifier:
+      Get Configuration:
+        GripMode:
+        Movement:
+        RetractDistance:
+        LiftupHeight:
+        LabwareOrientation:
+        InverseGrip:
+
+      Place Configuration:
+        Movement:
+        RetractDistance:
+        LiftupHeight:
+        LabwareOrientation:
