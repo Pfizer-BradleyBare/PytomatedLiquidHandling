@@ -15,12 +15,12 @@
 Transition Points:
   - Enabled: True
     Plate Sequence: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
-    Plate Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
+    Plate Labware Unique Identifier: Corning Costar 2000uL 96 Well PCR Plate
 
 Hamilton CORE Gripper:
-  Unique Identifier: Gripper 1
+  Unique Identifier: Gripper
   Enabled: True
-  Backend Unique Identifier: a
+  Backend Unique Identifier: Hammy
   Custom Error Handling: False
   Gripper Sequence: seq_COREGripTool
   Supported Labware Unique Identifiers:

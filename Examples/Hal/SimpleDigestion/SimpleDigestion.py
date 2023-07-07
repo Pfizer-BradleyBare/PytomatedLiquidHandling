@@ -17,21 +17,20 @@ LabwareTrackerInstance = HAL.Labware.Loader.LoadYaml(
     os.path.join(os.path.dirname(__file__), "Config", "Config_Labware.yaml")
 )
 
-TransportDeviceTrackerInstance = HAL.TransportDevice.Loader.LoadYaml(
-    BackendTrackerInstance,
-    LabwareTrackerInstance,
-    os.path.join(os.path.dirname(__file__), "Config", "Config_Transport.yaml"),
-)
-
 CarrierTrackerInstance = HAL.Carrier.Loader.LoadYaml(
-    HAL.DeckLoader.DeckLoaderTracker(),
-    os.path.join(os.path.dirname(__file__), "Config", "Config_DeckLocation.yaml"),
+    os.path.join(os.path.dirname(__file__), "Config", "Config_Carrier.yaml")
 )
 
 DeckLocationTrackerInstance = HAL.DeckLocation.Loader.LoadYaml(
     CarrierTrackerInstance,
-    TransportDeviceTrackerInstance,
     os.path.join(os.path.dirname(__file__), "Config", "Config_DeckLocation.yaml"),
+)
+
+TransportDeviceTrackerInstance = HAL.TransportDevice.Loader.LoadYaml(
+    BackendTrackerInstance,
+    LabwareTrackerInstance,
+    DeckLocationTrackerInstance,
+    os.path.join(os.path.dirname(__file__), "Config", "Config_Transport.yaml"),
 )
 
 LayoutItemTrackerInstance = HAL.LayoutItem.Loader.LoadYaml(
@@ -49,9 +48,7 @@ ClosedContainerTrackerInstance = HAL.ClosedContainer.Loader.LoadYaml(
 
 TempControlDeviceTrackerInstance = HAL.TempControlDevice.Loader.LoadYaml(
     BackendTrackerInstance,
-    LabwareTrackerInstance,
-    DeckLocationTrackerInstance,
-    TransportDeviceTrackerInstance,
+    LayoutItemTrackerInstance,
     os.path.join(os.path.dirname(__file__), "Config", "Config_TempControlDevice.yaml"),
 )
 
@@ -69,64 +66,15 @@ PipetteTrackerInstance = HAL.Pipette.Loader.LoadYaml(
 )
 # Load everything
 
-quit()
-
-LiquidHandler = BackendTrackerInstance.GetObjectByName("Hammy")
-Heater = TempControlDeviceTrackerInstance.GetObjectByName("Heater")
-FlipTube = ClosedContainerTrackerInstance.GetObjectByName("Special Fliptube")
 PlateTransporter = TransportDeviceTrackerInstance
-Pipette = PipetteTrackerInstance.GetObjectByName("Pipette")
 # devices
-SamplePlate = LayoutItemTrackerInstance.GetObjectByName("Sample Plate")
-DigestionPlate = LayoutItemTrackerInstance.GetObjectByName("Digestion Plate")
-FlipTubes = LayoutItemTrackerInstance.GetObjectByName("FlipTubes")
-ReagentReservoirs = LayoutItemTrackerInstance.GetObjectByName("Reagent Reservoirs")
-# Containers
-RRPosWater = 1
-FTPosTCEP = 32
-FTPosIAA = 31
-FTPosTFA = 30
-FTPosLysC = 29
-# Reagent Positions
-# Get varables I care about
+SamplePlate = LayoutItemTrackerInstance.GetObjectByName("Plate1")
+DigestionPlate = LayoutItemTrackerInstance.GetObjectByName("Plate2")
 
-NumSamples = 8
-StartingPosition = 1
-
-TransferOptions = HAL.Pipette.TransferOptions
-
-WaterTransferOptionsTracker = TransferOptions.OptionsTracker()
-for Count in range(0, NumSamples):
-    WaterTransferOptionsTracker.LoadSingle(
-        TransferOptions.Options(
-            SourceLayoutItemInstance=ReagentReservoirs,
-            SourcePosition=RRPosWater,
-            CurrentSourceVolume=5000,
-            SourceMixCycles=0,
-            SourceLiquidClassCategory="Default",
-            DestinationLayoutItemInstance=DigestionPlate,
-            DestinationPosition=StartingPosition + Count,
-            CurrentDestinationVolume=0,
-            DestinationMixCycles=0,
-            DestinationLiquidClassCategory="Default",
-            TransferVolume=90,
-        )
+OptionsTrackerInstance = HAL.TransportDevice.TransportOptions.OptionsTracker()
+OptionsTrackerInstance.LoadSingle(
+    HAL.TransportDevice.TransportOptions.Options(
+        SourceLayoutItem=SamplePlate, DestinationLayoutItem=DigestionPlate
     )
-Pipette.Transfer(WaterTransferOptionsTracker)
-# Water Transfer
-# Sample Transfer
-# Dilute sample into denaturation plate with water. All samples are assumed to be 10mg/mL
-
-# Add TCEP
-
-# Incubate
-
-# Add IAA
-
-# Incubate
-
-# Add LysC
-
-# Incubate
-
-# Quench
+)
+PlateTransporter.Transport(OptionsTrackerInstance)

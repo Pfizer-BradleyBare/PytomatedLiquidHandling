@@ -2,7 +2,10 @@ import yaml
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 
-from . import CoverableItem, LayoutItemTracker, Lid, NonCoverableItem
+from .BaseLayoutItem import LayoutItemTracker
+from .CoverableItem import CoverableItem
+from .Lid import Lid
+from .NonCoverableItem import NonCoverableItem
 
 
 def LoadYaml(

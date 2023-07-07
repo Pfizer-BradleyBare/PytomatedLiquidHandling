@@ -20,7 +20,6 @@ def LoadYaml(FilePath: str) -> CarrierTracker:
                 continue
 
             UniqueID = Device["Unique Identifier"]
-            DeckLoaderID = Device["Deck Loader Unique Identifier"]
 
             TrackStart = Device["Track Start"]
             TrackEnd = Device["Track End"]
@@ -31,7 +30,6 @@ def LoadYaml(FilePath: str) -> CarrierTracker:
             if DeviceID == "Moveable Carrier":
                 CarrierInstance = MoveableCarrier(
                     UniqueID,
-                    DeckLoaderID,
                     TrackStart,
                     TrackEnd,
                     NumPositions,
@@ -41,7 +39,6 @@ def LoadYaml(FilePath: str) -> CarrierTracker:
             elif DeviceID == "Non-Moveable Carrier":
                 CarrierInstance = NonMoveableCarrier(
                     UniqueID,
-                    DeckLoaderID,
                     TrackStart,
                     TrackEnd,
                     NumPositions,
@@ -52,7 +49,6 @@ def LoadYaml(FilePath: str) -> CarrierTracker:
                 LabwareID = Device["Labware ID"]
                 CarrierInstance = AutoloadCarrier(
                     UniqueID,
-                    DeckLoaderID,
                     TrackStart,
                     TrackEnd,
                     NumPositions,

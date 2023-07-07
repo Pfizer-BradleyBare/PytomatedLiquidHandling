@@ -25,9 +25,9 @@ class HamiltonCOREGripper(TransportDevice):
     class PlaceConfig(DeckLocationTransportConfig.TransportConfigABC):
         def __init__(self, Config: dict):
             self.CheckPlateExists: COREGripperDriver.PlacePlate.Options.YesNoOptions = (
-                COREGripperDriver.PlacePlate.Options.YesNoOptions[
+                COREGripperDriver.PlacePlate.Options.YesNoOptions(
                     Config["CheckPlateExists"]
-                ]
+                )
             )
 
         def _ComparisonKeys(self) -> list[str]:
@@ -78,7 +78,7 @@ class HamiltonCOREGripper(TransportDevice):
         PlaceConfigInstance = (
             self.DeckLocationTransportConfigTrackerInstance.GetObjectByName(
                 DestinationLayoutItem.DeckLocationInstance.UniqueIdentifier
-            ).PlaceConfig,
+            ).PlaceConfig
         )
 
         if not isinstance(PlaceConfigInstance, self.PlaceConfig):

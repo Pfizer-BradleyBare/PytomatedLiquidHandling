@@ -5,7 +5,6 @@ from ....Tools.AbstractClasses import UniqueObjectABC
 
 @dataclass
 class CarrierABC(UniqueObjectABC):
-    DeckLoaderUniqueIdentifier: str
     TrackStart: int
     TrackEnd: int
     NumLabwarePositions: int

@@ -18,33 +18,35 @@ Transition Points:
     Plate Labware Unique Identifier: Corning Costar 2000uL 96 Well PCR Plate
 
 Hamilton CORE Gripper:
-  Unique Identifier: Gripper
+  Unique Identifier: Gripper 1
   Enabled: True
   Backend Unique Identifier: Hammy
   Custom Error Handling: False
   Gripper Sequence: seq_COREGripTool
-  Supported Labware Information:
-    - Labware Unique Identifier: Agilent Black Lid
-      Close Offset: 2
-      Open Offset: 2
-      Pickup Height: 4
+  Supported Labware Unique Identifiers:
+    - Agilent Black Lid
+    - Biorad 200uL 96 Well PCR Plate
+    - Thermo 400uL 96 Well PCR Plate
+    - Thermo 1200uL 96 Well PCR Plate
+    - Corning Costar 2000uL 96 Well PCR Plate
 
-    - Labware Unique Identifier: Biorad 200uL 96 Well PCR Plate
-      Close Offset: 2
-      Open Offset: 2
-      Pickup Height: 4
+  Supported Deck Locations Config:
+    - Deck Location Unique Identifier: HHS
+      Get Configuration:
+      Place Configuration:
+        CheckPlateExists: False
 
-    - Labware Unique Identifier: Thermo 400uL 96 Well PCR Plate
-      Close Offset: 2
-      Open Offset: 2
-      Pickup Height: 4
+    - Deck Location Unique Identifier: Lid Storage
+      Get Configuration:
+      Place Configuration:
+        CheckPlateExists: False
 
-    - Labware Unique Identifier: Thermo 1200uL 96 Well PCR Plate
-      Close Offset: 2
-      Open Offset: 2
-      Pickup Height: 4
+    - Deck Location Unique Identifier: Plate 1
+      Get Configuration:
+      Place Configuration:
+        CheckPlateExists: False
 
-    - Labware Unique Identifier: Corning Costar 2000uL 96 Well PCR Plate
-      Close Offset: 2
-      Open Offset: 2
-      Pickup Height: 4
+    - Deck Location Unique Identifier: Plate 2
+      Get Configuration:
+      Place Configuration:
+        CheckPlateExists: False

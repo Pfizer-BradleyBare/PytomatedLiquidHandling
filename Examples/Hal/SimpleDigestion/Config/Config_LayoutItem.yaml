@@ -2,13 +2,13 @@ NonCoverable Item:
   - Unique Identifier: FlipTubes
     Enabled: True
     Sequence: FlipTubes
-    Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
+    Labware Unique Identifier: Corning Costar 2000uL 96 Well PCR Plate
     Deck Location Unique Identifier: Fliptube
 
   - Unique Identifier: Reservoirs
     Enabled: True
     Sequence: ReagentReservoirs
-    Labware Unique Identifier: 2000uL Corning 96 Well PCR Plate
+    Labware Unique Identifier: Corning Costar 2000uL 96 Well PCR Plate
     Deck Location Unique Identifier: Reservoir
 
   - Unique Identifier: Plate1

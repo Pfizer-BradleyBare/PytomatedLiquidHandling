@@ -2,8 +2,8 @@ import yaml
 
 from PytomatedLiquidHandling.HAL import Carrier
 
-from . import DeckLocation
 from .BaseDeckLocation import CarrierConfig, DeckLocationTracker
+from .DeckLocation import DeckLocation
 
 
 def LoadYaml(

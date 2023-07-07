@@ -88,7 +88,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                     DeckLocation.DeckLocation(
                         "Intermediate Destination",
                         DeckLocation.CarrierConfig(
-                            Carrier.CarrierABC("", "", 0, 0, 0, "", ""), 0
+                            Carrier.CarrierABC("", 0, 0, 0, "", ""), 0
                         ),
                     ),
                     LabwareDestinationLayoutItem.LabwareInstance,
@@ -137,7 +137,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                     DeckLocation.DeckLocation(
                         "Intermediate Source",
                         DeckLocation.CarrierConfig(
-                            Carrier.CarrierABC("", "", 0, 0, 0, "", ""), 0
+                            Carrier.CarrierABC("", 0, 0, 0, "", ""), 0
                         ),
                     ),
                     LabwareSourceLayoutItem.LabwareInstance,

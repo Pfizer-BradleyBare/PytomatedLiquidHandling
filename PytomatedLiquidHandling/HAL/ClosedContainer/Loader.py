@@ -21,6 +21,9 @@ def LoadYaml(
     FileHandle.close()
     # Get config file contents
 
+    if ConfigFile is None:
+        return ClosedContainerTrackerInstance
+
     for DeviceType in ConfigFile:
         for Device in ConfigFile[DeviceType]:
             if Device["Enabled"] == False:

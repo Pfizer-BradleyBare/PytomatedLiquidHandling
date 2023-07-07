@@ -27,7 +27,7 @@ class HamiltonInternalPlateGripper(TransportDevice):
                 Config["LabwareOrientation"]
             ]
             self.InverseGrip: IPGDriver.GetPlate.Options.YesNoOptions = (
-                IPGDriver.GetPlate.Options.YesNoOptions[Config["InverseGrip"]]
+                IPGDriver.GetPlate.Options.YesNoOptions(Config["InverseGrip"])
             )
 
         def _ComparisonKeys(self) -> list[str]:

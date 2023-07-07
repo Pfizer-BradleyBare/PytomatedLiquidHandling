@@ -12,12 +12,14 @@ from PytomatedLiquidHandling.HAL import (
     LayoutItem,
 )
 
-from . import HamiltonCOREGripper, HamiltonInternalPlateGripper, VantageTrackGripper
 from .BaseTransportDevice import (
     DeckLocationTransportConfig,
     DeckLocationTransportConfigTracker,
     TransportDeviceTracker,
 )
+from .HamiltonCOREGripper import HamiltonCOREGripper
+from .HamiltonInternalPlateGripper import HamiltonInternalPlateGripper
+from .VantageTrackGripper import VantageTrackGripper
 
 
 def LoadYaml(
@@ -33,9 +35,7 @@ def LoadYaml(
 
     FillerDeckLocationInstance = DeckLocation.DeckLocation(
         "TransitionPoint",
-        DeckLocation.CarrierConfig(
-            Carrier.NonMoveableCarrier("", "", 0, 0, 0, "", ""), 0
-        ),
+        DeckLocation.CarrierConfig(Carrier.NonMoveableCarrier("", 0, 0, 0, "", ""), 0),
     )
     # This filler is only used so we can create a layout item. The deck location info will never actually be used
 
