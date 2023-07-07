@@ -80,3 +80,5 @@ OptionsTrackerInstance.LoadSingle(
     )
 )
 PlateTransporter.Transport(OptionsTrackerInstance)
+
+BackendTrackerInstance.GetObjectByName("Hammy").StopBackend()
