@@ -26,15 +26,5 @@ class VantageTrackGripper(TransportDevice):
         def _ComparisonKeys(self) -> list[str]:
             return []
 
-    def Initialize(
-        self,
-    ):
-        ...
-
-    def Deinitialize(
-        self,
-    ):
-        ...
-
     def Transport(self, TransportOptionsInstance: TransportOptions.Options):
         ...

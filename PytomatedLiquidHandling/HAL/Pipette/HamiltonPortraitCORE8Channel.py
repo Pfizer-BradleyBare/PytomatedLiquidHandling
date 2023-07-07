@@ -14,16 +14,6 @@ class HamiltonPortraitCORE8Channel(Pipette):
     BackendInstance: HamiltonBackendABC
     ActiveChannels: list[int]
 
-    def Initialize(
-        self,
-    ):
-        ...
-
-    def Deinitialize(
-        self,
-    ):
-        ...
-
     def ConvertTransferVolumesToSupportedRange(
         self,
         OptionsTrackerInstance: TransferOptions.OptionsTracker,

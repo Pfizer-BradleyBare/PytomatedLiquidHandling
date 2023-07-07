@@ -10,10 +10,9 @@ class HamiltonTipFTR(Tip):
     BackendInstance: HamiltonBackendABC
 
     def Initialize(self):
-        self.Reload()
+        Tip.Initialize(self)
 
-    def Deinitialize(self):
-        ...
+        self.Reload()
 
     def Reload(self):
         CommandInstance = FTRDriver.LoadTips.Command(

@@ -12,6 +12,8 @@ class HamiltonHeaterShaker(TempControlDevice):
     HandleID: int = field(init=False)
 
     def Initialize(self):
+        TempControlDevice.Initialize(self)
+
         if not isinstance(self.ComPort, int):
             raise Exception("Should never happen")
 
@@ -56,6 +58,8 @@ class HamiltonHeaterShaker(TempControlDevice):
         )
 
     def Deinitialize(self):
+        TempControlDevice.Deinitialize(self)
+
         CommandInstance = HeaterShakerDriver.StopTemperatureControl.Command(
             OptionsInstance=HeaterShakerDriver.StopTemperatureControl.Options(
                 HandleID=int(self.HandleID),

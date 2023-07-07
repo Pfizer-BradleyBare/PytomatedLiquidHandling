@@ -33,16 +33,6 @@ class HamiltonCOREGripper(TransportDevice):
         def _ComparisonKeys(self) -> list[str]:
             return ["CheckPlateExists"]
 
-    def Initialize(
-        self,
-    ):
-        ...
-
-    def Deinitialize(
-        self,
-    ):
-        ...
-
     def Transport(self, TransportOptionsInstance: TransportOptions.Options):
         self._CheckIsValid(TransportOptionsInstance)
 

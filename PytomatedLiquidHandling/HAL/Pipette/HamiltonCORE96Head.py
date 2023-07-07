@@ -11,16 +11,6 @@ from .BasePipette import Pipette, TransferOptions
 class HamiltonCORE96Head(Pipette):
     BackendInstance: HamiltonBackendABC
 
-    def Initialize(
-        self,
-    ):
-        ...
-
-    def Deinitialize(
-        self,
-    ):
-        ...
-
     def OptionsSupported(
         self, OptionsTrackerInstance: TransferOptions.OptionsTracker
     ) -> bool:

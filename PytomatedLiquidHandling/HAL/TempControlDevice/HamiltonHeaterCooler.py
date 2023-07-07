@@ -12,6 +12,8 @@ class HamiltonHeaterCooler(TempControlDevice):
     HandleID: str = field(init=False)
 
     def Initialize(self):
+        TempControlDevice.Initialize(self)
+
         if not isinstance(self.ComPort, str):
             raise Exception("Should never happen")
 
@@ -30,6 +32,8 @@ class HamiltonHeaterCooler(TempControlDevice):
         self.HandleID = ResponseInstance.GetHandleID()
 
     def Deinitialize(self):
+        TempControlDevice.Deinitialize(self)
+
         CommandInstance = HeaterCoolerDriver.StopTemperatureControl.Command(
             OptionsInstance=HeaterCoolerDriver.StopTemperatureControl.Options(
                 HandleID=str(self.HandleID)

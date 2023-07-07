@@ -55,16 +55,6 @@ class HamiltonInternalPlateGripper(TransportDevice):
                 "LabwareOrientation",
             ]
 
-    def Initialize(
-        self,
-    ):
-        ...
-
-    def Deinitialize(
-        self,
-    ):
-        ...
-
     def Transport(self, TransportOptionsInstance: TransportOptions.Options):
         self._CheckIsValid(TransportOptionsInstance)
 

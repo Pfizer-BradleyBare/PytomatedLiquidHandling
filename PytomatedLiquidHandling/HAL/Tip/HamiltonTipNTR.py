@@ -13,6 +13,8 @@ class HamiltonTipNTR(Tip):
     GeneratedWasteSequence: str = field(init=False, default="")
 
     def Initialize(self):
+        Tip.Initialize(self)
+
         self.Reload()
 
     def Deinitialize(self):

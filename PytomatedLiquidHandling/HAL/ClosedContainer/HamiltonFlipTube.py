@@ -1,20 +1,20 @@
+from dataclasses import dataclass
+
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
 from .BaseClosedContainer import ClosedContainerABC, OpenCloseOptions
-from dataclasses import dataclass
 
 
 @dataclass
 class HamiltonFlipTube(ClosedContainerABC):
     def Initialize(self):
+        ClosedContainerABC.Initialize(self)
+
         Command = FlipTubeDriver.Initialize.Command(
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.BackendInstance.ExecuteCommand(Command)
         self.BackendInstance.WaitForResponseBlocking(Command)
         self.BackendInstance.GetResponse(Command, FlipTubeDriver.Initialize.Response)
-
-    def Deinitialize(self):
-        ...
 
     def Open(
         self,
