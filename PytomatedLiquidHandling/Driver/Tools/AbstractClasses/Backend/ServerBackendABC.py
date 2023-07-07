@@ -134,7 +134,7 @@ class ServerBackendABC(SimpleBackendABC):
             self.LoggerInstance: Logger.Logger = LoggerInstance
             self.EndpointID: str = EndpointID
             self.InputString: bytes | None = JSONstring
-            self.JSON: dict
+            self.JSON: dict = {}
             self.EndpointState: bool = False
             self.EndpointDetails: str = "N/A"
             self.EndpointReturn: dict = dict()
