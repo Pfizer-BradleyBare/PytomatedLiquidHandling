@@ -66,6 +66,8 @@ PipetteTrackerInstance = HAL.Pipette.Loader.LoadYaml(
 )
 # Load everything
 
+BackendTrackerInstance.GetObjectByName("Hammy").StartBackend()
+
 PlateTransporter = TransportDeviceTrackerInstance
 # devices
 SamplePlate = LayoutItemTrackerInstance.GetObjectByName("Plate1")
