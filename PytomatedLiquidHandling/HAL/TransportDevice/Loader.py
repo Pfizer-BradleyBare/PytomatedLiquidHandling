@@ -36,7 +36,6 @@ def LoadYaml(
         DeckLocation.CarrierConfig(
             Carrier.NonMoveableCarrier("", "", 0, 0, 0, "", ""), 0
         ),
-        DeckLocation.TransportDeviceConfig("", {}, {}, {}, {}),
     )
     # This filler is only used so we can create a layout item. The deck location info will never actually be used
 
@@ -102,8 +101,24 @@ def LoadYaml(
             GetConfig = DeckLocationConfig["Get Configuration"]
             PlaceConfig = DeckLocationConfig["Place Configuration"]
 
+            if DeviceType == "Hamilton CORE Gripper":
+                GetConfigInstance = HamiltonCOREGripper.GetConfig(GetConfig)
+                PlaceConfigInstance = HamiltonCOREGripper.PlaceConfig(PlaceConfig)
+            elif DeviceType == "Hamilton Internal Plate Gripper":
+                GetConfigInstance = HamiltonInternalPlateGripper.GetConfig(GetConfig)
+                PlaceConfigInstance = HamiltonInternalPlateGripper.PlaceConfig(
+                    PlaceConfig
+                )
+            elif DeviceType == "Vantage Track Gripper":
+                GetConfigInstance = VantageTrackGripper.GetConfig(GetConfig)
+                PlaceConfigInstance = VantageTrackGripper.PlaceConfig(PlaceConfig)
+            else:
+                raise Exception("Device type not recognized")
+
             DeckLocationTransportConfigTrackerInstance.LoadSingle(
-                DeckLocationTransportConfig(DeckLocationID, GetConfig, PlaceConfig)
+                DeckLocationTransportConfig(
+                    DeckLocationID, GetConfigInstance, PlaceConfigInstance
+                )
             )
 
         if DeviceType == "Hamilton CORE Gripper":

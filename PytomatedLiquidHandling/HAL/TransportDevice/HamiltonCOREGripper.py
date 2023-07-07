@@ -1,14 +1,37 @@
 from dataclasses import dataclass
+from typing import cast
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Transport import COREGripper as COREGripperDriver
-from .BaseTransportDevice import TransportDevice, TransportOptions
+from .BaseTransportDevice import (
+    DeckLocationTransportConfig,
+    TransportDevice,
+    TransportOptions,
+)
 
 
 @dataclass
 class HamiltonCOREGripper(TransportDevice):
     BackendInstance: HamiltonBackendABC
     GripperToolSequence: str
+
+    class GetConfig(DeckLocationTransportConfig.TransportConfigABC):
+        def __init__(self, Config: dict):
+            ...
+
+        def _ComparisonKeys(self) -> list[str]:
+            return []
+
+    class PlaceConfig(DeckLocationTransportConfig.TransportConfigABC):
+        def __init__(self, Config: dict):
+            self.CheckPlateExists: COREGripperDriver.PlacePlate.Options.YesNoOptions = (
+                COREGripperDriver.PlacePlate.Options.YesNoOptions[
+                    Config["CheckPlateExists"]
+                ]
+            )
+
+        def _ComparisonKeys(self) -> list[str]:
+            return ["CheckPlateExists"]
 
     def Initialize(
         self,
@@ -52,14 +75,19 @@ class HamiltonCOREGripper(TransportDevice):
             CommandInstance, COREGripperDriver.GetPlate.Response
         )
 
+        PlaceConfigInstance = (
+            self.DeckLocationTransportConfigTrackerInstance.GetObjectByName(
+                DestinationLayoutItem.DeckLocationInstance.UniqueIdentifier
+            ).PlaceConfig,
+        )
+
+        if not isinstance(PlaceConfigInstance, self.PlaceConfig):
+            raise Exception("This should never happen")
+
         CommandInstance = COREGripperDriver.PlacePlate.Command(
             OptionsInstance=COREGripperDriver.PlacePlate.Options(
                 PlateSequence=DestinationLayoutItem.Sequence,
-                CheckPlateExists=COREGripperDriver.PlacePlate.Options.YesNoOptions[
-                    DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.HomePlaceConfig[
-                        "CheckPlateExists"
-                    ]
-                ],
+                CheckPlateExists=PlaceConfigInstance.CheckPlateExists,
                 EjectTool=COREGripperDriver.PlacePlate.Options.YesNoOptions(
                     int(self._LastTransportFlag)
                 ),
@@ -71,9 +99,3 @@ class HamiltonCOREGripper(TransportDevice):
         self.BackendInstance.GetResponse(
             CommandInstance, COREGripperDriver.PlacePlate.Response
         )
-
-    def GetGetConfigKeys(self) -> list[str]:
-        return []
-
-    def GetPlaceConfigKeys(self) -> list[str]:
-        return ["CheckPlateExists"]

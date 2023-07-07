@@ -1,4 +1,4 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.HAL import Labware, LayoutItem
@@ -14,28 +14,6 @@ class TransportDevice(InterfaceABC, UniqueObjectABC):
     DeckLocationTransportConfigTrackerInstance: DeckLocationTransportConfigTracker
     SupportedLabwareTrackerInstance: Labware.LabwareTracker
     _LastTransportFlag: bool = field(init=False, default=True)
-
-    def __post_init__(self):
-        for (
-            DeckLocationTransportConfig
-        ) in self.DeckLocationTransportConfigTrackerInstance.GetObjectsAsList():
-            if not all(
-                Key in DeckLocationTransportConfig.GetConfig
-                for Key in self.GetGetConfigKeys()
-            ):
-                raise Exception(
-                    "Keys are missing from Home Get Config. Please fix. Expected: "
-                    + str(self.GetGetConfigKeys())
-                )
-
-            if not all(
-                Key in DeckLocationTransportConfig.PlaceConfig
-                for Key in self.GetPlaceConfigKeys()
-            ):
-                raise Exception(
-                    "Keys are missing from Home Place Config. Please fix. Expected: "
-                    + str(self.GetPlaceConfigKeys())
-                )
 
     def _CheckIsValid(self, TransportOptionsInstance: TransportOptions.Options):
         SourceLayoutItem = TransportOptionsInstance.SourceLayoutItem
@@ -97,14 +75,6 @@ class TransportDevice(InterfaceABC, UniqueObjectABC):
                 raise Exception(
                     "Source and Destination are not compatible layout items"
                 )
-
-    @abstractmethod
-    def GetGetConfigKeys(self) -> list[str]:
-        ...
-
-    @abstractmethod
-    def GetPlaceConfigKeys(self) -> list[str]:
-        ...
 
     @abstractmethod
     def Transport(self, TransportOptionsInstance: TransportOptions.Options):

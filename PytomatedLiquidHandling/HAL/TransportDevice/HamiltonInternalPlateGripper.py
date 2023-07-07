@@ -2,12 +2,58 @@ from dataclasses import dataclass
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Transport import IPG as IPGDriver
-from .BaseTransportDevice import TransportDevice, TransportOptions
+from .BaseTransportDevice import (
+    DeckLocationTransportConfig,
+    TransportDevice,
+    TransportOptions,
+)
 
 
 @dataclass
 class HamiltonInternalPlateGripper(TransportDevice):
     BackendInstance: HamiltonBackendABC
+
+    class GetConfig(DeckLocationTransportConfig.TransportConfigABC):
+        def __init__(self, Config: dict):
+            self.GripMode: IPGDriver.GetPlate.Options.GripModeOptions = (
+                IPGDriver.GetPlate.Options.GripModeOptions[Config["GripMode"]]
+            )
+            self.Movement: IPGDriver.GetPlate.Options.MovementOptions = (
+                IPGDriver.GetPlate.Options.MovementOptions[Config["Movement"]]
+            )
+            self.RetractDistance: float = Config["RetractDistance"]
+            self.LiftupHeight: float = Config["LiftupHeight"]
+            self.LabwareOrientation: IPGDriver.GetPlate.Options.LabwareOrientationOptions = IPGDriver.GetPlate.Options.LabwareOrientationOptions[
+                Config["LabwareOrientation"]
+            ]
+            self.InverseGrip: IPGDriver.GetPlate.Options.YesNoOptions = (
+                IPGDriver.GetPlate.Options.YesNoOptions[Config["InverseGrip"]]
+            )
+
+        def _ComparisonKeys(self) -> list[str]:
+            return [
+                "GripMode",
+                "Movement",
+                "LabwareOrientation",
+                "InverseGrip",
+            ]
+
+    class PlaceConfig(DeckLocationTransportConfig.TransportConfigABC):
+        def __init__(self, Config: dict):
+            self.Movement: IPGDriver.PlacePlate.Options.MovementOptions = (
+                IPGDriver.PlacePlate.Options.MovementOptions[Config["Movement"]]
+            )
+            self.RetractDistance: float = Config["RetractDistance"]
+            self.LiftupHeight: float = Config["LiftupHeight"]
+            self.LabwareOrientation: IPGDriver.PlacePlate.Options.LabwareOrientationOptions = IPGDriver.PlacePlate.Options.LabwareOrientationOptions[
+                Config["LabwareOrientation"]
+            ]
+
+        def _ComparisonKeys(self) -> list[str]:
+            return [
+                "Movement",
+                "LabwareOrientation",
+            ]
 
     def Initialize(
         self,
@@ -31,6 +77,15 @@ class HamiltonInternalPlateGripper(TransportDevice):
             )
         )
 
+        GetConfigInstance = (
+            self.DeckLocationTransportConfigTrackerInstance.GetObjectByName(
+                SourceLayoutItem.DeckLocationInstance.UniqueIdentifier
+            ).GetConfig
+        )
+
+        if not isinstance(GetConfigInstance, self.GetConfig):
+            raise Exception("This should never happen")
+
         CommandInstance = IPGDriver.GetPlate.Command(
             OptionsInstance=IPGDriver.GetPlate.Options(
                 PlateSequence=SourceLayoutItem.Sequence,
@@ -39,24 +94,12 @@ class HamiltonInternalPlateGripper(TransportDevice):
                 OpenWidth=SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
                 + SourceTransportableLabware.TransportOffsetsInstance.Open,
                 GripHeight=SourceTransportableLabware.TransportOffsetsInstance.Height,
-                GripMode=SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig[
-                    "GripMode"
-                ],
-                Movement=SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig[
-                    "Movement"
-                ],
-                RetractDistance=SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig[
-                    "RetractDistance"
-                ],
-                LiftupHeight=SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig[
-                    "LiftupHeight"
-                ],
-                LabwareOrientation=SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig[
-                    "LabwareOrientation"
-                ],
-                InverseGrip=SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig[
-                    "InverseGrip"
-                ],
+                GripMode=GetConfigInstance.GripMode,
+                Movement=GetConfigInstance.Movement,
+                RetractDistance=GetConfigInstance.RetractDistance,
+                LiftupHeight=GetConfigInstance.LiftupHeight,
+                LabwareOrientation=GetConfigInstance.LabwareOrientation,
+                InverseGrip=GetConfigInstance.InverseGrip,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
@@ -64,42 +107,25 @@ class HamiltonInternalPlateGripper(TransportDevice):
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         self.BackendInstance.GetResponse(CommandInstance, IPGDriver.GetPlate.Response)
 
+        PlaceConfigInstance = (
+            self.DeckLocationTransportConfigTrackerInstance.GetObjectByName(
+                DestinationLayoutItem.DeckLocationInstance.UniqueIdentifier
+            ).PlaceConfig
+        )
+
+        if not isinstance(PlaceConfigInstance, self.PlaceConfig):
+            raise Exception("This should never happen")
+
         CommandInstance = IPGDriver.PlacePlate.Command(
             OptionsInstance=IPGDriver.PlacePlate.Options(
                 PlateSequence=DestinationLayoutItem.Sequence,
-                Movement=SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig[
-                    "Movement"
-                ],
-                RetractDistance=SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig[
-                    "RetractDistance"
-                ],
-                LiftupHeight=SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig[
-                    "LiftupHeight"
-                ],
-                LabwareOrientation=SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig[
-                    "LabwareOrientation"
-                ],
+                Movement=PlaceConfigInstance.Movement,
+                RetractDistance=PlaceConfigInstance.RetractDistance,
+                LiftupHeight=PlaceConfigInstance.LiftupHeight,
+                LabwareOrientation=PlaceConfigInstance.LabwareOrientation,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.BackendInstance.ExecuteCommand(CommandInstance)
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         self.BackendInstance.GetResponse(CommandInstance, IPGDriver.PlacePlate.Response)
-
-    def GetGetConfigKeys(self) -> list[str]:
-        return [
-            "GripMode",
-            "Movement",
-            "RetractDistance",
-            "LiftupHeight",
-            "LabwareOrientation",
-            "InverseGrip",
-        ]
-
-    def GetPlaceConfigKeys(self) -> list[str]:
-        return [
-            "Movement",
-            "RetractDistance",
-            "LiftupHeight",
-            "LabwareOrientation",
-        ]

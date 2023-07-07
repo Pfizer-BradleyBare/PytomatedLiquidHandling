@@ -3,8 +3,8 @@ from dataclasses import dataclass
 from PytomatedLiquidHandling.HAL import Carrier, DeckLocation, LayoutItem
 
 from ....Tools.AbstractClasses import UniqueObjectTrackerABC
+from . import DeckLocationTransportConfig, TransportDevice
 from .Interface import TransportOptions
-from .TransportDevice import TransportDevice
 
 
 @dataclass
@@ -14,7 +14,7 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
     def Transport(
         self, TransportOptionsTrackerInstance: TransportOptions.OptionsTracker
     ):
-        DeviceLastUseIndices: dict[str, int] = dict()
+        DeviceLastUseIndices: dict[str | int, int] = dict()
 
         for Device in self.GetObjectsAsList():
             DeviceLastUseIndices[str(Device.UniqueIdentifier)] = 0
@@ -24,38 +24,64 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
         for Index, Options in enumerate(
             TransportOptionsTrackerInstance.GetObjectsAsList()
         ):
-            DeviceLastUseIndices[
-                str(
-                    Options.SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
-                )
-            ] = Index
-            DeviceLastUseIndices[
-                str(
-                    Options.DestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
-                )
-            ] = Index
+            for TransportDevice in self.GetObjectsAsList():
+                if TransportDevice.DeckLocationTransportConfigTrackerInstance.IsTracked(
+                    Options.SourceLayoutItem.DeckLocationInstance.UniqueIdentifier
+                ):
+                    DeviceLastUseIndices[TransportDevice.UniqueIdentifier] = Index
+
+                if TransportDevice.DeckLocationTransportConfigTrackerInstance.IsTracked(
+                    Options.DestinationLayoutItem.DeckLocationInstance.UniqueIdentifier
+                ):
+                    DeviceLastUseIndices[TransportDevice.UniqueIdentifier] = Index
         # Figure out the last time each device is used to I can reset the last transport flag
 
         for Index, Options in enumerate(
             TransportOptionsTrackerInstance.GetObjectsAsList()
         ):
-            SourceAwayConfig = (
-                Options.SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig
-            )
-            DestinationAwayConfig = (
-                Options.SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig
-            )
+            SourceTransportConfigInstance = None
+            SourceTransportDevice = None
+            DestinationTransportConfigInstance = None
+            DestinationTransportDevice = None
 
-            if SourceAwayConfig != DestinationAwayConfig:
+            for TransportDevice in self.GetObjectsAsList():
+                if TransportDevice.DeckLocationTransportConfigTrackerInstance.IsTracked(
+                    Options.SourceLayoutItem.DeckLocationInstance.UniqueIdentifier
+                ):
+                    SourceTransportConfigInstance = TransportDevice.DeckLocationTransportConfigTrackerInstance.GetObjectByName(
+                        Options.SourceLayoutItem.DeckLocationInstance.UniqueIdentifier
+                    )
+                    SourceTransportDevice = TransportDevice
+
+                if TransportDevice.DeckLocationTransportConfigTrackerInstance.IsTracked(
+                    Options.DestinationLayoutItem.DeckLocationInstance.UniqueIdentifier
+                ):
+                    DestinationTransportConfigInstance = TransportDevice.DeckLocationTransportConfigTrackerInstance.GetObjectByName(
+                        Options.DestinationLayoutItem.DeckLocationInstance.UniqueIdentifier
+                    )
+                    DestinationTransportDevice = TransportDevice
+            # Get our transport config for this transfer
+
+            if SourceTransportConfigInstance is None:
+                raise Exception("I hope this never happens")
+            if DestinationTransportConfigInstance is None:
+                raise Exception("I hope this never happens")
+            if SourceTransportDevice is None:
+                raise Exception("I hope this never happens")
+            if DestinationTransportDevice is None:
+                raise Exception("I hope this never happens")
+
+            if (
+                SourceTransportConfigInstance.GetConfig
+                != DestinationTransportConfigInstance.GetConfig
+            ):
                 LabwareDestinationLayoutItem = (
                     self.TransitionPointsTrackerInstance.GetObjectByName(
                         Options.SourceLayoutItem.LabwareInstance.UniqueIdentifier
                     )
                 )
+                IntermediateDestinationTransportDeviceInstance = SourceTransportDevice
 
-                IntermediateDestinationTransportDeviceInstance = self.GetObjectByName(
-                    LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
-                )
                 IntermediateDestinationLayoutItem = LayoutItem.NonCoverableItem(
                     "Intermediate Destination",
                     LabwareDestinationLayoutItem.Sequence,
@@ -64,17 +90,20 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                         DeckLocation.CarrierConfig(
                             Carrier.CarrierABC("", "", 0, 0, 0, "", ""), 0
                         ),
-                        DeckLocation.TransportDeviceConfig(
-                            IntermediateDestinationTransportDeviceInstance.UniqueIdentifier,
-                            LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig,
-                            LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayPlaceConfig,
-                            LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig,
-                            LabwareDestinationLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayPlaceConfig,
-                            # We only use the away config. TODO Explain
-                        ),
                     ),
                     LabwareDestinationLayoutItem.LabwareInstance,
                 )
+
+                DeckLocationTransportConfigInstance = DeckLocationTransportConfig(
+                    "Intermediate Destination",
+                    SourceTransportConfigInstance.GetConfig,
+                    SourceTransportConfigInstance.PlaceConfig,
+                )
+
+                IntermediateDestinationTransportDeviceInstance.DeckLocationTransportConfigTrackerInstance.LoadSingle(
+                    DeckLocationTransportConfigInstance
+                )
+
                 IntermediateDestinationTransportDeviceInstance.Transport(
                     TransportOptions.Options(
                         SourceLayoutItem=Options.SourceLayoutItem,
@@ -83,14 +112,16 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                 )
                 # Transport to the intermediate area from the initial source
 
+                IntermediateDestinationTransportDeviceInstance.DeckLocationTransportConfigTrackerInstance.UnloadSingle(
+                    DeckLocationTransportConfigInstance
+                )
+
                 LabwareSourceLayoutItem = (
                     self.TransitionPointsTrackerInstance.GetObjectByName(
                         Options.SourceLayoutItem.LabwareInstance.UniqueIdentifier
                     )
                 )
-                IntermediateSourceTransportDeviceInstance = self.GetObjectByName(
-                    LabwareSourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
-                )
+                IntermediateSourceTransportDeviceInstance = DestinationTransportDevice
 
                 if (
                     DeviceLastUseIndices[
@@ -108,17 +139,20 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                         DeckLocation.CarrierConfig(
                             Carrier.CarrierABC("", "", 0, 0, 0, "", ""), 0
                         ),
-                        DeckLocation.TransportDeviceConfig(
-                            IntermediateSourceTransportDeviceInstance.UniqueIdentifier,
-                            LabwareSourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig,
-                            LabwareSourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayPlaceConfig,
-                            LabwareSourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayGetConfig,
-                            LabwareSourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.AwayPlaceConfig,
-                            # We only use the away config. TODO Explain
-                        ),
                     ),
                     LabwareSourceLayoutItem.LabwareInstance,
                 )
+
+                DeckLocationTransportConfigInstance = DeckLocationTransportConfig(
+                    "Intermediate Source",
+                    DestinationTransportConfigInstance.GetConfig,
+                    DestinationTransportConfigInstance.PlaceConfig,
+                )
+
+                IntermediateDestinationTransportDeviceInstance.DeckLocationTransportConfigTrackerInstance.LoadSingle(
+                    DeckLocationTransportConfigInstance
+                )
+
                 IntermediateDestinationTransportDeviceInstance.Transport(
                     TransportOptions.Options(
                         SourceLayoutItem=Options.DestinationLayoutItem,
@@ -126,11 +160,17 @@ class TransportDeviceTracker(UniqueObjectTrackerABC[TransportDevice]):
                     )
                 )
                 # Transport to the destination from the transition point
+
+                IntermediateDestinationTransportDeviceInstance.DeckLocationTransportConfigTrackerInstance.UnloadSingle(
+                    DeckLocationTransportConfigInstance
+                )
+
             # The two sites are not compatible. We need to use a transition point
             else:
-                TransportDeviceInstance = self.GetObjectByName(
-                    Options.SourceLayoutItem.DeckLocationInstance.TransportDeviceConfigInstance.UniqueIdentifier
-                )
+                if SourceTransportDevice != DestinationTransportDevice:
+                    raise Exception("Something went wrong here...")
+
+                TransportDeviceInstance = SourceTransportDevice
                 if (
                     DeviceLastUseIndices[str(TransportDeviceInstance.UniqueIdentifier)]
                     == Index
