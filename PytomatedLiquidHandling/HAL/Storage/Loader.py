@@ -4,11 +4,13 @@ import yaml
 
 from PytomatedLiquidHandling.HAL import LayoutItem
 
+from ...Tools.Logger import Logger
 from .RandomAccessDeckStorage import RandomAccessDeckStorage
 from .StorageTracker import StorageTracker
 
 
 def LoadYaml(
+    LoggerInstance: Logger,
     LayoutItemTrackerInstance: LayoutItem.LayoutItemTracker,
     FilePath: str,
 ) -> StorageTracker:

@@ -2,13 +2,14 @@ import os
 
 import yaml
 
+from ...Tools.Logger import Logger
 from .AutoloadCarrier import AutoloadCarrier
 from .BaseCarrier import CarrierTracker
 from .MoveableCarrier import MoveableCarrier
 from .NonMoveableCarrier import NonMoveableCarrier
 
 
-def LoadYaml(FilePath: str) -> CarrierTracker:
+def LoadYaml(LoggerInstance: Logger, FilePath: str) -> CarrierTracker:
     CarrierTrackerInstance = CarrierTracker()
 
     if not os.path.exists(FilePath):

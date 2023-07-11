@@ -5,12 +5,15 @@ import yaml
 from PytomatedLiquidHandling.HAL import Backend
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from ...Tools.Logger import Logger
 from . import HamiltonTipFTR, HamiltonTipNTR
 from .BaseTip import TipTracker
 
 
 def LoadYaml(
-    BackendTrackerInstance: Backend.BackendTracker, FilePath: str
+    LoggerInstance: Logger,
+    BackendTrackerInstance: Backend.BackendTracker,
+    FilePath: str,
 ) -> TipTracker:
     TipTrackerInstance = TipTracker()
 

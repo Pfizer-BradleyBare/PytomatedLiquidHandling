@@ -2,6 +2,7 @@ import os
 
 import yaml
 
+from ...Tools.Logger import Logger
 from . import LabwareTracker, NonPipettableLabware, PipettableLabware
 from .BaseLabware import (
     Dimensions,
@@ -12,7 +13,7 @@ from .BaseLabware import (
 )
 
 
-def LoadYaml(FilePath: str) -> LabwareTracker:
+def LoadYaml(LoggerInstance: Logger, FilePath: str) -> LabwareTracker:
     LabwareTrackerInstance = LabwareTracker()
 
     if not os.path.exists(FilePath):

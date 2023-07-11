@@ -14,6 +14,7 @@ from PytomatedLiquidHandling.HAL import (
     LayoutItem,
 )
 
+from ...Tools.Logger import Logger
 from .BaseTransportDevice import (
     DeckLocationTransportConfig,
     DeckLocationTransportConfigTracker,
@@ -25,6 +26,7 @@ from .VantageTrackGripper import VantageTrackGripper
 
 
 def LoadYaml(
+    LoggerInstance: Logger,
     BackendTrackerInstance: Backend.BackendTracker,
     LabwareTrackerInstance: Labware.LabwareTracker,
     DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,

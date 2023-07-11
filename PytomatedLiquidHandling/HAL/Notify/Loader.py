@@ -13,9 +13,7 @@ def LoadYaml(FilePath: str) -> NotifyTracker:
     # Get config file contents
 
     for NotifyID in ConfigFile["Notify IDs"]:
-
         if ConfigFile["Notify IDs"][NotifyID]["Enabled"] is True:
-
             Type = NotificationTypes(NotifyID)
 
             if Type == NotificationTypes.EmailText:

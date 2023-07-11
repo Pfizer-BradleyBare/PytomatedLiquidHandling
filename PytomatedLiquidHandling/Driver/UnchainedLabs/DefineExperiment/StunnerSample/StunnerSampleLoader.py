@@ -4,8 +4,7 @@ from .StunnerSample import StunnerSample
 from .StunnerSampleTracker import StunnerSampleTracker
 
 
-def LoadYaml(FilePath: str) -> StunnerSampleTracker:
-
+def LoadYaml(LoggerInstance: Logger, FilePath: str) -> StunnerSampleTracker:
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()

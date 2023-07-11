@@ -5,12 +5,14 @@ import yaml
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from ...Tools.Logger import Logger
 from ..Backend import BackendTracker
 from . import HamiltonFlipTube, HamiltonFlipTubeSpecial
 from .BaseClosedContainer import ClosedContainerTracker
 
 
 def LoadYaml(
+    LoggerInstance: Logger,
     BackendTrackerInstance: BackendTracker,
     DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
     LabwareTrackerInstance: Labware.LabwareTracker,

@@ -52,19 +52,21 @@ class HAL:
         )
 
         self.CarrierTrackerInstance = Carrier.Loader.LoadYaml(
-            os.path.join(self.ConfigFolderPath, "Carrier.yaml")
+            self.LoggerInstance, os.path.join(self.ConfigFolderPath, "Carrier.yaml")
         )
 
         self.LabwareTrackerInstance = Labware.Loader.LoadYaml(
-            os.path.join(self.ConfigFolderPath, "Labware.yaml")
+            self.LoggerInstance, os.path.join(self.ConfigFolderPath, "Labware.yaml")
         )
 
         self.DeckLocationTrackerInstance = DeckLocation.Loader.LoadYaml(
+            self.LoggerInstance,
             self.CarrierTrackerInstance,
             os.path.join(self.ConfigFolderPath, "DeckLocation.yaml"),
         )
 
         self.TransportDeviceTrackerInstance = TransportDevice.Loader.LoadYaml(
+            self.LoggerInstance,
             self.BackendTrackerInstance,
             self.LabwareTrackerInstance,
             self.DeckLocationTrackerInstance,
@@ -72,12 +74,14 @@ class HAL:
         )
 
         self.LayoutItemTrackerInstance = LayoutItem.Loader.LoadYaml(
+            self.LoggerInstance,
             self.LabwareTrackerInstance,
             self.DeckLocationTrackerInstance,
             os.path.join(self.ConfigFolderPath, "LayoutItem.yaml"),
         )
 
         self.ClosedContainerTrackerInstance = ClosedContainer.Loader.LoadYaml(
+            self.LoggerInstance,
             self.BackendTrackerInstance,
             self.DeckLocationTrackerInstance,
             self.LabwareTrackerInstance,
@@ -85,17 +89,20 @@ class HAL:
         )
 
         self.TempControlDeviceTrackerInstance = TempControlDevice.Loader.LoadYaml(
+            self.LoggerInstance,
             self.BackendTrackerInstance,
             self.LayoutItemTrackerInstance,
             os.path.join(self.ConfigFolderPath, "TempControlDevice.yaml"),
         )
 
         self.TipTrackerInstance = Tip.Loader.LoadYaml(
+            self.LoggerInstance,
             self.BackendTrackerInstance,
             os.path.join(self.ConfigFolderPath, "Tip.yaml"),
         )
 
         self.PipetteTrackerInstance = Pipette.Loader.LoadYaml(
+            self.LoggerInstance,
             self.BackendTrackerInstance,
             self.DeckLocationTrackerInstance,
             self.LabwareTrackerInstance,
@@ -104,6 +111,7 @@ class HAL:
         )
 
         self.StorageTrackerInstance = Storage.Loader.LoadYaml(
+            self.LoggerInstance,
             self.LayoutItemTrackerInstance,
             os.path.join(self.ConfigFolderPath, "Storage.yaml"),
         )

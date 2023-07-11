@@ -4,11 +4,13 @@ import yaml
 
 from PytomatedLiquidHandling.HAL import Backend, LayoutItem, Pipette
 
+from ...Tools.Logger import Logger
 from .BaseMagneticRack import MagneticRackTracker
 from .MagneticRack import MagneticRack
 
 
 def LoadYaml(
+    LoggerInstance: Logger,
     FilePath: str,
     LayoutItemTrackerInstance: LayoutItem.LayoutItemTracker,
     PipetteTrackerInstance: Pipette.PipetteTracker,

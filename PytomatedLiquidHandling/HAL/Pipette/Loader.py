@@ -5,6 +5,7 @@ import yaml
 from PytomatedLiquidHandling.HAL import Backend, DeckLocation, Labware, Tip
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from ...Tools.Logger import Logger
 from . import PipetteTracker
 from .BasePipette import (
     LiquidClass,
@@ -19,6 +20,7 @@ from .HamiltonPortraitCORE8Channel import HamiltonPortraitCORE8Channel
 
 
 def LoadYaml(
+    LoggerInstance: Logger,
     BackendTrackerInstance: Backend.BackendTracker,
     DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
     LabwareTrackerInstance: Labware.LabwareTracker,

@@ -4,6 +4,7 @@ import yaml
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 
+from ...Tools.Logger import Logger
 from .BaseLayoutItem import LayoutItemTracker
 from .CoverableItem import CoverableItem
 from .Lid import Lid
@@ -11,6 +12,7 @@ from .NonCoverableItem import NonCoverableItem
 
 
 def LoadYaml(
+    LoggerInstance: Logger,
     LabwareTrackerInstance: Labware.LabwareTracker,
     DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
     FilePath: str,

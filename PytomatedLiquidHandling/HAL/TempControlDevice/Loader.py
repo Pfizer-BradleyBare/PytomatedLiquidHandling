@@ -5,11 +5,13 @@ import yaml
 from PytomatedLiquidHandling.HAL import Backend, LayoutItem
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from ...Tools.Logger import Logger
 from . import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .BaseTempControlDevice import TempControlDeviceTracker, TempLimits
 
 
 def LoadYaml(
+    LoggerInstance: Logger,
     BackendTrackerInstance: Backend.BackendTracker,
     LayoutItemTrackerInstance: LayoutItem.LayoutItemTracker,
     FilePath: str,
