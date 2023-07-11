@@ -17,6 +17,7 @@ def LoadYaml(
     StorageTrackerInstance = StorageTracker()
 
     if not os.path.exists(FilePath):
+        LoggerInstance.warning("Storage config file does not exist.")
         return StorageTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -25,6 +26,9 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
+        LoggerInstance.warning(
+            "Storage config file exists but does not contain any config items"
+        )
         return StorageTrackerInstance
 
     for StorageTypeID in ConfigFile:

@@ -18,6 +18,7 @@ def LoadYaml(
     TipTrackerInstance = TipTracker()
 
     if not os.path.exists(FilePath):
+        LoggerInstance.warning("Tip config file does not exist.")
         return TipTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -26,6 +27,9 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
+        LoggerInstance.warning(
+            "Tip config file exists but does not contain any config items"
+        )
         return TipTrackerInstance
 
     for TipType in ConfigFile:

@@ -33,6 +33,7 @@ def LoadYaml(
     FilePath: str,
 ) -> TransportDeviceTracker:
     if not os.path.exists(FilePath):
+        LoggerInstance.warning("TransportDevice config file does not exist.")
         return TransportDeviceTracker(LayoutItem.LayoutItemTracker())
 
     FileHandle = open(FilePath, "r")
@@ -41,6 +42,9 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
+        LoggerInstance.warning(
+            "TransportDevice config file exists but does not contain any config items"
+        )
         return TransportDeviceTracker(LayoutItem.LayoutItemTracker())
 
     FillerDeckLocationInstance = DeckLocation.DeckLocation(

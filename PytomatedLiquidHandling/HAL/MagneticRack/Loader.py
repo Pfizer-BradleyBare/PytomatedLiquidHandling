@@ -18,6 +18,7 @@ def LoadYaml(
     MagneticRackTrackerInstance = MagneticRackTracker()
 
     if not os.path.exists(FilePath):
+        LoggerInstance.warning("MagneticRack config file does not exist.")
         return MagneticRackTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -26,6 +27,9 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
+        LoggerInstance.warning(
+            "MagneticRack config file exists but does not contain any config items"
+        )
         return MagneticRackTrackerInstance
 
     for Rack in ConfigFile["Rack IDs"]:

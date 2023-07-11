@@ -17,6 +17,7 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> LabwareTracker:
     LabwareTrackerInstance = LabwareTracker()
 
     if not os.path.exists(FilePath):
+        LoggerInstance.warning("Labware config file does not exist.")
         return LabwareTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -25,6 +26,9 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> LabwareTracker:
     # Get config file contents
 
     if ConfigFile is None:
+        LoggerInstance.warning(
+            "Labware config file exists but does not contain any config items"
+        )
         return LabwareTrackerInstance
 
     for Labware in ConfigFile:

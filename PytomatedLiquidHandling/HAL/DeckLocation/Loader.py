@@ -17,6 +17,7 @@ def LoadYaml(
     DeckLocationTrackerInstance = DeckLocationTracker()
 
     if not os.path.exists(FilePath):
+        LoggerInstance.warning("DeckLocation config file does not exist.")
         return DeckLocationTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -25,6 +26,9 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
+        LoggerInstance.warning(
+            "DeckLocation config file exists but does not contain any config items"
+        )
         return DeckLocationTrackerInstance
 
     for Location in ConfigFile:

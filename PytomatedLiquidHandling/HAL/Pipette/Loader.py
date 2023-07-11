@@ -30,6 +30,7 @@ def LoadYaml(
     PipetteTrackerInstance = PipetteTracker()
 
     if not os.path.exists(FilePath):
+        LoggerInstance.warning("Pipette config file does not exist.")
         return PipetteTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -38,6 +39,9 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
+        LoggerInstance.warning(
+            "Pipette config file exists but does not contain any config items"
+        )
         return PipetteTrackerInstance
 
     PipetteDevices: dict[int, Pipette] = dict()

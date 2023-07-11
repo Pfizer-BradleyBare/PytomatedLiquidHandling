@@ -13,6 +13,7 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> CarrierTracker:
     CarrierTrackerInstance = CarrierTracker()
 
     if not os.path.exists(FilePath):
+        LoggerInstance.warning("Carrier config file does not exist.")
         return CarrierTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -21,6 +22,9 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> CarrierTracker:
     # Get config file contents
 
     if ConfigFile is None:
+        LoggerInstance.warning(
+            "Carrier config file exists but does not contain any config items"
+        )
         return CarrierTrackerInstance
 
     for DeviceID in ConfigFile:

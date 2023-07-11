@@ -21,6 +21,7 @@ def LoadYaml(
     ClosedContainerTrackerInstance = ClosedContainerTracker()
 
     if not os.path.exists(FilePath):
+        LoggerInstance.warning("ClosedContainer config file does not exist.")
         return ClosedContainerTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -29,6 +30,9 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
+        LoggerInstance.warning(
+            "ClosedContainer config file exists but does not contain any config items"
+        )
         return ClosedContainerTrackerInstance
 
     for DeviceType in ConfigFile:

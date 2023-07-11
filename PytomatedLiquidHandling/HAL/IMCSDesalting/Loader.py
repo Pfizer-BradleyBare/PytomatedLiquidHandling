@@ -29,6 +29,7 @@ def LoadYaml(
     IMCSDesaltingTrackerInstance = IMCSDesaltingTracker()
 
     if not os.path.exists(FilePath):
+        LoggerInstance.warning("IMCSDesalting config file does not exist.")
         return IMCSDesaltingTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -37,6 +38,9 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
+        LoggerInstance.warning(
+            "IMCSDesalting config file exists but does not contain any config items"
+        )
         return IMCSDesaltingTrackerInstance
 
     TipUniqueIdentifier = ConfigFile["300uL Tip Unique Identifier"]
