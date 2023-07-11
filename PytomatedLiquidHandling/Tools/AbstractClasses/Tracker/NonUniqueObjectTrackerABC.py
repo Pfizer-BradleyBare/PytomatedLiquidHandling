@@ -16,9 +16,17 @@ class NonUniqueObjectTrackerABC(Generic[T]):
     ThreadLock: Lock = field(init=False, default=Lock())
 
     def LoadSingle(self, ObjectABCInstance: T) -> None:
+        if ObjectABCInstance in self.Collection:
+            raise Exception(
+                type(ObjectABCInstance).__name__
+                + " was added as a duplicate instance. This is illegal."
+            )
+
         self.Collection.append(ObjectABCInstance)
 
     def UnloadSingle(self, ObjectABCInstance: T) -> None:
+        if not ObjectABCInstance in self.Collection:
+            raise Exception(type(ObjectABCInstance).__name__ + " does not exist.")
         self.Collection.remove(ObjectABCInstance)
 
     def LoadList(self, ObjectABCInstances: list[T]) -> None:
@@ -28,6 +36,11 @@ class NonUniqueObjectTrackerABC(Generic[T]):
     def UnloadList(self, ObjectABCInstances: list[T]) -> None:
         for ObjectABCInstance in ObjectABCInstances:
             self.UnloadSingle(ObjectABCInstance)
+
+    def IsTracked(self, ObjectABCInstance: T) -> bool:
+        BoolTest = ObjectABCInstance in self.Collection
+
+        return BoolTest
 
     def GetNumObjects(self) -> int:
         Length = len(self.Collection)
