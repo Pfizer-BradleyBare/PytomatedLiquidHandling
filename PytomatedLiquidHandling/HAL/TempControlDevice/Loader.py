@@ -16,10 +16,12 @@ def LoadYaml(
     LayoutItemTrackerInstance: LayoutItem.LayoutItemTracker,
     FilePath: str,
 ) -> TempControlDeviceTracker:
+    LoggerInstance.info("Loading TempControlDevice config yaml file.")
+
     TempControlDeviceTrackerInstance = TempControlDeviceTracker()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("TempControlDevice config file does not exist.")
+        LoggerInstance.warning("Config file does not exist. Skipped")
         return TempControlDeviceTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -29,13 +31,19 @@ def LoadYaml(
 
     if ConfigFile is None:
         LoggerInstance.warning(
-            "TempControlDevice config file exists but does not contain any config items"
+            "Config file exists but does not contain any config items. Skipped"
         )
         return TempControlDeviceTrackerInstance
 
     for DeviceType in ConfigFile:
         for Device in ConfigFile[DeviceType]:
             if Device["Enabled"] == False:
+                LoggerInstance.warning(
+                    DeviceType
+                    + " with unique ID "
+                    + Device["Unique Identifier"]
+                    + " is not enabled so will be skipped."
+                )
                 continue
 
             UniqueIdentifier = Device["Unique Identifier"]

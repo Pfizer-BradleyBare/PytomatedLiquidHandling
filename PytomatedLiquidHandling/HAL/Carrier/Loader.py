@@ -10,10 +10,12 @@ from .NonMoveableCarrier import NonMoveableCarrier
 
 
 def LoadYaml(LoggerInstance: Logger, FilePath: str) -> CarrierTracker:
+    LoggerInstance.info("Loading Carrier config yaml file.")
+
     CarrierTrackerInstance = CarrierTracker()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Carrier config file does not exist.")
+        LoggerInstance.warning("Config file does not exist. Skipped")
         return CarrierTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -23,13 +25,19 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> CarrierTracker:
 
     if ConfigFile is None:
         LoggerInstance.warning(
-            "Carrier config file exists but does not contain any config items"
+            "Config file exists but does not contain any config items. Skipped"
         )
         return CarrierTrackerInstance
 
     for DeviceID in ConfigFile:
         for Device in ConfigFile[DeviceID]:
             if Device["Enabled"] == False:
+                LoggerInstance.warning(
+                    DeviceID
+                    + " with unique ID "
+                    + Device["Unique Identifier"]
+                    + " is not enabled so will be skipped."
+                )
                 continue
 
             UniqueID = Device["Unique Identifier"]
@@ -73,4 +81,5 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> CarrierTracker:
                 raise Exception("Carrier Device not recognized")
 
             CarrierTrackerInstance.LoadSingle(CarrierInstance)
+
     return CarrierTrackerInstance

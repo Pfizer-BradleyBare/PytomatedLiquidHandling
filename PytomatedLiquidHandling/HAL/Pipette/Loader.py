@@ -27,10 +27,12 @@ def LoadYaml(
     TipTrackerInstance: Tip.TipTracker,
     FilePath: str,
 ) -> PipetteTracker:
+    LoggerInstance.info("Loading Pipette config yaml file.")
+
     PipetteTrackerInstance = PipetteTracker()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Pipette config file does not exist.")
+        LoggerInstance.warning("Config file does not exist. Skipped")
         return PipetteTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -40,7 +42,7 @@ def LoadYaml(
 
     if ConfigFile is None:
         LoggerInstance.warning(
-            "Pipette config file exists but does not contain any config items"
+            "Config file exists but does not contain any config items. Skipped"
         )
         return PipetteTrackerInstance
 
@@ -48,6 +50,12 @@ def LoadYaml(
     for DeviceType in ConfigFile:
         for Device in ConfigFile[DeviceType]:
             if Device["Enabled"] == False:
+                LoggerInstance.warning(
+                    DeviceType
+                    + " with unique ID "
+                    + Device["Unique Identifier"]
+                    + " is not enabled so will be skipped."
+                )
                 continue
 
             UniqueIdentifier = Device["Unique Identifier"]

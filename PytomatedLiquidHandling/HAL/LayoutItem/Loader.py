@@ -17,10 +17,12 @@ def LoadYaml(
     DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
     FilePath: str,
 ) -> LayoutItemTracker:
+    LoggerInstance.info("Loading LayoutItem config yaml file.")
+
     LayoutItemTrackerInstance = LayoutItemTracker()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("LayoutItem config file does not exist.")
+        LoggerInstance.warning("Config file does not exist. Skipped")
         return LayoutItemTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -30,7 +32,7 @@ def LoadYaml(
 
     if ConfigFile is None:
         LoggerInstance.warning(
-            "LayoutItem config file exists but does not contain any config items"
+            "Config file exists but does not contain any config items. Skipped"
         )
         return LayoutItemTrackerInstance
 
@@ -52,7 +54,14 @@ def LoadYaml(
     for LayoutItemID in ConfigFile:
         for LayoutItem in ConfigFile[LayoutItemID]:
             if LayoutItem["Enabled"] == False:
+                LoggerInstance.warning(
+                    LayoutItemID
+                    + " with unique ID "
+                    + LayoutItem["Unique Identifier"]
+                    + " is not enabled so will be skipped."
+                )
                 continue
+
             UniqueIdentifier = LayoutItem["Unique Identifier"]
             Sequence = LayoutItem["Sequence"]
             LabwareInstance = LabwareTrackerInstance.GetObjectByName(

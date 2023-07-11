@@ -14,10 +14,12 @@ from .BaseLabware import (
 
 
 def LoadYaml(LoggerInstance: Logger, FilePath: str) -> LabwareTracker:
+    LoggerInstance.info("Loading Labware config yaml file.")
+
     LabwareTrackerInstance = LabwareTracker()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Labware config file does not exist.")
+        LoggerInstance.warning("Config file does not exist. Skipped")
         return LabwareTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -27,12 +29,18 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> LabwareTracker:
 
     if ConfigFile is None:
         LoggerInstance.warning(
-            "Labware config file exists but does not contain any config items"
+            "Config file exists but does not contain any config items. Skipped"
         )
         return LabwareTrackerInstance
 
     for Labware in ConfigFile:
         if Labware["Enabled"] == False:
+            LoggerInstance.warning(
+                "Labware"
+                + " with unique ID "
+                + Labware["Unique Identifier"]
+                + " is not enabled so will be skipped."
+            )
             continue
 
         UniqueIdentifier = Labware["Unique Identifier"]

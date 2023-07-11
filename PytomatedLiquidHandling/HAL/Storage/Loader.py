@@ -14,10 +14,12 @@ def LoadYaml(
     LayoutItemTrackerInstance: LayoutItem.LayoutItemTracker,
     FilePath: str,
 ) -> StorageTracker:
+    LoggerInstance.info("Loading Storage config yaml file.")
+
     StorageTrackerInstance = StorageTracker()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Storage config file does not exist.")
+        LoggerInstance.warning("Config file does not exist. Skipped")
         return StorageTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -27,13 +29,19 @@ def LoadYaml(
 
     if ConfigFile is None:
         LoggerInstance.warning(
-            "Storage config file exists but does not contain any config items"
+            "Config file exists but does not contain any config items. Skipped"
         )
         return StorageTrackerInstance
 
     for StorageTypeID in ConfigFile:
         for Storage in ConfigFile[StorageTypeID]:
             if Storage["Enabled"] == False:
+                LoggerInstance.warning(
+                    StorageTypeID
+                    + " with unique ID "
+                    + Storage["Unique Identifier"]
+                    + " is not enabled so will be skipped."
+                )
                 continue
 
             UniqueIdentifier = Storage["Unique Identifier"]

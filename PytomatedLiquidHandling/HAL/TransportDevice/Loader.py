@@ -32,8 +32,10 @@ def LoadYaml(
     DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
     FilePath: str,
 ) -> TransportDeviceTracker:
+    LoggerInstance.info("Loading TransportDevice config yaml file.")
+
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("TransportDevice config file does not exist.")
+        LoggerInstance.warning("Config file does not exist. Skipped")
         return TransportDeviceTracker(LayoutItem.LayoutItemTracker())
 
     FileHandle = open(FilePath, "r")
@@ -43,7 +45,7 @@ def LoadYaml(
 
     if ConfigFile is None:
         LoggerInstance.warning(
-            "TransportDevice config file exists but does not contain any config items"
+            "Config file exists but does not contain any config items. Skipped"
         )
         return TransportDeviceTracker(LayoutItem.LayoutItemTracker())
 
@@ -59,6 +61,11 @@ def LoadYaml(
 
     for TransitionPoint in TransitionPoints:
         if TransitionPoint["Enabled"] == False:
+            LoggerInstance.warning(
+                "Transition Point for labware "
+                + TransitionPoint["Plate Labware Unique Identifier"]
+                + " is not enabled so will be skipped."
+            )
             continue
 
         PlateSequence = TransitionPoint["Plate Sequence"]
@@ -89,6 +96,12 @@ def LoadYaml(
         Device = ConfigFile[DeviceType]
 
         if Device["Enabled"] == False:
+            LoggerInstance.warning(
+                DeviceType
+                + " with unique ID "
+                + Device["Unique Identifier"]
+                + " is not enabled so will be skipped."
+            )
             continue
 
         UniqueIdentifier = Device["Unique Identifier"]

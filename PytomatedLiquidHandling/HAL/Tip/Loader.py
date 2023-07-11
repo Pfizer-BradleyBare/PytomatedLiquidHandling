@@ -15,10 +15,12 @@ def LoadYaml(
     BackendTrackerInstance: Backend.BackendTracker,
     FilePath: str,
 ) -> TipTracker:
+    LoggerInstance.info("Loading Tip config yaml file.")
+
     TipTrackerInstance = TipTracker()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Tip config file does not exist.")
+        LoggerInstance.warning("Config file does not exist. Skipped")
         return TipTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -28,13 +30,19 @@ def LoadYaml(
 
     if ConfigFile is None:
         LoggerInstance.warning(
-            "Tip config file exists but does not contain any config items"
+            "Config file exists but does not contain any config items. Skipped"
         )
         return TipTrackerInstance
 
     for TipType in ConfigFile:
         for Tip in ConfigFile[TipType]:
             if Tip["Enabled"] == False:
+                LoggerInstance.warning(
+                    TipType
+                    + " with unique ID "
+                    + Tip["Unique Identifier"]
+                    + " is not enabled so will be skipped."
+                )
                 continue
 
             UniqueIdentifier = Tip["Unique Identifier"]

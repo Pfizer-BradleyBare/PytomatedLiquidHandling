@@ -9,10 +9,12 @@ from .BackendTracker import BackendTracker
 
 
 def LoadYaml(LoggerInstance: Logger, FilePath: str) -> BackendTracker:
+    LoggerInstance.info("Loading Backend config yaml file.")
+
     BackendTrackerInstance = BackendTracker()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Backend config file does not exist.")
+        LoggerInstance.warning("Config file does not exist. Skipped")
         return BackendTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -22,7 +24,7 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> BackendTracker:
 
     if ConfigFile is None:
         LoggerInstance.warning(
-            "Backend config file exists but does not contain any config items"
+            "Config file exists but does not contain any config items. Skipped"
         )
         return BackendTrackerInstance
 

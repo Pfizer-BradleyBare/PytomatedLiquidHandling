@@ -15,10 +15,12 @@ def LoadYaml(
     LayoutItemTrackerInstance: LayoutItem.LayoutItemTracker,
     PipetteTrackerInstance: Pipette.PipetteTracker,
 ) -> MagneticRackTracker:
+    LoggerInstance.info("Loading MagneticRack config yaml file.")
+
     MagneticRackTrackerInstance = MagneticRackTracker()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("MagneticRack config file does not exist.")
+        LoggerInstance.warning("Config file does not exist. Skipped")
         return MagneticRackTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -28,11 +30,19 @@ def LoadYaml(
 
     if ConfigFile is None:
         LoggerInstance.warning(
-            "MagneticRack config file exists but does not contain any config items"
+            "Config file exists but does not contain any config items. Skipped"
         )
         return MagneticRackTrackerInstance
 
     for Rack in ConfigFile["Rack IDs"]:
+        if Rack["Enabled"] == False:
+            LoggerInstance.warning(
+                "Magnetic Rack"
+                + " with unique ID "
+                + Rack["Unique Identifier"]
+                + " is not enabled so will be skipped."
+            )
+            continue
         UniqueIdentifier = Rack["Unique Identifier"]
 
         SupportedLayoutItemTrackerInstance = LayoutItem.LayoutItemTracker()

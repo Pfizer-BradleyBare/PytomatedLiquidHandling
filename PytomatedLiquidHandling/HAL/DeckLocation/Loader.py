@@ -14,10 +14,12 @@ def LoadYaml(
     CarrierTrackerInstance: Carrier.CarrierTracker,
     FilePath: str,
 ) -> DeckLocationTracker:
+    LoggerInstance.info("Loading DeckLocation config yaml file.")
+
     DeckLocationTrackerInstance = DeckLocationTracker()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("DeckLocation config file does not exist.")
+        LoggerInstance.warning("Config file does not exist. Skipped")
         return DeckLocationTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -27,12 +29,19 @@ def LoadYaml(
 
     if ConfigFile is None:
         LoggerInstance.warning(
-            "DeckLocation config file exists but does not contain any config items"
+            "Config file exists but does not contain any config items. Skipped"
         )
         return DeckLocationTrackerInstance
 
     for Location in ConfigFile:
         if Location["Enabled"] == False:
+            LoggerInstance.warning(
+                "DeckLocation"
+                + " with unique ID "
+                + Location["Unique Identifier"]
+                + " is not enabled so will be skipped."
+            )
+
             continue
 
         UniqueIdentifier = Location["Unique Identifier"]

@@ -29,7 +29,7 @@ def LoadYaml(
     IMCSDesaltingTrackerInstance = IMCSDesaltingTracker()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("IMCSDesalting config file does not exist.")
+        LoggerInstance.warning("Config file does not exist. Skipped")
         return IMCSDesaltingTrackerInstance
 
     FileHandle = open(FilePath, "r")
@@ -39,7 +39,7 @@ def LoadYaml(
 
     if ConfigFile is None:
         LoggerInstance.warning(
-            "IMCSDesalting config file exists but does not contain any config items"
+            "Config file exists but does not contain any config items. Skipped"
         )
         return IMCSDesaltingTrackerInstance
 
