@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
@@ -15,6 +17,9 @@ def LoadYaml(
     FilePath: str,
 ) -> ClosedContainerTracker:
     ClosedContainerTrackerInstance = ClosedContainerTracker()
+
+    if not os.path.exists(FilePath):
+        return ClosedContainerTrackerInstance
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)

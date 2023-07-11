@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 from PytomatedLiquidHandling.HAL import Carrier
@@ -12,10 +14,16 @@ def LoadYaml(
 ) -> DeckLocationTracker:
     DeckLocationTrackerInstance = DeckLocationTracker()
 
+    if not os.path.exists(FilePath):
+        return DeckLocationTrackerInstance
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
+
+    if ConfigFile is None:
+        return DeckLocationTrackerInstance
 
     for Location in ConfigFile:
         if Location["Enabled"] == False:

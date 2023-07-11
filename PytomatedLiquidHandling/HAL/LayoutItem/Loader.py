@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
@@ -15,10 +17,16 @@ def LoadYaml(
 ) -> LayoutItemTracker:
     LayoutItemTrackerInstance = LayoutItemTracker()
 
+    if not os.path.exists(FilePath):
+        return LayoutItemTrackerInstance
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
+
+    if ConfigFile is None:
+        return LayoutItemTrackerInstance
 
     OldConfigFile = ConfigFile
     ConfigFile = dict()

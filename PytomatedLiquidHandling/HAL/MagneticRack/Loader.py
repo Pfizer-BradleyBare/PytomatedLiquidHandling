@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 from PytomatedLiquidHandling.HAL import Backend, LayoutItem, Pipette
@@ -13,10 +15,16 @@ def LoadYaml(
 ) -> MagneticRackTracker:
     MagneticRackTrackerInstance = MagneticRackTracker()
 
+    if not os.path.exists(FilePath):
+        return MagneticRackTrackerInstance
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
+
+    if ConfigFile is None:
+        return MagneticRackTrackerInstance
 
     for Rack in ConfigFile["Rack IDs"]:
         UniqueIdentifier = Rack["Unique Identifier"]

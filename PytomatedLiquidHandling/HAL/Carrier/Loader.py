@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 from .AutoloadCarrier import AutoloadCarrier
@@ -9,10 +11,16 @@ from .NonMoveableCarrier import NonMoveableCarrier
 def LoadYaml(FilePath: str) -> CarrierTracker:
     CarrierTrackerInstance = CarrierTracker()
 
+    if not os.path.exists(FilePath):
+        return CarrierTrackerInstance
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
+
+    if ConfigFile is None:
+        return CarrierTrackerInstance
 
     for DeviceID in ConfigFile:
         for Device in ConfigFile[DeviceID]:

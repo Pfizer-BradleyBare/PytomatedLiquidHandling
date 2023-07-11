@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 from PytomatedLiquidHandling.HAL import Backend, LayoutItem
@@ -14,10 +16,16 @@ def LoadYaml(
 ) -> TempControlDeviceTracker:
     TempControlDeviceTrackerInstance = TempControlDeviceTracker()
 
+    if not os.path.exists(FilePath):
+        return TempControlDeviceTrackerInstance
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
+
+    if ConfigFile is None:
+        return TempControlDeviceTrackerInstance
 
     for DeviceType in ConfigFile:
         for Device in ConfigFile[DeviceType]:

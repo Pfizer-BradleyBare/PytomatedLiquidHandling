@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 from . import LabwareTracker, NonPipettableLabware, PipettableLabware
@@ -13,10 +15,16 @@ from .BaseLabware import (
 def LoadYaml(FilePath: str) -> LabwareTracker:
     LabwareTrackerInstance = LabwareTracker()
 
+    if not os.path.exists(FilePath):
+        return LabwareTrackerInstance
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
+
+    if ConfigFile is None:
+        return LabwareTrackerInstance
 
     for Labware in ConfigFile:
         if Labware["Enabled"] == False:

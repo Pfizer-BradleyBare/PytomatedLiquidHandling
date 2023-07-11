@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 from ...Driver.Hamilton.Backend import MicrolabStarBackend, VantageBackend
@@ -9,10 +11,16 @@ from .BackendTracker import BackendTracker
 def LoadYaml(LoggerInstance: Logger, FilePath: str) -> BackendTracker:
     BackendTrackerInstance = BackendTracker()
 
+    if not os.path.exists(FilePath):
+        return BackendTrackerInstance
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
+
+    if ConfigFile is None:
+        return BackendTrackerInstance
 
     for DeviceID in ConfigFile:
         Device = ConfigFile[DeviceID]

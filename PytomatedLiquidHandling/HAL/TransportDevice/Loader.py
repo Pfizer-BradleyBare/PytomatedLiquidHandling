@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import (
@@ -28,10 +30,16 @@ def LoadYaml(
     DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
     FilePath: str,
 ) -> TransportDeviceTracker:
+    if not os.path.exists(FilePath):
+        return TransportDeviceTracker(LayoutItem.LayoutItemTracker())
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
+
+    if ConfigFile is None:
+        return TransportDeviceTracker(LayoutItem.LayoutItemTracker())
 
     FillerDeckLocationInstance = DeckLocation.DeckLocation(
         "TransitionPoint",

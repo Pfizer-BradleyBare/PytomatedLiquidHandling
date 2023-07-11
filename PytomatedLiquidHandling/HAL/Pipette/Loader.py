@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 from PytomatedLiquidHandling.HAL import Backend, DeckLocation, Labware, Tip
@@ -25,10 +27,16 @@ def LoadYaml(
 ) -> PipetteTracker:
     PipetteTrackerInstance = PipetteTracker()
 
+    if not os.path.exists(FilePath):
+        return PipetteTrackerInstance
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
+
+    if ConfigFile is None:
+        return PipetteTrackerInstance
 
     PipetteDevices: dict[int, Pipette] = dict()
     for DeviceType in ConfigFile:

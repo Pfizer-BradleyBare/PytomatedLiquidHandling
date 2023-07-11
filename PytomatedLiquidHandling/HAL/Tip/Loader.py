@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 from PytomatedLiquidHandling.HAL import Backend
@@ -12,10 +14,16 @@ def LoadYaml(
 ) -> TipTracker:
     TipTrackerInstance = TipTracker()
 
+    if not os.path.exists(FilePath):
+        return TipTrackerInstance
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
+
+    if ConfigFile is None:
+        return TipTrackerInstance
 
     for TipType in ConfigFile:
         for Tip in ConfigFile[TipType]:

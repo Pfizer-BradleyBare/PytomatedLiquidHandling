@@ -1,8 +1,11 @@
+import os
+
 import yaml
 
 from PytomatedLiquidHandling.HAL import LayoutItem
 
-from . import RandomAccessDeckStorage, StorageTracker
+from .RandomAccessDeckStorage import RandomAccessDeckStorage
+from .StorageTracker import StorageTracker
 
 
 def LoadYaml(
@@ -11,10 +14,16 @@ def LoadYaml(
 ) -> StorageTracker:
     StorageTrackerInstance = StorageTracker()
 
+    if not os.path.exists(FilePath):
+        return StorageTrackerInstance
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
+
+    if ConfigFile is None:
+        return StorageTrackerInstance
 
     for StorageTypeID in ConfigFile:
         for Storage in ConfigFile[StorageTypeID]:

@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 from PytomatedLiquidHandling.HAL import Backend, DeckLocation, Labware, Tip
@@ -24,10 +26,16 @@ def LoadYaml(
 ) -> IMCSDesaltingTracker:
     IMCSDesaltingTrackerInstance = IMCSDesaltingTracker()
 
+    if not os.path.exists(FilePath):
+        return IMCSDesaltingTrackerInstance
+
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
     FileHandle.close()
     # Get config file contents
+
+    if ConfigFile is None:
+        return IMCSDesaltingTrackerInstance
 
     TipUniqueIdentifier = ConfigFile["300uL Tip Unique Identifier"]
     TipSupportDropOffSequence = ConfigFile["300uL Tip Support Drop Off Sequence"]

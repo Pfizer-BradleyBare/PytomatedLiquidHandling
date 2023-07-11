@@ -15,3 +15,4 @@ from . import (
     Tip,
     TransportDevice,
 )
+from .HAL import HAL
