@@ -1,7 +1,8 @@
-from ....Tools.AbstractClasses import UniqueObjectTrackerABC, UniqueObjectABC
-from .Step import StepTracker
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
+
+from ....Tools.AbstractClasses import UniqueObjectABC
+from .Step import StepTracker
 
 
 @dataclass
@@ -14,6 +15,7 @@ class MethodABC(UniqueObjectABC):
     Simulate: bool
     Priority: PriorityOptions
     StepTrackerInstance: StepTracker
+    ExecutedStepTrackerInstance: StepTracker = field(init=False, default=StepTracker())
 
     def ExecuteStep(self):
         ...
