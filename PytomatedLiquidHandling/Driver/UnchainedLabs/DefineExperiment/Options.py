@@ -1,4 +1,4 @@
-from ....Tools.AbstractClasses import NonUniqueObjectABC
+from PytomatedLiquidHandling.Tools.AbstractClasses import NonUniqueObjectABC
 
 
 class Options(NonUniqueObjectABC):

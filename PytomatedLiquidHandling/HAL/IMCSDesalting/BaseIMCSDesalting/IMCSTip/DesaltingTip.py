@@ -1,7 +1,12 @@
-from .....Tools.AbstractClasses import UniqueObjectABC, UniqueObjectTrackerABC
 from dataclasses import dataclass
-from .ElutionParameters import ElutionParameters
 from enum import Enum
+
+from PytomatedLiquidHandling.Tools.AbstractClasses import (
+    UniqueObjectABC,
+    UniqueObjectTrackerABC,
+)
+
+from .ElutionParameters import ElutionParameters
 
 
 @dataclass

@@ -1,5 +1,6 @@
-from ......Tools.AbstractClasses import NonUniqueObjectABC
 from dataclasses import dataclass, field
+
+from PytomatedLiquidHandling.Tools.AbstractClasses import NonUniqueObjectABC
 
 
 @dataclass

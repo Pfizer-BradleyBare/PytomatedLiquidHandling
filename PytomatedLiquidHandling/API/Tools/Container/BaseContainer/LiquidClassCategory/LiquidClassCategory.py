@@ -1,4 +1,5 @@
-from ......Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+
 from ...Reagent.ReagentProperty import (
     HomogeneityReagentProperty,
     LLDReagentProperty,

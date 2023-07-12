@@ -1,6 +1,6 @@
 from enum import Enum
 
-from ...Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
 
 class NotificationTypes(Enum):

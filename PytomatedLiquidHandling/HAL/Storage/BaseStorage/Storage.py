@@ -2,8 +2,8 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.HAL import LayoutItem
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
-from ....Tools.AbstractClasses import UniqueObjectABC
 from .Reservation import ReservationTracker
 
 

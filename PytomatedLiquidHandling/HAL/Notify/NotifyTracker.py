@@ -1,4 +1,5 @@
-from ...Tools.AbstractClasses import UniqueObjectTrackerABC
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectTrackerABC
+
 from .Notify import Notify
 
 

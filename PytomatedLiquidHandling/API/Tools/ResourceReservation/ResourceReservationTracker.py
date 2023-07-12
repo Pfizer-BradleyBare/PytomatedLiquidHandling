@@ -1,6 +1,5 @@
 from PytomatedLiquidHandling.HAL import DeckLocation, TempControlDevice
-
-from ....Tools.AbstractClasses import UniqueObjectTrackerABC
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectTrackerABC
 
 
 class ResourceReservationTracker(

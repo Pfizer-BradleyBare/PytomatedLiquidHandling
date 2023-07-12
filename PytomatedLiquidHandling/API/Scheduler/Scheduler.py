@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling import HAL
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectTrackerABC
 from PytomatedLiquidHandling.Tools.Logger import Logger
 
-from ...Tools.AbstractClasses import UniqueObjectTrackerABC
 from ..Tools import ResourceReservation
 from .Method import MethodABC, MethodTracker
 

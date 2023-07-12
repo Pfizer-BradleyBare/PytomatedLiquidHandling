@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.HAL import Backend, LayoutItem
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
-from ....Tools.AbstractClasses import UniqueObjectABC
 from ...Tools.AbstractClasses import InterfaceABC
 
 

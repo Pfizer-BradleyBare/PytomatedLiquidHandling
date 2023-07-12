@@ -1,5 +1,6 @@
+from PytomatedLiquidHandling.Tools.AbstractClasses import NonUniqueObjectTrackerABC
+
 from ....HAL.Pipette.BasePipette import PipetteTracker
-from ....Tools.AbstractClasses import NonUniqueObjectTrackerABC
 from .TransferOptions import TransferOptions
 
 

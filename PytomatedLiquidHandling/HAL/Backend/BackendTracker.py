@@ -1,6 +1,8 @@
-from ...Driver.Tools.AbstractClasses import BackendABC
-from ...Tools.AbstractClasses import UniqueObjectTrackerABC
 from dataclasses import dataclass
+
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectTrackerABC
+
+from ...Driver.Tools.AbstractClasses import BackendABC
 
 
 @dataclass

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from ....Tools.AbstractClasses import UniqueObjectTrackerABC
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectTrackerABC
+
 from .CarrierABC import CarrierABC
 
 

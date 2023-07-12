@@ -2,8 +2,8 @@ from abc import abstractmethod
 from dataclasses import dataclass
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
-from ....Tools.AbstractClasses import UniqueObjectABC
 from ...Tools.AbstractClasses import InterfaceABC
 from .Interface import TransferOptions
 from .LiquidClass import LiquidClass, LiquidClassCategoryTracker

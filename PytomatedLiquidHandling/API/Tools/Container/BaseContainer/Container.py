@@ -1,6 +1,7 @@
 from abc import abstractmethod
 
-from .....Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+
 from ....Tools.LoadedLabware import LoadedLabware
 from ..Plate.Well.WellSolution.WellSolutionTracker import WellSolutionTracker
 from .LiquidClassCategory.LiquidClassCategory import LiquidClassCategory

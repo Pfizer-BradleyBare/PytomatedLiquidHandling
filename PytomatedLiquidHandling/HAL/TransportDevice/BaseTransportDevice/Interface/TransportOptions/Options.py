@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import LayoutItem
-
-from ......Driver.Tools.AbstractClasses import OptionsABC
 
 
 @dataclass(kw_only=True)

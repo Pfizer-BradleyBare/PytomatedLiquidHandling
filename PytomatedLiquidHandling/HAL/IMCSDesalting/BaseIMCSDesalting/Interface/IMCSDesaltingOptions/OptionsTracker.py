@@ -1,7 +1,9 @@
-from ......Driver.Tools.AbstractClasses import OptionsTrackerABC
-from .Options import Options
-from ...IMCSTip import DesaltingTip
 from dataclasses import dataclass
+
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsTrackerABC
+
+from ...IMCSTip import DesaltingTip
+from .Options import Options
 
 
 @dataclass

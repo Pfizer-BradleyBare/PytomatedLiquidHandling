@@ -1,6 +1,7 @@
 from abc import abstractmethod
-from .....Tools.AbstractClasses import UniqueObjectABC
 from dataclasses import dataclass
+
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
 
 @dataclass

@@ -1,6 +1,8 @@
-from ....Tools.AbstractClasses import UniqueObjectTrackerABC
-from .IMCSDesaltingABC import IMCSDesaltingABC
 from dataclasses import dataclass
+
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectTrackerABC
+
+from .IMCSDesaltingABC import IMCSDesaltingABC
 
 
 @dataclass

@@ -1,4 +1,5 @@
-from ....Tools.AbstractClasses import NonUniqueObjectABC
+from PytomatedLiquidHandling.Tools.AbstractClasses import NonUniqueObjectABC
+
 from ...Tools.Container.BaseContainer import Container
 
 
@@ -13,7 +14,6 @@ class TransferOptions(NonUniqueObjectABC):
         DestinationWellPosition: int,
         TransferVolume: float,
     ):
-
         self.SourceContainerInstance: Container = SourceContainerInstance
         self.DestinationContainerInstance: Container = DestinationContainerInstance
 

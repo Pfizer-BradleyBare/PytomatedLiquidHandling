@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.HAL import Tip
-
-from .....Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
 
 @dataclass

@@ -2,8 +2,8 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
-from ....Tools.AbstractClasses import UniqueObjectABC
 from ...Tools.AbstractClasses import InterfaceABC
 from .IMCSTip import DesaltingTipTracker
 from .Interface import IMCSDesaltingOptions

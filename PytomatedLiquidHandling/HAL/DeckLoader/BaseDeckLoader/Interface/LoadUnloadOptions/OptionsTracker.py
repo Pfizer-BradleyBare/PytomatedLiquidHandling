@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from ......Driver.Tools.AbstractClasses import OptionsTrackerABC
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsTrackerABC
+
 from .Options import Options
 
 

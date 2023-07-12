@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
 from PytomatedLiquidHandling.HAL import Carrier, DeckLocation, LayoutItem
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectTrackerABC
 
-from ....Tools.AbstractClasses import UniqueObjectTrackerABC
 from . import DeckLocationTransportConfig, TransportDevice
 from .Interface import TransportOptions
 

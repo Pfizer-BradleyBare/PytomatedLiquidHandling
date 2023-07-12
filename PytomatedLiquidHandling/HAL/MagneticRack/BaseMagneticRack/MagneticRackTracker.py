@@ -1,6 +1,8 @@
-from ....Tools.AbstractClasses import UniqueObjectTrackerABC
-from .MagneticRackABC import MagneticRackABC
 from dataclasses import dataclass
+
+from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectTrackerABC
+
+from .MagneticRackABC import MagneticRackABC
 
 
 @dataclass
