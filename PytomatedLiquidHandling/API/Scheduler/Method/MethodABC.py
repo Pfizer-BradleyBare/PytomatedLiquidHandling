@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from enum import Enum
 
+from PytomatedLiquidHandling.API.Tools import ResourceReservation
+from PytomatedLiquidHandling.HAL import HAL
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
 from .Step import StepTracker
@@ -32,5 +34,9 @@ class MethodABC(UniqueObjectABC):
         if self.Simulate == True:
             self.Priority = self.PriorityOptions.NonStop
 
-    def ExecuteStep(self):
+    def ExecuteStep(
+        self,
+        HALInstance: HAL,
+        ResourceReservationTrackerInstance: ResourceReservation.ResourceReservationTracker,
+    ):
         ...
