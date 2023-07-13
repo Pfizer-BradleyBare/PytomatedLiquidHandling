@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from enum import Enum
 
+import treelib
+
 from PytomatedLiquidHandling.API.Tools import ResourceReservation
 from PytomatedLiquidHandling.HAL import HAL
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
@@ -27,12 +29,20 @@ class MethodABC(UniqueObjectABC):
 
     State: StateOptions = field(init=False, default=StateOptions.Queued)
 
-    StepTrackerInstance: StepTracker
+    StepTreeInstance: treelib.Tree
+
     ExecutedStepTrackerInstance: StepTracker = field(init=False, default=StepTracker())
+    MethodStepPathways: list[StepTracker] = field(init=False, default_factory=list)
 
     def __post_init__(self):
         if self.Simulate == True:
             self.Priority = self.PriorityOptions.NonStop
+
+        for StepPathway in self.StepTreeInstance.paths_to_leaves():
+            StepTrackerInstance = StepTracker()
+            StepTrackerInstance.LoadList([Node.data for Node in StepPathway])
+            self.MethodStepPathways.append(StepTrackerInstance)
+        # Take the step tree and create discrete lists of step for each pathway.
 
     def ExecuteStep(
         self,
