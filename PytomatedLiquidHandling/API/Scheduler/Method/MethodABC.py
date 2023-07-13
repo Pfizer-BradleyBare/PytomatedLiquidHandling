@@ -7,7 +7,7 @@ from PytomatedLiquidHandling.API.Tools import ResourceReservation
 from PytomatedLiquidHandling.HAL import HAL
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
-from .Step import StepTracker
+from .Step import StepABC, StepTracker
 
 
 @dataclass
@@ -40,7 +40,20 @@ class MethodABC(UniqueObjectABC):
 
         for StepPathway in self.StepTreeInstance.paths_to_leaves():
             StepTrackerInstance = StepTracker()
-            StepTrackerInstance.LoadList([Node.data for Node in StepPathway])
+
+            for StepID in StepPathway:
+                Node = self.StepTreeInstance.get_node(StepID)
+                if not isinstance(Node, treelib.Node):
+                    raise Exception("")
+                # bad typing in treelib so we have to do this
+
+                Step = Node.data
+                if not isinstance(Step, StepABC):
+                    raise Exception("")
+                # bad typing in treelib so we have to do this
+
+                StepTrackerInstance.LoadSingle(Step)
+
             self.MethodStepPathways.append(StepTrackerInstance)
         # Take the step tree and create discrete lists of step for each pathway.
 
