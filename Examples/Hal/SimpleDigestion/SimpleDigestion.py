@@ -1,7 +1,7 @@
 import logging
 import os
 
-from PytomatedLiquidHandling import HAL, Logger
+from PytomatedLiquidHandling import API, HAL, Logger
 
 LoggerInstance = Logger(
     "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__), "Logging")

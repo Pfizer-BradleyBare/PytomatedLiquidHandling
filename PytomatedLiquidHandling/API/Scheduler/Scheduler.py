@@ -13,20 +13,22 @@ class Scheduler(UniqueObjectTrackerABC[MethodABC]):
     LoggerInstance: Logger
     HALInstance: HAL.HAL
 
-    MethodTrackerInstance: MethodTracker = field(init=False, default=MethodTracker())
+    MethodTrackerInstance: MethodTracker = field(
+        init=False, default_factory=MethodTracker
+    )
     CompletedMethodTrackerInstance: MethodTracker = field(
-        init=False, default=MethodTracker()
+        init=False, default_factory=MethodTracker
     )
 
     LoadedLayoutItems: HAL.LayoutItem.LayoutItemTracker = field(
-        init=False, default=HAL.LayoutItem.LayoutItemTracker()
+        init=False, default_factory=HAL.LayoutItem.LayoutItemTracker
     )
     InUseLoadedLayoutItems: HAL.LayoutItem.LayoutItemTracker = field(
-        init=False, default=HAL.LayoutItem.LayoutItemTracker()
+        init=False, default_factory=HAL.LayoutItem.LayoutItemTracker
     )
 
     ResourceReservationTrackerInstance: ResourceReservation.ResourceReservationTracker = field(
-        init=False, default=ResourceReservation.ResourceReservationTracker()
+        init=False, default_factory=ResourceReservation.ResourceReservationTracker
     )
 
     def QueueMethod(self):

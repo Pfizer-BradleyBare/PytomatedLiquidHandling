@@ -31,7 +31,9 @@ class MethodABC(UniqueObjectABC):
 
     StepTreeInstance: treelib.Tree
 
-    ExecutedStepTrackerInstance: StepTracker = field(init=False, default=StepTracker())
+    ExecutedStepTrackerInstance: StepTracker = field(
+        init=False, default_factory=StepTracker
+    )
     MethodStepPathways: list[StepTracker] = field(init=False, default_factory=list)
 
     def __post_init__(self):
