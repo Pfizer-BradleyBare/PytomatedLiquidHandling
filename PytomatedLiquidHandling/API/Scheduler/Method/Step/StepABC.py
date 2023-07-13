@@ -2,14 +2,15 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 from typing import ClassVar, Self, Type
 
-from PytomatedLiquidHandling.API.Tools import ResourceReservation
-from PytomatedLiquidHandling.HAL import HAL
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+
+from ...Orchastrator import Orchastrator
+from ..Utilities import Utilities
 
 
 @dataclass
 class StepABC(UniqueObjectABC):
-    AllStepClasses: ClassVar[list[Type[Self]]] = field(init=False, default_factory=list)
+    AllStepClasses: ClassVar[list[Type[Self]]] = list()
 
     StepPreExecuteBlocks: list[Type[Self]] = field(init=False, default_factory=list)
     StepExecuteBlocks: list[Type[Self]] = field(init=False, default_factory=list)
@@ -31,8 +32,8 @@ class StepABC(UniqueObjectABC):
     def PreExecute(
         self,
         Simulate: bool,
-        HALInstance: HAL,
-        ResourceReservationTrackerInstance: ResourceReservation.ResourceReservationTracker,
+        OrchastratorInstance: Orchastrator,
+        UtilitiesInstance: Utilities,
         TimeTillExecution: float,
     ):
         self.PreExecuteComplete = True
@@ -45,7 +46,7 @@ class StepABC(UniqueObjectABC):
     def Execute(
         self,
         Simulate: bool,
-        HALInstance: HAL,
-        ResourceReservationTrackerInstance: ResourceReservation.ResourceReservationTracker,
+        OrchastratorInstance: Orchastrator,
+        UtilitiesInstance: Utilities,
     ):
         ...

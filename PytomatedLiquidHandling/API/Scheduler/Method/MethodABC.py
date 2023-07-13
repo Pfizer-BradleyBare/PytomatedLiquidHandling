@@ -4,16 +4,17 @@ from typing import Type
 
 import treelib
 
-from PytomatedLiquidHandling.API.Tools import ResourceReservation
-from PytomatedLiquidHandling.HAL import HAL
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
+from ..Orchastrator import Orchastrator
 from .Step import StepABC, StepTracker
+from .Utilities import Utilities
 
 
 @dataclass
 class MethodABC(UniqueObjectABC):
     Simulate: bool
+    UtilitiesInstance: Utilities
 
     class PriorityOptions(Enum):
         NonStop = 2
@@ -31,7 +32,6 @@ class MethodABC(UniqueObjectABC):
     State: StateOptions = field(init=False, default=StateOptions.Queued)
 
     StepTreeInstance: treelib.Tree
-
     ExecutedStepTrackerInstance: StepTracker = field(
         init=False, default_factory=StepTracker
     )
@@ -60,11 +60,7 @@ class MethodABC(UniqueObjectABC):
             self.MethodStepPathways.append(StepTrackerInstance)
         # Take the step tree and create discrete lists of step for each pathway.
 
-    def PreExecute(
-        self,
-        HALInstance: HAL,
-        ResourceReservationTrackerInstance: ResourceReservation.ResourceReservationTracker,
-    ):
+    def PreExecute(self, OrchastratorInstance: Orchastrator):
         for StepTrackerInstance in self.MethodStepPathways:
             for StepInstance in StepTrackerInstance.GetObjectsAsList():
                 if StepInstance.ExecuteComplete == True:
@@ -112,19 +108,15 @@ class MethodABC(UniqueObjectABC):
 
                 StepInstance.PreExecute(
                     self.Simulate,
-                    HALInstance,
-                    ResourceReservationTrackerInstance,
+                    OrchastratorInstance,
+                    self.UtilitiesInstance,
                     TimeToStep,
                 )
             # do the EQ
         # first we need to try to do our pre-execution for as many steps as possible.
         # We always iterate over all steps to find PreExecutions that are meant to run during timer countdowns
 
-    def Execute(
-        self,
-        HALInstance: HAL,
-        ResourceReservationTrackerInstance: ResourceReservation.ResourceReservationTracker,
-    ):
+    def Execute(self, OrchastratorInstance: Orchastrator):
         TimeKeeper = float("inf")
         FastestPathway: StepTracker | None = None
         for StepTrackerInstance in self.MethodStepPathways:

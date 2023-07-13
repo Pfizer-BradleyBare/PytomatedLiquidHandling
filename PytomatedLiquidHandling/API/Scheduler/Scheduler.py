@@ -1,17 +1,17 @@
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling import HAL
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectTrackerABC
 from PytomatedLiquidHandling.Tools.Logger import Logger
 
-from ..Tools import ResourceReservation
-from .Method import MethodABC, MethodTracker
+from .Method import MethodTracker
+from .Orchastrator import Orchastrator
 
 
 @dataclass
-class Scheduler(UniqueObjectTrackerABC[MethodABC]):
+class Scheduler:
     LoggerInstance: Logger
     HALInstance: HAL.HAL
+    OrchastratorInstance: Orchastrator = field(init=False)
 
     MethodTrackerInstance: MethodTracker = field(
         init=False, default_factory=MethodTracker
@@ -20,16 +20,8 @@ class Scheduler(UniqueObjectTrackerABC[MethodABC]):
         init=False, default_factory=MethodTracker
     )
 
-    LoadedLayoutItems: HAL.LayoutItem.LayoutItemTracker = field(
-        init=False, default_factory=HAL.LayoutItem.LayoutItemTracker
-    )
-    InUseLoadedLayoutItems: HAL.LayoutItem.LayoutItemTracker = field(
-        init=False, default_factory=HAL.LayoutItem.LayoutItemTracker
-    )
-
-    ResourceReservationTrackerInstance: ResourceReservation.ResourceReservationTracker = field(
-        init=False, default_factory=ResourceReservation.ResourceReservationTracker
-    )
+    def __post_init__(self):
+        self.OrchastratorInstance = Orchastrator(self.LoggerInstance, self.HALInstance)
 
     def QueueMethod(self):
         ...
