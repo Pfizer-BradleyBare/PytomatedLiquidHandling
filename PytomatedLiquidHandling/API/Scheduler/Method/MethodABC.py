@@ -116,7 +116,7 @@ class MethodABC(UniqueObjectABC):
         # first we need to try to do our pre-execution for as many steps as possible.
         # We always iterate over all steps to find PreExecutions that are meant to run during timer countdowns
 
-    def Execute(self, OrchastratorInstance: Orchastrator):
+    def ExecuteStep(self, OrchastratorInstance: Orchastrator):
         TimeKeeper = float("inf")
         FastestPathway: StepTracker | None = None
         for StepTrackerInstance in self.MethodStepPathways:
@@ -131,3 +131,6 @@ class MethodABC(UniqueObjectABC):
             if PathwayTime < TimeKeeper:
                 FastestPathway = StepTrackerInstance
         # find the fastest path
+
+    def ExecuteAll(self, OrchastratorInstance: Orchastrator):
+        ...
