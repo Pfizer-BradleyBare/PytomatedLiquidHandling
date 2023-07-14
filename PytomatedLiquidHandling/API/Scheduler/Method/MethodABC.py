@@ -4,6 +4,7 @@ from typing import Type
 
 import treelib
 
+from PytomatedLiquidHandling.Tools import Logger
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
 from ..Orchastrator import Orchastrator

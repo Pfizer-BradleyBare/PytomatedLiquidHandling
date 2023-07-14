@@ -8,7 +8,7 @@ from .ResourceReservation import ResourceReservationTracker
 
 @dataclass
 class Orchastrator:
-    LoggerInstance: Logger
+    _LoggerInstance: Logger
     _HALInstance: HAL.HAL
 
     _LoadedLayoutItems: HAL.LayoutItem.LayoutItemTracker = field(
