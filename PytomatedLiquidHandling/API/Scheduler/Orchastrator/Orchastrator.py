@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling import HAL
-from PytomatedLiquidHandling.API.Tools import ResourceReservation
 from PytomatedLiquidHandling.Tools.Logger import Logger
+
+from .ResourceReservation import ResourceReservationTracker
 
 
 @dataclass
@@ -17,6 +18,6 @@ class Orchastrator:
         init=False, default_factory=HAL.LayoutItem.LayoutItemTracker
     )
 
-    _ResourceReservationTrackerInstance: ResourceReservation.ResourceReservationTracker = field(
-        init=False, default_factory=ResourceReservation.ResourceReservationTracker
+    _ResourceReservationTrackerInstance: ResourceReservationTracker = field(
+        init=False, default_factory=ResourceReservationTracker
     )
