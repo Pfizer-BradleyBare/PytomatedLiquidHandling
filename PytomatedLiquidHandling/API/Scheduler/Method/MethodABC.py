@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Type
-
+from itertools import permutations
 import treelib
 
 from PytomatedLiquidHandling.Tools import Logger
@@ -33,16 +33,10 @@ class MethodABC(UniqueObjectABC):
     State: StateOptions = field(init=False, default=StateOptions.Queued)
 
     StepTreeInstance: treelib.Tree
-    ExecutedStepTrackerInstance: StepTracker = field(
-        init=False, default_factory=StepTracker
-    )
-    MethodStepPathways: list[StepTracker] = field(init=False, default_factory=list)
-    CurrentPathway: StepTracker | None = field(init=False, default=None)
+    FlattenedMethod: StepTracker = field(init=False, default_factory=StepTracker)
 
     def __post_init__(self):
-        if self.Simulate == True:
-            self.Priority = self.PriorityOptions.NonStop
-
+        MethodPathways: list[StepTracker] = list()
         for StepPathway in self.StepTreeInstance.paths_to_leaves():
             StepTrackerInstance = StepTracker()
 
@@ -59,122 +53,45 @@ class MethodABC(UniqueObjectABC):
 
                 StepTrackerInstance.LoadSingle(Step)
 
-            self.MethodStepPathways.append(StepTrackerInstance)
+            MethodPathways.append(StepTrackerInstance)
         # Take the step tree and create discrete lists of step for each pathway.
 
-    @staticmethod
-    def IsStepBlocked(StepInstance: StepABC, StepTrackerInstance: StepTracker) -> bool:
-        ExecutionBlocks: dict[str | int, list[Type[StepABC]]] = dict()
-        for Step in StepTrackerInstance.GetObjectsAsList():
-            ExecutionBlocks[Step.UniqueIdentifier] = Step.StepPreExecuteBlocks
-        # get our execution blocks
-
-        StepBlocks = sum(
-            [
-                ExecutionBlocks[Key]
-                for Key in ExecutionBlocks
-                if Key != StepInstance.UniqueIdentifier
-            ],
-            [],
-        )
-
-        if type(StepInstance) in StepBlocks:
-            return True
-        else:
-            return False
-
-    @staticmethod
-    def IsPathwayActive(StepTrackerInstance: StepTracker) -> bool:
-        if StepTrackerInstance.GetNumObjects() != 0:
-            return not MethodABC.IsStepBlocked(
-                StepTrackerInstance.GetObjectsAsList()[0], StepTrackerInstance
-            )
-        return False
-
-    def IsActive(self) -> bool:
-        for StepTrackerInstance in self.MethodStepPathways:
-            if not MethodABC.IsPathwayActive(StepTrackerInstance):
-                return False
-        return True
-
-    def PreExecuteSteps(self, OrchastratorInstance: Orchastrator):
-        for StepTrackerInstance in self.MethodStepPathways:
-            for StepInstance in StepTrackerInstance.GetObjectsAsList():
-                if StepInstance.ExecuteComplete == True:
-                    if (
-                        self.ExecutedStepTrackerInstance.IsTracked(
-                            StepInstance.UniqueIdentifier
-                        )
-                        == False
-                    ):
-                        self.ExecutedStepTrackerInstance.LoadSingle(StepInstance)
-            # add to executed tracker
-
-            for StepInstance in StepTrackerInstance.GetObjectsAsList():
-                if (
-                    self.ExecutedStepTrackerInstance.IsTracked(
-                        StepInstance.UniqueIdentifier
-                    )
-                    == True
-                ):
-                    StepTrackerInstance.UnloadSingle(StepInstance)
-            # remove from each list.
-
-            PathwaySleepTime = 0
-            for (
-                TimerInstance
-            ) in self.UtilitiesInstance.TimerTrackerInstance.GetObjectsAsList():
-                if StepTrackerInstance.IsTracked(TimerInstance.UniqueIdentifier):
-                    if TimerInstance.GetRemainingTime() > PathwaySleepTime:
-                        PathwaySleepTime = TimerInstance.GetRemainingTime()
-            # get sleeping time of pathway if sleeping is occuring.
-
-            TimeToStep = 0
-            for StepInstance in StepTrackerInstance.GetObjectsAsList():
-                TimeToStep += StepInstance.PreExecuteTime() + StepInstance.ExecuteTime()
-
-                if MethodABC.IsStepBlocked(StepInstance, StepTrackerInstance):
-                    continue
-
-                if StepInstance.PreExecuteTime() <= PathwaySleepTime:
-                    StepInstance.PreExecute(
-                        self.Simulate,
-                        OrchastratorInstance,
-                        self.UtilitiesInstance,
-                        TimeToStep,
-                    )
-            # do the EQ
-        # first we need to try to do our pre-execution for as many steps as possible.
-        # We always iterate over all steps to find PreExecutions that are meant to run during timer countdowns
-
-    def ExecuteNextStep(self, OrchastratorInstance: Orchastrator):
-        if self.IsActive() == False:
-            return
-
-        if self.CurrentPathway is None:
-            TimeKeeper = float("inf")
-            for StepTrackerInstance in self.MethodStepPathways:
-                PathwayTime = 0
+        while len(MethodPathways) != 0:
+            PartialPathways: list[tuple[float, float, float, list[StepABC]]] = list()
+            for StepTrackerInstance in MethodPathways[:]:
+                PartialPathway: list[StepABC] = list()
                 for StepInstance in StepTrackerInstance.GetObjectsAsList():
-                    if StepInstance.HasTimer() == True:
+                    PartialPathway.append(StepInstance)
+
+                    if StepInstance.IsTimed() == True:
                         break
-                    PathwayTime += (
-                        StepInstance.PreExecuteTime() + StepInstance.ExecuteTime()
+
+                StepTrackerInstance.UnloadList(PartialPathway)
+                if StepTrackerInstance.GetNumObjects() == 0:
+                    MethodPathways.remove(StepTrackerInstance)
+
+                Partial = StepTracker()
+                Partial.LoadList(
+                    PartialPathway[:-1]
+                )  # get time of all but the timed step
+                Full = StepTracker()
+                Full.LoadList(PartialPathway)  # get time of all but the timed step
+
+                PartialPathways.append(
+                    (
+                        Full.GetExecutionTime(),
+                        Partial.GetExecutionTime(),
+                        PartialPathway[-1].GetExecuteTime(),
+                        PartialPathway,
                     )
+                )
 
-                if (
-                    PathwayTime <= TimeKeeper
-                    and MethodABC.IsPathwayActive(StepTrackerInstance) == True
-                ):
-                    self.CurrentPathway = StepTrackerInstance
-            # find the fastest path
+            PathTimeSorted = sorted(PartialPathways, key=lambda x: x[1])
+            # time to execute path WITHOUT the timed step
 
-        if self.CurrentPathway is None:
-            return
+            PartialPathwayPermutations = permutations(PathTimeSorted)
 
-        StepInstance = self.CurrentPathway.GetObjectsAsList()[0]
-
-        # it is assumed that pre-execution has already occured.
-        StepInstance.Execute(
-            self.Simulate, OrchastratorInstance, self.UtilitiesInstance
-        )
+            FavoritePermutation = tuple(PathTimeSorted)
+            # default to the time sorted as favorate
+            for Permutation in PartialPathwayPermutations:
+                ...
