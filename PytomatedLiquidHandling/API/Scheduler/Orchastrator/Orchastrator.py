@@ -1,14 +1,13 @@
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling import HAL
-from PytomatedLiquidHandling.Tools.Logger import Logger
+
 
 from .ResourceReservation import ResourceReservationTracker
 
 
 @dataclass
 class Orchastrator:
-    _LoggerInstance: Logger
     _HALInstance: HAL.HAL
 
     _LoadedLayoutItems: HAL.LayoutItem.LayoutItemTracker = field(

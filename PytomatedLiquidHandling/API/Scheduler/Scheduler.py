@@ -28,7 +28,6 @@ class Scheduler(UniqueObjectABC):
             os.path.join(self.AppFolderPath, "Logging"),
         )
         self.OrchastratorInstance = Orchastrator(
-            LoggerInstance,
             HAL.HAL(os.path.join(self.AppFolderPath, "Config"), LoggerInstance),
         )
 
