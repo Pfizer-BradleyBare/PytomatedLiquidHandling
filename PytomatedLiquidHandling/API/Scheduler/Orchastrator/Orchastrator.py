@@ -2,21 +2,23 @@ from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling import HAL
 
-
 from .ResourceReservation import ResourceReservationTracker
+from .Timer import TimerTracker
 
 
 @dataclass
 class Orchastrator:
-    _HALInstance: HAL.HAL
+    HALInstance: HAL.HAL
 
-    _LoadedLayoutItems: HAL.LayoutItem.LayoutItemTracker = field(
+    LoadedLayoutItems: HAL.LayoutItem.LayoutItemTracker = field(
         init=False, default_factory=HAL.LayoutItem.LayoutItemTracker
     )
-    _InUseLoadedLayoutItems: HAL.LayoutItem.LayoutItemTracker = field(
+    InUseLoadedLayoutItems: HAL.LayoutItem.LayoutItemTracker = field(
         init=False, default_factory=HAL.LayoutItem.LayoutItemTracker
     )
 
-    _ResourceReservationTrackerInstance: ResourceReservationTracker = field(
+    ResourceReservationTrackerInstance: ResourceReservationTracker = field(
         init=False, default_factory=ResourceReservationTracker
     )
+
+    TimerTrackerInstance: TimerTracker = field(init=False, default_factory=TimerTracker)
