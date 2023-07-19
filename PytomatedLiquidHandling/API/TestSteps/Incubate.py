@@ -32,7 +32,7 @@ class Incubate(Step.StepABC):
             StartHeater(
                 str(self.UniqueIdentifier) + "1",
                 False,
-                StartHeater.ExecutionWindows.Consecutive,
+                StartHeater.ExecutionWindows.AsSoonAsPossible,
                 [],
                 15,
             ),

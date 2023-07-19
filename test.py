@@ -1,16 +1,20 @@
-import os
+import treelib
 
-from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
-from PytomatedLiquidHandling.Tools.Logger import Logger
+from PytomatedLiquidHandling.API import Scheduler, TestSteps
 
-LoggerInstance = Logger("Name", 0, os.path.join(os.path.dirname(__file__),"Logging"))
+Tree = treelib.Tree()
 
-v = MicrolabStarBackend("Test", LoggerInstance)
+Tree.create_node(identifier="Sample", data=TestSteps.LiquidTransfer("Sample"))
+Tree.create_node(
+    identifier="Diluent", parent="Sample", data=TestSteps.LiquidTransfer("Diluent")
+)
+Tree.create_node(
+    identifier="DTT", parent="Sample", data=TestSteps.LiquidTransfer("DTT")
+)
 
-v.StartBackend()
+Tree.show()
 
-print("DONE")
+print(Scheduler.Method.MethodABC("Method", True, Tree).StartingTaskList)
 
-import time
 
-time.sleep(10)
+quit()
