@@ -137,7 +137,7 @@ class MethodABC(UniqueObjectABC):
                 for TasksList in Task.QueueUponCompletion:
                     if TasksList not in NewTaskList:
                         NewTaskList.append(TasksList)
-
+                Task.QueueUponCompletion = NewTaskList
         # go back around and remove duplicates from the QueueUponCompletionList of Lists
 
         self.StartingTaskList = SplitTaskPathways[0][0]
