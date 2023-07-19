@@ -125,20 +125,14 @@ class MethodABC(UniqueObjectABC):
             QCollector = list()
             for Task in AllTasks:
                 if BaseTask.UniqueIdentifier == Task.UniqueIdentifier:
-                    QCollector += Task.QueueUponCompletion
+                    for TaskList in Task.QueueUponCompletion:
+                        if TaskList not in QCollector:
+                            QCollector.append(TaskList)
             for Task in AllTasks:
                 if BaseTask.UniqueIdentifier == Task.UniqueIdentifier:
                     Task.QueueUponCompletion = QCollector
-        # combine the Q lists for each task because there could be repeats
-
-        for TaskPathway in TaskPathways:
-            for Task in TaskPathway:
-                NewTaskList = list()
-                for TasksList in Task.QueueUponCompletion:
-                    if TasksList not in NewTaskList:
-                        NewTaskList.append(TasksList)
-                Task.QueueUponCompletion = NewTaskList
-        # go back around and remove duplicates from the QueueUponCompletionList of Lists
+        # combine the Q lists for each task because there could be task repeats.
+        # at the same time ensure there are no TaskList repeats
 
         self.StartingTaskList = SplitTaskPathways[0][0]
         # jinkies
