@@ -1,5 +1,6 @@
+from datetime import datetime, timedelta
+
 import processscheduler as ps
-from datetime import timedelta, datetime
 
 problem = ps.SchedulingProblem(
     "SoftwareDevelopment", delta_time=timedelta(days=1), start_time=datetime.now()
