@@ -31,8 +31,8 @@ class TaskABC(UniqueObjectABC):
     MinExecutionTime: float
     # if 0 then the scheduler will assume this task is never-ending.
     # This is useful for unknown duration timers, user input, and unexpected errors.
-    # post user input or unknown duration the min execution time should
-    # be modified to reflect time taken and the scheduler rescheduled.
+    # Post completion of "never-ending task" the min execution time should
+    # be modified to reflect the total time taken.
 
     RequiredResources: list[Type[InterfaceABC] | Container]
     # resources required by the task. This can be any HAL derived object or any container.
