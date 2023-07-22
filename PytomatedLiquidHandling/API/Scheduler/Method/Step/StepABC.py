@@ -8,8 +8,6 @@ from .TaskABC import TaskABC
 
 @dataclass
 class StepABC(UniqueObjectABC):
-    BranchStart: bool = field(init=False, default=False)
-
     @abstractmethod
-    def GetTasks(self) -> list[TaskABC]:
+    def GetTasks(self, MethodName: str) -> list[TaskABC]:
         ...

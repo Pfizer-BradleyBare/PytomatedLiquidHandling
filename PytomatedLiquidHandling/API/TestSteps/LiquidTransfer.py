@@ -16,16 +16,16 @@ class LiquidTransfer(Step.StepABC):
         return [
             PipetteTask(
                 str(self.UniqueIdentifier) + "Pipette 1",
-                False,
                 PipetteTask.ExecutionWindows.Consecutive,
-                [],
+                False,
                 15,
+                [],
             ),
             PipetteTask(
                 str(self.UniqueIdentifier) + "Pipette 2",
-                False,
                 PipetteTask.ExecutionWindows.Consecutive,
-                [],
+                False,
                 15,
+                [],
             ),
         ]

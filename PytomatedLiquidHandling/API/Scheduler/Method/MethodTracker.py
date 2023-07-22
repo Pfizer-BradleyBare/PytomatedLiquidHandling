@@ -2,9 +2,9 @@ from dataclasses import dataclass
 
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectTrackerABC
 
-from .MethodABC import MethodABC
+from .Method import Method
 
 
 @dataclass
-class MethodTracker(UniqueObjectTrackerABC[MethodABC]):
+class MethodTracker(UniqueObjectTrackerABC[Method]):
     ...

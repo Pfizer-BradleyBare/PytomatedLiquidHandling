@@ -1,3 +1,3 @@
 from . import Step
-from .MethodABC import MethodABC
+from .Method import Method
 from .MethodTracker import MethodTracker

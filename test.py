@@ -36,11 +36,10 @@ release.add_required_resources([justine])
 solver = ps.SchedulingSolver(problem)
 solution = solver.solve()
 
-print(solution)
-solution.render_gantt_plotly()
+# print(solution)
+# solution.render_gantt_plotly()
 
-quit()
-
+# quit()
 
 import treelib
 
@@ -50,15 +49,28 @@ Tree = treelib.Tree()
 
 Tree.create_node(identifier="Sample", data=TestSteps.LiquidTransfer("Sample"))
 Tree.create_node(
-    identifier="Diluent", parent="Sample", data=TestSteps.LiquidTransfer("Diluent")
+    identifier="Sample1", data=TestSteps.LiquidTransfer("Sample1"), parent="Sample"
 )
 Tree.create_node(
-    identifier="DTT", parent="Sample", data=TestSteps.LiquidTransfer("DTT")
+    identifier="Diluent", parent="Sample1", data=TestSteps.LiquidTransfer("Diluent")
+)
+Tree.create_node(
+    identifier="Diluen2", parent="Diluent", data=TestSteps.LiquidTransfer("Diluent1")
+)
+Tree.create_node(
+    identifier="DTT", parent="Sample1", data=TestSteps.LiquidTransfer("DTT")
+)
+Tree.create_node(identifier="DTT1", parent="DTT", data=TestSteps.Incubate("DTT1"))
+
+Tree.create_node(
+    identifier="DTT2", parent="DTT1", data=TestSteps.LiquidTransfer("DTT1")
 )
 
+Sched = Scheduler.Scheduler("", "")
+
 Tree.show()
+Sched.QueueMethod(Scheduler.Method.Method("", Tree, False))
 
-print(Scheduler.Method.MethodABC("Method", True, Tree).StartingTaskList)
-
+# print(Tree.all_nodes())
 
 quit()

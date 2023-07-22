@@ -1,11 +1,14 @@
 import os
 from dataclasses import dataclass, field
 
+import treelib
+
 from PytomatedLiquidHandling import HAL
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 from PytomatedLiquidHandling.Tools.Logger import Logger, logging
 
-from .Method import MethodTracker
+from .Method import MethodTracker, Method
+from .Method.Step import StepABC, TaskABC
 from .Orchastrator import Orchastrator
 
 
@@ -13,23 +16,18 @@ from .Orchastrator import Orchastrator
 class Scheduler(UniqueObjectABC):
     AppFolderPath: str
     OrchastratorInstance: Orchastrator = field(init=False)
-
-    MethodTrackerInstance: MethodTracker = field(
-        init=False, default_factory=MethodTracker
-    )
-    CompletedMethodTrackerInstance: MethodTracker = field(
-        init=False, default_factory=MethodTracker
-    )
+    TaskTrees: list[treelib.Tree] = field(init=False)
 
     def __post_init__(self):
-        LoggerInstance = Logger(
-            str(self.UniqueIdentifier) + " Logger",
-            logging.DEBUG,
-            os.path.join(self.AppFolderPath, "Logging"),
-        )
-        self.OrchastratorInstance = Orchastrator(
-            HAL.HAL(os.path.join(self.AppFolderPath, "Config"), LoggerInstance),
-        )
-
-    def QueueMethod(self):
+        # LoggerInstance = Logger(
+        #    str(self.UniqueIdentifier) + " Logger",
+        #    logging.DEBUG,
+        #    os.path.join(self.AppFolderPath, "Logging"),
+        # )
+        # self.OrchastratorInstance = Orchastrator(
+        #    HAL.HAL(os.path.join(self.AppFolderPath, "Config"), LoggerInstance),
+        # )
         ...
+
+    def QueueMethod(self, MethodInstance: Method):
+        MethodInstance.GetTaskTree().show()
