@@ -31,6 +31,7 @@ Sched = Scheduler.Scheduler("", "")
 Sched.QueueMethod(Scheduler.Method.Method("", G, False))
 
 Sched.QueueMethod(Scheduler.Method.Method("1", G, False))
+Sched.QueueMethod(Scheduler.Method.Method("2", G, False))
 Sched.RescheduleTasks()
 
 

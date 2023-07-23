@@ -72,7 +72,8 @@ def StepGraphToTaskGraph(
                 TaskGraph.add_node(CombinedNodeName, Steps=StepList, Tasks=Tasks)
                 if ParentNode is not None:
                     TaskGraph.add_edge(ParentNode, CombinedNodeName)
-                    ParentNode = CombinedNodeName
+
+                ParentNode = CombinedNodeName
 
                 Tasks = list()
         # task reordering / splitting. TODO refactor

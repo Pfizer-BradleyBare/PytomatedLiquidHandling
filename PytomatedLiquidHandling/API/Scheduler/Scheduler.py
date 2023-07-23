@@ -44,9 +44,9 @@ class Scheduler(UniqueObjectABC):
 
         ResourceObjects: dict[str | int, processscheduler.Worker] = dict()
         ResourceObjects["Hamilton"] = processscheduler.Worker("Hamilton")
-        ResourceObjects["Heater"] = processscheduler.CumulativeWorker("Heater", 2)
+        ResourceObjects["Heater"] = processscheduler.CumulativeWorker("Heater", 5)
 
-        PriorityCounter = 1000
+        PriorityCounter = self.QueuedMethods.GetNumObjects() + 1
 
         for Method in self.QueuedMethods.GetObjectsAsList():
             PriorityCounter -= 1
@@ -91,11 +91,12 @@ class Scheduler(UniqueObjectABC):
                 # do the inter task precedence. Always lax for better scheduling
 
         problem.add_objective_flowtime()
-        problem.add_objective_priorities()
+        problem.add_objective_priorities(100)
 
-        solver = processscheduler.SchedulingSolver(problem, max_time=60)
+        solver = processscheduler.SchedulingSolver(
+            problem, max_time=600, parallel=False
+        )
         solution = solver.solve()
-        print(solution)
 
         solution.render_gantt_plotly()
 
