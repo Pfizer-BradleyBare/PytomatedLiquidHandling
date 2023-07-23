@@ -26,13 +26,10 @@ G.add_edge("DTT Incubation", "Continue")
 G.add_node("Continue2", Step=TestSteps.LiquidTransfer("Continue2"))
 G.add_edge("Continue", "Continue2")
 
-print(G.number_of_edges())
-print(G.number_of_nodes())
-networkx.draw(G)
-plt.show()
 
 Sched = Scheduler.Scheduler("", "")
 Sched.QueueMethod(Scheduler.Method.Method("", G, False))
+Sched.RescheduleTasks()
 
 
 quit()

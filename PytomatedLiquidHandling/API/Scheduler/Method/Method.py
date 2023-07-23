@@ -10,14 +10,14 @@ from PytomatedLiquidHandling.Tools.Logger import Logger
 from .Step import StepABC, StepTracker, TaskABC
 
 
-def StepTreeToTaskTree(
-    StepTree: networkx.DiGraph, UniqueIdentifier: str
+def StepGraphToTaskGraph(
+    StepGraph: networkx.DiGraph, UniqueIdentifier: str
 ) -> networkx.DiGraph:
-    TaskTree = networkx.DiGraph()
+    TaskGraph = networkx.DiGraph()
 
     def Inner(
         NodeName: str,
-        TaskTree: networkx.DiGraph,
+        TaskGraph: networkx.DiGraph,
         ParentNode: str | None,
     ):
         StartingNodeName = NodeName
@@ -28,10 +28,10 @@ def StepTreeToTaskTree(
         StepList: list[StepABC] = list()
 
         while True:
-            Node = StepTree.nodes[NodeName]
+            Node = StepGraph.nodes[NodeName]
 
             if (
-                len(list(StepTree.predecessors(NodeName))) > 1
+                len(list(StepGraph.predecessors(NodeName))) > 1
                 and NodeName != StartingNodeName
             ):
                 break
@@ -44,7 +44,7 @@ def StepTreeToTaskTree(
 
             TaskList += Step.GetTasks(UniqueIdentifier)
 
-            ChildrenNodes = list(StepTree.successors(NodeName))
+            ChildrenNodes = list(StepGraph.successors(NodeName))
 
             if len(ChildrenNodes) > 1 or len(ChildrenNodes) == 0:
                 break
@@ -69,9 +69,9 @@ def StepTreeToTaskTree(
                     [str(Task.UniqueIdentifier) for Task in Tasks]
                 )
 
-                TaskTree.add_node(CombinedNodeName, Steps=StepList, Tasks=Tasks)
+                TaskGraph.add_node(CombinedNodeName, Steps=StepList, Tasks=Tasks)
                 if ParentNode is not None:
-                    TaskTree.add_edge(ParentNode, CombinedNodeName)
+                    TaskGraph.add_edge(ParentNode, CombinedNodeName)
                     ParentNode = CombinedNodeName
 
                 Tasks = list()
@@ -80,18 +80,18 @@ def StepTreeToTaskTree(
         for ChildNode in ChildrenNodes:
             Inner(
                 ChildNode,
-                TaskTree,
+                TaskGraph,
                 CombinedNodeName,
             )
 
-    Inner(list(networkx.topological_sort(StepTree))[0], TaskTree, None)
-    return TaskTree
+    Inner(list(networkx.topological_sort(StepGraph))[0], TaskGraph, None)
+    return TaskGraph
 
 
 @dataclass
 class Method(UniqueObjectABC):
-    StepTreeInstance: networkx.DiGraph
+    StepGraphInstance: networkx.DiGraph
     Simulate: bool
 
-    def GetTaskTree(self) -> networkx.DiGraph:
-        return StepTreeToTaskTree(self.StepTreeInstance, str(self.UniqueIdentifier))
+    def GetTaskGraph(self) -> networkx.DiGraph:
+        return StepGraphToTaskGraph(self.StepGraphInstance, str(self.UniqueIdentifier))
