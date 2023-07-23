@@ -34,7 +34,7 @@ class TaskABC(UniqueObjectABC):
     # Post completion of "never-ending task" the min execution time should
     # be modified to reflect the total time taken.
 
-    RequiredResources: list[Type[InterfaceABC] | Container]
+    RequiredResources: list[str]
     # resources required by the task. This can be any HAL derived object or any container.
 
     @abstractmethod

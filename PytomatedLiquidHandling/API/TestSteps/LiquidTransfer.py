@@ -19,13 +19,13 @@ class LiquidTransfer(Step.StepABC):
                 PipetteTask.ExecutionWindows.Consecutive,
                 False,
                 15,
-                [],
+                ["Hamilton"],
             ),
             PipetteTask(
                 str(self.UniqueIdentifier) + "Pipette 2" + i,
                 PipetteTask.ExecutionWindows.Consecutive,
                 False,
                 15,
-                [],
+                ["Hamilton"],
             ),
         ]

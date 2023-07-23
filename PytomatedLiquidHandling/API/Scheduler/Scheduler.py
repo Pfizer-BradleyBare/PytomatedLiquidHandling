@@ -42,7 +42,14 @@ class Scheduler(UniqueObjectABC):
             start_time=datetime.now(),
         )
 
+        ResourceObjects: dict[str | int, processscheduler.Worker] = dict()
+        ResourceObjects["Hamilton"] = processscheduler.Worker("Hamilton")
+        ResourceObjects["Heater"] = processscheduler.CumulativeWorker("Heater", 2)
+
+        PriorityCounter = 1000
+
         for Method in self.QueuedMethods.GetObjectsAsList():
+            PriorityCounter -= 1
             NodeTaskObjects: dict[
                 str | int, processscheduler.FixedDurationTask
             ] = dict()
@@ -57,10 +64,13 @@ class Scheduler(UniqueObjectABC):
 
                 for Task in Tasks:
                     TaskObject = processscheduler.FixedDurationTask(
-                        str(Task.UniqueIdentifier), ceil(Task.MinExecutionTime)
+                        str(Task.UniqueIdentifier),
+                        ceil(Task.MinExecutionTime),
+                        priority=PriorityCounter,
                     )
 
-                    TaskObject.add_required_resources([])
+                    for ResourceName in Task.RequiredResources:
+                        TaskObject.add_required_resource(ResourceObjects[ResourceName])
 
                     NodeTaskObjects[str(Task.UniqueIdentifier)] = TaskObject
                 # Create all the tasks
@@ -80,10 +90,14 @@ class Scheduler(UniqueObjectABC):
                     processscheduler.TaskPrecedence(TaskBefore, TaskAfter, kind="lax")
                 # do the inter task precedence. Always lax for better scheduling
 
-        solver = processscheduler.SchedulingSolver(problem)
-        solution = solver.solve()
+        problem.add_objective_flowtime()
+        problem.add_objective_priorities()
 
-        solution.render_gantt_matplotlib()
+        solver = processscheduler.SchedulingSolver(problem, max_time=60)
+        solution = solver.solve()
+        print(solution)
+
+        solution.render_gantt_plotly()
 
     def QueueMethod(self, MethodInstance: Method):
         if self.QueuedMethods.IsTracked(MethodInstance.UniqueIdentifier):
