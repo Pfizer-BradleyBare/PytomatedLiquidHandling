@@ -79,37 +79,3 @@ solution = solver.solve()
 # solution.render_gantt_plotly()
 
 # quit()
-
-import treelib
-
-from PytomatedLiquidHandling.API import Scheduler, TestSteps
-
-Tree = treelib.Tree()
-
-Tree.create_node(identifier="Sample", data=TestSteps.LiquidTransfer("Sample"))
-Tree.create_node(
-    identifier="Sample1", data=TestSteps.LiquidTransfer("Sample1"), parent="Sample"
-)
-Tree.create_node(
-    identifier="Diluent", parent="Sample1", data=TestSteps.LiquidTransfer("Diluent")
-)
-Tree.create_node(
-    identifier="Diluen2", parent="Diluent", data=TestSteps.LiquidTransfer("Diluent1")
-)
-Tree.create_node(
-    identifier="DTT", parent="Sample1", data=TestSteps.LiquidTransfer("DTT")
-)
-Tree.create_node(identifier="DTT1", parent="DTT", data=TestSteps.Incubate("DTT1"))
-
-Tree.create_node(
-    identifier="DTT2", parent="DTT1", data=TestSteps.LiquidTransfer("DTT1")
-)
-
-Sched = Scheduler.Scheduler("", "")
-
-Tree.show()
-Sched.QueueMethod(Scheduler.Method.Method("", Tree, False))
-
-# print(Tree.all_nodes())
-
-quit()
