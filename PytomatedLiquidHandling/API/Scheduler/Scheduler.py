@@ -1,7 +1,8 @@
 import os
 from dataclasses import dataclass, field
 
-import treelib
+import networkx
+import matplotlib.pyplot as plt
 
 from PytomatedLiquidHandling import HAL
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
@@ -16,7 +17,7 @@ from .Orchastrator import Orchastrator
 class Scheduler(UniqueObjectABC):
     AppFolderPath: str
     OrchastratorInstance: Orchastrator = field(init=False)
-    TaskTrees: list[treelib.Tree] = field(init=False)
+    TaskTrees: list[networkx.DiGraph] = field(init=False)
 
     def __post_init__(self):
         # LoggerInstance = Logger(
@@ -30,4 +31,9 @@ class Scheduler(UniqueObjectABC):
         ...
 
     def QueueMethod(self, MethodInstance: Method):
-        MethodInstance.GetTaskTree().show()
+        G = MethodInstance.GetTaskTree()
+        for nodename in G.nodes:
+            print(nodename)
+            print(G.nodes[nodename])
+        networkx.draw(G)
+        plt.show()

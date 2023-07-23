@@ -1,3 +1,42 @@
+import networkx
+import matplotlib.pyplot as plt
+from PytomatedLiquidHandling.API import Scheduler, TestSteps
+
+G = networkx.DiGraph()
+G.add_node("Sample", Step=TestSteps.LiquidTransfer("Sample"))
+G.add_node("Diluent", Step=TestSteps.LiquidTransfer("Diluent"))
+G.add_edge("Sample", "Diluent")
+
+G.add_node("DTT", Step=TestSteps.LiquidTransfer("DTT"))
+G.add_edge("Diluent", "DTT")
+
+G.add_node("DTT Incubation", Step=TestSteps.Incubate("DTT Incubation"))
+G.add_edge("DTT", "DTT Incubation")
+
+G.add_node("DTT2", Step=TestSteps.LiquidTransfer("DTT2"))
+G.add_edge("DTT", "DTT2")
+
+G.add_node("DTT3", Step=TestSteps.LiquidTransfer("DTT3"))
+G.add_edge("DTT2", "DTT3")
+
+G.add_node("Continue", Step=TestSteps.LiquidTransfer("Continue"))
+G.add_edge("DTT3", "Continue")
+G.add_edge("DTT Incubation", "Continue")
+
+G.add_node("Continue2", Step=TestSteps.LiquidTransfer("Continue2"))
+G.add_edge("Continue", "Continue2")
+
+print(G.number_of_edges())
+print(G.number_of_nodes())
+networkx.draw(G)
+plt.show()
+
+Sched = Scheduler.Scheduler("", "")
+Sched.QueueMethod(Scheduler.Method.Method("", G, False))
+
+
+quit()
+
 import processscheduler as ps
 from datetime import timedelta, datetime
 

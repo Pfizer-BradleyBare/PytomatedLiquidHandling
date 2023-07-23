@@ -32,7 +32,7 @@ class StopHeater(TaskABC):
 
 @dataclass
 class Incubate(StepABC):
-    def GetTasks(self) -> list[TaskABC]:
+    def GetTasks(self, i) -> list[TaskABC]:
         return [
             StartHeater(
                 str(self.UniqueIdentifier) + "1",

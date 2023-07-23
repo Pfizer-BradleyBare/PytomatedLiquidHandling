@@ -12,7 +12,7 @@ class PipetteTask(Step.TaskABC):
 
 
 class LiquidTransfer(Step.StepABC):
-    def GetTasks(self) -> list[TaskABC]:
+    def GetTasks(self, i) -> list[TaskABC]:
         return [
             PipetteTask(
                 str(self.UniqueIdentifier) + "Pipette 1",
