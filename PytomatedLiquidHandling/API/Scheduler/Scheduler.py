@@ -90,12 +90,14 @@ class Scheduler(UniqueObjectABC):
                     processscheduler.TaskPrecedence(TaskBefore, TaskAfter, kind="lax")
                 # do the inter task precedence. Always lax for better scheduling
 
-        problem.add_objective_flowtime()
-        problem.add_objective_priorities(100)
+        problem.add_objective_makespan()
+        # Makespan is more consistent than flowtime
 
-        solver = processscheduler.SchedulingSolver(
-            problem, max_time=600, parallel=False
-        )
+        problem.add_objective_priorities(1)
+        # Weight doesn't truly matter with makespan.
+
+        solver = processscheduler.SchedulingSolver(problem, max_time=600)
+        # 500 is the max I have seen for very complex schedules. So 600 should cover that.
         solution = solver.solve()
 
         solution.render_gantt_plotly()
