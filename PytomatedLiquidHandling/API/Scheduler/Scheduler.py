@@ -56,11 +56,13 @@ class Scheduler(UniqueObjectABC):
                 Tasks: list[TaskABC] = Node["Tasks"]
 
                 for Task in Tasks:
-                    NodeTaskObjects[
-                        str(Task.UniqueIdentifier)
-                    ] = processscheduler.FixedDurationTask(
+                    TaskObject = processscheduler.FixedDurationTask(
                         str(Task.UniqueIdentifier), ceil(Task.MinExecutionTime)
                     )
+
+                    TaskObject.add_required_resources([])
+
+                    NodeTaskObjects[str(Task.UniqueIdentifier)] = TaskObject
                 # Create all the tasks
 
                 for Index in range(0, len(Tasks) - 1):

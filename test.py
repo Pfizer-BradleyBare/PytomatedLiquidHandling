@@ -29,6 +29,7 @@ G.add_edge("Continue", "Continue2")
 
 Sched = Scheduler.Scheduler("", "")
 Sched.QueueMethod(Scheduler.Method.Method("", G, False))
+Sched.QueueMethod(Scheduler.Method.Method("1", G, False))
 Sched.RescheduleTasks()
 
 

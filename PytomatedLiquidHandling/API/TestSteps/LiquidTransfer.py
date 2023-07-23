@@ -15,14 +15,14 @@ class LiquidTransfer(Step.StepABC):
     def GetTasks(self, i) -> list[TaskABC]:
         return [
             PipetteTask(
-                str(self.UniqueIdentifier) + "Pipette 1",
+                str(self.UniqueIdentifier) + "Pipette 1" + i,
                 PipetteTask.ExecutionWindows.Consecutive,
                 False,
                 15,
                 [],
             ),
             PipetteTask(
-                str(self.UniqueIdentifier) + "Pipette 2",
+                str(self.UniqueIdentifier) + "Pipette 2" + i,
                 PipetteTask.ExecutionWindows.Consecutive,
                 False,
                 15,
