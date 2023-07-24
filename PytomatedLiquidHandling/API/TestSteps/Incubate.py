@@ -1,67 +1,72 @@
-from typing import Generator
+from dataclasses import dataclass
 
-from PytomatedLiquidHandling.API.Scheduler.Method import Step
 from PytomatedLiquidHandling.API.Scheduler.Method.Step.TaskABC import TaskABC
+from PytomatedLiquidHandling.API.Scheduler.Method.Step import StepABC
 from PytomatedLiquidHandling.API.Scheduler.Orchastrator import Orchastrator
 from PytomatedLiquidHandling.Tools.Logger import Logger
 
 
-class StartHeater(Step.TaskABC):
+@dataclass
+class StartHeater(TaskABC):
     def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):
         return super().Execute(LoggerInstance, OrchastratorInstance)
 
 
-class Transport(Step.TaskABC):
+@dataclass
+class Transport(TaskABC):
     def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):
         return super().Execute(LoggerInstance, OrchastratorInstance)
 
 
-class Wait(Step.TaskABC):
+@dataclass
+class Wait(TaskABC):
     def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):
         return super().Execute(LoggerInstance, OrchastratorInstance)
 
 
-class StopHeater(Step.TaskABC):
+@dataclass
+class StopHeater(TaskABC):
     def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):
         return super().Execute(LoggerInstance, OrchastratorInstance)
 
 
-class Incubate(Step.StepABC):
-    def GetTasks(self) -> list[TaskABC]:
+@dataclass
+class Incubate(StepABC):
+    def GetTasks(self, i) -> list[TaskABC]:
         return [
             StartHeater(
-                str(self.UniqueIdentifier) + "1",
-                False,
+                str(self.UniqueIdentifier) + "1" + i,
                 StartHeater.ExecutionWindows.AsSoonAsPossible,
-                [],
+                False,
                 15,
+                ["Heater"],
             ),
             Transport(
-                str(self.UniqueIdentifier) + "2",
+                str(self.UniqueIdentifier) + "2" + i,
+                StartHeater.ExecutionWindows.Consecutive,
                 False,
-                Transport.ExecutionWindows.Consecutive,
-                [],
                 15,
+                ["Hamilton", "Heater"],
             ),
             Wait(
-                str(self.UniqueIdentifier) + "3",
-                True,
-                Wait.ExecutionWindows.Consecutive,
-                [],
-                15,
+                str(self.UniqueIdentifier) + "3" + i,
+                StartHeater.ExecutionWindows.Consecutive,
+                False,
+                600,
+                ["Heater"],
             ),
             Transport(
-                str(self.UniqueIdentifier) + "4",
+                str(self.UniqueIdentifier) + "4" + i,
+                StartHeater.ExecutionWindows.Consecutive,
                 False,
-                Transport.ExecutionWindows.Consecutive,
-                [],
                 15,
+                ["Hamilton", "Heater"],
             ),
             StopHeater(
-                str(self.UniqueIdentifier) + "5",
-                False,
-                StopHeater.ExecutionWindows.Consecutive,
-                [],
+                str(self.UniqueIdentifier) + "5" + i,
+                StartHeater.ExecutionWindows.Consecutive,
+                True,
                 15,
+                ["Heater"],
             ),
         ]

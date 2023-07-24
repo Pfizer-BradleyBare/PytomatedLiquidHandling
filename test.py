@@ -1,4 +1,42 @@
-from datetime import datetime, timedelta
+import matplotlib.pyplot as plt
+import networkx
+
+from PytomatedLiquidHandling.API import Scheduler, TestSteps
+
+G = networkx.DiGraph()
+G.add_node("Sample", Step=TestSteps.LiquidTransfer("Sample"))
+G.add_node("Diluent", Step=TestSteps.LiquidTransfer("Diluent"))
+G.add_edge("Sample", "Diluent")
+
+G.add_node("DTT", Step=TestSteps.LiquidTransfer("DTT"))
+G.add_edge("Diluent", "DTT")
+
+G.add_node("DTT Incubation", Step=TestSteps.Incubate("DTT Incubation"))
+G.add_edge("DTT", "DTT Incubation")
+
+G.add_node("DTT2", Step=TestSteps.LiquidTransfer("DTT2"))
+G.add_edge("DTT", "DTT2")
+
+G.add_node("DTT3", Step=TestSteps.LiquidTransfer("DTT3"))
+G.add_edge("DTT2", "DTT3")
+
+G.add_node("Continue", Step=TestSteps.LiquidTransfer("Continue"))
+G.add_edge("DTT3", "Continue")
+G.add_edge("DTT Incubation", "Continue")
+
+G.add_node("Continue2", Step=TestSteps.LiquidTransfer("Continue2"))
+G.add_edge("Continue", "Continue2")
+
+
+Sched = Scheduler.Scheduler("", "")
+Sched.QueueMethod(Scheduler.Method.Method("", G, False))
+
+Sched.QueueMethod(Scheduler.Method.Method("1", G, False))
+Sched.QueueMethod(Scheduler.Method.Method("2", G, False))
+Sched.RescheduleTasks()
+
+
+quit()
 
 import processscheduler as ps
 
@@ -37,29 +75,7 @@ release.add_required_resources([justine])
 solver = ps.SchedulingSolver(problem)
 solution = solver.solve()
 
-print(solution)
-solution.render_gantt_plotly()
+# print(solution)
+# solution.render_gantt_plotly()
 
-quit()
-
-
-import treelib
-
-from PytomatedLiquidHandling.API import Scheduler, TestSteps
-
-Tree = treelib.Tree()
-
-Tree.create_node(identifier="Sample", data=TestSteps.LiquidTransfer("Sample"))
-Tree.create_node(
-    identifier="Diluent", parent="Sample", data=TestSteps.LiquidTransfer("Diluent")
-)
-Tree.create_node(
-    identifier="DTT", parent="Sample", data=TestSteps.LiquidTransfer("DTT")
-)
-
-Tree.show()
-
-print(Scheduler.Method.MethodABC("Method", True, Tree).StartingTaskList)
-
-
-quit()
+# quit()

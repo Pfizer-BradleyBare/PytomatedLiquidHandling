@@ -12,20 +12,20 @@ class PipetteTask(Step.TaskABC):
 
 
 class LiquidTransfer(Step.StepABC):
-    def GetTasks(self) -> list[TaskABC]:
+    def GetTasks(self, i) -> list[TaskABC]:
         return [
             PipetteTask(
-                str(self.UniqueIdentifier) + "Pipette 1",
-                False,
+                str(self.UniqueIdentifier) + "Pipette 1" + i,
                 PipetteTask.ExecutionWindows.Consecutive,
-                [],
+                False,
                 15,
+                ["Hamilton"],
             ),
             PipetteTask(
-                str(self.UniqueIdentifier) + "Pipette 2",
-                False,
+                str(self.UniqueIdentifier) + "Pipette 2" + i,
                 PipetteTask.ExecutionWindows.Consecutive,
-                [],
+                False,
                 15,
+                ["Hamilton"],
             ),
         ]

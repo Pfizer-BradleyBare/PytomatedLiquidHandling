@@ -34,10 +34,8 @@ class TaskABC(UniqueObjectABC):
     # Post completion of "never-ending task" the min execution time should
     # be modified to reflect the total time taken.
 
-    RequiredResources: list[Type[InterfaceABC] | Container]
+    RequiredResources: list[str]
     # resources required by the task. This can be any HAL derived object or any container.
-
-    QueueUponCompletion: list[list] = field(init=False, default_factory=list)
 
     @abstractmethod
     def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):
