@@ -6,7 +6,7 @@ setup(
     packages=find_packages(exclude=["Examples"]),
     license="MIT",
     description="Python for labware automation",
-    install_requires=["xlwings", "pyyaml", "flask", "networkx"],
+    install_requires=["xlwings", "pyyaml", "flask", "networkx", "processscheduler"],
     url="https://github.com/Pfizer-BradleyBare/PytomatedLiquidHandling.git",
     author="Bradley Bare",
     author_email="Bradley.Bare@pfizer.com",
