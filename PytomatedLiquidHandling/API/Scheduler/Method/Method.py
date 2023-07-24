@@ -85,7 +85,7 @@ def StepGraphToTaskGraph(
                 CombinedNodeName,
             )
 
-    Inner(list(networkx.topological_sort(StepGraph))[0], TaskGraph, None)
+    Inner(list(networkx.topological_sort(StepGraph))[0], TaskGraph, None)  # type:ignore
     return TaskGraph
 
 

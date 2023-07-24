@@ -1,17 +1,17 @@
 import os
 from dataclasses import dataclass, field
-
-import processscheduler
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 from math import ceil
-import networkx
+
 import matplotlib.pyplot as plt
+import networkx
+import processscheduler
 
 from PytomatedLiquidHandling import HAL
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 from PytomatedLiquidHandling.Tools.Logger import Logger, logging
 
-from .Method import MethodTracker, Method
+from .Method import Method, MethodTracker
 from .Method.Step import StepABC, TaskABC
 from .Orchastrator import Orchastrator
 
@@ -55,7 +55,7 @@ class Scheduler(UniqueObjectABC):
             ] = dict()
 
             TaskGraph = Method.GetTaskGraph()
-            SortedNodes = list(networkx.topological_sort(TaskGraph))
+            SortedNodes = list(networkx.topological_sort(TaskGraph))  # type:ignore
 
             for NodeName in SortedNodes:
                 Node = TaskGraph.nodes[NodeName]
