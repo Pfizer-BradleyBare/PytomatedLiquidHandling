@@ -1,14 +1,17 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Generic, TypeVar
+
+T = TypeVar("T")
+R = TypeVar("R")
 
 
-class Open(ABC):
-    def __init__(self, OuterInstance):
-        self.Outer: Container = OuterInstance
+class OpenInterface(ABC, Generic[T]):
+    def __init__(self, OuterInstance: T):
+        self.Outer: T = OuterInstance
 
     def Execute(self):
-        return self.Outer.a
+        return self.Outer
 
     def ExecutionTime(self) -> float:
         ...
@@ -23,10 +26,21 @@ class Container:
         self.b = b
         self.c = c
         self.d = d
-        self.Open: Open = Open(self)
+        self.OpenInterface: Open = Open(self)
 
 
-print(Container(1, 2, 3, 4).Open.Execute())
+class Open(OpenInterface[Container]):
+    class Options:
+        ...
+
+    @staticmethod
+    def Execute(self, OptionsInstance: Options):
+        return self.Outer.a
+
+
+c = Container(1, 2, 3, 4)
+
+print(c.OpenInterface.Execute(c.OpenInterface.Options()))
 quit()
 
 
