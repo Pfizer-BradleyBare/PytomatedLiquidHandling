@@ -1,3 +1,35 @@
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Any
+
+
+class Open(ABC):
+    def __init__(self, OuterInstance):
+        self.Outer: Container = OuterInstance
+
+    def Execute(self):
+        return self.Outer.a
+
+    def ExecutionTime(self) -> float:
+        ...
+
+    def __call__(self):
+        return self.Execute()
+
+
+class Container:
+    def __init__(self, a, b, c, d):
+        self.a = a
+        self.b = b
+        self.c = c
+        self.d = d
+        self.Open: Open = Open(self)
+
+
+print(Container(1, 2, 3, 4).Open.Execute())
+quit()
+
+
 import matplotlib.pyplot as plt
 import networkx
 
