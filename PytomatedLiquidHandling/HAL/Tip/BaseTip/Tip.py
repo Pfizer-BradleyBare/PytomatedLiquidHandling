@@ -2,8 +2,12 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
-
-from ...Tools.AbstractClasses import InterfaceABC
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
+from ...Tools.AbstractClasses import (
+    InterfaceABC,
+    InterfaceCommandABC,
+    OptionsInterfaceCommandABC,
+)
 
 
 @dataclass
@@ -11,28 +15,23 @@ class Tip(InterfaceABC, UniqueObjectABC):
     PickupSequence: str
     MaxVolume: float
 
-    _RemainingTips: int = field(init=False, default=0)
+    class Initialize(InterfaceABC.Initialize):
+        @staticmethod
+        def Execute(InterfaceHandle) -> None:
+            if not isinstance(InterfaceHandle, Tip):
+                raise Exception("Should never happen")
 
-    @abstractmethod
-    def Reload(
-        self,
-    ):
+            InterfaceABC.Initialize.Execute(InterfaceHandle)
+
+            InterfaceHandle.TipCounterEditCommand.Execute(InterfaceHandle)
+
+    class TipCounterEditCommand(InterfaceCommandABC[None]):
         ...
 
-    @abstractmethod
-    def GetTipPositions(
-        self,
-        *,
-        NumTips: int,
-    ) -> list[int]:
-        ...
+    class GetTipPositionsCommand(OptionsInterfaceCommandABC[list[int]]):
+        @dataclass(kw_only=True)
+        class Options(OptionsABC):
+            NumTips: int
 
-    @property
-    def RemainingTips(self) -> int:
-        return self._RemainingTips
-
-    @abstractmethod
-    def _UpdateRemainingTips(
-        self,
-    ):
+    class GetRemainingTips(InterfaceCommandABC[int]):
         ...

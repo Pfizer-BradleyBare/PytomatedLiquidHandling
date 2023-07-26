@@ -1,41 +1,63 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Any, Generic, TypeVar
-
-T = TypeVar("T")
-R = TypeVar("R")
+from dataclasses import dataclass, field
+from typing import Any, Generic, TypeVar, Callable, Self
 
 
-class OpenInterface(ABC, Generic[T]):
-    def __init__(self, OuterInstance: T):
-        self.Outer: T = OuterInstance
+@dataclass(frozen=True)
+class CommandGrouping:
+    Execute: Callable[[], None]
+    ExecuteTime: Callable[[], float]
 
-    def Execute(self):
-        return self.Outer
 
-    def ExecutionTime(self) -> float:
+@dataclass
+class Container(ABC):
+    OpenCommand: CommandGrouping = field(init=False)
+    CloseCommand: CommandGrouping = field(init=False)
+
+    @abstractmethod
+    def _Open(self):
         ...
 
-    def __call__(self):
-        return self.Execute()
-
-
-class Container:
-    def __init__(self, OpenInterfaceInstance):
-        self.OpenInterface: Open = Open(self)
-
-
-class Open(OpenInterface[Container]):
-    class Options:
+    @abstractmethod
+    def _TimeToOpen(self) -> float:
         ...
 
-    def Execute(self, OptionsInstance: Options):
-        return self.Outer.OpenInterface.Outer.OpenInterface.Outer.a
+    @abstractmethod
+    def _Close(self):
+        ...
+
+    @abstractmethod
+    def _TimeToClose(self) -> float:
+        ...
+
+    def __post_init__(self):
+        self.OpenCommand = CommandGrouping(self._Open, self._TimeToOpen)
+        self.CloseCommand = CommandGrouping(self._Close, self._TimeToClose)
 
 
-c = Container(1, 2, 3, 4)
+@dataclass
+class Tube(Container):
+    def _Open(self):
+        # do open
+        ...
 
-print(c.OpenInterface.Execute(c.OpenInterface.Options()))
+    def _TimeToOpen(self) -> float:
+        # Calculate time required to open
+        ...
+
+    def _Close(self):
+        # do close
+        ...
+
+    def _TimeToClose(self) -> float:
+        # Calculate time required to close
+        ...
+
+
+TubeInstance = Tube()
+TubeInstance.OpenCommand.ExecuteTime()  # Get execution time
+TubeInstance.OpenCommand.Execute()  # Execute
+
 quit()
 
 

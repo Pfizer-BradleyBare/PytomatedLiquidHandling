@@ -24,7 +24,7 @@ class ClosedContainerABC(InterfaceABC, UniqueObjectABC):
     SupportedDeckLocationTrackerInstance: DeckLocation.DeckLocationTracker
     SupportedLabwareTrackerInstance: Labware.LabwareTracker
 
-    class OpenCommand(OptionsTrackerInterfaceCommandABC):
+    class Open(OptionsTrackerInterfaceCommandABC[None]):
         @dataclass(kw_only=True)
         class Options(OpenCloseOptions):
             ...
@@ -33,7 +33,7 @@ class ClosedContainerABC(InterfaceABC, UniqueObjectABC):
         class OptionsTracker(OptionsTrackerABC[Options]):
             ...
 
-    class CloseCommand(OptionsTrackerInterfaceCommandABC):
+    class Close(OptionsTrackerInterfaceCommandABC[None]):
         @dataclass(kw_only=True)
         class Options(OpenCloseOptions):
             ...

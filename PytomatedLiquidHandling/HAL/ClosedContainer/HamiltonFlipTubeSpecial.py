@@ -6,13 +6,13 @@ from .BaseClosedContainer import ClosedContainerABC
 
 @dataclass
 class HamiltonFlipTubeSpecial(ClosedContainerABC):
-    class InitializeCommand(ClosedContainerABC.InitializeCommand):
+    class Initialize(ClosedContainerABC.Initialize):
         @staticmethod
-        def Execute(InterfaceHandle):
+        def Execute(InterfaceHandle) -> None:
             if not isinstance(InterfaceHandle, HamiltonFlipTubeSpecial):
                 raise Exception("Should not happen")
 
-            ClosedContainerABC.InitializeCommand.Execute(InterfaceHandle)
+            ClosedContainerABC.Initialize.Execute(InterfaceHandle)
 
             Command = FlipTubeDriver.Initialize.Command(
                 CustomErrorHandling=InterfaceHandle.CustomErrorHandling,
@@ -23,14 +23,14 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
                 Command, FlipTubeDriver.Initialize.Response
             )
 
-    class OpenCommand(ClosedContainerABC.OpenCommand):
+    class Open(ClosedContainerABC.Open):
         @staticmethod
-        def Execute(InterfaceHandle, OptionsTrackerInstance):
+        def Execute(InterfaceHandle, OptionsTrackerInstance) -> None:
             if not isinstance(InterfaceHandle, HamiltonFlipTubeSpecial):
                 raise Exception("Should not happen")
 
             if not isinstance(
-                OptionsTrackerInstance, ClosedContainerABC.OpenCommand.OptionsTracker
+                OptionsTrackerInstance, ClosedContainerABC.Open.OptionsTracker
             ):
                 raise Exception("Should not happen")
 
@@ -63,14 +63,14 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
         def ExecutionTime(OptionsTrackerInstance) -> float:
             return 0
 
-    class CloseCommand(ClosedContainerABC.OpenCommand):
+    class Close(ClosedContainerABC.Close):
         @staticmethod
-        def Execute(InterfaceHandle, OptionsTrackerInstance):
+        def Execute(InterfaceHandle, OptionsTrackerInstance) -> None:
             if not isinstance(InterfaceHandle, HamiltonFlipTubeSpecial):
                 raise Exception("Should not happen")
 
             if not isinstance(
-                OptionsTrackerInstance, ClosedContainerABC.OpenCommand.OptionsTracker
+                OptionsTrackerInstance, ClosedContainerABC.Close.OptionsTracker
             ):
                 raise Exception("Should not happen")
 

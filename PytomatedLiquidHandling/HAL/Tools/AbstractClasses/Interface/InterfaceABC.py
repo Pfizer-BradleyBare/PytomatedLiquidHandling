@@ -10,9 +10,9 @@ class InterfaceABC(ABC):
     BackendInstance: BackendABC
     CustomErrorHandling: bool
 
-    class InitializeCommand(InterfaceCommandABC):
+    class Initialize(InterfaceCommandABC[None]):
         @staticmethod
-        def Execute(InterfaceHandle):
+        def Execute(InterfaceHandle) -> None:
             if not isinstance(InterfaceHandle, InterfaceABC):
                 raise Exception("Should never happen")
 
@@ -22,9 +22,9 @@ class InterfaceABC(ABC):
         def ExecutionTime() -> float:
             return 0
 
-    class DeinitializeCommand(InterfaceCommandABC):
+    class Deinitialize(InterfaceCommandABC[None]):
         @staticmethod
-        def Execute(InterfaceHandle):
+        def Execute(InterfaceHandle) -> None:
             if not isinstance(InterfaceHandle, InterfaceABC):
                 raise Exception("Should never happen")
 
