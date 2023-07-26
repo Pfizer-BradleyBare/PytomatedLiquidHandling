@@ -3,6 +3,7 @@ from enum import Enum
 
 import networkx
 
+from PytomatedLiquidHandling.API.Tools.Container import ContainerTracker
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
 from .Step import StepABC, TaskABC
@@ -91,6 +92,10 @@ def StepGraphToTaskGraph(
 class Method(UniqueObjectABC):
     StepGraphInstance: networkx.DiGraph
     Simulate: bool
+
+    ContainerTrackerInstance: ContainerTracker = field(
+        init=False, default_factory=ContainerTracker
+    )
 
     def GetTaskGraph(self) -> networkx.DiGraph:
         return StepGraphToTaskGraph(self.StepGraphInstance, str(self.UniqueIdentifier))
