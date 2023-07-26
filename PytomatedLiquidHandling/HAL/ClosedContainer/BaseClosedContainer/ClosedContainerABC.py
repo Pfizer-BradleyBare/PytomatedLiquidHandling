@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from abc import abstractmethod
-
+from typing import Callable, cast
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
     OptionsABC,
     OptionsTrackerABC,
@@ -12,11 +12,7 @@ from ...Tools.AbstractClasses import InterfaceABC, OptionsTrackerInterfaceComman
 
 
 @dataclass(frozen=True)
-class ClosedContainerInterfaceCommand(
-    OptionsTrackerInterfaceCommandABC[
-        None, "ClosedContainerInterfaceCommand.OptionsTracker"  # type:ignore
-    ]
-):
+class ClosedContainerInterfaceCommand(OptionsTrackerInterfaceCommandABC[None]):
     @dataclass(kw_only=True)
     class Options(OptionsABC):
         LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
@@ -62,8 +58,10 @@ class ClosedContainerABC(InterfaceABC, UniqueObjectABC):
     def __post_init__(self):
         InterfaceABC.__post_init__(self)
         self.Open = ClosedContainerInterfaceCommand(
-            Execute=self._Open, ExecutionTime=self._OpenTime
+            Execute=cast(Callable, self._Open),
+            ExecutionTime=cast(Callable, self._OpenTime),
         )
         self.Close = ClosedContainerInterfaceCommand(
-            Execute=self._Close, ExecutionTime=self._CloseTime
+            Execute=cast(Callable, self._Close),
+            ExecutionTime=cast(Callable, self._CloseTime),
         )
