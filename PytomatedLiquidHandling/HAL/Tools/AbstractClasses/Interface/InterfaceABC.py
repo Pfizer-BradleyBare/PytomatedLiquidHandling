@@ -2,6 +2,7 @@ from abc import ABC
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
+
 from ..InterfaceCommand import InterfaceCommandABC
 
 
@@ -14,10 +15,12 @@ class InterfaceABC(ABC):
 
     def __post_init__(self):
         self.Initialize = InterfaceCommandABC(
-            Execute=self._Initialize, ExecutionTime=self._InitializeTime
+            ExecuteFunction=self._Initialize,
+            ExecutionTimeFunction=self._InitializeTime,
         )
         self.Deinitialize = InterfaceCommandABC(
-            Execute=self._Deinitialize, ExecutionTime=self._DeinitializeTime
+            ExecuteFunction=self._Deinitialize,
+            ExecutionTimeFunction=self._DeinitializeTime,
         )
 
     def _Initialize(self):

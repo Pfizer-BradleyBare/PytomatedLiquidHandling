@@ -1,13 +1,16 @@
-from dataclasses import dataclass
-from typing import Any, Generic, TypeVar, Callable
+from typing import Any, Callable, Generic, TypeVar
 
 ExecuteReturnType = TypeVar("ExecuteReturnType")
 
 
-@dataclass(frozen=True, kw_only=True)
 class InterfaceCommandABC(Generic[ExecuteReturnType]):
-    Execute: Callable[[], ExecuteReturnType]
-    ExecutionTime: Callable[[], float]
+    def __init__(
+        self,
+        ExecuteFunction: Callable[[], ExecuteReturnType],
+        ExecutionTimeFunction: Callable[[], float],
+    ):
+        self.Execute: Callable[[], ExecuteReturnType] = ExecuteFunction
+        self.ExecutionTime: Callable[[], float] = ExecutionTimeFunction
 
     def __call__(self) -> ExecuteReturnType:
         return self.Execute()

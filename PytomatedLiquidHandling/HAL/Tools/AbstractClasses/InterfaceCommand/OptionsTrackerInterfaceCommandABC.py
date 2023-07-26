@@ -1,13 +1,16 @@
 from dataclasses import dataclass
-from typing import Generic, TypeVar, Callable, Any
+from typing import Callable, Generic, TypeVar
+
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsTrackerABC
 
 ExecuteReturnType = TypeVar("ExecuteReturnType")
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(kw_only=True, init=False)
 class OptionsTrackerInterfaceCommandABC(Generic[ExecuteReturnType]):
-    Execute: Callable[[Any], ExecuteReturnType]
-    ExecutionTime: Callable[[Any], float]
+    def __init__(self, ExecuteFunction: Callable, ExecutionTimeFunction: Callable):
+        self.Execute: Callable[[OptionsTrackerABC], ExecuteReturnType] = ExecuteFunction
+        self.ExecutionTime: Callable[[OptionsTrackerABC], float] = ExecutionTimeFunction
 
-    def __call__(self, OptionsTrackerInstance: Any) -> ExecuteReturnType:
+    def __call__(self, OptionsTrackerInstance: OptionsTrackerABC) -> ExecuteReturnType:
         return self.Execute(OptionsTrackerInstance)
