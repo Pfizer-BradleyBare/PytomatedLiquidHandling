@@ -11,22 +11,19 @@ from ...Tools.AbstractClasses import (
 )
 
 
-class TipCounterEditInterfaceCommand(InterfaceCommandABC[None]):
-    ...
-
-
-class GetTipPositionsInterfaceCommand(OptionsInterfaceCommandABC[list[int]]):
-    @dataclass(kw_only=True)
-    class Options(OptionsABC):
-        NumTips: int
-
-
-class GetRemainingTipsInterfaceCommand(InterfaceCommandABC[int]):
-    ...
-
-
 @dataclass
 class Tip(InterfaceABC, UniqueObjectABC):
+    class TipCounterEditInterfaceCommand(InterfaceCommandABC[None]):
+        ...
+
+    class GetTipPositionsInterfaceCommand(OptionsInterfaceCommandABC[list[int]]):
+        @dataclass(kw_only=True)
+        class Options(OptionsABC):
+            NumTips: int
+
+    class GetRemainingTipsInterfaceCommand(InterfaceCommandABC[int]):
+        ...
+
     PickupSequence: str
     MaxVolume: float
     TipCounterEdit: TipCounterEditInterfaceCommand = field(init=False)
@@ -67,12 +64,12 @@ class Tip(InterfaceABC, UniqueObjectABC):
 
     def __post_init__(self):
         InterfaceABC.__post_init__(self)
-        self.TipCounterEdit = TipCounterEditInterfaceCommand(
+        self.TipCounterEdit = Tip.TipCounterEditInterfaceCommand(
             self._TipCounterEdit, self._TipCounterEditTime
         )
-        self.GetTipPositionsself = GetTipPositionsInterfaceCommand(
+        self.GetTipPositionsself = Tip.GetTipPositionsInterfaceCommand(
             self._GetTipPositions, self._GetTipPositionsTime
         )
-        self.GetRemainingTips = GetRemainingTipsInterfaceCommand(
+        self.GetRemainingTips = Tip.GetRemainingTipsInterfaceCommand(
             self._GetRemainingTips, self._GetRemainingTipsTime
         )

@@ -29,7 +29,7 @@ class HamiltonTipNTR(Tip):
         return 0
 
     def _GetTipPositions(
-        self, OptionsInstance: Tip.GetTipPositions.Options
+        self, OptionsInstance: Tip.GetTipPositionsInterfaceCommand.Options
     ) -> list[int]:
         CommandInstance = NTRDriver.GetTipPositions.Command(
             OptionsInstance=NTRDriver.GetTipPositions.Options(
@@ -50,7 +50,7 @@ class HamiltonTipNTR(Tip):
         return ResponseInstance.GetTipPositions()
 
     def _GetTipPositionsTime(
-        self, OptionsInstance: Tip.GetTipPositions.Options
+        self, OptionsInstance: Tip.GetTipPositionsInterfaceCommand.Options
     ) -> float:
         return 0
 

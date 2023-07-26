@@ -16,7 +16,10 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
         self.BackendInstance.WaitForResponseBlocking(Command)
         self.BackendInstance.GetResponse(Command, FlipTubeDriver.Initialize.Response)
 
-    def _Open(self, OptionsTrackerInstance: ClosedContainerABC.Open.OptionsTracker):
+    def _Open(
+        self,
+        OptionsTrackerInstance: ClosedContainerABC.OpenCloseInterfaceCommand.OptionsTracker,
+    ):
         OpenOptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker(
             ToolSequence=self.ToolSequence
         )
@@ -41,11 +44,15 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
         self.BackendInstance.GetResponse(Command, FlipTubeDriver.Open.Response)
 
     def _OpenTime(
-        self, OptionsTrackerInstance: ClosedContainerABC.Open.OptionsTracker
+        self,
+        OptionsTrackerInstance: ClosedContainerABC.OpenCloseInterfaceCommand.OptionsTracker,
     ) -> float:
         return 0
 
-    def _Close(self, OptionsTrackerInstance: ClosedContainerABC.Close.OptionsTracker):
+    def _Close(
+        self,
+        OptionsTrackerInstance: ClosedContainerABC.OpenCloseInterfaceCommand.OptionsTracker,
+    ):
         CloseOptionsTrackerInstance = FlipTubeDriver.CloseSpecial.OptionsTracker(
             ToolSequence=self.ToolSequence
         )
@@ -70,6 +77,7 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
         self.BackendInstance.GetResponse(Command, FlipTubeDriver.CloseSpecial.Response)
 
     def _CloseTime(
-        self, OptionsTrackerInstance: ClosedContainerABC.Close.OptionsTracker
+        self,
+        OptionsTrackerInstance: ClosedContainerABC.OpenCloseInterfaceCommand.OptionsTracker,
     ) -> float:
         return 0

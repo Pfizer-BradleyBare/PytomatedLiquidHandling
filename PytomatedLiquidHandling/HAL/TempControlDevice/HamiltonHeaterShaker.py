@@ -1,9 +1,5 @@
 from dataclasses import dataclass, field
 
-from PytomatedLiquidHandling.HAL.TempControlDevice.BaseTempControlDevice.TempControlDevice import (
-    SetTemperatureInterfaceCommand,
-)
-
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.TemperatureControl import HeaterShaker as HeaterShakerDriver
 from .BaseTempControlDevice import TempControlDevice
@@ -110,7 +106,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         return 0
 
     def _SetTemperature(
-        self, OptionsInstance: TempControlDevice.SetTemperature.Options
+        self, OptionsInstance: TempControlDevice.SetTemperatureInterfaceCommand.Options
     ):
         CommandInstance = HeaterShakerDriver.StartTemperatureControl.Command(
             OptionsInstance=HeaterShakerDriver.StartTemperatureControl.Options(
@@ -126,7 +122,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         )
 
     def _SetTemperatureTime(
-        self, OptionsInstance: TempControlDevice.SetTemperature.Options
+        self, OptionsInstance: TempControlDevice.SetTemperatureInterfaceCommand.Options
     ) -> float:
         return 0
 
@@ -149,7 +145,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         return 0
 
     def _SetShakingSpeed(
-        self, OptionsInstance: TempControlDevice.SetShakingSpeed.Options
+        self, OptionsInstance: TempControlDevice.SetShakingSpeedInterfaceCommand.Options
     ):
         if OptionsInstance.ShakingSpeed == 0:
             CommandInstance = HeaterShakerDriver.StopShakeControl.Command(
@@ -204,7 +200,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             )
 
     def _SetShakingSpeedTime(
-        self, OptionsInstance: TempControlDevice.SetShakingSpeed.Options
+        self, OptionsInstance: TempControlDevice.SetShakingSpeedInterfaceCommand.Options
     ) -> float:
         return 0
 

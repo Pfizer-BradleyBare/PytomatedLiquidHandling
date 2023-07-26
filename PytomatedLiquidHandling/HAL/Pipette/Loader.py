@@ -6,7 +6,6 @@ from PytomatedLiquidHandling.HAL import Backend, DeckLocation, Labware, Tip
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Tools.Logger import Logger
-from . import PipetteTracker
 from .BasePipette import (
     LiquidClass,
     LiquidClassCategory,
@@ -14,6 +13,7 @@ from .BasePipette import (
     Pipette,
     PipetteTip,
     PipetteTipTracker,
+    PipetteTracker,
 )
 from .HamiltonCORE96Head import HamiltonCORE96Head
 from .HamiltonPortraitCORE8Channel import HamiltonPortraitCORE8Channel

@@ -15,8 +15,8 @@ class HamiltonPortraitCORE8Channel(Pipette):
 
     def ConvertTransferVolumesToSupportedRange(
         self,
-        OptionsTrackerInstance: Pipette.Transfer.OptionsTracker,
-    ) -> Pipette.Transfer.OptionsTracker:
+        OptionsTrackerInstance: Pipette.TransferInterfaceCommand.OptionsTracker,
+    ) -> Pipette.TransferInterfaceCommand.OptionsTracker:
         MaxVolume = self.SupportedTipTrackerInstance.GetObjectsAsList()[
             -1
         ].TipInstance.MaxVolume
@@ -33,7 +33,7 @@ class HamiltonPortraitCORE8Channel(Pipette):
 
     def _Transfer(
         self,
-        OptionsTrackerInstance: Pipette.Transfer.OptionsTracker,
+        OptionsTrackerInstance: Pipette.TransferInterfaceCommand.OptionsTracker,
     ):
         OptionsTrackerInstance = self.ConvertTransferVolumesToSupportedRange(
             OptionsTrackerInstance
@@ -172,6 +172,6 @@ class HamiltonPortraitCORE8Channel(Pipette):
             )
 
     def _TransferTime(
-        self, OptionsTrackerInstance: Pipette.Transfer.OptionsTracker
+        self, OptionsTrackerInstance: Pipette.TransferInterfaceCommand.OptionsTracker
     ) -> float:
         return 0

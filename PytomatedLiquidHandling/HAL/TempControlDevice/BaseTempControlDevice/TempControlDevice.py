@@ -13,28 +13,24 @@ from ...Tools.AbstractClasses import (
 from .TempLimits.TempLimits import TempLimits
 
 
-class SetTemperatureInterfaceCommand(OptionsInterfaceCommandABC[None]):
-    @dataclass
-    class Options(OptionsABC):
-        Temperature: float
-
-
-class GetTemperatureInterfaceCommand(InterfaceCommandABC[float]):
-    ...
-
-
-class SetShakingSpeedInterfaceCommand(OptionsInterfaceCommandABC[None]):
-    @dataclass
-    class Options(OptionsABC):
-        ShakingSpeed: int
-
-
-class GetShakingSpeedInterfaceCommand(InterfaceCommandABC[int]):
-    ...
-
-
 @dataclass
 class TempControlDevice(InterfaceABC, UniqueObjectABC):
+    class SetTemperatureInterfaceCommand(OptionsInterfaceCommandABC[None]):
+        @dataclass
+        class Options(OptionsABC):
+            Temperature: float
+
+    class GetTemperatureInterfaceCommand(InterfaceCommandABC[float]):
+        ...
+
+    class SetShakingSpeedInterfaceCommand(OptionsInterfaceCommandABC[None]):
+        @dataclass
+        class Options(OptionsABC):
+            ShakingSpeed: int
+
+    class GetShakingSpeedInterfaceCommand(InterfaceCommandABC[int]):
+        ...
+
     ComPort: str | int
     HeatingSupported: bool
     CoolingSupported: bool
@@ -110,15 +106,15 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
         ...
 
     def __post_init__(self):
-        self.SetTemperature = SetTemperatureInterfaceCommand(
+        self.SetTemperature = TempControlDevice.SetTemperatureInterfaceCommand(
             self._SetTemperature, self._SetTemperatureTime
         )
-        self.GetTemperature = GetTemperatureInterfaceCommand(
+        self.GetTemperature = TempControlDevice.GetTemperatureInterfaceCommand(
             self._GetTemperature, self._GetTemperatureTime
         )
-        self.SetShakingSpeed = SetShakingSpeedInterfaceCommand(
+        self.SetShakingSpeed = TempControlDevice.SetShakingSpeedInterfaceCommand(
             self._SetShakingSpeed, self._SetShakingSpeedTime
         )
-        self.GetShakingSpeed = GetShakingSpeedInterfaceCommand(
+        self.GetShakingSpeed = TempControlDevice.GetShakingSpeedInterfaceCommand(
             self._GetShakingSpeed, self._GetShakingSpeedTime
         )

@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.HAL.Tip.BaseTip.Tip import GetTipPositionsInterfaceCommand
-
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Tip import FTR as FTRDriver
 from .BaseTip import Tip
@@ -24,7 +22,7 @@ class HamiltonTipFTR(Tip):
         return 0
 
     def _GetTipPositions(
-        self, OptionsInstance: Tip.GetTipPositions.Options
+        self, OptionsInstance: Tip.GetTipPositionsInterfaceCommand.Options
     ) -> list[int]:
         CommandInstance = FTRDriver.GetTipPositions.Command(
             OptionsInstance=FTRDriver.GetTipPositions.Options(
@@ -42,7 +40,7 @@ class HamiltonTipFTR(Tip):
         return ResponseInstance.GetTipPositions()
 
     def _GetTipPositionsTime(
-        self, OptionsInstance: Tip.GetTipPositions.Options
+        self, OptionsInstance: Tip.GetTipPositionsInterfaceCommand.Options
     ) -> float:
         return 0
 

@@ -11,7 +11,7 @@ class HamiltonCORE96Head(Pipette):
     BackendInstance: HamiltonBackendABC
 
     def OptionsSupported(
-        self, OptionsTrackerInstance: Pipette.Transfer.OptionsTracker
+        self, OptionsTrackerInstance: Pipette.TransferInterfaceCommand.OptionsTracker
     ) -> bool:
         if (
             len(
@@ -107,7 +107,7 @@ class HamiltonCORE96Head(Pipette):
 
     def _Transfer(
         self,
-        OptionsTrackerInstance: Pipette.Transfer.OptionsTracker,
+        OptionsTrackerInstance: Pipette.TransferInterfaceCommand.OptionsTracker,
     ):
         Options = OptionsTrackerInstance.GetObjectsAsList()[0]
         # All the options should be the same. So we can just take the first one for the majority
@@ -171,6 +171,6 @@ class HamiltonCORE96Head(Pipette):
             )
 
     def _TransferTime(
-        self, OptionsTrackerInstance: Pipette.Transfer.OptionsTracker
+        self, OptionsTrackerInstance: Pipette.TransferInterfaceCommand.OptionsTracker
     ) -> float:
         return 0

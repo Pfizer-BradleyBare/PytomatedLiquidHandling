@@ -1,9 +1,5 @@
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.HAL.ClosedContainer.BaseClosedContainer.ClosedContainerABC import (
-    ClosedContainerInterfaceCommand,
-)
-
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
 from .BaseClosedContainer import ClosedContainerABC
 
@@ -20,7 +16,10 @@ class HamiltonFlipTube(ClosedContainerABC):
         self.BackendInstance.WaitForResponseBlocking(Command)
         self.BackendInstance.GetResponse(Command, FlipTubeDriver.Initialize.Response)
 
-    def _Open(self, OptionsTrackerInstance: ClosedContainerABC.Open.OptionsTracker):
+    def _Open(
+        self,
+        OptionsTrackerInstance: ClosedContainerABC.OpenCloseInterfaceCommand.OptionsTracker,
+    ):
         OpenOptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker(
             ToolSequence=self.ToolSequence
         )
@@ -45,11 +44,15 @@ class HamiltonFlipTube(ClosedContainerABC):
         self.BackendInstance.GetResponse(Command, FlipTubeDriver.Open.Response)
 
     def _OpenTime(
-        self, OptionsTrackerInstance: ClosedContainerABC.Open.OptionsTracker
+        self,
+        OptionsTrackerInstance: ClosedContainerABC.OpenCloseInterfaceCommand.OptionsTracker,
     ) -> float:
         return 0
 
-    def _Close(self, OptionsTrackerInstance: ClosedContainerABC.Close.OptionsTracker):
+    def _Close(
+        self,
+        OptionsTrackerInstance: ClosedContainerABC.OpenCloseInterfaceCommand.OptionsTracker,
+    ):
         CloseOptionsTrackerInstance = FlipTubeDriver.Close.OptionsTracker(
             ToolSequence=self.ToolSequence
         )
@@ -74,6 +77,7 @@ class HamiltonFlipTube(ClosedContainerABC):
         self.BackendInstance.GetResponse(Command, FlipTubeDriver.Close.Response)
 
     def _CloseTime(
-        self, OptionsTrackerInstance: ClosedContainerABC.Close.OptionsTracker
+        self,
+        OptionsTrackerInstance: ClosedContainerABC.OpenCloseInterfaceCommand.OptionsTracker,
     ) -> float:
         return 0

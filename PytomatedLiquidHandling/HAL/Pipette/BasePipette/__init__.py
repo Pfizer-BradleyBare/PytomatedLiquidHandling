@@ -1,4 +1,3 @@
-from .Interface import TransferOptions
 from .LiquidClass import LiquidClass, LiquidClassCategory, LiquidClassCategoryTracker
 from .Pipette import Pipette
 from .PipetteTip.PipetteTip import PipetteTip

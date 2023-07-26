@@ -1,9 +1,5 @@
 from dataclasses import dataclass, field
 
-from PytomatedLiquidHandling.HAL.TempControlDevice.BaseTempControlDevice.TempControlDevice import (
-    SetTemperatureInterfaceCommand,
-)
-
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.TemperatureControl import HeaterCooler as HeaterCoolerDriver
 from .BaseTempControlDevice import TempControlDevice
@@ -59,7 +55,7 @@ class HamiltonHeaterCooler(TempControlDevice):
         return 0
 
     def _SetTemperature(
-        self, OptionsInstance: TempControlDevice.SetTemperature.Options
+        self, OptionsInstance: TempControlDevice.SetTemperatureInterfaceCommand.Options
     ):
         CommandInstance = HeaterCoolerDriver.StartTemperatureControl.Command(
             OptionsInstance=HeaterCoolerDriver.StartTemperatureControl.Options(
@@ -75,7 +71,7 @@ class HamiltonHeaterCooler(TempControlDevice):
         )
 
     def _SetTemperatureTime(
-        self, OptionsInstance: TempControlDevice.SetTemperature.Options
+        self, OptionsInstance: TempControlDevice.SetTemperatureInterfaceCommand.Options
     ) -> float:
         return 0
 
@@ -100,29 +96,25 @@ class HamiltonHeaterCooler(TempControlDevice):
         return 0
 
     def _SetShakingSpeed(
-        self, OptionsInstance: TempControlDevice.SetShakingSpeed.Options
+        self, OptionsInstance: TempControlDevice.SetShakingSpeedInterfaceCommand.Options
     ):
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )
 
     def _SetShakingSpeedTime(
-        self, OptionsInstance: TempControlDevice.SetShakingSpeed.Options
+        self, OptionsInstance: TempControlDevice.SetShakingSpeedInterfaceCommand.Options
     ) -> float:
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )
 
-    def _GetShakingSpeed(
-        self, OptionsInstance: TempControlDevice.SetShakingSpeed.Options
-    ) -> int:
+    def _GetShakingSpeed(self) -> int:
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )
 
-    def _GetShakingSpeedTime(
-        self, OptionsInstance: TempControlDevice.SetShakingSpeed.Options
-    ) -> float:
+    def _GetShakingSpeedTime(self) -> float:
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )

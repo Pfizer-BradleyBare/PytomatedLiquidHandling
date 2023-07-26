@@ -13,28 +13,27 @@ from .LiquidClass import LiquidClass, LiquidClassCategoryTracker
 from .PipetteTip import PipetteTip, PipetteTipTracker
 
 
-class TransferInterfaceCommand(OptionsTrackerInterfaceCommandABC[None]):
-    @dataclass(kw_only=True)
-    class Options(OptionsABC):
-        SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-        SourcePosition: int  # This is the well position. Not sequence position
-        CurrentSourceVolume: float
-        SourceMixCycles: int
-        SourceLiquidClassCategory: str
-        DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-        DestinationPosition: int  # This is the well position. Not sequence position
-        CurrentDestinationVolume: float
-        DestinationMixCycles: int
-        DestinationLiquidClassCategory: str
-        TransferVolume: float
-
-    @dataclass
-    class OptionsTracker(OptionsTrackerABC[Options]):
-        ...
-
-
 @dataclass
 class Pipette(InterfaceABC, UniqueObjectABC):
+    class TransferInterfaceCommand(OptionsTrackerInterfaceCommandABC[None]):
+        @dataclass(kw_only=True)
+        class Options(OptionsABC):
+            SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+            SourcePosition: int  # This is the well position. Not sequence position
+            CurrentSourceVolume: float
+            SourceMixCycles: int
+            SourceLiquidClassCategory: str
+            DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+            DestinationPosition: int  # This is the well position. Not sequence position
+            CurrentDestinationVolume: float
+            DestinationMixCycles: int
+            DestinationLiquidClassCategory: str
+            TransferVolume: float
+
+        @dataclass
+        class OptionsTracker(OptionsTrackerABC[Options]):
+            ...
+
     SupportedTipTrackerInstance: PipetteTipTracker
     SupportedLabwareTrackerInstance: Labware.LabwareTracker
     SupportedDeckLocationTrackerInstance: DeckLocation.DeckLocationTracker
@@ -134,4 +133,6 @@ class Pipette(InterfaceABC, UniqueObjectABC):
 
     def __post_init__(self):
         InterfaceABC.__post_init__(self)
-        self.Transfer = TransferInterfaceCommand(self._Transfer, self._TransferTime)
+        self.Transfer = Pipette.TransferInterfaceCommand(
+            self._Transfer, self._TransferTime
+        )

@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling import HAL
+from PytomatedLiquidHandling.Tools.Logger import Logger
 
 from .ResourceReservation import ResourceReservationTracker
 from .Timer import TimerTracker
@@ -8,6 +9,7 @@ from .Timer import TimerTracker
 
 @dataclass
 class Orchastrator:
+    LoggerInstance: Logger
     HALInstance: HAL.HAL
 
     LoadedLayoutItems: HAL.LayoutItem.LayoutItemTracker = field(
@@ -20,5 +22,3 @@ class Orchastrator:
     ResourceReservationTrackerInstance: ResourceReservationTracker = field(
         init=False, default_factory=ResourceReservationTracker
     )
-
-    TimerTrackerInstance: TimerTracker = field(init=False, default_factory=TimerTracker)
