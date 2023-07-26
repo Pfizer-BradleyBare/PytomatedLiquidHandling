@@ -1,5 +1,9 @@
 from dataclasses import dataclass, field
 
+from PytomatedLiquidHandling.HAL.TempControlDevice.BaseTempControlDevice.TempControlDevice import (
+    SetTemperatureInterfaceCommand,
+)
+
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.TemperatureControl import HeaterCooler as HeaterCoolerDriver
 from .BaseTempControlDevice import TempControlDevice
@@ -8,11 +12,13 @@ from .BaseTempControlDevice import TempControlDevice
 @dataclass
 class HamiltonHeaterCooler(TempControlDevice):
     BackendInstance: HamiltonBackendABC
+    HeatingSupported: bool = field(init=False, default=True)
+    CoolingSupported: bool = field(init=False, default=True)
     ShakingSupported: bool = field(init=False, default=False)
     HandleID: str = field(init=False)
 
-    def Initialize(self):
-        TempControlDevice.Initialize(self)
+    def _Initialize(self):
+        TempControlDevice._Initialize(self)
 
         if not isinstance(self.ComPort, str):
             raise Exception("Should never happen")
@@ -31,8 +37,11 @@ class HamiltonHeaterCooler(TempControlDevice):
 
         self.HandleID = ResponseInstance.GetHandleID()
 
-    def Deinitialize(self):
-        TempControlDevice.Deinitialize(self)
+    def _InitializeTime(self) -> float:
+        return 0
+
+    def _Deinitialize(self):
+        TempControlDevice._Deinitialize(self)
 
         CommandInstance = HeaterCoolerDriver.StopTemperatureControl.Command(
             OptionsInstance=HeaterCoolerDriver.StopTemperatureControl.Options(
@@ -46,16 +55,16 @@ class HamiltonHeaterCooler(TempControlDevice):
             CommandInstance, HeaterCoolerDriver.StopTemperatureControl.Response
         )
 
-    @TempControlDevice.SetTemperature.setter
-    def SetTemperature(
-        self,
-        *,
-        NewTemperature: float,
+    def _DeinitializeTime(self) -> float:
+        return 0
+
+    def _SetTemperature(
+        self, OptionsInstance: TempControlDevice.SetTemperature.Options
     ):
         CommandInstance = HeaterCoolerDriver.StartTemperatureControl.Command(
             OptionsInstance=HeaterCoolerDriver.StartTemperatureControl.Options(
                 HandleID=str(self.HandleID),
-                Temperature=NewTemperature,
+                Temperature=OptionsInstance.Temperature,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
@@ -65,9 +74,14 @@ class HamiltonHeaterCooler(TempControlDevice):
             CommandInstance, HeaterCoolerDriver.StartTemperatureControl.Response
         )
 
-    def _UpdateActualTemperature(
+    def _SetTemperatureTime(
+        self, OptionsInstance: TempControlDevice.SetTemperature.Options
+    ) -> float:
+        return 0
+
+    def _GetTemperature(
         self,
-    ):
+    ) -> float:
         CommandInstance = HeaterCoolerDriver.GetTemperature.Command(
             OptionsInstance=HeaterCoolerDriver.GetTemperature.Options(
                 HandleID=str(self.HandleID),
@@ -80,13 +94,35 @@ class HamiltonHeaterCooler(TempControlDevice):
             CommandInstance, HeaterCoolerDriver.GetTemperature.Response
         )
 
-        self._ActualTemperature = ResponseInstance.GetTemperature()
+        return ResponseInstance.GetTemperature()
 
-    @TempControlDevice.SetShakingSpeed.setter
-    def SetShakingSpeed(self, NewRPM: int):
+    def _GetTemperatureTime(self) -> float:
+        return 0
+
+    def _SetShakingSpeed(
+        self, OptionsInstance: TempControlDevice.SetShakingSpeed.Options
+    ):
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )
 
-    def _UpdateActualShakingSpeed(self):
-        self._ActualShakingSpeed = 0
+    def _SetShakingSpeedTime(
+        self, OptionsInstance: TempControlDevice.SetShakingSpeed.Options
+    ) -> float:
+        raise Exception(
+            "Shaking is not supported on this device. You did something wrong. Pleaes correct"
+        )
+
+    def _GetShakingSpeed(
+        self, OptionsInstance: TempControlDevice.SetShakingSpeed.Options
+    ) -> int:
+        raise Exception(
+            "Shaking is not supported on this device. You did something wrong. Pleaes correct"
+        )
+
+    def _GetShakingSpeedTime(
+        self, OptionsInstance: TempControlDevice.SetShakingSpeed.Options
+    ) -> float:
+        raise Exception(
+            "Shaking is not supported on this device. You did something wrong. Pleaes correct"
+        )

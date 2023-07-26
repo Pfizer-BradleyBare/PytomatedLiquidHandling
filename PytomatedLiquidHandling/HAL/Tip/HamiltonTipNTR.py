@@ -12,15 +12,7 @@ class HamiltonTipNTR(Tip):
     GripperSequence: str
     GeneratedWasteSequence: str = field(init=False, default="")
 
-    def Initialize(self):
-        Tip.Initialize(self)
-
-        self.Reload()
-
-    def Deinitialize(self):
-        ...
-
-    def Reload(self):
+    def _TipCounterEdit(self):
         CommandInstance = NTRDriver.LoadTips.Command(
             OptionsInstance=NTRDriver.LoadTips.Options(
                 TipSequence=self.PickupSequence,
@@ -33,15 +25,18 @@ class HamiltonTipNTR(Tip):
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         self.BackendInstance.GetResponse(CommandInstance, NTRDriver.LoadTips.Response)
 
-    # We also need to show a deck loading dialog, move the autoload, etc.
+    def _TipCounterEditTime(self) -> float:
+        return 0
 
-    def GetTipPositions(self, *, NumTips: int) -> list[int]:
+    def _GetTipPositions(
+        self, OptionsInstance: Tip.GetTipPositions.Options
+    ) -> list[int]:
         CommandInstance = NTRDriver.GetTipPositions.Command(
             OptionsInstance=NTRDriver.GetTipPositions.Options(
                 TipSequence=self.PickupSequence,
                 GeneratedRackWasteSequence=self.GeneratedWasteSequence,
                 GripperSequence=self.GripperSequence,
-                NumPositions=NumTips,
+                NumPositions=OptionsInstance.NumTips,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
@@ -54,7 +49,12 @@ class HamiltonTipNTR(Tip):
 
         return ResponseInstance.GetTipPositions()
 
-    def _UpdateRemainingTips(self):
+    def _GetTipPositionsTime(
+        self, OptionsInstance: Tip.GetTipPositions.Options
+    ) -> float:
+        return 0
+
+    def _GetRemainingTips(self) -> int:
         CommandInstance = NTRDriver.GetNumTips.Command(
             OptionsInstance=NTRDriver.GetNumTips.Options(
                 TipSequence=self.PickupSequence,
@@ -67,4 +67,7 @@ class HamiltonTipNTR(Tip):
             CommandInstance, NTRDriver.GetNumTips.Response
         )
 
-        self._RemainingTips = ResponseInstance.GetNumRemaining()
+        return ResponseInstance.GetNumRemaining()
+
+    def _GetRemainingTipsTime(self) -> float:
+        return 0

@@ -1,25 +1,53 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field
 
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import LayoutItem
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
-from ...Tools.AbstractClasses import InterfaceABC
+from ...Tools.AbstractClasses import (
+    InterfaceABC,
+    InterfaceCommandABC,
+    OptionsInterfaceCommandABC,
+)
 from .TempLimits.TempLimits import TempLimits
+
+
+class SetTemperatureInterfaceCommand(OptionsInterfaceCommandABC[None]):
+    @dataclass
+    class Options(OptionsABC):
+        Temperature: float
+
+
+class GetTemperatureInterfaceCommand(InterfaceCommandABC[float]):
+    ...
+
+
+class SetShakingSpeedInterfaceCommand(OptionsInterfaceCommandABC[None]):
+    @dataclass
+    class Options(OptionsABC):
+        ShakingSpeed: int
+
+
+class GetShakingSpeedInterfaceCommand(InterfaceCommandABC[int]):
+    ...
 
 
 @dataclass
 class TempControlDevice(InterfaceABC, UniqueObjectABC):
     ComPort: str | int
+    HeatingSupported: bool
+    CoolingSupported: bool
     ShakingSupported: bool
     TempLimitsInstance: TempLimits
     SupportedLayoutItemTrackerInstance: LayoutItem.LayoutItemTracker
 
     HandleID: int | str = field(init=False)
-    _ActualTemperature: float = field(init=False, default=0)
-    _ActualShakingSpeed: int = field(init=False, default=0)
-    _SetTemperature: float = field(init=False, default=0)
-    _SetShakingSpeed: int = field(init=False, default=0)
+
+    SetTemperature: SetTemperatureInterfaceCommand = field(init=False)
+    GetTemperature: GetTemperatureInterfaceCommand = field(init=False)
+    SetShakingSpeed: SetShakingSpeedInterfaceCommand = field(init=False)
+    GetShakingSpeed: GetShakingSpeedInterfaceCommand = field(init=False)
 
     def GetLayoutItem(
         self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
@@ -45,42 +73,52 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
 
         raise Exception("This heater does not support your layout item")
 
-    @property
-    def SetTemperature(self) -> float:
-        return self._SetTemperature
-
-    @SetTemperature.setter
     @abstractmethod
-    def SetTemperature(self, NewTemperature: float):
+    def _SetTemperature(self, OptionsInstance: SetTemperatureInterfaceCommand.Options):
         ...
 
-    @property
-    def ActualTemperature(self) -> float:
-        self._UpdateActualTemperature()
-        return self._ActualTemperature
-
     @abstractmethod
-    def _UpdateActualTemperature(
-        self,
-    ):
+    def _SetTemperatureTime(
+        self, OptionsInstance: SetTemperatureInterfaceCommand.Options
+    ) -> float:
         ...
 
-    @property
-    def SetShakingSpeed(self) -> int:
-        return self._SetShakingSpeed
-
-    @SetShakingSpeed.setter
     @abstractmethod
-    def SetShakingSpeed(self, NewRPM: int):
+    def _GetTemperature(self) -> float:
         ...
 
-    @property
-    def ActualShakingSpeed(self) -> int:
-        self._UpdateActualShakingSpeed()
-        return self._ActualShakingSpeed
+    @abstractmethod
+    def _GetTemperatureTime(self) -> float:
+        ...
 
     @abstractmethod
-    def _UpdateActualShakingSpeed(
-        self,
-    ):
+    def _SetShakingSpeed(self, OptionsInstance: SetTemperatureInterfaceCommand.Options):
         ...
+
+    @abstractmethod
+    def _SetShakingSpeedTime(
+        self, OptionsInstance: SetTemperatureInterfaceCommand.Options
+    ) -> float:
+        ...
+
+    @abstractmethod
+    def _GetShakingSpeed(self) -> int:
+        ...
+
+    @abstractmethod
+    def _GetShakingSpeedTime(self) -> float:
+        ...
+
+    def __post_init__(self):
+        self.SetTemperature = SetTemperatureInterfaceCommand(
+            self._SetTemperature, self._SetTemperatureTime
+        )
+        self.GetTemperature = GetTemperatureInterfaceCommand(
+            self._GetTemperature, self._GetTemperatureTime
+        )
+        self.SetShakingSpeed = SetShakingSpeedInterfaceCommand(
+            self._SetShakingSpeed, self._SetShakingSpeedTime
+        )
+        self.GetShakingSpeed = GetShakingSpeedInterfaceCommand(
+            self._GetShakingSpeed, self._GetShakingSpeedTime
+        )

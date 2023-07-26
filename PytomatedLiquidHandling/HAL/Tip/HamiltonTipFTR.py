@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from PytomatedLiquidHandling.HAL.Tip.BaseTip.Tip import GetTipPositionsInterfaceCommand
+
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Tip import FTR as FTRDriver
 from .BaseTip import Tip
@@ -9,12 +11,7 @@ from .BaseTip import Tip
 class HamiltonTipFTR(Tip):
     BackendInstance: HamiltonBackendABC
 
-    def Initialize(self):
-        Tip.Initialize(self)
-
-        self.Reload()
-
-    def Reload(self):
+    def _TipCounterEdit(self):
         CommandInstance = FTRDriver.LoadTips.Command(
             OptionsInstance=FTRDriver.LoadTips.Options(TipSequence=self.PickupSequence),
             CustomErrorHandling=self.CustomErrorHandling,
@@ -23,13 +20,16 @@ class HamiltonTipFTR(Tip):
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         self.BackendInstance.GetResponse(CommandInstance, FTRDriver.LoadTips.Response)
 
-    # We also need to show a deck loading dialog, move the autoload, etc.
+    def _TipCounterEditTime(self) -> float:
+        return 0
 
-    def GetTipPositions(self, *, NumTips: int) -> list[int]:
+    def _GetTipPositions(
+        self, OptionsInstance: Tip.GetTipPositions.Options
+    ) -> list[int]:
         CommandInstance = FTRDriver.GetTipPositions.Command(
             OptionsInstance=FTRDriver.GetTipPositions.Options(
                 TipSequence=self.PickupSequence,
-                NumPositions=NumTips,
+                NumPositions=OptionsInstance.NumTips,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
@@ -41,7 +41,12 @@ class HamiltonTipFTR(Tip):
 
         return ResponseInstance.GetTipPositions()
 
-    def _UpdateRemainingTips(self):
+    def _GetTipPositionsTime(
+        self, OptionsInstance: Tip.GetTipPositions.Options
+    ) -> float:
+        return 0
+
+    def _GetRemainingTips(self) -> int:
         CommandInstance = FTRDriver.GetNumTips.Command(
             OptionsInstance=FTRDriver.GetNumTips.Options(
                 TipSequence=self.PickupSequence,
@@ -54,4 +59,7 @@ class HamiltonTipFTR(Tip):
             CommandInstance, FTRDriver.GetNumTips.Response
         )
 
-        self._RemainingTips = ResponseInstance.GetNumRemaining()
+        return ResponseInstance.GetNumRemaining()
+
+    def _GetRemainingTipsTime(self) -> float:
+        return 0

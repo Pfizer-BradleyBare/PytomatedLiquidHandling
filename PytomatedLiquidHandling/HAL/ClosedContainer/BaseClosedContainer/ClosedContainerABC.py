@@ -65,5 +65,3 @@ class ClosedContainerABC(InterfaceABC, UniqueObjectABC):
             ExecuteFunction=self._Close,
             ExecutionTimeFunction=self._CloseTime,
         )
-
-        self.Open.ExecutionTime(self.Open.OptionsTracker())
