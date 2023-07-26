@@ -21,11 +21,7 @@ class OpenInterface(ABC, Generic[T]):
 
 
 class Container:
-    def __init__(self, a, b, c, d):
-        self.a = a
-        self.b = b
-        self.c = c
-        self.d = d
+    def __init__(self, OpenInterfaceInstance):
         self.OpenInterface: Open = Open(self)
 
 
@@ -33,9 +29,8 @@ class Open(OpenInterface[Container]):
     class Options:
         ...
 
-    @staticmethod
     def Execute(self, OptionsInstance: Options):
-        return self.Outer.a
+        return self.Outer.OpenInterface.Outer.OpenInterface.Outer.a
 
 
 c = Container(1, 2, 3, 4)

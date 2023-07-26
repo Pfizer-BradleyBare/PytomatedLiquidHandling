@@ -1,7 +1,8 @@
 from abc import ABC
 from dataclasses import dataclass
 
-from .....Driver.Tools.AbstractClasses import BackendABC
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
+from ..InterfaceCommand import InterfaceCommandABC
 
 
 @dataclass
@@ -9,10 +10,26 @@ class InterfaceABC(ABC):
     BackendInstance: BackendABC
     CustomErrorHandling: bool
 
-    def Initialize(self):
-        if self.BackendInstance.IsRunning == False:
-            self.BackendInstance.StartBackend()
+    class InitializeCommand(InterfaceCommandABC):
+        @staticmethod
+        def Execute(InterfaceHandle):
+            if not isinstance(InterfaceHandle, InterfaceABC):
+                raise Exception("Should never happen")
 
-    def Deinitialize(self):
-        if self.BackendInstance.IsRunning == True:
-            self.BackendInstance.StopBackend()
+            InterfaceHandle.BackendInstance.StartBackend()
+
+        @staticmethod
+        def ExecutionTime() -> float:
+            return 0
+
+    class DeinitializeCommand(InterfaceCommandABC):
+        @staticmethod
+        def Execute(InterfaceHandle):
+            if not isinstance(InterfaceHandle, InterfaceABC):
+                raise Exception("Should never happen")
+
+            InterfaceHandle.BackendInstance.StopBackend()
+
+        @staticmethod
+        def ExecutionTime() -> float:
+            return 0

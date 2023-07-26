@@ -1,73 +1,104 @@
 from dataclasses import dataclass
 
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
-from .BaseClosedContainer import ClosedContainerABC, OpenCloseOptions
+from .BaseClosedContainer import ClosedContainerABC
 
 
 @dataclass
 class HamiltonFlipTube(ClosedContainerABC):
-    def Initialize(self):
-        ClosedContainerABC.Initialize(self)
+    class InitializeCommand(ClosedContainerABC.InitializeCommand):
+        @staticmethod
+        def Execute(InterfaceHandle):
+            if not isinstance(InterfaceHandle, HamiltonFlipTube):
+                raise Exception("Should not happen")
 
-        Command = FlipTubeDriver.Initialize.Command(
-            CustomErrorHandling=self.CustomErrorHandling,
-        )
-        self.BackendInstance.ExecuteCommand(Command)
-        self.BackendInstance.WaitForResponseBlocking(Command)
-        self.BackendInstance.GetResponse(Command, FlipTubeDriver.Initialize.Response)
+            ClosedContainerABC.InitializeCommand.Execute(InterfaceHandle)
 
-    def Open(
-        self,
-        *,
-        OpenCloseOptionsTrackerInstance: OpenCloseOptions.OptionsTracker,
-    ):
-        OptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker(
-            ToolSequence=self.ToolSequence
-        )
-        for OpenCloseOptions in OpenCloseOptionsTrackerInstance.GetObjectsAsList():
-            if (
-                OpenCloseOptions.LayoutItemInstance.LabwareInstance
-                in self.SupportedLabwareTrackerInstance.GetObjectsAsList()
+            Command = FlipTubeDriver.Initialize.Command(
+                CustomErrorHandling=InterfaceHandle.CustomErrorHandling,
+            )
+            InterfaceHandle.BackendInstance.ExecuteCommand(Command)
+            InterfaceHandle.BackendInstance.WaitForResponseBlocking(Command)
+            InterfaceHandle.BackendInstance.GetResponse(
+                Command, FlipTubeDriver.Initialize.Response
+            )
+
+    class OpenCommand(ClosedContainerABC.OpenCommand):
+        @staticmethod
+        def Execute(InterfaceHandle, OptionsTrackerInstance):
+            if not isinstance(InterfaceHandle, HamiltonFlipTube):
+                raise Exception("Should not happen")
+
+            if not isinstance(
+                OptionsTrackerInstance, ClosedContainerABC.OpenCommand.OptionsTracker
             ):
-                OptionsTrackerInstance.LoadSingle(
-                    FlipTubeDriver.Open.Options(
-                        Sequence=OpenCloseOptions.LayoutItemInstance.Sequence,
-                        SequencePosition=OpenCloseOptions.Position,
+                raise Exception("Should not happen")
+
+            OpenOptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker(
+                ToolSequence=InterfaceHandle.ToolSequence
+            )
+            for OpenCloseOptions in OptionsTrackerInstance.GetObjectsAsList():
+                if (
+                    OpenCloseOptions.LayoutItemInstance.LabwareInstance
+                    in InterfaceHandle.SupportedLabwareTrackerInstance.GetObjectsAsList()
+                ):
+                    OpenOptionsTrackerInstance.LoadSingle(
+                        FlipTubeDriver.Open.Options(
+                            Sequence=OpenCloseOptions.LayoutItemInstance.Sequence,
+                            SequencePosition=OpenCloseOptions.Position,
+                        )
                     )
-                )
 
-        Command = FlipTubeDriver.Open.Command(
-            OptionsTrackerInstance=OptionsTrackerInstance,
-            CustomErrorHandling=self.CustomErrorHandling,
-        )
-        self.BackendInstance.ExecuteCommand(Command)
-        self.BackendInstance.WaitForResponseBlocking(Command)
-        self.BackendInstance.GetResponse(Command, FlipTubeDriver.Open.Response)
+            Command = FlipTubeDriver.Open.Command(
+                OptionsTrackerInstance=OpenOptionsTrackerInstance,
+                CustomErrorHandling=InterfaceHandle.CustomErrorHandling,
+            )
+            InterfaceHandle.BackendInstance.ExecuteCommand(Command)
+            InterfaceHandle.BackendInstance.WaitForResponseBlocking(Command)
+            InterfaceHandle.BackendInstance.GetResponse(
+                Command, FlipTubeDriver.Open.Response
+            )
 
-    def Close(
-        self,
-        *,
-        OpenCloseOptionsTrackerInstance: OpenCloseOptions.OptionsTracker,
-    ):
-        OptionsTrackerInstance = FlipTubeDriver.Close.OptionsTracker(
-            ToolSequence=self.ToolSequence
-        )
-        for OpenCloseOptions in OpenCloseOptionsTrackerInstance.GetObjectsAsList():
-            if (
-                OpenCloseOptions.LayoutItemInstance.LabwareInstance
-                in self.SupportedLabwareTrackerInstance.GetObjectsAsList()
+        @staticmethod
+        def ExecutionTime(OptionsTrackerInstance) -> float:
+            return 0
+
+    class CloseCommand(ClosedContainerABC.OpenCommand):
+        @staticmethod
+        def Execute(InterfaceHandle, OptionsTrackerInstance):
+            if not isinstance(InterfaceHandle, HamiltonFlipTube):
+                raise Exception("Should not happen")
+
+            if not isinstance(
+                OptionsTrackerInstance, ClosedContainerABC.OpenCommand.OptionsTracker
             ):
-                OptionsTrackerInstance.LoadSingle(
-                    FlipTubeDriver.Close.Options(
-                        Sequence=OpenCloseOptions.LayoutItemInstance.Sequence,
-                        SequencePosition=OpenCloseOptions.Position,
-                    )
-                )
+                raise Exception("Should not happen")
 
-        Command = FlipTubeDriver.Close.Command(
-            OptionsTrackerInstance=OptionsTrackerInstance,
-            CustomErrorHandling=self.CustomErrorHandling,
-        )
-        self.BackendInstance.ExecuteCommand(Command)
-        self.BackendInstance.WaitForResponseBlocking(Command)
-        self.BackendInstance.GetResponse(Command, FlipTubeDriver.Close.Response)
+            CloseOptionsTrackerInstance = FlipTubeDriver.Close.OptionsTracker(
+                ToolSequence=InterfaceHandle.ToolSequence
+            )
+            for OpenCloseOptions in OptionsTrackerInstance.GetObjectsAsList():
+                if (
+                    OpenCloseOptions.LayoutItemInstance.LabwareInstance
+                    in InterfaceHandle.SupportedLabwareTrackerInstance.GetObjectsAsList()
+                ):
+                    CloseOptionsTrackerInstance.LoadSingle(
+                        FlipTubeDriver.Close.Options(
+                            Sequence=OpenCloseOptions.LayoutItemInstance.Sequence,
+                            SequencePosition=OpenCloseOptions.Position,
+                        )
+                    )
+
+            Command = FlipTubeDriver.Close.Command(
+                OptionsTrackerInstance=CloseOptionsTrackerInstance,
+                CustomErrorHandling=InterfaceHandle.CustomErrorHandling,
+            )
+            InterfaceHandle.BackendInstance.ExecuteCommand(Command)
+            InterfaceHandle.BackendInstance.WaitForResponseBlocking(Command)
+            InterfaceHandle.BackendInstance.GetResponse(
+                Command, FlipTubeDriver.Close.Response
+            )
+
+        @staticmethod
+        def ExecutionTime(OptionsTrackerInstance) -> float:
+            return 0

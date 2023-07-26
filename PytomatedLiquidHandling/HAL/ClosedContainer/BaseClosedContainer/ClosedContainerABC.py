@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Type
+
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
     OptionsABC,
@@ -9,37 +9,13 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
-from ...Tools.AbstractClasses import InterfaceABC
-from .Interface import OpenCloseOptions
+from ...Tools.AbstractClasses import InterfaceABC, OptionsTrackerInterfaceCommandABC
 
 
-class OptionsTrackerInterfaceABC(ABC):
-    @abstractmethod
-    def Execute(self, OptionsTrackerInstance: OptionsTrackerABC):
-        ...
-
-    @abstractmethod
-    def ExecutionTime(self, OptionsTrackerInstance: OptionsTrackerABC):
-        ...
-
-
-class OpenInterfaceABC(ABC):
-    @dataclass(kw_only=True)
-    class Options(OptionsABC):
-        LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-        Position: int
-
-    @dataclass
-    class OptionsTracker(OptionsTrackerABC[Options]):
-        ...
-
-    @abstractmethod
-    def Execute(self, OptionsTrackerInstance: OptionsTracker):
-        ...
-
-    @abstractmethod
-    def ExecutionTime(self, OptionsTrackerInstance: OptionsTracker):
-        ...
+@dataclass(kw_only=True)
+class OpenCloseOptions(OptionsABC):
+    LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+    Position: int
 
 
 @dataclass
@@ -48,12 +24,20 @@ class ClosedContainerABC(InterfaceABC, UniqueObjectABC):
     SupportedDeckLocationTrackerInstance: DeckLocation.DeckLocationTracker
     SupportedLabwareTrackerInstance: Labware.LabwareTracker
 
-    @abstractmethod
-    def Open(self, *, OpenCloseOptionsTrackerInstance: OpenCloseOptions.OptionsTracker):
-        ...
+    class OpenCommand(OptionsTrackerInterfaceCommandABC):
+        @dataclass(kw_only=True)
+        class Options(OpenCloseOptions):
+            ...
 
-    @abstractmethod
-    def Close(
-        self, *, OpenCloseOptionsTrackerInstance: OpenCloseOptions.OptionsTracker
-    ):
-        ...
+        @dataclass
+        class OptionsTracker(OptionsTrackerABC[Options]):
+            ...
+
+    class CloseCommand(OptionsTrackerInterfaceCommandABC):
+        @dataclass(kw_only=True)
+        class Options(OpenCloseOptions):
+            ...
+
+        @dataclass
+        class OptionsTracker(OptionsTrackerABC[Options]):
+            ...

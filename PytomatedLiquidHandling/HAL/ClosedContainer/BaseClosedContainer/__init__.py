@@ -1,3 +1,2 @@
 from .ClosedContainerABC import ClosedContainerABC
-from .Interface import OpenCloseOptions
 from .ClosedContainerTracker import ClosedContainerTracker
