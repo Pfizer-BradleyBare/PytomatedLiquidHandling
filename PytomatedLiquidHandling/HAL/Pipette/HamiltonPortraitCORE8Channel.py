@@ -5,7 +5,6 @@ from PytomatedLiquidHandling.HAL import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import PortraitCORE8Channel
-from . import TransferOptions
 from .BasePipette import Pipette
 
 
@@ -16,13 +15,13 @@ class HamiltonPortraitCORE8Channel(Pipette):
 
     def ConvertTransferVolumesToSupportedRange(
         self,
-        OptionsTrackerInstance: TransferOptions.OptionsTracker,
-    ) -> TransferOptions.OptionsTracker:
+        OptionsTrackerInstance: Pipette.Transfer.OptionsTracker,
+    ) -> Pipette.Transfer.OptionsTracker:
         MaxVolume = self.SupportedTipTrackerInstance.GetObjectsAsList()[
             -1
         ].TipInstance.MaxVolume
 
-        UpdatedOptionsTrackerInstance = TransferOptions.OptionsTracker()
+        UpdatedOptionsTrackerInstance = Pipette.Transfer.OptionsTracker()
         for OptionsInstance in OptionsTrackerInstance.GetObjectsAsList():
             NumTransfers = ceil(OptionsInstance.TransferVolume / MaxVolume)
             OptionsInstance.TransferVolume /= NumTransfers
@@ -32,15 +31,15 @@ class HamiltonPortraitCORE8Channel(Pipette):
 
         return UpdatedOptionsTrackerInstance
 
-    def Transfer(
+    def _Transfer(
         self,
-        OptionsTrackerInstance: TransferOptions.OptionsTracker,
+        OptionsTrackerInstance: Pipette.Transfer.OptionsTracker,
     ):
         OptionsTrackerInstance = self.ConvertTransferVolumesToSupportedRange(
             OptionsTrackerInstance
         )
 
-        OptionsListList: list[list[TransferOptions.Options]] = list()
+        OptionsListList: list[list[Pipette.Transfer.Options]] = list()
         Counter = 0
         Options = OptionsTrackerInstance.GetObjectsAsList()
         NumOptions = len(Options)
@@ -65,7 +64,9 @@ class HamiltonPortraitCORE8Channel(Pipette):
                 TipInstance = self.SupportedTipTrackerInstance.GetObjectByName(
                     Tip
                 ).TipInstance
-                TipPositions[Tip] = TipInstance.GetTipPositions(NumTips=Count)
+                TipPositions[Tip] = TipInstance.GetTipPositions.Execute(
+                    TipInstance.GetTipPositions.Options(NumTips=Count)
+                )
             # Get our updated tip positions!
 
             PickupOptionsTracker = PortraitCORE8Channel.Pickup.OptionsTracker()
@@ -169,3 +170,8 @@ class HamiltonPortraitCORE8Channel(Pipette):
                     OptionsTrackerInstance=EjectOptionsTracker,
                 )
             )
+
+    def _TransferTime(
+        self, OptionsTrackerInstance: Pipette.Transfer.OptionsTracker
+    ) -> float:
+        return 0

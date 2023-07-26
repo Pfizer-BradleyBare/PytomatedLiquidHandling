@@ -3,8 +3,7 @@ from math import ceil
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import CORE96Head
-from . import TransferOptions
-from .BasePipette import Pipette, TransferOptions
+from .BasePipette import Pipette
 
 
 @dataclass
@@ -12,7 +11,7 @@ class HamiltonCORE96Head(Pipette):
     BackendInstance: HamiltonBackendABC
 
     def OptionsSupported(
-        self, OptionsTrackerInstance: TransferOptions.OptionsTracker
+        self, OptionsTrackerInstance: Pipette.Transfer.OptionsTracker
     ) -> bool:
         if (
             len(
@@ -106,9 +105,9 @@ class HamiltonCORE96Head(Pipette):
         return Pipette.OptionsSupported(self, OptionsTrackerInstance)
         # Check all other requirements
 
-    def Transfer(
+    def _Transfer(
         self,
-        OptionsTrackerInstance: TransferOptions.OptionsTracker,
+        OptionsTrackerInstance: Pipette.Transfer.OptionsTracker,
     ):
         Options = OptionsTrackerInstance.GetObjectsAsList()[0]
         # All the options should be the same. So we can just take the first one for the majority
@@ -170,3 +169,8 @@ class HamiltonCORE96Head(Pipette):
                 CustomErrorHandling=self.CustomErrorHandling,
                 OptionsInstance=EjectOptions,
             )
+
+    def _TransferTime(
+        self, OptionsTrackerInstance: Pipette.Transfer.OptionsTracker
+    ) -> float:
+        return 0

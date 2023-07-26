@@ -1,13 +1,36 @@
 from abc import abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-from PytomatedLiquidHandling.HAL import DeckLocation, Labware
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
+    OptionsABC,
+    OptionsTrackerABC,
+)
+from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
-from ...Tools.AbstractClasses import InterfaceABC
-from .Interface import TransferOptions
+from ...Tools.AbstractClasses import InterfaceABC, OptionsTrackerInterfaceCommandABC
 from .LiquidClass import LiquidClass, LiquidClassCategoryTracker
 from .PipetteTip import PipetteTip, PipetteTipTracker
+
+
+class TransferInterfaceCommand(OptionsTrackerInterfaceCommandABC[None]):
+    @dataclass(kw_only=True)
+    class Options(OptionsABC):
+        SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+        SourcePosition: int  # This is the well position. Not sequence position
+        CurrentSourceVolume: float
+        SourceMixCycles: int
+        SourceLiquidClassCategory: str
+        DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+        DestinationPosition: int  # This is the well position. Not sequence position
+        CurrentDestinationVolume: float
+        DestinationMixCycles: int
+        DestinationLiquidClassCategory: str
+        TransferVolume: float
+
+    @dataclass
+    class OptionsTracker(OptionsTrackerABC[Options]):
+        ...
 
 
 @dataclass
@@ -16,6 +39,8 @@ class Pipette(InterfaceABC, UniqueObjectABC):
     SupportedLabwareTrackerInstance: Labware.LabwareTracker
     SupportedDeckLocationTrackerInstance: DeckLocation.DeckLocationTracker
     SupportedLiquidClassCategoryTrackerInstance: LiquidClassCategoryTracker
+
+    Transfer: TransferInterfaceCommand = field(init=False)
 
     def GetTip(self, Volume: float) -> PipetteTip:
         for PipetteTipInstance in self.SupportedTipTrackerInstance.GetObjectsAsList():
@@ -39,7 +64,7 @@ class Pipette(InterfaceABC, UniqueObjectABC):
 
     def OptionsSupported(
         self,
-        OptionsTrackerInstance: TransferOptions.OptionsTracker,
+        OptionsTrackerInstance: TransferInterfaceCommand.OptionsTracker,
     ) -> bool:
         for OptionsInstance in OptionsTrackerInstance.GetObjectsAsList():
             if OptionsInstance.CurrentSourceVolume < OptionsInstance.TransferVolume:
@@ -94,8 +119,19 @@ class Pipette(InterfaceABC, UniqueObjectABC):
         return True
 
     @abstractmethod
-    def Transfer(
+    def _Transfer(
         self,
-        TransferOptionsTrackerInstance: TransferOptions.OptionsTracker,
+        OptionsTrackerInstance: TransferInterfaceCommand.OptionsTracker,
     ):
         ...
+
+    @abstractmethod
+    def _TransferTime(
+        self,
+        OptionsTrackerInstance: TransferInterfaceCommand.OptionsTracker,
+    ):
+        ...
+
+    def __post_init__(self):
+        InterfaceABC.__post_init__(self)
+        self.Transfer = TransferInterfaceCommand(self._Transfer, self._TransferTime)
