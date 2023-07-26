@@ -1,5 +1,5 @@
 from abc import ABC
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from ..InterfaceCommand import InterfaceCommandABC
@@ -9,27 +9,25 @@ from ..InterfaceCommand import InterfaceCommandABC
 class InterfaceABC(ABC):
     BackendInstance: BackendABC
     CustomErrorHandling: bool
+    Initialize: InterfaceCommandABC[None] = field(init=False)
+    Deinitialize: InterfaceCommandABC[None] = field(init=False)
 
-    class Initialize(InterfaceCommandABC[None]):
-        @staticmethod
-        def Execute(InterfaceHandle) -> None:
-            if not isinstance(InterfaceHandle, InterfaceABC):
-                raise Exception("Should never happen")
+    def __post_init__(self):
+        self.Initialize = InterfaceCommandABC(
+            Execute=self._Initialize, ExecutionTime=self._InitializeTime
+        )
+        self.Deinitialize = InterfaceCommandABC(
+            Execute=self._Deinitialize, ExecutionTime=self._DeinitializeTime
+        )
 
-            InterfaceHandle.BackendInstance.StartBackend()
+    def _Initialize(self):
+        self.BackendInstance.StartBackend()
 
-        @staticmethod
-        def ExecutionTime() -> float:
-            return 0
+    def _InitializeTime(self) -> float:
+        return 0
 
-    class Deinitialize(InterfaceCommandABC[None]):
-        @staticmethod
-        def Execute(InterfaceHandle) -> None:
-            if not isinstance(InterfaceHandle, InterfaceABC):
-                raise Exception("Should never happen")
+    def _Deinitialize(self):
+        self.BackendInstance.StopBackend()
 
-            InterfaceHandle.BackendInstance.StopBackend()
-
-        @staticmethod
-        def ExecutionTime() -> float:
-            return 0
+    def _DeinitializeTime(self) -> float:
+        return 0

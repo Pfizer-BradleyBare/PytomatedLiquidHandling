@@ -1,6 +1,5 @@
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-
+from dataclasses import dataclass, field
+from abc import abstractmethod
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
     OptionsABC,
@@ -12,10 +11,20 @@ from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 from ...Tools.AbstractClasses import InterfaceABC, OptionsTrackerInterfaceCommandABC
 
 
-@dataclass(kw_only=True)
-class OpenCloseOptions(OptionsABC):
-    LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    Position: int
+@dataclass(frozen=True)
+class ClosedContainerInterfaceCommand(
+    OptionsTrackerInterfaceCommandABC[
+        None, "ClosedContainerInterfaceCommand.OptionsTracker"  # type:ignore
+    ]
+):
+    @dataclass(kw_only=True)
+    class Options(OptionsABC):
+        LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+        Position: int
+
+    @dataclass
+    class OptionsTracker(OptionsTrackerABC[Options]):
+        ...
 
 
 @dataclass
@@ -23,21 +32,38 @@ class ClosedContainerABC(InterfaceABC, UniqueObjectABC):
     ToolSequence: str
     SupportedDeckLocationTrackerInstance: DeckLocation.DeckLocationTracker
     SupportedLabwareTrackerInstance: Labware.LabwareTracker
+    Open: ClosedContainerInterfaceCommand = field(init=False)
+    Close: ClosedContainerInterfaceCommand = field(init=False)
 
-    class Open(OptionsTrackerInterfaceCommandABC[None]):
-        @dataclass(kw_only=True)
-        class Options(OpenCloseOptions):
-            ...
+    @abstractmethod
+    def _Open(
+        self, OptionsTrackerInstance: ClosedContainerInterfaceCommand.OptionsTracker
+    ):
+        ...
 
-        @dataclass
-        class OptionsTracker(OptionsTrackerABC[Options]):
-            ...
+    @abstractmethod
+    def _OpenTime(
+        self, OptionsTrackerInstance: ClosedContainerInterfaceCommand.OptionsTracker
+    ) -> float:
+        ...
 
-    class Close(OptionsTrackerInterfaceCommandABC[None]):
-        @dataclass(kw_only=True)
-        class Options(OpenCloseOptions):
-            ...
+    @abstractmethod
+    def _Close(
+        self, OptionsTrackerInstance: ClosedContainerInterfaceCommand.OptionsTracker
+    ):
+        ...
 
-        @dataclass
-        class OptionsTracker(OptionsTrackerABC[Options]):
-            ...
+    @abstractmethod
+    def _CloseTime(
+        self, OptionsTrackerInstance: ClosedContainerInterfaceCommand.OptionsTracker
+    ) -> float:
+        ...
+
+    def __post_init__(self):
+        InterfaceABC.__post_init__(self)
+        self.Open = ClosedContainerInterfaceCommand(
+            Execute=self._Open, ExecutionTime=self._OpenTime
+        )
+        self.Close = ClosedContainerInterfaceCommand(
+            Execute=self._Close, ExecutionTime=self._CloseTime
+        )

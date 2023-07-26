@@ -3,10 +3,51 @@ from dataclasses import dataclass, field
 from typing import Any, Generic, TypeVar, Callable, Self
 
 
+from typing import Generic, TypeVar, cast
+
+
+N = TypeVar("N", bound="Base.Nested")
+
+
+class Base(Generic[N]):
+    nested_instance: N
+
+    class Nested:
+        pass
+
+    def __init__(self) -> None:
+        self.nested_instance = cast(N, self.Nested())
+
+
+class Sub(Base["Sub.Nested"]):
+    class Nested(Base.Nested):
+        pass
+
+
+def get_nested(obj: Base[N]) -> N:
+    return obj.nested_instance
+
+
+def assert_instance_of_nested(nested_obj: N, cls: type[Base[N]]) -> None:
+    assert isinstance(nested_obj, cls.Nested)
+
+
+if __name__ == "__main__":
+    sub = Sub()
+    nested = get_nested(sub)
+    assert_instance_of_nested(nested, Sub)
+
+quit()
+
+
 @dataclass(frozen=True)
 class CommandGrouping:
     Execute: Callable[[], None]
-    ExecuteTime: Callable[[], float]
+    ExecutionTime: Callable[[], float]
+
+    @dataclass
+    class Options:
+        a: str
 
 
 @dataclass
@@ -55,8 +96,9 @@ class Tube(Container):
 
 
 TubeInstance = Tube()
-TubeInstance.OpenCommand.ExecuteTime()  # Get execution time
+TubeInstance.OpenCommand.ExecutionTime()  # Get execution time
 TubeInstance.OpenCommand.Execute()  # Execute
+TubeInstance.OpenCommand.Options("")
 
 quit()
 

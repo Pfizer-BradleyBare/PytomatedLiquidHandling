@@ -1,22 +1,13 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Generic, TypeVar
+from typing import Any, Generic, TypeVar, Callable
 
 ExecuteReturnType = TypeVar("ExecuteReturnType")
 
 
-@dataclass
-class InterfaceCommandABC(ABC, Generic[ExecuteReturnType]):
-    @abstractmethod
-    def __init__(self):
-        raise Exception("This class is not meant to be instantiated.")
+@dataclass(frozen=True, kw_only=True)
+class InterfaceCommandABC(Generic[ExecuteReturnType]):
+    Execute: Callable[[], ExecuteReturnType]
+    ExecutionTime: Callable[[], float]
 
-    @abstractmethod
-    @staticmethod
-    def Execute(InterfaceHandle) -> ExecuteReturnType:
-        ...
-
-    @abstractmethod
-    @staticmethod
-    def ExecutionTime() -> float:
-        ...
+    def __call__(self):
+        self.Execute()

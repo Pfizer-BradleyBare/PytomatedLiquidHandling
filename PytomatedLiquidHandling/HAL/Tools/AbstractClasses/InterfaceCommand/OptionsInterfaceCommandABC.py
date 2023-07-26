@@ -1,22 +1,16 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, Callable
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
+
 
 ExecuteReturnType = TypeVar("ExecuteReturnType")
+OptionsType = TypeVar("OptionsType", bound=OptionsABC)
 
 
-@dataclass
-class OptionsInterfaceCommandABC(ABC, Generic[ExecuteReturnType]):
-    @abstractmethod
-    def __init__(self):
-        raise Exception("This class is not meant to be instantiated.")
+@dataclass(frozen=True, kw_only=True)
+class OptionsInterfaceCommandABC(Generic[ExecuteReturnType, OptionsType]):
+    Execute: Callable[[OptionsType], ExecuteReturnType]
+    ExecutionTime: Callable[[OptionsType], float]
 
-    @abstractmethod
-    @staticmethod
-    def Execute(InterfaceHandle, OptionsInstance) -> ExecuteReturnType:
-        ...
-
-    @abstractmethod
-    @staticmethod
-    def ExecutionTime(OptionsInstance) -> float:
-        ...
+    def __call__(self, OptionsInstance: OptionsType):
+        self.Execute(OptionsInstance)
