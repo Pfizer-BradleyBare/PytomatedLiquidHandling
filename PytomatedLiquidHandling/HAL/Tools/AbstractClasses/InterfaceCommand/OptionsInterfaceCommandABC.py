@@ -12,5 +12,5 @@ class OptionsInterfaceCommandABC(Generic[ExecuteReturnType, OptionsType]):
     Execute: Callable[[OptionsType], ExecuteReturnType]
     ExecutionTime: Callable[[OptionsType], float]
 
-    def __call__(self, OptionsInstance: OptionsType):
-        self.Execute(OptionsInstance)
+    def __call__(self, OptionsInstance: OptionsType) -> ExecuteReturnType:
+        return self.Execute(OptionsInstance)

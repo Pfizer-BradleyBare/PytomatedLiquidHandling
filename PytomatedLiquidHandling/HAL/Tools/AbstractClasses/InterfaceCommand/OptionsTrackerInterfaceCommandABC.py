@@ -11,5 +11,5 @@ class OptionsTrackerInterfaceCommandABC(Generic[ExecuteReturnType, OptionsTracke
     Execute: Callable[[OptionsTrackerType], ExecuteReturnType]
     ExecutionTime: Callable[[OptionsTrackerType], float]
 
-    def __call__(self, OptionsTrackerInstance: OptionsTrackerType):
-        self.Execute(OptionsTrackerInstance)
+    def __call__(self, OptionsTrackerInstance: OptionsTrackerType) -> ExecuteReturnType:
+        return self.Execute(OptionsTrackerInstance)

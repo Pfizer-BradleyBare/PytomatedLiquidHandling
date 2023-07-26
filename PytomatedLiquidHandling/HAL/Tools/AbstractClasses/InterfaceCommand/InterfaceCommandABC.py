@@ -9,5 +9,5 @@ class InterfaceCommandABC(Generic[ExecuteReturnType]):
     Execute: Callable[[], ExecuteReturnType]
     ExecutionTime: Callable[[], float]
 
-    def __call__(self):
-        self.Execute()
+    def __call__(self) -> ExecuteReturnType:
+        return self.Execute()
