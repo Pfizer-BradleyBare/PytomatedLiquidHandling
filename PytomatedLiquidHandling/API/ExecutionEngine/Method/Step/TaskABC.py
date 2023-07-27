@@ -10,20 +10,26 @@ from ...Orchastrator import Orchastrator
 
 @dataclass
 class TaskABC(UniqueObjectABC):
+    Simulate: bool
+
     class ExecutionWindows(Enum):
         Consecutive = 1  # Consequtive means the task CANNOT move.
         AsSoonAsPossible = 2  # As soon as possible means the task will be moved to the beginning of the submethod task queue
 
     # This is a rule for the scheduler about how tasks must be executed. If ExecutionWindow is NOT Consecutive
     # then the scheduler is free to move the task around for better scheduling.
-    ExecutionWindow: ExecutionWindows
+    @abstractmethod
+    def GetExecutionWindow(self) -> ExecutionWindows:
+        ...
 
     # This indicates whether the method should be split into submethods at this task.
     # the scheduler works be scheduling a series of tasks that make up a submethod.
     # splitting a method into submethods make the workflow easier to schedule.
-    # This flag can be considered optional (False) for critical method workflows but understand
-    # parallel scheduling may be nonexistant.
-    SchedulingSeparator: bool
+    # This flag can be considered optional (False) for critical method workflows but understand that
+    # parallel scheduling will be nonexistant.
+    @abstractmethod
+    def IsSchedulingSeparator(self) -> bool:
+        ...
 
     # resources required by the task. This can be any HAL derived object or any container.
     @abstractmethod

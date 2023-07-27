@@ -82,18 +82,6 @@ class Scheduler(UniqueObjectABC):
         for (
             Device
         ) in (
-            OrchastratorInstance.HALInstance.ClosedContainerTrackerInstance.GetObjectsAsList()
-        ):
-            Identifier = str(Device.UniqueIdentifier)
-
-            self.__LoadedResourceObjects[Identifier] = processscheduler.Worker(
-                Identifier
-            )
-        # Load ClosedContainer devices
-
-        for (
-            Device
-        ) in (
             OrchastratorInstance.HALInstance.IMCSDesaltingTrackerInstance.GetObjectsAsList()
         ):
             Identifier = str(Device.UniqueIdentifier)

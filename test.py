@@ -4,9 +4,8 @@ import matplotlib.pyplot as plt
 import networkx
 import processscheduler as ps
 
-import matplotlib.pyplot as plt
-import networkx
-
+print(int(float("inf")))
+quit()
 
 G = networkx.DiGraph()
 G.add_node(

@@ -51,7 +51,7 @@ class Method(UniqueObjectABC):
                 Step: StepABC = Node["Step"]
                 StepList.append(Step)
 
-                TaskList += Step.GetTasks(UniqueIdentifier)
+                TaskList += Step.GetTasks(UniqueIdentifier, self.Simulate)
 
                 ChildrenNodes = list(StepGraph.successors(NodeName))
 
@@ -60,20 +60,24 @@ class Method(UniqueObjectABC):
 
                 NodeName = ChildrenNodes[0]
 
-            TaskList[-1].SchedulingSeparator = True
-            # Last task is technically always a scheduling seperator. So let's set it
-
             Tasks: list[TaskABC] = list()
 
             CombinedNodeName = ""
 
+            LastTaskID = TaskList[-1].UniqueIdentifier
+
             for Task in TaskList:
-                if Task.ExecutionWindow == Task.ExecutionWindows.Consecutive:
+                if Task.GetExecutionWindow() == Task.ExecutionWindows.Consecutive:
                     Tasks.append(Task)
-                elif Task.ExecutionWindow == Task.ExecutionWindows.AsSoonAsPossible:
+                elif (
+                    Task.GetExecutionWindow() == Task.ExecutionWindows.AsSoonAsPossible
+                ):
                     Tasks.insert(0, Task)
 
-                if Task.SchedulingSeparator == True:
+                if (
+                    Task.IsSchedulingSeparator() == True
+                    or Task.UniqueIdentifier == LastTaskID
+                ):
                     CombinedNodeName = "|".join(
                         [str(Task.UniqueIdentifier) for Task in Tasks]
                     )
@@ -94,5 +98,9 @@ class Method(UniqueObjectABC):
                     CombinedNodeName,
                 )
 
-        Inner(list(networkx.topological_sort(StepGraph))[0], TaskGraph, None)
+        Inner(
+            list(networkx.topological_sort(StepGraph))[0],  # type:ignore
+            TaskGraph,
+            None,
+        )
         return TaskGraph
