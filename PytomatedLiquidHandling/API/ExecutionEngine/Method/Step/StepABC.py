@@ -1,6 +1,5 @@
 from abc import abstractmethod
-from dataclasses import dataclass, field
-
+from dataclasses import dataclass
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
 from .TaskABC import TaskABC
