@@ -35,6 +35,16 @@ class Scheduler(UniqueObjectABC):
     def LoadResources(self, OrchastratorInstance: Orchastrator):
         for (
             Device
+        ) in OrchastratorInstance.HALInstance.PipetteTrackerInstance.GetObjectsAsList():
+            Identifier = str(Device.UniqueIdentifier)
+
+            self.__LoadedResourceObjects[Identifier] = processscheduler.Worker(
+                Identifier
+            )
+        # Load Pipette devices
+
+        for (
+            Device
         ) in (
             OrchastratorInstance.HALInstance.TransportDeviceTrackerInstance.GetObjectsAsList()
         ):
@@ -56,16 +66,6 @@ class Scheduler(UniqueObjectABC):
                 Identifier
             )
         # Load TempControl devices
-
-        for (
-            Device
-        ) in OrchastratorInstance.HALInstance.PipetteTrackerInstance.GetObjectsAsList():
-            Identifier = str(Device.UniqueIdentifier)
-
-            self.__LoadedResourceObjects[Identifier] = processscheduler.Worker(
-                Identifier
-            )
-        # Load Pipette devices
 
         for (
             Device
@@ -119,12 +119,18 @@ class Scheduler(UniqueObjectABC):
                     priority=Priority,
                 )
 
-                for ResourceName in Task.GetRequiredResources(
+                for Resource in Task.GetRequiredResources(
                     self.LoggerInstance, OrchastratorInstance
                 ):
+                    Resources: list = list()
+                    for Name in Resource.ResourceNames:
+                        Resources.append(self.__LoadedResourceObjects[Name])
+
                     TaskObject.add_required_resource(
-                        self.__LoadedResourceObjects[ResourceName]
+                        processscheduler.SelectWorkers(Resources, Resource.NumRequired)
                     )
+                # Resource selection is done automatically. It doesn't actually matter which resource we select.
+                # The best fit resource will be assigned by the Orchastrator upon task execution
 
                 NodeTaskObjects[str(Task.UniqueIdentifier)] = TaskObject
             # Create all the tasks

@@ -16,6 +16,11 @@ class TaskABC(UniqueObjectABC):
         Consecutive = 1  # Consequtive means the task CANNOT move.
         AsSoonAsPossible = 2  # As soon as possible means the task will be moved to the beginning of the submethod task queue
 
+    @dataclass
+    class ExecutionResource:
+        ResourceNames: list[str]
+        NumRequired: int
+
     # This is a rule for the scheduler about how tasks must be executed. If ExecutionWindow is NOT Consecutive
     # then the scheduler is free to move the task around for better scheduling.
     @abstractmethod
@@ -35,7 +40,7 @@ class TaskABC(UniqueObjectABC):
     @abstractmethod
     def GetRequiredResources(
         self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator
-    ) -> list[str]:
+    ) -> list[ExecutionResource]:
         ...
 
     @abstractmethod
