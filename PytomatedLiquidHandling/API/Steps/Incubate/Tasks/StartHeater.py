@@ -20,14 +20,29 @@ class StartHeater(TaskABC):
     def GetRequiredResources(
         self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator
     ) -> list[TaskABC.ExecutionResource]:
-        ResourceNames: list[str] = list()
+        NumLayoutItemsToIncubate = len(
+            set(
+                [
+                    Well.LayoutItemInstance.UniqueIdentifier
+                    for Well in self.OptionsInstance.ContainerInstance.GetObjectsAsList()
+                    if Well.LayoutItemInstance is not None
+                ]
+            )
+        )
 
-        for (
-            Device
-        ) in (
-            OrchastratorInstance.HALInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
-        ):
-            ...
+        ShakingRequired = self.OptionsInstance.ShakingSpeed > 0
+        CoolingRequired = self.OptionsInstance.Temperature < 25
+        HeatingRequired = self.OptionsInstance.Temperature > 25
+
+        ResourceNames: list[str] = [
+            str(Device.UniqueIdentifier)
+            for Device in OrchastratorInstance.HALInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
+            if Device.CoolingSupported >= CoolingRequired
+            and Device.HeatingSupported >= HeatingRequired
+            and Device.ShakingSupported >= ShakingRequired
+        ]
+
+        return [TaskABC.ExecutionResource(ResourceNames, NumLayoutItemsToIncubate)]
 
     def GetExecutionTime(
         self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator

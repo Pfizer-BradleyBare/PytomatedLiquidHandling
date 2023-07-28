@@ -33,62 +33,54 @@ class Scheduler(UniqueObjectABC):
         self.__LoadedResourceObjects = dict()
 
     def LoadResources(self, OrchastratorInstance: Orchastrator):
-        for (
-            Device
-        ) in OrchastratorInstance.HALInstance.PipetteTrackerInstance.GetObjectsAsList():
-            Identifier = str(Device.UniqueIdentifier)
-
-            self.__LoadedResourceObjects[Identifier] = processscheduler.Worker(
-                Identifier
-            )
+        self.__LoadedResourceObjects.update(
+            {
+                str(Device.UniqueIdentifier): processscheduler.Worker(
+                    str(Device.UniqueIdentifier)
+                )
+                for Device in OrchastratorInstance.HALInstance.PipetteTrackerInstance.GetObjectsAsList()
+            }
+        )
         # Load Pipette devices
 
-        for (
-            Device
-        ) in (
-            OrchastratorInstance.HALInstance.TransportDeviceTrackerInstance.GetObjectsAsList()
-        ):
-            Identifier = str(Device.UniqueIdentifier)
-
-            self.__LoadedResourceObjects[Identifier] = processscheduler.Worker(
-                Identifier
-            )
+        self.__LoadedResourceObjects.update(
+            {
+                str(Device.UniqueIdentifier): processscheduler.Worker(
+                    str(Device.UniqueIdentifier)
+                )
+                for Device in OrchastratorInstance.HALInstance.TransportDeviceTrackerInstance.GetObjectsAsList()
+            }
+        )
         # Load Transport devices
 
-        for (
-            Device
-        ) in (
-            OrchastratorInstance.HALInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
-        ):
-            Identifier = str(Device.UniqueIdentifier)
-
-            self.__LoadedResourceObjects[Identifier] = processscheduler.Worker(
-                Identifier
-            )
+        self.__LoadedResourceObjects.update(
+            {
+                str(Device.UniqueIdentifier): processscheduler.Worker(
+                    str(Device.UniqueIdentifier)
+                )
+                for Device in OrchastratorInstance.HALInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
+            }
+        )
         # Load TempControl devices
 
-        for (
-            Device
-        ) in (
-            OrchastratorInstance.HALInstance.MagneticRackTrackerInstance.GetObjectsAsList()
-        ):
-            Identifier = str(Device.UniqueIdentifier)
-
-            self.__LoadedResourceObjects[Identifier] = processscheduler.Worker(
-                Identifier
-            )
+        self.__LoadedResourceObjects.update(
+            {
+                str(Device.UniqueIdentifier): processscheduler.Worker(
+                    str(Device.UniqueIdentifier)
+                )
+                for Device in OrchastratorInstance.HALInstance.MagneticRackTrackerInstance.GetObjectsAsList()
+            }
+        )
         # Load MagneticRack devices
 
-        for (
-            Device
-        ) in (
-            OrchastratorInstance.HALInstance.IMCSDesaltingTrackerInstance.GetObjectsAsList()
-        ):
-            Identifier = str(Device.UniqueIdentifier)
-
-            self.__LoadedResourceObjects[Identifier] = processscheduler.Worker(
-                Identifier
-            )
+        self.__LoadedResourceObjects.update(
+            {
+                str(Device.UniqueIdentifier): processscheduler.Worker(
+                    str(Device.UniqueIdentifier)
+                )
+                for Device in OrchastratorInstance.HALInstance.IMCSDesaltingTrackerInstance.GetObjectsAsList()
+            }
+        )
         # Load IMCS Desalting devices
 
         # NOTE: We do not load the layout items orthe deck locations. This will be handled manually by the orchastrator.

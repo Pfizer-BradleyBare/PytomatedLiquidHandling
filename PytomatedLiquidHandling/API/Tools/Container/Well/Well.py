@@ -16,6 +16,7 @@ from .WellSolution.SolutionProperty import (
 
 @dataclass
 class Well(UniqueObjectABC, WellSolutionTracker):
+    UniqueIdentifier: int
     LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem | None = field(
         init=True, default=None
     )

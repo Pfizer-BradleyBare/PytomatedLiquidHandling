@@ -4,49 +4,6 @@ import matplotlib.pyplot as plt
 import networkx
 import processscheduler as ps
 
-G = networkx.DiGraph()
-G.add_node(
-    "Sample",
-)
-G.add_node(
-    "Diluent",
-)
-G.add_edge("Sample", "Diluent")
-
-G.add_node(
-    "DTT",
-)
-G.add_edge("Diluent", "DTT")
-
-G.add_node(
-    "DTT Incubation",
-)
-G.add_edge("DTT", "DTT Incubation")
-
-G.add_node(
-    "DTT2",
-)
-G.add_edge("DTT", "DTT2")
-
-G.add_node(
-    "DTT3",
-)
-G.add_edge("DTT2", "DTT3")
-
-G.add_node(
-    "Continue",
-)
-G.add_edge("DTT3", "Continue")
-G.add_edge("DTT Incubation", "Continue")
-
-G.add_node(
-    "Continue2",
-)
-
-print(networkx.node_link_data(G))
-
-quit()
-
 problem = ps.SchedulingProblem(
     "SoftwareDevelopment", delta_time=timedelta(days=1), start_time=datetime.now()
 )
@@ -82,7 +39,7 @@ release.add_required_resources([justine])
 solver = ps.SchedulingSolver(problem)
 solution = solver.solve()
 
-print(type(solution))
+print(solution)
 # solution.render_gantt_plotly()
 
 # quit()

@@ -22,17 +22,14 @@ class Transfer(TaskABC):
     ) -> list[TaskABC.ExecutionResource]:
         ResourceNames: list[str] = list()
 
-        for (
-            Device
-        ) in OrchastratorInstance.HALInstance.PipetteTrackerInstance.GetObjectsAsList():
-            ResourceNames.append(str(Device.UniqueIdentifier))
-
-        for (
-            Device
-        ) in (
-            OrchastratorInstance.HALInstance.TransportDeviceTrackerInstance.GetObjectsAsList()
-        ):
-            ResourceNames.append(str(Device.UniqueIdentifier))
+        ResourceNames += [
+            str(Device.UniqueIdentifier)
+            for Device in OrchastratorInstance.HALInstance.PipetteTrackerInstance.GetObjectsAsList()
+        ]
+        ResourceNames += [
+            str(Device.UniqueIdentifier)
+            for Device in OrchastratorInstance.HALInstance.TransportDeviceTrackerInstance.GetObjectsAsList()
+        ]
 
         return [TaskABC.ExecutionResource(ResourceNames, len(ResourceNames))]
 
