@@ -14,7 +14,7 @@ class ExceptionABC(Exception, Generic[CommandABCType, ResponseABCType]):
     CommandInstance: CommandABCType
     ResponseInstance: ResponseABCType
 
-    @abstractmethod
+    # @abstractmethod
     def __init_subclass__(cls) -> None:
         ...
 
