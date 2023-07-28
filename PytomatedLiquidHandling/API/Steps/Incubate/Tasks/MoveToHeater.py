@@ -1,3 +1,5 @@
+from dataclasses import dataclass, field
+
 from PytomatedLiquidHandling.API.ExecutionEngine.Method.Step import TaskABC
 from PytomatedLiquidHandling.API.ExecutionEngine.Orchastrator import Orchastrator
 from PytomatedLiquidHandling.Tools.Logger import Logger
@@ -5,6 +7,7 @@ from PytomatedLiquidHandling.Tools.Logger import Logger
 from ..Options import Options
 
 
+@dataclass
 class MoveToHeater(TaskABC):
     OptionsInstance: Options
 
@@ -20,6 +23,8 @@ class MoveToHeater(TaskABC):
     def GetRequiredResources(
         self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator
     ) -> list[TaskABC.ExecutionResource]:
+        ExecutionResources: list[TaskABC.ExecutionResource] = list()
+
         ResourceNames: list[str] = list()
 
         for (
@@ -34,7 +39,42 @@ class MoveToHeater(TaskABC):
         ):
             ResourceNames.append(str(Device.UniqueIdentifier))
 
-        return [TaskABC.ExecutionResource(ResourceNames, len(ResourceNames))]
+        ExecutionResources.append(
+            TaskABC.ExecutionResource(ResourceNames, len(ResourceNames))
+        )
+
+        NumLayoutItemsToIncubate = len(
+            set(
+                [
+                    Well.LayoutItemInstance.UniqueIdentifier
+                    for Well in self.OptionsInstance.ContainerInstance.GetObjectsAsList()
+                    if Well.LayoutItemInstance is not None
+                ]
+            )
+        )
+
+        ShakingRequired = self.OptionsInstance.ShakingSpeed > 0
+        CoolingRequired = self.OptionsInstance.Temperature < 25
+        HeatingRequired = self.OptionsInstance.Temperature > 25
+
+        if (
+            ShakingRequired == True
+            or CoolingRequired == True
+            or HeatingRequired == True
+        ):
+            ResourceNames: list[str] = [
+                str(Device.UniqueIdentifier)
+                for Device in OrchastratorInstance.HALInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
+                if Device.CoolingSupported >= CoolingRequired
+                and Device.HeatingSupported >= HeatingRequired
+                and Device.ShakingSupported >= ShakingRequired
+            ]
+
+            ExecutionResources.append(
+                TaskABC.ExecutionResource(ResourceNames, NumLayoutItemsToIncubate)
+            )
+
+        return ExecutionResources
 
     def GetExecutionTime(
         self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator

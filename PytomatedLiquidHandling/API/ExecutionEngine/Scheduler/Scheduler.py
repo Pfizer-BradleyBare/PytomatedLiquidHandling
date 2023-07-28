@@ -115,7 +115,7 @@ class Scheduler(UniqueObjectABC):
                     self.LoggerInstance, OrchastratorInstance
                 ):
                     Resources: list = list()
-                    for Name in Resource.ResourceNames:
+                    for Name in Resource.ResourceUniqueIdentifiers:
                         Resources.append(self.__LoadedResourceObjects[Name])
 
                     TaskObject.add_required_resource(

@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
@@ -12,13 +12,20 @@ from ...Orchastrator import Orchastrator
 class TaskABC(UniqueObjectABC):
     Simulate: bool
 
+    IsExecuted: bool = field(init=False, default=False)
+    RequestReschedule: bool = field(init=False, default=False)
+    TotalTimeTaken: float = field(init=False, default=0)
+    # These fields are important for the scheduler. For example: Do you have a wait step of unknown duration?
+    # If so, schedule a short time of 15 mins or so and at the end of the timer update the task with more time.
+    # Don't forget to leave the IsExecuted flag False and also to request a reschedule
+
     class ExecutionWindows(Enum):
         Consecutive = 1  # Consequtive means the task CANNOT move.
         AsSoonAsPossible = 2  # As soon as possible means the task will be moved to the beginning of the submethod task queue
 
     @dataclass
     class ExecutionResource:
-        ResourceNames: list[str]
+        ResourceUniqueIdentifiers: list[str]
         NumRequired: int
 
     # This is a rule for the scheduler about how tasks must be executed. If ExecutionWindow is NOT Consecutive

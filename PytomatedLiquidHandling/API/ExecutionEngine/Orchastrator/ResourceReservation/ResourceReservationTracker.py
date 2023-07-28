@@ -1,14 +1,10 @@
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.HAL import DeckLocation, TempControlDevice
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectTrackerABC
+
+from .ResourceReservation import ResourceReservation
 
 
 @dataclass
-class ResourceReservationTracker(
-    UniqueObjectTrackerABC[
-        DeckLocation.BaseDeckLocation.DeckLocationABC
-        | TempControlDevice.BaseTempControlDevice.TempControlDevice
-    ]
-):
+class ResourceReservationTracker(UniqueObjectTrackerABC[ResourceReservation]):
     ...

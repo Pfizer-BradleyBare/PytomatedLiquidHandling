@@ -1,10 +1,17 @@
+from dataclasses import dataclass, field
+
 from PytomatedLiquidHandling.API.ExecutionEngine.Method.Step import TaskABC
 from PytomatedLiquidHandling.API.ExecutionEngine.Orchastrator import Orchastrator
+from PytomatedLiquidHandling.API.ExecutionEngine.Orchastrator.ResourceReservation import (
+    ResourceReservation,
+)
+from PytomatedLiquidHandling.HAL import TempControlDevice
 from PytomatedLiquidHandling.Tools.Logger import Logger
 
 from ..Options import Options
 
 
+@dataclass
 class StartHeater(TaskABC):
     OptionsInstance: Options
 
@@ -20,6 +27,8 @@ class StartHeater(TaskABC):
     def GetRequiredResources(
         self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator
     ) -> list[TaskABC.ExecutionResource]:
+        ExecutionResources: list[TaskABC.ExecutionResource] = list()
+
         NumLayoutItemsToIncubate = len(
             set(
                 [
@@ -34,20 +43,69 @@ class StartHeater(TaskABC):
         CoolingRequired = self.OptionsInstance.Temperature < 25
         HeatingRequired = self.OptionsInstance.Temperature > 25
 
-        ResourceNames: list[str] = [
-            str(Device.UniqueIdentifier)
-            for Device in OrchastratorInstance.HALInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
-            if Device.CoolingSupported >= CoolingRequired
-            and Device.HeatingSupported >= HeatingRequired
-            and Device.ShakingSupported >= ShakingRequired
-        ]
+        if (
+            ShakingRequired == True
+            or CoolingRequired == True
+            or HeatingRequired == True
+        ):
+            ResourceNames: list[str] = [
+                str(Device.UniqueIdentifier)
+                for Device in OrchastratorInstance.HALInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
+                if Device.CoolingSupported >= CoolingRequired
+                and Device.HeatingSupported >= HeatingRequired
+                and Device.ShakingSupported >= ShakingRequired
+            ]
 
-        return [TaskABC.ExecutionResource(ResourceNames, NumLayoutItemsToIncubate)]
+            ExecutionResources.append(
+                TaskABC.ExecutionResource(ResourceNames, NumLayoutItemsToIncubate)
+            )
+
+        return ExecutionResources
 
     def GetExecutionTime(
         self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator
     ) -> float:
-        return 600
+        return 1
 
     def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):
-        ...
+        LayoutItemsToIncubate = list(
+            set(
+                [
+                    str(Well.LayoutItemInstance.UniqueIdentifier)
+                    for Well in self.OptionsInstance.ContainerInstance.GetObjectsAsList()
+                    if Well.LayoutItemInstance is not None
+                ]
+            )
+        )
+
+        ShakingRequired = self.OptionsInstance.ShakingSpeed > 0
+        CoolingRequired = self.OptionsInstance.Temperature < 25
+        HeatingRequired = self.OptionsInstance.Temperature > 25
+
+        TempControlOptions = TempControlDevice.BaseTempControlDevice.TempControlDevice.SetTemperatureInterfaceCommand.Options(
+            self.OptionsInstance.Temperature
+        )
+
+        if (
+            ShakingRequired == True
+            or CoolingRequired == True
+            or HeatingRequired == True
+        ):
+            Resources: list[
+                tuple[TempControlDevice.BaseTempControlDevice.TempControlDevice, float]
+            ] = [
+                (Device, Device.SetTemperature.ExecutionTime(TempControlOptions))
+                for Device in OrchastratorInstance.HALInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
+                if Device.CoolingSupported >= CoolingRequired
+                and Device.HeatingSupported >= HeatingRequired
+                and Device.ShakingSupported >= ShakingRequired
+            ]
+
+            SortedResources = sorted(Resources, key=lambda x: x[1])
+
+            for Index, LayoutItemID in enumerate(LayoutItemsToIncubate):
+                OrchastratorInstance.ResourceReservationTrackerInstance.LoadSingle(
+                    ResourceReservation(
+                        LayoutItemID + "_Heater", SortedResources[Index][0], False
+                    )
+                )

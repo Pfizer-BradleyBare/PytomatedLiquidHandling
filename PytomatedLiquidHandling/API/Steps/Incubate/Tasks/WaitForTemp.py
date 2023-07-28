@@ -8,14 +8,14 @@ from ..Options import Options
 
 
 @dataclass
-class StopHeater(TaskABC):
+class WaitForTemp(TaskABC):
     OptionsInstance: Options
 
     def GetExecutionWindow(self) -> TaskABC.ExecutionWindows:
-        return TaskABC.ExecutionWindows.Consecutive
+        return TaskABC.ExecutionWindows.AsSoonAsPossible
 
     def IsSchedulingSeparator(self) -> bool:
-        return True
+        return False
 
     # This is a transfer step with the pipetting channels.
     # Thus, the entire pipetting arm is unavailable during this step.
@@ -61,7 +61,30 @@ class StopHeater(TaskABC):
     def GetExecutionTime(
         self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator
     ) -> float:
-        return 600
+        LayoutItemsToIncubate = list(
+            set(
+                [
+                    Well.LayoutItemInstance.UniqueIdentifier
+                    for Well in self.OptionsInstance.ContainerInstance.GetObjectsAsList()
+                    if Well.LayoutItemInstance is not None
+                ]
+            )
+        )
+
+        for LayoutItem in LayoutItemsToIncubate:
+            if not 
 
     def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):
-        ...
+        LayoutItemsToIncubate = list(
+            set(
+                [
+                    Well.LayoutItemInstance.UniqueIdentifier
+                    for Well in self.OptionsInstance.ContainerInstance.GetObjectsAsList()
+                    if Well.LayoutItemInstance is not None
+                ]
+            )
+        )
+
+        ShakingRequired = self.OptionsInstance.ShakingSpeed > 0
+        CoolingRequired = self.OptionsInstance.Temperature < 25
+        HeatingRequired = self.OptionsInstance.Temperature > 25

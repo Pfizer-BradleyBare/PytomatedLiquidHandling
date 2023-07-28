@@ -1,3 +1,5 @@
+from dataclasses import dataclass, field
+
 from PytomatedLiquidHandling.API.ExecutionEngine.Method.Step import TaskABC
 from PytomatedLiquidHandling.API.ExecutionEngine.Orchastrator import Orchastrator
 from PytomatedLiquidHandling.Tools.Logger import Logger
@@ -5,6 +7,7 @@ from PytomatedLiquidHandling.Tools.Logger import Logger
 from ..OptionsTracker import OptionsTracker
 
 
+@dataclass
 class Transfer(TaskABC):
     OptionsTrackerInstance: OptionsTracker
 
