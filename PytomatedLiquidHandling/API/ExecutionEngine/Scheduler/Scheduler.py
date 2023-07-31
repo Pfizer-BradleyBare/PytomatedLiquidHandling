@@ -94,7 +94,7 @@ class Scheduler(UniqueObjectABC):
     ):
         NodeTaskObjects: dict[str | int, processscheduler.FixedDurationTask] = dict()
 
-        TaskGraph = MethodInstance.GetTaskGraph()
+        TaskGraph = MethodInstance.GetTaskGraph(OrchastratorInstance)
         SortedNodes = list(networkx.topological_sort(TaskGraph))  # type:ignore
 
         for NodeName in SortedNodes:
@@ -111,9 +111,7 @@ class Scheduler(UniqueObjectABC):
                     priority=Priority,
                 )
 
-                for Resource in Task.GetRequiredResources(
-                    self.LoggerInstance, OrchastratorInstance
-                ):
+                for Resource in Task.RequiredResources:
                     Resources: list = list()
                     for Name in Resource.ResourceUniqueIdentifiers:
                         Resources.append(self.__LoadedResourceObjects[Name])

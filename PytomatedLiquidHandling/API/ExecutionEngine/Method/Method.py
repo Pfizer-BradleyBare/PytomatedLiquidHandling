@@ -6,6 +6,7 @@ import networkx
 from PytomatedLiquidHandling.API.Tools.Container import ContainerTracker
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
+from ..Orchastrator import Orchastrator
 from .Step import StepABC, TaskABC
 
 
@@ -18,11 +19,10 @@ class Method(UniqueObjectABC):
         init=False, default_factory=ContainerTracker
     )
 
-    def GetTaskGraph(self) -> networkx.DiGraph:
+    def GetTaskGraph(self, OrchastratorInstance: Orchastrator) -> networkx.DiGraph:
         TaskGraph = networkx.DiGraph()
 
         StepGraph = self.StepGraphInstance
-        UniqueIdentifier = str(self.UniqueIdentifier)
 
         def Inner(
             NodeName: str,
@@ -35,6 +35,8 @@ class Method(UniqueObjectABC):
 
             TaskList: list[TaskABC] = list()
             StepList: list[StepABC] = list()
+
+            Tasks: list[TaskABC] = list()
 
             while True:
                 Node = StepGraph.nodes[NodeName]
@@ -51,7 +53,21 @@ class Method(UniqueObjectABC):
                 Step: StepABC = Node["Step"]
                 StepList.append(Step)
 
-                TaskList += Step.GetTasks(UniqueIdentifier, self.Simulate)
+                TaskList += [
+                    TaskClass(
+                        str(self.UniqueIdentifier)
+                        + ":"
+                        + str(Step.UniqueIdentifier)
+                        + ":"
+                        + str(Count)
+                        + ":"
+                        + TaskClass.__name__,
+                        self.Simulate,
+                        Tasks,
+                        OrchastratorInstance,
+                    )
+                    for Count, TaskClass in enumerate(Step.TaskClasses)
+                ]
 
                 ChildrenNodes = list(StepGraph.successors(NodeName))
 
@@ -60,24 +76,18 @@ class Method(UniqueObjectABC):
 
                 NodeName = ChildrenNodes[0]
 
-            Tasks: list[TaskABC] = list()
+            TaskList[-1].SchedulingSeparator = True
+            # Last task is always a scheduling separator.
 
             CombinedNodeName = ""
 
-            LastTaskID = TaskList[-1].UniqueIdentifier
-
             for Task in TaskList:
-                if Task.GetExecutionWindow() == Task.ExecutionWindows.Consecutive:
+                if Task.ExecutionWindow == Task.ExecutionWindows.Consecutive:
                     Tasks.append(Task)
-                elif (
-                    Task.GetExecutionWindow() == Task.ExecutionWindows.AsSoonAsPossible
-                ):
+                elif Task.ExecutionWindow == Task.ExecutionWindows.AsSoonAsPossible:
                     Tasks.insert(0, Task)
 
-                if (
-                    Task.IsSchedulingSeparator() == True
-                    or Task.UniqueIdentifier == LastTaskID
-                ):
+                if Task.SchedulingSeparator == True:
                     CombinedNodeName = "|".join(
                         [str(Task.UniqueIdentifier) for Task in Tasks]
                     )
