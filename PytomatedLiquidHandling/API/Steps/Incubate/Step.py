@@ -9,5 +9,5 @@ from .Options import Options
 class Step(StepABC):
     OptionsInstance: Options
 
-    def GetTasks(self, MethodName: str, Simulate: bool) -> list[TaskABC]:
+    def __post_init__(self):
         ...

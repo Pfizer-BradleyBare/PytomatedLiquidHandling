@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from enum import Enum
 
 import networkx
 
@@ -13,6 +12,7 @@ from .Step import StepABC, TaskABC
 @dataclass
 class Method(UniqueObjectABC):
     StepGraphInstance: networkx.DiGraph
+    TaskGraphInstance: networkx.DiGraph | None = field(init=False, default=None)
     Simulate: bool
 
     ContainerTrackerInstance: ContainerTracker = field(
@@ -20,8 +20,6 @@ class Method(UniqueObjectABC):
     )
 
     def GetTaskGraph(self, OrchastratorInstance: Orchastrator) -> networkx.DiGraph:
-        TaskGraph = networkx.DiGraph()
-
         StepGraph = self.StepGraphInstance
 
         def Inner(
@@ -108,9 +106,13 @@ class Method(UniqueObjectABC):
                     CombinedNodeName,
                 )
 
-        Inner(
-            list(networkx.topological_sort(StepGraph))[0],  # type:ignore
-            TaskGraph,
-            None,
-        )
-        return TaskGraph
+        if self.TaskGraphInstance is None:
+            self.TaskGraphInstance = networkx.DiGraph()
+            Inner(
+                list(networkx.topological_sort(StepGraph))[0],  # type:ignore
+                self.TaskGraphInstance,
+                None,
+            )
+            # If does not exists then create it
+
+        return self.TaskGraphInstance
