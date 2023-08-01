@@ -4,18 +4,12 @@ import matplotlib.pyplot as plt
 import networkx
 import processscheduler as ps
 
-from PytomatedLiquidHandling.API import ExecutionEngine
-
-["1", "2"].index("2")
-
-
-quit()
 
 problem = ps.SchedulingProblem(
-    "SoftwareDevelopment", delta_time=timedelta(days=1), start_time=datetime.now()
+    "SoftwareDevelopment", delta_time=timedelta(seconds=1), start_time=datetime.now()
 )
 
-preliminary_design = ps.FixedDurationTask("PreliminaryDesign", duration=1)  # 1 day
+preliminary_design = ps.FixedDurationTask("PreliminaryDesign", duration=120)  # 1 day
 core_development = ps.VariableDurationTask("CoreDevelopmenent", work_amount=10)
 gui_development = ps.VariableDurationTask("GUIDevelopment", work_amount=15)
 integration = ps.VariableDurationTask("Integration", work_amount=3)
@@ -47,6 +41,6 @@ solver = ps.SchedulingSolver(problem)
 solution = solver.solve()
 
 print(solution)
-# solution.render_gantt_plotly()
+solution.render_gantt_plotly()
 
 # quit()

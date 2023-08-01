@@ -29,7 +29,8 @@ class TaskABC(UniqueObjectABC):
     ExecutionWindow: ExecutionWindows
     SchedulingSeparator: bool
     RequiredResources: list[ExecutionResource]
-    ExecutionTime: float
+    ExecutionTime: int
+    ExecutionStartTime: int = field(init=False, default=0)
 
     @abstractmethod
     def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):

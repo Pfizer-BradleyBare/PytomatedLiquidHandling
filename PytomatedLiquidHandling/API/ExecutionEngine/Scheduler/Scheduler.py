@@ -1,7 +1,6 @@
-import os
+from typing import cast
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from math import ceil
 
 import networkx
 import processscheduler
@@ -100,14 +99,19 @@ class Scheduler(UniqueObjectABC):
         for NodeName in SortedNodes:
             Node = TaskGraph.nodes[NodeName]
 
-            Tasks: list[TaskABC] = Node["Tasks"]
+            Tasks: list[TaskABC] = cast(list[TaskABC], Node["Tasks"])
 
             for Task in Tasks:
                 TaskObject = processscheduler.FixedDurationTask(
                     str(Task.UniqueIdentifier),
-                    ceil(Task.ExecutionTime),
+                    Task.ExecutionTime,
                     priority=Priority,
                 )
+
+                if Task.ExecutionStartTime != 0:
+                    processscheduler.TaskStartAt(TaskObject, Task.ExecutionStartTime)
+                # if task has been executed then the start time will not be zero.
+                # To keep schedule consistent we will add that start time as a constraint
 
                 for Resource in Task.RequiredResources:
                     Resources: list = list()
