@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import abstractmethod
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
@@ -17,7 +19,7 @@ class StepABC(UniqueObjectABC):
     @abstractmethod
     def GenerateTasks(
         self,
-        MethodInstance: "Method",
+        MethodInstance: Method,
         OrchastratorInstance: Orchastrator,
     ) -> list[TaskABC]:
         ...

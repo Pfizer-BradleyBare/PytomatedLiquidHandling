@@ -6,3 +6,4 @@ from ..Timer import Timer
 @dataclass
 class TimedNotification(Timer):
     Message: str
+    AcknowledgeNotification: bool = field(init=False, default=False)

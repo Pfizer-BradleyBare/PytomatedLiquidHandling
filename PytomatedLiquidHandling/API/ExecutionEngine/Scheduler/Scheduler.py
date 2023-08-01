@@ -105,9 +105,7 @@ class Scheduler(UniqueObjectABC):
             for Task in Tasks:
                 TaskObject = processscheduler.FixedDurationTask(
                     str(Task.UniqueIdentifier),
-                    ceil(
-                        Task.GetExecutionTime(self.LoggerInstance, OrchastratorInstance)
-                    ),
+                    ceil(Task.ExecutionTime),
                     priority=Priority,
                 )
 

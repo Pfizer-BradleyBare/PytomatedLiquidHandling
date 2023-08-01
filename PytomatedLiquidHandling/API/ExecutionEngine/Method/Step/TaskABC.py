@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import abstractmethod
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
@@ -23,17 +25,12 @@ class TaskABC(UniqueObjectABC):
         ResourceUniqueIdentifiers: list[str]
         NumRequired: int
 
-    MethodInstance: "Method"
+    MethodInstance: Method
     ExecutionWindow: ExecutionWindows
     SchedulingSeparator: bool
     RequiredResources: list[ExecutionResource]
+    ExecutionTime: float
 
     @abstractmethod
     def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):
-        ...
-
-    @abstractmethod
-    def GetExecutionTime(
-        self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator
-    ) -> float:
         ...
