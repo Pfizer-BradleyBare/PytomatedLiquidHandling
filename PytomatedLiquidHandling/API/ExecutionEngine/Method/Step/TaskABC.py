@@ -1,12 +1,15 @@
 from abc import abstractmethod
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
-from typing import Self
+from typing import TYPE_CHECKING, Self
 
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 from PytomatedLiquidHandling.Tools.Logger import Logger
 
 from ...Orchastrator import Orchastrator
+
+if TYPE_CHECKING:
+    from ..Method import Method
 
 
 @dataclass
@@ -20,17 +23,10 @@ class TaskABC(UniqueObjectABC):
         ResourceUniqueIdentifiers: list[str]
         NumRequired: int
 
-    Simulate: bool
-    Tasks: list[Self]
-    OrchastratorInstance: InitVar[Orchastrator]
-    ExecutionWindow: ExecutionWindows = field(init=False)
-    SchedulingSeparator: bool = field(init=False)
-    RequiredResources: list[ExecutionResource] = field(init=False)
-
-    @abstractmethod
-    def __post_init__(self, OrchastratorInstance: Orchastrator):
-        """Set the execution window, SchedulingSeparator, and required resources variables here. Note that these are allowed to be changed by the scheduler."""
-        ...
+    MethodInstance: "Method"
+    ExecutionWindow: ExecutionWindows
+    SchedulingSeparator: bool
+    RequiredResources: list[ExecutionResource]
 
     @abstractmethod
     def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):

@@ -2,7 +2,7 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
-from PytomatedLiquidHandling.HAL import LayoutItem
+from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
 from ...Tools.AbstractClasses import (
@@ -44,6 +44,17 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
     GetTemperature: GetTemperatureInterfaceCommand = field(init=False)
     SetShakingSpeed: SetShakingSpeedInterfaceCommand = field(init=False)
     GetShakingSpeed: GetShakingSpeedInterfaceCommand = field(init=False)
+
+    def IsLabwareSupported(self, LabwareInstance: Labware.PipettableLabware) -> bool:
+        Labwares = [
+            LayoutItem.LabwareInstance.UniqueIdentifier
+            for LayoutItem in self.SupportedLayoutItemTrackerInstance.GetObjectsAsList()
+        ]
+
+        if LabwareInstance.UniqueIdentifier in Labwares:
+            return True
+        else:
+            return False
 
     def GetLayoutItem(
         self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem

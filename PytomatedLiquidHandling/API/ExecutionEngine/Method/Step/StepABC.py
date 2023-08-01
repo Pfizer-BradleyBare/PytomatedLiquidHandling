@@ -1,17 +1,23 @@
 from abc import abstractmethod
-from dataclasses import dataclass, field
-from typing import Type
+from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+
+from ...Orchastrator import Orchastrator
+
+if TYPE_CHECKING:
+    from ..Method import Method
 
 from .TaskABC import TaskABC
 
 
 @dataclass
 class StepABC(UniqueObjectABC):
-    TaskClasses: list[Type[TaskABC]] = field(init=False, default_factory=list)
-
     @abstractmethod
-    def __post_init__(self):
-        """Build the list of task classes to execute here. Note that tasks are allowed to occur more than once if needed"""
+    def GenerateTasks(
+        self,
+        MethodInstance: "Method",
+        OrchastratorInstance: Orchastrator,
+    ) -> list[TaskABC]:
         ...

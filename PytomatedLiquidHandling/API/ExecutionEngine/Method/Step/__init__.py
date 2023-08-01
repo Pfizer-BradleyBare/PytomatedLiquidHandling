@@ -1,2 +1,1 @@
-from .StepABC import StepABC
-from .TaskABC import TaskABC
+from .StepABC import StepABC, TaskABC

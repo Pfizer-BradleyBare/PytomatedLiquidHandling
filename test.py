@@ -4,6 +4,13 @@ import matplotlib.pyplot as plt
 import networkx
 import processscheduler as ps
 
+from PytomatedLiquidHandling.API import ExecutionEngine
+
+["1", "2"].index("2")
+
+
+quit()
+
 problem = ps.SchedulingProblem(
     "SoftwareDevelopment", delta_time=timedelta(days=1), start_time=datetime.now()
 )

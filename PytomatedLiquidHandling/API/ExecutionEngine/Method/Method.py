@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import cast
 
 import networkx
 
@@ -18,6 +19,19 @@ class Method(UniqueObjectABC):
     ContainerTrackerInstance: ContainerTracker = field(
         init=False, default_factory=ContainerTracker
     )
+
+    def _AddTask(self, ParentTask: TaskABC, NewTask: TaskABC):
+        if self.TaskGraphInstance is None:
+            raise Exception("Need to create the task graph first")
+
+        for Node in list(networkx.topological_sort(self.StepGraphInstance)):  # type: ignore
+            try:
+                Tasks: list[TaskABC] = cast(list[TaskABC], Node["Tasks"])
+                Index = Tasks.index(ParentTask)
+                Tasks.insert(Index + 1, NewTask)
+                break
+            except ValueError:
+                ...
 
     def GetTaskGraph(self, OrchastratorInstance: Orchastrator) -> networkx.DiGraph:
         StepGraph = self.StepGraphInstance
@@ -48,24 +62,10 @@ class Method(UniqueObjectABC):
                 # If so we need to split those nodes.
                 # If the nodename is equal to the startingnodename then that means we have started on the node with more than 1 parent
 
-                Step: StepABC = Node["Step"]
+                Step: StepABC = cast(StepABC, Node["Step"])
                 StepList.append(Step)
 
-                TaskList += [
-                    TaskClass(
-                        str(self.UniqueIdentifier)
-                        + ":"
-                        + str(Step.UniqueIdentifier)
-                        + ":"
-                        + str(Count)
-                        + ":"
-                        + TaskClass.__name__,
-                        self.Simulate,
-                        Tasks,
-                        OrchastratorInstance,
-                    )
-                    for Count, TaskClass in enumerate(Step.TaskClasses)
-                ]
+                TaskList += Step.GenerateTasks(self, OrchastratorInstance)
 
                 ChildrenNodes = list(StepGraph.successors(NodeName))
 

@@ -1,7 +1,7 @@
 import copy
 from dataclasses import dataclass, field
 
-from PytomatedLiquidHandling.HAL import LayoutItem
+from PytomatedLiquidHandling.API.ExecutionEngine.Orchastrator import LoadedLayoutItem
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
 from .WellSolution import WellSolutionTracker
@@ -17,7 +17,7 @@ from .WellSolution.SolutionProperty import (
 @dataclass
 class Well(UniqueObjectABC, WellSolutionTracker):
     UniqueIdentifier: int
-    LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem | None = field(
+    LayoutItemInstance: LoadedLayoutItem.LoadedLayoutItem | None = field(
         init=True, default=None
     )
 
