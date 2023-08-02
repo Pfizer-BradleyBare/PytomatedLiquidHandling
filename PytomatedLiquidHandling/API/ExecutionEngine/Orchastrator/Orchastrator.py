@@ -22,7 +22,6 @@ class Orchastrator:
         init=False, default_factory=ResourceReservationTracker
     )
 
-    TimerTrackerInstance: TimerTracker = field(init=False, default_factory=TimerTracker)
     TimedNotificationTrackerInstance: TimedNotificationTracker = field(
         init=False, default_factory=TimedNotificationTracker
     )

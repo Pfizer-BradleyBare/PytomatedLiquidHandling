@@ -1,6 +1,11 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 from dataclasses import dataclass, field
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
-from ...Method.Step import TaskABC
+
+if TYPE_CHECKING:
+    from ...Method.Step import TaskABC
 import time
 from threading import Event, Thread
 from PytomatedLiquidHandling.HAL import Notify

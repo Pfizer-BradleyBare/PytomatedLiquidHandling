@@ -5,6 +5,8 @@ import networkx
 import processscheduler as ps
 
 
+from PytomatedLiquidHandling.API import ExecutionEngine
+
 problem = ps.SchedulingProblem(
     "SoftwareDevelopment", delta_time=timedelta(seconds=1), start_time=datetime.now()
 )
