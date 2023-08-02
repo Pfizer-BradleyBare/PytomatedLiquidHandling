@@ -1,29 +1,30 @@
 import time
 from dataclasses import dataclass, field
-from typing import Any, Callable
 
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from ...Method.Step import TaskABC
 
 
 @dataclass
 class Timer(UniqueObjectABC):
-    WaitTime: float
-    EndTime: float = field(init=False)
+    WaitTime: int
+    StartTime: int = field(init=False)
     Kill: bool = field(init=False, default=False)
-    CallbackFunction: Callable[..., None]
-    CallbackArgs: tuple[Any]
+    TaskInstance: TaskABC
 
     def __post_init__(self):
-        self.EndTime = time.time() + self.WaitTime
+        self.StartTime = int(time.monotonic())
 
-    def GetRemainingTime(self) -> float:
-        return self.EndTime - time.time()
+    def GetRemainingTime(self) -> int:
+        return self.StartTime + self.WaitTime - int(time.monotonic())
 
     def IsExpired(self) -> bool:
-        return time.time() >= self.EndTime or self.Kill == True
+        Test = self.GetRemainingTime() <= 0 or self.Kill == True
+
+        if Test == True:
+            self.TaskInstance.ExecutionTime = int(time.monotonic()) - self.StartTime
+
+        return Test
 
     def ForceExpiration(self):
         self.Kill = True
-
-    def ExecuteCallback(self):
-        self.CallbackFunction(*self.CallbackArgs)
