@@ -5,6 +5,8 @@ from PytomatedLiquidHandling.Tools.Logger import Logger
 
 from .LoadedLayoutItem import LoadedLayoutItemTracker
 from .ResourceReservation import ResourceReservationTracker
+from .Timer import TimerTracker
+from .TimedNotification import TimedNotificationTracker
 
 
 @dataclass
@@ -18,4 +20,9 @@ class Orchastrator:
 
     ResourceReservationTrackerInstance: ResourceReservationTracker = field(
         init=False, default_factory=ResourceReservationTracker
+    )
+
+    TimerTrackerInstance: TimerTracker = field(init=False, default_factory=TimerTracker)
+    TimedNotificationTrackerInstance: TimedNotificationTracker = field(
+        init=False, default_factory=TimedNotificationTracker
     )
