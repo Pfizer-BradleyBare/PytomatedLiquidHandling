@@ -17,9 +17,10 @@ from .WellSolution.SolutionProperty import (
 @dataclass
 class Well(UniqueObjectABC, WellSolutionTracker):
     UniqueIdentifier: int
-    LayoutItemInstance: LoadedLayoutItem.LoadedLayoutItem | None = field(
+    LoadedLayoutItemInstance: LoadedLayoutItem.LoadedLayoutItem | None = field(
         init=True, default=None
     )
+    LoadedLayoutItemWell: int | None = field(init=False, default=None)
 
     def Aspirate(self, Volume: float) -> WellSolutionTracker:
         WellSolutionTrackerInstance = WellSolutionTracker()
