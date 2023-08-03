@@ -1,9 +1,10 @@
-from typing import cast
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+from typing import cast
 
 import networkx
 import processscheduler
+from processscheduler.solution import TaskSolution
 
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 from PytomatedLiquidHandling.Tools.Logger import Logger
@@ -17,7 +18,7 @@ from ..Orchastrator import Orchastrator
 class Scheduler(UniqueObjectABC):
     LoggerInstance: Logger
     SchedulingProblem: processscheduler.SchedulingProblem = field(init=False)
-    SchedulingSolution: dict | None = field(init=False)
+    SchedulingSolution: list[TaskSolution] = field(init=False, default_factory=list)
     __LoadedResourceObjects: dict[str, processscheduler.Worker] = field(init=False)
 
     def Reset(self):
@@ -145,9 +146,12 @@ class Scheduler(UniqueObjectABC):
     def Solve(self):
         self.SchedulingProblem.add_objective_priorities(1)
         self.SchedulingProblem.add_objective_makespan()
-        Solution = (
-            processscheduler.SchedulingSolver(self.SchedulingProblem, max_time=600)
-            .solve()
-            .__repr__()
-        )
+        Solution = processscheduler.SchedulingSolver(
+            self.SchedulingProblem, max_time=600
+        ).solve()
+
+        if isinstance(Solution, bool):
+            return
+
+        self.SchedulingSolution = list(Solution.tasks.values())
         # figure this out later
