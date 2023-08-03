@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from PytomatedLiquidHandling import HAL
 from PytomatedLiquidHandling.Tools.Logger import Logger
 
-from .LoadedLayoutItem import LoadedLayoutItemTracker
+from .ContainerLoader import ContainerLoader
 from .RecurringNotification import RecurringNotification
 from .ResourceReservation import ResourceReservation
 from .Timer import Timer
@@ -19,12 +19,10 @@ class Orchastrator:
     Timer: Timer = field(init=False)
     RecurringNotification: RecurringNotification = field(init=False)
     ResourceReservation: ResourceReservation = field(init=False)
+    ContainerLoader: ContainerLoader = field(init=False)
 
     def __post_init__(self):
         self.Timer = Timer(self)
         self.RecurringNotification = RecurringNotification(self)
         self.ResourceReservation = ResourceReservation(self)
-
-    LoadedLayoutItemTrackerInstance: LoadedLayoutItemTracker = field(
-        init=False, default_factory=LoadedLayoutItemTracker
-    )
+        self.ContainerLoader = ContainerLoader(self)

@@ -20,6 +20,8 @@ class Method(UniqueObjectABC):
         init=False, default_factory=ContainerTracker
     )
 
+    _TaskAddedFlag: bool = field(init=False, default=False)
+
     def _AddTask(self, ParentTask: TaskABC, NewTask: TaskABC):
         if self.TaskGraphInstance is None:
             raise Exception("Need to create the task graph first")
@@ -32,6 +34,7 @@ class Method(UniqueObjectABC):
                 break
             except ValueError:
                 ...
+        self._TaskAddedFlag = True
 
     def GetTaskGraph(self, OrchastratorInstance: Orchastrator) -> networkx.DiGraph:
         StepGraph = self.StepGraphInstance
