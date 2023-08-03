@@ -1,2 +1,2 @@
-from . import LoadedLayoutItem, ResourceReservation, TimedNotification, Timer
+from . import LoadedLayoutItem, RecurringNotification, ResourceReservation, Timer
 from .Orchastrator import Orchastrator

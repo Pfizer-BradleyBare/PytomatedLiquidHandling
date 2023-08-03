@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import networkx
 import processscheduler as ps
-
+from processscheduler.solution import TaskSolution
 
 from PytomatedLiquidHandling.API import ExecutionEngine
 
@@ -42,7 +42,13 @@ release.add_required_resources([justine])
 solver = ps.SchedulingSolver(problem)
 solution = solver.solve()
 
-print(solution)
-solution.render_gantt_plotly()
+if isinstance(solution, bool):
+    raise Exception("")
+
+Tasks: dict[str, TaskSolution] = solution.tasks
+
+print(list(Tasks.values()))
+
+# solution.render_gantt_plotly()
 
 # quit()
