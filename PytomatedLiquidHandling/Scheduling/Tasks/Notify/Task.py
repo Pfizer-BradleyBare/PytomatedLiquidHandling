@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.API.ExecutionEngine.Method.Step import TaskABC
 from PytomatedLiquidHandling.API.ExecutionEngine.Orchastrator import Orchastrator
-from PytomatedLiquidHandling.API.ExecutionEngine.Orchastrator.RecurringNotification import (
+from PytomatedLiquidHandling.Scheduling.ExecutionEngine.Orchastrator.RecurringNotification import (
     TimedNotification,
 )
 from PytomatedLiquidHandling.Tools.Logger import Logger
