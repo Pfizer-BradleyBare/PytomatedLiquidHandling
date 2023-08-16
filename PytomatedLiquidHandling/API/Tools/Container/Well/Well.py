@@ -1,7 +1,7 @@
 import copy
 from dataclasses import dataclass, field
 
-from PytomatedLiquidHandling.API.ExecutionEngine.Orchastrator import ContainerLoader
+from PytomatedLiquidHandling.HAL import LayoutItem
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
 from .WellSolution import WellSolutionTracker
@@ -17,10 +17,10 @@ from .WellSolution.SolutionProperty import (
 @dataclass
 class Well(UniqueObjectABC, WellSolutionTracker):
     UniqueIdentifier: int
-    LoadedLayoutItemInstance: ContainerLoader.ContainerLoader | None = field(
+    LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem | None = field(
         init=True, default=None
     )
-    LoadedLayoutItemWell: int | None = field(init=False, default=None)
+    LayoutItemWell: int | None = field(init=False, default=None)
 
     def Aspirate(self, Volume: float) -> WellSolutionTracker:
         WellSolutionTrackerInstance = WellSolutionTracker()
