@@ -20,7 +20,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             raise Exception("Should never happen")
 
         CommandInstance = HeaterShakerDriver.Connect.Command(
-            OptionsInstance=HeaterShakerDriver.Connect.Options(
+            Options=HeaterShakerDriver.Connect.Options(
                 ComPort=self.ComPort,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
@@ -34,7 +34,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         self.HandleID = ResponseInstance.GetHandleID()
 
         CommandInstance = HeaterShakerDriver.SetPlateLock.Command(
-            OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
+            Options=HeaterShakerDriver.SetPlateLock.Options(
                 HandleID=int(self.HandleID),
                 PlateLockState=1,
             ),
@@ -47,7 +47,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         )
 
         CommandInstance = HeaterShakerDriver.SetPlateLock.Command(
-            OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
+            Options=HeaterShakerDriver.SetPlateLock.Options(
                 HandleID=int(self.HandleID),
                 PlateLockState=0,
             ),
@@ -64,7 +64,7 @@ class HamiltonHeaterShaker(TempControlDevice):
 
     def _Deinitialize(self):
         CommandInstance = HeaterShakerDriver.StopTemperatureControl.Command(
-            OptionsInstance=HeaterShakerDriver.StopTemperatureControl.Options(
+            Options=HeaterShakerDriver.StopTemperatureControl.Options(
                 HandleID=int(self.HandleID),
             ),
             CustomErrorHandling=self.CustomErrorHandling,
@@ -76,7 +76,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         )
 
         CommandInstance = HeaterShakerDriver.StopShakeControl.Command(
-            OptionsInstance=HeaterShakerDriver.StopShakeControl.Options(
+            Options=HeaterShakerDriver.StopShakeControl.Options(
                 HandleID=int(self.HandleID)
             ),
             CustomErrorHandling=self.CustomErrorHandling,
@@ -88,7 +88,7 @@ class HamiltonHeaterShaker(TempControlDevice):
         )
 
         CommandInstance = HeaterShakerDriver.SetPlateLock.Command(
-            OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
+            Options=HeaterShakerDriver.SetPlateLock.Options(
                 HandleID=int(self.HandleID),
                 PlateLockState=0,
             ),
@@ -106,12 +106,12 @@ class HamiltonHeaterShaker(TempControlDevice):
         return 0
 
     def _SetTemperature(
-        self, OptionsInstance: TempControlDevice.SetTemperatureInterfaceCommand.Options
+        self, Options: TempControlDevice.SetTemperatureInterfaceCommand.Options
     ):
         CommandInstance = HeaterShakerDriver.StartTemperatureControl.Command(
-            OptionsInstance=HeaterShakerDriver.StartTemperatureControl.Options(
+            Options=HeaterShakerDriver.StartTemperatureControl.Options(
                 HandleID=int(self.HandleID),
-                Temperature=OptionsInstance.Temperature,
+                Temperature=Options.Temperature,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
@@ -122,13 +122,13 @@ class HamiltonHeaterShaker(TempControlDevice):
         )
 
     def _SetTemperatureTime(
-        self, OptionsInstance: TempControlDevice.SetTemperatureInterfaceCommand.Options
+        self, Options: TempControlDevice.SetTemperatureInterfaceCommand.Options
     ) -> float:
         return 0
 
     def _GetTemperature(self) -> float:
         CommandInstance = HeaterShakerDriver.GetTemperature.Command(
-            OptionsInstance=HeaterShakerDriver.GetTemperature.Options(
+            Options=HeaterShakerDriver.GetTemperature.Options(
                 HandleID=int(self.HandleID),
             ),
             CustomErrorHandling=self.CustomErrorHandling,
@@ -145,11 +145,11 @@ class HamiltonHeaterShaker(TempControlDevice):
         return 0
 
     def _SetShakingSpeed(
-        self, OptionsInstance: TempControlDevice.SetShakingSpeedInterfaceCommand.Options
+        self, Options: TempControlDevice.SetShakingSpeedInterfaceCommand.Options
     ):
-        if OptionsInstance.ShakingSpeed == 0:
+        if Options.ShakingSpeed == 0:
             CommandInstance = HeaterShakerDriver.StopShakeControl.Command(
-                OptionsInstance=HeaterShakerDriver.StopShakeControl.Options(
+                Options=HeaterShakerDriver.StopShakeControl.Options(
                     HandleID=int(self.HandleID),
                 ),
                 CustomErrorHandling=self.CustomErrorHandling,
@@ -161,7 +161,7 @@ class HamiltonHeaterShaker(TempControlDevice):
             )
 
             CommandInstance = HeaterShakerDriver.SetPlateLock.Command(
-                OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
+                Options=HeaterShakerDriver.SetPlateLock.Options(
                     HandleID=int(self.HandleID), PlateLockState=0
                 ),
                 CustomErrorHandling=self.CustomErrorHandling,
@@ -174,7 +174,7 @@ class HamiltonHeaterShaker(TempControlDevice):
 
         else:
             CommandInstance = HeaterShakerDriver.SetPlateLock.Command(
-                OptionsInstance=HeaterShakerDriver.SetPlateLock.Options(
+                Options=HeaterShakerDriver.SetPlateLock.Options(
                     HandleID=int(self.HandleID),
                     PlateLockState=1,
                 ),
@@ -187,9 +187,9 @@ class HamiltonHeaterShaker(TempControlDevice):
             )
 
             CommandInstance = HeaterShakerDriver.StartShakeControl.Command(
-                OptionsInstance=HeaterShakerDriver.StartShakeControl.Options(
+                Options=HeaterShakerDriver.StartShakeControl.Options(
                     HandleID=int(self.HandleID),
-                    ShakingSpeed=OptionsInstance.ShakingSpeed,
+                    ShakingSpeed=Options.ShakingSpeed,
                 ),
                 CustomErrorHandling=self.CustomErrorHandling,
             )
@@ -200,13 +200,13 @@ class HamiltonHeaterShaker(TempControlDevice):
             )
 
     def _SetShakingSpeedTime(
-        self, OptionsInstance: TempControlDevice.SetShakingSpeedInterfaceCommand.Options
+        self, Options: TempControlDevice.SetShakingSpeedInterfaceCommand.Options
     ) -> float:
         return 0
 
     def _GetShakingSpeed(self) -> int:
         CommandInstance = HeaterShakerDriver.GetShakingSpeed.Command(
-            OptionsInstance=HeaterShakerDriver.GetShakingSpeed.Options(
+            Options=HeaterShakerDriver.GetShakingSpeed.Options(
                 HandleID=int(self.HandleID),
             ),
             CustomErrorHandling=self.CustomErrorHandling,

@@ -2,21 +2,21 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 from ...Tools.AbstractClasses import (
     InterfaceABC,
     InterfaceCommandABC,
-    OptionsInterfaceCommandABC,
+    InterfaceCommandWithOptionsABC,
 )
 
 
 @dataclass
-class Tip(InterfaceABC, UniqueObjectABC):
+class Tip(InterfaceABC, HALObject):
     class TipCounterEditInterfaceCommand(InterfaceCommandABC[None]):
         ...
 
-    class GetTipPositionsInterfaceCommand(OptionsInterfaceCommandABC[list[int]]):
+    class GetTipPositionsInterfaceCommand(InterfaceCommandWithOptionsABC[list[int]]):
         @dataclass(kw_only=True)
         class Options(OptionsABC):
             NumTips: int

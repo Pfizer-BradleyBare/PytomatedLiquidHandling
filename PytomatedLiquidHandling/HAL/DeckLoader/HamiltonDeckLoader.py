@@ -5,8 +5,8 @@ from .BaseDeckLoader import DeckLoaderABC, LoadUnloadOptions
 class HamiltonDeckLoader(DeckLoaderABC):
     BackendInstance: HamiltonBackendABC
 
-    def Load(self, OptionsTrackerInstance: LoadUnloadOptions.OptionsTracker):
+    def Load(self, OptionsTrackerInstance: list[LoadUnloadOptions.Options]):
         ...
 
-    def Unload(self, OptionsTrackerInstance: LoadUnloadOptions.OptionsTracker):
+    def Unload(self, OptionsTrackerInstance: list[LoadUnloadOptions.Options]):
         ...

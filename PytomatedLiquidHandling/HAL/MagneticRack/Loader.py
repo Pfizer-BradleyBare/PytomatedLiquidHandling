@@ -5,23 +5,23 @@ import yaml
 from PytomatedLiquidHandling.HAL import Backend, LayoutItem, Pipette
 
 from ...Tools.Logger import Logger
-from .BaseMagneticRack import MagneticRackTracker
+from .BaseMagneticRack import MagneticRackABC
 from .MagneticRack import MagneticRack
 
 
 def LoadYaml(
     LoggerInstance: Logger,
     FilePath: str,
-    LayoutItemTrackerInstance: LayoutItem.LayoutItemTracker,
-    PipetteTrackerInstance: Pipette.PipetteTracker,
-) -> MagneticRackTracker:
+    LayoutItems: dict[str, LayoutItem.BaseLayoutItem.LayoutItemABC],
+    Pipettes: dict[str, Pipette.BasePipette.Pipette],
+) -> dict[str, MagneticRackABC]:
     LoggerInstance.info("Loading MagneticRack config yaml file.")
 
-    MagneticRackTrackerInstance = MagneticRackTracker()
+    MagneticRacks: dict[str, MagneticRackABC] = dict()
 
     if not os.path.exists(FilePath):
         LoggerInstance.warning("Config file does not exist. Skipped")
-        return MagneticRackTrackerInstance
+        return MagneticRacks
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
@@ -32,7 +32,7 @@ def LoadYaml(
         LoggerInstance.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
-        return MagneticRackTrackerInstance
+        return MagneticRacks
 
     for Rack in ConfigFile["Rack IDs"]:
         if Rack["Enabled"] == False:
@@ -43,43 +43,39 @@ def LoadYaml(
                 + " is not enabled so will be skipped."
             )
             continue
-        UniqueIdentifier = Rack["Unique Identifier"]
+        Identifier = Rack["Identifier"]
 
-        SupportedLayoutItemTrackerInstance = LayoutItem.LayoutItemTracker()
+        SupportedLayoutItems: list[LayoutItem.BaseLayoutItem.LayoutItemABC] = list()
 
-        for LayoutItemUniqueID in Rack[
-            "Supported Labware Layout Item Unique Identifiers"
-        ]:
-            LayoutItemInstance = LayoutItemTrackerInstance.GetObjectByName(
-                LayoutItemUniqueID
-            )
+        for LayoutItemUniqueID in Rack["Supported Labware Layout Item Identifiers"]:
+            LayoutItemInstance = LayoutItems[LayoutItemUniqueID]
 
             if isinstance(LayoutItemInstance, LayoutItem.Lid):
                 raise Exception(
                     "Only coverable or nonCoverable layout items are supported"
                 )
 
-            SupportedLayoutItemTrackerInstance.LoadSingle(LayoutItemInstance)
+            SupportedLayoutItems.append(LayoutItemInstance)
 
-        for PipetteDevice in Rack["Pipette Unique Identifiers"]:
-            PipetteID = PipetteDevice["Unique Identifier"]
-            PipetteInstance = PipetteTrackerInstance.GetObjectByName(PipetteID)
+        for PipetteDevice in Rack["Pipette Identifiers"]:
+            PipetteID = PipetteDevice["Identifier"]
+            PipetteInstance = Pipettes[PipetteID]
 
             RemoveCategoryInstance = Pipette.BasePipette.LiquidClassCategory(
-                UniqueIdentifier + ": Remove"
+                Identifier + ": Remove"
             )
             for LiquidClassInfo in PipetteDevice["Liquid Classes"]["Remove Buffer"]:
-                LiquidClassID = LiquidClassInfo["Unique Identifier"]
+                LiquidClassID = LiquidClassInfo["Identifier"]
                 LiquidClassVolume = LiquidClassInfo["Max Volume"]
                 RemoveCategoryInstance.LoadSingle(
                     Pipette.BasePipette.LiquidClass(LiquidClassID, LiquidClassVolume)
                 )
 
             AddCategoryInstance = Pipette.BasePipette.LiquidClassCategory(
-                UniqueIdentifier + ": Add"
+                Identifier + ": Add"
             )
             for LiquidClassInfo in PipetteDevice["Liquid Classes"]["Add Buffer"]:
-                LiquidClassID = LiquidClassInfo["Unique Identifier"]
+                LiquidClassID = LiquidClassInfo["Identifier"]
                 LiquidClassVolume = LiquidClassInfo["Max Volume"]
                 AddCategoryInstance.LoadSingle(
                     Pipette.BasePipette.LiquidClass(LiquidClassID, LiquidClassVolume)
@@ -92,12 +88,10 @@ def LoadYaml(
                 AddCategoryInstance
             )
 
-        MagneticRackTrackerInstance.LoadSingle(
-            MagneticRack(
-                UniqueIdentifier,
-                Backend.NullBackend(),
-                SupportedLayoutItemTrackerInstance,
-            )
+        MagneticRacks[Identifier] = MagneticRack(
+            Identifier,
+            Backend.NullBackend(),
+            SupportedLayoutItems,
         )
 
-    return MagneticRackTrackerInstance
+    return MagneticRacks

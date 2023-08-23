@@ -1,6 +1,7 @@
 from .Interface import InterfaceABC
 from .InterfaceCommand import (
     InterfaceCommandABC,
-    OptionsInterfaceCommandABC,
-    OptionsTrackerInterfaceCommandABC,
+    InterfaceCommandWithListedOptionsABC,
+    InterfaceCommandWithOptionsABC,
 )
+from .HALObject import HALObject

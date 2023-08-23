@@ -1,5 +1,5 @@
-from .WellEquation.WellEquationTracker import WellEquationTracker
 from dataclasses import dataclass
+from .WellEquation import WellEquation
 
 
 @dataclass
@@ -9,4 +9,4 @@ class Wells:
     SequencesPerWell: int
     MaxVolume: float
     WellDeadVolume: float
-    WellEquationTrackerInstance: WellEquationTracker
+    WellEquations: list[WellEquation]

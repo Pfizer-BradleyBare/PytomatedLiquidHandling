@@ -1,18 +1,17 @@
 from abc import abstractmethod
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
 from ...Tools.AbstractClasses import InterfaceABC
 from .Interface import LoadUnloadOptions
 
 
 @dataclass
-class DeckLoaderABC(InterfaceABC, UniqueObjectABC):
+class DeckLoaderABC(InterfaceABC):
     @abstractmethod
-    def Load(self, OptionsTrackerInstance: LoadUnloadOptions.OptionsTracker):
+    def Load(self, Options: list[LoadUnloadOptions.Options]):
         ...
 
     @abstractmethod
-    def Unload(self, OptionsTrackerInstance: LoadUnloadOptions.OptionsTracker):
+    def Unload(self, Options: list[LoadUnloadOptions.Options]):
         ...

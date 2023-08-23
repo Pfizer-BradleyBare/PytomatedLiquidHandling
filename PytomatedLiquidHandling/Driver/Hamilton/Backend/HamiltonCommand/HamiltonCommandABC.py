@@ -3,7 +3,11 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, TypeVar
 
-from ....Tools.AbstractClasses import CommandABC, CommandOptions, CommandOptionsTracker
+from ....Tools.AbstractClasses import (
+    CommandABC,
+    CommandOptions,
+    CommandOptionsListed,
+)
 
 CommandSelf = TypeVar("CommandSelf", bound="HamiltonCommandABC")
 
@@ -15,7 +19,7 @@ class HamiltonCommandABC(CommandABC):
 
     def GetVars(self) -> dict[str, Any]:
         if isinstance(self, CommandOptions):
-            OutputDict = vars(self.OptionsInstance)
+            OutputDict = vars(self.Options)
 
             for key, value in OutputDict.items():
                 if isinstance(value, Enum):
@@ -25,10 +29,10 @@ class HamiltonCommandABC(CommandABC):
 
             return OutputDict
 
-        elif isinstance(self, CommandOptionsTracker):
+        elif isinstance(self, CommandOptionsListed):
             OutputDict = defaultdict(list)
 
-            for Options in self.OptionsTrackerInstance.GetObjectsAsList():
+            for Options in self.ListedOptions:
                 OptionsDict = vars(Options)
 
                 for key, value in OptionsDict.items():
@@ -37,7 +41,7 @@ class HamiltonCommandABC(CommandABC):
                     else:
                         OutputDict[key].append(value)
 
-            OutputDict = OutputDict | vars(self.OptionsTrackerInstance)
+            OutputDict = OutputDict | vars(self.ListedOptions)
 
             for key, value in OutputDict.items():
                 if isinstance(value, Enum):

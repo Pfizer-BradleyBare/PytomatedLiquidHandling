@@ -5,22 +5,22 @@ import yaml
 from PytomatedLiquidHandling.HAL import Carrier
 
 from ...Tools.Logger import Logger
-from .BaseDeckLocation import CarrierConfig, DeckLocationTracker
+from .BaseDeckLocation import CarrierConfig, DeckLocationABC
 from .DeckLocation import DeckLocation
 
 
 def LoadYaml(
     LoggerInstance: Logger,
-    CarrierTrackerInstance: Carrier.CarrierTracker,
+    Carriers: dict[str, Carrier.BaseCarrier.CarrierABC],
     FilePath: str,
-) -> DeckLocationTracker:
+) -> dict[str, DeckLocationABC]:
     LoggerInstance.info("Loading DeckLocation config yaml file.")
 
-    DeckLocationTrackerInstance = DeckLocationTracker()
+    DeckLocations: dict[str, DeckLocationABC] = dict()
 
     if not os.path.exists(FilePath):
         LoggerInstance.warning("Config file does not exist. Skipped")
-        return DeckLocationTrackerInstance
+        return DeckLocations
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
@@ -31,7 +31,7 @@ def LoadYaml(
         LoggerInstance.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
-        return DeckLocationTrackerInstance
+        return DeckLocations
 
     for Location in ConfigFile:
         if Location["Enabled"] == False:
@@ -44,16 +44,16 @@ def LoadYaml(
 
             continue
 
-        UniqueIdentifier = Location["Unique Identifier"]
+        Identifier = Location["Identifier"]
 
-        CarrierUniqueID = Location["Carrier"]["Unique Identifier"]
+        CarrierID = Location["Carrier"]["Identifier"]
         CarrierPosition = Location["Carrier"]["Position"]
 
-        CarrierInstance = CarrierTrackerInstance.GetObjectByName(CarrierUniqueID)
+        CarrierInstance = Carriers[CarrierID]
         CarrierConfigInstance = CarrierConfig(CarrierInstance, CarrierPosition)
 
-        DeckLocationInstance = DeckLocation(UniqueIdentifier, CarrierConfigInstance)
+        DeckLocationInstance = DeckLocation(Identifier, CarrierConfigInstance)
 
-        DeckLocationTrackerInstance.LoadSingle(DeckLocationInstance)
+        DeckLocations[Identifier] = DeckLocationInstance
 
-    return DeckLocationTrackerInstance
+    return DeckLocations

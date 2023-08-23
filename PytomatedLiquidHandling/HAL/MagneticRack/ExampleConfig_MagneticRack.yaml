@@ -11,31 +11,31 @@
 #
 #############################################################
 
-- Unique Identifier: Rack 1
+- Identifier: Rack 1
   Enabled: True
-  Supported Labware Layout Item Unique Identifiers:
+  Supported Labware Layout Item Identifiers:
     - Item1
     - Item2
 
-  Pipette Unique Identifiers:
-    - Unique Identifier: 96 Head Hammy
+  Pipette Identifiers:
+    - Identifier: 96 Head Hammy
       Liquid Classes:
         Remove Buffer:
-          - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
+          - Identifier: Tip_50ul_Water_DispenseSurface_Empty
             Max Volume: 50
 
-          - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
+          - Identifier: StandardVolume_Water_DispenseSurface_Empty
             Max Volume: 300
 
-          - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
+          - Identifier: HighVolume_Water_DispenseSurface_Empty
             Max Volume: 1000
 
         Add Buffer:
-          - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
+          - Identifier: Tip_50ul_Water_DispenseSurface_Empty
             Max Volume: 50
 
-          - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
+          - Identifier: StandardVolume_Water_DispenseSurface_Empty
             Max Volume: 300
 
-          - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
+          - Identifier: HighVolume_Water_DispenseSurface_Empty
             Max Volume: 1000

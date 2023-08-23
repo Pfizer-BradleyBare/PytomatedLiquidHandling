@@ -6,14 +6,14 @@
 #############################################################
 
 Microlab Star:
-  Unique Identifier: Hammy
+  Identifier: Hammy
   Deck Layout Path: Path
 
 Vantage:
-  Unique Identifier: Hammy
+  Identifier: Hammy
   Deck Layout Path: Path
 
 Stunner:
-  Unique Identifier: Stunny
+  Identifier: Stunny
   IP Address: "192.168.1.1"
   Port: 1234

@@ -6,7 +6,7 @@ ExecuteReturnType = TypeVar("ExecuteReturnType")
 OptionsType = TypeVar("OptionsType", bound=OptionsABC)
 
 
-class OptionsInterfaceCommandABC(Generic[ExecuteReturnType]):
+class InterfaceCommandWithOptionsABC(Generic[ExecuteReturnType]):
     def __init__(
         self,
         ExecuteFunction: Callable,
@@ -15,5 +15,5 @@ class OptionsInterfaceCommandABC(Generic[ExecuteReturnType]):
         self.Execute: Callable[[OptionsABC], ExecuteReturnType] = ExecuteFunction
         self.ExecutionTime: Callable[[OptionsABC], float] = ExecutionTimeFunction
 
-    def __call__(self, OptionsInstance: OptionsABC) -> ExecuteReturnType:
-        return self.Execute(OptionsInstance)
+    def __call__(self, Options: OptionsABC) -> ExecuteReturnType:
+        return self.Execute(Options)

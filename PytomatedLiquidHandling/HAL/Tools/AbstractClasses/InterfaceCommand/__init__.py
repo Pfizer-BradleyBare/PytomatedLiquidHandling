@@ -1,3 +1,3 @@
-from .OptionsInterfaceCommandABC import OptionsInterfaceCommandABC
-from .OptionsTrackerInterfaceCommandABC import OptionsTrackerInterfaceCommandABC
+from .InterfaceCommandWithOptionsABC import InterfaceCommandWithOptionsABC
+from .InterfaceCommandWithListedOptionsABC import InterfaceCommandWithListedOptionsABC
 from .InterfaceCommandABC import InterfaceCommandABC

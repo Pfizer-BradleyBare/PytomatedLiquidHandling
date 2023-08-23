@@ -3,19 +3,19 @@ from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import Labware, LayoutItem
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 from ...Tools.AbstractClasses import (
     InterfaceABC,
     InterfaceCommandABC,
-    OptionsInterfaceCommandABC,
+    InterfaceCommandWithOptionsABC,
 )
 from .TempLimits.TempLimits import TempLimits
 
 
 @dataclass
-class TempControlDevice(InterfaceABC, UniqueObjectABC):
-    class SetTemperatureInterfaceCommand(OptionsInterfaceCommandABC[None]):
+class TempControlDevice(InterfaceABC, HALObject):
+    class SetTemperatureInterfaceCommand(InterfaceCommandWithOptionsABC[None]):
         @dataclass
         class Options(OptionsABC):
             Temperature: float
@@ -23,7 +23,7 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
     class GetTemperatureInterfaceCommand(InterfaceCommandABC[float]):
         ...
 
-    class SetShakingSpeedInterfaceCommand(OptionsInterfaceCommandABC[None]):
+    class SetShakingSpeedInterfaceCommand(InterfaceCommandWithOptionsABC[None]):
         @dataclass
         class Options(OptionsABC):
             ShakingSpeed: int
@@ -36,7 +36,7 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
     CoolingSupported: bool
     ShakingSupported: bool
     TempLimitsInstance: TempLimits
-    SupportedLayoutItemTrackerInstance: LayoutItem.LayoutItemTracker
+    SupportedLayoutItems: list[LayoutItem.BaseLayoutItem.LayoutItemABC]
 
     HandleID: int | str = field(init=False)
 
@@ -47,11 +47,11 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
 
     def IsLabwareSupported(self, LabwareInstance: Labware.PipettableLabware) -> bool:
         Labwares = [
-            LayoutItem.LabwareInstance.UniqueIdentifier
-            for LayoutItem in self.SupportedLayoutItemTrackerInstance.GetObjectsAsList()
+            LayoutItem.LabwareInstance.Identifier
+            for LayoutItem in self.SupportedLayoutItems
         ]
 
-        if LabwareInstance.UniqueIdentifier in Labwares:
+        if LabwareInstance.Identifier in Labwares:
             return True
         else:
             return False
@@ -59,9 +59,7 @@ class TempControlDevice(InterfaceABC, UniqueObjectABC):
     def GetLayoutItem(
         self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
     ) -> LayoutItem.CoverableItem:
-        for (
-            SupportedLayoutItemInstance
-        ) in self.SupportedLayoutItemTrackerInstance.GetObjectsAsList():
+        for SupportedLayoutItemInstance in self.SupportedLayoutItems:
             if (
                 SupportedLayoutItemInstance.LabwareInstance
                 == LayoutItemInstance.LabwareInstance

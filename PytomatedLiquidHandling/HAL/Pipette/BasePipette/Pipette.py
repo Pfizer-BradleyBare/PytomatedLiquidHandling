@@ -8,14 +8,14 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
-from ...Tools.AbstractClasses import InterfaceABC, OptionsTrackerInterfaceCommandABC
+from ...Tools.AbstractClasses import InterfaceABC, InterfaceCommandWithListedOptionsABC
 from .LiquidClass import LiquidClass, LiquidClassCategoryTracker
 from .PipetteTip import PipetteTip, PipetteTipTracker
 
 
 @dataclass
 class Pipette(InterfaceABC, UniqueObjectABC):
-    class TransferInterfaceCommand(OptionsTrackerInterfaceCommandABC[None]):
+    class TransferInterfaceCommand(InterfaceCommandWithListedOptionsABC[None]):
         @dataclass(kw_only=True)
         class Options(OptionsABC):
             SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem

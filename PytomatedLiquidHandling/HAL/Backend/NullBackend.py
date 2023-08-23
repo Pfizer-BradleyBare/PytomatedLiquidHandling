@@ -8,7 +8,7 @@ ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 @dataclass
 class NullBackend(BackendABC):
-    UniqueIdentifier: str | int = "Null Backend"
+    Identifier: str | int = field(init=False, default="Null Backend")
     LoggerInstance: None = field(init=False, default=None)
 
     def StartBackend(self):

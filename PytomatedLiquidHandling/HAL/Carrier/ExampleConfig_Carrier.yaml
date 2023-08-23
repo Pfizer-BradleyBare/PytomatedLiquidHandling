@@ -1,5 +1,5 @@
 Moveable Carrier:
-  - Unique Identifier: h
+  - Identifier: h
     Enabled: True
     Track Start: 32
     Track End: 37
@@ -8,7 +8,7 @@ Moveable Carrier:
     Image Filename 2D: 2DImage
 
 Non-Moveable Carrier:
-  - Unique Identifier: h
+  - Identifier: h
     Enabled: True
     Track Start: 32
     Track End: 37
@@ -17,7 +17,7 @@ Non-Moveable Carrier:
     Image Filename 2D: 2DImage
 
 Autoload Carrier:
-  - Unique Identifier: h
+  - Identifier: h
     Enabled: True
     Labware ID: LabID
     Track Start: 32

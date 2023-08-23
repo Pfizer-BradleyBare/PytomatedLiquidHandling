@@ -7,21 +7,22 @@ from PytomatedLiquidHandling.HAL import Backend
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Tools.Logger import Logger
 from . import HamiltonTipFTR, HamiltonTipNTR
-from .BaseTip import TipTracker
+from .BaseTip import Tip
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 
 
 def LoadYaml(
     LoggerInstance: Logger,
-    BackendTrackerInstance: Backend.BackendTracker,
+    Backends: dict[str, BackendABC],
     FilePath: str,
-) -> TipTracker:
+) -> dict[str, Tip]:
     LoggerInstance.info("Loading Tip config yaml file.")
 
-    TipTrackerInstance = TipTracker()
+    Tips: dict[str, Tip] = dict()
 
     if not os.path.exists(FilePath):
         LoggerInstance.warning("Config file does not exist. Skipped")
-        return TipTrackerInstance
+        return Tips
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
@@ -32,37 +33,35 @@ def LoadYaml(
         LoggerInstance.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
-        return TipTrackerInstance
+        return Tips
 
     for TipType in ConfigFile:
-        for Tip in ConfigFile[TipType]:
-            if Tip["Enabled"] == False:
+        for TipConfig in ConfigFile[TipType]:
+            if TipConfig["Enabled"] == False:
                 LoggerInstance.warning(
                     TipType
                     + " with unique ID "
-                    + Tip["Unique Identifier"]
+                    + TipConfig["Unique Identifier"]
                     + " is not enabled so will be skipped."
                 )
                 continue
 
-            UniqueIdentifier = Tip["Unique Identifier"]
-            BackendInstance = BackendTrackerInstance.GetObjectByName(
-                Tip["Backend Unique Identifier"]
-            )
-            CustomErrorHandling = Tip["Custom Error Handling"]
+            Identifier = TipConfig["Identifier"]
+            BackendInstance = Backends[TipConfig["Backend Identifier"]]
+            CustomErrorHandling = TipConfig["Custom Error Handling"]
 
-            PickupSequence = Tip["Pickup Sequence"]
-            MaxVolume = Tip["Volume"]
+            PickupSequence = TipConfig["Pickup Sequence"]
+            MaxVolume = TipConfig["Volume"]
 
             if TipType == "Hamilton NTR":
-                NTRWasteSequence = Tip["NTR Waste Sequence"]
-                GripperSequence = Tip["Gripper Sequence"]
+                NTRWasteSequence = TipConfig["NTR Waste Sequence"]
+                GripperSequence = TipConfig["Gripper Sequence"]
 
                 if not isinstance(BackendInstance, HamiltonBackendABC):
                     raise Exception("Must be a Hamilton Backend")
 
                 TipInstance = HamiltonTipNTR(
-                    UniqueIdentifier,
+                    Identifier,
                     BackendInstance,
                     CustomErrorHandling,
                     PickupSequence,
@@ -76,7 +75,7 @@ def LoadYaml(
                     raise Exception("Must be a Hamilton Backend")
 
                 TipInstance = HamiltonTipFTR(
-                    UniqueIdentifier,
+                    Identifier,
                     BackendInstance,
                     CustomErrorHandling,
                     PickupSequence,
@@ -86,6 +85,6 @@ def LoadYaml(
             else:
                 raise Exception("Tip type not recognized")
 
-            TipTrackerInstance.LoadSingle(TipInstance)
+            Tips[Identifier] = TipInstance
 
-    return TipTrackerInstance
+    return Tips

@@ -5,5 +5,10 @@ from dataclasses import dataclass
 
 @dataclass(kw_only=True)
 class Options(OptionsABC):
-    Sequence: str
-    SequencePosition: int
+    FlipTubeSequence: str
+    FlipTubeSequencePosition: int
+
+
+@dataclass(kw_only=True)
+class ListedOptions(list[Options]):
+    ToolSequence: str

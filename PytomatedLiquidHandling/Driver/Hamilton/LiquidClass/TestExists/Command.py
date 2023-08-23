@@ -1,13 +1,10 @@
 from dataclasses import dataclass
-from typing import TypeVar
 
-from ....Tools.AbstractClasses import CommandOptionsTracker
+from ....Tools.AbstractClasses import CommandOptionsListed
 from ...Backend import HamiltonActionCommandABC
-from .OptionsTracker import OptionsTracker
-
-CommandSelf = TypeVar("CommandSelf", bound="Command")
+from .Options import Options
 
 
 @dataclass
-class Command(CommandOptionsTracker[OptionsTracker], HamiltonActionCommandABC):
+class Command(CommandOptionsListed[list[Options]], HamiltonActionCommandABC):
     ...

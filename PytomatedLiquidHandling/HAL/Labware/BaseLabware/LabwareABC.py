@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 from .Dimensions.Dimensions import Dimensions
 from .TransportOffsets import TransportOffsets
 
 
 @dataclass
-class LabwareABC(UniqueObjectABC):
+class LabwareABC(HALObject):
     ImageFilename: str
     DimensionsInstance: Dimensions
     TransportOffsetsInstance: TransportOffsets

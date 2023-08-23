@@ -2,7 +2,7 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 from ...Tools.AbstractClasses import InterfaceABC
 from .IMCSTip import DesaltingTipTracker
@@ -10,7 +10,7 @@ from .Interface import IMCSDesaltingOptions
 
 
 @dataclass
-class IMCSDesaltingABC(InterfaceABC, UniqueObjectABC):
+class IMCSDesaltingABC(InterfaceABC, HALObject):
     TipInstance: Tip.BaseTip.Tip
     PipetteTipSupportDropOffSequence: str
     PipetteTipSupportPickupSequence: str
@@ -18,9 +18,9 @@ class IMCSDesaltingABC(InterfaceABC, UniqueObjectABC):
     IMCSTipSupportPickupSequence: str
     LoadLiquidClass: str
     EluteLiquidClass: str
-    SupportedSourceLabwareTrackerInstance: Labware.LabwareTracker
-    SupportedDestinationLabwareTrackerInstance: Labware.LabwareTracker
-    SupportedDeckLocationTrackerInstance: DeckLocation.DeckLocationTracker
+    SupportedSourceLabwares: list[Labware.BaseLabware.LabwareABC]
+    SupportedDestinationLabwares: list[Labware.BaseLabware.LabwareABC]
+    SupportedDeckLocationTracker: list[DeckLocation.BaseDeckLocation.DeckLocationABC]
     DesaltingTipTrackerInstance: DesaltingTipTracker
     IMCSTipDropOffSequence: str
     IMCSTipPickupSequence: str
@@ -28,9 +28,9 @@ class IMCSDesaltingABC(InterfaceABC, UniqueObjectABC):
     IsEquilibrated: bool = field(init=False, default=False)
 
     @abstractmethod
-    def Equilibrate(self, OptionsTrackerInstance: IMCSDesaltingOptions.OptionsTracker):
+    def Equilibrate(self, Options: IMCSDesaltingOptions.ListedOptions):
         self.IsEquilibrated = True
 
     @abstractmethod
-    def Desalt(self, OptionsTrackerInstance: IMCSDesaltingOptions.OptionsTracker):
+    def Desalt(self, Options: IMCSDesaltingOptions.ListedOptions):
         self.IsEquilibrated = False

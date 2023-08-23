@@ -2,20 +2,23 @@ import os
 
 import yaml
 
-from ...Driver.Hamilton.Backend import MicrolabStarBackend, VantageBackend
-from ...Driver.UnchainedLabs.Backend import StunnerBackend
-from ...Tools.Logger import Logger
-from .BackendTracker import BackendTracker
+from PytomatedLiquidHandling.Driver.Hamilton.Backend import (
+    MicrolabStarBackend,
+    VantageBackend,
+)
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
+from PytomatedLiquidHandling.Driver.UnchainedLabs.Backend import StunnerBackend
+from PytomatedLiquidHandling.Tools.Logger import Logger
 
 
-def LoadYaml(LoggerInstance: Logger, FilePath: str) -> BackendTracker:
+def LoadYaml(LoggerInstance: Logger, FilePath: str) -> dict[str, BackendABC]:
     LoggerInstance.info("Loading Backend config yaml file.")
 
-    BackendTrackerInstance = BackendTracker()
+    Backends: dict[str, BackendABC] = dict()
 
     if not os.path.exists(FilePath):
         LoggerInstance.warning("Config file does not exist. Skipped")
-        return BackendTrackerInstance
+        return Backends
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
@@ -26,27 +29,27 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> BackendTracker:
         LoggerInstance.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
-        return BackendTrackerInstance
+        return Backends
 
     for DeviceID in ConfigFile:
         Device = ConfigFile[DeviceID]
-        UniqueID = Device["Unique Identifier"]
+        Identifier = Device["Identifier"]
 
         if DeviceID == "Microlab Star":
             DeviceInstance = MicrolabStarBackend(
-                UniqueID, LoggerInstance, Device["Deck Layout Path"]
+                Identifier, LoggerInstance, Device["Deck Layout Path"]
             )
         elif DeviceID == "Vantage":
             DeviceInstance = VantageBackend(
-                UniqueID, LoggerInstance, Device["Deck Layout Path"]
+                Identifier, LoggerInstance, Device["Deck Layout Path"]
             )
         elif DeviceID == "Stunner":
             DeviceInstance = StunnerBackend(
-                UniqueID, LoggerInstance, Device["IP Address"], Device["Port"]
+                Identifier, LoggerInstance, Device["IP Address"], Device["Port"]
             )
         else:
             raise Exception("Device not recognized")
 
-        BackendTrackerInstance.LoadSingle(DeviceInstance)
+        Backends[Identifier] = DeviceInstance
 
-    return BackendTrackerInstance
+    return Backends

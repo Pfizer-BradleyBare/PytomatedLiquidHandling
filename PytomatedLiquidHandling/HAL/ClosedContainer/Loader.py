@@ -4,27 +4,29 @@ import yaml
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from PytomatedLiquidHandling.Driver.Hamilton.Backend.BaseHamiltonBackend import (
+    HamiltonBackendABC,
+)
 from ...Tools.Logger import Logger
-from ..Backend import BackendTracker
 from . import HamiltonFlipTube, HamiltonFlipTubeSpecial
-from .BaseClosedContainer import ClosedContainerTracker
+from .BaseClosedContainer import ClosedContainerABC
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 
 
 def LoadYaml(
     LoggerInstance: Logger,
-    BackendTrackerInstance: BackendTracker,
-    DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
-    LabwareTrackerInstance: Labware.LabwareTracker,
+    Backends: dict[str, BackendABC],
+    DeckLocations: dict[str, DeckLocation.BaseDeckLocation.DeckLocationABC],
+    Labwares: dict[str, Labware.BaseLabware.LabwareABC],
     FilePath: str,
-) -> ClosedContainerTracker:
+) -> dict[str, ClosedContainerABC]:
     LoggerInstance.info("Loading ClosedContainer config yaml file.")
 
-    ClosedContainerTrackerInstance = ClosedContainerTracker()
+    ClosedContainers: dict[str, ClosedContainerABC] = dict()
 
     if not os.path.exists(FilePath):
         LoggerInstance.warning("Config file does not exist. Skipped")
-        return ClosedContainerTrackerInstance
+        return ClosedContainers
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
@@ -35,7 +37,7 @@ def LoadYaml(
         LoggerInstance.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
-        return ClosedContainerTrackerInstance
+        return ClosedContainers
 
     for DeviceType in ConfigFile:
         for Device in ConfigFile[DeviceType]:
@@ -48,23 +50,21 @@ def LoadYaml(
                 )
                 continue
 
-            UniqueIdentifier = Device["Unique Identifier"]
-            BackendIdentifier = Device["Backend Unique Identifier"]
+            Identifier = Device["Identifier"]
+            BackendIdentifier = Device["Backend Identifier"]
             CustomErrorHandling = Device["Custom Error Handling"]
 
-            BackendInstance = BackendTrackerInstance.GetObjectByName(BackendIdentifier)
+            BackendInstance = Backends[BackendIdentifier]
 
-            SupportedDeckLocationTrackerInstance = DeckLocation.DeckLocationTracker()
-            for DeckLocationID in Device["Supported Deck Location Unique Identifiers"]:
-                SupportedDeckLocationTrackerInstance.LoadSingle(
-                    DeckLocationTrackerInstance.GetObjectByName(DeckLocationID)
-                )
+            SupportedDeckLocations: list[
+                DeckLocation.BaseDeckLocation.DeckLocationABC
+            ] = list()
+            for DeckLocationID in Device["Supported Deck Location Identifiers"]:
+                SupportedDeckLocations.append(DeckLocations[DeckLocationID])
 
-            SupportedLabwareTrackerInstance = Labware.LabwareTracker()
-            for LabwareID in Device["Supported Labware Unique Identifiers"]:
-                SupportedLabwareTrackerInstance.LoadSingle(
-                    LabwareTrackerInstance.GetObjectByName(LabwareID)
-                )
+            SupportedLabwares: list[Labware.BaseLabware.LabwareABC] = list()
+            for LabwareID in Device["Supported Labware Identifiers"]:
+                SupportedLabwares.append(Labwares[LabwareID])
 
             if DeviceType == "Hamilton FlipTube":
                 if not isinstance(BackendInstance, HamiltonBackendABC):
@@ -73,12 +73,12 @@ def LoadYaml(
                 ToolSequence = Device["Tool Sequence"]
 
                 ClosedContainerInstance = HamiltonFlipTube(
-                    UniqueIdentifier,
+                    Identifier,
                     BackendInstance,
                     CustomErrorHandling,
                     ToolSequence,
-                    SupportedDeckLocationTrackerInstance,
-                    SupportedLabwareTrackerInstance,
+                    SupportedDeckLocations,
+                    SupportedLabwares,
                 )
 
             elif DeviceType == "Hamilton FlipTube Special":
@@ -90,17 +90,17 @@ def LoadYaml(
                 ToolSequence = Device["Tool Sequence"]
 
                 ClosedContainerInstance = HamiltonFlipTubeSpecial(
-                    UniqueIdentifier,
+                    Identifier,
                     BackendInstance,
                     CustomErrorHandling,
                     ToolSequence,
-                    SupportedDeckLocationTrackerInstance,
-                    SupportedLabwareTrackerInstance,
+                    SupportedDeckLocations,
+                    SupportedLabwares,
                 )
 
             else:
                 raise Exception("Device Type not known. Please fix.")
 
-            ClosedContainerTrackerInstance.LoadSingle(ClosedContainerInstance)
+            ClosedContainers[Identifier] = ClosedContainerInstance
 
-    return ClosedContainerTrackerInstance
+    return ClosedContainers

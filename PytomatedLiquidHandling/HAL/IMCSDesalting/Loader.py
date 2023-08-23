@@ -2,15 +2,15 @@ import os
 
 import yaml
 
-from PytomatedLiquidHandling.HAL import Backend, DeckLocation, Labware, Tip
-
+from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Tools.Logger import Logger
 from .BaseIMCSDesalting import (
     DesaltingTip,
     DesaltingTipTracker,
     ElutionParameters,
-    IMCSDesaltingTracker,
+    IMCSDesaltingABC,
 )
 from .HamiltonCORE96HeadIMCSDesalting import HamiltonCORE96HeadIMCSDesalting
 from .HamiltonPortraitCORE8ChannelIMCSDesalting import (
@@ -20,17 +20,17 @@ from .HamiltonPortraitCORE8ChannelIMCSDesalting import (
 
 def LoadYaml(
     LoggerInstance: Logger,
-    BackendTrackerInstance: Backend.BackendTracker,
-    DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
-    LabwareTrackerInstance: Labware.LabwareTracker,
-    TipTrackerInstance: Tip.TipTracker,
+    Backends: dict[str, BackendABC],
+    DeckLocations: dict[str, DeckLocation.BaseDeckLocation.DeckLocationABC],
+    Labwares: dict[str, Labware.BaseLabware.LabwareABC],
+    Tips: Tip.TipTracker,
     FilePath: str,
-) -> IMCSDesaltingTracker:
-    IMCSDesaltingTrackerInstance = IMCSDesaltingTracker()
+) -> dict[str, IMCSDesaltingABC]:
+    IMCSDesaltingDevices: dict[str, IMCSDesaltingABC] = dict()
 
     if not os.path.exists(FilePath):
         LoggerInstance.warning("Config file does not exist. Skipped")
-        return IMCSDesaltingTrackerInstance
+        return IMCSDesaltingDevices
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
@@ -41,22 +41,22 @@ def LoadYaml(
         LoggerInstance.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
-        return IMCSDesaltingTrackerInstance
+        return IMCSDesaltingDevices
 
-    TipUniqueIdentifier = ConfigFile["300uL Tip Unique Identifier"]
+    TipID = ConfigFile["300uL Tip Identifier"]
     TipSupportDropOffSequence = ConfigFile["300uL Tip Support Drop Off Sequence"]
     TipSupportPickupSequence = ConfigFile["300uL Tip Support Pickup Sequence"]
     IMCSTipSupportDropOffSequence = ConfigFile["IMCS Tip Support Drop Off Sequence"]
     IMCSTipSupportPickupSequence = ConfigFile["IMCS Tip Support Pickup Off Sequence"]
 
-    del ConfigFile["300uL Tip Unique Identifier"]
+    del ConfigFile["300uL Tip Identifier"]
     del ConfigFile["300uL Tip Support Drop Off Sequence"]
     del ConfigFile["300uL Tip Support Pickup Sequence"]
     del ConfigFile["IMCS Tip Support Drop Off Sequence"]
     del ConfigFile["IMCS Tip Support Pickup Off Sequence"]
     # pull shared info then remove it
 
-    TipInstance = TipTrackerInstance.GetObjectByName(TipUniqueIdentifier)
+    TipInstance = Tips[TipID]
     if not TipInstance.MaxVolume == 300:
         raise Exception("Wrong tip selected...")
 
@@ -68,35 +68,31 @@ def LoadYaml(
         del Device["Load Liquid Class"]
         del Device["Elute Liquid Class"]
 
-        SupportedSourceLabwareTrackerInstance = Labware.LabwareTracker()
-        for LabwareID in Device["Supported Source Labware Unique Identifiers"]:
-            SupportedSourceLabwareTrackerInstance.LoadSingle(
-                LabwareTrackerInstance.GetObjectByName(LabwareID)
-            )
-        del Device["Supported Source Labware Unique Identifiers"]
+        SupportedSourceLabwares: list[Labware.BaseLabware.LabwareABC] = list()
+        for LabwareID in Device["Supported Source Labware Identifiers"]:
+            SupportedSourceLabwares.append(Labwares[LabwareID])
+        del Device["Supported Source Labware Identifiers"]
 
-        SupportedDestinationLabwareTrackerInstance = Labware.LabwareTracker()
-        for LabwareID in Device["Supported Destination Labware Unique Identifiers"]:
-            SupportedDestinationLabwareTrackerInstance.LoadSingle(
-                LabwareTrackerInstance.GetObjectByName(LabwareID)
-            )
-        del Device["Supported Destination Labware Unique Identifiers"]
+        SupportedDestinationLabwares: list[Labware.BaseLabware.LabwareABC] = list()
+        for LabwareID in Device["Supported Destination Labware Identifiers"]:
+            SupportedDestinationLabwares.append(Labwares[LabwareID])
+        del Device["Supported Destination Labware Identifiers"]
 
-        SupportedDeckLocationTrackerInstance = DeckLocation.DeckLocationTracker()
-        for DeckLocationID in Device["Supported Deck Location Unique Identifiers"]:
-            SupportedDeckLocationTrackerInstance.LoadSingle(
-                DeckLocationTrackerInstance.GetObjectByName(DeckLocationID)
-            )
-        del Device["Supported Deck Location Unique Identifiers"]
+        SupportedDeckLocations: list[
+            DeckLocation.BaseDeckLocation.DeckLocationABC
+        ] = list()
+        for DeckLocationID in Device["Supported Deck Location Identifiers"]:
+            SupportedDeckLocations.append(DeckLocations[DeckLocationID])
+        del Device["Supported Deck Location Identifiers"]
 
         DesaltingTipTrackerInstance = DesaltingTipTracker()
         for Tip in Device["Elution Method Tip Types"]:
-            DesaltingTipInstance = DesaltingTip(Tip["Unique Identifier"])
+            DesaltingTipInstance = DesaltingTip(Tip["Identifier"])
 
             for ElutionMethod in Tip["Elution Methods"]:
                 DesaltingTipInstance.LoadSingle(
                     ElutionParameters(
-                        ElutionMethod["Unique Identifier"],
+                        ElutionMethod["Identifier"],
                         ElutionMethod["Equilibration Dispense Height"],
                         ElutionMethod["Sample Dispense Height"],
                         ElutionMethod["Chaser Dispense Height"],
@@ -115,9 +111,9 @@ def LoadYaml(
             if DeviceItem["Enabled"] == False:
                 continue
 
-            ID = DeviceItem["Unique Identifier"]
-            BackendID = DeviceItem["Backend Unique Identifier"]
-            BackendInstance = BackendTrackerInstance.GetObjectByName(BackendID)
+            Identifier = DeviceItem["Identifier"]
+            BackendID = DeviceItem["Backend Identifier"]
+            BackendInstance = Backends[BackendID]
             CustomErrorHandling = DeviceItem["Custom Error Handling"]
 
             IMCSTipDropOffSequence = DeviceItem["IMCS Tip Drop Off Sequence"]
@@ -129,7 +125,7 @@ def LoadYaml(
                     raise Exception("Wrong backend selected.")
 
                 HamiltonCORE96HeadIMCSDesalting(
-                    ID,
+                    Identifier,
                     BackendInstance,
                     CustomErrorHandling,
                     TipInstance,
@@ -139,9 +135,9 @@ def LoadYaml(
                     IMCSTipSupportPickupSequence,
                     LoadLiquidClass,
                     EluteLiquidClass,
-                    SupportedSourceLabwareTrackerInstance,
-                    SupportedDestinationLabwareTrackerInstance,
-                    SupportedDeckLocationTrackerInstance,
+                    SupportedSourceLabwares,
+                    SupportedDestinationLabwares,
+                    SupportedDeckLocations,
                     DesaltingTipTrackerInstance,
                     IMCSTipDropOffSequence,
                     IMCSTipPickupSequence,
@@ -153,7 +149,7 @@ def LoadYaml(
                     raise Exception("Wrong backend selected.")
 
                 HamiltonPortraitCORE8ChannelIMCSDesalting(
-                    ID,
+                    Identifier,
                     BackendInstance,
                     CustomErrorHandling,
                     TipInstance,
@@ -163,9 +159,9 @@ def LoadYaml(
                     IMCSTipSupportPickupSequence,
                     LoadLiquidClass,
                     EluteLiquidClass,
-                    SupportedSourceLabwareTrackerInstance,
-                    SupportedDestinationLabwareTrackerInstance,
-                    SupportedDeckLocationTrackerInstance,
+                    SupportedSourceLabwares,
+                    SupportedDestinationLabwares,
+                    SupportedDeckLocations,
                     DesaltingTipTrackerInstance,
                     IMCSTipDropOffSequence,
                     IMCSTipPickupSequence,
@@ -175,4 +171,4 @@ def LoadYaml(
             else:
                 raise Exception("Device type not recognized")
 
-    return IMCSDesaltingTrackerInstance
+    return IMCSDesaltingDevices

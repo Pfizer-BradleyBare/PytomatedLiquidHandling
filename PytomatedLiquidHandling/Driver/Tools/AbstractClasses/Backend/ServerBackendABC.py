@@ -24,7 +24,7 @@ class ServerBackendABC(SimpleBackendABC):
     __AppParentThreadRunnerFlag: Event = field(init=False, default=Event())
 
     def __post_init__(self):
-        self.__App = Flask(str(self.UniqueIdentifier))
+        self.__App = Flask(str(self.Identifier))
         logging.getLogger("werkzeug").disabled = True
         self.Views += [self.IsActive, self.Kill]
 
@@ -39,7 +39,7 @@ class ServerBackendABC(SimpleBackendABC):
 
     def __ServerThreadRunner(self):
         Thread(
-            name="Flask App Thread-> " + str(self.UniqueIdentifier),
+            name="Flask App Thread-> " + str(self.Identifier),
             target=self.__Run,
             daemon=True,
         ).start()
@@ -51,13 +51,7 @@ class ServerBackendABC(SimpleBackendABC):
         self.__App.run(self.Address, self.Port)
 
     def GetEndpointID(self, Endpoint: str):
-        return (
-            self.__class__.__name__
-            + ": "
-            + str(self.UniqueIdentifier)
-            + "-> "
-            + Endpoint
-        )
+        return self.__class__.__name__ + ": " + str(self.Identifier) + "-> " + Endpoint
 
     def StartBackend(self):
         SimpleBackendABC.StartBackend(self)
@@ -72,7 +66,7 @@ class ServerBackendABC(SimpleBackendABC):
         self.__AppParentThreadRunnerFlag.clear()
 
         Thread(
-            name="Flask App Thread Runner-> " + str(self.UniqueIdentifier),
+            name="Flask App Thread Runner-> " + str(self.Identifier),
             target=self.__ServerThreadRunner,
         ).start()
 

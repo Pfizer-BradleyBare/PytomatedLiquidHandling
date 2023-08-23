@@ -6,27 +6,27 @@
 #############################################################
 
 Hamilton FlipTube:
-  - Unique Identifier: Fliptube 1
+  - Identifier: Fliptube 1
     Enabled: True
-    Backend Unique Identifier: Hammy
+    Backend Identifier: Hammy
     Custom Error Handling: False
     Tool Sequence: Ham_4_FlipTubeTools_OnWaste_0001
-    Supported Labware Unique Identifiers:
+    Supported Labware Identifiers:
       - Hamilton 1.5mL FlipTube
-    Supported Deck Location Unique Identifiers:
+    Supported Deck Location Identifiers:
       - a
       - b
       - c
 
 Hamilton FlipTube Special:
-  - Unique Identifier: Fliptube 1
+  - Identifier: Fliptube 1
     Enabled: True
-    Backend Unique Identifier: Hammy
+    Backend Identifier: Hammy
     Custom Error Handling: False
     Tool Sequence: Ham_4_FlipTubeTools_OnWaste_0001
-    Supported Labware Unique Identifiers:
+    Supported Labware Identifiers:
       - Hamilton 1.5mL FlipTube
-    Supported Deck Location Unique Identifiers:
+    Supported Deck Location Identifiers:
       - a
       - b
       - c

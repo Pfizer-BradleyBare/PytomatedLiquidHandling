@@ -5,7 +5,7 @@ import yaml
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 
 from ...Tools.Logger import Logger
-from .BaseLayoutItem import LayoutItemTracker
+from .BaseLayoutItem import LayoutItemABC
 from .CoverableItem import CoverableItem
 from .Lid import Lid
 from .NonCoverableItem import NonCoverableItem
@@ -13,17 +13,17 @@ from .NonCoverableItem import NonCoverableItem
 
 def LoadYaml(
     LoggerInstance: Logger,
-    LabwareTrackerInstance: Labware.LabwareTracker,
-    DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker,
+    Labwares: dict[str, Labware.BaseLabware.LabwareABC],
+    DeckLocations: dict[str, DeckLocation.BaseDeckLocation.DeckLocationABC],
     FilePath: str,
-) -> LayoutItemTracker:
+) -> dict[str, LayoutItemABC]:
     LoggerInstance.info("Loading LayoutItem config yaml file.")
 
-    LayoutItemTrackerInstance = LayoutItemTracker()
+    LayoutItems: dict[str, LayoutItemABC] = dict()
 
     if not os.path.exists(FilePath):
         LoggerInstance.warning("Config file does not exist. Skipped")
-        return LayoutItemTrackerInstance
+        return LayoutItems
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
@@ -34,7 +34,7 @@ def LoadYaml(
         LoggerInstance.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
-        return LayoutItemTrackerInstance
+        return LayoutItems
 
     OldConfigFile = ConfigFile
     ConfigFile = dict()
@@ -57,40 +57,34 @@ def LoadYaml(
                 LoggerInstance.warning(
                     LayoutItemID
                     + " with unique ID "
-                    + LayoutItem["Unique Identifier"]
+                    + LayoutItem["Identifier"]
                     + " is not enabled so will be skipped."
                 )
                 continue
 
-            UniqueIdentifier = LayoutItem["Unique Identifier"]
+            Identifier = LayoutItem["Identifier"]
             Sequence = LayoutItem["Sequence"]
-            LabwareInstance = LabwareTrackerInstance.GetObjectByName(
-                LayoutItem["Labware Unique Identifier"]
-            )
-            DeckLocationInstance = DeckLocationTrackerInstance.GetObjectByName(
-                LayoutItem["Deck Location Unique Identifier"]
-            )
+            LabwareInstance = Labwares[LayoutItem["Labware Identifier"]]
+            DeckLocationInstance = DeckLocations[LayoutItem["Deck Location Identifier"]]
 
             if LayoutItemID == "NonCoverable Item":
                 if not isinstance(LabwareInstance, Labware.PipettableLabware):
                     raise Exception("This should not happen")
                 # Plates are technically defined here and all plates should be PipettableLabware
                 LayoutItemInstance = NonCoverableItem(
-                    UniqueIdentifier, Sequence, DeckLocationInstance, LabwareInstance
+                    Identifier, Sequence, DeckLocationInstance, LabwareInstance
                 )
 
             elif LayoutItemID == "Coverable Item":
                 if not isinstance(LabwareInstance, Labware.PipettableLabware):
                     raise Exception("This should not happen")
                 # Plates are technically defined here and all plates should be PipettableLabware
-                LidInstance = LayoutItemTrackerInstance.GetObjectByName(
-                    LayoutItem["Lid Unique Identifier"]
-                )
+                LidInstance = LayoutItems[LayoutItem["Lid Identifier"]]
                 if not isinstance(LidInstance, Lid):
                     raise Exception("This lid unique ID is not a lid. Please fix.")
 
                 LayoutItemInstance = CoverableItem(
-                    UniqueIdentifier,
+                    Identifier,
                     Sequence,
                     DeckLocationInstance,
                     LabwareInstance,
@@ -102,12 +96,12 @@ def LoadYaml(
                     raise Exception("This should not happen")
                 # Lids are obviously NonPipettableLabware
                 LayoutItemInstance = Lid(
-                    UniqueIdentifier, Sequence, DeckLocationInstance, LabwareInstance
+                    Identifier, Sequence, DeckLocationInstance, LabwareInstance
                 )
 
             else:
                 raise Exception("Layout item ID not recognized")
 
-            LayoutItemTrackerInstance.LoadSingle(LayoutItemInstance)
+            LayoutItems[Identifier] = LayoutItemInstance
 
-    return LayoutItemTrackerInstance
+    return LayoutItems

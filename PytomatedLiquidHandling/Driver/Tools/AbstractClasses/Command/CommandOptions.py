@@ -7,4 +7,4 @@ T = TypeVar("T", bound="OptionsABC")
 
 @dataclass(kw_only=True)
 class CommandOptions(Generic[T]):
-    OptionsInstance: T
+    Options: T

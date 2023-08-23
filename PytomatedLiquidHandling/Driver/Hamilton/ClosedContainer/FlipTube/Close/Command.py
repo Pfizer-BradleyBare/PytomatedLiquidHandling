@@ -1,9 +1,9 @@
-from .....Tools.AbstractClasses import CommandOptionsTracker
+from .....Tools.AbstractClasses import CommandOptionsListed
 from ....Backend import HamiltonActionCommandABC
-from .OptionsTracker import OptionsTracker
+from .Options import ListedOptions
 from dataclasses import dataclass
 
 
-@dataclass
-class Command(CommandOptionsTracker[OptionsTracker], HamiltonActionCommandABC):
+@dataclass(kw_only=True)
+class Command(CommandOptionsListed[ListedOptions], HamiltonActionCommandABC):
     ...

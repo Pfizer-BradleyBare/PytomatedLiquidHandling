@@ -1,2 +1,1 @@
 from .DeckLocationTransportConfig import DeckLocationTransportConfig
-from .DeckLocationTransportConfigTracker import DeckLocationTransportConfigTracker

@@ -1,11 +1,9 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
-
 
 @dataclass
-class DeckLocationTransportConfig(UniqueObjectABC):
+class DeckLocationTransportConfig:
     class TransportConfigABC(ABC):
         def __eq__(self, __value: object) -> bool:
             if not isinstance(__value, self.__class__):

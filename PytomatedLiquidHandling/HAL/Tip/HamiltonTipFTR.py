@@ -11,7 +11,7 @@ class HamiltonTipFTR(Tip):
 
     def _TipCounterEdit(self):
         CommandInstance = FTRDriver.LoadTips.Command(
-            OptionsInstance=FTRDriver.LoadTips.Options(TipSequence=self.PickupSequence),
+            Options=FTRDriver.LoadTips.Options(TipSequence=self.PickupSequence),
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.BackendInstance.ExecuteCommand(CommandInstance)
@@ -22,12 +22,12 @@ class HamiltonTipFTR(Tip):
         return 0
 
     def _GetTipPositions(
-        self, OptionsInstance: Tip.GetTipPositionsInterfaceCommand.Options
+        self, Options: Tip.GetTipPositionsInterfaceCommand.Options
     ) -> list[int]:
         CommandInstance = FTRDriver.GetTipPositions.Command(
-            OptionsInstance=FTRDriver.GetTipPositions.Options(
+            Options=FTRDriver.GetTipPositions.Options(
                 TipSequence=self.PickupSequence,
-                NumPositions=OptionsInstance.NumTips,
+                NumPositions=Options.NumTips,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
@@ -40,13 +40,13 @@ class HamiltonTipFTR(Tip):
         return ResponseInstance.GetTipPositions()
 
     def _GetTipPositionsTime(
-        self, OptionsInstance: Tip.GetTipPositionsInterfaceCommand.Options
+        self, Options: Tip.GetTipPositionsInterfaceCommand.Options
     ) -> float:
         return 0
 
     def _GetRemainingTips(self) -> int:
         CommandInstance = FTRDriver.GetNumTips.Command(
-            OptionsInstance=FTRDriver.GetNumTips.Options(
+            Options=FTRDriver.GetNumTips.Options(
                 TipSequence=self.PickupSequence,
             ),
             CustomErrorHandling=self.CustomErrorHandling,

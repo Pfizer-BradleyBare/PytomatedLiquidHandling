@@ -4,7 +4,7 @@ from typing import Callable
 
 from flask import request
 
-from ....Tools.AbstractClasses import CommandOptionsTracker, ServerBackendABC
+from ....Tools.AbstractClasses import CommandOptionsListed, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
 from ..HamiltonResponse import HamiltonResponseABC
 
@@ -41,8 +41,8 @@ class HamiltonServerBackendABC(ServerBackendABC):
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        if isinstance(CommandInstance, CommandOptionsTracker):
-            if CommandInstance.OptionsTrackerInstance.GetNumObjects() == 0:
+        if isinstance(CommandInstance, CommandOptionsListed):
+            if len(CommandInstance.ListedOptions) == 0:
                 self.ResponseInstance = HamiltonResponseABC(
                     {
                         "State": False,

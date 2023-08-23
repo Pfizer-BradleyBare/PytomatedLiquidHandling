@@ -2,52 +2,41 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 from typing import Callable, cast
 
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
-    OptionsABC,
-    OptionsTrackerABC,
-)
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
-from ...Tools.AbstractClasses import InterfaceABC, OptionsTrackerInterfaceCommandABC
+from ...Tools.AbstractClasses import InterfaceABC, InterfaceCommandWithListedOptionsABC
 
 
 @dataclass
-class ClosedContainerABC(InterfaceABC, UniqueObjectABC):
-    class OpenCloseInterfaceCommand(OptionsTrackerInterfaceCommandABC[None]):
+class ClosedContainerABC(InterfaceABC, HALObject):
+    class OpenCloseInterfaceCommand(InterfaceCommandWithListedOptionsABC[None]):
         @dataclass(kw_only=True)
         class Options(OptionsABC):
             LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
             Position: int
 
-        @dataclass
-        class OptionsTracker(OptionsTrackerABC[Options]):
-            ...
-
     ToolSequence: str
-    SupportedDeckLocationTrackerInstance: DeckLocation.DeckLocationTracker
-    SupportedLabwareTrackerInstance: Labware.LabwareTracker
+    SupportedDeckLocations: list[DeckLocation.BaseDeckLocation.DeckLocationABC]
+    SupportedLabwares: list[Labware.BaseLabware.LabwareABC]
     Open: OpenCloseInterfaceCommand = field(init=False)
     Close: OpenCloseInterfaceCommand = field(init=False)
 
     @abstractmethod
-    def _Open(self, OptionsTrackerInstance: OpenCloseInterfaceCommand.OptionsTracker):
+    def _Open(self, Options: list[OpenCloseInterfaceCommand.Options]):
         ...
 
     @abstractmethod
-    def _OpenTime(
-        self, OptionsTrackerInstance: OpenCloseInterfaceCommand.OptionsTracker
-    ) -> float:
+    def _OpenTime(self, Options: list[OpenCloseInterfaceCommand.Options]) -> float:
         ...
 
     @abstractmethod
-    def _Close(self, OptionsTrackerInstance: OpenCloseInterfaceCommand.OptionsTracker):
+    def _Close(self, Options: list[OpenCloseInterfaceCommand.Options]):
         ...
 
     @abstractmethod
-    def _CloseTime(
-        self, OptionsTrackerInstance: OpenCloseInterfaceCommand.OptionsTracker
-    ) -> float:
+    def _CloseTime(self, Options: list[OpenCloseInterfaceCommand.Options]) -> float:
         ...
 
     def __post_init__(self):

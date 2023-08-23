@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 from .CarrierConfig import CarrierConfig
 
 
 @dataclass
-class DeckLocationABC(UniqueObjectABC):
+class DeckLocationABC(HALObject):
     CarrierConfigInstance: CarrierConfig

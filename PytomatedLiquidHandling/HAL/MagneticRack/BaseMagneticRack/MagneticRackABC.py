@@ -1,23 +1,21 @@
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.HAL import Backend, LayoutItem
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 from ...Tools.AbstractClasses import InterfaceABC
 
 
 @dataclass
-class MagneticRackABC(InterfaceABC, UniqueObjectABC):
+class MagneticRackABC(InterfaceABC, HALObject):
     BackendInstance: Backend.NullBackend
     CustomErrorHandling: bool = field(init=False, default=False)
-    SupportedLayoutItemTrackerInstance: LayoutItem.LayoutItemTracker
+    SupportedLayoutItems: list[LayoutItem.BaseLayoutItem.LayoutItemABC]
 
     def GetLayoutItem(
         self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
     ) -> LayoutItem.CoverableItem:
-        for (
-            SupportedLayoutItemInstance
-        ) in self.SupportedLayoutItemTrackerInstance.GetObjectsAsList():
+        for SupportedLayoutItemInstance in self.SupportedLayoutItems:
             if (
                 SupportedLayoutItemInstance.LabwareInstance
                 == LayoutItemInstance.LabwareInstance
@@ -37,7 +35,7 @@ class MagneticRackABC(InterfaceABC, UniqueObjectABC):
         raise Exception("This rack does not support your layout item")
 
     def GetRemoveStorageBufferLiquidClassCategory(self):
-        return str(self.UniqueIdentifier) + ": Remove"
+        return str(self.Identifier) + ": Remove"
 
     def GetAddStorageBufferLiquidClassCategory(self):
-        return str(self.UniqueIdentifier) + ": Add"
+        return str(self.Identifier) + ": Add"

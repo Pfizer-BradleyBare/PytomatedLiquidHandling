@@ -1,11 +1,11 @@
-from .....Tools.AbstractClasses import CommandOptionsTracker
+from .....Tools.AbstractClasses import CommandOptionsListed
 from ....Backend import HamiltonActionCommandABC
-from .OptionsTracker import OptionsTracker
+from .Options import Options
 from dataclasses import dataclass
 
 
 @dataclass
-class Command(CommandOptionsTracker[OptionsTracker], HamiltonActionCommandABC):
+class Command(CommandOptionsListed[list[Options]], HamiltonActionCommandABC):
     def GetVars(self) -> dict[str, list]:
         OutputDict = HamiltonActionCommandABC.GetVars(self)
 

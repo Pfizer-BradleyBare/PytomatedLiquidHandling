@@ -14,7 +14,7 @@ class HamiltonTipNTR(Tip):
 
     def _TipCounterEdit(self):
         CommandInstance = NTRDriver.LoadTips.Command(
-            OptionsInstance=NTRDriver.LoadTips.Options(
+            Options=NTRDriver.LoadTips.Options(
                 TipSequence=self.PickupSequence,
                 RackWasteSequence=self.NTRWasteSequence,
                 GripperSequence=self.GripperSequence,
@@ -29,14 +29,14 @@ class HamiltonTipNTR(Tip):
         return 0
 
     def _GetTipPositions(
-        self, OptionsInstance: Tip.GetTipPositionsInterfaceCommand.Options
+        self, Options: Tip.GetTipPositionsInterfaceCommand.Options
     ) -> list[int]:
         CommandInstance = NTRDriver.GetTipPositions.Command(
-            OptionsInstance=NTRDriver.GetTipPositions.Options(
+            Options=NTRDriver.GetTipPositions.Options(
                 TipSequence=self.PickupSequence,
                 GeneratedRackWasteSequence=self.GeneratedWasteSequence,
                 GripperSequence=self.GripperSequence,
-                NumPositions=OptionsInstance.NumTips,
+                NumPositions=Options.NumTips,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
@@ -50,13 +50,13 @@ class HamiltonTipNTR(Tip):
         return ResponseInstance.GetTipPositions()
 
     def _GetTipPositionsTime(
-        self, OptionsInstance: Tip.GetTipPositionsInterfaceCommand.Options
+        self, Options: Tip.GetTipPositionsInterfaceCommand.Options
     ) -> float:
         return 0
 
     def _GetRemainingTips(self) -> int:
         CommandInstance = NTRDriver.GetNumTips.Command(
-            OptionsInstance=NTRDriver.GetNumTips.Options(
+            Options=NTRDriver.GetNumTips.Options(
                 TipSequence=self.PickupSequence,
             ),
             CustomErrorHandling=self.CustomErrorHandling,

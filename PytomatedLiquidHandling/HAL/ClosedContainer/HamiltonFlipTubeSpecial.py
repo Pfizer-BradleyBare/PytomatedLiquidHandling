@@ -18,25 +18,25 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
 
     def _Open(
         self,
-        OptionsTrackerInstance: ClosedContainerABC.OpenCloseInterfaceCommand.OptionsTracker,
+        Options: list[ClosedContainerABC.OpenCloseInterfaceCommand.Options],
     ):
-        OpenOptionsTrackerInstance = FlipTubeDriver.Open.OptionsTracker(
+        CommandOptions = FlipTubeDriver.Open.ListedOptions(
             ToolSequence=self.ToolSequence
         )
-        for OpenCloseOptions in OptionsTrackerInstance.GetObjectsAsList():
+        for OpenCloseOptions in Options:
             if (
                 OpenCloseOptions.LayoutItemInstance.LabwareInstance
-                in self.SupportedLabwareTrackerInstance.GetObjectsAsList()
+                in self.SupportedLabwares
             ):
-                OpenOptionsTrackerInstance.LoadSingle(
+                CommandOptions.append(
                     FlipTubeDriver.Open.Options(
-                        Sequence=OpenCloseOptions.LayoutItemInstance.Sequence,
-                        SequencePosition=OpenCloseOptions.Position,
+                        FlipTubeSequence=OpenCloseOptions.LayoutItemInstance.Sequence,
+                        FlipTubeSequencePosition=OpenCloseOptions.Position,
                     )
                 )
 
         Command = FlipTubeDriver.Open.Command(
-            OptionsTrackerInstance=OpenOptionsTrackerInstance,
+            ListedOptions=CommandOptions,
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.BackendInstance.ExecuteCommand(Command)
@@ -45,31 +45,31 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
 
     def _OpenTime(
         self,
-        OptionsTrackerInstance: ClosedContainerABC.OpenCloseInterfaceCommand.OptionsTracker,
+        Options: list[ClosedContainerABC.OpenCloseInterfaceCommand.Options],
     ) -> float:
         return 0
 
     def _Close(
         self,
-        OptionsTrackerInstance: ClosedContainerABC.OpenCloseInterfaceCommand.OptionsTracker,
+        Options: list[ClosedContainerABC.OpenCloseInterfaceCommand.Options],
     ):
-        CloseOptionsTrackerInstance = FlipTubeDriver.CloseSpecial.OptionsTracker(
+        CommandOptions = FlipTubeDriver.CloseSpecial.ListedOptions(
             ToolSequence=self.ToolSequence
         )
-        for OpenCloseOptions in OptionsTrackerInstance.GetObjectsAsList():
+        for OpenCloseOptions in Options:
             if (
                 OpenCloseOptions.LayoutItemInstance.LabwareInstance
-                in self.SupportedLabwareTrackerInstance.GetObjectsAsList()
+                in self.SupportedLabwares
             ):
-                CloseOptionsTrackerInstance.LoadSingle(
+                CommandOptions.append(
                     FlipTubeDriver.CloseSpecial.Options(
-                        Sequence=OpenCloseOptions.LayoutItemInstance.Sequence,
-                        SequencePosition=OpenCloseOptions.Position,
+                        FlipTubeSequence=OpenCloseOptions.LayoutItemInstance.Sequence,
+                        FlipTubeSequencePosition=OpenCloseOptions.Position,
                     )
                 )
 
         Command = FlipTubeDriver.CloseSpecial.Command(
-            OptionsTrackerInstance=CloseOptionsTrackerInstance,
+            ListedOptions=CommandOptions,
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.BackendInstance.ExecuteCommand(Command)
@@ -78,6 +78,6 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
 
     def _CloseTime(
         self,
-        OptionsTrackerInstance: ClosedContainerABC.OpenCloseInterfaceCommand.OptionsTracker,
+        Options: list[ClosedContainerABC.OpenCloseInterfaceCommand.Options],
     ) -> float:
         return 0

@@ -20,7 +20,7 @@ class HamiltonHeaterCooler(TempControlDevice):
             raise Exception("Should never happen")
 
         CommandInstance = HeaterCoolerDriver.Connect.Command(
-            OptionsInstance=HeaterCoolerDriver.Connect.Options(
+            Options=HeaterCoolerDriver.Connect.Options(
                 ComPort=self.ComPort,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
@@ -40,7 +40,7 @@ class HamiltonHeaterCooler(TempControlDevice):
         TempControlDevice._Deinitialize(self)
 
         CommandInstance = HeaterCoolerDriver.StopTemperatureControl.Command(
-            OptionsInstance=HeaterCoolerDriver.StopTemperatureControl.Options(
+            Options=HeaterCoolerDriver.StopTemperatureControl.Options(
                 HandleID=str(self.HandleID)
             ),
             CustomErrorHandling=self.CustomErrorHandling,
@@ -58,7 +58,7 @@ class HamiltonHeaterCooler(TempControlDevice):
         self, OptionsInstance: TempControlDevice.SetTemperatureInterfaceCommand.Options
     ):
         CommandInstance = HeaterCoolerDriver.StartTemperatureControl.Command(
-            OptionsInstance=HeaterCoolerDriver.StartTemperatureControl.Options(
+            Options=HeaterCoolerDriver.StartTemperatureControl.Options(
                 HandleID=str(self.HandleID),
                 Temperature=OptionsInstance.Temperature,
             ),
@@ -79,7 +79,7 @@ class HamiltonHeaterCooler(TempControlDevice):
         self,
     ) -> float:
         CommandInstance = HeaterCoolerDriver.GetTemperature.Command(
-            OptionsInstance=HeaterCoolerDriver.GetTemperature.Options(
+            Options=HeaterCoolerDriver.GetTemperature.Options(
                 HandleID=str(self.HandleID),
             ),
             CustomErrorHandling=self.CustomErrorHandling,

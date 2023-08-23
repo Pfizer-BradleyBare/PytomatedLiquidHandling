@@ -8,8 +8,8 @@ from .BaseIMCSDesalting import IMCSDesaltingABC, IMCSDesaltingOptions
 class HamiltonPortraitCORE8ChannelIMCSDesalting(IMCSDesaltingABC):
     BackendInstance: HamiltonBackendABC
 
-    def Equilibrate(self, OptionsTrackerInstance: IMCSDesaltingOptions.OptionsTracker):
+    def Equilibrate(self, Options: IMCSDesaltingOptions.ListedOptions):
         ...
 
-    def Desalt(self, OptionsTrackerInstance: IMCSDesaltingOptions.OptionsTracker):
+    def Desalt(self, Options: IMCSDesaltingOptions.ListedOptions):
         ...

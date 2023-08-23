@@ -1,4 +1,4 @@
-- Unique Identifier: Agilent Black Lid
+- Identifier: Agilent Black Lid
   Enabled: True
   Image Filename: LidAgilentBlack
   Part Number: TODO
@@ -8,9 +8,10 @@
   Transport Offsets:
     Open: 2
     Close: 2
-    Height: 4
+    DistanceFromTop: 4
+    DistanceFromBottom: 4
 
-- Unique Identifier: Vacuum Manifold
+- Identifier: Vacuum Manifold
   Enabled: True
   Image Filename: Image
   Part Number: TODO
@@ -20,9 +21,10 @@
   Transport Offsets:
     Open: 2
     Close: 2
-    Height: 4
+    DistanceFromTop: 4
+    DistanceFromBottom: 4
 
-- Unique Identifier: Biorad 200uL 96 Well PCR Plate
+- Identifier: Biorad 200uL 96 Well PCR Plate
   Enabled: True
   Image Filename: PlateBiorad200uL96Well
   Part Number: HSP9601
@@ -44,9 +46,10 @@
   Transport Offsets:
     Open: 2
     Close: 2
-    Height: 4
+    DistanceFromTop: 4
+    DistanceFromBottom: 4
 
-- Unique Identifier: Thermo 400uL 96 Well PCR Plate
+- Identifier: Thermo 400uL 96 Well PCR Plate
   Enabled: True
   Image Filename: PlateThermo400uL96Well
   Part Number: 12-656-440
@@ -68,9 +71,10 @@
   Transport Offsets:
     Open: 2
     Close: 2
-    Height: 4
+    DistanceFromTop: 4
+    DistanceFromBottom: 4
 
-- Unique Identifier: Thermo 1200uL 96 Well PCR Plate
+- Identifier: Thermo 1200uL 96 Well PCR Plate
   Enabled: True
   Image Filename: PlateThermo1200uL96Well
   Part Number: AB1127
@@ -92,9 +96,10 @@
   Transport Offsets:
     Open: 2
     Close: 2
-    Height: 4
+    DistanceFromTop: 4
+    DistanceFromBottom: 4
 
-- Unique Identifier: Corning Costar 2000uL 96 Well PCR Plate
+- Identifier: Corning Costar 2000uL 96 Well PCR Plate
   Enabled: True
   Image Filename: PlateCorning2000uL96Well
   Part Number: 6604337-01
@@ -116,4 +121,5 @@
   Transport Offsets:
     Open: 2
     Close: 2
-    Height: 4
+    Distance From Top: 4
+    Distance From Bottom: 4

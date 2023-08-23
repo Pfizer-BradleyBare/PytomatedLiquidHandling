@@ -2,7 +2,7 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 from typing import Type, TypeVar
 
-from PytomatedLiquidHandling.Tools import AbstractClasses, Logger
+from PytomatedLiquidHandling.Tools import Logger
 
 from ..Command import CommandABC
 from ..Exception import ExceptionABC
@@ -12,7 +12,8 @@ ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 
 @dataclass
-class BackendABC(AbstractClasses.UniqueObjectABC):
+class BackendABC:
+    Identifier: str
     LoggerInstance: Logger.Logger
     IsRunning: bool = field(init=False, default=False)
     Exceptions: list[type[ExceptionABC]] = field(init=False, default_factory=list)

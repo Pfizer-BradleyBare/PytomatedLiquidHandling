@@ -1,10 +1,7 @@
-from dataclasses import dataclass, field
-
-from PytomatedLiquidHandling.Tools.AbstractClasses import NonUniqueObjectABC
+from dataclasses import dataclass
 
 
 @dataclass
-class WellEquation(NonUniqueObjectABC):
-    Identifier: str | int = field(init=False, default="Well Equation")
+class WellEquation:
     SegmentHeight: float
     SegmentEquation: str

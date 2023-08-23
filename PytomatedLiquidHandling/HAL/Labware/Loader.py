@@ -3,24 +3,18 @@ import os
 import yaml
 
 from ...Tools.Logger import Logger
-from . import LabwareTracker, NonPipettableLabware, PipettableLabware
-from .BaseLabware import (
-    Dimensions,
-    TransportOffsets,
-    WellEquation,
-    WellEquationTracker,
-    Wells,
-)
+from . import NonPipettableLabware, PipettableLabware
+from .BaseLabware import Dimensions, TransportOffsets, WellEquation, Wells, LabwareABC
 
 
-def LoadYaml(LoggerInstance: Logger, FilePath: str) -> LabwareTracker:
+def LoadYaml(LoggerInstance: Logger, FilePath: str) -> dict[str, LabwareABC]:
     LoggerInstance.info("Loading Labware config yaml file.")
 
-    LabwareTrackerInstance = LabwareTracker()
+    Labwares: dict[str, LabwareABC] = dict()
 
     if not os.path.exists(FilePath):
         LoggerInstance.warning("Config file does not exist. Skipped")
-        return LabwareTrackerInstance
+        return Labwares
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
@@ -31,31 +25,32 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> LabwareTracker:
         LoggerInstance.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
-        return LabwareTrackerInstance
+        return Labwares
 
     for Labware in ConfigFile:
         if Labware["Enabled"] == False:
             LoggerInstance.warning(
                 "Labware"
                 + " with unique ID "
-                + Labware["Unique Identifier"]
+                + Labware["Identifier"]
                 + " is not enabled so will be skipped."
             )
             continue
 
-        UniqueIdentifier = Labware["Unique Identifier"]
+        Identifier = Labware["Identifier"]
         ImageFilename = Labware["Image Filename"]
         LongSide = Labware["Dimensions"]["Long Side"]
         ShortSide = Labware["Dimensions"]["Short Side"]
         OpenOffset = Labware["Transport Offsets"]["Open"]
         CloseOffset = Labware["Transport Offsets"]["Close"]
-        HeightOffset = Labware["Transport Offsets"]["Height"]
+        FromTopOffset = Labware["Transport Offsets"]["Distance From Top"]
+        FromBottomOffset = Labware["Transport Offsets"]["Distance From Bottom"]
 
         DimensionsInstance = Dimensions(LongSide, ShortSide)
         # Create Dimensions Class
 
         TransportOffsetsInstance = TransportOffsets(
-            OpenOffset, CloseOffset, HeightOffset
+            OpenOffset, CloseOffset, FromTopOffset, FromBottomOffset
         )
 
         if "Wells" in Labware:
@@ -67,9 +62,9 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> LabwareTracker:
             MaxVolume = LabwareWells["Max Volume"]
             DeadVolume = LabwareWells["Dead Volume"]
 
-            WellEquationTrackerInstance = WellEquationTracker()
+            WellEquations: list[WellEquation] = list()
             for Segment in LabwareWells["Segment Equations"]:
-                WellEquationTrackerInstance.LoadSingle(
+                WellEquations.append(
                     WellEquation(Segment["Segment Height"], Segment["Segment Equation"])
                 )
             # Create WellsEquation Class List
@@ -80,11 +75,11 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> LabwareTracker:
                 SequencesPerWell,
                 MaxVolume,
                 DeadVolume,
-                WellEquationTrackerInstance,
+                WellEquations,
             )
             # Create Wells Class
             LabwareInstance = PipettableLabware(
-                UniqueIdentifier,
+                Identifier,
                 ImageFilename,
                 DimensionsInstance,
                 TransportOffsetsInstance,
@@ -93,17 +88,17 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> LabwareTracker:
 
         else:
             LabwareInstance = NonPipettableLabware(
-                UniqueIdentifier,
+                Identifier,
                 ImageFilename,
                 DimensionsInstance,
                 TransportOffsetsInstance,
             )
 
-        LabwareTrackerInstance.LoadSingle(LabwareInstance)
+        Labwares[Identifier] = LabwareInstance
 
         # Create Labware Class and append
 
-    return LabwareTrackerInstance
+    return Labwares
 
 
 # Populate list of Items

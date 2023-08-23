@@ -1,10 +1,9 @@
 from dataclasses import dataclass
-
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 
 @dataclass
-class CarrierABC(UniqueObjectABC):
+class CarrierABC(HALObject):
     TrackStart: int
     TrackEnd: int
     NumLabwarePositions: int
