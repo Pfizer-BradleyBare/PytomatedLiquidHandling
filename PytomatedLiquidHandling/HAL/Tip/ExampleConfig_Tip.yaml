@@ -13,18 +13,18 @@
 #############################################################
 
 Hamilton NTR:
-  - Unique Identifier: 50uL NTR
+  - Identifier: 50uL NTR
     Enabled: True
-    Backend Unique Identifier: Hammy
+    Backend Identifier: Hammy
     Custom Error Handling: False
     Volume: 50
     Pickup Sequence: seq_Tip_NTR50
     NTR Waste Sequence: Tip50_NTR_Waste
     Gripper Sequence: Gripper
 
-  - Unique Identifier: 300uL NTR
+  - Identifier: 300uL NTR
     Enabled: True
-    Backend Unique Identifier: Hammy
+    Backend Identifier: Hammy
     Custom Error Handling: False
     Volume: 300
     Pickup Sequence: seq_Tip_NTR300
@@ -32,9 +32,9 @@ Hamilton NTR:
     Gripper Sequence: Gripper
 
 Hamilton FTR:
-  - Unique Identifier: 1000uL FTR
+  - Identifier: 1000uL FTR
     Enabled: True
-    Backend Unique Identifier: Hammy
+    Backend Identifier: Hammy
     Custom Error Handling: False
     Volume: 1000
     Pickup Sequence: seq_Tip_FTR1000

@@ -1,20 +1,17 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field
 
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
-    OptionsABC,
-    OptionsTrackerABC,
-)
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 from ...Tools.AbstractClasses import InterfaceABC, InterfaceCommandWithListedOptionsABC
-from .LiquidClass import LiquidClass, LiquidClassCategoryTracker
-from .PipetteTip import PipetteTip, PipetteTipTracker
+from .LiquidClass import LiquidClass, LiquidClassCategory
+from .PipetteTip import PipetteTip
 
 
 @dataclass
-class Pipette(InterfaceABC, UniqueObjectABC):
+class Pipette(InterfaceABC, HALObject):
     class TransferInterfaceCommand(InterfaceCommandWithListedOptionsABC[None]):
         @dataclass(kw_only=True)
         class Options(OptionsABC):
@@ -29,10 +26,6 @@ class Pipette(InterfaceABC, UniqueObjectABC):
             DestinationMixCycles: int
             DestinationLiquidClassCategory: str
             TransferVolume: float
-
-        @dataclass
-        class OptionsTracker(OptionsTrackerABC[Options]):
-            ...
 
     SupportedTipTrackerInstance: PipetteTipTracker
     SupportedLabwareTrackerInstance: Labware.LabwareTracker
