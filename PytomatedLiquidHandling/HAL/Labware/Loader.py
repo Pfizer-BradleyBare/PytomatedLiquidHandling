@@ -4,7 +4,7 @@ import yaml
 
 from ...Tools.Logger import Logger
 from . import NonPipettableLabware, PipettableLabware
-from .BaseLabware import Dimensions, TransportOffsets, WellEquation, Wells, LabwareABC
+from .Base import Dimensions, LabwareABC, TransportOffsets, WellEquation, Wells
 
 
 def LoadYaml(LoggerInstance: Logger, FilePath: str) -> dict[str, LabwareABC]:

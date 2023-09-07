@@ -2,23 +2,22 @@ import os
 
 import yaml
 
-from PytomatedLiquidHandling.HAL import Backend
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Tools.Logger import Logger
 from . import HamiltonTipFTR, HamiltonTipNTR
-from .BaseTip import Tip
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
+from .Base import TipABC
 
 
 def LoadYaml(
     LoggerInstance: Logger,
     Backends: dict[str, BackendABC],
     FilePath: str,
-) -> dict[str, Tip]:
+) -> dict[str, TipABC]:
     LoggerInstance.info("Loading Tip config yaml file.")
 
-    Tips: dict[str, Tip] = dict()
+    Tips: dict[str, TipABC] = dict()
 
     if not os.path.exists(FilePath):
         LoggerInstance.warning("Config file does not exist. Skipped")

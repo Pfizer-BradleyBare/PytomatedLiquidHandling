@@ -5,7 +5,7 @@ import yaml
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 
 from ...Tools.Logger import Logger
-from .BaseLayoutItem import LayoutItemABC
+from .Base import LayoutItemABC
 from .CoverableItem import CoverableItem
 from .Lid import Lid
 from .NonCoverableItem import NonCoverableItem
@@ -13,8 +13,8 @@ from .NonCoverableItem import NonCoverableItem
 
 def LoadYaml(
     LoggerInstance: Logger,
-    Labwares: dict[str, Labware.BaseLabware.LabwareABC],
-    DeckLocations: dict[str, DeckLocation.BaseDeckLocation.DeckLocationABC],
+    Labwares: dict[str, Labware.Base.LabwareABC],
+    DeckLocations: dict[str, DeckLocation.Base.DeckLocationABC],
     FilePath: str,
 ) -> dict[str, LayoutItemABC]:
     LoggerInstance.info("Loading LayoutItem config yaml file.")

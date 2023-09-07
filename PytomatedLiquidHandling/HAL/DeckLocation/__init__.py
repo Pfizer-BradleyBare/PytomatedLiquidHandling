@@ -1,2 +1,2 @@
-from . import Loader, BaseDeckLocation
+from . import Base, Loader
 from .DeckLocation import DeckLocation

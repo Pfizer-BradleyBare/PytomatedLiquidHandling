@@ -1,15 +1,11 @@
 from dataclasses import dataclass
 
 from ...Driver.Hamilton.Backend import VantageBackend
-from .BaseTransportDevice import (
-    DeckLocationTransportConfig,
-    TransportDevice,
-    TransportOptions,
-)
+from .Base import DeckLocationTransportConfig, TransportDeviceABC, TransportOptions
 
 
 @dataclass
-class VantageTrackGripper(TransportDevice):
+class VantageTrackGripper(TransportDeviceABC):
     BackendInstance: VantageBackend
 
     class GetConfig(DeckLocationTransportConfig.TransportConfigABC):

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from .BaseCarrier import CarrierABC
+from .Base import CarrierABC
 
 
 @dataclass

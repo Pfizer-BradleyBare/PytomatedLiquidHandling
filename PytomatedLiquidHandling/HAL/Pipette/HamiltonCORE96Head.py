@@ -3,15 +3,15 @@ from math import ceil
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import CORE96Head
-from .BasePipette import Pipette
+from .Base import PipetteABC
 
 
 @dataclass
-class HamiltonCORE96Head(Pipette):
+class HamiltonCORE96Head(PipetteABC):
     BackendInstance: HamiltonBackendABC
 
     def OptionsSupported(
-        self, ListedOptionsInstance: list[Pipette.TransferInterfaceCommand.Options]
+        self, ListedOptionsInstance: list[PipetteABC.TransferInterfaceCommand.Options]
     ) -> bool:
         if (
             len(
@@ -72,12 +72,12 @@ class HamiltonCORE96Head(Pipette):
             return False
         # Only 96 channels are supported.
 
-        return Pipette.OptionsSupported(self, ListedOptionsInstance)
+        return PipetteABC.OptionsSupported(self, ListedOptionsInstance)
         # Check all other requirements
 
     def _Transfer(
         self,
-        ListedOptionsInstance: list[Pipette.TransferInterfaceCommand.Options],
+        ListedOptionsInstance: list[PipetteABC.TransferInterfaceCommand.Options],
     ):
         Options = ListedOptionsInstance[0]
         # All the options should be the same. So we can just take the first one for the majority
@@ -139,6 +139,6 @@ class HamiltonCORE96Head(Pipette):
             )
 
     def _TransferTime(
-        self, OptionsTrackerInstance: list[Pipette.TransferInterfaceCommand.Options]
+        self, OptionsTrackerInstance: list[PipetteABC.TransferInterfaceCommand.Options]
     ) -> float:
         return 0

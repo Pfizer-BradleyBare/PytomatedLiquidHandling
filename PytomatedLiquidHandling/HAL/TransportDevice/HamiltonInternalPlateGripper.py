@@ -2,15 +2,11 @@ from dataclasses import dataclass
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Transport import IPG as IPGDriver
-from .BaseTransportDevice import (
-    DeckLocationTransportConfig,
-    TransportDevice,
-    TransportOptions,
-)
+from .Base import DeckLocationTransportConfig, TransportDeviceABC, TransportOptions
 
 
 @dataclass
-class HamiltonInternalPlateGripper(TransportDevice):
+class HamiltonInternalPlateGripper(TransportDeviceABC):
     BackendInstance: HamiltonBackendABC
 
     class GetConfig(DeckLocationTransportConfig.TransportConfigABC):

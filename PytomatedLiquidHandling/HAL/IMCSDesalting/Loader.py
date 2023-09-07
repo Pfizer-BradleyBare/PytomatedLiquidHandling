@@ -7,12 +7,7 @@ from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Tools.Logger import Logger
-from .BaseIMCSDesalting import (
-    DesaltingTip,
-    DesaltingTipTracker,
-    ElutionParameters,
-    IMCSDesaltingABC,
-)
+from .Base import DesaltingTip, DesaltingTipTracker, ElutionParameters, IMCSDesaltingABC
 from .HamiltonCORE96HeadIMCSDesalting import HamiltonCORE96HeadIMCSDesalting
 from .HamiltonPortraitCORE8ChannelIMCSDesalting import (
     HamiltonPortraitCORE8ChannelIMCSDesalting,
@@ -22,9 +17,9 @@ from .HamiltonPortraitCORE8ChannelIMCSDesalting import (
 def LoadYaml(
     LoggerInstance: Logger,
     Backends: dict[str, BackendABC],
-    DeckLocations: dict[str, DeckLocation.BaseDeckLocation.DeckLocationABC],
-    Labwares: dict[str, Labware.BaseLabware.LabwareABC],
-    Tips: dict[str, Tip.BaseTip.Tip],
+    DeckLocations: dict[str, DeckLocation.Base.DeckLocationABC],
+    Labwares: dict[str, Labware.Base.LabwareABC],
+    Tips: dict[str, Tip.Base.TipABC],
     FilePath: str,
 ) -> dict[str, IMCSDesaltingABC]:
     IMCSDesaltingDevices: dict[str, IMCSDesaltingABC] = dict()
@@ -69,19 +64,17 @@ def LoadYaml(
         del Device["Load Liquid Class"]
         del Device["Elute Liquid Class"]
 
-        SupportedSourceLabwares: list[Labware.BaseLabware.LabwareABC] = list()
+        SupportedSourceLabwares: list[Labware.Base.LabwareABC] = list()
         for LabwareID in Device["Supported Source Labware Identifiers"]:
             SupportedSourceLabwares.append(Labwares[LabwareID])
         del Device["Supported Source Labware Identifiers"]
 
-        SupportedDestinationLabwares: list[Labware.BaseLabware.LabwareABC] = list()
+        SupportedDestinationLabwares: list[Labware.Base.LabwareABC] = list()
         for LabwareID in Device["Supported Destination Labware Identifiers"]:
             SupportedDestinationLabwares.append(Labwares[LabwareID])
         del Device["Supported Destination Labware Identifiers"]
 
-        SupportedDeckLocations: list[
-            DeckLocation.BaseDeckLocation.DeckLocationABC
-        ] = list()
+        SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC] = list()
         for DeckLocationID in Device["Supported Deck Location Identifiers"]:
             SupportedDeckLocations.append(DeckLocations[DeckLocationID])
         del Device["Supported Deck Location Identifiers"]

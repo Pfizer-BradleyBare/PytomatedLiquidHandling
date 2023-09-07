@@ -1,5 +1,6 @@
-from .BaseLabware import Dimensions, LabwareABC
 from dataclasses import dataclass
+
+from .Base import Dimensions, LabwareABC
 
 
 @dataclass

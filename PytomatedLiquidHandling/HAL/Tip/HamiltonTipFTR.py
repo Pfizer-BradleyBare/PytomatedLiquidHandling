@@ -2,11 +2,11 @@ from dataclasses import dataclass
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Tip import FTR as FTRDriver
-from .BaseTip import Tip
+from .Base import TipABC
 
 
 @dataclass
-class HamiltonTipFTR(Tip):
+class HamiltonTipFTR(TipABC):
     BackendInstance: HamiltonBackendABC
 
     def _TipCounterEdit(self):
@@ -22,7 +22,7 @@ class HamiltonTipFTR(Tip):
         return 0
 
     def _GetTipPositions(
-        self, Options: Tip.GetTipPositionsInterfaceCommand.Options
+        self, Options: TipABC.GetTipPositionsInterfaceCommand.Options
     ) -> list[int]:
         CommandInstance = FTRDriver.GetTipPositions.Command(
             Options=FTRDriver.GetTipPositions.Options(
@@ -40,7 +40,7 @@ class HamiltonTipFTR(Tip):
         return ResponseInstance.GetTipPositions()
 
     def _GetTipPositionsTime(
-        self, Options: Tip.GetTipPositionsInterfaceCommand.Options
+        self, Options: TipABC.GetTipPositionsInterfaceCommand.Options
     ) -> float:
         return 0
 

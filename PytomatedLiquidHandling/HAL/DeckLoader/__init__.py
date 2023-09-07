@@ -1,1 +1,1 @@
-from . import BaseDeckLoader
+from . import Base

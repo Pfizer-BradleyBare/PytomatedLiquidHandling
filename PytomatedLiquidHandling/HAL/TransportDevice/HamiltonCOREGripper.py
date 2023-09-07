@@ -3,15 +3,11 @@ from typing import cast
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Transport import COREGripper as COREGripperDriver
-from .BaseTransportDevice import (
-    DeckLocationTransportConfig,
-    TransportDevice,
-    TransportOptions,
-)
+from .Base import DeckLocationTransportConfig, TransportDeviceABC, TransportOptions
 
 
 @dataclass
-class HamiltonCOREGripper(TransportDevice):
+class HamiltonCOREGripper(TransportDeviceABC):
     BackendInstance: HamiltonBackendABC
     GripperToolSequence: str
 

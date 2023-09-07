@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from .BaseLayoutItem import LayoutItemABC
+from .Base import LayoutItemABC
 
 
 @dataclass

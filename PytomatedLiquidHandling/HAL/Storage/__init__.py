@@ -1,2 +1,2 @@
-from . import BaseStorage, Loader
+from . import Base, Loader
 from .RandomAccessDeckStorage import RandomAccessDeckStorage

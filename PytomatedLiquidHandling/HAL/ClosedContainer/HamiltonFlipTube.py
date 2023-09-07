@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
-from .BaseClosedContainer import ClosedContainerABC
+from .Base import ClosedContainerABC
 
 
 @dataclass

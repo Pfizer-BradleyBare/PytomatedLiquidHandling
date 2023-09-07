@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 _ReservableTypes = (
     TempControlDevice.BaseTempControlDevice.TempControlDevice
-    | DeckLocation.BaseDeckLocation.DeckLocationABC
+    | DeckLocation.Base.DeckLocationABC
 )
 
 

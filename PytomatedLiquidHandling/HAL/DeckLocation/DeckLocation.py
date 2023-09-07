@@ -1,5 +1,6 @@
-from .BaseDeckLocation import DeckLocationABC
 from dataclasses import dataclass
+
+from .Base import DeckLocationABC
 
 
 @dataclass

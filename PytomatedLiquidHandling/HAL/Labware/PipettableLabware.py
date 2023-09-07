@@ -1,5 +1,6 @@
-from .BaseLabware import LabwareABC, Wells
 from dataclasses import dataclass
+
+from .Base import LabwareABC, Wells
 
 
 @dataclass

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from .BaseLayoutItem import LayoutItemABC
+from .Base import LayoutItemABC
 from .Lid import Lid
 
 

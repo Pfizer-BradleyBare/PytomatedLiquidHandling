@@ -5,22 +5,22 @@ from PytomatedLiquidHandling.HAL import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import PortraitCORE8Channel
-from .BasePipette import Pipette
+from .Base import PipetteABC
 
 
 @dataclass
-class HamiltonPortraitCORE8Channel(Pipette):
+class HamiltonPortraitCORE8Channel(PipetteABC):
     BackendInstance: HamiltonBackendABC
     ActiveChannels: list[int]
 
     def ConvertTransferVolumesToSupportedRange(
         self,
-        ListedOptionsInstance: list[Pipette.TransferInterfaceCommand.Options],
-    ) -> list[Pipette.TransferInterfaceCommand.Options]:
+        ListedOptionsInstance: list[PipetteABC.TransferInterfaceCommand.Options],
+    ) -> list[PipetteABC.TransferInterfaceCommand.Options]:
         MaxVolume = self.SupportedPipetteTips[-1].TipInstance.MaxVolume
 
         UpdatedListedOptionsInstance: list[
-            Pipette.TransferInterfaceCommand.Options
+            PipetteABC.TransferInterfaceCommand.Options
         ] = list()
         for OptionsInstance in ListedOptionsInstance:
             NumTransfers = ceil(OptionsInstance.TransferVolume / MaxVolume)
@@ -33,13 +33,15 @@ class HamiltonPortraitCORE8Channel(Pipette):
 
     def _Transfer(
         self,
-        ListedOptionsInstance: list[Pipette.TransferInterfaceCommand.Options],
+        ListedOptionsInstance: list[PipetteABC.TransferInterfaceCommand.Options],
     ):
         ListedOptionsInstance = self.ConvertTransferVolumesToSupportedRange(
             ListedOptionsInstance
         )
 
-        OptionsListList: list[list[Pipette.TransferInterfaceCommand.Options]] = list()
+        OptionsListList: list[
+            list[PipetteABC.TransferInterfaceCommand.Options]
+        ] = list()
         Counter = 0
         Options = ListedOptionsInstance
         NumOptions = len(Options)
@@ -179,6 +181,6 @@ class HamiltonPortraitCORE8Channel(Pipette):
             )
 
     def _TransferTime(
-        self, ListedOptionsInstance: list[Pipette.TransferInterfaceCommand.Options]
+        self, ListedOptionsInstance: list[PipetteABC.TransferInterfaceCommand.Options]
     ) -> float:
         return 0

@@ -2,11 +2,11 @@ from dataclasses import dataclass, field
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Tip import NTR as NTRDriver
-from .BaseTip import Tip
+from .Base import TipABC
 
 
 @dataclass
-class HamiltonTipNTR(Tip):
+class HamiltonTipNTR(TipABC):
     BackendInstance: HamiltonBackendABC
     NTRWasteSequence: str
     GripperSequence: str
@@ -29,7 +29,7 @@ class HamiltonTipNTR(Tip):
         return 0
 
     def _GetTipPositions(
-        self, Options: Tip.GetTipPositionsInterfaceCommand.Options
+        self, Options: TipABC.GetTipPositionsInterfaceCommand.Options
     ) -> list[int]:
         CommandInstance = NTRDriver.GetTipPositions.Command(
             Options=NTRDriver.GetTipPositions.Options(
@@ -50,7 +50,7 @@ class HamiltonTipNTR(Tip):
         return ResponseInstance.GetTipPositions()
 
     def _GetTipPositionsTime(
-        self, Options: Tip.GetTipPositionsInterfaceCommand.Options
+        self, Options: TipABC.GetTipPositionsInterfaceCommand.Options
     ) -> float:
         return 0
 

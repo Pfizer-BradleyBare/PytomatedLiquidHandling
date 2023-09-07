@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Type, TypeVar
 
-from ...Driver.Tools.AbstractClasses import BackendABC, CommandABC, ResponseABC
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import CommandABC, ResponseABC
+
+from .Base import BackendABC
 
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 

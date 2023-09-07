@@ -5,13 +5,13 @@ import yaml
 from PytomatedLiquidHandling.HAL import Carrier
 
 from ...Tools.Logger import Logger
-from .BaseDeckLocation import CarrierConfig, DeckLocationABC
+from .Base import CarrierConfig, DeckLocationABC
 from .DeckLocation import DeckLocation
 
 
 def LoadYaml(
     LoggerInstance: Logger,
-    Carriers: dict[str, Carrier.BaseCarrier.CarrierABC],
+    Carriers: dict[str, Carrier.Base.CarrierABC],
     FilePath: str,
 ) -> dict[str, DeckLocationABC]:
     LoggerInstance.info("Loading DeckLocation config yaml file.")

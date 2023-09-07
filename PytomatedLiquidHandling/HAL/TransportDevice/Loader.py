@@ -15,7 +15,7 @@ from PytomatedLiquidHandling.HAL import (
 )
 
 from ...Tools.Logger import Logger
-from .BaseTransportDevice import (
+from .Base import (
     DeckLocationTransportConfig,
     DeckLocationTransportConfigTracker,
     TransportDeviceTracker,

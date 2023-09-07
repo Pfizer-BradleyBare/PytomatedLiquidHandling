@@ -1,5 +1,5 @@
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from .BaseDeckLoader import DeckLoaderABC, LoadUnloadOptions
+from .Base import DeckLoaderABC, LoadUnloadOptions
 
 
 class HamiltonDeckLoader(DeckLoaderABC):

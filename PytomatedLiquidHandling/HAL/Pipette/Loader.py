@@ -7,7 +7,7 @@ from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Tools.Logger import Logger
-from .BasePipette import LiquidClass, LiquidClassCategory, Pipette, PipetteTip
+from .Base import LiquidClass, LiquidClassCategory, PipetteABC, PipetteTip
 from .HamiltonCORE96Head import HamiltonCORE96Head
 from .HamiltonPortraitCORE8Channel import HamiltonPortraitCORE8Channel
 
@@ -15,14 +15,14 @@ from .HamiltonPortraitCORE8Channel import HamiltonPortraitCORE8Channel
 def LoadYaml(
     LoggerInstance: Logger,
     Backends: dict[str, BackendABC],
-    DeckLocations: dict[str, DeckLocation.BaseDeckLocation.DeckLocationABC],
-    Labwares: dict[str, Labware.BaseLabware.LabwareABC],
-    Tips: dict[str, Tip.BaseTip.Tip],
+    DeckLocations: dict[str, DeckLocation.Base.DeckLocationABC],
+    Labwares: dict[str, Labware.Base.LabwareABC],
+    Tips: dict[str, Tip.Base.TipABC],
     FilePath: str,
-) -> dict[str, Pipette]:
+) -> dict[str, PipetteABC]:
     LoggerInstance.info("Loading Pipette config yaml file.")
 
-    Pipettes: dict[str, Pipette] = dict()
+    Pipettes: dict[str, PipetteABC] = dict()
 
     if not os.path.exists(FilePath):
         LoggerInstance.warning("Config file does not exist. Skipped")
@@ -39,7 +39,7 @@ def LoadYaml(
         )
         return Pipettes
 
-    PipetteDevices: dict[int, Pipette] = dict()
+    PipetteDevices: dict[int, PipetteABC] = dict()
     for DeviceType in ConfigFile:
         for Device in ConfigFile[DeviceType]:
             if Device["Enabled"] == False:
@@ -66,9 +66,7 @@ def LoadYaml(
 
                 SupportedLabwares.append(LabwareInstance)
 
-            SupportedDeckLocations: list[
-                DeckLocation.BaseDeckLocation.DeckLocationABC
-            ] = list()
+            SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC] = list()
             for DeckLocationIdentifier in Device["Supported Deck Location Identifiers"]:
                 SupportedDeckLocations.append(DeckLocations[DeckLocationIdentifier])
 

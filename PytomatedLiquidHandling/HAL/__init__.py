@@ -4,6 +4,7 @@ from . import (
     ClosedContainer,
     DeckLoader,
     DeckLocation,
+    HeatCoolShakeDevice,
     IMCSDesalting,
     Labware,
     LayoutItem,
@@ -11,7 +12,6 @@ from . import (
     Notify,
     Pipette,
     Storage,
-    TempControlDevice,
     Tip,
     TransportDevice,
 )

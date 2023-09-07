@@ -1,5 +1,6 @@
-from .BaseLayoutItem import LayoutItemABC
 from dataclasses import dataclass
+
+from .Base import LayoutItemABC
 
 
 @dataclass

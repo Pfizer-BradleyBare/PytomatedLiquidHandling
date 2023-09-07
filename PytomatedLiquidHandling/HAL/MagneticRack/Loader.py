@@ -5,15 +5,15 @@ import yaml
 from PytomatedLiquidHandling.HAL import Backend, LayoutItem, Pipette
 
 from ...Tools.Logger import Logger
-from .BaseMagneticRack import MagneticRackABC
+from .Base import MagneticRackABC
 from .MagneticRack import MagneticRack
 
 
 def LoadYaml(
     LoggerInstance: Logger,
     FilePath: str,
-    LayoutItems: dict[str, LayoutItem.BaseLayoutItem.LayoutItemABC],
-    Pipettes: dict[str, Pipette.BasePipette.Pipette],
+    LayoutItems: dict[str, LayoutItem.Base.LayoutItemABC],
+    Pipettes: dict[str, Pipette.Base.PipetteABC],
 ) -> dict[str, MagneticRackABC]:
     LoggerInstance.info("Loading MagneticRack config yaml file.")
 
@@ -45,7 +45,7 @@ def LoadYaml(
             continue
         Identifier = Rack["Identifier"]
 
-        SupportedLayoutItems: list[LayoutItem.BaseLayoutItem.LayoutItemABC] = list()
+        SupportedLayoutItems: list[LayoutItem.Base.LayoutItemABC] = list()
 
         for LayoutItemUniqueID in Rack["Supported Labware Layout Item Identifiers"]:
             LayoutItemInstance = LayoutItems[LayoutItemUniqueID]
@@ -61,25 +61,25 @@ def LoadYaml(
             PipetteID = PipetteDevice["Identifier"]
             PipetteInstance = Pipettes[PipetteID]
 
-            LiquidClasses: list[Pipette.BasePipette.LiquidClass] = list()
+            LiquidClasses: list[Pipette.Base.LiquidClass] = list()
             for LiquidClassInfo in PipetteDevice["Liquid Classes"]["Remove Buffer"]:
                 LiquidClassID = LiquidClassInfo["Identifier"]
                 LiquidClassVolume = LiquidClassInfo["Max Volume"]
                 LiquidClasses.append(
-                    Pipette.BasePipette.LiquidClass(LiquidClassID, LiquidClassVolume)
+                    Pipette.Base.LiquidClass(LiquidClassID, LiquidClassVolume)
                 )
-            RemoveCategoryInstance = Pipette.BasePipette.LiquidClassCategory(
+            RemoveCategoryInstance = Pipette.Base.LiquidClassCategory(
                 Identifier + ": Remove", LiquidClasses
             )
 
-            LiquidClasses: list[Pipette.BasePipette.LiquidClass] = list()
+            LiquidClasses: list[Pipette.Base.LiquidClass] = list()
             for LiquidClassInfo in PipetteDevice["Liquid Classes"]["Add Buffer"]:
                 LiquidClassID = LiquidClassInfo["Identifier"]
                 LiquidClassVolume = LiquidClassInfo["Max Volume"]
                 LiquidClasses.append(
-                    Pipette.BasePipette.LiquidClass(LiquidClassID, LiquidClassVolume)
+                    Pipette.Base.LiquidClass(LiquidClassID, LiquidClassVolume)
                 )
-            AddCategoryInstance = Pipette.BasePipette.LiquidClassCategory(
+            AddCategoryInstance = Pipette.Base.LiquidClassCategory(
                 Identifier + ": Add", LiquidClasses
             )
 

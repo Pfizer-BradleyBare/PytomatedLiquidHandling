@@ -2,22 +2,22 @@ import os
 
 import yaml
 
-from PytomatedLiquidHandling.HAL import DeckLocation, Labware
-
 from PytomatedLiquidHandling.Driver.Hamilton.Backend.BaseHamiltonBackend import (
     HamiltonBackendABC,
 )
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
+from PytomatedLiquidHandling.HAL import DeckLocation, Labware
+
 from ...Tools.Logger import Logger
 from . import HamiltonFlipTube, HamiltonFlipTubeSpecial
-from .BaseClosedContainer import ClosedContainerABC
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
+from .Base import ClosedContainerABC
 
 
 def LoadYaml(
     LoggerInstance: Logger,
     Backends: dict[str, BackendABC],
-    DeckLocations: dict[str, DeckLocation.BaseDeckLocation.DeckLocationABC],
-    Labwares: dict[str, Labware.BaseLabware.LabwareABC],
+    DeckLocations: dict[str, DeckLocation.Base.DeckLocationABC],
+    Labwares: dict[str, Labware.Base.LabwareABC],
     FilePath: str,
 ) -> dict[str, ClosedContainerABC]:
     LoggerInstance.info("Loading ClosedContainer config yaml file.")
@@ -56,13 +56,11 @@ def LoadYaml(
 
             BackendInstance = Backends[BackendIdentifier]
 
-            SupportedDeckLocations: list[
-                DeckLocation.BaseDeckLocation.DeckLocationABC
-            ] = list()
+            SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC] = list()
             for DeckLocationID in Device["Supported Deck Location Identifiers"]:
                 SupportedDeckLocations.append(DeckLocations[DeckLocationID])
 
-            SupportedLabwares: list[Labware.BaseLabware.LabwareABC] = list()
+            SupportedLabwares: list[Labware.Base.LabwareABC] = list()
             for LabwareID in Device["Supported Labware Identifiers"]:
                 SupportedLabwares.append(Labwares[LabwareID])
 

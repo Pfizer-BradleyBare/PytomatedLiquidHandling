@@ -4,7 +4,7 @@ import yaml
 
 from ...Tools.Logger import Logger
 from .AutoloadCarrier import AutoloadCarrier
-from .BaseCarrier import CarrierABC
+from .Base import CarrierABC
 from .MoveableCarrier import MoveableCarrier
 from .NonMoveableCarrier import NonMoveableCarrier
 

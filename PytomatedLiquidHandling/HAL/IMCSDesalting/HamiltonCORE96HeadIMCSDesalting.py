@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from .BaseIMCSDesalting import IMCSDesaltingABC, IMCSDesaltingOptions
+from .Base import IMCSDesaltingABC, IMCSDesaltingOptions
 
 
 @dataclass

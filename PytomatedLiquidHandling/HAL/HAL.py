@@ -8,13 +8,13 @@ from PytomatedLiquidHandling.HAL import (
     ClosedContainer,
     DeckLoader,
     DeckLocation,
+    HeatCoolShakeDevice,
     IMCSDesalting,
     Labware,
     LayoutItem,
     MagneticRack,
     Pipette,
     Storage,
-    TempControlDevice,
     Tip,
     TransportDevice,
 )
@@ -26,31 +26,25 @@ class HAL:
     ConfigFolderPath: str
     LoggerInstance: Logger
     Backends: dict[str, BackendABC] = field(init=False)
-    Carriers: dict[str, Carrier.BaseCarrier.CarrierABC] = field(init=False)
-    ClosedContainers: dict[
-        str, ClosedContainer.BaseClosedContainer.ClosedContainerABC
-    ] = field(init=False)
-    DeckLoaders: dict[str, DeckLoader.BaseDeckLoader.DeckLoaderABC] = field(init=False)
-    DeckLocations: dict[str, DeckLocation.BaseDeckLocation.DeckLocationABC] = field(
+    Carriers: dict[str, Carrier.Base.CarrierABC] = field(init=False)
+    ClosedContainers: dict[str, ClosedContainer.Base.ClosedContainerABC] = field(
         init=False
     )
-    IMCSDesaltings: dict[str, IMCSDesalting.BaseIMCSDesalting.IMCSDesaltingABC] = field(
-        init=False
-    )
-    Labwares: dict[str, Labware.BaseLabware.LabwareABC] = field(init=False)
-    LayoutItems: dict[str, LayoutItem.BaseLayoutItem.LayoutItemABC] = field(init=False)
-    MagneticRacks: dict[str, MagneticRack.BaseMagneticRack.MagneticRackABC] = field(
-        init=False
-    )
-    Pipettes: dict[str, Pipette.BasePipette.Pipette] = field(init=False)
-    Storages: dict[str, Storage.BaseStorage.Storage] = field(init=False)
+    DeckLoaders: dict[str, DeckLoader.Base.DeckLoaderABC] = field(init=False)
+    DeckLocations: dict[str, DeckLocation.Base.DeckLocationABC] = field(init=False)
+    IMCSDesaltings: dict[str, IMCSDesalting.Base.IMCSDesaltingABC] = field(init=False)
+    Labwares: dict[str, Labware.Base.LabwareABC] = field(init=False)
+    LayoutItems: dict[str, LayoutItem.Base.LayoutItemABC] = field(init=False)
+    MagneticRacks: dict[str, MagneticRack.Base.MagneticRackABC] = field(init=False)
+    Pipettes: dict[str, Pipette.Base.PipetteABC] = field(init=False)
+    Storages: dict[str, Storage.Base.StorageABC] = field(init=False)
     TempControlDevices: dict[
-        str, TempControlDevice.BaseTempControlDevice.TempControlDevice
+        str, HeatCoolShakeDevice.Base.HeatCoolShakeDeviceABC
     ] = field(init=False)
-    Tips: dict[str, Tip.BaseTip.Tip] = field(init=False)
-    TransportDevices: dict[
-        str, TransportDevice.BaseTransportDevice.TransportDevice
-    ] = field(init=False)
+    Tips: dict[str, Tip.Base.TipABC] = field(init=False)
+    TransportDevices: dict[str, TransportDevice.Base.TransportDeviceABC] = field(
+        init=False
+    )
 
     def __post_init__(self):
         self.Backends = Backend.Loader.LoadYaml(
@@ -95,7 +89,7 @@ class HAL:
             os.path.join(self.ConfigFolderPath, "ClosedContainer.yaml"),
         )
 
-        self.TempControlDevices = TempControlDevice.Loader.LoadYaml(
+        self.TempControlDevices = HeatCoolShakeDevice.Loader.LoadYaml(
             self.LoggerInstance,
             self.Backends,
             self.LayoutItems,

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from .BaseMagneticRack import MagneticRackABC
+from .Base import MagneticRackABC
 
 
 @dataclass
