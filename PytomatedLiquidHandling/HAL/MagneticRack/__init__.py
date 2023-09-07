@@ -1,3 +1,2 @@
-from . import Loader, BaseMagneticRack
-from .BaseMagneticRack import MagneticRackABC
+from . import BaseMagneticRack, Loader
 from .MagneticRack import MagneticRack

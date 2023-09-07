@@ -27,38 +27,38 @@ class Pipette(InterfaceABC, HALObject):
             DestinationLiquidClassCategory: str
             TransferVolume: float
 
-    SupportedTipTrackerInstance: PipetteTipTracker
-    SupportedLabwareTrackerInstance: Labware.LabwareTracker
-    SupportedDeckLocationTrackerInstance: DeckLocation.DeckLocationTracker
-    SupportedLiquidClassCategoryTrackerInstance: LiquidClassCategoryTracker
+    SupportedPipetteTips: list[PipetteTip]
+    SupportedLabwares: list[Labware.PipettableLabware]
+    SupportedDeckLocations: list[DeckLocation.BaseDeckLocation.DeckLocationABC]
+    SupportedLiquidClassCategories: list[LiquidClassCategory]
 
     Transfer: TransferInterfaceCommand = field(init=False)
 
     def GetTip(self, Volume: float) -> PipetteTip:
-        for PipetteTipInstance in self.SupportedTipTrackerInstance.GetObjectsAsList():
+        for PipetteTipInstance in self.SupportedPipetteTips:
             if PipetteTipInstance.TipInstance.MaxVolume >= Volume:
                 return PipetteTipInstance
 
         raise Exception("This should never happen")
 
     def GetLiquidClass(self, LiquidClassCategory: str, Volume: float) -> LiquidClass:
-        for (
-            LiquidClassInstance
-        ) in self.SupportedLiquidClassCategoryTrackerInstance.GetObjectByName(
-            LiquidClassCategory
-        ).GetObjectsAsList():
-            if Volume <= LiquidClassInstance.MaxVolume:
-                return LiquidClassInstance
+        for LiquidClassCategoryInstance in self.SupportedLiquidClassCategories:
+            if LiquidClassCategory == LiquidClassCategoryInstance.Name:
+                for LiquidClass in LiquidClassCategoryInstance.LiquidClasses:
+                    if Volume <= LiquidClass.MaxVolume:
+                        return LiquidClass
 
-        raise Exception(
-            "Volume exceeds that supported by this liquid class category..."
-        )
+                raise Exception(
+                    "Volume exceeds that supported by this liquid class category..."
+                )
+
+        raise Exception("Liquid Class Category not found")
 
     def OptionsSupported(
         self,
-        OptionsTrackerInstance: TransferInterfaceCommand.OptionsTracker,
+        ListedOptionsInstance: list[TransferInterfaceCommand.Options],
     ) -> bool:
-        for OptionsInstance in OptionsTrackerInstance.GetObjectsAsList():
+        for OptionsInstance in ListedOptionsInstance:
             if OptionsInstance.CurrentSourceVolume < OptionsInstance.TransferVolume:
                 raise Exception("Not enough liquid in source...")
             # Check Source has enough volume
@@ -78,34 +78,31 @@ class Pipette(InterfaceABC, HALObject):
                 )
             # Check destination has enough room for volume
 
-            if not self.SupportedLabwareTrackerInstance.IsTracked(
-                OptionsInstance.SourceLayoutItemInstance.LabwareInstance.UniqueIdentifier
+            if (
+                OptionsInstance.SourceLayoutItemInstance.LabwareInstance
+                not in self.SupportedLabwares
             ):
                 return False
-            if not self.SupportedLabwareTrackerInstance.IsTracked(
-                OptionsInstance.DestinationLayoutItemInstance.LabwareInstance.UniqueIdentifier
+
+            if (
+                OptionsInstance.DestinationLayoutItemInstance.LabwareInstance
+                not in self.SupportedLabwares
             ):
                 return False
             # Labwares are supported
 
-            if not self.SupportedDeckLocationTrackerInstance.IsTracked(
-                OptionsInstance.SourceLayoutItemInstance.DeckLocationInstance.UniqueIdentifier
+            if (
+                OptionsInstance.SourceLayoutItemInstance.DeckLocationInstance
+                not in self.SupportedDeckLocations
             ):
                 return False
-            if not self.SupportedDeckLocationTrackerInstance.IsTracked(
-                OptionsInstance.DestinationLayoutItemInstance.DeckLocationInstance.UniqueIdentifier
+            if (
+                OptionsInstance.DestinationLayoutItemInstance.DeckLocationInstance
+                not in self.SupportedDeckLocations
             ):
                 return False
             # Check Deck locations are supported
 
-            if not self.SupportedLiquidClassCategoryTrackerInstance.IsTracked(
-                OptionsInstance.SourceLiquidClassCategory
-            ):
-                return False
-            if not self.SupportedLiquidClassCategoryTrackerInstance.IsTracked(
-                OptionsInstance.DestinationLiquidClassCategory
-            ):
-                return False
             # Check liquid class categories are supported
 
         return True
@@ -113,14 +110,14 @@ class Pipette(InterfaceABC, HALObject):
     @abstractmethod
     def _Transfer(
         self,
-        OptionsTrackerInstance: TransferInterfaceCommand.OptionsTracker,
+        ListedOptionsInstance: list[TransferInterfaceCommand.Options],
     ):
         ...
 
     @abstractmethod
     def _TransferTime(
         self,
-        OptionsTrackerInstance: TransferInterfaceCommand.OptionsTracker,
+        ListedOptionsInstance: list[TransferInterfaceCommand.Options],
     ):
         ...
 

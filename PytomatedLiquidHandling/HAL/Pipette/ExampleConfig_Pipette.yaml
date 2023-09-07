@@ -6,62 +6,62 @@
 #############################################################
 
 Hamilton 96 Core Head:
-  - Unique Identifier: test
+  - Identifier: test
     Enabled: True
-    Backend Unique Identifier: Hammy
+    Backend Identifier: Hammy
     Custom Error Handling: False
 
     Number of Channels: 96
 
-    Supported Labware Unique Identifiers:
+    Supported Labware Identifiers:
       - 400uL Corning Costar 96 Well UV Plate
       - 200uL Biorad 96 Well PCR Plate
       - 400uL Thermo 96 Well PCR Plate
       - 1200uL DeepWell 96 Well PCR Plate
       - 2000uL Corning 96 Well PCR Plate
 
-    Supported Deck Location Unique Identifiers:
+    Supported Deck Location Identifiers:
       - a
       - b
 
     Supported Tips:
-      - Tip Unique Identifier: 50uL NTR
+      - Tip Identifier: 50uL NTR
         Tip Support Dropoff Sequence: Test
         Tip Support Pickup Sequence: Test
         Waste Sequence: Test
 
-      - Tip Unique Identifier: 300uL NTR
+      - Tip Identifier: 300uL NTR
         Tip Support Dropoff Sequence: Test
         Tip Support Pickup Sequence: Test
         Waste Sequence: Test
 
-      - Tip Unique Identifier: 1000uL FTR
+      - Tip Identifier: 1000uL FTR
         Tip Support Dropoff Sequence: Test
         Tip Support Pickup Sequence: Test
         Waste Sequence: Test
 
     Supported Liquid Class Categories:
-      - Unique Identifier: Default
+      - Identifier: Default
         Liquid Classes:
-          - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
+          - Identifier: Tip_50ul_Water_DispenseSurface_Empty
             Max Volume: 50
 
-          - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
+          - Identifier: StandardVolume_Water_DispenseSurface_Empty
             Max Volume: 300
 
-          - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
+          - Identifier: HighVolume_Water_DispenseSurface_Empty
             Max Volume: 1000
 
 Hamilton 1mL Channels Portrait:
-  - Unique Identifier: Test
+  - Identifier: Test
     Enabled: True
-    Backend Unique Identifier: Hammy
+    Backend Identifier: Hammy
     Custom Error Handling: False
 
     Number of Channels: 8
     Active Channels: [1, 2, 3, 4, 5, 6, 7, 8]
 
-    Supported Labware Unique Identifiers:
+    Supported Labware Identifiers:
       - 400uL Corning Costar 96 Well UV Plate
       - 200uL Biorad 96 Well PCR Plate
       - 400uL Thermo 96 Well PCR Plate
@@ -72,34 +72,34 @@ Hamilton 1mL Channels Portrait:
       - 60mL Reagent Reservior
       - 200mL Reagent Trough
 
-    Supported Deck Location Unique Identifiers:
+    Supported Deck Location Identifiers:
       - a
       - b
 
     Supported Tips:
-      - Tip Unique Identifier: 50uL NTR
+      - Tip Identifier: 50uL NTR
         Tip Support Dropoff Sequence: Test
         Tip Support Pickup Sequence: Test
         Waste Sequence: Test
 
-      - Tip Unique Identifier: 300uL NTR
+      - Tip Identifier: 300uL NTR
         Tip Support Dropoff Sequence: Test
         Tip Support Pickup Sequence: Test
         Waste Sequence: Test
 
-      - Tip Unique Identifier: 1000uL FTR
+      - Tip Identifier: 1000uL FTR
         Tip Support Dropoff Sequence: Test
         Tip Support Pickup Sequence: Test
         Waste Sequence: Test
 
     Supported Liquid Class Categories:
-      - Unique Identifier: Default
+      - Identifier: Default
         Liquid Classes:
-          - Unique Identifier: Tip_50ul_Water_DispenseSurface_Empty
+          - Identifier: Tip_50ul_Water_DispenseSurface_Empty
             Max Volume: 50
 
-          - Unique Identifier: StandardVolume_Water_DispenseSurface_Empty
+          - Identifier: StandardVolume_Water_DispenseSurface_Empty
             Max Volume: 300
 
-          - Unique Identifier: HighVolume_Water_DispenseSurface_Empty
+          - Identifier: HighVolume_Water_DispenseSurface_Empty
             Max Volume: 1000

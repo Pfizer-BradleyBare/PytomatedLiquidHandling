@@ -61,32 +61,32 @@ def LoadYaml(
             PipetteID = PipetteDevice["Identifier"]
             PipetteInstance = Pipettes[PipetteID]
 
-            RemoveCategoryInstance = Pipette.BasePipette.LiquidClassCategory(
-                Identifier + ": Remove"
-            )
+            LiquidClasses: list[Pipette.BasePipette.LiquidClass] = list()
             for LiquidClassInfo in PipetteDevice["Liquid Classes"]["Remove Buffer"]:
                 LiquidClassID = LiquidClassInfo["Identifier"]
                 LiquidClassVolume = LiquidClassInfo["Max Volume"]
-                RemoveCategoryInstance.LoadSingle(
+                LiquidClasses.append(
                     Pipette.BasePipette.LiquidClass(LiquidClassID, LiquidClassVolume)
                 )
-
-            AddCategoryInstance = Pipette.BasePipette.LiquidClassCategory(
-                Identifier + ": Add"
+            RemoveCategoryInstance = Pipette.BasePipette.LiquidClassCategory(
+                Identifier + ": Remove", LiquidClasses
             )
+
+            LiquidClasses: list[Pipette.BasePipette.LiquidClass] = list()
             for LiquidClassInfo in PipetteDevice["Liquid Classes"]["Add Buffer"]:
                 LiquidClassID = LiquidClassInfo["Identifier"]
                 LiquidClassVolume = LiquidClassInfo["Max Volume"]
-                AddCategoryInstance.LoadSingle(
+                LiquidClasses.append(
                     Pipette.BasePipette.LiquidClass(LiquidClassID, LiquidClassVolume)
                 )
+            AddCategoryInstance = Pipette.BasePipette.LiquidClassCategory(
+                Identifier + ": Add", LiquidClasses
+            )
 
-            PipetteInstance.SupportedLiquidClassCategoryTrackerInstance.LoadSingle(
+            PipetteInstance.SupportedLiquidClassCategories.append(
                 RemoveCategoryInstance
             )
-            PipetteInstance.SupportedLiquidClassCategoryTrackerInstance.LoadSingle(
-                AddCategoryInstance
-            )
+            PipetteInstance.SupportedLiquidClassCategories.append(AddCategoryInstance)
 
         MagneticRacks[Identifier] = MagneticRack(
             Identifier,

@@ -15,33 +15,33 @@ class HamiltonPortraitCORE8Channel(Pipette):
 
     def ConvertTransferVolumesToSupportedRange(
         self,
-        OptionsTrackerInstance: Pipette.TransferInterfaceCommand.OptionsTracker,
-    ) -> Pipette.TransferInterfaceCommand.OptionsTracker:
-        MaxVolume = self.SupportedTipTrackerInstance.GetObjectsAsList()[
-            -1
-        ].TipInstance.MaxVolume
+        ListedOptionsInstance: list[Pipette.TransferInterfaceCommand.Options],
+    ) -> list[Pipette.TransferInterfaceCommand.Options]:
+        MaxVolume = self.SupportedPipetteTips[-1].TipInstance.MaxVolume
 
-        UpdatedOptionsTrackerInstance = Pipette.Transfer.OptionsTracker()
-        for OptionsInstance in OptionsTrackerInstance.GetObjectsAsList():
+        UpdatedListedOptionsInstance: list[
+            Pipette.TransferInterfaceCommand.Options
+        ] = list()
+        for OptionsInstance in ListedOptionsInstance:
             NumTransfers = ceil(OptionsInstance.TransferVolume / MaxVolume)
             OptionsInstance.TransferVolume /= NumTransfers
 
             for _ in range(0, NumTransfers):
-                UpdatedOptionsTrackerInstance.LoadSingle(OptionsInstance)
+                UpdatedListedOptionsInstance.append(OptionsInstance)
 
-        return UpdatedOptionsTrackerInstance
+        return UpdatedListedOptionsInstance
 
     def _Transfer(
         self,
-        OptionsTrackerInstance: Pipette.TransferInterfaceCommand.OptionsTracker,
+        ListedOptionsInstance: list[Pipette.TransferInterfaceCommand.Options],
     ):
-        OptionsTrackerInstance = self.ConvertTransferVolumesToSupportedRange(
-            OptionsTrackerInstance
+        ListedOptionsInstance = self.ConvertTransferVolumesToSupportedRange(
+            ListedOptionsInstance
         )
 
-        OptionsListList: list[list[Pipette.Transfer.Options]] = list()
+        OptionsListList: list[list[Pipette.TransferInterfaceCommand.Options]] = list()
         Counter = 0
-        Options = OptionsTrackerInstance.GetObjectsAsList()
+        Options = ListedOptionsInstance
         NumOptions = len(Options)
         while Counter < NumOptions:
             OptionsListList.append(Options[Counter : Counter + 8])
@@ -49,39 +49,46 @@ class HamiltonPortraitCORE8Channel(Pipette):
         # Create a list of lists of options in packages of 8 because we can only transfer with 8 tips at a time
 
         for OptionsList in OptionsListList:
-            RequiredTips: dict[str | int, int] = {
-                Tip.TipInstance.UniqueIdentifier: 0
-                for Tip in self.SupportedTipTrackerInstance.GetObjectsAsList()
+            RequiredTips: dict[str, int] = {
+                Tip.TipInstance.Identifier: 0 for Tip in self.SupportedPipetteTips
             }
+            # Package our tips for easy access
+
             for Options in OptionsList:
                 RequiredTips[
-                    self.GetTip(Options.TransferVolume).TipInstance.UniqueIdentifier
+                    self.GetTip(Options.TransferVolume).TipInstance.Identifier
                 ] += 1
             # How many tips of each volume do we need?
 
-            TipPositions: dict[str | int, list[int]] = dict()
+            TipPositions: dict[str, list[int]] = dict()
             for Tip, Count in RequiredTips.items():
-                TipInstance = self.SupportedTipTrackerInstance.GetObjectByName(
-                    Tip
-                ).TipInstance
+                TipInstance = None
+                for PipetteTipInstance in self.SupportedPipetteTips:
+                    if Tip == PipetteTipInstance.TipInstance.Identifier:
+                        TipInstance = PipetteTipInstance.TipInstance
+                        break
+
+                if TipInstance is None:
+                    raise Exception("")
+
                 TipPositions[Tip] = TipInstance.GetTipPositions.Execute(
                     TipInstance.GetTipPositions.Options(NumTips=Count)
                 )
             # Get our updated tip positions!
 
-            PickupOptionsTracker = PortraitCORE8Channel.Pickup.OptionsTracker()
-            AspirateOptionsTracker = PortraitCORE8Channel.Aspirate.OptionsTracker()
-            DispenseOptionsTracker = PortraitCORE8Channel.Dispense.OptionsTracker()
-            EjectOptionsTracker = PortraitCORE8Channel.Eject.OptionsTracker()
+            ListedPickupOptions: list[PortraitCORE8Channel.Pickup.Options] = list()
+            ListedAspirateOptions: list[PortraitCORE8Channel.Aspirate.Options] = list()
+            ListedDispenseOptions: list[PortraitCORE8Channel.Dispense.Options] = list()
+            ListedEjectOptions: list[PortraitCORE8Channel.Eject.Options] = list()
             for Count, Options in enumerate(OptionsList):
                 PipetteTipInstance = self.GetTip(Options.TransferVolume)
 
-                PickupOptionsTracker.LoadSingle(
+                ListedPickupOptions.append(
                     PortraitCORE8Channel.Pickup.Options(
                         Sequence=PipetteTipInstance.TipInstance.PickupSequence,
                         ChannelNumber=Count + 1,
                         SequencePosition=TipPositions[
-                            PipetteTipInstance.UniqueIdentifier
+                            PipetteTipInstance.TipInstance.Identifier
                         ].pop(0),
                     )
                 )
@@ -97,7 +104,7 @@ class HamiltonPortraitCORE8Channel(Pipette):
                     + 1
                 )
 
-                AspirateOptionsTracker.LoadSingle(
+                ListedAspirateOptions.append(
                     PortraitCORE8Channel.Aspirate.Options(
                         ChannelNumber=Count + 1,
                         Sequence=Options.SourceLayoutItemInstance.Sequence,
@@ -106,7 +113,7 @@ class HamiltonPortraitCORE8Channel(Pipette):
                             self.GetLiquidClass(
                                 Options.SourceLiquidClassCategory,
                                 Options.TransferVolume,
-                            ).UniqueIdentifier
+                            ).Name
                         ),
                         Volume=Options.TransferVolume,
                     )
@@ -123,7 +130,7 @@ class HamiltonPortraitCORE8Channel(Pipette):
                     + 1
                 )
 
-                DispenseOptionsTracker.LoadSingle(
+                ListedDispenseOptions.append(
                     PortraitCORE8Channel.Dispense.Options(
                         ChannelNumber=Count + 1,
                         Sequence=Options.DestinationLayoutItemInstance.Sequence,
@@ -132,13 +139,13 @@ class HamiltonPortraitCORE8Channel(Pipette):
                             self.GetLiquidClass(
                                 Options.DestinationLiquidClassCategory,
                                 Options.TransferVolume,
-                            ).UniqueIdentifier
+                            ).Name
                         ),
                         Volume=Options.TransferVolume,
                     )
                 )
 
-                EjectOptionsTracker.LoadSingle(
+                ListedEjectOptions.append(
                     PortraitCORE8Channel.Eject.Options(
                         Sequence=PipetteTipInstance.WasteSequence,
                         ChannelNumber=Count + 1,
@@ -149,29 +156,29 @@ class HamiltonPortraitCORE8Channel(Pipette):
             print(
                 PortraitCORE8Channel.Pickup.Command(
                     CustomErrorHandling=self.CustomErrorHandling,
-                    OptionsTrackerInstance=PickupOptionsTracker,
+                    ListedOptions=ListedPickupOptions,
                 )
             )
             print(
                 PortraitCORE8Channel.Aspirate.Command(
                     CustomErrorHandling=self.CustomErrorHandling,
-                    OptionsTrackerInstance=AspirateOptionsTracker,
+                    ListedOptions=ListedAspirateOptions,
                 )
             )
             print(
                 PortraitCORE8Channel.Dispense.Command(
                     CustomErrorHandling=self.CustomErrorHandling,
-                    OptionsTrackerInstance=DispenseOptionsTracker,
+                    ListedOptions=ListedDispenseOptions,
                 )
             )
             print(
                 PortraitCORE8Channel.Eject.Command(
                     CustomErrorHandling=self.CustomErrorHandling,
-                    OptionsTrackerInstance=EjectOptionsTracker,
+                    ListedOptions=ListedEjectOptions,
                 )
             )
 
     def _TransferTime(
-        self, OptionsTrackerInstance: Pipette.TransferInterfaceCommand.OptionsTracker
+        self, ListedOptionsInstance: list[Pipette.TransferInterfaceCommand.Options]
     ) -> float:
         return 0

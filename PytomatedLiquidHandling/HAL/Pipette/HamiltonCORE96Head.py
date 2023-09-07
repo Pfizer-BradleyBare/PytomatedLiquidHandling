@@ -11,14 +11,14 @@ class HamiltonCORE96Head(Pipette):
     BackendInstance: HamiltonBackendABC
 
     def OptionsSupported(
-        self, OptionsTrackerInstance: Pipette.TransferInterfaceCommand.OptionsTracker
+        self, ListedOptionsInstance: list[Pipette.TransferInterfaceCommand.Options]
     ) -> bool:
         if (
             len(
                 set(
                     [
                         Options.SourceLayoutItemInstance
-                        for Options in OptionsTrackerInstance.GetObjectsAsList()
+                        for Options in ListedOptionsInstance
                     ]
                 )
             )
@@ -30,7 +30,7 @@ class HamiltonCORE96Head(Pipette):
                 set(
                     [
                         Options.DestinationLayoutItemInstance
-                        for Options in OptionsTrackerInstance.GetObjectsAsList()
+                        for Options in ListedOptionsInstance
                     ]
                 )
             )
@@ -39,53 +39,23 @@ class HamiltonCORE96Head(Pipette):
             return False
         # Should be a single sequence location
 
-        if (
-            len(
-                set(
-                    [
-                        Options.TransferVolume
-                        for Options in OptionsTrackerInstance.GetObjectsAsList()
-                    ]
-                )
-            )
-            > 1
-        ):
+        if len(set([Options.TransferVolume for Options in ListedOptionsInstance])) > 1:
             return False
         # Transfer volume should be same for all wells
 
         if len(
-            set(
-                [
-                    Options.SourcePosition
-                    for Options in OptionsTrackerInstance.GetObjectsAsList()
-                ]
-            )
-        ) != len(
-            [
-                Options.SourcePosition
-                for Options in OptionsTrackerInstance.GetObjectsAsList()
-            ]
-        ):
+            set([Options.SourcePosition for Options in ListedOptionsInstance])
+        ) != len([Options.SourcePosition for Options in ListedOptionsInstance]):
             return False
         if len(
-            set(
-                [
-                    Options.DestinationPosition
-                    for Options in OptionsTrackerInstance.GetObjectsAsList()
-                ]
-            )
-        ) != len(
-            [
-                Options.DestinationPosition
-                for Options in OptionsTrackerInstance.GetObjectsAsList()
-            ]
-        ):
+            set([Options.DestinationPosition for Options in ListedOptionsInstance])
+        ) != len([Options.DestinationPosition for Options in ListedOptionsInstance]):
             return False
         # Well positions should not repeat
 
         SourcePositionHolder = 0
         DestinationPositionHolder = 0
-        for Options in OptionsTrackerInstance.GetObjectsAsList():
+        for Options in ListedOptionsInstance:
             if not Options.DestinationPosition == Options.SourcePosition:
                 return False
             # Source and destination positions MUST be the same
@@ -98,23 +68,21 @@ class HamiltonCORE96Head(Pipette):
             DestinationPositionHolder = Options.DestinationPosition
             # Positions should go in increasing order
 
-        if len(OptionsTrackerInstance.GetObjectsAsList()) > 96:
+        if len(ListedOptionsInstance) > 96:
             return False
         # Only 96 channels are supported.
 
-        return Pipette.OptionsSupported(self, OptionsTrackerInstance)
+        return Pipette.OptionsSupported(self, ListedOptionsInstance)
         # Check all other requirements
 
     def _Transfer(
         self,
-        OptionsTrackerInstance: Pipette.TransferInterfaceCommand.OptionsTracker,
+        ListedOptionsInstance: list[Pipette.TransferInterfaceCommand.Options],
     ):
-        Options = OptionsTrackerInstance.GetObjectsAsList()[0]
+        Options = ListedOptionsInstance[0]
         # All the options should be the same. So we can just take the first one for the majority
 
-        MaxVolume = self.SupportedTipTrackerInstance.GetObjectsAsList()[
-            -1
-        ].TipInstance.MaxVolume
+        MaxVolume = self.SupportedPipetteTips[-1].TipInstance.MaxVolume
         NumTransfers = ceil(Options.TransferVolume / MaxVolume)
         TransferVolume = Options.TransferVolume / NumTransfers
         # Find out how many transfers we need to do
@@ -130,7 +98,7 @@ class HamiltonCORE96Head(Pipette):
             LiquidClass=str(
                 self.GetLiquidClass(
                     Options.SourceLiquidClassCategory, TransferVolume
-                ).UniqueIdentifier
+                ).Name
             ),
             Volume=TransferVolume,
         )
@@ -140,7 +108,7 @@ class HamiltonCORE96Head(Pipette):
             LiquidClass=str(
                 self.GetLiquidClass(
                     Options.SourceLiquidClassCategory, TransferVolume
-                ).UniqueIdentifier
+                ).Name
             ),
             Volume=TransferVolume,
         )
@@ -152,25 +120,25 @@ class HamiltonCORE96Head(Pipette):
         for _ in range(0, NumTransfers):
             CORE96Head.Pickup.Command(
                 CustomErrorHandling=self.CustomErrorHandling,
-                OptionsInstance=PickupOptions,
+                Options=PickupOptions,
             )
 
             CORE96Head.Aspirate.Command(
                 CustomErrorHandling=self.CustomErrorHandling,
-                OptionsInstance=AspirateOptions,
+                Options=AspirateOptions,
             )
 
             CORE96Head.Dispense.Command(
                 CustomErrorHandling=self.CustomErrorHandling,
-                OptionsInstance=DispenseOptions,
+                Options=DispenseOptions,
             )
 
             CORE96Head.Eject.Command(
                 CustomErrorHandling=self.CustomErrorHandling,
-                OptionsInstance=EjectOptions,
+                Options=EjectOptions,
             )
 
     def _TransferTime(
-        self, OptionsTrackerInstance: Pipette.TransferInterfaceCommand.OptionsTracker
+        self, OptionsTrackerInstance: list[Pipette.TransferInterfaceCommand.Options]
     ) -> float:
         return 0

@@ -2,8 +2,9 @@ import os
 
 import yaml
 
-from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
+from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
+
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Tools.Logger import Logger
 from .BaseIMCSDesalting import (
@@ -23,7 +24,7 @@ def LoadYaml(
     Backends: dict[str, BackendABC],
     DeckLocations: dict[str, DeckLocation.BaseDeckLocation.DeckLocationABC],
     Labwares: dict[str, Labware.BaseLabware.LabwareABC],
-    Tips: Tip.TipTracker,
+    Tips: dict[str, Tip.BaseTip.Tip],
     FilePath: str,
 ) -> dict[str, IMCSDesaltingABC]:
     IMCSDesaltingDevices: dict[str, IMCSDesaltingABC] = dict()

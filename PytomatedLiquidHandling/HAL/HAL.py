@@ -1,6 +1,7 @@
 import os
 from dataclasses import dataclass, field
 
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from PytomatedLiquidHandling.HAL import (
     Backend,
     Carrier,
@@ -24,95 +25,101 @@ from PytomatedLiquidHandling.Tools.Logger import Logger
 class HAL:
     ConfigFolderPath: str
     LoggerInstance: Logger
-    BackendTrackerInstance: Backend.BackendTracker = field(init=False)
-    CarrierTrackerInstance: Carrier.CarrierTracker = field(init=False)
-    ClosedContainerTrackerInstance: ClosedContainer.ClosedContainerTracker = field(
+    Backends: dict[str, BackendABC] = field(init=False)
+    Carriers: dict[str, Carrier.BaseCarrier.CarrierABC] = field(init=False)
+    ClosedContainers: dict[
+        str, ClosedContainer.BaseClosedContainer.ClosedContainerABC
+    ] = field(init=False)
+    DeckLoaders: dict[str, DeckLoader.BaseDeckLoader.DeckLoaderABC] = field(init=False)
+    DeckLocations: dict[str, DeckLocation.BaseDeckLocation.DeckLocationABC] = field(
         init=False
     )
-    DeckLoaderInstance: DeckLoader.BaseDeckLoader.DeckLoaderABC = field(init=False)
-    DeckLocationTrackerInstance: DeckLocation.DeckLocationTracker = field(init=False)
-    IMCSDesaltingTrackerInstance: IMCSDesalting.IMCSDesaltingTracker = field(init=False)
-    LabwareTrackerInstance: Labware.LabwareTracker = field(init=False)
-    LayoutItemTrackerInstance: LayoutItem.LayoutItemTracker = field(init=False)
-    MagneticRackTrackerInstance: MagneticRack.MagneticRackTracker = field(init=False)
-    PipetteTrackerInstance: Pipette.PipetteTracker = field(init=False)
-    StorageTrackerInstance: Storage.StorageTracker = field(init=False)
-    TempControlDeviceTrackerInstance: TempControlDevice.TempControlDeviceTracker = (
-        field(init=False)
-    )
-    TipTrackerInstance: Tip.TipTracker = field(init=False)
-    TransportDeviceTrackerInstance: TransportDevice.TransportDeviceTracker = field(
+    IMCSDesaltings: dict[str, IMCSDesalting.BaseIMCSDesalting.IMCSDesaltingABC] = field(
         init=False
     )
+    Labwares: dict[str, Labware.BaseLabware.LabwareABC] = field(init=False)
+    LayoutItems: dict[str, LayoutItem.BaseLayoutItem.LayoutItemABC] = field(init=False)
+    MagneticRacks: dict[str, MagneticRack.BaseMagneticRack.MagneticRackABC] = field(
+        init=False
+    )
+    Pipettes: dict[str, Pipette.BasePipette.Pipette] = field(init=False)
+    Storages: dict[str, Storage.BaseStorage.Storage] = field(init=False)
+    TempControlDevices: dict[
+        str, TempControlDevice.BaseTempControlDevice.TempControlDevice
+    ] = field(init=False)
+    Tips: dict[str, Tip.BaseTip.Tip] = field(init=False)
+    TransportDevices: dict[
+        str, TransportDevice.BaseTransportDevice.TransportDevice
+    ] = field(init=False)
 
     def __post_init__(self):
-        self.BackendTrackerInstance = Backend.Loader.LoadYaml(
+        self.Backends = Backend.Loader.LoadYaml(
             self.LoggerInstance,
             os.path.join(self.ConfigFolderPath, "Backend.yaml"),
         )
 
-        self.CarrierTrackerInstance = Carrier.Loader.LoadYaml(
+        self.Carriers = Carrier.Loader.LoadYaml(
             self.LoggerInstance, os.path.join(self.ConfigFolderPath, "Carrier.yaml")
         )
 
-        self.LabwareTrackerInstance = Labware.Loader.LoadYaml(
+        self.Labwares = Labware.Loader.LoadYaml(
             self.LoggerInstance, os.path.join(self.ConfigFolderPath, "Labware.yaml")
         )
 
-        self.DeckLocationTrackerInstance = DeckLocation.Loader.LoadYaml(
+        self.DeckLocations = DeckLocation.Loader.LoadYaml(
             self.LoggerInstance,
-            self.CarrierTrackerInstance,
+            self.Carriers,
             os.path.join(self.ConfigFolderPath, "DeckLocation.yaml"),
         )
 
-        self.TransportDeviceTrackerInstance = TransportDevice.Loader.LoadYaml(
+        self.TransportDevices = TransportDevice.Loader.LoadYaml(
             self.LoggerInstance,
-            self.BackendTrackerInstance,
-            self.LabwareTrackerInstance,
-            self.DeckLocationTrackerInstance,
+            self.Backends,
+            self.Labwares,
+            self.DeckLocations,
             os.path.join(self.ConfigFolderPath, "Transport.yaml"),
         )
 
-        self.LayoutItemTrackerInstance = LayoutItem.Loader.LoadYaml(
+        self.LayoutItems = LayoutItem.Loader.LoadYaml(
             self.LoggerInstance,
-            self.LabwareTrackerInstance,
-            self.DeckLocationTrackerInstance,
+            self.Labwares,
+            self.DeckLocations,
             os.path.join(self.ConfigFolderPath, "LayoutItem.yaml"),
         )
 
-        self.ClosedContainerTrackerInstance = ClosedContainer.Loader.LoadYaml(
+        self.ClosedContainers = ClosedContainer.Loader.LoadYaml(
             self.LoggerInstance,
-            self.BackendTrackerInstance,
-            self.DeckLocationTrackerInstance,
-            self.LabwareTrackerInstance,
+            self.Backends,
+            self.DeckLocations,
+            self.Labwares,
             os.path.join(self.ConfigFolderPath, "ClosedContainer.yaml"),
         )
 
-        self.TempControlDeviceTrackerInstance = TempControlDevice.Loader.LoadYaml(
+        self.TempControlDevices = TempControlDevice.Loader.LoadYaml(
             self.LoggerInstance,
-            self.BackendTrackerInstance,
-            self.LayoutItemTrackerInstance,
+            self.Backends,
+            self.LayoutItems,
             os.path.join(self.ConfigFolderPath, "TempControlDevice.yaml"),
         )
 
-        self.TipTrackerInstance = Tip.Loader.LoadYaml(
+        self.Tips = Tip.Loader.LoadYaml(
             self.LoggerInstance,
-            self.BackendTrackerInstance,
+            self.Backends,
             os.path.join(self.ConfigFolderPath, "Tip.yaml"),
         )
 
-        self.PipetteTrackerInstance = Pipette.Loader.LoadYaml(
+        self.Pipettes = Pipette.Loader.LoadYaml(
             self.LoggerInstance,
-            self.BackendTrackerInstance,
-            self.DeckLocationTrackerInstance,
-            self.LabwareTrackerInstance,
-            self.TipTrackerInstance,
+            self.Backends,
+            self.DeckLocations,
+            self.Labwares,
+            self.Tips,
             os.path.join(self.ConfigFolderPath, "Pipette.yaml"),
         )
 
-        self.StorageTrackerInstance = Storage.Loader.LoadYaml(
+        self.Storages = Storage.Loader.LoadYaml(
             self.LoggerInstance,
-            self.LayoutItemTrackerInstance,
+            self.LayoutItems,
             os.path.join(self.ConfigFolderPath, "Storage.yaml"),
         )
 
