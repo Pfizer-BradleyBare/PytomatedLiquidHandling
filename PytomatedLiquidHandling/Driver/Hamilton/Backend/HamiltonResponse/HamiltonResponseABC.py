@@ -6,6 +6,7 @@ from ....Tools.AbstractClasses import ResponseABC
 
 @dataclass
 class HamiltonResponseABC(ResponseABC):
+    @staticmethod
     def Decorator_ExpectedResponseProperty(
         *, SuccessProperty: bool = False, ErrorProperty: bool = False
     ):

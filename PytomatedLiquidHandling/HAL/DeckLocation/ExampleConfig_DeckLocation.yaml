@@ -6,24 +6,46 @@
     Position: 1
   Transport Config:
     Transport Device Identifier: Gripper
+    Home Pickup Options:
+    Away Pickup Options:
+    Home Dropoff Options:
+    Away Dropoff Options:
 
 - Identifier: HHS_Carrier_Pos2
   Enabled: True
   Carrier:
     Identifier: C1
     Position: 1
+  Transport Config:
+    Transport Device Identifier: Gripper
+    Home Pickup Options:
+    Away Pickup Options:
+    Home Drop Options:
+    Away Drop Options:
 
 - Identifier: HHS_Carrier_Pos3
   Enabled: True
   Carrier:
     Identifier: C1
     Position: 1
+  Transport Config:
+    Transport Device Identifier: Gripper
+    Home Pickup Options:
+    Away Pickup Options:
+    Home Drop Options:
+    Away Drop Options:
 
 - Identifier: HHS_Carrier_Pos4
   Enabled: True
   Carrier:
     Identifier: C1
     Position: 1
+  Transport Config:
+    Transport Device Identifier: Gripper
+    Home Pickup Options:
+    Away Pickup Options:
+    Home Drop Options:
+    Away Drop Options:
 
 #Vacuum Carrier
 - Identifier: Vacuum_Carrier_Pos1
@@ -31,3 +53,9 @@
   Carrier:
     Identifier: C1
     Position: 1
+  Transport Config:
+    Transport Device Identifier: Gripper
+    Home Pickup Options:
+    Away Pickup Options:
+    Home Drop Options:
+    Away Drop Options:
