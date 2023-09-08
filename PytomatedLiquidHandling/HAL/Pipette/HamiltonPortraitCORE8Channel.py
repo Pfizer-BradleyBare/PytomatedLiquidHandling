@@ -95,13 +95,12 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     )
                 )
 
-                AspirateLabware = Options.SourceLayoutItemInstance.LabwareInstance
+                AspirateLabware = Options.SourceLayoutItemInstance.Labware
                 if not isinstance(AspirateLabware, Labware.PipettableLabware):
                     raise Exception("This should never happen")
 
                 AspiratePosition = (
-                    Options.SourcePosition
-                    * AspirateLabware.LabwareWells.SequencesPerWell
+                    Options.SourcePosition * AspirateLabware.Wells.SequencesPerWell
                     + Count
                     + 1
                 )
@@ -121,13 +120,12 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     )
                 )
 
-                DispenseLabware = Options.SourceLayoutItemInstance.LabwareInstance
+                DispenseLabware = Options.SourceLayoutItemInstance.Labware
                 if not isinstance(DispenseLabware, Labware.PipettableLabware):
                     raise Exception("This should never happen")
 
                 DispensePosition = (
-                    Options.SourcePosition
-                    * DispenseLabware.LabwareWells.SequencesPerWell
+                    Options.SourcePosition * DispenseLabware.Wells.SequencesPerWell
                     + Count
                     + 1
                 )

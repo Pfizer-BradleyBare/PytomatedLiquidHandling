@@ -5,12 +5,12 @@ from .Base import LabwareABC, Wells
 
 @dataclass
 class PipettableLabware(LabwareABC):
-    LabwareWells: Wells
+    Wells: Wells
 
     def GetHeightFromVolume(self, Volume: float) -> float:
         CalculatedHeight = 0.0
 
-        WellsEquations = self.LabwareWells.WellEquations
+        WellsEquations = self.Wells.WellEquations
 
         while True:
             TempHeight = CalculatedHeight
@@ -39,7 +39,7 @@ class PipettableLabware(LabwareABC):
         return CalculatedHeight
 
     def GetVolumeFromHeight(self, Height: float) -> float:
-        WellsEquations = self.LabwareWells.WellEquations
+        WellsEquations = self.Wells.WellEquations
         CalculatedVolume = 0
 
         for Segment in WellsEquations:

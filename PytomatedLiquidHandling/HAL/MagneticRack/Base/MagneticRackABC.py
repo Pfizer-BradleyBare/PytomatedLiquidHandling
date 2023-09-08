@@ -16,10 +16,7 @@ class MagneticRackABC(InterfaceABC, HALObject):
         self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
     ) -> LayoutItem.CoverableItem:
         for SupportedLayoutItemInstance in self.SupportedLayoutItems:
-            if (
-                SupportedLayoutItemInstance.LabwareInstance
-                == LayoutItemInstance.LabwareInstance
-            ):
+            if SupportedLayoutItemInstance.Labware == LayoutItemInstance.Labware:
                 if not isinstance(
                     SupportedLayoutItemInstance, LayoutItem.CoverableItem
                 ):

@@ -5,22 +5,22 @@ import yaml
 from PytomatedLiquidHandling.HAL import LayoutItem
 
 from ...Tools.Logger import Logger
+from .Base.StorageDeviceABC import StorageDeviceABC
 from .RandomAccessDeckStorage import RandomAccessDeckStorage
-from .StorageTracker import StorageTracker
 
 
 def LoadYaml(
     LoggerInstance: Logger,
-    LayoutItemTrackerInstance: LayoutItem.LayoutItemTracker,
+    LayoutItems: dict[str, LayoutItem.Base.LayoutItemABC],
     FilePath: str,
-) -> StorageTracker:
+) -> dict[str, StorageDeviceABC]:
     LoggerInstance.info("Loading Storage config yaml file.")
 
-    StorageTrackerInstance = StorageTracker()
+    StorageDevices: dict[str, StorageDeviceABC] = dict()
 
     if not os.path.exists(FilePath):
         LoggerInstance.warning("Config file does not exist. Skipped")
-        return StorageTrackerInstance
+        return StorageDevices
 
     FileHandle = open(FilePath, "r")
     ConfigFile = yaml.full_load(FileHandle)
@@ -31,7 +31,7 @@ def LoadYaml(
         LoggerInstance.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
-        return StorageTrackerInstance
+        return StorageDevices
 
     for StorageTypeID in ConfigFile:
         for Storage in ConfigFile[StorageTypeID]:
@@ -39,31 +39,29 @@ def LoadYaml(
                 LoggerInstance.warning(
                     StorageTypeID
                     + " with unique ID "
-                    + Storage["Unique Identifier"]
+                    + Storage["Identifier"]
                     + " is not enabled so will be skipped."
                 )
                 continue
 
-            UniqueIdentifier = Storage["Unique Identifier"]
+            Identifier = Storage["Identifier"]
 
             if StorageTypeID == "Random Access Deck Storage":
                 ItemCount = 0
-                ReservableItemTrackerInstance = LayoutItem.LayoutItemTracker()
-                for LayoutItemUniqueID in Storage[
-                    "Supported Labware Layout Item Unique Identifiers"
+                ReservableLayoutItems: list[LayoutItem.Base.LayoutItemABC] = list()
+                for LayoutItemID in Storage[
+                    "Supported Labware Layout Item Identifiers"
                 ]:
                     ItemCount += 1
-                    ReservableItemTrackerInstance.LoadSingle(
-                        LayoutItemTrackerInstance.GetObjectByName(LayoutItemUniqueID)
-                    )
+                    ReservableLayoutItems.append(LayoutItems[LayoutItemID])
 
                 StorageInstance = RandomAccessDeckStorage(
-                    UniqueIdentifier, ReservableItemTrackerInstance
+                    Identifier, ReservableLayoutItems
                 )
 
             else:
                 raise Exception("Storage Type not found. Try agian.")
 
-            StorageTrackerInstance.LoadSingle(StorageInstance)
+            StorageDevices[Identifier] = StorageInstance
 
-    return StorageTrackerInstance
+    return StorageDevices

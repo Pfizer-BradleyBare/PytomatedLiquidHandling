@@ -9,5 +9,5 @@ from .TransportOffsets import TransportOffsets
 @dataclass
 class LabwareABC(HALObject):
     ImageFilename: str
-    DimensionsInstance: Dimensions
-    TransportOffsetsInstance: TransportOffsets
+    Dimensions: Dimensions
+    TransportOffsets: TransportOffsets

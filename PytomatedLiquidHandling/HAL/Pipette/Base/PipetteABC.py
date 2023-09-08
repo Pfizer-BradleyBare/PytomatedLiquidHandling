@@ -63,15 +63,13 @@ class PipetteABC(InterfaceABC, HALObject):
                 raise Exception("Not enough liquid in source...")
             # Check Source has enough volume
 
-            DestinationLabware = (
-                OptionsInstance.DestinationLayoutItemInstance.LabwareInstance
-            )
+            DestinationLabware = OptionsInstance.DestinationLayoutItemInstance.Labware
             if not isinstance(DestinationLabware, Labware.PipettableLabware):
                 raise Exception("This should never happen")
             if (
                 OptionsInstance.CurrentDestinationVolume
                 + OptionsInstance.TransferVolume
-                > DestinationLabware.LabwareWells.MaxVolume
+                > DestinationLabware.Wells.MaxVolume
             ):
                 raise Exception(
                     "Destination well cannot support this volume. Overflow will occur"
@@ -79,25 +77,25 @@ class PipetteABC(InterfaceABC, HALObject):
             # Check destination has enough room for volume
 
             if (
-                OptionsInstance.SourceLayoutItemInstance.LabwareInstance
+                OptionsInstance.SourceLayoutItemInstance.Labware
                 not in self.SupportedLabwares
             ):
                 return False
 
             if (
-                OptionsInstance.DestinationLayoutItemInstance.LabwareInstance
+                OptionsInstance.DestinationLayoutItemInstance.Labware
                 not in self.SupportedLabwares
             ):
                 return False
             # Labwares are supported
 
             if (
-                OptionsInstance.SourceLayoutItemInstance.DeckLocationInstance
+                OptionsInstance.SourceLayoutItemInstance.DeckLocation
                 not in self.SupportedDeckLocations
             ):
                 return False
             if (
-                OptionsInstance.DestinationLayoutItemInstance.DeckLocationInstance
+                OptionsInstance.DestinationLayoutItemInstance.DeckLocation
                 not in self.SupportedDeckLocations
             ):
                 return False

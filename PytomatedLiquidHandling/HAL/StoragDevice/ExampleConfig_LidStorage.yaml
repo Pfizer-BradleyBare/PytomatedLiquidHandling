@@ -6,8 +6,8 @@
 #############################################################
 
 Random Access Deck Storage:
-  - Unique Identifier: Random Access Lid Storage 1
+  - Identifier: Random Access Lid Storage 1
     Enabled: True
-    Supported Labware Layout Item Unique Identifiers:
+    Supported Labware Layout Item Identifiers:
       - Item1
       - Item2

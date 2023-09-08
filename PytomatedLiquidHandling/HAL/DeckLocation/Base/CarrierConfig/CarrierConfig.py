@@ -5,5 +5,5 @@ from PytomatedLiquidHandling.HAL import Carrier
 
 @dataclass
 class CarrierConfig:
-    CarrierInstance: Carrier.Base.CarrierABC
+    Carrier: Carrier.Base.CarrierABC
     CarrierPosition: int

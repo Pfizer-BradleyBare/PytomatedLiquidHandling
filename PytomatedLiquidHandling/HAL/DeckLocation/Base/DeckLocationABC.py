@@ -7,4 +7,4 @@ from .CarrierConfig import CarrierConfig
 
 @dataclass
 class DeckLocationABC(HALObject):
-    CarrierConfigInstance: CarrierConfig
+    CarrierConfig: CarrierConfig

@@ -7,5 +7,5 @@ from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 @dataclass
 class LayoutItemABC(HALObject):
     Sequence: str
-    DeckLocationInstance: DeckLocation.Base.DeckLocationABC
-    LabwareInstance: Labware.Base.LabwareABC
+    DeckLocation: DeckLocation.Base.DeckLocationABC
+    Labware: Labware.Base.LabwareABC

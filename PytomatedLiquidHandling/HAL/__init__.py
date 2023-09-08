@@ -11,7 +11,7 @@ from . import (
     MagneticRack,
     Notify,
     Pipette,
-    Storage,
+    StoragDevice,
     Tip,
     TransportDevice,
 )

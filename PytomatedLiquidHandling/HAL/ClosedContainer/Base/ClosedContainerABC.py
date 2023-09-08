@@ -14,7 +14,7 @@ class ClosedContainerABC(InterfaceABC, HALObject):
     class OpenCloseInterfaceCommand(InterfaceCommandWithListedOptionsABC[None]):
         @dataclass(kw_only=True)
         class Options(OptionsABC):
-            LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+            LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
             Position: int
 
     ToolSequence: str

@@ -47,8 +47,7 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
 
     def IsLabwareSupported(self, LabwareInstance: Labware.PipettableLabware) -> bool:
         Labwares = [
-            LayoutItem.LabwareInstance.Identifier
-            for LayoutItem in self.SupportedLayoutItems
+            LayoutItem.Labware.Identifier for LayoutItem in self.SupportedLayoutItems
         ]
 
         if LabwareInstance.Identifier in Labwares:
@@ -60,10 +59,7 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
         self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
     ) -> LayoutItem.CoverableItem:
         for SupportedLayoutItemInstance in self.SupportedLayoutItems:
-            if (
-                SupportedLayoutItemInstance.LabwareInstance
-                == LayoutItemInstance.LabwareInstance
-            ):
+            if SupportedLayoutItemInstance.Labware == LayoutItemInstance.Labware:
                 if not isinstance(
                     SupportedLayoutItemInstance, LayoutItem.CoverableItem
                 ):

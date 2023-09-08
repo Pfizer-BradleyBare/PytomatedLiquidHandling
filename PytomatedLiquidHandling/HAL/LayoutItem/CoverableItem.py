@@ -6,7 +6,7 @@ from .Lid import Lid
 
 @dataclass
 class CoverableItem(LayoutItemABC):
-    LidInstance: Lid
+    Lid: Lid
     IsCovered: bool = field(init=False, default=False)
 
     def Cover(self):
