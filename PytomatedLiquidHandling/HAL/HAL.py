@@ -14,7 +14,7 @@ from PytomatedLiquidHandling.HAL import (
     LayoutItem,
     MagneticRack,
     Pipette,
-    StoragDevice,
+    StorageDevice,
     Tip,
     TransportDevice,
 )
@@ -37,7 +37,7 @@ class HAL:
     LayoutItems: dict[str, LayoutItem.Base.LayoutItemABC] = field(init=False)
     MagneticRacks: dict[str, MagneticRack.Base.MagneticRackABC] = field(init=False)
     Pipettes: dict[str, Pipette.Base.PipetteABC] = field(init=False)
-    StorageDevices: dict[str, StoragDevice.Base.StorageDeviceABC] = field(init=False)
+    StorageDevices: dict[str, StorageDevice.Base.StorageDeviceABC] = field(init=False)
     TempControlDevices: dict[
         str, HeatCoolShakeDevice.Base.HeatCoolShakeDeviceABC
     ] = field(init=False)
@@ -111,7 +111,7 @@ class HAL:
             os.path.join(self.ConfigFolderPath, "Pipette.yaml"),
         )
 
-        self.StorageDevices = StoragDevice.Loader.LoadYaml(
+        self.StorageDevices = StorageDevice.Loader.LoadYaml(
             self.LoggerInstance,
             self.LayoutItems,
             os.path.join(self.ConfigFolderPath, "Storage.yaml"),

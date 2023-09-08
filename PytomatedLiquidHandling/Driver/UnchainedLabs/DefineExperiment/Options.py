@@ -1,7 +1,4 @@
-from PytomatedLiquidHandling.Tools.AbstractClasses import NonUniqueObjectABC
-
-
-class Options(NonUniqueObjectABC):
+class Options:
     def __init__(
         self,
         *,

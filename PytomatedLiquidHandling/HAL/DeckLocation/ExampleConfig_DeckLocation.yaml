@@ -4,6 +4,8 @@
   Carrier:
     Identifier: C1
     Position: 1
+  Transport Config:
+    Transport Device Identifier: Gripper
 
 - Identifier: HHS_Carrier_Pos2
   Enabled: True
