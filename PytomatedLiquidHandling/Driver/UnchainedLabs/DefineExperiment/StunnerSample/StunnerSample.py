@@ -1,7 +1,4 @@
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
-
-
-class StunnerSample(UniqueObjectABC):
+class StunnerSample:
     def __init__(
         self,
         *,
@@ -13,7 +10,6 @@ class StunnerSample(UniqueObjectABC):
         SampleMetaData: str = "NA",
         BufferMetaData: str = "NA",
     ):
-        UniqueObjectABC.__init__(self, PlateName + ": " + str(Well))
         self.SampleName: str = SampleName
         self.PlateName: str = PlateName
         self.Well: str = Well

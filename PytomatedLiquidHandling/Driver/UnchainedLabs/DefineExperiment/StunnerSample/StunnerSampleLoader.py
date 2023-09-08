@@ -43,7 +43,7 @@ def LoadYaml(FilePath: str) -> StunnerSampleTracker:
         else:
             Names.append(SampleName)
 
-        SampleTrackerInstance.LoadSingle(
+        SampleTrackerInstance.append(
             StunnerSample(
                 SampleName=SampleName,
                 PlateName=PlateName,

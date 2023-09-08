@@ -1,9 +1,13 @@
-from dataclasses import dataclass
-from typing import cast
+from dataclasses import dataclass, field
 
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ...Driver.Hamilton.Transport import COREGripper as COREGripperDriver
-from .Base import DeckLocationTransportConfig, TransportDeviceABC, TransportOptions
+from PytomatedLiquidHandling.Driver.Hamilton.Backend.BaseHamiltonBackend import (
+    HamiltonBackendABC,
+)
+from PytomatedLiquidHandling.Driver.Hamilton.Transport import (
+    COREGripper as COREGripperDriver,
+)
+from .Base import TransportDeviceABC, TransportOptions
+from PytomatedLiquidHandling.HAL import DeckLocation
 
 
 @dataclass
@@ -11,48 +15,44 @@ class HamiltonCOREGripper(TransportDeviceABC):
     BackendInstance: HamiltonBackendABC
     GripperToolSequence: str
 
-    class GetConfig(DeckLocationTransportConfig.TransportConfigABC):
-        def __init__(self, Config: dict):
-            ...
+    class PickupOptions(DeckLocation.Base.TransportConfig.Options):
+        ...
 
-        def _ComparisonKeys(self) -> list[str]:
-            return []
-
-    class PlaceConfig(DeckLocationTransportConfig.TransportConfigABC):
-        def __init__(self, Config: dict):
-            self.CheckPlateExists: COREGripperDriver.PlacePlate.Options.YesNoOptions = (
-                COREGripperDriver.PlacePlate.Options.YesNoOptions(
-                    Config["CheckPlateExists"]
-                )
-            )
-
-        def _ComparisonKeys(self) -> list[str]:
-            return ["CheckPlateExists"]
+    class DropoffOptions(DeckLocation.Base.TransportConfig.Options):
+        CheckPlateExists: COREGripperDriver.PlacePlate.Options.YesNoOptions = field(
+            init=False, compare=False
+        )
 
     def Transport(self, TransportOptionsInstance: TransportOptions.Options):
-        self._CheckIsValid(TransportOptionsInstance)
-
         SourceLayoutItem = TransportOptionsInstance.SourceLayoutItem
         DestinationLayoutItem = TransportOptionsInstance.DestinationLayoutItem
 
-        SourceTransportableLabware = (
-            self.SupportedLabwareTrackerInstance.GetObjectByName(
-                SourceLayoutItem.LabwareInstance.UniqueIdentifier
+        if (
+            SourceLayoutItem.DeckLocation.TransportConfig.HomePickupOptions
+            != DestinationLayoutItem.DeckLocation.TransportConfig.AwayPickupOptions
+        ):
+            raise Exception(
+                "Source and destination transport configuration is not compatible."
             )
-        )
+
+        if SourceLayoutItem.Labware != DestinationLayoutItem.Labware:
+            raise Exception("Source and destination labware are not compatible")
+
+        if SourceLayoutItem.DeckLocation == DestinationLayoutItem.DeckLocation:
+            return
+
+        Labware = SourceLayoutItem.Labware
 
         GetPlateOptionsInstance = COREGripperDriver.GetPlate.Options(
             GripperSequence=self.GripperToolSequence,
             PlateSequence=SourceLayoutItem.Sequence,
-            GripWidth=SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
-            - SourceTransportableLabware.TransportOffsetsInstance.Close,
-            OpenWidth=SourceLayoutItem.LabwareInstance.DimensionsInstance.ShortSide
-            + SourceTransportableLabware.TransportOffsetsInstance.Open,
-            GripHeight=SourceTransportableLabware.TransportOffsetsInstance.Height,
+            GripWidth=Labware.Dimensions.ShortSide - Labware.TransportOffsets.Close,
+            OpenWidth=Labware.Dimensions.ShortSide + Labware.TransportOffsets.Open,
+            GripHeight=Labware.TransportOffsets.BottomOffset,
         )
 
         CommandInstance = COREGripperDriver.GetPlate.Command(
-            OptionsInstance=GetPlateOptionsInstance,
+            Options=GetPlateOptionsInstance,
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.BackendInstance.ExecuteCommand(CommandInstance)
@@ -61,19 +61,17 @@ class HamiltonCOREGripper(TransportDeviceABC):
             CommandInstance, COREGripperDriver.GetPlate.Response
         )
 
-        PlaceConfigInstance = (
-            self.DeckLocationTransportConfigTrackerInstance.GetObjectByName(
-                DestinationLayoutItem.DeckLocationInstance.UniqueIdentifier
-            ).PlaceConfig
+        DropoffOptions = (
+            DestinationLayoutItem.DeckLocation.TransportConfig.HomeDropoffOptions
         )
 
-        if not isinstance(PlaceConfigInstance, self.PlaceConfig):
+        if not isinstance(DropoffOptions, self.DropoffOptions):
             raise Exception("This should never happen")
 
         CommandInstance = COREGripperDriver.PlacePlate.Command(
-            OptionsInstance=COREGripperDriver.PlacePlate.Options(
+            Options=COREGripperDriver.PlacePlate.Options(
                 PlateSequence=DestinationLayoutItem.Sequence,
-                CheckPlateExists=PlaceConfigInstance.CheckPlateExists,
+                CheckPlateExists=DropoffOptions.CheckPlateExists,
                 EjectTool=COREGripperDriver.PlacePlate.Options.YesNoOptions(
                     int(self._LastTransportFlag)
                 ),

@@ -1,14 +1,10 @@
 from typing import Any
 
-from PytomatedLiquidHandling.Tools.AbstractClasses import (
-    UniqueObjectABC,
-    UniqueObjectTrackerABC,
-)
 
 from .StunnerSample import StunnerSample
 
 
-class StunnerSampleTracker(UniqueObjectABC, UniqueObjectTrackerABC[StunnerSample]):
+class StunnerSampleTracker(list):
     def __init__(
         self,
         *,
@@ -27,8 +23,6 @@ class StunnerSampleTracker(UniqueObjectABC, UniqueObjectTrackerABC[StunnerSample
             "A280 (10m)",
         ]
     ):
-        UniqueObjectABC.__init__(self, ExperimentName)
-        UniqueObjectTrackerABC.__init__(self)
         self.ApplicationID: str = ApplicationID
         self.DLSAquisitionTime: int = DLSAquisitionTime
         self.DLSNumAquisitions: int = DLSNumAquisitions
@@ -52,7 +46,7 @@ class StunnerSampleTracker(UniqueObjectABC, UniqueObjectTrackerABC[StunnerSample
         Blanks = list()
         SampleGroups = dict()
 
-        for Sample in self.GetObjectsAsList():
+        for Sample in []:
             SampleName = str(Sample.SampleName)
             PlateName = Sample.PlateName
             SampleWell = Sample.Well
@@ -90,9 +84,7 @@ class StunnerSampleTracker(UniqueObjectABC, UniqueObjectTrackerABC[StunnerSample
             )
 
         ExperimentDefinitionText = "[Experiment definition]\n"
-        ExperimentDefinitionText += (
-            'experiment_name="' + str(self.UniqueIdentifier) + '"\n'
-        )
+        ExperimentDefinitionText += 'experiment_name="' + str("") + '"\n'
         ExperimentDefinitionText += 'application_name="' + self.ApplicationID + '"\n'
         ExperimentDefinitionText += 'dropplate_type="Stunner Plate"\n'
         ExperimentDefinitionText += (

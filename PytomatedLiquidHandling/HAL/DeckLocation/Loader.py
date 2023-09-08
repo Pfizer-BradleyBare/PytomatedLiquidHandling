@@ -2,16 +2,17 @@ import os
 
 import yaml
 
-from PytomatedLiquidHandling.HAL import Carrier
+from PytomatedLiquidHandling.HAL import Carrier, TransportDevice
 
 from ...Tools.Logger import Logger
-from .Base import CarrierConfig, DeckLocationABC
+from .Base import CarrierConfig, DeckLocationABC, TransportConfig
 from .DeckLocation import DeckLocation
 
 
 def LoadYaml(
     LoggerInstance: Logger,
     Carriers: dict[str, Carrier.Base.CarrierABC],
+    TransportDevices: dict[str, TransportDevice.Base.TransportDeviceABC],
     FilePath: str,
 ) -> dict[str, DeckLocationABC]:
     LoggerInstance.info("Loading DeckLocation config yaml file.")
@@ -52,7 +53,25 @@ def LoadYaml(
         CarrierInstance = Carriers[CarrierID]
         CarrierConfigInstance = CarrierConfig(CarrierInstance, CarrierPosition)
 
-        DeckLocationInstance = DeckLocation(Identifier, CarrierConfigInstance)
+        TransportDevice = TransportDevices[
+            Location["Transport Config"]["Transport Device Identifier"]
+        ]
+        HomePickupOptions = Location["Transport Config"]["Home Pickup Options"]
+        AwayPickupOptions = Location["Transport Config"]["Away Pickup Options"]
+        HomeDropoffOptions = Location["Transport Config"]["Home Dropoff Options"]
+        AwayDropoffOptions = Location["Transport Config"]["Away Dropoff Options"]
+
+        DeckLocationInstance = DeckLocation(
+            Identifier,
+            CarrierConfigInstance,
+            TransportConfig(
+                TransportDevice,
+                HomePickupOptions,
+                AwayPickupOptions,
+                HomeDropoffOptions,
+                AwayDropoffOptions,
+            ),
+        )
 
         DeckLocations[Identifier] = DeckLocationInstance
 

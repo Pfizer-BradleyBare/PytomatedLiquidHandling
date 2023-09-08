@@ -60,18 +60,18 @@ class HAL:
             self.LoggerInstance, os.path.join(self.ConfigFolderPath, "Labware.yaml")
         )
 
-        self.DeckLocations = DeckLocation.Loader.LoadYaml(
-            self.LoggerInstance,
-            self.Carriers,
-            os.path.join(self.ConfigFolderPath, "DeckLocation.yaml"),
-        )
-
         self.TransportDevices = TransportDevice.Loader.LoadYaml(
             self.LoggerInstance,
             self.Backends,
             self.Labwares,
-            self.DeckLocations,
             os.path.join(self.ConfigFolderPath, "Transport.yaml"),
+        )
+
+        self.DeckLocations = DeckLocation.Loader.LoadYaml(
+            self.LoggerInstance,
+            self.Carriers,
+            self.TransportDevices,
+            os.path.join(self.ConfigFolderPath, "DeckLocation.yaml"),
         )
 
         self.LayoutItems = LayoutItem.Loader.LoadYaml(

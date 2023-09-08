@@ -1,26 +1,19 @@
 from dataclasses import dataclass
 
-from ...Driver.Hamilton.Backend import VantageBackend
-from .Base import DeckLocationTransportConfig, TransportDeviceABC, TransportOptions
+from PytomatedLiquidHandling.Driver.Hamilton.Backend import VantageBackend
+from .Base import TransportDeviceABC, TransportOptions
+from PytomatedLiquidHandling.HAL import DeckLocation
 
 
 @dataclass
 class VantageTrackGripper(TransportDeviceABC):
     BackendInstance: VantageBackend
 
-    class GetConfig(DeckLocationTransportConfig.TransportConfigABC):
-        def __init__(self, Config: dict):
-            ...
+    class PickupOptions(DeckLocation.Base.TransportConfig.Options):
+        ...
 
-        def _ComparisonKeys(self) -> list[str]:
-            return []
-
-    class PlaceConfig(DeckLocationTransportConfig.TransportConfigABC):
-        def __init__(self, Config: dict):
-            ...
-
-        def _ComparisonKeys(self) -> list[str]:
-            return []
+    class DropoffOptions(DeckLocation.Base.TransportConfig.Options):
+        ...
 
     def Transport(self, TransportOptionsInstance: TransportOptions.Options):
         ...

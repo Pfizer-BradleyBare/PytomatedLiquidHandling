@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any, ClassVar
+from dataclasses import dataclass, fields, field
+from typing import Any
 
 from PytomatedLiquidHandling.HAL import TransportDevice
 
@@ -14,48 +14,20 @@ class TransportConfig:
     HomeDropoffOptions: Options
     AwayDropoffOptions: Options
 
-    @dataclass(init=False)
+    @dataclass
     class Options:
-        def __init__(self, Config: dict[str, Any]):
-            self.Config: dict[str, Any] = Config
+        Config: dict[str, Any] = field(init=True, compare=False)
 
-        def __eq__(self, __value: object) -> bool:
-            if not isinstance(__value, self.__class__):
-                return False
+        def __post_init__(self):
+            Fields = [field for field in fields(self) if field.init == False]
 
-            return True
-        
-        @staticmethod
-        def 
+            for Field in Fields:
+                if Field.name not in self.Config:
+                    raise Exception(Field.name + " is missing from config")
 
+                try:
+                    Value = Field.type(self.Config[Field.name])
+                except:
+                    raise Exception("Value cannot be converted to the correct type")
 
-from dataclasses import dataclass, field, fields
-
-
-@dataclass
-class d:
-    Config: dict = field(init=True, compare=False)
-
-    def __post_init__(self):
-        mean = {field.name: field.type for field in fields(self) if field.init == False}
-        print(mean)
-
-        for key in mean:
-            self.__dict__[key] = mean[key](self.Config[key])
-
-
-@dataclass
-class a(d):
-    e: str = field(init=False, compare=False)
-    f: int = field(init=False, compare=True)
-
-
-@dataclass
-class c(d):
-    b: float = field(init=False, compare=True)
-
-
-aa = a({"e": "", "f": 1})
-
-ab = a({"e": "a", "f": "1"})
-print(aa == ab)
+                self.__dict__[Field.name] = Value
