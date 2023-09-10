@@ -43,8 +43,8 @@ class HamiltonInternalPlateGripper(TransportDeviceABC):
         DestinationLayoutItem = TransportOptionsInstance.DestinationLayoutItem
 
         if (
-            SourceLayoutItem.DeckLocation.TransportConfig.HomePickupOptions
-            != DestinationLayoutItem.DeckLocation.TransportConfig.AwayPickupOptions
+            SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
+            != DestinationLayoutItem.DeckLocation.TransportConfig.PickupOptions
         ):
             raise Exception(
                 "Source and destination transport configuration is not compatible."
@@ -58,7 +58,7 @@ class HamiltonInternalPlateGripper(TransportDeviceABC):
 
         Labware = SourceLayoutItem.Labware
 
-        PickupOptions = SourceLayoutItem.DeckLocation.TransportConfig.HomePickupOptions
+        PickupOptions = SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
 
         if not isinstance(PickupOptions, self.PickupOptions):
             raise Exception("This should never happen")
@@ -83,7 +83,7 @@ class HamiltonInternalPlateGripper(TransportDeviceABC):
         self.BackendInstance.GetResponse(CommandInstance, IPGDriver.GetPlate.Response)
 
         DropoffOptions = (
-            DestinationLayoutItem.DeckLocation.TransportConfig.HomeDropoffOptions
+            DestinationLayoutItem.DeckLocation.TransportConfig.DropoffOptions
         )
 
         if not isinstance(DropoffOptions, self.DropoffOptions):

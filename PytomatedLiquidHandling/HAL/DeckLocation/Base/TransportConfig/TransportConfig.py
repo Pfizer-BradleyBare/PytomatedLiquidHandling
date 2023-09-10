@@ -9,10 +9,8 @@ from PytomatedLiquidHandling.HAL import TransportDevice
 @dataclass
 class TransportConfig:
     TransportDevice: TransportDevice.Base.TransportDeviceABC
-    HomePickupOptions: Options
-    AwayPickupOptions: Options
-    HomeDropoffOptions: Options
-    AwayDropoffOptions: Options
+    PickupOptions: Options
+    DropoffOptions: Options
 
     @dataclass
     class Options:

@@ -56,21 +56,13 @@ def LoadYaml(
         TransportDevice = TransportDevices[
             Location["Transport Config"]["Transport Device Identifier"]
         ]
-        HomePickupOptions = Location["Transport Config"]["Home Pickup Options"]
-        AwayPickupOptions = Location["Transport Config"]["Away Pickup Options"]
-        HomeDropoffOptions = Location["Transport Config"]["Home Dropoff Options"]
-        AwayDropoffOptions = Location["Transport Config"]["Away Dropoff Options"]
+        PickupOptions = Location["Transport Config"]["Pickup Options"]
+        DropoffOptions = Location["Transport Config"]["Dropoff Options"]
 
         DeckLocationInstance = DeckLocation(
             Identifier,
             CarrierConfigInstance,
-            TransportConfig(
-                TransportDevice,
-                HomePickupOptions,
-                AwayPickupOptions,
-                HomeDropoffOptions,
-                AwayDropoffOptions,
-            ),
+            TransportConfig(TransportDevice, PickupOptions, DropoffOptions),
         )
 
         DeckLocations[Identifier] = DeckLocationInstance

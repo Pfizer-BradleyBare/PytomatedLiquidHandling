@@ -28,8 +28,8 @@ class HamiltonCOREGripper(TransportDeviceABC):
         DestinationLayoutItem = TransportOptionsInstance.DestinationLayoutItem
 
         if (
-            SourceLayoutItem.DeckLocation.TransportConfig.HomePickupOptions
-            != DestinationLayoutItem.DeckLocation.TransportConfig.AwayPickupOptions
+            SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
+            != DestinationLayoutItem.DeckLocation.TransportConfig.PickupOptions
         ):
             raise Exception(
                 "Source and destination transport configuration is not compatible."
@@ -62,7 +62,7 @@ class HamiltonCOREGripper(TransportDeviceABC):
         )
 
         DropoffOptions = (
-            DestinationLayoutItem.DeckLocation.TransportConfig.HomeDropoffOptions
+            DestinationLayoutItem.DeckLocation.TransportConfig.DropoffOptions
         )
 
         if not isinstance(DropoffOptions, self.DropoffOptions):
