@@ -5,14 +5,13 @@ from PytomatedLiquidHandling.Driver.Hamilton.Backend.BaseHamiltonBackend import 
 )
 from PytomatedLiquidHandling.Driver.Hamilton.Transport import IPG as IPGDriver
 from .Base import TransportDeviceABC, TransportOptions
-from PytomatedLiquidHandling.HAL import DeckLocation
 
 
 @dataclass
 class HamiltonInternalPlateGripper(TransportDeviceABC):
     BackendInstance: HamiltonBackendABC
 
-    class PickupOptions(DeckLocation.Base.TransportConfig.Options):
+    class PickupOptions(TransportDeviceABC.PickupOptions):
         GripMode: IPGDriver.GetPlate.Options.GripModeOptions = field(
             init=False, compare=True
         )
@@ -28,7 +27,7 @@ class HamiltonInternalPlateGripper(TransportDeviceABC):
             init=False, compare=True
         )
 
-    class DropoffOptions(DeckLocation.Base.TransportConfig.Options):
+    class DropoffOptions(TransportDeviceABC.DropoffOptions):
         Movement: IPGDriver.PlacePlate.Options.MovementOptions = field(
             init=False, compare=True
         )

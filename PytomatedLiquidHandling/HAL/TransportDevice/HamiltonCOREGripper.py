@@ -7,7 +7,6 @@ from PytomatedLiquidHandling.Driver.Hamilton.Transport import (
     COREGripper as COREGripperDriver,
 )
 from .Base import TransportDeviceABC, TransportOptions
-from PytomatedLiquidHandling.HAL import DeckLocation
 
 
 @dataclass
@@ -15,10 +14,10 @@ class HamiltonCOREGripper(TransportDeviceABC):
     BackendInstance: HamiltonBackendABC
     GripperToolSequence: str
 
-    class PickupOptions(DeckLocation.Base.TransportConfig.Options):
+    class PickupOptions(TransportDeviceABC.PickupOptions):
         ...
 
-    class DropoffOptions(DeckLocation.Base.TransportConfig.Options):
+    class DropoffOptions(TransportDeviceABC.DropoffOptions):
         CheckPlateExists: COREGripperDriver.PlacePlate.Options.YesNoOptions = field(
             init=False, compare=False
         )

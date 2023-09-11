@@ -56,8 +56,12 @@ def LoadYaml(
         TransportDevice = TransportDevices[
             Location["Transport Config"]["Transport Device Identifier"]
         ]
-        PickupOptions = Location["Transport Config"]["Pickup Options"]
-        DropoffOptions = Location["Transport Config"]["Dropoff Options"]
+        PickupOptions = TransportDevice.PickupOptions(
+            Location["Transport Config"]["Pickup Options"]
+        )
+        DropoffOptions = TransportDevice.DropoffOptions(
+            Location["Transport Config"]["Dropoff Options"]
+        )
 
         DeckLocationInstance = DeckLocation(
             Identifier,

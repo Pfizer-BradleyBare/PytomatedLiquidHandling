@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, fields, field
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
-from PytomatedLiquidHandling.HAL import TransportDevice
+if TYPE_CHECKING:
+    from PytomatedLiquidHandling.HAL import TransportDevice
 
 
 @dataclass
