@@ -1,10 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
-
-from PytomatedLiquidHandling.HAL import DeckLocation
-
-from PytomatedLiquidHandling.HAL import Labware
+from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 from ...Tools.AbstractClasses import InterfaceABC
@@ -16,9 +13,11 @@ class TransportDeviceABC(InterfaceABC, HALObject):
     SupportedLabwares: list[Labware.Base.LabwareABC]
     _LastTransportFlag: bool = field(init=False, default=True)
 
+    @dataclass
     class PickupOptions(DeckLocation.Base.TransportConfig.Options):
         ...
 
+    @dataclass
     class DropoffOptions(DeckLocation.Base.TransportConfig.Options):
         ...
 
