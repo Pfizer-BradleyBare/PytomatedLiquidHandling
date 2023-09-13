@@ -16,7 +16,7 @@ Backend.StartBackend()
 
 CommandInstance = COREGripper.GetPlate.Command(
     CustomErrorHandling=False,
-    OptionsInstance=COREGripper.GetPlate.Options(
+    Options=COREGripper.GetPlate.Options(
         GripperSequence="seq_COREGripTool",
         PlateSequence="Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel",
         GripWidth=79,
@@ -30,7 +30,7 @@ Response = Backend.GetResponse(CommandInstance, COREGripper.GetPlate.Response)
 
 CommandInstance = COREGripper.PlacePlate.Command(
     CustomErrorHandling=False,
-    OptionsInstance=COREGripper.PlacePlate.Options(
+    Options=COREGripper.PlacePlate.Options(
         PlateSequence="Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel",
         EjectTool=COREGripper.PlacePlate.Options.YesNoOptions.Yes,
     ),

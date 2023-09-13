@@ -18,18 +18,18 @@ Backend = MicrolabStarBackend(
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
-OptionsTrackerInstance = Carrier5Position.OptionsTracker(
-    Carrier3DImage=Carrier5Position.OptionsTracker.Carrier3DImageOptions.Carrier5PositionPlate3D,
-    Carrier2DImage=Carrier5Position.OptionsTracker.Carrier2DImageOptions.Carrier5PositionPlate2D,
+ListedOptions = Carrier5Position.ListedOptions(
+    Carrier3DImage=Carrier5Position.ListedOptions.Carrier3DImageOptions.Carrier5PositionPlate3D,
+    Carrier2DImage=Carrier5Position.ListedOptions.Carrier2DImageOptions.Carrier5PositionPlate2D,
 )
-OptionsTrackerInstance.LoadSingle(
+ListedOptions.append(
     Carrier5Position.Options(
         CarrierPosition=1,
         LabwareImage=Carrier5Position.Options.LabwareImageOptions.PlateThermo1200uL96Well,
         LabwareSupportingText="Hello!",
     )
 )
-OptionsTrackerInstance.LoadSingle(
+ListedOptions.append(
     Carrier5Position.Options(
         CarrierPosition=4,
         LabwareImage=Carrier5Position.Options.LabwareImageOptions.PlateBiorad200uL96Well,
@@ -37,7 +37,7 @@ OptionsTrackerInstance.LoadSingle(
     )
 )
 CommandInstance = Carrier5Position.Command(
-    CustomErrorHandling=False, OptionsTrackerInstance=OptionsTrackerInstance
+    CustomErrorHandling=False, ListedOptions=ListedOptions
 )
 
 Backend.ExecuteCommand(CommandInstance)

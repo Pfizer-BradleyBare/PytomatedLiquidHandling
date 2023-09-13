@@ -16,7 +16,7 @@ Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
 Command = HeaterCooler.Connect.Command(
-    OptionsInstance=HeaterCooler.Connect.Options(ComPort="COM4"),
+    Options=HeaterCooler.Connect.Options(ComPort="COM4"),
     CustomErrorHandling=False,
 )
 Backend.ExecuteCommand(Command)
@@ -27,7 +27,7 @@ HeaterShakerHandleId = Response.GetHandleID()
 
 DesiredTemperature = 37
 Command = HeaterCooler.StartTemperatureControl.Command(
-    OptionsInstance=HeaterCooler.StartTemperatureControl.Options(
+    Options=HeaterCooler.StartTemperatureControl.Options(
         HandleID=HeaterShakerHandleId, Temperature=DesiredTemperature
     ),
     CustomErrorHandling=False,
@@ -40,16 +40,14 @@ Response = Backend.GetResponse(Command, HeaterCooler.StartTemperatureControl.Res
 TemperatureOffset = 2
 for i in range(0, 1):
     Command = StartTimer.Command(
-        OptionsInstance=StartTimer.Options(WaitTime=10), CustomErrorHandling=False
+        Options=StartTimer.Options(WaitTime=10), CustomErrorHandling=False
     )
     Backend.ExecuteCommand(Command)
     Backend.WaitForResponseBlocking(Command)
     Backend.GetResponse(Command, StartTimer.Response)
 
     Command = HeaterCooler.GetTemperature.Command(
-        OptionsInstance=HeaterCooler.GetTemperature.Options(
-            HandleID=HeaterShakerHandleId
-        ),
+        Options=HeaterCooler.GetTemperature.Options(HandleID=HeaterShakerHandleId),
         CustomErrorHandling=False,
     )
     Backend.ExecuteCommand(Command)
@@ -68,7 +66,7 @@ for i in range(0, 1):
 # Wait for temperature to fall within desired range.
 
 Command = StartTimer.Command(
-    OptionsInstance=StartTimer.Options(WaitTime=30), CustomErrorHandling=False
+    Options=StartTimer.Options(WaitTime=30), CustomErrorHandling=False
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
@@ -76,9 +74,7 @@ Response = Backend.GetResponse(Command, StartTimer.Response)
 # run 30 seconds
 
 Command = HeaterCooler.StopTemperatureControl.Command(
-    OptionsInstance=HeaterCooler.StopTemperatureControl.Options(
-        HandleID=HeaterShakerHandleId
-    ),
+    Options=HeaterCooler.StopTemperatureControl.Options(HandleID=HeaterShakerHandleId),
     CustomErrorHandling=False,
 )
 Backend.ExecuteCommand(Command)

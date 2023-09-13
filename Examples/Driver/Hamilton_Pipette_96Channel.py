@@ -21,7 +21,7 @@ Backend.StartBackend()
 
 CommandInstance = FTR.LoadTips.Command(
     CustomErrorHandling=False,
-    OptionsInstance=FTR.LoadTips.Options(TipSequence="seq_Tips_FTR_1000ul"),
+    Options=FTR.LoadTips.Options(TipSequence="seq_Tips_FTR_1000ul"),
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
@@ -30,7 +30,7 @@ ResponseInstance = Backend.GetResponse(CommandInstance, FTR.LoadTips.Response)
 
 CommandInstance = FTR.GetTipPositions.Command(
     CustomErrorHandling=False,
-    OptionsInstance=FTR.GetTipPositions.Options(
+    Options=FTR.GetTipPositions.Options(
         TipSequence="seq_Tips_FTR_1000ul",
         NumPositions=96,
     ),
@@ -43,7 +43,7 @@ TipPositions = ResponseInstance.GetTipPositions()
 
 CommandInstance = CORE96Head.Pickup.Command(
     CustomErrorHandling=False,
-    OptionsInstance=CORE96Head.Pickup.Options(Sequence="seq_Tips_FTR_1000ul"),
+    Options=CORE96Head.Pickup.Options(Sequence="seq_Tips_FTR_1000ul"),
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
@@ -52,7 +52,7 @@ ResponseInstance = Backend.GetResponse(CommandInstance, CORE96Head.Pickup.Respon
 
 CommandInstance = CORE96Head.Aspirate.Command(
     CustomErrorHandling=False,
-    OptionsInstance=CORE96Head.Aspirate.Options(
+    Options=CORE96Head.Aspirate.Options(
         Sequence="Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel",
         LiquidClass="HighVolume_Water_DispenseSurface_Empty",
         Volume=25,
@@ -65,7 +65,7 @@ ResponseInstance = Backend.GetResponse(CommandInstance, CORE96Head.Aspirate.Resp
 
 CommandInstance = CORE96Head.Dispense.Command(
     CustomErrorHandling=False,
-    OptionsInstance=CORE96Head.Dispense.Options(
+    Options=CORE96Head.Dispense.Options(
         Sequence="Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel",
         LiquidClass="HighVolume_Water_DispenseSurface_Empty",
         Volume=25,
@@ -78,7 +78,7 @@ ResponseInstance = Backend.GetResponse(CommandInstance, CORE96Head.Dispense.Resp
 
 CommandInstance = CORE96Head.Eject.Command(
     CustomErrorHandling=False,
-    OptionsInstance=CORE96Head.Eject.Options(Sequence="core96externalwaste_0001"),
+    Options=CORE96Head.Eject.Options(Sequence="core96externalwaste_0001"),
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)

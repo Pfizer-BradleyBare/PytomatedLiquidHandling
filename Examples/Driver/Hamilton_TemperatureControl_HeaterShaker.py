@@ -16,7 +16,7 @@ Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
 Command = HeaterShaker.Connect.Command(
-    OptionsInstance=HeaterShaker.Connect.Options(ComPort=1), CustomErrorHandling=False
+    Options=HeaterShaker.Connect.Options(ComPort=1), CustomErrorHandling=False
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
@@ -26,7 +26,7 @@ HeaterShakerHandleId = Response.GetHandleID()
 
 DesiredTemperature = 37
 Command = HeaterShaker.StartTemperatureControl.Command(
-    OptionsInstance=HeaterShaker.StartTemperatureControl.Options(
+    Options=HeaterShaker.StartTemperatureControl.Options(
         HandleID=HeaterShakerHandleId, Temperature=DesiredTemperature
     ),
     CustomErrorHandling=False,
@@ -39,16 +39,14 @@ Response = Backend.GetResponse(Command, HeaterShaker.StartTemperatureControl.Res
 TemperatureOffset = 2
 for i in range(0, 1):
     Command = StartTimer.Command(
-        OptionsInstance=StartTimer.Options(WaitTime=10), CustomErrorHandling=False
+        Options=StartTimer.Options(WaitTime=10), CustomErrorHandling=False
     )
     Backend.ExecuteCommand(Command)
     Backend.WaitForResponseBlocking(Command)
     Backend.GetResponse(Command, StartTimer.Response)
 
     Command = HeaterShaker.GetTemperature.Command(
-        OptionsInstance=HeaterShaker.GetTemperature.Options(
-            HandleID=HeaterShakerHandleId
-        ),
+        Options=HeaterShaker.GetTemperature.Options(HandleID=HeaterShakerHandleId),
         CustomErrorHandling=False,
     )
     Backend.ExecuteCommand(Command)
@@ -67,7 +65,7 @@ for i in range(0, 1):
 # Wait for temperature to fall within desired range.
 
 Command = HeaterShaker.StartShakeControl.Command(
-    OptionsInstance=HeaterShaker.StartShakeControl.Options(
+    Options=HeaterShaker.StartShakeControl.Options(
         HandleID=HeaterShakerHandleId, ShakingSpeed=500
     ),
     CustomErrorHandling=True,
@@ -77,7 +75,7 @@ Backend.WaitForResponseBlocking(Command)
 Response = Backend.GetResponse(Command, HeaterShaker.StartShakeControl.Response)
 
 Command = StartTimer.Command(
-    OptionsInstance=StartTimer.Options(WaitTime=30), CustomErrorHandling=False
+    Options=StartTimer.Options(WaitTime=30), CustomErrorHandling=False
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
@@ -85,9 +83,7 @@ Response = Backend.GetResponse(Command, StartTimer.Response)
 # run 30 seconds
 
 Command = HeaterShaker.StopShakeControl.Command(
-    OptionsInstance=HeaterShaker.StopShakeControl.Options(
-        HandleID=HeaterShakerHandleId
-    ),
+    Options=HeaterShaker.StopShakeControl.Options(HandleID=HeaterShakerHandleId),
     CustomErrorHandling=False,
 )
 Backend.ExecuteCommand(Command)
@@ -95,9 +91,7 @@ Backend.WaitForResponseBlocking(Command)
 Response = Backend.GetResponse(Command, HeaterShaker.StopShakeControl.Response)
 
 Command = HeaterShaker.StopTemperatureControl.Command(
-    OptionsInstance=HeaterShaker.StopTemperatureControl.Options(
-        HandleID=HeaterShakerHandleId
-    ),
+    Options=HeaterShaker.StopTemperatureControl.Options(HandleID=HeaterShakerHandleId),
     CustomErrorHandling=False,
 )
 Backend.ExecuteCommand(Command)

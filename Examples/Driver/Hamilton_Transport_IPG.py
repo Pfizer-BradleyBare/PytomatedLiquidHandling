@@ -16,7 +16,7 @@ Backend.StartBackend()
 
 CommandInstance = IPG.GetPlate.Command(
     CustomErrorHandling=False,
-    OptionsInstance=IPG.GetPlate.Options(
+    Options=IPG.GetPlate.Options(
         PlateSequence="Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel",
         GripWidth=79,
         OpenWidth=83,
@@ -29,7 +29,7 @@ Response = Backend.GetResponse(CommandInstance, IPG.GetPlate.Response)
 
 CommandInstance = IPG.PlacePlate.Command(
     CustomErrorHandling=False,
-    OptionsInstance=IPG.PlacePlate.Options(
+    Options=IPG.PlacePlate.Options(
         PlateSequence="Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel",
     ),
 )

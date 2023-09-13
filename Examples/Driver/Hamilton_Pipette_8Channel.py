@@ -21,7 +21,7 @@ Backend.StartBackend()
 
 CommandInstance = NTR.LoadTips.Command(
     CustomErrorHandling=False,
-    OptionsInstance=NTR.LoadTips.Options(
+    Options=NTR.LoadTips.Options(
         TipSequence="seq_Tips_NTR_50ul",
         RackWasteSequence="Tip50_NTR_Waste",
         GripperSequence="seq_COREGripTool",
@@ -36,7 +36,7 @@ GeneratedWasteSequence = ResponseInstance.GetGeneratedWasteSequence()
 
 CommandInstance = NTR.GetTipPositions.Command(
     CustomErrorHandling=False,
-    OptionsInstance=NTR.GetTipPositions.Options(
+    Options=NTR.GetTipPositions.Options(
         TipSequence="seq_Tips_NTR_50ul",
         GeneratedRackWasteSequence=GeneratedWasteSequence,
         GripperSequence="seq_COREGripTool",
@@ -49,15 +49,15 @@ ResponseInstance = Backend.GetResponse(CommandInstance, NTR.GetTipPositions.Resp
 TipPositions = ResponseInstance.GetTipPositions()
 # Get the tip positions for our tip pickup
 
-OptionsTrackerInstance = PortraitCORE8Channel.Pickup.OptionsTracker()
+ListedOptions = list()
 for i, Position in enumerate(TipPositions):
-    OptionsTrackerInstance.LoadSingle(
+    ListedOptions.append(
         PortraitCORE8Channel.Pickup.Options(
             Sequence="seq_Tips_NTR_50ul", ChannelNumber=i + 1, SequencePosition=Position
         )
     )
 CommandInstance = PortraitCORE8Channel.Pickup.Command(
-    CustomErrorHandling=False, OptionsTrackerInstance=OptionsTrackerInstance
+    CustomErrorHandling=False, ListedOptions=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
@@ -66,9 +66,9 @@ ResponseInstance = Backend.GetResponse(
 )
 # pickup some tips
 
-OptionsTrackerInstance = PortraitCORE8Channel.Aspirate.OptionsTracker()
+ListedOptions = list()
 for i, Position in enumerate(TipPositions):
-    OptionsTrackerInstance.LoadSingle(
+    ListedOptions.append(
         PortraitCORE8Channel.Aspirate.Options(
             ChannelNumber=i + 1,
             Sequence="F32",
@@ -78,7 +78,7 @@ for i, Position in enumerate(TipPositions):
         )
     )
 CommandInstance = PortraitCORE8Channel.Aspirate.Command(
-    CustomErrorHandling=False, OptionsTrackerInstance=OptionsTrackerInstance
+    CustomErrorHandling=False, ListedOptions=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
@@ -87,9 +87,9 @@ ResponseInstance = Backend.GetResponse(
 )
 # Aspirate some liquid
 
-OptionsTrackerInstance = PortraitCORE8Channel.Dispense.OptionsTracker()
+ListedOptions = list()
 for i, Position in enumerate(TipPositions):
-    OptionsTrackerInstance.LoadSingle(
+    ListedOptions.append(
         PortraitCORE8Channel.Dispense.Options(
             ChannelNumber=i + 1,
             Sequence="F32",
@@ -99,7 +99,7 @@ for i, Position in enumerate(TipPositions):
         )
     )
 CommandInstance = PortraitCORE8Channel.Dispense.Command(
-    CustomErrorHandling=False, OptionsTrackerInstance=OptionsTrackerInstance
+    CustomErrorHandling=False, ListedOptions=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
@@ -108,15 +108,15 @@ ResponseInstance = Backend.GetResponse(
 )
 # Dispense some liquid
 
-OptionsTrackerInstance = PortraitCORE8Channel.Eject.OptionsTracker()
+ListedOptions = list()
 for i, Position in enumerate(TipPositions):
-    OptionsTrackerInstance.LoadSingle(
+    ListedOptions.append(
         PortraitCORE8Channel.Eject.Options(
             Sequence="Waste08", ChannelNumber=i + 1, SequencePosition=i + 1
         )
     )
 CommandInstance = PortraitCORE8Channel.Eject.Command(
-    CustomErrorHandling=False, OptionsTrackerInstance=OptionsTrackerInstance
+    CustomErrorHandling=False, ListedOptions=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
