@@ -9,7 +9,6 @@ from PytomatedLiquidHandling.HAL import (
     DeckLoader,
     DeckLocation,
     HeatCoolShakeDevice,
-    IMCSDesalting,
     Labware,
     LayoutItem,
     MagneticRack,
@@ -32,7 +31,7 @@ class HAL:
     )
     DeckLoaders: dict[str, DeckLoader.Base.DeckLoaderABC] = field(init=False)
     DeckLocations: dict[str, DeckLocation.Base.DeckLocationABC] = field(init=False)
-    IMCSDesaltings: dict[str, IMCSDesalting.Base.IMCSDesaltingABC] = field(init=False)
+    # IMCSDesaltings: dict[str, IMCSDesalting.Base.IMCSDesaltingABC] = field(init=False)
     Labwares: dict[str, Labware.Base.LabwareABC] = field(init=False)
     LayoutItems: dict[str, LayoutItem.Base.LayoutItemABC] = field(init=False)
     MagneticRacks: dict[str, MagneticRack.Base.MagneticRackABC] = field(init=False)

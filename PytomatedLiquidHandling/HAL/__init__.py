@@ -5,7 +5,6 @@ from . import (
     DeckLoader,
     DeckLocation,
     HeatCoolShakeDevice,
-    IMCSDesalting,
     Labware,
     LayoutItem,
     MagneticRack,
