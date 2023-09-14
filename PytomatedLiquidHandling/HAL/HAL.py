@@ -17,7 +17,6 @@ from PytomatedLiquidHandling.HAL import (
     Tip,
     TransportDevice,
 )
-from PytomatedLiquidHandling.Tools.Logger import Logger
 
 
 @dataclass

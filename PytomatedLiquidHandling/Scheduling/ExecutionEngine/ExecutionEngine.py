@@ -3,7 +3,6 @@ from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling import HAL
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
-from PytomatedLiquidHandling.Tools.Logger import Logger, logging
 
 from .Method import MethodTracker
 from .Orchastrator import Orchastrator
@@ -21,5 +20,5 @@ class ExecutionEngine(UniqueObjectABC):
 
     def __post_init__(self):
         self.OrchastratorInstance = Orchastrator(
-            HAL.HAL(os.path.join(self.AppFolderPath, "Config")
+            HAL.HAL(os.path.join(self.AppFolderPath, "Config"))
         )

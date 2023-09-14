@@ -6,7 +6,6 @@ from enum import Enum
 from typing import TYPE_CHECKING, Self
 
 from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
-from PytomatedLiquidHandling.Tools.Logger import Logger
 
 from ...Orchastrator import Orchastrator
 

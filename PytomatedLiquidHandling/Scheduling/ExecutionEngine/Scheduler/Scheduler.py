@@ -6,8 +6,6 @@ import networkx
 import processscheduler
 from processscheduler.solution import TaskSolution
 
-from PytomatedLiquidHandling.Tools.Logger import Logger
-
 from ..Method import Method
 from ..Method.Step import TaskABC
 from ..Orchastrator import Orchastrator

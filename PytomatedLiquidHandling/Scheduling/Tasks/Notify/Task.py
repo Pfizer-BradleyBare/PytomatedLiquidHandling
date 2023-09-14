@@ -5,7 +5,6 @@ from PytomatedLiquidHandling.API.ExecutionEngine.Orchastrator import Orchastrato
 from PytomatedLiquidHandling.Scheduling.ExecutionEngine.Orchastrator.RecurringNotification import (
     TimedNotification,
 )
-from PytomatedLiquidHandling.Tools.Logger import Logger
 
 from .Options import Options
 
