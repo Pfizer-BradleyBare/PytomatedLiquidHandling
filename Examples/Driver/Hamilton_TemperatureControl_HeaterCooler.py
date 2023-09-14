@@ -1,17 +1,17 @@
-import logging
 import os
+import logging
 
-from PytomatedLiquidHandling import Logger
+
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
 from PytomatedLiquidHandling.Driver.Hamilton.TemperatureControl import HeaterCooler
 from PytomatedLiquidHandling.Driver.Hamilton.Timer import StartTimer
 
-LoggerInstance = Logger(
-    "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__), "Logging")
-)
-# create a logger to log all actions
+Logger = logging.getLogger("App")
 
-Backend = MicrolabStarBackend("Example Star", LoggerInstance)
+Backend = MicrolabStarBackend(
+    "Example Star",
+    os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
+)
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
@@ -55,7 +55,7 @@ for i in range(0, 1):
     Response = Backend.GetResponse(Command, HeaterCooler.GetTemperature.Response)
 
     CurrentTemperature = Response.GetTemperature()
-    LoggerInstance.debug("Current Temp: %f", CurrentTemperature)
+    Logger.debug("Current Temp: %f", CurrentTemperature)
 
     if (
         DesiredTemperature - TemperatureOffset

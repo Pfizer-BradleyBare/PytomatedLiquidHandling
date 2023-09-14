@@ -1,16 +1,12 @@
-import logging
 import os
 
-from PytomatedLiquidHandling import Logger
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
 from PytomatedLiquidHandling.Driver.Hamilton.Transport import IPG
 
-LoggerInstance = Logger(
-    "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__), "Logging")
+Backend = MicrolabStarBackend(
+    "Example Star",
+    os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
 )
-# create a logger to log all actions
-
-Backend = MicrolabStarBackend("Example Star", LoggerInstance)
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 

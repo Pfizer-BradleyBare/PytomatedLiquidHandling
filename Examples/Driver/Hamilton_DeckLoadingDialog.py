@@ -1,18 +1,10 @@
-import logging
 import os
 
-from PytomatedLiquidHandling import Logger
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
 from PytomatedLiquidHandling.Driver.Hamilton.DeckLoadingDialog import Carrier5Position
 
-LoggerInstance = Logger(
-    "MyLogger", logging.DEBUG, os.path.join(os.path.dirname(__file__), "Logging")
-)
-# create a logger to log all actions
-
 Backend = MicrolabStarBackend(
     "Example Star",
-    LoggerInstance,
     os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
 )
 Backend.StartBackend()
