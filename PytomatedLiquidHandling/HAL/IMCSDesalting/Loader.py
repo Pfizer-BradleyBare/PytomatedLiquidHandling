@@ -6,16 +6,17 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ...Tools.Logger import Logger
+import logging
 from .Base import DesaltingTip, DesaltingTipTracker, ElutionParameters, IMCSDesaltingABC
 from .HamiltonCORE96HeadIMCSDesalting import HamiltonCORE96HeadIMCSDesalting
 from .HamiltonPortraitCORE8ChannelIMCSDesalting import (
     HamiltonPortraitCORE8ChannelIMCSDesalting,
 )
 
+Logger = logging.getLogger(__name__)
+
 
 def LoadYaml(
-    LoggerInstance: Logger,
     Backends: dict[str, BackendABC],
     DeckLocations: dict[str, DeckLocation.Base.DeckLocationABC],
     Labwares: dict[str, Labware.Base.LabwareABC],
@@ -25,7 +26,7 @@ def LoadYaml(
     IMCSDesaltingDevices: dict[str, IMCSDesaltingABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return IMCSDesaltingDevices
 
     FileHandle = open(FilePath, "r")
@@ -34,7 +35,7 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return IMCSDesaltingDevices

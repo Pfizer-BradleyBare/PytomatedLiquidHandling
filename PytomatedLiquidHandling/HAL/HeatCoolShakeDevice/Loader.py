@@ -6,23 +6,24 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from PytomatedLiquidHandling.HAL import LayoutItem
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ...Tools.Logger import Logger
+import logging
 from . import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .Base import HeatCoolShakeDeviceABC, TempLimits
 
+Logger = logging.getLogger(__name__)
+
 
 def LoadYaml(
-    LoggerInstance: Logger,
     Backends: dict[str, BackendABC],
     LayoutItems: dict[str, LayoutItem.Base.LayoutItemABC],
     FilePath: str,
 ) -> dict[str, HeatCoolShakeDeviceABC]:
-    LoggerInstance.info("Loading TempControlDevice config yaml file.")
+    Logger.info("Loading TempControlDevice config yaml file.")
 
     TempControlDevices: dict[str, HeatCoolShakeDeviceABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return TempControlDevices
 
     FileHandle = open(FilePath, "r")
@@ -31,7 +32,7 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return TempControlDevices
@@ -39,7 +40,7 @@ def LoadYaml(
     for DeviceType in ConfigFile:
         for Device in ConfigFile[DeviceType]:
             if Device["Enabled"] == False:
-                LoggerInstance.warning(
+                Logger.warning(
                     DeviceType
                     + " with unique ID "
                     + Device["Unique Identifier"]

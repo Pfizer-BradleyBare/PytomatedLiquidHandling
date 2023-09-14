@@ -1,6 +1,7 @@
 import os
 
 import yaml
+import logging
 
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import (
     MicrolabStarBackend,
@@ -8,16 +9,17 @@ from PytomatedLiquidHandling.Driver.Hamilton.Backend import (
 )
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from PytomatedLiquidHandling.Driver.UnchainedLabs.Backend import StunnerBackend
-from PytomatedLiquidHandling.Tools.Logger import Logger
+
+Logger = logging.getLogger(__name__)
 
 
-def LoadYaml(LoggerInstance: Logger, FilePath: str) -> dict[str, BackendABC]:
-    LoggerInstance.info("Loading Backend config yaml file.")
+def LoadYaml(FilePath: str) -> dict[str, BackendABC]:
+    Logger.info("Loading Backend config yaml file.")
 
     Backends: dict[str, BackendABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return Backends
 
     FileHandle = open(FilePath, "r")
@@ -26,7 +28,7 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> dict[str, BackendABC]:
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return Backends
@@ -36,16 +38,12 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> dict[str, BackendABC]:
         Identifier = Device["Identifier"]
 
         if DeviceID == "Microlab Star":
-            DeviceInstance = MicrolabStarBackend(
-                Identifier, LoggerInstance, Device["Deck Layout Path"]
-            )
+            DeviceInstance = MicrolabStarBackend(Identifier, Device["Deck Layout Path"])
         elif DeviceID == "Vantage":
-            DeviceInstance = VantageBackend(
-                Identifier, LoggerInstance, Device["Deck Layout Path"]
-            )
+            DeviceInstance = VantageBackend(Identifier, Device["Deck Layout Path"])
         elif DeviceID == "Stunner":
             DeviceInstance = StunnerBackend(
-                Identifier, LoggerInstance, Device["IP Address"], Device["Port"]
+                Identifier, Device["IP Address"], Device["Port"]
             )
         else:
             raise Exception("Device not recognized")

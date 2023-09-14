@@ -1,21 +1,24 @@
 import os
 
 import yaml
+import logging
 
-from ...Tools.Logger import Logger
+
 from .AutoloadCarrier import AutoloadCarrier
 from .Base import CarrierABC
 from .MoveableCarrier import MoveableCarrier
 from .NonMoveableCarrier import NonMoveableCarrier
 
+Logger = logging.getLogger(__name__)
 
-def LoadYaml(LoggerInstance: Logger, FilePath: str) -> dict[str, CarrierABC]:
-    LoggerInstance.info("Loading Carrier config yaml file.")
+
+def LoadYaml(FilePath: str) -> dict[str, CarrierABC]:
+    Logger.info("Loading Carrier config yaml file.")
 
     Carriers: dict[str, CarrierABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return Carriers
 
     FileHandle = open(FilePath, "r")
@@ -24,7 +27,7 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> dict[str, CarrierABC]:
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return Carriers
@@ -32,7 +35,7 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> dict[str, CarrierABC]:
     for DeviceID in ConfigFile:
         for Device in ConfigFile[DeviceID]:
             if Device["Enabled"] == False:
-                LoggerInstance.warning(
+                Logger.warning(
                     DeviceID
                     + " with unique ID "
                     + Device["Unique Identifier"]

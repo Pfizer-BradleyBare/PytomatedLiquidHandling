@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.API.ExecutionEngine.Method.Step import TaskABC
 from PytomatedLiquidHandling.API.ExecutionEngine.Orchastrator import Orchastrator
-from PytomatedLiquidHandling.Tools.Logger import Logger
+
 from PytomatedLiquidHandling.API.ExecutionEngine.Orchastrator.Timer import Timer
 from .Options import Options
 
@@ -16,7 +16,7 @@ class Task(TaskABC):
     def __post_init__(self):
         self.ExecutionTime = self.OptionsInstance.Time + 30
 
-    def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):
+    def Execute(self, OrchastratorInstance: Orchastrator):
         TimerInstance = Timer(
             str(self.UniqueIdentifier) + "_Timer", self.OptionsInstance.Time, self
         )

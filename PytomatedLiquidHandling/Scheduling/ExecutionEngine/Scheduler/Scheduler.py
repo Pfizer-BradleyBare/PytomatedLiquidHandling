@@ -6,7 +6,6 @@ import networkx
 import processscheduler
 from processscheduler.solution import TaskSolution
 
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 from PytomatedLiquidHandling.Tools.Logger import Logger
 
 from ..Method import Method
@@ -15,8 +14,7 @@ from ..Orchastrator import Orchastrator
 
 
 @dataclass
-class Scheduler(UniqueObjectABC):
-    LoggerInstance: Logger
+class Scheduler:
     SchedulingProblem: processscheduler.SchedulingProblem = field(init=False)
     SchedulingSolution: list[TaskSolution] = field(init=False, default_factory=list)
     __LoadedResourceObjects: dict[str, processscheduler.Worker] = field(init=False)

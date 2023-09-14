@@ -16,7 +16,7 @@ class Task(TaskABC):
     ExecutionTime: float = field(init=False, default=100000)
     SchedulingSeparator: bool = field(init=False, default=True)
 
-    def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):
+    def Execute(self, OrchastratorInstance: Orchastrator):
         TimedNotificationInstance = TimedNotification(
             str(self.UniqueIdentifier) + "_TimedNotification",
             "Message",

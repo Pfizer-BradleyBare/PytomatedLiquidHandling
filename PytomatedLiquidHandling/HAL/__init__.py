@@ -8,7 +8,6 @@ from . import (
     Labware,
     LayoutItem,
     MagneticRack,
-    Notify,
     Pipette,
     StorageDevice,
     Tip,

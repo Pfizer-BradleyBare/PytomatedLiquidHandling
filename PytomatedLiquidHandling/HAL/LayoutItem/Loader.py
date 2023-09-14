@@ -4,25 +4,26 @@ import yaml
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 
-from ...Tools.Logger import Logger
+import logging
 from .Base import LayoutItemABC
 from .CoverableItem import CoverableItem
 from .Lid import Lid
 from .NonCoverableItem import NonCoverableItem
 
+Logger = logging.getLogger(__name__)
+
 
 def LoadYaml(
-    LoggerInstance: Logger,
     Labwares: dict[str, Labware.Base.LabwareABC],
     DeckLocations: dict[str, DeckLocation.Base.DeckLocationABC],
     FilePath: str,
 ) -> dict[str, LayoutItemABC]:
-    LoggerInstance.info("Loading LayoutItem config yaml file.")
+    Logger.info("Loading LayoutItem config yaml file.")
 
     LayoutItems: dict[str, LayoutItemABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return LayoutItems
 
     FileHandle = open(FilePath, "r")
@@ -31,7 +32,7 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return LayoutItems
@@ -54,7 +55,7 @@ def LoadYaml(
     for LayoutItemID in ConfigFile:
         for LayoutItem in ConfigFile[LayoutItemID]:
             if LayoutItem["Enabled"] == False:
-                LoggerInstance.warning(
+                Logger.warning(
                     LayoutItemID
                     + " with unique ID "
                     + LayoutItem["Identifier"]

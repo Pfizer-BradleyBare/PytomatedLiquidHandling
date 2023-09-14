@@ -1,25 +1,26 @@
 import os
 
 import yaml
+import logging
 
 from PytomatedLiquidHandling.HAL import LayoutItem
 
-from ...Tools.Logger import Logger
 from .Base.StorageDeviceABC import StorageDeviceABC
 from .RandomAccessDeckStorage import RandomAccessDeckStorage
 
+Logger = logging.getLogger(__name__)
+
 
 def LoadYaml(
-    LoggerInstance: Logger,
     LayoutItems: dict[str, LayoutItem.Base.LayoutItemABC],
     FilePath: str,
 ) -> dict[str, StorageDeviceABC]:
-    LoggerInstance.info("Loading Storage config yaml file.")
+    Logger.info("Loading Storage config yaml file.")
 
     StorageDevices: dict[str, StorageDeviceABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return StorageDevices
 
     FileHandle = open(FilePath, "r")
@@ -28,7 +29,7 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return StorageDevices
@@ -36,7 +37,7 @@ def LoadYaml(
     for StorageTypeID in ConfigFile:
         for Storage in ConfigFile[StorageTypeID]:
             if Storage["Enabled"] == False:
-                LoggerInstance.warning(
+                Logger.warning(
                     StorageTypeID
                     + " with unique ID "
                     + Storage["Identifier"]

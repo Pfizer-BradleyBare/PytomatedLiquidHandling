@@ -1,31 +1,31 @@
 import os
 
 import yaml
-
+import logging
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ...Tools.Logger import Logger
 from .Base import LiquidClass, LiquidClassCategory, PipetteABC, PipetteTip
 from .HamiltonCORE96Head import HamiltonCORE96Head
 from .HamiltonPortraitCORE8Channel import HamiltonPortraitCORE8Channel
 
+Logger = logging.getLogger(__name__)
+
 
 def LoadYaml(
-    LoggerInstance: Logger,
     Backends: dict[str, BackendABC],
     DeckLocations: dict[str, DeckLocation.Base.DeckLocationABC],
     Labwares: dict[str, Labware.Base.LabwareABC],
     Tips: dict[str, Tip.Base.TipABC],
     FilePath: str,
 ) -> dict[str, PipetteABC]:
-    LoggerInstance.info("Loading Pipette config yaml file.")
+    Logger.info("Loading Pipette config yaml file.")
 
     Pipettes: dict[str, PipetteABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return Pipettes
 
     FileHandle = open(FilePath, "r")
@@ -34,7 +34,7 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return Pipettes
@@ -43,7 +43,7 @@ def LoadYaml(
     for DeviceType in ConfigFile:
         for Device in ConfigFile[DeviceType]:
             if Device["Enabled"] == False:
-                LoggerInstance.warning(
+                Logger.warning(
                     DeviceType
                     + " with unique ID "
                     + Device["Unique Identifier"]

@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling import HAL
-from PytomatedLiquidHandling.Tools.Logger import Logger
 
 from .ContainerLoader import ContainerLoader
 from .RecurringNotification import RecurringNotification
@@ -13,7 +12,6 @@ from .Timer import Timer
 
 @dataclass
 class Orchastrator:
-    LoggerInstance: Logger
     HALInstance: HAL.HAL
 
     Timer: Timer = field(init=False)

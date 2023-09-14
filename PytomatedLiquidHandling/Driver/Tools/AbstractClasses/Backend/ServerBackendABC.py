@@ -7,9 +7,9 @@ from typing import Callable, ClassVar
 
 from flask import Flask
 
-from PytomatedLiquidHandling.Tools import Logger
-
 from .SimpleBackendABC import SimpleBackendABC
+
+ParserLogger = logging.getLogger(__name__ + ".Parser")
 
 
 @dataclass()
@@ -92,7 +92,6 @@ class ServerBackendABC(SimpleBackendABC):
 
     def IsActive(self):
         ParserInstance = ServerBackendABC.Parser(
-            self.LoggerInstance,
             self.GetEndpointID("IsActive"),
             None,
         )
@@ -103,7 +102,6 @@ class ServerBackendABC(SimpleBackendABC):
     def Kill(self):
         ServerBackendABC.StopBackend(self)
         ParserInstance = ServerBackendABC.Parser(
-            self.LoggerInstance,
             self.GetEndpointID("Kill"),
             None,
         )
@@ -115,17 +113,15 @@ class ServerBackendABC(SimpleBackendABC):
     class Parser:
         def __init__(
             self,
-            LoggerInstance: Logger.Logger,
             EndpointID: str,
             JSONstring: bytes | None = None,
         ):
-            LoggerInstance.debug("PARSER: __START__")
-            LoggerInstance.info("PARSER: Handling Endpoint: %s", EndpointID)
-            LoggerInstance.debug(
+            ParserLogger.debug("PARSER: __START__")
+            ParserLogger.info("PARSER: Handling Endpoint: %s", EndpointID)
+            ParserLogger.debug(
                 "PARSER: Created Parser class with data: %s", str(JSONstring)
             )
 
-            self.LoggerInstance: Logger.Logger = LoggerInstance
             self.EndpointID: str = EndpointID
             self.InputString: bytes | None = JSONstring
             self.JSON: dict = {}
@@ -136,16 +132,16 @@ class ServerBackendABC(SimpleBackendABC):
             if not (JSONstring is None or JSONstring == "" or JSONstring == b""):
                 try:
                     self.JSON = json.loads(JSONstring.decode().replace("'", ""))
-                    LoggerInstance.debug(
+                    ParserLogger.debug(
                         "Request Data: \n%s",
                         json.dumps(self.JSON, indent=4, sort_keys=True),
                     )
                 except Exception:
-                    LoggerInstance.error("PARSER: Error Parsing Data! Bad format.")
+                    ParserLogger.error("PARSER: Error Parsing Data! Bad format.")
                     self.JSON = {}
 
         def __del__(self):
-            self.LoggerInstance.debug("PARSER: __END__")
+            ParserLogger.debug("PARSER: __END__")
 
         def IsValid(self, ExpectedKeys: list[str]) -> bool:
             if self.JSON == {}:
@@ -200,7 +196,7 @@ class ServerBackendABC(SimpleBackendABC):
             Out["Endpoint Input Data"] = self.JSON
             Out["Endpoint Output Data"] = self.EndpointReturn
 
-            self.LoggerInstance.debug(
+            ParserLogger.debug(
                 "Response Data: \n%s", json.dumps(Out, indent=4, sort_keys=True)
             )
             return json.dumps(Out)

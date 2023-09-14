@@ -4,23 +4,25 @@ import yaml
 
 from PytomatedLiquidHandling.HAL import Carrier, TransportDevice
 
-from ...Tools.Logger import Logger
+import logging
 from .Base import CarrierConfig, DeckLocationABC, TransportConfig
 from .DeckLocation import DeckLocation
 
 
+Logger = logging.getLogger(__name__)
+
+
 def LoadYaml(
-    LoggerInstance: Logger,
     Carriers: dict[str, Carrier.Base.CarrierABC],
     TransportDevices: dict[str, TransportDevice.Base.TransportDeviceABC],
     FilePath: str,
 ) -> dict[str, DeckLocationABC]:
-    LoggerInstance.info("Loading DeckLocation config yaml file.")
+    Logger.info("Loading DeckLocation config yaml file.")
 
     DeckLocations: dict[str, DeckLocationABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return DeckLocations
 
     FileHandle = open(FilePath, "r")
@@ -29,14 +31,14 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return DeckLocations
 
     for Location in ConfigFile:
         if Location["Enabled"] == False:
-            LoggerInstance.warning(
+            Logger.warning(
                 "DeckLocation"
                 + " with unique ID "
                 + Location["Unique Identifier"]

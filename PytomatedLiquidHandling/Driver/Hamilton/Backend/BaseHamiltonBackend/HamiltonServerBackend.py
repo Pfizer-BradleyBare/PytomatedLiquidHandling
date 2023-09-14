@@ -1,6 +1,7 @@
 import time
 from dataclasses import dataclass, field
 from typing import Callable
+import logging
 
 from flask import request
 
@@ -8,12 +9,13 @@ from ....Tools.AbstractClasses import CommandOptionsListed, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
 from ..HamiltonResponse import HamiltonResponseABC
 
+Logger = logging.getLogger(__name__)
+
 
 @dataclass
 class HamiltonServerBackendABC(ServerBackendABC):
     def GetNextCommand(self):
         ParserObject = ServerBackendABC.Parser(
-            self.LoggerInstance,
             self.__class__.__name__ + " HamiltonBackend GetNextCommand",
             request.get_data(),
         )
@@ -21,7 +23,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
         if not ParserObject.IsValid(["Timeout"]):
             ParserObject.SetEndpointDetails("Key missing. Accepted keys: [Timeout]")
             Response = ParserObject.GetHTTPResponse()
-            self.LoggerInstance.warning(Response)
+            Logger.warning(Response)
             return Response
 
         Timeout = ParserObject.GetEndpointInputData("Timeout") - 10
@@ -73,7 +75,6 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
     def RespondToCommand(self):
         ParserObject = ServerBackendABC.Parser(
-            self.LoggerInstance,
             self.__class__.__name__ + " HamiltonBackend RespondToCommand",
             request.get_data(),
         )

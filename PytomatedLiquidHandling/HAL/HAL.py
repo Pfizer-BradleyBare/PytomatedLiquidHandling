@@ -23,7 +23,6 @@ from PytomatedLiquidHandling.Tools.Logger import Logger
 @dataclass
 class HAL:
     ConfigFolderPath: str
-    LoggerInstance: Logger
     Backends: dict[str, BackendABC] = field(init=False)
     Carriers: dict[str, Carrier.Base.CarrierABC] = field(init=False)
     ClosedContainers: dict[str, ClosedContainer.Base.ClosedContainerABC] = field(
@@ -47,41 +46,36 @@ class HAL:
 
     def __post_init__(self):
         self.Backends = Backend.Loader.LoadYaml(
-            self.LoggerInstance,
-            os.path.join(self.ConfigFolderPath, "Backend.yaml"),
+            os.path.join(self.ConfigFolderPath, "Backend.yaml")
         )
 
         self.Carriers = Carrier.Loader.LoadYaml(
-            self.LoggerInstance, os.path.join(self.ConfigFolderPath, "Carrier.yaml")
+            os.path.join(self.ConfigFolderPath, "Carrier.yaml")
         )
 
         self.Labwares = Labware.Loader.LoadYaml(
-            self.LoggerInstance, os.path.join(self.ConfigFolderPath, "Labware.yaml")
+            os.path.join(self.ConfigFolderPath, "Labware.yaml")
         )
 
         self.TransportDevices = TransportDevice.Loader.LoadYaml(
-            self.LoggerInstance,
             self.Backends,
             self.Labwares,
             os.path.join(self.ConfigFolderPath, "Transport.yaml"),
         )
 
         self.DeckLocations = DeckLocation.Loader.LoadYaml(
-            self.LoggerInstance,
             self.Carriers,
             self.TransportDevices,
             os.path.join(self.ConfigFolderPath, "DeckLocation.yaml"),
         )
 
         self.LayoutItems = LayoutItem.Loader.LoadYaml(
-            self.LoggerInstance,
             self.Labwares,
             self.DeckLocations,
             os.path.join(self.ConfigFolderPath, "LayoutItem.yaml"),
         )
 
         self.ClosedContainers = ClosedContainer.Loader.LoadYaml(
-            self.LoggerInstance,
             self.Backends,
             self.DeckLocations,
             self.Labwares,
@@ -89,20 +83,17 @@ class HAL:
         )
 
         self.TempControlDevices = HeatCoolShakeDevice.Loader.LoadYaml(
-            self.LoggerInstance,
             self.Backends,
             self.LayoutItems,
             os.path.join(self.ConfigFolderPath, "TempControlDevice.yaml"),
         )
 
         self.Tips = Tip.Loader.LoadYaml(
-            self.LoggerInstance,
             self.Backends,
             os.path.join(self.ConfigFolderPath, "Tip.yaml"),
         )
 
         self.Pipettes = Pipette.Loader.LoadYaml(
-            self.LoggerInstance,
             self.Backends,
             self.DeckLocations,
             self.Labwares,
@@ -111,7 +102,6 @@ class HAL:
         )
 
         self.StorageDevices = StorageDevice.Loader.LoadYaml(
-            self.LoggerInstance,
             self.LayoutItems,
             os.path.join(self.ConfigFolderPath, "Storage.yaml"),
         )

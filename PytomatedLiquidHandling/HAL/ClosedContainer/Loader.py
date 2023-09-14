@@ -8,24 +8,25 @@ from PytomatedLiquidHandling.Driver.Hamilton.Backend.BaseHamiltonBackend import 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 
-from ...Tools.Logger import Logger
+import logging
 from . import HamiltonFlipTube, HamiltonFlipTubeSpecial
 from .Base import ClosedContainerABC
 
+Logger = logging.getLogger(__name__)
+
 
 def LoadYaml(
-    LoggerInstance: Logger,
     Backends: dict[str, BackendABC],
     DeckLocations: dict[str, DeckLocation.Base.DeckLocationABC],
     Labwares: dict[str, Labware.Base.LabwareABC],
     FilePath: str,
 ) -> dict[str, ClosedContainerABC]:
-    LoggerInstance.info("Loading ClosedContainer config yaml file.")
+    Logger.info("Loading ClosedContainer config yaml file.")
 
     ClosedContainers: dict[str, ClosedContainerABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return ClosedContainers
 
     FileHandle = open(FilePath, "r")
@@ -34,7 +35,7 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return ClosedContainers
@@ -42,7 +43,7 @@ def LoadYaml(
     for DeviceType in ConfigFile:
         for Device in ConfigFile[DeviceType]:
             if Device["Enabled"] == False:
-                LoggerInstance.warning(
+                Logger.warning(
                     DeviceType
                     + " with unique ID "
                     + Device["Unique Identifier"]

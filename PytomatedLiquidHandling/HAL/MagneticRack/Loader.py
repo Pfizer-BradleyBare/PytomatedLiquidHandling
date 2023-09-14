@@ -4,23 +4,24 @@ import yaml
 
 from PytomatedLiquidHandling.HAL import Backend, LayoutItem, Pipette
 
-from ...Tools.Logger import Logger
+import logging
 from .Base import MagneticRackABC
 from .MagneticRack import MagneticRack
 
+Logger = logging.getLogger(__name__)
+
 
 def LoadYaml(
-    LoggerInstance: Logger,
     FilePath: str,
     LayoutItems: dict[str, LayoutItem.Base.LayoutItemABC],
     Pipettes: dict[str, Pipette.Base.PipetteABC],
 ) -> dict[str, MagneticRackABC]:
-    LoggerInstance.info("Loading MagneticRack config yaml file.")
+    Logger.info("Loading MagneticRack config yaml file.")
 
     MagneticRacks: dict[str, MagneticRackABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return MagneticRacks
 
     FileHandle = open(FilePath, "r")
@@ -29,14 +30,14 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return MagneticRacks
 
     for Rack in ConfigFile["Rack IDs"]:
         if Rack["Enabled"] == False:
-            LoggerInstance.warning(
+            Logger.warning(
                 "Magnetic Rack"
                 + " with unique ID "
                 + Rack["Unique Identifier"]

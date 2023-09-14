@@ -2,18 +2,20 @@ import os
 
 import yaml
 
-from ...Tools.Logger import Logger
+import logging
 from . import NonPipettableLabware, PipettableLabware
 from .Base import Dimensions, LabwareABC, TransportOffsets, WellEquation, Wells
 
+Logger = logging.getLogger(__name__)
 
-def LoadYaml(LoggerInstance: Logger, FilePath: str) -> dict[str, LabwareABC]:
-    LoggerInstance.info("Loading Labware config yaml file.")
+
+def LoadYaml(FilePath: str) -> dict[str, LabwareABC]:
+    Logger.info("Loading Labware config yaml file.")
 
     Labwares: dict[str, LabwareABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return Labwares
 
     FileHandle = open(FilePath, "r")
@@ -22,14 +24,14 @@ def LoadYaml(LoggerInstance: Logger, FilePath: str) -> dict[str, LabwareABC]:
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return Labwares
 
     for Labware in ConfigFile:
         if Labware["Enabled"] == False:
-            LoggerInstance.warning(
+            Logger.warning(
                 "Labware"
                 + " with unique ID "
                 + Labware["Identifier"]

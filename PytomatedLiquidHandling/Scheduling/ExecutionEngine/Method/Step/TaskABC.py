@@ -33,5 +33,5 @@ class TaskABC(UniqueObjectABC):
     ExecutionStartTime: int = field(init=False, default=0)
 
     @abstractmethod
-    def Execute(self, LoggerInstance: Logger, OrchastratorInstance: Orchastrator):
+    def Execute(self, OrchastratorInstance: Orchastrator):
         ...

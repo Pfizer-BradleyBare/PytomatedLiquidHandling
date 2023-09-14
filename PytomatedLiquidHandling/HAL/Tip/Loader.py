@@ -2,25 +2,27 @@ import os
 
 import yaml
 
+import logging
+
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ...Tools.Logger import Logger
 from . import HamiltonTipFTR, HamiltonTipNTR
 from .Base import TipABC
 
+Logger = logging.getLogger(__name__)
+
 
 def LoadYaml(
-    LoggerInstance: Logger,
     Backends: dict[str, BackendABC],
     FilePath: str,
 ) -> dict[str, TipABC]:
-    LoggerInstance.info("Loading Tip config yaml file.")
+    Logger.info("Loading Tip config yaml file.")
 
     Tips: dict[str, TipABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return Tips
 
     FileHandle = open(FilePath, "r")
@@ -29,7 +31,7 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return Tips
@@ -37,7 +39,7 @@ def LoadYaml(
     for TipType in ConfigFile:
         for TipConfig in ConfigFile[TipType]:
             if TipConfig["Enabled"] == False:
-                LoggerInstance.warning(
+                Logger.warning(
                     TipType
                     + " with unique ID "
                     + TipConfig["Unique Identifier"]

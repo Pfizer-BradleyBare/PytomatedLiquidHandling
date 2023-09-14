@@ -2,32 +2,33 @@ import os
 
 import yaml
 
+import logging
+
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import (
     HamiltonBackendABC,
     VantageBackend,
 )
 from PytomatedLiquidHandling.HAL import Backend, Labware
 
-from ...Tools.Logger import Logger
-
 from .Base import TransportDeviceABC
 from .HamiltonCOREGripper import HamiltonCOREGripper
 from .HamiltonInternalPlateGripper import HamiltonInternalPlateGripper
 from .VantageTrackGripper import VantageTrackGripper
 
+Logger = logging.getLogger(__name__)
+
 
 def LoadYaml(
-    LoggerInstance: Logger,
     Backends: dict[str, Backend.Base.BackendABC],
     Labwares: dict[str, Labware.Base.LabwareABC],
     FilePath: str,
 ) -> dict[str, TransportDeviceABC]:
-    LoggerInstance.info("Loading TransportDevice config yaml file.")
+    Logger.info("Loading TransportDevice config yaml file.")
 
     TransportDevices: dict[str, TransportDeviceABC] = dict()
 
     if not os.path.exists(FilePath):
-        LoggerInstance.warning("Config file does not exist. Skipped")
+        Logger.warning("Config file does not exist. Skipped")
         return TransportDevices
 
     FileHandle = open(FilePath, "r")
@@ -36,7 +37,7 @@ def LoadYaml(
     # Get config file contents
 
     if ConfigFile is None:
-        LoggerInstance.warning(
+        Logger.warning(
             "Config file exists but does not contain any config items. Skipped"
         )
         return TransportDevices
@@ -45,7 +46,7 @@ def LoadYaml(
         Device = ConfigFile[DeviceType]
 
         if Device["Enabled"] == False:
-            LoggerInstance.warning(
+            Logger.warning(
                 DeviceType
                 + " with unique ID "
                 + Device["Identifier"]
