@@ -6,8 +6,8 @@ from .Base import ClosedContainerABC
 
 @dataclass
 class HamiltonFlipTube(ClosedContainerABC):
-    def _Initialize(self):
-        ClosedContainerABC._Initialize(self)
+    def Initialize(self):
+        ClosedContainerABC.Initialize(self)
 
         Command = FlipTubeDriver.Initialize.Command(
             CustomErrorHandling=self.CustomErrorHandling,
@@ -16,9 +16,9 @@ class HamiltonFlipTube(ClosedContainerABC):
         self.BackendInstance.WaitForResponseBlocking(Command)
         self.BackendInstance.GetResponse(Command, FlipTubeDriver.Initialize.Response)
 
-    def _Open(
+    def Open(
         self,
-        Options: list[ClosedContainerABC.OpenCloseInterfaceCommand.Options],
+        Options: list[ClosedContainerABC.Options],
     ):
         CommandOptions = FlipTubeDriver.Open.ListedOptions(
             ToolSequence=self.ToolSequence
@@ -40,15 +40,15 @@ class HamiltonFlipTube(ClosedContainerABC):
         self.BackendInstance.WaitForResponseBlocking(Command)
         self.BackendInstance.GetResponse(Command, FlipTubeDriver.Open.Response)
 
-    def _OpenTime(
+    def OpenTime(
         self,
-        Options: list[ClosedContainerABC.OpenCloseInterfaceCommand.Options],
+        Options: list[ClosedContainerABC.Options],
     ) -> float:
         return 0
 
-    def _Close(
+    def Close(
         self,
-        Options: list[ClosedContainerABC.OpenCloseInterfaceCommand.Options],
+        Options: list[ClosedContainerABC.Options],
     ):
         CommandOptions = FlipTubeDriver.Close.ListedOptions(
             ToolSequence=self.ToolSequence
@@ -70,8 +70,8 @@ class HamiltonFlipTube(ClosedContainerABC):
         self.BackendInstance.WaitForResponseBlocking(Command)
         self.BackendInstance.GetResponse(Command, FlipTubeDriver.Close.Response)
 
-    def _CloseTime(
+    def CloseTime(
         self,
-        Options: list[ClosedContainerABC.OpenCloseInterfaceCommand.Options],
+        Options: list[ClosedContainerABC.Options],
     ) -> float:
         return 0

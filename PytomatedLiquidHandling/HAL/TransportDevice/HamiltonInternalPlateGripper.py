@@ -5,7 +5,7 @@ from PytomatedLiquidHandling.Driver.Hamilton.Backend.BaseHamiltonBackend import 
 )
 from PytomatedLiquidHandling.Driver.Hamilton.Transport import IPG as IPGDriver
 
-from .Base import TransportDeviceABC, TransportOptions
+from .Base import TransportDeviceABC
 
 
 @dataclass
@@ -40,7 +40,7 @@ class HamiltonInternalPlateGripper(TransportDeviceABC):
             field(init=False, compare=True)
         )
 
-    def Transport(self, TransportOptionsInstance: TransportOptions.Options):
+    def Transport(self, TransportOptionsInstance: TransportDeviceABC.Options):
         SourceLayoutItem = TransportOptionsInstance.SourceLayoutItem
         DestinationLayoutItem = TransportOptionsInstance.DestinationLayoutItem
 
@@ -104,3 +104,8 @@ class HamiltonInternalPlateGripper(TransportDeviceABC):
         self.BackendInstance.ExecuteCommand(CommandInstance)
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         self.BackendInstance.GetResponse(CommandInstance, IPGDriver.PlacePlate.Response)
+
+    def TransportTime(
+        self, TransportOptionsInstance: TransportDeviceABC.Options
+    ) -> float:
+        return 0

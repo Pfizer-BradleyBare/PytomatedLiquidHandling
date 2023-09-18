@@ -12,7 +12,7 @@ class HamiltonTipNTR(TipABC):
     GripperSequence: str
     GeneratedWasteSequence: str = field(init=False, default="")
 
-    def _TipCounterEdit(self):
+    def TipCounterEdit(self):
         CommandInstance = NTRDriver.LoadTips.Command(
             Options=NTRDriver.LoadTips.Options(
                 TipSequence=self.PickupSequence,
@@ -25,12 +25,10 @@ class HamiltonTipNTR(TipABC):
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         self.BackendInstance.GetResponse(CommandInstance, NTRDriver.LoadTips.Response)
 
-    def _TipCounterEditTime(self) -> float:
+    def TipCounterEditTime(self) -> float:
         return 0
 
-    def _GetTipPositions(
-        self, Options: TipABC.GetTipPositionsInterfaceCommand.Options
-    ) -> list[int]:
+    def GetTipPositions(self, Options: TipABC.Options) -> list[int]:
         CommandInstance = NTRDriver.GetTipPositions.Command(
             Options=NTRDriver.GetTipPositions.Options(
                 TipSequence=self.PickupSequence,
@@ -49,12 +47,10 @@ class HamiltonTipNTR(TipABC):
 
         return ResponseInstance.GetTipPositions()
 
-    def _GetTipPositionsTime(
-        self, Options: TipABC.GetTipPositionsInterfaceCommand.Options
-    ) -> float:
+    def GetTipPositionsTime(self, Options: TipABC.Options) -> float:
         return 0
 
-    def _GetRemainingTips(self) -> int:
+    def GetRemainingTips(self) -> int:
         CommandInstance = NTRDriver.GetNumTips.Command(
             Options=NTRDriver.GetNumTips.Options(
                 TipSequence=self.PickupSequence,
@@ -69,5 +65,5 @@ class HamiltonTipNTR(TipABC):
 
         return ResponseInstance.GetNumRemaining()
 
-    def _GetRemainingTipsTime(self) -> float:
+    def GetRemainingTipsTime(self) -> float:
         return 0

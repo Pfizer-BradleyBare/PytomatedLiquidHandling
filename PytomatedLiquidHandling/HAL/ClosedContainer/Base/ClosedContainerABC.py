@@ -6,46 +6,32 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
-from ...Tools.AbstractClasses import InterfaceABC, InterfaceCommandWithListedOptionsABC
+from ...Tools.AbstractClasses import InterfaceABC
 
 
 @dataclass
 class ClosedContainerABC(InterfaceABC, HALObject):
-    class OpenCloseInterfaceCommand(InterfaceCommandWithListedOptionsABC[None]):
-        @dataclass(kw_only=True)
-        class Options(OptionsABC):
-            LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-            Position: int
-
     ToolSequence: str
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
     SupportedLabwares: list[Labware.Base.LabwareABC]
-    Open: OpenCloseInterfaceCommand = field(init=False)
-    Close: OpenCloseInterfaceCommand = field(init=False)
+
+    @dataclass(kw_only=True)
+    class Options(OptionsABC):
+        LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+        Position: int
 
     @abstractmethod
-    def _Open(self, Options: list[OpenCloseInterfaceCommand.Options]):
+    def Open(self, Options: list[Options]):
         ...
 
     @abstractmethod
-    def _OpenTime(self, Options: list[OpenCloseInterfaceCommand.Options]) -> float:
+    def OpenTime(self, Options: list[Options]) -> float:
         ...
 
     @abstractmethod
-    def _Close(self, Options: list[OpenCloseInterfaceCommand.Options]):
+    def Close(self, Options: list[Options]):
         ...
 
     @abstractmethod
-    def _CloseTime(self, Options: list[OpenCloseInterfaceCommand.Options]) -> float:
+    def CloseTime(self, Options: list[Options]) -> float:
         ...
-
-    def __post_init__(self):
-        InterfaceABC.__post_init__(self)
-        self.Open = ClosedContainerABC.OpenCloseInterfaceCommand(
-            ExecuteFunction=self._Open,
-            ExecutionTimeFunction=self._OpenTime,
-        )
-        self.Close = ClosedContainerABC.OpenCloseInterfaceCommand(
-            ExecuteFunction=self._Close,
-            ExecutionTimeFunction=self._CloseTime,
-        )

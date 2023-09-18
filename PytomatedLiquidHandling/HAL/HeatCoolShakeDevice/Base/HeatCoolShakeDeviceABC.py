@@ -5,31 +5,19 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
-from ...Tools.AbstractClasses import (
-    InterfaceABC,
-    InterfaceCommandABC,
-    InterfaceCommandWithOptionsABC,
-)
+from ...Tools.AbstractClasses import InterfaceABC
 from .TempLimits.TempLimits import TempLimits
 
 
 @dataclass
 class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
-    class SetTemperatureInterfaceCommand(InterfaceCommandWithOptionsABC[None]):
-        @dataclass
-        class Options(OptionsABC):
-            Temperature: float
+    @dataclass
+    class SetTemperatureOptions(OptionsABC):
+        Temperature: float
 
-    class GetTemperatureInterfaceCommand(InterfaceCommandABC[float]):
-        ...
-
-    class SetShakingSpeedInterfaceCommand(InterfaceCommandWithOptionsABC[None]):
-        @dataclass
-        class Options(OptionsABC):
-            ShakingSpeed: int
-
-    class GetShakingSpeedInterfaceCommand(InterfaceCommandABC[int]):
-        ...
+    @dataclass
+    class SetShakingSpeedOptions(OptionsABC):
+        ShakingSpeed: int
 
     ComPort: str | int
     HeatingSupported: bool
@@ -39,11 +27,6 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
     SupportedLayoutItems: list[LayoutItem.Base.LayoutItemABC]
 
     HandleID: int | str = field(init=False)
-
-    SetTemperature: SetTemperatureInterfaceCommand = field(init=False)
-    GetTemperature: GetTemperatureInterfaceCommand = field(init=False)
-    SetShakingSpeed: SetShakingSpeedInterfaceCommand = field(init=False)
-    GetShakingSpeed: GetShakingSpeedInterfaceCommand = field(init=False)
 
     def IsLabwareSupported(self, LabwareInstance: Labware.PipettableLabware) -> bool:
         Labwares = [
@@ -75,51 +58,33 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
         raise Exception("This heater does not support your layout item")
 
     @abstractmethod
-    def _SetTemperature(self, OptionsInstance: SetTemperatureInterfaceCommand.Options):
+    def SetTemperature(self, OptionsInstance: SetTemperatureOptions):
         ...
 
     @abstractmethod
-    def _SetTemperatureTime(
-        self, OptionsInstance: SetTemperatureInterfaceCommand.Options
-    ) -> float:
+    def SetTemperatureTime(self, OptionsInstance: SetTemperatureOptions) -> float:
         ...
 
     @abstractmethod
-    def _GetTemperature(self) -> float:
+    def GetTemperature(self) -> float:
         ...
 
     @abstractmethod
-    def _GetTemperatureTime(self) -> float:
+    def GetTemperatureTime(self) -> float:
         ...
 
     @abstractmethod
-    def _SetShakingSpeed(self, OptionsInstance: SetTemperatureInterfaceCommand.Options):
+    def SetShakingSpeed(self, OptionsInstance: SetShakingSpeedOptions):
         ...
 
     @abstractmethod
-    def _SetShakingSpeedTime(
-        self, OptionsInstance: SetTemperatureInterfaceCommand.Options
-    ) -> float:
+    def SetShakingSpeedTime(self, OptionsInstance: SetShakingSpeedOptions) -> float:
         ...
 
     @abstractmethod
-    def _GetShakingSpeed(self) -> int:
+    def GetShakingSpeed(self) -> int:
         ...
 
     @abstractmethod
-    def _GetShakingSpeedTime(self) -> float:
+    def GetShakingSpeedTime(self) -> float:
         ...
-
-    def __post_init__(self):
-        self.SetTemperature = HeatCoolShakeDeviceABC.SetTemperatureInterfaceCommand(
-            self._SetTemperature, self._SetTemperatureTime
-        )
-        self.GetTemperature = HeatCoolShakeDeviceABC.GetTemperatureInterfaceCommand(
-            self._GetTemperature, self._GetTemperatureTime
-        )
-        self.SetShakingSpeed = HeatCoolShakeDeviceABC.SetShakingSpeedInterfaceCommand(
-            self._SetShakingSpeed, self._SetShakingSpeedTime
-        )
-        self.GetShakingSpeed = HeatCoolShakeDeviceABC.GetShakingSpeedInterfaceCommand(
-            self._GetShakingSpeed, self._GetShakingSpeedTime
-        )

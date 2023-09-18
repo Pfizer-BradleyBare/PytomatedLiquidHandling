@@ -10,9 +10,7 @@ from .Base import PipetteABC
 class HamiltonCORE96Head(PipetteABC):
     BackendInstance: HamiltonBackendABC
 
-    def OptionsSupported(
-        self, ListedOptionsInstance: list[PipetteABC.TransferInterfaceCommand.Options]
-    ) -> bool:
+    def OptionsSupported(self, ListedOptionsInstance: list[PipetteABC.Options]) -> bool:
         if (
             len(
                 set(
@@ -75,9 +73,9 @@ class HamiltonCORE96Head(PipetteABC):
         return PipetteABC.OptionsSupported(self, ListedOptionsInstance)
         # Check all other requirements
 
-    def _Transfer(
+    def Transfer(
         self,
-        ListedOptionsInstance: list[PipetteABC.TransferInterfaceCommand.Options],
+        ListedOptionsInstance: list[PipetteABC.Options],
     ):
         Options = ListedOptionsInstance[0]
         # All the options should be the same. So we can just take the first one for the majority
@@ -138,7 +136,5 @@ class HamiltonCORE96Head(PipetteABC):
                 Options=EjectOptions,
             )
 
-    def _TransferTime(
-        self, OptionsTrackerInstance: list[PipetteABC.TransferInterfaceCommand.Options]
-    ) -> float:
+    def TransferTime(self, OptionsTrackerInstance: list[PipetteABC.Options]) -> float:
         return 0

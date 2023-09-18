@@ -5,34 +5,31 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
-from ...Tools.AbstractClasses import InterfaceABC, InterfaceCommandWithListedOptionsABC
+from ...Tools.AbstractClasses import InterfaceABC
 from .LiquidClass import LiquidClass, LiquidClassCategory
 from .PipetteTip import PipetteTip
 
 
 @dataclass
 class PipetteABC(InterfaceABC, HALObject):
-    class TransferInterfaceCommand(InterfaceCommandWithListedOptionsABC[None]):
-        @dataclass(kw_only=True)
-        class Options(OptionsABC):
-            SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-            SourcePosition: int  # This is the well position. Not sequence position
-            CurrentSourceVolume: float
-            SourceMixCycles: int
-            SourceLiquidClassCategory: str
-            DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-            DestinationPosition: int  # This is the well position. Not sequence position
-            CurrentDestinationVolume: float
-            DestinationMixCycles: int
-            DestinationLiquidClassCategory: str
-            TransferVolume: float
-
     SupportedPipetteTips: list[PipetteTip]
     SupportedLabwares: list[Labware.PipettableLabware]
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
     SupportedLiquidClassCategories: list[LiquidClassCategory]
 
-    Transfer: TransferInterfaceCommand = field(init=False)
+    @dataclass(kw_only=True)
+    class Options(OptionsABC):
+        SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+        SourcePosition: int  # This is the well position. Not sequence position
+        CurrentSourceVolume: float
+        SourceMixCycles: int
+        SourceLiquidClassCategory: str
+        DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+        DestinationPosition: int  # This is the well position. Not sequence position
+        CurrentDestinationVolume: float
+        DestinationMixCycles: int
+        DestinationLiquidClassCategory: str
+        TransferVolume: float
 
     def GetTip(self, Volume: float) -> PipetteTip:
         for PipetteTipInstance in self.SupportedPipetteTips:
@@ -56,7 +53,7 @@ class PipetteABC(InterfaceABC, HALObject):
 
     def OptionsSupported(
         self,
-        ListedOptionsInstance: list[TransferInterfaceCommand.Options],
+        ListedOptionsInstance: list[Options],
     ) -> bool:
         for OptionsInstance in ListedOptionsInstance:
             if OptionsInstance.CurrentSourceVolume < OptionsInstance.TransferVolume:
@@ -106,21 +103,15 @@ class PipetteABC(InterfaceABC, HALObject):
         return True
 
     @abstractmethod
-    def _Transfer(
+    def Transfer(
         self,
-        ListedOptionsInstance: list[TransferInterfaceCommand.Options],
+        ListedOptionsInstance: list[Options],
     ):
         ...
 
     @abstractmethod
-    def _TransferTime(
+    def TransferTime(
         self,
-        ListedOptionsInstance: list[TransferInterfaceCommand.Options],
+        ListedOptionsInstance: list[Options],
     ):
         ...
-
-    def __post_init__(self):
-        InterfaceABC.__post_init__(self)
-        self.Transfer = PipetteABC.TransferInterfaceCommand(
-            self._Transfer, self._TransferTime
-        )

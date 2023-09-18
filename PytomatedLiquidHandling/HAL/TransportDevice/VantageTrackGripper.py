@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import VantageBackend
 from PytomatedLiquidHandling.HAL import DeckLocation
 
-from .Base import TransportDeviceABC, TransportOptions
+from .Base import TransportDeviceABC
 
 
 @dataclass
@@ -18,5 +18,10 @@ class VantageTrackGripper(TransportDeviceABC):
     class DropoffOptions(DeckLocation.Base.TransportConfig.Options):
         ...
 
-    def Transport(self, TransportOptionsInstance: TransportOptions.Options):
+    def Transport(self, TransportOptionsInstance: TransportDeviceABC.Options):
         ...
+
+    def TransportTime(
+        self, TransportOptionsInstance: TransportDeviceABC.Options
+    ) -> float:
+        return 0

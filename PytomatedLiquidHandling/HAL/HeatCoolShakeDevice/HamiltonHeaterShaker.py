@@ -13,8 +13,8 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
     ShakingSupported: bool = field(init=False, default=True)
     HandleID: int = field(init=False)
 
-    def _Initialize(self):
-        HeatCoolShakeDeviceABC._Initialize(self)
+    def Initialize(self):
+        HeatCoolShakeDeviceABC.Initialize(self)
 
         if not isinstance(self.ComPort, int):
             raise Exception("Should never happen")
@@ -59,10 +59,10 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterShakerDriver.SetPlateLock.Response
         )
 
-    def _InitializeTime(self) -> float:
+    def InitializeTime(self) -> float:
         return 0
 
-    def _Deinitialize(self):
+    def Deinitialize(self):
         CommandInstance = HeaterShakerDriver.StopTemperatureControl.Command(
             Options=HeaterShakerDriver.StopTemperatureControl.Options(
                 HandleID=int(self.HandleID),
@@ -100,14 +100,12 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterShakerDriver.SetPlateLock.Response
         )
 
-        HeatCoolShakeDeviceABC._Deinitialize(self)
+        HeatCoolShakeDeviceABC.Deinitialize(self)
 
-    def _DeinitializeTime(self) -> float:
+    def DeinitializeTime(self) -> float:
         return 0
 
-    def _SetTemperature(
-        self, Options: HeatCoolShakeDeviceABC.SetTemperatureInterfaceCommand.Options
-    ):
+    def SetTemperature(self, Options: HeatCoolShakeDeviceABC.SetTemperatureOptions):
         CommandInstance = HeaterShakerDriver.StartTemperatureControl.Command(
             Options=HeaterShakerDriver.StartTemperatureControl.Options(
                 HandleID=int(self.HandleID),
@@ -121,12 +119,12 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterShakerDriver.StartTemperatureControl.Response
         )
 
-    def _SetTemperatureTime(
-        self, Options: HeatCoolShakeDeviceABC.SetTemperatureInterfaceCommand.Options
+    def SetTemperatureTime(
+        self, Options: HeatCoolShakeDeviceABC.SetTemperatureOptions
     ) -> float:
         return 0
 
-    def _GetTemperature(self) -> float:
+    def GetTemperature(self) -> float:
         CommandInstance = HeaterShakerDriver.GetTemperature.Command(
             Options=HeaterShakerDriver.GetTemperature.Options(
                 HandleID=int(self.HandleID),
@@ -141,12 +139,10 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
 
         return ResponseInstance.GetTemperature()
 
-    def _GetTemperatureTime(self) -> float:
+    def GetTemperatureTime(self) -> float:
         return 0
 
-    def _SetShakingSpeed(
-        self, Options: HeatCoolShakeDeviceABC.SetShakingSpeedInterfaceCommand.Options
-    ):
+    def SetShakingSpeed(self, Options: HeatCoolShakeDeviceABC.SetShakingSpeedOptions):
         if Options.ShakingSpeed == 0:
             CommandInstance = HeaterShakerDriver.StopShakeControl.Command(
                 Options=HeaterShakerDriver.StopShakeControl.Options(
@@ -199,12 +195,12 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
                 CommandInstance, HeaterShakerDriver.StartShakeControl.Response
             )
 
-    def _SetShakingSpeedTime(
-        self, Options: HeatCoolShakeDeviceABC.SetShakingSpeedInterfaceCommand.Options
+    def SetShakingSpeedTime(
+        self, Options: HeatCoolShakeDeviceABC.SetShakingSpeedOptions
     ) -> float:
         return 0
 
-    def _GetShakingSpeed(self) -> int:
+    def GetShakingSpeed(self) -> int:
         CommandInstance = HeaterShakerDriver.GetShakingSpeed.Command(
             Options=HeaterShakerDriver.GetShakingSpeed.Options(
                 HandleID=int(self.HandleID),
@@ -219,5 +215,5 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
 
         return ResponseInstance.GetShakingSpeed()
 
-    def _GetShakingSpeedTime(self) -> float:
+    def GetShakingSpeedTime(self) -> float:
         return 0

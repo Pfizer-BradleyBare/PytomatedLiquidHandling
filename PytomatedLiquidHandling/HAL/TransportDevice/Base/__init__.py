@@ -1,2 +1,1 @@
-from .Interface import TransportOptions
 from .TransportDeviceABC import TransportDeviceABC

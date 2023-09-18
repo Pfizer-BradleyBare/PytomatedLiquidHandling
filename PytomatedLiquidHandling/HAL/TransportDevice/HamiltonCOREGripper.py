@@ -7,7 +7,7 @@ from PytomatedLiquidHandling.Driver.Hamilton.Transport import (
     COREGripper as COREGripperDriver,
 )
 
-from .Base import TransportDeviceABC, TransportOptions
+from .Base import TransportDeviceABC
 
 
 @dataclass
@@ -25,7 +25,7 @@ class HamiltonCOREGripper(TransportDeviceABC):
             init=False, compare=False
         )
 
-    def Transport(self, TransportOptionsInstance: TransportOptions.Options):
+    def Transport(self, TransportOptionsInstance: TransportDeviceABC.Options):
         SourceLayoutItem = TransportOptionsInstance.SourceLayoutItem
         DestinationLayoutItem = TransportOptionsInstance.DestinationLayoutItem
 
@@ -85,3 +85,8 @@ class HamiltonCOREGripper(TransportDeviceABC):
         self.BackendInstance.GetResponse(
             CommandInstance, COREGripperDriver.PlacePlate.Response
         )
+
+    def TransportTime(
+        self, TransportOptionsInstance: TransportDeviceABC.Options
+    ) -> float:
+        return 0

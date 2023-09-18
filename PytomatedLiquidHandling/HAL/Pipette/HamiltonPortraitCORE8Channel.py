@@ -15,13 +15,11 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
     def ConvertTransferVolumesToSupportedRange(
         self,
-        ListedOptionsInstance: list[PipetteABC.TransferInterfaceCommand.Options],
-    ) -> list[PipetteABC.TransferInterfaceCommand.Options]:
+        ListedOptionsInstance: list[PipetteABC.Options],
+    ) -> list[PipetteABC.Options]:
         MaxVolume = self.SupportedPipetteTips[-1].TipInstance.MaxVolume
 
-        UpdatedListedOptionsInstance: list[
-            PipetteABC.TransferInterfaceCommand.Options
-        ] = list()
+        UpdatedListedOptionsInstance: list[PipetteABC.Options] = list()
         for OptionsInstance in ListedOptionsInstance:
             NumTransfers = ceil(OptionsInstance.TransferVolume / MaxVolume)
             OptionsInstance.TransferVolume /= NumTransfers
@@ -31,17 +29,15 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
         return UpdatedListedOptionsInstance
 
-    def _Transfer(
+    def Transfer(
         self,
-        ListedOptionsInstance: list[PipetteABC.TransferInterfaceCommand.Options],
+        ListedOptionsInstance: list[PipetteABC.Options],
     ):
         ListedOptionsInstance = self.ConvertTransferVolumesToSupportedRange(
             ListedOptionsInstance
         )
 
-        OptionsListList: list[
-            list[PipetteABC.TransferInterfaceCommand.Options]
-        ] = list()
+        OptionsListList: list[list[PipetteABC.Options]] = list()
         Counter = 0
         Options = ListedOptionsInstance
         NumOptions = len(Options)
@@ -178,7 +174,5 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 )
             )
 
-    def _TransferTime(
-        self, ListedOptionsInstance: list[PipetteABC.TransferInterfaceCommand.Options]
-    ) -> float:
+    def TransferTime(self, ListedOptionsInstance: list[PipetteABC.Options]) -> float:
         return 0

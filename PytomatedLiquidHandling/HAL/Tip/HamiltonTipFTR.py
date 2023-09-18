@@ -9,7 +9,7 @@ from .Base import TipABC
 class HamiltonTipFTR(TipABC):
     BackendInstance: HamiltonBackendABC
 
-    def _TipCounterEdit(self):
+    def TipCounterEdit(self):
         CommandInstance = FTRDriver.LoadTips.Command(
             Options=FTRDriver.LoadTips.Options(TipSequence=self.PickupSequence),
             CustomErrorHandling=self.CustomErrorHandling,
@@ -18,12 +18,10 @@ class HamiltonTipFTR(TipABC):
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         self.BackendInstance.GetResponse(CommandInstance, FTRDriver.LoadTips.Response)
 
-    def _TipCounterEditTime(self) -> float:
+    def TipCounterEditTime(self) -> float:
         return 0
 
-    def _GetTipPositions(
-        self, Options: TipABC.GetTipPositionsInterfaceCommand.Options
-    ) -> list[int]:
+    def GetTipPositions(self, Options: TipABC.Options) -> list[int]:
         CommandInstance = FTRDriver.GetTipPositions.Command(
             Options=FTRDriver.GetTipPositions.Options(
                 TipSequence=self.PickupSequence,
@@ -39,12 +37,10 @@ class HamiltonTipFTR(TipABC):
 
         return ResponseInstance.GetTipPositions()
 
-    def _GetTipPositionsTime(
-        self, Options: TipABC.GetTipPositionsInterfaceCommand.Options
-    ) -> float:
+    def GetTipPositionsTime(self, Options: TipABC.Options) -> float:
         return 0
 
-    def _GetRemainingTips(self) -> int:
+    def GetRemainingTips(self) -> int:
         CommandInstance = FTRDriver.GetNumTips.Command(
             Options=FTRDriver.GetNumTips.Options(
                 TipSequence=self.PickupSequence,
@@ -59,5 +55,5 @@ class HamiltonTipFTR(TipABC):
 
         return ResponseInstance.GetNumRemaining()
 
-    def _GetRemainingTipsTime(self) -> float:
+    def GetRemainingTipsTime(self) -> float:
         return 0
