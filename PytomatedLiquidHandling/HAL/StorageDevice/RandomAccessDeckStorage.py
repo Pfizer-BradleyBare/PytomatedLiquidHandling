@@ -46,6 +46,9 @@ class RandomAccessDeckStorage(StorageDeviceABC):
 
         del self.Reservations[ReservationID]
 
+    def PrepareStore(self, ReservationID: str):
+        ...
+
     def Store(self, ReservationID: str) -> LayoutItem.Base.LayoutItemABC:
         if ReservationID not in self.Reservations:
             raise Exception("Reservation ID does not exist")
@@ -58,6 +61,9 @@ class RandomAccessDeckStorage(StorageDeviceABC):
         Reservation.IsStored = True
 
         return Reservation.LayoutItem
+
+    def PrepareRetrieve(self, ReservationID: str):
+        ...
 
     def Retrieve(self, ReservationID: str) -> LayoutItem.Base.LayoutItemABC:
         if ReservationID not in self.Reservations:

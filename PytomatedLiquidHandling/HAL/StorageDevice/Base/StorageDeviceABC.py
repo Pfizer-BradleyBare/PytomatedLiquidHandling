@@ -20,11 +20,19 @@ class StorageDeviceABC(HALObject):
         ...
 
     @abstractmethod
+    def PrepareStore(self, ReservationID: str):
+        ...
+
+    @abstractmethod
     def Store(self, ReservationID: str) -> LayoutItem.Base.LayoutItemABC:
         ...
 
     @abstractmethod
     def Release(self, ReservationID: str):
+        ...
+
+    @abstractmethod
+    def PrepareRetrieve(self, ReservationID: str):
         ...
 
     @abstractmethod
