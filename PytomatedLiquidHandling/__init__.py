@@ -1,7 +1,7 @@
-import logging
-import sys
-import os
 import datetime
+import logging
+import os
+import sys
 
 
 class STDERRLogger(object):
@@ -127,4 +127,4 @@ sys.stderr = STDERRLogger(logging.getLogger("STDERR"))
 
 RootLogger.level = logging.DEBUG
 
-from . import API, HAL, Driver, Tools
+from . import API, HAL, Driver

@@ -3,11 +3,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, TypeVar
 
-from ....Tools.AbstractClasses import (
-    CommandABC,
-    CommandOptions,
-    CommandOptionsListed,
-)
+from ....Tools.AbstractClasses import CommandABC, CommandOptions, CommandOptionsListed
 
 CommandSelf = TypeVar("CommandSelf", bound="HamiltonCommandABC")
 
@@ -41,7 +37,11 @@ class HamiltonCommandABC(CommandABC):
                     else:
                         OutputDict[key].append(value)
 
-            OutputDict = OutputDict | vars(self.ListedOptions)
+            try:
+                OutputDict = OutputDict | vars(self.ListedOptions)
+            except:
+                ...
+            # Easiest way to check if ListedOptions is a custom class (Inherits from list) vs just a list
 
             for key, value in OutputDict.items():
                 if isinstance(value, Enum):
@@ -49,8 +49,6 @@ class HamiltonCommandABC(CommandABC):
                 else:
                     OutputDict[key] = value
 
-            del OutputDict["Collection"]
-            # removes junk from parent classes
             return dict(OutputDict)
 
         else:
