@@ -21,38 +21,40 @@ See docstrings
 ## Example usage
 ```python
 import logging
-from PytomatedLiquidHandling import Logger
+import os
+
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
 from PytomatedLiquidHandling.Driver.Hamilton.TemperatureControl import HeaterShaker
 from PytomatedLiquidHandling.Driver.Hamilton.Timer import StartTimer
 
-LoggerInstance = Logger(
-    "MyLogger", logging.DEBUG, "C:\\Program Files (x86)\\HAMILTON\\Library\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Logging")
-#create a logger to log all actions
+Logger = logging.getLogger("App")
 
-Backend = MicrolabStarBackend("Example Star",LoggerInstance)
+Backend = MicrolabStarBackend(
+    "Example Star",
+    os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
+)
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
 Command = HeaterShaker.Connect.Command(
-    OptionsInstance=HeaterShaker.Connect.Options(ComPort=1), CustomErrorHandling=False
+    Options=HeaterShaker.Connect.Options(ComPort=1), CustomErrorHandling=False
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(Command, Command.Response)
+Response = Backend.GetResponse(Command, HeaterShaker.Connect.Response)
 HeaterShakerHandleId = Response.GetHandleID()
 # Connect and get our Handle
 
 DesiredTemperature = 37
 Command = HeaterShaker.StartTemperatureControl.Command(
-    OptionsInstance=HeaterShaker.StartTemperatureControl.Options(
+    Options=HeaterShaker.StartTemperatureControl.Options(
         HandleID=HeaterShakerHandleId, Temperature=DesiredTemperature
     ),
     CustomErrorHandling=False,
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(Command, Command.Response)
+Response = Backend.GetResponse(Command, HeaterShaker.StartTemperatureControl.Response)
 # Turn on the Heat
 
 #
