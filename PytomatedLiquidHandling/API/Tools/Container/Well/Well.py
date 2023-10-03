@@ -2,32 +2,24 @@ import copy
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.HAL import LayoutItem
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
 
-from .WellSolution import WellSolutionTracker
-from .WellSolution.SolutionProperty import (
-    HomogeneitySolutionProperty,
-    LLDSolutionProperty,
-    SolutionCategory,
-    ViscositySolutionProperty,
-    VolatilitySolutionProperty,
-)
+from .Liquid import Liquid
+from .Liquid.Property import LLD, Homogeneity, Properties, Viscosity, Volatility
 
 
 @dataclass
-class Well(UniqueObjectABC, WellSolutionTracker):
-    UniqueIdentifier: int
+class Well:
+    WellNumber: int
+    Liquids: list[Liquid] = field(init=False, default_factory=list)
     LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem | None = field(
         init=True, default=None
     )
     LayoutItemWell: int | None = field(init=False, default=None)
 
-    def Aspirate(self, Volume: float) -> WellSolutionTracker:
-        WellSolutionTrackerInstance = WellSolutionTracker()
+    def Aspirate(self, Volume: float) -> list[Liquid]:
+        AspiratedLiquids: list[Liquid] = list()
 
-        TotalVolume = sum(
-            [WellSolution.Volume for WellSolution in self.GetObjectsAsList()]
-        )
+        TotalVolume = sum([Liquid.Volume for Liquid in self.Liquids])
 
         if Volume > TotalVolume:
             raise Exception(
@@ -36,37 +28,37 @@ class Well(UniqueObjectABC, WellSolutionTracker):
 
         FractionRemoved = Volume / TotalVolume
 
-        for WellSolutionInstance in self.GetObjectsAsList():
-            RemovedVolume = WellSolutionInstance.Volume * FractionRemoved
-            NewVolume = WellSolutionInstance.Volume - RemovedVolume
+        for AspiratedLiquid in self.Liquids:
+            RemovedVolume = AspiratedLiquid.Volume * FractionRemoved
+            NewVolume = AspiratedLiquid.Volume - RemovedVolume
 
-            RemovedWellSolutionInstance = copy.copy(
-                WellSolutionInstance
+            RemovedSolution = copy.copy(
+                AspiratedLiquid
             )  # use a shallow copy to preserve all references.
-            RemovedWellSolutionInstance.Volume = RemovedVolume
-            WellSolutionTrackerInstance.LoadSingle(RemovedWellSolutionInstance)
+            RemovedSolution.Volume = RemovedVolume
+            AspiratedLiquids.append(RemovedSolution)
 
-            WellSolutionInstance.Volume = NewVolume
+            AspiratedLiquid.Volume = NewVolume
 
             if NewVolume == 0:
-                self.UnloadSingle(WellSolutionInstance)
+                self.Liquids.remove(AspiratedLiquid)
 
-        return WellSolutionTrackerInstance
+        return AspiratedLiquids
 
-    def Dispense(self, WellSolutionTrackerInstance: WellSolutionTracker):
-        for WellSolutionInstance in WellSolutionTrackerInstance.GetObjectsAsList():
-            if self.IsTracked(WellSolutionInstance.UniqueIdentifier):
-                self.GetObjectByName(
-                    WellSolutionInstance.UniqueIdentifier
-                ).Volume += WellSolutionInstance.Volume
-
+    def Dispense(self, Liquids: list[Liquid]):
+        for DispensedLiquid in Liquids:
+            Names = [Solution.Name for Solution in self.Liquids]
+            if DispensedLiquid.Name in Names:
+                self.Liquids[
+                    Names.index(DispensedLiquid.Name)
+                ].Volume += DispensedLiquid.Volume
             else:
-                self.LoadSingle(WellSolutionInstance)
+                self.Liquids.append(DispensedLiquid)
 
-    def GetLiquidClassCategory(self) -> SolutionCategory:
-        WellSolutionInstances = self.GetObjectsAsList()
+    def GetLiquidProperties(self) -> Properties:
+        Liquids = self.Liquids
 
-        WellVolume = sum(WellSolution.Volume for WellSolution in WellSolutionInstances)
+        TotalVolume = sum(Liquid.Volume for Liquid in Liquids)
         # A solution will technically not have a well volume because we never pipette into a solution. Only out of
 
         VolatilityList = list()
@@ -74,50 +66,48 @@ class Well(UniqueObjectABC, WellSolutionTracker):
         HomogeneityList = list()
         LLDList = list()
 
-        for WellSolutionInstance in WellSolutionInstances:
-            Percentage = int(WellSolutionInstance.Volume * 100 / WellVolume)
+        for Liquid in Liquids:
+            Percentage = int(Liquid.Volume * 100 / TotalVolume)
 
-            SolutionCategoryInstance = WellSolutionInstance.SolutionCategoryInstance
+            LiquidProperties = Liquid.Properties
 
             VolatilityList += (
-                [SolutionCategoryInstance.VolatilityProperty.value.NumericValue]
+                [LiquidProperties.Volatility.value.NumericValue]
                 * Percentage
-                * SolutionCategoryInstance.VolatilityProperty.value.Weight
+                * LiquidProperties.Volatility.value.Weight
             )
 
             ViscosityList += (
-                [SolutionCategoryInstance.ViscosityProperty.value.NumericValue]
+                [LiquidProperties.Viscosity.value.NumericValue]
                 * Percentage
-                * SolutionCategoryInstance.ViscosityProperty.value.Weight
+                * LiquidProperties.Viscosity.value.Weight
             )
 
             HomogeneityList += (
-                [SolutionCategoryInstance.HomogeneityProperty.value.NumericValue]
+                [LiquidProperties.Homogeneity.value.NumericValue]
                 * Percentage
-                * SolutionCategoryInstance.HomogeneityProperty.value.Weight
+                * LiquidProperties.Homogeneity.value.Weight
             )
 
             LLDList += (
-                [SolutionCategoryInstance.LLDProperty.value.NumericValue]
+                [LiquidProperties.LLD.value.NumericValue]
                 * Percentage
-                * SolutionCategoryInstance.LLDProperty.value.Weight
+                * LiquidProperties.LLD.value.Weight
             )
 
-        Volatility = VolatilitySolutionProperty.GetByNumericKey(
+        VolatilityValue = Volatility.GetByNumericKey(
             int(round(sum(VolatilityList) / len(VolatilityList)))
         )
 
-        Viscosity = ViscositySolutionProperty.GetByNumericKey(
+        ViscosityValue = Viscosity.GetByNumericKey(
             int(round(sum(ViscosityList) / len(ViscosityList)))
         )
 
-        Homogeneity = HomogeneitySolutionProperty.GetByNumericKey(
+        HomogeneityValue = Homogeneity.GetByNumericKey(
             int(round(sum(HomogeneityList) / len(HomogeneityList)))
         )
 
-        LLD = LLDSolutionProperty.GetByNumericKey(
-            int(round(sum(LLDList) / len(LLDList)))
-        )
+        LLDValue = LLD.GetByNumericKey(int(round(sum(LLDList) / len(LLDList))))
         # We are going to process the whole shebang here
 
-        return SolutionCategory(Volatility, Viscosity, Homogeneity, LLD)
+        return Properties(VolatilityValue, ViscosityValue, HomogeneityValue, LLDValue)

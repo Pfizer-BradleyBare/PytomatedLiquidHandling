@@ -1,13 +1,12 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-from PytomatedLiquidHandling.Tools.AbstractClasses import (
-    UniqueObjectABC,
-    UniqueObjectTrackerABC,
-)
-from PytomatedLiquidHandling.HAL import Labware
 from .Well import Well
 
 
 @dataclass
-class Container(UniqueObjectABC, UniqueObjectTrackerABC[Well]):
-    LabwareInstance: Labware.PipettableLabware
+class Container:
+    Name: str
+    Wells: list[Well] = field(init=False)
+
+    def __init__(self, Name: str):
+        ...

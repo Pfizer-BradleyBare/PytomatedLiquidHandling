@@ -3,7 +3,7 @@ from typing import ClassVar
 
 
 @dataclass
-class SolutionPropertyValue:
+class Value:
     _NumericValueCounter: ClassVar[int] = 1
     NumericValue: int = field(init=False)
     Weight: int
@@ -11,5 +11,5 @@ class SolutionPropertyValue:
     MinDispenseMix: int
 
     def __post_init__(self):
-        self.NumericValue = SolutionPropertyValue._NumericValueCounter
-        SolutionPropertyValue._NumericValueCounter += 1
+        self.NumericValue = Value._NumericValueCounter
+        Value._NumericValueCounter += 1

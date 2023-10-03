@@ -1,2 +1,2 @@
-from . import WellSolution
+from . import Liquid
 from .Well import Well
