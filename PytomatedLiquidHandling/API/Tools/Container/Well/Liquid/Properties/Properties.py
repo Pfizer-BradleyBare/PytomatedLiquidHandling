@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from .Homogeneity import Homogeneity
-from .LLD import LLD
+from .Polarity import Polarity
 from .Viscosity import Viscosity
 from .Volatility import Volatility
 
@@ -12,7 +12,7 @@ class Properties:
     Volatility: Volatility
     Viscosity: Viscosity
     Homogeneity: Homogeneity
-    LLD: LLD
+    Polarity: Polarity
 
     def __post_init__(self):
         self.Name = (
@@ -22,8 +22,8 @@ class Properties:
             + self.Viscosity.name
             + "Homogeneity"
             + self.Homogeneity.name
-            + "LLD"
-            + self.LLD.name
+            + "Polarity"
+            + self.Polarity.name
         ).replace(" ", "")
 
     def GetMinAspirateMixParam(self):
@@ -41,7 +41,7 @@ class Properties:
         if MinMixParam > ReturnMinMixParam:
             ReturnMinMixParam = MinMixParam
 
-        MinMixParam = self.LLD.value.MinAspirateMix
+        MinMixParam = self.Polarity.value.MinAspirateMix
         if MinMixParam > ReturnMinMixParam:
             ReturnMinMixParam = MinMixParam
 
@@ -62,7 +62,7 @@ class Properties:
         if MinMixParam > ReturnMinMixParam:
             ReturnMinMixParam = MinMixParam
 
-        MinMixParam = self.LLD.value.MinDispenseMix
+        MinMixParam = self.Polarity.value.MinDispenseMix
         if MinMixParam > ReturnMinMixParam:
             ReturnMinMixParam = MinMixParam
 

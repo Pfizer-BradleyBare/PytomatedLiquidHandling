@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Liquid import Liquid
-from .Liquid.Property import LLD, Homogeneity, Properties, Viscosity, Volatility
+from .Liquid.Properties import Homogeneity, Polarity, Properties, Viscosity, Volatility
 
 
 @dataclass
@@ -64,7 +64,7 @@ class Well:
         VolatilityList = list()
         ViscosityList = list()
         HomogeneityList = list()
-        LLDList = list()
+        PolarityList = list()
 
         for Liquid in Liquids:
             Percentage = int(Liquid.Volume * 100 / TotalVolume)
@@ -89,10 +89,10 @@ class Well:
                 * LiquidProperties.Homogeneity.value.Weight
             )
 
-            LLDList += (
-                [LiquidProperties.LLD.value.NumericValue]
+            PolarityList += (
+                [LiquidProperties.Polarity.value.NumericValue]
                 * Percentage
-                * LiquidProperties.LLD.value.Weight
+                * LiquidProperties.Polarity.value.Weight
             )
 
         VolatilityValue = Volatility.GetByNumericKey(
@@ -107,7 +107,9 @@ class Well:
             int(round(sum(HomogeneityList) / len(HomogeneityList)))
         )
 
-        LLDValue = LLD.GetByNumericKey(int(round(sum(LLDList) / len(LLDList))))
+        LLDValue = Polarity.GetByNumericKey(
+            int(round(sum(PolarityList) / len(PolarityList)))
+        )
         # We are going to process the whole shebang here
 
         return Properties(VolatilityValue, ViscosityValue, HomogeneityValue, LLDValue)

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from .Property import Properties
+from .Properties import Properties
 
 
 @dataclass
