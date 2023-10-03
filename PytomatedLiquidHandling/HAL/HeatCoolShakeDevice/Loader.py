@@ -1,3 +1,4 @@
+import logging
 import os
 
 import yaml
@@ -6,7 +7,6 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from PytomatedLiquidHandling.HAL import LayoutItem
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-import logging
 from . import HamiltonHeaterCooler, HamiltonHeaterShaker
 from .Base import HeatCoolShakeDeviceABC, TempLimits
 
@@ -59,7 +59,7 @@ def LoadYaml(
             TempLimitsInstance = TempLimits(StableTempDelta, MinTemp, MaxTemp)
             # Create Temp Config
 
-            SupportedLayoutItems: list[LayoutItem.Base.LayoutItemABC] = list()
+            SupportedLayoutItems: list[LayoutItem.CoverableItem] = list()
 
             for CoverableLayoutItemUniqueID in Device[
                 "Supported Labware Coverable Layout Item Unique Identifiers"

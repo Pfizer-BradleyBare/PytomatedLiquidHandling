@@ -24,7 +24,7 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
     CoolingSupported: bool
     ShakingSupported: bool
     TempLimitsInstance: TempLimits
-    SupportedLayoutItems: list[LayoutItem.Base.LayoutItemABC]
+    SupportedLayoutItems: list[LayoutItem.CoverableItem]
 
     HandleID: int | str = field(init=False)
 
@@ -43,11 +43,6 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
     ) -> LayoutItem.CoverableItem:
         for SupportedLayoutItemInstance in self.SupportedLayoutItems:
             if SupportedLayoutItemInstance.Labware == LayoutItemInstance.Labware:
-                if not isinstance(
-                    SupportedLayoutItemInstance, LayoutItem.CoverableItem
-                ):
-                    raise Exception("This should never happen")
-
                 if isinstance(LayoutItemInstance, LayoutItem.CoverableItem):
                     SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered
                 else:
