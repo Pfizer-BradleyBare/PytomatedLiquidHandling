@@ -55,7 +55,7 @@ class Well:
             else:
                 self.Liquids.append(DispensedLiquid)
 
-    def GetLiquidProperties(self) -> Properties:
+    def GetSolutionProperties(self) -> Properties:
         Liquids = self.Liquids
 
         TotalVolume = sum(Liquid.Volume for Liquid in Liquids)
