@@ -1,5 +1,6 @@
 import os
 
+from PytomatedLiquidHandling import HAL
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
 from PytomatedLiquidHandling.Driver.Hamilton.DeckLoadingDialog import Carrier5Position
 
