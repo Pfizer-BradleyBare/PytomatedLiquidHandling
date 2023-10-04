@@ -1,20 +1,13 @@
 import copy
 from dataclasses import dataclass, field
 
-from PytomatedLiquidHandling.HAL import LayoutItem
-
 from .Liquid import Liquid
 from .Liquid.Properties import Homogeneity, Polarity, Properties, Viscosity, Volatility
 
 
 @dataclass
 class Well:
-    WellNumber: int
     Liquids: list[Liquid] = field(init=False, default_factory=list)
-    LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem | None = field(
-        init=True, default=None
-    )
-    LayoutItemWell: int | None = field(init=False, default=None)
 
     def Aspirate(self, Volume: float) -> list[Liquid]:
         AspiratedLiquids: list[Liquid] = list()
