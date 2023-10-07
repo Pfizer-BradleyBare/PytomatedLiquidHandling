@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from PytomatedLiquidHandling.API.Tools import Container
-from PytomatedLiquidHandling.HAL import DeckLoaders, Labware, LayoutItem
+from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 
 
 @dataclass
@@ -30,4 +30,10 @@ def UnloadContainer(Container: Container.Container):
 def GetLoadedWells(
     Well: Container.Well.Well,
 ) -> list[tuple[LayoutItem.CoverableItem | LayoutItem.NonCoverableItem, list[int]]]:
+    ...
+
+
+def GetLoadedLayoutItems(
+    Container: Container.Container,
+) -> list[LayoutItem.CoverableItem | LayoutItem.NonCoverableItem]:
     ...

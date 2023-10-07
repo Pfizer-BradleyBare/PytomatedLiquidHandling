@@ -33,11 +33,9 @@ Hamilton Internal Plate Gripper:
   Custom Error Handling: False
   Supported Labware Identifiers:
 
-
-
 Vantage Track Gripper:
   Identifier: Gripper 3
   Enabled: False
   Backend Identifier: a
   Custom Error Handling: False
-  Supported Labware Information:
+  Supported Labware Identifiers:

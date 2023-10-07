@@ -17,25 +17,33 @@ from . import (
 )
 
 _IsHALInit: bool = False
+
+Backends: dict[str, Backend.Base.BackendABC] = dict()
+Carriers: dict[str, Carrier.Base.CarrierABC] = dict()
+Labwares: dict[str, Labware.Base.LabwareABC] = dict()
+TransportDevices: dict[str, TransportDevice.Base.TransportDeviceABC] = dict()
+DeckLocations: dict[str, DeckLocation.Base.DeckLocationABC] = dict()
+LayoutItems: dict[str, LayoutItem.Base.LayoutItemABC] = dict()
 ClosedContainers: dict[str, ClosedContainer.Base.ClosedContainerABC] = dict()
-DeckLoaders: dict[str, DeckLoader.Base.DeckLoaderABC] = dict()
-MagneticRacks: dict[str, MagneticRack.Base.MagneticRackABC] = dict()
-Pipettes: dict[str, Pipette.Base.PipetteABC] = dict()
-StorageDevices: dict[str, StorageDevice.Base.StorageDeviceABC] = dict()
 HeatCoolShakeDevices: dict[
     str, HeatCoolShakeDevice.Base.HeatCoolShakeDeviceABC
 ] = dict()
-TransportDevices: dict[str, TransportDevice.Base.TransportDeviceABC] = dict()
+Tips: dict[str, Tip.Base.TipABC] = dict()
+Pipettes: dict[str, Pipette.Base.PipetteABC] = dict()
+StorageDevices: dict[str, StorageDevice.Base.StorageDeviceABC] = dict()
 
 
 def Initialize(ConfigFolderPath: str):
     global _IsHALInit
     _IsHALInit = True
 
+    global Backends
     Backends = Backend.Loader.LoadYaml(os.path.join(ConfigFolderPath, "Backend.yaml"))
 
+    global Carriers
     Carriers = Carrier.Loader.LoadYaml(os.path.join(ConfigFolderPath, "Carrier.yaml"))
 
+    global Labwares
     Labwares = Labware.Loader.LoadYaml(os.path.join(ConfigFolderPath, "Labware.yaml"))
 
     global TransportDevices
@@ -45,12 +53,14 @@ def Initialize(ConfigFolderPath: str):
         os.path.join(ConfigFolderPath, "Transport.yaml"),
     )
 
+    global DeckLocations
     DeckLocations = DeckLocation.Loader.LoadYaml(
         Carriers,
         TransportDevices,
         os.path.join(ConfigFolderPath, "DeckLocation.yaml"),
     )
 
+    global LayoutItems
     LayoutItems = LayoutItem.Loader.LoadYaml(
         Labwares,
         DeckLocations,
@@ -72,6 +82,7 @@ def Initialize(ConfigFolderPath: str):
         os.path.join(ConfigFolderPath, "TempControlDevice.yaml"),
     )
 
+    global Tips
     Tips = Tip.Loader.LoadYaml(
         Backends,
         os.path.join(ConfigFolderPath, "Tip.yaml"),
