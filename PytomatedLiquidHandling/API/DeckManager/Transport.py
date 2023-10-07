@@ -1,14 +1,7 @@
 from PytomatedLiquidHandling.API.Tools import Container
 from PytomatedLiquidHandling.HAL import DeckLocation, LayoutItem
 
-TransitionPoints: list[LayoutItem.Base.LayoutItemABC] = list()
-
-
-def TransportLayoutItem(
-    SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
-    DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
-):
-    ...
+TransitionPoints: dict[str, LayoutItem.Base.LayoutItemABC] = dict()
 
 
 def TransportContainer(
@@ -18,7 +11,35 @@ def TransportContainer(
     ...
 
 
-def Transport(self, TransportOptionsTrackerInstance: TransportOptions.OptionsTracker):
+def TransportLayoutItem(
+    SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
+    DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
+):
+    if SourceLayoutItem.Labware != DestinationLayoutItem.Labware:
+        raise Exception("These layout items are not compatible... WTH are you doing??")
+
+    if (
+        SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
+        != DestinationLayoutItem.DeckLocation.TransportConfig
+    ):
+        global TransitionPoints
+
+        TransitionPointLayoutItem = TransitionPoints[
+            SourceLayoutItem.Labware.Identifier
+        ]
+
+    # crap. Okay we need to use a transition point.
+    else:
+        TransportDevice = SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
+        TransportDevice.Transport(
+            TransportDevice.Options(
+                SourceLayoutItem=SourceLayoutItem,
+                DestinationLayoutItem=DestinationLayoutItem,
+            )
+        )
+    # Hooray we can just do the transport!
+    # Are these bad boys compatible? Meaning are the pickup options similar...
+
     DeviceLastUseIndices: dict[str | int, int] = dict()
 
     for Device in self.GetObjectsAsList():
