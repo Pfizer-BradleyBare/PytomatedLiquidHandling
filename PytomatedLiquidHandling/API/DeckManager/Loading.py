@@ -14,7 +14,7 @@ class LoadedWell:
 LoadedWells: list[LoadedWell] = list()
 
 
-def LoadContainer(
+def QueueContainer(
     Container: Container.Container,
     Labware: Labware.Base.LabwareABC,
     RequireLid: bool = True,
@@ -23,7 +23,15 @@ def LoadContainer(
     ...
 
 
-def UnloadContainer(Container: Container.Container):
+def ClearQueue():
+    ...
+
+
+def LoadQueue():
+    ...
+
+
+def UnloadQueue():
     ...
 
 
