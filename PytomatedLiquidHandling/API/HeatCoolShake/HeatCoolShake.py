@@ -115,7 +115,19 @@ def Release(Container: Container.Container):
 
 
 def GetTimeToTemp(Container: Container.Container) -> float:
-    ...
+    global Reservations
+
+    MaxHeatTime = 0
+
+    for Key in Reservations:
+        if Container == Reservations[Key].Container:
+            HeatTime = HeatCoolShakeDevices[Key].SetTemperatureTime(
+                HeatCoolShakeDevice.SetTemperatureOptions(Reservations[Key].Temperature)
+            )
+            if HeatTime > MaxHeatTime:
+                MaxHeatTime = HeatTime
+
+    return MaxHeatTime
 
 
 def Start(Container: Container.Container):
