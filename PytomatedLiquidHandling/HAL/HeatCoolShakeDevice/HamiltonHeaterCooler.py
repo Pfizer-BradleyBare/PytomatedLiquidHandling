@@ -33,9 +33,6 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
 
         self.HandleID = ResponseInstance.GetHandleID()
 
-    def InitializeTime(self) -> float:
-        return 0
-
     def Deinitialize(self):
         HeatCoolShakeDeviceABC.Deinitialize(self)
 
@@ -50,9 +47,6 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
         ResponseInstance = self.BackendInstance.GetResponse(
             CommandInstance, HeaterCoolerDriver.StopTemperatureControl.Response
         )
-
-    def DeinitializeTime(self) -> float:
-        return 0
 
     def SetTemperature(
         self,

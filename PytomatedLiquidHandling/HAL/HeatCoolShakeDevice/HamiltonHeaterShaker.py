@@ -59,9 +59,6 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterShakerDriver.SetPlateLock.Response
         )
 
-    def InitializeTime(self) -> float:
-        return 0
-
     def Deinitialize(self):
         CommandInstance = HeaterShakerDriver.StopTemperatureControl.Command(
             Options=HeaterShakerDriver.StopTemperatureControl.Options(
@@ -101,9 +98,6 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
         )
 
         HeatCoolShakeDeviceABC.Deinitialize(self)
-
-    def DeinitializeTime(self) -> float:
-        return 0
 
     def SetTemperature(self, Options: HeatCoolShakeDeviceABC.SetTemperatureOptions):
         CommandInstance = HeaterShakerDriver.StartTemperatureControl.Command(

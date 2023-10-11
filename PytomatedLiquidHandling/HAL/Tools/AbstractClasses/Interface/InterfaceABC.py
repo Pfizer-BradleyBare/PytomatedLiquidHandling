@@ -12,11 +12,5 @@ class InterfaceABC(ABC):
     def Initialize(self):
         self.BackendInstance.StartBackend()
 
-    def InitializeTime(self) -> float:
-        return 0
-
     def Deinitialize(self):
         self.BackendInstance.StopBackend()
-
-    def DeinitializeTime(self) -> float:
-        return 0
