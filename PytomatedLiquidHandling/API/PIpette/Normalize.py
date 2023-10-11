@@ -7,18 +7,19 @@ from PytomatedLiquidHandling.HAL import PipetteDevices, ClosedContainerDevices
 
 
 @dataclass
-class ListedNormalizeOptions(list):
+class NormalizeOptions(list):
+    Source: Container.Well.Well
+    Diluent: Container.Well.Well
+    Destination: Container.Well.Well
+    SourceConcentration: float
+    TargetConcentration: float
+    IntermediateWells: Container.Well.Well
+    IntermediateConcentrations: None | list[float] = field(init=True, default=None)
+
+
+def Normalize(Options: list[NormalizeOptions]):
     ...
 
 
-@dataclass
-class NormalizeOptions:
-    ...
-
-
-def Normalize():
-    ...
-
-
-def NormalizeTime():
+def NormalizeTime(Options: list[NormalizeOptions]):
     ...
