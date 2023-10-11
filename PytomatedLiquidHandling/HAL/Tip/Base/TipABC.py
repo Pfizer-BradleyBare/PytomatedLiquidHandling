@@ -25,21 +25,9 @@ class TipABC(InterfaceABC, HALObject):
         ...
 
     @abstractmethod
-    def TipCounterEditTime(self) -> float:
-        ...
-
-    @abstractmethod
     def GetTipPositions(self, OptionsInstance: Options) -> list[int]:
         ...
 
     @abstractmethod
-    def GetTipPositionsTime(self, OptionsInstance: Options) -> float:
-        ...
-
-    @abstractmethod
     def GetRemainingTips(self) -> int:
-        ...
-
-    @abstractmethod
-    def GetRemainingTipsTime(self) -> float:
         ...

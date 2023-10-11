@@ -88,9 +88,6 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
 
         return ResponseInstance.GetTemperature()
 
-    def GetTemperatureTime(self) -> float:
-        return 0
-
     def SetShakingSpeed(
         self,
         OptionsInstance: HeatCoolShakeDeviceABC.SetShakingSpeedOptions,
@@ -99,20 +96,7 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )
 
-    def SetShakingSpeedTime(
-        self,
-        OptionsInstance: HeatCoolShakeDeviceABC.SetShakingSpeedOptions,
-    ) -> float:
-        raise Exception(
-            "Shaking is not supported on this device. You did something wrong. Pleaes correct"
-        )
-
     def GetShakingSpeed(self) -> int:
-        raise Exception(
-            "Shaking is not supported on this device. You did something wrong. Pleaes correct"
-        )
-
-    def GetShakingSpeedTime(self) -> float:
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )

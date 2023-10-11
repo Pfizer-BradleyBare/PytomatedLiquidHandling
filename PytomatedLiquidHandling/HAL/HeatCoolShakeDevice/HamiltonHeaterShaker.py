@@ -133,9 +133,6 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
 
         return ResponseInstance.GetTemperature()
 
-    def GetTemperatureTime(self) -> float:
-        return 0
-
     def SetShakingSpeed(self, Options: HeatCoolShakeDeviceABC.SetShakingSpeedOptions):
         if Options.ShakingSpeed == 0:
             CommandInstance = HeaterShakerDriver.StopShakeControl.Command(
@@ -189,11 +186,6 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
                 CommandInstance, HeaterShakerDriver.StartShakeControl.Response
             )
 
-    def SetShakingSpeedTime(
-        self, Options: HeatCoolShakeDeviceABC.SetShakingSpeedOptions
-    ) -> float:
-        return 0
-
     def GetShakingSpeed(self) -> int:
         CommandInstance = HeaterShakerDriver.GetShakingSpeed.Command(
             Options=HeaterShakerDriver.GetShakingSpeed.Options(
@@ -208,6 +200,3 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
         )
 
         return ResponseInstance.GetShakingSpeed()
-
-    def GetShakingSpeedTime(self) -> float:
-        return 0

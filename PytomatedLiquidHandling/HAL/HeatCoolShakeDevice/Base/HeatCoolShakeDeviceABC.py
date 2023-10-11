@@ -65,21 +65,9 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
         ...
 
     @abstractmethod
-    def GetTemperatureTime(self) -> float:
-        ...
-
-    @abstractmethod
     def SetShakingSpeed(self, OptionsInstance: SetShakingSpeedOptions):
         ...
 
     @abstractmethod
-    def SetShakingSpeedTime(self, OptionsInstance: SetShakingSpeedOptions) -> float:
-        ...
-
-    @abstractmethod
     def GetShakingSpeed(self) -> int:
-        ...
-
-    @abstractmethod
-    def GetShakingSpeedTime(self) -> float:
         ...
