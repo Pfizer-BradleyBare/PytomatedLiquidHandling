@@ -114,6 +114,10 @@ def Release(Container: Container.Container):
             del Reservations[Key]
 
 
+def GetTimeToTemp(Container: Container.Container) -> float:
+    ...
+
+
 def Start(Container: Container.Container):
     ...
     # move to the heater
