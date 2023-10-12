@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.TemperatureControl import HeaterCooler as HeaterCoolerDriver
-from .Base import HeatCoolShakeDeviceABC
+from .Base import HeatCoolShakeDeviceABC, SetShakingSpeedOptions, SetTemperatureOptions
 
 
 @dataclass
@@ -33,9 +33,6 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
 
         self.HandleID = ResponseInstance.GetHandleID()
 
-    def InitializeTime(self) -> float:
-        return 0
-
     def Deinitialize(self):
         HeatCoolShakeDeviceABC.Deinitialize(self)
 
@@ -51,13 +48,7 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterCoolerDriver.StopTemperatureControl.Response
         )
 
-    def DeinitializeTime(self) -> float:
-        return 0
-
-    def SetTemperature(
-        self,
-        OptionsInstance: HeatCoolShakeDeviceABC.SetTemperatureOptions,
-    ):
+    def SetTemperature(self, OptionsInstance: SetTemperatureOptions):
         CommandInstance = HeaterCoolerDriver.StartTemperatureControl.Command(
             Options=HeaterCoolerDriver.StartTemperatureControl.Options(
                 HandleID=str(self.HandleID),
@@ -71,10 +62,7 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterCoolerDriver.StartTemperatureControl.Response
         )
 
-    def SetTemperatureTime(
-        self,
-        OptionsInstance: HeatCoolShakeDeviceABC.SetTemperatureOptions,
-    ) -> float:
+    def SetTemperatureTime(self, OptionsInstance: SetTemperatureOptions) -> float:
         return 0
 
     def GetTemperature(
@@ -94,31 +82,12 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
 
         return ResponseInstance.GetTemperature()
 
-    def GetTemperatureTime(self) -> float:
-        return 0
-
-    def SetShakingSpeed(
-        self,
-        OptionsInstance: HeatCoolShakeDeviceABC.SetShakingSpeedOptions,
-    ):
-        raise Exception(
-            "Shaking is not supported on this device. You did something wrong. Pleaes correct"
-        )
-
-    def SetShakingSpeedTime(
-        self,
-        OptionsInstance: HeatCoolShakeDeviceABC.SetShakingSpeedOptions,
-    ) -> float:
+    def SetShakingSpeed(self, OptionsInstance: SetShakingSpeedOptions):
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )
 
     def GetShakingSpeed(self) -> int:
-        raise Exception(
-            "Shaking is not supported on this device. You did something wrong. Pleaes correct"
-        )
-
-    def GetShakingSpeedTime(self) -> float:
         raise Exception(
             "Shaking is not supported on this device. You did something wrong. Pleaes correct"
         )

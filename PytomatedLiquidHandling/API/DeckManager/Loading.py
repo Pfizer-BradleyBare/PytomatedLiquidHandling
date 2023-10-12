@@ -6,24 +6,33 @@ from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 
 @dataclass
 class LoadedWell:
+    ContainerWell: Container.Well.Well
     LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    PhysicalWell: int
-    ContainerWells: list[Container.Well.Well]
+    LayoutItemWell: int
 
 
 LoadedWells: list[LoadedWell] = list()
 
 
-def LoadContainer(
+def QueueContainer(
     Container: Container.Container,
     Labware: Labware.Base.LabwareABC,
     RequireLid: bool = True,
     MeasureVolume: bool = False,
+    Disposable: bool = False,
 ):
     ...
 
 
-def UnloadContainer(Container: Container.Container):
+def ClearQueue():
+    ...
+
+
+def LoadQueue():
+    ...
+
+
+def UnloadQueue():
     ...
 
 

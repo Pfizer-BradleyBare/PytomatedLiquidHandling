@@ -24,12 +24,11 @@ Labwares: dict[str, Labware.Base.LabwareABC] = dict()
 TransportDevices: dict[str, TransportDevice.Base.TransportDeviceABC] = dict()
 DeckLocations: dict[str, DeckLocation.Base.DeckLocationABC] = dict()
 LayoutItems: dict[str, LayoutItem.Base.LayoutItemABC] = dict()
-ClosedContainers: dict[str, ClosedContainer.Base.ClosedContainerABC] = dict()
+ClosedContainerDevices: dict[str, ClosedContainer.Base.ClosedContainerABC] = dict()
 HeatCoolShakeDevices: dict[
     str, HeatCoolShakeDevice.Base.HeatCoolShakeDeviceABC
 ] = dict()
-Tips: dict[str, Tip.Base.TipABC] = dict()
-Pipettes: dict[str, Pipette.Base.PipetteABC] = dict()
+PipetteDevices: dict[str, Pipette.Base.PipetteABC] = dict()
 StorageDevices: dict[str, StorageDevice.Base.StorageDeviceABC] = dict()
 
 
@@ -67,8 +66,8 @@ def Initialize(ConfigFolderPath: str):
         os.path.join(ConfigFolderPath, "LayoutItem.yaml"),
     )
 
-    global ClosedContainers
-    ClosedContainers = ClosedContainer.Loader.LoadYaml(
+    global ClosedContainerDevices
+    ClosedContainerDevices = ClosedContainer.Loader.LoadYaml(
         Backends,
         DeckLocations,
         Labwares,
@@ -82,18 +81,17 @@ def Initialize(ConfigFolderPath: str):
         os.path.join(ConfigFolderPath, "TempControlDevice.yaml"),
     )
 
-    global Tips
-    Tips = Tip.Loader.LoadYaml(
+    TipDevices = Tip.Loader.LoadYaml(
         Backends,
         os.path.join(ConfigFolderPath, "Tip.yaml"),
     )
 
-    global Pipettes
-    Pipettes = Pipette.Loader.LoadYaml(
+    global PipetteDevices
+    PipetteDevices = Pipette.Loader.LoadYaml(
         Backends,
         DeckLocations,
         Labwares,
-        Tips,
+        TipDevices,
         os.path.join(ConfigFolderPath, "Pipette.yaml"),
     )
 

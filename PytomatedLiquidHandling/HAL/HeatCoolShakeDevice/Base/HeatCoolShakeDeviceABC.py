@@ -10,15 +10,17 @@ from .TempLimits.TempLimits import TempLimits
 
 
 @dataclass
+class SetTemperatureOptions(OptionsABC):
+    Temperature: float
+
+
+@dataclass
+class SetShakingSpeedOptions(OptionsABC):
+    ShakingSpeed: int
+
+
+@dataclass
 class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
-    @dataclass
-    class SetTemperatureOptions(OptionsABC):
-        Temperature: float
-
-    @dataclass
-    class SetShakingSpeedOptions(OptionsABC):
-        ShakingSpeed: int
-
     ComPort: str | int
     HeatingSupported: bool
     CoolingSupported: bool
@@ -65,21 +67,9 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
         ...
 
     @abstractmethod
-    def GetTemperatureTime(self) -> float:
-        ...
-
-    @abstractmethod
     def SetShakingSpeed(self, OptionsInstance: SetShakingSpeedOptions):
         ...
 
     @abstractmethod
-    def SetShakingSpeedTime(self, OptionsInstance: SetShakingSpeedOptions) -> float:
-        ...
-
-    @abstractmethod
     def GetShakingSpeed(self) -> int:
-        ...
-
-    @abstractmethod
-    def GetShakingSpeedTime(self) -> float:
         ...

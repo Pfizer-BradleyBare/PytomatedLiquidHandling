@@ -18,9 +18,6 @@ class HamiltonTipFTR(TipABC):
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         self.BackendInstance.GetResponse(CommandInstance, FTRDriver.LoadTips.Response)
 
-    def TipCounterEditTime(self) -> float:
-        return 0
-
     def GetTipPositions(self, Options: TipABC.Options) -> list[int]:
         CommandInstance = FTRDriver.GetTipPositions.Command(
             Options=FTRDriver.GetTipPositions.Options(
@@ -37,9 +34,6 @@ class HamiltonTipFTR(TipABC):
 
         return ResponseInstance.GetTipPositions()
 
-    def GetTipPositionsTime(self, Options: TipABC.Options) -> float:
-        return 0
-
     def GetRemainingTips(self) -> int:
         CommandInstance = FTRDriver.GetNumTips.Command(
             Options=FTRDriver.GetNumTips.Options(
@@ -54,6 +48,3 @@ class HamiltonTipFTR(TipABC):
         )
 
         return ResponseInstance.GetNumRemaining()
-
-    def GetRemainingTipsTime(self) -> float:
-        return 0
