@@ -38,7 +38,7 @@ def UnloadQueue():
 
 def GetLoadedWells(
     Well: Container.Well.Well,
-) -> list[tuple[LayoutItem.CoverableItem | LayoutItem.NonCoverableItem, int]]:
+) -> list[tuple[LayoutItem.CoverableItem | LayoutItem.NonCoverableItem, list[int]]]:
     ...
 
 
