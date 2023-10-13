@@ -16,8 +16,6 @@ from . import (
     TransportDevice,
 )
 
-from .Tools.Exceptions import LabwareNotSupportedError
-
 _IsHALInit: bool = False
 
 Backends: dict[str, Backend.Base.BackendABC] = dict()

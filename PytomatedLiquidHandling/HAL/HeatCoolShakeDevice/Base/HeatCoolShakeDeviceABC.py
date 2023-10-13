@@ -2,7 +2,7 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
-from PytomatedLiquidHandling.HAL import LayoutItem, LabwareNotSupportedError, Labware
+from PytomatedLiquidHandling.HAL import LayoutItem, Labware
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 from ...Tools.AbstractClasses import InterfaceABC
@@ -69,7 +69,7 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
 
                 return SupportedLayoutItemInstance
 
-        raise LabwareNotSupportedError([LayoutItemInstance.Labware])
+        raise Exception([LayoutItemInstance.Labware])
 
     @abstractmethod
     def SetTemperature(self, OptionsInstance: SetTemperatureOptions):
