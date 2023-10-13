@@ -11,3 +11,8 @@ class LabwareABC(HALObject):
     ImageFilename: str
     Dimensions: Dimensions
     TransportOffsets: TransportOffsets
+
+
+@dataclass
+class LabwareNotSupportedError(BaseException):
+    Labwares: list[LabwareABC]

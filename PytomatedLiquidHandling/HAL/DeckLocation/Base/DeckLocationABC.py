@@ -10,3 +10,8 @@ from .TransportConfig import TransportConfig
 class DeckLocationABC(HALObject):
     CarrierConfig: CarrierConfig
     TransportConfig: TransportConfig
+
+
+@dataclass
+class DeckLocationNotSupportedError(BaseException):
+    DeckLocations: list[DeckLocationABC]

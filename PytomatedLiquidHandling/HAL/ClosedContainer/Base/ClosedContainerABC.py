@@ -20,13 +20,27 @@ class ClosedContainerABC(InterfaceABC, HALObject):
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
     SupportedLabwares: list[Labware.Base.LabwareABC]
 
-    def IsDeckLocationSupported(
-        self, DeckLocation: DeckLocation.Base.DeckLocationABC
-    ) -> bool:
-        return DeckLocation in self.SupportedDeckLocations
+    def ValidateOpenCloseOptions(self, OptionsList: list[OpenCloseOptions]):
+        UnsupportedDeckLocations = list()
+        UnsupportedLabwares = list()
 
-    def IsLabwareSupported(self, Labware: Labware.PipettableLabware) -> bool:
-        return Labware in self.SupportedLabwares
+        for Options in OptionsList:
+            DeckLocationInstance = Options.LayoutItem.DeckLocation
+            LabwareInstance = Options.LayoutItem.Labware
+
+            if DeckLocationInstance not in self.SupportedDeckLocations:
+                UnsupportedDeckLocations.append(DeckLocationInstance)
+
+            if LabwareInstance not in self.SupportedLabwares:
+                UnsupportedLabwares.append(LabwareInstance)
+
+        if len(UnsupportedDeckLocations) > 0:
+            raise DeckLocation.Base.DeckLocationNotSupportedError(
+                UnsupportedDeckLocations
+            )
+
+        if len(UnsupportedLabwares) > 0:
+            raise Labware.Base.LabwareNotSupportedError(UnsupportedLabwares)
 
     @abstractmethod
     def Open(self, Options: list[OpenCloseOptions]):
