@@ -34,13 +34,15 @@ class ClosedContainerABC(InterfaceABC, HALObject):
             if LabwareInstance not in self.SupportedLabwares:
                 UnsupportedLabwares.append(LabwareInstance)
 
+        if len(UnsupportedLabwares) > 0:
+            raise Labware.Base.LabwareNotSupportedError(UnsupportedLabwares)
+
         if len(UnsupportedDeckLocations) > 0:
             raise DeckLocation.Base.DeckLocationNotSupportedError(
                 UnsupportedDeckLocations
             )
 
-        if len(UnsupportedLabwares) > 0:
-            raise Labware.Base.LabwareNotSupportedError(UnsupportedLabwares)
+        # NOTE: unfixable exceptions come first. We can move to an unsupported deck location if all other exceptions are a non issue
 
     @abstractmethod
     def Open(self, Options: list[OpenCloseOptions]):
