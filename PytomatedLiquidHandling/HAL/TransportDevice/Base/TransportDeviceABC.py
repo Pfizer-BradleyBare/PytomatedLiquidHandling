@@ -1,9 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
+
 from ...Tools.AbstractClasses import InterfaceABC
 
 
@@ -20,15 +20,18 @@ class TransportDeviceABC(InterfaceABC, HALObject):
     class DropoffOptions(DeckLocation.Base.TransportConfig.Options):
         ...
 
-    @dataclass(kw_only=True)
-    class Options(OptionsABC):
-        SourceLayoutItem: LayoutItem.Base.LayoutItemABC
-        DestinationLayoutItem: LayoutItem.Base.LayoutItemABC
-
     @abstractmethod
-    def Transport(self, TransportOptionsInstance: Options):
+    def Transport(
+        self,
+        SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
+        DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
+    ):
         ...
 
     @abstractmethod
-    def TransportTime(self, TransportOptionsInstance: Options) -> float:
+    def TransportTime(
+        self,
+        SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
+        DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
+    ) -> float:
         ...

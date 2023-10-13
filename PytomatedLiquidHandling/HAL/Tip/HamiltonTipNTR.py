@@ -25,13 +25,13 @@ class HamiltonTipNTR(TipABC):
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         self.BackendInstance.GetResponse(CommandInstance, NTRDriver.LoadTips.Response)
 
-    def GetTipPositions(self, Options: TipABC.Options) -> list[int]:
+    def GetTipPositions(self, Num: int) -> list[int]:
         CommandInstance = NTRDriver.GetTipPositions.Command(
             Options=NTRDriver.GetTipPositions.Options(
                 TipSequence=self.PickupSequence,
                 GeneratedRackWasteSequence=self.GeneratedWasteSequence,
                 GripperSequence=self.GripperSequence,
-                NumPositions=Options.NumTips,
+                NumPositions=Num,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )

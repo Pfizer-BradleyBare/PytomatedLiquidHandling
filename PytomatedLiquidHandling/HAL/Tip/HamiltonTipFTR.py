@@ -18,11 +18,11 @@ class HamiltonTipFTR(TipABC):
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         self.BackendInstance.GetResponse(CommandInstance, FTRDriver.LoadTips.Response)
 
-    def GetTipPositions(self, Options: TipABC.Options) -> list[int]:
+    def GetTipPositions(self, Num: int) -> list[int]:
         CommandInstance = FTRDriver.GetTipPositions.Command(
             Options=FTRDriver.GetTipPositions.Options(
                 TipSequence=self.PickupSequence,
-                NumPositions=Options.NumTips,
+                NumPositions=Num,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )

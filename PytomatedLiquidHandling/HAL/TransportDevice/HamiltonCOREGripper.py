@@ -6,6 +6,7 @@ from PytomatedLiquidHandling.Driver.Hamilton.Backend.BaseHamiltonBackend import 
 from PytomatedLiquidHandling.Driver.Hamilton.Transport import (
     COREGripper as COREGripperDriver,
 )
+from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import TransportDeviceABC
 
@@ -25,10 +26,11 @@ class HamiltonCOREGripper(TransportDeviceABC):
             init=False, compare=False
         )
 
-    def Transport(self, TransportOptionsInstance: TransportDeviceABC.Options):
-        SourceLayoutItem = TransportOptionsInstance.SourceLayoutItem
-        DestinationLayoutItem = TransportOptionsInstance.DestinationLayoutItem
-
+    def Transport(
+        self,
+        SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
+        DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
+    ):
         if (
             SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
             != DestinationLayoutItem.DeckLocation.TransportConfig.PickupOptions
@@ -87,6 +89,8 @@ class HamiltonCOREGripper(TransportDeviceABC):
         )
 
     def TransportTime(
-        self, TransportOptionsInstance: TransportDeviceABC.Options
+        self,
+        SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
+        DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
     ) -> float:
         return 0
