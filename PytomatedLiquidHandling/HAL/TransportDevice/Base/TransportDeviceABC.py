@@ -43,6 +43,12 @@ class TransportDeviceABC(InterfaceABC, HALObject):
         SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
         DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
     ):
+        if SourceLayoutItem.Labware != DestinationLayoutItem.Labware:
+            raise Labware.Base.LabwareNotEqualError(
+                SourceLayoutItem.Labware, DestinationLayoutItem.Labware
+            )
+        # Are the labware compatible?
+
         UnsupportedLabware = list()
 
         if SourceLayoutItem.Labware.Identifier not in self.SupportedLabwares:
@@ -53,6 +59,7 @@ class TransportDeviceABC(InterfaceABC, HALObject):
 
         if len(UnsupportedLabware) > 0:
             raise Labware.Base.LabwareNotSupportedError(UnsupportedLabware)
+        # Are both source and destination labware supported by this device?
 
         SourceTransportDevice = (
             SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
@@ -64,10 +71,12 @@ class TransportDeviceABC(InterfaceABC, HALObject):
             raise TransportDevicesNotCompatibleError(
                 SourceTransportDevice, DestinationTransportDevice
             )
+        # Are the source and destination accessible by the same transport device?
 
         RequiredTransportDevice = SourceTransportDevice
         if type(self) != type(RequiredTransportDevice):
             raise WrongDeviceTransportOptionsError(self, RequiredTransportDevice)
+        # Is this device actually needed by this layout item?
 
         SourcePickupOptions = (
             SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
