@@ -8,6 +8,24 @@ from ...Tools.AbstractClasses import InterfaceABC
 
 
 @dataclass
+class PickupOptionsNotSupoortedError(BaseException):
+    SourcePickupOptions: DeckLocation.Base.TransportConfig.Options
+    DestinationPickupOptions: DeckLocation.Base.TransportConfig.Options
+
+
+@dataclass
+class WrongDeviceTransportOptionsError(BaseException):
+    CurrentDevice: "TransportDeviceABC"
+    TransportOptionsDevice: "TransportDeviceABC"
+
+
+@dataclass
+class TransportDevicesNotCompatibleError(BaseException):
+    SourceTransportDevice: "TransportDeviceABC"
+    DestinationTransportDevice: "TransportDeviceABC"
+
+
+@dataclass
 class TransportDeviceABC(InterfaceABC, HALObject):
     SupportedLabwares: list[Labware.Base.LabwareABC]
     _LastTransportFlag: bool = field(init=False, default=True)
@@ -20,26 +38,49 @@ class TransportDeviceABC(InterfaceABC, HALObject):
     class DropoffOptions(DeckLocation.Base.TransportConfig.Options):
         ...
 
-    def IsTransportSupported(
+    def ValidateTransportOptions(
         self,
         SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
         DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
-    ) -> bool:
+    ):
+        UnsupportedLabware = list()
+
         if SourceLayoutItem.Labware.Identifier not in self.SupportedLabwares:
-            return False
+            UnsupportedLabware.append(SourceLayoutItem.Labware)
 
         if DestinationLayoutItem.Labware.Identifier not in self.SupportedLabwares:
-            return False
+            UnsupportedLabware.append(DestinationLayoutItem.Labware)
 
-        if (
+        if len(UnsupportedLabware) > 0:
+            raise Labware.Base.LabwareNotSupportedError(UnsupportedLabware)
+
+        SourceTransportDevice = (
+            SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
+        )
+        DestinationTransportDevice = (
+            DestinationLayoutItem.DeckLocation.TransportConfig.TransportDevice
+        )
+        if SourceTransportDevice != DestinationTransportDevice:
+            raise TransportDevicesNotCompatibleError(
+                SourceTransportDevice, DestinationTransportDevice
+            )
+
+        RequiredTransportDevice = SourceTransportDevice
+        if type(self) != type(RequiredTransportDevice):
+            raise WrongDeviceTransportOptionsError(self, RequiredTransportDevice)
+
+        SourcePickupOptions = (
             SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
-            != DestinationLayoutItem.DeckLocation.TransportConfig.PickupOptions
-        ):
-            return False
+        )
+        DestinationPickupOptions = (
+            DestinationLayoutItem.DeckLocation.TransportConfig.PickupOptions
+        )
+        if SourcePickupOptions != DestinationPickupOptions:
+            raise PickupOptionsNotSupoortedError(
+                SourcePickupOptions, DestinationPickupOptions
+            )
         # We only care that the pickup options are compatible because that could determine plate orientation.
         # If orientation is incorrect then the plate dropoff will fail.
-
-        return True
 
     @abstractmethod
     def Transport(
