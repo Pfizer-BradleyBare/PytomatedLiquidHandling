@@ -8,6 +8,19 @@ from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 from ...Tools.AbstractClasses import InterfaceABC
 from .PipetteTip import PipetteTip
 
+Labware.Base.LabwareNotSupportedError
+
+
+@dataclass
+class LiquidClassCategoryNotSupportedError(BaseException):
+    """HAL device does not support your Labware. This can be thrown for any LayoutItem inputs.
+
+    Attributes:
+    Categories: List of string category names that were not supported
+    """
+
+    Categories: list[str]
+
 
 @dataclass(kw_only=True)
 class TransferOptions(OptionsABC):
@@ -35,20 +48,43 @@ class PipetteABC(InterfaceABC, HALObject):
             self.SupportedPipetteTips, key=lambda x: x.TipInstance.MaxVolume
         )
 
-    def IsDeckLocationSupported(
-        self, DeckLocation: DeckLocation.Base.DeckLocationABC
-    ) -> bool:
-        return DeckLocation in self.SupportedDeckLocations
+    def ValidateTransferOptions(self, OptionsList: list[TransferOptions]):
+        UnsupportedDeckLocations = list()
+        UnsupportedLabware = list()
+        UnsupportedLiquidClassCategories = list()
 
-    def IsLabwareSupported(self, Labware: Labware.PipettableLabware) -> bool:
-        return Labware in self.SupportedLabwares
+        for Options in OptionsList:
+            SourceLabware = Options.SourceLayoutItemInstance.Labware
+            DestinationLabware = Options.DestinationLayoutItemInstance.Labware
+            if SourceLabware not in self.SupportedLabwares:
+                UnsupportedLabware.append(SourceLabware)
+            if DestinationLabware not in self.SupportedLabwares:
+                UnsupportedLabware.append(DestinationLabware)
+            # Check Labware Compatibility
 
-    def IsLiquidClassCategorySupported(self, Category: str) -> bool:
-        for PipetteTip in self.SupportedPipetteTips:
-            if PipetteTip.IsLiquidClassCategorySupported(Category):
-                return True
+            SourceDeckLocation = Options.SourceLayoutItemInstance.DeckLocation
+            DestinationDeckLocation = Options.DestinationLayoutItemInstance.DeckLocation
+            if SourceDeckLocation not in self.SupportedDeckLocations:
+                UnsupportedDeckLocations.append(SourceDeckLocation)
+            if DestinationDeckLocation not in self.SupportedDeckLocations:
+                UnsupportedDeckLocations.append(DestinationDeckLocation)
+            # Check DeckLocation compatibility
 
-        return False
+            SourceLiquidClassCategory = Options.SourceLiquidClassCategory
+            DestinationLiquidClassCategory = Options.DestinationLiquidClassCategory
+            if not any(
+                PipetteTip.IsLiquidClassCategorySupported(SourceLiquidClassCategory)
+                for PipetteTip in self.SupportedPipetteTips
+            ):
+                UnsupportedLiquidClassCategories.append(SourceLiquidClassCategory)
+            if not any(
+                PipetteTip.IsLiquidClassCategorySupported(
+                    DestinationLiquidClassCategory
+                )
+                for PipetteTip in self.SupportedPipetteTips
+            ):
+                UnsupportedLiquidClassCategories.append(DestinationLiquidClassCategory)
+            # Check liquid class compatibility
 
     def _GetTip(self, LiquidClassCategory: str, Volume: float) -> PipetteTip:
         PossiblePipetteTips = [

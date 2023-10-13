@@ -20,12 +20,22 @@ class TipABC(InterfaceABC, HALObject):
 
     @abstractmethod
     def TipCounterEdit(self):
+        """Creates an interface for the user to physically edit the number of tips currently available."""
         ...
 
     @abstractmethod
-    def GetTipPositions(self, Num: int) -> list[int]:
+    def GetTotalRemainingTips(self) -> int:
+        """Returns number of remaining tips in total."""
         ...
 
     @abstractmethod
-    def GetRemainingTips(self) -> int:
+    def GetRemainingTipsInLayer(self) -> int:
+        """Returns number of remaining tips in the currently accessible layer.
+        If GetRemainingTipsInLayer and GetTotalRemainingTips are equal. This this tip type is not stacked.
+        """
+        ...
+
+    @abstractmethod
+    def GetNextTipLayer(self):
+        """Discards the currently accessible layer and makes the following layer accessible."""
         ...
