@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
-from .Base import ClosedContainerABC
+from .Base import ClosedContainerABC, OpenCloseOptions
 
 
 @dataclass
@@ -18,7 +18,7 @@ class HamiltonFlipTube(ClosedContainerABC):
 
     def Open(
         self,
-        Options: list[ClosedContainerABC.Options],
+        Options: list[OpenCloseOptions],
     ):
         CommandOptions = FlipTubeDriver.Open.ListedOptions(
             ToolSequence=self.ToolSequence
@@ -42,13 +42,13 @@ class HamiltonFlipTube(ClosedContainerABC):
 
     def OpenTime(
         self,
-        Options: list[ClosedContainerABC.Options],
+        Options: list[OpenCloseOptions],
     ) -> float:
         return 0
 
     def Close(
         self,
-        Options: list[ClosedContainerABC.Options],
+        Options: list[OpenCloseOptions],
     ):
         CommandOptions = FlipTubeDriver.Close.ListedOptions(
             ToolSequence=self.ToolSequence
@@ -72,6 +72,6 @@ class HamiltonFlipTube(ClosedContainerABC):
 
     def CloseTime(
         self,
-        Options: list[ClosedContainerABC.Options],
+        Options: list[OpenCloseOptions],
     ) -> float:
         return 0

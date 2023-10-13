@@ -2,12 +2,7 @@ from dataclasses import dataclass, field
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.TemperatureControl import HeaterCooler as HeaterCoolerDriver
-from .Base import (
-    HeatCoolShakeDeviceABC,
-    SetShakingSpeedOptions,
-    SetTemperatureOptions,
-    ShakingNotSupportedError,
-)
+from .Base import HeatCoolShakeDeviceABC, ShakingNotSupportedError
 
 
 @dataclass
@@ -53,11 +48,11 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterCoolerDriver.StopTemperatureControl.Response
         )
 
-    def SetTemperature(self, OptionsInstance: SetTemperatureOptions):
+    def SetTemperature(self, Temperature: float):
         CommandInstance = HeaterCoolerDriver.StartTemperatureControl.Command(
             Options=HeaterCoolerDriver.StartTemperatureControl.Options(
                 HandleID=str(self.HandleID),
-                Temperature=OptionsInstance.Temperature,
+                Temperature=Temperature,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
@@ -67,7 +62,7 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterCoolerDriver.StartTemperatureControl.Response
         )
 
-    def SetTemperatureTime(self, OptionsInstance: SetTemperatureOptions) -> float:
+    def SetTemperatureTime(self, Temperature: float) -> float:
         return 0
 
     def GetTemperature(
@@ -87,7 +82,7 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
 
         return ResponseInstance.GetTemperature()
 
-    def SetShakingSpeed(self, OptionsInstance: SetShakingSpeedOptions):
+    def SetShakingSpeed(self, RPM: int):
         raise ShakingNotSupportedError
 
     def GetShakingSpeed(self) -> int:

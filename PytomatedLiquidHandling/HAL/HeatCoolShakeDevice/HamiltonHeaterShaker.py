@@ -2,12 +2,7 @@ from dataclasses import dataclass, field
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.TemperatureControl import HeaterShaker as HeaterShakerDriver
-from .Base import (
-    HeatCoolShakeDeviceABC,
-    SetTemperatureOptions,
-    SetShakingSpeedOptions,
-    CoolingNotSupportedError,
-)
+from .Base import CoolingNotSupportedError, HeatCoolShakeDeviceABC
 
 
 @dataclass
@@ -104,14 +99,14 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
 
         HeatCoolShakeDeviceABC.Deinitialize(self)
 
-    def SetTemperature(self, Options: SetTemperatureOptions):
-        if Options.Temperature < 25:
+    def SetTemperature(self, Temperature: float):
+        if Temperature < 25:
             raise CoolingNotSupportedError
 
         CommandInstance = HeaterShakerDriver.StartTemperatureControl.Command(
             Options=HeaterShakerDriver.StartTemperatureControl.Options(
                 HandleID=int(self.HandleID),
-                Temperature=Options.Temperature,
+                Temperature=Temperature,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
@@ -121,7 +116,7 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterShakerDriver.StartTemperatureControl.Response
         )
 
-    def SetTemperatureTime(self, Options: SetTemperatureOptions) -> float:
+    def SetTemperatureTime(self, Temperature: float) -> float:
         return 0
 
     def GetTemperature(self) -> float:
@@ -139,8 +134,8 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
 
         return ResponseInstance.GetTemperature()
 
-    def SetShakingSpeed(self, Options: SetShakingSpeedOptions):
-        if Options.ShakingSpeed == 0:
+    def SetShakingSpeed(self, RPM: int):
+        if RPM == 0:
             CommandInstance = HeaterShakerDriver.StopShakeControl.Command(
                 Options=HeaterShakerDriver.StopShakeControl.Options(
                     HandleID=int(self.HandleID),
@@ -182,7 +177,7 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             CommandInstance = HeaterShakerDriver.StartShakeControl.Command(
                 Options=HeaterShakerDriver.StartShakeControl.Options(
                     HandleID=int(self.HandleID),
-                    ShakingSpeed=Options.ShakingSpeed,
+                    ShakingSpeed=RPM,
                 ),
                 CustomErrorHandling=self.CustomErrorHandling,
             )

@@ -1,9 +1,7 @@
 from .HeatCoolShakeDeviceABC import (
-    HeatCoolShakeDeviceABC,
-    SetTemperatureOptions,
-    SetShakingSpeedOptions,
-    HeatingNotSupportedError,
     CoolingNotSupportedError,
+    HeatCoolShakeDeviceABC,
+    HeatingNotSupportedError,
     ShakingNotSupportedError,
 )
 from .TempLimits.TempLimits import TempLimits
