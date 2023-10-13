@@ -27,28 +27,25 @@ Hamilton 96 Core Head:
         Tip Support Dropoff Sequence: Test
         Tip Support Pickup Sequence: Test
         Waste Sequence: Test
+        Supported Liquid Class Categories:
+          - Identifier: Default
+            Liquid Class Name: Tip_50ul_Water_DispenseSurface_Empty
 
       - Tip Identifier: 300uL NTR
         Tip Support Dropoff Sequence: Test
         Tip Support Pickup Sequence: Test
         Waste Sequence: Test
+        Supported Liquid Class Categories:
+          - Identifier: Default
+            Liquid Class Name: StandardVolume_Water_DispenseSurface_Empty
 
       - Tip Identifier: 1000uL FTR
         Tip Support Dropoff Sequence: Test
         Tip Support Pickup Sequence: Test
         Waste Sequence: Test
-
-    Supported Liquid Class Categories:
-      - Identifier: Default
-        Liquid Classes:
-          - Identifier: Tip_50ul_Water_DispenseSurface_Empty
-            Max Volume: 50
-
-          - Identifier: StandardVolume_Water_DispenseSurface_Empty
-            Max Volume: 300
-
-          - Identifier: HighVolume_Water_DispenseSurface_Empty
-            Max Volume: 1000
+        Supported Liquid Class Categories:
+          - Identifier: Default
+            Liquid Class Name: HighVolume_Water_DispenseSurface_Empty
 
 Hamilton 1mL Channels Portrait:
   - Identifier: Test
@@ -78,25 +75,22 @@ Hamilton 1mL Channels Portrait:
         Tip Support Dropoff Sequence: Test
         Tip Support Pickup Sequence: Test
         Waste Sequence: Test
+        Supported Liquid Class Categories:
+          - Identifier: Default
+            Liquid Class Name: Tip_50ul_Water_DispenseSurface_Empty
 
       - Tip Identifier: 300uL NTR
         Tip Support Dropoff Sequence: Test
         Tip Support Pickup Sequence: Test
         Waste Sequence: Test
+        Supported Liquid Class Categories:
+          - Identifier: Default
+            Liquid Class Name: StandardVolume_Water_DispenseSurface_Empty
 
       - Tip Identifier: 1000uL FTR
         Tip Support Dropoff Sequence: Test
         Tip Support Pickup Sequence: Test
         Waste Sequence: Test
-
-    Supported Liquid Class Categories:
-      - Identifier: Default
-        Liquid Classes:
-          - Identifier: Tip_50ul_Water_DispenseSurface_Empty
-            Max Volume: 50
-
-          - Identifier: StandardVolume_Water_DispenseSurface_Empty
-            Max Volume: 300
-
-          - Identifier: HighVolume_Water_DispenseSurface_Empty
-            Max Volume: 1000
+        Supported Liquid Class Categories:
+          - Identifier: Default
+            Liquid Class Name: HighVolume_Water_DispenseSurface_Empty

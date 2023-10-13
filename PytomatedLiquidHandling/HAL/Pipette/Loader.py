@@ -7,7 +7,7 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from .Base import LiquidClass, LiquidClassCategory, PipetteABC, PipetteTip
+from .Base import PipetteABC, PipetteTip
 from .HamiltonCORE96Head import HamiltonCORE96Head
 from .HamiltonPortraitCORE8Channel import HamiltonPortraitCORE8Channel
 
@@ -75,31 +75,22 @@ def LoadYaml(
                 DropoffSequence = TipDevice["Tip Support Dropoff Sequence"]
                 PickupSequence = TipDevice["Tip Support Pickup Sequence"]
                 WasteSequence = TipDevice["Waste Sequence"]
+
+                SupportedLiquidClassCategories: dict[str, str] = dict()
+                for Category in TipDevice["Supported Liquid Class Categories"]:
+                    SupportedLiquidClassCategories[Category["Identifier"]] = Category[
+                        "Liquid Class Name"
+                    ]
+
                 PipetteTips.append(
                     PipetteTip(
                         Tips[TipIdentifier],
                         DropoffSequence,
                         PickupSequence,
                         WasteSequence,
+                        SupportedLiquidClassCategories,
                     )
                 )
-
-            LiquidClassCategories: list[LiquidClassCategory] = list()
-            for Category in Device["Supported Liquid Class Categories"]:
-                CategoryID = Category["Identifier"]
-
-                LiquidClasses: list[LiquidClass] = list()
-                for Class in Category["Liquid Classes"]:
-                    ClassIdentifier = Class["Unique Identifier"]
-                    ClassMaxVolume = Class["Max Volume"]
-
-                    LiquidClasses.append(LiquidClass(ClassIdentifier, ClassMaxVolume))
-
-                LiquidClassCategoryInstance = LiquidClassCategory(
-                    CategoryID, LiquidClasses
-                )
-
-                LiquidClassCategories.append(LiquidClassCategoryInstance)
 
             if DeviceType == "Hamilton 96 Core Head":
                 if not isinstance(BackendInstance, HamiltonBackendABC):
@@ -112,7 +103,6 @@ def LoadYaml(
                     PipetteTips,
                     SupportedLabwares,
                     SupportedDeckLocations,
-                    LiquidClassCategories,
                 )
 
             elif DeviceType == "Hamilton 1mL Channels Portrait":
@@ -128,7 +118,6 @@ def LoadYaml(
                     PipetteTips,
                     SupportedLabwares,
                     SupportedDeckLocations,
-                    LiquidClassCategories,
                     ActiveChannels,
                 )
             else:

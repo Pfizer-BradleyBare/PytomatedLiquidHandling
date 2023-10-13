@@ -15,6 +15,9 @@ class TipABC(InterfaceABC, HALObject):
         InterfaceABC.Initialize(self)
         self.TipCounterEdit()
 
+    def IsVolumeSupported(self, Volume: float):
+        return Volume <= self.MaxVolume
+
     @abstractmethod
     def TipCounterEdit(self):
         ...

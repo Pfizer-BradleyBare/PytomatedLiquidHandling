@@ -45,8 +45,8 @@ def TransportLayoutItem(
         raise Exception("These layout items are not compatible... WTH are you doing??")
 
     if (
-        SourceLayoutItem.DeckLocation.TransportConfig
-        != DestinationLayoutItem.DeckLocation.TransportConfig
+        SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
+        != DestinationLayoutItem.DeckLocation.TransportConfig.PickupOptions
     ):
         global TransitionPoints
 

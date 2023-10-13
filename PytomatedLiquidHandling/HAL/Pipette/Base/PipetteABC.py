@@ -6,7 +6,6 @@ from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 from ...Tools.AbstractClasses import InterfaceABC
-from .LiquidClass import LiquidClass, LiquidClassCategory
 from .PipetteTip import PipetteTip
 
 
@@ -30,27 +29,39 @@ class PipetteABC(InterfaceABC, HALObject):
     SupportedPipetteTips: list[PipetteTip]
     SupportedLabwares: list[Labware.PipettableLabware]
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
-    SupportedLiquidClassCategories: list[LiquidClassCategory]
 
-    def GetTip(self, Volume: float) -> PipetteTip:
-        for PipetteTipInstance in self.SupportedPipetteTips:
-            if PipetteTipInstance.TipInstance.MaxVolume >= Volume:
-                return PipetteTipInstance
+    def __post_init__(self):
+        self.SupportedPipetteTips = sorted(
+            self.SupportedPipetteTips, key=lambda x: x.TipInstance.MaxVolume
+        )
 
-        raise Exception("This should never happen")
+    def IsDeckLocationSupported(
+        self, DeckLocation: DeckLocation.Base.DeckLocationABC
+    ) -> bool:
+        return DeckLocation in self.SupportedDeckLocations
 
-    def GetLiquidClass(self, LiquidClassCategory: str, Volume: float) -> LiquidClass:
-        for LiquidClassCategoryInstance in self.SupportedLiquidClassCategories:
-            if LiquidClassCategory == LiquidClassCategoryInstance.Name:
-                for LiquidClass in LiquidClassCategoryInstance.LiquidClasses:
-                    if Volume <= LiquidClass.MaxVolume:
-                        return LiquidClass
+    def IsLabwareSupported(self, Labware: Labware.PipettableLabware) -> bool:
+        return Labware in self.SupportedLabwares
 
-                raise Exception(
-                    "Volume exceeds that supported by this liquid class category..."
-                )
+    def IsLiquidClassCategorySupported(self, Category: str) -> bool:
+        for PipetteTip in self.SupportedPipetteTips:
+            if PipetteTip.IsLiquidClassCategorySupported(Category):
+                return True
 
-        raise Exception("Liquid Class Category not found")
+        return False
+
+    def _GetTip(self, LiquidClassCategory: str, Volume: float) -> PipetteTip:
+        PossiblePipetteTips = [
+            PipetteTip
+            for PipetteTip in self.SupportedPipetteTips
+            if PipetteTip.IsLiquidClassCategorySupported(LiquidClassCategory)
+        ]
+
+        for PipetteTip in PossiblePipetteTips:
+            if PipetteTip.TipInstance.MaxVolume >= Volume:
+                return PipetteTip
+
+        return PossiblePipetteTips[-1]
 
     @abstractmethod
     def Transfer(self, ListedOptions: list[TransferOptions]):

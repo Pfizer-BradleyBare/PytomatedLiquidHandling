@@ -20,6 +20,27 @@ class TransportDeviceABC(InterfaceABC, HALObject):
     class DropoffOptions(DeckLocation.Base.TransportConfig.Options):
         ...
 
+    def IsTransportSupported(
+        self,
+        SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
+        DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
+    ) -> bool:
+        if SourceLayoutItem.Labware.Identifier not in self.SupportedLabwares:
+            return False
+
+        if DestinationLayoutItem.Labware.Identifier not in self.SupportedLabwares:
+            return False
+
+        if (
+            SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
+            != DestinationLayoutItem.DeckLocation.TransportConfig.PickupOptions
+        ):
+            return False
+        # We only care that the pickup options are compatible because that could determine plate orientation.
+        # If orientation is incorrect then the plate dropoff will fail.
+
+        return True
+
     @abstractmethod
     def Transport(
         self,

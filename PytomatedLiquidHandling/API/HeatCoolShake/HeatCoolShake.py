@@ -4,9 +4,9 @@ from typing import cast
 from PytomatedLiquidHandling.API import DeckManager
 from PytomatedLiquidHandling.API.Tools import Container
 from PytomatedLiquidHandling.HAL import (
+    HeatCoolShakeDevice,
     HeatCoolShakeDevices,
     Labware,
-    HeatCoolShakeDevice,
 )
 
 
@@ -50,12 +50,10 @@ def Reserve(Container: Container.Container, Temperature: float, RPM: int):
             "Not enough HeatCoolShake devices available for this container..."
         )
 
-    SetTemperatureOptions = HeatCoolShakeDevice.SetTemperatureOptions(Temperature)
-
     if HeatingRequired or CoolingRequired:
         DevicesWithTemp = sorted(
             [
-                (Device, abs(Device.SetTemperatureTime(SetTemperatureOptions)))
+                (Device, abs(Device.SetTemperatureTime(Temperature)))
                 for Device in PotentialDevices
             ],
             key=lambda x: x[1],
@@ -65,7 +63,7 @@ def Reserve(Container: Container.Container, Temperature: float, RPM: int):
     for Index in range(0, len(LayoutItems)):
         Device = PotentialDevices[Index]
 
-        Device.SetTemperature(SetTemperatureOptions)
+        Device.SetTemperature(Temperature)
         # Heat the device ahead of time so it is ready when we actually need to use it
 
         Reservations[Device.Identifier] = Reservation(Temperature, RPM, Container)
@@ -78,19 +76,16 @@ def UpdateReservation(Container: Container.Container, Temperature: float, RPM: i
     CoolingRequired = Temperature < 25
     ShakingRequired = RPM > 0
 
-    SetTemperatureOptions = HeatCoolShakeDevice.SetTemperatureOptions(Temperature)
-    SetShakingSpeedOptions = HeatCoolShakeDevice.SetShakingSpeedOptions(RPM)
-
     for Key in Reservations:
         if Container == Reservations[Key].Container:
             Reservations[Key].Temperature = Temperature
             Reservations[Key].RPM = RPM
 
             if HeatingRequired or CoolingRequired:
-                HeatCoolShakeDevices[Key].SetTemperature(SetTemperatureOptions)
+                HeatCoolShakeDevices[Key].SetTemperature(Temperature)
 
             if Reservations[Key].Started and ShakingRequired:
-                HeatCoolShakeDevices[Key].SetShakingSpeed(SetShakingSpeedOptions)
+                HeatCoolShakeDevices[Key].SetShakingSpeed(RPM)
         # We need to update the reservation info and also update the device itself.
 
 
@@ -102,9 +97,7 @@ def Release(Container: Container.Container):
             if Reservations[Key].Started:
                 Stop(Container)
 
-            HeatCoolShakeDevices[Key].SetTemperature(
-                HeatCoolShakeDevice.SetTemperatureOptions(25)
-            )
+            HeatCoolShakeDevices[Key].SetTemperature(25)
 
             del Reservations[Key]
 
@@ -117,7 +110,7 @@ def GetTimeToTemp(Container: Container.Container) -> float:
     for Key in Reservations:
         if Container == Reservations[Key].Container:
             HeatTime = HeatCoolShakeDevices[Key].SetTemperatureTime(
-                HeatCoolShakeDevice.SetTemperatureOptions(Reservations[Key].Temperature)
+                Reservations[Key].Temperature
             )
             if HeatTime > MaxHeatTime:
                 MaxHeatTime = HeatTime
