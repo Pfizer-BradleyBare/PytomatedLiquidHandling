@@ -1,13 +1,8 @@
 from dataclasses import dataclass, field
-from typing import cast
 
 from PytomatedLiquidHandling.API import DeckManager
-from PytomatedLiquidHandling.API.Tools import Container
-from PytomatedLiquidHandling.HAL import (
-    HeatCoolShakeDevice,
-    HeatCoolShakeDevices,
-    Labware,
-)
+from PytomatedLiquidHandling.API.Tools import Container, ExceptionToBool
+from PytomatedLiquidHandling.HAL import HeatCoolShakeDevices
 
 
 @dataclass
@@ -38,7 +33,10 @@ def Reserve(Container: Container.Container, Temperature: float, RPM: int):
         and Device.CoolingSupported >= CoolingRequired
         and Device.ShakingSupported >= ShakingRequired
         and Device.Identifier not in Reservations
-        and all(Device.IsLayoutItemSupported(LayoutItem) for LayoutItem in LayoutItems)
+        and all(
+            ExceptionToBool.ExceptionToBool(Device.ValidateOptions, LayoutItem)
+            for LayoutItem in LayoutItems
+        )
     ]
     # Potential devices must meet the following criteria:
     # If heating, cooling, or shaking is required then the device must support it
