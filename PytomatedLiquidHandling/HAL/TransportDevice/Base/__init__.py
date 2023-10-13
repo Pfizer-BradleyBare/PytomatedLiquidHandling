@@ -1,5 +1,5 @@
 from .TransportDeviceABC import (
-    PickupOptionsNotSupoortedError,
+    PickupOptionsNotEqualError,
     TransportDeviceABC,
     TransportDevicesNotCompatibleError,
     WrongDeviceTransportOptionsError,

@@ -11,17 +11,29 @@ from .TempLimits.TempLimits import TempLimits
 
 @dataclass
 class HeatingNotSupportedError(BaseException):
-    ...
+    """Selected HeatCoolShakeDevice does not support heating.
+
+    Attributes:
+    None
+    """
 
 
 @dataclass
 class CoolingNotSupportedError(BaseException):
-    ...
+    """Selected HeatCoolShakeDevice does not support cooling.
+
+    Attributes:
+    None
+    """
 
 
 @dataclass
 class ShakingNotSupportedError(BaseException):
-    ...
+    """Selected HeatCoolShakeDevice does not support shaking.
+
+    Attributes:
+    None
+    """
 
 
 @dataclass
