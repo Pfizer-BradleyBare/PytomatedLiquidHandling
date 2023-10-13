@@ -35,17 +35,28 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
 
     HandleID: int | str = field(init=False)
 
-    def IsLayoutItemSupported(
-        self, LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    ) -> bool:
-        Labwares = [
+    def ValidateOptions(
+        self,
+        LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem,
+        Temperature: None | float = None,
+        RPM: None | int = None,
+    ):
+        SupportedLabwares = [
             LayoutItem.Labware.Identifier for LayoutItem in self.SupportedLayoutItems
         ]
 
-        if LayoutItem.Labware.Identifier in Labwares:
-            return True
-        else:
-            return False
+        if LayoutItem.Labware not in SupportedLabwares:
+            raise Labware.Base.LabwareNotSupportedError([LayoutItem.Labware])
+
+        if Temperature is not None:
+            if Temperature < 25 and not self.CoolingSupported:
+                raise CoolingNotSupportedError
+            if Temperature > 25 and not self.HeatingSupported:
+                raise HeatingNotSupportedError
+
+        if RPM is not None:
+            if not self.ShakingSupported:
+                raise ShakingNotSupportedError
 
     def GetLayoutItem(
         self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
