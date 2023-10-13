@@ -2,11 +2,26 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
-from PytomatedLiquidHandling.HAL import Labware, LayoutItem
+from PytomatedLiquidHandling.HAL import LayoutItem, LabwareNotSupportedError, Labware
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 from ...Tools.AbstractClasses import InterfaceABC
 from .TempLimits.TempLimits import TempLimits
+
+
+@dataclass
+class HeatingNotSupportedError(BaseException):
+    ...
+
+
+@dataclass
+class CoolingNotSupportedError(BaseException):
+    ...
+
+
+@dataclass
+class ShakingNotSupportedError(BaseException):
+    ...
 
 
 @dataclass
@@ -30,6 +45,18 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
 
     HandleID: int | str = field(init=False)
 
+    def IsLayoutItemSupported(
+        self, LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+    ) -> bool:
+        Labwares = [
+            LayoutItem.Labware.Identifier for LayoutItem in self.SupportedLayoutItems
+        ]
+
+        if LayoutItem.Labware.Identifier in Labwares:
+            return True
+        else:
+            return False
+
     def GetLayoutItem(
         self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
     ) -> LayoutItem.CoverableItem:
@@ -42,7 +69,7 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
 
                 return SupportedLayoutItemInstance
 
-        raise Exception("This heater does not support your layout item")
+        raise LabwareNotSupportedError([LayoutItemInstance.Labware])
 
     @abstractmethod
     def SetTemperature(self, OptionsInstance: SetTemperatureOptions):

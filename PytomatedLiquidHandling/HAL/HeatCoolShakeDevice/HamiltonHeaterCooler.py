@@ -2,7 +2,12 @@ from dataclasses import dataclass, field
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.TemperatureControl import HeaterCooler as HeaterCoolerDriver
-from .Base import HeatCoolShakeDeviceABC, SetShakingSpeedOptions, SetTemperatureOptions
+from .Base import (
+    HeatCoolShakeDeviceABC,
+    SetShakingSpeedOptions,
+    SetTemperatureOptions,
+    ShakingNotSupportedError,
+)
 
 
 @dataclass
@@ -83,11 +88,7 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
         return ResponseInstance.GetTemperature()
 
     def SetShakingSpeed(self, OptionsInstance: SetShakingSpeedOptions):
-        raise Exception(
-            "Shaking is not supported on this device. You did something wrong. Pleaes correct"
-        )
+        raise ShakingNotSupportedError
 
     def GetShakingSpeed(self) -> int:
-        raise Exception(
-            "Shaking is not supported on this device. You did something wrong. Pleaes correct"
-        )
+        raise ShakingNotSupportedError

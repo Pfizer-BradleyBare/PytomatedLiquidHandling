@@ -38,12 +38,7 @@ def Reserve(Container: Container.Container, Temperature: float, RPM: int):
         and Device.CoolingSupported >= CoolingRequired
         and Device.ShakingSupported >= ShakingRequired
         and Device.Identifier not in Reservations
-        and all(
-            Device.IsLabwareSupported(
-                cast(Labware.PipettableLabware, LayoutItem.Labware)
-            )
-            for LayoutItem in LayoutItems
-        )
+        and all(Device.IsLayoutItemSupported(LayoutItem) for LayoutItem in LayoutItems)
     ]
     # Potential devices must meet the following criteria:
     # If heating, cooling, or shaking is required then the device must support it

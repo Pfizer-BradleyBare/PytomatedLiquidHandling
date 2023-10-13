@@ -2,7 +2,12 @@ from dataclasses import dataclass, field
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.TemperatureControl import HeaterShaker as HeaterShakerDriver
-from .Base import HeatCoolShakeDeviceABC, SetTemperatureOptions, SetShakingSpeedOptions
+from .Base import (
+    HeatCoolShakeDeviceABC,
+    SetTemperatureOptions,
+    SetShakingSpeedOptions,
+    CoolingNotSupportedError,
+)
 
 
 @dataclass
@@ -100,6 +105,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
         HeatCoolShakeDeviceABC.Deinitialize(self)
 
     def SetTemperature(self, Options: SetTemperatureOptions):
+        if Options.Temperature < 25:
+            raise CoolingNotSupportedError
+
         CommandInstance = HeaterShakerDriver.StartTemperatureControl.Command(
             Options=HeaterShakerDriver.StartTemperatureControl.Options(
                 HandleID=int(self.HandleID),
