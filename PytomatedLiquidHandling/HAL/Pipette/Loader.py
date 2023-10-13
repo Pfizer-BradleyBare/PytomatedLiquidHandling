@@ -1,7 +1,8 @@
+import logging
 import os
 
 import yaml
-import logging
+
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
 
@@ -39,7 +40,6 @@ def LoadYaml(
         )
         return Pipettes
 
-    PipetteDevices: dict[int, PipetteABC] = dict()
     for DeviceType in ConfigFile:
         for Device in ConfigFile[DeviceType]:
             if Device["Enabled"] == False:
@@ -55,7 +55,6 @@ def LoadYaml(
             BackendIdentifier = Device["Backend Identifier"]
             BackendInstance = Backends[BackendIdentifier]
             CustomErrorHandling = Device["Custom Error Handling"]
-            NumberOfChannels = Device["Number of Channels"]
 
             SupportedLabwares: list[Labware.PipettableLabware] = list()
             for LabwareIdentifier in Device["Supported Labware Identifiers"]:
@@ -106,7 +105,7 @@ def LoadYaml(
                 if not isinstance(BackendInstance, HamiltonBackendABC):
                     raise Exception("Wrong backend selected")
 
-                PipetteDevices[NumberOfChannels] = HamiltonCORE96Head(
+                Pipettes[Identifier] = HamiltonCORE96Head(
                     Identifier,
                     BackendInstance,
                     CustomErrorHandling,
@@ -122,7 +121,7 @@ def LoadYaml(
                 if not isinstance(BackendInstance, HamiltonBackendABC):
                     raise Exception("Wrong backend selected")
 
-                PipetteDevices[NumberOfChannels] = HamiltonPortraitCORE8Channel(
+                Pipettes[Identifier] = HamiltonPortraitCORE8Channel(
                     Identifier,
                     BackendInstance,
                     CustomErrorHandling,
@@ -134,11 +133,5 @@ def LoadYaml(
                 )
             else:
                 raise Exception("Device type not recognized")
-
-    for NumberOfChannels, PipetteInstance in sorted(
-        PipetteDevices.items(), reverse=True
-    ):  # Note the () after items!
-        Pipettes[PipetteInstance.Identifier] = PipetteInstance
-    # This sorts the devices by number of channels from largest to smallest.
 
     return Pipettes
