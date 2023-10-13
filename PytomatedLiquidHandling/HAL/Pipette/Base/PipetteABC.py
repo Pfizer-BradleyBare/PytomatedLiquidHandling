@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field
-
+from math import ceil
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
@@ -10,26 +10,27 @@ from .LiquidClass import LiquidClass, LiquidClassCategory
 from .PipetteTip import PipetteTip
 
 
+@dataclass(kw_only=True)
+class TransferOptions(OptionsABC):
+    SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+    SourcePosition: int  # This is the labware well position. Not raw sequence position
+    CurrentSourceVolume: float
+    SourceMixCycles: int
+    SourceLiquidClassCategory: str
+    DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+    DestinationPosition: int  # This is the labware well position. Not raw sequence position
+    CurrentDestinationVolume: float
+    DestinationMixCycles: int
+    DestinationLiquidClassCategory: str
+    TransferVolume: float
+
+
 @dataclass
 class PipetteABC(InterfaceABC, HALObject):
     SupportedPipetteTips: list[PipetteTip]
     SupportedLabwares: list[Labware.PipettableLabware]
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
     SupportedLiquidClassCategories: list[LiquidClassCategory]
-
-    @dataclass(kw_only=True)
-    class Options(OptionsABC):
-        SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-        SourcePosition: int  # This is the labware well position. Not raw sequence position
-        CurrentSourceVolume: float
-        SourceMixCycles: int
-        SourceLiquidClassCategory: str
-        DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-        DestinationPosition: int  # This is the labware well position. Not raw sequence position
-        CurrentDestinationVolume: float
-        DestinationMixCycles: int
-        DestinationLiquidClassCategory: str
-        TransferVolume: float
 
     def GetTip(self, Volume: float) -> PipetteTip:
         for PipetteTipInstance in self.SupportedPipetteTips:
@@ -51,67 +52,10 @@ class PipetteABC(InterfaceABC, HALObject):
 
         raise Exception("Liquid Class Category not found")
 
-    def OptionsSupported(
-        self,
-        ListedOptionsInstance: list[Options],
-    ) -> bool:
-        for OptionsInstance in ListedOptionsInstance:
-            if OptionsInstance.CurrentSourceVolume < OptionsInstance.TransferVolume:
-                raise Exception("Not enough liquid in source...")
-            # Check Source has enough volume
-
-            DestinationLabware = OptionsInstance.DestinationLayoutItemInstance.Labware
-            if not isinstance(DestinationLabware, Labware.PipettableLabware):
-                raise Exception("This should never happen")
-            if (
-                OptionsInstance.CurrentDestinationVolume
-                + OptionsInstance.TransferVolume
-                > DestinationLabware.Wells.MaxVolume
-            ):
-                raise Exception(
-                    "Destination well cannot support this volume. Overflow will occur"
-                )
-            # Check destination has enough room for volume
-
-            if (
-                OptionsInstance.SourceLayoutItemInstance.Labware
-                not in self.SupportedLabwares
-            ):
-                return False
-
-            if (
-                OptionsInstance.DestinationLayoutItemInstance.Labware
-                not in self.SupportedLabwares
-            ):
-                return False
-            # Labwares are supported
-
-            if (
-                OptionsInstance.SourceLayoutItemInstance.DeckLocation
-                not in self.SupportedDeckLocations
-            ):
-                return False
-            if (
-                OptionsInstance.DestinationLayoutItemInstance.DeckLocation
-                not in self.SupportedDeckLocations
-            ):
-                return False
-            # Check Deck locations are supported
-
-            # Check liquid class categories are supported
-
-        return True
-
     @abstractmethod
-    def Transfer(
-        self,
-        ListedOptionsInstance: list[Options],
-    ):
+    def Transfer(self, ListedOptions: list[TransferOptions]):
         ...
 
     @abstractmethod
-    def TransferTime(
-        self,
-        ListedOptionsInstance: list[Options],
-    ):
+    def TransferTime(self, ListedOptions: list[TransferOptions]):
         ...

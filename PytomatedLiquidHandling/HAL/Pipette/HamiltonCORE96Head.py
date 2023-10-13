@@ -3,81 +3,18 @@ from math import ceil
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import CORE96Head
-from .Base import PipetteABC
+from .Base import PipetteABC, TransferOptions
 
 
 @dataclass
 class HamiltonCORE96Head(PipetteABC):
     BackendInstance: HamiltonBackendABC
 
-    def OptionsSupported(self, ListedOptionsInstance: list[PipetteABC.Options]) -> bool:
-        if (
-            len(
-                set(
-                    [
-                        Options.SourceLayoutItemInstance
-                        for Options in ListedOptionsInstance
-                    ]
-                )
-            )
-            > 1
-        ):
-            return False
-        if (
-            len(
-                set(
-                    [
-                        Options.DestinationLayoutItemInstance
-                        for Options in ListedOptionsInstance
-                    ]
-                )
-            )
-            > 1
-        ):
-            return False
-        # Should be a single sequence location
-
-        if len(set([Options.TransferVolume for Options in ListedOptionsInstance])) > 1:
-            return False
-        # Transfer volume should be same for all wells
-
-        if len(
-            set([Options.SourcePosition for Options in ListedOptionsInstance])
-        ) != len([Options.SourcePosition for Options in ListedOptionsInstance]):
-            return False
-        if len(
-            set([Options.DestinationPosition for Options in ListedOptionsInstance])
-        ) != len([Options.DestinationPosition for Options in ListedOptionsInstance]):
-            return False
-        # Well positions should not repeat
-
-        SourcePositionHolder = 0
-        DestinationPositionHolder = 0
-        for Options in ListedOptionsInstance:
-            if not Options.DestinationPosition == Options.SourcePosition:
-                return False
-            # Source and destination positions MUST be the same
-
-            if not Options.SourcePosition > SourcePositionHolder:
-                return False
-            SourcePositionHolder = Options.SourcePosition
-            if not Options.DestinationPosition > DestinationPositionHolder:
-                return False
-            DestinationPositionHolder = Options.DestinationPosition
-            # Positions should go in increasing order
-
-        if len(ListedOptionsInstance) > 96:
-            return False
-        # Only 96 channels are supported.
-
-        return PipetteABC.OptionsSupported(self, ListedOptionsInstance)
-        # Check all other requirements
-
     def Transfer(
         self,
-        ListedOptionsInstance: list[PipetteABC.Options],
+        ListedOptions: list[TransferOptions],
     ):
-        Options = ListedOptionsInstance[0]
+        Options = ListedOptions[0]
         # All the options should be the same. So we can just take the first one for the majority
 
         MaxVolume = self.SupportedPipetteTips[-1].TipInstance.MaxVolume
@@ -136,5 +73,5 @@ class HamiltonCORE96Head(PipetteABC):
                 Options=EjectOptions,
             )
 
-    def TransferTime(self, OptionsTrackerInstance: list[PipetteABC.Options]) -> float:
+    def TransferTime(self, OptionsTracker: list[TransferOptions]) -> float:
         return 0

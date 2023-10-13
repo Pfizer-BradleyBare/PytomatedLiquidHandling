@@ -5,7 +5,7 @@ from PytomatedLiquidHandling.HAL import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import PortraitCORE8Channel
-from .Base import PipetteABC
+from .Base import PipetteABC, TransferOptions
 
 
 @dataclass
@@ -15,34 +15,31 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
     def ConvertTransferVolumesToSupportedRange(
         self,
-        ListedOptionsInstance: list[PipetteABC.Options],
-    ) -> list[PipetteABC.Options]:
+        ListedOptions: list[TransferOptions],
+    ) -> list[TransferOptions]:
         MaxVolume = self.SupportedPipetteTips[-1].TipInstance.MaxVolume
 
-        UpdatedListedOptionsInstance: list[PipetteABC.Options] = list()
-        for OptionsInstance in ListedOptionsInstance:
-            NumTransfers = ceil(OptionsInstance.TransferVolume / MaxVolume)
-            OptionsInstance.TransferVolume /= NumTransfers
+        UpdatedListedOptions: list[TransferOptions] = list()
+        for Options in ListedOptions:
+            NumTransfers = ceil(Options.TransferVolume / MaxVolume)
+            Options.TransferVolume /= NumTransfers
 
             for _ in range(0, NumTransfers):
-                UpdatedListedOptionsInstance.append(OptionsInstance)
+                UpdatedListedOptions.append(Options)
 
-        return UpdatedListedOptionsInstance
+        return UpdatedListedOptions
 
     def Transfer(
         self,
-        ListedOptionsInstance: list[PipetteABC.Options],
+        ListedOptions: list[TransferOptions],
     ):
-        ListedOptionsInstance = self.ConvertTransferVolumesToSupportedRange(
-            ListedOptionsInstance
-        )
+        ListedOptions = self.ConvertTransferVolumesToSupportedRange(ListedOptions)
 
-        OptionsListList: list[list[PipetteABC.Options]] = list()
+        OptionsListList: list[list[TransferOptions]] = list()
         Counter = 0
-        Options = ListedOptionsInstance
-        NumOptions = len(Options)
+        NumOptions = len(ListedOptions)
         while Counter < NumOptions:
-            OptionsListList.append(Options[Counter : Counter + 8])
+            OptionsListList.append(ListedOptions[Counter : Counter + 8])
             Counter += 8
         # Create a list of lists of options in packages of 8 because we can only transfer with 8 tips at a time
 
@@ -174,5 +171,5 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 )
             )
 
-    def TransferTime(self, ListedOptionsInstance: list[PipetteABC.Options]) -> float:
+    def TransferTime(self, ListedOptionsInstance: list[TransferOptions]) -> float:
         return 0
