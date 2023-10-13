@@ -30,16 +30,6 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
 
     HandleID: int | str = field(init=False)
 
-    def IsLabwareSupported(self, LabwareInstance: Labware.PipettableLabware) -> bool:
-        Labwares = [
-            LayoutItem.Labware.Identifier for LayoutItem in self.SupportedLayoutItems
-        ]
-
-        if LabwareInstance.Identifier in Labwares:
-            return True
-        else:
-            return False
-
     def GetLayoutItem(
         self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
     ) -> LayoutItem.CoverableItem:
