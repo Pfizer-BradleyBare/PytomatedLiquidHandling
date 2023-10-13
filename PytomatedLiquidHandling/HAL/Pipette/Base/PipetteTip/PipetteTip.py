@@ -2,8 +2,6 @@ from dataclasses import dataclass
 
 from PytomatedLiquidHandling.HAL import Tip
 
-from .LiquidClass import LiquidClass
-
 
 @dataclass
 class PipetteTip:
