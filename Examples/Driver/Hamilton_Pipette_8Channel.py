@@ -28,9 +28,9 @@ ResponseInstance = Backend.GetResponse(CommandInstance, NTR.LoadTips.Response)
 GeneratedWasteSequence = ResponseInstance.GetGeneratedWasteSequence()
 # Load the tips on the deck. This makes sure the tip sequence is setup correctly
 
-CommandInstance = NTR.GetTipPositions.Command(
+CommandInstance = NTR.DiscardCurrentLayer.Command(
     CustomErrorHandling=False,
-    Options=NTR.GetTipPositions.Options(
+    Options=NTR.DiscardCurrentLayer.Options(
         TipSequence="seq_Tips_NTR_50ul",
         GeneratedRackWasteSequence=GeneratedWasteSequence,
         GripperSequence="seq_COREGripTool",
@@ -39,7 +39,9 @@ CommandInstance = NTR.GetTipPositions.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, NTR.GetTipPositions.Response)
+ResponseInstance = Backend.GetResponse(
+    CommandInstance, NTR.DiscardCurrentLayer.Response
+)
 TipPositions = ResponseInstance.GetTipPositions()
 # Get the tip positions for our tip pickup
 

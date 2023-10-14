@@ -35,8 +35,8 @@ class HamiltonTipFTR(TipABC):
         return ResponseInstance.GetTipPositions()
 
     def GetRemainingTips(self) -> int:
-        CommandInstance = FTRDriver.GetNumTips.Command(
-            Options=FTRDriver.GetNumTips.Options(
+        CommandInstance = FTRDriver.GetTotalRemainingTips.Command(
+            Options=FTRDriver.GetTotalRemainingTips.Options(
                 TipSequence=self.PickupSequence,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
@@ -44,7 +44,7 @@ class HamiltonTipFTR(TipABC):
         self.BackendInstance.ExecuteCommand(CommandInstance)
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         ResponseInstance = self.BackendInstance.GetResponse(
-            CommandInstance, FTRDriver.GetNumTips.Response
+            CommandInstance, FTRDriver.GetTotalRemainingTips.Response
         )
 
         return ResponseInstance.GetNumRemaining()

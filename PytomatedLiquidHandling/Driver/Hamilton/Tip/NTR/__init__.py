@@ -1,1 +1,6 @@
-from . import LoadTips, GetNumTips, GetTipPositions
+from . import (
+    LoadTips,
+    GetTotalRemainingTipPositions,
+    GetTotalRemainingTips,
+    DiscardCurrentLayer,
+)

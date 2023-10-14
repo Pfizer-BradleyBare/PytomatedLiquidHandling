@@ -5,5 +5,5 @@ from dataclasses import dataclass
 @dataclass
 class Response(HamiltonResponseABC):
     @HamiltonResponseABC.Decorator_ExpectedResponseProperty(SuccessProperty=True)
-    def GetTipPositions(self) -> list[int]:
+    def GetTotalRemaining(self) -> int:
         ...

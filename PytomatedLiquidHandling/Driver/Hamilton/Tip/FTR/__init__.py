@@ -1,1 +1,1 @@
-from . import LoadTips, GetNumTips, GetTipPositions
+from . import LoadTips, GetTotalRemainingTips, GetTotalRemainingTipPositions

@@ -7,4 +7,3 @@ class Options(OptionsABC):
     TipSequence: str
     GeneratedRackWasteSequence: str
     GripperSequence: str
-    NumPositions: int
