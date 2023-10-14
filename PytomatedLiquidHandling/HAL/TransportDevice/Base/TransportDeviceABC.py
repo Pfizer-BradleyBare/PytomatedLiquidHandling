@@ -83,8 +83,6 @@ class TransportDeviceABC(InterfaceABC, HALObject):
         Raises:
             Labware.Base.LabwareNotEqualError
 
-            Labware.Base.LabwareNotSupportedError
-
             TransportDevice.Base.TransportDevicesNotCompatibleError
 
             TransportDevice.Base.WrongDeviceTransportOptionsError
@@ -97,21 +95,19 @@ class TransportDeviceABC(InterfaceABC, HALObject):
             )
         # Are the labware compatible?
 
-        UnsupportedLabware = list()
-
-        if SourceLayoutItem.Labware.Identifier not in self.SupportedLabwares:
-            UnsupportedLabware.append(SourceLayoutItem.Labware)
-
-        if DestinationLayoutItem.Labware.Identifier not in self.SupportedLabwares:
-            UnsupportedLabware.append(DestinationLayoutItem.Labware)
-
-        if len(UnsupportedLabware) > 0:
-            raise Labware.Base.LabwareNotSupportedError(UnsupportedLabware)
-        # Are both source and destination labware supported by this device?
-
-        RequiredTransportDevice = (
+        SourceTransportDevice = (
             SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
         )
+        DestinationTransportDevice = (
+            DestinationLayoutItem.DeckLocation.TransportConfig.TransportDevice
+        )
+        if SourceTransportDevice != DestinationTransportDevice:
+            raise TransportDevicesNotCompatibleError(
+                SourceTransportDevice, DestinationTransportDevice
+            )
+        # Are the source and destination accessible by the same transport device?
+
+        RequiredTransportDevice = SourceTransportDevice
         if type(self) != type(RequiredTransportDevice):
             raise WrongDeviceTransportOptionsError(self, RequiredTransportDevice)
         # Is this device actually needed by this layout item?

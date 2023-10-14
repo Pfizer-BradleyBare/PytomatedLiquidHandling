@@ -53,8 +53,6 @@ class ClosedContainerABC(InterfaceABC, HALObject):
                 UnsupportedDeckLocations
             )
 
-        # NOTE: unfixable exceptions come first. We can move to an unsupported deck location if all other exceptions are a non issue
-
     @abstractmethod
     def Open(self, Options: list[OpenCloseOptions]):
         ...
