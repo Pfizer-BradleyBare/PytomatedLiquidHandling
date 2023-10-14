@@ -2,7 +2,11 @@ from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.API import DeckManager
 from PytomatedLiquidHandling.API.Tools import Container
-from PytomatedLiquidHandling.HAL import HeatCoolShakeDevices
+from PytomatedLiquidHandling.HAL import (
+    HeatCoolShakeDevices,
+    Labware,
+    HeatCoolShakeDevice,
+)
 
 
 @dataclass
@@ -30,7 +34,12 @@ def Reserve(Container: Container.Container, Temperature: float, RPM: int):
         try:
             ValidateFunction(*args)
             return True
-        except:
+        except (
+            Labware.Base.LabwareNotSupportedError,
+            HeatCoolShakeDevice.Base.CoolingNotSupportedError,
+            HeatCoolShakeDevice.Base.HeatingNotSupportedError,
+            HeatCoolShakeDevice.Base.ShakingNotSupportedError,
+        ):
             return False
 
     PotentialDevices = [

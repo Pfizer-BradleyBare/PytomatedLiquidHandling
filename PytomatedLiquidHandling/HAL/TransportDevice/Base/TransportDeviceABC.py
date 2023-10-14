@@ -67,6 +67,7 @@ class TransportDeviceABC(InterfaceABC, HALObject):
         DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
     ):
         """Must be called before calling Transport or TransportTime
+
         If LabwareNotEqualError is thrown then your Source and Destination labware are different, which is not supported.
 
         If TransportDevicesNotCompatibleError is thrown then your Source and Destination require different
