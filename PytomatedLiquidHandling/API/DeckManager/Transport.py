@@ -58,7 +58,7 @@ def TransportLayoutItem(
     except* (
         TransportDevice.Base.PickupOptionsNotEqualError,
         TransportDevice.Base.TransportDevicesNotCompatibleError,
-    ) as Error:
+    ):
         try:
             Device = SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
             Device.ValidateTransportOptions(SourceLayoutItem, SourceLayoutItem)
