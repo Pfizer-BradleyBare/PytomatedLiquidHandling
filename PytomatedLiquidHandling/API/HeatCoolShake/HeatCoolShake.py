@@ -34,7 +34,7 @@ def Reserve(Container: Container.Container, Temperature: float, RPM: int):
         try:
             ValidateFunction(*args)
             return True
-        except (
+        except* (
             Labware.Base.LabwareNotSupportedError,
             HeatCoolShakeDevice.Base.CoolingNotSupportedError,
             HeatCoolShakeDevice.Base.HeatingNotSupportedError,

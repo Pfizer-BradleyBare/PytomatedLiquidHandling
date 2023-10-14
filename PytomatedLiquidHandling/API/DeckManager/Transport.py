@@ -55,10 +55,25 @@ def TransportLayoutItem(
         Device.Transport(SourceLayoutItem, DestinationLayoutItem)
         # In this case everything matches so we can just do the transport
 
-    except (
+    except* (
         TransportDevice.Base.PickupOptionsNotEqualError,
         TransportDevice.Base.TransportDevicesNotCompatibleError,
     ) as Error:
+        try:
+            Device = SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
+            Device.ValidateTransportOptions(SourceLayoutItem, SourceLayoutItem)
+        except* Labware.Base.LabwareNotSupportedError:
+            raise Exception("Please god this should never happen...")
+
+        try:
+            Device = DestinationLayoutItem.DeckLocation.TransportConfig.TransportDevice
+            Device.ValidateTransportOptions(
+                DestinationLayoutItem, DestinationLayoutItem
+            )
+        except* Labware.Base.LabwareNotSupportedError:
+            raise Exception("Please god this should never happen...")
+        # Check the labware is atleast supported...
+
         global TransitionPoints
 
         TransitionPointLayoutItem = TransitionPoints[
