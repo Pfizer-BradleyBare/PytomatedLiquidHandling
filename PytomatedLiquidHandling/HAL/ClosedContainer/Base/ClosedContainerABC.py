@@ -27,11 +27,14 @@ class ClosedContainerABC(InterfaceABC, HALObject):
 
         If DeckLocationNotSupportedError is thrown then you need to move the LayoutItem to a compatible location.
 
-        Raises:
+        Raises ExceptionGroup of the following:
             Labware.Base.LabwareNotSupportedError
 
             DeckLocation.Base.DeckLocationNotSupportedError
         """
+
+        Exceptions = list()
+
         UnsupportedDeckLocations = list()
         UnsupportedLabwares = list()
 
@@ -46,11 +49,20 @@ class ClosedContainerABC(InterfaceABC, HALObject):
                 UnsupportedLabwares.append(LabwareInstance)
 
         if len(UnsupportedLabwares) > 0:
-            raise Labware.Base.LabwareNotSupportedError(UnsupportedLabwares)
+            Exceptions.append(
+                Labware.Base.LabwareNotSupportedError(UnsupportedLabwares)
+            )
 
         if len(UnsupportedDeckLocations) > 0:
-            raise DeckLocation.Base.DeckLocationNotSupportedError(
-                UnsupportedDeckLocations
+            Exceptions.append(
+                DeckLocation.Base.DeckLocationNotSupportedError(
+                    UnsupportedDeckLocations
+                )
+            )
+
+        if len(Exceptions) > 0:
+            raise ExceptionGroup(
+                "ClosedContainer OpenCloseOptions Exceptions", Exceptions
             )
 
     @abstractmethod

@@ -57,7 +57,7 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
 
         If any exceptions are thrown then you are trying to use an incompatible device.
 
-        Raises:
+        Raises ExceptionGroup of the following:
             Labware.Base.LabwareNotSupportedError
 
             HeatCoolShakeDevice.Base.CoolingNotSupportedError
@@ -66,22 +66,29 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
 
             HeatCoolShakeDevice.Base.ShakingNotSupportedError
         """
+        Exceptions = list()
+
         SupportedLabwares = [
             LayoutItem.Labware.Identifier for LayoutItem in self.SupportedLayoutItems
         ]
 
         if LayoutItem.Labware not in SupportedLabwares:
-            raise Labware.Base.LabwareNotSupportedError([LayoutItem.Labware])
+            Exceptions.append(
+                Labware.Base.LabwareNotSupportedError([LayoutItem.Labware])
+            )
 
         if Temperature is not None:
             if Temperature < 25 and not self.CoolingSupported:
-                raise CoolingNotSupportedError
+                Exceptions.append(CoolingNotSupportedError)
             if Temperature > 25 and not self.HeatingSupported:
-                raise HeatingNotSupportedError
+                Exceptions.append(HeatingNotSupportedError)
 
         if RPM is not None:
             if not self.ShakingSupported:
-                raise ShakingNotSupportedError
+                Exceptions.append(ShakingNotSupportedError)
+
+        if len(Exceptions) > 0:
+            raise ExceptionGroup("HeatCoolShakeDevice Options Exceptions", Exceptions)
 
     def GetLayoutItem(
         self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem

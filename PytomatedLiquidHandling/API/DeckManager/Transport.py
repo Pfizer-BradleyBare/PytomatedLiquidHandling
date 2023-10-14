@@ -1,5 +1,11 @@
 from PytomatedLiquidHandling.API.Tools import Container
-from PytomatedLiquidHandling.HAL import DeckLocation, LayoutItem, LayoutItems
+from PytomatedLiquidHandling.HAL import (
+    DeckLocation,
+    LayoutItem,
+    LayoutItems,
+    TransportDevice,
+    Labware,
+)
 
 from .Loading import GetLoadedLayoutItems, LoadedWells
 
@@ -41,13 +47,18 @@ def TransportLayoutItem(
     SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
     DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
 ):
-    if SourceLayoutItem.Labware != DestinationLayoutItem.Labware:
-        raise Exception("These layout items are not compatible... WTH are you doing??")
+    try:
+        Device = SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
 
-    if (
-        SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
-        != DestinationLayoutItem.DeckLocation.TransportConfig.PickupOptions
-    ):
+        Device.ValidateTransportOptions(SourceLayoutItem, DestinationLayoutItem)
+
+        Device.Transport(SourceLayoutItem, DestinationLayoutItem)
+        # In this case everything matches so we can just do the transport
+
+    except (
+        TransportDevice.Base.PickupOptionsNotEqualError,
+        TransportDevice.Base.TransportDevicesNotCompatibleError,
+    ) as Error:
         global TransitionPoints
 
         TransitionPointLayoutItem = TransitionPoints[
@@ -58,36 +69,15 @@ def TransportLayoutItem(
             SourceLayoutItem.DeckLocation.TransportConfig
         )
 
-        TransportDevice = SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
-        TransportDevice.Transport(
-            TransportDevice.Options(
-                SourceLayoutItem=SourceLayoutItem,
-                DestinationLayoutItem=TransitionPointLayoutItem,
-            )
-        )
+        Device = SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
+        Device.Transport(SourceLayoutItem, TransitionPointLayoutItem)
         # go to transition point.
 
         TransitionPointLayoutItem.DeckLocation.TransportConfig = (
             DestinationLayoutItem.DeckLocation.TransportConfig
         )
 
-        TransportDevice = SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
-        TransportDevice.Transport(
-            TransportDevice.Options(
-                SourceLayoutItem=TransitionPointLayoutItem,
-                DestinationLayoutItem=DestinationLayoutItem,
-            )
-        )
+        Device = SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
+        Device.Transport(TransitionPointLayoutItem, DestinationLayoutItem)
         # go from transition point to destination
-
     # crap. Okay we need to use a transition point.
-    else:
-        TransportDevice = SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
-        TransportDevice.Transport(
-            TransportDevice.Options(
-                SourceLayoutItem=SourceLayoutItem,
-                DestinationLayoutItem=DestinationLayoutItem,
-            )
-        )
-    # Hooray we can just do the transport!
-    # Are these bad boys compatible? Meaning are the pickup options similar...
