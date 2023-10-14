@@ -29,9 +29,10 @@ class TipABC(InterfaceABC, HALObject):
         ...
 
     @abstractmethod
-    def GetRemainingTipsInLayer(self) -> int:
-        """Returns number of remaining tips in the currently accessible layer.
-        If GetRemainingTipsInLayer and GetTotalRemainingTips are equal. This this tip type is not stacked.
+    def GetRemainingSequencePositions(self) -> list[int]:
+        """Returns number of remaining positions in the currently accessible layer.
+        If len(GetRemainingSequencePositions) and GetTotalRemainingTips are equal. This this tip type is not stacked.
+        NOTE: This is not guarenteed to be consecutive.
         """
         ...
 
