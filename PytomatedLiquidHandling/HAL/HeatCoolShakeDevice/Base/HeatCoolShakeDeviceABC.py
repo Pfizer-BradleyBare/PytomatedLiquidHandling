@@ -53,6 +53,19 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
         Temperature: None | float = None,
         RPM: None | int = None,
     ):
+        """Must called before calling SetTemperature, SetTemperatureTime, or SetShakingSpeed.
+
+        If any exceptions are thrown then you are trying to use an incompatible device.
+
+        Raises:
+            Labware.Base.LabwareNotSupportedError
+
+            HeatCoolShakeDevice.Base.CoolingNotSupportedError
+
+            HeatCoolShakeDevice.Base.HeatingNotSupportedError
+
+            HeatCoolShakeDevice.Base.ShakingNotSupportedError
+        """
         SupportedLabwares = [
             LayoutItem.Labware.Identifier for LayoutItem in self.SupportedLayoutItems
         ]

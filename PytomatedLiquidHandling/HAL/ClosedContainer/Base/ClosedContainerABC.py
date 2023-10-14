@@ -21,6 +21,17 @@ class ClosedContainerABC(InterfaceABC, HALObject):
     SupportedLabwares: list[Labware.Base.LabwareABC]
 
     def ValidateOpenCloseOptions(self, OptionsList: list[OpenCloseOptions]):
+        """Must be called before calling Open, OpenTime, Close, or CloseTime.
+
+        If LabwareNotSupportedError is thrown then you are trying to use the wrong ClosedContainerDevice.
+
+        If DeckLocationNotSupportedError is thrown then you need to move the LayoutItem to a compatible location.
+
+        Raises:
+            Labware.Base.LabwareNotSupportedError
+
+            DeckLocation.Base.DeckLocationNotSupportedError
+        """
         UnsupportedDeckLocations = list()
         UnsupportedLabwares = list()
 

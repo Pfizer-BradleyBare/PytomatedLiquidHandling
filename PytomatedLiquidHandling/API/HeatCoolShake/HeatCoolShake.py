@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.API import DeckManager
-from PytomatedLiquidHandling.API.Tools import Container, ExceptionToBool
+from PytomatedLiquidHandling.API.Tools import Container
 from PytomatedLiquidHandling.HAL import HeatCoolShakeDevices
 
 
@@ -26,6 +26,13 @@ def Reserve(Container: Container.Container, Temperature: float, RPM: int):
     LayoutItems = set(DeckManager.GetLoadedLayoutItems(Container))
     # Set to give us non repeating list
 
+    def ExceptionToBool(ValidateFunction, *args) -> bool:
+        try:
+            ValidateFunction(*args)
+            return True
+        except:
+            return False
+
     PotentialDevices = [
         Device
         for Device in HeatCoolShakeDevices.values()
@@ -34,7 +41,7 @@ def Reserve(Container: Container.Container, Temperature: float, RPM: int):
         and Device.ShakingSupported >= ShakingRequired
         and Device.Identifier not in Reservations
         and all(
-            ExceptionToBool.ExceptionToBool(Device.ValidateOptions, LayoutItem)
+            ExceptionToBool(Device.ValidateOptions, LayoutItem)
             for LayoutItem in LayoutItems
         )
     ]

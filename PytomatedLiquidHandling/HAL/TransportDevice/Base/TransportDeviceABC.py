@@ -66,6 +66,30 @@ class TransportDeviceABC(InterfaceABC, HALObject):
         SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
         DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
     ):
+        """Must be called before calling Transport or TransportTime
+        If LabwareNotEqualError is thrown then your Source and Destination labware are different, which is not supported.
+
+        If TransportDevicesNotCompatibleError is thrown then your Source and Destination require different
+        transport devices for access.
+        Use a transition point to bridge the gap.
+
+        If WrongDeviceTransportOptionsError is thrown then you are trying to use a incompatible device.
+
+        If PickupOptionsNotEqualError is thrown then your Source and Destination require different orientations.
+        Use a transition point to bridge the gap.
+
+
+        Raises:
+            Labware.Base.LabwareNotEqualError
+
+            Labware.Base.LabwareNotSupportedError
+
+            TransportDevice.Base.TransportDevicesNotCompatibleError
+
+            TransportDevice.Base.WrongDeviceTransportOptionsError
+
+            TransportDevice.Base.PickupOptionsNotEqualError
+        """
         if SourceLayoutItem.Labware != DestinationLayoutItem.Labware:
             raise Labware.Base.LabwareNotEqualError(
                 SourceLayoutItem.Labware, DestinationLayoutItem.Labware
@@ -84,19 +108,9 @@ class TransportDeviceABC(InterfaceABC, HALObject):
             raise Labware.Base.LabwareNotSupportedError(UnsupportedLabware)
         # Are both source and destination labware supported by this device?
 
-        SourceTransportDevice = (
+        RequiredTransportDevice = (
             SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
         )
-        DestinationTransportDevice = (
-            DestinationLayoutItem.DeckLocation.TransportConfig.TransportDevice
-        )
-        if SourceTransportDevice != DestinationTransportDevice:
-            raise TransportDevicesNotCompatibleError(
-                SourceTransportDevice, DestinationTransportDevice
-            )
-        # Are the source and destination accessible by the same transport device?
-
-        RequiredTransportDevice = SourceTransportDevice
         if type(self) != type(RequiredTransportDevice):
             raise WrongDeviceTransportOptionsError(self, RequiredTransportDevice)
         # Is this device actually needed by this layout item?
