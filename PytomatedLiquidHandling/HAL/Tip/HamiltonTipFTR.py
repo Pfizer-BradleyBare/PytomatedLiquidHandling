@@ -18,23 +18,7 @@ class HamiltonTipFTR(TipABC):
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         self.BackendInstance.GetResponse(CommandInstance, FTRDriver.LoadTips.Response)
 
-    def GetTipPositions(self, Num: int) -> list[int]:
-        CommandInstance = FTRDriver.GetTipPositions.Command(
-            Options=FTRDriver.GetTipPositions.Options(
-                TipSequence=self.PickupSequence,
-                NumPositions=Num,
-            ),
-            CustomErrorHandling=self.CustomErrorHandling,
-        )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
-            CommandInstance, FTRDriver.GetTipPositions.Response
-        )
-
-        return ResponseInstance.GetTipPositions()
-
-    def GetRemainingTips(self) -> int:
+    def GetTotalRemainingTips(self) -> int:
         CommandInstance = FTRDriver.GetTotalRemainingTips.Command(
             Options=FTRDriver.GetTotalRemainingTips.Options(
                 TipSequence=self.PickupSequence,
@@ -47,4 +31,22 @@ class HamiltonTipFTR(TipABC):
             CommandInstance, FTRDriver.GetTotalRemainingTips.Response
         )
 
-        return ResponseInstance.GetNumRemaining()
+        return ResponseInstance.GetTotalRemaining()
+
+    def GetRemainingSequencePositions(self) -> list[int]:
+        CommandInstance = FTRDriver.GetTotalRemainingTipPositions.Command(
+            Options=FTRDriver.GetTotalRemainingTipPositions.Options(
+                TipSequence=self.PickupSequence,
+            ),
+            CustomErrorHandling=self.CustomErrorHandling,
+        )
+        self.BackendInstance.ExecuteCommand(CommandInstance)
+        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+        ResponseInstance = self.BackendInstance.GetResponse(
+            CommandInstance, FTRDriver.GetTotalRemainingTipPositions.Response
+        )
+
+        return ResponseInstance.GetPositions()
+
+    def GetNextTipLayer(self):
+        raise Exception("Not supported")

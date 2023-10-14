@@ -25,13 +25,43 @@ class HamiltonTipNTR(TipABC):
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
         self.BackendInstance.GetResponse(CommandInstance, NTRDriver.LoadTips.Response)
 
-    def GetTipPositions(self, Num: int) -> list[int]:
+    def GetTotalRemainingTips(self) -> int:
+        CommandInstance = NTRDriver.GetTotalRemainingTips.Command(
+            Options=NTRDriver.GetTotalRemainingTips.Options(
+                TipSequence=self.PickupSequence,
+            ),
+            CustomErrorHandling=self.CustomErrorHandling,
+        )
+        self.BackendInstance.ExecuteCommand(CommandInstance)
+        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+        ResponseInstance = self.BackendInstance.GetResponse(
+            CommandInstance, NTRDriver.GetTotalRemainingTips.Response
+        )
+
+        return ResponseInstance.GetTotalRemaining()
+
+    def GetRemainingSequencePositions(self) -> list[int]:
+        CommandInstance = NTRDriver.GetTotalRemainingTipPositions.Command(
+            Options=NTRDriver.GetTotalRemainingTipPositions.Options(
+                TipSequence=self.PickupSequence
+            ),
+            CustomErrorHandling=self.CustomErrorHandling,
+        )
+
+        self.BackendInstance.ExecuteCommand(CommandInstance)
+        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+        ResponseInstance = self.BackendInstance.GetResponse(
+            CommandInstance, NTRDriver.GetTotalRemainingTipPositions.Response
+        )
+
+        return ResponseInstance.GetPositions()
+
+    def GetNextTipLayer(self):
         CommandInstance = NTRDriver.DiscardCurrentLayer.Command(
             Options=NTRDriver.DiscardCurrentLayer.Options(
                 TipSequence=self.PickupSequence,
                 GeneratedRackWasteSequence=self.GeneratedWasteSequence,
                 GripperSequence=self.GripperSequence,
-                NumPositions=Num,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
@@ -41,20 +71,3 @@ class HamiltonTipNTR(TipABC):
         ResponseInstance = self.BackendInstance.GetResponse(
             CommandInstance, NTRDriver.DiscardCurrentLayer.Response
         )
-
-        return ResponseInstance.GetTipPositions()
-
-    def GetRemainingTips(self) -> int:
-        CommandInstance = NTRDriver.GetNumTips.Command(
-            Options=NTRDriver.GetNumTips.Options(
-                TipSequence=self.PickupSequence,
-            ),
-            CustomErrorHandling=self.CustomErrorHandling,
-        )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
-            CommandInstance, NTRDriver.GetNumTips.Response
-        )
-
-        return ResponseInstance.GetNumRemaining()
