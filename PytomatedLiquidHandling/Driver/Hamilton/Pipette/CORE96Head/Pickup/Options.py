@@ -5,4 +5,4 @@ from .....Tools.AbstractClasses import OptionsABC
 
 @dataclass(kw_only=True)
 class Options(OptionsABC):
-    Sequence: str
+    LabwareID: str

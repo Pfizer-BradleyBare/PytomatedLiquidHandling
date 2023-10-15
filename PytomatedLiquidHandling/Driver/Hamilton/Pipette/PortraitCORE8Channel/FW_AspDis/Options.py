@@ -6,8 +6,8 @@ from enum import Enum
 
 @dataclass(kw_only=True)
 class Options(OptionsABC):
-    Sequence: str
-    Position: int
+    LabwareID: str
+    PositionID: str
 
 
 @dataclass(kw_only=True)
