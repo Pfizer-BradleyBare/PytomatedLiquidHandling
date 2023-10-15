@@ -7,4 +7,4 @@ from .....Tools.AbstractClasses import OptionsABC
 class Options(OptionsABC):
     Sequence: str
     ChannelNumber: int
-    SequencePosition: int
+    PositionID: str

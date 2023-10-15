@@ -28,7 +28,7 @@ class Options(OptionsABC):
 
     ChannelNumber: int
     Sequence: str
-    SequencePosition: int
+    PositionID: str
     LiquidClass: str
     Volume: float
     Mode: ModeOptions = ModeOptions.FromLiquidClassDefinition

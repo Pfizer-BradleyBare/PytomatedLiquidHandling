@@ -4,8 +4,8 @@ from dataclasses import dataclass
 
 @dataclass(kw_only=True)
 class Options(OptionsABC):
-    FlipTubeSequence: str
-    FlipTubeSequencePosition: int
+    Sequence: str
+    PositionID: str
 
 
 @dataclass(kw_only=True)

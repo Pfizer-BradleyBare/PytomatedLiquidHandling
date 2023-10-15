@@ -7,7 +7,7 @@ from enum import Enum
 @dataclass(kw_only=True)
 class Options(OptionsABC):
     Sequence: str
-    SequencePosition: int
+    PositionID: str
 
 
 @dataclass(kw_only=True)
