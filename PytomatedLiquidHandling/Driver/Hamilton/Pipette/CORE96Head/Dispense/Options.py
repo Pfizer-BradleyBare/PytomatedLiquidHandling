@@ -1,5 +1,6 @@
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
+
 from .....Tools.AbstractClasses import OptionsABC
 
 
@@ -26,7 +27,7 @@ class Options(OptionsABC):
         No = 0
         Yes = 1
 
-    LabwareID: str
+    Sequence: str
     LiquidClass: str
     Volume: float
     Mode: ModeOptions = ModeOptions.FromLiquidClassDefinition

@@ -1,6 +1,7 @@
+from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
-from dataclasses import dataclass
+
 from .....Tools.AbstractClasses import OptionsABC
 
 
@@ -23,7 +24,7 @@ class Options(OptionsABC):
         No = 0
         Yes = 1
 
-    LabwareID: str
+    Sequence: str
     LLDSearchHeight: int
     LiquidClass: str
     SettlingTimeStoppable: YesNoOptions

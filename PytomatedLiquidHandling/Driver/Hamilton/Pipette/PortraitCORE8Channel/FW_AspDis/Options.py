@@ -1,13 +1,14 @@
 from dataclasses import dataclass
-from typing import Literal
-from .....Tools.AbstractClasses import OptionsABC
 from enum import Enum
+from typing import Literal
+
+from .....Tools.AbstractClasses import OptionsABC
 
 
 @dataclass(kw_only=True)
 class Options(OptionsABC):
-    LabwareID: str
-    PositionID: str
+    Sequence: str
+    Position: int
 
 
 @dataclass(kw_only=True)
