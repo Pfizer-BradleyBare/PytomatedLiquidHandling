@@ -26,6 +26,9 @@
  namespace _Method { #include "HSLTipCountingLib.hsl" } 
  namespace _ActionServer { #include "HSLTipCountingLib.hsl" } 
  namespace _StateServer { #include "HSLTipCountingLib.hsl" } 
+ namespace _Method { #include "Visual_NTR_library\\Visual_NTR_library.hs_" } 
+ namespace _ActionServer { #include "Visual_NTR_library\\Visual_NTR_library.hs_" } 
+ namespace _StateServer { #include "Visual_NTR_library\\Visual_NTR_library.hs_" } 
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable ActionServer;
 variable StateServer;
@@ -88,6 +91,7 @@ PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
 DRIVER::_InitLibrary();
 LOGGER::_InitLibrary();
 JSONPARSER::_InitLibrary();
+VISUAL_NTR_LIBRARY::_InitLibrary();
 ::RegisterAbortHandler( "OnAbort");
 // }} ""
 // {{ 1 1 0 "62ffc1ee_87f1_4777_bdbf6988152c0a4d" "ML_STAR:{1C0C0CB0-7C87-11D3-AD83-0004ACB1DCB2}"
@@ -123,8 +127,9 @@ if( StateServer == 0 )
 DRIVER::_ExitLibrary();
 LOGGER::_ExitLibrary();
 JSONPARSER::_ExitLibrary();
+VISUAL_NTR_LIBRARY::_ExitLibrary();
 // }} ""
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-10-16 14:26$$checksum=ebcf3ec7$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-10-16 14:41$$checksum=3f11636e$$length=084$$
