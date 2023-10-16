@@ -24,7 +24,7 @@ class Options(OptionsABC):
         No = 0
         Yes = 1
 
-    Sequence: str
+    LabwareID: str
     LLDSearchHeight: int
     LiquidClass: str
     SettlingTimeStoppable: YesNoOptions

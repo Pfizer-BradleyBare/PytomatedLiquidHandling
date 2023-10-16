@@ -23,7 +23,7 @@ class Options(OptionsABC):
         No = 0
         Yes = 1
 
-    Sequence: str
+    LabwareID: str
     LiquidClass: str
     Volume: float
     Mode: ModeOptions = ModeOptions.Aspiration

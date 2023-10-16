@@ -28,8 +28,8 @@ class Options(OptionsABC):
         Yes = 1
 
     ChannelNumber: int
-    Sequence: str
-    Position: int
+    LabwareID: str
+    PositionID: str
     LiquidClass: str
     Volume: float
     Mode: ModeOptions = ModeOptions.FromLiquidClassDefinition
