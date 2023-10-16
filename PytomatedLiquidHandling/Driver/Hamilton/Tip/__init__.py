@@ -1,1 +1,1 @@
-from . import FTR, NTR, HSLTipCountingLib
+from . import HSLTipCountingLib, Visual_NTR_Library
