@@ -1,9 +1,10 @@
-from ....Backend import HamiltonResponseABC
 from dataclasses import dataclass
+
+from ....Backend import HamiltonResponseABC
 
 
 @dataclass
 class Response(HamiltonResponseABC):
     @HamiltonResponseABC.Decorator_ExpectedResponseProperty(SuccessProperty=True)
-    def GetTotalRemaining(self) -> int:
+    def GetAvailablePositions(self) -> list[tuple[str, str]]:
         ...

@@ -23,6 +23,9 @@
  namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_" } 
  namespace _ActionServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_" } 
  namespace _StateServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_" } 
+ namespace _Method { #include "HSLTipCountingLib.hsl" } 
+ namespace _ActionServer { #include "HSLTipCountingLib.hsl" } 
+ namespace _StateServer { #include "HSLTipCountingLib.hsl" } 
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable ActionServer;
 variable StateServer;
@@ -124,4 +127,4 @@ JSONPARSER::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-06-14 13:30$$checksum=780cfc0e$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-10-16 14:26$$checksum=ebcf3ec7$$length=084$$

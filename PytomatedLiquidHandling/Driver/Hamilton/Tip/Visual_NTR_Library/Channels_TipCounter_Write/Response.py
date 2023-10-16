@@ -1,5 +1,6 @@
-from ....Backend import HamiltonResponseABC
 from dataclasses import dataclass
+
+from ....Backend import HamiltonResponseABC
 
 
 @dataclass

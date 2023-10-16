@@ -1,10 +1,8 @@
 import os
 
-
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
 from PytomatedLiquidHandling.Driver.Hamilton.Pipette import PortraitCORE8Channel
-from PytomatedLiquidHandling.Driver.Hamilton.Tip import NTR
-
+from PytomatedLiquidHandling.Driver.Hamilton.Tip import NTR, HSLTipCountingLib
 
 Backend = MicrolabStarBackend(
     "Example Star",
@@ -12,6 +10,7 @@ Backend = MicrolabStarBackend(
 )
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
+
 
 CommandInstance = NTR.LoadTips.Command(
     CustomErrorHandling=False,
