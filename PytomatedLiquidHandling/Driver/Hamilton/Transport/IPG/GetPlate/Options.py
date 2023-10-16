@@ -35,7 +35,7 @@ class Options(OptionsABC):
         PositiveYAxis = 3
         NegativeXAxis = 4
 
-    PlateSequence: str
+    LabwareID: str
     GripWidth: float
     OpenWidth: float
     GripHeight: float = 3

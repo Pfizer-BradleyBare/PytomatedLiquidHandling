@@ -21,8 +21,8 @@ class Options(OptionsABC):
         GripForce8 = 8
         GripForce9 = 9
 
-    GripperSequence: str
-    PlateSequence: str
+    GripperLabwareID: str
+    PlateLabwareID: str
     GripWidth: float
     OpenWidth: float
     GripHeight: float = 3

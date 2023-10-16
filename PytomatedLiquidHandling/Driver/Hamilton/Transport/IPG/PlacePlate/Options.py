@@ -19,7 +19,7 @@ class Options(OptionsABC):
         PositiveYAxis = 3
         NegativeXAxis = 4
 
-    PlateSequence: str
+    LabwareID: str
     Movement: MovementOptions = MovementOptions.Simple
     RetractDistance: float = 0
     LiftupHeight: float = 0
