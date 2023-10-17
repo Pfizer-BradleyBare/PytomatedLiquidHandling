@@ -1,8 +1,21 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import Enum
 
 from .....Tools.AbstractClasses import OptionsABC
 
 
-@dataclass(kw_only=True)
+@dataclass
 class Options(OptionsABC):
-    LabwareIDs: list[str]
+    LabwareID: str
+
+
+@dataclass
+class ListedOptions(list[Options]):
+    class SortingOptions(Enum):
+        RackColumns = 0
+        TierColumns = 1
+
+    TipCounter: str
+    DialogTitle: str
+    Sorting: SortingOptions = SortingOptions.RackColumns
+    Timeout: int = 1000

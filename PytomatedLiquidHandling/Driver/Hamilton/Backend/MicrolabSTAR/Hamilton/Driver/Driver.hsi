@@ -8,8 +8,6 @@
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\TemperatureControl\\HeaterCooler\\HeaterCooler.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\TemperatureControl\\HeaterShaker\\HeaterShaker.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Timer\\Timer.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Tip\\FTR\\FTR.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Tip\\NTR\\NTR.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Transport\\Gripper\\Gripper.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Transport\\IPG\\IPG.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Vacuum\\Vacuum.hs_"
@@ -22,6 +20,8 @@
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\CuttedTipType\\CuttedTipType.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\LabwareAccess\\LabwareAccess.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\LiquidClasses\\LiquidClasses.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\_HSLTipCountingLib\\_HSLTipCountingLib.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\_Visual_NTR_Library\\_Visual_NTR_Library.hs_"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -60,8 +60,6 @@ _96CHANNEL::_InitLibrary();
 HEATERCOOLER::_InitLibrary();
 HEATERSHAKER::_InitLibrary();
 TIMER::_InitLibrary();
-FTR::_InitLibrary();
-NTR::_InitLibrary();
 GRIPPER::_InitLibrary();
 IPG::_InitLibrary();
 VACUUM::_InitLibrary();
@@ -72,6 +70,8 @@ DECKLOADINGDIALOG::_InitLibrary();
 CUTTEDTIPTYPE::_InitLibrary();
 LABWAREACCESS::_InitLibrary();
 LIQUIDCLASSES::_InitLibrary();
+_HSLTIPCOUNTINGLIB::_InitLibrary();
+_VISUAL_NTR_LIBRARY::_InitLibrary();
 // }} ""
 }
 function _ExitLibrary() {
@@ -83,8 +83,6 @@ _96CHANNEL::_ExitLibrary();
 HEATERCOOLER::_ExitLibrary();
 HEATERSHAKER::_ExitLibrary();
 TIMER::_ExitLibrary();
-FTR::_ExitLibrary();
-NTR::_ExitLibrary();
 GRIPPER::_ExitLibrary();
 IPG::_ExitLibrary();
 VACUUM::_ExitLibrary();
@@ -95,6 +93,8 @@ DECKLOADINGDIALOG::_ExitLibrary();
 CUTTEDTIPTYPE::_ExitLibrary();
 LABWAREACCESS::_ExitLibrary();
 LIQUIDCLASSES::_ExitLibrary();
+_HSLTIPCOUNTINGLIB::_ExitLibrary();
+_VISUAL_NTR_LIBRARY::_ExitLibrary();
 // }} ""
 }
 // {{{ 5 "ServeRequest" "Begin"
@@ -305,30 +305,30 @@ return;
 // {{ 79 1 0 "34417adc_a51c_44e4_bc34f81e5fb3a018" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 80 1 0 "d7547067_58e5_48bf_99f68a194a142fbc" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (ModuleName == "Hamilton Tip FTR")
+// {{ 80 1 0 "0d85d77b_4e2a_466d_9c6ada2fab24595e" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (ModuleName == "Hamilton Tip HSLTipCountingLib")
 {
 // }} ""
-// {{{ 81 1 0 "c810f7a7_0e70_4f32_b9126e262c303454" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-FTR::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
+// {{{ 81 1 0 "b131363b_9f7a_4d7c_b7b55a8f9449ae0a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+_HSLTIPCOUNTINGLIB::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 82 1 0 "926e171f_0b61_431d_8ac015cb11a18e54" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 83 1 0 "d7547067_58e5_48bf_99f68a194a142fbc" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 83 1 0 "0d85d77b_4e2a_466d_9c6ada2fab24595e" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 84 1 0 "ce22dc71_e877_4e4f_9ff2336c00de53c2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (ModuleName == "Hamilton Tip NTR")
+// {{ 84 1 0 "4cdcf4f4_da1f_4cd6_a0ce4520c48a56a7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (ModuleName == "Hamilton Tip Visual_NTR_Library")
 {
 // }} ""
-// {{{ 85 1 0 "24790ab2_2ccd_4b30_a0bae1e70ce739c5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-NTR::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
+// {{{ 85 1 0 "f5cee240_7c17_4baa_ab234d874139fe9f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+_VISUAL_NTR_LIBRARY::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 86 1 0 "6e940c5b_a7da_4e6b_bb7c7acbc299d65e" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 87 1 0 "ce22dc71_e877_4e4f_9ff2336c00de53c2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 87 1 0 "4cdcf4f4_da1f_4cd6_a0ce4520c48a56a7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
 // {{ 88 1 0 "34417adc_a51c_44e4_bc34f81e5fb3a018" "{586C3429-F931-405f-9938-928E22C90BFA}"
@@ -526,4 +526,4 @@ ACTIONSERVERENDPOINTS::ServerKill();
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-07-07 14:11$$checksum=9b6f22c8$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-10-17 15:38$$checksum=06cb0e16$$length=084$$

@@ -1,10 +1,10 @@
 
 // this ALWAYS GENERATED file contains the sub-method library header
-// Generated at 6/1/2023 9:23:01 AM
+// Generated at 10/17/2023 5:47:32 PM
 
 #pragma once
 #ifndef HSL_RUNTIME
-namespace NTR {
+namespace _HSLTIPCOUNTINGLIB {
 function _InitLibrary() { }
 function _ExitLibrary() { }
 function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void { }
@@ -14,4 +14,4 @@ function HandleCommand( device & ML_STAR, variable CommandName, object & i_Endpo
 #ifdef HSL_RUNTIME
 #include __filename__ ".hsi"
 #endif
-// $$author=BAREB$$valid=0$$time=2023-06-01 09:23$$checksum=57ed0274$$length=082$$
+// $$author=BAREB$$valid=0$$time=2023-10-17 17:47$$checksum=09db6d11$$length=082$$

@@ -1,7 +1,7 @@
+import logging
 import time
 from dataclasses import dataclass, field
 from typing import Callable
-import logging
 
 from flask import request
 
@@ -92,12 +92,13 @@ class HamiltonServerBackendABC(ServerBackendABC):
             return Response
         # Check the command does not already have a response
 
-        self.ResponseInstance = HamiltonResponseABC(ParserObject.JSON)
-        # Add response then release threads waiting for a response
-
         ParserObject.SetEndpointState(True)
 
         Response = ParserObject.GetHTTPResponse()
+
+        self.ResponseInstance = HamiltonResponseABC(ParserObject.JSON)
+        # Add response then release threads waiting for a response
+
         return Response
 
     Views: list[Callable] = field(init=False, default_factory=list)

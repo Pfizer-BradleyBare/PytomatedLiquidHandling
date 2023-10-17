@@ -3,6 +3,12 @@ from dataclasses import dataclass
 from .....Tools.AbstractClasses import OptionsABC
 
 
-@dataclass(kw_only=True)
+@dataclass
 class Options(OptionsABC):
-    VirtualSequence: list[tuple[str, str]]
+    LabwareID: str
+    PositionID: str
+
+
+@dataclass
+class ListedOptions(list[Options]):
+    TipCounter: str

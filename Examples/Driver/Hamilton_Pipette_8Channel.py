@@ -1,8 +1,11 @@
 import os
 
-from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
+from PytomatedLiquidHandling.Driver.Hamilton.Backend import (
+    HamiltonStateCommandABC,
+    MicrolabStarBackend,
+)
 from PytomatedLiquidHandling.Driver.Hamilton.Pipette import PortraitCORE8Channel
-from PytomatedLiquidHandling.Driver.Hamilton.Tip import NTR, HSLTipCountingLib
+from PytomatedLiquidHandling.Driver.Hamilton.Tip import HSLTipCountingLib
 
 Backend = MicrolabStarBackend(
     "Example Star",
@@ -11,6 +14,31 @@ Backend = MicrolabStarBackend(
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
+ListedOptions = HSLTipCountingLib.Edit.ListedOptions(
+    TipCounter="T", DialogTitle="Edit 1000uL Tip Positions"
+)
+ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0005"))
+ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0003"))
+ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0001"))
+ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0002"))
+ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0004"))
+CommandInstance = HSLTipCountingLib.Edit.Command(
+    CustomErrorHandling=False,
+    ListedOptions=ListedOptions,
+)
+
+Backend.ExecuteCommand(CommandInstance)
+Backend.WaitForResponseBlocking(CommandInstance)
+print("HOWDY!!!")
+print(
+    Backend.GetResponse(
+        CommandInstance, HSLTipCountingLib.Edit.Response
+    ).GetAvailablePositions()
+)
+
+Backend.StopBackend()
+
+quit()
 
 CommandInstance = NTR.LoadTips.Command(
     CustomErrorHandling=False,
