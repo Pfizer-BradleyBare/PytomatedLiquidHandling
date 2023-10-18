@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.Driver.Hamilton import Tools
-
 from .....Tools.AbstractClasses import OptionsABC
 
 
