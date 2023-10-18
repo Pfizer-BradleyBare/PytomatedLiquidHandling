@@ -72,9 +72,9 @@ def LoadYaml(
             PipetteTips: list[PipetteTip] = list()
             for TipDevice in Device["Supported Tips"]:
                 TipIdentifier = TipDevice["Tip Identifier"]
-                DropoffSequence = TipDevice["Tip Support Dropoff Sequence"]
-                PickupSequence = TipDevice["Tip Support Pickup Sequence"]
-                WasteSequence = TipDevice["Waste Sequence"]
+                DropoffLabwareID = TipDevice["Tip Support Dropoff Layout Labware ID"]
+                PickupLabwareID = TipDevice["Tip Support Pickup Layout Labware ID"]
+                WasteLabwareID = TipDevice["Tip Waste Layout Labware ID"]
 
                 SupportedLiquidClassCategories: dict[str, str] = dict()
                 for Category in TipDevice["Supported Liquid Class Categories"]:
@@ -85,9 +85,9 @@ def LoadYaml(
                 PipetteTips.append(
                     PipetteTip(
                         Tips[TipIdentifier],
-                        DropoffSequence,
-                        PickupSequence,
-                        WasteSequence,
+                        DropoffLabwareID,
+                        PickupLabwareID,
+                        WasteLabwareID,
                         SupportedLiquidClassCategories,
                     )
                 )

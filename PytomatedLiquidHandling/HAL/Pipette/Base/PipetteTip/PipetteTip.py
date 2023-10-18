@@ -6,9 +6,9 @@ from PytomatedLiquidHandling.HAL import Tip
 @dataclass
 class PipetteTip:
     TipInstance: Tip.Base.TipABC
-    TipSupportDropoffSequence: str
-    TipSupportPickupSequence: str
-    WasteSequence: str
+    TipSupportDropoffLabwareID: str
+    TipSupportPickupLabwareID: str
+    TipWasteLabwareID: str
     SupportedLiquidClassCategories: dict[str, str]
 
     def IsLiquidClassCategorySupported(self, Category: str) -> bool:

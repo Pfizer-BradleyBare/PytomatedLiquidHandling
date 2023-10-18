@@ -24,25 +24,25 @@ Hamilton 96 Core Head:
 
     Supported Tips:
       - Tip Identifier: 50uL NTR
-        Tip Support Dropoff Sequence: Test
-        Tip Support Pickup Sequence: Test
-        Waste Sequence: Test
+        Tip Support Dropoff Layout Labware ID: Test
+        Tip Support Pickup Layout Labware ID: Test
+        Tip Waste Layout Labware ID: Test
         Supported Liquid Class Categories:
           - Identifier: Default
             Liquid Class Name: Tip_50ul_Water_DispenseSurface_Empty
 
       - Tip Identifier: 300uL NTR
-        Tip Support Dropoff Sequence: Test
-        Tip Support Pickup Sequence: Test
-        Waste Sequence: Test
+        Tip Support Dropoff Layout Labware ID: Test
+        Tip Support Pickup Layout Labware ID: Test
+        Tip Waste Layout Labware ID: Test
         Supported Liquid Class Categories:
           - Identifier: Default
             Liquid Class Name: StandardVolume_Water_DispenseSurface_Empty
 
       - Tip Identifier: 1000uL FTR
-        Tip Support Dropoff Sequence: Test
-        Tip Support Pickup Sequence: Test
-        Waste Sequence: Test
+        Tip Support Dropoff Layout Labware ID: Test
+        Tip Support Pickup Layout Labware ID: Test
+        Tip Waste Layout Labware ID: Test
         Supported Liquid Class Categories:
           - Identifier: Default
             Liquid Class Name: HighVolume_Water_DispenseSurface_Empty
@@ -72,25 +72,25 @@ Hamilton 1mL Channels Portrait:
 
     Supported Tips:
       - Tip Identifier: 50uL NTR
-        Tip Support Dropoff Sequence: Test
-        Tip Support Pickup Sequence: Test
-        Waste Sequence: Test
+        Tip Support Dropoff Layout Labware ID: Test
+        Tip Support Pickup Layout Labware ID: Test
+        Tip Waste Layout Labware ID: Test
         Supported Liquid Class Categories:
           - Identifier: Default
             Liquid Class Name: Tip_50ul_Water_DispenseSurface_Empty
 
       - Tip Identifier: 300uL NTR
-        Tip Support Dropoff Sequence: Test
-        Tip Support Pickup Sequence: Test
-        Waste Sequence: Test
+        Tip Support Dropoff Layout Labware ID: Test
+        Tip Support Pickup Layout Labware ID: Test
+        Tip Waste Layout Labware ID: Test
         Supported Liquid Class Categories:
           - Identifier: Default
             Liquid Class Name: StandardVolume_Water_DispenseSurface_Empty
 
       - Tip Identifier: 1000uL FTR
-        Tip Support Dropoff Sequence: Test
-        Tip Support Pickup Sequence: Test
-        Waste Sequence: Test
+        Tip Support Dropoff Layout Labware ID: Test
+        Tip Support Pickup Layout Labware ID: Test
+        Tip Waste Layout Labware ID: Test
         Supported Liquid Class Categories:
           - Identifier: Default
             Liquid Class Name: HighVolume_Water_DispenseSurface_Empty

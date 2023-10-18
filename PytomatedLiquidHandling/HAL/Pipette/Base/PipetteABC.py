@@ -3,9 +3,8 @@ from dataclasses import dataclass
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
+from PytomatedLiquidHandling.HAL.Tools import AbstractClasses, LabwareAddressing
 
-from ...Tools.AbstractClasses import InterfaceABC
 from .PipetteTip import PipetteTip
 
 Labware.Base.LabwareNotSupportedError
@@ -25,12 +24,12 @@ class LiquidClassCategoryNotSupportedError(BaseException):
 @dataclass(kw_only=True)
 class TransferOptions(OptionsABC):
     SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    SourcePosition: int  # This is the labware well position. Not raw sequence position
+    SourcePosition: LabwareAddressing.AlphaNumericPosition | LabwareAddressing.NumericPosition  # This is the labware well position. Not raw sequence position
     CurrentSourceVolume: float
     SourceMixCycles: int
     SourceLiquidClassCategory: str
     DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    DestinationPosition: int  # This is the labware well position. Not raw sequence position
+    DestinationPosition: LabwareAddressing.AlphaNumericPosition | LabwareAddressing.NumericPosition  # This is the labware well position. Not raw sequence position
     CurrentDestinationVolume: float
     DestinationMixCycles: int
     DestinationLiquidClassCategory: str
@@ -38,7 +37,7 @@ class TransferOptions(OptionsABC):
 
 
 @dataclass
-class PipetteABC(InterfaceABC, HALObject):
+class PipetteABC(AbstractClasses.InterfaceABC, AbstractClasses.HALObject):
     SupportedPipetteTips: list[PipetteTip]
     SupportedLabwares: list[Labware.PipettableLabware]
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
