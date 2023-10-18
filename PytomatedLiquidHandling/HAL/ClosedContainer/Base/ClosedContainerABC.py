@@ -16,7 +16,8 @@ class OpenCloseOptions(OptionsABC):
 
 @dataclass
 class ClosedContainerABC(InterfaceABC, HALObject):
-    ToolSequence: str
+    ToolLabwareID: str
+    ToolPositionID: str
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
     SupportedLabwares: list[Labware.Base.LabwareABC]
 

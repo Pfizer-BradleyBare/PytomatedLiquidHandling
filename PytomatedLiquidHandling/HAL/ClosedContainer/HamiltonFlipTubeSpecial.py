@@ -21,7 +21,7 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
         Options: list[OpenCloseOptions],
     ):
         CommandOptions = FlipTubeDriver.Open.ListedOptions(
-            ToolSequence=self.ToolSequence
+            ToolLabwareID=self.ToolLabwareID, ToolPositionID=self.ToolPositionID
         )
         for OpenCloseOptions in Options:
             if OpenCloseOptions.LayoutItem.Labware in self.SupportedLabwares:
@@ -51,7 +51,7 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
         Options: list[OpenCloseOptions],
     ):
         CommandOptions = FlipTubeDriver.CloseSpecial.ListedOptions(
-            ToolSequence=self.ToolSequence
+            ToolLabwareID=self.ToolLabwareID, ToolPositionID=self.ToolPositionID
         )
         for OpenCloseOptions in Options:
             if OpenCloseOptions.LayoutItem.Labware in self.SupportedLabwares:

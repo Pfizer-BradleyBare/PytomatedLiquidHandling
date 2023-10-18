@@ -1,3 +1,4 @@
+import logging
 import os
 
 import yaml
@@ -8,7 +9,6 @@ from PytomatedLiquidHandling.Driver.Hamilton.Backend.BaseHamiltonBackend import 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 
-import logging
 from . import HamiltonFlipTube, HamiltonFlipTubeSpecial
 from .Base import ClosedContainerABC
 
@@ -65,17 +65,19 @@ def LoadYaml(
             for LabwareID in Device["Supported Labware Identifiers"]:
                 SupportedLabwares.append(Labwares[LabwareID])
 
+            ToolLabwareID = Device["Tool Layout Labware ID"]
+            ToolPositionID = Device["Tool Layout Position ID"]
+
             if DeviceType == "Hamilton FlipTube":
                 if not isinstance(BackendInstance, HamiltonBackendABC):
                     raise Exception("Hamilton FlipTube only accepts Hamilton backends")
-
-                ToolSequence = Device["Tool Sequence"]
 
                 ClosedContainerInstance = HamiltonFlipTube(
                     Identifier,
                     BackendInstance,
                     CustomErrorHandling,
-                    ToolSequence,
+                    ToolLabwareID,
+                    ToolPositionID,
                     SupportedDeckLocations,
                     SupportedLabwares,
                 )
@@ -86,13 +88,12 @@ def LoadYaml(
                         "Hamilton FlipTube Special only accepts Hamilton backends"
                     )
 
-                ToolSequence = Device["Tool Sequence"]
-
                 ClosedContainerInstance = HamiltonFlipTubeSpecial(
                     Identifier,
                     BackendInstance,
                     CustomErrorHandling,
-                    ToolSequence,
+                    ToolLabwareID,
+                    ToolPositionID,
                     SupportedDeckLocations,
                     SupportedLabwares,
                 )

@@ -1,10 +1,10 @@
 
 // this ALWAYS GENERATED file contains the sub-method library header
-// Generated at 5/18/2023 4:09:01 AM
+// Generated at 10/18/2023 10:13:13 AM
 
 #pragma once
 #ifndef HSL_RUNTIME
-namespace IPG {
+namespace GRIPPER {
 function _InitLibrary() { }
 function _ExitLibrary() { }
 function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void { }
@@ -14,4 +14,4 @@ function HandleCommand( device & ML_STAR, variable CommandName, object & i_Endpo
 #ifdef HSL_RUNTIME
 #include __filename__ ".hsi"
 #endif
-// $$author=BAREB$$valid=0$$time=2023-05-18 04:09$$checksum=5937ad3e$$length=082$$
+// $$author=BAREB$$valid=0$$time=2023-10-18 10:13$$checksum=ebf71fc8$$length=082$$

@@ -6,6 +6,7 @@
 #include "HSLErrLib.hsl"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLJson\\HSLJson.hsl"
+#include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -68,10 +69,12 @@ private variable State;
 private variable Message;
 private variable RequestID;
 private object o_JSONObject;
+private variable LabwareID;
+private variable PlateLabwareID;
 // {{ 5 "GetPlate" "InitLocals"
 // }} ""
-// {{{ 1 1 0 "6d0b2b91_d6d1_4ca5_b752c7f4c2f1ee2d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-PlateSequence = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PlateSequence:"));
+// {{{ 1 1 0 "444de72a_e683_415f_9f5fa4c7c6f75639" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+PlateLabwareID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareID:"));
 // }} ""
 // {{{ 2 1 0 "c0edeb69_9148_46b0_9ec0e9c8e9af3eee" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 GripHeight = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:GripHeight:"));
@@ -109,8 +112,8 @@ InverseGrip = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Transla
 // {{{ 13 1 0 "a3974cd3_9ea8_4567_83a18fd42767419c" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 CollisionControl = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CollisionControl:"));
 // }} ""
-// {{{ 14 1 0 "59bb678c_8e1c_428c_97876678d11df1bb" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-DevGetSequenceRef(ML_STAR, PlateSequence, Sequence);
+// {{{ 14 1 0 "74c37411_4170_4846_a037eab7143f71bd" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLLabwrAccess::GetTransportSequenceForLabwareID(ML_STAR, PlateLabwareID, Sequence);
 // }} ""
 // {{ 15 1 0 "ceee0803_598e_4c7c_9fa5f4abffbc5db4" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -198,10 +201,11 @@ private variable State;
 private variable Message;
 private variable RequestID;
 private object o_JSONObject;
+private variable PlateLabwareID;
 // {{ 5 "PlacePlate" "InitLocals"
 // }} ""
-// {{{ 45 1 0 "4cbf6811_b965_40b8_a4188e9f17746c36" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-PlateSequence = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PlateSequence:"));
+// {{{ 45 1 0 "77cb64e9_0bae_4b2e_b58c672a63e20f4b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+PlateLabwareID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareID:"));
 // }} ""
 // {{{ 46 1 0 "8d30adb2_4db2_4e9d_8e3e65b12119d023" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 Movement = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Movement:"));
@@ -218,8 +222,8 @@ LabwareOrientation = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, 
 // {{{ 50 1 0 "271808eb_b841_47af_9d2273970f5c709b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 CollisionControl = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CollisionControl:"));
 // }} ""
-// {{{ 51 1 0 "04a23a02_9820_4507_9c873acec0d8f129" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-DevGetSequenceRef(ML_STAR, PlateSequence, Sequence);
+// {{{ 51 1 0 "79ef78a4_e2dd_49c7_81b71b59bfeaa324" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLLabwrAccess::GetTransportSequenceForLabwareID(ML_STAR, PlateLabwareID, Sequence);
 // }} ""
 // {{ 52 1 0 "1deb8c03_f2c5_4503_95efefc22a1cef0d" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -335,4 +339,4 @@ abort;
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-05-18 04:09$$checksum=44ebd7b1$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-10-18 10:15$$checksum=c9c32106$$length=084$$

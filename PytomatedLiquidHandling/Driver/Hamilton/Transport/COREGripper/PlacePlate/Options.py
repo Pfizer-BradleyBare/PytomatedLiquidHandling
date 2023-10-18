@@ -1,5 +1,6 @@
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
+
 from .....Tools.AbstractClasses import OptionsABC
 
 
@@ -16,7 +17,7 @@ class Options(OptionsABC):
         XSpeed4 = 4
         XSpeed5 = 5
 
-    GripperLabwareID: str
+    LabwareID: str
     EjectTool: YesNoOptions = YesNoOptions.No
     XSpeed: XSpeedOptions = XSpeedOptions.XSpeed4
     ZSpeed: float = 128.7
