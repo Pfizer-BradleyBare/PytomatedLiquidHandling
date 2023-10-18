@@ -13,7 +13,7 @@ class NumericPosition(LabwarePosition):
 
 @dataclass
 class NumericAddressing(LabwareAddressing):
-    def GetColumnwisePosition(self, Position: LabwarePosition) -> str:
+    def _GetColumnwisePosition(self, Position: LabwarePosition) -> str:
         if Position.Value.isnumeric():
             return Position.Value
 
@@ -26,7 +26,7 @@ class NumericAddressing(LabwareAddressing):
 
         return str(Pos)
 
-    def GetRowwisePosition(self, Position: LabwarePosition) -> str:
+    def _GetRowwisePosition(self, Position: LabwarePosition) -> str:
         if Position.Value.isnumeric():
             return Position.Value
 

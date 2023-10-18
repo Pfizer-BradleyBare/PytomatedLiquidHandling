@@ -27,8 +27,10 @@ class HamiltonFlipTube(ClosedContainerABC):
             if OpenCloseOptions.LayoutItem.Labware in self.SupportedLabwares:
                 CommandOptions.append(
                     FlipTubeDriver.Open.Options(
-                        FlipTubeSequence=OpenCloseOptions.LayoutItem.Sequence,
-                        FlipTubeSequencePosition=OpenCloseOptions.Position,
+                        LabwareID=OpenCloseOptions.LayoutItem.LabwareID,
+                        PositionID=OpenCloseOptions.LayoutItem.Labware.LabwareAddressing.GetPosition(
+                            OpenCloseOptions.Position
+                        ),
                     )
                 )
 
@@ -57,8 +59,10 @@ class HamiltonFlipTube(ClosedContainerABC):
             if OpenCloseOptions.LayoutItem.Labware in self.SupportedLabwares:
                 CommandOptions.append(
                     FlipTubeDriver.Close.Options(
-                        FlipTubeSequence=OpenCloseOptions.LayoutItem.Sequence,
-                        FlipTubeSequencePosition=OpenCloseOptions.Position,
+                        LabwareID=OpenCloseOptions.LayoutItem.LabwareID,
+                        PositionID=OpenCloseOptions.LayoutItem.Labware.LabwareAddressing.GetPosition(
+                            OpenCloseOptions.Position
+                        ),
                     )
                 )
 

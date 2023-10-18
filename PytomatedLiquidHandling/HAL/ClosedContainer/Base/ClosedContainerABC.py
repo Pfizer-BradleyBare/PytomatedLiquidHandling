@@ -3,19 +3,17 @@ from dataclasses import dataclass
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
-
-from ...Tools.AbstractClasses import InterfaceABC
+from PytomatedLiquidHandling.HAL.Tools import AbstractClasses, LabwareAddressing
 
 
 @dataclass(kw_only=True)
 class OpenCloseOptions(OptionsABC):
     LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    Position: int
+    Position: LabwareAddressing.AlphaNumericPosition | LabwareAddressing.NumericPosition
 
 
 @dataclass
-class ClosedContainerABC(InterfaceABC, HALObject):
+class ClosedContainerABC(AbstractClasses.InterfaceABC, AbstractClasses.HALObject):
     ToolLabwareID: str
     ToolPositionID: str
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]

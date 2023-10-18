@@ -14,7 +14,7 @@ class AlphaNumericPosition(LabwarePosition):
 
 @dataclass
 class AlphaNumericAddressing(LabwareAddressing):
-    def GetColumnwisePosition(self, Position: LabwarePosition) -> str:
+    def _GetColumnwisePosition(self, Position: LabwarePosition) -> str:
         if (
             Position.Value.isalnum()
             and not Position.Value.isalpha()
@@ -30,7 +30,7 @@ class AlphaNumericAddressing(LabwareAddressing):
 
         return CharacterPortion + NumberPortion
 
-    def GetRowwisePosition(self, Position: LabwarePosition) -> str:
+    def _GetRowwisePosition(self, Position: LabwarePosition) -> str:
         if (
             Position.Value.isalnum()
             and not Position.Value.isalpha()
