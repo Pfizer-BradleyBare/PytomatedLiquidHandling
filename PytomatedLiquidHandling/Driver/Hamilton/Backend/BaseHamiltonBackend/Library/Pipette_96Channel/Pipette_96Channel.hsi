@@ -3,11 +3,11 @@
 // }} ""
 #include "HSLSeqLib.hsl"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Pipette\\Tools\\PipetteTools.hs_"
 #include "HSLErrLib.hsl"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLJson\\HSLJson.hsl"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Pipette\\Tools\\STAR_Channel_MPH_fwCmd.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\STAR_Channel_MPH_fwCmd\\STAR_Channel_MPH_fwCmd.hs_"
+#include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -15,7 +15,7 @@
 #include "HSLPTLLib.hsl"
 // }} ""
 // {{{ 2 "LibraryNamespace" "Begin"
-namespace _96CHANNEL {
+namespace PIPETTE_96CHANNEL {
 // }} ""
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{{ 2 "SubmethodForwardDeclaration" ""
@@ -25,7 +25,6 @@ private function Eject( device & ML_STAR, object & i_EndpointOutputDataJSONObjec
 private function FW_AspDis( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
 function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void ;
 private function Pickup( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
-function _Get96PositionSequence( device & ML_STAR, variable SequenceString, sequence & Sequence ) void ;
 // }} ""
 function _InitLibrary() {
 // {{ 2 "AutoInitBlock" ""
@@ -42,7 +41,6 @@ PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
 PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
 PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
 JSONPARSER::_InitLibrary();
-PIPETTETOOLS::_InitLibrary();
 ACTIONSERVERENDPOINTS::_InitLibrary();
 STAR_CHANNEL_MPH_FWCMD::_InitLibrary();
 // }} ""
@@ -50,7 +48,6 @@ STAR_CHANNEL_MPH_FWCMD::_InitLibrary();
 function _ExitLibrary() {
 // {{ 2 "AutoExitBlock" ""
 JSONPARSER::_ExitLibrary();
-PIPETTETOOLS::_ExitLibrary();
 ACTIONSERVERENDPOINTS::_ExitLibrary();
 STAR_CHANNEL_MPH_FWCMD::_ExitLibrary();
 // }} ""
@@ -76,10 +73,12 @@ private variable State;
 private variable Message;
 private object o_JSONObject;
 private variable SequenceString;
+private variable LabwareIDArray[];
+private variable LabwareID;
 // {{ 5 "Aspirate" "InitLocals"
 // }} ""
-// {{{ 1 1 0 "13f1cffa_f40d_4e04_845c55a0896aa669" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-SequenceString = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Sequence:"));
+// {{{ 1 1 0 "03bac922_0083_4704_a015e7413a60b447" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareID:"));
 // }} ""
 // {{{ 2 1 0 "d2f1b8b6_a00f_446b_9389390397f7f4a4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 Volume = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Volume:"));
@@ -114,8 +113,8 @@ MixPosition = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Transla
 // {{{ 12 1 0 "97614925_d394_4ee1_b4c760a028a438b1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 MixVolume = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:MixVolume:"));
 // }} ""
-// {{{ 13 1 0 "e6fe34f9_94d2_48e2_b551cbc8e410b259" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-_Get96PositionSequence(ML_STAR, SequenceString, Sequence);
+// {{{ 13 1 0 "85917b68_f953_40a6_ac8d0d13ec2039c9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLLabwrAccess::GetDefaultSequenceForLabwareID(ML_STAR, LabwareID, 0, Sequence);
 // }} ""
 // {{{ 14 1 0 "4ed459b5_4ad8_4067_beff654369207321" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 SeqEnd = SeqGetTotal(Sequence);
@@ -218,10 +217,12 @@ private variable State;
 private variable Message;
 private object o_JSONObject;
 private variable SequenceString;
+private variable LabwareIDArray[];
+private variable LabwareID;
 // {{ 5 "Dispense" "InitLocals"
 // }} ""
-// {{{ 36 1 0 "926d2530_7ead_41e5_8bcbbe5680fdea36" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-SequenceString = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Sequence:"));
+// {{{ 36 1 0 "2e9e5c56_0c86_4685_976ef6a7317e319b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareID:"));
 // }} ""
 // {{{ 37 1 0 "a950b372_e044_4dbb_99d88b4393436634" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 Volume = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Volume:"));
@@ -259,8 +260,8 @@ MixPosition = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Transla
 // {{{ 48 1 0 "a9181df2_d0f4_4a8b_bfc33ce62fa40fb5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 MixVolume = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:MixVolume:"));
 // }} ""
-// {{{ 49 1 0 "bd11a7bb_9ade_4a3a_a1688f7c8e8dde7c" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-_Get96PositionSequence(ML_STAR, SequenceString, Sequence);
+// {{{ 49 1 0 "827b1210_7163_4633_bc4e73fc6aabe6bf" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLLabwrAccess::GetDefaultSequenceForLabwareID(ML_STAR, LabwareID, 0, Sequence);
 // }} ""
 // {{{ 50 1 0 "00045a48_080a_4d14_9b6f68f6c096b28d" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 SeqEnd = SeqGetTotal(Sequence);
@@ -351,13 +352,15 @@ private variable State;
 private variable Message;
 private object o_JSONObject;
 private variable SequenceString;
+private variable LabwareIDArray[];
+private variable LabwareID;
 // {{ 5 "Pickup" "InitLocals"
 // }} ""
-// {{{ 162 1 0 "9ea5a3f0_97bf_44cb_aeb624444f83763b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-SequenceString = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Sequence:"));
+// {{{ 162 1 0 "5b1a9de2_56db_4afc_83d5d73d2dae5d76" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareID:"));
 // }} ""
-// {{{ 163 1 0 "cccc86c6_9f91_4714_af06da8f6b1ad458" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-_Get96PositionSequence(ML_STAR, SequenceString, Sequence);
+// {{{ 163 1 0 "9bceba9a_efa2_4e72_a7393afb464dacd6" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLLabwrAccess::GetDefaultSequenceForLabwareID(ML_STAR, LabwareID, 0, Sequence);
 // }} ""
 // {{{ 164 1 0 "20661842_688d_4206_a1b3c519cf611c69" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 SeqEnd = SeqGetTotal(Sequence);
@@ -448,13 +451,15 @@ private variable SeqEnd;
 private sequence Sequence;
 private object o_JSONObject;
 private variable SequenceString;
+private variable LabwareIDArray[];
+private variable LabwareID;
 // {{ 5 "Eject" "InitLocals"
 // }} ""
-// {{{ 72 1 0 "755877f0_48e5_4876_8a9685d41379bc1f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-SequenceString = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Sequence:"));
+// {{{ 72 1 0 "1c95689b_fb2e_4eb0_ac80c5cb4b852130" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareID:"));
 // }} ""
-// {{{ 73 1 0 "b48cd4d8_0ab1_454b_ae0c0ad3118dda57" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-_Get96PositionSequence(ML_STAR, SequenceString, Sequence);
+// {{{ 73 1 0 "31b606f1_2200_41b4_ab72d57eea036972" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLLabwrAccess::GetDefaultSequenceForLabwareID(ML_STAR, LabwareID, 0, Sequence);
 // }} ""
 // {{{ 74 1 0 "d9e892a2_2ff8_4bc6_97761e61c99246b3" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 SeqEnd = SeqGetTotal(Sequence);
@@ -614,42 +619,6 @@ abort;
 // {{{ 5 "HandleCommand" "End"
 }
 // }} ""
-// {{{ 5 "_Get96PositionSequence" "Begin"
-function _Get96PositionSequence( device & ML_STAR, variable SequenceString, sequence & Sequence ) void {
-// }} ""
-private variable Counter;
-private variable SequenceStringArray[];
-private variable SequencePositionsArray[];
-// {{ 5 "_Get96PositionSequence" "InitLocals"
-// }} ""
-// {{ 186 1 0 "923ff341_774c_4bcf_83e12a620e95801b" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
-SequenceStringArray.SetSize(0);
-// }} ""
-// {{ 187 1 0 "3ecc9852_c3c7_43bc_b1cbafe86f79088c" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
-SequencePositionsArray.SetSize(0);
-// }} ""
-// {{ 188 1 0 "19e8faba_77c0_4a80_a9150ac1e14a243b" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
-{
-for(Counter = 0; Counter < 96;)
-{
-Counter = Counter + 1;
-// }} ""
-// {{ 189 1 0 "fd72167d_7b31_4b6c_bc3b652ebdbd54aa" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
-SequenceStringArray.AddAsLast(SequenceString);
-// }} ""
-// {{ 190 1 0 "5ad95002_357c_4324_8cb05f8455b7a0f0" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
-SequencePositionsArray.AddAsLast(Counter);
-// }} ""
-// {{ 191 1 0 "19e8faba_77c0_4a80_a9150ac1e14a243b" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
-}
-}
-// }} ""
-// {{{ 192 1 0 "efc8e080_2e5e_4017_bbbf8b2640c1cdfe" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-PIPETTETOOLS::CreateSequence(ML_STAR, SequenceStringArray, SequencePositionsArray, Sequence);
-// }} ""
-// {{{ 5 "_Get96PositionSequence" "End"
-}
-// }} ""
 // {{{ 5 "FW_AspDis" "Begin"
 private function FW_AspDis( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
@@ -679,10 +648,12 @@ private variable DispenseTraverseAfterDispense;
 private variable DispenseBlowoutVolume;
 private variable DispenseVolume;
 private variable DispenseAdditionalSettlingTime;
+private variable LabwareIDArray[];
+private variable LabwareID;
 // {{ 5 "FW_AspDis" "InitLocals"
 // }} ""
-// {{{ 96 1 0 "021fc2c0_7050_4c14_af7d8a46d52e9053" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-SequenceString = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:Sequence:"));
+// {{{ 96 1 0 "82ee2fb9_81f8_44fa_a26efb26290cb008" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareID:"));
 // }} ""
 // {{{ 97 1 0 "9b9f2012_4b58_4dc9_9f6a2a225fda9168" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 LLDSearchHeight = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LLDSearchHeight:"));
@@ -741,8 +712,8 @@ DispenseAdditionalSettlingTime = JSONPARSER::GetJSONElement(i_EndpointOutputData
 // {{{ 115 1 0 "c92cc991_35db_41d9_846faf1a561de471" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 DispenseBlowoutVolume = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:DispenseBlowoutVolume:"));
 // }} ""
-// {{{ 116 1 0 "310c899d_5828_4e6a_a8f28b4f3d03ecd1" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-_Get96PositionSequence(ML_STAR, SequenceString, Sequence);
+// {{{ 116 1 0 "ca1995c3_dd00_4787_907b2d6a4e0635a4" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLLabwrAccess::GetDefaultSequenceForLabwareID(ML_STAR, LabwareID, 0, Sequence);
 // }} ""
 // {{{ 117 1 0 "8992f266_247d_4cfb_82a5a81e8d9c3cbd" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 SeqEnd = SeqGetTotal(Sequence);
@@ -821,4 +792,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-06-02 12:39$$checksum=09288c38$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-10-18 09:52$$checksum=d8dbc16c$$length=084$$

@@ -1,18 +1,17 @@
 
 // this ALWAYS GENERATED file contains the sub-method library header
-// Generated at 6/2/2023 12:39:37 PM
+// Generated at 10/18/2023 9:52:56 AM
 
 #pragma once
 #ifndef HSL_RUNTIME
-namespace _96CHANNEL {
+namespace PIPETTE_96CHANNEL {
 function _InitLibrary() { }
 function _ExitLibrary() { }
 function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void { }
-function _Get96PositionSequence( device & ML_STAR, variable SequenceString, sequence & Sequence ) void { }
 } // namespace
 #endif
 
 #ifdef HSL_RUNTIME
 #include __filename__ ".hsi"
 #endif
-// $$author=BAREB$$valid=0$$time=2023-06-02 12:39$$checksum=be9f7af6$$length=082$$
+// $$author=BAREB$$valid=0$$time=2023-10-18 09:52$$checksum=1d6566ec$$length=082$$

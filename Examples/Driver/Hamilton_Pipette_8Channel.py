@@ -1,12 +1,6 @@
 import os
 
-print(180 % 180)
-quit()
-
-from PytomatedLiquidHandling.Driver.Hamilton.Backend import (
-    HamiltonStateCommandABC,
-    MicrolabStarBackend,
-)
+from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
 from PytomatedLiquidHandling.Driver.Hamilton.Pipette import PortraitCORE8Channel
 from PytomatedLiquidHandling.Driver.Hamilton.Tip import Visual_NTR_Library
 
@@ -51,73 +45,19 @@ CommandInstance = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
 
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-
 AvailablePositions = Backend.GetResponse(
     CommandInstance, Visual_NTR_Library.Channels_TipCounter_Edit.Response
 ).GetAvailablePositions()
-print(len(AvailablePositions))
 
-
-ListedOptions = Visual_NTR_Library.Channels_TipCounter_Write.ListedOptions(
-    TipCounter="N"
-)
-for Pos in AvailablePositions[96:]:
-    ListedOptions.append(
-        Visual_NTR_Library.Channels_TipCounter_Write.Options(
-            LabwareID=Pos["LabwareID"], PositionID=Pos["PositionID"]
-        )
-    )
-CommandInstance = Visual_NTR_Library.Channels_TipCounter_Write.Command(
-    CustomErrorHandling=False, ListedOptions=ListedOptions
-)
-Backend.ExecuteCommand(CommandInstance)
-Backend.WaitForResponseBlocking(CommandInstance)
-Backend.GetResponse(
-    CommandInstance, Visual_NTR_Library.Channels_TipCounter_Write.Response
-)
-
-
-Backend.StopBackend()
-
-quit()
-
-CommandInstance = NTR.LoadTips.Command(
-    CustomErrorHandling=False,
-    Options=NTR.LoadTips.Options(
-        TipSequence="seq_Tips_NTR_50ul",
-        RackWasteSequence="Tip50_NTR_Waste",
-        GripperSequence="seq_COREGripTool",
-    ),
-)
-
-Backend.ExecuteCommand(CommandInstance)
-Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, NTR.LoadTips.Response)
-GeneratedWasteSequence = ResponseInstance.GetGeneratedWasteSequence()
-# Load the tips on the deck. This makes sure the tip sequence is setup correctly
-
-CommandInstance = NTR.DiscardCurrentLayer.Command(
-    CustomErrorHandling=False,
-    Options=NTR.DiscardCurrentLayer.Options(
-        TipSequence="seq_Tips_NTR_50ul",
-        GeneratedRackWasteSequence=GeneratedWasteSequence,
-        GripperSequence="seq_COREGripTool",
-        NumPositions=8,
-    ),
-)
-Backend.ExecuteCommand(CommandInstance)
-Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(
-    CommandInstance, NTR.DiscardCurrentLayer.Response
-)
-TipPositions = ResponseInstance.GetTipPositions()
-# Get the tip positions for our tip pickup
+TipPositions = AvailablePositions[:8]
 
 ListedOptions = list()
 for i, Position in enumerate(TipPositions):
     ListedOptions.append(
         PortraitCORE8Channel.Pickup.Options(
-            Sequence="seq_Tips_NTR_50ul", ChannelNumber=i + 1, SequencePosition=Position
+            LabwareID=Position["LabwareID"],
+            PositionID=Position["PositionID"],
+            ChannelNumber=i + 1,
         )
     )
 CommandInstance = PortraitCORE8Channel.Pickup.Command(
@@ -135,8 +75,8 @@ for i, Position in enumerate(TipPositions):
     ListedOptions.append(
         PortraitCORE8Channel.Aspirate.Options(
             ChannelNumber=i + 1,
-            Sequence="F32",
-            SequencePosition=i + 1,
+            LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
+            PositionID="32",
             LiquidClass="Tip_50ul_Water_DispenseSurface_Empty",
             Volume=25,
         )
@@ -156,8 +96,8 @@ for i, Position in enumerate(TipPositions):
     ListedOptions.append(
         PortraitCORE8Channel.Dispense.Options(
             ChannelNumber=i + 1,
-            Sequence="F32",
-            SequencePosition=i + 1,
+            LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
+            PositionID="32",
             LiquidClass="Tip_50ul_Water_DispenseSurface_Empty",
             Volume=25,
         )
@@ -176,7 +116,9 @@ ListedOptions = list()
 for i, Position in enumerate(TipPositions):
     ListedOptions.append(
         PortraitCORE8Channel.Eject.Options(
-            Sequence="Waste08", ChannelNumber=i + 1, SequencePosition=i + 1
+            LabwareID="Waste",
+            ChannelNumber=i + 1,
+            PositionID=str(i + 1),
         )
     )
 CommandInstance = PortraitCORE8Channel.Eject.Command(
@@ -188,3 +130,22 @@ ResponseInstance = Backend.GetResponse(
     CommandInstance, PortraitCORE8Channel.Eject.Response
 )
 # Eject some tips
+
+
+ListedOptions = Visual_NTR_Library.Channels_TipCounter_Write.ListedOptions(
+    TipCounter="N"
+)
+for Pos in AvailablePositions[8:]:
+    ListedOptions.append(
+        Visual_NTR_Library.Channels_TipCounter_Write.Options(
+            LabwareID=Pos["LabwareID"], PositionID=Pos["PositionID"]
+        )
+    )
+CommandInstance = Visual_NTR_Library.Channels_TipCounter_Write.Command(
+    CustomErrorHandling=False, ListedOptions=ListedOptions
+)
+Backend.ExecuteCommand(CommandInstance)
+Backend.WaitForResponseBlocking(CommandInstance)
+Backend.GetResponse(
+    CommandInstance, Visual_NTR_Library.Channels_TipCounter_Write.Response
+)

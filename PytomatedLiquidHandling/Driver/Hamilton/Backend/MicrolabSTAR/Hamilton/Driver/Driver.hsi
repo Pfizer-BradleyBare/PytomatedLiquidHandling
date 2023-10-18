@@ -3,8 +3,8 @@
 // }} ""
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\ClosedContainer\\FlipTube\\Fliptube.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Pipette\\8Channel\\8Channel.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Pipette\\96Channel\\96Channel.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Pipette_8Channel\\Pipette_8Channel.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Pipette_96Channel\\Pipette_96Channel.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\TemperatureControl\\HeaterCooler\\HeaterCooler.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\TemperatureControl\\HeaterShaker\\HeaterShaker.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Timer\\Timer.hs_"
@@ -55,8 +55,8 @@ PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
 PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
 JSONPARSER::_InitLibrary();
 FLIPTUBE::_InitLibrary();
-_8CHANNEL::_InitLibrary();
-_96CHANNEL::_InitLibrary();
+PIPETTE_8CHANNEL::_InitLibrary();
+PIPETTE_96CHANNEL::_InitLibrary();
 HEATERCOOLER::_InitLibrary();
 HEATERSHAKER::_InitLibrary();
 TIMER::_InitLibrary();
@@ -78,8 +78,8 @@ function _ExitLibrary() {
 // {{ 2 "AutoExitBlock" ""
 JSONPARSER::_ExitLibrary();
 FLIPTUBE::_ExitLibrary();
-_8CHANNEL::_ExitLibrary();
-_96CHANNEL::_ExitLibrary();
+PIPETTE_8CHANNEL::_ExitLibrary();
+PIPETTE_96CHANNEL::_ExitLibrary();
 HEATERCOOLER::_ExitLibrary();
 HEATERSHAKER::_ExitLibrary();
 TIMER::_ExitLibrary();
@@ -226,8 +226,8 @@ return;
 if (ModuleName == "Hamilton Pipette PortraitCORE8Channel")
 {
 // }} ""
-// {{{ 55 1 0 "d131fe0d_1c54_4378_a7a1aacb248e978a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-_8CHANNEL::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
+// {{{ 55 1 0 "f884f8c5_db7d_4a7c_b1502d3453e6b9e7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+PIPETTE_8CHANNEL::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 56 1 0 "3704dedc_4752_4729_abfe9d30e8a1779f" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
@@ -239,8 +239,8 @@ return;
 if (ModuleName == "Hamilton Pipette CORE96Head")
 {
 // }} ""
-// {{{ 59 1 0 "b1413362_946a_47f6_8c3104ba4e9942be" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-_96CHANNEL::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
+// {{{ 59 1 0 "a7eb3d5b_9559_4758_b1ba7ac50f945289" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+PIPETTE_96CHANNEL::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 60 1 0 "f97e7ee2_635c_4c92_af15cb0b112c5a6a" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
@@ -526,4 +526,4 @@ ACTIONSERVERENDPOINTS::ServerKill();
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-10-17 15:38$$checksum=06cb0e16$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-10-18 09:51$$checksum=38f4efbc$$length=084$$

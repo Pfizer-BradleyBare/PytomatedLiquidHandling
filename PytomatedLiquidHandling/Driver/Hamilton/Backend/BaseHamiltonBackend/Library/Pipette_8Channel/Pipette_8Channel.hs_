@@ -1,13 +1,13 @@
 
 // this ALWAYS GENERATED file contains the sub-method library header
-// Generated at 5/31/2023 4:51:59 PM
+// Generated at 10/18/2023 9:52:32 AM
 
 #pragma once
 #ifndef HSL_RUNTIME
-namespace PIPETTETOOLS {
+namespace PIPETTE_8CHANNEL {
 function _InitLibrary() { }
 function _ExitLibrary() { }
-function CreateSequence( device & ML_STAR, variable & i_SequenceNameArray[], variable & i_SequencePositionArray[], sequence & o_Sequence ) void { }
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void { }
 function PadArray( variable & io_Array[], variable & PadIndices[] ) void { }
 } // namespace
 #endif
@@ -15,4 +15,4 @@ function PadArray( variable & io_Array[], variable & PadIndices[] ) void { }
 #ifdef HSL_RUNTIME
 #include __filename__ ".hsi"
 #endif
-// $$author=BAREB$$valid=0$$time=2023-05-31 16:51$$checksum=da1d9292$$length=082$$
+// $$author=BAREB$$valid=0$$time=2023-10-18 09:52$$checksum=d5084829$$length=082$$
