@@ -5,7 +5,7 @@ from PytomatedLiquidHandling.Driver.Hamilton.Backend import (
     MicrolabStarBackend,
 )
 from PytomatedLiquidHandling.Driver.Hamilton.Pipette import PortraitCORE8Channel
-from PytomatedLiquidHandling.Driver.Hamilton.Tip import HSLTipCountingLib
+from PytomatedLiquidHandling.Driver.Hamilton.Tip import Visual_NTR_Library
 
 Backend = MicrolabStarBackend(
     "Example Star",
@@ -14,15 +14,34 @@ Backend = MicrolabStarBackend(
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
-ListedOptions = HSLTipCountingLib.Edit.ListedOptions(
-    TipCounter="T", DialogTitle="Edit 1000uL Tip Positions"
+ListedOptions = Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
+    TipCounter="N", DialogTitle="Edit 1000uL Tip Positions"
 )
-ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0005"))
-ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0003"))
-ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0001"))
-ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0002"))
-ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0004"))
-CommandInstance = HSLTipCountingLib.Edit.Command(
+ListedOptions.append(
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0001_0001")
+)
+ListedOptions.append(
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0001_0002")
+)
+ListedOptions.append(
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0001_0003")
+)
+ListedOptions.append(
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0001_0004")
+)
+ListedOptions.append(
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0002_0001")
+)
+ListedOptions.append(
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0002_0002")
+)
+ListedOptions.append(
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0002_0003")
+)
+ListedOptions.append(
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0002_0004")
+)
+CommandInstance = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
     CustomErrorHandling=False,
     ListedOptions=ListedOptions,
 )
@@ -31,22 +50,27 @@ Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
 
 AvailablePositions = Backend.GetResponse(
-    CommandInstance, HSLTipCountingLib.Edit.Response
+    CommandInstance, Visual_NTR_Library.Channels_TipCounter_Edit.Response
 ).GetAvailablePositions()
 
-ListedOptions = HSLTipCountingLib.Write.ListedOptions(TipCounter="T")
+
+ListedOptions = Visual_NTR_Library.Channels_TipCounter_Write.ListedOptions(
+    TipCounter="N"
+)
 for Pos in AvailablePositions[96:]:
     ListedOptions.append(
-        HSLTipCountingLib.Write.Options(
+        Visual_NTR_Library.Channels_TipCounter_Write.Options(
             LabwareID=Pos["LabwareID"], PositionID=Pos["PositionID"]
         )
     )
-CommandInstance = HSLTipCountingLib.Write.Command(
+CommandInstance = Visual_NTR_Library.Channels_TipCounter_Write.Command(
     CustomErrorHandling=False, ListedOptions=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-Backend.GetResponse(CommandInstance, HSLTipCountingLib.Write.Response)
+Backend.GetResponse(
+    CommandInstance, Visual_NTR_Library.Channels_TipCounter_Write.Response
+)
 
 
 Backend.StopBackend()

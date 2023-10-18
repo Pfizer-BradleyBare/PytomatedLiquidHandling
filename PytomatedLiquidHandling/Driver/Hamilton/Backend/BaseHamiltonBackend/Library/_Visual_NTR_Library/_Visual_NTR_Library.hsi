@@ -8,6 +8,7 @@
 #include "HSLSeqLib.hsl"
 #include "Visual_NTR_library\\Visual_NTR_library.hs_"
 #include "HSLTipCountingLib.hsl"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\StateServerEndpoints\\StateServerEndpoints.hs_"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -40,6 +41,7 @@ PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
 JSONPARSER::_InitLibrary();
 ACTIONSERVERENDPOINTS::_InitLibrary();
 VISUAL_NTR_LIBRARY::_InitLibrary();
+STATESERVERENDPOINTS::_InitLibrary();
 // }} ""
 }
 function _ExitLibrary() {
@@ -47,6 +49,7 @@ function _ExitLibrary() {
 JSONPARSER::_ExitLibrary();
 ACTIONSERVERENDPOINTS::_ExitLibrary();
 VISUAL_NTR_LIBRARY::_ExitLibrary();
+STATESERVERENDPOINTS::_ExitLibrary();
 // }} ""
 }
 // {{{ 5 "_Write" "Begin"
@@ -132,8 +135,8 @@ TipCount::Write2(Seq, TipCounter, ML_STAR);
 // {{{ 79 1 0 "8be5f2de_0edf_4a70_91aafe3c38f2859b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{{ 80 1 0 "cfc5791d_c185_4a33_adfaeb7a74882c86" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ACTIONSERVERENDPOINTS::RespondToCommand(State, Message, o_JSONObject);
+// {{{ 80 1 0 "204073e1_4cb6_4006_a2a3bd79c563039b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+STATESERVERENDPOINTS::RespondToCommand(State, Message, o_JSONObject);
 // }} ""
 // {{{ 81 1 0 "3adf1c5a_3721_4546_8457254f90e6b3a9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
@@ -149,8 +152,8 @@ function HandleCommand( device & ML_STAR, variable CommandName, object & i_Endpo
 // }} ""
 // {{ 5 "HandleCommand" "InitLocals"
 // }} ""
-// {{ 1 1 0 "a2beca2b_5abd_4ffc_b68cea332ae2e699" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "Edit")
+// {{ 1 1 0 "318feb5a_fbb9_4ae7_bd12de6924cc20df" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "Channels_TipCounter_Edit")
 {
 // }} ""
 // {{{ 2 1 0 "36f1db85_f9a0_48ba_b8cba5f9d580bd8f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -159,11 +162,11 @@ _Edit(ML_STAR, i_EndpointOutputDataJSONObject);
 // {{{ 3 1 0 "70160f8d_a9e8_4e2b_b7590a4a5ef2aa32" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 4 1 0 "a2beca2b_5abd_4ffc_b68cea332ae2e699" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 4 1 0 "318feb5a_fbb9_4ae7_bd12de6924cc20df" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 5 1 0 "40bb4488_7844_4d53_85d56dfa5206d549" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "Write")
+// {{ 5 1 0 "d39d62ea_4a95_4fd6_a55321bd44b1a5ee" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "Channels_TipCounter_Write")
 {
 // }} ""
 // {{{ 6 1 0 "fe864dac_125a_4d52_82bef2cb986102ba" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -172,7 +175,7 @@ _Write(ML_STAR, i_EndpointOutputDataJSONObject);
 // {{{ 7 1 0 "8d9e216a_aecb_4a58_88d727253c526f08" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 8 1 0 "40bb4488_7844_4d53_85d56dfa5206d549" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 8 1 0 "d39d62ea_4a95_4fd6_a55321bd44b1a5ee" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
 // {{ 9 1 0 "7eba0f5d_73bc_4c95_9aaf8fb35768504f" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
@@ -385,4 +388,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-10-17 15:36$$checksum=4a7fa3aa$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-10-17 19:50$$checksum=01438f82$$length=084$$
