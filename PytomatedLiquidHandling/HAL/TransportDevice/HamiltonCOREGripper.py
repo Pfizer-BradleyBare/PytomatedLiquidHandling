@@ -14,7 +14,7 @@ from .Base import TransportDeviceABC
 @dataclass
 class HamiltonCOREGripper(TransportDeviceABC):
     BackendInstance: HamiltonBackendABC
-    GripperToolSequence: str
+    GripperLabwareID: str
 
     @dataclass
     class PickupOptions(TransportDeviceABC.PickupOptions):
@@ -48,8 +48,8 @@ class HamiltonCOREGripper(TransportDeviceABC):
         Labware = SourceLayoutItem.Labware
 
         GetPlateOptionsInstance = COREGripperDriver.GetPlate.Options(
-            GripperSequence=self.GripperToolSequence,
-            PlateSequence=SourceLayoutItem.Sequence,
+            GripperLabwareID=self.GripperLabwareID,
+            PlateLabwareID=SourceLayoutItem.LabwareID,
             GripWidth=Labware.Dimensions.ShortSide - Labware.TransportOffsets.Close,
             OpenWidth=Labware.Dimensions.ShortSide + Labware.TransportOffsets.Open,
             GripHeight=Labware.TransportOffsets.BottomOffset,
@@ -74,7 +74,7 @@ class HamiltonCOREGripper(TransportDeviceABC):
 
         CommandInstance = COREGripperDriver.PlacePlate.Command(
             Options=COREGripperDriver.PlacePlate.Options(
-                PlateSequence=DestinationLayoutItem.Sequence,
+                LabwareID=DestinationLayoutItem.LabwareID,
                 CheckPlateExists=DropoffOptions.CheckPlateExists,
                 EjectTool=COREGripperDriver.PlacePlate.Options.YesNoOptions(
                     int(self._LastTransportFlag)

@@ -69,7 +69,7 @@ class HamiltonInternalPlateGripper(TransportDeviceABC):
 
         CommandInstance = IPGDriver.GetPlate.Command(
             Options=IPGDriver.GetPlate.Options(
-                PlateSequence=SourceLayoutItem.Sequence,
+                LabwareID=SourceLayoutItem.LabwareID,
                 GripWidth=Labware.Dimensions.ShortSide - Labware.TransportOffsets.Close,
                 OpenWidth=Labware.Dimensions.ShortSide + Labware.TransportOffsets.Open,
                 GripHeight=Labware.TransportOffsets.BottomOffset,
@@ -95,7 +95,7 @@ class HamiltonInternalPlateGripper(TransportDeviceABC):
 
         CommandInstance = IPGDriver.PlacePlate.Command(
             Options=IPGDriver.PlacePlate.Options(
-                PlateSequence=DestinationLayoutItem.Sequence,
+                LabwareID=DestinationLayoutItem.LabwareID,
                 Movement=DropoffOptions.Movement,
                 RetractDistance=DropoffOptions.RetractDistance,
                 LiftupHeight=DropoffOptions.LiftupHeight,
