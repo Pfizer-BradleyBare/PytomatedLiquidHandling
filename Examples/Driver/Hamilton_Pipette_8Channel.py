@@ -29,12 +29,25 @@ CommandInstance = HSLTipCountingLib.Edit.Command(
 
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-print("HOWDY!!!")
-print(
-    Backend.GetResponse(
-        CommandInstance, HSLTipCountingLib.Edit.Response
-    ).GetAvailablePositions()
+
+AvailablePositions = Backend.GetResponse(
+    CommandInstance, HSLTipCountingLib.Edit.Response
+).GetAvailablePositions()
+
+ListedOptions = HSLTipCountingLib.Write.ListedOptions(TipCounter="T")
+for Pos in AvailablePositions[96:]:
+    ListedOptions.append(
+        HSLTipCountingLib.Write.Options(
+            LabwareID=Pos["LabwareID"], PositionID=Pos["PositionID"]
+        )
+    )
+CommandInstance = HSLTipCountingLib.Write.Command(
+    CustomErrorHandling=False, ListedOptions=ListedOptions
 )
+Backend.ExecuteCommand(CommandInstance)
+Backend.WaitForResponseBlocking(CommandInstance)
+Backend.GetResponse(CommandInstance, HSLTipCountingLib.Write.Response)
+
 
 Backend.StopBackend()
 

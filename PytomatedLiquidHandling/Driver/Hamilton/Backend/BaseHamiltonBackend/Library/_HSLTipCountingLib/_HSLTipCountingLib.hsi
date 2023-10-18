@@ -306,26 +306,26 @@ SeqAdd(Seq, LabwareID, PosID);
 // {{ 35 1 0 "39475282_ca2d_49e4_a8e75aa59e47fa14" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 36 1 0 "392b394a_44c7_457e_abc724bfdede74ad" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 36 1 0 "4d1e76f8_189f_47f2_8f5a81e4b3d2b708" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLLabwrAccess::SortSequenceByColumn1(ML_STAR, 6, Seq, Seq);
+// }} ""
+// {{{ 37 1 0 "392b394a_44c7_457e_abc724bfdede74ad" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 SeqCopySequence(EditedSeq, Seq);
 // }} ""
-// {{{ 37 1 0 "07772bcf_8da5_4c93_874d798466d9bcb0" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 38 1 0 "07772bcf_8da5_4c93_874d798466d9bcb0" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 TipCount::Read2(EditedSeq, TipCounter, ML_STAR);
 // }} ""
-// {{{ 38 1 0 "410ab8cc_1e69_4e04_83a091fa84032db7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 39 1 0 "410ab8cc_1e69_4e04_83a091fa84032db7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 DevAddSequence2(ML_STAR, EditedSeq, Seq, 1);
 // }} ""
-// {{{ 39 1 0 "361e9c6a_355c_4390_80232a4eb7d831a3" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 40 1 0 "361e9c6a_355c_4390_80232a4eb7d831a3" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 DevEditSequences(ML_STAR, Translate("Tip Counter Edit"), DialogTitle, 1000);
 // }} ""
-// {{{ 40 1 0 "e3efaf71_28af_4128_b48e4401d8778598" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 41 1 0 "e3efaf71_28af_4128_b48e4401d8778598" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 DevRemoveSequences(ML_STAR);
 // }} ""
-// {{{ 41 1 0 "42313fff_f419_4b0e_8cf700cfcbb13613" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 42 1 0 "42313fff_f419_4b0e_8cf700cfcbb13613" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 TipCount::Write2(EditedSeq, TipCounter, ML_STAR);
-// }} ""
-// {{{ 42 1 0 "f887ca9b_9fdd_4aff_9f88d28114d16669" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLLabwrAccess::SortSequenceByColumn1(ML_STAR, 6, EditedSeq, EditedSeq);
 // }} ""
 // {{ 43 1 0 "39475282_ca2d_49e4_a8e75aa59e47fa14" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -416,4 +416,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-10-17 17:47$$checksum=e01980ee$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-10-17 19:10$$checksum=478b4867$$length=084$$
