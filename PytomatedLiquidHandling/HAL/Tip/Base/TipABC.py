@@ -7,36 +7,49 @@ from ...Tools.AbstractClasses import InterfaceABC
 
 
 @dataclass
+class AvailablePosition:
+    LabwareID: str
+    PositionID: str
+
+
+@dataclass
 class TipABC(InterfaceABC, HALObject):
-    PickupSequence: str
+    RackLabwareIDs: list[str]
     MaxVolume: float
+    AvailablePositions: list[AvailablePosition] = field(
+        init=False, default_factory=list
+    )
+
+    def _ParseAvailablePositions(self, AvailablePositions: list[dict[str, str]]):
+        for Pos in AvailablePositions:
+            self.AvailablePositions.append(
+                AvailablePosition(Pos["LabwareID"], Pos["PositionID"])
+            )
 
     def Initialize(self):
         InterfaceABC.Initialize(self)
         self.TipCounterEdit()
 
-    def IsVolumeSupported(self, Volume: float):
-        return Volume <= self.MaxVolume
+    def RemainingTips(self) -> int:
+        """Total number of tips.
+        NOTE: This is not guarenteed to be the number of accessible tips. Call RemainingTipsInTier for that info.
+        """
+        return len(self.AvailablePositions)
 
     @abstractmethod
-    def TipCounterEdit(self):
-        """Creates an interface for the user to physically edit the number of tips currently available."""
+    def RemainingTipsInTier(self) -> int:
+        """Total number of accessible tips."""
         ...
 
     @abstractmethod
-    def GetTotalRemainingTips(self) -> int:
-        """Returns number of remaining tips in total."""
-        ...
+    def DiscardTierLayerToWaste(self):
+        """For stacked tips, discards the uppermost layer to make the next layer accessible.
 
-    @abstractmethod
-    def GetRemainingSequencePositions(self) -> list[int]:
-        """Returns number of remaining positions in the currently accessible layer.
-        If len(GetRemainingSequencePositions) and GetTotalRemainingTips are equal. This this tip type is not stacked.
-        NOTE: This is not guarenteed to be consecutive.
+        For non-stacked tips, should probably request a tip reload from the user.
         """
         ...
 
     @abstractmethod
-    def GetNextTipLayer(self):
-        """Discards the currently accessible layer and makes the following layer accessible."""
+    def TipCounterEdit(self):
+        """Creates an interface for the user to physically edit the number of tips currently available."""
         ...

@@ -1,8 +1,7 @@
+import logging
 import os
 
 import yaml
-
-import logging
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 
@@ -51,12 +50,14 @@ def LoadYaml(
             BackendInstance = Backends[TipConfig["Backend Identifier"]]
             CustomErrorHandling = TipConfig["Custom Error Handling"]
 
-            PickupSequence = TipConfig["Pickup Sequence"]
+            LabwareIDs = TipConfig["Rack Layout Labware IDs"]
             MaxVolume = TipConfig["Volume"]
 
             if TipType == "Hamilton NTR":
-                NTRWasteSequence = TipConfig["NTR Waste Sequence"]
-                GripperSequence = TipConfig["Gripper Sequence"]
+                RackWasteLabwareID = TipConfig["Rack Waste Layout Labware ID"]
+                GripperLabwareID = TipConfig["Gripper Layout Labware ID"]
+                NumTiers = TipConfig["Number of Tiers"]
+                TipsPerRack = TipConfig["Tips Per Rack"]
 
                 if not isinstance(BackendInstance, HamiltonBackendABC):
                     raise Exception("Must be a Hamilton Backend")
@@ -65,10 +66,12 @@ def LoadYaml(
                     Identifier,
                     BackendInstance,
                     CustomErrorHandling,
-                    PickupSequence,
+                    LabwareIDs,
                     MaxVolume,
-                    NTRWasteSequence,
-                    GripperSequence,
+                    NumTiers,
+                    TipsPerRack,
+                    RackWasteLabwareID,
+                    GripperLabwareID,
                 )
 
             elif TipType == "Hamilton FTR":
@@ -79,7 +82,7 @@ def LoadYaml(
                     Identifier,
                     BackendInstance,
                     CustomErrorHandling,
-                    PickupSequence,
+                    LabwareIDs,
                     MaxVolume,
                 )
 

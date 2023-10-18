@@ -1,7 +1,8 @@
 from dataclasses import dataclass
+from typing import cast
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ...Driver.Hamilton.Tip import FTR as FTRDriver
+from ...Driver.Hamilton.Tip import HSLTipCountingLib
 from .Base import TipABC
 
 
@@ -9,44 +10,33 @@ from .Base import TipABC
 class HamiltonTipFTR(TipABC):
     BackendInstance: HamiltonBackendABC
 
+    def RemainingTipsInTier(self) -> int:
+        return self.RemainingTips()
+
+    def DiscardTierLayerToWaste(self):
+        self.TipCounterEdit()
+
     def TipCounterEdit(self):
-        CommandInstance = FTRDriver.LoadTips.Command(
-            Options=FTRDriver.LoadTips.Options(TipSequence=self.PickupSequence),
+        ListedOptions = HSLTipCountingLib.Edit.ListedOptions(
+            TipCounter="HamiltonTipFTR_" + str(self.MaxVolume) + "uL_TipCounter",
+            DialogTitle="Please update the number of "
+            + str(self.MaxVolume)
+            + "uL tips currently loaded on the system",
+        )
+        for ID in self.RackLabwareIDs:
+            ListedOptions.append(HSLTipCountingLib.Edit.Options(ID))
+
+        CommandInstance = HSLTipCountingLib.Edit.Command(
+            ListedOptions=ListedOptions,
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.BackendInstance.ExecuteCommand(CommandInstance)
         self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        self.BackendInstance.GetResponse(CommandInstance, FTRDriver.LoadTips.Response)
-
-    def GetTotalRemainingTips(self) -> int:
-        CommandInstance = FTRDriver.GetTotalRemainingTips.Command(
-            Options=FTRDriver.GetTotalRemainingTips.Options(
-                TipSequence=self.PickupSequence,
-            ),
-            CustomErrorHandling=self.CustomErrorHandling,
+        self._ParseAvailablePositions(
+            cast(
+                list[dict[str, str]],
+                self.BackendInstance.GetResponse(
+                    CommandInstance, HSLTipCountingLib.Edit.Response
+                ).GetAvailablePositions(),
+            )
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
-            CommandInstance, FTRDriver.GetTotalRemainingTips.Response
-        )
-
-        return ResponseInstance.GetTotalRemaining()
-
-    def GetRemainingSequencePositions(self) -> list[int]:
-        CommandInstance = FTRDriver.GetTotalRemainingTipPositions.Command(
-            Options=FTRDriver.GetTotalRemainingTipPositions.Options(
-                TipSequence=self.PickupSequence,
-            ),
-            CustomErrorHandling=self.CustomErrorHandling,
-        )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
-            CommandInstance, FTRDriver.GetTotalRemainingTipPositions.Response
-        )
-
-        return ResponseInstance.GetPositions()
-
-    def GetNextTipLayer(self):
-        raise Exception("Not supported")

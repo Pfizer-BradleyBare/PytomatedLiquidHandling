@@ -18,18 +18,26 @@ Hamilton NTR:
     Backend Identifier: Hammy
     Custom Error Handling: False
     Volume: 50
-    Pickup Sequence: seq_Tip_NTR50
-    NTR Waste Sequence: Tip50_NTR_Waste
-    Gripper Sequence: Gripper
+    Number of Tiers: 2
+    Tips Per Rack: 96
+    Rack Layout Labware IDs:
+      - L1
+      - L2
+    Rack Waste Layout Labware ID: Waste
+    Gripper Layout Labware ID: Gripper
 
   - Identifier: 300uL NTR
     Enabled: True
     Backend Identifier: Hammy
     Custom Error Handling: False
     Volume: 300
-    Pickup Sequence: seq_Tip_NTR300
-    NTR Waste Sequence: Tip300_NTR_Waste
-    Gripper Sequence: Gripper
+    Number of Tiers: 2
+    Tips Per Rack: 96
+    Rack Layout Labware IDs:
+      - L1
+      - L2
+    Rack Waste Layout Labware ID: Waste
+    Gripper Layout Labware ID: Gripper
 
 Hamilton FTR:
   - Identifier: 1000uL FTR
@@ -37,4 +45,6 @@ Hamilton FTR:
     Backend Identifier: Hammy
     Custom Error Handling: False
     Volume: 1000
-    Pickup Sequence: seq_Tip_FTR1000
+    Rack Layout Labware IDs:
+      - L1
+      - L2
