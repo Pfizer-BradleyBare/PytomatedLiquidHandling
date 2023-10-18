@@ -24,12 +24,16 @@ class LiquidClassCategoryNotSupportedError(BaseException):
 @dataclass(kw_only=True)
 class TransferOptions(OptionsABC):
     SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    SourcePosition: LabwareAddressing.AlphaNumericPosition | LabwareAddressing.NumericPosition  # This is the labware well position. Not raw sequence position
+    SourcePosition: LabwareAddressing.AlphaNumericPosition | LabwareAddressing.NumericPosition
+    # This is the labware well position.
+    # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
     CurrentSourceVolume: float
     SourceMixCycles: int
     SourceLiquidClassCategory: str
     DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    DestinationPosition: LabwareAddressing.AlphaNumericPosition | LabwareAddressing.NumericPosition  # This is the labware well position. Not raw sequence position
+    DestinationPosition: LabwareAddressing.AlphaNumericPosition | LabwareAddressing.NumericPosition
+    # This is the labware well position.
+    # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
     CurrentDestinationVolume: float
     DestinationMixCycles: int
     DestinationLiquidClassCategory: str
@@ -85,11 +89,19 @@ class PipetteABC(AbstractClasses.InterfaceABC, AbstractClasses.HALObject):
                 UnsupportedLiquidClassCategories.append(DestinationLiquidClassCategory)
             # Check liquid class compatibility
 
-    def _GetTip(self, LiquidClassCategory: str, Volume: float) -> PipetteTip:
+    def _GetTip(
+        self,
+        SourceLiquidClassCategory: str,
+        DestinationLiquidClassCategory: str,
+        Volume: float,
+    ) -> PipetteTip:
         PossiblePipetteTips = [
             PipetteTip
             for PipetteTip in self.SupportedPipetteTips
-            if PipetteTip.IsLiquidClassCategorySupported(LiquidClassCategory)
+            if PipetteTip.IsLiquidClassCategorySupported(SourceLiquidClassCategory)
+            and PipetteTip.IsLiquidClassCategorySupported(
+                DestinationLiquidClassCategory
+            )
         ]
 
         for PipetteTip in PossiblePipetteTips:
@@ -97,6 +109,11 @@ class PipetteABC(AbstractClasses.InterfaceABC, AbstractClasses.HALObject):
                 return PipetteTip
 
         return PossiblePipetteTips[-1]
+
+    def _GetLiquidClass(self, LiquidClassCategory: str, Volume: float) -> str:
+        return self._GetTip(
+            LiquidClassCategory, LiquidClassCategory, Volume
+        ).SupportedLiquidClassCategories[LiquidClassCategory]
 
     @abstractmethod
     def Transfer(self, ListedOptions: list[TransferOptions]):
