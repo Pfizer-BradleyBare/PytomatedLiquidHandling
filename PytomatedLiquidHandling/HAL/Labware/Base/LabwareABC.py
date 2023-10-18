@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.HAL.Tools import AbstractClasses, LabwareAddressing
+from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
 
 from .Dimensions.Dimensions import Dimensions
 from .TransportOffsets import TransportOffsets
@@ -35,6 +35,5 @@ class LabwareNotEqualError(BaseException):
 @dataclass
 class LabwareABC(AbstractClasses.HALObject):
     ImageFilename: str
-    LabwareAddressing: LabwareAddressing.AlphaNumericAddressing | LabwareAddressing.NumericAddressing
     Dimensions: Dimensions
     TransportOffsets: TransportOffsets

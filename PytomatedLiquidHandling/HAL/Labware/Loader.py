@@ -1,8 +1,10 @@
+import logging
 import os
 
 import yaml
 
-import logging
+from PytomatedLiquidHandling.HAL.Tools import LabwareAddressing
+
 from . import NonPipettableLabware, PipettableLabware
 from .Base import Dimensions, LabwareABC, TransportOffsets, WellEquation, Wells
 
@@ -64,6 +66,18 @@ def LoadYaml(FilePath: str) -> dict[str, LabwareABC]:
             MaxVolume = LabwareWells["Max Volume"]
             DeadVolume = LabwareWells["Dead Volume"]
 
+            AddressingType = LabwareWells["Labware Addressing"]["Type"]
+            AddressingDirection = LabwareWells["Labware Addressing"]["Direction"]
+
+            if AddressingType == "AlphaNumeric":
+                Addressing = LabwareAddressing.AlphaNumericAddressing(
+                    Rows, Columns, LabwareAddressing.Sorting(AddressingDirection)
+                )
+            else:
+                Addressing = LabwareAddressing.NumericAddressing(
+                    Rows, Columns, LabwareAddressing.Sorting(AddressingDirection)
+                )
+
             WellEquations: list[WellEquation] = list()
             for Segment in LabwareWells["Segment Equations"]:
                 WellEquations.append(
@@ -72,6 +86,7 @@ def LoadYaml(FilePath: str) -> dict[str, LabwareABC]:
             # Create WellsEquation Class List
 
             WellsInstance = Wells(
+                Addressing,
                 Columns,
                 Rows,
                 SequencesPerWell,

@@ -29,6 +29,9 @@
   Image Filename: PlateBiorad200uL96Well
   Part Number: HSP9601
   Wells:
+    Labware Addressing:
+      Type: AlphaNumeric
+      Direction: Columnwise
     Columns: 12
     Rows: 8
     Sequences Per Well: 1
@@ -54,6 +57,9 @@
   Image Filename: PlateThermo400uL96Well
   Part Number: 12-656-440
   Wells:
+    Labware Addressing:
+      Type: AlphaNumeric
+      Direction: Columnwise
     Columns: 12
     Rows: 8
     Sequences Per Well: 1
@@ -79,6 +85,9 @@
   Image Filename: PlateThermo1200uL96Well
   Part Number: AB1127
   Wells:
+    Labware Addressing:
+      Type: AlphaNumeric
+      Direction: Columnwise
     Columns: 12
     Rows: 8
     Sequences Per Well: 1
@@ -104,6 +113,9 @@
   Image Filename: PlateCorning2000uL96Well
   Part Number: 6604337-01
   Wells:
+    Labware Addressing:
+      Type: AlphaNumeric
+      Direction: Columnwise
     Columns: 12
     Rows: 8
     Sequences Per Well: 1

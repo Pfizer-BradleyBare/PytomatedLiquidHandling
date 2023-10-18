@@ -1,1 +1,6 @@
-from .LabwareAddressing import InvalidPositionError, LabwareAddressing, LabwarePosition
+from .LabwareAddressing import (
+    InvalidPositionError,
+    LabwareAddressing,
+    LabwarePosition,
+    Sorting,
+)

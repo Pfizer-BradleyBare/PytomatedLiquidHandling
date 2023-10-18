@@ -28,7 +28,7 @@ class HamiltonFlipTube(ClosedContainerABC):
                 CommandOptions.append(
                     FlipTubeDriver.Open.Options(
                         LabwareID=OpenCloseOptions.LayoutItem.LabwareID,
-                        PositionID=OpenCloseOptions.LayoutItem.Labware.LabwareAddressing.GetPosition(
+                        PositionID=OpenCloseOptions.LayoutItem.Labware.Wells.Addressing.GetPosition(
                             OpenCloseOptions.Position
                         ),
                     )
@@ -60,7 +60,7 @@ class HamiltonFlipTube(ClosedContainerABC):
                 CommandOptions.append(
                     FlipTubeDriver.Close.Options(
                         LabwareID=OpenCloseOptions.LayoutItem.LabwareID,
-                        PositionID=OpenCloseOptions.LayoutItem.Labware.LabwareAddressing.GetPosition(
+                        PositionID=OpenCloseOptions.LayoutItem.Labware.Wells.Addressing.GetPosition(
                             OpenCloseOptions.Position
                         ),
                     )
