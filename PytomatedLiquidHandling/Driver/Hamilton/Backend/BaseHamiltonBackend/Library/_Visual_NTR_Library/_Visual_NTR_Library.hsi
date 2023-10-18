@@ -7,8 +7,12 @@
 #include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
 #include "HSLSeqLib.hsl"
 #include "Visual_NTR_library\\Visual_NTR_library.hs_"
-#include "HSLTipCountingLib.hsl"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\StateServerEndpoints\\StateServerEndpoints.hs_"
+#include "HSLFilLib.hsl"
+#include "HSLStrLib.hsl"
+#include "HSLUtilLib.hsl"
+#include "HSLTipCountingLib.hsl"
+#include "HSLTrcLib.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -78,6 +82,26 @@ private variable LabwareIDs[];
 private variable SequencePositions[];
 private sequence Seq;
 private variable PositionIDs[];
+private variable path_system;
+private variable db_fullPath;
+private variable isSimulation;
+private variable iTipCounterName;
+private variable myTipCounter;
+private variable currentPosition;
+private variable sqlCommand;
+private variable currentLayer;
+private variable endPosition;
+private file TIP_COUNT_READ;
+private file TIP_COUNT_UPDATE;
+private variable Simulated;
+private variable dbPath;
+private variable SystemPath;
+private variable EndPosition;
+private variable CurrentPosition;
+private variable CurrentLayer;
+private variable iNTRTipCounterName;
+private variable Command;
+private variable SQLCommand;
 // {{ 5 "_Write" "InitLocals"
 // }} ""
 // {{{ 63 1 0 "fe649b28_b800_4c0d_a5ee22fc35bfe05b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -86,7 +110,7 @@ JSONPARSER::GetJSONArrayElement(i_EndpointOutputDataJSONObject, Translate("Comma
 // {{{ 64 1 0 "7497c473_5193_4149_ad685c43e983edde" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 JSONPARSER::GetJSONArrayElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PositionID:"), PositionIDs);
 // }} ""
-// {{{ 65 1 0 "ac55654f_6449_4bca_867810185749df09" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 65 1 0 "a263c6d8_1298_42dd_9bf29041e4eb4e31" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 TipCounter = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:TipCounter:"));
 // }} ""
 // {{ 66 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
@@ -126,22 +150,107 @@ SeqAdd(Seq, LabwareIDs.ElementAt( Counter -1), PositionIDs.ElementAt( Counter -1
 // {{ 76 1 0 "f4570088_3ea8_44ed_b84210b75c97ae07" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 77 1 0 "a02fc7ed_ed6e_4420_8bd5262a07b44b80" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-TipCount::Write2(Seq, TipCounter, ML_STAR);
-// }} ""
-// {{ 78 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 77 1 0 "2a907d44_6eac_4eab_b94e0c99a5001937" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 79 1 0 "8be5f2de_0edf_4a70_91aafe3c38f2859b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 78 1 0 "6d5accab_c170_4eec_a38ee8d9c7bc1659" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Simulated = Util::GetSimulationMode();
+// }} ""
+// {{ 79 1 0 "5e600618_6c53_49ba_a8c246c19e70ac27" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Simulated == 1)
+{
+// }} ""
+// {{{ 80 1 0 "cce1e757_5057_4d11_86cc2363f63e76cb" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+TipCounter = StrConcat2(TipCounter, Translate("_simulation"));
+// }} ""
+// {{ 81 1 0 "5e600618_6c53_49ba_a8c246c19e70ac27" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 82 1 0 "676832aa_a514_499c_b33a5fc950011390" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SystemPath = FilGetSystemPath();
+// }} ""
+// {{{ 83 1 0 "8b8b283c_6497_4a86_b8b0eb1aabe2ed63" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+dbPath = StrConcat2(SystemPath, Translate("\\CustomizedTipManagement.mdb"));
+// }} ""
+// {{ 84 1 0 "7721e966_a512_4454_abf7a0ca24c1fb50" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 85 1 0 "f1794662_54e5_4003_a4eccea011c67d1c" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SQLCommand = StrConcat4(Translate("SELECT * FROM [TipCounters] WHERE [TipCounter] = '"), TipCounter, Translate("'"), Translate(""));
+// }} ""
+// {{ 86 1 0 "76e3f10f_15d1_4d20_bc6fa825fb4a91ea" "{B31F3534-5D80-11d4-A5EB-0050DA737D89}"
+TIP_COUNT_READ.AddField("TipCounter", TipCounter, hslString, 255);
+TIP_COUNT_READ.AddField("EndPosition", EndPosition, hslInteger);
+if( 0 == TIP_COUNT_READ.Open(dbPath + " " + "TipCounters", hslAppend, SQLCommand) )
+{
+    MECC::RaiseRuntimeErrorEx(-1523711743, MECC::IDS::stepNameFileOpen, MECC::IDS::errorStepFileOpenFailed, dbPath, "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 87 1 0 "4c15f1b5_2f08_4ecc_b0c9645d15d569f5" "{B31F3536-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == TIP_COUNT_READ.ReadRecord() )
+{
+    MECC::RaiseRuntimeErrorEx(-1490157312, MECC::IDS::stepNameFileRead, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 88 1 0 "81eb73f4_1d62_479c_830a135062e6602c" "{B31F3538-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 != TIP_COUNT_READ.Close() )
+{
+    MECC::RaiseRuntimeErrorEx(-1456602880, MECC::IDS::stepNameFileClose, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+TIP_COUNT_READ.RemoveFields();
+// }} ""
+// {{ 89 1 0 "7721e966_a512_4454_abf7a0ca24c1fb50" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 90 1 0 "7dca4431_094a_4ad9_841f489424565933" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+TotalSequencePositions = SeqGetTotal(Seq);
+// }} ""
+// {{ 91 1 0 "65d31326_4a4e_430f_95fe1e701e6507a6" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+CurrentPosition = EndPosition - TotalSequencePositions;
+// }} ""
+// {{ 92 1 0 "1975fbe4_9f6d_4b8c_a6467fc05a4f1a9f" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+CurrentPosition = CurrentPosition + 1;
+// }} ""
+// {{ 93 1 0 "185164e6_7d6f_4d97_ba0d76a80be10b9b" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 94 1 0 "d4f8386c_3531_4525_a51139f081964c1b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SQLCommand = StrConcat8(Translate("UPDATE [TipCounters] SET [CurrentPosition] = "), CurrentPosition, Translate(" WHERE [TipCounter] = '"), TipCounter, Translate("'"), Translate(""), Translate(""), Translate(""));
+// }} ""
+// {{ 95 1 0 "63b31db5_2b67_44db_aa37d819896ff32a" "{B31F3534-5D80-11d4-A5EB-0050DA737D89}"
+TIP_COUNT_UPDATE.AddField("TipCounter", TipCounter, hslString, 255);
+TIP_COUNT_UPDATE.AddField("CurrentPosition", currentPosition, hslInteger);
+if( 0 == TIP_COUNT_UPDATE.Open(dbPath + " " + "TipCounters", hslAppend, SQLCommand) )
+{
+    MECC::RaiseRuntimeErrorEx(-1523711743, MECC::IDS::stepNameFileOpen, MECC::IDS::errorStepFileOpenFailed, dbPath, "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 96 1 0 "bf1aba22_1ead_4ade_afcaeb4d4839d251" "{B31F3538-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 != TIP_COUNT_UPDATE.Close() )
+{
+    MECC::RaiseRuntimeErrorEx(-1456602880, MECC::IDS::stepNameFileClose, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+TIP_COUNT_UPDATE.RemoveFields();
+// }} ""
+// {{ 97 1 0 "185164e6_7d6f_4d97_ba0d76a80be10b9b" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 98 1 0 "2a907d44_6eac_4eab_b94e0c99a5001937" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 99 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 100 1 0 "8be5f2de_0edf_4a70_91aafe3c38f2859b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{{ 80 1 0 "204073e1_4cb6_4006_a2a3bd79c563039b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 101 1 0 "204073e1_4cb6_4006_a2a3bd79c563039b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 STATESERVERENDPOINTS::RespondToCommand(State, Message, o_JSONObject);
 // }} ""
-// {{{ 81 1 0 "3adf1c5a_3721_4546_8457254f90e6b3a9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 102 1 0 "3adf1c5a_3721_4546_8457254f90e6b3a9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
 // }} ""
-// {{ 82 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 103 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
 // {{{ 5 "_Write" "End"
@@ -388,4 +497,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-10-17 19:50$$checksum=01438f82$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-10-18 04:48$$checksum=7427be02$$length=084$$

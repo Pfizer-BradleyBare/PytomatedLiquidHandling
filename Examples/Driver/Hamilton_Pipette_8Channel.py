@@ -52,6 +52,7 @@ Backend.WaitForResponseBlocking(CommandInstance)
 AvailablePositions = Backend.GetResponse(
     CommandInstance, Visual_NTR_Library.Channels_TipCounter_Edit.Response
 ).GetAvailablePositions()
+print(len(AvailablePositions))
 
 
 ListedOptions = Visual_NTR_Library.Channels_TipCounter_Write.ListedOptions(
