@@ -1,7 +1,7 @@
 import logging
-import os
+from typing import Any
 
-import yaml
+from PytomatedLiquidHandling.HAL.Tools import DictTools
 
 from .AutoloadCarrier import AutoloadCarrier
 from .Base import CarrierABC
@@ -10,78 +10,39 @@ from .NonMoveableCarrier import NonMoveableCarrier
 
 Logger = logging.getLogger(__name__)
 
+__Init: bool = False
+__Carriers: dict[str, CarrierABC] = dict()
 
-def Load(FilePath: str) -> dict[str, CarrierABC]:
-    Logger.info("Loading Carrier config yaml file.")
 
-    Carriers: dict[str, CarrierABC] = dict()
+def GetCarriers() -> dict[str, CarrierABC]:
+    global __Carriers
+    if __Init:
+        return __Carriers
+    else:
+        raise RuntimeError("Carriers do not exist yet. Did you load Carriers first?")
 
-    if not os.path.exists(FilePath):
-        Logger.warning("Config file does not exist. Skipped")
-        return Carriers
 
-    FileHandle = open(FilePath, "r")
-    ConfigFile = yaml.full_load(FileHandle)
-    FileHandle.close()
-    # Get config file contents
+def Load(Dict: dict[str, Any]):
+    global __Init
+    __Init = True
 
-    if ConfigFile is None:
-        Logger.warning(
-            "Config file exists but does not contain any config items. Skipped"
-        )
-        return Carriers
+    Dict = DictTools.RemoveKeyWhitespace(Dict)
 
-    for DeviceID in ConfigFile:
-        for Device in ConfigFile[DeviceID]:
-            if Device["Enabled"] == False:
-                Logger.warning(
-                    DeviceID
-                    + " with unique ID "
-                    + Device["Unique Identifier"]
-                    + " is not enabled so will be skipped."
-                )
-                continue
+    for Key in Dict:
+        for Item in Dict[Key]:
+            if Item["Enabled"] == True:
+                print(Item)
+                if Key == MoveableCarrier.__name__:
+                    Carrier = MoveableCarrier(**Item)
+                    __Carriers[Carrier.Identifier] = Carrier
 
-            Identifier = Device["Identifier"]
+                elif Key == AutoloadCarrier.__name__:
+                    Carrier = AutoloadCarrier(**Item)
+                    __Carriers[Carrier.Identifier] = Carrier
 
-            TrackStart = Device["Track Start"]
-            TrackEnd = Device["Track End"]
-            NumPositions = Device["Num Labware Positions"]
-            Filename3D = Device["Image Filename 3D"]
-            Filename2D = Device["Image Filename 2D"]
+                elif Key == NonMoveableCarrier.__name__:
+                    Carrier = NonMoveableCarrier(**Item)
+                    __Carriers[Carrier.Identifier] = Carrier
 
-            if DeviceID == "Moveable Carrier":
-                CarrierInstance = MoveableCarrier(
-                    Identifier,
-                    TrackStart,
-                    TrackEnd,
-                    NumPositions,
-                    Filename3D,
-                    Filename2D,
-                )
-            elif DeviceID == "Non-Moveable Carrier":
-                CarrierInstance = NonMoveableCarrier(
-                    Identifier,
-                    TrackStart,
-                    TrackEnd,
-                    NumPositions,
-                    Filename3D,
-                    Filename2D,
-                )
-            elif DeviceID == "Autoload Carrier":
-                LabwareID = Device["Labware ID"]
-                CarrierInstance = AutoloadCarrier(
-                    Identifier,
-                    TrackStart,
-                    TrackEnd,
-                    NumPositions,
-                    Filename3D,
-                    Filename2D,
-                    LabwareID,
-                )
-            else:
-                raise Exception("Carrier Device not recognized")
-
-            Carriers[Identifier] = CarrierInstance
-
-    return Carriers
+                else:
+                    raise ValueError(Key + " not recognized")

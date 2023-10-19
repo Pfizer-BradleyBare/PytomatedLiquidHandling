@@ -127,4 +127,4 @@ sys.stderr = STDERRLogger(logging.getLogger("STDERR"))
 
 RootLogger.level = logging.DEBUG
 
-from . import API, HAL, Driver
+from . import HAL, Driver

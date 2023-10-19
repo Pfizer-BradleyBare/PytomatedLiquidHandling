@@ -4,17 +4,17 @@ Moveable Carrier:
     Track Start: 32
     Track End: 37
     Num Labware Positions: 5
-    Image Filename 3D: 3DImage
-    Image Filename 2D: 2DImage
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
 
-Non-Moveable Carrier:
+NonMoveable Carrier:
   - Identifier: h
     Enabled: True
     Track Start: 32
     Track End: 37
     Num Labware Positions: 5
-    Image Filename 3D: 3DImage
-    Image Filename 2D: 2DImage
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
 
 Autoload Carrier:
   - Identifier: h
@@ -23,5 +23,5 @@ Autoload Carrier:
     Track Start: 32
     Track End: 37
     Num Labware Positions: 5
-    Image Filename 3D: 3DImage
-    Image Filename 2D: 2DImage
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
