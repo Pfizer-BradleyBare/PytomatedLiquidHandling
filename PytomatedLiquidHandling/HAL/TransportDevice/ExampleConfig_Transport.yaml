@@ -15,10 +15,10 @@
 Hamilton CORE Gripper:
   Identifier: Gripper
   Enabled: True
-  Backend Identifier: Hammy
+  Backend: Hammy
   Custom Error Handling: False
-  Gripper Layout Labware ID: seq_COREGripTool
-  Supported Labware Identifiers:
+  Gripper Labware ID: seq_COREGripTool
+  Supported Labwares:
     - Agilent Black Lid
     - 200uL Biorad 96 Well PCR Plate
     - 400uL Thermo 96 Well PCR Plate
@@ -29,13 +29,13 @@ Hamilton CORE Gripper:
 Hamilton Internal Plate Gripper:
   Identifier: Gripper 2
   Enabled: False
-  Backend Identifier: a
+  Backend: a
   Custom Error Handling: False
-  Supported Labware Identifiers:
+  Supported Labwares:
 
 Vantage Track Gripper:
   Identifier: Gripper 3
   Enabled: False
-  Backend Identifier: a
+  Backend: a
   Custom Error Handling: False
-  Supported Labware Identifiers:
+  Supported Labwares:

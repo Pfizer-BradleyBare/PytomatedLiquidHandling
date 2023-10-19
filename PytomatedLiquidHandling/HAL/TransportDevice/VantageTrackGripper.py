@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.Driver.Hamilton.Backend import VantageBackend
 from PytomatedLiquidHandling.HAL import DeckLocation, LayoutItem
 
 from .Base import TransportDeviceABC
@@ -8,8 +7,6 @@ from .Base import TransportDeviceABC
 
 @dataclass
 class VantageTrackGripper(TransportDeviceABC):
-    Backend: VantageBackend
-
     @dataclass
     class PickupOptions(DeckLocation.Base.TransportConfig.Options):
         ...

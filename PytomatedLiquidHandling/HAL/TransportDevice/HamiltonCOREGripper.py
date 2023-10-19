@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 
-from PytomatedLiquidHandling.Driver.Hamilton.Backend.BaseHamiltonBackend import (
-    HamiltonBackendABC,
-)
+
 from PytomatedLiquidHandling.Driver.Hamilton.Transport import (
     COREGripper as COREGripperDriver,
 )
@@ -13,7 +11,6 @@ from .Base import TransportDeviceABC
 
 @dataclass
 class HamiltonCOREGripper(TransportDeviceABC):
-    Backend: HamiltonBackendABC
     GripperLabwareID: str
 
     @dataclass

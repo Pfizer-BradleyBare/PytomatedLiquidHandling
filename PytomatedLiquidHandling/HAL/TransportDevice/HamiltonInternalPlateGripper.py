@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 
-from PytomatedLiquidHandling.Driver.Hamilton.Backend.BaseHamiltonBackend import (
-    HamiltonBackendABC,
-)
+
 from PytomatedLiquidHandling.Driver.Hamilton.Transport import IPG as IPGDriver
 from PytomatedLiquidHandling.HAL import LayoutItem
 
@@ -11,8 +9,6 @@ from .Base import TransportDeviceABC
 
 @dataclass
 class HamiltonInternalPlateGripper(TransportDeviceABC):
-    Backend: HamiltonBackendABC
-
     @dataclass
     class PickupOptions(TransportDeviceABC.PickupOptions):
         GripMode: IPGDriver.GetPlate.Options.GripModeOptions = field(
