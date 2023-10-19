@@ -1,21 +1,21 @@
 Lid:
   - Identifier: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
     Enabled: True
-    Sequence: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
-    Labware Identifier: 2000uL Corning 96 Well PCR Plate
-    Deck Location Identifier: Carrier38_Pos1
+    LabwareID: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
+    Labware: 2000uL Corning 96 Well PCR Plate
+    Deck Location: Carrier38_Pos1
 
 NonCoverable Item:
   - Identifier: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
     Enabled: True
-    Sequence: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
-    Labware Identifier: 2000uL Corning 96 Well PCR Plate
-    Deck Location Identifier: Carrier38_Pos1
+    LabwareID: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
+    Labware: 2000uL Corning 96 Well PCR Plate
+    Deck Location: Carrier38_Pos1
 
 Coverable Item:
   - Identifier: Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel
     Enabled: True
-    Sequence: Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel
-    Labware Identifier: 2000uL Corning 96 Well PCR Plate
-    Deck Location Identifier: Carrier38_Pos2
-    Lid Identifier: Lid
+    LabwareID: Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel
+    Labware: 2000uL Corning 96 Well PCR Plate
+    Deck Location: Carrier38_Pos2
+    Lid: Lid
