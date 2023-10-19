@@ -1,1 +1,1 @@
-from .InterfaceABC import InterfaceABC
+from .Interface import Interface

@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
-from ...Tools.AbstractClasses import InterfaceABC
+from ...Tools.AbstractClasses import Interface
 
 
 @dataclass
@@ -13,7 +13,7 @@ class AvailablePosition:
 
 
 @dataclass
-class TipABC(InterfaceABC, HALObject):
+class TipABC(Interface, HALObject):
     RackLabwareIDs: list[str]
     MaxVolume: float
     AvailablePositions: list[AvailablePosition] = field(
@@ -27,7 +27,7 @@ class TipABC(InterfaceABC, HALObject):
             )
 
     def Initialize(self):
-        InterfaceABC.Initialize(self)
+        Interface.Initialize(self)
         self.TipCounterEdit()
 
     def RemainingTips(self) -> int:

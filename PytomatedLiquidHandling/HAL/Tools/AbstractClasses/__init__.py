@@ -1,2 +1,2 @@
-from .Interface import InterfaceABC
 from .HALObject import HALObject
+from .Interface import Interface

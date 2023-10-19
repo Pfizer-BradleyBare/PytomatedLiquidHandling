@@ -13,7 +13,7 @@ class OpenCloseOptions(OptionsABC):
 
 
 @dataclass
-class ClosedContainerABC(AbstractClasses.InterfaceABC, AbstractClasses.HALObject):
+class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALObject):
     ToolLabwareID: str
     ToolPositionID: str
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]

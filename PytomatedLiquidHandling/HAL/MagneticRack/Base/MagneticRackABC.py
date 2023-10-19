@@ -3,11 +3,11 @@ from dataclasses import dataclass, field
 from PytomatedLiquidHandling.HAL import Backend, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
-from ...Tools.AbstractClasses import InterfaceABC
+from ...Tools.AbstractClasses import Interface
 
 
 @dataclass
-class MagneticRackABC(InterfaceABC, HALObject):
+class MagneticRackABC(Interface, HALObject):
     BackendInstance: Backend.NullBackend
     CustomErrorHandling: bool = field(init=False, default=False)
     SupportedLayoutItems: list[LayoutItem.Base.LayoutItemABC]

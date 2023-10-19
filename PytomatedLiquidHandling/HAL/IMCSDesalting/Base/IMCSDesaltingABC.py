@@ -4,13 +4,13 @@ from dataclasses import dataclass, field
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
-from ...Tools.AbstractClasses import InterfaceABC
+from ...Tools.AbstractClasses import Interface
 from .IMCSTip import DesaltingTipTracker
 from .Interface import IMCSDesaltingOptions
 
 
 @dataclass
-class IMCSDesaltingABC(InterfaceABC, HALObject):
+class IMCSDesaltingABC(Interface, HALObject):
     TipInstance: Tip.Base.TipABC
     PipetteTipSupportDropOffSequence: str
     PipetteTipSupportPickupSequence: str

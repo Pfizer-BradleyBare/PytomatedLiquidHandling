@@ -1,5 +1,5 @@
-from pydantic.dataclasses import dataclass
 from pydantic import field_validator
+from pydantic.dataclasses import dataclass
 
 from PytomatedLiquidHandling.HAL import Carrier, GetCarriers
 

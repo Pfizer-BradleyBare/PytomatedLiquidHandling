@@ -1,13 +1,12 @@
 from abc import abstractmethod
 from dataclasses import dataclass
 
-
-from ...Tools.AbstractClasses import InterfaceABC
+from ...Tools.AbstractClasses import Interface
 from .Interface import LoadUnloadOptions
 
 
 @dataclass
-class DeckLoaderABC(InterfaceABC):
+class DeckLoaderABC(Interface):
     @abstractmethod
     def Load(self, Options: list[LoadUnloadOptions.Options]):
         ...

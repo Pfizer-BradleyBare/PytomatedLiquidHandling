@@ -1,8 +1,7 @@
+import logging
 import os
 
 import yaml
-import logging
-
 
 from .AutoloadCarrier import AutoloadCarrier
 from .Base import CarrierABC
@@ -12,7 +11,7 @@ from .NonMoveableCarrier import NonMoveableCarrier
 Logger = logging.getLogger(__name__)
 
 
-def LoadYaml(FilePath: str) -> dict[str, CarrierABC]:
+def Load(FilePath: str) -> dict[str, CarrierABC]:
     Logger.info("Loading Carrier config yaml file.")
 
     Carriers: dict[str, CarrierABC] = dict()

@@ -1,11 +1,13 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field
+
 from pydantic.dataclasses import dataclass as PydanticDataclass
+
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
-from ...Tools.AbstractClasses import InterfaceABC
+from ...Tools.AbstractClasses import Interface
 from .TempLimits.TempLimits import TempLimits
 
 
@@ -37,7 +39,7 @@ class ShakingNotSupportedError(BaseException):
 
 
 @PydanticDataclass
-class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
+class HeatCoolShakeDeviceABC(Interface, HALObject):
     ComPort: str | int
     HeatingSupported: bool
     CoolingSupported: bool
