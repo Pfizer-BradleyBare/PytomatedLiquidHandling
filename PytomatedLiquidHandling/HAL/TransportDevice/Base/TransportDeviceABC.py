@@ -1,5 +1,7 @@
 from abc import abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+
+from pydantic import Field
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
@@ -48,10 +50,9 @@ class TransportDevicesNotCompatibleError(BaseException):
     DestinationTransportDevice: "TransportDeviceABC"
 
 
-@dataclass
 class TransportDeviceABC(Interface, HALObject):
     SupportedLabwares: list[Labware.Base.LabwareABC]
-    _LastTransportFlag: bool = field(init=False, default=True)
+    _LastTransportFlag: bool = Field(exclude=True)
 
     @dataclass
     class PickupOptions(DeckLocation.Base.TransportConfig.Options):

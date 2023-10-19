@@ -1,13 +1,11 @@
 from dataclasses import dataclass, field
 
-
 from PytomatedLiquidHandling.Driver.Hamilton.Transport import IPG as IPGDriver
 from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import TransportDeviceABC
 
 
-@dataclass
 class HamiltonInternalPlateGripper(TransportDeviceABC):
     @dataclass
     class PickupOptions(TransportDeviceABC.PickupOptions):

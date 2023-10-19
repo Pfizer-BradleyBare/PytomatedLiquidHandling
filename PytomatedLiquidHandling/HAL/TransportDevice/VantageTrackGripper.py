@@ -5,7 +5,6 @@ from PytomatedLiquidHandling.HAL import DeckLocation, LayoutItem
 from .Base import TransportDeviceABC
 
 
-@dataclass
 class VantageTrackGripper(TransportDeviceABC):
     @dataclass
     class PickupOptions(DeckLocation.Base.TransportConfig.Options):
