@@ -19,7 +19,7 @@ Non-Moveable Carrier:
 Autoload Carrier:
   - Identifier: h
     Enabled: True
-    Labware ID: LabID
+    Carrier Labware ID: LabID
     Track Start: 32
     Track End: 37
     Num Labware Positions: 5
