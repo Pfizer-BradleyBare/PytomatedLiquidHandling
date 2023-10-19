@@ -22,7 +22,7 @@ def GetCarriers() -> dict[str, CarrierABC]:
         raise RuntimeError("Carriers do not exist yet. Did you load Carriers first?")
 
 
-def Load(Dict: dict[str, Any]):
+def Load(Dict: dict[str, Any]) -> dict[str, CarrierABC]:
     global __Init
     __Init = True
 
@@ -46,3 +46,5 @@ def Load(Dict: dict[str, Any]):
 
                 else:
                     raise ValueError(Key + " not recognized")
+
+    return __Carriers
