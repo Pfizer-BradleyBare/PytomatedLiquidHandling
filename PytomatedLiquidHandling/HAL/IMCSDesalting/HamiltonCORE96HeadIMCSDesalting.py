@@ -6,7 +6,7 @@ from .Base import IMCSDesaltingABC, IMCSDesaltingOptions
 
 @dataclass
 class HamiltonCORE96HeadIMCSDesalting(IMCSDesaltingABC):
-    BackendInstance: HamiltonBackendABC
+    Backend: HamiltonBackendABC
 
     def Equilibrate(self, Options: IMCSDesaltingOptions.ListedOptions):
         ...

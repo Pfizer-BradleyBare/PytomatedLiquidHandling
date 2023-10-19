@@ -11,7 +11,7 @@ from .Base import TransportDeviceABC
 
 @dataclass
 class HamiltonInternalPlateGripper(TransportDeviceABC):
-    BackendInstance: HamiltonBackendABC
+    Backend: HamiltonBackendABC
 
     @dataclass
     class PickupOptions(TransportDeviceABC.PickupOptions):
@@ -70,9 +70,9 @@ class HamiltonInternalPlateGripper(TransportDeviceABC):
         CommandInstance = IPGDriver.GetPlate.Command(
             Options=IPGDriver.GetPlate.Options(
                 LabwareID=SourceLayoutItem.LabwareID,
-                GripWidth=Labware.Dimensions.ShortSide - Labware.TransportOffsets.Close,
-                OpenWidth=Labware.Dimensions.ShortSide + Labware.TransportOffsets.Open,
-                GripHeight=Labware.TransportOffsets.BottomOffset,
+                GripWidth=Labware.Dimensions.YLength - Labware.TransportOffsets.Close,
+                OpenWidth=Labware.Dimensions.YLength + Labware.TransportOffsets.Open,
+                GripHeight=Labware.TransportOffsets.Top,
                 GripMode=PickupOptions.GripMode,
                 Movement=PickupOptions.Movement,
                 RetractDistance=PickupOptions.RetractDistance,
@@ -82,9 +82,9 @@ class HamiltonInternalPlateGripper(TransportDeviceABC):
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        self.BackendInstance.GetResponse(CommandInstance, IPGDriver.GetPlate.Response)
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        self.Backend.GetResponse(CommandInstance, IPGDriver.GetPlate.Response)
 
         DropoffOptions = (
             DestinationLayoutItem.DeckLocation.TransportConfig.DropoffOptions
@@ -103,9 +103,9 @@ class HamiltonInternalPlateGripper(TransportDeviceABC):
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        self.BackendInstance.GetResponse(CommandInstance, IPGDriver.PlacePlate.Response)
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        self.Backend.GetResponse(CommandInstance, IPGDriver.PlacePlate.Response)
 
     def TransportTime(
         self,

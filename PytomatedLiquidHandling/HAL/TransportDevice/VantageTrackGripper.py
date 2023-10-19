@@ -8,7 +8,7 @@ from .Base import TransportDeviceABC
 
 @dataclass
 class VantageTrackGripper(TransportDeviceABC):
-    BackendInstance: VantageBackend
+    Backend: VantageBackend
 
     @dataclass
     class PickupOptions(DeckLocation.Base.TransportConfig.Options):

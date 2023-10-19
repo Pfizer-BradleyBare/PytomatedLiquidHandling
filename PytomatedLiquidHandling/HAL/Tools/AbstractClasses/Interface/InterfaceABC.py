@@ -6,11 +6,11 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC, Opt
 
 @dataclass
 class InterfaceABC(ABC):
-    BackendInstance: BackendABC
+    Backend: BackendABC
     CustomErrorHandling: bool
 
     def Initialize(self):
-        self.BackendInstance.StartBackend()
+        self.Backend.StartBackend()
 
     def Deinitialize(self):
-        self.BackendInstance.StopBackend()
+        self.Backend.StopBackend()

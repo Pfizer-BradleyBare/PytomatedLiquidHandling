@@ -8,7 +8,7 @@ from .Base import PipetteABC, TransferOptions
 
 @dataclass
 class HamiltonCORE96Head(PipetteABC):
-    BackendInstance: HamiltonBackendABC
+    Backend: HamiltonBackendABC
 
     def Transfer(
         self,

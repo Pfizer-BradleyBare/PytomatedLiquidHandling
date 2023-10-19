@@ -11,7 +11,7 @@ from .Base import PipetteABC, TransferOptions
 
 @dataclass
 class HamiltonPortraitCORE8Channel(PipetteABC):
-    BackendInstance: HamiltonBackendABC
+    Backend: HamiltonBackendABC
     ActiveChannels: list[int]
 
     def _TruncateTransferVolume(

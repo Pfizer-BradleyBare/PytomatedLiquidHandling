@@ -12,9 +12,9 @@ class HamiltonFlipTube(ClosedContainerABC):
         Command = FlipTubeDriver.Initialize.Command(
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(Command)
-        self.BackendInstance.WaitForResponseBlocking(Command)
-        self.BackendInstance.GetResponse(Command, FlipTubeDriver.Initialize.Response)
+        self.Backend.ExecuteCommand(Command)
+        self.Backend.WaitForResponseBlocking(Command)
+        self.Backend.GetResponse(Command, FlipTubeDriver.Initialize.Response)
 
     def Open(
         self,
@@ -38,9 +38,9 @@ class HamiltonFlipTube(ClosedContainerABC):
             ListedOptions=CommandOptions,
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(Command)
-        self.BackendInstance.WaitForResponseBlocking(Command)
-        self.BackendInstance.GetResponse(Command, FlipTubeDriver.Open.Response)
+        self.Backend.ExecuteCommand(Command)
+        self.Backend.WaitForResponseBlocking(Command)
+        self.Backend.GetResponse(Command, FlipTubeDriver.Open.Response)
 
     def OpenTime(
         self,
@@ -70,9 +70,9 @@ class HamiltonFlipTube(ClosedContainerABC):
             ListedOptions=CommandOptions,
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(Command)
-        self.BackendInstance.WaitForResponseBlocking(Command)
-        self.BackendInstance.GetResponse(Command, FlipTubeDriver.Close.Response)
+        self.Backend.ExecuteCommand(Command)
+        self.Backend.WaitForResponseBlocking(Command)
+        self.Backend.GetResponse(Command, FlipTubeDriver.Close.Response)
 
     def CloseTime(
         self,

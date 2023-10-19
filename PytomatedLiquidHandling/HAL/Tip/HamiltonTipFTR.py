@@ -8,7 +8,7 @@ from .Base import TipABC
 
 @dataclass
 class HamiltonTipFTR(TipABC):
-    BackendInstance: HamiltonBackendABC
+    Backend: HamiltonBackendABC
 
     def RemainingTipsInTier(self) -> int:
         return self.RemainingTips()
@@ -30,12 +30,12 @@ class HamiltonTipFTR(TipABC):
             ListedOptions=ListedOptions,
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
         self._ParseAvailablePositions(
             cast(
                 list[dict[str, str]],
-                self.BackendInstance.GetResponse(
+                self.Backend.GetResponse(
                     CommandInstance, HSLTipCountingLib.Edit.Response
                 ).GetAvailablePositions(),
             )

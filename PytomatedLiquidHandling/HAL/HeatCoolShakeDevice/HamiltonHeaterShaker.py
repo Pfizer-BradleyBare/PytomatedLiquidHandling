@@ -7,7 +7,7 @@ from .Base import CoolingNotSupportedError, HeatCoolShakeDeviceABC
 
 @dataclass
 class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
-    BackendInstance: HamiltonBackendABC
+    Backend: HamiltonBackendABC
     HeatingSupported: bool = field(init=False, default=True)
     CoolingSupported: bool = field(init=False, default=False)
     ShakingSupported: bool = field(init=False, default=True)
@@ -25,9 +25,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        ResponseInstance = self.Backend.GetResponse(
             CommandInstance, HeaterShakerDriver.Connect.Response
         )
 
@@ -40,9 +40,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        ResponseInstance = self.Backend.GetResponse(
             CommandInstance, HeaterShakerDriver.SetPlateLock.Response
         )
 
@@ -53,9 +53,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        ResponseInstance = self.Backend.GetResponse(
             CommandInstance, HeaterShakerDriver.SetPlateLock.Response
         )
 
@@ -66,9 +66,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        ResponseInstance = self.Backend.GetResponse(
             CommandInstance, HeaterShakerDriver.StopTemperatureControl.Response
         )
 
@@ -78,9 +78,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        ResponseInstance = self.Backend.GetResponse(
             CommandInstance, HeaterShakerDriver.StopShakeControl.Response
         )
 
@@ -91,9 +91,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        ResponseInstance = self.Backend.GetResponse(
             CommandInstance, HeaterShakerDriver.SetPlateLock.Response
         )
 
@@ -110,9 +110,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        ResponseInstance = self.Backend.GetResponse(
             CommandInstance, HeaterShakerDriver.StartTemperatureControl.Response
         )
 
@@ -126,9 +126,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        ResponseInstance = self.Backend.GetResponse(
             CommandInstance, HeaterShakerDriver.GetTemperature.Response
         )
 
@@ -142,9 +142,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
                 ),
                 CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.BackendInstance.ExecuteCommand(CommandInstance)
-            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.BackendInstance.GetResponse(
+            self.Backend.ExecuteCommand(CommandInstance)
+            self.Backend.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.Backend.GetResponse(
                 CommandInstance, HeaterShakerDriver.StopShakeControl.Response
             )
 
@@ -154,9 +154,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
                 ),
                 CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.BackendInstance.ExecuteCommand(CommandInstance)
-            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.BackendInstance.GetResponse(
+            self.Backend.ExecuteCommand(CommandInstance)
+            self.Backend.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.Backend.GetResponse(
                 CommandInstance, HeaterShakerDriver.SetPlateLock.Response
             )
 
@@ -168,9 +168,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
                 ),
                 CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.BackendInstance.ExecuteCommand(CommandInstance)
-            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.BackendInstance.GetResponse(
+            self.Backend.ExecuteCommand(CommandInstance)
+            self.Backend.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.Backend.GetResponse(
                 CommandInstance, HeaterShakerDriver.SetPlateLock.Response
             )
 
@@ -181,9 +181,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
                 ),
                 CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.BackendInstance.ExecuteCommand(CommandInstance)
-            self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-            ResponseInstance = self.BackendInstance.GetResponse(
+            self.Backend.ExecuteCommand(CommandInstance)
+            self.Backend.WaitForResponseBlocking(CommandInstance)
+            ResponseInstance = self.Backend.GetResponse(
                 CommandInstance, HeaterShakerDriver.StartShakeControl.Response
             )
 
@@ -194,9 +194,9 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        ResponseInstance = self.BackendInstance.GetResponse(
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        ResponseInstance = self.Backend.GetResponse(
             CommandInstance, HeaterShakerDriver.GetShakingSpeed.Response
         )
 

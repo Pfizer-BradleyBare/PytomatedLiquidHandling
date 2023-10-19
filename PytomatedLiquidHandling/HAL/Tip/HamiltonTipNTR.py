@@ -8,7 +8,7 @@ from .Base import TipABC
 
 @dataclass
 class HamiltonTipNTR(TipABC):
-    BackendInstance: HamiltonBackendABC
+    Backend: HamiltonBackendABC
     NumTiers: int
     TipsPerRack: int
     RackWasteLabwareID: str
@@ -71,9 +71,9 @@ class HamiltonTipNTR(TipABC):
                 ),
                 CustomErrorHandling=self.CustomErrorHandling,
             )
-            self.BackendInstance.ExecuteCommand(Command)
-            self.BackendInstance.WaitForResponseBlocking(Command)
-            self.BackendInstance.GetResponse(
+            self.Backend.ExecuteCommand(Command)
+            self.Backend.WaitForResponseBlocking(Command)
+            self.Backend.GetResponse(
                 Command, Visual_NTR_Library.Channels_TipCounter_Write.Response
             )
             self.TipCounterEdit()
@@ -94,12 +94,12 @@ class HamiltonTipNTR(TipABC):
             ListedOptions=ListedOptions,
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
         self._ParseAvailablePositions(
             cast(
                 list[dict[str, str]],
-                self.BackendInstance.GetResponse(
+                self.Backend.GetResponse(
                     CommandInstance,
                     Visual_NTR_Library.Channels_TipCounter_Edit.Response,
                 ).GetAvailablePositions(),

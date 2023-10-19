@@ -13,7 +13,7 @@ from .Base import TransportDeviceABC
 
 @dataclass
 class HamiltonCOREGripper(TransportDeviceABC):
-    BackendInstance: HamiltonBackendABC
+    Backend: HamiltonBackendABC
     GripperLabwareID: str
 
     @dataclass
@@ -50,20 +50,18 @@ class HamiltonCOREGripper(TransportDeviceABC):
         GetPlateOptionsInstance = COREGripperDriver.GetPlate.Options(
             GripperLabwareID=self.GripperLabwareID,
             PlateLabwareID=SourceLayoutItem.LabwareID,
-            GripWidth=Labware.Dimensions.ShortSide - Labware.TransportOffsets.Close,
-            OpenWidth=Labware.Dimensions.ShortSide + Labware.TransportOffsets.Open,
-            GripHeight=Labware.TransportOffsets.BottomOffset,
+            GripWidth=Labware.Dimensions.YLength - Labware.TransportOffsets.Close,
+            OpenWidth=Labware.Dimensions.YLength + Labware.TransportOffsets.Open,
+            GripHeight=Labware.TransportOffsets.Top,
         )
 
         CommandInstance = COREGripperDriver.GetPlate.Command(
             Options=GetPlateOptionsInstance,
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        self.BackendInstance.GetResponse(
-            CommandInstance, COREGripperDriver.GetPlate.Response
-        )
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        self.Backend.GetResponse(CommandInstance, COREGripperDriver.GetPlate.Response)
 
         DropoffOptions = (
             DestinationLayoutItem.DeckLocation.TransportConfig.DropoffOptions
@@ -82,11 +80,9 @@ class HamiltonCOREGripper(TransportDeviceABC):
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
-        self.BackendInstance.ExecuteCommand(CommandInstance)
-        self.BackendInstance.WaitForResponseBlocking(CommandInstance)
-        self.BackendInstance.GetResponse(
-            CommandInstance, COREGripperDriver.PlacePlate.Response
-        )
+        self.Backend.ExecuteCommand(CommandInstance)
+        self.Backend.WaitForResponseBlocking(CommandInstance)
+        self.Backend.GetResponse(CommandInstance, COREGripperDriver.PlacePlate.Response)
 
     def TransportTime(
         self,
