@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field
-
+from pydantic.dataclasses import dataclass as PydanticDataclass
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
@@ -36,16 +36,16 @@ class ShakingNotSupportedError(BaseException):
     """
 
 
-@dataclass
+@PydanticDataclass
 class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
     ComPort: str | int
     HeatingSupported: bool
     CoolingSupported: bool
     ShakingSupported: bool
-    TempLimitsInstance: TempLimits
-    SupportedLayoutItems: list[LayoutItem.CoverableItem]
+    TempLimits: TempLimits
+    SupportedCoverableLayoutItems: list[LayoutItem.CoverableItem]
 
-    HandleID: int | str = field(init=False)
+    HandleID: int | str = field(init=False, default="")
 
     def ValidateOptions(
         self,
@@ -69,7 +69,8 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
         Exceptions = list()
 
         SupportedLabwares = [
-            LayoutItem.Labware.Identifier for LayoutItem in self.SupportedLayoutItems
+            LayoutItem.Labware.Identifier
+            for LayoutItem in self.SupportedCoverableLayoutItems
         ]
 
         if LayoutItem.Labware not in SupportedLabwares:
@@ -93,7 +94,7 @@ class HeatCoolShakeDeviceABC(InterfaceABC, HALObject):
     def GetLayoutItem(
         self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
     ) -> LayoutItem.CoverableItem:
-        for SupportedLayoutItemInstance in self.SupportedLayoutItems:
+        for SupportedLayoutItemInstance in self.SupportedCoverableLayoutItems:
             if SupportedLayoutItemInstance.Labware == LayoutItemInstance.Labware:
                 if isinstance(LayoutItemInstance, LayoutItem.CoverableItem):
                     SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered

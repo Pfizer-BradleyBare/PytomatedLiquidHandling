@@ -1,17 +1,15 @@
-from dataclasses import dataclass, field
-
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from dataclasses import field
+from pydantic.dataclasses import dataclass
 from ...Driver.Hamilton.TemperatureControl import HeaterShaker as HeaterShakerDriver
 from .Base import CoolingNotSupportedError, HeatCoolShakeDeviceABC
 
 
 @dataclass
 class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
-    Backend: HamiltonBackendABC
     HeatingSupported: bool = field(init=False, default=True)
     CoolingSupported: bool = field(init=False, default=False)
     ShakingSupported: bool = field(init=False, default=True)
-    HandleID: int = field(init=False)
+    HandleID: int = field(init=False, default=0)
 
     def Initialize(self):
         HeatCoolShakeDeviceABC.Initialize(self)

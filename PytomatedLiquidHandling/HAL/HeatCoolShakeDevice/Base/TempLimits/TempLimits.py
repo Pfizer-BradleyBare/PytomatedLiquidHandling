@@ -1,8 +1,8 @@
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 
 
 @dataclass
 class TempLimits:
-    StableTempDelta: float
-    MinimumTemp: float
-    MaximumTemp: float
+    StableDelta: float
+    Minimum: float
+    Maximum: float

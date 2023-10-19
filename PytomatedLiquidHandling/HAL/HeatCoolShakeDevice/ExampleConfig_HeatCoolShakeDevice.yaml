@@ -15,14 +15,14 @@
 Hamilton Heater Shaker:
   - Identifier: Heater 1
     Enabled: True
-    Backend Identifier: Hammy
+    Backend: Hammy
     Custom Error Handling: False
     Com Port: 1
     Temp Limits:
       Stable Delta: 2
       Minimum: 0
       Maximum: 100
-    Supported Labware Coverable Layout Item Identifiers:
+    Supported Coverable Layout Items:
       - Item1
       - Item2
 
