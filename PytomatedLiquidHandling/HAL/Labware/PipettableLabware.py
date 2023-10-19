@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 
 from .Base import LabwareABC, Wells
 
@@ -10,22 +10,22 @@ class PipettableLabware(LabwareABC):
     def GetHeightFromVolume(self, Volume: float) -> float:
         CalculatedHeight = 0.0
 
-        WellsEquations = self.Wells.WellEquations
+        Segments = self.Wells.Segments
 
         while True:
             TempHeight = CalculatedHeight
             CalculatedVolume = 0
             # reset each round
 
-            for Segment in WellsEquations:
-                SegmentHeight = Segment.SegmentHeight
+            for Segment in Segments:
+                SegmentHeight = Segment.Height
                 EvalHeight = TempHeight
 
                 if EvalHeight > SegmentHeight:
                     EvalHeight = SegmentHeight
                 # Make sure we do not exceed the segment height during the calc
 
-                CalculatedVolume += eval(Segment.SegmentEquation, {}, {"h": EvalHeight})
+                CalculatedVolume += eval(Segment.Equation, {}, {"h": EvalHeight})
                 TempHeight -= SegmentHeight
 
                 if TempHeight <= 0:
@@ -39,11 +39,11 @@ class PipettableLabware(LabwareABC):
         return CalculatedHeight
 
     def GetVolumeFromHeight(self, Height: float) -> float:
-        WellsEquations = self.Wells.WellEquations
+        Segments = self.Wells.Segments
         CalculatedVolume = 0
 
-        for Segment in WellsEquations:
-            SegmentHeight = Segment.SegmentHeight
+        for Segment in Segments:
+            SegmentHeight = Segment.Height
 
             if Height > SegmentHeight:
                 EvalHeight = SegmentHeight
@@ -52,6 +52,6 @@ class PipettableLabware(LabwareABC):
 
             Height -= SegmentHeight
 
-            CalculatedVolume += eval(Segment.SegmentEquation, {}, {"h": EvalHeight})
+            CalculatedVolume += eval(Segment.Equation, {}, {"h": EvalHeight})
 
         return CalculatedVolume

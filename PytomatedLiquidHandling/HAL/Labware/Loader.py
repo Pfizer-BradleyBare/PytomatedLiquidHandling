@@ -6,7 +6,7 @@ import yaml
 from PytomatedLiquidHandling.HAL.Tools import LabwareAddressing
 
 from . import NonPipettableLabware, PipettableLabware
-from .Base import Dimensions, LabwareABC, TransportOffsets, WellEquation, Wells
+from .Base import Dimensions, LabwareABC, TransportOffsets, Segment, Wells
 
 Logger = logging.getLogger(__name__)
 
@@ -78,26 +78,27 @@ def LoadYaml(FilePath: str) -> dict[str, LabwareABC]:
                     Rows, Columns, LabwareAddressing.Sorting(AddressingDirection)
                 )
 
-            WellEquations: list[WellEquation] = list()
+            Segments = list()
             for Segment in LabwareWells["Segment Equations"]:
-                WellEquations.append(
-                    WellEquation(Segment["Segment Height"], Segment["Segment Equation"])
+                Segments.append(
+                    (Segment["Segment Height"], Segment["Segment Equation"])
                 )
             # Create WellsEquation Class List
 
             WellsInstance = Wells(
-                Addressing,
                 Columns,
                 Rows,
+                Addressing,
                 SequencesPerWell,
                 MaxVolume,
                 DeadVolume,
-                WellEquations,
+                Segments,
             )
             # Create Wells Class
             LabwareInstance = PipettableLabware(
                 Identifier,
                 ImageFilename,
+                "",
                 DimensionsInstance,
                 TransportOffsetsInstance,
                 WellsInstance,
@@ -107,6 +108,7 @@ def LoadYaml(FilePath: str) -> dict[str, LabwareABC]:
             LabwareInstance = NonPipettableLabware(
                 Identifier,
                 ImageFilename,
+                "",
                 DimensionsInstance,
                 TransportOffsetsInstance,
             )

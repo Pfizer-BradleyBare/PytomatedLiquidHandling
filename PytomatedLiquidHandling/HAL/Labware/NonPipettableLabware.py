@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 
-from .Base import Dimensions, LabwareABC
+from .Base import LabwareABC
 
 
 @dataclass

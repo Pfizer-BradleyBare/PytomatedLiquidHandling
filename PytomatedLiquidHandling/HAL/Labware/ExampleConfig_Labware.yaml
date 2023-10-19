@@ -3,33 +3,33 @@
   Image Filename: LidAgilentBlack
   Part Number: TODO
   Dimensions:
-    Long Side: 136
-    Short Side: 95
+    X Length: 136
+    Y Length: 95
   Transport Offsets:
     Open: 2
     Close: 2
-    DistanceFromTop: 4
-    DistanceFromBottom: 4
+    Top: 4
+    Bottom: 4
 
 - Identifier: Vacuum Manifold
   Enabled: True
   Image Filename: Image
   Part Number: TODO
   Dimensions:
-    Long Side: 250
-    Short Side: 89
+    X Length: 250
+    Y Length: 89
   Transport Offsets:
     Open: 2
     Close: 2
-    DistanceFromTop: 4
-    DistanceFromBottom: 4
+    Top: 4
+    Bottom: 4
 
 - Identifier: Biorad 200uL 96 Well PCR Plate
   Enabled: True
   Image Filename: PlateBiorad200uL96Well
   Part Number: HSP9601
   Wells:
-    Labware Addressing:
+    Addressing:
       Type: AlphaNumeric
       Direction: Columnwise
     Columns: 12
@@ -37,27 +37,27 @@
     Sequences Per Well: 1
     Max Volume: 200
     Dead Volume: 10
-    Segment Equations:
-      - Segment Height: 0
-        Segment Equation: h * 2.3562
+    Segments:
+      - Height: 0
+        Equation: h * 2.3562
 
-      - Segment Height: 15
-        Segment Equation: h * 14.5953
+      - Height: 15
+        Equation: h * 14.5953
   Dimensions:
-    Long Side: 127
-    Short Side: 86
+    X Length: 127
+    Y Length: 86
   Transport Offsets:
     Open: 2
     Close: 2
-    DistanceFromTop: 4
-    DistanceFromBottom: 4
+    Top: 4
+    Bottom: 4
 
 - Identifier: Thermo 400uL 96 Well PCR Plate
   Enabled: True
   Image Filename: PlateThermo400uL96Well
   Part Number: 12-656-440
   Wells:
-    Labware Addressing:
+    Addressing:
       Type: AlphaNumeric
       Direction: Columnwise
     Columns: 12
@@ -65,27 +65,27 @@
     Sequences Per Well: 1
     Max Volume: 400
     Dead Volume: 10
-    Segment Equations:
-      - Segment Height: 3
-        Segment Equation: h * 18.9150
+    Segments:
+      - Height: 3
+        Equation: h * 18.9150
 
-      - Segment Height: 8
-        Segment Equation: h * 56.7450
+      - Height: 8
+        Equation: h * 56.7450
   Dimensions:
-    Long Side: 127
-    Short Side: 86
+    X Length: 127
+    Y Length: 86
   Transport Offsets:
     Open: 2
     Close: 2
-    DistanceFromTop: 4
-    DistanceFromBottom: 4
+    Top: 4
+    Bottom: 4
 
 - Identifier: Thermo 1200uL 96 Well PCR Plate
   Enabled: True
   Image Filename: PlateThermo1200uL96Well
   Part Number: AB1127
   Wells:
-    Labware Addressing:
+    Addressing:
       Type: AlphaNumeric
       Direction: Columnwise
     Columns: 12
@@ -93,27 +93,27 @@
     Sequences Per Well: 1
     Max Volume: 1200
     Dead Volume: 50
-    Segment Equations:
-      - Segment Height: 3
-        Segment Equation: h * h * (12.5664 - (1.0472 * h))
+    Segments:
+      - Height: 3
+        Equation: h * h * (12.5664 - (1.0472 * h))
 
-      - Segment Height: 18
-        Segment Equation: h * 70.5600
+      - Height: 18
+        Equation: h * 70.5600
   Dimensions:
-    Long Side: 127
-    Short Side: 86
+    X Length: 127
+    Y Length: 86
   Transport Offsets:
     Open: 2
     Close: 2
-    DistanceFromTop: 4
-    DistanceFromBottom: 4
+    Top: 4
+    Bottom: 4
 
 - Identifier: Corning Costar 2000uL 96 Well PCR Plate
   Enabled: True
   Image Filename: PlateCorning2000uL96Well
   Part Number: 6604337-01
   Wells:
-    Labware Addressing:
+    Addressing:
       Type: AlphaNumeric
       Direction: Columnwise
     Columns: 12
@@ -121,17 +121,17 @@
     Sequences Per Well: 1
     Max Volume: 2000
     Dead Volume: 50
-    Segment Equations:
-      - Segment Height: 4
-        Segment Equation: h * h * (12.5664 - (1.0472 * h))
+    Segments:
+      - Height: 4
+        Equation: h * h * (12.5664 - (1.0472 * h))
 
-      - Segment Height: 38
-        Segment Equation: h * 64.0000
+      - Height: 38
+        Equation: h * 64.0000
   Dimensions:
-    Long Side: 127
-    Short Side: 86
+    X Length: 127
+    Y Length: 86
   Transport Offsets:
     Open: 2
     Close: 2
-    Distance From Top: 4
-    Distance From Bottom: 4
+    Top: 4
+    Bottom: 4

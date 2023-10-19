@@ -2,6 +2,6 @@ from pydantic.dataclasses import dataclass
 
 
 @dataclass
-class Dimensions:
-    XLength: float
-    YLength: float
+class Segment:
+    Height: float
+    Equation: str

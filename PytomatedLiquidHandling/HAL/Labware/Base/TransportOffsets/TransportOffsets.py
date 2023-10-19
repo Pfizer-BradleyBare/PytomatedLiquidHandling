@@ -1,9 +1,9 @@
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 
 
 @dataclass
 class TransportOffsets:
     Open: float
     Close: float
-    TopOffset: float
-    BottomOffset: float
+    Top: float
+    Bottom: float

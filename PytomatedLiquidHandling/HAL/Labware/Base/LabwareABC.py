@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 
 from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
 
@@ -35,5 +35,6 @@ class LabwareNotEqualError(BaseException):
 @dataclass
 class LabwareABC(AbstractClasses.HALObject):
     ImageFilename: str
+    PartNumber: str
     Dimensions: Dimensions
     TransportOffsets: TransportOffsets
