@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from pydantic import PrivateAttr
 
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
@@ -12,17 +13,14 @@ class AvailablePosition:
     PositionID: str
 
 
-@dataclass
 class TipABC(Interface, HALObject):
     RackLabwareIDs: list[str]
-    MaxVolume: float
-    AvailablePositions: list[AvailablePosition] = field(
-        init=False, default_factory=list
-    )
+    Volume: float
+    _AvailablePositions: list[AvailablePosition] = PrivateAttr(default_factory=list)
 
     def _ParseAvailablePositions(self, AvailablePositions: list[dict[str, str]]):
         for Pos in AvailablePositions:
-            self.AvailablePositions.append(
+            self._AvailablePositions.append(
                 AvailablePosition(Pos["LabwareID"], Pos["PositionID"])
             )
 
@@ -34,7 +32,7 @@ class TipABC(Interface, HALObject):
         """Total number of tips.
         NOTE: This is not guarenteed to be the number of accessible tips. Call RemainingTipsInTier for that info.
         """
-        return len(self.AvailablePositions)
+        return len(self._AvailablePositions)
 
     @abstractmethod
     def RemainingTipsInTier(self) -> int:

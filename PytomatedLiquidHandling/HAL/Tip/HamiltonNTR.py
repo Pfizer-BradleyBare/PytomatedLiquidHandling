@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from pydantic import PrivateAttr
 from typing import cast
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
@@ -6,18 +6,16 @@ from ...Driver.Hamilton.Tip import Visual_NTR_Library
 from .Base import TipABC
 
 
-@dataclass
-class HamiltonTipNTR(TipABC):
-    Backend: HamiltonBackendABC
-    NumTiers: int
+class HamiltonNTR(TipABC):
+    Tiers: int
     TipsPerRack: int
     RackWasteLabwareID: str
     GripperLabwareID: str
-    TierDiscardNumber: int = field(init=False, default=100)
-    DiscardedRackLabwareIDs: list[str] = field(init=False, default_factory=list)
+    _TierDiscardNumber: int = PrivateAttr(default=100)
+    _DiscardedRackLabwareIDs: list[str] = PrivateAttr(default_factory=list)
 
     def RemainingTipsInTier(self) -> int:
-        Remaining = self.RemainingTips() % (self.TipsPerRack * self.NumTiers)
+        Remaining = self.RemainingTips() % (self.TipsPerRack * self.Tiers)
 
         if Remaining == 0:
             AvailableIDs = set([Pos.LabwareID for Pos in self.AvailablePositions])
@@ -25,7 +23,7 @@ class HamiltonTipNTR(TipABC):
             if len(AvailableIDs) + len(self.DiscardedRackLabwareIDs) == len(
                 self.RackLabwareIDs
             ):
-                return self.TipsPerRack * self.NumTiers
+                return self.TipsPerRack * self.Tiers
                 # We are at the start of a fresh layer
             else:
                 return 0
@@ -61,13 +59,13 @@ class HamiltonTipNTR(TipABC):
         ]
         # Update available positions
 
-        self.TierDiscardNumber = self.NumTiers
+        self.TierDiscardNumber = self.Tiers
         # Reset the Tier discard number. This will only be changed here and in the TipCounterEdit method
 
         if len(self.AvailablePositions) == 0:
             Command = Visual_NTR_Library.Channels_TipCounter_Write.Command(
                 ListedOptions=Visual_NTR_Library.Channels_TipCounter_Write.ListedOptions(
-                    TipCounter="HamiltonTipNTR_" + str(self.MaxVolume) + "uL_TipCounter"
+                    TipCounter="HamiltonTipNTR_" + str(self.Volume) + "uL_TipCounter"
                 ),
                 CustomErrorHandling=self.CustomErrorHandling,
             )
@@ -80,9 +78,9 @@ class HamiltonTipNTR(TipABC):
 
     def TipCounterEdit(self):
         ListedOptions = Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
-            TipCounter="HamiltonTipNTR_" + str(self.MaxVolume) + "uL_TipCounter",
+            TipCounter="HamiltonTipNTR_" + str(self.Volume) + "uL_TipCounter",
             DialogTitle="Please update the number of "
-            + str(self.MaxVolume)
+            + str(self.Volume)
             + "uL tips currently loaded on the system",
         )
         for ID in self.RackLabwareIDs:
@@ -112,6 +110,6 @@ class HamiltonTipNTR(TipABC):
         ]
         # We automatically assume the if a labwareID is NOT in the available positions, then it is basically already discarded.
 
-        self.TierDiscardNumber = len(self.DiscardedRackLabwareIDs) % self.NumTiers
+        self.TierDiscardNumber = len(self.DiscardedRackLabwareIDs) % self.Tiers
         # Once we know which labwareIDs are already gone we can calculate how many to throw away on the first pass.
         # We basically say: "I assume to have a multiple of NumTiers so if I have any remainder then that is number of tiers to be thrown away."

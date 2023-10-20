@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import cast
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
@@ -6,10 +5,7 @@ from ...Driver.Hamilton.Tip import HSLTipCountingLib
 from .Base import TipABC
 
 
-@dataclass
-class HamiltonTipFTR(TipABC):
-    Backend: HamiltonBackendABC
-
+class HamiltonFTR(TipABC):
     def RemainingTipsInTier(self) -> int:
         return self.RemainingTips()
 

@@ -23,3 +23,8 @@ with open(os.path.join(os.path.dirname(__file__), "Transport.yaml")) as File:
     Dict = yaml.full_load(File)
 
 HAL.TransportDevice.Load(Dict)
+
+with open(os.path.join(os.path.dirname(__file__), "Tip.yaml")) as File:
+    Dict = yaml.full_load(File)
+
+HAL.Tip.Load(Dict)
