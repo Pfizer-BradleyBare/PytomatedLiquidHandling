@@ -149,6 +149,22 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
         ).SupportedLiquidClassCategories[LiquidClassCategory]
 
     @abstractmethod
+    def Pickup(self):
+        ...
+
+    @abstractmethod
+    def Aspirate(self):
+        ...
+
+    @abstractmethod
+    def Dispense(self):
+        ...
+
+    @abstractmethod
+    def Eject(self):
+        ...
+
+    @abstractmethod
     def Transfer(self, ListedOptions: list[TransferOptions]):
         ...
 
