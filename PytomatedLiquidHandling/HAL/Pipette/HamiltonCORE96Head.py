@@ -15,7 +15,7 @@ class HamiltonCORE96Head(PipetteABC):
         Options = ListedOptions[0]
         # All the options should be the same. So we can just take the first one for the majority
 
-        MaxVolume = self.SupportedPipetteTips[-1].TipInstance.Volume
+        MaxVolume = self.SupportedTips[-1].Tip.Volume
         NumTransfers = ceil(Options.TransferVolume / MaxVolume)
         TransferVolume = Options.TransferVolume / NumTransfers
         # Find out how many transfers we need to do
@@ -23,7 +23,7 @@ class HamiltonCORE96Head(PipetteABC):
         PipetteTipInstance = self.GetTip(TransferVolume)
 
         PickupOptions = CORE96Head.Pickup.Options(
-            Sequence=PipetteTipInstance.TipInstance.PickupSequence
+            Sequence=PipetteTipInstance.Tip.PickupSequence
         )
 
         AspirateOptions = CORE96Head.Aspirate.Options(

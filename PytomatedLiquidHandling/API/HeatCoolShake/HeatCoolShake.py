@@ -45,9 +45,9 @@ def Reserve(Container: Container.Container, Temperature: float, RPM: int):
     PotentialDevices = [
         Device
         for Device in HeatCoolShakeDevices.values()
-        if Device.HeatingSupported >= HeatingRequired
-        and Device.CoolingSupported >= CoolingRequired
-        and Device.ShakingSupported >= ShakingRequired
+        if Device._HeatingSupported >= HeatingRequired
+        and Device._CoolingSupported >= CoolingRequired
+        and Device._ShakingSupported >= ShakingRequired
         and Device.Identifier not in Reservations
         and all(
             ExceptionToBool(Device.ValidateOptions, LayoutItem)

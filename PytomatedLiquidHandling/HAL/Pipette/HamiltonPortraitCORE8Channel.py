@@ -83,7 +83,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 # If we don't have enough tips then try to get a user to help out
 
                 TipPositions[Tip] = TipInstance._AvailablePositions[:8]
-                TipInstance.AvailablePositions = TipInstance._AvailablePositions[8:]
+                TipInstance._AvailablePositions = TipInstance._AvailablePositions[8:]
             # Get our updated tip positions!
 
             ListedPickupOptions: list[PortraitCORE8Channel.Pickup.Options] = list()

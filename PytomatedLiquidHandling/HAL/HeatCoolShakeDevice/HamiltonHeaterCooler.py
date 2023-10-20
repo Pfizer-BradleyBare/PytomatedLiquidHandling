@@ -28,14 +28,14 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterCoolerDriver.Connect.Response
         )
 
-        self.HandleID = ResponseInstance.GetHandleID()
+        self._HandleID = ResponseInstance.GetHandleID()
 
     def Deinitialize(self):
         HeatCoolShakeDeviceABC.Deinitialize(self)
 
         CommandInstance = HeaterCoolerDriver.StopTemperatureControl.Command(
             Options=HeaterCoolerDriver.StopTemperatureControl.Options(
-                HandleID=str(self.HandleID)
+                HandleID=str(self._HandleID)
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
@@ -48,7 +48,7 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
     def SetTemperature(self, Temperature: float):
         CommandInstance = HeaterCoolerDriver.StartTemperatureControl.Command(
             Options=HeaterCoolerDriver.StartTemperatureControl.Options(
-                HandleID=str(self.HandleID),
+                HandleID=str(self._HandleID),
                 Temperature=Temperature,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
@@ -67,7 +67,7 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
     ) -> float:
         CommandInstance = HeaterCoolerDriver.GetTemperature.Command(
             Options=HeaterCoolerDriver.GetTemperature.Options(
-                HandleID=str(self.HandleID),
+                HandleID=str(self._HandleID),
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
