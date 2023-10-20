@@ -1,7 +1,6 @@
-from pydantic.dataclasses import dataclass
+from pydantic import BaseModel
 
 
-@dataclass
-class Segment:
+class Segment(BaseModel):
     Height: float
     Equation: str

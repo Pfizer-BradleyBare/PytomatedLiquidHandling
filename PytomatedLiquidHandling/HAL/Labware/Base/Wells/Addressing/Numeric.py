@@ -1,6 +1,5 @@
-from dataclasses import dataclass
-
-from .Base import InvalidPositionError, LabwareAddressing, LabwarePosition
+from .Base import InvalidPositionError, Addressing, LabwarePosition
+from typing import Literal
 
 
 class NumericPosition(LabwarePosition):
@@ -11,8 +10,9 @@ class NumericPosition(LabwarePosition):
         LabwarePosition.__init__(self, Position)
 
 
-@dataclass
-class NumericAddressing(LabwareAddressing):
+class NumericAddressing(Addressing):
+    Type: Literal["Numeric"] = "Numeric"
+
     def _GetColumnwisePosition(self, Position: LabwarePosition) -> str:
         if Position.Value.isnumeric():
             return Position.Value

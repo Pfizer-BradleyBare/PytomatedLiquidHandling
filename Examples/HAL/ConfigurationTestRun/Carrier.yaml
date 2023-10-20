@@ -1,0 +1,27 @@
+Moveable Carrier:
+  - Identifier: h
+    Enabled: True
+    Track Start: 32
+    Track End: 37
+    Num Labware Positions: 5
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
+
+NonMoveable Carrier:
+  - Identifier: i
+    Enabled: True
+    Track Start: 32
+    Track End: 37
+    Num Labware Positions: 5
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
+
+Autoload Carrier:
+  - Identifier: j
+    Enabled: True
+    Carrier Labware ID: LabID
+    Track Start: 32
+    Track End: 37
+    Num Labware Positions: 5
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage

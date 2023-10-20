@@ -1,7 +1,7 @@
 from pydantic import field_validator
 from pydantic.dataclasses import dataclass
 
-from PytomatedLiquidHandling.HAL import Carrier, GetCarriers
+from PytomatedLiquidHandling.HAL import Carrier
 
 
 @dataclass
@@ -11,9 +11,9 @@ class CarrierConfig:
 
     @field_validator("Carrier")
     def CarrierValidate(cls, v):
-        if v not in GetCarriers():
+        if v not in Carrier.GetCarriers():
             raise ValueError(
                 v + " not found in Carriers. Did you disable or forget to add it?"
             )
 
-        return GetCarriers()[v]
+        return Carrier.GetCarriers()[v]

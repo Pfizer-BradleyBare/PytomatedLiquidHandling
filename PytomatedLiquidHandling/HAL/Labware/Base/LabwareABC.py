@@ -32,7 +32,6 @@ class LabwareNotEqualError(BaseException):
     Labware2: "LabwareABC"
 
 
-@dataclass
 class LabwareABC(AbstractClasses.HALObject):
     ImageFilename: str
     PartNumber: str

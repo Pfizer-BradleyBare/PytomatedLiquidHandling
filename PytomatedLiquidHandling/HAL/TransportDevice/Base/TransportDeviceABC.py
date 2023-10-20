@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass
 
-from pydantic import Field
+from pydantic import field_validator, PrivateAttr, Field
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
@@ -52,7 +52,26 @@ class TransportDevicesNotCompatibleError(BaseException):
 
 class TransportDeviceABC(Interface, HALObject):
     SupportedLabwares: list[Labware.Base.LabwareABC]
-    _LastTransportFlag: bool = Field(exclude=True)
+    _LastTransportFlag: bool = PrivateAttr(default=False)
+
+    @field_validator("SupportedLabwares", mode="before")
+    def __SupportedLabwaresValidated(cls, v):
+        SupportedObjects = list()
+
+        Objects = Labware.GetObjects()
+
+        for Identifier in v:
+            if Identifier not in Objects:
+                raise ValueError(
+                    Identifier
+                    + " is not found in "
+                    + Labware.Base.LabwareABC.__name__
+                    + " objects."
+                )
+
+            SupportedObjects.append(Objects[Identifier])
+
+        return SupportedObjects
 
     @dataclass
     class PickupOptions(DeckLocation.Base.TransportConfig.Options):

@@ -1,7 +1,6 @@
-from pydantic.dataclasses import dataclass
+from pydantic import BaseModel
 
 
-@dataclass
-class Dimensions:
+class Dimensions(BaseModel):
     XLength: float
     YLength: float

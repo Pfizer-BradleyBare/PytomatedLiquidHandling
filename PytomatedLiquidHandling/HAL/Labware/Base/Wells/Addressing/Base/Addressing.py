@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from pydantic import BaseModel
 from enum import Enum
 
 
@@ -18,14 +18,13 @@ class Sorting(Enum):
     Rowwise = "Rowwise"
 
 
-@dataclass
-class LabwareAddressing(ABC):
+class Addressing(BaseModel, ABC):
     Rows: int = 8
     Columns: int = 12
-    SortDirection: Sorting = Sorting.Columnwise
+    Direction: Sorting = Sorting.Columnwise
 
     def GetPosition(self, Position: LabwarePosition) -> str:
-        if self.SortDirection == Sorting.Columnwise:
+        if self.Direction == Sorting.Columnwise:
             return self._GetColumnwisePosition(Position)
         else:
             return self._GetRowwisePosition(Position)

@@ -1,6 +1,5 @@
-from dataclasses import dataclass
-
-from .Base import InvalidPositionError, LabwareAddressing, LabwarePosition
+from .Base import InvalidPositionError, Addressing, LabwarePosition
+from typing import Literal
 
 
 class AlphaNumericPosition(LabwarePosition):
@@ -12,8 +11,9 @@ class AlphaNumericPosition(LabwarePosition):
         LabwarePosition.__init__(self, Position)
 
 
-@dataclass
-class AlphaNumericAddressing(LabwareAddressing):
+class AlphaNumericAddressing(Addressing):
+    Type: Literal["AlphaNumeric"] = "AlphaNumeric"
+
     def _GetColumnwisePosition(self, Position: LabwarePosition) -> str:
         if (
             Position.Value.isalnum()

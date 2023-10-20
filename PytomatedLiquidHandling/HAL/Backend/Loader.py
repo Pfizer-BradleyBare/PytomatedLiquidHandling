@@ -7,34 +7,34 @@ from PytomatedLiquidHandling.Driver.Hamilton.Backend import (
     MicrolabStarBackend,
     VantageBackend,
 )
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
+from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
+    BackendABC as BaseObject,
+)
 from PytomatedLiquidHandling.Driver.UnchainedLabs.Backend import StunnerBackend
 
 Logger = logging.getLogger(__name__)
 
+__Init: bool = False
+__Objects: dict[str, BaseObject] = dict()
 
-def LoadYaml(FilePath: str) -> dict[str, BackendABC]:
+
+def GetObjects() -> dict[str, BaseObject]:
+    if __Init:
+        return __Objects
+    else:
+        raise RuntimeError(
+            BaseObject.__name__ + " objects do not exist yet. Did you load them?"
+        )
+
+
+def Load(Dict: dict) -> dict[str, BaseObject]:
+    global __Init
+    __Init = True
+
     Logger.info("Loading Backend config yaml file.")
 
-    Backends: dict[str, BackendABC] = dict()
-
-    if not os.path.exists(FilePath):
-        Logger.warning("Config file does not exist. Skipped")
-        return Backends
-
-    FileHandle = open(FilePath, "r")
-    ConfigFile = yaml.full_load(FileHandle)
-    FileHandle.close()
-    # Get config file contents
-
-    if ConfigFile is None:
-        Logger.warning(
-            "Config file exists but does not contain any config items. Skipped"
-        )
-        return Backends
-
-    for DeviceID in ConfigFile:
-        Device = ConfigFile[DeviceID]
+    for DeviceID in Dict:
+        Device = Dict[DeviceID]
         Identifier = Device["Identifier"]
 
         if DeviceID == "Microlab Star":
@@ -48,6 +48,6 @@ def LoadYaml(FilePath: str) -> dict[str, BackendABC]:
         else:
             raise Exception("Device not recognized")
 
-        Backends[Identifier] = DeviceInstance
+        __Objects[Identifier] = DeviceInstance
 
-    return Backends
+    return __Objects

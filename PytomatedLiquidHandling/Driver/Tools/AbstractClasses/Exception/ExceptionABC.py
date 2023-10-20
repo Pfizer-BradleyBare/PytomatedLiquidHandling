@@ -11,8 +11,8 @@ ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 @dataclass
 class ExceptionABC(Exception, Generic[CommandABCType, ResponseABCType]):
     ErrorCode = ""
-    CommandInstance: CommandABCType
-    ResponseInstance: ResponseABCType
+    CommandInstance: CommandABCType = None
+    ResponseInstance: ResponseABCType = None
 
     # @abstractmethod
     def __init_subclass__(cls) -> None:
