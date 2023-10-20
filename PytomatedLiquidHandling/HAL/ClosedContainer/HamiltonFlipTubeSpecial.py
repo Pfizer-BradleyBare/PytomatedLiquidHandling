@@ -1,10 +1,7 @@
-from dataclasses import dataclass
-
 from ...Driver.Hamilton.ClosedContainer import FlipTube as FlipTubeDriver
 from .Base import ClosedContainerABC, OpenCloseOptions
 
 
-@dataclass
 class HamiltonFlipTubeSpecial(ClosedContainerABC):
     def Initialize(self):
         ClosedContainerABC.Initialize(self)

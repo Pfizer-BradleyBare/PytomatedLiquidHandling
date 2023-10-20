@@ -1,1 +1,1 @@
-from . import AbstractClasses, DictTools, Loader
+from . import AbstractClasses, DictTools, ConfigLoader

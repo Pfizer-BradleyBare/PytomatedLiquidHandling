@@ -1,4 +1,10 @@
 from . import Base
 from .NonPipettableLabware import NonPipettableLabware
 from .PipettableLabware import PipettableLabware
-from .Loader import Load, GetObjects
+
+
+__Objects: dict[str, Base.LabwareABC] = dict()
+
+
+def GetObjects() -> dict[str, Base.LabwareABC]:
+    return __Objects

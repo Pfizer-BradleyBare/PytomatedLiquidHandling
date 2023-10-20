@@ -3,21 +3,59 @@ from dataclasses import dataclass
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
-from PytomatedLiquidHandling.HAL.Tools import AbstractClasses, LabwareAddressing
+from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
+from pydantic import field_validator
 
 
 @dataclass(kw_only=True)
 class OpenCloseOptions(OptionsABC):
     LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    Position: LabwareAddressing.AlphaNumericPosition | LabwareAddressing.NumericPosition
+    Position: Labware.Base.Addressing.AlphaNumericPosition | Labware.Base.Addressing.NumericPosition
 
 
-@dataclass
 class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALObject):
     ToolLabwareID: str
     ToolPositionID: str
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
     SupportedLabwares: list[Labware.Base.LabwareABC]
+
+    @field_validator("SupportedDeckLocations", mode="before")
+    def __SupportedDeckLocationsValidate(cls, v):
+        SupportedObjects = list()
+
+        Objects = DeckLocation.GetObjects()
+
+        for Identifier in v:
+            if Identifier not in Objects:
+                raise ValueError(
+                    Identifier
+                    + " is not found in "
+                    + DeckLocation.Base.DeckLocationABC.__name__
+                    + " objects."
+                )
+
+            SupportedObjects.append(Objects[Identifier])
+
+        return SupportedObjects
+
+    @field_validator("SupportedLabwares", mode="before")
+    def __SupportedLabwaresValidate(cls, v):
+        SupportedObjects = list()
+
+        Objects = Labware.GetObjects()
+
+        for Identifier in v:
+            if Identifier not in Objects:
+                raise ValueError(
+                    Identifier
+                    + " is not found in "
+                    + Labware.Base.LabwareABC.__name__
+                    + " objects."
+                )
+
+            SupportedObjects.append(Objects[Identifier])
+
+        return SupportedObjects
 
     def ValidateOpenCloseOptions(self, OptionsList: list[OpenCloseOptions]):
         """Must be called before calling Open, OpenTime, Close, or CloseTime.

@@ -8,7 +8,8 @@ DeckLocation:
     Transport Config:
       Transport Device: Gripper
       Pickup Options:
-      Dropoff Options:
+      Dropoff Options: 
+        CheckPlateExists: True
 
   - Identifier: HHS_Carrier_Pos2
     Enabled: True
@@ -19,6 +20,7 @@ DeckLocation:
       Transport Device: Gripper
       Pickup Options:
       Dropoff Options:
+        CheckPlateExists: True
 
   - Identifier: HHS_Carrier_Pos3
     Enabled: True
@@ -29,6 +31,7 @@ DeckLocation:
       Transport Device: Gripper
       Pickup Options:
       Dropoff Options:
+        CheckPlateExists: True
 
   - Identifier: HHS_Carrier_Pos4
     Enabled: True
@@ -39,6 +42,7 @@ DeckLocation:
       Transport Device: Gripper
       Pickup Options:
       Dropoff Options:
+        CheckPlateExists: True
 
   #Vacuum Carrier
   - Identifier: Vacuum_Carrier_Pos1
@@ -50,3 +54,4 @@ DeckLocation:
       Transport Device: Gripper
       Pickup Options:
       Dropoff Options:
+        CheckPlateExists: True

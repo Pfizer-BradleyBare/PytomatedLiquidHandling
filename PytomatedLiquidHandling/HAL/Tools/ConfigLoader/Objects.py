@@ -1,11 +1,14 @@
 from typing import Type, TypeVar
 from .. import DictTools, AbstractClasses
-from logging import Logger
+import logging
+
+Logger = logging.getLogger(__name__)
+
 
 T = TypeVar("T", bound="AbstractClasses.HALObject")
 
 
-def Load(Dict: dict, BaseObject: Type[T], Objects: dict[str, T], Logger: Logger):
+def Load(Dict: dict, BaseObject: Type[T], Objects: dict[str, T]):
     Logger.info("Starting to load " + BaseObject.__name__ + " configuration.")
 
     if bool(Dict) == False:

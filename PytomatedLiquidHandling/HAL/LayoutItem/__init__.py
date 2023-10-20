@@ -2,4 +2,9 @@ from . import Base
 from .CoverableItem import CoverableItem
 from .Lid import Lid
 from .NonCoverableItem import NonCoverableItem
-from .Loader import Load, GetObjects
+
+__Objects: dict[str, Base.LayoutItemABC] = dict()
+
+
+def GetObjects() -> dict[str, Base.LayoutItemABC]:
+    return __Objects
