@@ -15,7 +15,9 @@ HAL.Tools.ConfigLoader.ObjectsLists(
 with open(os.path.join(os.path.dirname(__file__), "Backend.yaml")) as File:
     Dict = yaml.full_load(File)
 
-HAL.Backend.Load(Dict)
+HAL.Tools.ConfigLoader.Objects(
+    Dict, HAL.Backend.Base.BackendABC, HAL.Backend.GetObjects()
+)
 
 with open(os.path.join(os.path.dirname(__file__), "Labware.yaml")) as File:
     Dict = yaml.full_load(File)

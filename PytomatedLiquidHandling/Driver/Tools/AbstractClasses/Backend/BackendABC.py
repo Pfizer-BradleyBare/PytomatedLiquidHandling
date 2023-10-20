@@ -1,7 +1,8 @@
 from abc import abstractmethod
-from dataclasses import dataclass, field
+from pydantic import PrivateAttr
 from typing import Type, TypeVar
 
+from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
 
 from ..Command import CommandABC
 from ..Exception import ExceptionABC
@@ -10,23 +11,22 @@ from ..Response import ResponseABC
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 
-@dataclass
-class BackendABC:
+class BackendABC(AbstractClasses.HALObject):
     Identifier: str
-    IsRunning: bool = field(init=False, default=False)
-    Exceptions: list[type[ExceptionABC]] = field(init=False, default_factory=list)
+    _IsRunning: bool = PrivateAttr(default=False)
+    _Exceptions: list[type[ExceptionABC]] = PrivateAttr(default_factory=list)
 
     def __CheckRunning(self):
-        if self.IsRunning == False:
+        if self._IsRunning == False:
             raise Exception("You must start the backend before interacting")
 
     @abstractmethod
     def StartBackend(self):
-        self.IsRunning = True
+        self._IsRunning = True
 
     @abstractmethod
     def StopBackend(self):
-        self.IsRunning = False
+        self._IsRunning = False
 
     @abstractmethod
     def ExecuteCommand(self, CommandInstance: CommandABC):

@@ -1,7 +1,7 @@
 import os
 import shutil
 import subprocess
-from dataclasses import dataclass, field
+from pydantic import PrivateAttr
 from typing import Type, TypeVar
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
@@ -18,26 +18,25 @@ from .HamiltonServerBackend import HamiltonServerBackendABC
 HamiltonResponseABCType = TypeVar("HamiltonResponseABCType", bound=HamiltonResponseABC)
 
 
-@dataclass
 class HamiltonBackendABC(BackendABC):
     MethodPath: str
     DeckLayoutPath: str
-    ActionServer: HamiltonServerBackendABC = field(init=False)
-    StateServer: HamiltonServerBackendABC = field(init=False)
+    _ActionServer: HamiltonServerBackendABC = PrivateAttr()
+    _StateServer: HamiltonServerBackendABC = PrivateAttr()
 
     def __post_init__(self):
         self.ActionServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
-            str(self.Identifier) + " Action Server",
-            "/ActionServer/",
-            767,
+            Identifier=str(self.Identifier) + " Action Server",
+            PathPrefix="/ActionServer/",
+            Port=767,
         )
         self.StateServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
-            str(self.Identifier) + " State Server",
-            "/StateServer/",
-            768,
+            Identifier=str(self.Identifier) + " State Server",
+            PathPrefix="/StateServer/",
+            Port=768,
         )
 
-        self.Exceptions = [
+        self._Exceptions = [
             HamiltonExceptions.UnhandledException,
             HamiltonExceptions.NoOptionsInTracker,
         ]

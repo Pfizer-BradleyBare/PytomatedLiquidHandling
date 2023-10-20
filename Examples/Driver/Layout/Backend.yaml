@@ -5,6 +5,7 @@
 #
 #############################################################
 
-Microlab Star:
+Microlab STAR:
   Identifier: Hammy
+  Enabled: True
   Deck Layout Path: Path

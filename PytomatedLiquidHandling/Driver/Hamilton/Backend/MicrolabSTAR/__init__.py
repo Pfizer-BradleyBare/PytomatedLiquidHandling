@@ -1,1 +1,1 @@
-from .MicrolabStar import MicrolabStarBackend
+from .MicrolabSTAR import MicrolabSTAR

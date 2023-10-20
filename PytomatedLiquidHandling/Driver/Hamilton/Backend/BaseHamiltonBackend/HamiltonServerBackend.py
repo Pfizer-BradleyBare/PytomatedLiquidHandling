@@ -1,10 +1,10 @@
 import logging
 import time
-from dataclasses import dataclass, field
+
 from typing import Callable
 
 from flask import request
-
+from pydantic import PrivateAttr
 from ....Tools.AbstractClasses import CommandOptionsListed, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
 from ..HamiltonResponse import HamiltonResponseABC
@@ -12,7 +12,6 @@ from ..HamiltonResponse import HamiltonResponseABC
 Logger = logging.getLogger(__name__)
 
 
-@dataclass
 class HamiltonServerBackendABC(ServerBackendABC):
     def GetNextCommand(self):
         ParserObject = ServerBackendABC.Parser(
@@ -101,8 +100,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         return Response
 
-    Views: list[Callable] = field(init=False, default_factory=list)
-    Address: str = field(init=False, default="localhost")
+    Views: list[Callable] = list()
 
     def __post_init__(self):
         self.Views = [self.GetNextCommand, self.RespondToCommand]

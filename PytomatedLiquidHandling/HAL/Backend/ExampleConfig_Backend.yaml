@@ -7,13 +7,16 @@
 
 Microlab Star:
   Identifier: Hammy
+  Enabled: True
   Deck Layout Path: Path
 
 Vantage:
   Identifier: Hammy
+  Enabled: True
   Deck Layout Path: Path
 
 Stunner:
   Identifier: Stunny
+  Enabled: True
   IP Address: "192.168.1.1"
   Port: 1234

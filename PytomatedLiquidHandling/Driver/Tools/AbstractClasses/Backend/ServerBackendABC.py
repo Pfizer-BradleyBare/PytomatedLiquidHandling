@@ -1,7 +1,7 @@
 import json
 import logging
 import time
-from dataclasses import dataclass, field
+from pydantic import PrivateAttr
 from threading import Event, Thread
 from typing import Callable, ClassVar
 
@@ -12,7 +12,6 @@ from .SimpleBackendABC import SimpleBackendABC
 ParserLogger = logging.getLogger(__name__ + ".Parser")
 
 
-@dataclass()
 class ServerBackendABC(SimpleBackendABC):
     __Hosts: ClassVar[list[tuple]] = list()
 
@@ -20,8 +19,8 @@ class ServerBackendABC(SimpleBackendABC):
     PathPrefix: str = "/"
     Address: str = "localhost"
     Port: int = 8080
-    __App: Flask = field(init=False)
-    __AppParentThreadRunnerFlag: Event = field(init=False, default=Event())
+    _App: Flask = PrivateAttr()
+    _AppParentThreadRunnerFlag: Event = PrivateAttr(default=Event())
 
     def __post_init__(self):
         self.__App = Flask(str(self.Identifier))
@@ -44,7 +43,7 @@ class ServerBackendABC(SimpleBackendABC):
             daemon=True,
         ).start()
 
-        self.__AppParentThreadRunnerFlag.wait()
+        self._AppParentThreadRunnerFlag.wait()
         time.sleep(1)
 
     def __Run(self):
@@ -63,7 +62,7 @@ class ServerBackendABC(SimpleBackendABC):
 
         ServerBackendABC.__Hosts.append(Host)
 
-        self.__AppParentThreadRunnerFlag.clear()
+        self._AppParentThreadRunnerFlag.clear()
 
         Thread(
             name="Flask App Thread Runner-> " + str(self.Identifier),
@@ -76,7 +75,7 @@ class ServerBackendABC(SimpleBackendABC):
         if Host not in ServerBackendABC.__Hosts:
             raise Exception("This backend not currently running. Run it first")
 
-        self.__AppParentThreadRunnerFlag.set()
+        self._AppParentThreadRunnerFlag.set()
 
         ServerBackendABC.__Hosts.remove(Host)
 
@@ -109,7 +108,6 @@ class ServerBackendABC(SimpleBackendABC):
         ParserInstance.SetEndpointDetails("Backend Killed")
         return ParserInstance.GetHTTPResponse()
 
-    @dataclass
     class Parser:
         def __init__(
             self,

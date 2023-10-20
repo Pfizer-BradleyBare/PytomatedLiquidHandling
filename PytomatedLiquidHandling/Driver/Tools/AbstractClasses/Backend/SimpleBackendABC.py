@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from pydantic import PrivateAttr
 from typing import Type, TypeVar
 
 from ..Command import CommandABC
@@ -9,10 +9,9 @@ from .BackendABC import BackendABC
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 
-@dataclass
 class SimpleBackendABC(BackendABC):
-    CommandInstance: CommandABC | None = field(init=False, default=None)
-    ResponseInstance: ResponseABC | None = field(init=False, default=None)
+    _CommandInstance: CommandABC | None = PrivateAttr(default=None)
+    _ResponseInstance: ResponseABC | None = PrivateAttr(default=None)
 
     def ExecuteCommand(self, CommandInstance: CommandABC):
         BackendABC.ExecuteCommand(self, CommandInstance)
@@ -61,7 +60,7 @@ class SimpleBackendABC(BackendABC):
         self, CommandInstance: CommandABC, ResponseInstance: ResponseABC
     ):
         if ResponseInstance.GetState() == False:
-            for Exception in self.Exceptions:
+            for Exception in self._Exceptions:
                 if Exception.ErrorCode in ResponseInstance.GetDetails():
                     raise Exception(CommandInstance, ResponseInstance)
 
