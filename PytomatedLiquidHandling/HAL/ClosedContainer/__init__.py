@@ -1,4 +1,4 @@
-from . import Base, Loader
+from . import Base
 from .HamiltonFlipTube import HamiltonFlipTube
 from .HamiltonFlipTubeSpecial import HamiltonFlipTubeSpecial
 

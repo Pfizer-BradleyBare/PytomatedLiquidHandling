@@ -1,6 +1,8 @@
 from abc import abstractmethod
 from dataclasses import dataclass
+
 from pydantic import field_validator
+
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
@@ -39,6 +41,7 @@ class TransferOptions(OptionsABC):
 
 
 class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
+    TipWasteLabwareID: str
     SupportedTips: list[PipetteTip]
     SupportedLabwares: list[Labware.PipettableLabware]
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]

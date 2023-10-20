@@ -1,4 +1,4 @@
-from . import Base, Loader
+from . import Base
 from .RandomAccessDeckStorage import RandomAccessDeckStorage
 
 __Objects: dict[str, Base.StorageDeviceABC] = dict()

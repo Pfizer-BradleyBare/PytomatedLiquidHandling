@@ -1,4 +1,4 @@
-from pydantic import field_validator, BaseModel
+from pydantic import BaseModel, field_validator
 
 from PytomatedLiquidHandling.HAL import Tip
 
@@ -7,7 +7,6 @@ class PipetteTip(BaseModel):
     Tip: Tip.Base.TipABC
     TipSupportDropoffLabwareID: str
     TipSupportPickupLabwareID: str
-    TipWasteLabwareID: str
     SupportedLiquidClassCategories: dict[str, str]
 
     @field_validator("Tip", mode="before")
