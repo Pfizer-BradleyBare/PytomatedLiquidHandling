@@ -12,4 +12,5 @@ from . import (
     DeckLocation,
     Tools,
     ClosedContainer,
+    HeatCoolShakeDevice,
 )

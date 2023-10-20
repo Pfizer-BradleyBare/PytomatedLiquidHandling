@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field
 
-from pydantic.dataclasses import dataclass as PydanticDataclass
+from pydantic import PrivateAttr, field_validator
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import Labware, LayoutItem
@@ -38,16 +38,34 @@ class ShakingNotSupportedError(BaseException):
     """
 
 
-@PydanticDataclass
 class HeatCoolShakeDeviceABC(Interface, HALObject):
     ComPort: str | int
-    HeatingSupported: bool
-    CoolingSupported: bool
-    ShakingSupported: bool
     TempLimits: TempLimits
-    SupportedCoverableLayoutItems: list[LayoutItem.CoverableItem]
+    CoverableLayoutItems: list[LayoutItem.CoverableItem]
 
-    HandleID: int | str = field(init=False, default="")
+    _HeatingSupported: bool = PrivateAttr(False)
+    _CoolingSupported: bool = PrivateAttr(False)
+    _ShakingSupported: bool = PrivateAttr(False)
+    _HandleID: int | str = PrivateAttr()
+
+    @field_validator("CoverableLayoutItems", mode="before")
+    def __SupportedCoverableLayoutItemsValidate(cls, v):
+        SupportedObjects = list()
+
+        Objects = LayoutItem.GetObjects()
+
+        for Identifier in v:
+            if Identifier not in Objects:
+                raise ValueError(
+                    Identifier
+                    + " is not found in "
+                    + LayoutItem.Base.LayoutItemABC.__name__
+                    + " objects."
+                )
+
+            SupportedObjects.append(Objects[Identifier])
+
+        return SupportedObjects
 
     def ValidateOptions(
         self,
@@ -71,8 +89,7 @@ class HeatCoolShakeDeviceABC(Interface, HALObject):
         Exceptions = list()
 
         SupportedLabwares = [
-            LayoutItem.Labware.Identifier
-            for LayoutItem in self.SupportedCoverableLayoutItems
+            LayoutItem.Labware.Identifier for LayoutItem in self.CoverableLayoutItems
         ]
 
         if LayoutItem.Labware not in SupportedLabwares:
@@ -81,13 +98,13 @@ class HeatCoolShakeDeviceABC(Interface, HALObject):
             )
 
         if Temperature is not None:
-            if Temperature < 25 and not self.CoolingSupported:
+            if Temperature < 25 and not self._CoolingSupported:
                 Exceptions.append(CoolingNotSupportedError)
-            if Temperature > 25 and not self.HeatingSupported:
+            if Temperature > 25 and not self._HeatingSupported:
                 Exceptions.append(HeatingNotSupportedError)
 
         if RPM is not None:
-            if not self.ShakingSupported:
+            if not self._ShakingSupported:
                 Exceptions.append(ShakingNotSupportedError)
 
         if len(Exceptions) > 0:
@@ -96,7 +113,7 @@ class HeatCoolShakeDeviceABC(Interface, HALObject):
     def GetLayoutItem(
         self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
     ) -> LayoutItem.CoverableItem:
-        for SupportedLayoutItemInstance in self.SupportedCoverableLayoutItems:
+        for SupportedLayoutItemInstance in self.CoverableLayoutItems:
             if SupportedLayoutItemInstance.Labware == LayoutItemInstance.Labware:
                 if isinstance(LayoutItemInstance, LayoutItem.CoverableItem):
                     SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered

@@ -57,3 +57,12 @@ with open(os.path.join(os.path.dirname(__file__), "ClosedContainer.yaml")) as Fi
 HAL.Tools.ConfigLoader.ObjectsLists(
     Dict, HAL.ClosedContainer.Base.ClosedContainerABC, HAL.ClosedContainer.GetObjects()
 )
+
+with open(os.path.join(os.path.dirname(__file__), "HeatCoolShakeDevice.yaml")) as File:
+    Dict = yaml.full_load(File)
+
+HAL.Tools.ConfigLoader.ObjectsLists(
+    Dict,
+    HAL.HeatCoolShakeDevice.Base.HeatCoolShakeDeviceABC,
+    HAL.HeatCoolShakeDevice.GetObjects(),
+)
