@@ -14,9 +14,9 @@ class HamiltonFTR(TipABC):
 
     def TipCounterEdit(self):
         ListedOptions = HSLTipCountingLib.Edit.ListedOptions(
-            TipCounter="HamiltonTipFTR_" + str(self.MaxVolume) + "uL_TipCounter",
+            TipCounter="HamiltonTipFTR_" + str(self.Volume) + "uL_TipCounter",
             DialogTitle="Please update the number of "
-            + str(self.MaxVolume)
+            + str(self.Volume)
             + "uL tips currently loaded on the system",
         )
         for ID in self.RackLabwareIDs:
