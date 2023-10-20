@@ -1,15 +1,13 @@
-from dataclasses import dataclass
 from math import ceil
 from typing import Any
 
-from PytomatedLiquidHandling.HAL import Labware, Tools
+from PytomatedLiquidHandling.HAL import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import PortraitCORE8Channel
 from .Base import PipetteABC, TransferOptions
 
 
-@dataclass
 class HamiltonPortraitCORE8Channel(PipetteABC):
     Backend: HamiltonBackendABC
     ActiveChannels: list[int]
@@ -40,7 +38,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     Options.SourceLiquidClassCategory,
                     Options.DestinationLiquidClassCategory,
                     Options.TransferVolume,
-                ).TipInstance.MaxVolume,
+                ).Tip.Volume,
             )
         ]
         # Use the appropriate tip to determine how many transfers will occur.
@@ -55,7 +53,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
         for OptionsList in OptionsListList:
             RequiredTips: dict[str, int] = {
-                Tip.TipInstance.Identifier: 0 for Tip in self.SupportedPipetteTips
+                Tip.Tip.Identifier: 0 for Tip in self.SupportedTips
             }
             # Package our tips for easy access
 
@@ -65,16 +63,16 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                         Options.SourceLiquidClassCategory,
                         Options.DestinationLiquidClassCategory,
                         Options.TransferVolume,
-                    ).TipInstance.Identifier
+                    ).Tip.Identifier
                 ] += 1
             # How many tips of each volume do we need?
 
             TipPositions: dict[str, list[Any]] = dict()
             for Tip, Count in RequiredTips.items():
                 TipInstance = None
-                for PipetteTipInstance in self.SupportedPipetteTips:
-                    if Tip == PipetteTipInstance.TipInstance.Identifier:
-                        TipInstance = PipetteTipInstance.TipInstance
+                for PipetteTipInstance in self.SupportedTips:
+                    if Tip == PipetteTipInstance.Tip.Identifier:
+                        TipInstance = PipetteTipInstance.Tip
                         break
 
                 if TipInstance is None:
@@ -84,8 +82,8 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     TipInstance.DiscardTierLayerToWaste()
                 # If we don't have enough tips then try to get a user to help out
 
-                TipPositions[Tip] = TipInstance.AvailablePositions[:8]
-                TipInstance.AvailablePositions = TipInstance.AvailablePositions[8:]
+                TipPositions[Tip] = TipInstance._AvailablePositions[:8]
+                TipInstance.AvailablePositions = TipInstance._AvailablePositions[8:]
             # Get our updated tip positions!
 
             ListedPickupOptions: list[PortraitCORE8Channel.Pickup.Options] = list()
@@ -101,12 +99,12 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
                 ListedPickupOptions.append(
                     PortraitCORE8Channel.Pickup.Options(
-                        LabwareID=TipPositions[
-                            PipetteTipInstance.TipInstance.Identifier
-                        ].pop(0)["LabwareID"],
-                        PositionID=TipPositions[
-                            PipetteTipInstance.TipInstance.Identifier
-                        ].pop(0)["PositionID"],
+                        LabwareID=TipPositions[PipetteTipInstance.Tip.Identifier].pop(
+                            0
+                        )["LabwareID"],
+                        PositionID=TipPositions[PipetteTipInstance.Tip.Identifier].pop(
+                            0
+                        )["PositionID"],
                         ChannelNumber=Count + 1,
                     )
                 )
@@ -115,10 +113,10 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 if not isinstance(AspirateLabware, Labware.PipettableLabware):
                     raise Exception("This should never happen")
 
-                NumericAddressing = Tools.LabwareAddressing.NumericAddressing(
-                    Options.SourceLayoutItemInstance.Labware.Wells.Rows,
-                    Options.SourceLayoutItemInstance.Labware.Wells.Columns,
-                    Options.SourceLayoutItemInstance.Labware.Wells.Addressing.SortDirection,
+                NumericAddressing = Labware.Base.Addressing.NumericAddressing(
+                    Rows=Options.SourceLayoutItemInstance.Labware.Wells.Addressing.Rows,
+                    Columns=Options.SourceLayoutItemInstance.Labware.Wells.Addressing.Columns,
+                    Direction=Options.SourceLayoutItemInstance.Labware.Wells.Addressing.Direction,
                 )
 
                 AspiratePosition = (
@@ -133,7 +131,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                         ChannelNumber=Count + 1,
                         LabwareID=Options.SourceLayoutItemInstance.LabwareID,
                         PositionID=Options.SourceLayoutItemInstance.Labware.Wells.Addressing.GetPosition(
-                            Tools.LabwareAddressing.NumericPosition(AspiratePosition)
+                            Labware.Base.Addressing.NumericPosition(AspiratePosition)
                         ),
                         LiquidClass=str(
                             self._GetLiquidClass(
@@ -149,10 +147,10 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 if not isinstance(DispenseLabware, Labware.PipettableLabware):
                     raise Exception("This should never happen")
 
-                NumericAddressing = Tools.LabwareAddressing.NumericAddressing(
-                    Options.DestinationLayoutItemInstance.Labware.Wells.Rows,
-                    Options.DestinationLayoutItemInstance.Labware.Wells.Columns,
-                    Options.DestinationLayoutItemInstance.Labware.Wells.Addressing.SortDirection,
+                NumericAddressing = Labware.Base.Addressing.NumericAddressing(
+                    Rows=Options.DestinationLayoutItemInstance.Labware.Wells.Addressing.Rows,
+                    Columns=Options.DestinationLayoutItemInstance.Labware.Wells.Addressing.Columns,
+                    Direction=Options.DestinationLayoutItemInstance.Labware.Wells.Addressing.Direction,
                 )
 
                 DispensePosition = (
@@ -167,7 +165,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                         ChannelNumber=Count + 1,
                         LabwareID=Options.DestinationLayoutItemInstance.LabwareID,
                         PositionID=Options.DestinationLayoutItemInstance.Labware.Wells.Addressing.GetPosition(
-                            Tools.LabwareAddressing.NumericPosition(DispensePosition)
+                            Labware.Base.Addressing.NumericPosition(DispensePosition)
                         ),
                         LiquidClass=str(
                             self._GetLiquidClass(

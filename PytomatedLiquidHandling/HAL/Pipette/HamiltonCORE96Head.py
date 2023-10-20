@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from math import ceil
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
@@ -6,7 +5,6 @@ from ...Driver.Hamilton.Pipette import CORE96Head
 from .Base import PipetteABC, TransferOptions
 
 
-@dataclass
 class HamiltonCORE96Head(PipetteABC):
     Backend: HamiltonBackendABC
 
@@ -17,7 +15,7 @@ class HamiltonCORE96Head(PipetteABC):
         Options = ListedOptions[0]
         # All the options should be the same. So we can just take the first one for the majority
 
-        MaxVolume = self.SupportedPipetteTips[-1].TipInstance.MaxVolume
+        MaxVolume = self.SupportedPipetteTips[-1].TipInstance.Volume
         NumTransfers = ceil(Options.TransferVolume / MaxVolume)
         TransferVolume = Options.TransferVolume / NumTransfers
         # Find out how many transfers we need to do

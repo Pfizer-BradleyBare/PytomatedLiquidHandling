@@ -1,13 +1,11 @@
 from abc import abstractmethod
 from dataclasses import dataclass
-
+from pydantic import field_validator
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
-from PytomatedLiquidHandling.HAL.Tools import AbstractClasses, LabwareAddressing
+from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
 
 from .PipetteTip import PipetteTip
-
-Labware.Base.LabwareNotSupportedError
 
 
 @dataclass
@@ -24,14 +22,14 @@ class LiquidClassCategoryNotSupportedError(BaseException):
 @dataclass(kw_only=True)
 class TransferOptions(OptionsABC):
     SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    SourcePosition: LabwareAddressing.AlphaNumericPosition | LabwareAddressing.NumericPosition
+    SourcePosition: Labware.Base.Addressing.AlphaNumericPosition | Labware.Base.Addressing.NumericPosition
     # This is the labware well position.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
     CurrentSourceVolume: float
     SourceMixCycles: int
     SourceLiquidClassCategory: str
     DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    DestinationPosition: LabwareAddressing.AlphaNumericPosition | LabwareAddressing.NumericPosition
+    DestinationPosition: Labware.Base.Addressing.AlphaNumericPosition | Labware.Base.Addressing.NumericPosition
     # This is the labware well position.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
     CurrentDestinationVolume: float
@@ -40,16 +38,51 @@ class TransferOptions(OptionsABC):
     TransferVolume: float
 
 
-@dataclass
 class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
-    SupportedPipetteTips: list[PipetteTip]
+    SupportedTips: list[PipetteTip]
     SupportedLabwares: list[Labware.PipettableLabware]
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
 
+    @field_validator("SupportedDeckLocations", mode="before")
+    def __SupportedDeckLocationsValidate(cls, v):
+        SupportedObjects = list()
+
+        Objects = DeckLocation.GetObjects()
+
+        for Identifier in v:
+            if Identifier not in Objects:
+                raise ValueError(
+                    Identifier
+                    + " is not found in "
+                    + DeckLocation.Base.DeckLocationABC.__name__
+                    + " objects."
+                )
+
+            SupportedObjects.append(Objects[Identifier])
+
+        return SupportedObjects
+
+    @field_validator("SupportedLabwares", mode="before")
+    def __SupportedLabwaresValidate(cls, v):
+        SupportedObjects = list()
+
+        Objects = Labware.GetObjects()
+
+        for Identifier in v:
+            if Identifier not in Objects:
+                raise ValueError(
+                    Identifier
+                    + " is not found in "
+                    + Labware.Base.LabwareABC.__name__
+                    + " objects."
+                )
+
+            SupportedObjects.append(Objects[Identifier])
+
+        return SupportedObjects
+
     def __post_init__(self):
-        self.SupportedPipetteTips = sorted(
-            self.SupportedPipetteTips, key=lambda x: x.TipInstance.MaxVolume
-        )
+        self.SupportedTips = sorted(self.SupportedTips, key=lambda x: x.Tip.Volume)
 
     def ValidateTransferOptions(self, OptionsList: list[TransferOptions]):
         UnsupportedDeckLocations = list()
@@ -77,14 +110,14 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
             DestinationLiquidClassCategory = Options.DestinationLiquidClassCategory
             if not any(
                 PipetteTip.IsLiquidClassCategorySupported(SourceLiquidClassCategory)
-                for PipetteTip in self.SupportedPipetteTips
+                for PipetteTip in self.SupportedTips
             ):
                 UnsupportedLiquidClassCategories.append(SourceLiquidClassCategory)
             if not any(
                 PipetteTip.IsLiquidClassCategorySupported(
                     DestinationLiquidClassCategory
                 )
-                for PipetteTip in self.SupportedPipetteTips
+                for PipetteTip in self.SupportedTips
             ):
                 UnsupportedLiquidClassCategories.append(DestinationLiquidClassCategory)
             # Check liquid class compatibility
@@ -97,7 +130,7 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
     ) -> PipetteTip:
         PossiblePipetteTips = [
             PipetteTip
-            for PipetteTip in self.SupportedPipetteTips
+            for PipetteTip in self.SupportedTips
             if PipetteTip.IsLiquidClassCategorySupported(SourceLiquidClassCategory)
             and PipetteTip.IsLiquidClassCategorySupported(
                 DestinationLiquidClassCategory
@@ -105,7 +138,7 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
         ]
 
         for PipetteTip in PossiblePipetteTips:
-            if PipetteTip.TipInstance.MaxVolume >= Volume:
+            if PipetteTip.Tip.Volume >= Volume:
                 return PipetteTip
 
         return PossiblePipetteTips[-1]

@@ -1,0 +1,76 @@
+#############################################################
+#
+# Devices: The pipetting devices available on this system. Options per device are different.
+# Enabled: True: Can be used. False: Cannot be used
+#
+#############################################################
+
+Hamilton CORE 96 Head:
+  - Identifier: test
+    Enabled: True
+    Backend: Hammy
+    Custom Error Handling: False
+
+    Supported Labwares:
+      - 200uL Biorad 96 Well PCR Plate
+
+    Supported Deck Locations:
+      - HHS_Carrier_Pos1
+
+    Supported Tips:
+      - Tip: 50uL NTR
+        Tip Support Dropoff Labware ID: Test
+        Tip Support Pickup Labware ID: Test
+        Tip Waste Labware ID: Test
+        Supported Liquid Class Categories:
+          CategoryName: LiquidClassName
+
+      - Tip: 300uL NTR
+        Tip Support Dropoff Labware ID: Test
+        Tip Support Pickup Labware ID: Test
+        Tip Waste Labware ID: Test
+        Supported Liquid Class Categories:
+          CategoryName: LiquidClassName
+
+      - Tip: 1000uL FTR
+        Tip Support Dropoff Labware ID: Test
+        Tip Support Pickup Labware ID: Test
+        Tip Waste Labware ID: Test
+        Supported Liquid Class Categories:
+          CategoryName: LiquidClassName
+
+Hamilton PortraitCORE8Channel:
+  - Identifier: Test
+    Enabled: True
+    Backend: Hammy
+    Custom Error Handling: False
+
+    Active Channels: [1, 2, 3, 4, 5, 6, 7, 8]
+
+    Supported Labwares:
+      - 200uL Biorad 96 Well PCR Plate
+
+    Supported Deck Locations:
+      - HHS_Carrier_Pos1
+
+    Supported Tips:
+      - Tip: 50uL NTR
+        Tip Support Dropoff Labware ID: Test
+        Tip Support Pickup Labware ID: Test
+        Tip Waste Labware ID: Test
+        Supported Liquid Class Categories:
+          CategoryName: LiquidClassName
+
+      - Tip: 300uL NTR
+        Tip Support Dropoff Labware ID: Test
+        Tip Support Pickup Labware ID: Test
+        Tip Waste Labware ID: Test
+        Supported Liquid Class Categories:
+          CategoryName: LiquidClassName
+
+      - Tip: 1000uL FTR
+        Tip Support Dropoff Labware ID: Test
+        Tip Support Pickup Labware ID: Test
+        Tip Waste Labware ID: Test
+        Supported Liquid Class Categories:
+          CategoryName: LiquidClassName
