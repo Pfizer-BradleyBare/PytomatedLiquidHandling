@@ -4,7 +4,6 @@ import time
 from typing import Callable
 
 from flask import request
-from pydantic import PrivateAttr
 from ....Tools.AbstractClasses import CommandOptionsListed, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
 from ..HamiltonResponse import HamiltonResponseABC
