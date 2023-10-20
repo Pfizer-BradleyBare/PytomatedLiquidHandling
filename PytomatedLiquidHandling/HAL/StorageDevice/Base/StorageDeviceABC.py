@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from dataclasses import dataclass, field
+from pydantic import PrivateAttr, field_validator
 
 from PytomatedLiquidHandling.HAL import LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
@@ -7,11 +7,29 @@ from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 from .Reservation import Reservation
 
 
-@dataclass
 class StorageDeviceABC(HALObject):
-    ReservableLayoutItems: list[LayoutItem.Base.LayoutItemABC]
+    LayoutItems: list[LayoutItem.Base.LayoutItemABC]
 
-    Reservations: dict[str, Reservation] = field(init=False, default_factory=dict)
+    _Reservations: dict[str, Reservation] = PrivateAttr(default_factory=list)
+
+    @field_validator("LayoutItems", mode="before")
+    def __SupportedLabwaresValidate(cls, v):
+        SupportedObjects = list()
+
+        Objects = LayoutItem.GetObjects()
+
+        for Identifier in v:
+            if Identifier not in Objects:
+                raise ValueError(
+                    Identifier
+                    + " is not found in "
+                    + LayoutItem.Base.LayoutItemABC.__name__
+                    + " objects."
+                )
+
+            SupportedObjects.append(Objects[Identifier])
+
+        return SupportedObjects
 
     @abstractmethod
     def Reserve(

@@ -27,6 +27,14 @@ def Load(Dict: dict, BaseObject: Type[T], Objects: dict[str, T]):
                 Key + " not recognized as a valid " + BaseObject.__name__ + " subclass"
             )
 
+        if not issubclass(cls, BaseObject):
+            raise ValueError(
+                cls.__name__
+                + " is not a subclass of "
+                + BaseObject.__name__
+                + ". You may be trying to load a config with the wrong HALObject."
+            )
+
         for Item in Dict[Key]:
             if Item["Enabled"] == True:
                 Logger.info(

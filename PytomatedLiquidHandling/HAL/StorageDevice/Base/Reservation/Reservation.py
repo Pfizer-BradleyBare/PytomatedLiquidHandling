@@ -1,9 +1,7 @@
-from dataclasses import dataclass, field
-
+from pydantic import BaseModel, PrivateAttr
 from PytomatedLiquidHandling.HAL import LayoutItem
 
 
-@dataclass
-class Reservation:
+class Reservation(BaseModel):
     LayoutItem: LayoutItem.Base.LayoutItemABC
-    IsStored: bool = field(init=False, default=False)
+    _IsStored: bool = PrivateAttr(default=False)

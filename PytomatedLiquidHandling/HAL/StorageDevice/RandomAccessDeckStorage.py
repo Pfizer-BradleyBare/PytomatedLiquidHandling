@@ -1,26 +1,23 @@
-from dataclasses import dataclass
-
 from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import StorageDeviceABC
 from .Base.Reservation import Reservation
 
 
-@dataclass
 class RandomAccessDeckStorage(StorageDeviceABC):
     def Reserve(self, ReservationID: str, LayoutItem: LayoutItem.Base.LayoutItemABC):
-        if ReservationID in self.Reservations:
+        if ReservationID in self._Reservations:
             raise Exception("Reservation ID already exists")
 
         ReservedSites = [
-            Site.LayoutItem.DeckLocation for Site in self.Reservations.values()
+            Site.LayoutItem.DeckLocation for Site in self._Reservations.values()
         ]
 
         ReservationLabware = LayoutItem.Labware
 
         FreeSites = [
             Site
-            for Site in self.ReservableLayoutItems
+            for Site in self.LayoutItems
             if Site.Labware == ReservationLabware
             and Site.DeckLocation not in ReservedSites
         ]
@@ -31,34 +28,34 @@ class RandomAccessDeckStorage(StorageDeviceABC):
                 "No sites available..."
             )  # Could we potentially move something? Thought...
 
-        self.Reservations[ReservationID] = Reservation(FreeSites[0])
+        self._Reservations[ReservationID] = Reservation(LayoutItem=FreeSites[0])
 
     def Release(self, ReservationID: str):
-        if ReservationID not in self.Reservations:
+        if ReservationID not in self._Reservations:
             raise Exception("Reservation ID does not exist")
 
-        Reservation = self.Reservations[ReservationID]
+        Reservation = self._Reservations[ReservationID]
 
-        if Reservation.IsStored == True:
+        if Reservation._IsStored == True:
             raise Exception(
                 "You must remove the object from storage before you can release the reservation"
             )
 
-        del self.Reservations[ReservationID]
+        del self._Reservations[ReservationID]
 
     def PrepareStore(self, ReservationID: str):
         ...
 
     def Store(self, ReservationID: str) -> LayoutItem.Base.LayoutItemABC:
-        if ReservationID not in self.Reservations:
+        if ReservationID not in self._Reservations:
             raise Exception("Reservation ID does not exist")
 
-        Reservation = self.Reservations[ReservationID]
+        Reservation = self._Reservations[ReservationID]
 
-        if Reservation.IsStored == True:
+        if Reservation._IsStored == True:
             raise Exception("Object already stored")
 
-        Reservation.IsStored = True
+        Reservation._IsStored = True
 
         return Reservation.LayoutItem
 
@@ -66,14 +63,14 @@ class RandomAccessDeckStorage(StorageDeviceABC):
         ...
 
     def Retrieve(self, ReservationID: str) -> LayoutItem.Base.LayoutItemABC:
-        if ReservationID not in self.Reservations:
+        if ReservationID not in self._Reservations:
             raise Exception("Reservation ID does not exist")
 
-        Reservation = self.Reservations[ReservationID]
+        Reservation = self._Reservations[ReservationID]
 
-        if Reservation.IsStored == False:
+        if Reservation._IsStored == False:
             raise Exception("Object not yet stored")
 
-        Reservation.IsStored = False
+        Reservation._IsStored = False
 
         return Reservation.LayoutItem

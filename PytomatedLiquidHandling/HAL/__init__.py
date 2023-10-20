@@ -14,4 +14,5 @@ from . import (
     ClosedContainer,
     HeatCoolShakeDevice,
     Pipette,
+    StorageDevice,
 )

@@ -73,3 +73,10 @@ with open(os.path.join(os.path.dirname(__file__), "Pipette.yaml")) as File:
 HAL.Tools.ConfigLoader.ObjectsLists(
     Dict, HAL.Pipette.Base.PipetteABC, HAL.Pipette.GetObjects()
 )
+
+with open(os.path.join(os.path.dirname(__file__), "StorageDevice.yaml")) as File:
+    Dict = yaml.full_load(File)
+
+HAL.Tools.ConfigLoader.ObjectsLists(
+    Dict, HAL.StorageDevice.Base.StorageDeviceABC, HAL.StorageDevice.GetObjects()
+)
