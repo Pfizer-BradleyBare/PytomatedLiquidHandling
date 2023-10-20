@@ -1,60 +1,49 @@
 from __future__ import annotations
 
-from pydantic.dataclasses import dataclass as Pydanticdataclass
-from dataclasses import dataclass, fields, field
-from pydantic import field_validator, ValidationInfo
-from typing import Any, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from PytomatedLiquidHandling.HAL import TransportDevice
+from pydantic import field_validator, BaseModel, ValidationInfo
 
 
-@Pydanticdataclass
-class TransportConfig:
+from PytomatedLiquidHandling.HAL import TransportDevice
+
+
+class TransportConfig(BaseModel):
     TransportDevice: TransportDevice.Base.TransportDeviceABC
-    PickupOptions: Options
-    DropoffOptions: Options
+    PickupOptions: TransportDevice.Base.TransportDeviceABC.PickupOptions
+    DropoffOptions: TransportDevice.Base.TransportDeviceABC.DropoffOptions
 
-    @field_validator("TransportDevice")
+    @field_validator("TransportDevice", mode="before")
     def TransportDeviceValidate(cls, v):
-        if v not in TransportDevice.GetTransportDevices():
+        Objects = TransportDevice.GetObjects()
+        Identifier = v
+
+        if Identifier not in Objects:
             raise ValueError(
-                v
-                + " not found in TransportDevices. Did you disable or forget to add it?"
+                Identifier
+                + " is not found in "
+                + TransportDevice.Base.TransportDeviceABC.__name__
+                + " objects."
             )
 
-        return TransportDevice.GetTransportDevices()[v]
+        return Objects[Identifier]
 
-    @field_validator("PickupOptions")
+    @field_validator("PickupOptions", mode="before")
     def PickupOptionsValidate(cls, v, info: ValidationInfo):
         TransportDevice: TransportDevice.Base.TransportDeviceABC = info.data[
             "TransportDevice"
         ]
 
-        return TransportDevice.PickupOptions(v)
+        if v is None:
+            v = dict()
 
-    @field_validator("DropoffOptions")
+        return TransportDevice.PickupOptions(**v)
+
+    @field_validator("DropoffOptions", mode="before")
     def DropoffOptionsValidate(cls, v, info: ValidationInfo):
         TransportDevice: TransportDevice.Base.TransportDeviceABC = info.data[
             "TransportDevice"
         ]
 
-        return TransportDevice.DropoffOptions(v)
+        if v is None:
+            v = dict()
 
-    @dataclass
-    class Options:
-        Config: dict[str, Any] = field(init=True, compare=False)
-
-        def __post_init__(self):
-            Fields = [field for field in fields(self) if field.init == False]
-
-            for Field in Fields:
-                if Field.name not in self.Config:
-                    raise Exception(Field.name + " is missing from config")
-
-                try:
-                    Value = Field.type(self.Config[Field.name])
-                except:
-                    raise Exception("Value cannot be converted to the correct type")
-
-                self.__dict__[Field.name] = Value
+        return TransportDevice.DropoffOptions(**v)

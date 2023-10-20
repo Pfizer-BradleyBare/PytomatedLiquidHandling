@@ -1,10 +1,7 @@
-from dataclasses import dataclass
-
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 
-@dataclass
 class LayoutItemABC(HALObject):
     LabwareID: str
     DeckLocation: DeckLocation.Base.DeckLocationABC

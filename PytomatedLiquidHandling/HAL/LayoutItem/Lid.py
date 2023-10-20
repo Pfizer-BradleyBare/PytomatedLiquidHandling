@@ -1,8 +1,6 @@
-from dataclasses import dataclass
-
 from .Base import LayoutItemABC
+from PytomatedLiquidHandling.HAL import Labware
 
 
-@dataclass
 class Lid(LayoutItemABC):
-    ...
+    Labware: Labware.NonPipettableLabware

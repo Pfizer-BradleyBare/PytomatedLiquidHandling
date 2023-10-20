@@ -1,0 +1,52 @@
+DeckLocation:
+  #HHS Carrier
+  - Identifier: HHS_Carrier_Pos1
+    Enabled: True
+    Carrier Config:
+      Carrier: h
+      Position: 1
+    Transport Config:
+      Transport Device: Gripper
+      Pickup Options:
+      Dropoff Options:
+
+  - Identifier: HHS_Carrier_Pos2
+    Enabled: True
+    Carrier Config:
+      Carrier: h
+      Position: 1
+    Transport Config:
+      Transport Device: Gripper
+      Pickup Options:
+      Dropoff Options:
+
+  - Identifier: HHS_Carrier_Pos3
+    Enabled: True
+    Carrier Config:
+      Carrier: h
+      Position: 1
+    Transport Config:
+      Transport Device: Gripper
+      Pickup Options:
+      Dropoff Options:
+
+  - Identifier: HHS_Carrier_Pos4
+    Enabled: True
+    Carrier Config:
+      Carrier: h
+      Position: 1
+    Transport Config:
+      Transport Device: Gripper
+      Pickup Options:
+      Dropoff Options:
+
+  #Vacuum Carrier
+  - Identifier: Vacuum_Carrier_Pos1
+    Enabled: True
+    Carrier Config:
+      Carrier: h
+      Position: 1
+    Transport Config:
+      Transport Device: Gripper
+      Pickup Options:
+      Dropoff Options:

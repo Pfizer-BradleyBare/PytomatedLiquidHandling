@@ -6,7 +6,6 @@ from .CarrierConfig import CarrierConfig
 from .TransportConfig import TransportConfig
 
 
-@dataclass
 class DeckLocationABC(HALObject):
     CarrierConfig: CarrierConfig
     TransportConfig: TransportConfig

@@ -1,4 +1,5 @@
-from dataclasses import dataclass, field
+from dataclasses import field
+from pydantic.dataclasses import dataclass
 
 from PytomatedLiquidHandling.Driver.Hamilton.Transport import IPG as IPGDriver
 from PytomatedLiquidHandling.HAL import LayoutItem

@@ -1,12 +1,18 @@
+from __future__ import annotations
+
 from abc import abstractmethod
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from pydantic import field_validator, PrivateAttr, Field
 
-from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
+from PytomatedLiquidHandling.HAL import Labware
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
 
 from ...Tools.AbstractClasses import Interface
+
+if TYPE_CHECKING:
+    from PytomatedLiquidHandling.HAL import LayoutItem
 
 
 @dataclass
@@ -20,8 +26,8 @@ class PickupOptionsNotEqualError(BaseException):
     DestinationPickupOptions: self explanatory
     """
 
-    SourcePickupOptions: DeckLocation.Base.TransportConfig.Options
-    DestinationPickupOptions: DeckLocation.Base.TransportConfig.Options
+    SourcePickupOptions: TransportDeviceABC.PickupOptions
+    DestinationPickupOptions: TransportDeviceABC.PickupOptions
 
 
 @dataclass
@@ -74,11 +80,11 @@ class TransportDeviceABC(Interface, HALObject):
         return SupportedObjects
 
     @dataclass
-    class PickupOptions(DeckLocation.Base.TransportConfig.Options):
+    class PickupOptions:
         ...
 
     @dataclass
-    class DropoffOptions(DeckLocation.Base.TransportConfig.Options):
+    class DropoffOptions:
         ...
 
     def ValidateTransportOptions(

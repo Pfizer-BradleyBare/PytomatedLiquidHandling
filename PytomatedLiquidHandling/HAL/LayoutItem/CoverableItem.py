@@ -1,16 +1,13 @@
-from dataclasses import dataclass, field
-
 from PytomatedLiquidHandling.HAL import Labware
-
+from pydantic import Field
 from .Base import LayoutItemABC
 from .Lid import Lid
 
 
-@dataclass
 class CoverableItem(LayoutItemABC):
     Labware: Labware.PipettableLabware
     Lid: Lid
-    IsCovered: bool = field(init=False, default=False)
+    IsCovered: bool = Field(exclude=True, default=False)
 
     def Cover(self):
         self.IsCovered = True

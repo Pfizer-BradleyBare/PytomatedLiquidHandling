@@ -1,17 +1,18 @@
-from dataclasses import dataclass
+from dataclasses import field
+from pydantic.dataclasses import dataclass
 
-from PytomatedLiquidHandling.HAL import DeckLocation, LayoutItem
+from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import TransportDeviceABC
 
 
 class VantageTrackGripper(TransportDeviceABC):
     @dataclass
-    class PickupOptions(DeckLocation.Base.TransportConfig.Options):
+    class PickupOptions(TransportDeviceABC.PickupOptions):
         ...
 
     @dataclass
-    class DropoffOptions(DeckLocation.Base.TransportConfig.Options):
+    class DropoffOptions(TransportDeviceABC.DropoffOptions):
         ...
 
     def Transport(

@@ -1,19 +1,23 @@
-from pydantic import field_validator
-from pydantic.dataclasses import dataclass
+from pydantic import field_validator, BaseModel
 
 from PytomatedLiquidHandling.HAL import Carrier
 
 
-@dataclass
-class CarrierConfig:
+class CarrierConfig(BaseModel):
     Carrier: Carrier.Base.CarrierABC
-    CarrierPosition: int
+    Position: int
 
-    @field_validator("Carrier")
-    def CarrierValidate(cls, v):
-        if v not in Carrier.GetCarriers():
+    @field_validator("Carrier", mode="before")
+    def __CarrierValidate(cls, v):
+        Objects = Carrier.GetObjects()
+        Identifier = v
+
+        if Identifier not in Objects:
             raise ValueError(
-                v + " not found in Carriers. Did you disable or forget to add it?"
+                Identifier
+                + " is not found in "
+                + Carrier.Base.CarrierABC.__name__
+                + " objects."
             )
 
-        return Carrier.GetCarriers()[v]
+        return Objects[Identifier]
