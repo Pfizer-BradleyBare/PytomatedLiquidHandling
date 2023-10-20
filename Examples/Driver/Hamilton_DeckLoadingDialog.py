@@ -1,12 +1,12 @@
 import os
 
 from PytomatedLiquidHandling import HAL
-from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
+from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
 from PytomatedLiquidHandling.Driver.Hamilton.DeckLoadingDialog import Carrier5Position
 
-Backend = MicrolabStarBackend(
-    "Example Star",
-    os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
+Backend = MicrolabSTAR(
+    Identifier="Example Star",
+    DeckLayoutPath=os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
 )
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton

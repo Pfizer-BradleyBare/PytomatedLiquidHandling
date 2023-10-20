@@ -2,15 +2,15 @@ import os
 import logging
 
 
-from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabStarBackend
+from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
 from PytomatedLiquidHandling.Driver.Hamilton.TemperatureControl import HeaterCooler
 from PytomatedLiquidHandling.Driver.Hamilton.Timer import StartTimer
 
 Logger = logging.getLogger("App")
 
-Backend = MicrolabStarBackend(
-    "Example Star",
-    os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
+Backend = MicrolabSTAR(
+    Identifier="Example Star",
+    DeckLayoutPath=os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
 )
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
