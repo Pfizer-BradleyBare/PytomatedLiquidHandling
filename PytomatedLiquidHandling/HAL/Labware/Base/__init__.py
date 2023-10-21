@@ -1,4 +1,4 @@
 from .Dimensions.Dimensions import Dimensions
 from .LabwareABC import LabwareABC, LabwareNotSupportedError, LabwareNotEqualError
 from .TransportOffsets import TransportOffsets
-from .Wells import Segment, Wells, Addressing
+from .Wells import Segment, Wells, Layout

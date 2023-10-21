@@ -114,14 +114,14 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 if not isinstance(AspirateLabware, Labware.PipettableLabware):
                     raise Exception("This should never happen")
 
-                NumericAddressing = Labware.Base.Addressing.NumericAddressing(
-                    Rows=Options.SourceLayoutItemInstance.Labware.Wells.Addressing.Rows,
-                    Columns=Options.SourceLayoutItemInstance.Labware.Wells.Addressing.Columns,
-                    Direction=Options.SourceLayoutItemInstance.Labware.Wells.Addressing.Direction,
+                NumericAddressing = Labware.Base.Layout.Numeric(
+                    Rows=Options.SourceLayoutItemInstance.Labware.Wells.Layout.Rows,
+                    Columns=Options.SourceLayoutItemInstance.Labware.Wells.Layout.Columns,
+                    Direction=Options.SourceLayoutItemInstance.Labware.Wells.Layout.Direction,
                 )
 
                 AspiratePosition = (
-                    int(NumericAddressing.GetPosition(Options.SourcePosition))
+                    int(NumericAddressing.GetPositionID(Options.SourcePosition))
                     * AspirateLabware.Wells.SequencesPerWell
                     + Count
                     + 1
@@ -131,8 +131,8 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     PortraitCORE8Channel.Aspirate.Options(
                         ChannelNumber=Count + 1,
                         LabwareID=Options.SourceLayoutItemInstance.LabwareID,
-                        PositionID=Options.SourceLayoutItemInstance.Labware.Wells.Addressing.GetPosition(
-                            Labware.Base.Addressing.NumericPosition(AspiratePosition)
+                        PositionID=Options.SourceLayoutItemInstance.Labware.Wells.Layout.GetPositionID(
+                            AspiratePosition
                         ),
                         LiquidClass=str(
                             self._GetLiquidClass(
@@ -148,14 +148,14 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 if not isinstance(DispenseLabware, Labware.PipettableLabware):
                     raise Exception("This should never happen")
 
-                NumericAddressing = Labware.Base.Addressing.NumericAddressing(
-                    Rows=Options.DestinationLayoutItemInstance.Labware.Wells.Addressing.Rows,
-                    Columns=Options.DestinationLayoutItemInstance.Labware.Wells.Addressing.Columns,
-                    Direction=Options.DestinationLayoutItemInstance.Labware.Wells.Addressing.Direction,
+                NumericAddressing = Labware.Base.Layout.Numeric(
+                    Rows=Options.DestinationLayoutItemInstance.Labware.Wells.Layout.Rows,
+                    Columns=Options.DestinationLayoutItemInstance.Labware.Wells.Layout.Columns,
+                    Direction=Options.DestinationLayoutItemInstance.Labware.Wells.Layout.Direction,
                 )
 
                 DispensePosition = (
-                    int(NumericAddressing.GetPosition(Options.DestinationPosition))
+                    int(NumericAddressing.GetPositionID(Options.DestinationPosition))
                     * DispenseLabware.Wells.SequencesPerWell
                     + Count
                     + 1
@@ -165,8 +165,8 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     PortraitCORE8Channel.Dispense.Options(
                         ChannelNumber=Count + 1,
                         LabwareID=Options.DestinationLayoutItemInstance.LabwareID,
-                        PositionID=Options.DestinationLayoutItemInstance.Labware.Wells.Addressing.GetPosition(
-                            Labware.Base.Addressing.NumericPosition(DispensePosition)
+                        PositionID=Options.DestinationLayoutItemInstance.Labware.Wells.Layout.GetPositionID(
+                            DispensePosition
                         ),
                         LiquidClass=str(
                             self._GetLiquidClass(
@@ -180,7 +180,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
                 ListedEjectOptions.append(
                     PortraitCORE8Channel.Eject.Options(
-                        LabwareID=PipetteTipInstance.TipWasteLabwareID,
+                        LabwareID=self.TipWasteLabwareID,
                         ChannelNumber=Count + 1,
                         PositionID=str(Count + 1),
                     )

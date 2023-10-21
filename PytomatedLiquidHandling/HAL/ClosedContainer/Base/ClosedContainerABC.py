@@ -10,7 +10,7 @@ from pydantic import field_validator
 @dataclass(kw_only=True)
 class OpenCloseOptions(OptionsABC):
     LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    Position: Labware.Base.Addressing.AlphaNumericPosition | Labware.Base.Addressing.NumericPosition
+    Position: str | int
 
 
 class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALObject):

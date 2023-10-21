@@ -24,14 +24,14 @@ class LiquidClassCategoryNotSupportedError(BaseException):
 @dataclass(kw_only=True)
 class TransferOptions(OptionsABC):
     SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    SourcePosition: Labware.Base.Addressing.AlphaNumericPosition | Labware.Base.Addressing.NumericPosition
+    SourcePosition: str | int
     # This is the labware well position.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
     CurrentSourceVolume: float
     SourceMixCycles: int
     SourceLiquidClassCategory: str
     DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    DestinationPosition: Labware.Base.Addressing.AlphaNumericPosition | Labware.Base.Addressing.NumericPosition
+    DestinationPosition: str | int
     # This is the labware well position.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
     CurrentDestinationVolume: float

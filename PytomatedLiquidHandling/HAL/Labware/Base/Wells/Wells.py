@@ -1,16 +1,11 @@
-from pydantic import BaseModel, field_validator
-from .Addressing import AlphaNumericAddressing, NumericAddressing
+from pydantic import BaseModel
+from .Layout import AlphaNumeric, Numeric
 from .Segment import Segment
 
 
 class Wells(BaseModel):
-    Addressing: AlphaNumericAddressing | NumericAddressing
+    Layout: AlphaNumeric | Numeric
     SequencesPerWell: int
     MaxVolume: float
     DeadVolume: float
     Segments: list[Segment]
-
-    @field_validator("Addressing", mode="after")
-    def __AddressingValidator(cls, v):
-        # TODO
-        return v
