@@ -17,24 +17,28 @@ Hamilton CORE 96 Head:
     Supported Deck Locations:
       - HHS_Carrier_Pos1
 
-    Tip Waste Labware ID: Test
-
     Supported Tips:
       - Tip: 50uL NTR
         Tip Support Dropoff Labware ID: Test
         Tip Support Pickup Labware ID: Test
+        Tip Waste Labware ID: Test
+        Tip Waste Position IDs: range(1,17,2)
         Supported Liquid Class Categories:
           CategoryName: LiquidClassName
 
       - Tip: 300uL NTR
         Tip Support Dropoff Labware ID: Test
         Tip Support Pickup Labware ID: Test
+        Tip Waste Labware ID: Test
+        Tip Waste Position IDs: [1, 2, 3, 4, 13, 14, 15, 16]
         Supported Liquid Class Categories:
           CategoryName: LiquidClassName
 
       - Tip: 1000uL FTR
         Tip Support Dropoff Labware ID: Test
         Tip Support Pickup Labware ID: Test
+        Tip Waste Labware ID: Test
+        Tip Waste Position IDs: [1, 2, 3, 4, 13, 14, 15, 16]
         Supported Liquid Class Categories:
           CategoryName: LiquidClassName
 
@@ -52,24 +56,27 @@ Hamilton PortraitCORE8Channel:
     Supported Deck Locations:
       - HHS_Carrier_Pos1
 
-    Tip Waste Labware ID: Test
-    Tip Waste Position IDs: [1, 2, 3, 4, 5, 6, 7, 8]
-
     Supported Tips:
       - Tip: 50uL NTR
         Tip Support Dropoff Labware ID: Test
         Tip Support Pickup Labware ID: Test
+        Tip Waste Labware ID: Test
+        Tip Waste Position IDs: [1, 2, 3, 4, 13, 14, 15, 16]
         Supported Liquid Class Categories:
           CategoryName: LiquidClassName
 
       - Tip: 300uL NTR
         Tip Support Dropoff Labware ID: Test
         Tip Support Pickup Labware ID: Test
+        Tip Waste Labware ID: Test
+        Tip Waste Position IDs: [1, 2, 3, 4, 13, 14, 15, 16]
         Supported Liquid Class Categories:
           CategoryName: LiquidClassName
 
       - Tip: 1000uL FTR
         Tip Support Dropoff Labware ID: Test
         Tip Support Pickup Labware ID: Test
+        Tip Waste Labware ID: Test
+        Tip Waste Position IDs: [1, 2, 3, 4, 13, 14, 15, 16]
         Supported Liquid Class Categories:
           CategoryName: LiquidClassName

@@ -41,7 +41,6 @@ class TransferOptions(OptionsABC):
 
 
 class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
-    TipWasteLabwareID: str
     SupportedTips: list[PipetteTip]
     SupportedLabwares: list[Labware.PipettableLabware]
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]

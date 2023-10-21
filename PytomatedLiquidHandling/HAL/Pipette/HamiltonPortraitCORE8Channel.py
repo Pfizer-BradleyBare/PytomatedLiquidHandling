@@ -180,7 +180,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
                 ListedEjectOptions.append(
                     PortraitCORE8Channel.Eject.Options(
-                        LabwareID=self.TipWasteLabwareID,
+                        LabwareID=PipetteTipInstance.TipWasteLabwareID,
                         ChannelNumber=Count + 1,
                         PositionID=str(Count + 1),
                     )
