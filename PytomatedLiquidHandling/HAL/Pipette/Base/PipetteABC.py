@@ -40,6 +40,11 @@ class TransferOptions(OptionsABC):
     TransferVolume: float
 
 
+@dataclass(kw_only=True)
+class ListedTransferOptions(list[TransferOptions]):
+    ...
+
+
 class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
     SupportedTips: list[PipetteTip]
     SupportedLabwares: list[Labware.PipettableLabware]
@@ -151,19 +156,19 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
         ).SupportedLiquidClassCategories[LiquidClassCategory]
 
     @abstractmethod
-    def Pickup(self):
+    def Pickup(self, ListedOptions: ListedTransferOptions):
         ...
 
     @abstractmethod
-    def Aspirate(self):
+    def Aspirate(self, ListedOptions: ListedTransferOptions):
         ...
 
     @abstractmethod
-    def Dispense(self):
+    def Dispense(self, ListedOptions: ListedTransferOptions):
         ...
 
     @abstractmethod
-    def Eject(self):
+    def Eject(self, ListedOptions: ListedTransferOptions):
         ...
 
     @abstractmethod

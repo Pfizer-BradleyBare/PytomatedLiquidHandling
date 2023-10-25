@@ -5,7 +5,7 @@ from PytomatedLiquidHandling.HAL import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import PortraitCORE8Channel
-from .Base import PipetteABC, TransferOptions
+from .Base import PipetteABC, TransferOptions, ListedTransferOptions
 
 
 class HamiltonPortraitCORE8Channel(PipetteABC):
@@ -24,6 +24,18 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
             UpdatedListedOptions.append(TransferOptions)
 
         return UpdatedListedOptions
+
+    def Pickup(self, ListedOptions: ListedTransferOptions):
+        ...
+
+    def Aspirate(self, ListedOptions: ListedTransferOptions):
+        ...
+
+    def Dispense(self, ListedOptions: ListedTransferOptions):
+        ...
+
+    def Eject(self, ListedOptions: ListedTransferOptions):
+        ...
 
     def Transfer(
         self,
