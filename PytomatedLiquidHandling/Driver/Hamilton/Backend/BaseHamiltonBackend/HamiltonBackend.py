@@ -36,10 +36,10 @@ class HamiltonBackendABC(BackendABC):
             Port=768,
         )
 
-        self._Exceptions = [
-            HamiltonExceptions.UnhandledException,
-            HamiltonExceptions.NoOptionsInTracker,
-        ]
+        # self._Exceptions = [
+        #    HamiltonExceptions.UnhandledException,
+        #    HamiltonExceptions.NoOptionsInTracker,
+        # ]
 
     def StartBackend(self):
         BackendABC.StartBackend(self)

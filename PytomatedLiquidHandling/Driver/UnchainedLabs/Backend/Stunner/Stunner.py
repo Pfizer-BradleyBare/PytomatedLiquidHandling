@@ -54,7 +54,7 @@ class StunnerBackend(SimpleBackendABC):
             self.StunnerDLLObject.Request_Access()
         )
         CommandInstance = UnchainedLabsCommandABC()
-        self.CheckExceptions(CommandInstance, ResponseInstance)
+        # self.CheckExceptions(CommandInstance, ResponseInstance)
 
     def StopBackend(self):
         SimpleBackendABC.StopBackend(self)
@@ -63,7 +63,7 @@ class StunnerBackend(SimpleBackendABC):
             self.StunnerDLLObject.Release_Access()
         )
         CommandInstance = UnchainedLabsCommandABC()
-        self.CheckExceptions(CommandInstance, ResponseInstance)
+        # self.CheckExceptions(CommandInstance, ResponseInstance)
 
     def ExecuteCommand(self, CommandInstance: UnchainedLabsCommandABC):
         SimpleBackendABC.ExecuteCommand(self, CommandInstance)

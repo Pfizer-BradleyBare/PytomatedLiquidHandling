@@ -5,7 +5,6 @@ from typing import Type, TypeVar
 from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
 
 from ..Command import CommandABC
-from ..Exception import ExceptionABC
 from ..Response import ResponseABC
 
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
@@ -14,7 +13,6 @@ ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 class BackendABC(AbstractClasses.HALObject):
     Identifier: str
     _IsRunning: bool = PrivateAttr(default=False)
-    _Exceptions: list[type[ExceptionABC]] = PrivateAttr(default_factory=list)
 
     def __CheckRunning(self):
         if self._IsRunning == False:
