@@ -172,9 +172,9 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
         ...
 
     @abstractmethod
-    def Transfer(self, ListedOptions: list[TransferOptions]):
+    def Transfer(self, ListedOptions: ListedTransferOptions):
         ...
 
     @abstractmethod
-    def TransferTime(self, ListedOptions: list[TransferOptions]):
+    def TransferTime(self, ListedOptions: ListedTransferOptions):
         ...

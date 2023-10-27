@@ -39,7 +39,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
     def Transfer(
         self,
-        ListedOptions: list[TransferOptions],
+        ListedOptions: ListedTransferOptions,
     ):
         ListedOptions = [
             NewOptions
@@ -222,5 +222,5 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 )
             )
 
-    def TransferTime(self, ListedOptionsInstance: list[TransferOptions]) -> float:
+    def TransferTime(self, ListedOptionsInstance: ListedTransferOptions) -> float:
         return 0

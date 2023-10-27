@@ -22,7 +22,7 @@ class HamiltonCORE96Head(PipetteABC):
 
     def Transfer(
         self,
-        ListedOptions: list[TransferOptions],
+        ListedOptions: ListedTransferOptions,
     ):
         Options = ListedOptions[0]
         # All the options should be the same. So we can just take the first one for the majority
@@ -83,5 +83,5 @@ class HamiltonCORE96Head(PipetteABC):
                 Options=EjectOptions,
             )
 
-    def TransferTime(self, OptionsTracker: list[TransferOptions]) -> float:
+    def TransferTime(self, OptionsTracker: ListedTransferOptions) -> float:
         return 0
