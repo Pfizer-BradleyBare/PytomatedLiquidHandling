@@ -2,7 +2,6 @@ from pydantic import PrivateAttr
 from typing import Type, TypeVar
 
 from ..Command import CommandABC
-from ..Exception import UnhandledException
 from ..Response import ResponseABC
 from .BackendABC import BackendABC
 
@@ -56,15 +55,15 @@ class SimpleBackendABC(BackendABC):
         while self.GetCommandStatus(CommandInstance).GetState() != True:
             ...
 
-    def CheckExceptions(
-        self, CommandInstance: CommandABC, ResponseInstance: ResponseABC
-    ):
-        if ResponseInstance.GetState() == False:
-            for Exception in self._Exceptions:
-                if Exception.ErrorCode in ResponseInstance.GetDetails():
-                    raise Exception(CommandInstance, ResponseInstance)
-
-            raise UnhandledException(CommandInstance, ResponseInstance)
+    # def CheckExceptions(
+    #    self, CommandInstance: CommandABC, ResponseInstance: ResponseABC
+    # ):
+    #    if ResponseInstance.GetState() == False:
+    #        for Exception in self._Exceptions:
+    #            if Exception.ErrorCode in ResponseInstance.GetDetails():
+    #                raise Exception(CommandInstance, ResponseInstance)
+    #
+    #        raise UnhandledException(CommandInstance, ResponseInstance)
 
     def GetResponse(
         self, CommandInstance: CommandABC, ResponseType: Type[ResponseABCType]
@@ -88,6 +87,6 @@ class SimpleBackendABC(BackendABC):
         self.CommandInstance = None
         self.ResponseInstance = None
 
-        self.CheckExceptions(CommandInstance, Response)
+        # self.CheckExceptions(CommandInstance, Response)
 
         return ResponseType(Response.Properties)

@@ -10,7 +10,6 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
     ResponseABC,
 )
 
-from .. import HamiltonExceptions
 from ..HamiltonCommand import HamiltonActionCommandABC, HamiltonStateCommandABC
 from ..HamiltonResponse import HamiltonResponseABC
 from .HamiltonServerBackend import HamiltonServerBackendABC
@@ -36,10 +35,10 @@ class HamiltonBackendABC(BackendABC):
             Port=768,
         )
 
-        self._Exceptions = [
-            HamiltonExceptions.UnhandledException,
-            HamiltonExceptions.NoOptionsInTracker,
-        ]
+        # self._Exceptions = [
+        #    HamiltonExceptions.UnhandledException,
+        #    HamiltonExceptions.NoOptionsInTracker,
+        # ]
 
     def StartBackend(self):
         BackendABC.StartBackend(self)

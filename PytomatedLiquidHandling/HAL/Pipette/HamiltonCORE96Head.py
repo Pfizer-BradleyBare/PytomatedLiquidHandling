@@ -2,15 +2,27 @@ from math import ceil
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import CORE96Head
-from .Base import PipetteABC, TransferOptions
+from .Base import PipetteABC, TransferOptions, ListedTransferOptions
 
 
 class HamiltonCORE96Head(PipetteABC):
     Backend: HamiltonBackendABC
 
+    def Pickup(self, ListedOptions: ListedTransferOptions):
+        ...
+
+    def Aspirate(self, ListedOptions: ListedTransferOptions):
+        ...
+
+    def Dispense(self, ListedOptions: ListedTransferOptions):
+        ...
+
+    def Eject(self, ListedOptions: ListedTransferOptions):
+        ...
+
     def Transfer(
         self,
-        ListedOptions: list[TransferOptions],
+        ListedOptions: ListedTransferOptions,
     ):
         Options = ListedOptions[0]
         # All the options should be the same. So we can just take the first one for the majority
@@ -71,5 +83,5 @@ class HamiltonCORE96Head(PipetteABC):
                 Options=EjectOptions,
             )
 
-    def TransferTime(self, OptionsTracker: list[TransferOptions]) -> float:
+    def TransferTime(self, OptionsTracker: ListedTransferOptions) -> float:
         return 0

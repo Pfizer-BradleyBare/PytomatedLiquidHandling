@@ -1,4 +1,3 @@
-from ....Tools.AbstractClasses import ExceptionABC, UnhandledException
 from typing import TypeVar
 from ..UnchainedLabsCommand import UnchainedLabsCommandABC
 from ..UnchainedLabsResponse import UnchainedLabsResponseABC
@@ -10,7 +9,7 @@ UnchainedLabsResponseABCType = TypeVar(
     "UnchainedLabsResponseABCType", bound=UnchainedLabsResponseABC
 )
 
-
+"""
 class PlateTypeIncompatibleWithInstrument(
     ExceptionABC[UnchainedLabsCommandABCType, UnchainedLabsResponseABCType]
 ):
@@ -359,3 +358,4 @@ class NoAccess(ExceptionABC[UnchainedLabsCommandABCType, UnchainedLabsResponseAB
     @classmethod
     def DetailsErrorValue(cls) -> str | int:
         return "Unchained Labs: -1"
+"""

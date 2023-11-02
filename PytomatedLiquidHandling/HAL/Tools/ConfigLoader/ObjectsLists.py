@@ -52,7 +52,7 @@ def Load(Dict: dict, BaseObject: Type[T], Objects: dict[str, T]):
                         + " already exists. Idenitifers must be unique."
                     )
 
-                Logger.info(
+                Logger.debug(
                     "Successfully loaded "
                     + Item["Identifier"]
                     + " as a "
