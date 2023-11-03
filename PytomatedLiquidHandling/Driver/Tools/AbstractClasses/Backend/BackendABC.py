@@ -1,6 +1,7 @@
 from abc import abstractmethod
-from pydantic import PrivateAttr
 from typing import Type, TypeVar
+
+from pydantic import PrivateAttr
 
 from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
 
@@ -10,7 +11,7 @@ from ..Response import ResponseABC
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 
-class BackendABC(AbstractClasses.HALObject):
+class BackendABC(AbstractClasses.HALDevice):
     Identifier: str
     _IsRunning: bool = PrivateAttr(default=False)
 

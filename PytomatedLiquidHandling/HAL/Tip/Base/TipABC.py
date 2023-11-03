@@ -1,8 +1,9 @@
 from abc import abstractmethod
 from dataclasses import dataclass
+
 from pydantic import PrivateAttr
 
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
 
 from ...Tools.AbstractClasses import Interface
 
@@ -13,7 +14,7 @@ class AvailablePosition:
     PositionID: str
 
 
-class TipABC(Interface, HALObject):
+class TipABC(Interface, HALDevice):
     RackLabwareIDs: list[str]
     Volume: float
     _AvailablePositions: list[AvailablePosition] = PrivateAttr(default_factory=list)

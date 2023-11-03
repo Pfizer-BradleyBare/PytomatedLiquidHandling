@@ -1,7 +1,7 @@
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
 
 
-class CarrierABC(HALObject):
+class CarrierABC(HALDevice):
     TrackStart: int
     TrackEnd: int
     NumLabwarePositions: int

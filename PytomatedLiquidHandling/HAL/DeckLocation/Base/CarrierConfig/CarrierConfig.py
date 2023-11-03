@@ -1,4 +1,4 @@
-from pydantic import field_validator, BaseModel
+from pydantic import BaseModel, field_validator
 
 from PytomatedLiquidHandling.HAL import Carrier
 
@@ -9,7 +9,7 @@ class CarrierConfig(BaseModel):
 
     @field_validator("Carrier", mode="before")
     def __CarrierValidate(cls, v):
-        Objects = Carrier.GetObjects()
+        Objects = Carrier.Devices
         Identifier = v
 
         if Identifier not in Objects:

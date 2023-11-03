@@ -1,10 +1,10 @@
-from typing import Self, ClassVar, Type
+from typing import ClassVar, Self, Type
 
 from pydantic import BaseModel
 
 
-class HALObject(BaseModel):
-    HALObjects: ClassVar[dict[str, Type[Self]]] = dict()
+class HALDevice(BaseModel):
+    HALDevices: ClassVar[dict[str, Type[Self]]] = dict()
 
     Identifier: str
 
@@ -12,4 +12,4 @@ class HALObject(BaseModel):
         return self.Identifier == __value.Identifier
 
     def __init_subclass__(cls):
-        cls.HALObjects[cls.__name__] = cls
+        cls.HALDevices[cls.__name__] = cls

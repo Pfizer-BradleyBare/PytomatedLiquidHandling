@@ -1,10 +1,11 @@
 from abc import abstractmethod
 from dataclasses import dataclass
 
+from pydantic import field_validator
+
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
-from pydantic import field_validator
 
 
 @dataclass(kw_only=True)
@@ -13,7 +14,7 @@ class OpenCloseOptions(OptionsABC):
     Position: str | int
 
 
-class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALObject):
+class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
     ToolLabwareID: str
     ToolPositionID: str
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
@@ -23,7 +24,7 @@ class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALObject):
     def __SupportedDeckLocationsValidate(cls, v):
         SupportedObjects = list()
 
-        Objects = DeckLocation.GetObjects()
+        Objects = DeckLocation.Devices
 
         for Identifier in v:
             if Identifier not in Objects:
@@ -42,7 +43,7 @@ class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALObject):
     def __SupportedLabwaresValidate(cls, v):
         SupportedObjects = list()
 
-        Objects = Labware.GetObjects()
+        Objects = Labware.Devices
 
         for Identifier in v:
             if Identifier not in Objects:

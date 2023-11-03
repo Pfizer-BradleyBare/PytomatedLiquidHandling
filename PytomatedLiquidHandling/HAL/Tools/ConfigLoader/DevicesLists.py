@@ -1,13 +1,14 @@
-from typing import Type, TypeVar
-from .. import DictTools, AbstractClasses
 import logging
+from typing import Type, TypeVar
+
+from .. import AbstractClasses, DictTools
 
 Logger = logging.getLogger(__name__)
 
-T = TypeVar("T", bound="AbstractClasses.HALObject")
+T = TypeVar("T", bound="AbstractClasses.HALDevice")
 
 
-def Load(Dict: dict, BaseObject: Type[T], Objects: dict[str, T]):
+def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
     Logger.info("Starting to load " + BaseObject.__name__ + " configuration.")
 
     if bool(Dict) == False:
@@ -21,7 +22,7 @@ def Load(Dict: dict, BaseObject: Type[T], Objects: dict[str, T]):
 
     for Key in Dict:
         try:
-            cls = BaseObject.HALObjects[Key]
+            cls = BaseObject.HALDevices[Key]
         except:
             raise ValueError(
                 Key + " not recognized as a valid " + BaseObject.__name__ + " subclass"
@@ -32,7 +33,7 @@ def Load(Dict: dict, BaseObject: Type[T], Objects: dict[str, T]):
                 cls.__name__
                 + " is not a subclass of "
                 + BaseObject.__name__
-                + ". You may be trying to load a config with the wrong HALObject."
+                + ". You may be trying to load a config with the wrong HALDevice."
             )
 
         for Item in Dict[Key]:
@@ -44,11 +45,11 @@ def Load(Dict: dict, BaseObject: Type[T], Objects: dict[str, T]):
                     + BaseObject.__name__
                     + " object."
                 )
-                HALObject = cls(**Item)
+                HALDevice = cls(**Item)
 
-                if HALObject.Identifier in Objects:
+                if HALDevice.Identifier in Devices:
                     raise ValueError(
-                        HALObject.Identifier
+                        HALDevice.Identifier
                         + " already exists. Idenitifers must be unique."
                     )
 
@@ -58,10 +59,10 @@ def Load(Dict: dict, BaseObject: Type[T], Objects: dict[str, T]):
                     + " as a "
                     + BaseObject.__name__
                     + " object with the following configuration: "
-                    + HALObject.model_dump_json(indent=4)
+                    + HALDevice.model_dump_json(indent=4)
                 )
 
-                Objects[HALObject.Identifier] = HALObject  # type: ignore IDK why this is an error...
+                Devices[HALDevice.Identifier] = HALDevice  # type: ignore IDK why this is an error...
             else:
                 Logger.warning(
                     Item["Identifier"]
@@ -70,4 +71,4 @@ def Load(Dict: dict, BaseObject: Type[T], Objects: dict[str, T]):
                     + " object."
                 )
 
-    return Objects
+    return Devices

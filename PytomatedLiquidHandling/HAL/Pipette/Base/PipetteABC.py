@@ -45,7 +45,7 @@ class ListedTransferOptions(list[TransferOptions]):
     ...
 
 
-class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
+class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
     SupportedTips: list[PipetteTip]
     SupportedLabwares: list[Labware.PipettableLabware]
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
@@ -54,7 +54,7 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
     def __SupportedDeckLocationsValidate(cls, v):
         SupportedObjects = list()
 
-        Objects = DeckLocation.GetObjects()
+        Objects = DeckLocation.Devices
 
         for Identifier in v:
             if Identifier not in Objects:
@@ -73,7 +73,7 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALObject):
     def __SupportedLabwaresValidate(cls, v):
         SupportedObjects = list()
 
-        Objects = Labware.GetObjects()
+        Objects = Labware.Devices
 
         for Identifier in v:
             if Identifier not in Objects:

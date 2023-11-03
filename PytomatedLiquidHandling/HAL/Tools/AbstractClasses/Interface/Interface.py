@@ -10,7 +10,7 @@ class Interface(BaseModel):
 
     @field_validator("Backend", mode="before")
     def __ValidateBackend(cls, v):
-        Objects = Backend.GetObjects()
+        Objects = Backend.Devices
         Identifier = v
 
         if Identifier not in Objects:

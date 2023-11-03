@@ -1,8 +1,4 @@
 from . import Base
 from .RandomAccessDeckStorage import RandomAccessDeckStorage
 
-__Objects: dict[str, Base.StorageDeviceABC] = dict()
-
-
-def GetObjects() -> dict[str, Base.StorageDeviceABC]:
-    return __Objects
+Devices: dict[str, Base.StorageDeviceABC] = dict()

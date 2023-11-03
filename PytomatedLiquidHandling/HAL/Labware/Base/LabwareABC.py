@@ -32,7 +32,7 @@ class LabwareNotEqualError(BaseException):
     Labware2: "LabwareABC"
 
 
-class LabwareABC(AbstractClasses.HALObject):
+class LabwareABC(AbstractClasses.HALDevice):
     ImageFilename: str
     PartNumber: str
     Dimensions: Dimensions

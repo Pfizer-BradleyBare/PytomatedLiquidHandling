@@ -4,10 +4,10 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from pydantic import field_validator, PrivateAttr, Field
+from pydantic import Field, PrivateAttr, field_validator
 
 from PytomatedLiquidHandling.HAL import Labware
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
 
 from ...Tools.AbstractClasses import Interface
 
@@ -56,7 +56,7 @@ class TransportDevicesNotCompatibleError(BaseException):
     DestinationTransportDevice: "TransportDeviceABC"
 
 
-class TransportDeviceABC(Interface, HALObject):
+class TransportDeviceABC(Interface, HALDevice):
     SupportedLabwares: list[Labware.Base.LabwareABC]
     _LastTransportFlag: bool = PrivateAttr(default=False)
 
@@ -64,7 +64,7 @@ class TransportDeviceABC(Interface, HALObject):
     def __SupportedLabwaresValidated(cls, v):
         SupportedObjects = list()
 
-        Objects = Labware.GetObjects()
+        Objects = Labware.Devices
 
         for Identifier in v:
             if Identifier not in Objects:

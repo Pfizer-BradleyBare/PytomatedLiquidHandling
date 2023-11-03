@@ -1,2 +1,2 @@
-from .ObjectsLists import Load as ObjectsLists
-from .Objects import Load as Objects
+from .Devices import Load as Devices
+from .DevicesLists import Load as DevicesLists

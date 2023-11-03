@@ -13,7 +13,7 @@ class PipetteTip(BaseModel):
 
     @field_validator("Tip", mode="before")
     def __TipValidate(cls, v):
-        Objects = Tip.GetObjects()
+        Objects = Tip.Devices
         Identifier = v
 
         if Identifier not in Objects:

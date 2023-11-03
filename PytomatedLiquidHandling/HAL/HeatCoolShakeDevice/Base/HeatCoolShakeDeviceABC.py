@@ -5,7 +5,7 @@ from pydantic import PrivateAttr, field_validator
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import Labware, LayoutItem
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALObject
+from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
 
 from ...Tools.AbstractClasses import Interface
 from .TempLimits.TempLimits import TempLimits
@@ -38,7 +38,7 @@ class ShakingNotSupportedError(BaseException):
     """
 
 
-class HeatCoolShakeDeviceABC(Interface, HALObject):
+class HeatCoolShakeDeviceABC(Interface, HALDevice):
     ComPort: str | int
     TempLimits: TempLimits
     CoverableLayoutItems: list[LayoutItem.CoverableItem]
@@ -52,7 +52,7 @@ class HeatCoolShakeDeviceABC(Interface, HALObject):
     def __SupportedCoverableLayoutItemsValidate(cls, v):
         SupportedObjects = list()
 
-        Objects = LayoutItem.GetObjects()
+        Objects = LayoutItem.Devices
 
         for Identifier in v:
             if Identifier not in Objects:

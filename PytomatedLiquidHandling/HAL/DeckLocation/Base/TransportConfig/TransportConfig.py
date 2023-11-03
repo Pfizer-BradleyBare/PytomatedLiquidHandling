@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from pydantic import field_validator, BaseModel, ValidationInfo
-
+from pydantic import BaseModel, ValidationInfo, field_validator
 
 from PytomatedLiquidHandling.HAL import TransportDevice
 
@@ -13,7 +12,7 @@ class TransportConfig(BaseModel):
 
     @field_validator("TransportDevice", mode="before")
     def TransportDeviceValidate(cls, v):
-        Objects = TransportDevice.GetObjects()
+        Objects = TransportDevice.Devices
         Identifier = v
 
         if Identifier not in Objects:

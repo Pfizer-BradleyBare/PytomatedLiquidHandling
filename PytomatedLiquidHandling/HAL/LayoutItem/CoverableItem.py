@@ -1,5 +1,7 @@
-from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 from pydantic import Field, field_validator
+
+from PytomatedLiquidHandling.HAL import Labware, LayoutItem
+
 from .Base import LayoutItemABC
 from .Lid import Lid
 
@@ -11,7 +13,7 @@ class CoverableItem(LayoutItemABC):
 
     @field_validator("Lid", mode="before")
     def __LidValidate(cls, v):
-        Objects = LayoutItem.GetObjects()
+        Objects = LayoutItem.Devices
         Identifier = v
 
         if Identifier not in Objects:
