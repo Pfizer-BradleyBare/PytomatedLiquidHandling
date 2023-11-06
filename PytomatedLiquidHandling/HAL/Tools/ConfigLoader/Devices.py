@@ -1,3 +1,4 @@
+import json
 import logging
 from typing import Type, TypeVar
 
@@ -7,6 +8,30 @@ Logger = logging.getLogger(__name__)
 
 
 T = TypeVar("T", bound="AbstractClasses.HALDevice")
+
+
+def SimplifyPrintedHALObject(model_dump_json: str) -> str:
+    model_dump_json = json.loads(model_dump_json)
+
+    def GetID(Dict):
+        for Key in Dict:
+            Value = Dict[Key]
+
+            if isinstance(Value, list):
+                for index, item in enumerate(Value):
+                    if isinstance(item, dict):
+                        if "Identifier" in item:
+                            Value[index] = item["Identifier"]
+
+            if isinstance(Value, dict):
+                if "Identifier" in Value:
+                    Dict[Key] = Value["Identifier"]
+                else:
+                    GetID(Value)
+
+    GetID(model_dump_json)
+
+    return json.dumps(model_dump_json, indent=4)
 
 
 def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
@@ -60,7 +85,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
                 + " as a "
                 + BaseObject.__name__
                 + " object with the following configuration: "
-                + HALDevice.model_dump_json(indent=4)
+                + SimplifyPrintedHALObject(HALDevice.model_dump_json(indent=4))
             )
 
             Devices[HALDevice.Identifier] = HALDevice  # type: ignore IDK why this is an error...

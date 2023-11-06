@@ -14,8 +14,10 @@ Hamilton FlipTube:
     Tool Position ID: "1"
     Supported Labwares:
       - 1200uL DeepWell 96 Well PCR Plate
+      - 200uL Biorad 96 Well PCR Plate
     Supported Deck Locations:
       - HHS_Carrier_Pos1
+      - HHS_Carrier_Pos2
 
 Hamilton FlipTube Special:
   - Identifier: Fliptube 2
