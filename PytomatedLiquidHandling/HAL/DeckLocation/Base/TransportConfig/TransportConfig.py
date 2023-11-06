@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from typing import Any
+
+from pydantic import BaseModel, ValidationInfo, field_serializer, field_validator
 
 from PytomatedLiquidHandling.HAL import TransportDevice
 
@@ -9,6 +11,10 @@ class TransportConfig(BaseModel):
     TransportDevice: TransportDevice.Base.TransportDeviceABC
     PickupOptions: TransportDevice.Base.TransportDeviceABC.PickupOptions
     DropoffOptions: TransportDevice.Base.TransportDeviceABC.DropoffOptions
+
+    @field_serializer("PickupOptions", "DropoffOptions")
+    def __OptionsSerializer(self, Options):
+        return vars(Options)
 
     @field_validator("TransportDevice", mode="before")
     def TransportDeviceValidate(cls, v):
