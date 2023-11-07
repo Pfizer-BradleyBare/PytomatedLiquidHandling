@@ -214,7 +214,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 )
             )
 
-    def TransferTime(
+    def TimeToTransfer(
         self, ListedOptionsInstance: ListedTransferOptions | list[ListedTransferOptions]
     ) -> float:
         return 0

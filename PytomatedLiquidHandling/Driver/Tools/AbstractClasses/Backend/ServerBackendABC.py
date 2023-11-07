@@ -20,17 +20,20 @@ class ServerBackendABC(SimpleBackendABC):
     Address: str = "localhost"
     Port: int = 8080
     _App: Flask = PrivateAttr()
-    _AppParentThreadRunnerFlag: Event = PrivateAttr(default=Event())
+    _AppParentThreadRunnerFlag: Event = PrivateAttr()
 
     def model_post_init(self, __context: Any) -> None:
-        super().model_post_init(__context)
-        self.__App = Flask(str(self.Identifier))
-        logging.getLogger("werkzeug").disabled = True
-        self.Views += [self.IsActive, self.Kill]
+        SimpleBackendABC.model_post_init(self, __context)
 
-        self.__App.add_url_rule(self.PathPrefix, "Index", self.Index)
+        self._AppParentThreadRunnerFlag = Event()
+
+        self._App = Flask(str(self.Identifier))
+        logging.getLogger("werkzeug").disabled = True
+
+        self.Views += [self.IsActive, self.Kill]
+        self._App.add_url_rule(self.PathPrefix, "Index", self.Index)
         for View in self.Views:
-            self.__App.add_url_rule(
+            self._App.add_url_rule(
                 self.PathPrefix + View.__name__,
                 View.__name__,
                 View,
@@ -48,7 +51,7 @@ class ServerBackendABC(SimpleBackendABC):
         time.sleep(1)
 
     def __Run(self):
-        self.__App.run(self.Address, self.Port)
+        self._App.run(self.Address, self.Port)
 
     def GetEndpointID(self, Endpoint: str):
         return self.__class__.__name__ + ": " + str(self.Identifier) + "-> " + Endpoint

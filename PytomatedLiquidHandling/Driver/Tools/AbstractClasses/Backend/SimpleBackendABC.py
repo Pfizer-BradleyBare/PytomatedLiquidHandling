@@ -1,5 +1,6 @@
-from pydantic import PrivateAttr
 from typing import Type, TypeVar
+
+from pydantic import PrivateAttr
 
 from ..Command import CommandABC
 from ..Response import ResponseABC
@@ -14,28 +15,28 @@ class SimpleBackendABC(BackendABC):
 
     def ExecuteCommand(self, CommandInstance: CommandABC):
         BackendABC.ExecuteCommand(self, CommandInstance)
-        if self.CommandInstance is not None:
+        if self._CommandInstance is not None:
             raise Exception(
                 "Command is already being executed. Wait on command to compelete..."
             )
 
-        self.CommandInstance = CommandInstance
+        self._CommandInstance = CommandInstance
 
     def GetCommandStatus(self, CommandInstance: CommandABC) -> ResponseABC:
         BackendABC.GetCommandStatus(self, CommandInstance)
-        if self.CommandInstance is None:
+        if self._CommandInstance is None:
             raise Exception(
                 "No Command currently executing. Execute a command first..."
             )
 
-        if self.CommandInstance != CommandInstance:
+        if self._CommandInstance != CommandInstance:
             raise Exception(
                 "You can only get a status for the currently executing command."
             )
 
         Response = ResponseABC({})
 
-        if not self.ResponseInstance is None:
+        if not self._ResponseInstance is None:
             Response.SetProperty("State", True)
             Response.SetProperty("Details", "Respose available")
 
@@ -47,7 +48,7 @@ class SimpleBackendABC(BackendABC):
 
     def WaitForResponseBlocking(self, CommandInstance: CommandABC):
         BackendABC.WaitForResponseBlocking(self, CommandInstance)
-        if self.CommandInstance != CommandInstance:
+        if self._CommandInstance != CommandInstance:
             raise Exception(
                 "You can only wait on a response for the currently executing command."
             )
@@ -69,23 +70,23 @@ class SimpleBackendABC(BackendABC):
         self, CommandInstance: CommandABC, ResponseType: Type[ResponseABCType]
     ) -> ResponseABCType:
         BackendABC.GetResponse(self, CommandInstance, ResponseType)
-        if self.CommandInstance is None:
+        if self._CommandInstance is None:
             raise Exception(
                 "No Command currently executing. Execute a command first..."
             )
 
-        if self.CommandInstance != CommandInstance:
+        if self._CommandInstance != CommandInstance:
             raise Exception(
                 "You can only get a response for the currently executing command."
             )
 
-        if self.ResponseInstance is None:
+        if self._ResponseInstance is None:
             raise Exception("Response not available. Check status first...")
 
-        Response = self.ResponseInstance
+        Response = self._ResponseInstance
 
-        self.CommandInstance = None
-        self.ResponseInstance = None
+        self._CommandInstance = None
+        self._ResponseInstance = None
 
         # self.CheckExceptions(CommandInstance, Response)
 

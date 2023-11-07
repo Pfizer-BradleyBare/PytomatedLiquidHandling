@@ -25,13 +25,13 @@ class HamiltonBackendABC(BackendABC):
     _StateServer: HamiltonServerBackendABC = PrivateAttr()
 
     def model_post_init(self, __context: Any) -> None:
-        super().model_post_init(__context)
-        self.ActionServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
+        BackendABC.model_post_init(self, __context)
+        self._ActionServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
             Identifier=str(self.Identifier) + " Action Server",
             PathPrefix="/ActionServer/",
             Port=767,
         )
-        self.StateServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
+        self._StateServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
             Identifier=str(self.Identifier) + " State Server",
             PathPrefix="/StateServer/",
             Port=768,
@@ -66,38 +66,38 @@ class HamiltonBackendABC(BackendABC):
             ["C:\\Program Files (x86)\\HAMILTON\\Bin\\HxRun.exe", "-t", self.MethodPath]
         )
 
-        self.ActionServer.StartBackend()
-        self.StateServer.StartBackend()
+        self._ActionServer.StartBackend()
+        self._StateServer.StartBackend()
 
     def StopBackend(self):
         BackendABC.StopBackend(self)
-        self.ActionServer.StopBackend()
-        self.StateServer.StopBackend()
+        self._ActionServer.StopBackend()
+        self._StateServer.StopBackend()
 
     def ExecuteCommand(
         self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
     ):
         BackendABC.ExecuteCommand(self, CommandInstance)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
-            self.StateServer.ExecuteCommand(CommandInstance)
+            self._StateServer.ExecuteCommand(CommandInstance)
         else:
-            self.ActionServer.ExecuteCommand(CommandInstance)
+            self._ActionServer.ExecuteCommand(CommandInstance)
 
     def GetCommandStatus(
         self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
     ) -> ResponseABC:
         BackendABC.GetCommandStatus(self, CommandInstance)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
-            return self.StateServer.GetCommandStatus(CommandInstance)
+            return self._StateServer.GetCommandStatus(CommandInstance)
         else:
-            return self.ActionServer.GetCommandStatus(CommandInstance)
+            return self._ActionServer.GetCommandStatus(CommandInstance)
 
     def WaitForResponseBlocking(self, CommandInstance: CommandABC):
         BackendABC.WaitForResponseBlocking(self, CommandInstance)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
-            self.StateServer.WaitForResponseBlocking(CommandInstance)
+            self._StateServer.WaitForResponseBlocking(CommandInstance)
         else:
-            self.ActionServer.WaitForResponseBlocking(CommandInstance)
+            self._ActionServer.WaitForResponseBlocking(CommandInstance)
 
     def GetResponse(
         self,
@@ -107,9 +107,9 @@ class HamiltonBackendABC(BackendABC):
         BackendABC.GetResponse(self, CommandInstance, ResponseType)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
             return ResponseType(
-                self.StateServer.GetResponse(CommandInstance, ResponseType).Properties
+                self._StateServer.GetResponse(CommandInstance, ResponseType).Properties
             )
         else:
             return ResponseType(
-                self.ActionServer.GetResponse(CommandInstance, ResponseType).Properties
+                self._ActionServer.GetResponse(CommandInstance, ResponseType).Properties
             )

@@ -27,13 +27,13 @@ class HamiltonServerBackendABC(ServerBackendABC):
         Timeout = ParserObject.GetEndpointInputData("Timeout") - 10
         Counter = 0
 
-        while self.CommandInstance is None or not self.ResponseInstance is None:
+        while self._CommandInstance is None or not self._ResponseInstance is None:
             if Counter >= Timeout * 10:
                 break
 
             time.sleep(0.1)
 
-        CommandInstance = self.CommandInstance
+        CommandInstance = self._CommandInstance
 
         if CommandInstance is None:
             ParserObject.SetEndpointState(False)
@@ -43,7 +43,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         if isinstance(CommandInstance, CommandOptionsListed):
             if len(CommandInstance.Options) == 0:
-                self.ResponseInstance = HamiltonResponseABC(
+                self._ResponseInstance = HamiltonResponseABC(
                     {
                         "State": False,
                         "Details": "There are no options in the options tracker.",
@@ -77,12 +77,12 @@ class HamiltonServerBackendABC(ServerBackendABC):
             request.get_data(),
         )
 
-        CommandInstance = self.CommandInstance
+        CommandInstance = self._CommandInstance
 
         if not isinstance(CommandInstance, HamiltonCommandABC):
             raise Exception("This should never happen")
 
-        if self.ResponseInstance is not None:
+        if self._ResponseInstance is not None:
             ParserObject.SetEndpointDetails(
                 "Command already has a reponse. This should never happen."
             )
@@ -94,7 +94,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         Response = ParserObject.GetHTTPResponse()
 
-        self.ResponseInstance = HamiltonResponseABC(ParserObject.JSON)
+        self._ResponseInstance = HamiltonResponseABC(ParserObject.JSON)
         # Add response then release threads waiting for a response
 
         return Response
@@ -102,5 +102,5 @@ class HamiltonServerBackendABC(ServerBackendABC):
     Views: list[Callable] = list()
 
     def model_post_init(self, __context: Any) -> None:
-        super().model_post_init(__context)
+        ServerBackendABC.model_post_init(self, __context)
         self.Views = [self.GetNextCommand, self.RespondToCommand]

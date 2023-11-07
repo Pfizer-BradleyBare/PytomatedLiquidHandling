@@ -71,7 +71,7 @@ class HamiltonCORE96Head(PipetteABC):
                 Options=EjectOptions,
             )
 
-    def TransferTime(
+    def TimeToTransfer(
         self, OptionsTracker: ListedTransferOptions | list[ListedTransferOptions]
     ) -> float:
         return 0

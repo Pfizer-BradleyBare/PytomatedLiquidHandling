@@ -96,7 +96,8 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         return SupportedObjects
 
     def model_post_init(self, __context: Any) -> None:
-        super().model_post_init(__context)
+        AbstractClasses.HALDevice.model_post_init(self, __context)
+        AbstractClasses.Interface.model_post_init(self, __context)
         self.SupportedTips = sorted(self.SupportedTips, key=lambda x: x.Tip.Volume)
 
     def ValidateTransferOptions(self, Options: list[TransferOptions]):
@@ -185,7 +186,7 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         ...
 
     @abstractmethod
-    def TransferTime(
+    def TimeToTransfer(
         self, ListedOptions: ListedTransferOptions | list[ListedTransferOptions]
     ):
         ...
