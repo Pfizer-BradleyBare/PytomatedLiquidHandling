@@ -27,17 +27,30 @@ class TransferOptions(OptionsABC):
     SourcePosition: str | int
     # This is the labware well position.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
-    CurrentSourceVolume: float
+    CurrentSourceComposition: float | list[tuple[str, float]]
     SourceMixCycles: int
     SourceLiquidClassCategory: str
     DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
     DestinationPosition: str | int
     # This is the labware well position.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
-    CurrentDestinationVolume: float
+    CurrentDestinationComposition: float | list[tuple[str, float]]
     DestinationMixCycles: int
     DestinationLiquidClassCategory: str
     TransferVolume: float
+
+    def __post_init__(self):
+        if isinstance(self.CurrentSourceComposition, float):
+            self.CurrentSourceComposition = [
+                ("Source N/A", self.CurrentSourceComposition)
+            ]
+
+        if isinstance(self.CurrentDestinationComposition, float):
+            self.CurrentDestinationComposition = [
+                ("Destination N/A", self.CurrentDestinationComposition)
+            ]
+
+        # We want to input to be a composition. If the user doesn't care then we will
 
 
 @dataclass(kw_only=True)
@@ -171,9 +184,13 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         ][-1]
 
     @abstractmethod
-    def Transfer(self, ListedOptions: ListedTransferOptions):
+    def Transfer(
+        self, ListedOptions: ListedTransferOptions | list[ListedTransferOptions]
+    ):
         ...
 
     @abstractmethod
-    def TransferTime(self, ListedOptions: ListedTransferOptions):
+    def TransferTime(
+        self, ListedOptions: ListedTransferOptions | list[ListedTransferOptions]
+    ):
         ...

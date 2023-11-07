@@ -27,8 +27,12 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
     def Transfer(
         self,
-        Options: ListedTransferOptions,
+        Options: ListedTransferOptions | list[ListedTransferOptions],
     ):
+        if isinstance(Options, ListedTransferOptions):
+            Options = [Options]
+        # We will always assume it is a list of pipetting steps in the following code.
+
         Options = [
             NewOptions
             for Opt in Options
@@ -210,5 +214,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 )
             )
 
-    def TransferTime(self, ListedOptionsInstance: ListedTransferOptions) -> float:
+    def TransferTime(
+        self, ListedOptionsInstance: ListedTransferOptions | list[ListedTransferOptions]
+    ) -> float:
         return 0
