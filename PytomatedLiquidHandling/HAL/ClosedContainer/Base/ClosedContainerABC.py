@@ -58,7 +58,7 @@ class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
 
         return SupportedObjects
 
-    def ValidateOpenCloseOptions(self, OptionsList: list[OpenCloseOptions]):
+    def AssertOpenCloseOptions(self, Options: list[OpenCloseOptions]):
         """Must be called before calling Open, OpenTime, Close, or CloseTime.
 
         If LabwareNotSupportedError is thrown then you are trying to use the wrong ClosedContainerDevice.
@@ -76,9 +76,9 @@ class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         UnsupportedDeckLocations = list()
         UnsupportedLabwares = list()
 
-        for Options in OptionsList:
-            DeckLocationInstance = Options.LayoutItem.DeckLocation
-            LabwareInstance = Options.LayoutItem.Labware
+        for Opt in Options:
+            DeckLocationInstance = Opt.LayoutItem.DeckLocation
+            LabwareInstance = Opt.LayoutItem.Labware
 
             if DeckLocationInstance not in self.SupportedDeckLocations:
                 UnsupportedDeckLocations.append(DeckLocationInstance)
@@ -108,7 +108,7 @@ class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         ...
 
     @abstractmethod
-    def OpenTime(self, Options: list[OpenCloseOptions]) -> float:
+    def TimeToOpen(self, Options: list[OpenCloseOptions]) -> float:
         ...
 
     @abstractmethod
@@ -116,5 +116,5 @@ class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         ...
 
     @abstractmethod
-    def CloseTime(self, Options: list[OpenCloseOptions]) -> float:
+    def TimeToClose(self, Options: list[OpenCloseOptions]) -> float:
         ...

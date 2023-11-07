@@ -1,4 +1,5 @@
 from pydantic import PrivateAttr
+
 from ...Driver.Hamilton.TemperatureControl import HeaterShaker as HeaterShakerDriver
 from .Base import CoolingNotSupportedError, HeatCoolShakeDeviceABC
 
@@ -112,7 +113,7 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterShakerDriver.StartTemperatureControl.Response
         )
 
-    def SetTemperatureTime(self, Temperature: float) -> float:
+    def TimeToTemperature(self, Temperature: float) -> float:
         return 0
 
     def GetTemperature(self) -> float:

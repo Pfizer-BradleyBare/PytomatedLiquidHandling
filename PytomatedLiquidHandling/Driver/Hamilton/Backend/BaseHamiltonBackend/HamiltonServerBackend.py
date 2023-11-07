@@ -1,9 +1,9 @@
 import logging
 import time
-
 from typing import Callable
 
 from flask import request
+
 from ....Tools.AbstractClasses import CommandOptionsListed, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
 from ..HamiltonResponse import HamiltonResponseABC
@@ -42,7 +42,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
             return Response
 
         if isinstance(CommandInstance, CommandOptionsListed):
-            if len(CommandInstance.ListedOptions) == 0:
+            if len(CommandInstance.Options) == 0:
                 self.ResponseInstance = HamiltonResponseABC(
                     {
                         "State": False,

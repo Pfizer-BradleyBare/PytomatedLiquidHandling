@@ -59,7 +59,7 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterCoolerDriver.StartTemperatureControl.Response
         )
 
-    def SetTemperatureTime(self, Temperature: float) -> float:
+    def TimeToTemperature(self, Temperature: float) -> float:
         return 0
 
     def GetTemperature(

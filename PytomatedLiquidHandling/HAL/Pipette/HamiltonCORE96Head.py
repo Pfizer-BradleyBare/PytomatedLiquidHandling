@@ -2,34 +2,22 @@ from math import ceil
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import CORE96Head
-from .Base import PipetteABC, TransferOptions, ListedTransferOptions
+from .Base import ListedTransferOptions, PipetteABC, TransferOptions
 
 
 class HamiltonCORE96Head(PipetteABC):
     Backend: HamiltonBackendABC
 
-    def Pickup(self, ListedOptions: ListedTransferOptions):
-        ...
-
-    def Aspirate(self, ListedOptions: ListedTransferOptions):
-        ...
-
-    def Dispense(self, ListedOptions: ListedTransferOptions):
-        ...
-
-    def Eject(self, ListedOptions: ListedTransferOptions):
-        ...
-
     def Transfer(
         self,
-        ListedOptions: ListedTransferOptions,
+        Options: ListedTransferOptions,
     ):
-        Options = ListedOptions[0]
+        Opt = Options[0]
         # All the options should be the same. So we can just take the first one for the majority
 
         MaxVolume = self.SupportedTips[-1].Tip.Volume
-        NumTransfers = ceil(Options.TransferVolume / MaxVolume)
-        TransferVolume = Options.TransferVolume / NumTransfers
+        NumTransfers = ceil(Opt.TransferVolume / MaxVolume)
+        TransferVolume = Opt.TransferVolume / NumTransfers
         # Find out how many transfers we need to do
 
         PipetteTipInstance = self.GetTip(TransferVolume)

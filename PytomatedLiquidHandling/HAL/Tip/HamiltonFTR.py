@@ -23,7 +23,7 @@ class HamiltonFTR(TipABC):
             ListedOptions.append(HSLTipCountingLib.Edit.Options(ID))
 
         CommandInstance = HSLTipCountingLib.Edit.Command(
-            ListedOptions=ListedOptions,
+            Options=ListedOptions,
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.Backend.ExecuteCommand(CommandInstance)

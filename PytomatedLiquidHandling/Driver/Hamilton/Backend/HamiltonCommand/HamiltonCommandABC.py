@@ -28,7 +28,7 @@ class HamiltonCommandABC(CommandABC):
         elif isinstance(self, CommandOptionsListed):
             OutputDict = defaultdict(list)
 
-            for Options in self.ListedOptions:
+            for Options in self.Options:
                 OptionsDict = vars(Options)
 
                 for key, value in OptionsDict.items():
@@ -38,7 +38,7 @@ class HamiltonCommandABC(CommandABC):
                         OutputDict[key].append(value)
 
             try:
-                OutputDict = OutputDict | vars(self.ListedOptions)
+                OutputDict = OutputDict | vars(self.Options)
             except:
                 ...
             # Easiest way to check if ListedOptions is a custom class (Inherits from list) vs just a list

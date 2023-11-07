@@ -91,30 +91,30 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
     def __post_init__(self):
         self.SupportedTips = sorted(self.SupportedTips, key=lambda x: x.Tip.Volume)
 
-    def ValidateTransferOptions(self, OptionsList: list[TransferOptions]):
+    def ValidateTransferOptions(self, Options: list[TransferOptions]):
         UnsupportedDeckLocations = list()
         UnsupportedLabware = list()
         UnsupportedLiquidClassCategories = list()
 
-        for Options in OptionsList:
-            SourceLabware = Options.SourceLayoutItemInstance.Labware
-            DestinationLabware = Options.DestinationLayoutItemInstance.Labware
+        for Opt in Options:
+            SourceLabware = Opt.SourceLayoutItemInstance.Labware
+            DestinationLabware = Opt.DestinationLayoutItemInstance.Labware
             if SourceLabware not in self.SupportedLabwares:
                 UnsupportedLabware.append(SourceLabware)
             if DestinationLabware not in self.SupportedLabwares:
                 UnsupportedLabware.append(DestinationLabware)
             # Check Labware Compatibility
 
-            SourceDeckLocation = Options.SourceLayoutItemInstance.DeckLocation
-            DestinationDeckLocation = Options.DestinationLayoutItemInstance.DeckLocation
+            SourceDeckLocation = Opt.SourceLayoutItemInstance.DeckLocation
+            DestinationDeckLocation = Opt.DestinationLayoutItemInstance.DeckLocation
             if SourceDeckLocation not in self.SupportedDeckLocations:
                 UnsupportedDeckLocations.append(SourceDeckLocation)
             if DestinationDeckLocation not in self.SupportedDeckLocations:
                 UnsupportedDeckLocations.append(DestinationDeckLocation)
             # Check DeckLocation compatibility
 
-            SourceLiquidClassCategory = Options.SourceLiquidClassCategory
-            DestinationLiquidClassCategory = Options.DestinationLiquidClassCategory
+            SourceLiquidClassCategory = Opt.SourceLiquidClassCategory
+            DestinationLiquidClassCategory = Opt.DestinationLiquidClassCategory
             if not any(
                 PipetteTip.IsLiquidClassCategorySupported(SourceLiquidClassCategory)
                 for PipetteTip in self.SupportedTips
@@ -154,22 +154,6 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         return self._GetTip(
             LiquidClassCategory, LiquidClassCategory, Volume
         ).SupportedLiquidClassCategories[LiquidClassCategory]
-
-    @abstractmethod
-    def Pickup(self, ListedOptions: ListedTransferOptions):
-        ...
-
-    @abstractmethod
-    def Aspirate(self, ListedOptions: ListedTransferOptions):
-        ...
-
-    @abstractmethod
-    def Dispense(self, ListedOptions: ListedTransferOptions):
-        ...
-
-    @abstractmethod
-    def Eject(self, ListedOptions: ListedTransferOptions):
-        ...
 
     @abstractmethod
     def Transfer(self, ListedOptions: ListedTransferOptions):

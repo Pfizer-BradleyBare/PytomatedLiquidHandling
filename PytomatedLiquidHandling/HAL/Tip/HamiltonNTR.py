@@ -1,5 +1,6 @@
-from pydantic import PrivateAttr
 from typing import cast
+
+from pydantic import PrivateAttr
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Tip import Visual_NTR_Library
@@ -64,7 +65,7 @@ class HamiltonNTR(TipABC):
 
         if len(self._AvailablePositions) == 0:
             Command = Visual_NTR_Library.Channels_TipCounter_Write.Command(
-                ListedOptions=Visual_NTR_Library.Channels_TipCounter_Write.ListedOptions(
+                Options=Visual_NTR_Library.Channels_TipCounter_Write.ListedOptions(
                     TipCounter="HamiltonTipNTR_" + str(self.Volume) + "uL_TipCounter"
                 ),
                 CustomErrorHandling=self.CustomErrorHandling,
@@ -89,7 +90,7 @@ class HamiltonNTR(TipABC):
             )
 
         CommandInstance = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
-            ListedOptions=ListedOptions,
+            Options=ListedOptions,
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.Backend.ExecuteCommand(CommandInstance)

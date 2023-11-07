@@ -129,7 +129,7 @@ class HeatCoolShakeDeviceABC(Interface, HALDevice):
         ...
 
     @abstractmethod
-    def SetTemperatureTime(self, Temperature: float) -> float:
+    def TimeToTemperature(self, Temperature: float) -> float:
         ...
 
     @abstractmethod

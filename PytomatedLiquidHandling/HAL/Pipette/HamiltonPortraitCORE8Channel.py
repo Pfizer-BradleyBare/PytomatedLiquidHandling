@@ -5,7 +5,7 @@ from PytomatedLiquidHandling.HAL import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Pipette import PortraitCORE8Channel
-from .Base import PipetteABC, TransferOptions, ListedTransferOptions
+from .Base import ListedTransferOptions, PipetteABC, TransferOptions
 
 
 class HamiltonPortraitCORE8Channel(PipetteABC):
@@ -25,31 +25,19 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
         return UpdatedListedOptions
 
-    def Pickup(self, ListedOptions: ListedTransferOptions):
-        ...
-
-    def Aspirate(self, ListedOptions: ListedTransferOptions):
-        ...
-
-    def Dispense(self, ListedOptions: ListedTransferOptions):
-        ...
-
-    def Eject(self, ListedOptions: ListedTransferOptions):
-        ...
-
     def Transfer(
         self,
-        ListedOptions: ListedTransferOptions,
+        Options: ListedTransferOptions,
     ):
-        ListedOptions = [
+        Options = [
             NewOptions
-            for Options in ListedOptions
+            for Opt in Options
             for NewOptions in self._TruncateTransferVolume(
-                Options,
+                Opt,
                 self._GetTip(
-                    Options.SourceLiquidClassCategory,
-                    Options.DestinationLiquidClassCategory,
-                    Options.TransferVolume,
+                    Opt.SourceLiquidClassCategory,
+                    Opt.DestinationLiquidClassCategory,
+                    Opt.TransferVolume,
                 ).Tip.Volume,
             )
         ]
@@ -69,12 +57,12 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
             }
             # Package our tips for easy access
 
-            for Options in OptionsList:
+            for Opt in OptionsList:
                 RequiredTips[
                     self._GetTip(
-                        Options.SourceLiquidClassCategory,
-                        Options.DestinationLiquidClassCategory,
-                        Options.TransferVolume,
+                        Opt.SourceLiquidClassCategory,
+                        Opt.DestinationLiquidClassCategory,
+                        Opt.TransferVolume,
                     ).Tip.Identifier
                 ] += 1
             # How many tips of each volume do we need?
@@ -102,11 +90,11 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
             ListedAspirateOptions: list[PortraitCORE8Channel.Aspirate.Options] = list()
             ListedDispenseOptions: list[PortraitCORE8Channel.Dispense.Options] = list()
             ListedEjectOptions: list[PortraitCORE8Channel.Eject.Options] = list()
-            for Count, Options in enumerate(OptionsList):
+            for Count, Opt in enumerate(OptionsList):
                 PipetteTipInstance = self._GetTip(
-                    Options.SourceLiquidClassCategory,
-                    Options.DestinationLiquidClassCategory,
-                    Options.TransferVolume,
+                    Opt.SourceLiquidClassCategory,
+                    Opt.DestinationLiquidClassCategory,
+                    Opt.TransferVolume,
                 )
 
                 ListedPickupOptions.append(
@@ -121,18 +109,18 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     )
                 )
 
-                AspirateLabware = Options.SourceLayoutItemInstance.Labware
+                AspirateLabware = Opt.SourceLayoutItemInstance.Labware
                 if not isinstance(AspirateLabware, Labware.PipettableLabware):
                     raise Exception("This should never happen")
 
                 NumericAddressing = Labware.Base.Layout.Numeric(
-                    Rows=Options.SourceLayoutItemInstance.Labware.Wells.Layout.Rows,
-                    Columns=Options.SourceLayoutItemInstance.Labware.Wells.Layout.Columns,
-                    Direction=Options.SourceLayoutItemInstance.Labware.Wells.Layout.Direction,
+                    Rows=Opt.SourceLayoutItemInstance.Labware.Wells.Layout.Rows,
+                    Columns=Opt.SourceLayoutItemInstance.Labware.Wells.Layout.Columns,
+                    Direction=Opt.SourceLayoutItemInstance.Labware.Wells.Layout.Direction,
                 )
 
                 AspiratePosition = (
-                    int(NumericAddressing.GetPositionID(Options.SourcePosition))
+                    int(NumericAddressing.GetPositionID(Opt.SourcePosition))
                     * AspirateLabware.Wells.SequencesPerWell
                     + Count
                     + 1
@@ -141,32 +129,32 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 ListedAspirateOptions.append(
                     PortraitCORE8Channel.Aspirate.Options(
                         ChannelNumber=Count + 1,
-                        LabwareID=Options.SourceLayoutItemInstance.LabwareID,
-                        PositionID=Options.SourceLayoutItemInstance.Labware.Wells.Layout.GetPositionID(
+                        LabwareID=Opt.SourceLayoutItemInstance.LabwareID,
+                        PositionID=Opt.SourceLayoutItemInstance.Labware.Wells.Layout.GetPositionID(
                             AspiratePosition
                         ),
                         LiquidClass=str(
                             self._GetLiquidClass(
-                                Options.SourceLiquidClassCategory,
-                                Options.TransferVolume,
+                                Opt.SourceLiquidClassCategory,
+                                Opt.TransferVolume,
                             )
                         ),
-                        Volume=Options.TransferVolume,
+                        Volume=Opt.TransferVolume,
                     )
                 )
 
-                DispenseLabware = Options.SourceLayoutItemInstance.Labware
+                DispenseLabware = Opt.SourceLayoutItemInstance.Labware
                 if not isinstance(DispenseLabware, Labware.PipettableLabware):
                     raise Exception("This should never happen")
 
                 NumericAddressing = Labware.Base.Layout.Numeric(
-                    Rows=Options.DestinationLayoutItemInstance.Labware.Wells.Layout.Rows,
-                    Columns=Options.DestinationLayoutItemInstance.Labware.Wells.Layout.Columns,
-                    Direction=Options.DestinationLayoutItemInstance.Labware.Wells.Layout.Direction,
+                    Rows=Opt.DestinationLayoutItemInstance.Labware.Wells.Layout.Rows,
+                    Columns=Opt.DestinationLayoutItemInstance.Labware.Wells.Layout.Columns,
+                    Direction=Opt.DestinationLayoutItemInstance.Labware.Wells.Layout.Direction,
                 )
 
                 DispensePosition = (
-                    int(NumericAddressing.GetPositionID(Options.DestinationPosition))
+                    int(NumericAddressing.GetPositionID(Opt.DestinationPosition))
                     * DispenseLabware.Wells.SequencesPerWell
                     + Count
                     + 1
@@ -175,17 +163,17 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 ListedDispenseOptions.append(
                     PortraitCORE8Channel.Dispense.Options(
                         ChannelNumber=Count + 1,
-                        LabwareID=Options.DestinationLayoutItemInstance.LabwareID,
-                        PositionID=Options.DestinationLayoutItemInstance.Labware.Wells.Layout.GetPositionID(
+                        LabwareID=Opt.DestinationLayoutItemInstance.LabwareID,
+                        PositionID=Opt.DestinationLayoutItemInstance.Labware.Wells.Layout.GetPositionID(
                             DispensePosition
                         ),
                         LiquidClass=str(
                             self._GetLiquidClass(
-                                Options.DestinationLiquidClassCategory,
-                                Options.TransferVolume,
+                                Opt.DestinationLiquidClassCategory,
+                                Opt.TransferVolume,
                             )
                         ),
-                        Volume=Options.TransferVolume,
+                        Volume=Opt.TransferVolume,
                     )
                 )
 

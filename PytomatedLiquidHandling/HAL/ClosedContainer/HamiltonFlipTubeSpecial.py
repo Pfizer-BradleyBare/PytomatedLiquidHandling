@@ -32,14 +32,14 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
                 )
 
         Command = FlipTubeDriver.Open.Command(
-            ListedOptions=CommandOptions,
+            Options=CommandOptions,
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.Backend.ExecuteCommand(Command)
         self.Backend.WaitForResponseBlocking(Command)
         self.Backend.GetResponse(Command, FlipTubeDriver.Open.Response)
 
-    def OpenTime(
+    def TimeToOpen(
         self,
         Options: list[OpenCloseOptions],
     ) -> float:
@@ -64,14 +64,14 @@ class HamiltonFlipTubeSpecial(ClosedContainerABC):
                 )
 
         Command = FlipTubeDriver.CloseSpecial.Command(
-            ListedOptions=CommandOptions,
+            Options=CommandOptions,
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.Backend.ExecuteCommand(Command)
         self.Backend.WaitForResponseBlocking(Command)
         self.Backend.GetResponse(Command, FlipTubeDriver.CloseSpecial.Response)
 
-    def CloseTime(
+    def TimeToClose(
         self,
         Options: list[OpenCloseOptions],
     ) -> float:
