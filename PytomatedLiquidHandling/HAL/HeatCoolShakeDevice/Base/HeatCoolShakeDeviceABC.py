@@ -1,41 +1,17 @@
 from abc import abstractmethod
-from dataclasses import dataclass, field
 
 from pydantic import PrivateAttr, field_validator
 
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
 
 from ...Tools.AbstractClasses import Interface
+from .Exceptions import (
+    CoolingNotSupportedError,
+    HeatingNotSupportedError,
+    ShakingNotSupportedError,
+)
 from .TempLimits.TempLimits import TempLimits
-
-
-@dataclass
-class HeatingNotSupportedError(BaseException):
-    """Selected HeatCoolShakeDevice does not support heating.
-
-    Attributes:
-    None
-    """
-
-
-@dataclass
-class CoolingNotSupportedError(BaseException):
-    """Selected HeatCoolShakeDevice does not support cooling.
-
-    Attributes:
-    None
-    """
-
-
-@dataclass
-class ShakingNotSupportedError(BaseException):
-    """Selected HeatCoolShakeDevice does not support shaking.
-
-    Attributes:
-    None
-    """
 
 
 class HeatCoolShakeDeviceABC(Interface, HALDevice):
@@ -94,7 +70,7 @@ class HeatCoolShakeDeviceABC(Interface, HALDevice):
 
         if LayoutItem.Labware not in SupportedLabwares:
             Exceptions.append(
-                Labware.Base.LabwareNotSupportedError([LayoutItem.Labware])
+                Labware.Base.Exceptions.LabwareNotSupportedError([LayoutItem.Labware])
             )
 
         if Temperature is not None:

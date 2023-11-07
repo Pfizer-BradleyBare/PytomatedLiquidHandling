@@ -88,12 +88,12 @@ class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
 
         if len(UnsupportedLabwares) > 0:
             Exceptions.append(
-                Labware.Base.LabwareNotSupportedError(UnsupportedLabwares)
+                Labware.Base.Exceptions.LabwareNotSupportedError(UnsupportedLabwares)
             )
 
         if len(UnsupportedDeckLocations) > 0:
             Exceptions.append(
-                DeckLocation.Base.DeckLocationNotSupportedError(
+                DeckLocation.Base.Exceptions.DeckLocationNotSupportedError(
                     UnsupportedDeckLocations
                 )
             )

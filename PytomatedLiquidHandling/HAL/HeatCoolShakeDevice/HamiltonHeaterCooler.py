@@ -1,7 +1,7 @@
 from pydantic import PrivateAttr
 
 from ...Driver.Hamilton.TemperatureControl import HeaterCooler as HeaterCoolerDriver
-from .Base import HeatCoolShakeDeviceABC, ShakingNotSupportedError
+from .Base import Exceptions, HeatCoolShakeDeviceABC
 
 
 class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
@@ -80,7 +80,7 @@ class HamiltonHeaterCooler(HeatCoolShakeDeviceABC):
         return ResponseInstance.GetTemperature()
 
     def SetShakingSpeed(self, RPM: int):
-        raise ShakingNotSupportedError
+        raise Exceptions.ShakingNotSupportedError
 
     def GetShakingSpeed(self) -> int:
-        raise ShakingNotSupportedError
+        raise Exceptions.ShakingNotSupportedError

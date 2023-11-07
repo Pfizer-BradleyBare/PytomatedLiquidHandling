@@ -10,17 +10,6 @@ from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
 from .PipetteTip import PipetteTip
 
 
-@dataclass
-class LiquidClassCategoryNotSupportedError(BaseException):
-    """HAL device does not support your Labware. This can be thrown for any LayoutItem inputs.
-
-    Attributes:
-    Categories: List of string category names that were not supported
-    """
-
-    Categories: list[str]
-
-
 @dataclass(kw_only=True)
 class TransferOptions(OptionsABC):
     SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
@@ -63,7 +52,7 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
     SupportedLabwares: list[Labware.PipettableLabware]
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
 
-    @field_validator("SupportedTips", mode="before")
+    @field_validator("SupportedTips", mode="after")
     def __SupportedTipsValidate(cls, v):
         return sorted(v, key=lambda x: x.Tip.Volume)
 
@@ -138,14 +127,18 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
                 )
                 for PipetteTip in self.SupportedTips
             ):
-                UnsupportedLiquidClassCategories.append(SourceLiquidClassCategory)
+                UnsupportedLiquidClassCategories.append(
+                    (SourceLiquidClassCategory, Opt.TransferVolume)
+                )
             if not any(
                 PipetteTip.IsLiquidClassCategorySupported(
                     DestinationLiquidClassCategory, Opt.TransferVolume
                 )
                 for PipetteTip in self.SupportedTips
             ):
-                UnsupportedLiquidClassCategories.append(DestinationLiquidClassCategory)
+                UnsupportedLiquidClassCategories.append(
+                    (DestinationLiquidClassCategory, Opt.TransferVolume)
+                )
             # Check liquid class compatibility
 
     def _GetTip(

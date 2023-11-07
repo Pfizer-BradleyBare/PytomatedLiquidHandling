@@ -1,7 +1,3 @@
-from .HeatCoolShakeDeviceABC import (
-    CoolingNotSupportedError,
-    HeatCoolShakeDeviceABC,
-    HeatingNotSupportedError,
-    ShakingNotSupportedError,
-)
+from . import Exceptions
+from .HeatCoolShakeDeviceABC import HeatCoolShakeDeviceABC
 from .TempLimits.TempLimits import TempLimits

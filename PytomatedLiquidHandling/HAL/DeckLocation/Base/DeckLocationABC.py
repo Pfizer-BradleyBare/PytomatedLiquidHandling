@@ -9,15 +9,3 @@ from .TransportConfig import TransportConfig
 class DeckLocationABC(HALDevice):
     CarrierConfig: CarrierConfig
     TransportConfig: TransportConfig
-
-
-@dataclass
-class DeckLocationNotSupportedError(BaseException):
-    """HAL device does not support your DeckLocation.
-    This can be thrown for any LayoutItem inputs.
-
-    Attributes:
-    DeckLocations: List of DeckLocationABC objects that were not supported
-    """
-
-    DeckLocations: list[DeckLocationABC]
