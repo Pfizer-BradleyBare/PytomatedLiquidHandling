@@ -22,25 +22,28 @@ Hamilton CORE 96 Head:
         Tip Support Dropoff Labware ID: Test
         Tip Support Pickup Labware ID: Test
         Tip Waste Labware ID: Test
-        Tip Waste Position IDs: range(1,17,2)
         Supported Liquid Class Categories:
-          CategoryName: LiquidClassName
+          CategoryName:
+            - Liquid Class Name: a
+              Max Volume: 50
 
       - Tip: 300uL NTR
         Tip Support Dropoff Labware ID: Test
         Tip Support Pickup Labware ID: Test
         Tip Waste Labware ID: Test
-        Tip Waste Position IDs: [1, 2, 3, 4, 13, 14, 15, 16]
         Supported Liquid Class Categories:
-          CategoryName: LiquidClassName
+          CategoryName:
+            - Liquid Class Name: a
+              Max Volume: 50
 
       - Tip: 1000uL FTR
         Tip Support Dropoff Labware ID: Test
         Tip Support Pickup Labware ID: Test
         Tip Waste Labware ID: Test
-        Tip Waste Position IDs: [1, 2, 3, 4, 13, 14, 15, 16]
         Supported Liquid Class Categories:
-          CategoryName: LiquidClassName
+          CategoryName:
+            - Liquid Class Name: a
+              Max Volume: 50
 
 Hamilton PortraitCORE8Channel:
   - Identifier: Test
@@ -61,22 +64,25 @@ Hamilton PortraitCORE8Channel:
         Tip Support Dropoff Labware ID: Test
         Tip Support Pickup Labware ID: Test
         Tip Waste Labware ID: Test
-        Tip Waste Position IDs: [1, 2, 3, 4, 13, 14, 15, 16]
         Supported Liquid Class Categories:
-          CategoryName: LiquidClassName
+          CategoryName:
+            - Liquid Class Name: a
+              Max Volume: 50
 
       - Tip: 300uL NTR
         Tip Support Dropoff Labware ID: Test
         Tip Support Pickup Labware ID: Test
         Tip Waste Labware ID: Test
-        Tip Waste Position IDs: [1, 2, 3, 4, 13, 14, 15, 16]
         Supported Liquid Class Categories:
-          CategoryName: LiquidClassName
+          CategoryName:
+            - Liquid Class Name: a
+              Max Volume: 50
 
       - Tip: 1000uL FTR
         Tip Support Dropoff Labware ID: Test
         Tip Support Pickup Labware ID: Test
         Tip Waste Labware ID: Test
-        Tip Waste Position IDs: [1, 2, 3, 4, 13, 14, 15, 16]
         Supported Liquid Class Categories:
-          CategoryName: LiquidClassName
+          CategoryName:
+            - Liquid Class Name: a
+              Max Volume: 50

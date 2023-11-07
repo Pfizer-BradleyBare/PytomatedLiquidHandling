@@ -2,14 +2,15 @@ from pydantic import BaseModel, field_validator
 
 from PytomatedLiquidHandling.HAL import Tip
 
+from .LiquidClass import LiquidClass
+
 
 class PipetteTip(BaseModel):
     Tip: Tip.Base.TipABC
     TipSupportDropoffLabwareID: str
     TipSupportPickupLabwareID: str
     TipWasteLabwareID: str
-    TipWastePositionIDs: list[str]
-    SupportedLiquidClassCategories: dict[str, str]
+    SupportedLiquidClassCategories: dict[str, list[LiquidClass]]
 
     @field_validator("Tip", mode="before")
     def __TipValidate(cls, v):
@@ -26,30 +27,12 @@ class PipetteTip(BaseModel):
 
         return Objects[Identifier]
 
-    @field_validator("TipWastePositionIDs", mode="before")
-    def __TipWastePositionIDsValidate(cls, v):
-        print("HERE")
-        if isinstance(v, list):
-            return [str(v) for v in v]
-        else:
-            v = v.lower()
-            if "range" in v:
-                return [
-                    str(v)
-                    for v in list(
-                        range(
-                            *[
-                                int(v)
-                                for v in v.replace("range(", "")
-                                .replace(")", "")
-                                .split(",")
-                            ]
-                        )
-                    )
-                ]
-            # This allows us to trick pydantic into understanding a range object. However, the desired object is a list of strings.
-            else:
-                ValueError("The only acceptable inputs are either range or list.")
+    @field_validator("SupportedLiquidClassCategories", mode="after")
+    def __SupportedLiquidClassCategoriesValdate(cls, v):
+        for Category in v:
+            v[Category] = sorted(v[Category], key=lambda x: x.MaxVolume)
+
+        return v
 
     def IsLiquidClassCategorySupported(self, Category: str) -> bool:
         return Category in self.SupportedLiquidClassCategories

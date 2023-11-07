@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
 from pydantic import BaseModel, ValidationInfo, field_serializer, field_validator
 
 from PytomatedLiquidHandling.HAL import TransportDevice
