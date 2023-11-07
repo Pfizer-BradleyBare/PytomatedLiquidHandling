@@ -1,11 +1,11 @@
 import json
 import logging
 import time
-from pydantic import PrivateAttr
 from threading import Event, Thread
-from typing import Callable, ClassVar
+from typing import Any, Callable, ClassVar
 
 from flask import Flask
+from pydantic import PrivateAttr
 
 from .SimpleBackendABC import SimpleBackendABC
 
@@ -22,7 +22,8 @@ class ServerBackendABC(SimpleBackendABC):
     _App: Flask = PrivateAttr()
     _AppParentThreadRunnerFlag: Event = PrivateAttr(default=Event())
 
-    def __post_init__(self):
+    def model_post_init(self, __context: Any) -> None:
+        super().model_post_init(__context)
         self.__App = Flask(str(self.Identifier))
         logging.getLogger("werkzeug").disabled = True
         self.Views += [self.IsActive, self.Kill]

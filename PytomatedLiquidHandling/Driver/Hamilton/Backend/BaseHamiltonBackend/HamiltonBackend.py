@@ -1,8 +1,9 @@
 import os
 import shutil
 import subprocess
+from typing import Any, Type, TypeVar
+
 from pydantic import PrivateAttr
-from typing import Type, TypeVar
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
     BackendABC,
@@ -23,7 +24,8 @@ class HamiltonBackendABC(BackendABC):
     _ActionServer: HamiltonServerBackendABC = PrivateAttr()
     _StateServer: HamiltonServerBackendABC = PrivateAttr()
 
-    def __post_init__(self):
+    def model_post_init(self, __context: Any) -> None:
+        super().model_post_init(__context)
         self.ActionServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
             Identifier=str(self.Identifier) + " Action Server",
             PathPrefix="/ActionServer/",

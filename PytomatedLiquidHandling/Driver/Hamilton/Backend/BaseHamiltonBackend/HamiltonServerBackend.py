@@ -1,6 +1,6 @@
 import logging
 import time
-from typing import Callable
+from typing import Any, Callable
 
 from flask import request
 
@@ -101,6 +101,6 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
     Views: list[Callable] = list()
 
-    def __post_init__(self):
+    def model_post_init(self, __context: Any) -> None:
+        super().model_post_init(__context)
         self.Views = [self.GetNextCommand, self.RespondToCommand]
-        ServerBackendABC.__post_init__(self)

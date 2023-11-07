@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from dataclasses import dataclass
+from typing import Any
 
 from pydantic import field_validator
 
@@ -94,7 +95,8 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
 
         return SupportedObjects
 
-    def __post_init__(self):
+    def model_post_init(self, __context: Any) -> None:
+        super().model_post_init(__context)
         self.SupportedTips = sorted(self.SupportedTips, key=lambda x: x.Tip.Volume)
 
     def ValidateTransferOptions(self, Options: list[TransferOptions]):
