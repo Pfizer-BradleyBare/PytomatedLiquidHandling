@@ -14,8 +14,8 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
     def _TruncateTransferVolume(
         self, TransferOptions: TransferOptions, Volume: float
-    ) -> list[TransferOptions]:
-        UpdatedListedOptions = list()
+    ) -> ListedTransferOptions:
+        UpdatedListedOptions = ListedTransferOptions()
 
         NumTransfers = ceil(TransferOptions.TransferVolume / Volume)
         TransferOptions.TransferVolume /= NumTransfers

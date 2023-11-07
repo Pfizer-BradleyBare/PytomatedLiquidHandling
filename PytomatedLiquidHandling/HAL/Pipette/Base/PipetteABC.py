@@ -50,6 +50,10 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
     SupportedLabwares: list[Labware.PipettableLabware]
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
 
+    @field_validator("SupportedTips", mode="before")
+    def __SupportedTipsValidate(cls, v):
+        return sorted(v, key=lambda x: x.Tip.Volume)
+
     @field_validator("SupportedDeckLocations", mode="before")
     def __SupportedDeckLocationsValidate(cls, v):
         SupportedObjects = list()
@@ -116,13 +120,15 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
             SourceLiquidClassCategory = Opt.SourceLiquidClassCategory
             DestinationLiquidClassCategory = Opt.DestinationLiquidClassCategory
             if not any(
-                PipetteTip.IsLiquidClassCategorySupported(SourceLiquidClassCategory)
+                PipetteTip.IsLiquidClassCategorySupported(
+                    SourceLiquidClassCategory, Opt.TransferVolume
+                )
                 for PipetteTip in self.SupportedTips
             ):
                 UnsupportedLiquidClassCategories.append(SourceLiquidClassCategory)
             if not any(
                 PipetteTip.IsLiquidClassCategorySupported(
-                    DestinationLiquidClassCategory
+                    DestinationLiquidClassCategory, Opt.TransferVolume
                 )
                 for PipetteTip in self.SupportedTips
             ):
@@ -138,9 +144,11 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         PossiblePipetteTips = [
             PipetteTip
             for PipetteTip in self.SupportedTips
-            if PipetteTip.IsLiquidClassCategorySupported(SourceLiquidClassCategory)
+            if PipetteTip.IsLiquidClassCategorySupported(
+                SourceLiquidClassCategory, Volume
+            )
             and PipetteTip.IsLiquidClassCategorySupported(
-                DestinationLiquidClassCategory
+                DestinationLiquidClassCategory, Volume
             )
         ]
 
@@ -151,9 +159,16 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         return PossiblePipetteTips[-1]
 
     def _GetLiquidClass(self, LiquidClassCategory: str, Volume: float) -> str:
-        return self._GetTip(
-            LiquidClassCategory, LiquidClassCategory, Volume
-        ).SupportedLiquidClassCategories[LiquidClassCategory]
+        Tip = self._GetTip(LiquidClassCategory, LiquidClassCategory, Volume)
+
+        for Class in Tip.SupportedLiquidClassCategories[LiquidClassCategory]:
+            if Class.MaxVolume > Volume:
+                return Class.LiquidClassName
+
+        return [
+            Class.LiquidClassName
+            for Class in Tip.SupportedLiquidClassCategories[LiquidClassCategory]
+        ][-1]
 
     @abstractmethod
     def Transfer(self, ListedOptions: ListedTransferOptions):
