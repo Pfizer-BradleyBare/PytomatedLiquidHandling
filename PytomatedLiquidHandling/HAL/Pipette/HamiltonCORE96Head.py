@@ -9,10 +9,7 @@ from .Base import PipetteABC, TransferOptions
 class HamiltonCORE96Head(PipetteABC):
     Backend: HamiltonBackendABC
 
-    def Transfer(
-        self,
-        Options: list[TransferOptions] | list[list[TransferOptions]],
-    ):
+    def Transfer(self, Options: list[TransferOptions]):
         if len(Options) == 0:
             raise ValueError("No items in Options list")
 
@@ -86,7 +83,5 @@ class HamiltonCORE96Head(PipetteABC):
                     Options=EjectOptions,
                 )
 
-    def TimeToTransfer(
-        self, OptionsTracker: ListedTransferOptions | list[ListedTransferOptions]
-    ) -> float:
+    def TimeToTransfer(self, Options: list[TransferOptions]) -> float:
         return 0

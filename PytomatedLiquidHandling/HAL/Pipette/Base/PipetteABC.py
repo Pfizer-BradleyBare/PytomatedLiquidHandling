@@ -17,30 +17,17 @@ class TransferOptions(OptionsABC):
     SourcePosition: str | int
     # This is the labware well position.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
-    CurrentSourceComposition: float | list[tuple[str, float]]
+    CurrentSourceVolme: float
     SourceMixCycles: int
     SourceLiquidClassCategory: str
     DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
     DestinationPosition: str | int
     # This is the labware well position.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
-    CurrentDestinationComposition: float | list[tuple[str, float]]
+    CurrentDestinationVolume: float
     DestinationMixCycles: int
     DestinationLiquidClassCategory: str
     TransferVolume: float
-
-    def __post_init__(self):
-        if isinstance(self.CurrentSourceComposition, float):
-            self.CurrentSourceComposition = [
-                ("Source N/A", self.CurrentSourceComposition)
-            ]
-
-        if isinstance(self.CurrentDestinationComposition, float):
-            self.CurrentDestinationComposition = [
-                ("Destination N/A", self.CurrentDestinationComposition)
-            ]
-
-        # We want to input to be a composition. If the user doesn't care then we will
 
 
 class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
@@ -175,13 +162,9 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         ][-1]
 
     @abstractmethod
-    def Transfer(
-        self, ListedOptions: list[TransferOptions] | list[list[TransferOptions]]
-    ):
+    def Transfer(self, ListedOptions: list[TransferOptions]):
         ...
 
     @abstractmethod
-    def TimeToTransfer(
-        self, ListedOptions: list[TransferOptions] | list[list[TransferOptions]]
-    ):
+    def TimeToTransfer(self, ListedOptions: list[TransferOptions]):
         ...
