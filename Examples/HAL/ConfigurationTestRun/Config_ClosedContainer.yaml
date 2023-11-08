@@ -1,0 +1,32 @@
+#############################################################
+#
+# Devices: The pipetting devices available on this system. Options per device are different.
+# Enabled: True: Can be used. False: Cannot be used
+#
+#############################################################
+
+Hamilton FlipTube:
+  - Identifier: Fliptube 1
+    Enabled: True
+    Backend: Hammy
+    Custom Error Handling: False
+    Tool Labware ID: Tool_FlipTube
+    Tool Position ID: 1-4
+    Supported Labwares:
+      - Hamilton 1.5mL FlipTube
+    Supported Deck Locations: 
+      - SMP_CAR_32_FlipTubes_A02_0001
+      - Ham_24_RB_TuR_1_5ml_0001
+      
+Hamilton FlipTube Special:
+  - Identifier: Fliptube 1
+    Enabled: True
+    Backend: Hammy
+    Custom Error Handling: False
+    Tool Labware ID: Tool_FlipTube
+    Tool Position ID: 1
+    Supported Labwares:
+      - Hamilton 1.5mL FlipTube
+    Supported Deck Locations:
+      - SMP_CAR_32_FlipTubes_A02_0001
+      - Ham_24_RB_TuR_1_5ml_0001

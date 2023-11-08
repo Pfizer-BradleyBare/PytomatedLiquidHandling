@@ -1,0 +1,51 @@
+#HHS Carrier
+- Identifier: HHS_Carrier_Pos1
+  Enabled: True
+  Carrier:
+    Identifier: C1
+    Position: 1
+  Transport Config:
+    Transport Device Identifier: Gripper
+    Pickup Options:
+    Dropoff Options:
+
+- Identifier: HHS_Carrier_Pos2
+  Enabled: True
+  Carrier:
+    Identifier: C1
+    Position: 1
+  Transport Config:
+    Transport Device Identifier: Gripper
+    Pickup Options:
+    Dropoff Options:
+
+- Identifier: HHS_Carrier_Pos3
+  Enabled: True
+  Carrier:
+    Identifier: C1
+    Position: 1
+  Transport Config:
+    Transport Device Identifier: Gripper
+    Pickup Options:
+    Dropoff Options:
+
+- Identifier: HHS_Carrier_Pos4
+  Enabled: True
+  Carrier:
+    Identifier: C1
+    Position: 1
+  Transport Config:
+    Transport Device Identifier: Gripper
+    Pickup Options:
+    Dropoff Options:
+
+#Vacuum Carrier
+- Identifier: Vacuum_Carrier_Pos1
+  Enabled: True
+  Carrier:
+    Identifier: C1
+    Position: 1
+  Transport Config:
+    Transport Device Identifier: Gripper
+    Pickup Options:
+    Dropoff Options:

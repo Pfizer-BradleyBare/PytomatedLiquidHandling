@@ -1,0 +1,98 @@
+NonMoveable Carrier:
+  - Identifier: HHS and Cooler
+    Enabled: True
+    Track Start: 7
+    Track End: 13
+    Num Labware Positions: 4
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
+
+  - Identifier: Lids and Vac
+    Enabled: True
+    Track Start: 14
+    Track End: 20
+    Num Labware Positions: 4
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
+
+Autoload Carrier:
+  - Identifier: IMCS SizeX100 Desalting Tips
+    Enabled: True
+    Carrier Labware ID: MFX_CAR_5Tip_0001
+    Track Start: 21
+    Track End: 26
+    Num Labware Positions: 5
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
+
+  - Identifier: 1mL Tips
+    Enabled: True
+    Carrier Labware ID: MFX_CAR_5Tip_0002
+    Track Start: 27
+    Track End: 32
+    Num Labware Positions: 5
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
+
+  - Identifier: 50uL and 300uL Tips
+    Enabled: True
+    Carrier Labware ID: MFX_CAR_Tip_3NTR4_Base_HPTab_0001
+    Track Start: 33
+    Track End: 38
+    Num Labware Positions: 5
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
+
+  - Identifier: 60mL Reagent Troughs
+    Enabled: True
+    Carrier Labware ID: RGT_CAR_5R60_A00_0001
+    Track Start: 39
+    Track End: 39
+    Num Labware Positions: 5
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
+
+  - Identifier: 15mL Reagent Troughs
+    Enabled: True
+    Carrier Labware ID: SMP_CAR_24_15x95_A00_0002
+    Track Start: 40
+    Track End: 40
+    Num Labware Positions: 24
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
+
+  - Identifier: 1.5mL Fliptubes
+    Enabled: True
+    Carrier Labware ID: SMP_CAR_32_FlipTubes_A02_0001
+    Track Start: 41
+    Track End: 41
+    Num Labware Positions: 32
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
+
+  - Identifier: Kevin 
+    Enabled: True
+    Carrier Labware ID: MFX_CAR_5Base_HPTab_0003
+    Track Start: 42
+    Track End: 47
+    Num Labware Positions: 5
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
+
+  - Identifier: Joe 
+    Enabled: True
+    Carrier Labware ID: MFX_CAR_5Base_HPTab_0001
+    Track Start: 48
+    Track End: 53
+    Num Labware Positions: 5
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage       
+
+  - Identifier: Nick
+    Enabled: True
+    Carrier Labware ID: MFX_CAR_5Base_HPTab_0002
+    Track Start: 54
+    Track End: 59
+    Num Labware Positions: 5
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
