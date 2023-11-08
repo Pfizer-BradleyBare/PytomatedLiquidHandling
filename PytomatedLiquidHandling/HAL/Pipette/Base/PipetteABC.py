@@ -43,11 +43,6 @@ class TransferOptions(OptionsABC):
         # We want to input to be a composition. If the user doesn't care then we will
 
 
-@dataclass(kw_only=True)
-class ListedTransferOptions(list[TransferOptions]):
-    ...
-
-
 class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
     SupportedTips: list[PipetteTip]
     SupportedLabwares: list[Labware.PipettableLabware]
@@ -181,12 +176,12 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
 
     @abstractmethod
     def Transfer(
-        self, ListedOptions: ListedTransferOptions | list[ListedTransferOptions]
+        self, ListedOptions: list[TransferOptions] | list[list[TransferOptions]]
     ):
         ...
 
     @abstractmethod
     def TimeToTransfer(
-        self, ListedOptions: ListedTransferOptions | list[ListedTransferOptions]
+        self, ListedOptions: list[TransferOptions] | list[list[TransferOptions]]
     ):
         ...

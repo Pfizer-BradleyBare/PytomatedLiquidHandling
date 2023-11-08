@@ -1,3 +1,3 @@
 from . import Exceptions
-from .PipetteABC import ListedTransferOptions, PipetteABC, TransferOptions
+from .PipetteABC import PipetteABC, TransferOptions
 from .PipetteTip.PipetteTip import PipetteTip
