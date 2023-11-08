@@ -123,6 +123,14 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                             ChannelNumber=Count + 1,
                         )
                     )
+                    Command = PortraitCORE8Channel.Pickup.Command(
+                        CustomErrorHandling=self.CustomErrorHandling,
+                        Options=ListedPickupOptions,
+                    )
+                    self.Backend.ExecuteCommand(Command)
+                    self.Backend.GetResponse(
+                        Command, PortraitCORE8Channel.Pickup.Response
+                    )
 
                     AspirateLabware = Opt.SourceLayoutItemInstance.Labware
                     if not isinstance(AspirateLabware, Labware.PipettableLabware):
@@ -156,6 +164,15 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                             ),
                             Volume=Opt.TransferVolume,
                         )
+                    )
+
+                    Command = PortraitCORE8Channel.Aspirate.Command(
+                        CustomErrorHandling=self.CustomErrorHandling,
+                        Options=ListedAspirateOptions,
+                    )
+                    self.Backend.ExecuteCommand(Command)
+                    self.Backend.GetResponse(
+                        Command, PortraitCORE8Channel.Aspirate.Response
                     )
 
                     DispenseLabware = Opt.SourceLayoutItemInstance.Labware
@@ -192,38 +209,34 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                         )
                     )
 
+                    Command = PortraitCORE8Channel.Dispense.Command(
+                        CustomErrorHandling=self.CustomErrorHandling,
+                        Options=ListedDispenseOptions,
+                    )
+                    self.Backend.ExecuteCommand(Command)
+                    self.Backend.GetResponse(
+                        Command, PortraitCORE8Channel.Dispense.Response
+                    )
+
+                    EjectPositions = ["1", "2", "3", "4", "13", "14", "15", "16"]
+                    # Hamilton waste always has 16 positions. Do be compatible with liquid waste we want to use the outer positions
+
                     ListedEjectOptions.append(
                         PortraitCORE8Channel.Eject.Options(
                             LabwareID=PipetteTipInstance.TipWasteLabwareID,
                             ChannelNumber=Count + 1,
-                            PositionID=str(Count + 1),
+                            PositionID=EjectPositions[Count],
                         )
                     )
 
-                print(
-                    PortraitCORE8Channel.Pickup.Command(
-                        CustomErrorHandling=self.CustomErrorHandling,
-                        Options=ListedPickupOptions,
-                    )
-                )
-                print(
-                    PortraitCORE8Channel.Aspirate.Command(
-                        CustomErrorHandling=self.CustomErrorHandling,
-                        Options=ListedAspirateOptions,
-                    )
-                )
-                print(
-                    PortraitCORE8Channel.Dispense.Command(
-                        CustomErrorHandling=self.CustomErrorHandling,
-                        Options=ListedDispenseOptions,
-                    )
-                )
-                print(
-                    PortraitCORE8Channel.Eject.Command(
+                    Command = PortraitCORE8Channel.Eject.Command(
                         CustomErrorHandling=self.CustomErrorHandling,
                         Options=ListedEjectOptions,
                     )
-                )
+                    self.Backend.ExecuteCommand(Command)
+                    self.Backend.GetResponse(
+                        Command, PortraitCORE8Channel.Eject.Response
+                    )
 
     def TimeToTransfer(
         self, ListedOptionsInstance: list[TransferOptions] | list[list[TransferOptions]]
