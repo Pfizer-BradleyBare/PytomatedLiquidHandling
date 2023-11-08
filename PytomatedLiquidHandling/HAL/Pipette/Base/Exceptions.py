@@ -15,4 +15,4 @@ class LiquidClassCategoryNotSupportedError(BaseException):
     Categories: List of category names and associated volumes tuple[Name,Volume] that were not supported
     """
 
-    Categories: list[tuple[str, float]]
+    Categories: list[str]

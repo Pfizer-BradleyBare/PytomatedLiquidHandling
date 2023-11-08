@@ -34,13 +34,5 @@ class PipetteTip(BaseModel):
 
         return v
 
-    def IsLiquidClassCategorySupported(self, Category: str, Volume: float) -> bool:
-        if Category in self.SupportedLiquidClassCategories:
-            return Volume <= max(
-                [
-                    Class.MaxVolume
-                    for Class in self.SupportedLiquidClassCategories[Category]
-                ]
-            )
-
-        return False
+    def IsLiquidClassCategorySupported(self, Category: str) -> bool:
+        return Category in self.SupportedLiquidClassCategories

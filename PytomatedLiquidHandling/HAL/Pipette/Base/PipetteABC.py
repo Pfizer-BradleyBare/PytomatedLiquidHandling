@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from dataclasses import dataclass
+from math import ceil
 from typing import Any
 
 from pydantic import field_validator
@@ -14,15 +15,15 @@ from .PipetteTip import PipetteTip
 @dataclass(kw_only=True)
 class TransferOptions(OptionsABC):
     SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    SourcePosition: str | int
-    # This is the labware well position.
+    SourcePosition: int | str
+    # This is the labware well position. Numeric or alphanumeric.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
     CurrentSourceVolme: float
     SourceMixCycles: int
     SourceLiquidClassCategory: str
     DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    DestinationPosition: str | int
-    # This is the labware well position.
+    DestinationPosition: int | str
+    # This is the labware well position. Numeric or alphanumeric.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
     CurrentDestinationVolume: float
     DestinationMixCycles: int
@@ -107,24 +108,54 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
             SourceLiquidClassCategory = Opt.SourceLiquidClassCategory
             DestinationLiquidClassCategory = Opt.DestinationLiquidClassCategory
             if not any(
-                PipetteTip.IsLiquidClassCategorySupported(
-                    SourceLiquidClassCategory, Opt.TransferVolume
-                )
+                PipetteTip.IsLiquidClassCategorySupported(SourceLiquidClassCategory)
                 for PipetteTip in self.SupportedTips
             ):
-                UnsupportedLiquidClassCategories.append(
-                    (SourceLiquidClassCategory, Opt.TransferVolume)
-                )
+                UnsupportedLiquidClassCategories.append(SourceLiquidClassCategory)
             if not any(
                 PipetteTip.IsLiquidClassCategorySupported(
-                    DestinationLiquidClassCategory, Opt.TransferVolume
+                    DestinationLiquidClassCategory
                 )
                 for PipetteTip in self.SupportedTips
             ):
-                UnsupportedLiquidClassCategories.append(
-                    (DestinationLiquidClassCategory, Opt.TransferVolume)
-                )
+                UnsupportedLiquidClassCategories.append(DestinationLiquidClassCategory)
             # Check liquid class compatibility
+
+    def _GetMaxTransferVolume(
+        self, SourceLiquidClassCategory: str, DestinationLiquidClassCategory: str
+    ) -> float:
+        MaxVol = 0
+
+        for Tip in self.SupportedTips:
+            if Tip.IsLiquidClassCategorySupported(
+                SourceLiquidClassCategory
+            ) and Tip.IsLiquidClassCategorySupported(DestinationLiquidClassCategory):
+                for LiquidClass in Tip.SupportedLiquidClassCategories[
+                    SourceLiquidClassCategory
+                ]:
+                    if LiquidClass.MaxVolume > MaxVol:
+                        MaxVol = LiquidClass.MaxVolume
+
+                for LiquidClass in Tip.SupportedLiquidClassCategories[
+                    DestinationLiquidClassCategory
+                ]:
+                    if LiquidClass.MaxVolume > MaxVol:
+                        MaxVol = LiquidClass.MaxVolume
+
+        return MaxVol
+
+    def _TruncateTransferVolume(
+        self, Options: TransferOptions, Volume: float
+    ) -> list[TransferOptions]:
+        UpdatedListedOptions = list()
+
+        NumTransfers = ceil(Options.TransferVolume / Volume)
+        TransferOptions.TransferVolume /= NumTransfers
+
+        for _ in range(0, NumTransfers):
+            UpdatedListedOptions.append(TransferOptions)
+
+        return UpdatedListedOptions
 
     def _GetTip(
         self,
@@ -135,11 +166,9 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         PossiblePipetteTips = [
             PipetteTip
             for PipetteTip in self.SupportedTips
-            if PipetteTip.IsLiquidClassCategorySupported(
-                SourceLiquidClassCategory, Volume
-            )
+            if PipetteTip.IsLiquidClassCategorySupported(SourceLiquidClassCategory)
             and PipetteTip.IsLiquidClassCategorySupported(
-                DestinationLiquidClassCategory, Volume
+                DestinationLiquidClassCategory
             )
         ]
 
