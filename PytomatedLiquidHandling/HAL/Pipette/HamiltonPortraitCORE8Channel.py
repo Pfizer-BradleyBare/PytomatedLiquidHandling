@@ -105,7 +105,9 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 TipPositions = Tip.Tip._AvailablePositions[:NumActiveChannels]
 
                 PickupOptions: list[PortraitCORE8Channel.Pickup.Options] = list()
-                for Index, ChannelNumber in enumerate(self.ActiveChannels):
+                for Index, (Opt, ChannelNumber) in enumerate(
+                    zip(Opts, self.ActiveChannels)
+                ):
                     PortraitCORE8Channel.Pickup.Options(
                         ChannelNumber=ChannelNumber,
                         LabwareID=TipPositions[Index].LabwareID,
@@ -118,6 +120,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 self.Backend.GetResponse(Command, PortraitCORE8Channel.Pickup.Response)
                 # Pickup the tips
 
+                AspirateOptions: list[PortraitCORE8Channel.Aspirate.Options] = list()
                 for Index, (Opt, ChannelNumber) in enumerate(
                     zip(Opts, self.ActiveChannels)
                 ):
@@ -141,9 +144,6 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     # The position MUST take into account the number of sequences per well.
                     # This calculates the proper position in the well for each channel if the container has multiple position positions.
 
-                    AspirateOptions: list[
-                        PortraitCORE8Channel.Aspirate.Options
-                    ] = list()
                     AspirateOptions.append(
                         PortraitCORE8Channel.Aspirate.Options(
                             ChannelNumber=ChannelNumber,
@@ -161,15 +161,19 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                         )
                     )
 
-                    Command = PortraitCORE8Channel.Aspirate.Command(
-                        CustomErrorHandling=self.CustomErrorHandling,
-                        Options=AspirateOptions,
-                    )
-                    self.Backend.ExecuteCommand(Command)
-                    self.Backend.GetResponse(
-                        Command, PortraitCORE8Channel.Aspirate.Response
-                    )
+                Command = PortraitCORE8Channel.Aspirate.Command(
+                    CustomErrorHandling=self.CustomErrorHandling,
+                    Options=AspirateOptions,
+                )
+                self.Backend.ExecuteCommand(Command)
+                self.Backend.GetResponse(
+                    Command, PortraitCORE8Channel.Aspirate.Response
+                )
 
+                DispenseOptions: list[PortraitCORE8Channel.Dispense.Options] = list()
+                for Index, (Opt, ChannelNumber) in enumerate(
+                    zip(Opts, self.ActiveChannels)
+                ):
                     DispenseLabware = cast(
                         Labware.PipettableLabware,
                         Opt.DestinationLayoutItemInstance.Labware,
@@ -196,9 +200,6 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     # The position MUST take into account the number of sequences per well.
                     # This calculates the proper position in the well for each channel if the container has multiple position positions.
 
-                    DispenseOptions: list[
-                        PortraitCORE8Channel.Dispense.Options
-                    ] = list()
                     DispenseOptions.append(
                         PortraitCORE8Channel.Dispense.Options(
                             ChannelNumber=ChannelNumber,
@@ -216,19 +217,22 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                         )
                     )
 
-                    Command = PortraitCORE8Channel.Dispense.Command(
-                        CustomErrorHandling=self.CustomErrorHandling,
-                        Options=DispenseOptions,
-                    )
-                    self.Backend.ExecuteCommand(Command)
-                    self.Backend.GetResponse(
-                        Command, PortraitCORE8Channel.Dispense.Response
-                    )
+                Command = PortraitCORE8Channel.Dispense.Command(
+                    CustomErrorHandling=self.CustomErrorHandling,
+                    Options=DispenseOptions,
+                )
+                self.Backend.ExecuteCommand(Command)
+                self.Backend.GetResponse(
+                    Command, PortraitCORE8Channel.Dispense.Response
+                )
 
+                EjectOptions: list[PortraitCORE8Channel.Eject.Options] = list()
+                for Index, (Opt, ChannelNumber) in enumerate(
+                    zip(Opts, self.ActiveChannels)
+                ):
                     EjectPositions = ["1", "2", "3", "4", "13", "14", "15", "16"]
                     # Hamilton waste always has 16 positions. Do be compatible with liquid waste we want to use the outer positions
 
-                    EjectOptions: list[PortraitCORE8Channel.Eject.Options] = list()
                     EjectOptions.append(
                         PortraitCORE8Channel.Eject.Options(
                             LabwareID=Tip.TipWasteLabwareID,
@@ -241,10 +245,8 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                         CustomErrorHandling=self.CustomErrorHandling,
                         Options=EjectOptions,
                     )
-                    self.Backend.ExecuteCommand(Command)
-                    self.Backend.GetResponse(
-                        Command, PortraitCORE8Channel.Eject.Response
-                    )
+                self.Backend.ExecuteCommand(Command)
+                self.Backend.GetResponse(Command, PortraitCORE8Channel.Eject.Response)
 
     def TimeToTransfer(self, ListedOptionsInstance: list[TransferOptions]) -> float:
         return 0
