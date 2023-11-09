@@ -15,7 +15,7 @@ class HamiltonNTR(TipABC):
     TipRackWaste: LayoutItem.TipRack
     TransportDevice: TransportDevice.Base.TransportDeviceABC
     _TierDiscardNumber: int = PrivateAttr(default=100)
-    _DiscardedRackLabwareIDs: list[str] = PrivateAttr(default_factory=list)
+    _DiscardedTipRacks: list[LayoutItem.TipRack] = PrivateAttr(default_factory=list)
 
     @field_validator("TipRackWaste", mode="before")
     def __TipRackWasteValidate(cls, v):
@@ -55,9 +55,7 @@ class HamiltonNTR(TipABC):
         if Remaining == 0:
             AvailableIDs = set([Pos.LabwareID for Pos in self._AvailablePositions])
 
-            if len(AvailableIDs) + len(self._DiscardedRackLabwareIDs) == len(
-                self.RackLabwareIDs
-            ):
+            if len(AvailableIDs) + len(self._DiscardedTipRacks) == len(self.TipRacks):
                 return self.TipsPerRack * self.Tiers
                 # We are at the start of a fresh layer
             else:
@@ -70,27 +68,33 @@ class HamiltonNTR(TipABC):
         PresentLabwareIDs = list(
             set([Pos.LabwareID for Pos in self._AvailablePositions])
         )
-        DiscardLabwareIDs = [
-            RackID
-            for RackID in self.RackLabwareIDs
-            if RackID not in PresentLabwareIDs
-            and RackID not in self._DiscardedRackLabwareIDs
+        PresentTipRacks = [
+            TipRack
+            for TipRack in self.TipRacks
+            if TipRack.LabwareID not in PresentLabwareIDs
+        ]
+        DiscardTipRacks = [
+            TipRack
+            for TipRack in self.TipRacks
+            if TipRack.LabwareID not in PresentLabwareIDs
+            and TipRack not in self._DiscardedTipRacks
         ]
 
-        for i in range(0, self._TierDiscardNumber - len(DiscardLabwareIDs)):
-            DiscardLabwareIDs.append(PresentLabwareIDs[i])
+        for i in range(0, self._TierDiscardNumber - len(DiscardTipRacks)):
+            DiscardTipRacks.append(PresentTipRacks[i])
         # Basically we should always discard the same number of racks as we have tiers.
         # There is a special case during tip counter edit where an NTR rack is removed manually by the user. We handle that here.
 
-        for DiscardLabwareID in DiscardLabwareIDs:
-            self._DiscardedRackLabwareIDs.append(DiscardLabwareID)
+        for TipRack in DiscardTipRacks:
+            self._DiscardedTipRacks.append(TipRack)
             ...
             # TODO: Do the discard with CORE grippers here
 
         self._AvailablePositions = [
             Pos
             for Pos in self._AvailablePositions
-            if Pos.LabwareID not in self._DiscardedRackLabwareIDs
+            if Pos.LabwareID
+            not in [TipRack.LabwareID for TipRack in self._DiscardedTipRacks]
         ]
         # Update available positions
 
@@ -111,8 +115,6 @@ class HamiltonNTR(TipABC):
             )
             self.TipCounterEdit()
 
-        # TODO. Need to move the racks to waste with a transport device...
-
     def TipCounterEdit(self):
         ListedOptions = Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
             TipCounter="HamiltonTipNTR_" + str(self.Volume) + "uL_TipCounter",
@@ -120,9 +122,9 @@ class HamiltonNTR(TipABC):
             + str(self.Volume)
             + "uL tips currently loaded on the system",
         )
-        for ID in self.RackLabwareIDs:
+        for TipRack in self.TipRacks:
             ListedOptions.append(
-                Visual_NTR_Library.Channels_TipCounter_Edit.Options(ID)
+                Visual_NTR_Library.Channels_TipCounter_Edit.Options(TipRack.LabwareID)
             )
 
         CommandInstance = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
@@ -142,11 +144,13 @@ class HamiltonNTR(TipABC):
         )
 
         AvailableIDs = set([Pos.LabwareID for Pos in self._AvailablePositions])
-        self._DiscardedRackLabwareIDs = [
-            ID for ID in self.RackLabwareIDs if ID not in AvailableIDs
+        self._DiscardedTipRacks = [
+            TipRack
+            for TipRack in self.TipRacks
+            if TipRack.LabwareID not in AvailableIDs
         ]
         # We automatically assume the if a labwareID is NOT in the available positions, then it is basically already discarded.
 
-        self._TierDiscardNumber = len(self._DiscardedRackLabwareIDs) % self.Tiers
+        self._TierDiscardNumber = len(self._DiscardedTipRacks) % self.Tiers
         # Once we know which labwareIDs are already gone we can calculate how many to throw away on the first pass.
         # We basically say: "I assume to have a multiple of NumTiers so if I have any remainder then that is number of tiers to be thrown away."
