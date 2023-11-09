@@ -87,8 +87,7 @@ class HamiltonNTR(TipABC):
 
         for TipRack in DiscardTipRacks:
             self._DiscardedTipRacks.append(TipRack)
-            ...
-            # TODO: Do the discard with CORE grippers here
+            self.TransportDevice.Transport(TipRack, self.TipRackWaste)
 
         self._AvailablePositions = [
             Pos
