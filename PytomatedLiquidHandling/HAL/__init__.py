@@ -1,18 +1,17 @@
-import os
-
-import yaml
+if True:
+    from . import TransportDevice
 
 from . import (
-    Carrier,
     Backend,
-    TransportDevice,
-    Labware,
-    Tip,
-    LayoutItem,
-    DeckLocation,
-    Tools,
+    Carrier,
     ClosedContainer,
+    DeckLocation,
     HeatCoolShakeDevice,
+    Labware,
+    LayoutItem,
+    MagneticRack,
     Pipette,
     StorageDevice,
+    Tip,
+    Tools,
 )

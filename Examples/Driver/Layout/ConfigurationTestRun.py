@@ -80,3 +80,10 @@ with open(os.path.join(os.path.dirname(__file__), "StorageDevice.yaml")) as File
 HAL.Tools.ConfigLoader.DevicesLists(
     Dict, HAL.StorageDevice.Base.StorageDeviceABC, HAL.StorageDevice.Devices
 )
+
+with open(os.path.join(os.path.dirname(__file__), "MagneticRack.yaml")) as File:
+    Dict = yaml.full_load(File)
+
+HAL.Tools.ConfigLoader.DevicesLists(
+    Dict, HAL.MagneticRack.Base.MagneticRackABC, HAL.MagneticRack.Devices
+)

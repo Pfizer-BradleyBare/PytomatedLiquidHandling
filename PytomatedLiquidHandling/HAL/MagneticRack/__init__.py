@@ -1,2 +1,4 @@
-from . import Base, Loader
+from . import Base
 from .MagneticRack import MagneticRack
+
+Devices: dict[str, Base.MagneticRackABC] = dict()
