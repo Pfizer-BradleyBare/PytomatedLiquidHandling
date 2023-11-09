@@ -20,8 +20,8 @@ class TipABC(Interface, HALDevice):
     Volume: float
     _AvailablePositions: list[AvailablePosition] = PrivateAttr(default_factory=list)
 
-    @field_validator("TipRacks", mode="before")
-    def __TipRacksValidate(cls, v):
+    @field_validator("TipRackLayoutItems", mode="before")
+    def __TipRackLayoutItemsValidate(cls, v):
         SupportedObjects = list()
 
         Objects = LayoutItem.Devices

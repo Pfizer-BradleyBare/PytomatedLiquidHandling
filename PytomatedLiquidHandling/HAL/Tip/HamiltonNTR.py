@@ -17,8 +17,8 @@ class HamiltonNTR(TipABC):
     _TierDiscardNumber: int = PrivateAttr(default=100)
     _DiscardedTipRacks: list[LayoutItem.TipRack] = PrivateAttr(default_factory=list)
 
-    @field_validator("TipRackWaste", mode="before")
-    def __TipRackWasteValidate(cls, v):
+    @field_validator("TipRackWasteLayoutItem", mode="before")
+    def __TipRackWasteLayoutItemValidate(cls, v):
         Objects = LayoutItem.Devices
 
         Identifier = v

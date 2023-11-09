@@ -24,6 +24,7 @@ Hamilton NTR:
       - L1
       - L2
     Tip Rack Waste Layout Item: Waste
+    Transport Device: Gripper
 
   - Identifier: 300uL NTR
     Enabled: True
@@ -36,6 +37,7 @@ Hamilton NTR:
       - L1
       - L2
     Tip Rack Waste Layout Item: Waste
+    Transport Device: Gripper
 
 Hamilton FTR:
   - Identifier: 1000uL FTR
