@@ -4,12 +4,13 @@
 # Enabled: True: Can be used. False: Cannot be used
 #
 #############################################################
-
-Hamilton CORE 96 Head:
-  - Identifier: test
+Hamilton PortraitCORE8Channel:
+  - Identifier: Test
     Enabled: True
     Backend: Hammy
     Custom Error Handling: False
+
+    Active Channels: [1, 2, 3, 4, 5, 6, 7, 8]
 
     Supported Labwares:
       - 200uL Biorad 96 Well PCR Plate
@@ -45,13 +46,12 @@ Hamilton CORE 96 Head:
             - Liquid Class Name: a
               Max Volume: 50
 
-Hamilton PortraitCORE8Channel:
-  - Identifier: Test
+Hamilton CORE 96 Head:
+  - Identifier: test
     Enabled: True
     Backend: Hammy
+    Hamilton PortraitCORE8Channel: Test
     Custom Error Handling: False
-
-    Active Channels: [1, 2, 3, 4, 5, 6, 7, 8]
 
     Supported Labwares:
       - 200uL Biorad 96 Well PCR Plate

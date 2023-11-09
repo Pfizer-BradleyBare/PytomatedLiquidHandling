@@ -98,20 +98,22 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
             # are there at minimum enough tips left?
 
             for Opts in PackagedOpts:
-                if Tip.Tip.RemainingTipsInTier() < NumActiveChannels:
+                if Tip.Tip.RemainingTipsInTier() < len(Opts):
                     Tip.Tip.DiscardTierLayerToWaste()
                 # If not enough tips then get user to help
 
-                TipPositions = Tip.Tip._AvailablePositions[:NumActiveChannels]
+                TipPositions = Tip.Tip._AvailablePositions[: len(Opts)]
 
                 PickupOptions: list[PortraitCORE8Channel.Pickup.Options] = list()
                 for Index, (Opt, ChannelNumber) in enumerate(
                     zip(Opts, self.ActiveChannels)
                 ):
-                    PortraitCORE8Channel.Pickup.Options(
-                        ChannelNumber=ChannelNumber,
-                        LabwareID=TipPositions[Index].LabwareID,
-                        PositionID=TipPositions[Index].PositionID,
+                    PickupOptions.append(
+                        PortraitCORE8Channel.Pickup.Options(
+                            ChannelNumber=ChannelNumber,
+                            LabwareID=TipPositions[Index].LabwareID,
+                            PositionID=TipPositions[Index].PositionID,
+                        )
                     )
                 Command = PortraitCORE8Channel.Pickup.Command(
                     CustomErrorHandling=self.CustomErrorHandling, Options=PickupOptions
@@ -226,13 +228,12 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     Command, PortraitCORE8Channel.Dispense.Response
                 )
 
+                EjectPositions = ["1", "2", "3", "4", "13", "14", "15", "16"]
+                # Hamilton waste always has 16 positions. Do be compatible with liquid waste we want to use the outer positions
                 EjectOptions: list[PortraitCORE8Channel.Eject.Options] = list()
                 for Index, (Opt, ChannelNumber) in enumerate(
                     zip(Opts, self.ActiveChannels)
                 ):
-                    EjectPositions = ["1", "2", "3", "4", "13", "14", "15", "16"]
-                    # Hamilton waste always has 16 positions. Do be compatible with liquid waste we want to use the outer positions
-
                     EjectOptions.append(
                         PortraitCORE8Channel.Eject.Options(
                             LabwareID=Tip.TipWasteLabwareID,
@@ -241,10 +242,10 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                         )
                     )
 
-                    Command = PortraitCORE8Channel.Eject.Command(
-                        CustomErrorHandling=self.CustomErrorHandling,
-                        Options=EjectOptions,
-                    )
+                Command = PortraitCORE8Channel.Eject.Command(
+                    CustomErrorHandling=self.CustomErrorHandling,
+                    Options=EjectOptions,
+                )
                 self.Backend.ExecuteCommand(Command)
                 self.Backend.GetResponse(Command, PortraitCORE8Channel.Eject.Response)
 
