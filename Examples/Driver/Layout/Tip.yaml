@@ -20,11 +20,10 @@ Hamilton NTR:
     Volume: 50
     Tiers: 2
     Tips Per Rack: 96
-    Tip Racks:
+    Tip Rack Layout Items:
       - L1
       - L2
-    Tip Rack Waste: Waste
-    Gripper Labware ID: Gripper
+    Tip Rack Waste Layout Item: Waste
 
   - Identifier: 300uL NTR
     Enabled: True
@@ -33,11 +32,10 @@ Hamilton NTR:
     Volume: 300
     Tiers: 2
     Tips Per Rack: 96
-    Tip Racks:
+    Tip Rack Layout Items:
       - L1
       - L2
-    Tip Rack Waste: Waste
-    Gripper Labware ID: Gripper
+    Tip Rack Waste Layout Item: Waste
 
 Hamilton FTR:
   - Identifier: 1000uL FTR
@@ -45,6 +43,6 @@ Hamilton FTR:
     Backend: Hammy
     Custom Error Handling: False
     Volume: 1000
-    Tip Racks:
+    Tip Rack Layout Items:
       - L1
       - L2
