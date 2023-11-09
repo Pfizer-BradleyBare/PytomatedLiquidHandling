@@ -1,18 +1,17 @@
 import os
 import subprocess
 import threading
-from dataclasses import dataclass, field
+from pydantic import PrivateAttr
 from typing import Any
 
 from ....Tools.AbstractClasses import SimpleBackendABC
 from ..UnchainedLabsCommand import UnchainedLabsCommandABC
 
 
-@dataclass
 class StunnerBackend(SimpleBackendABC):
     InstrumentIPAddress: str
     InstrumentPort: int
-    StunnerDLLObject: Any = field(init=False)
+    _StunnerDLLObject: Any = PrivateAttr()
 
     def __post_init__(self):
         BasePath = os.path.dirname(__file__)
@@ -33,25 +32,26 @@ class StunnerBackend(SimpleBackendABC):
         from UnchainedLabs_Instruments import Stunner  # type: ignore
 
         # The stunner API access uses a .DLL library. This step loads the .dll as a module.
+        # Namespace is "UnchainedLabs_Instruments" and class is Stunner (This is a C# dll)
 
-        self.StunnerDLLObject = Stunner(self.InstrumentIPAddress, self.InstrumentPort)
+        self._StunnerDLLObject = Stunner(self.InstrumentIPAddress, self.InstrumentPort)
         # The stunner API access uses a .DLL library. This step creates the stunner class present in the .dll.
 
     def StunnerRunnerThread(self):
-        CommandInstance = self.CommandInstance
+        CommandInstance = self._CommandInstance
 
         if not isinstance(CommandInstance, UnchainedLabsCommandABC):
             raise Exception("This should never happen")
 
-        self.ResponseInstance = CommandInstance.ParseResponse(
-            CommandInstance.ExecuteCommandHelper(self.StunnerDLLObject)
+        self._ResponseInstance = CommandInstance.ParseResponse(
+            CommandInstance.ExecuteCommandHelper(self._StunnerDLLObject)
         )
 
     def StartBackend(self):
         SimpleBackendABC.StartBackend(self)
 
         ResponseInstance = UnchainedLabsCommandABC.ParseResponse(
-            self.StunnerDLLObject.Request_Access()
+            self._StunnerDLLObject.Request_Access()
         )
         CommandInstance = UnchainedLabsCommandABC()
         # self.CheckExceptions(CommandInstance, ResponseInstance)
@@ -60,7 +60,7 @@ class StunnerBackend(SimpleBackendABC):
         SimpleBackendABC.StopBackend(self)
 
         ResponseInstance = UnchainedLabsCommandABC.ParseResponse(
-            self.StunnerDLLObject.Release_Access()
+            self._StunnerDLLObject.Release_Access()
         )
         CommandInstance = UnchainedLabsCommandABC()
         # self.CheckExceptions(CommandInstance, ResponseInstance)
