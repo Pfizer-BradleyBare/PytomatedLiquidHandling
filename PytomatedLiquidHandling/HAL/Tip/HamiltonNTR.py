@@ -1,6 +1,8 @@
 from typing import cast
 
-from pydantic import PrivateAttr
+from pydantic import PrivateAttr, field_validator
+
+from PytomatedLiquidHandling.HAL import LayoutItem, TransportDevice
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Tip import Visual_NTR_Library
@@ -10,10 +12,42 @@ from .Base import TipABC
 class HamiltonNTR(TipABC):
     Tiers: int
     TipsPerRack: int
-    RackWasteLabwareID: str
-    GripperLabwareID: str
+    TipRackWaste: LayoutItem.TipRack
+    TransportDevice: TransportDevice.Base.TransportDeviceABC
     _TierDiscardNumber: int = PrivateAttr(default=100)
     _DiscardedRackLabwareIDs: list[str] = PrivateAttr(default_factory=list)
+
+    @field_validator("TipRackWaste", mode="before")
+    def __TipRackWasteValidate(cls, v):
+        Objects = LayoutItem.Devices
+
+        Identifier = v
+
+        if Identifier not in Objects:
+            raise ValueError(
+                Identifier
+                + " is not found in "
+                + LayoutItem.Base.LayoutItemABC.__name__
+                + " objects."
+            )
+
+        return Objects[Identifier]
+
+    @field_validator("TransportDevice", mode="before")
+    def __TransportDeviceValidate(cls, v):
+        Objects = TransportDevice.Devices
+
+        Identifier = v
+
+        if Identifier not in Objects:
+            raise ValueError(
+                Identifier
+                + " is not found in "
+                + TransportDevice.Base.TransportDeviceABC.__name__
+                + " objects."
+            )
+
+        return Objects[Identifier]
 
     def RemainingTipsInTier(self) -> int:
         Remaining = self.RemainingTips() % (self.TipsPerRack * self.Tiers)
@@ -76,6 +110,8 @@ class HamiltonNTR(TipABC):
                 Command, Visual_NTR_Library.Channels_TipCounter_Write.Response
             )
             self.TipCounterEdit()
+
+        # TODO. Need to move the racks to waste with a transport device...
 
     def TipCounterEdit(self):
         ListedOptions = Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(

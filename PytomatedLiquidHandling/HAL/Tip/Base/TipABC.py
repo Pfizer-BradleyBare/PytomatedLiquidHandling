@@ -1,8 +1,9 @@
 from abc import abstractmethod
 from dataclasses import dataclass
 
-from pydantic import PrivateAttr
+from pydantic import PrivateAttr, field_validator
 
+from PytomatedLiquidHandling.HAL import LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
 
 from ...Tools.AbstractClasses import Interface
@@ -15,9 +16,28 @@ class AvailablePosition:
 
 
 class TipABC(Interface, HALDevice):
-    RackLabwareIDs: list[str]
+    TipRacks: list[LayoutItem.TipRack]
     Volume: float
     _AvailablePositions: list[AvailablePosition] = PrivateAttr(default_factory=list)
+
+    @field_validator("TipRacks", mode="before")
+    def __TipRacksValidate(cls, v):
+        SupportedObjects = list()
+
+        Objects = LayoutItem.Devices
+
+        for Identifier in v:
+            if Identifier not in Objects:
+                raise ValueError(
+                    Identifier
+                    + " is not found in "
+                    + LayoutItem.Base.LayoutItemABC.__name__
+                    + " objects."
+                )
+
+            SupportedObjects.append(Objects[Identifier])
+
+        return SupportedObjects
 
     def _ParseAvailablePositions(self, AvailablePositions: list[dict[str, str]]):
         for Pos in AvailablePositions:
