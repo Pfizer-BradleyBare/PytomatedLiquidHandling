@@ -33,7 +33,8 @@ class TransferOptions(OptionsABC):
 
 class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
     SupportedTips: list[PipetteTip]
-    SupportedLabwares: list[Labware.PipettableLabware]
+    SupportedSourceLabwares: list[Labware.PipettableLabware]
+    SupportedDestinationLabwares: list[Labware.PipettableLabware]
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
 
     @field_validator("SupportedTips", mode="after")
@@ -59,7 +60,9 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
 
         return SupportedObjects
 
-    @field_validator("SupportedLabwares", mode="before")
+    @field_validator(
+        "SupportedSourceLabwares", "SupportedDestinationLabwares", mode="before"
+    )
     def __SupportedLabwaresValidate(cls, v):
         SupportedObjects = list()
 
@@ -91,9 +94,9 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         for Opt in Options:
             SourceLabware = Opt.SourceLayoutItemInstance.Labware
             DestinationLabware = Opt.DestinationLayoutItemInstance.Labware
-            if SourceLabware not in self.SupportedLabwares:
+            if SourceLabware not in self.SupportedSourceLabwares:
                 UnsupportedLabware.append(SourceLabware)
-            if DestinationLabware not in self.SupportedLabwares:
+            if DestinationLabware not in self.SupportedDestinationLabwares:
                 UnsupportedLabware.append(DestinationLabware)
             # Check Labware Compatibility
 
