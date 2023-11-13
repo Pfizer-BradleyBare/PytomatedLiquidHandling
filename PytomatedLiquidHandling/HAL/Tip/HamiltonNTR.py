@@ -1,3 +1,4 @@
+from copy import copy
 from typing import cast
 
 from pydantic import PrivateAttr, field_validator
@@ -12,7 +13,7 @@ from .Base import TipABC
 class HamiltonNTR(TipABC):
     Tiers: int
     TipsPerRack: int
-    TipRackWasteLayoutItem: LayoutItem.TipRack
+    TipRackWasteLabwareID: str
     TransportDevice: TransportDevice.Base.TransportDeviceABC
     _TierDiscardNumber: int = PrivateAttr(default=100)
     _DiscardedTipRacks: list[LayoutItem.TipRack] = PrivateAttr(default_factory=list)
@@ -88,8 +89,12 @@ class HamiltonNTR(TipABC):
         # There is a special case during tip counter edit where an NTR rack is removed manually by the user. We handle that here.
 
         for TipRack in DiscardTipRacks:
+            TipRackWasteLayoutItem = copy(TipRack)
+            TipRackWasteLayoutItem.LabwareID = self.TipRackWasteLabwareID
+            # Use the tip rack layout item to make the waste layout item
+
             self._DiscardedTipRacks.append(TipRack)
-            self.TransportDevice.Transport(TipRack, self.TipRackWasteLayoutItem)
+            self.TransportDevice.Transport(TipRack, TipRackWasteLayoutItem)
 
         self._AvailablePositions = [
             Pos
