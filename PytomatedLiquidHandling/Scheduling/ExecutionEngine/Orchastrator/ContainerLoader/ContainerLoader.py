@@ -28,7 +28,7 @@ class ContainerLoader:
 
     @dataclass
     class _ContainerLoader(NonUniqueObjectABC):
-        LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+        LayoutItemInstance: LayoutItem.CoverablePlate | LayoutItem.Plate
         AssignedWellTrackerInstance: AssignedWellTracker = field(
             init=False, default_factory=AssignedWellTracker
         )

@@ -3,5 +3,5 @@ from PytomatedLiquidHandling.HAL import Labware
 from .Base import LayoutItemABC
 
 
-class NonCoverableItem(LayoutItemABC):
+class Plate(LayoutItemABC):
     Labware: Labware.PipettableLabware

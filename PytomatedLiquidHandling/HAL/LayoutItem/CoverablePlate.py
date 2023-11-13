@@ -6,7 +6,7 @@ from .Base import LayoutItemABC
 from .Lid import Lid
 
 
-class CoverableItem(LayoutItemABC):
+class CoverablePlate(LayoutItemABC):
     Labware: Labware.PipettableLabware
     Lid: Lid
     IsCovered: bool = Field(exclude=True, default=False)

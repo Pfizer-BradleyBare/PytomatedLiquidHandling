@@ -1,7 +1,7 @@
 from . import Base
-from .CoverableItem import CoverableItem
+from .CoverablePlate import CoverablePlate
 from .Lid import Lid
-from .NonCoverableItem import NonCoverableItem
+from .Plate import Plate
 from .TipRack import TipRack
 
 Devices: dict[str, Base.LayoutItemABC] = dict()

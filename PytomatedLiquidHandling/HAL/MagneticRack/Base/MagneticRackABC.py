@@ -5,7 +5,7 @@ from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
 
 
 class MagneticRackABC(HALDevice):
-    SupportedLayoutItems: list[LayoutItem.CoverableItem | LayoutItem.NonCoverableItem]
+    SupportedLayoutItems: list[LayoutItem.CoverablePlate | LayoutItem.Plate]
     SupportedPipettes: list[Pipette.Base.PipetteABC]
 
     @field_validator("SupportedLayoutItems", mode="before")
@@ -94,16 +94,17 @@ class MagneticRackABC(HALDevice):
         return SupportedObjects
 
     def GetLayoutItem(
-        self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    ) -> LayoutItem.CoverableItem:
+        self,
+        LayoutItemInstance: LayoutItem.CoverablePlate | LayoutItem.Plate,
+    ) -> LayoutItem.CoverablePlate:
         for SupportedLayoutItemInstance in self.SupportedLayoutItems:
             if SupportedLayoutItemInstance.Labware == LayoutItemInstance.Labware:
                 if not isinstance(
-                    SupportedLayoutItemInstance, LayoutItem.CoverableItem
+                    SupportedLayoutItemInstance, LayoutItem.CoverablePlate
                 ):
                     raise Exception("This should never happen")
 
-                if isinstance(LayoutItemInstance, LayoutItem.CoverableItem):
+                if isinstance(LayoutItemInstance, LayoutItem.CoverablePlate):
                     SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered
                 else:
                     SupportedLayoutItemInstance.IsCovered = False

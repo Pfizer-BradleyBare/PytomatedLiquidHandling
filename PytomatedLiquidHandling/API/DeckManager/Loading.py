@@ -7,7 +7,7 @@ from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 @dataclass
 class LoadedWell:
     ContainerWell: Container.Well.Well
-    LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+    LayoutItem: LayoutItem.CoverablePlate | LayoutItem.Plate
     LayoutItemWell: int
 
 
@@ -38,11 +38,11 @@ def UnloadQueue():
 
 def GetLoadedWells(
     Well: Container.Well.Well,
-) -> list[tuple[LayoutItem.CoverableItem | LayoutItem.NonCoverableItem, list[int]]]:
+) -> list[tuple[LayoutItem.CoverablePlate | LayoutItem.Plate, list[int]]]:
     ...
 
 
 def GetLoadedLayoutItems(
     Container: Container.Container,
-) -> list[LayoutItem.CoverableItem | LayoutItem.NonCoverableItem]:
+) -> list[LayoutItem.CoverablePlate | LayoutItem.Plate]:
     ...
