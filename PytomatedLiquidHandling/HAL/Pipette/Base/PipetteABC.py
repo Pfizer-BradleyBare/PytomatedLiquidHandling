@@ -14,14 +14,14 @@ from .PipetteTip import PipetteTip
 
 @dataclass(kw_only=True)
 class TransferOptions(OptionsABC):
-    SourceLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+    SourceLayoutItemInstance: LayoutItem.CoverablePlate | LayoutItem.Plate
     SourcePosition: int | str
     # This is the labware well position. Numeric or alphanumeric.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
     CurrentSourceVolme: float
     SourceMixCycles: int
     SourceLiquidClassCategory: str
-    DestinationLayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+    DestinationLayoutItemInstance: LayoutItem.CoverablePlate | LayoutItem.Plate
     DestinationPosition: int | str
     # This is the labware well position. Numeric or alphanumeric.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly

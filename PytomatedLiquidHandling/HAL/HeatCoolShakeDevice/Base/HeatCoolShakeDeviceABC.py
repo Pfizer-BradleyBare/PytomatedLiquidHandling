@@ -17,7 +17,7 @@ from .TempLimits.TempLimits import TempLimits
 class HeatCoolShakeDeviceABC(Interface, HALDevice):
     ComPort: str | int
     TempLimits: TempLimits
-    CoverableLayoutItems: list[LayoutItem.CoverableItem]
+    CoverableLayoutItems: list[LayoutItem.CoverablePlate]
 
     _HeatingSupported: bool = PrivateAttr(False)
     _CoolingSupported: bool = PrivateAttr(False)
@@ -45,7 +45,7 @@ class HeatCoolShakeDeviceABC(Interface, HALDevice):
 
     def AssertOptions(
         self,
-        LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem,
+        LayoutItem: LayoutItem.CoverablePlate | LayoutItem.Plate,
         Temperature: None | float = None,
         RPM: None | int = None,
     ):
@@ -87,11 +87,12 @@ class HeatCoolShakeDeviceABC(Interface, HALDevice):
             raise ExceptionGroup("HeatCoolShakeDevice Options Exceptions", Exceptions)
 
     def GetLayoutItem(
-        self, LayoutItemInstance: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
-    ) -> LayoutItem.CoverableItem:
+        self,
+        LayoutItemInstance: LayoutItem.CoverablePlate | LayoutItem.Plate,
+    ) -> LayoutItem.CoverablePlate:
         for SupportedLayoutItemInstance in self.CoverableLayoutItems:
             if SupportedLayoutItemInstance.Labware == LayoutItemInstance.Labware:
-                if isinstance(LayoutItemInstance, LayoutItem.CoverableItem):
+                if isinstance(LayoutItemInstance, LayoutItem.CoverablePlate):
                     SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered
                 else:
                     SupportedLayoutItemInstance.IsCovered = False

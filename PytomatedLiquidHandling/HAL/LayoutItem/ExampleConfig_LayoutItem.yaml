@@ -5,14 +5,14 @@ Lid:
     Labware: 2000uL Corning 96 Well PCR Plate
     Deck Location: Carrier38_Pos1
 
-NonCoverable Item:
+Plate:
   - Identifier: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
     Enabled: True
     LabwareID: Carrier38_Pos1_96WellPCRPlate2000uL_1mLChannel
     Labware: 2000uL Corning 96 Well PCR Plate
     Deck Location: Carrier38_Pos1
 
-Coverable Item:
+Coverable Plate:
   - Identifier: Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel
     Enabled: True
     LabwareID: Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel

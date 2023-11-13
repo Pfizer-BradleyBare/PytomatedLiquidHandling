@@ -10,7 +10,7 @@ from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
 
 @dataclass(kw_only=True)
 class OpenCloseOptions(OptionsABC):
-    LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem
+    LayoutItem: LayoutItem.CoverablePlate | LayoutItem.Plate
     Position: str | int
 
 

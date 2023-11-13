@@ -1,11 +1,11 @@
 Hamilton Vacuum:
   - Identifier: Vacuum 1
     Enabled: True
-    Manifold Park Layout Items:
-    Manifold Processing Layout Items:
-    Supported Filter Plate Layout Item Configurations:
-      - Filter Plate Layout Item Identifier:
-        Collection Plate Layout Item Identifier:
+    Manifold Park Layout Item:
+    Manifold Processing Layout Item:
+    Supported Filter Plate Configurations:
+      - Vacuum Plate Layout Item:
+        Collection Plate Layout Item:
         Harmonized Vacuum Pressures:
           Low:
           Medium:
