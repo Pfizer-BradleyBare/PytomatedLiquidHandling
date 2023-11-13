@@ -86,7 +86,7 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         AbstractClasses.Interface.model_post_init(self, __context)
         self.SupportedTips = sorted(self.SupportedTips, key=lambda x: x.Tip.Volume)
 
-    def ValidateTransferOptions(self, Options: list[TransferOptions]):
+    def AssertTransferOptions(self, Options: list[TransferOptions]):
         UnsupportedDeckLocations = list()
         UnsupportedLabware = list()
         UnsupportedLiquidClassCategories = list()

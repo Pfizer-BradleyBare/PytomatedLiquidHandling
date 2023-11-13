@@ -43,7 +43,7 @@ class HeatCoolShakeDeviceABC(Interface, HALDevice):
 
         return SupportedObjects
 
-    def ValidateOptions(
+    def AssertOptions(
         self,
         LayoutItem: LayoutItem.CoverableItem | LayoutItem.NonCoverableItem,
         Temperature: None | float = None,

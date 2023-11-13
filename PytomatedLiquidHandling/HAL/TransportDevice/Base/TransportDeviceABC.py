@@ -51,7 +51,7 @@ class TransportDeviceABC(Interface, HALDevice):
     class DropoffOptions:
         ...
 
-    def ValidateTransportOptions(
+    def AssertTransportOptions(
         self,
         SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
         DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
