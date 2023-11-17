@@ -1,6 +1,9 @@
 Hamilton Vacuum:
   - Identifier: Vacuum 1
     Enabled: True
+    Backend: Hammy
+    Custom Error Handling: True
+    Com Port: COM1
     Manifold Park Layout Item:
     Manifold Processing Layout Item:
     Supported Filter Plate Configurations:
