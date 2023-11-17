@@ -20,7 +20,7 @@ Hamilton NTR:
     Volume: 50
     Tiers: 2
     Tips Per Rack: 96
-    Tip Rack Layout Items:
+    Tip Racks:
       - L1
       - L2
     Tip Rack Waste Labware ID: Waste
@@ -33,7 +33,7 @@ Hamilton NTR:
     Volume: 300
     Tiers: 2
     Tips Per Rack: 96
-    Tip Rack Layout Items:
+    Tip Racks:
       - L1
       - L2
     Tip Rack Waste Labware ID: Waste
@@ -45,6 +45,6 @@ Hamilton FTR:
     Backend: Hammy
     Custom Error Handling: False
     Volume: 1000
-    Tip Rack Layout Items:
+    Tip Racks:
       - L1
       - L2

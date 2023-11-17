@@ -19,7 +19,7 @@ class HamiltonFTR(TipABC):
             + str(self.Volume)
             + "uL tips currently loaded on the system",
         )
-        for TipRack in self.TipRackLayoutItems:
+        for TipRack in self.TipRacks:
             ListedOptions.append(HSLTipCountingLib.Edit.Options(TipRack.LabwareID))
 
         CommandInstance = HSLTipCountingLib.Edit.Command(

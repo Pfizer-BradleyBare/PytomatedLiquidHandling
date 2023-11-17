@@ -14,7 +14,7 @@
 Magnetic Rack:
   - Identifier: Rack 1
     Enabled: True
-    Supported Layout Items:
+    Supported Plates:
       - Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel3
 
     Supported Pipettes:

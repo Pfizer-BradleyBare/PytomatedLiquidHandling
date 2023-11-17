@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from pydantic import BaseModel, ValidationInfo, field_serializer, field_validator
 
-from PytomatedLiquidHandling.HAL import TransportDevice
+from PytomatedLiquidHandling.HAL import Transport
 
 
 class TransportConfig(BaseModel):
-    TransportDevice: TransportDevice.Base.TransportDeviceABC
-    PickupOptions: TransportDevice.Base.TransportDeviceABC.PickupOptions
-    DropoffOptions: TransportDevice.Base.TransportDeviceABC.DropoffOptions
+    TransportDevice: Transport.Base.TransportABC
+    PickupOptions: Transport.Base.TransportABC.PickupOptions
+    DropoffOptions: Transport.Base.TransportABC.DropoffOptions
 
     @field_serializer("PickupOptions", "DropoffOptions")
     def __OptionsSerializer(self, Options):
@@ -16,14 +16,14 @@ class TransportConfig(BaseModel):
 
     @field_validator("TransportDevice", mode="before")
     def TransportDeviceValidate(cls, v):
-        Objects = TransportDevice.Devices
+        Objects = Transport.Devices
         Identifier = v
 
         if Identifier not in Objects:
             raise ValueError(
                 Identifier
                 + " is not found in "
-                + TransportDevice.Base.TransportDeviceABC.__name__
+                + Transport.Base.TransportABC.__name__
                 + " objects."
             )
 
@@ -31,9 +31,7 @@ class TransportConfig(BaseModel):
 
     @field_validator("PickupOptions", mode="before")
     def PickupOptionsValidate(cls, v, info: ValidationInfo):
-        TransportDevice: TransportDevice.Base.TransportDeviceABC = info.data[
-            "TransportDevice"
-        ]
+        TransportDevice: Transport.Base.TransportABC = info.data["TransportDevice"]
 
         if v is None:
             v = dict()
@@ -42,9 +40,7 @@ class TransportConfig(BaseModel):
 
     @field_validator("DropoffOptions", mode="before")
     def DropoffOptionsValidate(cls, v, info: ValidationInfo):
-        TransportDevice: TransportDevice.Base.TransportDeviceABC = info.data[
-            "TransportDevice"
-        ]
+        TransportDevice: Transport.Base.TransportABC = info.data["TransportDevice"]
 
         if v is None:
             v = dict()

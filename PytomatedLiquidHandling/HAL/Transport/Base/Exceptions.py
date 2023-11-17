@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .TransportDeviceABC import TransportDeviceABC
+    from .TransportABC import TransportABC
 
 
 @dataclass
@@ -18,8 +18,8 @@ class PickupOptionsNotEqualError(BaseException):
     DestinationPickupOptions: self explanatory
     """
 
-    SourcePickupOptions: TransportDeviceABC.PickupOptions
-    DestinationPickupOptions: TransportDeviceABC.PickupOptions
+    SourcePickupOptions: TransportABC.PickupOptions
+    DestinationPickupOptions: TransportABC.PickupOptions
 
 
 @dataclass
@@ -31,8 +31,8 @@ class WrongDeviceTransportOptionsError(BaseException):
     TransportOptionsDevice: Device required by the deck location
     """
 
-    CurrentDevice: TransportDeviceABC
-    TransportOptionsDevice: TransportDeviceABC
+    CurrentDevice: TransportABC
+    TransportOptionsDevice: TransportABC
 
 
 @dataclass
@@ -44,5 +44,5 @@ class TransportDevicesNotCompatibleError(BaseException):
     DestinationTransportDevice: self explanatory
     """
 
-    SourceTransportDevice: TransportDeviceABC
-    DestinationTransportDevice: TransportDeviceABC
+    SourceTransportDevice: TransportABC
+    DestinationTransportDevice: TransportABC

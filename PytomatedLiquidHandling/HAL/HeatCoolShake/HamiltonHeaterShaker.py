@@ -1,17 +1,17 @@
 from pydantic import PrivateAttr
 
 from ...Driver.Hamilton.TemperatureControl import HeaterShaker as HeaterShakerDriver
-from .Base import Exceptions, HeatCoolShakeDeviceABC
+from .Base import Exceptions, HeatCoolShakeABC
 
 
-class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
+class HamiltonHeaterShaker(HeatCoolShakeABC):
     _HeatingSupported: bool = PrivateAttr(default=True)
     _CoolingSupported: bool = PrivateAttr(default=False)
     _ShakingSupported: bool = PrivateAttr(default=True)
     _HandleID: int = PrivateAttr()
 
     def Initialize(self):
-        HeatCoolShakeDeviceABC.Initialize(self)
+        HeatCoolShakeABC.Initialize(self)
 
         if not isinstance(self.ComPort, int):
             raise Exception("Should never happen")
@@ -94,7 +94,7 @@ class HamiltonHeaterShaker(HeatCoolShakeDeviceABC):
             CommandInstance, HeaterShakerDriver.SetPlateLock.Response
         )
 
-        HeatCoolShakeDeviceABC.Deinitialize(self)
+        HeatCoolShakeABC.Deinitialize(self)
 
     def SetTemperature(self, Temperature: float):
         if Temperature < 25:

@@ -14,18 +14,18 @@ from .Exceptions import (
 from .TempLimits.TempLimits import TempLimits
 
 
-class HeatCoolShakeDeviceABC(Interface, HALDevice):
+class HeatCoolShakeABC(Interface, HALDevice):
     ComPort: str | int
     TempLimits: TempLimits
-    CoverableLayoutItems: list[LayoutItem.CoverablePlate]
+    CoverablePlates: list[LayoutItem.CoverablePlate]
 
     _HeatingSupported: bool = PrivateAttr(False)
     _CoolingSupported: bool = PrivateAttr(False)
     _ShakingSupported: bool = PrivateAttr(False)
     _HandleID: int | str = PrivateAttr()
 
-    @field_validator("CoverableLayoutItems", mode="before")
-    def __SupportedCoverableLayoutItemsValidate(cls, v):
+    @field_validator("CoverablePlates", mode="before")
+    def __SupportedCoverablePlatesValidate(cls, v):
         SupportedObjects = list()
 
         Objects = LayoutItem.Devices
@@ -65,7 +65,7 @@ class HeatCoolShakeDeviceABC(Interface, HALDevice):
         Exceptions = list()
 
         SupportedLabwares = [
-            LayoutItem.Labware.Identifier for LayoutItem in self.CoverableLayoutItems
+            LayoutItem.Labware.Identifier for LayoutItem in self.CoverablePlates
         ]
 
         if LayoutItem.Labware not in SupportedLabwares:
@@ -90,7 +90,7 @@ class HeatCoolShakeDeviceABC(Interface, HALDevice):
         self,
         LayoutItemInstance: LayoutItem.CoverablePlate | LayoutItem.Plate,
     ) -> LayoutItem.CoverablePlate:
-        for SupportedLayoutItemInstance in self.CoverableLayoutItems:
+        for SupportedLayoutItemInstance in self.CoverablePlates:
             if SupportedLayoutItemInstance.Labware == LayoutItemInstance.Labware:
                 if isinstance(LayoutItemInstance, LayoutItem.CoverablePlate):
                     SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered

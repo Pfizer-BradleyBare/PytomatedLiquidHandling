@@ -1,3 +1,3 @@
 from . import Exceptions
-from .HeatCoolShakeDeviceABC import HeatCoolShakeDeviceABC
+from .HeatCoolShakeABC import HeatCoolShakeABC
 from .TempLimits.TempLimits import TempLimits

@@ -1,15 +1,16 @@
 from dataclasses import field
+
 from pydantic.dataclasses import dataclass
 
 from PytomatedLiquidHandling.Driver.Hamilton.Transport import IPG as IPGDriver
 from PytomatedLiquidHandling.HAL import LayoutItem
 
-from .Base import TransportDeviceABC
+from .Base import TransportABC
 
 
-class HamiltonInternalPlateGripper(TransportDeviceABC):
+class HamiltonInternalPlateGripper(TransportABC):
     @dataclass
-    class PickupOptions(TransportDeviceABC.PickupOptions):
+    class PickupOptions(TransportABC.PickupOptions):
         GripMode: IPGDriver.GetPlate.Options.GripModeOptions = field(
             init=False, compare=True
         )
@@ -26,7 +27,7 @@ class HamiltonInternalPlateGripper(TransportDeviceABC):
         )
 
     @dataclass
-    class DropoffOptions(TransportDeviceABC.DropoffOptions):
+    class DropoffOptions(TransportABC.DropoffOptions):
         Movement: IPGDriver.PlacePlate.Options.MovementOptions = field(
             init=False, compare=True
         )

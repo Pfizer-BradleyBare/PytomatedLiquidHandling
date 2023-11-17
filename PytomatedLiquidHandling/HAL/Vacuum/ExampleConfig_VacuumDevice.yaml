@@ -4,12 +4,12 @@ Hamilton Vacuum:
     Backend: Hammy
     Custom Error Handling: True
     Com Port: COM1
-    Manifold Park Layout Item:
-    Manifold Processing Layout Item:
+    Manifold Park:
+    Manifold Processing:
     Supported Filter Plate Configurations:
-      - Vacuum Plate Layout Item:
-        Collection Plate Layout Item:
-        Harmonized Vacuum Pressures:
+      - Filter Plate Stack:
+        Collection Plate:
+        Default Vacuum Pressures:
           Low:
           Medium:
           High:

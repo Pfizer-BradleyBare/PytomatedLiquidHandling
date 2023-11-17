@@ -1,22 +1,24 @@
 from dataclasses import field
+
 from pydantic.dataclasses import dataclass
+
 from PytomatedLiquidHandling.Driver.Hamilton.Transport import (
     COREGripper as COREGripperDriver,
 )
 from PytomatedLiquidHandling.HAL import LayoutItem
 
-from .Base import TransportDeviceABC
+from .Base import TransportABC
 
 
-class HamiltonCOREGripper(TransportDeviceABC):
+class HamiltonCOREGripper(TransportABC):
     GripperLabwareID: str
 
     @dataclass
-    class PickupOptions(TransportDeviceABC.PickupOptions):
+    class PickupOptions(TransportABC.PickupOptions):
         ...
 
     @dataclass
-    class DropoffOptions(TransportDeviceABC.DropoffOptions):
+    class DropoffOptions(TransportABC.DropoffOptions):
         CheckPlateExists: COREGripperDriver.PlacePlate.Options.YesNoOptions = field(
             init=True, compare=False
         )

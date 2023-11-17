@@ -22,7 +22,7 @@ Hamilton Heater Shaker:
       Stable Delta: 2
       Minimum: 0
       Maximum: 100
-    Coverable Layout Items:
+    Coverable Plates:
       - Item1
       - Item2
 
@@ -35,6 +35,6 @@ Hamilton Heater Shaker:
       Stable Delta: 2
       Minimum: 0
       Maximum: 100
-    Coverable Layout Items:
+    Coverable Plates:
       - Item1
       - Item2

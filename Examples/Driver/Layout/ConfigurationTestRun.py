@@ -28,7 +28,7 @@ with open(os.path.join(os.path.dirname(__file__), "Transport.yaml")) as File:
     Dict = yaml.full_load(File)
 
 HAL.Tools.ConfigLoader.Devices(
-    Dict, HAL.TransportDevice.Base.TransportDeviceABC, HAL.TransportDevice.Devices
+    Dict, HAL.Transport.Base.TransportABC, HAL.Transport.Devices
 )
 
 with open(os.path.join(os.path.dirname(__file__), "Tip.yaml")) as File:
@@ -63,8 +63,8 @@ with open(os.path.join(os.path.dirname(__file__), "HeatCoolShakeDevice.yaml")) a
 
 HAL.Tools.ConfigLoader.DevicesLists(
     Dict,
-    HAL.HeatCoolShakeDevice.Base.HeatCoolShakeDeviceABC,
-    HAL.HeatCoolShakeDevice.Devices,
+    HAL.HeatCoolShake.Base.HeatCoolShakeABC,
+    HAL.HeatCoolShake.Devices,
 )
 
 with open(os.path.join(os.path.dirname(__file__), "Pipette.yaml")) as File:

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .HeatCoolShakeDeviceABC import HeatCoolShakeDeviceABC
+    from .HeatCoolShakeABC import HeatCoolShakeABC
 
 
 @dataclass

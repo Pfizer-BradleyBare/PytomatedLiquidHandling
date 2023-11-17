@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from PytomatedLiquidHandling.HAL import LayoutItem
 
 
-class TransportDeviceABC(Interface, HALDevice):
+class TransportABC(Interface, HALDevice):
     SupportedLabwares: list[Labware.Base.LabwareABC]
     _LastTransportFlag: bool = PrivateAttr(default=False)
 

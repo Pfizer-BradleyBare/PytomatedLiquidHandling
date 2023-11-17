@@ -3,7 +3,7 @@ from typing import cast
 
 from pydantic import PrivateAttr, field_validator
 
-from PytomatedLiquidHandling.HAL import LayoutItem, TransportDevice
+from PytomatedLiquidHandling.HAL import LayoutItem, Transport
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.Tip import Visual_NTR_Library
@@ -14,29 +14,13 @@ class HamiltonNTR(TipABC):
     Tiers: int
     TipsPerRack: int
     TipRackWasteLabwareID: str
-    TransportDevice: TransportDevice.Base.TransportDeviceABC
+    TransportDevice: Transport.Base.TransportABC
     _TierDiscardNumber: int = PrivateAttr(default=100)
     _DiscardedTipRacks: list[LayoutItem.TipRack] = PrivateAttr(default_factory=list)
 
-    @field_validator("TipRackWasteLayoutItem", mode="before")
-    def __TipRackWasteLayoutItemValidate(cls, v):
-        Objects = LayoutItem.Devices
-
-        Identifier = v
-
-        if Identifier not in Objects:
-            raise ValueError(
-                Identifier
-                + " is not found in "
-                + LayoutItem.Base.LayoutItemABC.__name__
-                + " objects."
-            )
-
-        return Objects[Identifier]
-
     @field_validator("TransportDevice", mode="before")
     def __TransportDeviceValidate(cls, v):
-        Objects = TransportDevice.Devices
+        Objects = Transport.Devices
 
         Identifier = v
 
@@ -44,7 +28,7 @@ class HamiltonNTR(TipABC):
             raise ValueError(
                 Identifier
                 + " is not found in "
-                + TransportDevice.Base.TransportDeviceABC.__name__
+                + Transport.Base.TransportABC.__name__
                 + " objects."
             )
 
@@ -56,9 +40,7 @@ class HamiltonNTR(TipABC):
         if Remaining == 0:
             AvailableIDs = set([Pos.LabwareID for Pos in self._AvailablePositions])
 
-            if len(AvailableIDs) + len(self._DiscardedTipRacks) == len(
-                self.TipRackLayoutItems
-            ):
+            if len(AvailableIDs) + len(self._DiscardedTipRacks) == len(self.TipRacks):
                 return self.TipsPerRack * self.Tiers
                 # We are at the start of a fresh layer
             else:
@@ -73,12 +55,12 @@ class HamiltonNTR(TipABC):
         )
         PresentTipRacks = [
             TipRack
-            for TipRack in self.TipRackLayoutItems
+            for TipRack in self.TipRacks
             if TipRack.LabwareID not in PresentLabwareIDs
         ]
         DiscardTipRacks = [
             TipRack
-            for TipRack in self.TipRackLayoutItems
+            for TipRack in self.TipRacks
             if TipRack.LabwareID not in PresentLabwareIDs
             and TipRack not in self._DiscardedTipRacks
         ]
@@ -128,7 +110,7 @@ class HamiltonNTR(TipABC):
             + str(self.Volume)
             + "uL tips currently loaded on the system",
         )
-        for TipRack in self.TipRackLayoutItems:
+        for TipRack in self.TipRacks:
             ListedOptions.append(
                 Visual_NTR_Library.Channels_TipCounter_Edit.Options(TipRack.LabwareID)
             )
@@ -152,7 +134,7 @@ class HamiltonNTR(TipABC):
         AvailableIDs = set([Pos.LabwareID for Pos in self._AvailablePositions])
         self._DiscardedTipRacks = [
             TipRack
-            for TipRack in self.TipRackLayoutItems
+            for TipRack in self.TipRacks
             if TipRack.LabwareID not in AvailableIDs
         ]
         # We automatically assume the if a labwareID is NOT in the available positions, then it is basically already discarded.

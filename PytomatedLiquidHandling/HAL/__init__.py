@@ -1,12 +1,12 @@
 if True:
-    from . import TransportDevice
+    from . import Transport
 
 from . import (
     Backend,
     Carrier,
     ClosedContainer,
     DeckLocation,
-    HeatCoolShakeDevice,
+    HeatCoolShake,
     Labware,
     LayoutItem,
     MagneticRack,

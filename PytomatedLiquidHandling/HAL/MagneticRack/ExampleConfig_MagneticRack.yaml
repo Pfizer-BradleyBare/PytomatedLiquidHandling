@@ -13,7 +13,7 @@
 
 - Identifier: Rack 1
   Enabled: True
-  Supported Labware Layout Item Identifiers:
+  Supported Plate Identifiers:
     - Item1
     - Item2
 

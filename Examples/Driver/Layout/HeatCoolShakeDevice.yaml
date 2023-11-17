@@ -22,7 +22,7 @@ Hamilton Heater Shaker:
       Stable Delta: 2
       Minimum: 0
       Maximum: 100
-    Coverable Layout Items:
+    Coverable Plates:
       - Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel3
 
   - Identifier: Heater 2
@@ -34,5 +34,5 @@ Hamilton Heater Shaker:
       Stable Delta: 2
       Minimum: 0
       Maximum: 100
-    Coverable Layout Items:
+    Coverable Plates:
       - Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel3
