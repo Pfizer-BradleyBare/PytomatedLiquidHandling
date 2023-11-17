@@ -9,7 +9,6 @@ Backend = MicrolabSTAR(
 )
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
-
 CommandInstance = COREGripper.GetPlate.Command(
     CustomErrorHandling=False,
     Options=COREGripper.GetPlate.Options(

@@ -1,14 +1,14 @@
 
 // this ALWAYS GENERATED file contains the sub-method library header
-// Generated at 6/2/2023 8:54:51 AM
+// Generated at 11/17/2023 2:25:32 PM
 
 #pragma once
 #ifndef HSL_RUNTIME
-namespace STATESERVERENDPOINTS {
+namespace ACTIONSERVERENDPOINTS {
 function _InitLibrary() { }
 function _ExitLibrary() { }
 function GetNextCommand( variable Timeout, object & o_JSONObject ) variable {  return (0); }
-function RespondToCommand( variable i_State, variable i_Details, object & i_ResponseData_JSONObject ) variable {  return (0); }
+function RespondToCommand( object & i_ResponseData_JSONObject ) variable {  return (0); }
 function ServerIsAlive(  ) variable {  return (0); }
 function ServerKill(  ) variable {  return (0); }
 } // namespace
@@ -17,4 +17,4 @@ function ServerKill(  ) variable {  return (0); }
 #ifdef HSL_RUNTIME
 #include __filename__ ".hsi"
 #endif
-// $$author=BAREB$$valid=0$$time=2023-06-02 08:54$$checksum=d4dee218$$length=082$$
+// $$author=BAREB$$valid=0$$time=2023-11-17 14:25$$checksum=541741c9$$length=082$$

@@ -102,5 +102,5 @@ class HamiltonServerBackendABC(ServerBackendABC):
     Views: list[Callable] = list()
 
     def model_post_init(self, __context: Any) -> None:
-        ServerBackendABC.model_post_init(self, __context)
         self.Views = [self.GetNextCommand, self.RespondToCommand]
+        ServerBackendABC.model_post_init(self, __context)

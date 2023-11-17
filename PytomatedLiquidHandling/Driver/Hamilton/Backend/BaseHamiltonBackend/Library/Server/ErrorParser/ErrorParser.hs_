@@ -1,0 +1,17 @@
+
+// this ALWAYS GENERATED file contains the sub-method library header
+// Generated at 11/17/2023 2:24:41 PM
+
+#pragma once
+#ifndef HSL_RUNTIME
+namespace ERRORPARSER {
+function _InitLibrary() { }
+function _ExitLibrary() { }
+function ExtractErrorInfo( object & JsonObject ) void { }
+} // namespace
+#endif
+
+#ifdef HSL_RUNTIME
+#include __filename__ ".hsi"
+#endif
+// $$author=BAREB$$valid=0$$time=2023-11-17 14:24$$checksum=b2e66130$$length=082$$

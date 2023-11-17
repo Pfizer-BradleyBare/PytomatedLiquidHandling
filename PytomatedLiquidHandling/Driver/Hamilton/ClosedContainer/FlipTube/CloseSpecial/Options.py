@@ -12,4 +12,3 @@ class Options(OptionsABC):
 @dataclass(kw_only=True)
 class ListedOptions(list[Options]):
     ToolLabwareID: str
-    ToolPositionID: str
