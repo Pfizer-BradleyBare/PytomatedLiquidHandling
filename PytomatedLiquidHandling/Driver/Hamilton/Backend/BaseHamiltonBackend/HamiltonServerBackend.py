@@ -27,13 +27,13 @@ class HamiltonServerBackendABC(ServerBackendABC):
         Timeout = ParserObject.GetEndpointInputData("Timeout") - 10
         Counter = 0
 
-        while self._CommandInstance is None or not self._ResponseInstance is None:
+        while self._Command is None or not self._Response is None:
             if Counter >= Timeout * 10:
                 break
 
             time.sleep(0.1)
 
-        CommandInstance = self._CommandInstance
+        CommandInstance = self._Command
 
         if CommandInstance is None:
             ParserObject.SetEndpointState(False)
@@ -43,12 +43,16 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         if isinstance(CommandInstance, CommandOptionsListed):
             if len(CommandInstance.Options) == 0:
-                self._ResponseInstance = HamiltonResponseABC(
-                    {
-                        "State": False,
-                        "Details": "There are no options in the options tracker.",
-                        "ErrorCode": -65535,
-                    }
+                self._Response = dict(
+                    Error=dict(
+                        ID=-123456789,
+                        IsVectorError=False,
+                        VectorCode=0,
+                        VectorMajorID=0,
+                        VectorMinorID=0,
+                        Description="There are no options in the options tracker",
+                        Data=list(),
+                    ),
                 )
                 return self.GetNextCommand()
         # This makes sure there are actually options. It could be possible for a user to submit a command with an options tracker without actul options
@@ -77,12 +81,12 @@ class HamiltonServerBackendABC(ServerBackendABC):
             request.get_data(),
         )
 
-        CommandInstance = self._CommandInstance
+        CommandInstance = self._Command
 
         if not isinstance(CommandInstance, HamiltonCommandABC):
             raise Exception("This should never happen")
 
-        if self._ResponseInstance is not None:
+        if self._Response is not None:
             ParserObject.SetEndpointDetails(
                 "Command already has a reponse. This should never happen."
             )
@@ -94,7 +98,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         Response = ParserObject.GetHTTPResponse()
 
-        self._ResponseInstance = HamiltonResponseABC(ParserObject.JSON)
+        self._Response = ParserObject.JSON
         # Add response then release threads waiting for a response
 
         return Response

@@ -11,6 +11,4 @@ class SequencePositionDict(TypedDict):
 
 @dataclass
 class Response(HamiltonResponseABC):
-    @HamiltonResponseABC.Decorator_ExpectedResponseProperty(SuccessProperty=True)
-    def GetAvailablePositions(self) -> list[SequencePositionDict]:
-        ...
+    AvailablePositions: list[SequencePositionDict]

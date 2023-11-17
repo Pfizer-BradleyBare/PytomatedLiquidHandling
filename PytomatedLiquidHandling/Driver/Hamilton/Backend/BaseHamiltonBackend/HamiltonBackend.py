@@ -106,10 +106,7 @@ class HamiltonBackendABC(BackendABC):
     ) -> HamiltonResponseABCType:
         BackendABC.GetResponse(self, CommandInstance, ResponseType)
         if isinstance(CommandInstance, HamiltonStateCommandABC):
-            return ResponseType(
-                self._StateServer.GetResponse(CommandInstance, ResponseType).Properties
-            )
+            return self._StateServer.GetResponse(CommandInstance, ResponseType)
+
         else:
-            return ResponseType(
-                self._ActionServer.GetResponse(CommandInstance, ResponseType).Properties
-            )
+            return self._ActionServer.GetResponse(CommandInstance, ResponseType)

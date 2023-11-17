@@ -1,1 +1,1 @@
-from .HamiltonResponseABC import HamiltonResponseABC
+from .HamiltonResponseABC import HamiltonError, HamiltonResponseABC
