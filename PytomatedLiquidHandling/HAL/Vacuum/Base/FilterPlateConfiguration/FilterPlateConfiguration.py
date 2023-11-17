@@ -12,6 +12,7 @@ class DefaultVacuumPressures(BaseModel):
 class FilterPlateConfiguration(BaseModel):
     FilterPlateStack: LayoutItem.FilterPlateStack
     CollectionPlate: LayoutItem.Plate
+    MaxPressure: float
     DefaultVacuumPressures: DefaultVacuumPressures
 
     @field_validator("FilterPlateStack", "CollectionPlate", mode="before")

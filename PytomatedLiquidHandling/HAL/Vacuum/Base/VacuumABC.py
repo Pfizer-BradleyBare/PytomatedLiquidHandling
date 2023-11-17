@@ -2,17 +2,15 @@ from abc import abstractmethod
 
 from pydantic import PrivateAttr, field_validator
 
-from PytomatedLiquidHandling.HAL import Labware, LayoutItem
+from PytomatedLiquidHandling.HAL import LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
 
 from ...Tools.AbstractClasses import Interface
 from .FilterPlateConfiguration import FilterPlateConfiguration
-from .PressureLimits import PressureLimits
 
 
 class VacuumABC(Interface, HALDevice):
     ComPort: str
-    MaxPresure: float
     ManifoldPark: LayoutItem.VacuumManifold
     ManifoldProcessing: LayoutItem.VacuumManifold
     SupportedFilterPlateConfigurations: dict[str, FilterPlateConfiguration]

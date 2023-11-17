@@ -4,12 +4,12 @@ Hamilton Vacuum:
     Backend: Hammy
     Custom Error Handling: True
     Com Port: COM1
-    Max Pressure: 1000
     Manifold Park:
     Manifold Processing:
     Supported Filter Plate Configurations:
       - Filter Plate Stack:
         Collection Plate:
+        Max Pressure: 1000
         Default Vacuum Pressures:
           Low:
           Medium:
