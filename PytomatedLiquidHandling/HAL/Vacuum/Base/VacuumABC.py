@@ -7,38 +7,37 @@ from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
 
 from ...Tools.AbstractClasses import Interface
 from .FilterPlateConfiguration import FilterPlateConfiguration
+from .PressureLimits import PressureLimits
 
 
 class VacuumABC(Interface, HALDevice):
     ComPort: str
+    MaxPresure: float
     ManifoldPark: LayoutItem.VacuumManifold
     ManifoldProcessing: LayoutItem.VacuumManifold
     SupportedFilterPlateConfigurations: dict[str, FilterPlateConfiguration]
+    _HandleID: int = PrivateAttr()
 
-    @field_validator("CoverableLayoutItems", mode="before")
-    def __SupportedCoverableLayoutItemsValidate(cls, v):
-        SupportedObjects = list()
+    @field_validator("ManifoldPark", "ManifoldProcessing", mode="before")
+    def __ManifoldsValidate(cls, v):
+        Identifier = v
 
         Objects = LayoutItem.Devices
 
-        for Identifier in v:
-            if Identifier not in Objects:
-                raise ValueError(
-                    Identifier
-                    + " is not found in "
-                    + LayoutItem.Base.LayoutItemABC.__name__
-                    + " objects."
-                )
+        if Identifier not in Objects:
+            raise ValueError(
+                Identifier
+                + " is not found in "
+                + LayoutItem.Base.LayoutItemABC.__name__
+                + " objects."
+            )
 
-            SupportedObjects.append(Objects[Identifier])
-
-        return SupportedObjects
+        return Objects[Identifier]
 
     def AssertOptions(
         self,
         LayoutItem: LayoutItem.CoverablePlate | LayoutItem.Plate,
-        Temperature: None | float = None,
-        RPM: None | int = None,
+        Pressure: None | float = None,
     ):
         """TODO
 
@@ -57,21 +56,5 @@ class VacuumABC(Interface, HALDevice):
         """
 
     @abstractmethod
-    def SetTemperature(self, Temperature: float):
-        ...
-
-    @abstractmethod
-    def TimeToTemperature(self, Temperature: float) -> float:
-        ...
-
-    @abstractmethod
-    def GetTemperature(self) -> float:
-        ...
-
-    @abstractmethod
-    def SetShakingSpeed(self, RPM: int):
-        ...
-
-    @abstractmethod
-    def GetShakingSpeed(self) -> int:
+    def SetVacuumPressure(self, Pressure: float):
         ...
