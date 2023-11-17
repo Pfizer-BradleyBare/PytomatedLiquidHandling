@@ -1,0 +1,17 @@
+
+// this ALWAYS GENERATED file contains the sub-method library header
+// Generated at 11/17/2023 3:23:24 PM
+
+#pragma once
+#ifndef HSL_RUNTIME
+namespace LIQUIDCLASS {
+function _InitLibrary() { }
+function _ExitLibrary() { }
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void { }
+} // namespace
+#endif
+
+#ifdef HSL_RUNTIME
+#include __filename__ ".hsi"
+#endif
+// $$author=BAREB$$valid=0$$time=2023-11-17 15:23$$checksum=ee5efb0b$$length=082$$

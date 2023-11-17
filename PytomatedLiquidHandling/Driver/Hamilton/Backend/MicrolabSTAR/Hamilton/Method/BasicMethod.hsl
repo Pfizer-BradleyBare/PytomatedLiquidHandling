@@ -7,26 +7,14 @@
  namespace _Method { #include "HSLJson\\HSLJson.hsl" } 
  namespace _ActionServer { #include "HSLJson\\HSLJson.hsl" } 
  namespace _StateServer { #include "HSLJson\\HSLJson.hsl" } 
- namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\Logger\\Logger.hs_" } 
- namespace _ActionServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\Logger\\Logger.hs_" } 
- namespace _StateServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\Logger\\Logger.hs_" } 
- namespace _Method { #include "HSLTrcLib.hsl" } 
- namespace _ActionServer { #include "HSLTrcLib.hsl" } 
- namespace _StateServer { #include "HSLTrcLib.hsl" } 
- namespace _Method { #include "HSLUtilLib.hsl" } 
- namespace _ActionServer { #include "HSLUtilLib.hsl" } 
- namespace _StateServer { #include "HSLUtilLib.hsl" } 
- namespace _Method { #include "HSL_LiquidClassLib.hsl" } 
- namespace _ActionServer { #include "HSL_LiquidClassLib.hsl" } 
- namespace _StateServer { #include "HSL_LiquidClassLib.hsl" } 
- namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_" } 
- namespace _ActionServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_" } 
- namespace _StateServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_" } 
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\Layout\\Temp\\ExampleLayout.res"
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\Logger\\Logger.hs_" } 
+ namespace _ActionServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\Logger\\Logger.hs_" } 
+ namespace _StateServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\Logger\\Logger.hs_" } 
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Layout\\ExampleLayout.res"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable ActionServer;
 variable StateServer;
-global device ML_STAR ("PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\Layout\\Temp\\ExampleLayout.lay", "ML_STAR", hslTrue);
+global device ML_STAR ("PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Layout\\ExampleLayout.lay", "ML_STAR", hslTrue);
 object In;
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
@@ -84,7 +72,6 @@ PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
 PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
 DRIVER::_InitLibrary();
 LOGGER::_InitLibrary();
-JSONPARSER::_InitLibrary();
 ::RegisterAbortHandler( "OnAbort");
 // }} ""
 // {{ 1 1 0 "62ffc1ee_87f1_4777_bdbf6988152c0a4d" "ML_STAR:{1C0C0CB0-7C87-11D3-AD83-0004ACB1DCB2}"
@@ -119,9 +106,8 @@ if( StateServer == 0 )
 // {{ 2 "AutoExitBlock" ""
 DRIVER::_ExitLibrary();
 LOGGER::_ExitLibrary();
-JSONPARSER::_ExitLibrary();
 // }} ""
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-17 12:56$$checksum=ad33b7c5$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-17 16:03$$checksum=25f52e71$$length=084$$

@@ -45,7 +45,7 @@ class HamiltonBackendABC(BackendABC):
     def StartBackend(self):
         BackendABC.StartBackend(self)
 
-        HamiltonDeckLayoutBasePath = "C:\\Program Files (x86)\\HAMILTON\\Library\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\Layout\\Temp\\ExampleLayout.lay"
+        HamiltonDeckLayoutBasePath = "C:\\Program Files (x86)\\HAMILTON\\Library\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Layout\\Layout.lay"
         os.makedirs(
             os.path.dirname(HamiltonDeckLayoutBasePath), mode=777, exist_ok=True
         )

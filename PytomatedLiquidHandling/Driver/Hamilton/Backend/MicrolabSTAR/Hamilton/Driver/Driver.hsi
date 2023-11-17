@@ -1,25 +1,25 @@
 // {{{ 2 "IncludeGuard" "PragmaOnce"
 #pragma once
 // }} ""
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\JsonParser\\JsonParser.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\ClosedContainer\\FlipTube\\Fliptube.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Pipette_8Channel\\Pipette_8Channel.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Pipette_96Channel\\Pipette_96Channel.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\TemperatureControl\\HeaterCooler\\HeaterCooler.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\TemperatureControl\\HeaterShaker\\HeaterShaker.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Timer\\Timer.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HHC\\HHC.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HHS\\HHS.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Timer\\Timer.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\COREGripTool\\Gripper.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\IntegratedPlateGripper\\IPG.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\Vacuum\\Vacuum.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Vacuum\\Vacuum.hs_"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLTrcLib.hsl"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\StateServerEndpoints\\StateServerEndpoints.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\Logger\\Logger.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\Logger\\Logger.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\DeckLoadingDialog\\DeckLoadingDialog.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Hamilton\\CuttedTipType\\CuttedTipType.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\LabwareAccess\\LabwareAccess.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\LiquidClasses\\LiquidClasses.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\CuttedTipType\\CuttedTipType.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\LabwareAccess\\LabwareAccess.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\LiquidClass\\LiquidClass.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\_HSLTipCountingLib\\_HSLTipCountingLib.hs_"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\_Visual_NTR_Library\\_Visual_NTR_Library.hs_"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
@@ -57,8 +57,8 @@ JSONPARSER::_InitLibrary();
 FLIPTUBE::_InitLibrary();
 PIPETTE_8CHANNEL::_InitLibrary();
 PIPETTE_96CHANNEL::_InitLibrary();
-HEATERCOOLER::_InitLibrary();
-HEATERSHAKER::_InitLibrary();
+HHC::_InitLibrary();
+HHS::_InitLibrary();
 TIMER::_InitLibrary();
 GRIPPER::_InitLibrary();
 IPG::_InitLibrary();
@@ -69,7 +69,7 @@ LOGGER::_InitLibrary();
 DECKLOADINGDIALOG::_InitLibrary();
 CUTTEDTIPTYPE::_InitLibrary();
 LABWAREACCESS::_InitLibrary();
-LIQUIDCLASSES::_InitLibrary();
+LIQUIDCLASS::_InitLibrary();
 _HSLTIPCOUNTINGLIB::_InitLibrary();
 _VISUAL_NTR_LIBRARY::_InitLibrary();
 // }} ""
@@ -80,8 +80,8 @@ JSONPARSER::_ExitLibrary();
 FLIPTUBE::_ExitLibrary();
 PIPETTE_8CHANNEL::_ExitLibrary();
 PIPETTE_96CHANNEL::_ExitLibrary();
-HEATERCOOLER::_ExitLibrary();
-HEATERSHAKER::_ExitLibrary();
+HHC::_ExitLibrary();
+HHS::_ExitLibrary();
 TIMER::_ExitLibrary();
 GRIPPER::_ExitLibrary();
 IPG::_ExitLibrary();
@@ -92,7 +92,7 @@ LOGGER::_ExitLibrary();
 DECKLOADINGDIALOG::_ExitLibrary();
 CUTTEDTIPTYPE::_ExitLibrary();
 LABWAREACCESS::_ExitLibrary();
-LIQUIDCLASSES::_ExitLibrary();
+LIQUIDCLASS::_ExitLibrary();
 _HSLTIPCOUNTINGLIB::_ExitLibrary();
 _VISUAL_NTR_LIBRARY::_ExitLibrary();
 // }} ""
@@ -188,8 +188,8 @@ return;
 if (ModuleName == "Hamilton LiquidClass")
 {
 // }} ""
-// {{{ 43 1 0 "3385cb4f_c959_49e8_ae74fa5a85053b51" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-LIQUIDCLASSES::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
+// {{{ 43 1 0 "5a539e8c_19b9_42ab_90de5056aae618e5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LIQUIDCLASS::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 44 1 0 "29c672f1_e9d0_471a_b556e05023703116" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
@@ -258,8 +258,8 @@ return;
 if (ModuleName == "Hamilton TemperatureControl HeaterCooler")
 {
 // }} ""
-// {{{ 65 1 0 "81484ddd_c67d_44b4_be78bf02d7544f3e" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-HEATERCOOLER::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
+// {{{ 65 1 0 "08f076dd_0c5a_4d4b_b6c96886586e5480" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HHC::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 66 1 0 "14aefac1_a592_4c5f_8850c987b6395060" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
@@ -271,8 +271,8 @@ return;
 if (ModuleName == "Hamilton TemperatureControl HeaterShaker")
 {
 // }} ""
-// {{{ 69 1 0 "ebcc8c23_2c27_45eb_b8c5f4d1b621a680" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-HEATERSHAKER::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
+// {{{ 69 1 0 "c2f4c649_61ff_4df0_94ec1a7d35cb5aa4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HHS::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 70 1 0 "7f7acb59_4009_45e9_9a6f507c86b9d159" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
@@ -526,4 +526,4 @@ ACTIONSERVERENDPOINTS::ServerKill();
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-17 12:50$$checksum=5d4a156a$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-17 15:58$$checksum=cf9c67a0$$length=084$$

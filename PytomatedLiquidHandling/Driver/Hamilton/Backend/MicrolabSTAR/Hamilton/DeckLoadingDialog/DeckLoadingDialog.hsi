@@ -1,11 +1,11 @@
 // {{{ 2 "IncludeGuard" "PragmaOnce"
 #pragma once
 // }} ""
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\JsonParser\\JsonParser.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\JsonParser\\JsonParser.hs_"
 #include "HSLStrLib.hsl"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Hamilton\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -616,8 +616,8 @@ customDialog90E30AD526114be58465BCAA0C964E06.ShowCustomDialog();
 // {{{ 133 1 0 "a051cfba_7085_400e_8fc2e8a2ccc9c1a6" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{{ 134 1 0 "af637e03_6275_4ed1_8c90ed7fdf1564ef" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ACTIONSERVERENDPOINTS::RespondToCommand(State, Message, o_JSONObject);
+// {{{ 134 1 0 "ca09bbb9_1f3c_4295_9c488ce3e7f62a73" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
 // {{{ 135 1 0 "caaef611_af0a_4b64_b42a2e25f43d73d1" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
@@ -632,4 +632,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-06-15 13:49$$checksum=d4ec7dac$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-17 16:02$$checksum=236311f4$$length=084$$
