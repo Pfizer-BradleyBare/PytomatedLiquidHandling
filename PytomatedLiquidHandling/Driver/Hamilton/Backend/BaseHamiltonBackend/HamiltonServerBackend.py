@@ -80,11 +80,6 @@ class HamiltonServerBackendABC(ServerBackendABC):
             request.get_data(),
         )
 
-        CommandInstance = self._Command
-
-        if not isinstance(CommandInstance, HamiltonCommandABC):
-            raise Exception("This should never happen")
-
         if self._Response is not None:
             ParserObject.SetEndpointDetails(
                 "Command already has a reponse. This should never happen."
