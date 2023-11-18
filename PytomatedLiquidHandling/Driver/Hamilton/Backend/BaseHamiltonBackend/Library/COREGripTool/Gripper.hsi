@@ -2,11 +2,12 @@
 #pragma once
 // }} ""
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\JsonParser\\JsonParser.hs_"
-#include "HSLDevLib.hsl"
-#include "HSLErrLib.hsl"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
+#include "HSLDevLib.hsl"
+#include "HSLErrLib.hsl"
+#include "HSLTrcLib.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -70,7 +71,7 @@ private variable GripperLabwareID;
 private variable PlateLabwareID;
 // {{ 5 "GetPlate" "InitLocals"
 // }} ""
-// {{{ 1 1 0 "8a659c45_2630_4432_8e0afe7b225dfacf" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 1 1 0 "1040eac3_80cf_4477_803b30ae9f7e5558" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 PlateLabwareID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PlateLabwareID:"));
 // }} ""
 // {{{ 2 1 0 "e81b6108_238c_4dbf_9f48f08b4738d7ec" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -181,8 +182,8 @@ private variable PlateLabwareID;
 private variable GripperLabwareID;
 // {{ 5 "PlacePlate" "InitLocals"
 // }} ""
-// {{{ 38 1 0 "e238ffb4_2ead_4847_848139a413aca3dd" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-PlateLabwareID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PlateLabwareID:"));
+// {{{ 38 1 0 "2eea4222_2f45_4afe_861276b952e8333f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+PlateLabwareID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareID:"));
 // }} ""
 // {{{ 39 1 0 "bc39dba4_b25d_4268_9b8484c53c33b6a4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 EjectTool = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:EjectTool:"));
@@ -304,4 +305,4 @@ abort;
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-17 14:27$$checksum=9601bfc4$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-17 19:30$$checksum=b36737dc$$length=084$$

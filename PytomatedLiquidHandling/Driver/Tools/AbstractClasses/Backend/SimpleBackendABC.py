@@ -14,7 +14,7 @@ class CommandStatusResponse(ResponseABC):
     ResponseReady: bool
 
     @field_validator("Error")
-    def __ErrorValidate(cls, v):
+    def ErrorValidate(cls, v):
         ...
 
 

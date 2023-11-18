@@ -10,7 +10,7 @@ class ResponseABC(BaseModel, ABC):
 
     @field_validator("Error")
     @abstractmethod
-    def __ErrorValidate(cls, v):
+    def ErrorValidate(cls, v):
         """You should check error codes here. If there is an error then you should throw the correct exception.
 
         NOTE: Must be decorated as a field validator as shown below for field "Error"

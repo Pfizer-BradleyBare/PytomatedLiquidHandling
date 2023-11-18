@@ -1,5 +1,4 @@
-from dataclasses import dataclass
-from typing import TypedDict
+from typing_extensions import TypedDict
 
 from ....Backend import HamiltonResponseABC
 
@@ -9,6 +8,5 @@ class SequencePositionDict(TypedDict):
     PositionID: str
 
 
-@dataclass
 class Response(HamiltonResponseABC):
     AvailablePositions: list[SequencePositionDict]

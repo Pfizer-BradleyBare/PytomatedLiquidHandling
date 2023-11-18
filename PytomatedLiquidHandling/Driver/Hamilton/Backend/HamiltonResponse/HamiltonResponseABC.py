@@ -8,13 +8,13 @@ class HamiltonError(ExecutionError):
     VectorCode: int
     VectorMajorID: int
     VectorMinorID: int
-    Data: list[int | float | str | bool]
+    Data: list[int | float | str | bool | None]
 
 
 class HamiltonResponseABC(ResponseABC):
     Error: HamiltonError
 
     @field_validator("Error")
-    def __ErrorValidate(cls, v: HamiltonError):
+    def ErrorValidate(cls, v: HamiltonError):
         if v.StatusCode != 0:
             raise Exception("TODO: Handle errors")
