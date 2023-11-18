@@ -30,7 +30,7 @@ ListedOptions.append(
     )
 )
 CommandInstance = Carrier5Position.Command(
-    CustomErrorHandling=False, ListedOptions=ListedOptions
+    CustomErrorHandling=False, Options=ListedOptions
 )
 
 Backend.ExecuteCommand(CommandInstance)

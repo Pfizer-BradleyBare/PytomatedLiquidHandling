@@ -1,6 +1,5 @@
-import os
 import logging
-
+import os
 
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
 from PytomatedLiquidHandling.Driver.Hamilton.TemperatureControl import HeaterCooler
@@ -22,7 +21,7 @@ Command = HeaterCooler.Connect.Command(
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
 Response = Backend.GetResponse(Command, HeaterCooler.Connect.Response)
-HeaterShakerHandleId = Response.GetHandleID()
+HeaterShakerHandleId = Response.HandleID
 # Connect and get our Handle
 
 DesiredTemperature = 37
@@ -54,7 +53,7 @@ for i in range(0, 1):
     Backend.WaitForResponseBlocking(Command)
     Response = Backend.GetResponse(Command, HeaterCooler.GetTemperature.Response)
 
-    CurrentTemperature = Response.GetTemperature()
+    CurrentTemperature = Response.Temperature
     Logger.debug("Current Temp: %f", CurrentTemperature)
 
     if (

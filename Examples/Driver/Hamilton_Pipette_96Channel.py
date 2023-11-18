@@ -21,14 +21,14 @@ ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0004"))
 ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0005"))
 CommandInstance = HSLTipCountingLib.Edit.Command(
     CustomErrorHandling=False,
-    ListedOptions=ListedOptions,
+    Options=ListedOptions,
 )
 
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
 AvailablePositions = Backend.GetResponse(
     CommandInstance, HSLTipCountingLib.Edit.Response
-).GetAvailablePositions()
+).AvailablePositions
 
 CommandInstance = CORE96Head.Pickup.Command(
     CustomErrorHandling=False,
@@ -82,7 +82,7 @@ for Pos in AvailablePositions[96:]:
         )
     )
 CommandInstance = HSLTipCountingLib.Write.Command(
-    CustomErrorHandling=False, ListedOptions=ListedOptions
+    CustomErrorHandling=False, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)

@@ -20,7 +20,7 @@ Command = HeaterShaker.Connect.Command(
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
 Response = Backend.GetResponse(Command, HeaterShaker.Connect.Response)
-HeaterShakerHandleId = Response.GetHandleID()
+HeaterShakerHandleId = Response.HandleID
 # Connect and get our Handle
 
 DesiredTemperature = 37
@@ -52,7 +52,7 @@ for i in range(0, 1):
     Backend.WaitForResponseBlocking(Command)
     Response = Backend.GetResponse(Command, HeaterShaker.GetTemperature.Response)
 
-    CurrentTemperature = Response.GetTemperature()
+    CurrentTemperature = Response.Temperature
     Logger.debug("Current Temp: %f", CurrentTemperature)
 
     if (

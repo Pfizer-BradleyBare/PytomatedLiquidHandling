@@ -40,14 +40,14 @@ ListedOptions.append(
 )
 CommandInstance = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
     CustomErrorHandling=False,
-    ListedOptions=ListedOptions,
+    Options=ListedOptions,
 )
 
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
 AvailablePositions = Backend.GetResponse(
     CommandInstance, Visual_NTR_Library.Channels_TipCounter_Edit.Response
-).GetAvailablePositions()
+).AvailablePositions
 
 TipPositions = AvailablePositions[:8]
 
@@ -61,7 +61,7 @@ for i, Position in enumerate(TipPositions):
         )
     )
 CommandInstance = PortraitCORE8Channel.Pickup.Command(
-    CustomErrorHandling=False, ListedOptions=ListedOptions
+    CustomErrorHandling=False, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
@@ -81,8 +81,9 @@ for i, Position in enumerate(TipPositions):
             Volume=25,
         )
     )
+
 CommandInstance = PortraitCORE8Channel.Aspirate.Command(
-    CustomErrorHandling=False, ListedOptions=ListedOptions
+    CustomErrorHandling=False, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
@@ -103,7 +104,7 @@ for i, Position in enumerate(TipPositions):
         )
     )
 CommandInstance = PortraitCORE8Channel.Dispense.Command(
-    CustomErrorHandling=False, ListedOptions=ListedOptions
+    CustomErrorHandling=False, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
@@ -122,7 +123,7 @@ for i, Position in enumerate(TipPositions):
         )
     )
 CommandInstance = PortraitCORE8Channel.Eject.Command(
-    CustomErrorHandling=False, ListedOptions=ListedOptions
+    CustomErrorHandling=False, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
@@ -142,7 +143,7 @@ for Pos in AvailablePositions[8:]:
         )
     )
 CommandInstance = Visual_NTR_Library.Channels_TipCounter_Write.Command(
-    CustomErrorHandling=False, ListedOptions=ListedOptions
+    CustomErrorHandling=False, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)

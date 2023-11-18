@@ -3,10 +3,11 @@
 // }} ""
 #include "HSLSeqLib.hsl"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\JsonParser\\JsonParser.hs_"
-#include "HSLErrLib.hsl"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLJson\\HSLJson.hsl"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\STAR_Channel_MPH_fwCmd\\STAR_Channel_MPH_fwCmd.hs_"
+#include "HSLErrLib.hsl"
+#include "HSLTrcLib.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -1022,4 +1023,4 @@ for(IndiceCounter = 0; IndiceCounter < NumIndices;)
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-17 16:00$$checksum=93ae074c$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-17 20:37$$checksum=9edbd8ef$$length=084$$

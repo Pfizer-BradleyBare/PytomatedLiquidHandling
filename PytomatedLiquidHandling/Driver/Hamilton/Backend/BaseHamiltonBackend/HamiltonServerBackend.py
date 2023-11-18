@@ -63,7 +63,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         # ParserObject.SetEndpointOutputKey("Request Identifier", CommandInstance.GetID())
         ParserObject.SetEndpointOutputKey(
-            "Custom Error Handling", CommandInstance.CustomErrorHandling
+            "CustomErrorHandling", CommandInstance.CustomErrorHandling
         )
         ParserObject.SetEndpointOutputKey("Module Name", CommandInstance.ModuleName)
         ParserObject.SetEndpointOutputKey("Command Name", CommandInstance.CommandName)
