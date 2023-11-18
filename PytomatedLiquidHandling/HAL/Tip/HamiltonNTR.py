@@ -14,25 +14,8 @@ class HamiltonNTR(TipABC):
     Tiers: int
     TipsPerRack: int
     TipRackWasteLabwareID: str
-    TransportDevice: Transport.Base.TransportABC
     _TierDiscardNumber: int = PrivateAttr(default=100)
     _DiscardedTipRacks: list[LayoutItem.TipRack] = PrivateAttr(default_factory=list)
-
-    @field_validator("TransportDevice", mode="before")
-    def __TransportDeviceValidate(cls, v):
-        Objects = Transport.Devices
-
-        Identifier = v
-
-        if Identifier not in Objects:
-            raise ValueError(
-                Identifier
-                + " is not found in "
-                + Transport.Base.TransportABC.__name__
-                + " objects."
-            )
-
-        return Objects[Identifier]
 
     def RemainingTipsInTier(self) -> int:
         Remaining = self.RemainingTips() % (self.TipsPerRack * self.Tiers)
@@ -76,7 +59,9 @@ class HamiltonNTR(TipABC):
             # Use the tip rack layout item to make the waste layout item
 
             self._DiscardedTipRacks.append(TipRack)
-            self.TransportDevice.Transport(TipRack, TipRackWasteLayoutItem)
+            TipRack.DeckLocation.TransportConfig.TransportDevice.Transport(
+                TipRack, TipRackWasteLayoutItem
+            )
 
         self._AvailablePositions = [
             Pos
