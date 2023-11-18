@@ -6,7 +6,6 @@ from flask import request
 
 from ....Tools.AbstractClasses import CommandOptionsListed, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
-from ..HamiltonResponse import HamiltonResponseABC
 
 Logger = logging.getLogger(__name__)
 
@@ -45,7 +44,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
             if len(CommandInstance.Options) == 0:
                 self._Response = dict(
                     Error=dict(
-                        ID=-123456789,
+                        StatusCode=-123456789,
                         IsVectorError=False,
                         VectorCode=0,
                         VectorMajorID=0,

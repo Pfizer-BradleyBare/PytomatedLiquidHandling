@@ -1,8 +1,9 @@
 from typing import Type, TypeVar
 
-from pydantic import PrivateAttr
+from pydantic import PrivateAttr, field_validator
 
 from ..Command import CommandABC
+from ..ExecutionError import ExecutionError
 from ..Response import ResponseABC
 from .BackendABC import BackendABC
 
@@ -11,6 +12,10 @@ ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 class CommandStatusResponse(ResponseABC):
     ResponseReady: bool
+
+    @field_validator("Error")
+    def __ErrorValidate(cls, v):
+        ...
 
 
 class SimpleBackendABC(BackendABC):
@@ -39,10 +44,16 @@ class SimpleBackendABC(BackendABC):
             )
 
         if not self._Response is None:
-            return CommandStatusResponse(ResponseReady=True)
+            return CommandStatusResponse(
+                ResponseReady=True,
+                Error=ExecutionError(StatusCode=0, Description="No error"),
+            )
 
         else:
-            return CommandStatusResponse(ResponseReady=False)
+            return CommandStatusResponse(
+                ResponseReady=False,
+                Error=ExecutionError(StatusCode=0, Description="No error"),
+            )
 
     def WaitForResponseBlocking(self, CommandInstance: CommandABC):
         BackendABC.WaitForResponseBlocking(self, CommandInstance)
@@ -86,7 +97,5 @@ class SimpleBackendABC(BackendABC):
 
         self._Command = None
         self._Response = None
-
-        # self.CheckExceptions(CommandInstance, Response)
 
         return ResponseType(**Response)

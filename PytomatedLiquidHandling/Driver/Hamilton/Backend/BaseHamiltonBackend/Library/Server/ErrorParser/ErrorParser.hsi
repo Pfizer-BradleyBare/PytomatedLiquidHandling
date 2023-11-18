@@ -52,8 +52,8 @@ HSLJsonLib::Create(ErrorObject);
 // {{{ 3 1 0 "ac985d8f_d783_42da_b3e4b53df1b6b06f" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 ID = ErrGetId();
 // }} ""
-// {{{ 4 1 0 "33970c79_6061_46c3_8f783f3c2c828474" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetIntegerProperty(ErrorObject, Translate("ID"), ID);
+// {{{ 4 1 0 "bc24a24e_96f4_42db_904b142a1571c9d1" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetIntegerProperty(ErrorObject, Translate("StatusCode"), ID);
 // }} ""
 // {{ 5 1 0 "6d74dc7a_bf2b_42c6_8e599e8bed763a5f" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -225,4 +225,4 @@ HSLJsonLib::Release(ErrorObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-17 16:45$$checksum=43f0cfd2$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-17 19:01$$checksum=364cc65d$$length=084$$

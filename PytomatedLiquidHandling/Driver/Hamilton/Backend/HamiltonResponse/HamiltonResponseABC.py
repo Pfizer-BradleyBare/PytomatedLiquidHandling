@@ -1,17 +1,20 @@
-from pydantic import BaseModel
+from pydantic import field_validator
 
-from ....Tools.AbstractClasses import ResponseABC
+from ....Tools.AbstractClasses import ExecutionError, ResponseABC
 
 
-class HamiltonError(BaseModel):
-    ID: int
+class HamiltonError(ExecutionError):
     IsVectorError: bool
     VectorCode: int
     VectorMajorID: int
     VectorMinorID: int
-    Description: str
     Data: list[int | float | str | bool]
 
 
 class HamiltonResponseABC(ResponseABC):
     Error: HamiltonError
+
+    @field_validator("Error")
+    def __ErrorValidate(cls, v: HamiltonError):
+        if v.StatusCode != 0:
+            raise Exception("TODO: Handle errors")
