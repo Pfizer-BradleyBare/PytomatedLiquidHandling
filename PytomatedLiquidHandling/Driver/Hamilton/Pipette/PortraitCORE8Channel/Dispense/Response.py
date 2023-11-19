@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from ....Backend import HamiltonResponseABC
+from ....Backend import HamiltonBlockDataPackage, HamiltonResponseABC
 
 
 class Response(HamiltonResponseABC):
-    ...
+    DispenseData: HamiltonBlockDataPackage

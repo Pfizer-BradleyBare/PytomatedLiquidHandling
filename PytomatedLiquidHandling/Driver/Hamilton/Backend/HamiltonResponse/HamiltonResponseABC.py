@@ -97,6 +97,7 @@ class HamiltonBlockDataPackage(BaseModel):
 
 
 class HamiltonResponseABC(ResponseABC):
+    ErrorID: int
     ErrorDescription: str | Literal[""]
     # There are, unfortunately, 2 cases here:
     # Case 1: Hamilton throws an error and the error is not handled by the user. ErrFlag is set, Description is set, MainErr is not set.
@@ -159,29 +160,36 @@ class HamiltonResponseABC(ResponseABC):
     def model_post_init(self, __context: Any) -> None:
         Exceptions = list()
 
-        for Item in self.__dict__.values():
-            if isinstance(Item, HamiltonBlockDataPackage):
-                if Item.ErrFlag == HamiltonBlockDataPackage.ErrFlags.ErrorWithBlockData:
-                    for Data in Item.BlockData:
-                        if (
-                            Data.ButtonID == Data.ButtonIDs.Cancel
-                        ):  # We only care about Cancel button because that means this error was NOT handled.
-                            Exceptions.append(ExceptionErrorCodeMap[Data.MainErr](Data))
+        if self.ErrorID != 0:
+            for Item in self.__dict__.values():
+                if isinstance(Item, HamiltonBlockDataPackage):
+                    if (
+                        Item.ErrFlag
+                        == HamiltonBlockDataPackage.ErrFlags.ErrorWithBlockData
+                    ):
+                        for Data in Item.BlockData:
+                            if (
+                                Data.ButtonID == Data.ButtonIDs.Cancel
+                            ):  # We only care about Cancel button because that means this error was NOT handled.
+                                Exceptions.append(
+                                    ExceptionErrorCodeMap[Data.MainErr](Data)
+                                )
 
-        if self.ErrorDescription != "":
-            for Description in ErrorCodeDescriptionMap:
-                if Description.lower() in self.ErrorDescription.lower():
-                    Exceptions.append(
-                        ExceptionErrorCodeMap[ErrorCodeDescriptionMap[Description]](
-                            None
+            # This is the cae where the Error does NOT have block data.
+            if self.ErrorDescription != "":
+                for Description in ErrorCodeDescriptionMap:
+                    if Description.lower() in self.ErrorDescription.lower():
+                        Exceptions.append(
+                            ExceptionErrorCodeMap[ErrorCodeDescriptionMap[Description]](
+                                None
+                            )
                         )
-                    )
-            # TODO make this faster...
+                # TODO make this faster...
 
-        if len(Exceptions) > 0:
-            raise ExceptionGroup("Hamilton step produced errors.", Exceptions)
-        else:
-            raise RuntimeError(
-                "No acceptable exception found for error description: "
-                + self.ErrorDescription
-            )
+            if len(Exceptions) > 0:
+                raise ExceptionGroup("Hamilton step produced errors.", Exceptions)
+            else:
+                raise RuntimeError(
+                    "No acceptable exception found for error description: "
+                    + self.ErrorDescription
+                )
