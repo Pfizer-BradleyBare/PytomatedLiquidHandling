@@ -82,7 +82,7 @@ for i, Position in enumerate(TipPositions):
         )
     )
 
-ListedOptions[7].PositionID = "A1"
+ListedOptions[7].PositionID = "32"
 
 CommandInstance = PortraitCORE8Channel.Aspirate.Command(
     CustomErrorHandling=True, Options=ListedOptions

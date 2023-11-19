@@ -91,11 +91,17 @@ class SimpleBackendABC(BackendABC):
             try:
                 return ResponseType(**Response)
             except ValidationError:
+                ShouldContinue = False
                 for Base in ResponseType.__bases__:
-                    if isinstance(Base, ResponseABC):
+                    if issubclass(Base, ResponseABC):
                         ResponseType = cast(
                             Type[ResponseABCType], ResponseType.__bases__[0]
                         )
+                        ShouldContinue = True
+                        break
+                if ShouldContinue:
+                    continue
+
                 raise RuntimeError("No suitable class was found to create...")
 
         # NOTE: This is a very dirty way to handle error responses. Basically a response is validated by Pydantic on creation.
