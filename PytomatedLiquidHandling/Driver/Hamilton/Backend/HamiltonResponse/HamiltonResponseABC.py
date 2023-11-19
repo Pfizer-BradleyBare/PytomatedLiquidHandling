@@ -112,6 +112,14 @@ class HamiltonResponseABC(ResponseABC):
             == HamiltonBlockDataPackage
         ):
             v = cast(str, v)
+
+            if len(v) == 0:
+                return HamiltonBlockDataPackage(
+                    ErrFlag=HamiltonBlockDataPackage.ErrFlags.ErrorWithoutBlockData,
+                    BlockData=[],
+                )
+            # NOTE: Not sure if this is required but putting it here for now.
+
             ErrFlag = int(v[:1])
             # ErrFlag is always the first digit
 
