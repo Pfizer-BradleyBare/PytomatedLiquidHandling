@@ -99,9 +99,9 @@ class HamiltonBlockDataPackage(BaseModel):
 class HamiltonResponseABC(ResponseABC):
     ErrorDescription: str | Literal[""]
     # There are, unfortunately, 2 cases here:
-    # Case 1: Hamilton throws an error and the error is not handled by the user. ErrFlag is set, Description is set, MainErr is not set.
+    # Case 1: Hamilton throws an error and the error is not handled by the user. Description is set, BlockData may or may not be available.
     # We will use the description to throw the correct exception.
-    # Case 2: Hamilton throws an error and the error is handled by the user. ErrFlag is set, Description is not set, MainErr is set.
+    # Case 2: Hamilton throws an error and the error is handled by the user. Description is not set, BlockData is available.
     # We will use the MainErr to throw the correct exception.
 
     @field_validator("*", mode="before")
