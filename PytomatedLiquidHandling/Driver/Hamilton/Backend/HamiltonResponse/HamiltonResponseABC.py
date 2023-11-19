@@ -170,14 +170,20 @@ class HamiltonResponseABC(ResponseABC):
                         if (
                             Data.ButtonID == Data.ButtonIDs.Cancel
                         ):  # We only care about Cancel button because that means this error was NOT handled.
-                            Exceptions.append(ExceptionErrorCodeMap[Data.MainErr](Data))
+                            if Data.MainErr in ExceptionErrorCodeMap:
+                                Exceptions.append(
+                                    ExceptionErrorCodeMap[Data.MainErr](Data)
+                                )
 
         # This is the cae where the Error does NOT have block data.
         if self.ErrorDescription != "":
             ErrorOccurred = True
 
             for Description in ErrorCodeDescriptionMap:
-                if Description.lower() in self.ErrorDescription.lower():
+                if all(
+                    Text in self.ErrorDescription.lower()
+                    for Text in Description.lower().split(" ")
+                ):
                     Exceptions.append(
                         ExceptionErrorCodeMap[ErrorCodeDescriptionMap[Description]](
                             None
@@ -190,6 +196,5 @@ class HamiltonResponseABC(ResponseABC):
                 raise ExceptionGroup("Hamilton step produced errors.", Exceptions)
             else:
                 raise RuntimeError(
-                    "No acceptable exception found for error description: "
-                    + self.ErrorDescription
+                    "No acceptable exception found for Hamilton error. See response data for more info."
                 )
