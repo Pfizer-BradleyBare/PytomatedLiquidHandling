@@ -37,11 +37,6 @@ class HamiltonBackendABC(BackendABC):
             Port=768,
         )
 
-        # self._Exceptions = [
-        #    HamiltonExceptions.UnhandledException,
-        #    HamiltonExceptions.NoOptionsInTracker,
-        # ]
-
     def StartBackend(self):
         BackendABC.StartBackend(self)
 
@@ -51,7 +46,7 @@ class HamiltonBackendABC(BackendABC):
         )
 
         if not os.path.exists(self.DeckLayoutPath):
-            raise Exception(
+            raise RuntimeError(
                 "Layout File not found. Ensure the layout file exists in this location: "
                 + self.DeckLayoutPath
             )

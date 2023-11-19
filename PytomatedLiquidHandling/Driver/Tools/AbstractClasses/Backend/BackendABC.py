@@ -17,7 +17,7 @@ class BackendABC(AbstractClasses.HALDevice):
 
     def __CheckRunning(self):
         if self._IsRunning == False:
-            raise Exception("You must start the backend before interacting")
+            raise RuntimeError("You must start the backend before interacting")
 
     @abstractmethod
     def StartBackend(self):

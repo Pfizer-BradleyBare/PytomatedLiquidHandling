@@ -1,6 +1,6 @@
 import logging
 import time
-from typing import Any, Callable
+from typing import Any, Callable, cast
 
 from flask import request
 
@@ -32,7 +32,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
             time.sleep(0.1)
 
-        CommandInstance = self._Command
+        CommandInstance = cast(HamiltonCommandABC, self._Command)
 
         if CommandInstance is None:
             ParserObject.SetEndpointState(False)
@@ -42,15 +42,11 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         if isinstance(CommandInstance, CommandOptionsListed):
             if len(CommandInstance.Options) == 0:
-                self._Response = dict(
-                    Description="There are no options in the options tracker"
+                self._Response = ValueError(
+                    "There are no options in the options tracker"
                 )
-                # TODO. Make an exception for this!
                 return self.GetNextCommand()
         # This makes sure there are actually options. It could be possible for a user to submit a command with an options tracker without actul options
-
-        if not isinstance(CommandInstance, HamiltonCommandABC):
-            raise Exception("This will never happen")
 
         ParserObject.SetEndpointState(True)
 
@@ -60,9 +56,14 @@ class HamiltonServerBackendABC(ServerBackendABC):
         )
         ParserObject.SetEndpointOutputKey("Module Name", CommandInstance.ModuleName)
         ParserObject.SetEndpointOutputKey("Command Name", CommandInstance.CommandName)
-        ParserObject.SetEndpointOutputKey(
-            "Command Parameters", CommandInstance.GetVars()
-        )
+        try:
+            ParserObject.SetEndpointOutputKey(
+                "Command Parameters", CommandInstance.GetVars()
+            )
+        except:
+            self._Response = RuntimeError(
+                "Error while converting Options to json dict."
+            )
         # TODO: This is a fragile function. Catch errors if this occur...
 
         Response = ParserObject.GetHTTPResponse()

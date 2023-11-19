@@ -50,7 +50,7 @@ class CommandABC:
     def __post_init__(self):
         ModuleType = inspect.getmodule(type(self))
         if ModuleType is None:
-            raise Exception("inspect.getmodule failed... This should never happen")
+            raise RuntimeError("inspect.getmodule failed... This should never happen")
         FilePath = ModuleType.__file__
 
         CommandABC.ModuleName = CommandABC.__GetModuleName(str(FilePath))

@@ -60,7 +60,7 @@ class ServerBackendABC(SimpleBackendABC):
         SimpleBackendABC.StartBackend(self)
         Host = (self.Address, self.Port)
         if Host in ServerBackendABC.__Hosts:
-            raise Exception(
+            raise ValueError(
                 "This host is already taken. Choose a different address and/or port."
             )
 
