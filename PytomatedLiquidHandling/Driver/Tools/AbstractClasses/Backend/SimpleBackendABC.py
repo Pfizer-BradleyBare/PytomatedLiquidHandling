@@ -16,6 +16,7 @@ class CommandStatusResponse(ResponseABC):
 class SimpleBackendABC(BackendABC):
     _Command: CommandABC | None = PrivateAttr(default=None)
     _Response: dict | None = PrivateAttr(default=None)
+    _Exception: Exception | None = PrivateAttr(default=None)
 
     def ExecuteCommand(self, CommandInstance: CommandABC):
         BackendABC.ExecuteCommand(self, CommandInstance)
@@ -54,16 +55,6 @@ class SimpleBackendABC(BackendABC):
         while self.GetCommandStatus(CommandInstance).ResponseReady != True:
             ...
 
-    # def CheckExceptions(
-    #    self, CommandInstance: CommandABC, ResponseInstance: ResponseABC
-    # ):
-    #    if ResponseInstance.GetState() == False:
-    #        for Exception in self._Exceptions:
-    #            if Exception.ErrorCode in ResponseInstance.GetDetails():
-    #                raise Exception(CommandInstance, ResponseInstance)
-    #
-    #        raise UnhandledException(CommandInstance, ResponseInstance)
-
     def GetResponse(
         self, CommandInstance: CommandABC, ResponseType: Type[ResponseABCType]
     ) -> ResponseABCType:
@@ -87,22 +78,10 @@ class SimpleBackendABC(BackendABC):
         self._Command = None
         self._Response = None
 
-        while True:
-            try:
-                return ResponseType(**Response)
-            except ValidationError:
-                ShouldContinue = False
-                for Base in ResponseType.__bases__:
-                    if issubclass(Base, ResponseABC):
-                        ResponseType = cast(
-                            Type[ResponseABCType], ResponseType.__bases__[0]
-                        )
-                        ShouldContinue = True
-                        break
-                if ShouldContinue:
-                    continue
+        if self._Exception is not None:
+            Exception = self._Exception
+            self._Exception = None
+            raise Exception
+        # TODO!!!
 
-                raise RuntimeError("No suitable class was found to create...")
-
-        # NOTE: This is a very dirty way to handle error responses. Basically a response is validated by Pydantic on creation.
-        # TODO: Fix this!!!
+        return ResponseType(**Response)
