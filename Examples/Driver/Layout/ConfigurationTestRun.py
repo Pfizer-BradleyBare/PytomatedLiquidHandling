@@ -2,7 +2,19 @@ import os
 
 import yaml
 
-from PytomatedLiquidHandling import HAL
+from PytomatedLiquidHandling import HAL, Driver
+
+
+class Test(Driver.Hamilton.Backend.HamiltonResponseABC):
+    T: Driver.Hamilton.Backend.HamiltonResponse.HamiltonBlockDataPackage
+
+
+Test(
+    ErrorDescription="",
+    T="1[01,05,00,2,Barcode01,car24_cup15x100_0001,1[02,20,00,2,Barcode02,car24_cup15x100_0001,2[03,00,00,0,Barcode03,car24_cup15x100_0001,3[04,00,00,0,Barcode04,car24_cup15x100_0001,4[05,00,00,0,Barcode05,car24_cup15x100_0001,5[06,00,00,0,Barcode06,car24_cup15x100_0001,6",
+)
+
+quit()
 
 with open(os.path.join(os.path.dirname(__file__), "Carrier.yaml")) as File:
     Dict = yaml.full_load(File)

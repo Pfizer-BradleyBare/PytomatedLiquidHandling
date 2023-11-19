@@ -1,19 +1,5 @@
-from abc import ABC, abstractmethod
-
-from pydantic import BaseModel, field_validator
-
-from ..ExecutionError import ExecutionError
+from pydantic import BaseModel
 
 
-class ResponseABC(BaseModel, ABC):
-    Error: ExecutionError
-
-    @field_validator("Error")
-    @abstractmethod
-    def ErrorValidate(cls, v):
-        """You should check error codes here. If there is an error then you should throw the correct exception.
-
-        NOTE: Must be decorated as a field validator as shown below for field "Error"
-
-        @field_validator("Error")
-        """
+class ResponseABC(BaseModel):
+    ...

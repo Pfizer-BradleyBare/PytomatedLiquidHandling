@@ -53,6 +53,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
                         Data=list(),
                     ),
                 )
+                # TODO. Figure out how to throw interface errors...
                 return self.GetNextCommand()
         # This makes sure there are actually options. It could be possible for a user to submit a command with an options tracker without actul options
 
