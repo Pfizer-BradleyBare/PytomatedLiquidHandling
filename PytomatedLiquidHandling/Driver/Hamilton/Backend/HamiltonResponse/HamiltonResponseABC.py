@@ -167,12 +167,9 @@ class HamiltonResponseABC(ResponseABC):
                             Data.ButtonID == Data.ButtonIDs.Cancel
                         ):  # We only care about Cancel button because that means this error was NOT handled.
                             Exceptions.append(ExceptionErrorCodeMap[Data.MainErr](Data))
-                elif (
-                    Item.ErrFlag
-                    == HamiltonBlockDataPackage.ErrFlags.ErrorWithoutBlockData
-                ):
+                elif self.ErrorDescription != "":
                     for Description in ErrorCodeDescriptionMap:
-                        if Description in self.ErrorDescription:
+                        if Description.lower() in self.ErrorDescription.lower():
                             Exceptions.append(
                                 ExceptionErrorCodeMap[
                                     ErrorCodeDescriptionMap[Description]

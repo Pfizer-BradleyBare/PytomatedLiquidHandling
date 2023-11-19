@@ -43,17 +43,9 @@ class HamiltonServerBackendABC(ServerBackendABC):
         if isinstance(CommandInstance, CommandOptionsListed):
             if len(CommandInstance.Options) == 0:
                 self._Response = dict(
-                    Error=dict(
-                        StatusCode=-123456789,
-                        IsVectorError=False,
-                        VectorCode=0,
-                        VectorMajorID=0,
-                        VectorMinorID=0,
-                        Description="There are no options in the options tracker",
-                        Data=list(),
-                    ),
+                    Description="There are no options in the options tracker"
                 )
-                # TODO. Figure out how to throw interface errors...
+                # TODO. Make an exception for this!
                 return self.GetNextCommand()
         # This makes sure there are actually options. It could be possible for a user to submit a command with an options tracker without actul options
 
@@ -71,6 +63,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
         ParserObject.SetEndpointOutputKey(
             "Command Parameters", CommandInstance.GetVars()
         )
+        # TODO: This is a fragile function. Catch errors if this occur...
 
         Response = ParserObject.GetHTTPResponse()
         return Response

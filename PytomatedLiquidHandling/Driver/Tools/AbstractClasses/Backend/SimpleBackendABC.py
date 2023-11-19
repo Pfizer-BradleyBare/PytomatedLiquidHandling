@@ -1,6 +1,6 @@
-from typing import Type, TypeVar
+from typing import Type, TypeVar, cast
 
-from pydantic import PrivateAttr
+from pydantic import PrivateAttr, ValidationError
 
 from ..Command import CommandABC
 from ..Response import ResponseABC
@@ -87,4 +87,16 @@ class SimpleBackendABC(BackendABC):
         self._Command = None
         self._Response = None
 
-        return ResponseType(**Response)
+        while True:
+            try:
+                return ResponseType(**Response)
+            except ValidationError:
+                for Base in ResponseType.__bases__:
+                    if isinstance(Base, ResponseABC):
+                        ResponseType = cast(
+                            Type[ResponseABCType], ResponseType.__bases__[0]
+                        )
+                raise RuntimeError("No suitable class was found to create...")
+
+        # NOTE: This is a very dirty way to handle error responses. Basically a response is validated by Pydantic on creation.
+        # TODO: Fix this!!!
