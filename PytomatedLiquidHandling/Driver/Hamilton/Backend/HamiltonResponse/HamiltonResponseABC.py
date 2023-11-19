@@ -156,7 +156,7 @@ class HamiltonResponseABC(ResponseABC):
 
         return v
 
-    def model_post_init(self):
+    def model_post_init(self, __context: Any) -> None:
         Exceptions = list()
 
         for Item in self.__dict__.values():
@@ -167,19 +167,21 @@ class HamiltonResponseABC(ResponseABC):
                             Data.ButtonID == Data.ButtonIDs.Cancel
                         ):  # We only care about Cancel button because that means this error was NOT handled.
                             Exceptions.append(ExceptionErrorCodeMap[Data.MainErr](Data))
-                elif self.ErrorDescription != "":
-                    for Description in ErrorCodeDescriptionMap:
-                        if Description.lower() in self.ErrorDescription.lower():
-                            Exceptions.append(
-                                ExceptionErrorCodeMap[
-                                    ErrorCodeDescriptionMap[Description]
-                                ](None)
-                            )
-                    # TODO make this faster...
 
-                else:
-                    ...
-                    # No Errors!
+        if self.ErrorDescription != "":
+            for Description in ErrorCodeDescriptionMap:
+                if Description.lower() in self.ErrorDescription.lower():
+                    Exceptions.append(
+                        ExceptionErrorCodeMap[ErrorCodeDescriptionMap[Description]](
+                            None
+                        )
+                    )
+            # TODO make this faster...
 
         if len(Exceptions) > 0:
             raise ExceptionGroup("Hamilton step produced errors.", Exceptions)
+        else:
+            raise RuntimeError(
+                "No acceptable exception found for error description: "
+                + self.ErrorDescription
+            )

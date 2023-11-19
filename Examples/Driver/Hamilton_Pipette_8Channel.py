@@ -82,8 +82,10 @@ for i, Position in enumerate(TipPositions):
         )
     )
 
+ListedOptions[7].PositionID = "A1"
+
 CommandInstance = PortraitCORE8Channel.Aspirate.Command(
-    CustomErrorHandling=False, Options=ListedOptions
+    CustomErrorHandling=True, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
