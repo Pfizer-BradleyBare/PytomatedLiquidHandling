@@ -13,4 +13,6 @@ class Options(OptionsABC):
 
     LabwareID: str
     BarcodeFilePath: str
-    LabwarePositions: LabwarePositionsOptions
+    LabwarePositions: LabwarePositionsOptions = (
+        LabwarePositionsOptions.ReadPresentLabware
+    )
