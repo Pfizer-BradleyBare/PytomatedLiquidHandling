@@ -1,7 +1,7 @@
 import os
 
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
-from PytomatedLiquidHandling.Driver.Hamilton.Transport import IPG
+from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import iSwap
 
 Backend = MicrolabSTAR(
     Identifier="Example Star",
@@ -10,9 +10,9 @@ Backend = MicrolabSTAR(
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
-CommandInstance = IPG.GetPlate.Command(
+CommandInstance = iSwap.GetPlate.Command(
     CustomErrorHandling=False,
-    Options=IPG.GetPlate.Options(
+    Options=iSwap.GetPlate.Options(
         LabwareID="Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel",
         GripWidth=79,
         OpenWidth=83,
@@ -20,18 +20,18 @@ CommandInstance = IPG.GetPlate.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-Response = Backend.GetResponse(CommandInstance, IPG.GetPlate.Response)
+Response = Backend.GetResponse(CommandInstance, iSwap.GetPlate.Response)
 # Grab the plate.
 
-CommandInstance = IPG.PlacePlate.Command(
+CommandInstance = iSwap.PlacePlate.Command(
     CustomErrorHandling=False,
-    Options=IPG.PlacePlate.Options(
+    Options=iSwap.PlacePlate.Options(
         LabwareID="Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel",
     ),
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-Response = Backend.GetResponse(CommandInstance, IPG.PlacePlate.Response)
+Response = Backend.GetResponse(CommandInstance, iSwap.PlacePlate.Response)
 # Put it back
 
 # Done!

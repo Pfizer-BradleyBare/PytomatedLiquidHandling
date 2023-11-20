@@ -1,8 +1,8 @@
 import os
 
+from PytomatedLiquidHandling.Driver.Hamilton import HSLTipCountingLib
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
-from PytomatedLiquidHandling.Driver.Hamilton.Pipette import CORE96Head
-from PytomatedLiquidHandling.Driver.Hamilton.Tip import HSLTipCountingLib
+from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import CORE96Head
 
 Backend = MicrolabSTAR(
     Identifier="Example Star",

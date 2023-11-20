@@ -1,0 +1,268 @@
+// {{{ 2 "IncludeGuard" "PragmaOnce"
+#pragma once
+// }} ""
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\JsonParser\\JsonParser.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "HSLJson\\HSLJson.hsl"
+#include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
+#include "HSLDevLib.hsl"
+#include "HSLSeqLib.hsl"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+#include "HSLMETEDLib.hs_"
+#include "HSLMECCLib.hs_"
+#include "HSLPTLLib.hsl"
+// }} ""
+// {{{ 2 "LibraryNamespace" "Begin"
+namespace HSLLABWRACCESS {
+// }} ""
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{{ 2 "SubmethodForwardDeclaration" ""
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void ;
+function TestLabwareIDExists( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function ValueForKeySetForPropertiesOfLabwareID( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+// }} ""
+function _InitLibrary() {
+// {{ 2 "AutoInitBlock" ""
+PTL::SetWashingStateDefault("RinseTime1", 5);
+PTL::SetWashingStateDefault("SoakTime1", 5);
+PTL::SetWashingStateDefault("FlowRate1", 11);
+PTL::SetWashingStateDefault("RinseTime2", 0);
+PTL::SetWashingStateDefault("SoakTime2", 0);
+PTL::SetWashingStateDefault("FlowRate2", 11);
+PTL::SetWashingStateDefault("DrainingTime", 10);
+PTL::SetWashingStateDefault("StartWashLiquid", 0);
+PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
+PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
+JSONPARSER::_InitLibrary();
+ACTIONSERVERENDPOINTS::_InitLibrary();
+// }} ""
+}
+function _ExitLibrary() {
+// {{ 2 "AutoExitBlock" ""
+JSONPARSER::_ExitLibrary();
+ACTIONSERVERENDPOINTS::_ExitLibrary();
+// }} ""
+}
+// {{{ 5 "ValueForKeySetForPropertiesOfLabwareID" "Begin"
+private function ValueForKeySetForPropertiesOfLabwareID( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable WaitTime;
+private variable IsStoppable;
+private variable ShowTimer;
+private timer Timer;
+private variable CustomErrorHandling;
+private variable State;
+private variable Message;
+private object o_JSONObject;
+private variable SequenceString;
+private variable PropertyValue;
+private variable PropertyKey;
+private variable LabwareID;
+private sequence Sequence;
+private variable Counter;
+private variable NumLabwareIDs;
+private variable LabwareIDArray[];
+// {{ 5 "ValueForKeySetForPropertiesOfLabwareID" "InitLocals"
+// }} ""
+// {{{ 37 1 0 "4da5ba10_8039_4d59_9304db7c17934adf" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+PropertyValue = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PropertyValue:"));
+// }} ""
+// {{{ 38 1 0 "4d54650d_70f3_45ac_b11a480d013ecd42" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+PropertyKey = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:PropertyKey:"));
+// }} ""
+// {{{ 39 1 0 "bff158cc_1e45_402b_a7270098a5f29263" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+JSONPARSER::GetJSONArrayElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareID:"), LabwareIDArray);
+// }} ""
+// {{ 40 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 41 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 42 1 0 "a66d84ff_a346_424a_a4c0f1081aa3464e" "{72EACF88-8D49-43e3-92C8-2F90E81E3260}"
+NumLabwareIDs=LabwareIDArray.GetSize();
+// }} ""
+// {{ 43 1 0 "5dade789_3464_46ad_a433abc2ac1c34e5" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+for(Counter = 0; Counter < NumLabwareIDs;)
+{
+Counter = Counter + 1;
+// }} ""
+// {{{ 44 1 0 "0f88f06d_a05d_4230_aa690d946afd37d7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLLabwrAccess::ValueForKeySetForPropertiesOfLabwareID(ML_STAR, PropertyValue, PropertyKey, LabwareIDArray.ElementAt( Counter -1));
+// }} ""
+// {{ 45 1 0 "5dade789_3464_46ad_a433abc2ac1c34e5" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+}
+}
+// }} ""
+// {{ 46 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 47 1 0 "8be5f2de_0edf_4a70_91aafe3c38f2859b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Create(o_JSONObject);
+// }} ""
+// {{{ 48 1 0 "544fdbaf_4d77_466f_b9bd0458a06afdc2" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
+// }} ""
+// {{{ 49 1 0 "3adf1c5a_3721_4546_8457254f90e6b3a9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
+// }} ""
+// {{ 50 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "ValueForKeySetForPropertiesOfLabwareID" "End"
+}
+// }} ""
+// {{{ 5 "HandleCommand" "Begin"
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+// {{ 5 "HandleCommand" "InitLocals"
+// }} ""
+// {{ 1 1 0 "693a086f_f56b_4e20_bc428e97a7ed5646" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "TestLabwareIDExists")
+{
+// }} ""
+// {{{ 2 1 0 "1ec3321f_e305_4d74_ab72d13c0f3ea4e6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+TestLabwareIDExists(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 3 1 0 "8e5700c5_a5f6_4b96_af5ac7ccebfdc881" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 4 1 0 "693a086f_f56b_4e20_bc428e97a7ed5646" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 5 1 0 "68b60212_fcc1_4e1f_b5dbea755d263347" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "ValueForKeySetForPropertiesOfLabwareID")
+{
+// }} ""
+// {{{ 6 1 0 "3ff0a100_5efa_4c7f_8847975fd4c0b0a9" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ValueForKeySetForPropertiesOfLabwareID(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 7 1 0 "70160f8d_a9e8_4e2b_b7590a4a5ef2aa32" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 8 1 0 "68b60212_fcc1_4e1f_b5dbea755d263347" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 9 1 0 "7eba0f5d_73bc_4c95_9aaf8fb35768504f" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nCommand not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+// }} ""
+// {{ 10 1 0 "60a5dee6_353e_4d2f_88d4468acb0b851f" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+abort;
+// }} ""
+// {{{ 5 "HandleCommand" "End"
+}
+// }} ""
+// {{{ 5 "TestLabwareIDExists" "Begin"
+function TestLabwareIDExists( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private object o_JSONObject;
+private variable SequenceString;
+private variable PropertyValue;
+private variable PropertyKey;
+private variable LabwareID;
+private sequence Sequence;
+private variable Counter;
+private variable NumLabwareIDs;
+private variable Total;
+private sequence TestSeq;
+private variable FailedLabwareIDs[];
+private variable LabwareIDArray[];
+private variable NumFailed;
+private variable LiquidClass;
+private variable NumClasses;
+private variable FailedLiquidClasses[];
+// {{ 5 "TestLabwareIDExists" "InitLocals"
+// }} ""
+// {{{ 12 1 0 "b9e03995_7c5c_49f7_b7691c95fc6a1214" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+JSONPARSER::GetJSONArrayElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareID:"), LabwareIDArray);
+// }} ""
+// {{ 13 1 0 "3c580e37_2df3_475b_9799af924b910502" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 14 1 0 "176cfabf_9cc4_4683_81c4b6e2b77c8e4d" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 15 1 0 "3726996d_764b_4024_b4de1ee89c121067" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+FailedLabwareIDs.SetSize(0);
+// }} ""
+// {{ 16 1 0 "a06df56d_b16d_46b4_ae6a92215d2c00ef" "{72EACF88-8D49-43e3-92C8-2F90E81E3260}"
+NumLabwareIDs=LabwareIDArray.GetSize();
+// }} ""
+// {{ 17 1 0 "95299f1c_f1a6_44e2_9fd0f14ef3f51585" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+for(Counter = 0; Counter < NumLabwareIDs;)
+{
+Counter = Counter + 1;
+// }} ""
+// {{{ 18 1 0 "334944b6_4950_4595_b5d8c622851274a3" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLLabwrAccess::GetDefaultSequenceForLabwareID(ML_STAR, LabwareIDArray.ElementAt( Counter -1), 0, TestSeq);
+// }} ""
+// {{{ 19 1 0 "d3e18f90_349e_43bd_bacbb26cf5f4966a" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Total = SeqGetTotal(TestSeq);
+// }} ""
+// {{ 20 1 0 "52f4aace_d28f_4c29_b002a581f9d8b279" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Total == 0)
+{
+// }} ""
+// {{ 21 1 0 "f971aeff_24b6_47db_8dc9eec22a2dad0a" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
+FailedLabwareIDs.AddAsLast(LabwareIDArray.ElementAt( Counter -1));
+// }} ""
+// {{ 22 1 0 "52f4aace_d28f_4c29_b002a581f9d8b279" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 23 1 0 "95299f1c_f1a6_44e2_9fd0f14ef3f51585" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+}
+}
+// }} ""
+// {{ 24 1 0 "176cfabf_9cc4_4683_81c4b6e2b77c8e4d" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 25 1 0 "61e8f5f7_8316_49ae_b261e07b0304e2ed" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Create(o_JSONObject);
+// }} ""
+// {{ 26 1 0 "3acc4b63_57b4_4715_b122df4d087b5371" "{72EACF88-8D49-43e3-92C8-2F90E81E3260}"
+NumFailed=FailedLabwareIDs.GetSize();
+// }} ""
+// {{{ 27 1 0 "6daa92c7_fb13_4b3f_a35c68399b1c18da" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetArray(o_JSONObject, Translate("FailedLabwareIDs"));
+// }} ""
+// {{{ 28 1 0 "6393c39c_bbad_4e74_8e3e1f4802cfad89" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetArrayLength(o_JSONObject, Translate("FailedLabwareIDs"), NumFailed);
+// }} ""
+// {{ 29 1 0 "9f097014_fc29_44df_952f5ca27d463345" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+for(Counter = 0; Counter < NumClasses;)
+{
+Counter = Counter + 1;
+// }} ""
+// {{ 30 1 0 "3649f050_071d_4815_bfed0d7505ecfde2" "{67A8F1C9-6546-41e9-AD2F-3C54F7818853}"
+LabwareID=LabwareIDArray.GetAt(Counter-1);
+// }} ""
+// {{{ 31 1 0 "05c161ae_b65a_4870_ba069ab03c53e053" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetStringArrayElement(o_JSONObject, Translate("FailedLabwareIDs"), Counter, LabwareID);
+// }} ""
+// {{ 32 1 0 "9f097014_fc29_44df_952f5ca27d463345" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+}
+}
+// }} ""
+// {{{ 33 1 0 "4a705fee_81f7_40a7_91b9cf0af23d6436" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
+// }} ""
+// {{{ 34 1 0 "6044ca5f_0f1c_4182_921aa051fcbc5545" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
+// }} ""
+// {{ 35 1 0 "3c580e37_2df3_475b_9799af924b910502" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "TestLabwareIDExists" "End"
+}
+// }} ""
+/* {{ 2 "SubmethodInsertLine" "" */ // }} ""
+// {{{ 2 "LibraryNamespace" "End"
+} // library namespace
+// }} ""
+// $$author=BAREB$$valid=0$$time=2023-11-20 16:17$$checksum=4b0e4f66$$length=084$$

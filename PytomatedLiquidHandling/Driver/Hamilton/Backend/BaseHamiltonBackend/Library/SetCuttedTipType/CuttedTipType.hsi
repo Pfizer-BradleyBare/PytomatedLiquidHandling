@@ -1,0 +1,193 @@
+// {{{ 2 "IncludeGuard" "PragmaOnce"
+#pragma once
+// }} ""
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\JsonParser\\JsonParser.hs_"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "HSLJson\\HSLJson.hsl"
+#include "HSLDevLib.hsl"
+#include "HSLSeqLib.hsl"
+#include "SetCuttedTipType_Universal_V2.hs_"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+#include "HSLMETEDLib.hs_"
+#include "HSLMECCLib.hs_"
+#include "HSLPTLLib.hsl"
+// }} ""
+// {{{ 2 "LibraryNamespace" "Begin"
+namespace CUTTEDTIPTYPE {
+// }} ""
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{{ 2 "SubmethodForwardDeclaration" ""
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void ;
+private function ResetAllTipTypes( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function SetCuttedTipTypeByLength( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+// }} ""
+function _InitLibrary() {
+// {{ 2 "AutoInitBlock" ""
+PTL::SetWashingStateDefault("RinseTime1", 5);
+PTL::SetWashingStateDefault("SoakTime1", 5);
+PTL::SetWashingStateDefault("FlowRate1", 11);
+PTL::SetWashingStateDefault("RinseTime2", 0);
+PTL::SetWashingStateDefault("SoakTime2", 0);
+PTL::SetWashingStateDefault("FlowRate2", 11);
+PTL::SetWashingStateDefault("DrainingTime", 10);
+PTL::SetWashingStateDefault("StartWashLiquid", 0);
+PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
+PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
+JSONPARSER::_InitLibrary();
+ACTIONSERVERENDPOINTS::_InitLibrary();
+SETCUTTEDTIPTYPE_UNIVERSAL_V2::_InitLibrary();
+// }} ""
+}
+function _ExitLibrary() {
+// {{ 2 "AutoExitBlock" ""
+JSONPARSER::_ExitLibrary();
+ACTIONSERVERENDPOINTS::_ExitLibrary();
+SETCUTTEDTIPTYPE_UNIVERSAL_V2::_ExitLibrary();
+// }} ""
+}
+// {{{ 5 "ResetAllTipTypes" "Begin"
+private function ResetAllTipTypes( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable CustomErrorHandling;
+private variable State;
+private variable Message;
+private object o_JSONObject;
+// {{ 5 "ResetAllTipTypes" "InitLocals"
+// }} ""
+// {{ 12 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 13 1 0 "2c080b81_e588_49c0_94f0bb7e95f6ed14" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// }} ""
+// {{ 14 1 0 "d91c3acb_d3c5_43c0_8dc9bb9a6fd757ee" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 1;
+// }} ""
+// {{ 15 1 0 "a7620655_4849_443d_b88a502a056a14f9" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Success");
+// }} ""
+// {{ 16 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 17 1 0 "0136c7db_ed70_4412_a517693cc53c31db" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+SETCUTTEDTIPTYPE_UNIVERSAL_V2::ResetAllTipTypes(ML_STAR);
+// }} ""
+// {{ 18 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 19 1 0 "8be5f2de_0edf_4a70_91aafe3c38f2859b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Create(o_JSONObject);
+// }} ""
+// {{{ 20 1 0 "68740169_079f_44be_8149226772b263bf" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
+// }} ""
+// {{{ 21 1 0 "3adf1c5a_3721_4546_8457254f90e6b3a9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
+// }} ""
+// {{ 22 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "ResetAllTipTypes" "End"
+}
+// }} ""
+// {{{ 5 "HandleCommand" "Begin"
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+// {{ 5 "HandleCommand" "InitLocals"
+// }} ""
+// {{ 1 1 0 "9e52d153_fc4c_4a47_a2dd0f40f661719d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "ResetAllTipTypes")
+{
+// }} ""
+// {{{ 2 1 0 "072893f8_9433_444e_ad3b6a9bdc6eb243" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ResetAllTipTypes(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 3 1 0 "70160f8d_a9e8_4e2b_b7590a4a5ef2aa32" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 4 1 0 "9e52d153_fc4c_4a47_a2dd0f40f661719d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 5 1 0 "b792b623_26be_4575_83f53bf3d3ae7b76" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "SetCuttedTipTypeByLength")
+{
+// }} ""
+// {{{ 6 1 0 "fc8c8368_256c_46e5_af38d0637b432746" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+SetCuttedTipTypeByLength(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 7 1 0 "9e486e11_6649_41b8_ae4b8ccab7719fda" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 8 1 0 "b792b623_26be_4575_83f53bf3d3ae7b76" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 9 1 0 "7eba0f5d_73bc_4c95_9aaf8fb35768504f" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nCommand not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+// }} ""
+// {{ 10 1 0 "60a5dee6_353e_4d2f_88d4468acb0b851f" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+abort;
+// }} ""
+// {{{ 5 "HandleCommand" "End"
+}
+// }} ""
+// {{{ 5 "SetCuttedTipTypeByLength" "Begin"
+private function SetCuttedTipTypeByLength( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private object o_JSONObject;
+private variable CustomErrorHandling;
+private variable Message;
+private variable State;
+private variable CutLength;
+private variable TipType;
+// {{ 5 "SetCuttedTipTypeByLength" "InitLocals"
+// }} ""
+// {{{ 24 1 0 "60efa556_caa2_4560_851fe1ef5cbf4c4b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+TipType = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:TipType:"));
+// }} ""
+// {{{ 25 1 0 "d216377c_399c_4f8f_bf44f6c0660ffa67" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CutLength = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CutLength:"));
+// }} ""
+// {{ 26 1 0 "50a5cbf6_72f7_4e3a_9cb28b78a83b8b36" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 27 1 0 "e8bd58a7_a1f1_42d3_8c54e7c918763779" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CustomErrorHandling = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
+// }} ""
+// {{ 28 1 0 "b63f0bfe_5df9_4301_8ac0c8402482cbc1" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+State = 1;
+// }} ""
+// {{ 29 1 0 "2cbdb42f_c294_4372_98c74eee39e54f6c" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Message = Translate("Success");
+// }} ""
+// {{ 30 1 0 "2b55153f_1b2c_423a_90d73ae4ec170aab" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 31 1 0 "05a0625a_3cf2_44ab_9aa5c79ffba4a202" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+SETCUTTEDTIPTYPE_UNIVERSAL_V2::SetCuttedTipTypeByLength(ML_STAR, TipType, CutLength);
+// }} ""
+// {{ 32 1 0 "2b55153f_1b2c_423a_90d73ae4ec170aab" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 33 1 0 "a41b707e_95e9_40f0_aa9e073b3ab60607" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Create(o_JSONObject);
+// }} ""
+// {{{ 34 1 0 "3921c71f_5e24_44a1_bcf2cb9dc84528f7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
+// }} ""
+// {{{ 35 1 0 "cb986874_a967_45c2_b29a5eb574000f9e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
+// }} ""
+// {{ 36 1 0 "50a5cbf6_72f7_4e3a_9cb28b78a83b8b36" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "SetCuttedTipTypeByLength" "End"
+}
+// }} ""
+/* {{ 2 "SubmethodInsertLine" "" */ // }} ""
+// {{{ 2 "LibraryNamespace" "End"
+} // library namespace
+// }} ""
+// $$author=BAREB$$valid=0$$time=2023-11-20 16:12$$checksum=04e58be7$$length=084$$

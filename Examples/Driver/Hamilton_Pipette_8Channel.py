@@ -1,8 +1,8 @@
 import os
 
+from PytomatedLiquidHandling.Driver.Hamilton import Visual_NTR_Library
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
-from PytomatedLiquidHandling.Driver.Hamilton.Pipette import PortraitCORE8Channel
-from PytomatedLiquidHandling.Driver.Hamilton.Tip import Visual_NTR_Library
+from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import Channel1000uL
 
 Backend = MicrolabSTAR(
     Identifier="Example Star",
@@ -54,26 +54,24 @@ TipPositions = AvailablePositions[:8]
 ListedOptions = list()
 for i, Position in enumerate(TipPositions):
     ListedOptions.append(
-        PortraitCORE8Channel.Pickup.Options(
+        Channel1000uL.Pickup.Options(
             LabwareID=Position["LabwareID"],
             PositionID=Position["PositionID"],
             ChannelNumber=i + 1,
         )
     )
-CommandInstance = PortraitCORE8Channel.Pickup.Command(
+CommandInstance = Channel1000uL.Pickup.Command(
     CustomErrorHandling=False, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(
-    CommandInstance, PortraitCORE8Channel.Pickup.Response
-)
+ResponseInstance = Backend.GetResponse(CommandInstance, Channel1000uL.Pickup.Response)
 # pickup some tips
 
 ListedOptions = list()
 for i, Position in enumerate(TipPositions):
     ListedOptions.append(
-        PortraitCORE8Channel.Aspirate.Options(
+        Channel1000uL.Aspirate.Options(
             ChannelNumber=i + 1,
             LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
             PositionID="32",
@@ -82,20 +80,18 @@ for i, Position in enumerate(TipPositions):
         )
     )
 
-CommandInstance = PortraitCORE8Channel.Aspirate.Command(
+CommandInstance = Channel1000uL.Aspirate.Command(
     CustomErrorHandling=True, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(
-    CommandInstance, PortraitCORE8Channel.Aspirate.Response
-)
+ResponseInstance = Backend.GetResponse(CommandInstance, Channel1000uL.Aspirate.Response)
 # Aspirate some liquid
 
 ListedOptions = list()
 for i, Position in enumerate(TipPositions):
     ListedOptions.append(
-        PortraitCORE8Channel.Dispense.Options(
+        Channel1000uL.Dispense.Options(
             ChannelNumber=i + 1,
             LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
             PositionID="32",
@@ -103,33 +99,29 @@ for i, Position in enumerate(TipPositions):
             Volume=25,
         )
     )
-CommandInstance = PortraitCORE8Channel.Dispense.Command(
+CommandInstance = Channel1000uL.Dispense.Command(
     CustomErrorHandling=False, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(
-    CommandInstance, PortraitCORE8Channel.Dispense.Response
-)
+ResponseInstance = Backend.GetResponse(CommandInstance, Channel1000uL.Dispense.Response)
 # Dispense some liquid
 
 ListedOptions = list()
 for i, Position in enumerate(TipPositions):
     ListedOptions.append(
-        PortraitCORE8Channel.Eject.Options(
+        Channel1000uL.Eject.Options(
             LabwareID="Waste",
             ChannelNumber=i + 1,
             PositionID=str(i + 1),
         )
     )
-CommandInstance = PortraitCORE8Channel.Eject.Command(
+CommandInstance = Channel1000uL.Eject.Command(
     CustomErrorHandling=False, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(
-    CommandInstance, PortraitCORE8Channel.Eject.Response
-)
+ResponseInstance = Backend.GetResponse(CommandInstance, Channel1000uL.Eject.Response)
 # Eject some tips
 
 

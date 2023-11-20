@@ -1,7 +1,7 @@
 import os
 
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
-from PytomatedLiquidHandling.Driver.Hamilton.Transport import COREGripper
+from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import Channel1000uLCOREGrip
 
 Backend = MicrolabSTAR(
     Identifier="Example Star",
@@ -9,9 +9,9 @@ Backend = MicrolabSTAR(
 )
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
-CommandInstance = COREGripper.GetPlate.Command(
+CommandInstance = Channel1000uLCOREGrip.GetPlate.Command(
     CustomErrorHandling=False,
-    Options=COREGripper.GetPlate.Options(
+    Options=Channel1000uLCOREGrip.GetPlate.Options(
         GripperLabwareID="COREGripTool_OnWaste_1000ul_0001",
         PlateLabwareID="Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel",
         GripWidth=79,
@@ -20,19 +20,21 @@ CommandInstance = COREGripper.GetPlate.Command(
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-Response = Backend.GetResponse(CommandInstance, COREGripper.GetPlate.Response)
+Response = Backend.GetResponse(CommandInstance, Channel1000uLCOREGrip.GetPlate.Response)
 # Grab the plate.
 
-CommandInstance = COREGripper.PlacePlate.Command(
+CommandInstance = Channel1000uLCOREGrip.PlacePlate.Command(
     CustomErrorHandling=False,
-    Options=COREGripper.PlacePlate.Options(
+    Options=Channel1000uLCOREGrip.PlacePlate.Options(
         LabwareID="Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel",
-        EjectTool=COREGripper.PlacePlate.Options.YesNoOptions.Yes,
+        EjectTool=Channel1000uLCOREGrip.PlacePlate.Options.YesNoOptions.Yes,
     ),
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-Response = Backend.GetResponse(CommandInstance, COREGripper.PlacePlate.Response)
+Response = Backend.GetResponse(
+    CommandInstance, Channel1000uLCOREGrip.PlacePlate.Response
+)
 # Put it back
 
 # Done!
