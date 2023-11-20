@@ -1,6 +1,6 @@
 
 // this ALWAYS GENERATED file contains the sub-method library header
-// Generated at 11/20/2023 3:29:32 PM
+// Generated at 11/20/2023 5:14:07 PM
 
 #pragma once
 #ifndef HSL_RUNTIME
@@ -14,4 +14,4 @@ function HandleCommand( device & ML_STAR, variable CommandName, object & i_Endpo
 #ifdef HSL_RUNTIME
 #include __filename__ ".hsi"
 #endif
-// $$author=BAREB$$valid=0$$time=2023-11-20 15:29$$checksum=524829c6$$length=082$$
+// $$author=BAREB$$valid=0$$time=2023-11-20 17:14$$checksum=820c6231$$length=082$$

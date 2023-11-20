@@ -76,23 +76,10 @@ abort;
 private function LockUnlockFrontCover( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private object o_JSONObject;
-private variable PlateLabwareID;
-private variable GripHeight;
-private variable GripWidth;
 private variable CustomErrorHandling;
-private variable InverseGrip;
-private variable GripForce;
-private variable CollisionControl;
-private variable LiftupHeight;
-private variable RetractDistance;
-private variable GripMode;
-private variable LabwareOrientation;
 private variable Data;
-private variable Tolerance;
-private variable OpenWidth;
 private variable LockState;
-private variable Movement;
-private sequence Sequence;
+private variable RecoveryDetails;
 // {{ 5 "LockUnlockFrontCover" "InitLocals"
 // }} ""
 // {{{ 8 1 0 "ca15dbd9_9ce6_4761_8dd4dfe018293252" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -116,7 +103,7 @@ err.Clear();
 {
 	variable arrRetValues[];
 	arrRetValues = ML_STAR._2931977C_E32F_4471_8B68_F31ED1A866F5("108ec6bf_494d_4a1e_96212f15b258fdbd"); // LockFrontCover
-	Data = arrRetValues[2];
+	RecoveryDetails = arrRetValues[2];
 }
 // }} ""
 // {{ 14 1 0 "c5e335cd_3004_4f47_b53eeb687eba95db" "{3293659E-F71E-472f-AFB4-6A674E32B114}"
@@ -125,8 +112,8 @@ onerror goto 0;
 if (err.GetId() != 0)   /* skip handler if no error */
 {
 // }} ""
-// {{{ 15 1 0 "24d47572_2d52_41f5_a61311dee458a1ee" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-Data = ErrGetDataAt(3);
+// {{{ 15 1 0 "83fce7e3_bd19_4cf7_8ba6950d045207dc" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+RecoveryDetails = ErrGetDataAt(3);
 // }} ""
 // {{ 16 1 0 "c5e335cd_3004_4f47_b53eeb687eba95db" "{3293659E-F71E-472f-AFB4-6A674E32B114}"
 }   /* end if from skip handler if no error */
@@ -140,7 +127,7 @@ else
 {
 	variable arrRetValues[];
 	arrRetValues = ML_STAR._2931977C_E32F_4471_8B68_F31ED1A866F5("8721c99f_9a78_4cc2_8d9d086fbe9a3870"); // LockFrontCover
-	Data = arrRetValues[2];
+	RecoveryDetails = arrRetValues[2];
 }
 // }} ""
 // {{ 19 1 0 "a2ebe5c5_82e0_4ce0_af98b2541af3c7a2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
@@ -149,8 +136,8 @@ else
 // {{{ 20 1 0 "799aa7ca_ec97_4352_9fea7636710116ab" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{{ 21 1 0 "ae567014_592f_4202_a5e663008770a5b5" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetStringProperty(o_JSONObject, Translate("LockStatus"), Data);
+// {{{ 21 1 0 "427b3bd1_e561_4e0d_9c0d0bb26b5e3528" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetStringProperty(o_JSONObject, Translate("RecoveryDetails"), RecoveryDetails);
 // }} ""
 // {{{ 22 1 0 "9673d13d_c156_4e85_b20ae4443507db29" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
@@ -168,4 +155,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-20 16:56$$checksum=70effd59$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-20 17:16$$checksum=7a43c207$$length=084$$

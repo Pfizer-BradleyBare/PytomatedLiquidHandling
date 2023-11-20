@@ -4,4 +4,4 @@ from ....Backend import HamiltonBlockDataPackage, HamiltonResponseABC
 
 
 class Response(HamiltonResponseABC):
-    AspirateData: HamiltonBlockDataPackage
+    RecoveryDetails: HamiltonBlockDataPackage
