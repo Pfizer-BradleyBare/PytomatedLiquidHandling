@@ -109,9 +109,11 @@ class TADMOvershotError(HamiltonError):
 
     Note:
 
-    On aspirate this error is returned as main error 17.
+    DO NOT USE THIS ERROR. Instead use the following:
 
-    On dispense this error is returned as main error 4.
+    On aspirate this error is returned as main error 17 (ImproperAspirationDispenseError).
+
+    On dispense this error is returned as main error 4 (ClotError).
     """
 
 
@@ -147,9 +149,11 @@ class TADMUndershotError(HamiltonError):
 
     Note:
 
-    On aspirate this error is returned as main error 4.
+    DO NOT USE THIS ERROR. Instead use the following:
 
-    On dispense this error is returned as main error 17.
+    On aspirate this error is returned as main error 4 (ClotError).
+
+    On dispense this error is returned as main error 17 (ImproperAspirationDispenseError).
     """
 
 
