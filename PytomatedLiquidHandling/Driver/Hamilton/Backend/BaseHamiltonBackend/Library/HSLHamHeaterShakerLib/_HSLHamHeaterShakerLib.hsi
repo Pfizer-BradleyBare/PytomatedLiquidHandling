@@ -15,7 +15,7 @@
 #include "HSLPTLLib.hsl"
 // }} ""
 // {{{ 2 "LibraryNamespace" "Begin"
-namespace HSLHAMHEATERSHAKERLIB {
+namespace _HSLHAMHEATERSHAKERLIB {
 // }} ""
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{{ 2 "SubmethodForwardDeclaration" ""
@@ -610,4 +610,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-20 16:21$$checksum=a3309108$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-20 17:37$$checksum=a52c062a$$length=084$$

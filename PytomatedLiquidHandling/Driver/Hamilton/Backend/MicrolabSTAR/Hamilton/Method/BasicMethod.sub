@@ -223,8 +223,8 @@ return;
 if (ModuleName == "Hamilton HSLHamHeaterShakerLib")
 {
 // }} ""
-// {{{ 47 1 0 "5fab053d_9986_47ae_b90aaf2007f42df5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-HSLHAMHEATERSHAKERLIB::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
+// {{{ 47 1 0 "1a105eb4_e6f2_43d6_8461fa1c751e4120" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+_HSLHAMHEATERSHAKERLIB::HandleCommand(ML_STAR, CommandName, EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 48 1 0 "996ffaa2_c782_4249_9742542032d69b64" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
@@ -462,4 +462,4 @@ abort;
 }
 // }} ""
 /* {{ 2 "SubmethodInsertLine" "" */ // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-20 16:30$$checksum=9789c9a5$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-20 17:38$$checksum=66d8ce6d$$length=084$$

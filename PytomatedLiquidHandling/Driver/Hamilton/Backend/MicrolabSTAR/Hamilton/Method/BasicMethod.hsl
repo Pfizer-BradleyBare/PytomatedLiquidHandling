@@ -39,9 +39,9 @@
  namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HamiltonHeaterCooler\\HamiltonHeaterCooler.hs_" } 
  namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HamiltonHeaterCooler\\HamiltonHeaterCooler.hs_" } 
  namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HamiltonHeaterCooler\\HamiltonHeaterCooler.hs_" } 
- namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLHamHeaterShakerLib\\HSLHamHeaterShakerLib.hs_" } 
- namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLHamHeaterShakerLib\\HSLHamHeaterShakerLib.hs_" } 
- namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLHamHeaterShakerLib\\HSLHamHeaterShakerLib.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLHamHeaterShakerLib\\_HSLHamHeaterShakerLib.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLHamHeaterShakerLib\\_HSLHamHeaterShakerLib.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLHamHeaterShakerLib\\_HSLHamHeaterShakerLib.hs_" } 
  namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLLabwrAccess\\HSLLabwrAccess.hs_" } 
  namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLLabwrAccess\\HSLLabwrAccess.hs_" } 
  namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLLabwrAccess\\HSLLabwrAccess.hs_" } 
@@ -145,7 +145,7 @@ STATESERVERENDPOINTS::_InitLibrary();
 _VISUAL_NTR_LIBRARY::_InitLibrary();
 CUTTEDTIPTYPE::_InitLibrary();
 HAMILTONHEATERCOOLER::_InitLibrary();
-HSLHAMHEATERSHAKERLIB::_InitLibrary();
+_HSLHAMHEATERSHAKERLIB::_InitLibrary();
 HSLLABWRACCESS::_InitLibrary();
 HSL_LIQUIDCLASSLIB::_InitLibrary();
 JSONPARSER::_InitLibrary();
@@ -198,7 +198,7 @@ STATESERVERENDPOINTS::_ExitLibrary();
 _VISUAL_NTR_LIBRARY::_ExitLibrary();
 CUTTEDTIPTYPE::_ExitLibrary();
 HAMILTONHEATERCOOLER::_ExitLibrary();
-HSLHAMHEATERSHAKERLIB::_ExitLibrary();
+_HSLHAMHEATERSHAKERLIB::_ExitLibrary();
 HSLLABWRACCESS::_ExitLibrary();
 HSL_LIQUIDCLASSLIB::_ExitLibrary();
 JSONPARSER::_ExitLibrary();
@@ -217,4 +217,4 @@ TIMER::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-20 16:30$$checksum=07b6bb73$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-20 17:38$$checksum=151ce9b9$$length=084$$
