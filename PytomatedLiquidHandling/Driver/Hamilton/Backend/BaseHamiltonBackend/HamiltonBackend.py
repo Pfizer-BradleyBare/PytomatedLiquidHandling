@@ -107,6 +107,14 @@ class HamiltonBackendABC(BackendABC):
 
     def StopBackend(self):
         BackendABC.StopBackend(self)
+
+        class AbortCommand(HamiltonActionCommandABC):
+            ...
+
+        Command = AbortCommand(CustomErrorHandling=True)
+        self._ActionServer._Command = Command
+        self._ActionServer.WaitForResponseBlocking(Command)
+
         self._ActionServer.StopBackend()
         self._StateServer.StopBackend()
 

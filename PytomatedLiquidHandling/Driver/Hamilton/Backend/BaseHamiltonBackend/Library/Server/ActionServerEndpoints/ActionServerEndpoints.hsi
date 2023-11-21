@@ -116,13 +116,13 @@ MECC::TraceComment(Translate("###################### END COMMAND ###############
 // {{ 9 1 0 "ee2ba724_345a_4d5b_bf30dc2f30940579" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
 MECC::TraceComment(Translate("###################### START RESPONSE ###################### "));
 // }} ""
-// {{{ 10 1 0 "1e6996ce_d526_4d07_b60714d958516ecf" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::GetJson(i_ResponseData_JSONObject, JSONObjectString);
-// }} ""
-// {{{ 11 1 0 "22755db6_e02f_4df2_8aee7f638b0c6558" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 10 1 0 "22755db6_e02f_4df2_8aee7f638b0c6558" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ERRORPARSER::ExtractErrorInfo(i_ResponseData_JSONObject);
 // }} ""
-// {{{ 12 1 0 "6247dbfe_1c56_4925_abd8fab69336b0fc" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 11 1 0 "a8593fe7_1340_4ad5_98a854a47c1359b7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::GetJson(i_ResponseData_JSONObject, JSONObjectString);
+// }} ""
+// {{{ 12 1 0 "61317a1b_3d75_4cdc_abc76e36716447df" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 TrcTrace(JSONObjectString, Translate(""));
 // }} ""
 // {{ 13 1 0 "fe329372_f8c9_4239_a8f119d4c0f4de6e" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
@@ -147,4 +147,4 @@ return (StatusCode);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-20 15:44$$checksum=431e4088$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-21 13:57$$checksum=0ef9cce0$$length=084$$

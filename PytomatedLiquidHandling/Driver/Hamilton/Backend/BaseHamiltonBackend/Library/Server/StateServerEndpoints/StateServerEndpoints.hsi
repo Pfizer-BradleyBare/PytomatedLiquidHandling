@@ -115,11 +115,11 @@ MECC::TraceComment(Translate("###################### END COMMAND ###############
 // {{ 9 1 0 "ee2ba724_345a_4d5b_bf30dc2f30940579" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
 MECC::TraceComment(Translate("###################### START RESPONSE ###################### "));
 // }} ""
-// {{{ 10 1 0 "db979f48_edb8_41b4_a80a5283b66ed403" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::GetJson(i_ResponseData_JSONObject, JSONObjectString);
-// }} ""
-// {{{ 11 1 0 "48ac5cf2_0739_47b0_96ebdad1c9b16f0b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 10 1 0 "1f34c5e8_8131_4eaa_a02178a6564d4356" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ERRORPARSER::ExtractErrorInfo(i_ResponseData_JSONObject);
+// }} ""
+// {{{ 11 1 0 "db979f48_edb8_41b4_a80a5283b66ed403" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::GetJson(i_ResponseData_JSONObject, JSONObjectString);
 // }} ""
 // {{{ 12 1 0 "5b4b56e8_1c79_4779_95e4976eea581230" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 TrcTrace(Translate(""), JSONObjectString);
@@ -146,4 +146,4 @@ return (StatusCode);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-17 14:25$$checksum=1dbb7ce8$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-21 12:58$$checksum=6ae70260$$length=084$$

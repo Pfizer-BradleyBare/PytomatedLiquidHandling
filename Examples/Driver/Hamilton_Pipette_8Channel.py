@@ -13,10 +13,15 @@ Backend = MicrolabSTAR(
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
+
+Backend.StopBackend()
+
+
 quit()
 
 
-ListedOptions = Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
+ListedOptions = Visual_NTR_Library.C
+hannels_TipCounter_Edit.ListedOptions(
     TipCounter="N", DialogTitle="Edit 1000uL Tip Positions"
 )
 ListedOptions.append(
