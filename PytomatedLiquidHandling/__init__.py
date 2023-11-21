@@ -97,7 +97,7 @@ os.makedirs(ColoredFolderPath, exist_ok=True)
 os.makedirs(XMLFolderPath, exist_ok=True)
 # make directory if it does not exists
 
-FileDatePrefix = str(datetime.datetime.now().strftime("%d%b%Y-%H%M%S"))
+FileDatePrefix = str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
 
 XMLFilePath = os.path.join(XMLFolderPath, FileDatePrefix + ".xml")
 
