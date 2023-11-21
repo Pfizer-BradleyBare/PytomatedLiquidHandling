@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+from platform import platform
 from typing import Any, Type, TypeVar
 
 from pydantic import PrivateAttr
@@ -39,6 +40,11 @@ class HamiltonBackendABC(BackendABC):
         )
 
     def StartBackend(self):
+        if "windows" not in platform().lower():
+            raise RuntimeError(
+                "Hamilton backend is only supported on Windows PCs. Sorry!"
+            )
+
         BackendABC.StartBackend(self)
 
         HamiltonDeckLayoutBasePath = "C:\\Program Files (x86)\\HAMILTON\\Library\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Layout\\Layout.lay"
