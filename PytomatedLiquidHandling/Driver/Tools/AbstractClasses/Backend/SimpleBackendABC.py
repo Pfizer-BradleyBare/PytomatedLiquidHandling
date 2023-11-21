@@ -4,13 +4,9 @@ from pydantic import PrivateAttr, ValidationError
 
 from ..Command import CommandABC
 from ..Response import ResponseABC
-from .BackendABC import BackendABC
+from .BackendABC import BackendABC, CommandStatusResponse
 
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
-
-
-class CommandStatusResponse(ResponseABC):
-    ResponseReady: bool
 
 
 class SimpleBackendABC(BackendABC):
@@ -46,10 +42,6 @@ class SimpleBackendABC(BackendABC):
 
     def WaitForResponseBlocking(self, CommandInstance: CommandABC):
         BackendABC.WaitForResponseBlocking(self, CommandInstance)
-        if self._Command != CommandInstance:
-            raise RuntimeError(
-                "You can only wait on a response for the currently executing command."
-            )
 
         while self.GetCommandStatus(CommandInstance).ResponseReady != True:
             ...

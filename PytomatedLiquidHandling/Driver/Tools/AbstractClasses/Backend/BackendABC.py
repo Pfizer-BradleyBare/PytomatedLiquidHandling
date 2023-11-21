@@ -11,6 +11,10 @@ from ..Response import ResponseABC
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 
+class CommandStatusResponse(ResponseABC):
+    ResponseReady: bool
+
+
 class BackendABC(AbstractClasses.HALDevice):
     Identifier: str
     _IsRunning: bool = PrivateAttr(default=False)
@@ -32,7 +36,7 @@ class BackendABC(AbstractClasses.HALDevice):
         self.__CheckRunning()
 
     @abstractmethod
-    def GetCommandStatus(self, CommandInstance: CommandABC) -> ResponseABC:
+    def GetCommandStatus(self, CommandInstance: CommandABC) -> CommandStatusResponse:
         self.__CheckRunning()
 
     @abstractmethod

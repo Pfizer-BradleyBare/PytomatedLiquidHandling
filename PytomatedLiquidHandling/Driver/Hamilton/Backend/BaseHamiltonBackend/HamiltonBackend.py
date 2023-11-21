@@ -8,7 +8,7 @@ from pydantic import PrivateAttr
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
     BackendABC,
-    CommandABC,
+    CommandStatusResponse,
     ResponseABC,
 )
 
@@ -25,6 +25,7 @@ class HamiltonBackendABC(BackendABC):
     SimulationOn: bool = True
     _ActionServer: HamiltonServerBackendABC = PrivateAttr()
     _StateServer: HamiltonServerBackendABC = PrivateAttr()
+    _HamiltonProcess: subprocess.Popen = PrivateAttr()
 
     def model_post_init(self, __context: Any) -> None:
         BackendABC.model_post_init(self, __context)
@@ -68,7 +69,7 @@ class HamiltonBackendABC(BackendABC):
             "C:\\Program Files (x86)\\HAMILTON\\Config\\HxServices.cfg"
         )
 
-        process = subprocess.Popen(
+        subprocess.Popen(
             [
                 "C:\\Program Files (x86)\\HAMILTON\\Bin\\HxCfgFilConverter.exe",
                 "/t",
@@ -77,7 +78,6 @@ class HamiltonBackendABC(BackendABC):
             stdout=subprocess.PIPE,
             universal_newlines=True,
         )
-        process.communicate()
         # Taken from PyVenus by SNIPR Biome. Thank you!!
 
         File = open(SimulationConfigFile, "r")
@@ -98,7 +98,7 @@ class HamiltonBackendABC(BackendABC):
         File.close()
         # Turn on or off simulation mode
 
-        subprocess.Popen(
+        self._HamiltonProcess = subprocess.Popen(
             ["C:\\Program Files (x86)\\HAMILTON\\Bin\\HxRun.exe", "-t", self.MethodPath]
         )
 
@@ -129,19 +129,31 @@ class HamiltonBackendABC(BackendABC):
 
     def GetCommandStatus(
         self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
-    ) -> ResponseABC:
+    ) -> CommandStatusResponse:
         BackendABC.GetCommandStatus(self, CommandInstance)
+
+        if self._HamiltonProcess.poll() != None:
+            self._HamiltonProcess = subprocess.Popen(
+                [
+                    "C:\\Program Files (x86)\\HAMILTON\\Bin\\HxRun.exe",
+                    "-t",
+                    self.MethodPath,
+                ]
+            )
+        # If the process closed then we need to reopen it. Only the script can close the Hamilton.
+
         if isinstance(CommandInstance, HamiltonStateCommandABC):
             return self._StateServer.GetCommandStatus(CommandInstance)
         else:
             return self._ActionServer.GetCommandStatus(CommandInstance)
 
-    def WaitForResponseBlocking(self, CommandInstance: CommandABC):
+    def WaitForResponseBlocking(
+        self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
+    ):
         BackendABC.WaitForResponseBlocking(self, CommandInstance)
-        if isinstance(CommandInstance, HamiltonStateCommandABC):
-            self._StateServer.WaitForResponseBlocking(CommandInstance)
-        else:
-            self._ActionServer.WaitForResponseBlocking(CommandInstance)
+
+        while self.GetCommandStatus(CommandInstance).ResponseReady != True:
+            ...
 
     def GetResponse(
         self,
