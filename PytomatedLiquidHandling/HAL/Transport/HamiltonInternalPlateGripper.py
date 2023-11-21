@@ -2,7 +2,7 @@ from dataclasses import field
 
 from pydantic.dataclasses import dataclass
 
-from PytomatedLiquidHandling.Driver.Hamilton.Transport import IPG as IPGDriver
+from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import iSwap as IPGDriver
 from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import TransportABC

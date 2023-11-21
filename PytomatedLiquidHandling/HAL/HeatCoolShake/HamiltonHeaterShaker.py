@@ -1,6 +1,6 @@
 from pydantic import PrivateAttr
 
-from ...Driver.Hamilton.TemperatureControl import HeaterShaker as HeaterShakerDriver
+from ...Driver.Hamilton import HSLHamHeaterShakerLib as HeaterShakerDriver
 from .Base import Exceptions, HeatCoolShakeABC
 
 

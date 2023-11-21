@@ -4,7 +4,7 @@ from typing import Any, DefaultDict, Literal, cast
 from PytomatedLiquidHandling.HAL import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ...Driver.Hamilton.Pipette import PortraitCORE8Channel
+from ...Driver.Hamilton.ML_STAR import Channel1000uL
 from .Base import PipetteABC, PipetteTip, TransferOptions
 
 
@@ -104,25 +104,25 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
                 TipPositions = Tip.Tip._AvailablePositions[: len(Opts)]
 
-                PickupOptions: list[PortraitCORE8Channel.Pickup.Options] = list()
+                PickupOptions: list[Channel1000uL.Pickup.Options] = list()
                 for Index, (Opt, ChannelNumber) in enumerate(
                     zip(Opts, self.ActiveChannels)
                 ):
                     PickupOptions.append(
-                        PortraitCORE8Channel.Pickup.Options(
+                        Channel1000uL.Pickup.Options(
                             ChannelNumber=ChannelNumber,
                             LabwareID=TipPositions[Index].LabwareID,
                             PositionID=TipPositions[Index].PositionID,
                         )
                     )
-                Command = PortraitCORE8Channel.Pickup.Command(
+                Command = Channel1000uL.Pickup.Command(
                     CustomErrorHandling=self.CustomErrorHandling, Options=PickupOptions
                 )
                 self.Backend.ExecuteCommand(Command)
-                self.Backend.GetResponse(Command, PortraitCORE8Channel.Pickup.Response)
+                self.Backend.GetResponse(Command, Channel1000uL.Pickup.Response)
                 # Pickup the tips
 
-                AspirateOptions: list[PortraitCORE8Channel.Aspirate.Options] = list()
+                AspirateOptions: list[Channel1000uL.Aspirate.Options] = list()
                 for Index, (Opt, ChannelNumber) in enumerate(
                     zip(Opts, self.ActiveChannels)
                 ):
@@ -147,7 +147,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     # This calculates the proper position in the well for each channel if the container has multiple position positions.
 
                     AspirateOptions.append(
-                        PortraitCORE8Channel.Aspirate.Options(
+                        Channel1000uL.Aspirate.Options(
                             ChannelNumber=ChannelNumber,
                             LabwareID=Opt.SourceLayoutItemInstance.LabwareID,
                             PositionID=Opt.SourceLayoutItemInstance.Labware.Wells.Layout.GetPositionID(
@@ -163,16 +163,14 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                         )
                     )
 
-                Command = PortraitCORE8Channel.Aspirate.Command(
+                Command = Channel1000uL.Aspirate.Command(
                     CustomErrorHandling=self.CustomErrorHandling,
                     Options=AspirateOptions,
                 )
                 self.Backend.ExecuteCommand(Command)
-                self.Backend.GetResponse(
-                    Command, PortraitCORE8Channel.Aspirate.Response
-                )
+                self.Backend.GetResponse(Command, Channel1000uL.Aspirate.Response)
 
-                DispenseOptions: list[PortraitCORE8Channel.Dispense.Options] = list()
+                DispenseOptions: list[Channel1000uL.Dispense.Options] = list()
                 for Index, (Opt, ChannelNumber) in enumerate(
                     zip(Opts, self.ActiveChannels)
                 ):
@@ -203,7 +201,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     # This calculates the proper position in the well for each channel if the container has multiple position positions.
 
                     DispenseOptions.append(
-                        PortraitCORE8Channel.Dispense.Options(
+                        Channel1000uL.Dispense.Options(
                             ChannelNumber=ChannelNumber,
                             LabwareID=Opt.DestinationLayoutItemInstance.LabwareID,
                             PositionID=Opt.DestinationLayoutItemInstance.Labware.Wells.Layout.GetPositionID(
@@ -219,35 +217,33 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                         )
                     )
 
-                Command = PortraitCORE8Channel.Dispense.Command(
+                Command = Channel1000uL.Dispense.Command(
                     CustomErrorHandling=self.CustomErrorHandling,
                     Options=DispenseOptions,
                 )
                 self.Backend.ExecuteCommand(Command)
-                self.Backend.GetResponse(
-                    Command, PortraitCORE8Channel.Dispense.Response
-                )
+                self.Backend.GetResponse(Command, Channel1000uL.Dispense.Response)
 
                 EjectPositions = ["1", "2", "3", "4", "13", "14", "15", "16"]
                 # Hamilton waste always has 16 positions. Do be compatible with liquid waste we want to use the outer positions
-                EjectOptions: list[PortraitCORE8Channel.Eject.Options] = list()
+                EjectOptions: list[Channel1000uL.Eject.Options] = list()
                 for Index, (Opt, ChannelNumber) in enumerate(
                     zip(Opts, self.ActiveChannels)
                 ):
                     EjectOptions.append(
-                        PortraitCORE8Channel.Eject.Options(
+                        Channel1000uL.Eject.Options(
                             LabwareID=Tip.TipWasteLabwareID,
                             ChannelNumber=ChannelNumber,
                             PositionID=EjectPositions[Index],
                         )
                     )
 
-                Command = PortraitCORE8Channel.Eject.Command(
+                Command = Channel1000uL.Eject.Command(
                     CustomErrorHandling=self.CustomErrorHandling,
                     Options=EjectOptions,
                 )
                 self.Backend.ExecuteCommand(Command)
-                self.Backend.GetResponse(Command, PortraitCORE8Channel.Eject.Response)
+                self.Backend.GetResponse(Command, Channel1000uL.Eject.Response)
 
     def TimeToTransfer(self, ListedOptionsInstance: list[TransferOptions]) -> float:
         return 0

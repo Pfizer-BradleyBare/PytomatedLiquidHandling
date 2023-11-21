@@ -8,8 +8,13 @@ Backend = MicrolabSTAR(
     Identifier="Example Star",
     DeckLayoutPath=os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
 )
+
+
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
+
+quit()
+
 
 ListedOptions = Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
     TipCounter="N", DialogTitle="Edit 1000uL Tip Positions"

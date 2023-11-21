@@ -21,6 +21,7 @@ HamiltonResponseABCType = TypeVar("HamiltonResponseABCType", bound=HamiltonRespo
 class HamiltonBackendABC(BackendABC):
     MethodPath: str
     DeckLayoutPath: str
+    SimulationOn: bool = True
     _ActionServer: HamiltonServerBackendABC = PrivateAttr()
     _StateServer: HamiltonServerBackendABC = PrivateAttr()
 
@@ -56,6 +57,40 @@ class HamiltonBackendABC(BackendABC):
             HamiltonDeckLayoutBasePath.replace(".lay", ".res"),
         )
         # Move layout file into temp folder. Layouts are comprised of 2 files: .lay, and .res
+
+        SimulationConfigFile = (
+            "C:\\Program Files (x86)\\HAMILTON\\Config\\HxServices.cfg"
+        )
+
+        process = subprocess.Popen(
+            [
+                "C:\\Program Files (x86)\\HAMILTON\\Bin\\HxCfgFilConverter.exe",
+                "/t",
+                SimulationConfigFile,
+            ],
+            stdout=subprocess.PIPE,
+            universal_newlines=True,
+        )
+        process.communicate()
+        # Taken from PyVenus by SNIPR Biome. Thank you!!
+
+        File = open(SimulationConfigFile, "r")
+        Contents = (
+            File.read()
+            .replace(
+                'SimulationOn, "1",',
+                'SimulationOn, "' + str(int(self.SimulationOn)) + '",',
+            )
+            .replace(
+                'SimulationOn, "0",',
+                'SimulationOn, "' + str(int(self.SimulationOn)) + '",',
+            )
+        )
+        File.close()
+        File = open(SimulationConfigFile, "w")
+        File.write(Contents)
+        File.close()
+        # Turn on or off simulation mode
 
         subprocess.Popen(
             ["C:\\Program Files (x86)\\HAMILTON\\Bin\\HxRun.exe", "-t", self.MethodPath]

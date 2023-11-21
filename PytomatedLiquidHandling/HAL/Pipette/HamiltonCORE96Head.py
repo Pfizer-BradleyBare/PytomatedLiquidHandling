@@ -6,7 +6,7 @@ from pydantic import field_validator
 from PytomatedLiquidHandling.HAL import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ...Driver.Hamilton.Pipette import CORE96Head, PortraitCORE8Channel
+from ...Driver.Hamilton.ML_STAR import Channel1000uL, CORE96Head
 from . import HamiltonPortraitCORE8Channel
 from .Base import PipetteABC, TransferOptions
 
@@ -63,35 +63,35 @@ class HamiltonCORE96Head(PipetteABC):
 
             TipPositions = Tip.Tip._AvailablePositions[: len(Opts)]
 
-            SupportPickupOptions: list[PortraitCORE8Channel.Pickup.Options] = list()
+            SupportPickupOptions: list[Channel1000uL.Pickup.Options] = list()
             for Index, (Opt, ChannelNumber) in enumerate(
                 zip(Opts, self.HamiltonPortraitCORE8Channel.ActiveChannels)
             ):
                 SupportPickupOptions.append(
-                    PortraitCORE8Channel.Pickup.Options(
+                    Channel1000uL.Pickup.Options(
                         ChannelNumber=ChannelNumber,
                         LabwareID=TipPositions[Index].LabwareID,
                         PositionID=TipPositions[Index].PositionID,
                     )
                 )
-            Command = PortraitCORE8Channel.Pickup.Command(
+            Command = Channel1000uL.Pickup.Command(
                 CustomErrorHandling=self.CustomErrorHandling,
                 Options=SupportPickupOptions,
             )
             self.Backend.ExecuteCommand(Command)
-            self.Backend.GetResponse(Command, PortraitCORE8Channel.Pickup.Response)
+            self.Backend.GetResponse(Command, Channel1000uL.Pickup.Response)
             # Pickup the tips
 
             NumericAddressing = Labware.Base.Layout.Numeric()
             # Hamilton tip positions are always numeric and are always sorted columwise.
             # So we are going to convert the desired pipetting positions to the correct numeric position
 
-            SupportEjectOptions: list[PortraitCORE8Channel.Eject.Options] = list()
+            SupportEjectOptions: list[Channel1000uL.Eject.Options] = list()
             for Index, (Opt, ChannelNumber) in enumerate(
                 zip(Opts, self.HamiltonPortraitCORE8Channel.ActiveChannels)
             ):
                 SupportEjectOptions.append(
-                    PortraitCORE8Channel.Eject.Options(
+                    Channel1000uL.Eject.Options(
                         LabwareID=Tip.TipSupportDropoffLabwareID,
                         ChannelNumber=ChannelNumber,
                         PositionID=NumericAddressing.GetPositionID(
@@ -100,12 +100,12 @@ class HamiltonCORE96Head(PipetteABC):
                     )
                 )
 
-            Command = PortraitCORE8Channel.Eject.Command(
+            Command = Channel1000uL.Eject.Command(
                 CustomErrorHandling=self.CustomErrorHandling,
                 Options=SupportEjectOptions,
             )
             self.Backend.ExecuteCommand(Command)
-            self.Backend.GetResponse(Command, PortraitCORE8Channel.Eject.Response)
+            self.Backend.GetResponse(Command, Channel1000uL.Eject.Response)
             # Eject into the tip support at the correct position
         # This picks up tips with the 1mL channels and ejects them in the tip support rack. The 96 head will now pick them up.
 

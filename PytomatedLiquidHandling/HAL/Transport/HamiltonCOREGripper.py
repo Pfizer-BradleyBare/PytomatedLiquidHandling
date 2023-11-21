@@ -2,8 +2,8 @@ from dataclasses import field
 
 from pydantic.dataclasses import dataclass
 
-from PytomatedLiquidHandling.Driver.Hamilton.Transport import (
-    COREGripper as COREGripperDriver,
+from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import (
+    Channel1000uLCOREGrip as COREGripperDriver,
 )
 from PytomatedLiquidHandling.HAL import LayoutItem
 

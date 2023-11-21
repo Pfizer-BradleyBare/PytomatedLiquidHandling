@@ -5,8 +5,8 @@ from pydantic import PrivateAttr, field_validator
 
 from PytomatedLiquidHandling.HAL import LayoutItem, Transport
 
+from ...Driver.Hamilton import Visual_NTR_Library
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ...Driver.Hamilton.Tip import Visual_NTR_Library
 from .Base import TipABC
 
 

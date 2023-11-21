@@ -1,6 +1,6 @@
 from pydantic import PrivateAttr
 
-from ...Driver.Hamilton.TemperatureControl import HeaterCooler as HeaterCoolerDriver
+from ...Driver.Hamilton import HamiltonHeaterCooler as HeaterCoolerDriver
 from .Base import Exceptions, HeatCoolShakeABC
 
 
