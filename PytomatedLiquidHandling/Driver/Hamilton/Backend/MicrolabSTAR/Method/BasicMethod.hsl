@@ -86,11 +86,11 @@
  namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
  namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
  namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
-#include "Layout\\ExampleLayout.res"
+#include "ExampleLayout.res"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable StateServerProc;
 variable ActionServerProc;
-global device ML_STAR ("Layout\\ExampleLayout.lay", "ML_STAR", hslTrue);
+global device ML_STAR ("ExampleLayout.lay", "ML_STAR", hslTrue);
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
  namespace _Method { #include "HSLMETEDLib.hs_" } 
@@ -223,4 +223,4 @@ TIMER::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2023-11-22 08:06$$checksum=d0c0941a$$length=091$$
+// $$author=BAREB$$valid=0$$time=2023-11-22 08:13$$checksum=968787ee$$length=084$$
