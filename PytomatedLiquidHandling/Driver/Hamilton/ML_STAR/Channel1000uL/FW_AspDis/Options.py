@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import dataclasses
 
 from .....Tools.AbstractClasses import OptionsABC
 
@@ -11,7 +11,8 @@ class Options(OptionsABC):
     PositionID: str
 
 
-class ListedOptions(list[Options], BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class ListedOptions(list[Options]):
     class ModeOptions(Enum):
         Aspiration = 0
         ConsequtiveAspiration = 1

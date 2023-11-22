@@ -1,6 +1,5 @@
-from dataclasses import dataclass, field
+from pydantic import BaseModel
 
 
-@dataclass(kw_only=True)
-class OptionsABC:
+class OptionsABC(BaseModel):
     ...

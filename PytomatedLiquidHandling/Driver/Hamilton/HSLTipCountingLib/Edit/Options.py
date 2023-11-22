@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import Field, dataclasses
 
 from ....Tools.AbstractClasses import OptionsABC
 
@@ -7,7 +7,8 @@ class Options(OptionsABC):
     LabwareID: str
 
 
-class ListedOptions(list[Options], BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class ListedOptions(list[Options]):
     TipCounter: str
     DialogTitle: str
     Timeout: int = Field(default=1000)

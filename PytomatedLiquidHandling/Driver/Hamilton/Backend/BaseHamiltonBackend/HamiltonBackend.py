@@ -111,7 +111,7 @@ class HamiltonBackendABC(BackendABC):
         class AbortCommand(HamiltonActionCommandABC):
             ...
 
-        Command = AbortCommand(CustomErrorHandling=True)
+        Command = AbortCommand()
         self._ActionServer._Command = Command
         self._ActionServer.WaitForResponseBlocking(Command)
 

@@ -55,12 +55,14 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         ParserObject.SetEndpointState(True)
 
-        # ParserObject.SetEndpointOutputKey("Request Identifier", CommandInstance.GetID())
-        ParserObject.SetEndpointOutputKey(
-            "CustomErrorHandling", CommandInstance.CustomErrorHandling
-        )
+        if hasattr(CommandInstance, "CustomErrorHandling"):
+            ParserObject.SetEndpointOutputKey(
+                "CustomErrorHandling", getattr(CommandInstance, "CustomErrorHandling")
+            )
+
         ParserObject.SetEndpointOutputKey("Module Name", CommandInstance.ModuleName)
         ParserObject.SetEndpointOutputKey("Command Name", CommandInstance.CommandName)
+
         try:
             ParserObject.SetEndpointOutputKey(
                 "Command Parameters", CommandInstance.GetVars()
@@ -69,7 +71,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
             self._Response = RuntimeError(
                 "Error while converting Options to json dict."
             )
-        # TODO: This is a fragile function. Catch errors if this occur...
+        # TODO: This is a fragile function. Catch errors if they occur...
 
         Response = ParserObject.GetHTTPResponse()
         return Response

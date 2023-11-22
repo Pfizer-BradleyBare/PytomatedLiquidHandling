@@ -1,7 +1,5 @@
-from dataclasses import dataclass
-
-from ...Backend import HamiltonResponseABC
+from ...Backend import HamiltonBlockDataPackage, HamiltonResponseABC
 
 
 class Response(HamiltonResponseABC):
-    HandleID: str
+    RecoveryDetails: HamiltonBlockDataPackage

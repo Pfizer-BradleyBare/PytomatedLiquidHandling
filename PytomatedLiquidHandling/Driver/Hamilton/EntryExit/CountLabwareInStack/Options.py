@@ -2,4 +2,7 @@ from ....Tools.AbstractClasses import OptionsABC
 
 
 class Options(OptionsABC):
-    ComPort: str
+    ModuleNumber: int
+    StackNumber: int
+    LabwareID: str
+    IsNTRRack: bool
