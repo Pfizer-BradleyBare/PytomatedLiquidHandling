@@ -2458,7 +2458,7 @@ Labware.2.Angle, "0",
 Labware.2.BarcodeCnt, "0",
 Labware.2.Clsid, "{8E1D6C02-F939-11D1-8D14-008029ED67EA}",
 Labware.2.DefSeqValid, "1",
-Labware.2.File, "ML_STAR\\FlipTube\\Ham_4_FlipTubeTools_OnWaste.rck",
+Labware.2.File, "C:\\Program Files (x86)\\HAMILTON\\Library\\PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\VantageTrackGripperEntryExit\\Method\\Labware\\Hamilton Tools\\FlipTube\\Ham_4_FlipTubeTools_OnWaste_PN10066896_Spacing.rck",
 Labware.2.Id, "Tool_FlipTube",
 Labware.2.Inst, "",
 Labware.2.IsCovered, "0",
@@ -35329,4 +35329,4 @@ DataDef,SYSTEM,1,default,
 "TrackGripper"
 ];
 
-* $$author=BAREB$$valid=0$$time=2023-11-22 08:22$$checksum=ca229e79$$length=081$$
+* $$author=BAREB$$valid=0$$time=2023-11-22 08:30$$checksum=7aec34d9$$length=081$$
