@@ -87,6 +87,12 @@
  namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
  namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
 #include "Example Layout.res"
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\VantageTrackGripperEntryExit\\Library\\EntryExit\\EntryExit.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\VantageTrackGripperEntryExit\\Library\\EntryExit\\EntryExit.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\VantageTrackGripperEntryExit\\Library\\EntryExit\\EntryExit.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\VantageTrackGripperEntryExit\\Library\\TrackGripper\\TrackGripper.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\VantageTrackGripperEntryExit\\Library\\TrackGripper\\TrackGripper.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\VantageTrackGripperEntryExit\\Library\\TrackGripper\\TrackGripper.hs_" } 
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable StateServerProc;
 variable ActionServerProc;
@@ -116,7 +122,7 @@ global device TrackGripper ("Example Layout.lay", "TrackGripper", hslTrue);
 // {{{ 3 "tfn_ActionServerProc" "0"
 namespace _ActionServerProc{ function tfn_ActionServerProc () {
 // }} ""
-// {{{ 6 2 0 "cf558e2c_ac45_40f2_bd8a17c7b509d50d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 8 2 0 "cf558e2c_ac45_40f2_bd8a17c7b509d50d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ActionServer();
 // }} ""
 // {{{ 3 "tfn_ActionServerProc" "1"
@@ -125,7 +131,7 @@ ActionServer();
 // {{{ 3 "tfn_StateServerProc" "0"
 namespace _StateServerProc{ function tfn_StateServerProc () {
 // }} ""
-// {{{ 7 3 0 "9e60cd9b_e862_45ec_8dfe97a51c0ea6ef" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 9 3 0 "9e60cd9b_e862_45ec_8dfe97a51c0ea6ef" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 StateServer();
 // }} ""
 // {{{ 3 "tfn_StateServerProc" "1"
@@ -171,6 +177,8 @@ AUTOLOAD::_InitLibrary();
 ML_STAR::_InitLibrary();
 _HSLTIPCOUNTINGLIB::_InitLibrary();
 TIMER::_InitLibrary();
+ENTRYEXIT::_InitLibrary();
+TRACKGRIPPER::_InitLibrary();
 ::RegisterAbortHandler( "OnAbort");
 // }} ""
 // {{ 1 1 0 "62ffc1ee_87f1_4777_bdbf6988152c0a4d" "ML_STAR:{1C0C0CB0-7C87-11D3-AD83-0004ACB1DCB2}"
@@ -179,23 +187,33 @@ TIMER::_InitLibrary();
 	arrRetValues = ML_STAR._1C0C0CB0_7C87_11D3_AD83_0004ACB1DCB2("62ffc1ee_87f1_4777_bdbf6988152c0a4d"); // Initialize
 }
 // }} ""
-// {{{ 2 1 0 "3c7d2db7_3ef4_4ca5_b3aaab38d91437dc" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{ 2 1 0 "9a925dd6_e059_4a9a_8e4157411f045ff4" "EntryExit:{99C02468-3A8F-41DC-86EE-32F35ECF339A}"
+{
+	EntryExit._99C02468_3A8F_41DC_86EE_32F35ECF339A("9a925dd6_e059_4a9a_8e4157411f045ff4"); // Initialize
+}
+// }} ""
+// {{ 3 1 0 "088ffbe7_0650_4c20_91e9a5db59f72958" "TrackGripper:{5486C916-CCE0-472B-AB7C-45B597C4F704}"
+{
+	TrackGripper._5486C916_CCE0_472B_AB7C_45B597C4F704("088ffbe7_0650_4c20_91e9a5db59f72958"); // Initialize
+}
+// }} ""
+// {{{ 4 1 0 "3c7d2db7_3ef4_4ca5_b3aaab38d91437dc" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 LOGGER::EnableOutput(Translate("True"));
 // }} ""
-// {{{ 3 1 0 "8378617e_cfd6_4024_9223af8e1d9f6b71" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 5 1 0 "8378617e_cfd6_4024_9223af8e1d9f6b71" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLHttp::SetTraceLevel(0);
 // }} ""
-// {{{ 4 1 0 "5005cfea_8171_4442_9dd45cf0a69594f9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 6 1 0 "5005cfea_8171_4442_9dd45cf0a69594f9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::SetTraceLevel(0);
 // }} ""
-// {{ 5 1 0 "401e94bc_a4a4_4d74_86531e9cda5195e3" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
+// {{ 7 1 0 "401e94bc_a4a4_4d74_86531e9cda5195e3" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
 ActionServerProc = Fork("_ActionServerProc::tfn_ActionServerProc");
 if( ActionServerProc == 0 )
 {
     MECC::RaiseRuntimeErrorEx(-1590820608, MECC::IDS::stepNameThreadBegin, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
 }
 // }} ""
-// {{ 6 1 0 "3b2c9d09_c566_41d3_bf26d929052b2cb8" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
+// {{ 8 1 0 "3b2c9d09_c566_41d3_bf26d929052b2cb8" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
 StateServerProc = Fork("_StateServerProc::tfn_StateServerProc");
 if( StateServerProc == 0 )
 {
@@ -224,8 +242,10 @@ AUTOLOAD::_ExitLibrary();
 ML_STAR::_ExitLibrary();
 _HSLTIPCOUNTINGLIB::_ExitLibrary();
 TIMER::_ExitLibrary();
+ENTRYEXIT::_ExitLibrary();
+TRACKGRIPPER::_ExitLibrary();
 // }} ""
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2023-11-22 08:21$$checksum=7d28ba88$$length=091$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2023-11-22 08:52$$checksum=763577d2$$length=091$$
