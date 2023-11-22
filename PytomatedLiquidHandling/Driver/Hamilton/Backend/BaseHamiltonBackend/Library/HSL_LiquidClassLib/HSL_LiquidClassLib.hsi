@@ -46,9 +46,6 @@ ACTIONSERVERENDPOINTS::_ExitLibrary();
 // {{{ 5 "TestLiquidClassExists" "Begin"
 private function TestLiquidClassExists( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 private variable LiquidClassesArray[];
 private variable Counter;
@@ -63,80 +60,80 @@ JSONPARSER::GetJSONArrayElement(i_EndpointOutputDataJSONObject, Translate("Comma
 // {{ 9 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 10 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{{ 10 1 0 "5852a450_cc59_43af_a510eda41f6c5bf0" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Create(o_JSONObject);
+// }} ""
+// {{ 11 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 11 1 0 "a8dcffe8_6ba0_46fc_96b4f6517a95a7f9" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
+// {{ 12 1 0 "a8dcffe8_6ba0_46fc_96b4f6517a95a7f9" "{4900C1F7-0FB7-4033-8253-760BDB9354DC}"
 FailedLiquidClasses.SetSize(0);
 // }} ""
-// {{{ 12 1 0 "58b78fb8_363c_4b0b_a8c1619709577477" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 13 1 0 "58b78fb8_363c_4b0b_a8c1619709577477" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 LiquidClassLib::Initialize(ML_STAR, 0);
 // }} ""
-// {{ 13 1 0 "64fd85a5_2764_4fe5_9a6ae3d1335038c8" "{72EACF88-8D49-43e3-92C8-2F90E81E3260}"
+// {{ 14 1 0 "64fd85a5_2764_4fe5_9a6ae3d1335038c8" "{72EACF88-8D49-43e3-92C8-2F90E81E3260}"
 NumClasses=LiquidClassesArray.GetSize();
 // }} ""
-// {{ 14 1 0 "60ceefea_fcd0_41db_96279caf17cde998" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 15 1 0 "60ceefea_fcd0_41db_96279caf17cde998" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
 {
 for(Counter = 0; Counter < NumClasses;)
 {
 Counter = Counter + 1;
 // }} ""
-// {{ 15 1 0 "1603a806_becc_45a2_a5f21389298fe42b" "{67A8F1C9-6546-41e9-AD2F-3C54F7818853}"
+// {{ 16 1 0 "1603a806_becc_45a2_a5f21389298fe42b" "{67A8F1C9-6546-41e9-AD2F-3C54F7818853}"
 LiquidClass=LiquidClassesArray.GetAt(Counter-1);
 // }} ""
-// {{ 16 1 0 "521e3b51_5744_4550_a3be622263d3d13c" "{3293659E-F71E-472f-AFB4-6A674E32B114}"
+// {{ 17 1 0 "521e3b51_5744_4550_a3be622263d3d13c" "{3293659E-F71E-472f-AFB4-6A674E32B114}"
 onerror goto errLabel_3489BB9D987145c9A08529F4BC670EA6 ;
 err.Clear();
 // }} ""
-// {{{ 17 1 0 "8dbda48b_b595_4b4a_a47bc23859295f62" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 18 1 0 "8dbda48b_b595_4b4a_a47bc23859295f62" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 LiquidClassLib::SelectLiquidClass(LiquidClass);
 // }} ""
-// {{ 18 1 0 "521e3b51_5744_4550_a3be622263d3d13c" "{3293659E-F71E-472f-AFB4-6A674E32B114}"
+// {{ 19 1 0 "521e3b51_5744_4550_a3be622263d3d13c" "{3293659E-F71E-472f-AFB4-6A674E32B114}"
 errLabel_3489BB9D987145c9A08529F4BC670EA6 : {}
 onerror goto 0;
 if (err.GetId() != 0)   /* skip handler if no error */
 {
 // }} ""
-// {{ 19 1 0 "48d25776_aca5_4ffe_a26b2bf75dcc574b" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
+// {{ 20 1 0 "48d25776_aca5_4ffe_a26b2bf75dcc574b" "{F17B7626-27CB-47f1-8477-8C4158339A6D}"
 FailedLiquidClasses.AddAsLast(LiquidClass);
 // }} ""
-// {{ 20 1 0 "521e3b51_5744_4550_a3be622263d3d13c" "{3293659E-F71E-472f-AFB4-6A674E32B114}"
+// {{ 21 1 0 "521e3b51_5744_4550_a3be622263d3d13c" "{3293659E-F71E-472f-AFB4-6A674E32B114}"
 }   /* end if from skip handler if no error */
 // }} ""
-// {{ 21 1 0 "60ceefea_fcd0_41db_96279caf17cde998" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 22 1 0 "60ceefea_fcd0_41db_96279caf17cde998" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
 }
 }
 // }} ""
-// {{ 22 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
-
-// }} ""
-// {{{ 23 1 0 "8be5f2de_0edf_4a70_91aafe3c38f2859b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::Create(o_JSONObject);
-// }} ""
-// {{ 24 1 0 "d1cedab2_0de0_48c5_b2f422ac8c093a68" "{72EACF88-8D49-43e3-92C8-2F90E81E3260}"
+// {{ 23 1 0 "525b8e6b_bd14_480b_a6b4d3d9d58deed4" "{72EACF88-8D49-43e3-92C8-2F90E81E3260}"
 NumClasses=FailedLiquidClasses.GetSize();
 // }} ""
-// {{{ 25 1 0 "c0b97b07_6a54_4325_92e0edafe78c0f87" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 24 1 0 "39fd66f2_841a_42ad_bcb77b3b7c495785" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::SetArray(o_JSONObject, Translate("FailedLiquidClasses"));
 // }} ""
-// {{{ 26 1 0 "7d2fba3a_ae94_41ec_bf9b1f241c0f968c" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 25 1 0 "b163dd20_4e86_4110_8f56d088aafc5bab" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::SetArrayLength(o_JSONObject, Translate("FailedLiquidClasses"), NumClasses);
 // }} ""
-// {{ 27 1 0 "865b7a3c_7532_4b37_a24cff0e990676ab" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 26 1 0 "470280be_4841_4379_9e75d271fd640f47" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
 {
 for(Counter = 0; Counter < NumClasses;)
 {
 Counter = Counter + 1;
 // }} ""
-// {{ 28 1 0 "f6e4c161_5891_46d6_a29d1d0e6deae4d8" "{67A8F1C9-6546-41e9-AD2F-3C54F7818853}"
+// {{ 27 1 0 "e2440486_f88a_40e7_ba2ed6c0cfc1962d" "{67A8F1C9-6546-41e9-AD2F-3C54F7818853}"
 LiquidClass=FailedLiquidClasses.GetAt(Counter-1);
 // }} ""
-// {{{ 29 1 0 "cac9e4ae_0c6e_44aa_8b6effe97985a35e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 28 1 0 "414ed8c6_216f_4d79_b1846f8905432858" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::SetStringArrayElement(o_JSONObject, Translate("FailedLiquidClasses"), Counter, LiquidClass);
 // }} ""
-// {{ 30 1 0 "865b7a3c_7532_4b37_a24cff0e990676ab" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 29 1 0 "470280be_4841_4379_9e75d271fd640f47" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
 }
 }
+// }} ""
+// {{ 30 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
 // }} ""
 // {{{ 31 1 0 "488e052c_035a_4077_9efcdd30af875539" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
@@ -181,4 +178,4 @@ abort;
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-20 16:16$$checksum=07914903$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-21 15:35$$checksum=82c29757$$length=084$$

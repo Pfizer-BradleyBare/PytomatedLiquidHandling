@@ -5,7 +5,6 @@ from typing import Literal
 from .....Tools.AbstractClasses import OptionsABC
 
 
-@dataclass(kw_only=True)
 class Options(OptionsABC):
     class ModeOptions(Enum):
         Aspiration = 0

@@ -8,6 +8,7 @@
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
 #include "HSLStrLib.hsl"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\Logger\\Logger.hs_"
+#include "HSLErrLib.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -19,15 +20,15 @@ namespace _HSLHAMHEATERSHAKERLIB {
 // }} ""
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{{ 2 "SubmethodForwardDeclaration" ""
-private function Connect( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
-private function GetShakingSpeed( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function CreateUSBDevice( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function GetShakerSpeed( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
 private function GetTemperature( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
 function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void ;
 private function SetPlateLock( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
-private function StartShakeControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
-private function StartTemperatureControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
-private function StopShakeControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
-private function StopTemperatureControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function StartShaker( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function StartTempCtrl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function StopShaker( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function StopTempCtrl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
 // }} ""
 function _InitLibrary() {
 // {{ 2 "AutoInitBlock" ""
@@ -57,8 +58,8 @@ STATESERVERENDPOINTS::_ExitLibrary();
 LOGGER::_ExitLibrary();
 // }} ""
 }
-// {{{ 5 "Connect" "Begin"
-private function Connect( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// {{{ 5 "CreateUSBDevice" "Begin"
+private function CreateUSBDevice( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private variable ComPort;
 private variable HandleID;
@@ -66,7 +67,8 @@ private variable CustomErrorHandling;
 private variable State;
 private variable Message;
 private object o_JSONObject;
-// {{ 5 "Connect" "InitLocals"
+private variable Status;
+// {{ 5 "CreateUSBDevice" "InitLocals"
 // }} ""
 // {{{ 1 1 0 "9ddcef8b_4c2e_4290_a45460192f212e15" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ComPort = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ComPort:"));
@@ -74,29 +76,30 @@ ComPort = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("
 // {{ 2 1 0 "4927b127_fdac_4e11_971b050a08670fc2" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 3 1 0 "6b9f446e_5432_4ae2_96b216a49c6716e6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-CustomErrorHandling = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
-// }} ""
-// {{ 4 1 0 "52cc9d9b_9f92_4186_9ae55ff4cbe84185" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
-State = 1;
-// }} ""
-// {{ 5 1 0 "e16edf1e_62c6_4d34_886ded7f5db4ecc0" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
-Message = Translate("Success");
-// }} ""
-// {{ 6 1 0 "232c6af8_a8fe_4049_bb707b18126e4d72" "{586C3429-F931-405f-9938-928E22C90BFA}"
-
-// }} ""
-// {{{ 7 1 0 "1bfa7da9_5348_47b6_9e9a0fafc00457dc" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLHamHeaterShaker::CreateUsbDevice(ComPort, HandleID);
-// }} ""
-// {{ 8 1 0 "232c6af8_a8fe_4049_bb707b18126e4d72" "{586C3429-F931-405f-9938-928E22C90BFA}"
-
-// }} ""
-// {{{ 9 1 0 "12312aca_a955_4372_99b7783675721d05" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 3 1 0 "5a5f528f_9c26_418b_ae25efd8429b9abd" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{{ 10 1 0 "abb23ea0_070c_44b9_819573e8fc888f30" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{ 4 1 0 "232c6af8_a8fe_4049_bb707b18126e4d72" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 1 0 "f0620241_6ba9_4c4e_b46af5676816735b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Status = HSLHamHeaterShaker::CreateUsbDevice(ComPort, HandleID);
+// }} ""
+// {{ 6 1 0 "1093abb8_0627_42c5_a62baf7ad026ff6e" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Status != 0)
+{
+// }} ""
+// {{{ 7 1 0 "eb0c08da_1a46_4c7b_aebeec465835cb8a" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+ErrSetDescription(Translate("Peripheral device communication failed"));
+// }} ""
+// {{ 8 1 0 "1093abb8_0627_42c5_a62baf7ad026ff6e" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 9 1 0 "a2ef4ef5_fe3b_4f53_930925848ab023d7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::SetIntegerProperty(o_JSONObject, Translate("HandleID"), HandleID);
+// }} ""
+// {{ 10 1 0 "232c6af8_a8fe_4049_bb707b18126e4d72" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
 // }} ""
 // {{{ 11 1 0 "d9bfef0f_85b8_43f0_9d3128ef1ee5aded" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
@@ -107,11 +110,11 @@ HSLJsonLib::Release(o_JSONObject);
 // {{ 13 1 0 "4927b127_fdac_4e11_971b050a08670fc2" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 5 "Connect" "End"
+// {{{ 5 "CreateUSBDevice" "End"
 }
 // }} ""
-// {{{ 5 "StartTemperatureControl" "Begin"
-private function StartTemperatureControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// {{{ 5 "StartTempCtrl" "Begin"
+private function StartTempCtrl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private variable HandleID;
 private variable Temperature;
@@ -119,7 +122,7 @@ private variable CustomErrorHandling;
 private variable State;
 private variable Message;
 private object o_JSONObject;
-// {{ 5 "StartTemperatureControl" "InitLocals"
+// {{ 5 "StartTempCtrl" "InitLocals"
 // }} ""
 // {{{ 110 1 0 "86f0c08a_49e5_4206_8e73754ffefac5e7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 HandleID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:HandleID:"));
@@ -160,18 +163,18 @@ HSLJsonLib::Release(o_JSONObject);
 // {{ 122 1 0 "b1ddbc08_7bdf_4e2c_bf1966d14ba63d88" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 5 "StartTemperatureControl" "End"
+// {{{ 5 "StartTempCtrl" "End"
 }
 // }} ""
-// {{{ 5 "StopTemperatureControl" "Begin"
-private function StopTemperatureControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// {{{ 5 "StopTempCtrl" "Begin"
+private function StopTempCtrl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private variable HandleID;
 private variable CustomErrorHandling;
 private variable State;
 private variable Message;
 private object o_JSONObject;
-// {{ 5 "StopTemperatureControl" "InitLocals"
+// {{ 5 "StopTempCtrl" "InitLocals"
 // }} ""
 // {{{ 137 1 0 "beda24ab_5083_4bc1_9ab52ea38f90f410" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 HandleID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:HandleID:"));
@@ -209,11 +212,11 @@ HSLJsonLib::Release(o_JSONObject);
 // {{ 148 1 0 "267d2d11_8596_408a_99d16a5c8e6206a7" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 5 "StopTemperatureControl" "End"
+// {{{ 5 "StopTempCtrl" "End"
 }
 // }} ""
-// {{{ 5 "StartShakeControl" "Begin"
-private function StartShakeControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// {{{ 5 "StartShaker" "Begin"
+private function StartShaker( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private variable HandleID;
 private variable ShakingSpeed;
@@ -221,7 +224,7 @@ private variable CustomErrorHandling;
 private variable State;
 private variable Message;
 private object o_JSONObject;
-// {{ 5 "StartShakeControl" "InitLocals"
+// {{ 5 "StartShaker" "InitLocals"
 // }} ""
 // {{{ 96 1 0 "9a8ef351_794e_486a_9c0e271b2ac981b5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 HandleID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:HandleID:"));
@@ -262,18 +265,18 @@ HSLJsonLib::Release(o_JSONObject);
 // {{ 108 1 0 "9fbc2334_cf0b_4689_b59206f5034c5668" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 5 "StartShakeControl" "End"
+// {{{ 5 "StartShaker" "End"
 }
 // }} ""
-// {{{ 5 "StopShakeControl" "Begin"
-private function StopShakeControl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// {{{ 5 "StopShaker" "Begin"
+private function StopShaker( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private variable HandleID;
 private variable CustomErrorHandling;
 private variable State;
 private variable Message;
 private object o_JSONObject;
-// {{ 5 "StopShakeControl" "InitLocals"
+// {{ 5 "StopShaker" "InitLocals"
 // }} ""
 // {{{ 124 1 0 "c446da07_9a03_4ddd_aaae40a72de83981" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 HandleID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:HandleID:"));
@@ -311,7 +314,7 @@ HSLJsonLib::Release(o_JSONObject);
 // {{ 135 1 0 "f5a04bee_c62b_41dd_9a2501e33c0a37ba" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 5 "StopShakeControl" "End"
+// {{{ 5 "StopShaker" "End"
 }
 // }} ""
 // {{{ 5 "GetTemperature" "Begin"
@@ -382,8 +385,8 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 5 "GetTemperature" "End"
 }
 // }} ""
-// {{{ 5 "GetShakingSpeed" "Begin"
-private function GetShakingSpeed( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// {{{ 5 "GetShakerSpeed" "Begin"
+private function GetShakerSpeed( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private variable HandleID;
 private variable ShakingSpeed;
@@ -391,7 +394,7 @@ private variable CustomErrorHandling;
 private variable State;
 private variable Message;
 private object o_JSONObject;
-// {{ 5 "GetShakingSpeed" "InitLocals"
+// {{ 5 "GetShakerSpeed" "InitLocals"
 // }} ""
 // {{{ 15 1 0 "385796f0_571b_41c7_a7ca4d958c578b21" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 HandleID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:HandleID:"));
@@ -432,7 +435,7 @@ HSLJsonLib::Release(o_JSONObject);
 // {{ 27 1 0 "c9f10233_f46b_4481_b1b3b1bb14eddff6" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 5 "GetShakingSpeed" "End"
+// {{{ 5 "GetShakerSpeed" "End"
 }
 // }} ""
 // {{{ 5 "HandleCommand" "Begin"
@@ -440,17 +443,17 @@ function HandleCommand( device & ML_STAR, variable CommandName, object & i_Endpo
 // }} ""
 // {{ 5 "HandleCommand" "InitLocals"
 // }} ""
-// {{ 47 1 0 "4070c6c6_ded0_4338_a626bc72b2adfd29" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "Connect")
+// {{ 47 1 0 "4d9583db_3865_4294_9eface416ee3fbe8" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "CreateUSBDevice")
 {
 // }} ""
-// {{{ 48 1 0 "2aa5affb_376d_4788_a7b8baef0770a860" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-Connect(ML_STAR, i_EndpointOutputDataJSONObject);
+// {{{ 48 1 0 "38f4abc0_e272_4ff3_aed353eb216d0bf8" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CreateUSBDevice(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 49 1 0 "5d52a75f_9257_4990_9ed0fd3e91ad5527" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 50 1 0 "4070c6c6_ded0_4338_a626bc72b2adfd29" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 50 1 0 "4d9583db_3865_4294_9eface416ee3fbe8" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
 // {{ 51 1 0 "2c5d3461_3f22_40da_9575777284c080e4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
@@ -466,17 +469,17 @@ return;
 // {{ 54 1 0 "2c5d3461_3f22_40da_9575777284c080e4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 55 1 0 "c5f86395_f357_45a1_903756470be5f57a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "StartTemperatureControl")
+// {{ 55 1 0 "5b0c1748_f9f1_4373_a4afaf7e824f871b" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "StartTempCtrl")
 {
 // }} ""
-// {{{ 56 1 0 "b8b8c3e4_e9a5_4f93_b20ac3601d51db32" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-StartTemperatureControl(ML_STAR, i_EndpointOutputDataJSONObject);
+// {{{ 56 1 0 "a72d2922_0094_4485_afc3f71a0e08d372" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StartTempCtrl(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 57 1 0 "9862b9fd_5823_4498_b5d814a526dad9e2" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 58 1 0 "c5f86395_f357_45a1_903756470be5f57a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 58 1 0 "5b0c1748_f9f1_4373_a4afaf7e824f871b" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
 // {{ 59 1 0 "e1c0a7f2_2bee_40cb_94cdce2f6a730694" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
@@ -492,56 +495,56 @@ return;
 // {{ 62 1 0 "e1c0a7f2_2bee_40cb_94cdce2f6a730694" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 63 1 0 "f2ccd9ec_ed04_41e4_aa5209e150d370c2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "StopTemperatureControl")
+// {{ 63 1 0 "e6631ab8_6a4f_4780_bffea7d2855be345" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "StopTempCtrl")
 {
 // }} ""
-// {{{ 64 1 0 "26f89560_adac_4bbf_b7f3384ee97821d8" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-StopTemperatureControl(ML_STAR, i_EndpointOutputDataJSONObject);
+// {{{ 64 1 0 "2cd2c5d8_a035_44c3_bdc7ce4ea1f6eeb9" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StopTempCtrl(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 65 1 0 "808c95c6_cff9_4f38_a224f0079309adcf" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 66 1 0 "f2ccd9ec_ed04_41e4_aa5209e150d370c2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 66 1 0 "e6631ab8_6a4f_4780_bffea7d2855be345" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 67 1 0 "c3539c50_48b5_48a6_a5b2f1dac8dce44d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "StartShakeControl")
+// {{ 67 1 0 "71099c66_6f53_4035_8ea19bc7da82ee27" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "StartShaker")
 {
 // }} ""
-// {{{ 68 1 0 "3cdfc791_a5f0_41ab_b218894f02790c85" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-StartShakeControl(ML_STAR, i_EndpointOutputDataJSONObject);
+// {{{ 68 1 0 "5089d5e2_b273_4a0e_b4a397751dfba6b7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StartShaker(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 69 1 0 "24ffae4e_88f0_424e_8f7ef2ad0e197af7" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 70 1 0 "c3539c50_48b5_48a6_a5b2f1dac8dce44d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 70 1 0 "71099c66_6f53_4035_8ea19bc7da82ee27" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 71 1 0 "b118e98c_188d_45e0_91791ff215777f95" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "GetShakingSpeed")
+// {{ 71 1 0 "55d74647_50a3_4d5c_be7319a966cedbe2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "GetShakerSpeed")
 {
 // }} ""
-// {{{ 72 1 0 "87def83d_19d0_4467_8cb9376cee840ee0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-GetShakingSpeed(ML_STAR, i_EndpointOutputDataJSONObject);
+// {{{ 72 1 0 "a25f3db7_f199_4f9e_ae39908116229abe" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+GetShakerSpeed(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 73 1 0 "d6149140_d4a7_4fc7_8417aa0e94739a8b" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 74 1 0 "b118e98c_188d_45e0_91791ff215777f95" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 74 1 0 "55d74647_50a3_4d5c_be7319a966cedbe2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 75 1 0 "ab2699aa_98bd_40c3_b0af4b7c310ea063" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "StopShakeControl")
+// {{ 75 1 0 "ce823c9e_9056_42f4_921953899de9bad1" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "StopShaker")
 {
 // }} ""
-// {{{ 76 1 0 "c49a1267_afd8_44a7_80a1a35345fbd2a3" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-StopShakeControl(ML_STAR, i_EndpointOutputDataJSONObject);
+// {{{ 76 1 0 "3590cbbe_c690_466e_83050f6b3f97c984" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StopShaker(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
 // {{{ 77 1 0 "26598c57_911f_4da1_bb3af6165e79798c" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 78 1 0 "ab2699aa_98bd_40c3_b0af4b7c310ea063" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 78 1 0 "ce823c9e_9056_42f4_921953899de9bad1" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
 // {{ 79 1 0 "40fedf2c_e1bc_4e62_8e4e71780327997d" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
@@ -610,4 +613,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-20 17:37$$checksum=a52c062a$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-21 16:04$$checksum=2493e7c4$$length=084$$

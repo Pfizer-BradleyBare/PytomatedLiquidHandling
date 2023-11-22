@@ -1,11 +1,11 @@
-from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
+
+from pydantic import BaseModel
 
 from ....Tools.AbstractClasses import OptionsABC
 
 
-@dataclass(kw_only=True)
 class Options(OptionsABC):
     class LabwareImageOptions(Enum):
         TipNTR50uL = "TipNTR50uL"
@@ -31,8 +31,7 @@ class Options(OptionsABC):
     LabwareExtendedInformation: str | Literal["None"] = "None"
 
 
-@dataclass(kw_only=True)
-class ListedOptions(list[Options]):
+class ListedOptions(list[Options], BaseModel):
     class Carrier3DImageOptions(Enum):
         Carrier5PositionFTR3D = "Carrier5PositionFTR3D"
         Carrier5PositionPlate3D = "Carrier5PositionPlate3D"

@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
 from ....Tools.AbstractClasses import CommandOptionsListed
-from ...Backend import HamiltonStateCommandABC
+from ...Backend import HamiltonActionCommandABC
 from .Options import ListedOptions
 
 
-@dataclass
-class Command(CommandOptionsListed[ListedOptions], HamiltonStateCommandABC):
+@dataclass(kw_only=True)
+class Command(CommandOptionsListed[ListedOptions], HamiltonActionCommandABC):
     ...

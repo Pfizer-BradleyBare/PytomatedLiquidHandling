@@ -1,10 +1,10 @@
 import inspect
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, ClassVar
 
 
-@dataclass
+@dataclass(kw_only=True)
 class CommandABC:
     @staticmethod
     def __GetCommandName(__file__: str) -> str:
@@ -46,6 +46,7 @@ class CommandABC:
 
     ModuleName: ClassVar[str] = "Not Set"
     CommandName: ClassVar[str] = "Not Set"
+    Identifier: str = field(default="N/A")
 
     def __post_init__(self):
         ModuleType = inspect.getmodule(type(self))

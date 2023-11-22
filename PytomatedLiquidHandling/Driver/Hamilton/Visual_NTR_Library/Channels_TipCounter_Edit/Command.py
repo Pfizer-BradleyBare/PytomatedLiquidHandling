@@ -5,6 +5,6 @@ from ...Backend import HamiltonActionCommandABC
 from .Options import ListedOptions
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Command(CommandOptionsListed[ListedOptions], HamiltonActionCommandABC):
     ...

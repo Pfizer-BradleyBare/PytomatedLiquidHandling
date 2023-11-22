@@ -10,9 +10,6 @@ CommandSelf = TypeVar("CommandSelf", bound="HamiltonCommandABC")
 
 @dataclass(kw_only=True)
 class HamiltonCommandABC(CommandABC):
-    Identifier: str | int = field(default="None")
-    CustomErrorHandling: bool
-
     def GetVars(self) -> dict[str, Any]:
         if isinstance(self, CommandOptions):
             OutputDict = vars(self.Options)

@@ -1,14 +1,12 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 from ....Tools.AbstractClasses import OptionsABC
 
 
-@dataclass(kw_only=True)
 class Options(OptionsABC):
     LabwareID: str
 
 
-@dataclass(kw_only=True)
-class ListedOptions(list[OptionsABC]):
+class ListedOptions(list[Options], BaseModel):
     PropertyKey: str
     PropertyValue: str | int

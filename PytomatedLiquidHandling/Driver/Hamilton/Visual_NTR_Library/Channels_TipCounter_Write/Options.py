@@ -1,14 +1,12 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 from ....Tools.AbstractClasses import OptionsABC
 
 
-@dataclass
 class Options(OptionsABC):
     LabwareID: str
     PositionID: str
 
 
-@dataclass
-class ListedOptions(list[Options]):
+class ListedOptions(list[Options], BaseModel):
     TipCounter: str
