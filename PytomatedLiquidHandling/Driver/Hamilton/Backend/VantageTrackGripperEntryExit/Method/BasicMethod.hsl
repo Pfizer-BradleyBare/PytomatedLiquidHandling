@@ -86,11 +86,13 @@
  namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
  namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
  namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
-#include "Layout\\ExampleLayout.res"
+#include "Example Layout.res"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable StateServerProc;
 variable ActionServerProc;
-global device ML_STAR ("Layout\\ExampleLayout.lay", "ML_STAR", hslTrue);
+global device ML_STAR ("Example Layout.lay", "ML_STAR", hslTrue);
+global device EntryExit ("Example Layout.lay", "EntryExit", hslTrue);
+global device TrackGripper ("Example Layout.lay", "TrackGripper", hslTrue);
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
  namespace _Method { #include "HSLMETEDLib.hs_" } 
@@ -102,6 +104,9 @@ global device ML_STAR ("Layout\\ExampleLayout.lay", "ML_STAR", hslTrue);
  namespace _Method { #include "HSLPTLLib.hsl" } 
  namespace _ActionServerProc { #include "HSLPTLLib.hsl" } 
  namespace _StateServerProc { #include "HSLPTLLib.hsl" } 
+ namespace _Method { #include "templates\\HSLPipetteWizard.hsl" } 
+ namespace _ActionServerProc { #include "templates\\HSLPipetteWizard.hsl" } 
+ namespace _StateServerProc { #include "templates\\HSLPipetteWizard.hsl" } 
 // }} ""
 // {{{ 2 "LocalSubmethodInclude" ""
  namespace _Method {  #include __filename__ ".sub"  } 
@@ -223,4 +228,4 @@ TIMER::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2023-11-22 08:06$$checksum=d0c0941a$$length=091$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2023-11-22 08:21$$checksum=7d28ba88$$length=091$$
