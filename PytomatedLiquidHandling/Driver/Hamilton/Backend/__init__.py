@@ -7,4 +7,4 @@ from .HamiltonResponse import (
     HamiltonResponseABC,
 )
 from .MicrolabSTAR import MicrolabSTAR
-from .Vantage import Vantage
+from .VantageTrackGripperEntryExit import VantageTrackGripperEntryExit

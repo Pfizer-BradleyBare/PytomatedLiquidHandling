@@ -1,0 +1,226 @@
+ namespace _Method { #include "HSLHttp\\HSLHttp.hsl" } 
+ namespace _ActionServer { #include "HSLHttp\\HSLHttp.hsl" } 
+ namespace _StateServer { #include "HSLHttp\\HSLHttp.hsl" } 
+ namespace _Method { #include "HSLJson\\HSLJson.hsl" } 
+ namespace _ActionServer { #include "HSLJson\\HSLJson.hsl" } 
+ namespace _StateServer { #include "HSLJson\\HSLJson.hsl" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\Logger\\Logger.hs_" } 
+ namespace _ActionServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\Logger\\Logger.hs_" } 
+ namespace _StateServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\Logger\\Logger.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _ActionServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _StateServer { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _ActionServerProcessa { #include "HSLHttp\\HSLHttp.hsl" } 
+ namespace _ActionServerProcessa { #include "HSLJson\\HSLJson.hsl" } 
+ namespace _ActionServerProcessa { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\Logger\\Logger.hs_" } 
+ namespace _ActionServerProcessa { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _ActionServerProc { #include "HSLHttp\\HSLHttp.hsl" } 
+ namespace _ActionServerProc { #include "HSLJson\\HSLJson.hsl" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\Logger\\Logger.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _ActionServerProc { #include "HSLHttp\\HSLHttp.hsl" } 
+ namespace _ActionServerProc { #include "HSLJson\\HSLJson.hsl" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\Logger\\Logger.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _StateServerProc { #include "HSLHttp\\HSLHttp.hsl" } 
+ namespace _StateServerProc { #include "HSLJson\\HSLJson.hsl" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\Logger\\Logger.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\_Visual_NTR_Library\\_Visual_NTR_Library.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\_Visual_NTR_Library\\_Visual_NTR_Library.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\_Visual_NTR_Library\\_Visual_NTR_Library.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\SetCuttedTipType\\CuttedTipType.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\SetCuttedTipType\\CuttedTipType.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\SetCuttedTipType\\CuttedTipType.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HamiltonHeaterCooler\\HamiltonHeaterCooler.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HamiltonHeaterCooler\\HamiltonHeaterCooler.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HamiltonHeaterCooler\\HamiltonHeaterCooler.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLHamHeaterShakerLib\\_HSLHamHeaterShakerLib.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLHamHeaterShakerLib\\_HSLHamHeaterShakerLib.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLHamHeaterShakerLib\\_HSLHamHeaterShakerLib.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLLabwrAccess\\HSLLabwrAccess.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLLabwrAccess\\HSLLabwrAccess.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLLabwrAccess\\HSLLabwrAccess.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSL_LiquidClassLib\\HSL_LiquidClassLib.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSL_LiquidClassLib\\HSL_LiquidClassLib.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSL_LiquidClassLib\\HSL_LiquidClassLib.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\JsonParser\\JsonParser.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\JsonParser\\JsonParser.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\JsonParser\\JsonParser.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\ClosedContainer\\FlipTube\\Fliptube.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\ClosedContainer\\FlipTube\\Fliptube.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\ClosedContainer\\FlipTube\\Fliptube.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\DeckLoadingDialog\\DeckLoadingDialog.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\DeckLoadingDialog\\DeckLoadingDialog.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\DeckLoadingDialog\\DeckLoadingDialog.hs_" } 
+ namespace _Method { #include "HSLTrcLib.hsl" } 
+ namespace _ActionServerProc { #include "HSLTrcLib.hsl" } 
+ namespace _StateServerProc { #include "HSLTrcLib.hsl" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\Channel1000uL.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\Channel1000uL.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\Channel1000uL.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\Channel1000uLCOREGrip.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\Channel1000uLCOREGrip.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\Channel1000uLCOREGrip.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\CORE96Head.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\CORE96Head.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\CORE96Head.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\iSwap.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\iSwap.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\iSwap.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\Autoload.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\Autoload.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\Autoload.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\ML_STAR.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\ML_STAR.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\ML_STAR\\ML_STAR.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLTipCountingLib\\_HSLTipCountingLib.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLTipCountingLib\\_HSLTipCountingLib.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLTipCountingLib\\_HSLTipCountingLib.hs_" } 
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
+#include "Layout\\ExampleLayout.res"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+variable StateServerProc;
+variable ActionServerProc;
+global device ML_STAR ("Layout\\ExampleLayout.lay", "ML_STAR", hslTrue);
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+ namespace _Method { #include "HSLMETEDLib.hs_" } 
+ namespace _ActionServerProc { #include "HSLMETEDLib.hs_" } 
+ namespace _StateServerProc { #include "HSLMETEDLib.hs_" } 
+ namespace _Method { #include "HSLMECCLib.hs_" } 
+ namespace _ActionServerProc { #include "HSLMECCLib.hs_" } 
+ namespace _StateServerProc { #include "HSLMECCLib.hs_" } 
+ namespace _Method { #include "HSLPTLLib.hsl" } 
+ namespace _ActionServerProc { #include "HSLPTLLib.hsl" } 
+ namespace _StateServerProc { #include "HSLPTLLib.hsl" } 
+// }} ""
+// {{{ 2 "LocalSubmethodInclude" ""
+ namespace _Method {  #include __filename__ ".sub"  } 
+ namespace _ActionServerProc {  #include __filename__ ".sub"  } 
+ namespace _StateServerProc {  #include __filename__ ".sub"  } 
+// }} ""
+// {{{ 3 "tfn_ActionServerProc" "0"
+namespace _ActionServerProc{ function tfn_ActionServerProc () {
+// }} ""
+// {{{ 6 2 0 "cf558e2c_ac45_40f2_bd8a17c7b509d50d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ActionServer();
+// }} ""
+// {{{ 3 "tfn_ActionServerProc" "1"
+} }
+// }} ""
+// {{{ 3 "tfn_StateServerProc" "0"
+namespace _StateServerProc{ function tfn_StateServerProc () {
+// }} ""
+// {{{ 7 3 0 "9e60cd9b_e862_45ec_8dfe97a51c0ea6ef" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StateServer();
+// }} ""
+// {{{ 3 "tfn_StateServerProc" "1"
+} }
+// }} ""
+/* {{ 2 "ProcessInsertLine" "" */ // }} ""
+// {{{ 5 "main" "Begin"
+namespace _Method { method main(  ) void {
+// }} ""
+// {{ 5 "main" "InitLocals"
+// }} ""
+// {{ 2 "AutoInitBlock" ""
+PTL::SetWashingStateDefault("RinseTime1", 5);
+PTL::SetWashingStateDefault("SoakTime1", 5);
+PTL::SetWashingStateDefault("FlowRate1", 11);
+PTL::SetWashingStateDefault("RinseTime2", 0);
+PTL::SetWashingStateDefault("SoakTime2", 0);
+PTL::SetWashingStateDefault("FlowRate2", 11);
+PTL::SetWashingStateDefault("DrainingTime", 10);
+PTL::SetWashingStateDefault("StartWashLiquid", 0);
+PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
+PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
+LOGGER::_InitLibrary();
+ACTIONSERVERENDPOINTS::_InitLibrary();
+STATESERVERENDPOINTS::_InitLibrary();
+_VISUAL_NTR_LIBRARY::_InitLibrary();
+CUTTEDTIPTYPE::_InitLibrary();
+HAMILTONHEATERCOOLER::_InitLibrary();
+_HSLHAMHEATERSHAKERLIB::_InitLibrary();
+HSLLABWRACCESS::_InitLibrary();
+HSL_LIQUIDCLASSLIB::_InitLibrary();
+JSONPARSER::_InitLibrary();
+HSLVACUUBRANDPUMP::_InitLibrary();
+FLIPTUBE::_InitLibrary();
+DECKLOADINGDIALOG::_InitLibrary();
+CHANNEL1000UL::_InitLibrary();
+CHANNEL1000ULCOREGRIP::_InitLibrary();
+CORE96HEAD::_InitLibrary();
+ISWAP::_InitLibrary();
+AUTOLOAD::_InitLibrary();
+ML_STAR::_InitLibrary();
+_HSLTIPCOUNTINGLIB::_InitLibrary();
+TIMER::_InitLibrary();
+::RegisterAbortHandler( "OnAbort");
+// }} ""
+// {{ 1 1 0 "62ffc1ee_87f1_4777_bdbf6988152c0a4d" "ML_STAR:{1C0C0CB0-7C87-11D3-AD83-0004ACB1DCB2}"
+{
+	variable arrRetValues[];
+	arrRetValues = ML_STAR._1C0C0CB0_7C87_11D3_AD83_0004ACB1DCB2("62ffc1ee_87f1_4777_bdbf6988152c0a4d"); // Initialize
+}
+// }} ""
+// {{{ 2 1 0 "3c7d2db7_3ef4_4ca5_b3aaab38d91437dc" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LOGGER::EnableOutput(Translate("True"));
+// }} ""
+// {{{ 3 1 0 "8378617e_cfd6_4024_9223af8e1d9f6b71" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHttp::SetTraceLevel(0);
+// }} ""
+// {{{ 4 1 0 "5005cfea_8171_4442_9dd45cf0a69594f9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetTraceLevel(0);
+// }} ""
+// {{ 5 1 0 "401e94bc_a4a4_4d74_86531e9cda5195e3" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
+ActionServerProc = Fork("_ActionServerProc::tfn_ActionServerProc");
+if( ActionServerProc == 0 )
+{
+    MECC::RaiseRuntimeErrorEx(-1590820608, MECC::IDS::stepNameThreadBegin, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 6 1 0 "3b2c9d09_c566_41d3_bf26d929052b2cb8" "{1A4D922E-531A-405b-BF19-FFD9AF850726}"
+StateServerProc = Fork("_StateServerProc::tfn_StateServerProc");
+if( StateServerProc == 0 )
+{
+    MECC::RaiseRuntimeErrorEx(-1590820608, MECC::IDS::stepNameThreadBegin, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 2 "AutoExitBlock" ""
+LOGGER::_ExitLibrary();
+ACTIONSERVERENDPOINTS::_ExitLibrary();
+STATESERVERENDPOINTS::_ExitLibrary();
+_VISUAL_NTR_LIBRARY::_ExitLibrary();
+CUTTEDTIPTYPE::_ExitLibrary();
+HAMILTONHEATERCOOLER::_ExitLibrary();
+_HSLHAMHEATERSHAKERLIB::_ExitLibrary();
+HSLLABWRACCESS::_ExitLibrary();
+HSL_LIQUIDCLASSLIB::_ExitLibrary();
+JSONPARSER::_ExitLibrary();
+HSLVACUUBRANDPUMP::_ExitLibrary();
+FLIPTUBE::_ExitLibrary();
+DECKLOADINGDIALOG::_ExitLibrary();
+CHANNEL1000UL::_ExitLibrary();
+CHANNEL1000ULCOREGRIP::_ExitLibrary();
+CORE96HEAD::_ExitLibrary();
+ISWAP::_ExitLibrary();
+AUTOLOAD::_ExitLibrary();
+ML_STAR::_ExitLibrary();
+_HSLTIPCOUNTINGLIB::_ExitLibrary();
+TIMER::_ExitLibrary();
+// }} ""
+// {{{ 5 "main" "End"
+} }
+// }} ""
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2023-11-22 08:06$$checksum=d0c0941a$$length=091$$
