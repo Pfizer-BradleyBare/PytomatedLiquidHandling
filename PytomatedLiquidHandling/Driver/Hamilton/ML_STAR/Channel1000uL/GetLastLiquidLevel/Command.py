@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from ...Backend import HamiltonActionCommandABC
+from ....Backend import HamiltonActionCommandABC
 
 
 @dataclass(kw_only=True)
