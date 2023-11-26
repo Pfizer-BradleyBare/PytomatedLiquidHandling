@@ -5,20 +5,6 @@ import yaml
 from PytomatedLiquidHandling import HAL, Driver
 
 
-class Test(Driver.Hamilton.Backend.HamiltonResponseABC):
-    T: Driver.Hamilton.Backend.HamiltonResponse.HamiltonBlockDataPackage
-
-
-Test(
-    ErrorDescription="",
-    T=Driver.Hamilton.Backend.HamiltonResponse.HamiltonBlockDataPackage(
-        ErrFlag=Driver.Hamilton.Backend.HamiltonResponse.HamiltonBlockDataPackage.ErrFlags.ErrorWithoutBlockData,
-        BlockData=[],
-    ),
-)
-
-quit()
-
 with open(os.path.join(os.path.dirname(__file__), "Carrier.yaml")) as File:
     Dict = yaml.full_load(File)
 
@@ -38,6 +24,7 @@ with open(os.path.join(os.path.dirname(__file__), "Labware.yaml")) as File:
 HAL.Tools.ConfigLoader.DevicesLists(
     Dict, HAL.Labware.Base.LabwareABC, HAL.Labware.Devices
 )
+quit()
 
 with open(os.path.join(os.path.dirname(__file__), "Transport.yaml")) as File:
     Dict = yaml.full_load(File)
