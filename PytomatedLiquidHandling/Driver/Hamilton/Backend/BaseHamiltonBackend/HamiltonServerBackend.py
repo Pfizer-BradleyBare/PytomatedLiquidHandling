@@ -37,16 +37,16 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
             time.sleep(0.1)
 
-        CommandInstance = cast(HamiltonCommandABC, self._Command)
+        Command = cast(HamiltonCommandABC, self._Command)
 
-        if CommandInstance is None:
+        if Command is None:
             ParserObject.SetEndpointState(False)
             ParserObject.SetEndpointDetails("Command not available. Please try again.")
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        if isinstance(CommandInstance, CommandOptionsListed):
-            if len(CommandInstance.Options) == 0:
+        if isinstance(Command, CommandOptionsListed):
+            if len(Command.Options) == 0:
                 self._Response = ValueError(
                     "There are no options in the options tracker"
                 )
@@ -55,18 +55,16 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         ParserObject.SetEndpointState(True)
 
-        if hasattr(CommandInstance, "CustomErrorHandling"):
+        if hasattr(Command, "CustomErrorHandling"):
             ParserObject.SetEndpointOutputKey(
-                "CustomErrorHandling", getattr(CommandInstance, "CustomErrorHandling")
+                "CustomErrorHandling", getattr(Command, "CustomErrorHandling")
             )
 
-        ParserObject.SetEndpointOutputKey("Module Name", CommandInstance.ModuleName)
-        ParserObject.SetEndpointOutputKey("Command Name", CommandInstance.CommandName)
+        ParserObject.SetEndpointOutputKey("Module Name", Command.ModuleName)
+        ParserObject.SetEndpointOutputKey("Command Name", Command.CommandName)
 
         try:
-            ParserObject.SetEndpointOutputKey(
-                "Command Parameters", CommandInstance.GetVars()
-            )
+            ParserObject.SetEndpointOutputKey("Command Parameters", Command.GetVars())
         except:
             self._Response = RuntimeError(
                 "Error while converting Options to json dict."

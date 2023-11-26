@@ -119,18 +119,18 @@ class HamiltonBackendABC(BackendABC):
         self._StateServer.StopBackend()
 
     def ExecuteCommand(
-        self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
+        self, Command: HamiltonActionCommandABC | HamiltonStateCommandABC
     ):
-        BackendABC.ExecuteCommand(self, CommandInstance)
-        if isinstance(CommandInstance, HamiltonStateCommandABC):
-            self._StateServer.ExecuteCommand(CommandInstance)
+        BackendABC.ExecuteCommand(self, Command)
+        if isinstance(Command, HamiltonStateCommandABC):
+            self._StateServer.ExecuteCommand(Command)
         else:
-            self._ActionServer.ExecuteCommand(CommandInstance)
+            self._ActionServer.ExecuteCommand(Command)
 
     def GetCommandStatus(
-        self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
+        self, Command: HamiltonActionCommandABC | HamiltonStateCommandABC
     ) -> CommandStatusResponse:
-        BackendABC.GetCommandStatus(self, CommandInstance)
+        BackendABC.GetCommandStatus(self, Command)
 
         if self._HamiltonProcess.poll() != None:
             self._HamiltonProcess = subprocess.Popen(
@@ -142,27 +142,27 @@ class HamiltonBackendABC(BackendABC):
             )
         # If the process closed then we need to reopen it. Only the script can close the Hamilton.
 
-        if isinstance(CommandInstance, HamiltonStateCommandABC):
-            return self._StateServer.GetCommandStatus(CommandInstance)
+        if isinstance(Command, HamiltonStateCommandABC):
+            return self._StateServer.GetCommandStatus(Command)
         else:
-            return self._ActionServer.GetCommandStatus(CommandInstance)
+            return self._ActionServer.GetCommandStatus(Command)
 
     def WaitForResponseBlocking(
-        self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
+        self, Command: HamiltonActionCommandABC | HamiltonStateCommandABC
     ):
-        BackendABC.WaitForResponseBlocking(self, CommandInstance)
+        BackendABC.WaitForResponseBlocking(self, Command)
 
-        while self.GetCommandStatus(CommandInstance).ResponseReady != True:
+        while self.GetCommandStatus(Command).ResponseReady != True:
             ...
 
     def GetResponse(
         self,
-        CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC,
+        Command: HamiltonActionCommandABC | HamiltonStateCommandABC,
         ResponseType: Type[HamiltonResponseABCType],
     ) -> HamiltonResponseABCType:
-        BackendABC.GetResponse(self, CommandInstance, ResponseType)
-        if isinstance(CommandInstance, HamiltonStateCommandABC):
-            return self._StateServer.GetResponse(CommandInstance, ResponseType)
+        BackendABC.GetResponse(self, Command, ResponseType)
+        if isinstance(Command, HamiltonStateCommandABC):
+            return self._StateServer.GetResponse(Command, ResponseType)
 
         else:
-            return self._ActionServer.GetResponse(CommandInstance, ResponseType)
+            return self._ActionServer.GetResponse(Command, ResponseType)

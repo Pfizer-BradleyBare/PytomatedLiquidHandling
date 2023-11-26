@@ -169,7 +169,7 @@ class NoAccessError(Exception):
     ...
 
 
-ExceptionErrorCodeMap: dict[int, Type[Exception]] = {
+ExceptionStatusCodeMap: dict[int, Type[Exception]] = {
     -904: PlateTypeIncompatibleWithInstrumentError,
     -903: PlateTypeIncompatibleWithInstrumentError,
     -902: UnknownPlateTypeInExperimentDefinitionError,

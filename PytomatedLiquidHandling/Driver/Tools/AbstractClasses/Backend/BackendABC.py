@@ -32,19 +32,19 @@ class BackendABC(BaseModel):
         self._IsRunning = False
 
     @abstractmethod
-    def ExecuteCommand(self, CommandInstance: CommandABC):
+    def ExecuteCommand(self, Command: CommandABC):
         self.__CheckRunning()
 
     @abstractmethod
-    def GetCommandStatus(self, CommandInstance: CommandABC) -> CommandStatusResponse:
+    def GetCommandStatus(self, Command: CommandABC) -> CommandStatusResponse:
         self.__CheckRunning()
 
     @abstractmethod
-    def WaitForResponseBlocking(self, CommandInstance: CommandABC):
+    def WaitForResponseBlocking(self, Command: CommandABC):
         self.__CheckRunning()
 
     @abstractmethod
     def GetResponse(
-        self, CommandInstance: CommandABC, ResponseType: Type[ResponseABCType]
+        self, Command: CommandABC, ResponseType: Type[ResponseABCType]
     ) -> ResponseABCType:
         self.__CheckRunning()

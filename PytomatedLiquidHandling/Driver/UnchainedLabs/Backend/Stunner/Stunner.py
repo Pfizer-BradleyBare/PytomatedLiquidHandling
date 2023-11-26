@@ -6,6 +6,7 @@ from typing import Any
 
 from ....Tools.AbstractClasses import SimpleBackendABC
 from ..UnchainedLabsCommand import UnchainedLabsCommandABC
+from ..UnchainedLabsResponse import UnchainedLabsResponseABC
 
 
 class StunnerBackend(SimpleBackendABC):
@@ -38,36 +39,17 @@ class StunnerBackend(SimpleBackendABC):
         self._StunnerDLLObject = Stunner(self.InstrumentIPAddress, self.InstrumentPort)
         # The stunner API access uses a .DLL library. This step creates the stunner class present in the .dll.
 
-    def StunnerRunnerThread(self):
-        Command = self._Command
-
-        if not isinstance(Command, UnchainedLabsCommandABC):
-            raise Exception("This should never happen")
-
-        self._ResponseInstance = Command.ParseResponse(
-            Command.ExecuteCommandHelper(self._StunnerDLLObject)
-        )
-
     def StartBackend(self):
         SimpleBackendABC.StartBackend(self)
 
-        ResponseInstance = UnchainedLabsCommandABC.ParseResponse(
-            self._StunnerDLLObject.Request_Access()
-        )
-        CommandInstance = UnchainedLabsCommandABC()
-        # self.CheckExceptions(CommandInstance, ResponseInstance)
+        UnchainedLabsResponseABC(StatusCode=self._StunnerDLLObject.Request_Access())
 
     def StopBackend(self):
         SimpleBackendABC.StopBackend(self)
 
-        ResponseInstance = UnchainedLabsCommandABC.ParseResponse(
-            self._StunnerDLLObject.Release_Access()
-        )
-        CommandInstance = UnchainedLabsCommandABC()
-        # self.CheckExceptions(CommandInstance, ResponseInstance)
+        UnchainedLabsResponseABC(StatusCode=self._StunnerDLLObject.Release_Access())
 
-    def ExecuteCommand(self, CommandInstance: UnchainedLabsCommandABC):
-        SimpleBackendABC.ExecuteCommand(self, CommandInstance)
-        threading.Thread(
-            target=StunnerBackend.StunnerRunnerThread, args=(self,)
-        ).start()
+    def ExecuteCommand(self, Command: UnchainedLabsCommandABC):
+        SimpleBackendABC.ExecuteCommand(self, Command)
+
+        self._Response = Command._ExecuteCommandHelper(self._StunnerDLLObject)

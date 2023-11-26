@@ -13,23 +13,23 @@ class SimpleBackendABC(BackendABC):
     _Command: CommandABC | None = PrivateAttr(default=None)
     _Response: dict | Exception | None = PrivateAttr(default=None)
 
-    def ExecuteCommand(self, CommandInstance: CommandABC):
-        BackendABC.ExecuteCommand(self, CommandInstance)
+    def ExecuteCommand(self, Command: CommandABC):
+        BackendABC.ExecuteCommand(self, Command)
         if self._Command is not None:
             raise RuntimeError(
                 "Command is already being executed. Wait on command to compelete..."
             )
 
-        self._Command = CommandInstance
+        self._Command = Command
 
-    def GetCommandStatus(self, CommandInstance: CommandABC) -> CommandStatusResponse:
-        BackendABC.GetCommandStatus(self, CommandInstance)
+    def GetCommandStatus(self, Command: CommandABC) -> CommandStatusResponse:
+        BackendABC.GetCommandStatus(self, Command)
         if self._Command is None:
             raise RuntimeError(
                 "No Command currently executing. Execute a command first..."
             )
 
-        if self._Command != CommandInstance:
+        if self._Command != Command:
             raise RuntimeError(
                 "You can only get a status for the currently executing command."
             )
@@ -40,23 +40,23 @@ class SimpleBackendABC(BackendABC):
         else:
             return CommandStatusResponse(ResponseReady=False)
 
-    def WaitForResponseBlocking(self, CommandInstance: CommandABC):
-        BackendABC.WaitForResponseBlocking(self, CommandInstance)
+    def WaitForResponseBlocking(self, Command: CommandABC):
+        BackendABC.WaitForResponseBlocking(self, Command)
 
-        while self.GetCommandStatus(CommandInstance).ResponseReady != True:
+        while self.GetCommandStatus(Command).ResponseReady != True:
             ...
 
     def GetResponse(
-        self, CommandInstance: CommandABC, ResponseType: Type[ResponseABCType]
+        self, Command: CommandABC, ResponseType: Type[ResponseABCType]
     ) -> ResponseABCType:
-        BackendABC.GetResponse(self, CommandInstance, ResponseType)
+        BackendABC.GetResponse(self, Command, ResponseType)
 
         if self._Command is None:
             raise RuntimeError(
                 "No Command currently executing. Execute a command first..."
             )
 
-        if self._Command != CommandInstance:
+        if self._Command != Command:
             raise RuntimeError(
                 "You can only get a response for the currently executing command."
             )
