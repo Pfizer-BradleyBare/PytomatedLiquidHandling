@@ -6,6 +6,4 @@ from ....Tools.AbstractClasses import ResponseABC
 
 @dataclass
 class UnchainedLabsResponseABC(ResponseABC):
-    @ResponseABC.Decorator_ExpectedResponseProperty
-    def GetMeasurementInfo(self) -> str:
-        ...
+    StatusCode: int

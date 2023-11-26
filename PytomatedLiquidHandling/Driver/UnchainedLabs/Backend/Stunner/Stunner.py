@@ -13,7 +13,8 @@ class StunnerBackend(SimpleBackendABC):
     InstrumentPort: int
     _StunnerDLLObject: Any = PrivateAttr()
 
-    def __post_init__(self):
+    def model_post_init(self, __context: Any) -> None:
+        SimpleBackendABC.model_post_init(self, __context)
         BasePath = os.path.dirname(__file__)
 
         Args = (
@@ -38,13 +39,13 @@ class StunnerBackend(SimpleBackendABC):
         # The stunner API access uses a .DLL library. This step creates the stunner class present in the .dll.
 
     def StunnerRunnerThread(self):
-        CommandInstance = self._CommandInstance
+        Command = self._Command
 
-        if not isinstance(CommandInstance, UnchainedLabsCommandABC):
+        if not isinstance(Command, UnchainedLabsCommandABC):
             raise Exception("This should never happen")
 
-        self._ResponseInstance = CommandInstance.ParseResponse(
-            CommandInstance.ExecuteCommandHelper(self._StunnerDLLObject)
+        self._ResponseInstance = Command.ParseResponse(
+            Command.ExecuteCommandHelper(self._StunnerDLLObject)
         )
 
     def StartBackend(self):
