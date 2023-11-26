@@ -4,5 +4,4 @@ from ...Backend import HamiltonResponseABC
 
 
 class Response(HamiltonResponseABC):
-    def GetFailedLabwareIDs(self) -> list[str]:
-        ...
+    FailedLabwareIDs: list[str]

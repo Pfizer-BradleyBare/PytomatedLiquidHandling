@@ -1,5 +1,5 @@
-from ...Backend import HamiltonBlockDataPackage, HamiltonResponseABC
+from ...Backend import HamiltonResponseABC
 
 
 class Response(HamiltonResponseABC):
-    RecoveryDetails: HamiltonBlockDataPackage
+    ...
