@@ -1,21 +1,10 @@
 from . import (
-    Connect,
-    GetShakingSpeed,
+    CreateUSBDevice,
+    GetShakerSpeed,
     GetTemperature,
     SetPlateLock,
-    StartShakeControl,
-    StartTemperatureControl,
-    StopShakeControl,
-    StopTemperatureControl,
+    StartShaker,
+    StartTempCtrl,
+    StopShaker,
+    StopTempCtrl,
 )
-
-__all__ = [
-    "Connect",
-    "GetShakingSpeed",
-    "GetTemperature",
-    "SetPlateLock",
-    "StartShakeControl",
-    "StartTemperatureControl",
-    "StopShakeControl",
-    "StopTemperatureControl",
-]
