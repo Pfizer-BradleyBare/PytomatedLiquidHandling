@@ -77,7 +77,7 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
             Line.append(Opt.SamplePlatePosition)
             Line.append(f"SG{Opt.SampleGroup}")
             Line.append(str(Opt.AnalyteMetaData))
-            Line.append(str(Opt.MatrixMetaData))
+            Line.append(str(Opt.BufferMetaData))
             Line.append(str(Opt.ExtinctionCoefficient))
 
             if BlankingInformation == 3:

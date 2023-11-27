@@ -14,7 +14,7 @@ class Options(OptionsABC):
     ExtinctionCoefficient: float = 1.0
     BlankSampleName: Optional[str] = None
     AnalyteMetaData: Optional[str] = None
-    MatrixMetaData: Optional[str] = None
+    BufferMetaData: Optional[str] = None
 
 
 @dataclasses.dataclass(kw_only=True)
