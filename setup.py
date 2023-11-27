@@ -13,6 +13,7 @@ setup(
         "networkx",
         "processscheduler",
         "pydantic",
+        "pythonnet",
     ],
     url="https://github.com/Pfizer-BradleyBare/PytomatedLiquidHandling.git",
     author="Bradley Bare",
