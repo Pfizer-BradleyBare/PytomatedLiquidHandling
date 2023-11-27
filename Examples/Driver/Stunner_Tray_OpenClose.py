@@ -8,7 +8,7 @@ from PytomatedLiquidHandling.Driver.UnchainedLabs.Backend import StunnerBackend
 Command = DefineExperiment.Command(
     Options=DefineExperiment.ListedOptions(
         ExperimentName="Test",
-        ApplicationName=DefineExperiment.ListedOptions.ApplicationNameOptions.App,
+        ApplicationName=DefineExperiment.ListedOptions.ApplicationNameOptions.ProteinSinglePoint,
     )
 )
 Command.Options.append(
