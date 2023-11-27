@@ -29,9 +29,7 @@ ListedOptions.append(
         LabwareSupportingText="Hello!",
     )
 )
-CommandInstance = Carrier5Position.Command(
-    CustomErrorHandling=False, Options=ListedOptions
-)
+CommandInstance = Carrier5Position.Command(Options=ListedOptions)
 
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
