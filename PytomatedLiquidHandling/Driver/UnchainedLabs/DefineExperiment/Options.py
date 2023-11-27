@@ -20,7 +20,7 @@ class Options(OptionsABC):
 @dataclasses.dataclass(kw_only=True)
 class ListedOptions(list[Options]):
     class ApplicationNameOptions(Enum):
-        App = "App"
+        ProteinSinglePoint = "Protein (Single point)"
 
     ExperimentName: str
     ApplicationName: ApplicationNameOptions

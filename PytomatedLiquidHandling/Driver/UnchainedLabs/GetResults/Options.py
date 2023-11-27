@@ -18,8 +18,15 @@ class Options(str, Enum):
     PathLengthMode = "PathL length mode"
     Date = "Date"
     Time = "Time"
+    Pump = "Pump"
+    A280 = "A280"
+    A260A280 = "A260/A280"
+    E1 = "E1%"
+    BackgroundWavelength = "Background Wvl. (nm)"
+    BackgroundA340 = "Background (A340)"
     InstrumentID = "Instrument ID"
     AllAbsorbanceValues = "All absorbance values (10mm)"
+    PlateType = "Plate type"
 
 
 @dataclasses.dataclass(kw_only=True)
