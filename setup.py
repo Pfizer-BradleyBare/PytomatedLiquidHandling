@@ -13,6 +13,8 @@ setup(
         "networkx",
         "processscheduler",
         "pydantic",
+        "redmail",
+        "redbox",
     ],
     url="https://github.com/Pfizer-BradleyBare/PytomatedLiquidHandling.git",
     author="Bradley Bare",
