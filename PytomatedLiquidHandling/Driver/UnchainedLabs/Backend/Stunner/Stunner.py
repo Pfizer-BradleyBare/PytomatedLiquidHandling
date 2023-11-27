@@ -1,8 +1,9 @@
 import os
 import subprocess
 import threading
-from pydantic import PrivateAttr
 from typing import Any, cast
+
+from pydantic import PrivateAttr
 
 from ....Tools.AbstractClasses import SimpleBackendABC
 from ..UnchainedLabsCommand import UnchainedLabsCommandABC

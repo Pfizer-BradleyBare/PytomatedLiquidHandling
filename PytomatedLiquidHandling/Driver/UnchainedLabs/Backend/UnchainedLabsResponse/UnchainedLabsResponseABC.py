@@ -1,8 +1,10 @@
+from enum import Enum
 from typing import Any
+
+from pydantic import field_validator
+
 from ....Tools.AbstractClasses import ResponseABC
 from ..Exceptions import ExceptionStatusCodeMap
-from pydantic import field_validator
-from enum import Enum
 
 
 class UnchainedLabsResponseABC(ResponseABC):
@@ -24,7 +26,7 @@ class UnchainedLabsResponseABC(ResponseABC):
         AccessAndConnectionTrayIsMoving = 52
         ClientExitAccepted = 999
 
-    StatusCode: int
+    StatusCode: StatusCodes
 
     @field_validator("StatusCode", mode="before")
     def __StatusCodeValidate(cls, v):
