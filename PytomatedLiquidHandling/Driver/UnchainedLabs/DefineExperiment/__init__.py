@@ -1,3 +1,3 @@
 from .Command import Command
-from .Options import Options
+from .Options import ListedOptions, Options
 from .Response import Response

@@ -33,18 +33,20 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
             BlankingInformation = 0
             BlankNameUsed = ""
             # If no blanks then we are going to autoblank
-        elif not all(Blank is None for Blank in Blanks):
+        elif not all(Blank is not None for Blank in Blanks):
             return Exception("Incorrect options")
             # Blanking is either all our none.
         else:
-            if len(Blanks) == 1:
-                BlankingInformation = 2
-                BlankNameUsed = Blanks[0]
-                # We only have one blanks across all samples so single blank
-            elif len(Blanks) == len(set(Blanks)):
+            if len(set(Blanks)) == 1 and len(self.Options) != len(
+                set(PlateInfo.keys())
+            ):
                 BlankingInformation = 1
                 BlankNameUsed = Blanks[0]
-                # All blank names are the same but we have more than one blank. Average
+                # All blank names are the same but we have more than one blank sample. Average
+            elif len(set(Blanks)) == 1:
+                BlankingInformation = 2
+                BlankNameUsed = Blanks[0]
+                # We only have one blank across all samples so single blank
             else:
                 BlankingInformation = 3
                 BlankNameUsed = ""
@@ -96,7 +98,7 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
         ExperimentDefinition += f'plate_type="Stunner Plate"'
         ExperimentDefinition += "\n"
         ExperimentDefinition += "\n"
-        ExperimentDefinition = "[Import samples]"
+        ExperimentDefinition += "[Import samples]"
         ExperimentDefinition += "\n"
         ExperimentDefinition += f"column_source_plate={ColumnSourcePlate}"
         ExperimentDefinition += "\n"
@@ -124,11 +126,11 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
         ExperimentDefinition += "\n"
         ExperimentDefinition += f"blanking_information={BlankingInformation}"
         ExperimentDefinition += "\n"
-        ExperimentDefinition += f"blank_plate_ID={BlankPlateID}"
+        ExperimentDefinition += f'blank_plate_ID="{BlankPlateID}"'
         ExperimentDefinition += "\n"
-        ExperimentDefinition += f"blank_plate_position={BlankPlatePosition}"
+        ExperimentDefinition += f'blank_plate_position="{BlankPlatePosition}"'
         ExperimentDefinition += "\n"
-        ExperimentDefinition += f"blank_name_used={BlankNameUsed}"
+        ExperimentDefinition += f'blank_name_used="{BlankNameUsed}"'
         ExperimentDefinition += "\n"
         ExperimentDefinition += (
             f'stored_blanks_sample_group_name="{StoredBlanksSampleGroupName}"'
@@ -137,5 +139,9 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
         ExperimentDefinition += f'column_stored_blanks_sample_group_name="{ColumnStoredBlanksSampleGroupName}"'
         # Assemble Experiment Definition
 
-        print(ExperimentDefinition)
-        print(SampleDefinition)
+        DefinedPlateIDs = list()
+        StatusCode = StunnerDLLObject(
+            ExperimentDefinition, SampleDefinition, DefinedPlateIDs
+        )
+
+        return dict(StatusCode=StatusCode, DefinedPlateIDs=DefinedPlateIDs)
