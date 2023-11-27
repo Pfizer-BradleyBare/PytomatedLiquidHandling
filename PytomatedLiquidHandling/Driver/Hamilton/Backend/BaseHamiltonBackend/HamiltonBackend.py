@@ -8,7 +8,6 @@ from pydantic import PrivateAttr
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
     BackendABC,
-    CommandStatusResponse,
     ResponseABC,
 )
 
@@ -127,33 +126,27 @@ class HamiltonBackendABC(BackendABC):
         else:
             self._ActionServer.ExecuteCommand(Command)
 
-    def GetCommandStatus(
-        self, Command: HamiltonActionCommandABC | HamiltonStateCommandABC
-    ) -> CommandStatusResponse:
-        BackendABC.GetCommandStatus(self, Command)
-
-        if self._HamiltonProcess.poll() != None:
-            self._HamiltonProcess = subprocess.Popen(
-                [
-                    "C:\\Program Files (x86)\\HAMILTON\\Bin\\HxRun.exe",
-                    "-t",
-                    self.MethodPath,
-                ]
-            )
-        # If the process closed then we need to reopen it. Only the script can close the Hamilton.
-
-        if isinstance(Command, HamiltonStateCommandABC):
-            return self._StateServer.GetCommandStatus(Command)
-        else:
-            return self._ActionServer.GetCommandStatus(Command)
-
     def WaitForResponseBlocking(
         self, Command: HamiltonActionCommandABC | HamiltonStateCommandABC
     ):
         BackendABC.WaitForResponseBlocking(self, Command)
 
-        while self.GetCommandStatus(Command).ResponseReady != True:
-            ...
+        if isinstance(Command, HamiltonStateCommandABC):
+            Server = self._StateServer
+        else:
+            Server = self._ActionServer
+
+        while Server._Response is None:
+            if self._HamiltonProcess.poll() != None:
+                self._HamiltonProcess = subprocess.Popen(
+                    [
+                        "C:\\Program Files (x86)\\HAMILTON\\Bin\\HxRun.exe",
+                        "-t",
+                        self.MethodPath,
+                    ]
+                )
+        # If the process closed then we need to reopen it. Only the script can close the Hamilton.
+        # NOTE: This should be done differently but not sure how yet.
 
     def GetResponse(
         self,

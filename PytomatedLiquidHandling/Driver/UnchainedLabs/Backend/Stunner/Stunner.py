@@ -2,7 +2,7 @@ import os
 import subprocess
 import threading
 from pydantic import PrivateAttr
-from typing import Any
+from typing import Any, cast
 
 from ....Tools.AbstractClasses import SimpleBackendABC
 from ..UnchainedLabsCommand import UnchainedLabsCommandABC
@@ -26,7 +26,7 @@ class StunnerBackend(SimpleBackendABC):
         )
         subprocess.call(Args)
         # The stunner API access uses a .DLL library. This step cleans the .dll.
-        # Microsoft will not let you load a .dll without cleaning it first.
+        # Microsoft will not let you load a .dll without cleaning it first. Fun Fact!
 
         import clr
 
@@ -39,6 +39,10 @@ class StunnerBackend(SimpleBackendABC):
         self._StunnerDLLObject = Stunner(self.InstrumentIPAddress, self.InstrumentPort)
         # The stunner API access uses a .DLL library. This step creates the stunner class present in the .dll.
 
+    def ExecuteCommandThread(self):
+        Command = cast(UnchainedLabsCommandABC, self._Command)
+        self._Response = Command._ExecuteCommandHelper(self._StunnerDLLObject)
+
     def StartBackend(self):
         SimpleBackendABC.StartBackend(self)
 
@@ -49,7 +53,10 @@ class StunnerBackend(SimpleBackendABC):
 
         UnchainedLabsResponseABC(StatusCode=self._StunnerDLLObject.Release_Access())
 
-    def ExecuteCommand(self, Command: UnchainedLabsCommandABC):
-        SimpleBackendABC.ExecuteCommand(self, Command)
+    def ExecuteCommand(self, CommandInstance: UnchainedLabsCommandABC):
+        SimpleBackendABC.ExecuteCommand(self, CommandInstance)
 
-        self._Response = Command._ExecuteCommandHelper(self._StunnerDLLObject)
+        threading.Thread(
+            target=StunnerBackend.ExecuteCommandThread, args=(self,)
+        ).start()
+        # We use a thread because actions like open and close can take a while. Better to free up processing time.

@@ -4,7 +4,7 @@ from pydantic import PrivateAttr, ValidationError
 
 from ..Command import CommandABC
 from ..Response import ResponseABC
-from .BackendABC import BackendABC, CommandStatusResponse
+from .BackendABC import BackendABC
 
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
@@ -22,28 +22,10 @@ class SimpleBackendABC(BackendABC):
 
         self._Command = Command
 
-    def GetCommandStatus(self, Command: CommandABC) -> CommandStatusResponse:
-        BackendABC.GetCommandStatus(self, Command)
-        if self._Command is None:
-            raise RuntimeError(
-                "No Command currently executing. Execute a command first..."
-            )
-
-        if self._Command != Command:
-            raise RuntimeError(
-                "You can only get a status for the currently executing command."
-            )
-
-        if not self._Response is None:
-            return CommandStatusResponse(ResponseReady=True)
-
-        else:
-            return CommandStatusResponse(ResponseReady=False)
-
     def WaitForResponseBlocking(self, Command: CommandABC):
         BackendABC.WaitForResponseBlocking(self, Command)
 
-        while self.GetCommandStatus(Command).ResponseReady != True:
+        while self._Response is None:
             ...
 
     def GetResponse(

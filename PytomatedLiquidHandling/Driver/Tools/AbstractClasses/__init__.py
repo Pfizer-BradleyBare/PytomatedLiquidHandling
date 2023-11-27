@@ -1,6 +1,5 @@
 from .Backend import (
     BackendABC,
-    CommandStatusResponse,
     ServerBackendABC,
     SimpleBackendABC,
 )
