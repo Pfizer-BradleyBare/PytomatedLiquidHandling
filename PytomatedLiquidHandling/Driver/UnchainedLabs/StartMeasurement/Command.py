@@ -6,7 +6,6 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import CommandOptions
 from ..Backend import UnchainedLabsCommandABC
 from .Options import Options
 
-
 @dataclass(kw_only=True)
 class Command(UnchainedLabsCommandABC, CommandOptions[Options]):
     def _ExecuteCommandHelper(self, StunnerDLLObject) -> dict | Exception:

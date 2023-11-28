@@ -3,6 +3,5 @@ from ..Backend import UnchainedLabsCommandABC
 
 class Command(UnchainedLabsCommandABC):
     def _ExecuteCommandHelper(self, StunnerDLLObject) -> dict | Exception:
-        MeasurementInfo = ""
-        StatusCode = StunnerDLLObject.Get_Status(MeasurementInfo)
-        return dict(StatusCode=StatusCode, MeasurementInfo=MeasurementInfo)
+        Result = StunnerDLLObject.Get_Status("")
+        return dict(StatusCode=Result[0], MeasurementInfo=Result[1])

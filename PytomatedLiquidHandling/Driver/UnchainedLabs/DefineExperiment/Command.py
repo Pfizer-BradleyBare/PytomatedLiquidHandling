@@ -95,7 +95,7 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
             f'application_name="{self.Options.ApplicationName.value}"'
         )
         ExperimentDefinition += "\n"
-        ExperimentDefinition += f'plate_type="Stunner Plate"'
+        ExperimentDefinition += f'dropplate_type="Stunner Plate"'
         ExperimentDefinition += "\n"
         ExperimentDefinition += "\n"
         ExperimentDefinition += "[Import samples]"
@@ -136,12 +136,11 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
             f'stored_blanks_sample_group_name="{StoredBlanksSampleGroupName}"'
         )
         ExperimentDefinition += "\n"
-        ExperimentDefinition += f'column_stored_blanks_sample_group_name="{ColumnStoredBlanksSampleGroupName}"'
+        ExperimentDefinition += f'column_stored_blanks_sample_group_name={ColumnStoredBlanksSampleGroupName}'
         # Assemble Experiment Definition
 
-        DefinedPlateIDs = list()
-        StatusCode = StunnerDLLObject(
-            ExperimentDefinition, SampleDefinition, DefinedPlateIDs
+        Result = StunnerDLLObject.Define_Experiment(
+            ExperimentDefinition, SampleDefinition, []
         )
 
-        return dict(StatusCode=StatusCode, DefinedPlateIDs=DefinedPlateIDs)
+        return dict(StatusCode=Result[0], DefinedPlateIDs=Result[1])

@@ -30,6 +30,8 @@ class UnchainedLabsResponseABC(ResponseABC):
 
     @field_validator("StatusCode", mode="before")
     def __StatusCodeValidate(cls, v):
+        if isinstance(v,tuple):
+            v = v[0]
         if v < 0:
             raise ExceptionStatusCodeMap[v]
 
