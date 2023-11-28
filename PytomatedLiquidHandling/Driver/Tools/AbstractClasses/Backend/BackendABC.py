@@ -1,9 +1,8 @@
 from abc import abstractmethod
 from typing import Type, TypeVar
 
-from pydantic import PrivateAttr
+from pydantic import PrivateAttr, BaseModel
 
-from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
 
 from ..Command import CommandABC
 from ..Response import ResponseABC
@@ -11,11 +10,7 @@ from ..Response import ResponseABC
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 
-class CommandStatusResponse(ResponseABC):
-    ResponseReady: bool
-
-
-class BackendABC(AbstractClasses.HALDevice):
+class BackendABC(BaseModel):
     Identifier: str
     _IsRunning: bool = PrivateAttr(default=False)
 
@@ -32,19 +27,15 @@ class BackendABC(AbstractClasses.HALDevice):
         self._IsRunning = False
 
     @abstractmethod
-    def ExecuteCommand(self, CommandInstance: CommandABC):
+    def ExecuteCommand(self, Command: CommandABC):
         self.__CheckRunning()
 
     @abstractmethod
-    def GetCommandStatus(self, CommandInstance: CommandABC) -> CommandStatusResponse:
-        self.__CheckRunning()
-
-    @abstractmethod
-    def WaitForResponseBlocking(self, CommandInstance: CommandABC):
+    def WaitForResponseBlocking(self, Command: CommandABC):
         self.__CheckRunning()
 
     @abstractmethod
     def GetResponse(
-        self, CommandInstance: CommandABC, ResponseType: Type[ResponseABCType]
+        self, Command: CommandABC, ResponseType: Type[ResponseABCType]
     ) -> ResponseABCType:
         self.__CheckRunning()

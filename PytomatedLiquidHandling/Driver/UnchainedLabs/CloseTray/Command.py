@@ -1,10 +1,6 @@
-from dataclasses import dataclass
-from typing import Any
-
 from ..Backend import UnchainedLabsCommandABC
 
 
-@dataclass(kw_only=True)
 class Command(UnchainedLabsCommandABC):
-    def ExecuteCommandHelper(self, StunnerDLLObject) -> Any:
-        return StunnerDLLObject.Close_Tray()
+    def _ExecuteCommandHelper(self, StunnerDLLObject) -> dict | Exception:
+        return dict(StatusCode=StunnerDLLObject.Close_Tray())

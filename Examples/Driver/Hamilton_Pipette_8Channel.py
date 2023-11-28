@@ -18,32 +18,47 @@ ListedOptions = Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
     TipCounter="N", DialogTitle="Edit 1000uL Tip Positions"
 )
 ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0001_0003")
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
+        LabwareID="TIP_50ul_L_NE_stack_0001_0003"
+    )
 )
 ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0002_0002")
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
+        LabwareID="TIP_50ul_L_NE_stack_0002_0002"
+    )
 )
 ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0001_0001")
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
+        LabwareID="TIP_50ul_L_NE_stack_0001_0001"
+    )
 )
 ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0002_0004")
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
+        LabwareID="TIP_50ul_L_NE_stack_0002_0004"
+    )
 )
 ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0001_0004")
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
+        LabwareID="TIP_50ul_L_NE_stack_0001_0004"
+    )
 )
 ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0001_0002")
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
+        LabwareID="TIP_50ul_L_NE_stack_0001_0002"
+    )
 )
 ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0002_0003")
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
+        LabwareID="TIP_50ul_L_NE_stack_0002_0003"
+    )
 )
 ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options("TIP_50ul_L_NE_stack_0002_0001")
+    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
+        LabwareID="TIP_50ul_L_NE_stack_0002_0001"
+    )
 )
 CommandInstance = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
-    CustomErrorHandling=False,
-    Options=ListedOptions,
+    Options=ListedOptions
 )
 
 Backend.ExecuteCommand(CommandInstance)
@@ -138,7 +153,7 @@ for Pos in AvailablePositions[8:]:
         )
     )
 CommandInstance = Visual_NTR_Library.Channels_TipCounter_Write.Command(
-    CustomErrorHandling=False, Options=ListedOptions
+    Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)

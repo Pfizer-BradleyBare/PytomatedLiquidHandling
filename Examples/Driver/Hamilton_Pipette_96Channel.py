@@ -14,13 +14,12 @@ Backend.StartBackend()
 ListedOptions = HSLTipCountingLib.Edit.ListedOptions(
     TipCounter="N", DialogTitle="Edit 1000uL Tip Positions"
 )
-ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0001"))
-ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0002"))
-ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0003"))
-ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0004"))
-ListedOptions.append(HSLTipCountingLib.Edit.Options("HT_L_0005"))
+ListedOptions.append(HSLTipCountingLib.Edit.Options(LabwareID="HT_L_0001"))
+ListedOptions.append(HSLTipCountingLib.Edit.Options(LabwareID="HT_L_0002"))
+ListedOptions.append(HSLTipCountingLib.Edit.Options(LabwareID="HT_L_0003"))
+ListedOptions.append(HSLTipCountingLib.Edit.Options(LabwareID="HT_L_0004"))
+ListedOptions.append(HSLTipCountingLib.Edit.Options(LabwareID="HT_L_0005"))
 CommandInstance = HSLTipCountingLib.Edit.Command(
-    CustomErrorHandling=False,
     Options=ListedOptions,
 )
 
@@ -81,9 +80,7 @@ for Pos in AvailablePositions[96:]:
             LabwareID=Pos["LabwareID"], PositionID=Pos["PositionID"]
         )
     )
-CommandInstance = HSLTipCountingLib.Write.Command(
-    CustomErrorHandling=False, Options=ListedOptions
-)
+CommandInstance = HSLTipCountingLib.Write.Command(Options=ListedOptions)
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
 Backend.GetResponse(CommandInstance, HSLTipCountingLib.Write.Response)

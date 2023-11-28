@@ -1,6 +1,6 @@
 from enum import Enum
 
-from pydantic import BaseModel
+from pydantic import dataclasses
 
 from ....Tools.AbstractClasses import OptionsABC
 
@@ -9,7 +9,8 @@ class Options(OptionsABC):
     LabwareID: str
 
 
-class ListedOptions(list[Options], BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class ListedOptions(list[Options]):
     class SortingOptions(Enum):
         RackColumns = 0
         TierColumns = 1

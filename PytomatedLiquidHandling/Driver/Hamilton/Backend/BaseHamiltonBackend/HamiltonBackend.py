@@ -8,7 +8,6 @@ from pydantic import PrivateAttr
 
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import (
     BackendABC,
-    CommandStatusResponse,
     ResponseABC,
 )
 
@@ -111,7 +110,7 @@ class HamiltonBackendABC(BackendABC):
         class AbortCommand(HamiltonActionCommandABC):
             ...
 
-        Command = AbortCommand(CustomErrorHandling=True)
+        Command = AbortCommand()
         self._ActionServer._Command = Command
         self._ActionServer.WaitForResponseBlocking(Command)
 
@@ -119,50 +118,44 @@ class HamiltonBackendABC(BackendABC):
         self._StateServer.StopBackend()
 
     def ExecuteCommand(
-        self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
+        self, Command: HamiltonActionCommandABC | HamiltonStateCommandABC
     ):
-        BackendABC.ExecuteCommand(self, CommandInstance)
-        if isinstance(CommandInstance, HamiltonStateCommandABC):
-            self._StateServer.ExecuteCommand(CommandInstance)
+        BackendABC.ExecuteCommand(self, Command)
+        if isinstance(Command, HamiltonStateCommandABC):
+            self._StateServer.ExecuteCommand(Command)
         else:
-            self._ActionServer.ExecuteCommand(CommandInstance)
-
-    def GetCommandStatus(
-        self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
-    ) -> CommandStatusResponse:
-        BackendABC.GetCommandStatus(self, CommandInstance)
-
-        if self._HamiltonProcess.poll() != None:
-            self._HamiltonProcess = subprocess.Popen(
-                [
-                    "C:\\Program Files (x86)\\HAMILTON\\Bin\\HxRun.exe",
-                    "-t",
-                    self.MethodPath,
-                ]
-            )
-        # If the process closed then we need to reopen it. Only the script can close the Hamilton.
-
-        if isinstance(CommandInstance, HamiltonStateCommandABC):
-            return self._StateServer.GetCommandStatus(CommandInstance)
-        else:
-            return self._ActionServer.GetCommandStatus(CommandInstance)
+            self._ActionServer.ExecuteCommand(Command)
 
     def WaitForResponseBlocking(
-        self, CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC
+        self, Command: HamiltonActionCommandABC | HamiltonStateCommandABC
     ):
-        BackendABC.WaitForResponseBlocking(self, CommandInstance)
+        BackendABC.WaitForResponseBlocking(self, Command)
 
-        while self.GetCommandStatus(CommandInstance).ResponseReady != True:
-            ...
+        if isinstance(Command, HamiltonStateCommandABC):
+            Server = self._StateServer
+        else:
+            Server = self._ActionServer
+
+        while Server._Response is None:
+            if self._HamiltonProcess.poll() != None:
+                self._HamiltonProcess = subprocess.Popen(
+                    [
+                        "C:\\Program Files (x86)\\HAMILTON\\Bin\\HxRun.exe",
+                        "-t",
+                        self.MethodPath,
+                    ]
+                )
+        # If the process closed then we need to reopen it. Only the script can close the Hamilton.
+        # NOTE: This should be done differently but not sure how yet.
 
     def GetResponse(
         self,
-        CommandInstance: HamiltonActionCommandABC | HamiltonStateCommandABC,
+        Command: HamiltonActionCommandABC | HamiltonStateCommandABC,
         ResponseType: Type[HamiltonResponseABCType],
     ) -> HamiltonResponseABCType:
-        BackendABC.GetResponse(self, CommandInstance, ResponseType)
-        if isinstance(CommandInstance, HamiltonStateCommandABC):
-            return self._StateServer.GetResponse(CommandInstance, ResponseType)
+        BackendABC.GetResponse(self, Command, ResponseType)
+        if isinstance(Command, HamiltonStateCommandABC):
+            return self._StateServer.GetResponse(Command, ResponseType)
 
         else:
-            return self._ActionServer.GetResponse(CommandInstance, ResponseType)
+            return self._ActionServer.GetResponse(Command, ResponseType)

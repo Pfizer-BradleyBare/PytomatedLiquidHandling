@@ -107,9 +107,10 @@ class HamiltonResponseABC(ResponseABC):
     @field_validator("*", mode="before")
     # NOTE: This will attempt to validate all data but will only validate HamiltonBlockDataPackage types internally
     def __HamiltonBlockDataValidate(cls, v, Info: ValidationInfo):
-        if (
-            cls.model_fields[cast(str, Info.field_name)].annotation
-            == HamiltonBlockDataPackage
+        if cls.model_fields[
+            cast(str, Info.field_name)
+        ].annotation == HamiltonBlockDataPackage and not isinstance(
+            v, HamiltonBlockDataPackage
         ):
             v = cast(str, v)
 

@@ -4,9 +4,7 @@ from typing import Any, Callable, cast
 
 from flask import request
 
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Backend.SimpleBackendABC import (
-    CommandStatusResponse,
-)
+
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
 
 from ....Tools.AbstractClasses import CommandOptionsListed, ServerBackendABC
@@ -37,16 +35,16 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
             time.sleep(0.1)
 
-        CommandInstance = cast(HamiltonCommandABC, self._Command)
+        Command = cast(HamiltonCommandABC, self._Command)
 
-        if CommandInstance is None:
+        if Command is None:
             ParserObject.SetEndpointState(False)
             ParserObject.SetEndpointDetails("Command not available. Please try again.")
             Response = ParserObject.GetHTTPResponse()
             return Response
 
-        if isinstance(CommandInstance, CommandOptionsListed):
-            if len(CommandInstance.Options) == 0:
+        if isinstance(Command, CommandOptionsListed):
+            if len(Command.Options) == 0:
                 self._Response = ValueError(
                     "There are no options in the options tracker"
                 )
@@ -55,21 +53,21 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         ParserObject.SetEndpointState(True)
 
-        # ParserObject.SetEndpointOutputKey("Request Identifier", CommandInstance.GetID())
-        ParserObject.SetEndpointOutputKey(
-            "CustomErrorHandling", CommandInstance.CustomErrorHandling
-        )
-        ParserObject.SetEndpointOutputKey("Module Name", CommandInstance.ModuleName)
-        ParserObject.SetEndpointOutputKey("Command Name", CommandInstance.CommandName)
-        try:
+        if hasattr(Command, "CustomErrorHandling"):
             ParserObject.SetEndpointOutputKey(
-                "Command Parameters", CommandInstance.GetVars()
+                "CustomErrorHandling", getattr(Command, "CustomErrorHandling")
             )
+
+        ParserObject.SetEndpointOutputKey("Module Name", Command.ModuleName)
+        ParserObject.SetEndpointOutputKey("Command Name", Command.CommandName)
+
+        try:
+            ParserObject.SetEndpointOutputKey("Command Parameters", Command.GetVars())
         except:
             self._Response = RuntimeError(
                 "Error while converting Options to json dict."
             )
-        # TODO: This is a fragile function. Catch errors if this occur...
+        # TODO: This is a fragile function. Catch errors if they occur...
 
         Response = ParserObject.GetHTTPResponse()
         return Response

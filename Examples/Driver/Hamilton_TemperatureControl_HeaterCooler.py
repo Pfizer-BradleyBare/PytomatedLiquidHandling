@@ -16,7 +16,6 @@ Backend.StartBackend()
 
 Command = HamiltonHeaterCooler.Connect.Command(
     Options=HamiltonHeaterCooler.Connect.Options(ComPort="COM4"),
-    CustomErrorHandling=False,
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
@@ -25,24 +24,19 @@ HeaterShakerHandleId = Response.HandleID
 # Connect and get our Handle
 
 DesiredTemperature = 37
-Command = HamiltonHeaterCooler.StartTemperatureControl.Command(
-    Options=HamiltonHeaterCooler.StartTemperatureControl.Options(
+Command = HamiltonHeaterCooler.SetTemperature.Command(
+    Options=HamiltonHeaterCooler.SetTemperature.Options(
         HandleID=HeaterShakerHandleId, Temperature=DesiredTemperature
     ),
-    CustomErrorHandling=False,
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Response = Backend.GetResponse(
-    Command, HamiltonHeaterCooler.StartTemperatureControl.Response
-)
+Response = Backend.GetResponse(Command, HamiltonHeaterCooler.SetTemperature.Response)
 # Turn on the Heat
 
 TemperatureOffset = 2
 for i in range(0, 1):
-    Command = StartTimer.Command(
-        Options=StartTimer.Options(WaitTime=10), CustomErrorHandling=False
-    )
+    Command = StartTimer.Command(Options=StartTimer.Options(WaitTime=10))
     Backend.ExecuteCommand(Command)
     Backend.WaitForResponseBlocking(Command)
     Backend.GetResponse(Command, StartTimer.Response)
@@ -51,7 +45,6 @@ for i in range(0, 1):
         Options=HamiltonHeaterCooler.GetTemperature.Options(
             HandleID=HeaterShakerHandleId
         ),
-        CustomErrorHandling=False,
     )
     Backend.ExecuteCommand(Command)
     Backend.WaitForResponseBlocking(Command)
@@ -70,9 +63,7 @@ for i in range(0, 1):
         break
 # Wait for temperature to fall within desired range.
 
-Command = StartTimer.Command(
-    Options=StartTimer.Options(WaitTime=30), CustomErrorHandling=False
-)
+Command = StartTimer.Command(Options=StartTimer.Options(WaitTime=30))
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
 Response = Backend.GetResponse(Command, StartTimer.Response)
@@ -82,7 +73,6 @@ Command = HamiltonHeaterCooler.StopTemperatureControl.Command(
     Options=HamiltonHeaterCooler.StopTemperatureControl.Options(
         HandleID=HeaterShakerHandleId
     ),
-    CustomErrorHandling=False,
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
