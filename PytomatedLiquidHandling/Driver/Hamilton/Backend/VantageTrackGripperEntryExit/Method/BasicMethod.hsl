@@ -93,6 +93,9 @@
  namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\VantageTrackGripperEntryExit\\Library\\TrackGripper\\TrackGripper.hs_" } 
  namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\VantageTrackGripperEntryExit\\Library\\TrackGripper\\TrackGripper.hs_" } 
  namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\VantageTrackGripperEntryExit\\Library\\TrackGripper\\TrackGripper.hs_" } 
+ namespace _Method { #include "HSLML_STARLib.hsl" } 
+ namespace _ActionServerProc { #include "HSLML_STARLib.hsl" } 
+ namespace _StateServerProc { #include "HSLML_STARLib.hsl" } 
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable StateServerProc;
 variable ActionServerProc;
@@ -248,4 +251,4 @@ TRACKGRIPPER::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2023-11-22 08:52$$checksum=763577d2$$length=091$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2023-11-23 07:39$$checksum=ec58dd05$$length=091$$
