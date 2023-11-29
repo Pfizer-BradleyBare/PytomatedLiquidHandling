@@ -6,5 +6,5 @@ from ..Backend import UnchainedLabsResponseABC
 
 
 class Response(UnchainedLabsResponseABC):
-    Results: dict[str, Any]
+    Results: str
     ResultsPath: str

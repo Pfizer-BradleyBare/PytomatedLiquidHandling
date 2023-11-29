@@ -140,7 +140,7 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
         # Assemble Experiment Definition
 
         Result = StunnerDLLObject.Define_Experiment(
-            ExperimentDefinition, SampleDefinition, []
+            ExperimentDefinition, SampleDefinition
         )
 
         return dict(StatusCode=Result[0], DefinedPlateIDs=Result[1])

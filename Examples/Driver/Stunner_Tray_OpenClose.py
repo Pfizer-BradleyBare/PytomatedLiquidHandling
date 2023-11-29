@@ -3,7 +3,7 @@ from PytomatedLiquidHandling.Driver.UnchainedLabs import (
     DefineExperiment,
     StartMeasurement,
     OpenTray,
-    GetResults,GetStatus
+    GetResults,GetStatus,Reset
 )
 from PytomatedLiquidHandling.Driver.UnchainedLabs.Backend import StunnerBackend
 
@@ -18,6 +18,10 @@ Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
 
+Command = CloseTray.Command()
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Backend.GetResponse(Command, CloseTray.Response)
 
 Command = DefineExperiment.Command(Options=DefineExperiment.ListedOptions(ExperimentName="Test",ApplicationName=DefineExperiment.ListedOptions.ApplicationNameOptions.ProteinSinglePoint))
 Command.Options.append(DefineExperiment.Options(SampleName="A",SamplePlateID="Plate 1",SamplePlatePosition="A1",SampleGroup=1))
@@ -29,17 +33,10 @@ Backend.WaitForResponseBlocking(Command)
 Response1 = Backend.GetResponse(Command, DefineExperiment.Response)
 print(Response1.DefinedPlateIDs)
 
-Command = OpenTray.Command()
+Command = GetStatus.Command()
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
-Backend.GetResponse(Command, OpenTray.Response)
-
-input("Load stunner plate then presss enter to continue")
-
-Command = CloseTray.Command()
-Backend.ExecuteCommand(Command)
-Backend.WaitForResponseBlocking(Command)
-Backend.GetResponse(Command, CloseTray.Response)
+Response = Backend.GetResponse(Command, GetStatus.Response)
 
 Command = StartMeasurement.Command(Options=StartMeasurement.Options(PlateID=Response1.DefinedPlateIDs[0]))
 Backend.ExecuteCommand(Command)
@@ -50,19 +47,15 @@ Backend.GetResponse(Command, StartMeasurement.Response)
 
 import time
 
-while True:
-    Command = GetStatus.Command()
-    Backend.ExecuteCommand(Command)
-    Backend.WaitForResponseBlocking(Command)
-    Response = Backend.GetResponse(Command, GetStatus.Response)
-    try:
+try:
+    while True:
+
         print(Response.StatusCode)
         print(Response.MeasurementInfo)
-    except:
-        print("LEAVING WHILE")
-        time.sleep(5)
-        break
-    time.sleep(1)
+        time.sleep(1)
+except:
+    print("LEAVING!")
+    time.sleep(5)
 
 Command = GetResults.Command(Options=GetResults.ListedOptions())
 Command.Options += [GetResults.Options.SampleName,GetResults.Options.A280,GetResults.Options.PlatePosition]
