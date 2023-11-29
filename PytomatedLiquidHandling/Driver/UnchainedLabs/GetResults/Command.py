@@ -23,8 +23,6 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
         ResultsDefinition += f'no_result_value="{self.Options.NoResultValue}"'
         ResultsDefinition += "\n"
 
-        Result = StunnerDLLObject.Get_Results(
-            ResultsDefinition, "", "",""
-        )
+        StatusCode, Results, ResultsPath = StunnerDLLObject.Get_Results(ResultsDefinition, "")
 
-        return dict(StatusCode=Result[0], Results=Result[1], ResultsPath=Result[2])
+        return dict(StatusCode=StatusCode, Results=Results, ResultsPath=ResultsPath)

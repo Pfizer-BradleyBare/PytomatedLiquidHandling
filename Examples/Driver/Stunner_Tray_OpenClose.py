@@ -8,6 +8,9 @@ from PytomatedLiquidHandling.Driver.UnchainedLabs import (
 from PytomatedLiquidHandling.Driver.UnchainedLabs.Backend import StunnerBackend
 
 
+
+
+
 Backend = StunnerBackend(
     Identifier="Example Stunner",
     InstrumentIPAddress="10.37.144.9",
@@ -50,12 +53,20 @@ import time
 try:
     while True:
 
+        Command = GetStatus.Command()
+        Backend.ExecuteCommand(Command)
+        Backend.WaitForResponseBlocking(Command)
+        Response = Backend.GetResponse(Command, GetStatus.Response)
+
         print(Response.StatusCode)
         print(Response.MeasurementInfo)
-        time.sleep(1)
+        print("Sleep")
+        time.sleep(5)
+
+
 except:
     print("LEAVING!")
-    time.sleep(5)
+    time.sleep(1)
 
 Command = GetResults.Command(Options=GetResults.ListedOptions())
 Command.Options += [GetResults.Options.SampleName,GetResults.Options.A280,GetResults.Options.PlatePosition]

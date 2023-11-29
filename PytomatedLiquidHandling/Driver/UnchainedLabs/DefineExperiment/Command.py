@@ -139,8 +139,8 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
         ExperimentDefinition += f'column_stored_blanks_sample_group_name={ColumnStoredBlanksSampleGroupName}'
         # Assemble Experiment Definition
 
-        Result = StunnerDLLObject.Define_Experiment(
+        StatusCode, DefinedPlateIDs = StunnerDLLObject.Define_Experiment(
             ExperimentDefinition, SampleDefinition
         )
 
-        return dict(StatusCode=Result[0], DefinedPlateIDs=Result[1])
+        return dict(StatusCode=StatusCode, DefinedPlateIDs=DefinedPlateIDs)
