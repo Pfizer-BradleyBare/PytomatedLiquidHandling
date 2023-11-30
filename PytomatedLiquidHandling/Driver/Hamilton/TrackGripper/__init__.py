@@ -1,1 +1,6 @@
-from . import GripPlate, LockUnlockDoors, MoveToPosition, PlacePlate
+from . import (
+    GripPlateFromTaughtPosition,
+    LockUnlockDoors,
+    MoveToHomePosition,
+    PlacePlateToTaughtPosition,
+)

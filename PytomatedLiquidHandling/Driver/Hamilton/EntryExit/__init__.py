@@ -1,1 +1,1 @@
-from . import CountLabwareInStack, LockUnlockDoors, MoveToBeam
+from . import CountLabwareInStack, LockUnlockDoors, MoveRandomShelfAccess, MoveToBeam
