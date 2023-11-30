@@ -97,6 +97,11 @@ Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
 Response = Backend.GetResponse(Command, GetResults.Response)
 
+Command = CloseTray.Command()
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Backend.GetResponse(Command, CloseTray.Response)
+
 print(Response.Results[0][GetResults.Options.SampleName])
 print(Response.ResultsPath)
 
