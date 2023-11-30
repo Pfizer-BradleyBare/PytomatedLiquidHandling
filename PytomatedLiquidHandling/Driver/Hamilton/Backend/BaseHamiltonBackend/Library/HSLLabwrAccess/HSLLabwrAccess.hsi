@@ -5,8 +5,9 @@
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
-#include "HSLDevLib.hsl"
 #include "HSLSeqLib.hsl"
+#include "HSLDevLib.hsl"
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -38,12 +39,14 @@ PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
 PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
 JSONPARSER::_InitLibrary();
 ACTIONSERVERENDPOINTS::_InitLibrary();
+STATESERVERENDPOINTS::_InitLibrary();
 // }} ""
 }
 function _ExitLibrary() {
 // {{ 2 "AutoExitBlock" ""
 JSONPARSER::_ExitLibrary();
 ACTIONSERVERENDPOINTS::_ExitLibrary();
+STATESERVERENDPOINTS::_ExitLibrary();
 // }} ""
 }
 // {{{ 5 "ValueForKeySetForPropertiesOfLabwareID" "Begin"
@@ -94,8 +97,8 @@ HSLLabwrAccess::ValueForKeySetForPropertiesOfLabwareID(ML_STAR, PropertyValue, P
 // {{ 47 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 48 1 0 "544fdbaf_4d77_466f_b9bd0458a06afdc2" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
+// {{{ 48 1 0 "75793733_be2d_49ad_b04ed82d41402491" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+STATESERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
 // {{{ 49 1 0 "3adf1c5a_3721_4546_8457254f90e6b3a9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
@@ -233,8 +236,8 @@ HSLJsonLib::SetStringArrayElement(o_JSONObject, Translate("FailedLabwareIDs"), C
 // {{ 32 1 0 "176cfabf_9cc4_4683_81c4b6e2b77c8e4d" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 33 1 0 "4a705fee_81f7_40a7_91b9cf0af23d6436" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
+// {{{ 33 1 0 "50a8251a_168c_48bd_8a26e92f70371006" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+STATESERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
 // {{{ 34 1 0 "6044ca5f_0f1c_4182_921aa051fcbc5545" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
@@ -249,4 +252,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-21 19:28$$checksum=2064bba4$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-11-30 13:25$$checksum=c105e3e8$$length=084$$

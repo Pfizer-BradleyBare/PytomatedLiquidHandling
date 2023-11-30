@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from ....Backend import HamiltonActionCommandABC
+from ....Backend import HamiltonStateCommandABC
 
 
 @dataclass(kw_only=True)
-class Command(HamiltonActionCommandABC):
+class Command(HamiltonStateCommandABC):
     ...
