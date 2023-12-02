@@ -67,6 +67,7 @@ class HamiltonBackendABC(BackendABC):
         SimulationConfigFile = (
             "C:\\Program Files (x86)\\HAMILTON\\Config\\HxServices.cfg"
         )
+        shutil.copyfile(SimulationConfigFile, SimulationConfigFile+".bak")
 
         subprocess.Popen(
             [
