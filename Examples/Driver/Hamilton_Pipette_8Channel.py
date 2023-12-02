@@ -1,10 +1,10 @@
 import os
 
 from PytomatedLiquidHandling.Driver.Hamilton import Visual_NTR_Library
-from PytomatedLiquidHandling.Driver.Hamilton.Backend import VantageTrackGripperEntryExit
+from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
 from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import Channel1000uL
 
-Backend = VantageTrackGripperEntryExit(
+Backend = MicrolabSTAR(
     Identifier="Example Star",
     DeckLayoutPath=os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
 )
@@ -12,9 +12,6 @@ Backend = VantageTrackGripperEntryExit(
 
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
-
-Backend.StopBackend()
-quit()
 
 ListedOptions = Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
     TipCounter="N", DialogTitle="Edit 1000uL Tip Positions"
