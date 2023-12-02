@@ -53,9 +53,6 @@
  namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
  namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
  namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
- namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\ClosedContainer\\FlipTube\\Fliptube.hs_" } 
- namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\ClosedContainer\\FlipTube\\Fliptube.hs_" } 
- namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\ClosedContainer\\FlipTube\\Fliptube.hs_" } 
  namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\DeckLoadingDialog\\DeckLoadingDialog.hs_" } 
  namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\DeckLoadingDialog\\DeckLoadingDialog.hs_" } 
  namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\DeckLoadingDialog\\DeckLoadingDialog.hs_" } 
@@ -86,11 +83,14 @@
  namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
  namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
  namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\General\\Timer.hs_" } 
-#include "ExampleLayout.res"
+ namespace _Method { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\FlipTubeTool\\FlipTubeTool.hs_" } 
+ namespace _ActionServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\FlipTubeTool\\FlipTubeTool.hs_" } 
+ namespace _StateServerProc { #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\MicrolabSTAR\\Library\\FlipTubeTool\\FlipTubeTool.hs_" } 
+#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Layout\\Layout.res"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable StateServerProc;
 variable ActionServerProc;
-global device ML_STAR ("ExampleLayout.lay", "ML_STAR", hslTrue);
+global device ML_STAR ("PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Layout\\Layout.lay", "ML_STAR", hslTrue);
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
  namespace _Method { #include "HSLMETEDLib.hs_" } 
@@ -156,7 +156,6 @@ HSLLABWRACCESS::_InitLibrary();
 HSL_LIQUIDCLASSLIB::_InitLibrary();
 JSONPARSER::_InitLibrary();
 HSLVACUUBRANDPUMP::_InitLibrary();
-FLIPTUBE::_InitLibrary();
 DECKLOADINGDIALOG::_InitLibrary();
 CHANNEL1000UL::_InitLibrary();
 CHANNEL1000ULCOREGRIP::_InitLibrary();
@@ -166,6 +165,7 @@ AUTOLOAD::_InitLibrary();
 ML_STAR::_InitLibrary();
 _HSLTIPCOUNTINGLIB::_InitLibrary();
 TIMER::_InitLibrary();
+FLIPTUBETOOL::_InitLibrary();
 ::RegisterAbortHandler( "OnAbort");
 // }} ""
 // {{ 1 1 0 "62ffc1ee_87f1_4777_bdbf6988152c0a4d" "ML_STAR:{1C0C0CB0-7C87-11D3-AD83-0004ACB1DCB2}"
@@ -209,7 +209,6 @@ HSLLABWRACCESS::_ExitLibrary();
 HSL_LIQUIDCLASSLIB::_ExitLibrary();
 JSONPARSER::_ExitLibrary();
 HSLVACUUBRANDPUMP::_ExitLibrary();
-FLIPTUBE::_ExitLibrary();
 DECKLOADINGDIALOG::_ExitLibrary();
 CHANNEL1000UL::_ExitLibrary();
 CHANNEL1000ULCOREGRIP::_ExitLibrary();
@@ -219,8 +218,9 @@ AUTOLOAD::_ExitLibrary();
 ML_STAR::_ExitLibrary();
 _HSLTIPCOUNTINGLIB::_ExitLibrary();
 TIMER::_ExitLibrary();
+FLIPTUBETOOL::_ExitLibrary();
 // }} ""
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-22 08:13$$checksum=968787ee$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-12-02 05:04$$checksum=ffb5034e$$length=084$$
