@@ -1,10 +1,10 @@
 
 // this ALWAYS GENERATED file contains the sub-method library header
-// Generated at 11/17/2023 4:01:35 PM
+// Generated at 12/2/2023 4:50:55 AM
 
 #pragma once
 #ifndef HSL_RUNTIME
-namespace FLIPTUBE {
+namespace FLIPTUBETOOL {
 function _InitLibrary() { }
 function _ExitLibrary() { }
 function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void { }
@@ -14,4 +14,4 @@ function HandleCommand( device & ML_STAR, variable CommandName, object & i_Endpo
 #ifdef HSL_RUNTIME
 #include __filename__ ".hsi"
 #endif
-// $$author=BAREB$$valid=0$$time=2023-11-17 16:01$$checksum=3ce0a556$$length=082$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2023-12-02 04:50$$checksum=6058794a$$length=089$$
