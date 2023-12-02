@@ -67,9 +67,8 @@ class HamiltonBackendABC(BackendABC):
         SimulationConfigFile = (
             "C:\\Program Files (x86)\\HAMILTON\\Config\\HxServices.cfg"
         )
-        shutil.copyfile(SimulationConfigFile, SimulationConfigFile+".bak")
 
-        subprocess.Popen(
+        Process = subprocess.Popen(
             [
                 "C:\\Program Files (x86)\\HAMILTON\\Bin\\HxCfgFilConverter.exe",
                 "/t",
@@ -79,6 +78,10 @@ class HamiltonBackendABC(BackendABC):
             universal_newlines=True,
         )
         # Taken from PyVenus by SNIPR Biome. Thank you!!
+
+        while Process.poll() is None:
+            ...
+        #Wait for completion
 
         File = open(SimulationConfigFile, "r")
         Contents = (
