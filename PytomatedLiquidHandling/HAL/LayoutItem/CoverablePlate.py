@@ -25,9 +25,3 @@ class CoverablePlate(LayoutItemABC):
             )
 
         return Objects[Identifier]
-
-    def Cover(self):
-        self.IsCovered = True
-
-    def Uncover(self):
-        self.IsCovered = False
