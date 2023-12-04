@@ -2,6 +2,7 @@ from dataclasses import field
 
 from pydantic.dataclasses import dataclass
 
+from PytomatedLiquidHandling.Driver.Hamilton import Backend
 from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import (
     Channel1000uLCOREGrip as COREGripperDriver,
 )
@@ -11,6 +12,7 @@ from .Base import TransportABC
 
 
 class HamiltonCOREGripper(TransportABC):
+    Backend: Backend.HamiltonBackendABC
     GripperLabwareID: str
 
     @dataclass

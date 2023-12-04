@@ -1,10 +1,19 @@
+from typing import Literal
+
 from pydantic import PrivateAttr
 
-from ...Driver.Hamilton import HamiltonHeaterCooler as HeaterCoolerDriver
+from PytomatedLiquidHandling.Driver.Hamilton import Backend
+from PytomatedLiquidHandling.Driver.Hamilton import (
+    HamiltonHeaterCooler as HeaterCoolerDriver,
+)
+
 from .Base import Exceptions, HeatCoolShakeABC
 
 
 class HamiltonHeaterCooler(HeatCoolShakeABC):
+    Backend: Backend.HamiltonBackendABC
+    CustomErrorHandling: Literal["N/A"] = "N/A"
+
     _HeatingSupported: bool = PrivateAttr(default=True)
     _CoolingSupported: bool = PrivateAttr(default=True)
     _ShakingSupported: bool = PrivateAttr(default=False)

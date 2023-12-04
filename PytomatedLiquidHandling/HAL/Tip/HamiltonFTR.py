@@ -1,11 +1,14 @@
-from typing import cast
+from typing import Literal, cast
 
-from ...Driver.Hamilton import HSLTipCountingLib
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
+from PytomatedLiquidHandling.Driver.Hamilton import Backend, HSLTipCountingLib
+
 from .Base import TipABC
 
 
 class HamiltonFTR(TipABC):
+    Backend: Backend.HamiltonBackendABC
+    CustomErrorHandling: Literal["N/A"] = "N/A"
+
     def RemainingTipsInTier(self) -> int:
         return self.RemainingTips()
 

@@ -2,6 +2,7 @@ from dataclasses import field
 
 from pydantic.dataclasses import dataclass
 
+from PytomatedLiquidHandling.Driver.Hamilton import Backend
 from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import iSwap as IPGDriver
 from PytomatedLiquidHandling.HAL import LayoutItem
 
@@ -9,6 +10,8 @@ from .Base import TransportABC
 
 
 class HamiltonInternalPlateGripper(TransportABC):
+    Backend: Backend.HamiltonBackendABC
+
     @dataclass
     class PickupOptions(TransportABC.PickupOptions):
         GripMode: IPGDriver.GetPlate.Options.GripModeOptions = field(

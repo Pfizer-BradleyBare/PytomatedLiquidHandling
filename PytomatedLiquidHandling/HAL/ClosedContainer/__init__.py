@@ -1,4 +1,4 @@
 from . import Base
-from .HamiltonFlipTube import HamiltonFlipTube
+from .HamiltonFlipTubeLandscape import HamiltonFlipTubeLandscape
 
 Devices: dict[str, Base.ClosedContainerABC] = dict()

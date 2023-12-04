@@ -1,10 +1,15 @@
-from ...Driver.Hamilton import FlipTubeTool
-from .Base import ClosedContainerABC, OpenCloseOptions
-from typing import DefaultDict
+from typing import DefaultDict, Literal
+
+from PytomatedLiquidHandling.Driver.Hamilton import Backend, FlipTubeTool
 from PytomatedLiquidHandling.HAL import LayoutItem
 
+from .Base import ClosedContainerABC, OpenCloseOptions
 
-class HamiltonFlipTube(ClosedContainerABC):
+
+class HamiltonFlipTubeLandscape(ClosedContainerABC):
+    Backend: Backend.HamiltonBackendABC
+    CustomErrorHandling: Literal["N/A"] = "N/A"
+
     def Initialize(self):
         ClosedContainerABC.Initialize(self)
 

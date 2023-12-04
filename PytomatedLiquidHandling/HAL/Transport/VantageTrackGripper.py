@@ -2,12 +2,15 @@ from dataclasses import field
 
 from pydantic.dataclasses import dataclass
 
+from PytomatedLiquidHandling.Driver.Hamilton import Backend
 from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import TransportABC
 
 
 class VantageTrackGripper(TransportABC):
+    Backend: Backend.VantageTrackGripperEntryExit
+
     @dataclass
     class PickupOptions(TransportABC.PickupOptions):
         ...

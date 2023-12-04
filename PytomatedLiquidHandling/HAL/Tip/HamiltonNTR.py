@@ -1,16 +1,18 @@
 from copy import copy
-from typing import cast
+from typing import Literal, cast
 
-from pydantic import PrivateAttr, field_validator
+from pydantic import PrivateAttr
 
-from PytomatedLiquidHandling.HAL import LayoutItem, Transport
+from PytomatedLiquidHandling.Driver.Hamilton import Backend, Visual_NTR_Library
+from PytomatedLiquidHandling.HAL import LayoutItem
 
-from ...Driver.Hamilton import Visual_NTR_Library
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from .Base import TipABC
 
 
 class HamiltonNTR(TipABC):
+    Backend: Backend.HamiltonBackendABC
+    CustomErrorHandling: Literal["N/A"] = "N/A"
+
     Tiers: int
     TipsPerRack: int
     TipRackWasteLabwareID: str
