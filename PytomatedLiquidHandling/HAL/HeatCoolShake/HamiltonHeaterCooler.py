@@ -19,8 +19,7 @@ class HamiltonHeaterCooler(HeatCoolShakeABC):
         CommandInstance = HeaterCoolerDriver.Connect.Command(
             Options=HeaterCoolerDriver.Connect.Options(
                 ComPort=self.ComPort,
-            ),
-            CustomErrorHandling=self.CustomErrorHandling,
+            )
         )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)
@@ -28,7 +27,7 @@ class HamiltonHeaterCooler(HeatCoolShakeABC):
             CommandInstance, HeaterCoolerDriver.Connect.Response
         )
 
-        self._HandleID = ResponseInstance.GetHandleID()
+        self._HandleID = ResponseInstance.HandleID
 
     def Deinitialize(self):
         HeatCoolShakeABC.Deinitialize(self)
@@ -36,8 +35,7 @@ class HamiltonHeaterCooler(HeatCoolShakeABC):
         CommandInstance = HeaterCoolerDriver.StopTemperatureControl.Command(
             Options=HeaterCoolerDriver.StopTemperatureControl.Options(
                 HandleID=str(self._HandleID)
-            ),
-            CustomErrorHandling=self.CustomErrorHandling,
+            )
         )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)
@@ -46,17 +44,16 @@ class HamiltonHeaterCooler(HeatCoolShakeABC):
         )
 
     def SetTemperature(self, Temperature: float):
-        CommandInstance = HeaterCoolerDriver.StartTemperatureControl.Command(
-            Options=HeaterCoolerDriver.StartTemperatureControl.Options(
+        CommandInstance = HeaterCoolerDriver.SetTemperature.Command(
+            Options=HeaterCoolerDriver.SetTemperature.Options(
                 HandleID=str(self._HandleID),
                 Temperature=Temperature,
-            ),
-            CustomErrorHandling=self.CustomErrorHandling,
+            )
         )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)
         ResponseInstance = self.Backend.GetResponse(
-            CommandInstance, HeaterCoolerDriver.StartTemperatureControl.Response
+            CommandInstance, HeaterCoolerDriver.SetTemperature.Response
         )
 
     def TimeToTemperature(self, Temperature: float) -> float:
@@ -69,7 +66,6 @@ class HamiltonHeaterCooler(HeatCoolShakeABC):
             Options=HeaterCoolerDriver.GetTemperature.Options(
                 HandleID=str(self._HandleID),
             ),
-            CustomErrorHandling=self.CustomErrorHandling,
         )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)
@@ -77,7 +73,7 @@ class HamiltonHeaterCooler(HeatCoolShakeABC):
             CommandInstance, HeaterCoolerDriver.GetTemperature.Response
         )
 
-        return ResponseInstance.GetTemperature()
+        return ResponseInstance.Temperature
 
     def SetShakingSpeed(self, RPM: int):
         raise Exceptions.ShakingNotSupportedError
