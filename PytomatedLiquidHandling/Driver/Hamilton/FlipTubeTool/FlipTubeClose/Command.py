@@ -10,7 +10,7 @@ class Command(CommandOptionsListed[list[Options]], HamiltonActionCommandABC):
     def GetVars(self) -> dict[str, list]:
         OutputDict = HamiltonActionCommandABC.GetVars(self)
 
-        ChannelNumberList = ["0"] * 4
+        ChannelNumberList = ["0"] * 8
 
         for ChannelNumber in OutputDict["ChannelNumber"]:
             ChannelNumberList[ChannelNumber - 1] = "1"
