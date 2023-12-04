@@ -1,5 +1,1 @@
-from .Layout import (
-    InvalidPositionError,
-    Layout,
-    Sorting,
-)
+from .Layout import InvalidPositionError, Layout

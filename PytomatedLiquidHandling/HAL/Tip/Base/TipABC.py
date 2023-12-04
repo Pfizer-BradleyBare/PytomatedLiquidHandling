@@ -49,6 +49,14 @@ class TipABC(Interface, HALDevice):
         Interface.Initialize(self)
         self.TipCounterEdit()
 
+    def GetTips(self, Num: int) -> list[AvailablePosition]:
+        if len(self._AvailablePositions) < Num:
+            raise Exception("Not enough tips available")
+
+        Tips = self._AvailablePositions[:Num]
+        self._AvailablePositions = self._AvailablePositions[Num:]
+        return Tips
+
     def RemainingTips(self) -> int:
         """Total number of tips.
         NOTE: This is not guarenteed to be the number of accessible tips. Call RemainingTipsInTier for that info.

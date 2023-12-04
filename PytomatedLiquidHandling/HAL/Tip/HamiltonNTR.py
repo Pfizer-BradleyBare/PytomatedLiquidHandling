@@ -75,35 +75,24 @@ class HamiltonNTR(TipABC):
         # Reset the Tier discard number. This will only be changed here and in the TipCounterEdit method
 
         if len(self._AvailablePositions) == 0:
-            Command = Visual_NTR_Library.Channels_TipCounter_Write.Command(
-                Options=Visual_NTR_Library.Channels_TipCounter_Write.ListedOptions(
-                    TipCounter="HamiltonTipNTR_" + str(self.Volume) + "uL_TipCounter"
-                ),
-                CustomErrorHandling=self.CustomErrorHandling,
-            )
-            self.Backend.ExecuteCommand(Command)
-            self.Backend.WaitForResponseBlocking(Command)
-            self.Backend.GetResponse(
-                Command, Visual_NTR_Library.Channels_TipCounter_Write.Response
-            )
-            self.TipCounterEdit()
+            raise RuntimeError("Out of tips. Reload tips.")
 
     def TipCounterEdit(self):
-        ListedOptions = Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
-            TipCounter="HamiltonTipNTR_" + str(self.Volume) + "uL_TipCounter",
-            DialogTitle="Please update the number of "
-            + str(self.Volume)
-            + "uL tips currently loaded on the system",
+        CommandInstance = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
+            Options=Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
+                TipCounter="HamiltonTipNTR_" + str(self.Volume) + "uL_TipCounter",
+                DialogTitle="Please update the number of "
+                + str(self.Volume)
+                + "uL tips currently loaded on the system",
+            )
         )
         for TipRack in self.TipRacks:
-            ListedOptions.append(
-                Visual_NTR_Library.Channels_TipCounter_Edit.Options(TipRack.LabwareID)
+            CommandInstance.Options.append(
+                Visual_NTR_Library.Channels_TipCounter_Edit.Options(
+                    LabwareID=TipRack.LabwareID
+                )
             )
 
-        CommandInstance = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
-            Options=ListedOptions,
-            CustomErrorHandling=self.CustomErrorHandling,
-        )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)
         self._ParseAvailablePositions(
@@ -112,7 +101,7 @@ class HamiltonNTR(TipABC):
                 self.Backend.GetResponse(
                     CommandInstance,
                     Visual_NTR_Library.Channels_TipCounter_Edit.Response,
-                ).GetAvailablePositions(),
+                ).AvailablePositions,
             )
         )
 

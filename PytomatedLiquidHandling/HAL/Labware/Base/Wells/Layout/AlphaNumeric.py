@@ -1,9 +1,40 @@
 from .Base import Layout
+from .Numeric import Numeric
 from typing import Literal
 
 
 class AlphaNumeric(Layout):
     Type: Literal["AlphaNumeric"] = "AlphaNumeric"
+
+    def SortPositions(self, Positions: list[str | int]) -> list[str]:
+        NumericAddressing = Numeric(
+            Rows=self.Rows, Columns=self.Columns, Direction=self.Direction
+        )
+
+        return [
+            self.GetPositionID(Pos)
+            for Pos in NumericAddressing.SortPositions(Positions)
+        ]
+
+    def GroupPositionsColumnwise(self, Positions: list[str | int]) -> list[list[str]]:
+        NumericAddressing = Numeric(
+            Rows=self.Rows, Columns=self.Columns, Direction=self.Direction
+        )
+
+        return [
+            [self.GetPositionID(Pos) for Pos in Group]
+            for Group in NumericAddressing.GroupPositionsColumnwise(Positions)
+        ]
+
+    def GroupPositionsRowwise(self, Positions: list[str | int]) -> list[list[str]]:
+        NumericAddressing = Numeric(
+            Rows=self.Rows, Columns=self.Columns, Direction=self.Direction
+        )
+
+        return [
+            [self.GetPositionID(Pos) for Pos in Group]
+            for Group in NumericAddressing.GroupPositionsRowwise(Positions)
+        ]
 
     def _GetColumnwisePositionID(self, Position: str) -> str:
         if Position.isalnum() and not Position.isalpha() and not Position.isdigit():

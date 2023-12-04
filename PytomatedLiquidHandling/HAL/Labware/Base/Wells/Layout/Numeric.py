@@ -5,6 +5,27 @@ from typing import Literal
 class Numeric(Layout):
     Type: Literal["Numeric"] = "Numeric"
 
+    def SortPositions(self, Positions: list[str | int]) -> list[str]:
+        return sorted([self.GetPositionID(Pos) for Pos in Positions])
+
+    def GroupPositionsColumnwise(self, Positions: list[str | int]) -> list[list[str]]:
+        SortedPositions = self.SortPositions(Positions)
+
+        Groups = [[] for _ in range(self.Columns)]
+        for Pos in SortedPositions:
+            Groups[int((int(Pos) - 1) / self.Rows)].append(Pos)
+
+        return [Group for Group in Groups if len(Group) != 0]
+
+    def GroupPositionsRowwise(self, Positions: list[str | int]) -> list[list[str]]:
+        SortedPositions = self.SortPositions(Positions)
+
+        Groups = [[] for _ in range(self.Rows)]
+        for Pos in SortedPositions:
+            Groups[int((int(Pos) - 1) / self.Columns)].append(Pos)
+
+        return [Group for Group in Groups if len(Group) != 0]
+
     def _GetColumnwisePositionID(self, Position: str) -> str:
         if Position.isnumeric():
             return Position
