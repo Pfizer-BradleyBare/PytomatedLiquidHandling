@@ -1,4 +1,5 @@
 from dataclasses import field
+from typing import cast
 
 from pydantic.dataclasses import dataclass
 
@@ -14,6 +15,8 @@ class HamiltonInternalPlateGripper(TransportABC):
 
     @dataclass
     class PickupOptions(TransportABC.PickupOptions):
+        """Options to pick up labware from deck location"""
+
         GripMode: IPGDriver.GetPlate.Options.GripModeOptions = field(compare=True)
         Movement: IPGDriver.GetPlate.Options.MovementOptions = field(compare=True)
         RetractDistance: float = field(compare=False)
@@ -25,6 +28,8 @@ class HamiltonInternalPlateGripper(TransportABC):
 
     @dataclass
     class DropoffOptions(TransportABC.DropoffOptions):
+        """Options to drop off labware to deck location"""
+
         Movement: IPGDriver.PlacePlate.Options.MovementOptions = field(compare=True)
         RetractDistance: float = field(compare=False)
         LiftupHeight: float = field(compare=False)
@@ -37,26 +42,15 @@ class HamiltonInternalPlateGripper(TransportABC):
         SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
         DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
     ):
-        if (
-            SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
-            != DestinationLayoutItem.DeckLocation.TransportConfig.PickupOptions
-        ):
-            raise Exception(
-                "Source and destination transport configuration is not compatible."
-            )
-
-        if SourceLayoutItem.Labware != DestinationLayoutItem.Labware:
-            raise Exception("Source and destination labware are not compatible")
-
         if SourceLayoutItem.DeckLocation == DestinationLayoutItem.DeckLocation:
             return
 
         Labware = SourceLayoutItem.Labware
 
-        PickupOptions = SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
-
-        if not isinstance(PickupOptions, self.PickupOptions):
-            raise Exception("This should never happen")
+        PickupOptions = cast(
+            HamiltonInternalPlateGripper.PickupOptions,
+            SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions,
+        )
 
         CommandInstance = IPGDriver.GetPlate.Command(
             Options=IPGDriver.GetPlate.Options(
@@ -77,12 +71,10 @@ class HamiltonInternalPlateGripper(TransportABC):
         self.Backend.WaitForResponseBlocking(CommandInstance)
         self.Backend.GetResponse(CommandInstance, IPGDriver.GetPlate.Response)
 
-        DropoffOptions = (
-            DestinationLayoutItem.DeckLocation.TransportConfig.DropoffOptions
+        DropoffOptions = cast(
+            HamiltonInternalPlateGripper.DropoffOptions,
+            DestinationLayoutItem.DeckLocation.TransportConfig.DropoffOptions,
         )
-
-        if not isinstance(DropoffOptions, self.DropoffOptions):
-            raise Exception("This should never happen")
 
         CommandInstance = IPGDriver.PlacePlate.Command(
             Options=IPGDriver.PlacePlate.Options(

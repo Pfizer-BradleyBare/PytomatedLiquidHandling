@@ -1,4 +1,5 @@
 from dataclasses import field
+from typing import cast
 
 from pydantic.dataclasses import dataclass
 
@@ -17,10 +18,14 @@ class HamiltonCOREGripper(TransportABC):
 
     @dataclass
     class PickupOptions(TransportABC.PickupOptions):
+        """Options to pick up labware from deck location"""
+
         ...
 
     @dataclass
     class DropoffOptions(TransportABC.DropoffOptions):
+        """Options to drop off labware to deck location"""
+
         CheckPlateExists: COREGripperDriver.PlacePlate.Options.YesNoOptions = field(
             compare=False
         )
@@ -30,17 +35,6 @@ class HamiltonCOREGripper(TransportABC):
         SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
         DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
     ):
-        if (
-            SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
-            != DestinationLayoutItem.DeckLocation.TransportConfig.PickupOptions
-        ):
-            raise Exception(
-                "Source and destination transport configuration is not compatible."
-            )
-
-        if SourceLayoutItem.Labware != DestinationLayoutItem.Labware:
-            raise Exception("Source and destination labware are not compatible")
-
         if SourceLayoutItem.DeckLocation == DestinationLayoutItem.DeckLocation:
             return
 
@@ -62,12 +56,10 @@ class HamiltonCOREGripper(TransportABC):
         self.Backend.WaitForResponseBlocking(CommandInstance)
         self.Backend.GetResponse(CommandInstance, COREGripperDriver.GetPlate.Response)
 
-        DropoffOptions = (
-            DestinationLayoutItem.DeckLocation.TransportConfig.DropoffOptions
+        DropoffOptions = cast(
+            HamiltonCOREGripper.DropoffOptions,
+            DestinationLayoutItem.DeckLocation.TransportConfig.DropoffOptions,
         )
-
-        if not isinstance(DropoffOptions, self.DropoffOptions):
-            raise Exception("This should never happen")
 
         CommandInstance = COREGripperDriver.PlacePlate.Command(
             Options=COREGripperDriver.PlacePlate.Options(
