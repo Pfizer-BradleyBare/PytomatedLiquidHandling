@@ -13,11 +13,11 @@ class VantageTrackGripper(TransportABC):
 
     @dataclass
     class PickupOptions(TransportABC.PickupOptions):
-        ...
+        TaughtPathName: str = field(compare=True)
 
     @dataclass
     class DropoffOptions(TransportABC.DropoffOptions):
-        ...
+        TaughtPathName: str = field(compare=True)
 
     def Transport(
         self,

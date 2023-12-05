@@ -14,30 +14,22 @@ class HamiltonInternalPlateGripper(TransportABC):
 
     @dataclass
     class PickupOptions(TransportABC.PickupOptions):
-        GripMode: IPGDriver.GetPlate.Options.GripModeOptions = field(
-            init=False, compare=True
-        )
-        Movement: IPGDriver.GetPlate.Options.MovementOptions = field(
-            init=False, compare=True
-        )
-        RetractDistance: float = field(init=False, compare=False)
-        LiftupHeight: float = field(init=False, compare=False)
+        GripMode: IPGDriver.GetPlate.Options.GripModeOptions = field(compare=True)
+        Movement: IPGDriver.GetPlate.Options.MovementOptions = field(compare=True)
+        RetractDistance: float = field(compare=False)
+        LiftupHeight: float = field(compare=False)
         LabwareOrientation: IPGDriver.GetPlate.Options.LabwareOrientationOptions = (
-            field(init=False, compare=True)
+            field(compare=True)
         )
-        InverseGrip: IPGDriver.GetPlate.Options.YesNoOptions = field(
-            init=False, compare=True
-        )
+        InverseGrip: IPGDriver.GetPlate.Options.YesNoOptions = field(compare=True)
 
     @dataclass
     class DropoffOptions(TransportABC.DropoffOptions):
-        Movement: IPGDriver.PlacePlate.Options.MovementOptions = field(
-            init=False, compare=True
-        )
-        RetractDistance: float = field(init=False, compare=False)
-        LiftupHeight: float = field(init=False, compare=False)
+        Movement: IPGDriver.PlacePlate.Options.MovementOptions = field(compare=True)
+        RetractDistance: float = field(compare=False)
+        LiftupHeight: float = field(compare=False)
         LabwareOrientation: IPGDriver.PlacePlate.Options.LabwareOrientationOptions = (
-            field(init=False, compare=True)
+            field(compare=True)
         )
 
     def Transport(

@@ -22,7 +22,7 @@ class HamiltonCOREGripper(TransportABC):
     @dataclass
     class DropoffOptions(TransportABC.DropoffOptions):
         CheckPlateExists: COREGripperDriver.PlacePlate.Options.YesNoOptions = field(
-            init=True, compare=False
+            compare=False
         )
 
     def Transport(
