@@ -58,7 +58,7 @@ class HamiltonCORE96Head(PipetteABC):
 
         for Opts in PackagedOpts:
             if Tip.Tip.RemainingTipsInTier() < len(Opts):
-                Tip.Tip.DiscardTierLayerToWaste()
+                Tip.Tip.DiscardLayerToWaste()
             # If not enough tips then get user to help
 
             TipPositions = Tip.Tip._AvailablePositions[: len(Opts)]
