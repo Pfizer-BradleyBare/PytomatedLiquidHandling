@@ -14,7 +14,6 @@ class HamiltonNTR(TipABC):
     CustomErrorHandling: Literal["N/A"] = "N/A"
 
     Tiers: int
-    TipsPerRack: int
     TipRackWasteLabwareID: str
     _TierDiscardNumber: int = PrivateAttr(default=100)
     _DiscardedTipRacks: list[LayoutItem.TipRack] = PrivateAttr(default_factory=list)

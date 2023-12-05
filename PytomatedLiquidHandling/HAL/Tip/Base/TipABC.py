@@ -17,6 +17,7 @@ class AvailablePosition:
 
 class TipABC(Interface, HALDevice):
     TipRacks: list[LayoutItem.TipRack]
+    TipsPerRack: int
     Volume: float
     _AvailablePositions: list[AvailablePosition] = PrivateAttr(default_factory=list)
 
