@@ -12,10 +12,10 @@ class HamiltonFTR(TipABC):
     def RemainingTipsInTier(self) -> int:
         return self.RemainingTips()
 
-    def DiscardTierLayerToWaste(self):
+    def DiscardLayerToWaste(self):
         raise RuntimeError("FTR tips cannot waste tiers. Reload tips.")
 
-    def TipCounterEdit(self):
+    def UpdateAvailablePositions(self):
         CommandInstance = HSLTipCountingLib.Edit.Command(
             Options=HSLTipCountingLib.Edit.ListedOptions(
                 TipCounter="HamiltonTipFTR_" + str(self.Volume) + "uL_TipCounter",

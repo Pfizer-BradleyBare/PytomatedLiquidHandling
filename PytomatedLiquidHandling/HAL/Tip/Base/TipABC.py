@@ -48,7 +48,6 @@ class TipABC(Interface, HALDevice):
 
     def Initialize(self):
         Interface.Initialize(self)
-        self.TipCounterEdit()
 
     def GetTips(self, Num: int) -> list[AvailablePosition]:
         if len(self._AvailablePositions) < Num:
@@ -65,19 +64,18 @@ class TipABC(Interface, HALDevice):
         return len(self._AvailablePositions)
 
     @abstractmethod
+    def UpdateAvailablePositions(self):
+        """This initiates a update of the available positions. This is not neccesarily the same as Initialize"""
+
+    @abstractmethod
     def RemainingTipsInTier(self) -> int:
         """Total number of accessible tips."""
         ...
 
     @abstractmethod
-    def DiscardTierLayerToWaste(self):
+    def DiscardLayerToWaste(self):
         """For stacked tips, discards the uppermost layer to make the next layer accessible.
 
         For non-stacked tips, should probably request a tip reload from the user.
         """
-        ...
-
-    @abstractmethod
-    def TipCounterEdit(self):
-        """Creates an interface for the user to physically edit the number of tips currently available."""
         ...

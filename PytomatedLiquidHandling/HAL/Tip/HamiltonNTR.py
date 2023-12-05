@@ -33,7 +33,7 @@ class HamiltonNTR(TipABC):
 
         return Remaining
 
-    def DiscardTierLayerToWaste(self):
+    def DiscardLayerToWaste(self):
         PresentLabwareIDs = list(
             set([Pos.LabwareID for Pos in self._AvailablePositions])
         )
@@ -78,7 +78,7 @@ class HamiltonNTR(TipABC):
         if len(self._AvailablePositions) == 0:
             raise RuntimeError("Out of tips. Reload tips.")
 
-    def TipCounterEdit(self):
+    def UpdateAvailablePositions(self):
         CommandInstance = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
             Options=Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
                 TipCounter="HamiltonTipNTR_" + str(self.Volume) + "uL_TipCounter",
