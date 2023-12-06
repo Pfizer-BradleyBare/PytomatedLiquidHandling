@@ -5,6 +5,17 @@ from PytomatedLiquidHandling.HAL import Backend
 
 
 class Interface(BaseModel):
+    """Allows devices to abstract away functionality.
+
+    Example: There are many systems which utilize pipette devices.
+    Devices that inherit from interface will expose a set of abstract functions to simplify interaction across all systems.
+
+    Attributes:
+        Backend: The backend that will be used to execute physical actions. NOTE: devices are backend specific.
+        CustomErrorHandling: Allows users to handle errors directly on the system or to return them to the device. NOTE: some
+        backends may not support error handling on the system.
+    """
+
     Backend: BackendABC
     CustomErrorHandling: bool
 

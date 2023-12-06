@@ -15,8 +15,15 @@ class OpenCloseOptions(OptionsABC):
 
 
 class CloseableContainerABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
-    ToolLabwareID: str
-    ToolPositionID: str
+    """A container that is part of a rack that can be opened with some kind of tool.
+
+    This is NOT the same as a lid for a plate.
+
+    Attributes:
+        SupportedDeckLocations: The rack must be in one of these deck locations to perform an operation.
+        SupportedLabwares: The device can only open labware of this type(s).
+    """
+
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
     SupportedLabwares: list[Labware.Base.LabwareABC]
 

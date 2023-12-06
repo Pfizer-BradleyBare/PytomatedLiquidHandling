@@ -7,8 +7,20 @@ from .Base import CloseableContainerABC, OpenCloseOptions
 
 
 class HamiltonFlipTubeLandscape(CloseableContainerABC):
+    """FlipTubes are a 1500uL conical tube that can be opened and closed on deck with a tool.
+
+    This device only supports FlipTubes in the landscape orientation.
+
+    Attributes:
+        Backend: Only Hamilton backends are supported
+        CustomErrorHandling: User handling is not possible for fliptubes.
+        ToolLabwareID: The labware ID of the fliptube tool. Typically available on deck as a set of 4 tools.
+    """
+
     Backend: Backend.HamiltonBackendABC
     CustomErrorHandling: Literal["N/A"] = "N/A"
+
+    ToolLabwareID: str
 
     def Initialize(self):
         CloseableContainerABC.Initialize(self)

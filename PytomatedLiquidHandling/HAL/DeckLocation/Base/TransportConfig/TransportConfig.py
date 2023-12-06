@@ -6,6 +6,14 @@ from PytomatedLiquidHandling.HAL import Transport
 
 
 class TransportConfig(BaseModel):
+    """Compatible transport device and options for a DeckLocation. Enables seamless transport of labware at a DeckLocation.
+
+    Attributes:
+        TransportDevice: Compatible transport device.
+        PickupOptions: Options that are used to pickup a labware from this DeckLocation.
+        DropoffOptions: Options that are used to dropoff a labware to this DeckLocation.
+    """
+
     TransportDevice: Transport.Base.TransportABC
     PickupOptions: Transport.Base.TransportABC.PickupOptions
     DropoffOptions: Transport.Base.TransportABC.DropoffOptions
