@@ -10,7 +10,7 @@ class DefaultVacuumPressures(BaseModel):
 
 
 class FilterPlateConfiguration(BaseModel):
-    FilterPlateStack: LayoutItem.FilterPlateStack
+    FilterPlate: LayoutItem.FilterPlate | LayoutItem.CoverableFilterPlate
     CollectionPlate: LayoutItem.Plate
     MaxPressure: float
     DefaultVacuumPressures: DefaultVacuumPressures
