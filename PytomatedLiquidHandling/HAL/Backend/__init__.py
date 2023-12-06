@@ -17,4 +17,5 @@ from PytomatedLiquidHandling.Driver.UnchainedLabs.Backend import StunnerBackend
 HALDevice.HALDevices[StunnerBackend.__name__] = cast(Type[HALDevice], StunnerBackend)
 
 
-Devices: dict[str, Base.BackendABC] = dict()
+Identifier = str
+Devices: dict[Identifier, Base.BackendABC] = dict()

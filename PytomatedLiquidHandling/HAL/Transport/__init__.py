@@ -3,4 +3,5 @@ from .HamiltonCOREGripper import HamiltonCOREGripper
 from .HamiltonInternalPlateGripper import HamiltonInternalPlateGripper
 from .VantageTrackGripper import VantageTrackGripper
 
-Devices: dict[str, Base.TransportABC] = dict()
+Identifier = str
+Devices: dict[Identifier, Base.TransportABC] = dict()

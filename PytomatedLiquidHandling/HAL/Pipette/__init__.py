@@ -6,4 +6,5 @@ if True:
 
 from .HamiltonCORE96Head import HamiltonCORE96Head
 
-Devices: dict[str, Base.PipetteABC] = dict()
+Identifier = str
+Devices: dict[Identifier, Base.PipetteABC] = dict()

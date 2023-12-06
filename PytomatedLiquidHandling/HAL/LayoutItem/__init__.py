@@ -8,4 +8,5 @@ from .Plate import Plate
 from .TipRack import TipRack
 from .VacuumManifold import VacuumManifold
 
-Devices: dict[str, Base.LayoutItemABC] = dict()
+Identifier = str
+Devices: dict[Identifier, Base.LayoutItemABC] = dict()

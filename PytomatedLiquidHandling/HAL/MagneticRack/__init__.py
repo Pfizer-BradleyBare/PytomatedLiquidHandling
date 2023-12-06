@@ -1,4 +1,5 @@
 from . import Base
 from .MagneticRack import MagneticRack
 
-Devices: dict[str, Base.MagneticRackABC] = dict()
+Identifier = str
+Devices: dict[Identifier, Base.MagneticRackABC] = dict()

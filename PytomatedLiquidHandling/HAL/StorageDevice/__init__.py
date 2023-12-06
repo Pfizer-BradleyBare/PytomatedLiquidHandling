@@ -1,4 +1,5 @@
 from . import Base
 from .RandomAccessDeckStorage import RandomAccessDeckStorage
 
-Devices: dict[str, Base.StorageDeviceABC] = dict()
+Identifier = str
+Devices: dict[Identifier, Base.StorageDeviceABC] = dict()
