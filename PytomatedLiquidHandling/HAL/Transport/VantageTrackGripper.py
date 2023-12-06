@@ -23,15 +23,21 @@ class VantageTrackGripper(TransportABC):
         Orientation: ML_STAR.iSwap.GetPlate.Options.LabwareOrientationOptions = field(
             compare=True
         )
+        CoordinatedMovement: TrackGripper.GripPlateFromTaughtPosition.Options.YesNoOptions = field(
+            compare=False
+        )
 
     @dataclass
     class DropoffOptions(TransportABC.DropoffOptions):
         """Options to drop off labware to deck location
-        NOTE: Pickup and Dropoff TaughtPathName should be same due to how track gripper works
+        NOTE: Pickup and Dropoff TaughtPathName and PathTime should be same due to how track gripper works
         """
 
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
+        CoordinatedMovement: TrackGripper.PlacePlateToTaughtPosition.Options.YesNoOptions = field(
+            compare=False
+        )
 
     def Transport(
         self,
@@ -48,43 +54,51 @@ class VantageTrackGripper(TransportABC):
             SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions,
         )
 
-        CommandInstance = IPGDriver.GetPlate.Command(
-            Options=IPGDriver.GetPlate.Options(
-                LabwareID=SourceLayoutItem.LabwareID,
-                GripWidth=Labware.Dimensions.YLength - Labware.TransportOffsets.Close,
-                OpenWidth=Labware.Dimensions.YLength + Labware.TransportOffsets.Open,
-                GripHeight=Labware.TransportOffsets.Top,
-                GripMode=PickupOptions.GripMode,
-                Movement=PickupOptions.Movement,
-                RetractDistance=PickupOptions.RetractDistance,
-                LiftupHeight=PickupOptions.LiftupHeight,
-                LabwareOrientation=PickupOptions.LabwareOrientation,
-                InverseGrip=PickupOptions.InverseGrip,
+        if (
+            PickupOptions.Orientation
+            == ML_STAR.iSwap.GetPlate.Options.LabwareOrientationOptions.PositiveYAxis
+        ):
+            OpenWidth = Labware.Dimensions.XLength + Labware.TransportOffsets.Open
+        else:
+            OpenWidth = Labware.Dimensions.YLength + Labware.TransportOffsets.Open
+
+        CommandInstance = TrackGripper.GripPlateFromTaughtPosition.Command(
+            Options=TrackGripper.GripPlateFromTaughtPosition.Options(
+                OpenWidth=OpenWidth,
+                CoordinatedMovement=PickupOptions.CoordinatedMovement,
+                GripForcePercentage=100,
+                SpeedPercentage=100,
+                CollisionControl=TrackGripper.GripPlateFromTaughtPosition.Options.YesNoOptions.Yes,
+                TaughtPathName=PickupOptions.TaughtPathName,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)
-        self.Backend.GetResponse(CommandInstance, IPGDriver.GetPlate.Response)
+        self.Backend.GetResponse(
+            CommandInstance, TrackGripper.GripPlateFromTaughtPosition.Response
+        )
 
         DropoffOptions = cast(
             VantageTrackGripper.DropoffOptions,
             DestinationLayoutItem.DeckLocation.TransportConfig.DropoffOptions,
         )
 
-        CommandInstance = IPGDriver.PlacePlate.Command(
-            Options=IPGDriver.PlacePlate.Options(
-                LabwareID=DestinationLayoutItem.LabwareID,
-                Movement=DropoffOptions.Movement,
-                RetractDistance=DropoffOptions.RetractDistance,
-                LiftupHeight=DropoffOptions.LiftupHeight,
-                LabwareOrientation=DropoffOptions.LabwareOrientation,
+        CommandInstance = TrackGripper.PlacePlateToTaughtPosition.Command(
+            Options=TrackGripper.PlacePlateToTaughtPosition.Options(
+                OpenWidth=Labware.TransportOffsets.Open,
+                TaughtPathName=DropoffOptions.TaughtPathName,
+                CoordinatedMovement=DropoffOptions.CoordinatedMovement,
+                SpeedPercentage=100,
+                CollisionControl=TrackGripper.PlacePlateToTaughtPosition.Options.YesNoOptions.Yes,
             ),
             CustomErrorHandling=self.CustomErrorHandling,
         )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)
-        self.Backend.GetResponse(CommandInstance, IPGDriver.PlacePlate.Response)
+        self.Backend.GetResponse(
+            CommandInstance, TrackGripper.PlacePlateToTaughtPosition.Response
+        )
 
     def TransportTime(
         self,
