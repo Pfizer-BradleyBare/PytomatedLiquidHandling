@@ -15,7 +15,8 @@ class VantageTrackGripper(TransportABC):
     @dataclass
     class PickupOptions(TransportABC.PickupOptions):
         """Options to pick up labware from deck location
-        NOTE: Pickup and Dropoff TaughtPathName should be same"""
+        NOTE: Pickup and Dropoff TaughtPathName should be same due to how track gripper works
+        """
 
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
@@ -26,7 +27,8 @@ class VantageTrackGripper(TransportABC):
     @dataclass
     class DropoffOptions(TransportABC.DropoffOptions):
         """Options to drop off labware to deck location
-        NOTE: Pickup and Dropoff TaughtPathName should be same"""
+        NOTE: Pickup and Dropoff TaughtPathName should be same due to how track gripper works
+        """
 
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
