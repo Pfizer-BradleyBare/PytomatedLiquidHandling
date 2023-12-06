@@ -14,7 +14,7 @@ class OpenCloseOptions(OptionsABC):
     Position: str | int
 
 
-class ClosedContainerABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
+class CloseableContainerABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
     ToolLabwareID: str
     ToolPositionID: str
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]

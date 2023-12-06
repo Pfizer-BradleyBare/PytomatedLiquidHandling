@@ -3,15 +3,15 @@ from typing import DefaultDict, Literal
 from PytomatedLiquidHandling.Driver.Hamilton import Backend, FlipTubeTool
 from PytomatedLiquidHandling.HAL import LayoutItem
 
-from .Base import ClosedContainerABC, OpenCloseOptions
+from .Base import CloseableContainerABC, OpenCloseOptions
 
 
-class HamiltonFlipTubeLandscape(ClosedContainerABC):
+class HamiltonFlipTubeLandscape(CloseableContainerABC):
     Backend: Backend.HamiltonBackendABC
     CustomErrorHandling: Literal["N/A"] = "N/A"
 
     def Initialize(self):
-        ClosedContainerABC.Initialize(self)
+        CloseableContainerABC.Initialize(self)
 
         Command = FlipTubeTool.Initialize.Command(
             Options=FlipTubeTool.Initialize.Options(
