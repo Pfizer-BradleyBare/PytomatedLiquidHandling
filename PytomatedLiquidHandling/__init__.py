@@ -5,8 +5,8 @@ PLH is an abstraction layer package for automated liquid handlers.
 
 The main feature of PLH is no compromise abstraction at the API layer: what we lack in simplicity we make up for in high level feature set.
 - PLH is made of 3 layers: Driver, HAL, and API.
-- Methods written using the API layers are 100% system agnostic.
-- Tools are provided are each layer to create new drivers, devices, etc.
+- Methods written using the API layer are 100% system agnostic.
+- A Tools folder is provided in each layer to be used to create new drivers, devices, etc.
 - Fully typed!
 
 Please see each layer for descriptions / examples.
