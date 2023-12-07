@@ -2,10 +2,13 @@
 # What is the Driver layer?
 
 Driver layer facilitates raw command execution on a given backend (system).
-- The driver layer is designed as a execute, wait, response system.
+- This is a no compromises layer. All commands that can be executed on your system are executable here.
+- The driver layer is designed as a execute, wait, response system similar to most automation systems.
 - Generally, only a single command can be queued per backend (command queue support is implementation specific).
-- You are expected to handle raw errors returned by the system.
-- Commands may or may not required options.
+- You must handle raw errors returned by the system.
+
+Notes:
+- Commands may or may not require options.
 - Command options can either be a single option class or a list of option classes.
 - If commands return information then that information will be accessible in the associated response class.
 

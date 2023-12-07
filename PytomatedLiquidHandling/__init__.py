@@ -7,6 +7,7 @@ The main feature of PLH is no compromise abstraction at the API layer: what we l
 - PLH is made of 3 layers: Driver, HAL, and API.
 - Methods written using the API layers are 100% system agnostic.
 - Tools are provided are each layer to create new drivers, devices, etc.
+- Fully typed!
 
 Please see each layer for descriptions / examples.
 
