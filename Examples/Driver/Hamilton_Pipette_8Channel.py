@@ -4,6 +4,8 @@ from PytomatedLiquidHandling.Driver.Hamilton import Visual_NTR_Library
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
 from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import Channel1000uL
 
+quit()
+
 Backend = MicrolabSTAR(
     Identifier="Example Star",
     DeckLayoutPath=os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),

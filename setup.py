@@ -16,6 +16,7 @@ setup(
         "pythonnet",
         "redmail",
         "redbox",
+        "loguru",
     ],
     url="https://github.com/Pfizer-BradleyBare/PytomatedLiquidHandling.git",
     author="Bradley Bare",

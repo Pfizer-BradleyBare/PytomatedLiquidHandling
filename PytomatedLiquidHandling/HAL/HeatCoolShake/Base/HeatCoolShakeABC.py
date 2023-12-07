@@ -13,8 +13,8 @@ class HeatCoolShakeABC(Interface, HALDevice):
     Plates: list[LayoutItem.CoverablePlate | LayoutItem.Plate]
     _HandleID: int | str = PrivateAttr()
 
-    @field_validator("CoverablePlates", mode="before")
-    def __SupportedCoverablePlatesValidate(cls, v):
+    @field_validator("Plates", mode="before")
+    def __SupportedPlatesValidate(cls, v):
         SupportedObjects = list()
 
         Objects = LayoutItem.Devices

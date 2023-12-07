@@ -1,5 +1,5 @@
 """ 
-# What is Pytomated Liquid Handling (PLH)
+# What is Pytomated Liquid Handling (PLH)?
 
 PLH is an abstraction layer package for automated liquid handlers.
 
