@@ -11,8 +11,8 @@ class Command(
     HamiltonActionCommandABC,
     CommandBackendErrorHandling,
 ):
-    def GetVars(self) -> dict[str, list]:
-        OutputDict = HamiltonActionCommandABC.GetVars(self)
+    def SerializeOptions(self) -> dict[str, list]:
+        OutputDict = HamiltonActionCommandABC.SerializeOptions(self)
 
         ChannelNumberList = ["0"] * 16
 

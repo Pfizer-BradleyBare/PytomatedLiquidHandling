@@ -10,7 +10,7 @@ CommandSelf = TypeVar("CommandSelf", bound="HamiltonCommandABC")
 
 @dataclass(kw_only=True)
 class HamiltonCommandABC(CommandABC):
-    def GetVars(self) -> dict[str, Any]:
+    def SerializeOptions(self) -> dict[str, Any]:
         if isinstance(self, CommandOptions):
             OutputDict = vars(self.Options)
 

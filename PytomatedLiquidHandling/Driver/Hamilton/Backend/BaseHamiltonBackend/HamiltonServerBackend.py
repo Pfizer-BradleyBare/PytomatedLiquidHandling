@@ -63,7 +63,9 @@ class HamiltonServerBackendABC(ServerBackendABC):
         ParserObject.SetEndpointOutputKey("Command Name", Command.CommandName)
 
         try:
-            ParserObject.SetEndpointOutputKey("Command Parameters", Command.GetVars())
+            ParserObject.SetEndpointOutputKey(
+                "Command Parameters", Command.SerializeOptions()
+            )
         except:
             self._Response = RuntimeError(
                 "Error while converting Options to json dict."
