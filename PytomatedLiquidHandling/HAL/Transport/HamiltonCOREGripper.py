@@ -50,7 +50,7 @@ class HamiltonCOREGripper(TransportABC):
 
         CommandInstance = COREGripperDriver.GetPlate.Command(
             Options=GetPlateOptionsInstance,
-            CustomErrorHandling=self.CustomErrorHandling,
+            UserErrorHandling=self.UserErrorHandling,
         )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)
@@ -69,7 +69,7 @@ class HamiltonCOREGripper(TransportABC):
                     int(self._LastTransportFlag)
                 ),
             ),
-            CustomErrorHandling=self.CustomErrorHandling,
+            UserErrorHandling=self.UserErrorHandling,
         )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)

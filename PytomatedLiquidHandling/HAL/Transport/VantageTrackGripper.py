@@ -71,7 +71,7 @@ class VantageTrackGripper(TransportABC):
                 CollisionControl=TrackGripper.GripPlateFromTaughtPosition.Options.YesNoOptions.Yes,
                 TaughtPathName=PickupOptions.TaughtPathName,
             ),
-            CustomErrorHandling=self.CustomErrorHandling,
+            UserErrorHandling=self.UserErrorHandling,
         )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)
@@ -92,7 +92,7 @@ class VantageTrackGripper(TransportABC):
                 SpeedPercentage=100,
                 CollisionControl=TrackGripper.PlacePlateToTaughtPosition.Options.YesNoOptions.Yes,
             ),
-            CustomErrorHandling=self.CustomErrorHandling,
+            UserErrorHandling=self.UserErrorHandling,
         )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)

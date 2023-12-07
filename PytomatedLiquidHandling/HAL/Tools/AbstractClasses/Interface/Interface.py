@@ -12,12 +12,12 @@ class Interface(BaseModel):
 
     Attributes:
         Backend: The backend that will be used to execute physical actions. NOTE: devices are backend specific.
-        CustomErrorHandling: Allows users to handle errors directly on the system or to return them to the device. NOTE: some
+        UserErrorHandling: Allows users to handle errors directly on the system or to return them to the device. NOTE: some
         backends may not support error handling on the system.
     """
 
     Backend: BackendABC
-    CustomErrorHandling: bool
+    UserErrorHandling: bool
 
     @field_validator("Backend", mode="before")
     def __ValidateBackend(cls, v):

@@ -37,7 +37,7 @@ Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
 Command = HeaterShaker.Connect.Command(
-    Options=HeaterShaker.Connect.Options(ComPort=1), CustomErrorHandling=False
+    Options=HeaterShaker.Connect.Options(ComPort=1), UserErrorHandling=False
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
@@ -50,7 +50,7 @@ Command = HeaterShaker.StartTemperatureControl.Command(
     Options=HeaterShaker.StartTemperatureControl.Options(
         HandleID=HeaterShakerHandleId, Temperature=DesiredTemperature
     ),
-    CustomErrorHandling=False,
+    UserErrorHandling=False,
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)

@@ -7,7 +7,7 @@ from .Options import Options
 
 @dataclass(kw_only=True)
 class Command(CommandOptionsListed[list[Options]], HamiltonActionCommandABC):
-    CustomErrorHandling: bool
+    UserErrorHandling: bool
 
     def GetVars(self) -> dict[str, list]:
         OutputDict = HamiltonActionCommandABC.GetVars(self)

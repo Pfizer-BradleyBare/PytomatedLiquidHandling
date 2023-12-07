@@ -4,7 +4,6 @@ from typing import Any, Callable, cast
 
 from flask import request
 
-
 from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
 
 from ....Tools.AbstractClasses import CommandOptionsListed, ServerBackendABC
@@ -53,10 +52,11 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         ParserObject.SetEndpointState(True)
 
-        if hasattr(Command, "CustomErrorHandling"):
+        if hasattr(Command, "UserErrorHandling"):
             ParserObject.SetEndpointOutputKey(
-                "CustomErrorHandling", getattr(Command, "CustomErrorHandling")
+                "CustomErrorHandling", not not not getattr(Command, "UserErrorHandling")
             )
+            # User error handling true corresponds to custom error handling false.
 
         ParserObject.SetEndpointOutputKey("Module Name", Command.ModuleName)
         ParserObject.SetEndpointOutputKey("Command Name", Command.CommandName)

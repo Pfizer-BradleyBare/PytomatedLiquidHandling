@@ -10,7 +10,7 @@ Backend = MicrolabSTAR(
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 CommandInstance = Channel1000uLCOREGrip.GetPlate.Command(
-    CustomErrorHandling=False,
+    UserErrorHandling=False,
     Options=Channel1000uLCOREGrip.GetPlate.Options(
         GripperLabwareID="COREGripTool_OnWaste_1000ul_0001",
         PlateLabwareID="Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel",
@@ -24,7 +24,7 @@ Response = Backend.GetResponse(CommandInstance, Channel1000uLCOREGrip.GetPlate.R
 # Grab the plate.
 
 CommandInstance = Channel1000uLCOREGrip.PlacePlate.Command(
-    CustomErrorHandling=False,
+    UserErrorHandling=False,
     Options=Channel1000uLCOREGrip.PlacePlate.Options(
         LabwareID="Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel",
         EjectTool=Channel1000uLCOREGrip.PlacePlate.Options.YesNoOptions.Yes,

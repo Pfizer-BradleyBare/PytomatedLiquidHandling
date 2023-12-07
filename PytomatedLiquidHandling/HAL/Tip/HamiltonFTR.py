@@ -7,7 +7,7 @@ from .Base import TipABC
 
 class HamiltonFTR(TipABC):
     Backend: Backend.HamiltonBackendABC
-    CustomErrorHandling: Literal["N/A"] = "N/A"
+    UserErrorHandling: Literal["N/A"] = "N/A"
 
     def RemainingTipsInTier(self) -> int:
         return self.RemainingTips()

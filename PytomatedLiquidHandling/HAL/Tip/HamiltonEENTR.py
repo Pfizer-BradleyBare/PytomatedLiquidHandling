@@ -49,7 +49,7 @@ class HamiltonEENTR(TipABC):
                         StackNumber=Stack.StackNumber,
                         OffsetFromBeam=0,
                     ),
-                    CustomErrorHandling=self.CustomErrorHandling,
+                    UserErrorHandling=self.UserErrorHandling,
                 )
 
                 self.Backend.ExecuteCommand(CommandInstance)
@@ -84,7 +84,7 @@ class HamiltonEENTR(TipABC):
                     LabwareID=Stack.LabwareID,
                     IsNTRRack=True,
                 ),
-                CustomErrorHandling=self.CustomErrorHandling,
+                UserErrorHandling=self.UserErrorHandling,
             )
             self.Backend.ExecuteCommand(CommandInstance)
             self.Backend.WaitForResponseBlocking(CommandInstance)

@@ -1,3 +1,4 @@
+import logging
 import os
 
 import yaml
@@ -6,7 +7,6 @@ from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, Tip
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-import logging
 from .Base import DesaltingTip, DesaltingTipTracker, ElutionParameters, IMCSDesaltingABC
 from .HamiltonCORE96HeadIMCSDesalting import HamiltonCORE96HeadIMCSDesalting
 from .HamiltonPortraitCORE8ChannelIMCSDesalting import (
@@ -109,7 +109,7 @@ def LoadYaml(
             Identifier = DeviceItem["Identifier"]
             BackendID = DeviceItem["Backend Identifier"]
             BackendInstance = Backends[BackendID]
-            CustomErrorHandling = DeviceItem["Custom Error Handling"]
+            UserErrorHandling = DeviceItem["Custom Error Handling"]
 
             IMCSTipDropOffSequence = DeviceItem["IMCS Tip Drop Off Sequence"]
             IMCSTipPickupSequence = DeviceItem["IMCS Tip Pickup Sequence"]
@@ -122,7 +122,7 @@ def LoadYaml(
                 HamiltonCORE96HeadIMCSDesalting(
                     Identifier,
                     BackendInstance,
-                    CustomErrorHandling,
+                    UserErrorHandling,
                     TipInstance,
                     TipSupportDropOffSequence,
                     TipSupportPickupSequence,
@@ -146,7 +146,7 @@ def LoadYaml(
                 HamiltonPortraitCORE8ChannelIMCSDesalting(
                     Identifier,
                     BackendInstance,
-                    CustomErrorHandling,
+                    UserErrorHandling,
                     TipInstance,
                     TipSupportDropOffSequence,
                     TipSupportPickupSequence,
