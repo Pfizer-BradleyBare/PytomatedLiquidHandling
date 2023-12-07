@@ -57,7 +57,9 @@ class HamiltonServerBackendABC(ServerBackendABC):
                 "CustomErrorHandling",
                 not not not getattr(Command, "BackendErrorHandling"),
             )
-            # User error handling true corresponds to custom error handling false.
+            # Backend error handling true corresponds to custom error handling false.
+            # Unfortunately when I wrote the Hamilton backend I used CustomErrorHandling. Too much work to change right now.
+            # TODO: change Hamilton libraries to Backend Error Handling
 
         ParserObject.SetEndpointOutputKey("Module Name", Command.ModuleName)
         ParserObject.SetEndpointOutputKey("Command Name", Command.CommandName)
