@@ -12,7 +12,7 @@ class Interface(BaseModel):
 
     Attributes:
         Backend: The backend that will be used to execute physical actions. NOTE: devices are backend specific.
-        BackendErrorHandling: Allows users to handle errors directly on the system or to return them to the device. NOTE: some
+        BackendErrorHandling: Allows users to handle errors directly on the system or to return them to the HAL device. NOTE: some
         backends may not support error handling on the system.
     """
 
