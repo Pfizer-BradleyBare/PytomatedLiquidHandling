@@ -27,12 +27,12 @@ class HamiltonBackendABC(BackendABC):
         BackendABC.model_post_init(self, __context)
         self._ActionServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
             Identifier=str(self.Identifier) + " Action Server",
-            PathPrefix="/ActionServer/",
+            SubDomain="/ActionServer/",
             Port=767,
         )
         self._StateServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
             Identifier=str(self.Identifier) + " State Server",
-            PathPrefix="/StateServer/",
+            SubDomain="/StateServer/",
             Port=768,
         )
 
