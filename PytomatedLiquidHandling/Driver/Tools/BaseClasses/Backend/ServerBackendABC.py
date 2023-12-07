@@ -13,16 +13,27 @@ ParserLogger = logging.getLogger(__name__ + ".Parser")
 
 
 class ServerBackendABC(SimpleBackendABC):
+    """Creates a web API for communication with the system software."""
+
     __Hosts: ClassVar[list[tuple]] = list()
 
-    Views: list[Callable]
-    PathPrefix: str = "/"
     Address: str = "localhost"
+    """Web address to request web API endpoints."""
+
     Port: int = 8080
+    """Web port to request web API endpoints."""
+
+    SubDomain: str = "/"
+    """Web sub domain to request web API endpoints."""
+
+    Views: list[Callable]
+    """Endpoints that this web API exposes."""
+
     _App: Flask = PrivateAttr()
     _AppParentThreadRunnerFlag: Event = PrivateAttr()
 
     def model_post_init(self, __context: Any) -> None:
+        """Creates the web API based on ```Address```, ```Port```, ```SubDomain```, and ```Views```."""
         SimpleBackendABC.model_post_init(self, __context)
 
         self._AppParentThreadRunnerFlag = Event()
@@ -31,10 +42,10 @@ class ServerBackendABC(SimpleBackendABC):
         logging.getLogger("werkzeug").disabled = True
 
         self.Views += [self.IsActive, self.Kill]
-        self._App.add_url_rule(self.PathPrefix, "Index", self.Index)
+        self._App.add_url_rule(self.SubDomain, "Index", self.Index)
         for View in self.Views:
             self._App.add_url_rule(
-                self.PathPrefix + View.__name__,
+                self.SubDomain + View.__name__,
                 View.__name__,
                 View,
                 methods=["GET", "POST"],
@@ -53,10 +64,12 @@ class ServerBackendABC(SimpleBackendABC):
     def __Run(self):
         self._App.run(self.Address, self.Port)
 
-    def GetEndpointID(self, Endpoint: str):
+    def _GetEndpointID(self, Endpoint: str):
         return self.__class__.__name__ + ": " + str(self.Identifier) + "-> " + Endpoint
 
     def StartBackend(self):
+        """- Checks that host is available. If host is not available then raises ```ValueError```.
+        - Starts server as daemon thread."""
         SimpleBackendABC.StartBackend(self)
         Host = (self.Address, self.Port)
         if Host in ServerBackendABC.__Hosts:
@@ -74,16 +87,18 @@ class ServerBackendABC(SimpleBackendABC):
         ).start()
 
     def StopBackend(self):
+        """Kills server and all daemon threads. NOTE: expect 1 second delay. If server is not running then raises ```RuntimeError```."""
         SimpleBackendABC.StopBackend(self)
         Host = (self.Address, self.Port)
         if Host not in ServerBackendABC.__Hosts:
-            raise Exception("This backend not currently running. Run it first")
+            raise RuntimeError("This backend not currently running. Run it first")
 
         self._AppParentThreadRunnerFlag.set()
 
         ServerBackendABC.__Hosts.remove(Host)
 
     def Index(self):
+        """@private Index API endpoint."""
         Out = ""
         Out += "<H1>Hello!</H1>"
         Out += "<H3>Endpoints:</H3>"
@@ -94,8 +109,9 @@ class ServerBackendABC(SimpleBackendABC):
         return Out
 
     def IsActive(self):
+        """@private IsActive API endpoint."""
         ParserInstance = ServerBackendABC.Parser(
-            self.GetEndpointID("IsActive"),
+            self._GetEndpointID("IsActive"),
             None,
         )
         ParserInstance.SetEndpointState(True)
@@ -103,9 +119,10 @@ class ServerBackendABC(SimpleBackendABC):
         return ParserInstance.GetHTTPResponse()
 
     def Kill(self):
+        """@private Kill API endpoint. Used to kill the server remotely."""
         ServerBackendABC.StopBackend(self)
         ParserInstance = ServerBackendABC.Parser(
-            self.GetEndpointID("Kill"),
+            self._GetEndpointID("Kill"),
             None,
         )
         ParserInstance.SetEndpointState(True)
@@ -113,6 +130,8 @@ class ServerBackendABC(SimpleBackendABC):
         return ParserInstance.GetHTTPResponse()
 
     class Parser:
+        """@private Legacy. This is going away."""
+
         def __init__(
             self,
             EndpointID: str,

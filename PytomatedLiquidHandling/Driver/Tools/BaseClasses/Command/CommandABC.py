@@ -1,11 +1,29 @@
 import inspect
 import os
 from dataclasses import dataclass, field
-from typing import Any, ClassVar
+from typing import ClassVar
 
 
 @dataclass(kw_only=True)
 class CommandABC:
+    """Base dataclass for all commands. All commands must be a dataclass with ```kw_only=True``` for consistency sake.
+
+    Commands should be contained in a folder with 4 files below. These 4 files make up a single command that can be executed on your backend:.
+    - __init__.py
+    - Command.py
+    - Options.py
+    - Response.py
+    """
+
+    Identifier: str = "N/A"
+    """All commands have an optional identifier. Provided for more logging context."""
+
+    ModuleName: ClassVar[str]
+    """This is the path from the ```Driver``` folder. This is autodetermined upon dataclass creation."""
+
+    CommandName: ClassVar[str]
+    """This is the folder name where your 4 files are contained. This is autodetermined upon dataclass creation."""
+
     @staticmethod
     def __GetCommandName(__file__: str) -> str:
         """Uses the path of the python module to extract a command name
@@ -43,10 +61,6 @@ class CommandABC:
             Output += " "
 
         return Output[:-1]
-
-    ModuleName: ClassVar[str] = "Not Set"
-    CommandName: ClassVar[str] = "Not Set"
-    Identifier: str = field(default="N/A")
 
     def __post_init__(self):
         ModuleType = inspect.getmodule(type(self))
