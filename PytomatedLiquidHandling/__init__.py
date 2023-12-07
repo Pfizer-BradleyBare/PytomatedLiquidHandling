@@ -1,4 +1,4 @@
-""" Pytomated Liquid Handling is agnostic lab automation platform.
+""" Pytomated Liquid Handling (PLH) is an agnostic lab automation platform. 
 
 
 The idea behind this library is to mimic a computer system in which layers of abstraction are used to simplify user interaction.
@@ -13,8 +13,14 @@ NOTE:
     API -> Platform agnostic implementations. API layer simplifies the choice of HAL implementations. Method written in the API layer can 
     seamlessly move to other platforms by only modifying the HAL configuration files.
 
+High level implementation details:
+    Critical Libraries:
+        Logging is performed with Loguru.
 
-Logging is performed with Loguru.
+        Web server backends are implemented with flask.
+
+    Notes:
+        Base classes (suffixed with ABC) make up most all of the classes in PLH. Base classes may or may not be abstract.
 """
 
 
