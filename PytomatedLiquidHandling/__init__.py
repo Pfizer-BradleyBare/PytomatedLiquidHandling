@@ -15,13 +15,25 @@ NOTE:
 
 High level implementation details:
     Critical Libraries:
-        Logging is performed with Loguru. Enable with "logger.enable("PytomatedLiquidHandling")"
+        Logging is performed with "loguru". Enable with "logger.enable("PytomatedLiquidHandling")"
 
-        Web server backends are implemented with flask.
+        Yaml ingestion is performed with "pyyaml"
+
+        Yaml config ingestion is validated with "pydantic"
+
+        Web server backends are implemented with "flask".
+
+        Email / text notifications are handled with "redbox" / "redmail".
+
+        Dynamic linked library loading is performed by "pythonnet".
 
     Notes:
         Base classes (suffixed with ABC) make up most all of the classes in PLH. Base classes may or may not be abstract.
 """
 
+from loguru import logger
+
+logger.disable("PytomatedLiquidHandling")
+# Programmer is excepted to enable loguru to see PLH logs
 
 from . import HAL, Driver
