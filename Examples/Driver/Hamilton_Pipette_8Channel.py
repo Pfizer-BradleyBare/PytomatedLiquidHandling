@@ -13,81 +13,64 @@ Backend = MicrolabSTAR(
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
-ListedOptions = Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
-    TipCounter="N", DialogTitle="Edit 1000uL Tip Positions"
-)
-ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
-        LabwareID="TIP_50ul_L_NE_stack_0001_0003"
+Command = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
+    Options=Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
+        TipCounter="My custom tip counter", DialogTitle="Edit 50uL Tip Positions"
     )
-)
-ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
-        LabwareID="TIP_50ul_L_NE_stack_0002_0002"
-    )
-)
-ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
-        LabwareID="TIP_50ul_L_NE_stack_0001_0001"
-    )
-)
-ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
-        LabwareID="TIP_50ul_L_NE_stack_0002_0004"
-    )
-)
-ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
-        LabwareID="TIP_50ul_L_NE_stack_0001_0004"
-    )
-)
-ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
-        LabwareID="TIP_50ul_L_NE_stack_0001_0002"
-    )
-)
-ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
-        LabwareID="TIP_50ul_L_NE_stack_0002_0003"
-    )
-)
-ListedOptions.append(
-    Visual_NTR_Library.Channels_TipCounter_Edit.Options(
-        LabwareID="TIP_50ul_L_NE_stack_0002_0001"
-    )
-)
-CommandInstance = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
-    Options=ListedOptions
 )
 
-Backend.ExecuteCommand(CommandInstance)
-Backend.WaitForResponseBlocking(CommandInstance)
+TipLabwareIDs = [
+    "TIP_50ul_L_NE_stack_0001_0003",
+    "TIP_50ul_L_NE_stack_0002_0002",
+    "TIP_50ul_L_NE_stack_0001_0001",
+    "TIP_50ul_L_NE_stack_0002_0004",
+    "TIP_50ul_L_NE_stack_0001_0004",
+    "TIP_50ul_L_NE_stack_0001_0002",
+    "TIP_50ul_L_NE_stack_0002_0003",
+    "TIP_50ul_L_NE_stack_0002_0001",
+]
+
+for ID in TipLabwareIDs:
+    Command.Options.append(
+        Visual_NTR_Library.Channels_TipCounter_Edit.Options(LabwareID=ID)
+    )
+
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
 AvailablePositions = Backend.GetResponse(
-    CommandInstance, Visual_NTR_Library.Channels_TipCounter_Edit.Response
+    Command, Visual_NTR_Library.Channels_TipCounter_Edit.Response
 ).AvailablePositions
+# Execute our tip rack edit step on the Hamilton.
+# This will prompt the user to select which tips are present and which are not.
+# This information will then be returned to us to use for pipetting.
+
 
 TipPositions = AvailablePositions[:8]
+AvailablePositions = AvailablePositions[8:]
+# We want to do a single pipetting step with 8 tips.
 
-ListedOptions = list()
+Command = Channel1000uL.Pickup.Command(BackendErrorHandling=True, Options=list())
 for i, Position in enumerate(TipPositions):
-    ListedOptions.append(
+    Command.Options.append(
         Channel1000uL.Pickup.Options(
             LabwareID=Position["LabwareID"],
             PositionID=Position["PositionID"],
             ChannelNumber=i + 1,
         )
     )
-CommandInstance = Channel1000uL.Pickup.Command(
-    BackendErrorHandling=False, Options=ListedOptions
-)
-Backend.ExecuteCommand(CommandInstance)
-Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, Channel1000uL.Pickup.Response)
-# pickup some tips
 
-ListedOptions = list()
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+ResponseInstance = Backend.GetResponse(Command, Channel1000uL.Pickup.Response)
+# Pickup our tips.
+# We are using the Tip information returned from the system
+# The channel number dictates exactly which channel picks up which tip.
+# We set BackendErrorHandling as True so the Hamilton software will handle errors for us.
+
+
+Command = Channel1000uL.Aspirate.Command(BackendErrorHandling=True, Options=list())
 for i, Position in enumerate(TipPositions):
-    ListedOptions.append(
+    Command.Options.append(
         Channel1000uL.Aspirate.Options(
             ChannelNumber=i + 1,
             LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
@@ -97,17 +80,17 @@ for i, Position in enumerate(TipPositions):
         )
     )
 
-CommandInstance = Channel1000uL.Aspirate.Command(
-    BackendErrorHandling=True, Options=ListedOptions
-)
-Backend.ExecuteCommand(CommandInstance)
-Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, Channel1000uL.Aspirate.Response)
-# Aspirate some liquid
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+ResponseInstance = Backend.GetResponse(Command, Channel1000uL.Aspirate.Response)
+# Aspirate some liquid from the same labware and same well 8 times
+# NOTE that the liquid class must be correct for the given aspiration volume.
+# The channel number dictates exactly which channel aspirates.
+# We set BackendErrorHandling as True so the Hamilton software will handle errors for us.
 
-ListedOptions = list()
+Command = Channel1000uL.Dispense.Command(BackendErrorHandling=True, Options=list())
 for i, Position in enumerate(TipPositions):
-    ListedOptions.append(
+    Command.Options.append(
         Channel1000uL.Dispense.Options(
             ChannelNumber=i + 1,
             LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
@@ -116,46 +99,42 @@ for i, Position in enumerate(TipPositions):
             Volume=25,
         )
     )
-CommandInstance = Channel1000uL.Dispense.Command(
-    BackendErrorHandling=False, Options=ListedOptions
-)
-Backend.ExecuteCommand(CommandInstance)
-Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, Channel1000uL.Dispense.Response)
-# Dispense some liquid
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+ResponseInstance = Backend.GetResponse(Command, Channel1000uL.Dispense.Response)
+# Dispense liquid into the same container for example purposes.
+# NOTE that the liquid class must be correct for the given dispense volume.
+# The channel number dictates exactly which channel dispenses.
+# We set BackendErrorHandling as True so the Hamilton software will handle errors for us.
 
-ListedOptions = list()
+Command = Channel1000uL.Eject.Command(BackendErrorHandling=True, Options=list())
 for i, Position in enumerate(TipPositions):
-    ListedOptions.append(
+    Command.Options.append(
         Channel1000uL.Eject.Options(
             LabwareID="Waste",
             ChannelNumber=i + 1,
             PositionID=str(i + 1),
         )
     )
-CommandInstance = Channel1000uL.Eject.Command(
-    BackendErrorHandling=False, Options=ListedOptions
-)
-Backend.ExecuteCommand(CommandInstance)
-Backend.WaitForResponseBlocking(CommandInstance)
-ResponseInstance = Backend.GetResponse(CommandInstance, Channel1000uL.Eject.Response)
-# Eject some tips
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+ResponseInstance = Backend.GetResponse(Command, Channel1000uL.Eject.Response)
+# Eject tips to waste.
+# We set BackendErrorHandling as True so the Hamilton software will handle errors for us.
 
-
-ListedOptions = Visual_NTR_Library.Channels_TipCounter_Write.ListedOptions(
-    TipCounter="N"
+Command = Visual_NTR_Library.Channels_TipCounter_Write.Command(
+    Options=Visual_NTR_Library.Channels_TipCounter_Write.ListedOptions(
+        TipCounter="My custom tip counter"
+    )
 )
-for Pos in AvailablePositions[8:]:
-    ListedOptions.append(
+for Pos in AvailablePositions:
+    Command.Options.append(
         Visual_NTR_Library.Channels_TipCounter_Write.Options(
             LabwareID=Pos["LabwareID"], PositionID=Pos["PositionID"]
         )
     )
-CommandInstance = Visual_NTR_Library.Channels_TipCounter_Write.Command(
-    Options=ListedOptions
-)
-Backend.ExecuteCommand(CommandInstance)
-Backend.WaitForResponseBlocking(CommandInstance)
-Backend.GetResponse(
-    CommandInstance, Visual_NTR_Library.Channels_TipCounter_Write.Response
-)
+
+Backend.ExecuteCommand(Command)
+Backend.WaitForResponseBlocking(Command)
+Backend.GetResponse(Command, Visual_NTR_Library.Channels_TipCounter_Write.Response)
+# Write our tip counter so during the next tip edit it is already correctly selected.
