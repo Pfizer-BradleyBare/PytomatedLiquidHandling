@@ -6,22 +6,11 @@ from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
 
 from ...Tools.AbstractClasses import Interface
-from .Exceptions import (
-    CoolingNotSupportedError,
-    HeatingNotSupportedError,
-    ShakingNotSupportedError,
-)
-from .TempLimits.TempLimits import TempLimits
 
 
 class HeatCoolShakeABC(Interface, HALDevice):
     ComPort: str | int
-    TempLimits: TempLimits
-    CoverablePlates: list[LayoutItem.CoverablePlate]
-
-    _HeatingSupported: bool = PrivateAttr(False)
-    _CoolingSupported: bool = PrivateAttr(False)
-    _ShakingSupported: bool = PrivateAttr(False)
+    Plates: list[LayoutItem.CoverablePlate | LayoutItem.Plate]
     _HandleID: int | str = PrivateAttr()
 
     @field_validator("CoverablePlates", mode="before")
@@ -65,7 +54,7 @@ class HeatCoolShakeABC(Interface, HALDevice):
         Exceptions = list()
 
         SupportedLabwares = [
-            LayoutItem.Labware.Identifier for LayoutItem in self.CoverablePlates
+            LayoutItem.Labware.Identifier for LayoutItem in self.Plates
         ]
 
         if LayoutItem.Labware not in SupportedLabwares:
@@ -73,24 +62,14 @@ class HeatCoolShakeABC(Interface, HALDevice):
                 Labware.Base.Exceptions.LabwareNotSupportedError([LayoutItem.Labware])
             )
 
-        if Temperature is not None:
-            if Temperature < 25 and not self._CoolingSupported:
-                Exceptions.append(CoolingNotSupportedError)
-            if Temperature > 25 and not self._HeatingSupported:
-                Exceptions.append(HeatingNotSupportedError)
-
-        if RPM is not None:
-            if not self._ShakingSupported:
-                Exceptions.append(ShakingNotSupportedError)
-
         if len(Exceptions) > 0:
             raise ExceptionGroup("HeatCoolShakeDevice Options Exceptions", Exceptions)
 
     def GetLayoutItem(
         self,
         LayoutItemInstance: LayoutItem.CoverablePlate | LayoutItem.Plate,
-    ) -> LayoutItem.CoverablePlate:
-        for SupportedLayoutItemInstance in self.CoverablePlates:
+    ) -> LayoutItem.CoverablePlate | LayoutItem.Plate:
+        for SupportedLayoutItemInstance in self.Plates:
             if SupportedLayoutItemInstance.Labware == LayoutItemInstance.Labware:
                 if isinstance(LayoutItemInstance, LayoutItem.CoverablePlate):
                     SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered

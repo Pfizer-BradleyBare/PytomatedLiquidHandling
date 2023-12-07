@@ -18,11 +18,7 @@ Hamilton Heater Shaker:
     Backend: Hammy
     Custom Error Handling: False
     Com Port: 1
-    Temp Limits:
-      Stable Delta: 2
-      Minimum: 0
-      Maximum: 100
-    Coverable Plates:
+    Plates:
       - Item1
       - Item2
 
@@ -31,10 +27,6 @@ Hamilton Heater Shaker:
     Backend Identifier: Hammy
     Custom Error Handling: False
     Com Port: 2
-    Temp Limits:
-      Stable Delta: 2
-      Minimum: 0
-      Maximum: 100
-    Coverable Plates:
+    Plates:
       - Item1
       - Item2

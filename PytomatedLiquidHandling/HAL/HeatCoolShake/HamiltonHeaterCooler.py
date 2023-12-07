@@ -6,18 +6,36 @@ from PytomatedLiquidHandling.Driver.Hamilton import Backend
 from PytomatedLiquidHandling.Driver.Hamilton import (
     HamiltonHeaterCooler as HeaterCoolerDriver,
 )
+from PytomatedLiquidHandling.HAL import LayoutItem
 
-from .Base import Exceptions, HeatCoolShakeABC
+from .Base import HeatCoolShakeABC
+from .Base.Exceptions import ShakingNotSupportedError
 
 
 class HamiltonHeaterCooler(HeatCoolShakeABC):
     Backend: Backend.HamiltonBackendABC
     CustomErrorHandling: Literal["N/A"] = "N/A"
 
-    _HeatingSupported: bool = PrivateAttr(default=True)
-    _CoolingSupported: bool = PrivateAttr(default=True)
-    _ShakingSupported: bool = PrivateAttr(default=False)
     _HandleID: str = PrivateAttr()
+
+    def AssertOptions(
+        self,
+        LayoutItem: LayoutItem.CoverablePlate | LayoutItem.Plate,
+        Temperature: float | None = None,
+        RPM: int | None = None,
+    ):
+        Exceptions = list()
+
+        try:
+            super().AssertOptions(LayoutItem, Temperature, RPM)
+        except ExceptionGroup as e:
+            Exceptions += e.exceptions
+
+        if RPM is not None:
+            Exceptions.append(ShakingNotSupportedError)
+
+        if len(Exceptions) > 0:
+            raise ExceptionGroup("HeatCoolShakeDevice Options Exceptions", Exceptions)
 
     def Initialize(self):
         HeatCoolShakeABC.Initialize(self)
@@ -85,7 +103,7 @@ class HamiltonHeaterCooler(HeatCoolShakeABC):
         return ResponseInstance.Temperature
 
     def SetShakingSpeed(self, RPM: int):
-        raise Exceptions.ShakingNotSupportedError
+        raise ShakingNotSupportedError
 
     def GetShakingSpeed(self) -> int:
-        raise Exceptions.ShakingNotSupportedError
+        raise ShakingNotSupportedError

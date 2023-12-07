@@ -6,18 +6,36 @@ from PytomatedLiquidHandling.Driver.Hamilton import Backend
 from PytomatedLiquidHandling.Driver.Hamilton import (
     HSLHamHeaterShakerLib as HeaterShakerDriver,
 )
+from PytomatedLiquidHandling.HAL import LayoutItem
 
-from .Base import Exceptions, HeatCoolShakeABC
+from .Base import HeatCoolShakeABC
+from .Base.Exceptions import CoolingNotSupportedError
 
 
 class HamiltonHeaterShaker(HeatCoolShakeABC):
     Backend: Backend.HamiltonBackendABC
     CustomErrorHandling: Literal["N/A"] = "N/A"
-
-    _HeatingSupported: bool = PrivateAttr(default=True)
-    _CoolingSupported: bool = PrivateAttr(default=False)
-    _ShakingSupported: bool = PrivateAttr(default=True)
     _HandleID: int = PrivateAttr()
+
+    def AssertOptions(
+        self,
+        LayoutItem: LayoutItem.CoverablePlate | LayoutItem.Plate,
+        Temperature: float | None = None,
+        RPM: int | None = None,
+    ):
+        Exceptions = list()
+
+        try:
+            super().AssertOptions(LayoutItem, Temperature, RPM)
+        except ExceptionGroup as e:
+            Exceptions += e.exceptions
+
+        if Temperature is not None:
+            if Temperature < 25:
+                Exceptions.append(CoolingNotSupportedError)
+
+        if len(Exceptions) > 0:
+            raise ExceptionGroup("HeatCoolShakeDevice Options Exceptions", Exceptions)
 
     def Initialize(self):
         HeatCoolShakeABC.Initialize(self)
@@ -99,7 +117,7 @@ class HamiltonHeaterShaker(HeatCoolShakeABC):
 
     def SetTemperature(self, Temperature: float):
         if Temperature < 25:
-            raise Exceptions.CoolingNotSupportedError
+            raise CoolingNotSupportedError
 
         CommandInstance = HeaterShakerDriver.StartTempCtrl.Command(
             Options=HeaterShakerDriver.StartTempCtrl.Options(
