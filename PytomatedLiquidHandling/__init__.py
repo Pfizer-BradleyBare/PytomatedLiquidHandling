@@ -15,7 +15,7 @@ NOTE:
 
 High level implementation details:
     Critical Libraries:
-        Logging is performed with Loguru.
+        Logging is performed with Loguru. Enable with "logger.enable("PytomatedLiquidHandling")"
 
         Web server backends are implemented with flask.
 
