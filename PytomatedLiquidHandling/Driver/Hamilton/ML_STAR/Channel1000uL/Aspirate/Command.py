@@ -1,14 +1,16 @@
 from dataclasses import dataclass
 
-from .....Tools.BaseClasses import CommandOptionsListed
+from .....Tools.BaseClasses import CommandOptionsListed, CommandBackendErrorHandling
 from ....Backend import HamiltonActionCommandABC
 from .Options import Options
 
 
 @dataclass(kw_only=True)
-class Command(CommandOptionsListed[list[Options]], HamiltonActionCommandABC):
-    BackendErrorHandling: bool
-
+class Command(
+    CommandOptionsListed[list[Options]],
+    HamiltonActionCommandABC,
+    CommandBackendErrorHandling,
+):
     def GetVars(self) -> dict[str, list]:
         OutputDict = HamiltonActionCommandABC.GetVars(self)
 

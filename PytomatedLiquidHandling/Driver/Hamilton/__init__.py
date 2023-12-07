@@ -1,3 +1,11 @@
+"""
+Hamilton Venus driver implementation.
+
+- Support for Both Microlab STAR and Vantage (with TrackGripper and EntryExit)
+- Module names mimic the names of libraries in Venus.
+- Command options mimic the parameters available in Venus.
+"""
+
 from . import (
     ML_STAR,
     Backend,

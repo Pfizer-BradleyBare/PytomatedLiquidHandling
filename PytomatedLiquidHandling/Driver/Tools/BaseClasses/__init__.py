@@ -16,7 +16,12 @@ See each class for more details.
 """
 
 from .Backend import BackendABC, ServerBackendABC, SimpleBackendABC
-from .Command import CommandABC, CommandOptions, CommandOptionsListed
+from .Command import (
+    CommandABC,
+    CommandOptions,
+    CommandOptionsListed,
+    CommandBackendErrorHandling,
+)
 from .Options import OptionsABC
 from .Response import ResponseABC
 
@@ -27,6 +32,7 @@ __all__ = [
     "CommandABC",
     "CommandOptions",
     "CommandOptionsListed",
+    "CommandBackendErrorHandling",
     "OptionsABC",
     "ResponseABC",
 ]
