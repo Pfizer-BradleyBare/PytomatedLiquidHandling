@@ -116,7 +116,8 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                         )
                     )
                 Command = Channel1000uL.Pickup.Command(
-                    UserErrorHandling=self.UserErrorHandling, Options=PickupOptions
+                    BackendErrorHandling=self.BackendErrorHandling,
+                    Options=PickupOptions,
                 )
                 self.Backend.ExecuteCommand(Command)
                 self.Backend.GetResponse(Command, Channel1000uL.Pickup.Response)
@@ -164,7 +165,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     )
 
                 Command = Channel1000uL.Aspirate.Command(
-                    UserErrorHandling=self.UserErrorHandling,
+                    BackendErrorHandling=self.BackendErrorHandling,
                     Options=AspirateOptions,
                 )
                 self.Backend.ExecuteCommand(Command)
@@ -218,7 +219,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     )
 
                 Command = Channel1000uL.Dispense.Command(
-                    UserErrorHandling=self.UserErrorHandling,
+                    BackendErrorHandling=self.BackendErrorHandling,
                     Options=DispenseOptions,
                 )
                 self.Backend.ExecuteCommand(Command)
@@ -239,7 +240,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     )
 
                 Command = Channel1000uL.Eject.Command(
-                    UserErrorHandling=self.UserErrorHandling,
+                    BackendErrorHandling=self.BackendErrorHandling,
                     Options=EjectOptions,
                 )
                 self.Backend.ExecuteCommand(Command)

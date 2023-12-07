@@ -14,7 +14,7 @@ from .Base.Exceptions import ShakingNotSupportedError
 
 class HamiltonHeaterCooler(HeatCoolShakeABC):
     Backend: Backend.HamiltonBackendABC
-    UserErrorHandling: Literal["N/A"] = "N/A"
+    BackendErrorHandling: Literal["N/A"] = "N/A"
 
     _HandleID: str = PrivateAttr()
 

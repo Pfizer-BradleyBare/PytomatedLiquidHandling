@@ -65,7 +65,7 @@ class HamiltonInternalPlateGripper(TransportABC):
                 LabwareOrientation=PickupOptions.LabwareOrientation,
                 InverseGrip=PickupOptions.InverseGrip,
             ),
-            UserErrorHandling=self.UserErrorHandling,
+            BackendErrorHandling=self.BackendErrorHandling,
         )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)
@@ -84,7 +84,7 @@ class HamiltonInternalPlateGripper(TransportABC):
                 LiftupHeight=DropoffOptions.LiftupHeight,
                 LabwareOrientation=DropoffOptions.LabwareOrientation,
             ),
-            UserErrorHandling=self.UserErrorHandling,
+            BackendErrorHandling=self.BackendErrorHandling,
         )
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)

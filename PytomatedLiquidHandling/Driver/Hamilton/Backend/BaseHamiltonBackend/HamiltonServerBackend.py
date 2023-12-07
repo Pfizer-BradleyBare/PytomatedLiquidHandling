@@ -52,9 +52,10 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         ParserObject.SetEndpointState(True)
 
-        if hasattr(Command, "UserErrorHandling"):
+        if hasattr(Command, "BackendErrorHandling"):
             ParserObject.SetEndpointOutputKey(
-                "CustomErrorHandling", not not not getattr(Command, "UserErrorHandling")
+                "CustomErrorHandling",
+                not not not getattr(Command, "BackendErrorHandling"),
             )
             # User error handling true corresponds to custom error handling false.
 

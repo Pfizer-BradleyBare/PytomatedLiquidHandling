@@ -30,7 +30,7 @@ AvailablePositions = Backend.GetResponse(
 ).AvailablePositions
 
 CommandInstance = CORE96Head.Pickup.Command(
-    UserErrorHandling=False,
+    BackendErrorHandling=False,
     Options=CORE96Head.Pickup.Options(LabwareID=AvailablePositions[0]["LabwareID"]),
 )
 Backend.ExecuteCommand(CommandInstance)
@@ -39,7 +39,7 @@ ResponseInstance = Backend.GetResponse(CommandInstance, CORE96Head.Pickup.Respon
 # pickup some tips
 
 CommandInstance = CORE96Head.Aspirate.Command(
-    UserErrorHandling=False,
+    BackendErrorHandling=False,
     Options=CORE96Head.Aspirate.Options(
         LabwareID="Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel",
         LiquidClass="HighVolume_Water_DispenseSurface_Empty",
@@ -52,7 +52,7 @@ ResponseInstance = Backend.GetResponse(CommandInstance, CORE96Head.Aspirate.Resp
 # Aspirate some liquid
 
 CommandInstance = CORE96Head.Dispense.Command(
-    UserErrorHandling=False,
+    BackendErrorHandling=False,
     Options=CORE96Head.Dispense.Options(
         LabwareID="Carrier14_Pos3_96WellPCRPlate200uL_1mLChannel",
         LiquidClass="HighVolume_Water_DispenseSurface_Empty",
@@ -65,7 +65,7 @@ ResponseInstance = Backend.GetResponse(CommandInstance, CORE96Head.Dispense.Resp
 # Dispense some liquid
 
 CommandInstance = CORE96Head.Eject.Command(
-    UserErrorHandling=False,
+    BackendErrorHandling=False,
     Options=CORE96Head.Eject.Options(LabwareID="core96externalwaste_0001"),
 )
 Backend.ExecuteCommand(CommandInstance)

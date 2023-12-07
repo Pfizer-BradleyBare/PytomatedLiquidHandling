@@ -109,7 +109,7 @@ def LoadYaml(
             Identifier = DeviceItem["Identifier"]
             BackendID = DeviceItem["Backend Identifier"]
             BackendInstance = Backends[BackendID]
-            UserErrorHandling = DeviceItem["Custom Error Handling"]
+            BackendErrorHandling = DeviceItem["Custom Error Handling"]
 
             IMCSTipDropOffSequence = DeviceItem["IMCS Tip Drop Off Sequence"]
             IMCSTipPickupSequence = DeviceItem["IMCS Tip Pickup Sequence"]
@@ -122,7 +122,7 @@ def LoadYaml(
                 HamiltonCORE96HeadIMCSDesalting(
                     Identifier,
                     BackendInstance,
-                    UserErrorHandling,
+                    BackendErrorHandling,
                     TipInstance,
                     TipSupportDropOffSequence,
                     TipSupportPickupSequence,
@@ -146,7 +146,7 @@ def LoadYaml(
                 HamiltonPortraitCORE8ChannelIMCSDesalting(
                     Identifier,
                     BackendInstance,
-                    UserErrorHandling,
+                    BackendErrorHandling,
                     TipInstance,
                     TipSupportDropOffSequence,
                     TipSupportPickupSequence,

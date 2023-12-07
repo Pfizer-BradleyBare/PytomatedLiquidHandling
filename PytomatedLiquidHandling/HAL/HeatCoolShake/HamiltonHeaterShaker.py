@@ -14,7 +14,7 @@ from .Base.Exceptions import CoolingNotSupportedError
 
 class HamiltonHeaterShaker(HeatCoolShakeABC):
     Backend: Backend.HamiltonBackendABC
-    UserErrorHandling: Literal["N/A"] = "N/A"
+    BackendErrorHandling: Literal["N/A"] = "N/A"
     _HandleID: int = PrivateAttr()
 
     def AssertOptions(

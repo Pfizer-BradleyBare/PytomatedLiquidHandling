@@ -78,7 +78,7 @@ for i, Position in enumerate(TipPositions):
         )
     )
 CommandInstance = Channel1000uL.Pickup.Command(
-    UserErrorHandling=False, Options=ListedOptions
+    BackendErrorHandling=False, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
@@ -98,7 +98,7 @@ for i, Position in enumerate(TipPositions):
     )
 
 CommandInstance = Channel1000uL.Aspirate.Command(
-    UserErrorHandling=True, Options=ListedOptions
+    BackendErrorHandling=True, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
@@ -117,7 +117,7 @@ for i, Position in enumerate(TipPositions):
         )
     )
 CommandInstance = Channel1000uL.Dispense.Command(
-    UserErrorHandling=False, Options=ListedOptions
+    BackendErrorHandling=False, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
@@ -134,7 +134,7 @@ for i, Position in enumerate(TipPositions):
         )
     )
 CommandInstance = Channel1000uL.Eject.Command(
-    UserErrorHandling=False, Options=ListedOptions
+    BackendErrorHandling=False, Options=ListedOptions
 )
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)

@@ -7,4 +7,4 @@ from .Options import ListedOptions
 
 @dataclass(kw_only=True)
 class Command(CommandOptionsListed[ListedOptions], HamiltonActionCommandABC):
-    UserErrorHandling: bool
+    BackendErrorHandling: bool

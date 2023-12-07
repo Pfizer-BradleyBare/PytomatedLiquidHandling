@@ -11,7 +11,7 @@ from .Base import TipABC
 
 class HamiltonNTR(TipABC):
     Backend: Backend.HamiltonBackendABC
-    UserErrorHandling: Literal["N/A"] = "N/A"
+    BackendErrorHandling: Literal["N/A"] = "N/A"
 
     Tiers: int
     TipRackWasteLabwareID: str

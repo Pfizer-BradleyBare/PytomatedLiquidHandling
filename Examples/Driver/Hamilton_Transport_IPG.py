@@ -11,7 +11,7 @@ Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
 CommandInstance = iSwap.GetPlate.Command(
-    UserErrorHandling=False,
+    BackendErrorHandling=False,
     Options=iSwap.GetPlate.Options(
         LabwareID="Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel",
         GripWidth=79,
@@ -24,7 +24,7 @@ Response = Backend.GetResponse(CommandInstance, iSwap.GetPlate.Response)
 # Grab the plate.
 
 CommandInstance = iSwap.PlacePlate.Command(
-    UserErrorHandling=False,
+    BackendErrorHandling=False,
     Options=iSwap.PlacePlate.Options(
         LabwareID="Carrier14_Pos1_96WellPCRPlate1200uL_1mLChannel",
     ),

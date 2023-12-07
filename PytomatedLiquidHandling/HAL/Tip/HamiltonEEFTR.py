@@ -73,7 +73,7 @@ class HamiltonEEFTR(TipABC):
                         StackNumber=Stack.StackNumber,
                         OffsetFromBeam=0,
                     ),
-                    UserErrorHandling=self.UserErrorHandling,
+                    BackendErrorHandling=self.BackendErrorHandling,
                 )
 
                 self.Backend.ExecuteCommand(CommandInstance)
@@ -108,7 +108,7 @@ class HamiltonEEFTR(TipABC):
                     LabwareID=Stack.LabwareID,
                     IsNTRRack=False,
                 ),
-                UserErrorHandling=self.UserErrorHandling,
+                BackendErrorHandling=self.BackendErrorHandling,
             )
             self.Backend.ExecuteCommand(CommandInstance)
             self.Backend.WaitForResponseBlocking(CommandInstance)

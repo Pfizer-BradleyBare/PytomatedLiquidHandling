@@ -75,7 +75,7 @@ class HamiltonCORE96Head(PipetteABC):
                     )
                 )
             Command = Channel1000uL.Pickup.Command(
-                UserErrorHandling=self.UserErrorHandling,
+                BackendErrorHandling=self.BackendErrorHandling,
                 Options=SupportPickupOptions,
             )
             self.Backend.ExecuteCommand(Command)
@@ -101,7 +101,7 @@ class HamiltonCORE96Head(PipetteABC):
                 )
 
             Command = Channel1000uL.Eject.Command(
-                UserErrorHandling=self.UserErrorHandling,
+                BackendErrorHandling=self.BackendErrorHandling,
                 Options=SupportEjectOptions,
             )
             self.Backend.ExecuteCommand(Command)
@@ -113,7 +113,7 @@ class HamiltonCORE96Head(PipetteABC):
             LabwareID=Tip.TipSupportPickupLabwareID
         )
         Command = CORE96Head.Pickup.Command(
-            UserErrorHandling=self.UserErrorHandling,
+            BackendErrorHandling=self.BackendErrorHandling,
             Options=PickupOptions,
         )
         self.Backend.ExecuteCommand(Command)
@@ -140,14 +140,14 @@ class HamiltonCORE96Head(PipetteABC):
 
         for _ in range(0, NumRepeats):
             Command = CORE96Head.Aspirate.Command(
-                UserErrorHandling=self.UserErrorHandling,
+                BackendErrorHandling=self.BackendErrorHandling,
                 Options=AspirateOptions,
             )
             self.Backend.ExecuteCommand(Command)
             self.Backend.GetResponse(Command, CORE96Head.Aspirate.Response)
 
             Command = CORE96Head.Dispense.Command(
-                UserErrorHandling=self.UserErrorHandling,
+                BackendErrorHandling=self.BackendErrorHandling,
                 Options=DispenseOptions,
             )
             self.Backend.ExecuteCommand(Command)
@@ -155,7 +155,7 @@ class HamiltonCORE96Head(PipetteABC):
 
         EjectOptions = CORE96Head.Eject.Options(LabwareID=Tip.TipWasteLabwareID)
         Command = CORE96Head.Eject.Command(
-            UserErrorHandling=self.UserErrorHandling,
+            BackendErrorHandling=self.BackendErrorHandling,
             Options=EjectOptions,
         )
         self.Backend.ExecuteCommand(Command)

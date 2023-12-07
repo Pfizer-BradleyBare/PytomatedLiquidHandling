@@ -13,12 +13,12 @@ class HamiltonFlipTubeLandscape(CloseableContainerABC):
 
     Attributes:
         Backend: Only Hamilton backends are supported
-        UserErrorHandling: User handling is not possible for fliptubes.
+        BackendErrorHandling: User handling is not possible for fliptubes.
         ToolLabwareID: The labware ID of the fliptube tool. Typically available on deck as a set of 4 tools.
     """
 
     Backend: Backend.HamiltonBackendABC
-    UserErrorHandling: Literal["N/A"] = "N/A"
+    BackendErrorHandling: Literal["N/A"] = "N/A"
 
     ToolLabwareID: str
 
