@@ -15,7 +15,11 @@ See each class for more details.
 
 """
 
-from .Backend import BackendABC, ServerBackendABC, SimpleBackendABC
-from .Command import CommandABC, CommandOptions, CommandOptionsListed
-from .Options import OptionsABC
-from .Response import ResponseABC
+from .BackendABC import BackendABC
+from .CommandABC import CommandABC
+from .CommandOptions import CommandOptions
+from .CommandOptionsListed import CommandOptionsListed
+from .OptionsABC import OptionsABC
+from .ResponseABC import ResponseABC
+from .ServerBackendABC import ServerBackendABC
+from .SimpleBackendABC import SimpleBackendABC

@@ -1,6 +1,7 @@
-from typing import Generic, TypeVar
 from dataclasses import dataclass
-from ..Options import OptionsABC
+from typing import Generic, TypeVar
+
+from .OptionsABC import OptionsABC
 
 T = TypeVar("T", bound="OptionsABC")
 

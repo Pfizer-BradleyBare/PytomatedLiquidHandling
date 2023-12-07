@@ -2,9 +2,9 @@ from typing import Type, TypeVar, cast
 
 from pydantic import PrivateAttr, ValidationError
 
-from ..Command import CommandABC
-from ..Response import ResponseABC
 from .BackendABC import BackendABC
+from .CommandABC import CommandABC
+from .ResponseABC import ResponseABC
 
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 

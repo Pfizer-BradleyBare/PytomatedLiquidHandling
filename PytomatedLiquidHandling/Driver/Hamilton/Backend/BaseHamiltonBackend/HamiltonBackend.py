@@ -6,7 +6,7 @@ from typing import Any, Type, TypeVar
 
 from pydantic import PrivateAttr
 
-from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC, ResponseABC
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
 
 from ..HamiltonCommand import HamiltonActionCommandABC, HamiltonStateCommandABC
 from ..HamiltonResponse import HamiltonResponseABC

@@ -4,8 +4,6 @@ from typing import Any, Callable, cast
 
 from flask import request
 
-from PytomatedLiquidHandling.Driver.Tools.BaseClasses.Command import CommandABC
-
 from ....Tools.BaseClasses import CommandOptionsListed, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
 

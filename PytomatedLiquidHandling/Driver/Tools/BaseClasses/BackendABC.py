@@ -1,11 +1,10 @@
 from abc import abstractmethod
 from typing import Type, TypeVar
 
-from pydantic import PrivateAttr, BaseModel
+from pydantic import BaseModel, PrivateAttr
 
-
-from ..Command import CommandABC
-from ..Response import ResponseABC
+from .CommandABC import CommandABC
+from .ResponseABC import ResponseABC
 
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 

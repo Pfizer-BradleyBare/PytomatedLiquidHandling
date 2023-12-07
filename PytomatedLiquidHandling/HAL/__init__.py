@@ -4,7 +4,7 @@ if True:
 from . import (
     Backend,
     Carrier,
-    ClosedContainer,
+    CloseableContainer,
     DeckLocation,
     HeatCoolShake,
     Labware,
