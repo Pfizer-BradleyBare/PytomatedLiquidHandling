@@ -2,12 +2,13 @@ import json
 import logging
 from typing import Type, TypeVar, Union
 
-from .. import AbstractClasses, DictTools
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import BackendABC
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
+
+from .. import BaseClasses, DictTools
 
 Logger = logging.getLogger(__name__)
 
-T = TypeVar("T", bound="Union[AbstractClasses.HALDevice,BackendABC]")
+T = TypeVar("T", bound="Union[BaseClasses.HALDevice,BackendABC]")
 
 
 def SimplifyPrintedHALObject(model_dump_json: str) -> str:
@@ -48,7 +49,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
 
     for Key in Dict:
         try:
-            cls = AbstractClasses.HALDevice.HALDevices[Key]
+            cls = BaseClasses.HALDevice.HALDevices[Key]
         except:
             raise ValueError(
                 Key + " not recognized as a valid " + BaseObject.__name__ + " subclass"

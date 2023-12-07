@@ -2,7 +2,7 @@ from enum import Enum
 
 from pydantic import Field
 
-from ....Tools.AbstractClasses import OptionsABC
+from ....Tools.BaseClasses import OptionsABC
 
 
 class Options(OptionsABC):

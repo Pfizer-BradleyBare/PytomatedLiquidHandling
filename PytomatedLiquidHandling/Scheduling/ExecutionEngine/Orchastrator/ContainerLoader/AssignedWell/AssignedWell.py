@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.Tools.BaseClasses import UniqueObjectABC
 
 
 @dataclass

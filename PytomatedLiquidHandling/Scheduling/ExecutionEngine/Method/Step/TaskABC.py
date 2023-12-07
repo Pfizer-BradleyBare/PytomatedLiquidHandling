@@ -5,7 +5,7 @@ from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from typing import TYPE_CHECKING, Self
 
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.Tools.BaseClasses import UniqueObjectABC
 
 from ...Orchastrator import Orchastrator
 

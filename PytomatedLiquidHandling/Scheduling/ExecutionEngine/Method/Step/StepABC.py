@@ -4,7 +4,7 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.Tools.BaseClasses import UniqueObjectABC
 
 from ...Orchastrator import Orchastrator
 

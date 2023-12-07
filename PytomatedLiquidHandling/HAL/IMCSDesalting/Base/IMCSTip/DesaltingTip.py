@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 
-from PytomatedLiquidHandling.Tools.AbstractClasses import (
+from PytomatedLiquidHandling.Tools.BaseClasses import (
     UniqueObjectABC,
     UniqueObjectTrackerABC,
 )

@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass
 
-from ...Tools.AbstractClasses import Interface
+from ...Tools.BaseClasses import Interface
 from .Interface import LoadUnloadOptions
 
 

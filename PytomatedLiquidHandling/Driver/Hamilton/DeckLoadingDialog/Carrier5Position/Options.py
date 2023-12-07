@@ -3,7 +3,7 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-from ....Tools.AbstractClasses import OptionsABC
+from ....Tools.BaseClasses import OptionsABC
 
 
 class Options(OptionsABC):

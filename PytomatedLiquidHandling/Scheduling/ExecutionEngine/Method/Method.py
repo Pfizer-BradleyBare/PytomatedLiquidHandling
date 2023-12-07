@@ -4,7 +4,7 @@ from typing import cast
 import networkx
 
 from PytomatedLiquidHandling.API.Tools.Container import ContainerTracker
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectABC
+from PytomatedLiquidHandling.Tools.BaseClasses import UniqueObjectABC
 
 from ..Orchastrator import Orchastrator
 from .Step import StepABC, TaskABC

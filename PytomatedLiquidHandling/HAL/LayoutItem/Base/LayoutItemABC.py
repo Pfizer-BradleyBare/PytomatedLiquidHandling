@@ -1,7 +1,7 @@
 from pydantic import field_validator
 
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
+from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
 
 class LayoutItemABC(HALDevice):

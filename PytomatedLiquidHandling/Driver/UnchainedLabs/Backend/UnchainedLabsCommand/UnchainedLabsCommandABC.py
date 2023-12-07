@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from ....Tools.AbstractClasses import CommandABC
+from ....Tools.BaseClasses import CommandABC
 
 
 class UnchainedLabsCommandABC(CommandABC):

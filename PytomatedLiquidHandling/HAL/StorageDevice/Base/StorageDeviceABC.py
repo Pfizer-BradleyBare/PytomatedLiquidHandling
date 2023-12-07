@@ -3,7 +3,7 @@ from abc import abstractmethod
 from pydantic import PrivateAttr, field_validator
 
 from PytomatedLiquidHandling.HAL import LayoutItem
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
+from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
 from .Reservation import Reservation
 

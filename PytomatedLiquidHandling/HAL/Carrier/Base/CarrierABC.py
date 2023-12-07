@@ -1,4 +1,4 @@
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
+from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
 
 class CarrierABC(HALDevice):

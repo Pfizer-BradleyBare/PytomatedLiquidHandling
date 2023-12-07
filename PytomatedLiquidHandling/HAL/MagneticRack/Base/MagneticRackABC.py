@@ -1,7 +1,7 @@
 from pydantic import ValidationInfo, field_validator
 
 from PytomatedLiquidHandling.HAL import LayoutItem, Pipette
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
+from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
 
 class MagneticRackABC(HALDevice):

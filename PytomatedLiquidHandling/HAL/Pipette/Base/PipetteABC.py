@@ -5,9 +5,9 @@ from typing import Any
 
 from pydantic import field_validator
 
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
-from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
+from PytomatedLiquidHandling.HAL.Tools import BaseClasses
 
 from .PipetteTip import PipetteTip
 
@@ -31,7 +31,7 @@ class TransferOptions(OptionsABC):
     TransferVolume: float
 
 
-class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
+class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
     SupportedTips: list[PipetteTip]
     SupportedSourceLabwares: list[Labware.PipettableLabware]
     SupportedDestinationLabwares: list[Labware.PipettableLabware]
@@ -82,8 +82,8 @@ class PipetteABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
         return SupportedObjects
 
     def model_post_init(self, __context: Any) -> None:
-        AbstractClasses.HALDevice.model_post_init(self, __context)
-        AbstractClasses.Interface.model_post_init(self, __context)
+        BaseClasses.HALDevice.model_post_init(self, __context)
+        BaseClasses.Interface.model_post_init(self, __context)
         self.SupportedTips = sorted(self.SupportedTips, key=lambda x: x.Tip.Volume)
 
     def AssertTransferOptions(self, Options: list[TransferOptions]):

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from PytomatedLiquidHandling.API.Tools.Container import ContainerTracker
 from PytomatedLiquidHandling.HAL import Labware, LayoutItem
-from PytomatedLiquidHandling.Tools.AbstractClasses import (
+from PytomatedLiquidHandling.Tools.BaseClasses import (
     NonUniqueObjectABC,
     NonUniqueObjectTrackerABC,
 )

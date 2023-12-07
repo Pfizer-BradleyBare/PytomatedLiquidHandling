@@ -3,9 +3,9 @@ from abc import abstractmethod
 from pydantic import PrivateAttr, field_validator
 
 from PytomatedLiquidHandling.HAL import Labware, LayoutItem
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
+from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
-from ...Tools.AbstractClasses import Interface
+from ...Tools.BaseClasses import Interface
 
 
 class HeatCoolShakeABC(Interface, HALDevice):

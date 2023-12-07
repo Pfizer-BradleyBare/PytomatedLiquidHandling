@@ -1,6 +1,6 @@
 from pydantic.dataclasses import dataclass
 
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
+from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
 from .CarrierConfig import CarrierConfig
 from .TransportConfig import TransportConfig

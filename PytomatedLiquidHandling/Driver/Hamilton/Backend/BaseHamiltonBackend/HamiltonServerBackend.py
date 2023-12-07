@@ -4,9 +4,9 @@ from typing import Any, Callable, cast
 
 from flask import request
 
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses.Command import CommandABC
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses.Command import CommandABC
 
-from ....Tools.AbstractClasses import CommandOptionsListed, ServerBackendABC
+from ....Tools.BaseClasses import CommandOptionsListed, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
 
 Logger = logging.getLogger(__name__)

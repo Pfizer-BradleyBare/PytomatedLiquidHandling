@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.Tools.AbstractClasses import UniqueObjectTrackerABC
+from PytomatedLiquidHandling.Tools.BaseClasses import UniqueObjectTrackerABC
 
 from .DesaltingTip import DesaltingTip
 

@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, TypeVar
 
-from ....Tools.AbstractClasses import CommandABC, CommandOptions, CommandOptionsListed
+from ....Tools.BaseClasses import CommandABC, CommandOptions, CommandOptionsListed
 
 CommandSelf = TypeVar("CommandSelf", bound="HamiltonCommandABC")
 

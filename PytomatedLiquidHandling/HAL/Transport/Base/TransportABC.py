@@ -7,9 +7,9 @@ from typing import TYPE_CHECKING
 from pydantic import PrivateAttr, field_validator
 
 from PytomatedLiquidHandling.HAL import Labware
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
+from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
-from ...Tools.AbstractClasses import Interface
+from ...Tools.BaseClasses import Interface
 from .Exceptions import (
     PickupOptionsNotEqualError,
     TransportDevicesNotCompatibleError,

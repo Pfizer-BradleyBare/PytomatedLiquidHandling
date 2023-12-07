@@ -1,11 +1,12 @@
-from . import Base
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
-from typing import cast, Type
+from typing import Type, cast
 
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import (
     MicrolabSTAR,
     VantageTrackGripperEntryExit,
 )
+from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
+
+from . import Base
 
 HALDevice.HALDevices[MicrolabSTAR.__name__] = cast(Type[HALDevice], MicrolabSTAR)
 HALDevice.HALDevices[VantageTrackGripperEntryExit.__name__] = cast(

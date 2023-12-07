@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from PytomatedLiquidHandling.HAL import DeckLocation, TempControlDevice
-from PytomatedLiquidHandling.Tools.AbstractClasses import (
+from PytomatedLiquidHandling.Tools.BaseClasses import (
     UniqueObjectABC,
     UniqueObjectTrackerABC,
 )

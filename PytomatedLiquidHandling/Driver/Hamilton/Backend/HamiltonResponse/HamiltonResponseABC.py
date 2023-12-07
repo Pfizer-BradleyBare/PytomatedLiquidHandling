@@ -3,7 +3,7 @@ from typing import Any, Literal, cast
 
 from pydantic import BaseModel, ValidationInfo, field_validator
 
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import ResponseABC
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import ResponseABC
 
 from ..Exceptions import ErrorCodeDescriptionMap, ExceptionErrorCodeMap
 

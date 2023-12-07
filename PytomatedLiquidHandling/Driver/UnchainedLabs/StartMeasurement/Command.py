@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 
-
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import CommandOptions
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import CommandOptions
 
 from ..Backend import UnchainedLabsCommandABC
 from .Options import Options

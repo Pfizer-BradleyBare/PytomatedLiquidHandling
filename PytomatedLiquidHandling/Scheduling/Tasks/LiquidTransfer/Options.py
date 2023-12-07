@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
 from PytomatedLiquidHandling.API.Tools.Container import Container
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsABC
 
 
 @dataclass

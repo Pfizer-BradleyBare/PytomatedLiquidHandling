@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from pydantic import PrivateAttr, field_validator
 
 from PytomatedLiquidHandling.HAL import LayoutItem
-from PytomatedLiquidHandling.HAL.Tools.AbstractClasses import HALDevice
+from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
-from ...Tools.AbstractClasses import Interface
+from ...Tools.BaseClasses import Interface
 
 
 @dataclass

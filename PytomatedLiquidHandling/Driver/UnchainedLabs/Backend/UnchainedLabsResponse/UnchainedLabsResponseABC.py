@@ -3,7 +3,7 @@ from typing import Any
 
 from pydantic import field_validator
 
-from ....Tools.AbstractClasses import ResponseABC
+from ....Tools.BaseClasses import ResponseABC
 from ..Exceptions import ExceptionStatusCodeMap
 
 
@@ -30,7 +30,7 @@ class UnchainedLabsResponseABC(ResponseABC):
 
     @field_validator("StatusCode", mode="before")
     def __StatusCodeValidate(cls, v):
-        if isinstance(v,tuple):
+        if isinstance(v, tuple):
             print(v)
             v = v[0]
         if v < 0:

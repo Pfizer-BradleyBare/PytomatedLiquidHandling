@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import CommandOptionsListed
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import CommandOptionsListed
 
 from ..Backend import UnchainedLabsCommandABC
 from .Options import ListedOptions
@@ -136,7 +136,7 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
             f'stored_blanks_sample_group_name="{StoredBlanksSampleGroupName}"'
         )
         ExperimentDefinition += "\n"
-        ExperimentDefinition += f'column_stored_blanks_sample_group_name={ColumnStoredBlanksSampleGroupName}'
+        ExperimentDefinition += f"column_stored_blanks_sample_group_name={ColumnStoredBlanksSampleGroupName}"
         # Assemble Experiment Definition
 
         StatusCode, DefinedPlateIDs = StunnerDLLObject.Define_Experiment(

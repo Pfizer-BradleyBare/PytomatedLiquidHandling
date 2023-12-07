@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from ....Tools.AbstractClasses import CommandOptionsListed
+from ....Tools.BaseClasses import CommandOptionsListed
 from ...Backend import HamiltonActionCommandABC
 from .Options import ListedOptions
 

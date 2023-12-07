@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import CommandOptionsListed
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import CommandOptionsListed
 
 from ..Backend import UnchainedLabsCommandABC
 from .Options import ListedOptions
@@ -23,6 +23,8 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
         ResultsDefinition += f'no_result_value="{self.Options.NoResultValue}"'
         ResultsDefinition += "\n"
 
-        StatusCode, Results, ResultsPath = StunnerDLLObject.Get_Results(ResultsDefinition, "")
+        StatusCode, Results, ResultsPath = StunnerDLLObject.Get_Results(
+            ResultsDefinition, ""
+        )
 
         return dict(StatusCode=StatusCode, Results=Results, ResultsPath=ResultsPath)

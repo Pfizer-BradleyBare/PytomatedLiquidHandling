@@ -1,10 +1,10 @@
-from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
+from PytomatedLiquidHandling.HAL.Tools import BaseClasses
 
 from .Dimensions.Dimensions import Dimensions
 from .TransportOffsets import TransportOffsets
 
 
-class LabwareABC(AbstractClasses.HALDevice):
+class LabwareABC(BaseClasses.HALDevice):
     ImageFilename: str
     PartNumber: str
     Dimensions: Dimensions

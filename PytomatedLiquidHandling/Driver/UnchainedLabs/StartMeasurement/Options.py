@@ -1,4 +1,5 @@
-from ...Tools.AbstractClasses import OptionsABC
+from ...Tools.BaseClasses import OptionsABC
+
 
 class Options(OptionsABC):
     PlateID: str | None

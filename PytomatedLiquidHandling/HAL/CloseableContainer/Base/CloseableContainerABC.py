@@ -3,9 +3,9 @@ from dataclasses import dataclass
 
 from pydantic import field_validator
 
-from PytomatedLiquidHandling.Driver.Tools.AbstractClasses import OptionsABC
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
-from PytomatedLiquidHandling.HAL.Tools import AbstractClasses
+from PytomatedLiquidHandling.HAL.Tools import BaseClasses
 
 
 @dataclass(kw_only=True)
@@ -14,7 +14,7 @@ class OpenCloseOptions(OptionsABC):
     Position: str | int
 
 
-class CloseableContainerABC(AbstractClasses.Interface, AbstractClasses.HALDevice):
+class CloseableContainerABC(BaseClasses.Interface, BaseClasses.HALDevice):
     """A container that is part of a rack that can be opened with some kind of tool.
 
     This is NOT the same as a lid for a plate.
