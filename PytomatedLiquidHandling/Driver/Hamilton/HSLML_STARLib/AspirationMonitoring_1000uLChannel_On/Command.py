@@ -1,9 +1,9 @@
-from dataclasses import dataclass
+from pydantic import dataclasses
 
 from ....Tools.BaseClasses import CommandOptions
 from ...Backend import HamiltonActionCommandABC
 
 
-@dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True)
 class Command(HamiltonActionCommandABC):
     ...

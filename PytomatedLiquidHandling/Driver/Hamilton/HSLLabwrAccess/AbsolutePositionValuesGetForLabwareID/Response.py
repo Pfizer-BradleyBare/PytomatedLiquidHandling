@@ -10,5 +10,9 @@ class LabwarePosition(BaseModel):
     ZRotation: float
 
 
+from pydantic import dataclasses
+
+
+@dataclasses.dataclass(kw_only=True)
 class Response(HamiltonResponseABC):
     LabwarePositions: list[LabwarePosition]

@@ -8,5 +8,9 @@ class SequencePositionDict(TypedDict):
     PositionID: str
 
 
+from pydantic import dataclasses
+
+
+@dataclasses.dataclass(kw_only=True)
 class Response(HamiltonResponseABC):
     AvailablePositions: list[SequencePositionDict]

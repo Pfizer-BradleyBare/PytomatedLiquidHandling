@@ -1,11 +1,12 @@
 from enum import Enum
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, dataclasses
 
 from ....Tools.BaseClasses import OptionsABC
 
 
+@dataclasses.dataclass(kw_only=True)
 class Options(OptionsABC):
     class LabwareImageOptions(Enum):
         TipNTR50uL = "TipNTR50uL"

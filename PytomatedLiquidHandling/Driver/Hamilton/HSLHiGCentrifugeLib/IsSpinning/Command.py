@@ -1,8 +1,8 @@
-from dataclasses import dataclass
+from pydantic import dataclasses
 
 from ...Backend import HamiltonStateCommandABC
 
 
-@dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True)
 class Command(HamiltonStateCommandABC):
     ...

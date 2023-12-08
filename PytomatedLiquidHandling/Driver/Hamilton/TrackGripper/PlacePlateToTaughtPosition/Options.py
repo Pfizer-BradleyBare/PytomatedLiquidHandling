@@ -1,10 +1,11 @@
 from enum import Enum
 
-from pydantic import Field
+from pydantic import Field, dataclasses
 
 from ....Tools.BaseClasses import OptionsABC
 
 
+@dataclasses.dataclass(kw_only=True)
 class Options(OptionsABC):
     class YesNoOptions(Enum):
         No = 0

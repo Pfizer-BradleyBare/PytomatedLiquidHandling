@@ -1,11 +1,11 @@
-from dataclasses import dataclass
+from pydantic import dataclasses
 
 from ....Tools.BaseClasses import CommandOptionsListed
 from ...Backend import HamiltonActionCommandABC
 from .Options import ListedOptions
 
 
-@dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True)
 class Command(CommandOptionsListed[ListedOptions], HamiltonActionCommandABC):
     def SerializeOptions(self) -> dict[str, list]:
         OutputDict = HamiltonActionCommandABC.SerializeOptions(self)
