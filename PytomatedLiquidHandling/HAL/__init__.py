@@ -23,7 +23,7 @@ from . import (
 
 @logger.catch(reraise=True)
 def LoadYamlConfiguration(ConfigBaseFolder: str):
-    """Walks through ```ConfigBaseFolder``` looking for ```.yaml``` files with HAL module names in the filename.
+    """Walks through ```ConfigBaseFolder``` looking for ```.yaml``` files with ```HAL``` module names in the filename.
 
     You can have as many files as required to simplify configuration."""
 
