@@ -1,7 +1,7 @@
 """ 
 #Tools
 
-These are used to create new backends, backend commands, command options, and command responses.
+Tools exposed by the Driver layer.
 
 """
 from . import BaseClasses
