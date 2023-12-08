@@ -1,13 +1,11 @@
-from dataclasses import dataclass
-from typing import Any
-
+from pydantic import dataclasses
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import CommandOptions
 
 from ..Backend import UnchainedLabsCommandABC
 from .Options import Options
 
 
-@dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True)
 class Command(UnchainedLabsCommandABC, CommandOptions[Options]):
     def _ExecuteCommandHelper(self, StunnerDLLObject) -> dict | Exception:
         import clr

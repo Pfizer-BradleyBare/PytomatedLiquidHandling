@@ -4,6 +4,7 @@ from typing import Literal
 from pydantic import dataclasses
 
 
+@dataclasses.dataclass(kw_only=True)
 class Options(str, Enum):
     PlateID = "Plate ID"
     PlatePosition = "Plate Position"

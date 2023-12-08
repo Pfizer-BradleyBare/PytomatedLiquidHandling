@@ -1,13 +1,13 @@
-from dataclasses import dataclass
 from typing import Any
 
+from pydantic import dataclasses
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import CommandOptionsListed
 
 from ..Backend import UnchainedLabsCommandABC
 from .Options import ListedOptions
 
 
-@dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True)
 class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
     def _ExecuteCommandHelper(self, StunnerDLLObject) -> Any:
         ColumnSourcePlate = -1
