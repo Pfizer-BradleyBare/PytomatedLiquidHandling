@@ -1,115 +1,126 @@
 from enum import Enum
 from typing import Any, Literal, cast
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from pydantic import ValidationInfo, dataclasses, field_validator
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import ResponseABC
 
 from ..Exceptions import ErrorCodeDescriptionMap, ExceptionErrorCodeMap
 
 
-class HamiltonBlockData(BaseModel):
-    """
-    Num = Step depended information (e.g. the channel number, a loading position etc.).
-    MainErr = Used to determine which exception to throw. See Exceptions to find the corresponding error codes
-    SlaveErr = Slave error. Currently unused
-    ButtonID = The button pressed by the user. See ButtonIDs enum which is an inner class
-    LabwareIDs: list[str]
-    PositionIDs: list[str]
-    """
+@dataclasses.dataclass(kw_only=True)
+class HamiltonBlockData:
+    """Channel grouping of block data."""
 
     class ButtonIDs(Enum):
-        """
-        NoError = No button was pressed.
-
-        Abort = Run aborted.
-
-        Cancel = Run canceled. Note: If programmed, the user-defined error handling was executed.
-
-        Initialize = Instrument initialized again.
-
-        Repeat = Command repeated.
-
-        Exclude = Channel or position excluded until the next tip pick up.
-
-        Waste = Tip ejected to the default waste.
-
-        Air = Rest of missing volume filled up with air.
-
-        Bottom = Aspiration repeated on container bottom.
-
-        Continue = Run continued without any change.
-
-        Barcode = Barcode assigned manually.
-
-        Next = Command repeated on next sequence position.
-
-        Available = Available volume used.
-
-        Refill = System reservoir of Nano Pipettor refilled.
-        """
+        """The possible buttons that can be pressed by the user when backend error handling is true and an error occurs."""
 
         NoError = 0
+        """No button was pressed."""
+
         Abort = 1
+        """Run aborted."""
+
         Cancel = 2
+        """Run canceled. Note: If programmed, the backend error handling was executed."""
+
         Initialize = 3
+        """Instrument initialized again."""
+
         Repeat = 4
+        """Command repeated."""
+
         Exclude = 5
+        """Channel or position excluded until the next tip pick up."""
+
         Waste = 6
+        """Tip ejected to the default waste."""
+
         Air = 7
+        """Rest of missing volume filled up with air."""
+
         Bottom = 8
+        """Aspiration repeated on container bottom."""
+
         Continue = 9
+        """Run continued without any change."""
+
         Barcode = 10
+        """Barcode assigned manually."""
+
         Next = 11
+        """Command repeated on next sequence position."""
+
         Available = 12
+        """Available volume used."""
+
         Refill = 13
+        """System reservoir of Nano Pipettor refilled."""
 
     Num: int
+    """Step dependant information (e.g. the channel number, a loading position etc.)."""
+
     MainErr: int
+    """Used to determine which exception to throw. See Exceptions to find the corresponding error codes."""
+
     SlaveErr: int
+    """Slave error. Currently unused."""
+
     ButtonID: ButtonIDs
+    """The button pressed by the user. See ButtonIDs enum which is an inner class."""
+
     StepData: int | float | str
+    """Data associated with the step. Aspirated/dispensed volume, liquid height, barcode, etc."""
+
     LabwareID: str
+    """Labware ID to which block data applies."""
+
     PositionID: str
+    """Position ID to which block data applies."""
 
 
-class HamiltonBlockDataPackage(BaseModel):
-    """
-    ErrFlag = Indicates whether an error occured or not and if block data is available. See ErrFlags enum which is an inner class
-    BlockData = Contains BlockData if the ErrFlag indicates as such
-    """
+@dataclasses.dataclass(kw_only=True)
+class HamiltonBlockDataPackage:
+    """General step result format of supported single steps."""
 
     class ErrFlags(Enum):
-        """
-        NoErrorWithBlockData = Step ends with OK, no error occurred and no error handling was used. The block data contains the step-dependent information.
+        """Types of errors that can occur on the Hamilton."""
 
-        ErrorWithBlockData = Step ends with OK, Abort or Cancel. Error handling was necessary. The block data contains the step-dependent information. Note: The step data for this block are invalid if one of the following recoveries were used: Cancel, Abort, Continue, Exclude or Waste.
-
-        ErrorWithoutBlockData = Step ends with a fatal error. Caution: The block data part is invalid. Result values 4-n may have undefined data.
-        """
-
-        NoErrorWithBlockData = 0  # Step ends with OK, no error occurred and no error handling was used. The block data contains the step-dependent information.
-        ErrorWithBlockData = 1  # Step ends with OK, Abort or Cancel. Error handling was necessary. The block data contains the step-dependent information. Note: The step data for this block are invalid if one of the following recoveries were used: Cancel, Abort, Continue, Exclude or Waste.
-        ErrorWithoutBlockData = 2  # Step ends with a fatal error. Caution: The block data part is invalid. Result values 4-n may have undefined data.
+        NoErrorWithBlockData = 0
+        """Step ends with ```OK```, no error occurred and no error handling was used. The block data contains the step-dependent information."""
+        ErrorWithBlockData = 1
+        """Step ends with ```OK```, ```Abort``` or ```Cancel```. Error handling was necessary. The block data contains the step-dependent information. 
+        Note: The step data for this block are invalid if one of the following recoveries were used: Cancel, Abort, Continue, Exclude or Waste."""
+        ErrorWithoutBlockData = 2
+        """Step ends with a fatal error. Caution: The block data part is invalid. Result values 4-n may have undefined data."""
 
     ErrFlag: ErrFlags
+    """Indicates whether an error occured or not and if block data is available. See ErrFlags enum which is an inner class."""
+
     BlockData: list[HamiltonBlockData]
+    """Contains BlockData if the ErrFlag indicates as such."""
 
 
+@dataclasses.dataclass(kw_only=True)
 class HamiltonResponseABC(ResponseABC):
+    """Base class for all responses from Hamilton systems.
+    - ```HamiltonBlockData``` will be parsed and converted autpmatically
+    - If unhandled errors exists then an exception grouping of all unhandled errors that occrured will be raised.
+    """
+
     ErrorDescription: str | Literal[""]
-    # There are, unfortunately, 2 cases here:
-    # Case 1: Hamilton throws an error and the error is not handled by the user. Description is set, BlockData may or may not be available.
-    # We will use the description to throw the correct exception.
-    # Case 2: Hamilton throws an error and the error is handled by the user. Description is not set, BlockData is available.
-    # We will use the MainErr to throw the correct exception.
+    """There are, unfortunately, 2 cases here:
+    - Case 1: Hamilton throws an error and the error is not handled by the user. Description is set, BlockData may or may not be available.
+    We will use the description to throw the correct exception.
+    - Case 2: Hamilton throws an error and the error is handled by the user. Description is not set, BlockData is available.
+    We will use the MainErr to throw the correct exception."""
 
     @field_validator("*", mode="before")
     # NOTE: This will attempt to validate all data but will only validate HamiltonBlockDataPackage types internally
     def __HamiltonBlockDataValidate(cls, v, Info: ValidationInfo):
-        if cls.model_fields[
+        if cls.__dataclass_fields__[
             cast(str, Info.field_name)
-        ].annotation == HamiltonBlockDataPackage and not isinstance(
+        ].type == HamiltonBlockDataPackage and not isinstance(
             v, HamiltonBlockDataPackage
         ):
             v = cast(str, v)
@@ -165,7 +176,7 @@ class HamiltonResponseABC(ResponseABC):
 
         return v
 
-    def model_post_init(self, __context: Any) -> None:
+    def __post_init__(self) -> None:
         Exceptions = list()
 
         ErrorOccurred = False
@@ -184,7 +195,7 @@ class HamiltonResponseABC(ResponseABC):
                                     ExceptionErrorCodeMap[Data.MainErr](Data)
                                 )
 
-        # This is the cae where the Error does NOT have block data.
+        # This is the case where the Error does NOT have block data.
         if self.ErrorDescription != "":
             ErrorOccurred = True
 

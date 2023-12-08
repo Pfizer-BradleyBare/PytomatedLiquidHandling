@@ -1,7 +1,8 @@
+from pydantic import dataclasses
+
 from .HamiltonCommandABC import HamiltonCommandABC
-from dataclasses import dataclass
 
 
-@dataclass
+@dataclasses.dataclass(kw_only=True)
 class HamiltonStateCommandABC(HamiltonCommandABC):
     ...

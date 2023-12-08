@@ -1,10 +1,11 @@
 import inspect
 import os
-from dataclasses import dataclass, field
 from typing import ClassVar
 
+from pydantic import dataclasses
 
-@dataclass(kw_only=True)
+
+@dataclasses.dataclass(kw_only=True)
 class CommandABC:
     """Base dataclass for all commands. All commands must be a dataclass with ```kw_only=True``` for consistency sake.
 

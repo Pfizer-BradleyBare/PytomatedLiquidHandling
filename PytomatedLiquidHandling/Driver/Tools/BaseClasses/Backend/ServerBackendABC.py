@@ -1,21 +1,24 @@
 import json
 import logging
 import time
+from dataclasses import field
 from threading import Event, Thread
-from typing import Any, Callable, ClassVar
+from typing import Callable, ClassVar
 
 from flask import Flask
-from pydantic import PrivateAttr
+from pydantic import dataclasses
 
 from .SimpleBackendABC import SimpleBackendABC
 
 ParserLogger = logging.getLogger(__name__ + ".Parser")
 
 
+@dataclasses.dataclass(kw_only=True)
 class ServerBackendABC(SimpleBackendABC):
     """Creates a web API for communication with the system software."""
 
     __Hosts: ClassVar[list[tuple]] = list()
+    """Currently running web API hosts"""
 
     Address: str = "localhost"
     """Web address to request web API endpoints."""
@@ -29,13 +32,11 @@ class ServerBackendABC(SimpleBackendABC):
     Views: list[Callable]
     """Endpoints that this web API exposes."""
 
-    _App: Flask = PrivateAttr()
-    _AppParentThreadRunnerFlag: Event = PrivateAttr()
+    _App: Flask = field(init=False)
+    _AppParentThreadRunnerFlag: Event = field(init=False)
 
-    def model_post_init(self, __context: Any) -> None:
+    def __post_init__(self) -> None:
         """Creates the web API based on ```Address```, ```Port```, ```SubDomain```, and ```Views```."""
-        SimpleBackendABC.model_post_init(self, __context)
-
         self._AppParentThreadRunnerFlag = Event()
 
         self._App = Flask(str(self.Identifier))

@@ -1,10 +1,11 @@
 import os
 import shutil
 import subprocess
+from dataclasses import field
 from platform import platform
-from typing import Any, Type, TypeVar
+from typing import Type, TypeVar
 
-from pydantic import PrivateAttr
+from pydantic import dataclasses
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
 
@@ -15,16 +16,16 @@ from .HamiltonServerBackend import HamiltonServerBackendABC
 HamiltonResponseABCType = TypeVar("HamiltonResponseABCType", bound=HamiltonResponseABC)
 
 
+@dataclasses.dataclass(kw_only=True)
 class HamiltonBackendABC(BackendABC):
     MethodPath: str
     DeckLayoutPath: str
     SimulationOn: bool = True
-    _ActionServer: HamiltonServerBackendABC = PrivateAttr()
-    _StateServer: HamiltonServerBackendABC = PrivateAttr()
-    _HamiltonProcess: subprocess.Popen = PrivateAttr()
+    _ActionServer: HamiltonServerBackendABC = field(init=False)
+    _StateServer: HamiltonServerBackendABC = field(init=False)
+    _HamiltonProcess: subprocess.Popen = field(init=False)
 
-    def model_post_init(self, __context: Any) -> None:
-        BackendABC.model_post_init(self, __context)
+    def __post_init__(self) -> None:
         self._ActionServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
             Identifier=str(self.Identifier) + " Action Server",
             SubDomain="/ActionServer/",

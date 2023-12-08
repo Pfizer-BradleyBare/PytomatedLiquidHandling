@@ -1,22 +1,23 @@
 import os
 import subprocess
 import threading
+from dataclasses import field
 from typing import Any, cast
 
-from pydantic import PrivateAttr
+from pydantic import dataclasses
 
 from ....Tools.BaseClasses import SimpleBackendABC
 from ..UnchainedLabsCommand import UnchainedLabsCommandABC
 from ..UnchainedLabsResponse import UnchainedLabsResponseABC
 
 
+@dataclasses.dataclass(kw_only=True)
 class StunnerBackend(SimpleBackendABC):
     InstrumentIPAddress: str
     InstrumentPort: int
-    _StunnerDLLObject: Any = PrivateAttr()
+    _StunnerDLLObject: Any = field(init=False)
 
-    def model_post_init(self, __context: Any) -> None:
-        SimpleBackendABC.model_post_init(self, __context)
+    def __post_init__(self) -> None:
         BasePath = os.path.dirname(__file__)
 
         Args = (

@@ -1,12 +1,13 @@
 from enum import Enum
 from typing import Any
 
-from pydantic import field_validator
+from pydantic import dataclasses, field_validator
 
 from ....Tools.BaseClasses import ResponseABC
 from ..Exceptions import ExceptionStatusCodeMap
 
 
+@dataclasses.dataclass(kw_only=True)
 class UnchainedLabsResponseABC(ResponseABC):
     class StatusCodes(Enum):
         Successful = 0

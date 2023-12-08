@@ -1,5 +1,6 @@
-from pydantic import BaseModel
+from pydantic import dataclasses
 
 
-class ResponseABC(BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class ResponseABC:
     """Base class for command response. Validated with pydantic."""

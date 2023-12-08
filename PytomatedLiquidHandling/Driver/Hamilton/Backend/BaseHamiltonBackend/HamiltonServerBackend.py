@@ -1,8 +1,10 @@
 import logging
 import time
-from typing import Any, Callable, cast
+from dataclasses import field
+from typing import Callable, cast
 
 from flask import request
+from pydantic import dataclasses
 
 from ....Tools.BaseClasses import CommandOptionsListed, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
@@ -10,7 +12,14 @@ from ..HamiltonCommand import HamiltonCommandABC
 Logger = logging.getLogger(__name__)
 
 
+@dataclasses.dataclass(kw_only=True)
 class HamiltonServerBackendABC(ServerBackendABC):
+    Views: list[Callable] = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.Views = [self.GetNextCommand, self.RespondToCommand]
+        ServerBackendABC.__post_init__(self)
+
     def GetNextCommand(self):
         ParserObject = ServerBackendABC.Parser(
             self.__class__.__name__ + " HamiltonBackend GetNextCommand",
@@ -97,9 +106,3 @@ class HamiltonServerBackendABC(ServerBackendABC):
         # Add response then release threads waiting for a response
 
         return Response
-
-    Views: list[Callable] = list()
-
-    def model_post_init(self, __context: Any) -> None:
-        self.Views = [self.GetNextCommand, self.RespondToCommand]
-        ServerBackendABC.model_post_init(self, __context)

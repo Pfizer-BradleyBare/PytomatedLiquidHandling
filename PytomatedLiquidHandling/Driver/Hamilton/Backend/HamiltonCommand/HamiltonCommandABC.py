@@ -1,14 +1,15 @@
 from collections import defaultdict
-from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, TypeVar
+
+from pydantic import dataclasses
 
 from ....Tools.BaseClasses import CommandABC, CommandOptions, CommandOptionsListed
 
 CommandSelf = TypeVar("CommandSelf", bound="HamiltonCommandABC")
 
 
-@dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True)
 class HamiltonCommandABC(CommandABC):
     def SerializeOptions(self) -> dict[str, Any]:
         if isinstance(self, CommandOptions):

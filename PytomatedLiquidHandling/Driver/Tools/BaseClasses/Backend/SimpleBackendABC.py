@@ -1,6 +1,7 @@
+from dataclasses import field
 from typing import Type, TypeVar, cast
 
-from pydantic import PrivateAttr, ValidationError
+from pydantic import PrivateAttr, dataclasses
 
 from ..Command import CommandABC
 from ..Response import ResponseABC
@@ -9,13 +10,14 @@ from .BackendABC import BackendABC
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 
+@dataclasses.dataclass(kw_only=True)
 class SimpleBackendABC(BackendABC):
     """The simplest implementation of a backend. This class will support 99% of backends."""
 
-    _Command: CommandABC | None = PrivateAttr(default=None)
+    _Command: CommandABC | None = field(init=False, default=None)
     """The currently executing command. If ```None``` then no command is currently executing."""
 
-    _Response: dict | Exception | None = PrivateAttr(default=None)
+    _Response: dict | Exception | None = field(init=False, default=None)
     """The information for the command. If ```None``` then the command execution has not completed."""
 
     def ExecuteCommand(self, Command: CommandABC):

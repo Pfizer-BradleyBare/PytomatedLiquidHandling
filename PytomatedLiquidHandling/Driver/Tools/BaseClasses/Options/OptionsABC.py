@@ -1,5 +1,6 @@
-from pydantic import BaseModel
+from pydantic import dataclasses
 
 
-class OptionsABC(BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class OptionsABC:
     """Base class for command options. Validated with pydantic."""
