@@ -2,7 +2,7 @@ Hamilton Vacuum:
   - Identifier: Vacuum 1
     Enabled: True
     Backend: Hammy
-    Custom Error Handling: True
+    Backend Error Handling: True
     Com Port: COM1
     Manifold Park:
     Manifold Processing:

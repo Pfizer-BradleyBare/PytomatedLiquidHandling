@@ -44,7 +44,7 @@ Hamilton CORE 96 Head IMCS Desalting:
   - Identifier: Position 1
     Enabled: True
     Backend Identifier: Hammy
-    Custom Error Handling: False
+    Backend Error Handling: False
       
     IMCS Tip Drop Off Sequence: Carrier32_Pos5_IMCSTipsRack_DropOff
     IMCS Tip Pickup Sequence: Carrier32_Pos5_IMCSTipsRack_Pickup
@@ -89,7 +89,7 @@ Hamilton Portrait CORE 8 Channel IMCS Desalting:
   - Identifier: Position 1
     Enabled: True
     Backend Identifier: Hammy
-    Custom Error Handling: False
+    Backend Error Handling: False
       
     IMCS Tip Drop Off Sequence: Carrier32_Pos5_IMCSTipsRack_DropOff
     IMCS Tip Pickup Sequence: Carrier32_Pos5_IMCSTipsRack_Pickup

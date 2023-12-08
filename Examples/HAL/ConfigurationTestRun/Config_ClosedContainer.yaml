@@ -9,7 +9,7 @@ Hamilton FlipTube:
   - Identifier: Fliptube 1
     Enabled: True
     Backend: Hammy
-    Custom Error Handling: False
+    Backend Error Handling: False
     Tool Labware ID: Tool_FlipTube
     Tool Position ID: 1-4
     Supported Labwares:
@@ -22,7 +22,7 @@ Hamilton FlipTube Special:
   - Identifier: Fliptube 1
     Enabled: True
     Backend: Hammy
-    Custom Error Handling: False
+    Backend Error Handling: False
     Tool Labware ID: Tool_FlipTube
     Tool Position ID: 1
     Supported Labwares:

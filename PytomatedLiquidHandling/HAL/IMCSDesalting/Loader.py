@@ -109,7 +109,7 @@ def LoadYaml(
             Identifier = DeviceItem["Identifier"]
             BackendID = DeviceItem["Backend Identifier"]
             BackendInstance = Backends[BackendID]
-            BackendErrorHandling = DeviceItem["Custom Error Handling"]
+            BackendErrorHandling = DeviceItem["Backend Error Handling"]
 
             IMCSTipDropOffSequence = DeviceItem["IMCS Tip Drop Off Sequence"]
             IMCSTipPickupSequence = DeviceItem["IMCS Tip Pickup Sequence"]

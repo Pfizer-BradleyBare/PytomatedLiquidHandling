@@ -8,7 +8,7 @@ Hamilton PortraitCORE8Channel:
   - Identifier: Test
     Enabled: True
     Backend: Hammy
-    Custom Error Handling: False
+    Backend Error Handling: False
 
     Active Channels: [1, 2, 3, 4, 5, 6, 7, 8]
 
@@ -54,7 +54,7 @@ Hamilton CORE 96 Head:
     Enabled: True
     Backend: Hammy
     Hamilton PortraitCORE8Channel: Test
-    Custom Error Handling: False
+    Backend Error Handling: False
 
     Supported Labwares:
       - 200uL Biorad 96 Well PCR Plate

@@ -16,7 +16,7 @@ Hamilton Heater Shaker:
   - Identifier: Heater 1
     Enabled: True
     Backend: Hammy
-    Custom Error Handling: False
+    Backend Error Handling: False
     Com Port: 1
     Plates:
       - Item1
@@ -25,7 +25,7 @@ Hamilton Heater Shaker:
   - Identifier: Heater 2
     Enabled: True
     Backend Identifier: Hammy
-    Custom Error Handling: False
+    Backend Error Handling: False
     Com Port: 2
     Plates:
       - Item1

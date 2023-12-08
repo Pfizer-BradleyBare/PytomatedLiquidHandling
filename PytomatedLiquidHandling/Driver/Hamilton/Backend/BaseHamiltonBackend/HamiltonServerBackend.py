@@ -55,7 +55,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
                 "CustomErrorHandling",
                 not not not getattr(Command, "BackendErrorHandling"),
             )
-            # Backend error handling true corresponds to custom error handling false.
+            # Backend error handling true corresponds to Backend Error Handling false.
             # Unfortunately when I wrote the Hamilton backend I used CustomErrorHandling. Too much work to change right now.
             # TODO: change Hamilton libraries to Backend Error Handling
 

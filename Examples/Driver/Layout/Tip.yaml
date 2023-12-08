@@ -16,7 +16,7 @@ Hamilton NTR:
   - Identifier: 50uL NTR
     Enabled: True
     Backend: Hammy
-    Custom Error Handling: False
+    Backend Error Handling: False
     Volume: 50
     Tiers: 2
     Tips Per Rack: 96
@@ -28,7 +28,7 @@ Hamilton NTR:
   - Identifier: 300uL NTR
     Enabled: True
     Backend: Hammy
-    Custom Error Handling: False
+    Backend Error Handling: False
     Volume: 300
     Tiers: 2
     Tips Per Rack: 96
@@ -41,7 +41,7 @@ Hamilton FTR:
   - Identifier: 1000uL FTR
     Enabled: True
     Backend: Hammy
-    Custom Error Handling: False
+    Backend Error Handling: False
     Volume: 1000
     Tip Racks:
       - L1

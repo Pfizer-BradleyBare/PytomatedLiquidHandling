@@ -1,12 +1,10 @@
 import json
-import logging
+from loguru import logger
 from typing import Type, TypeVar, Union
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
 
 from .. import BaseClasses, DictTools
-
-Logger = logging.getLogger(__name__)
 
 T = TypeVar("T", bound="Union[BaseClasses.HALDevice,BackendABC]")
 
@@ -36,10 +34,10 @@ def SimplifyPrintedHALObject(model_dump_json: str) -> str:
 
 
 def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
-    Logger.info("Starting to load " + BaseObject.__name__ + " configuration.")
+    logger.info("Starting to load " + BaseObject.__name__ + " configuration.")
 
     if bool(Dict) == False:
-        Logger.warning(
+        logger.warning(
             "Empty configuration was passed. No "
             + BaseObject.__name__
             + " objects will be loaded."
@@ -65,7 +63,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
 
         for Item in Dict[Key]:
             if Item["Enabled"] == True:
-                Logger.info(
+                logger.info(
                     "Loading "
                     + Item["Identifier"]
                     + " as a "
@@ -80,18 +78,19 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
                         + " already exists. Idenitifers must be unique."
                     )
 
-                Logger.debug(
-                    "Successfully loaded "
-                    + Item["Identifier"]
-                    + " as a "
-                    + BaseObject.__name__
-                    + " object with the following configuration: "
-                    + SimplifyPrintedHALObject(HALDevice.model_dump_json(indent=4))
+                logger.debug(
+                    # "Successfully loaded "
+                    # + Item["Identifier"]
+                    # + " as a "
+                    # + BaseObject.__name__
+                    # + " object with the following configuration: "
+                    # +
+                    SimplifyPrintedHALObject(HALDevice.model_dump_json(indent=4))
                 )
 
                 Devices[HALDevice.Identifier] = HALDevice  # type: ignore IDK why this is an error...
             else:
-                Logger.warning(
+                logger.warning(
                     Item["Identifier"]
                     + " is disabled so will not be loaded as a "
                     + BaseObject.__name__
