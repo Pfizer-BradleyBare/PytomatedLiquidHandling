@@ -104,7 +104,7 @@ class HamiltonBlockDataPackage:
 @dataclasses.dataclass(kw_only=True)
 class HamiltonResponseABC(ResponseABC):
     """Base class for all responses from Hamilton systems.
-    - ```HamiltonBlockData``` will be parsed and converted autpmatically
+    - All ```HamiltonBlockData``` will be parsed and converted automatically if present as a response field.
     - If unhandled errors exists then an exception grouping of all unhandled errors that occrured will be raised.
     """
 
