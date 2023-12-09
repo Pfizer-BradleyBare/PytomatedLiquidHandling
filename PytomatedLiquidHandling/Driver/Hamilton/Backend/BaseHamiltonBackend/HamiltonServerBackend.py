@@ -69,14 +69,15 @@ class HamiltonServerBackendABC(ServerBackendABC):
         Response["Command Name"] = Command.CommandName
 
         try:
-            Response["Command Parameters"] = Command.SerializeOptions()
+            with BoundLogger.catch(reraise=True, level="critical"):
+                Response["Command Parameters"] = Command.SerializeOptions()
+            # catch the error if it occurs and log it. Then reraise so we can cleanup.
         except:
-            BoundLogger = BoundLogger.bind(Traceback=traceback.format_exc())
-            BoundLogger.critical("Error while converting Options to json dict.")
             self._Response = RuntimeError(
                 "Error while converting Options to json dict."
             )
-        # TODO: This is a fragile function. Catch errors if they occur...
+            return self.GetNextCommand()
+        # This is a fragile function. Catch errors if they occur...
 
         return dict(Response=Response)
 
