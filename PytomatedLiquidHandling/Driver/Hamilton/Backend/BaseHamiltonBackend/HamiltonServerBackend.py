@@ -35,7 +35,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
         Timeout -= 10
         Counter = 0
 
-        while self._Command is None or not self._Response is None:
+        while self._Command is None or self._Response is not None:
             if Counter >= Timeout * 10:
                 break
 
