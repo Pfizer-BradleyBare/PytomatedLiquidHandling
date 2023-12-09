@@ -2,7 +2,6 @@ from loguru import logger
 import time
 from dataclasses import field
 from typing import Callable, cast
-import traceback
 from flask import request
 from pydantic import dataclasses
 
