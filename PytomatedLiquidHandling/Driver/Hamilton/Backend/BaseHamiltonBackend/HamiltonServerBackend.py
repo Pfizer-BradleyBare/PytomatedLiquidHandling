@@ -85,6 +85,10 @@ class HamiltonServerBackendABC(ServerBackendABC):
             BoundLogger.error("Request from Hamilton is not json format.")
             return dict(Response="Request is not json format.")
 
+        if self._Command is None:
+            BoundLogger.error("There is no active command needing a response.")
+            return dict(Response="There is no active command needing a response.")
+
         if self._Response is not None:
             BoundLogger.error("Command already has a response.")
             return dict(Response="Command already has a response.")
