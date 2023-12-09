@@ -1,4 +1,4 @@
-import json
+from loguru import logger
 import logging
 import time
 from dataclasses import field
@@ -9,8 +9,6 @@ from flask import Flask
 from pydantic import dataclasses
 
 from .SimpleBackendABC import SimpleBackendABC
-
-ParserLogger = logging.getLogger(__name__ + ".Parser")
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -30,7 +28,7 @@ class ServerBackendABC(SimpleBackendABC):
     """Web sub domain to request web API endpoints."""
 
     Views: list[Callable]
-    """Endpoints that this web API exposes."""
+    """Endpoints that the web API exposes."""
 
     _App: Flask = field(init=False)
     _AppParentThreadRunnerFlag: Event = field(init=False)
@@ -99,7 +97,7 @@ class ServerBackendABC(SimpleBackendABC):
         ServerBackendABC.__Hosts.remove(Host)
 
     def Index(self):
-        """@private Index API endpoint."""
+        """Index API endpoint."""
         Out = ""
         Out += "<H1>Hello!</H1>"
         Out += "<H3>Endpoints:</H3>"
@@ -110,115 +108,14 @@ class ServerBackendABC(SimpleBackendABC):
         return Out
 
     def IsActive(self):
-        """@private IsActive API endpoint."""
-        ParserInstance = ServerBackendABC.Parser(
-            self._GetEndpointID("IsActive"),
-            None,
-        )
-        ParserInstance.SetEndpointState(True)
-        ParserInstance.SetEndpointDetails("Backend is Active")
-        return ParserInstance.GetHTTPResponse()
+        """IsActive API endpoint."""
+        return dict(Response="Running")
 
     def Kill(self):
         """@private Kill API endpoint. Used to kill the server remotely."""
+        BoundLogger = logger.bind(Server=self)
+        BoundLogger.critical("Remote kill received.")
+
         ServerBackendABC.StopBackend(self)
-        ParserInstance = ServerBackendABC.Parser(
-            self._GetEndpointID("Kill"),
-            None,
-        )
-        ParserInstance.SetEndpointState(True)
-        ParserInstance.SetEndpointDetails("Backend Killed")
-        return ParserInstance.GetHTTPResponse()
 
-    class Parser:
-        """@private Legacy. This is going away."""
-
-        def __init__(
-            self,
-            EndpointID: str,
-            JSONstring: bytes | None = None,
-        ):
-            ParserLogger.debug("PARSER: __START__")
-            ParserLogger.info("PARSER: Handling Endpoint: %s", EndpointID)
-            ParserLogger.debug(
-                "PARSER: Created Parser class with data: %s", str(JSONstring)
-            )
-
-            self.EndpointID: str = EndpointID
-            self.InputString: bytes | None = JSONstring
-            self.JSON: dict = {}
-            self.EndpointState: bool = False
-            self.EndpointDetails: str = "N/A"
-            self.EndpointReturn: dict = dict()
-
-            if not (JSONstring is None or JSONstring == "" or JSONstring == b""):
-                try:
-                    self.JSON = json.loads(JSONstring.decode().replace("'", ""))
-                    ParserLogger.debug(
-                        "Request Data: \n%s",
-                        json.dumps(self.JSON, indent=4, sort_keys=True),
-                    )
-                except Exception:
-                    ParserLogger.error("PARSER: Error Parsing Data! Bad format.")
-                    self.JSON = {}
-
-        def __del__(self):
-            ParserLogger.debug("PARSER: __END__")
-
-        def IsValid(self, ExpectedKeys: list[str]) -> bool:
-            if self.JSON == {}:
-                self.EndpointMessage = (
-                    "JSON Object could not be loaded correctly. Try again."
-                )
-                return False
-
-            InputKeys = self.JSON.keys()
-
-            # if len(InputKeys) != len(ExpectedKeys):
-            #    self.EndpointMessage = (
-            #        "Incorrect number of keys. This endpoint expects "
-            #        + str(len(ExpectedKeys))
-            #        + " keys. Expected: "
-            #        + str(ExpectedKeys)
-            #    )
-            #    return False
-            # Maybe extra keys doesn't matter?
-
-            if not all(Key in InputKeys for Key in ExpectedKeys):
-                self.EndpointMessage = (
-                    "Incorrect keys given to input. Received: "
-                    + str(InputKeys)
-                    + " Expected: "
-                    + str(ExpectedKeys)
-                )
-                return False
-
-            return True
-
-        def GetEndpointInputData(self, Key: str) -> any:  # type: ignore
-            if self.JSON == {}:
-                return None
-
-            return self.JSON[Key]
-
-        def SetEndpointState(self, State: bool):
-            self.EndpointState = State
-
-        def SetEndpointDetails(self, Details: str):
-            self.EndpointDetails = Details
-
-        def SetEndpointOutputKey(self, Key: str, Value: any):  # type: ignore
-            self.EndpointReturn[Key] = Value
-
-        def GetHTTPResponse(self) -> str:
-            Out = dict()
-            Out["Endpoint ID"] = self.EndpointID
-            Out["Endpoint State"] = self.EndpointState
-            Out["Endpoint Details"] = self.EndpointDetails
-            Out["Endpoint Input Data"] = self.JSON
-            Out["Endpoint Output Data"] = self.EndpointReturn
-
-            ParserLogger.debug(
-                "Response Data: \n%s", json.dumps(Out, indent=4, sort_keys=True)
-            )
-            return json.dumps(Out)
+        return dict(Response="Killed")

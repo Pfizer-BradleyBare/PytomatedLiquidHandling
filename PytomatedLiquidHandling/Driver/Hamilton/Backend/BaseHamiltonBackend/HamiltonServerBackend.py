@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 import time
 from dataclasses import field
 from typing import Callable, cast
@@ -8,8 +8,6 @@ from pydantic import dataclasses
 
 from ....Tools.BaseClasses import CommandOptionsListed, ServerBackendABC
 from ..HamiltonCommand import HamiltonCommandABC
-
-Logger = logging.getLogger(__name__)
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -21,18 +19,21 @@ class HamiltonServerBackendABC(ServerBackendABC):
         ServerBackendABC.__post_init__(self)
 
     def GetNextCommand(self):
-        ParserObject = ServerBackendABC.Parser(
-            self.__class__.__name__ + " HamiltonBackend GetNextCommand",
-            request.get_data(),
-        )
+        BoundLogger = logger.bind(Request=request.get_data())
 
-        if not ParserObject.IsValid(["Timeout"]):
-            ParserObject.SetEndpointDetails("Key missing. Accepted keys: [Timeout]")
-            Response = ParserObject.GetHTTPResponse()
-            Logger.warning(Response)
-            return Response
+        if request.is_json == False:
+            BoundLogger.error("Request from Hamilton is not json format.")
+            return dict(Response="Request is not json format.")
 
-        Timeout = ParserObject.GetEndpointInputData("Timeout") - 10
+        Content = request.get_json()
+
+        try:
+            Timeout = Content["Timeout"]
+        except KeyError:
+            BoundLogger.error("Timeout is missing from request.")
+            return dict(Response="Timeout is missing from request.")
+
+        Timeout -= 10
         Counter = 0
 
         while self._Command is None or not self._Response is None:
@@ -44,10 +45,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
         Command = cast(HamiltonCommandABC, self._Command)
 
         if Command is None:
-            ParserObject.SetEndpointState(False)
-            ParserObject.SetEndpointDetails("Command not available. Please try again.")
-            Response = ParserObject.GetHTTPResponse()
-            return Response
+            return dict(Response="Command not available. Try again.")
 
         if isinstance(Command, CommandOptionsListed):
             if len(Command.Options) == 0:
@@ -57,52 +55,42 @@ class HamiltonServerBackendABC(ServerBackendABC):
                 return self.GetNextCommand()
         # This makes sure there are actually options. It could be possible for a user to submit a command with an options tracker without actul options
 
-        ParserObject.SetEndpointState(True)
+        Response = dict()
 
         if hasattr(Command, "BackendErrorHandling"):
-            ParserObject.SetEndpointOutputKey(
-                "CustomErrorHandling",
+            Response["CustomErrorHandling"] = (
                 not not not getattr(Command, "BackendErrorHandling"),
             )
             # Backend error handling true corresponds to Backend Error Handling false.
             # Unfortunately when I wrote the Hamilton backend I used CustomErrorHandling. Too much work to change right now.
             # TODO: change Hamilton libraries to Backend Error Handling
 
-        ParserObject.SetEndpointOutputKey("Module Name", Command.ModuleName)
-        ParserObject.SetEndpointOutputKey("Command Name", Command.CommandName)
+        Response["Module Name"] = Command.ModuleName
+        Response["Command Name"] = Command.CommandName
 
         try:
-            ParserObject.SetEndpointOutputKey(
-                "Command Parameters", Command.SerializeOptions()
-            )
+            Response["Command Parameters"] = Command.SerializeOptions()
         except:
             self._Response = RuntimeError(
                 "Error while converting Options to json dict."
             )
         # TODO: This is a fragile function. Catch errors if they occur...
 
-        Response = ParserObject.GetHTTPResponse()
-        return Response
+        return dict(Response=Response)
 
     def RespondToCommand(self):
-        ParserObject = ServerBackendABC.Parser(
-            self.__class__.__name__ + " HamiltonBackend RespondToCommand",
-            request.get_data(),
-        )
+        BoundLogger = logger.bind(Request=request.get_data())
+
+        if request.is_json == False:
+            BoundLogger.error("Request from Hamilton is not json format.")
+            return dict(Response="Request is not json format.")
 
         if self._Response is not None:
-            ParserObject.SetEndpointDetails(
-                "Command already has a reponse. This should never happen."
-            )
-            Response = ParserObject.GetHTTPResponse()
-            return Response
+            BoundLogger.error("Command already has a response.")
+            return dict(Response="Command already has a response.")
         # Check the command does not already have a response
 
-        ParserObject.SetEndpointState(True)
-
-        Response = ParserObject.GetHTTPResponse()
-
-        self._Response = ParserObject.JSON
+        self._Response = request.get_json()
         # Add response then release threads waiting for a response
 
-        return Response
+        return dict(Response="Response received.")
