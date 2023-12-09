@@ -2,7 +2,7 @@ from loguru import logger
 import time
 from dataclasses import field
 from typing import Callable, cast
-
+import traceback
 from flask import request
 from pydantic import dataclasses
 
@@ -71,6 +71,8 @@ class HamiltonServerBackendABC(ServerBackendABC):
         try:
             Response["Command Parameters"] = Command.SerializeOptions()
         except:
+            BoundLogger = BoundLogger.bind(Traceback=traceback.format_exc())
+            BoundLogger.critical("Error while converting Options to json dict.")
             self._Response = RuntimeError(
                 "Error while converting Options to json dict."
             )
