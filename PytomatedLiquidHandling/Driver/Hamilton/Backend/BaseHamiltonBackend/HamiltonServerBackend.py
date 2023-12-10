@@ -18,7 +18,8 @@ class HamiltonServerBackendABC(ServerBackendABC):
         ServerBackendABC.__post_init__(self)
 
     def GetNextCommand(self):
-        BoundLogger = logger.bind(Request=request.get_data())
+        BoundLogger = logger.bind(Request=request.get_data(), Server=self)
+        BoundLogger.debug("GetNextCommand web API request.")
 
         if request.is_json == False:
             BoundLogger.error("Request from Hamilton is not json format.")
@@ -79,12 +80,13 @@ class HamiltonServerBackendABC(ServerBackendABC):
             return self.GetNextCommand()
         # This is a fragile function. Catch errors if they occur...
 
-        BoundLogger.info(f"Command delivered to Hamilton: {Command.CommandName}")
+        BoundLogger.debug(f"Command delivered to Hamilton: {Command.CommandName}")
 
         return dict(Response=Response)
 
     def RespondToCommand(self):
-        BoundLogger = logger.bind(Request=request.get_data())
+        BoundLogger = logger.bind(Request=request.get_data(), Server=self)
+        BoundLogger.debug("RespondToCommand web API request.")
 
         if request.is_json == False:
             BoundLogger.error("Request from Hamilton is not json format.")
@@ -101,5 +103,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         self._Response = request.get_json()
         # Add response then release threads waiting for a response
+
+        BoundLogger.debug("Response received from Hamilton.")
 
         return dict(Response="Response received.")

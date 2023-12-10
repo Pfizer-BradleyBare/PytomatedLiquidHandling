@@ -98,6 +98,9 @@ class ServerBackendABC(SimpleBackendABC):
 
     def Index(self):
         """Index API endpoint."""
+        BoundLogger = logger.bind(Server=self)
+        BoundLogger.debug("Index web API request.")
+
         Out = ""
         Out += "<H1>Hello!</H1>"
         Out += "<H3>Endpoints:</H3>"
@@ -109,12 +112,14 @@ class ServerBackendABC(SimpleBackendABC):
 
     def IsActive(self):
         """IsActive API endpoint."""
+        BoundLogger = logger.bind(Server=self)
+        BoundLogger.debug("IsActive web API request.")
         return dict(Response="Running")
 
     def Kill(self):
-        """@private Kill API endpoint. Used to kill the server remotely."""
+        """Kill API endpoint. Used to kill the server remotely."""
         BoundLogger = logger.bind(Server=self)
-        BoundLogger.critical("Remote kill received.")
+        BoundLogger.debug("Kill web API request.")
 
         ServerBackendABC.StopBackend(self)
 
