@@ -55,6 +55,10 @@ class HamiltonServerBackendABC(ServerBackendABC):
         # This makes sure there are actually options. It could be possible for a user to submit a command with an options tracker without actul options
 
         Response = dict()
+        BoundLogger = BoundLogger.bind(Response=Response)
+
+        Response["Module Name"] = Command.ModuleName
+        Response["Command Name"] = Command.CommandName
 
         if hasattr(Command, "BackendErrorHandling"):
             Response["CustomErrorHandling"] = (
@@ -63,9 +67,6 @@ class HamiltonServerBackendABC(ServerBackendABC):
             # Backend error handling true corresponds to Backend Error Handling false.
             # Unfortunately when I wrote the Hamilton backend I used CustomErrorHandling. Too much work to change right now.
             # TODO: change Hamilton libraries to Backend Error Handling
-
-        Response["Module Name"] = Command.ModuleName
-        Response["Command Name"] = Command.CommandName
 
         try:
             with BoundLogger.catch(reraise=True, level="critical"):
@@ -77,6 +78,8 @@ class HamiltonServerBackendABC(ServerBackendABC):
             )
             return self.GetNextCommand()
         # This is a fragile function. Catch errors if they occur...
+
+        BoundLogger.info(f"Command delivered to Hamilton: {Command.CommandName}")
 
         return dict(Response=Response)
 
