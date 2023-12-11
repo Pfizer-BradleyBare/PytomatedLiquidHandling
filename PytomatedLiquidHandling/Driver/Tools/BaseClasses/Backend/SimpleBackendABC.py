@@ -1,7 +1,7 @@
 from dataclasses import field
-from typing import Type, TypeVar, cast
+from typing import Type, TypeVar
 
-from pydantic import PrivateAttr, dataclasses
+from pydantic import dataclasses
 
 from ..Command import CommandABC
 from ..Response import ResponseABC

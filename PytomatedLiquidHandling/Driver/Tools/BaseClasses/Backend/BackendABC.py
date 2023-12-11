@@ -25,14 +25,14 @@ class BackendABC:
         """Should start the system software then establish communication. You should only call the method once."""
         if self.IsRunning == True:
             raise RuntimeError(f"{type(self).__name__} backend is already running")
-        self._IsRunning = True
+        self.IsRunning = True
 
     @abstractmethod
     def StopBackend(self):
         """Should close the communication layer then kill the system software."""
         if self.IsRunning == False:
             raise RuntimeError(f"{type(self).__name__} backend is not running")
-        self._IsRunning = False
+        self.IsRunning = False
 
     @abstractmethod
     def ExecuteCommand(self, Command: CommandABC):

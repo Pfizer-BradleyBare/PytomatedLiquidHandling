@@ -17,8 +17,8 @@ namespace SERVERFUNCTIONS {
 // }} ""
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{{ 2 "SubmethodForwardDeclaration" ""
-function RequestGET( variable Port, variable i_EndpointString, variable Timeout, object & o_JSONObject ) variable ;
-function RequestPOST( variable Port, variable EndpointString, variable Timeout, object & i_JSONObject, object & o_JSONObject ) variable ;
+function RequestGET( variable Port, variable i_EndpointString, variable Timeout, variable & Content ) variable ;
+function RequestPOST( variable Port, variable EndpointString, variable Timeout, object & i_JSONObject, variable & Content ) variable ;
 // }} ""
 function _InitLibrary() {
 // {{ 2 "AutoInitBlock" ""
@@ -31,13 +31,13 @@ LOGGER::_ExitLibrary();
 // }} ""
 }
 // {{{ 5 "RequestGET" "Begin"
-function RequestGET( variable Port, variable i_EndpointString, variable Timeout, object & o_JSONObject ) variable {
+function RequestGET( variable Port, variable i_EndpointString, variable Timeout, variable & Content ) variable {
 // }} ""
 private object HttpObject;
 private variable Request;
 private variable ReturnStatusCode;
-private variable ReturnJsonContent;
 // {{ 5 "RequestGET" "InitLocals"
+Content = 0;
 // }} ""
 // {{ 1 1 0 "36637ec1_dc60_4e53_8dfedf046166d9c9" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -51,8 +51,8 @@ HSLHttp::Initialize(HttpObject);
 // {{{ 4 1 0 "ebe6275f_1ca1_4731_b2dc2cbdd3d9bcac" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLHttp::SetTimeout(HttpObject, Timeout);
 // }} ""
-// {{{ 5 1 0 "6a60fab8_27dc_49d2_b675d07e39477ed4" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-ReturnJsonContent = HSLHttp::HttpGET(HttpObject, Request, ReturnStatusCode);
+// {{{ 5 1 0 "d88d9c0e_2022_4d3a_b21cbb3e7886da0e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Content = HSLHttp::HttpGET(HttpObject, Request, ReturnStatusCode);
 // }} ""
 // {{{ 6 1 0 "a11b5b8b_5760_4c2d_ac0fff3ecf29443e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLHttp::Release(HttpObject);
@@ -60,102 +60,47 @@ HSLHttp::Release(HttpObject);
 // {{ 7 1 0 "36637ec1_dc60_4e53_8dfedf046166d9c9" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 8 1 0 "13a74624_3845_4c3d_a1bcdc7001fa9d08" "{586C3429-F931-405f-9938-928E22C90BFA}"
-
-// }} ""
-// {{{ 9 1 0 "26928ba7_b2c8_4417_80824604a2a915ea" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::Create(o_JSONObject);
-// }} ""
-// {{{ 10 1 0 "17d99493_a7c7_4192_ab24a50d13947cfa" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::ParseJson(o_JSONObject, ReturnJsonContent);
-// }} ""
-// {{ 11 1 0 "13a74624_3845_4c3d_a1bcdc7001fa9d08" "{586C3429-F931-405f-9938-928E22C90BFA}"
-
-// }} ""
-// {{ 12 1 0 "92662d88_4e4b_4bd8_ac2b46318406cc22" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (ReturnStatusCode == 200)
-{
-// }} ""
-// {{{ 13 1 0 "636babbe_6318_4bd8_98f6e92372c52d0e" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
-return (1);
-// }} ""
-// {{ 14 1 0 "92662d88_4e4b_4bd8_ac2b46318406cc22" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-}
-else
-{
-// }} ""
-// {{{ 15 1 0 "df39a8f6_4570_4992_980aa3e9089e5284" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
-return (0);
-// }} ""
-// {{ 16 1 0 "92662d88_4e4b_4bd8_ac2b46318406cc22" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-}
+// {{{ 8 1 0 "e172e8c2_d0de_476b_a4497be017da0d42" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return (ReturnStatusCode);
 // }} ""
 // {{{ 5 "RequestGET" "End"
 }
 // }} ""
 // {{{ 5 "RequestPOST" "Begin"
-function RequestPOST( variable Port, variable EndpointString, variable Timeout, object & i_JSONObject, object & o_JSONObject ) variable {
+function RequestPOST( variable Port, variable EndpointString, variable Timeout, object & i_JSONObject, variable & Content ) variable {
 // }} ""
 private object HttpObject;
 private variable Request;
 private variable ReturnStatusCode;
-private variable ReturnJsonContent;
-private variable Content;
 // {{ 5 "RequestPOST" "InitLocals"
+Content = 0;
 // }} ""
-// {{{ 18 1 0 "808ac3c3_d3b3_4cea_af9921839e03fa8c" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 10 1 0 "808ac3c3_d3b3_4cea_af9921839e03fa8c" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::GetJson(i_JSONObject, Content);
 // }} ""
-// {{ 19 1 0 "89215456_8455_4084_bd498b4b531709b9" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 11 1 0 "89215456_8455_4084_bd498b4b531709b9" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 20 1 0 "77a13791_ede6_4859_bea2b2417517fc60" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 12 1 0 "77a13791_ede6_4859_bea2b2417517fc60" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 Request = StrConcat4(Translate("http://localhost"), Translate(":"), Port, EndpointString);
 // }} ""
-// {{{ 21 1 0 "0a3311cb_04ad_4a4b_818f28aa0dba9800" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 13 1 0 "0a3311cb_04ad_4a4b_818f28aa0dba9800" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLHttp::Initialize(HttpObject);
 // }} ""
-// {{{ 22 1 0 "c1ef788e_6f1e_464c_9b3beedb016101b3" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 14 1 0 "c1ef788e_6f1e_464c_9b3beedb016101b3" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLHttp::SetTimeout(HttpObject, Timeout);
 // }} ""
-// {{{ 23 1 0 "dfa25afd_3e42_453f_8672ac2fdf405b85" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-ReturnJsonContent = HSLHttp::HttpPOST(HttpObject, Request, Content, HSLHttp::ContentType_JSON, ReturnStatusCode);
+// {{{ 15 1 0 "db91f22b_901c_4a6a_9b445ee6794566a2" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Content = HSLHttp::HttpPOST(HttpObject, Request, Content, HSLHttp::ContentType_JSON, ReturnStatusCode);
 // }} ""
-// {{{ 24 1 0 "2809fabd_8bcb_4f8e_98527d8ca9254dec" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 16 1 0 "2809fabd_8bcb_4f8e_98527d8ca9254dec" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLHttp::Release(HttpObject);
 // }} ""
-// {{ 25 1 0 "89215456_8455_4084_bd498b4b531709b9" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 17 1 0 "89215456_8455_4084_bd498b4b531709b9" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 26 1 0 "158b9ffb_56a5_4b63_89394cf7df8ac16c" "{586C3429-F931-405f-9938-928E22C90BFA}"
-
-// }} ""
-// {{{ 27 1 0 "bd27a2af_cb21_428a_a7d1070acfeb31ab" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::Create(o_JSONObject);
-// }} ""
-// {{{ 28 1 0 "a5fe97e4_f547_4eae_a91dfa151e892044" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::ParseJson(o_JSONObject, ReturnJsonContent);
-// }} ""
-// {{ 29 1 0 "158b9ffb_56a5_4b63_89394cf7df8ac16c" "{586C3429-F931-405f-9938-928E22C90BFA}"
-
-// }} ""
-// {{ 30 1 0 "e250d00a_92e8_4961_b3bf3da1410c1216" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (ReturnStatusCode == 200)
-{
-// }} ""
-// {{{ 31 1 0 "261a38e9_2fec_4921_b3d8d3ec9e9f01ee" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
-return (1);
-// }} ""
-// {{ 32 1 0 "e250d00a_92e8_4961_b3bf3da1410c1216" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-}
-else
-{
-// }} ""
-// {{{ 33 1 0 "c589c929_f756_438f_b91b0cb1c0ffa954" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
-return (0);
-// }} ""
-// {{ 34 1 0 "e250d00a_92e8_4961_b3bf3da1410c1216" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-}
+// {{{ 18 1 0 "90625e03_8e03_4e76_b03202d18ce6379c" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return (ReturnStatusCode);
 // }} ""
 // {{{ 5 "RequestPOST" "End"
 }
@@ -164,4 +109,4 @@ return (0);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-17 16:02$$checksum=1089fefa$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-12-11 13:20$$checksum=5f7fea86$$length=084$$

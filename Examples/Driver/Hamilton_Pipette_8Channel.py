@@ -4,16 +4,19 @@ from PytomatedLiquidHandling.Driver.Hamilton import Visual_NTR_Library
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
 from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import Channel1000uL
 
-quit()
-
 Backend = MicrolabSTAR(
     Identifier="Example Star",
     DeckLayoutPath=os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
 )
 
+import loguru
+
+loguru.logger.enable("PytomatedLiquidHandling")
+
 
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
+
 
 Command = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
     Options=Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
@@ -46,6 +49,7 @@ AvailablePositions = Backend.GetResponse(
 # This will prompt the user to select which tips are present and which are not.
 # This information will then be returned to us to use for pipetting.
 
+quit()
 
 TipPositions = AvailablePositions[:8]
 AvailablePositions = AvailablePositions[8:]

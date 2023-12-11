@@ -1,11 +1,11 @@
-from loguru import logger
 import logging
 import time
 from dataclasses import field
 from threading import Event, Thread
 from typing import Callable, ClassVar
 
-from flask import Flask
+from flask import Flask, make_response
+from loguru import logger
 from pydantic import dataclasses
 
 from .SimpleBackendABC import SimpleBackendABC
@@ -101,20 +101,20 @@ class ServerBackendABC(SimpleBackendABC):
         BoundLogger = logger.bind(Server=self)
         BoundLogger.debug("Index web API request.")
 
-        Out = ""
-        Out += "<H1>Hello!</H1>"
-        Out += "<H3>Endpoints:</H3>"
-        Out += "<ol>"
+        Response = ""
+        Response += "<H1>Hello!</H1>"
+        Response += "<H3>Endpoints:</H3>"
+        Response += "<ol>"
         for View in self.Views:
-            Out += "<li>" + View.__name__ + "</li>"
-        Out += "</ol>"
-        return Out
+            Response += "<li>" + View.__name__ + "</li>"
+        Response += "</ol>"
+        return Response, 200
 
     def IsActive(self):
         """IsActive API endpoint."""
         BoundLogger = logger.bind(Server=self)
         BoundLogger.debug("IsActive web API request.")
-        return dict(Response="Running")
+        return "Running", 200
 
     def Kill(self):
         """Kill API endpoint. Used to kill the server remotely."""
@@ -123,4 +123,4 @@ class ServerBackendABC(SimpleBackendABC):
 
         ServerBackendABC.StopBackend(self)
 
-        return dict(Response="Killed")
+        return "Killed", 202

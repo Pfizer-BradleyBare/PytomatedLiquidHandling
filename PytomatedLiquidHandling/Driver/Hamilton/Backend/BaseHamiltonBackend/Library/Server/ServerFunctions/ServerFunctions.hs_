@@ -1,18 +1,18 @@
 
 // this ALWAYS GENERATED file contains the sub-method library header
-// Generated at 11/17/2023 4:02:13 PM
+// Generated at 12/11/2023 1:20:38 PM
 
 #pragma once
 #ifndef HSL_RUNTIME
 namespace SERVERFUNCTIONS {
 function _InitLibrary() { }
 function _ExitLibrary() { }
-function RequestGET( variable Port, variable i_EndpointString, variable Timeout, object & o_JSONObject ) variable {  return (0); }
-function RequestPOST( variable Port, variable EndpointString, variable Timeout, object & i_JSONObject, object & o_JSONObject ) variable {  return (0); }
+function RequestGET( variable Port, variable i_EndpointString, variable Timeout, variable & Content ) variable {  return (0); }
+function RequestPOST( variable Port, variable EndpointString, variable Timeout, object & i_JSONObject, variable & Content ) variable {  return (0); }
 } // namespace
 #endif
 
 #ifdef HSL_RUNTIME
 #include __filename__ ".hsi"
 #endif
-// $$author=BAREB$$valid=0$$time=2023-11-17 16:02$$checksum=99ee4756$$length=082$$
+// $$author=BAREB$$valid=0$$time=2023-12-11 13:20$$checksum=2c83e19a$$length=082$$

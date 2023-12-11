@@ -1,8 +1,9 @@
-from loguru import logger
 import time
 from dataclasses import field
 from typing import Callable, cast
+
 from flask import request
+from loguru import logger
 from pydantic import dataclasses
 
 from ....Tools.BaseClasses import CommandOptionsListed, ServerBackendABC
@@ -23,7 +24,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         if request.is_json == False:
             BoundLogger.error("Request from Hamilton is not json format.")
-            return dict(Response="Request is not json format.")
+            return "Request is not json format.", 400
 
         Content = request.get_json()
 
@@ -31,7 +32,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
             Timeout = Content["Timeout"]
         except KeyError:
             BoundLogger.error("Timeout is missing from request.")
-            return dict(Response="Timeout is missing from request.")
+            return "Timeout is missing from request.", 400
 
         Timeout -= 10
         Counter = 0
@@ -45,7 +46,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
         Command = cast(HamiltonCommandABC, self._Command)
 
         if Command is None:
-            return dict(Response="Command not available. Try again.")
+            return "Command not available. Try again.", 408
 
         if isinstance(Command, CommandOptionsListed):
             if len(Command.Options) == 0:
@@ -82,7 +83,7 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         BoundLogger.debug(f"Command delivered to Hamilton: {Command.CommandName}")
 
-        return dict(Response=Response)
+        return Response, 200
 
     def RespondToCommand(self):
         BoundLogger = logger.bind(Request=request.get_data(), Server=self)
@@ -90,15 +91,15 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         if request.is_json == False:
             BoundLogger.error("Request from Hamilton is not json format.")
-            return dict(Response="Request is not json format.")
+            return "Request is not json format.", 400
 
         if self._Command is None:
             BoundLogger.error("There is no active command needing a response.")
-            return dict(Response="There is no active command needing a response.")
+            return "There is no active command needing a response.", 400
 
         if self._Response is not None:
             BoundLogger.error("Command already has a response.")
-            return dict(Response="Command already has a response.")
+            return "Command already has a response.", 400
         # Check the command does not already have a response
 
         self._Response = request.get_json()
@@ -106,4 +107,4 @@ class HamiltonServerBackendABC(ServerBackendABC):
 
         BoundLogger.debug("Response received from Hamilton.")
 
-        return dict(Response="Response received.")
+        return "Response received.", 200
