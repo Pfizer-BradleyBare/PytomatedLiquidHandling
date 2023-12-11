@@ -479,4 +479,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-17 14:26$$checksum=fa627081$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-12-11 16:43$$checksum=1fc057bb$$length=084$$

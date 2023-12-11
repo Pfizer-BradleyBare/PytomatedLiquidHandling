@@ -9,6 +9,7 @@
 #include "HSLTipCountingLib.hsl"
 #include "HSLDevLib.hsl"
 #include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
+#include "HSLTrcLib.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -53,27 +54,11 @@ STATESERVERENDPOINTS::_ExitLibrary();
 // {{{ 5 "_Write" "Begin"
 private function _Write( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
-private variable WaitTime;
-private variable IsStoppable;
-private variable ShowTimer;
-private timer Timer;
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
-private variable SequenceString;
-private variable PropertyValue;
-private variable PropertyKey;
-private variable LabwareID;
-private sequence Sequence;
-private object Object;
 private variable Counter;
-private variable PositionID;
-private variable SequencePosition;
 private variable TipCounter;
 private variable TotalSequencePositions;
 private variable LabwareIDs[];
-private variable SequencePositions[];
 private sequence Seq;
 private variable PositionIDs[];
 // {{ 5 "_Write" "InitLocals"
@@ -190,17 +175,10 @@ private function _Edit( device & ML_STAR, object & i_EndpointOutputDataJSONObjec
 // }} ""
 private object o_JSONObject;
 private variable Counter;
-private variable SequenceString;
 private variable Counter2;
 private variable NumLabwareIDs;
-private variable CustomErrorHandling;
-private variable PropertyValue;
-private variable PropertyKey;
-private variable Message;
 private variable TotalSequencePositions;
 private variable LabwareID;
-private variable State;
-private sequence Sequence;
 private sequence TempSeq;
 private variable LabwareIDs[];
 private variable PosID;
@@ -220,10 +198,10 @@ private variable DialogTitle;
 // {{{ 12 1 0 "52297ab8_5e82_473b_92743afc262f0292" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 JSONPARSER::GetJSONArrayElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareID:"), LabwareIDs);
 // }} ""
-// {{{ 13 1 0 "39e8a7e5_90df_4d7c_b434b80b69cecdf2" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 13 1 0 "822ec47c_90f7_4185_bc3a3f39438b6b88" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 TipCounter = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:TipCounter:"));
 // }} ""
-// {{{ 14 1 0 "53939312_46b0_409e_94e2a94bd7de1dd7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 14 1 0 "42b6a067_9ae9_419c_aaa512fc57eaae18" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 DialogTitle = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:DialogTitle:"));
 // }} ""
 // {{{ 15 1 0 "63e60f59_f5bc_4aeb_b1be7e0e42fabc39" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -294,14 +272,14 @@ HSLLabwrAccess::SortSequenceByColumn1(ML_STAR, 6, Seq, Seq);
 // {{{ 34 1 0 "392b394a_44c7_457e_abc724bfdede74ad" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 SeqCopySequence(EditedSeq, Seq);
 // }} ""
-// {{{ 35 1 0 "07772bcf_8da5_4c93_874d798466d9bcb0" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 35 1 0 "99f86fa0_b870_46a3_be84bf3e76a2e1e0" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 TipCount::Read2(EditedSeq, TipCounter, ML_STAR);
 // }} ""
-// {{{ 36 1 0 "410ab8cc_1e69_4e04_83a091fa84032db7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 36 1 0 "f7d3fbba_d7ec_4e62_9153029b2a4e6efe" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 DevAddSequence2(ML_STAR, EditedSeq, Seq, 1);
 // }} ""
-// {{{ 37 1 0 "361e9c6a_355c_4390_80232a4eb7d831a3" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-DevEditSequences(ML_STAR, Translate("Tip Counter Edit"), DialogTitle, 1000);
+// {{{ 37 1 0 "93b3ece4_2cf5_46b1_88c6ddaacf4649e1" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+DevEditSequences(ML_STAR, Translate("Tip Counter Edit"), DialogTitle, Timeout);
 // }} ""
 // {{{ 38 1 0 "e3efaf71_28af_4128_b48e4401d8778598" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 DevRemoveSequences(ML_STAR);
@@ -398,4 +376,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-17 14:26$$checksum=8af992db$$length=084$$
+// $$author=BAREB$$valid=0$$time=2023-12-11 16:49$$checksum=6b0f604f$$length=084$$

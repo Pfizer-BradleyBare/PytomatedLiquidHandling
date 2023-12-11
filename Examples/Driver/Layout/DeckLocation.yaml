@@ -8,7 +8,7 @@ DeckLocation:
     Transport Config:
       Transport Device: Gripper
       Pickup Options:
-      Dropoff Options: 
+      Dropoff Options:
         CheckPlateExists: True
 
   - Identifier: HHS_Carrier_Pos2
