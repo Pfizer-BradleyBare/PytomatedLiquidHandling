@@ -20,7 +20,7 @@ Backend.StartBackend()
 
 Command = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
     Options=Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
-        TipCounter="Custom", DialogTitle="Edit 50uL Tip Positions"
+        TipCounter="My custom tip counter", DialogTitle="Edit 50uL Tip Positions"
     )
 )
 
@@ -48,6 +48,8 @@ AvailablePositions = Backend.GetResponse(
 # Execute our tip rack edit step on the Hamilton.
 # This will prompt the user to select which tips are present and which are not.
 # This information will then be returned to us to use for pipetting.
+
+quit()
 
 TipPositions = AvailablePositions[:8]
 AvailablePositions = AvailablePositions[8:]

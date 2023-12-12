@@ -35,11 +35,9 @@ class HamiltonCommandABC(CommandABC):
                     else:
                         OutputDict[key].append(value)
 
-            try:
+            if type(self.Options) != list:
                 OutputDict = OutputDict | vars(self.Options)
-            except:
-                ...
-            # Easiest way to check if ListedOptions is a custom class (Inherits from list) vs just a list
+            # custom list type so we need to get extra options.
 
             for key, value in OutputDict.items():
                 if isinstance(value, Enum):

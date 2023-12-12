@@ -1,6 +1,6 @@
 from typing import Generic, TypeVar
 
-from pydantic import dataclasses
+from pydantic import SkipValidation, dataclasses
 
 from ..Options import OptionsABC
 
@@ -12,5 +12,5 @@ class CommandOptions(Generic[T]):
     """Mixin for command. This gives your command the ability to have options.
     Must be typed according to your command options."""
 
-    Options: T
+    Options: SkipValidation[T]
     """Options for your command."""

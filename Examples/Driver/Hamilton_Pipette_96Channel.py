@@ -8,11 +8,11 @@ Backend = MicrolabSTAR(
     Identifier="Example Star",
     DeckLayoutPath=os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
 )
-# Backend.StartBackend()
+Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
 ListedOptions = HSLTipCountingLib.Edit.ListedOptions(
-    TipCounter="Custom", DialogTitle="Edit 1000uL Tip Positions"
+    TipCounter="N", DialogTitle="Edit 1000uL Tip Positions"
 )
 ListedOptions.append(HSLTipCountingLib.Edit.Options(LabwareID="HT_L_0001"))
 ListedOptions.append(HSLTipCountingLib.Edit.Options(LabwareID="HT_L_0002"))
@@ -23,18 +23,11 @@ CommandInstance = HSLTipCountingLib.Edit.Command(
     Options=ListedOptions,
 )
 
-print(CommandInstance.SerializeOptions())
-
-quit()
-
-
 Backend.ExecuteCommand(CommandInstance)
 Backend.WaitForResponseBlocking(CommandInstance)
-
 AvailablePositions = Backend.GetResponse(
     CommandInstance, HSLTipCountingLib.Edit.Response
 ).AvailablePositions
-
 
 CommandInstance = CORE96Head.Pickup.Command(
     BackendErrorHandling=False,
