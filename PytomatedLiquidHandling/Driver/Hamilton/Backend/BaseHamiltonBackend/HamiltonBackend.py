@@ -5,7 +5,7 @@ from dataclasses import field
 from platform import platform
 from typing import Type, TypeVar
 
-from pydantic import dataclasses
+from pydantic import dataclasses, Field
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
 
@@ -23,7 +23,7 @@ class HamiltonBackendABC(BackendABC):
     SimulationOn: bool = True
     _ActionServer: HamiltonServerBackendABC = field(init=False)
     _StateServer: HamiltonServerBackendABC = field(init=False)
-    _HamiltonProcess: subprocess.Popen = field(init=False)
+    _HamiltonProcess: subprocess.Popen = field(init=False, default=Field(exclude=True))
 
     def __post_init__(self) -> None:
         self._ActionServer: HamiltonServerBackendABC = HamiltonServerBackendABC(
