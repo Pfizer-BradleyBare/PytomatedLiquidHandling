@@ -75,10 +75,13 @@ class HeatCoolShakeABC(Interface, HALDevice):
     ) -> LayoutItem.CoverablePlate | LayoutItem.Plate:
         for SupportedLayoutItemInstance in self.Plates:
             if SupportedLayoutItemInstance.Labware == LayoutItemInstance.Labware:
-                if isinstance(LayoutItemInstance, LayoutItem.CoverablePlate):
-                    SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered
-                else:
-                    SupportedLayoutItemInstance.IsCovered = False
+                if isinstance(SupportedLayoutItemInstance, LayoutItem.CoverablePlate):
+                    if isinstance(LayoutItemInstance, LayoutItem.CoverablePlate):
+                        SupportedLayoutItemInstance.IsCovered = (
+                            LayoutItemInstance.IsCovered
+                        )
+                    else:
+                        SupportedLayoutItemInstance.IsCovered = False
 
                 return SupportedLayoutItemInstance
 
