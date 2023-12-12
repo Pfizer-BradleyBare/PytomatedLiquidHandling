@@ -1,6 +1,7 @@
-from pydantic import BaseModel
+from pydantic import dataclasses
 
 
-class Dimensions(BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class Dimensions:
     XLength: float
     YLength: float

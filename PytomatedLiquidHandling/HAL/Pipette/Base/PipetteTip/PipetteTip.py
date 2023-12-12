@@ -1,11 +1,12 @@
-from pydantic import BaseModel, field_validator
+from pydantic import dataclasses, field_validator
 
 from PytomatedLiquidHandling.HAL import Tip
 
 from .LiquidClass import LiquidClass
 
 
-class PipetteTip(BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class PipetteTip:
     Tip: Tip.Base.TipABC
     TipSupportDropoffLabwareID: str
     TipSupportPickupLabwareID: str

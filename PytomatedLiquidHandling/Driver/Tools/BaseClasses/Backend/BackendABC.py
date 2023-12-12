@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from dataclasses import field
-from typing import Any, Type, TypeVar
+from typing import Type, TypeVar
 
-from pydantic import PrivateAttr, dataclasses
+from pydantic import dataclasses
 
 from ..Command import CommandABC
 from ..Response import ResponseABC

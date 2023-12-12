@@ -1,7 +1,7 @@
 from dataclasses import field
 from typing import cast
 
-from pydantic.dataclasses import dataclass
+from pydantic import dataclasses
 
 from PytomatedLiquidHandling.Driver.Hamilton import ML_STAR, Backend, TrackGripper
 from PytomatedLiquidHandling.HAL import LayoutItem
@@ -9,10 +9,11 @@ from PytomatedLiquidHandling.HAL import LayoutItem
 from .Base import TransportABC
 
 
+@dataclasses.dataclass(kw_only=True)
 class VantageTrackGripper(TransportABC):
     Backend: Backend.VantageTrackGripperEntryExit
 
-    @dataclass
+    @dataclasses.dataclass(kw_only=True)
     class PickupOptions(TransportABC.PickupOptions):
         """Options to pick up labware from deck location
         NOTE: Pickup and Dropoff TaughtPathName should be same due to how track gripper works
@@ -27,7 +28,7 @@ class VantageTrackGripper(TransportABC):
             compare=False
         )
 
-    @dataclass
+    @dataclasses.dataclass(kw_only=True)
     class DropoffOptions(TransportABC.DropoffOptions):
         """Options to drop off labware to deck location
         NOTE: Pickup and Dropoff TaughtPathName and PathTime should be same due to how track gripper works

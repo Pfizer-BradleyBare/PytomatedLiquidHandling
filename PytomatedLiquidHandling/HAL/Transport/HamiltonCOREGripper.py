@@ -1,7 +1,7 @@
 from dataclasses import field
 from typing import cast
 
-from pydantic.dataclasses import dataclass
+from pydantic import dataclasses
 
 from PytomatedLiquidHandling.Driver.Hamilton import Backend
 from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import (
@@ -11,21 +11,19 @@ from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import TransportABC
 
-from pydantic import dataclasses
-
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonCOREGripper(TransportABC):
     Backend: Backend.HamiltonBackendABC
     GripperLabwareID: str
 
-    @dataclass
+    @dataclasses.dataclass(kw_only=True)
     class PickupOptions(TransportABC.PickupOptions):
         """Options to pick up labware from deck location"""
 
         ...
 
-    @dataclass
+    @dataclasses.dataclass(kw_only=True)
     class DropoffOptions(TransportABC.DropoffOptions):
         """Options to drop off labware to deck location"""
 

@@ -5,7 +5,10 @@ from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import CloseableContainerABC, OpenCloseOptions
 
+from pydantic import dataclasses
 
+
+@dataclasses.dataclass(kw_only=True)
 class HamiltonFlipTubeLandscape(CloseableContainerABC):
     """FlipTubes are a 1500uL conical tube that can be opened and closed on deck with a tool.
 

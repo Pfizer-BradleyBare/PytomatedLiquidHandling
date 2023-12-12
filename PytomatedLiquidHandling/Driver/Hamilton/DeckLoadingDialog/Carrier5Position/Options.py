@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Literal
 
-from pydantic import BaseModel, dataclasses
+from pydantic import dataclasses
 
 from ....Tools.BaseClasses import OptionsABC
 
@@ -32,7 +32,8 @@ class Options(OptionsABC):
     LabwareExtendedInformation: str | Literal["None"] = "None"
 
 
-class ListedOptions(list[Options], BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class ListedOptions(list[Options]):
     class Carrier3DImageOptions(Enum):
         Carrier5PositionFTR3D = "Carrier5PositionFTR3D"
         Carrier5PositionPlate3D = "Carrier5PositionPlate3D"

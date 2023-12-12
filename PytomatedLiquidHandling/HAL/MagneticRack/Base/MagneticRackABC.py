@@ -1,9 +1,10 @@
-from pydantic import ValidationInfo, field_validator
+from pydantic import ValidationInfo, field_validator, dataclasses
 
 from PytomatedLiquidHandling.HAL import LayoutItem, Pipette
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
 
+@dataclasses.dataclass(kw_only=True)
 class MagneticRackABC(HALDevice):
     SupportedPlates: list[LayoutItem.CoverablePlate | LayoutItem.Plate]
     SupportedPipettes: list[Pipette.Base.PipetteABC]

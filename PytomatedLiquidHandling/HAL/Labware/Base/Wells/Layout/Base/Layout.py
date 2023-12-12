@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from pydantic import BaseModel
+from pydantic import dataclasses
+
 from enum import Enum
 
 
@@ -7,7 +8,8 @@ class InvalidPositionError(ValueError):
     ...
 
 
-class Layout(BaseModel, ABC):
+@dataclasses.dataclass(kw_only=True)
+class Layout(ABC):
     class Sorting(Enum):
         Columnwise = "Columnwise"
         Rowwise = "Rowwise"

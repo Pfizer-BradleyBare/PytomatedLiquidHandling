@@ -2,7 +2,10 @@ from .Base import Layout
 from .Numeric import Numeric
 from typing import Literal
 
+from pydantic import dataclasses
 
+
+@dataclasses.dataclass(kw_only=True)
 class AlphaNumeric(Layout):
     Type: Literal["AlphaNumeric"] = "AlphaNumeric"
 

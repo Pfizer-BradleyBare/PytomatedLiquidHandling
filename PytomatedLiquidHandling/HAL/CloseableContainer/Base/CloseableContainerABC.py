@@ -1,19 +1,21 @@
 from abc import abstractmethod
-from dataclasses import dataclass
+
 
 from pydantic import field_validator
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools import BaseClasses
+from pydantic import dataclasses
 
 
-@dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True)
 class OpenCloseOptions(OptionsABC):
     LayoutItem: LayoutItem.Plate
     Position: str | int
 
 
+@dataclasses.dataclass(kw_only=True)
 class CloseableContainerABC(BaseClasses.Interface, BaseClasses.HALDevice):
     """A container that is part of a rack that can be opened with some kind of tool.
 

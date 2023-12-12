@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from pydantic import BaseModel, ValidationInfo, field_serializer, field_validator
+from pydantic import dataclasses, ValidationInfo, field_serializer, field_validator
 
 from PytomatedLiquidHandling.HAL import Transport
 
 
-class TransportConfig(BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class TransportConfig:
     """Compatible transport device and options for a DeckLocation. Enables seamless transport of labware at a DeckLocation.
 
     Attributes:

@@ -1,17 +1,21 @@
 from abc import abstractmethod
 
-from pydantic import PrivateAttr, field_validator
+from pydantic import field_validator
 
 from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
 from ...Tools.BaseClasses import Interface
 
+from pydantic import dataclasses
+from dataclasses import field
 
+
+@dataclasses.dataclass(kw_only=True)
 class HeatCoolShakeABC(Interface, HALDevice):
     ComPort: str | int
     Plates: list[LayoutItem.CoverablePlate | LayoutItem.Plate]
-    _HandleID: int | str = PrivateAttr()
+    _HandleID: int | str = field(init=False)
 
     @field_validator("Plates", mode="before")
     def __SupportedPlatesValidate(cls, v):

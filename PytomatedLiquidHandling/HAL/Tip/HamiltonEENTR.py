@@ -1,7 +1,6 @@
 from copy import copy
 from typing import cast
 
-from pydantic import BaseModel, PrivateAttr
 
 from PytomatedLiquidHandling.Driver.Hamilton import (
     Backend,
@@ -17,7 +16,8 @@ from dataclasses import field
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonEENTR(TipABC):
-    class TipStack(BaseModel):
+    @dataclasses.dataclass(kw_only=True)
+    class TipStack:
         LabwareID: str
         ModuleNumber: int
         StackNumber: int

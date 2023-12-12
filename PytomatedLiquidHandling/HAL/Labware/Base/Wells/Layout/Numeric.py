@@ -1,7 +1,10 @@
 from .Base import Layout
 from typing import Literal
 
+from pydantic import dataclasses
 
+
+@dataclasses.dataclass(kw_only=True)
 class Numeric(Layout):
     Type: Literal["Numeric"] = "Numeric"
 

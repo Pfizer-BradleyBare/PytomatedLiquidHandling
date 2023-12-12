@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field
 
-from pydantic import PrivateAttr, field_validator, dataclasses
+from pydantic import field_validator, dataclasses
 
 from PytomatedLiquidHandling.HAL import LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice

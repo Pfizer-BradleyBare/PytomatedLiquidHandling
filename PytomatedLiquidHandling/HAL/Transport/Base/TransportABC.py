@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from pydantic import PrivateAttr, field_validator, Field
+from pydantic import field_validator, Field
 
 from PytomatedLiquidHandling.HAL import Labware
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
@@ -46,11 +45,11 @@ class TransportABC(Interface, HALDevice):
 
         return SupportedObjects
 
-    @dataclass
+    @dataclasses.dataclass(kw_only=True)
     class PickupOptions:
         ...
 
-    @dataclass
+    @dataclasses.dataclass(kw_only=True)
     class DropoffOptions:
         ...
 

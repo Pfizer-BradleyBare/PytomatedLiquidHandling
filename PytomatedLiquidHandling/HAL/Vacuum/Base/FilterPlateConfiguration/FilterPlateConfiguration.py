@@ -1,15 +1,21 @@
-from pydantic import BaseModel, field_validator
+from pydantic import field_validator
 
 from PytomatedLiquidHandling.HAL import LayoutItem
+from pydantic import dataclasses
 
 
-class DefaultVacuumPressures(BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class DefaultVacuumPressures:
     Low: float
     Medium: float
     High: float
 
 
-class FilterPlateConfiguration(BaseModel):
+from pydantic import dataclasses
+
+
+@dataclasses.dataclass(kw_only=True)
+class FilterPlateConfiguration:
     FilterPlate: LayoutItem.FilterPlate | LayoutItem.CoverableFilterPlate
     CollectionPlate: LayoutItem.Plate
     MaxPressure: float

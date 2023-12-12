@@ -1,17 +1,21 @@
 from abc import abstractmethod
 
-from pydantic import PrivateAttr, field_validator
+from pydantic import field_validator
 
 from PytomatedLiquidHandling.HAL import LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
 from .Reservation import Reservation
 
+from pydantic import dataclasses
+from dataclasses import field
 
+
+@dataclasses.dataclass(kw_only=True)
 class StorageDeviceABC(HALDevice):
     LayoutItems: list[LayoutItem.Base.LayoutItemABC]
 
-    _Reservations: dict[str, Reservation] = PrivateAttr(default_factory=list)
+    _Reservations: dict[str, Reservation] = field(init=False, default_factory=dict)
 
     @field_validator("LayoutItems", mode="before")
     def __SupportedLabwaresValidate(cls, v):

@@ -1,9 +1,10 @@
-from pydantic import BaseModel, field_validator
+from pydantic import dataclasses, field_validator
 
 from PytomatedLiquidHandling.HAL import Carrier
 
 
-class CarrierConfig(BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class CarrierConfig:
     """Connects a DeckLocation to a specific carrier position.
 
     Attributes:

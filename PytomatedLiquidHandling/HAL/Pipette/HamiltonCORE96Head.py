@@ -1,7 +1,7 @@
 from math import ceil
 from typing import cast
 
-from pydantic import field_validator
+from pydantic import field_validator, dataclasses
 
 from PytomatedLiquidHandling.HAL import Labware
 
@@ -11,6 +11,7 @@ from . import HamiltonPortraitCORE8Channel
 from .Base import PipetteABC, TransferOptions
 
 
+@dataclasses.dataclass(kw_only=True)
 class HamiltonCORE96Head(PipetteABC):
     Backend: HamiltonBackendABC
     HamiltonPortraitCORE8Channel: HamiltonPortraitCORE8Channel

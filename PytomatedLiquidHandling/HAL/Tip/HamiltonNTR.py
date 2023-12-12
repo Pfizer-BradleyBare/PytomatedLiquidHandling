@@ -1,8 +1,6 @@
 from copy import copy
 from typing import Literal, cast
 
-from pydantic import PrivateAttr
-
 from PytomatedLiquidHandling.Driver.Hamilton import Backend, Visual_NTR_Library
 from PytomatedLiquidHandling.HAL import LayoutItem
 

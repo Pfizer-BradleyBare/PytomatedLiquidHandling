@@ -1,6 +1,7 @@
-from pydantic import BaseModel
+from pydantic import dataclasses
 
 
-class LiquidClass(BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class LiquidClass:
     LiquidClassName: str
     MaxVolume: float

@@ -1,16 +1,13 @@
-from pydantic import BaseModel
-
 from ...Backend import HamiltonResponseABC
+from pydantic import dataclasses
 
 
-class LabwarePosition(BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class LabwarePosition:
     XPosition: float
     YPosition: float
     ZPosition: float
     ZRotation: float
-
-
-from pydantic import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

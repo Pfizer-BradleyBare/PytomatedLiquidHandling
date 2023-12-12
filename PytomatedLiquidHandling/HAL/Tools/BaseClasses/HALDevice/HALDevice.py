@@ -1,7 +1,5 @@
 from typing import ClassVar, Self, Type
 
-from pydantic import BaseModel
-
 from pydantic import dataclasses
 
 

@@ -3,7 +3,10 @@ from PytomatedLiquidHandling.HAL import LayoutItem
 from .Base import StorageDeviceABC
 from .Base.Reservation import Reservation
 
+from pydantic import dataclasses
 
+
+@dataclasses.dataclass(kw_only=True)
 class RandomAccessDeckStorage(StorageDeviceABC):
     def Reserve(self, ReservationID: str, LayoutItem: LayoutItem.Base.LayoutItemABC):
         if ReservationID in self._Reservations:

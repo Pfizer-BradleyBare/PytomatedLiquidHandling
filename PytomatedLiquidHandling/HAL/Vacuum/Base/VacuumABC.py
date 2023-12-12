@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from pydantic import PrivateAttr, field_validator
+from pydantic import field_validator
 
 from PytomatedLiquidHandling.HAL import LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
@@ -8,13 +8,18 @@ from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 from ...Tools.BaseClasses import Interface
 from .FilterPlateConfiguration import FilterPlateConfiguration
 
+from pydantic import dataclasses
 
+from dataclasses import field
+
+
+@dataclasses.dataclass(kw_only=True)
 class VacuumABC(Interface, HALDevice):
     ComPort: str
     ManifoldPark: LayoutItem.VacuumManifold
     ManifoldProcessing: LayoutItem.VacuumManifold
     SupportedFilterPlateConfigurations: dict[str, FilterPlateConfiguration]
-    _HandleID: int = PrivateAttr()
+    _HandleID: int = field(init=False)
 
     @field_validator("ManifoldPark", "ManifoldProcessing", mode="before")
     def __ManifoldsValidate(cls, v):

@@ -1,7 +1,8 @@
-from pydantic import BaseModel
+from pydantic import dataclasses
 
 
-class TransportOffsets(BaseModel):
+@dataclasses.dataclass(kw_only=True)
+class TransportOffsets:
     Open: float
     Close: float
     Top: float

@@ -1,7 +1,5 @@
 from typing import Literal
 
-from pydantic import PrivateAttr
-
 from PytomatedLiquidHandling.Driver.Hamilton import Backend
 from PytomatedLiquidHandling.Driver.Hamilton import (
     HamiltonHeaterCooler as HeaterCoolerDriver,
@@ -11,12 +9,16 @@ from PytomatedLiquidHandling.HAL import LayoutItem
 from .Base import HeatCoolShakeABC
 from .Base.Exceptions import ShakingNotSupportedError
 
+from pydantic import dataclasses
+from dataclasses import field
 
+
+@dataclasses.dataclass(kw_only=True)
 class HamiltonHeaterCooler(HeatCoolShakeABC):
     Backend: Backend.HamiltonBackendABC
     BackendErrorHandling: Literal["N/A"] = "N/A"
 
-    _HandleID: str = PrivateAttr()
+    _HandleID: str = field(init=False)
 
     def AssertOptions(
         self,
