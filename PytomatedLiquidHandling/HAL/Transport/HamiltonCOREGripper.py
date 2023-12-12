@@ -11,7 +11,10 @@ from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import TransportABC
 
+from pydantic import dataclasses
 
+
+@dataclasses.dataclass(kw_only=True)
 class HamiltonCOREGripper(TransportABC):
     Backend: Backend.HamiltonBackendABC
     GripperLabwareID: str

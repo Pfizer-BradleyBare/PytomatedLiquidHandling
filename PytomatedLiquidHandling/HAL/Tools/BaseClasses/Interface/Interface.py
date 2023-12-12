@@ -3,8 +3,11 @@ from pydantic import BaseModel, field_validator
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
 from PytomatedLiquidHandling.HAL import Backend
 
+from pydantic import dataclasses
 
-class Interface(BaseModel):
+
+@dataclasses.dataclass(kw_only=True)
+class Interface:
     """Allows devices to abstract away functionality.
 
     Example: There are many systems which utilize pipette devices.

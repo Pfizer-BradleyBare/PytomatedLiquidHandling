@@ -1,6 +1,9 @@
 from .Base import LabwareABC, Wells
 
+from pydantic import dataclasses
 
+
+@dataclasses.dataclass(kw_only=True)
 class PipettableLabware(LabwareABC):
     Wells: Wells
 

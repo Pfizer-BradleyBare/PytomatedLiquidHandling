@@ -8,15 +8,21 @@ from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import TipABC
 
+from pydantic import dataclasses
+from dataclasses import field
 
+
+@dataclasses.dataclass(kw_only=True)
 class HamiltonNTR(TipABC):
     Backend: Backend.HamiltonBackendABC
     BackendErrorHandling: Literal["N/A"] = "N/A"
 
     Tiers: int
     TipRackWasteLabwareID: str
-    _TierDiscardNumber: int = PrivateAttr(default=100)
-    _DiscardedTipRacks: list[LayoutItem.TipRack] = PrivateAttr(default_factory=list)
+    _TierDiscardNumber: int = field(init=False, default=100)
+    _DiscardedTipRacks: list[LayoutItem.TipRack] = field(
+        init=False, default_factory=list
+    )
 
     def RemainingTipsInTier(self) -> int:
         Remaining = self.RemainingTips() % (self.TipsPerRack * self.Tiers)

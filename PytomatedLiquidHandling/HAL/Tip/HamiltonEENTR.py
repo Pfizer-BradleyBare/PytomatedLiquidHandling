@@ -11,13 +11,17 @@ from PytomatedLiquidHandling.Driver.Hamilton import (
 
 from .Base import TipABC
 
+from pydantic import dataclasses
+from dataclasses import field
 
+
+@dataclasses.dataclass(kw_only=True)
 class HamiltonEENTR(TipABC):
     class TipStack(BaseModel):
         LabwareID: str
         ModuleNumber: int
         StackNumber: int
-        _StackCount: int = PrivateAttr(default=0)
+        _StackCount: int = field(init=False, default=0)
 
     Backend: Backend.HamiltonBackendABC
 

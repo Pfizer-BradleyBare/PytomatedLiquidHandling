@@ -1,6 +1,9 @@
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
+from pydantic import dataclasses
 
+
+@dataclasses.dataclass(kw_only=True)
 class CarrierABC(HALDevice):
     """A physical carrier on an automation system deck.
 

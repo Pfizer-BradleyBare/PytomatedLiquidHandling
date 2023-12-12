@@ -2,23 +2,66 @@ import os
 import yaml
 from loguru import logger
 
-if True:
-    from . import Transport
+# NOTE: Modules are loaded in order they are used to load configuration
 
-from . import (
-    Backend,
-    Carrier,
-    CloseableContainer,
-    DeckLocation,
-    HeatCoolShake,
-    Labware,
-    LayoutItem,
-    MagneticRack,
-    Pipette,
-    StorageDevice,
-    Tip,
-    Tools,
-)
+from . import Tools
+
+#
+
+from . import Backend
+
+#
+
+from . import Carrier
+
+#
+
+from . import Labware
+
+#
+
+from . import Transport
+
+#
+
+from . import DeckLocation
+
+#
+
+from . import LayoutItem
+
+#
+
+from . import Tip
+
+#
+
+from . import CloseableContainer
+
+#
+
+from . import HeatCoolShake
+
+#
+
+from . import Pipette
+
+#
+
+from . import StorageDevice
+
+#
+
+from . import MagneticRack
+
+
+# IDK why i need this with pydantic dataclasses. DO NOT DELETE IT!!!
+import pydantic
+
+
+for cls in Tools.BaseClasses.HALDevice.HALDevices.values():
+    pydantic.dataclasses.rebuild_dataclass(cls)  # type:ignore
+# End weirdly required processing
 
 
 @logger.catch(reraise=True)
@@ -93,19 +136,6 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):
         for File in Files:
             if File.lower().endswith(".yaml"):
-                if "tip" in File.lower():
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
-
-                    Tools.ConfigLoader.DevicesLists(Dict, Tip.Base.TipABC, Tip.Devices)
-    if Loaded != True:
-        logger.warning(f"No {Tip.Base.TipABC.__name__} objects were loaded.")
-
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
                 if "decklocation" in File.lower():
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
@@ -135,6 +165,19 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         logger.warning(
             f"No {LayoutItem.Base.LayoutItemABC.__name__} objects were loaded."
         )
+
+    Loaded = False
+    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
+        for File in Files:
+            if File.lower().endswith(".yaml"):
+                if "tip" in File.lower():
+                    Loaded = True
+                    with open(os.path.join(Root, File)) as ConfigFile:
+                        Dict = yaml.full_load(ConfigFile)
+
+                    Tools.ConfigLoader.DevicesLists(Dict, Tip.Base.TipABC, Tip.Devices)
+    if Loaded != True:
+        logger.warning(f"No {Tip.Base.TipABC.__name__} objects were loaded.")
 
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):

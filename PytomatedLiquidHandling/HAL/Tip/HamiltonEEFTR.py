@@ -10,14 +10,17 @@ from PytomatedLiquidHandling.Driver.Hamilton import (
 )
 
 from .Base import TipABC
+from dataclasses import field
+from pydantic import dataclasses
 
 
+@dataclasses.dataclass(kw_only=True)
 class HamiltonEEFTR(TipABC):
     class TipStack(BaseModel):
         LabwareID: str
         ModuleNumber: int
         StackNumber: int
-        _StackCount: int = PrivateAttr(default=0)
+        _StackCount: int = field(init=False, default=0)
 
     Backend: Backend.HamiltonBackendABC
 

@@ -4,7 +4,10 @@ from PytomatedLiquidHandling.Driver.Hamilton import Backend, HSLTipCountingLib
 
 from .Base import TipABC
 
+from pydantic import dataclasses
 
+
+@dataclasses.dataclass(kw_only=True)
 class HamiltonFTR(TipABC):
     Backend: Backend.HamiltonBackendABC
     BackendErrorHandling: Literal["N/A"] = "N/A"

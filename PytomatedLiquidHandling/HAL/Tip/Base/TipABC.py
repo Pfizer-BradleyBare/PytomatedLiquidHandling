@@ -1,7 +1,7 @@
 from abc import abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-from pydantic import PrivateAttr, field_validator
+from pydantic import PrivateAttr, field_validator, dataclasses
 
 from PytomatedLiquidHandling.HAL import LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
@@ -15,11 +15,14 @@ class AvailablePosition:
     PositionID: str
 
 
+@dataclasses.dataclass(kw_only=True)
 class TipABC(Interface, HALDevice):
     TipRacks: list[LayoutItem.TipRack]
     TipsPerRack: int
     Volume: float
-    _AvailablePositions: list[AvailablePosition] = PrivateAttr(default_factory=list)
+    _AvailablePositions: list[AvailablePosition] = field(
+        init=False, default_factory=list
+    )
 
     @field_validator("TipRacks", mode="before")
     def __TipRacksValidate(cls, v):

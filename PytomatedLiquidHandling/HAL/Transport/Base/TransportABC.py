@@ -4,7 +4,7 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from pydantic import PrivateAttr, field_validator
+from pydantic import PrivateAttr, field_validator, Field
 
 from PytomatedLiquidHandling.HAL import Labware
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
@@ -19,10 +19,13 @@ from .Exceptions import (
 if TYPE_CHECKING:
     from PytomatedLiquidHandling.HAL import LayoutItem
 
+from pydantic import dataclasses
 
+
+@dataclasses.dataclass(kw_only=True)
 class TransportABC(Interface, HALDevice):
     SupportedLabwares: list[Labware.Base.LabwareABC]
-    _LastTransportFlag: bool = PrivateAttr(default=False)
+    _LastTransportFlag: bool = Field(exclude=False, default=False)
 
     @field_validator("SupportedLabwares", mode="before")
     def __SupportedLabwaresValidated(cls, v):

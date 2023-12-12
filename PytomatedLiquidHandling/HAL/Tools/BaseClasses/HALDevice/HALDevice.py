@@ -2,8 +2,11 @@ from typing import ClassVar, Self, Type
 
 from pydantic import BaseModel
 
+from pydantic import dataclasses
 
-class HALDevice(BaseModel):
+
+@dataclasses.dataclass(kw_only=True)
+class HALDevice:
     """A high level device that is part of a fully functioning automation system.
 
     Example: An automation system is, at minimum, made up of a deck (with carriers and labware) and a pipette.

@@ -3,7 +3,10 @@ from pydantic import field_validator
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
+from pydantic import dataclasses
 
+
+@dataclasses.dataclass(kw_only=True)
 class LayoutItemABC(HALDevice):
     LabwareID: str
     DeckLocation: DeckLocation.Base.DeckLocationABC
