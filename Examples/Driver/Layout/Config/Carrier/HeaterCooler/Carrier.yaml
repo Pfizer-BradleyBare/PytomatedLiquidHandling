@@ -1,0 +1,8 @@
+NonMoveable Carrier:
+  - Identifier: HeaterCooler
+    Enabled: True
+    Track Start: 7
+    Track End: 13
+    Num Labware Positions: 4
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage

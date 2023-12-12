@@ -1,6 +1,6 @@
 from typing import ClassVar, Self, Type
 
-from pydantic import dataclasses
+from pydantic import dataclasses, field_validator
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -19,6 +19,14 @@ class HALDevice:
     HALDevices: ClassVar[dict[str, Type[Self]]] = dict()
 
     Identifier: str
+
+    @field_validator("Identifier", mode="after")
+    def __ValidateIdentifier(cls, v):
+        if " " in v:
+            raise ValueError(
+                "Spaces are not allowed in Identifiers. Please replace with underscores (_)."
+            )
+        return v
 
     def __eq__(self, __value: Type[Self]) -> bool:
         return (type(self).__name__ + self.Identifier) == (

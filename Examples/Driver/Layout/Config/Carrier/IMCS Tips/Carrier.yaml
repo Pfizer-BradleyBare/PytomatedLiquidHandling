@@ -1,0 +1,8 @@
+Moveable Carrier:
+  - Identifier: IMCS Tips
+    Enabled: True
+    Track Start: 21
+    Track End: 26
+    Num Labware Positions: 5
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage

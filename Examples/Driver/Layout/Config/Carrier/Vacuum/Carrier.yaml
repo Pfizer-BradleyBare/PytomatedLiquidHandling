@@ -1,0 +1,8 @@
+NonMoveable Carrier:
+  - Identifier: Vacuum
+    Enabled: True
+    Track Start: 14
+    Track End: 20
+    Num Labware Positions: 4
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage

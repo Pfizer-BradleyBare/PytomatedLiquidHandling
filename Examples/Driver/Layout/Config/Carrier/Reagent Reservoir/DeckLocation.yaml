@@ -1,0 +1,30 @@
+NonTransportable DeckLocation:
+  - Identifier: Reagent Reservoir Pos 1
+    Enabled: True
+    Carrier Config:
+      Carrier: Reagent Reservoir
+      Position: 1
+
+  - Identifier: Reagent Reservoir Pos 2
+    Enabled: True
+    Carrier Config:
+      Carrier: Reagent Reservoir
+      Position: 2
+
+  - Identifier: Reagent Reservoir Pos 3
+    Enabled: True
+    Carrier Config:
+      Carrier: Reagent Reservoir
+      Position: 3
+
+  - Identifier: Reagent Reservoir Pos 4
+    Enabled: True
+    Carrier Config:
+      Carrier: Reagent Reservoir
+      Position: 4
+
+  - Identifier: Reagent Reservoir Pos 5
+    Enabled: True
+    Carrier Config:
+      Carrier: Reagent Reservoir
+      Position: 5

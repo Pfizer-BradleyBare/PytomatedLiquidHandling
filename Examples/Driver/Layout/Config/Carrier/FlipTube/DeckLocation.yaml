@@ -1,0 +1,6 @@
+NonTransportable DeckLocation:
+  - Identifier: FlipTube Pos 1
+    Enabled: True
+    Carrier Config:
+      Carrier: FlipTube
+      Position: 1

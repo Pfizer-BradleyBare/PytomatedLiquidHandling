@@ -1,5 +1,6 @@
 from . import Base
-from .DeckLocation import DeckLocation
+from .NonTransportableDeckLocation import NonTransportableDeckLocation
+from .TransportableDeckLocation import TransportableDeckLocation
 
 Identifier = str
 Devices: dict[Identifier, Base.DeckLocationABC] = dict()

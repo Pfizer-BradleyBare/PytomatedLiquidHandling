@@ -1,0 +1,24 @@
+NonTransportable DeckLocation:
+  - Identifier: Heater Pos 1
+    Enabled: True
+    Carrier Config:
+      Carrier: HeaterCooler
+      Position: 1
+
+  - Identifier: Heater Pos 2
+    Enabled: True
+    Carrier Config:
+      Carrier: HeaterCooler
+      Position: 2
+
+  - Identifier: Heater Pos 3
+    Enabled: True
+    Carrier Config:
+      Carrier: HeaterCooler
+      Position: 3
+
+  - Identifier: Cooler Pos 4
+    Enabled: True
+    Carrier Config:
+      Carrier: HeaterCooler
+      Position: 4

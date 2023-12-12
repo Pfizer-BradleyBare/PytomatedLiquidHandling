@@ -1,0 +1,8 @@
+Moveable Carrier:
+  - Identifier: FT_41
+    Enabled: True
+    Track Start: 41
+    Track End: 41
+    Num Labware Positions: 1
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage

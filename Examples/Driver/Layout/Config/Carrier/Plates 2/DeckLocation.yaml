@@ -1,0 +1,30 @@
+NonTransportable DeckLocation:
+  - Identifier: Plates 2 Pos 1
+    Enabled: True
+    Carrier Config:
+      Carrier: Plates 2
+      Position: 1
+
+  - Identifier: Plates 2 Pos 2
+    Enabled: True
+    Carrier Config:
+      Carrier: Plates 2
+      Position: 2
+
+  - Identifier: Plates 2 Pos 3
+    Enabled: True
+    Carrier Config:
+      Carrier: Plates 2
+      Position: 3
+
+  - Identifier: Plates 2 Pos 4
+    Enabled: True
+    Carrier Config:
+      Carrier: Plates 2
+      Position: 4
+
+  - Identifier: Plates 2 Pos 5
+    Enabled: True
+    Carrier Config:
+      Carrier: Plates 2
+      Position: 5

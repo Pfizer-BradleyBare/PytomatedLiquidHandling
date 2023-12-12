@@ -1,0 +1,8 @@
+Moveable Carrier:
+  - Identifier: CT_40
+    Enabled: True
+    Track Start: 40
+    Track End: 40
+    Num Labware Positions: 1
+    Image Path 3D: 3DImage
+    Image Path 2D: 2DImage
