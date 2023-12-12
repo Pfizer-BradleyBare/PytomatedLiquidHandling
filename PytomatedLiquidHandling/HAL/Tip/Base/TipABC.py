@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import field
 
 from pydantic import field_validator, dataclasses
 
@@ -9,7 +9,7 @@ from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 from ...Tools.BaseClasses import Interface
 
 
-@dataclass
+@dataclasses.dataclass(kw_only=True)
 class AvailablePosition:
     LabwareID: str
     PositionID: str
@@ -46,7 +46,9 @@ class TipABC(Interface, HALDevice):
     def _ParseAvailablePositions(self, AvailablePositions: list[dict[str, str]]):
         for Pos in AvailablePositions:
             self._AvailablePositions.append(
-                AvailablePosition(Pos["LabwareID"], Pos["PositionID"])
+                AvailablePosition(
+                    LabwareID=Pos["LabwareID"], PositionID=Pos["PositionID"]
+                )
             )
 
     def Initialize(self):

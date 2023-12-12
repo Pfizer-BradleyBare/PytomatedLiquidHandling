@@ -16,7 +16,7 @@ class HamiltonNTR(TipABC):
     BackendErrorHandling: Literal["N/A"] = "N/A"
 
     Tiers: int
-    TipRackWasteLabwareID: str
+    TipRackWaste: LayoutItem.TipRack
     _TierDiscardNumber: int = field(init=False, default=100)
     _DiscardedTipRacks: list[LayoutItem.TipRack] = field(
         init=False, default_factory=list
@@ -59,13 +59,9 @@ class HamiltonNTR(TipABC):
         # There is a special case during tip counter edit where an NTR rack is removed manually by the user. We handle that here.
 
         for TipRack in DiscardTipRacks:
-            TipRackWasteLayoutItem = copy(TipRack)
-            TipRackWasteLayoutItem.LabwareID = self.TipRackWasteLabwareID
-            # Use the tip rack layout item to make the waste layout item
-
             self._DiscardedTipRacks.append(TipRack)
             TipRack.DeckLocation.TransportConfig.TransportDevice.Transport(
-                TipRack, TipRackWasteLayoutItem
+                TipRack, self.TipRackWaste
             )
 
         self._AvailablePositions = [

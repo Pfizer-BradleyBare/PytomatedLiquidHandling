@@ -6,6 +6,7 @@ from PytomatedLiquidHandling.Driver.Hamilton import (
     EntryExit,
     HSLTipCountingLib,
 )
+from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import TipABC
 from dataclasses import field
@@ -16,7 +17,7 @@ from pydantic import dataclasses
 class HamiltonEEFTR(TipABC):
     @dataclasses.dataclass(kw_only=True)
     class TipStack:
-        LabwareID: str
+        TipRack: LayoutItem.TipRack
         ModuleNumber: int
         StackNumber: int
         _StackCount: int = field(init=False, default=0)
@@ -25,7 +26,7 @@ class HamiltonEEFTR(TipABC):
 
     TipStacks: list[TipStack]
     RacksPerStack: int
-    TipRackWasteLabwareID: str
+    TipRackWaste: LayoutItem.TipRack
 
     def Initialize(self):
         TipABC.Initialize(self)
@@ -85,20 +86,12 @@ class HamiltonEEFTR(TipABC):
 
                 Stack._StackCount -= 1
 
-                TipRackWasteLayoutItem = copy(Rack)
-                TipRackWasteLayoutItem.LabwareID = self.TipRackWasteLabwareID
-                # Use the tip rack layout item to make the waste layout item
-
                 TransportDevice = Rack.DeckLocation.TransportConfig.TransportDevice
-                TransportDevice.Transport(Rack, TipRackWasteLayoutItem)
+                TransportDevice.Transport(Rack, self.TipRackWaste)
                 # Dispose of the empty rack
 
-                StackTipRackLayoutItem = copy(Rack)
-                StackTipRackLayoutItem.LabwareID = Stack.LabwareID
-                # Use the tip rack layout item to make the Tip Rack Stack layout item
-
                 TransportDevice = Rack.DeckLocation.TransportConfig.TransportDevice
-                TransportDevice.Transport(Rack, StackTipRackLayoutItem)
+                TransportDevice.Transport(Rack, Stack.TipRack)
                 # Move the full rack from the stack.
 
     def UpdateAvailablePositions(self):
@@ -107,7 +100,7 @@ class HamiltonEEFTR(TipABC):
                 Options=EntryExit.CountLabwareInStack.Options(
                     ModuleNumber=Stack.ModuleNumber,
                     StackNumber=Stack.StackNumber,
-                    LabwareID=Stack.LabwareID,
+                    LabwareID=Stack.TipRack.LabwareID,
                     IsNTRRack=False,
                 ),
                 BackendErrorHandling=self.BackendErrorHandling,
