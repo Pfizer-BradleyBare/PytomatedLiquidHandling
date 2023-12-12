@@ -1,6 +1,7 @@
 import json
 from loguru import logger
-from typing import Type, TypeVar, Union
+from typing import Type, TypeVar, Union, cast
+from pydantic import BaseModel
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
 
@@ -78,6 +79,8 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
                         + " already exists. Idenitifers must be unique."
                     )
 
+                HALDevice = cast(BaseModel, HALDevice)
+
                 logger.debug(
                     # "Successfully loaded "
                     # + Item["Identifier"]
@@ -85,7 +88,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
                     # + BaseObject.__name__
                     # + " object with the following configuration: "
                     # +
-                    SimplifyPrintedHALObject(HALDevice.model_dump_json(indent=4))
+                    SimplifyPrintedHALObject(BaseModel.model_dump_json(HALDevice))
                 )
 
                 Devices[HALDevice.Identifier] = HALDevice  # type: ignore IDK why this is an error...
