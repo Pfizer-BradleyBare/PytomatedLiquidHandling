@@ -1,0 +1,24 @@
+NonTransportable DeckLocation:
+  - Identifier: Carrier14_Pos1_LidStorage
+    Enabled: True
+    Carrier Config:
+      Carrier: Carrier14
+      Position: 1
+
+  - Identifier: Carrier14_Pos2_LidStorage
+    Enabled: True
+    Carrier Config:
+      Carrier: Carrier14
+      Position: 2
+
+  - Identifier: Carrier14_Pos3_VacuumManifoldPark
+    Enabled: True
+    Carrier Config:
+      Carrier: Carrier14
+      Position: 3
+
+  - Identifier: Carrier14_Pos4_VacuumManifoldProcessing
+    Enabled: True
+    Carrier Config:
+      Carrier: Carrier14
+      Position: 4

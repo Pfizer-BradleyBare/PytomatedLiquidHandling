@@ -1,0 +1,30 @@
+NonTransportable DeckLocation:
+  - Identifier: Carrier21_Pos1_IMCSTips
+    Enabled: True
+    Carrier Config:
+      Carrier: Carrier21
+      Position: 1
+
+  - Identifier: Carrier21_Pos2_IMCSTips
+    Enabled: True
+    Carrier Config:
+      Carrier: Carrier21
+      Position: 2
+
+  - Identifier: Carrier21_Pos3_IMCSTips
+    Enabled: True
+    Carrier Config:
+      Carrier: Carrier21
+      Position: 3
+
+  - Identifier: Carrier21_Pos4_IMCSTips
+    Enabled: True
+    Carrier Config:
+      Carrier: Carrier21
+      Position: 4
+
+  - Identifier: Carrier21_Pos5_IMCSTips
+    Enabled: True
+    Carrier Config:
+      Carrier: Carrier21
+      Position: 5

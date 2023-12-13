@@ -1,24 +1,24 @@
 NonTransportable DeckLocation:
-  - Identifier: Heater Pos 1
+  - Identifier: Carrier7_Pos1_HHS
     Enabled: True
     Carrier Config:
-      Carrier: HeaterCooler
+      Carrier: Carrier7
       Position: 1
 
-  - Identifier: Heater Pos 2
+  - Identifier: Carrier7_Pos2_HHS
     Enabled: True
     Carrier Config:
-      Carrier: HeaterCooler
+      Carrier: Carrier7
       Position: 2
 
-  - Identifier: Heater Pos 3
+  - Identifier: Carrier7_Pos3_HHS
     Enabled: True
     Carrier Config:
-      Carrier: HeaterCooler
+      Carrier: Carrier7
       Position: 3
 
-  - Identifier: Cooler Pos 4
+  - Identifier: Carrier7_Pos4_HHC
     Enabled: True
     Carrier Config:
-      Carrier: HeaterCooler
+      Carrier: Carrier7
       Position: 4
