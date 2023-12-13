@@ -1,6 +1,5 @@
 Moveable Carrier:
-  - Identifier: FTR Tips
-    Enabled: True
+  - Enabled: True
     Track Start: 27
     Track End: 32
     Num Labware Positions: 5

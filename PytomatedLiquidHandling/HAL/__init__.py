@@ -1,62 +1,58 @@
 import os
+
+# IDK why i need this with pydantic dataclasses. DO NOT DELETE IT!!!
+import pydantic
 import yaml
 from loguru import logger
 
 # NOTE: Modules are loaded in order they are used to load configuration
 
-from . import Tools
+if True:
+    from . import Tools
 
-#
+if True:
+    from . import Backend
 
-from . import Backend
+if True:
+    from . import Carrier
 
-#
+if True:
+    from . import Labware
 
-from . import Carrier
+if True:
+    from . import Transport
 
-#
+if True:
+    from . import DeckLocation
 
-from . import Labware
+if True:
+    from . import LayoutItem
 
-#
+if True:
+    from . import Tip
 
-from . import Transport
+if True:
+    from . import CloseableContainer
 
-#
+if True:
+    from . import HeatCoolShake
 
-from . import DeckLocation
+if True:
+    from . import Pipette
 
-#
+if True:
+    from . import StorageDevice
 
-from . import LayoutItem
-
-#
-
-from . import Tip
-
-#
-
-from . import CloseableContainer
-
-#
-
-from . import HeatCoolShake
-
-#
-
-from . import Pipette
-
-#
-
-from . import StorageDevice
-
-#
-
-from . import MagneticRack
+if True:
+    from . import MagneticRack
 
 
 # IDK why i need this with pydantic dataclasses. DO NOT DELETE IT!!!
 import pydantic
+
+for cls in Tools.BaseClasses.HALDevice.HALDevices.values():
+    pydantic.dataclasses.rebuild_dataclass(cls)  # type:ignore
+# End weirdly required processing
 
 
 for cls in Tools.BaseClasses.HALDevice.HALDevices.values():
@@ -64,7 +60,7 @@ for cls in Tools.BaseClasses.HALDevice.HALDevices.values():
 # End weirdly required processing
 
 
-@logger.catch(reraise=True)
+@logger.catch(onerror=lambda _: quit())
 def LoadYamlConfiguration(ConfigBaseFolder: str):
     """Walks through ```ConfigBaseFolder``` looking for ```.yaml``` files with ```HAL``` module names in the filename.
 
@@ -75,6 +71,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         for File in Files:
             if File.lower().endswith(".yaml"):
                 if "backend" in File.lower():
+                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)
@@ -90,6 +87,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         for File in Files:
             if File.lower().endswith(".yaml"):
                 if "carrier" in File.lower():
+                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)
@@ -105,6 +103,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         for File in Files:
             if File.lower().endswith(".yaml"):
                 if "labware" in File.lower():
+                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)
@@ -120,6 +119,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         for File in Files:
             if File.lower().endswith(".yaml"):
                 if "transport" in File.lower():
+                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)
@@ -137,6 +137,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         for File in Files:
             if File.lower().endswith(".yaml"):
                 if "decklocation" in File.lower():
+                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)
@@ -154,6 +155,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         for File in Files:
             if File.lower().endswith(".yaml"):
                 if "layoutitem" in File.lower():
+                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)
@@ -171,6 +173,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         for File in Files:
             if File.lower().endswith(".yaml"):
                 if "tip" in File.lower():
+                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)
@@ -184,6 +187,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         for File in Files:
             if File.lower().endswith(".yaml"):
                 if "closeablecontainer" in File.lower():
+                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)
@@ -203,6 +207,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         for File in Files:
             if File.lower().endswith(".yaml"):
                 if "heatcoolshake" in File.lower():
+                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)
@@ -222,6 +227,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         for File in Files:
             if File.lower().endswith(".yaml"):
                 if "pipette" in File.lower():
+                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)
@@ -239,6 +245,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         for File in Files:
             if File.lower().endswith(".yaml"):
                 if "storagedevice" in File.lower():
+                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)
@@ -258,6 +265,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
         for File in Files:
             if File.lower().endswith(".yaml"):
                 if "magneticrack" in File.lower():
+                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
                     Loaded = True
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)

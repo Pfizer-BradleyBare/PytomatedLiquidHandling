@@ -1,6 +1,5 @@
 Moveable Carrier:
-  - Identifier: 
-    Enabled: True
+  - Enabled: True
     Track Start: 40
     Track End: 40
     Num Labware Positions: 1

@@ -1,6 +1,5 @@
 Moveable Carrier:
-  - Identifier: Reagent Reservoir
-    Enabled: True
+  - Enabled: True
     Track Start: 39
     Track End: 39
     Num Labware Positions: 5

@@ -19,7 +19,10 @@ class CarrierConfig:
     Carrier: Carrier.Base.CarrierABC
     Position: int
 
-    @field_validator("Carrier", mode="before")
+    @field_validator(
+        "Carrier",
+        mode="before",
+    )
     def __CarrierValidate(cls, v):
         Objects = Carrier.Devices
         Identifier = v
@@ -36,7 +39,11 @@ class CarrierConfig:
 
     @field_validator("Position", mode="after")
     def __PositionValidate(cls, v, Info: ValidationInfo):
-        AssignedCarrier = cast(Carrier.Base.CarrierABC, Info.data["Carrier"])
+        try:
+            AssignedCarrier = cast(Carrier.Base.CarrierABC, Info.data["Carrier"])
+        except KeyError:
+            return v
+
         NumPositions = AssignedCarrier.NumLabwarePositions
 
         if v > NumPositions:

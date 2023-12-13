@@ -1,30 +1,25 @@
 NonTransportable DeckLocation:
-  - Identifier: FTR Tips Pos 1
-    Enabled: True
+  - Enabled: True
     Carrier Config:
-      Carrier: FTR Tips
+      Carrier: Carrier27
       Position: 1
 
-  - Identifier: FTR Tips Pos 2
-    Enabled: True
+  - Enabled: True
     Carrier Config:
-      Carrier: FTR Tips
+      Carrier: Carrier27
       Position: 2
 
-  - Identifier: FTR Tips Pos 3
-    Enabled: True
+  - Enabled: True
     Carrier Config:
-      Carrier: FTR Tips
+      Carrier: Carrier27
       Position: 3
 
-  - Identifier: FTR Tips Pos 4
-    Enabled: True
+  - Enabled: True
     Carrier Config:
-      Carrier: FTR Tips
+      Carrier: Carrier27
       Position: 4
 
-  - Identifier: FTR Tips Pos 5
-    Enabled: True
+  - Enabled: True
     Carrier Config:
-      Carrier: FTR Tips
+      Carrier: Carrier27
       Position: 5

@@ -16,9 +16,7 @@ class DeckLocationABC(HALDevice):
     @model_validator(mode="after")
     def __ModelValidate(cls, v):
         if v.Identifier == "None":
-            v.Identifier = (
-                f"{v.CarrierConfig.Carrier}_Pos{str(v.CarrierConfig.Position)}"
-            )
+            v.Identifier = f"{v.CarrierConfig.Carrier.Identifier}_Pos{str(v.CarrierConfig.Position)}"
         return v
 
     Identifier: str = "None"

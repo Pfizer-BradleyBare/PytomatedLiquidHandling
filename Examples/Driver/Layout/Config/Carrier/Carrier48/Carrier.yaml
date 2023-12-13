@@ -1,6 +1,5 @@
 Moveable Carrier:
-  - Identifier: Plates 2
-    Enabled: True
+  - Enabled: True
     Track Start: 48
     Track End: 53
     Num Labware Positions: 5

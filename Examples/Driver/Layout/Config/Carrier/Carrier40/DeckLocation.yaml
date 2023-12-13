@@ -1,6 +1,5 @@
 NonTransportable DeckLocation:
-  - Identifier: Centrifuge Tube Pos 1
-    Enabled: True
+  - Enabled: True
     Carrier Config:
-      Carrier: Centrifuge Tube
+      Carrier: Carrier40
       Position: 1

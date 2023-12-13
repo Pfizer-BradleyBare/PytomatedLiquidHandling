@@ -1,6 +1,5 @@
 Moveable Carrier:
-  - Identifier: FT_41
-    Enabled: True
+  - Enabled: True
     Track Start: 41
     Track End: 41
     Num Labware Positions: 1

@@ -1,30 +1,25 @@
 NonTransportable DeckLocation:
-  - Identifier: Tip Support Rack
-    Enabled: True
+  - Enabled: True
     Carrier Config:
-      Carrier: Tip Support NTR Magnetic Rack
+      Carrier: Carrier33
       Position: 1
 
-  - Identifier: 1000uL FTR Tip
-    Enabled: True
+  - Enabled: True
     Carrier Config:
-      Carrier: Tip Support NTR Magnetic Rack
+      Carrier: Carrier33
       Position: 2
 
-  - Identifier: 300uL NTR Tip
-    Enabled: True
+  - Enabled: True
     Carrier Config:
-      Carrier: Tip Support NTR Magnetic Rack
+      Carrier: Carrier33
       Position: 3
 
-  - Identifier: 50uL NTR Tip
-    Enabled: True
+  - Enabled: True
     Carrier Config:
-      Carrier: Tip Support NTR Magnetic Rack
+      Carrier: Carrier33
       Position: 4
 
-  - Identifier: Magnetic Rack
-    Enabled: True
+  - Enabled: True
     Carrier Config:
-      Carrier: Tip Support NTR Magnetic Rack
+      Carrier: Carrier33
       Position: 5

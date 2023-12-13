@@ -1,6 +1,5 @@
 Moveable Carrier:
-  - Identifier: Tip Support NTR Magnetic Rack
-    Enabled: True
+  - Enabled: True
     Track Start: 33
     Track End: 38
     Num Labware Positions: 5

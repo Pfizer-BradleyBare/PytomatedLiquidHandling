@@ -1,6 +1,5 @@
 NonMoveable Carrier:
-  - Identifier: Carrier7
-    Enabled: True
+  - Enabled: True
     Track Start: 7
     Track End: 13
     Num Labware Positions: 4

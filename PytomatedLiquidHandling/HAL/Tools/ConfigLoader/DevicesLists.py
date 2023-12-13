@@ -1,6 +1,7 @@
 import json
-from loguru import logger
 from typing import Type, TypeVar, Union, cast
+
+from loguru import logger
 from pydantic import BaseModel
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
@@ -35,7 +36,7 @@ def SimplifyPrintedHALObject(model_dump_json: str) -> str:
 
 
 def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
-    logger.info("Starting to load " + BaseObject.__name__ + " configuration.")
+    logger.info("Loading " + BaseObject.__name__ + " configuration.")
 
     if bool(Dict) == False:
         logger.warning(
@@ -64,13 +65,6 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
 
         for Item in Dict[Key]:
             if Item["Enabled"] == True:
-                logger.info(
-                    "Loading "
-                    + Item["Identifier"]
-                    + " as a "
-                    + BaseObject.__name__
-                    + " object."
-                )
                 HALDevice = cls(**Item)
 
                 if HALDevice.Identifier in Devices:
@@ -82,12 +76,6 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
                 HALDevice = cast(BaseModel, HALDevice)
 
                 logger.debug(
-                    # "Successfully loaded "
-                    # + Item["Identifier"]
-                    # + " as a "
-                    # + BaseObject.__name__
-                    # + " object with the following configuration: "
-                    # +
                     SimplifyPrintedHALObject(BaseModel.model_dump_json(HALDevice))
                 )
 

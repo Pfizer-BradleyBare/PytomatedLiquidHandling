@@ -1,24 +1,20 @@
 NonTransportable DeckLocation:
-  - Identifier: Carrier7_Pos1_HHS
-    Enabled: True
+  - Enabled: True
     Carrier Config:
       Carrier: Carrier7
       Position: 1
 
-  - Identifier: Carrier7_Pos2_HHS
-    Enabled: True
+  - Enabled: True
     Carrier Config:
       Carrier: Carrier7
       Position: 2
 
-  - Identifier: Carrier7_Pos3_HHS
-    Enabled: True
+  - Enabled: True
     Carrier Config:
       Carrier: Carrier7
       Position: 3
 
-  - Identifier: Carrier7_Pos4_HHC
-    Enabled: True
+  - Enabled: True
     Carrier Config:
       Carrier: Carrier7
       Position: 4
