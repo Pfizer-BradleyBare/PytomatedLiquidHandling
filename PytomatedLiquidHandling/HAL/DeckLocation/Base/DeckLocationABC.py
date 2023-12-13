@@ -1,4 +1,4 @@
-from pydantic import dataclasses
+from pydantic import dataclasses, model_validator
 
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
@@ -12,5 +12,15 @@ class DeckLocationABC(HALDevice):
     Attributes:
         CarrierConfig: See DeckLocation.Base.CarrierConfig class.
     """
+
+    @model_validator(mode="after")
+    def __ModelValidate(cls, v):
+        if v.Identifier == "None":
+            v.Identifier = (
+                f"{v.CarrierConfig.Carrier}_Pos{str(v.CarrierConfig.Position)}"
+            )
+        return v
+
+    Identifier: str = "None"
 
     CarrierConfig: CarrierConfig

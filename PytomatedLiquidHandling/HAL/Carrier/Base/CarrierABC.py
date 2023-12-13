@@ -1,6 +1,8 @@
-from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
+from typing import Any, Optional, Self, cast
 
-from pydantic import dataclasses
+from pydantic import dataclasses, model_validator
+
+from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -14,6 +16,14 @@ class CarrierABC(HALDevice):
         ImagePath3D: Full path to a 3D model
         ImagePath2D: Full path to a 3D image
     """
+
+    @model_validator(mode="after")
+    def __ModelValidate(cls, v):
+        if v.Identifier == "None":
+            v.Identifier = f"Carrer{v.TrackStart}"
+        return v
+
+    Identifier: str = "None"
 
     TrackStart: int
     TrackEnd: int
