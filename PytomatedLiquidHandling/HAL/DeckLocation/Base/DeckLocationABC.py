@@ -13,12 +13,12 @@ class DeckLocationABC(HALDevice):
         CarrierConfig: See DeckLocation.Base.CarrierConfig class.
     """
 
+    Identifier: str = "None"
+
+    CarrierConfig: CarrierConfig
+
     @model_validator(mode="after")
     def __ModelValidate(cls, v):
         if v.Identifier == "None":
             v.Identifier = f"{v.CarrierConfig.Carrier.Identifier}_Pos{str(v.CarrierConfig.Position)}"
         return v
-
-    Identifier: str = "None"
-
-    CarrierConfig: CarrierConfig

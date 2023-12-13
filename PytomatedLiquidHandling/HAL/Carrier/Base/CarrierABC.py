@@ -17,12 +17,6 @@ class CarrierABC(HALDevice):
         ImagePath2D: Full path to a 3D image
     """
 
-    @model_validator(mode="after")
-    def __ModelValidate(cls, v):
-        if v.Identifier == "None":
-            v.Identifier = f"Carrier{v.TrackStart}"
-        return v
-
     Identifier: str = "None"
 
     TrackStart: int
@@ -30,3 +24,9 @@ class CarrierABC(HALDevice):
     NumLabwarePositions: int
     ImagePath3D: str
     ImagePath2D: str
+
+    @model_validator(mode="after")
+    def __ModelValidate(cls, v):
+        if v.Identifier == "None":
+            v.Identifier = f"Carrier{v.TrackStart}"
+        return v
