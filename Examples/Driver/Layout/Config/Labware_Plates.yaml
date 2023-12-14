@@ -1,0 +1,38 @@
+Pipettable Labware:
+  - Identifier: UnchainedLabsStunnerUVPlate
+    Enabled: True
+    Image Filename: N/A
+    Part Number: 701-2022
+    Wells:
+      Addressing:
+        Type: AlphaNumeric
+        Direction: Columnwise
+      Columns: 12
+      Rows: 8
+      Positions Per Well: 1
+      Max Volume: 3
+      Dead Volume: 0
+      Segments:
+        - Height: 0.001
+          Equation: h * 0.0942
+
+        - Height: 0.12
+          Equation: h * 0.2827
+
+        - Height: 0.13
+          Equation: h * 0.3325
+
+        - Height: 0.95
+          Equation: h * 1.9906
+
+        - Height: 0.7
+          Equation: h * 4.4305
+
+    Dimensions:
+      X Length: 124.5
+      Y Length: 82
+    Transport Offsets:
+      Open: 5
+      Close: 2
+      Top: 8
+      Bottom: 4
