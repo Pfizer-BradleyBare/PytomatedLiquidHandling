@@ -5,7 +5,7 @@
 #
 #############################################################
 
-Hamilton FlipTube:
+Hamilton FlipTube Landscape:
   - Identifier: FlipTube
     Enabled: True
     Backend: Hamilton
@@ -32,4 +32,4 @@ Hamilton FlipTube:
       - Carrier54_Pos4
       - Carrier54_Pos5
 
-      -
+      - Carrier41_Pos1
