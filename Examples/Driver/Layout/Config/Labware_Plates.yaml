@@ -4,11 +4,11 @@ Pipettable Labware:
     Image Filename: N/A
     Part Number: 701-2022
     Wells:
-      Addressing:
+      Layout:
         Type: AlphaNumeric
         Direction: Columnwise
-      Columns: 12
-      Rows: 8
+        Columns: 12
+        Rows: 8
       Positions Per Well: 1
       Max Volume: 3
       Dead Volume: 0

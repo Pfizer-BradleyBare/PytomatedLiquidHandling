@@ -22,14 +22,6 @@ from . import (
     Transport,
 )
 
-# NOTE: Modules are loaded in order they are used to load configuration
-
-
-for cls in Tools.BaseClasses.HALDevice.HALDevices.values():
-    pydantic.dataclasses.rebuild_dataclass(cls)  # type:ignore
-# End weirdly required processing
-
-
 for cls in Tools.BaseClasses.HALDevice.HALDevices.values():
     pydantic.dataclasses.rebuild_dataclass(cls)  # type:ignore
 # End weirdly required processing
