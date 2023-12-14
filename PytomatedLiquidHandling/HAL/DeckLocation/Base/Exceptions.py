@@ -17,3 +17,8 @@ class DeckLocationNotSupportedError(BaseException):
     """
 
     DeckLocations: list[DeckLocationABC]
+
+
+@dataclass
+class DeckLocationNotTransportable(Exception):
+    DeckLocation: DeckLocationABC

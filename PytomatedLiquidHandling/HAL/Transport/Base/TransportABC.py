@@ -15,8 +15,7 @@ from .Exceptions import (
     WrongDeviceTransportOptionsError,
 )
 
-if TYPE_CHECKING:
-    from PytomatedLiquidHandling.HAL import LayoutItem
+from PytomatedLiquidHandling.HAL import LayoutItem, DeckLocation
 
 from pydantic import dataclasses
 
