@@ -1,13 +1,13 @@
 from copy import copy
+from dataclasses import field
 from typing import Literal, cast
+
+from pydantic import dataclasses
 
 from PytomatedLiquidHandling.Driver.Hamilton import Backend, Visual_NTR_Library
 from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import TipABC
-
-from pydantic import dataclasses
-from dataclasses import field
 
 
 @dataclasses.dataclass(kw_only=True)

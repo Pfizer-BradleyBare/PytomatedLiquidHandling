@@ -1,5 +1,6 @@
-from ...Backend import HamiltonResponseABC
 from pydantic import dataclasses
+
+from ...Backend import HamiltonResponseABC
 
 
 @dataclasses.dataclass(kw_only=True)

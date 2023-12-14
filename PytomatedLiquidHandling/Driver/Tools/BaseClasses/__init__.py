@@ -18,9 +18,9 @@ See each class for more details.
 from .Backend import BackendABC, ServerBackendABC, SimpleBackendABC
 from .Command import (
     CommandABC,
+    CommandBackendErrorHandling,
     CommandOptions,
     CommandOptionsListed,
-    CommandBackendErrorHandling,
 )
 from .Options import OptionsABC
 from .Response import ResponseABC

@@ -1,54 +1,29 @@
 import os
 
 # IDK why i need this with pydantic dataclasses. DO NOT DELETE IT!!!
+# IDK why i need this with pydantic dataclasses. DO NOT DELETE IT!!!
 import pydantic
 import yaml
 from loguru import logger
 
+from . import (
+    Backend,
+    Carrier,
+    CloseableContainer,
+    DeckLocation,
+    HeatCoolShake,
+    Labware,
+    LayoutItem,
+    MagneticRack,
+    Pipette,
+    StorageDevice,
+    Tip,
+    Tools,
+    Transport,
+)
+
 # NOTE: Modules are loaded in order they are used to load configuration
 
-if True:
-    from . import Tools
-
-if True:
-    from . import Backend
-
-if True:
-    from . import Carrier
-
-if True:
-    from . import Labware
-
-if True:
-    from . import Transport
-
-if True:
-    from . import DeckLocation
-
-if True:
-    from . import LayoutItem
-
-if True:
-    from . import Tip
-
-if True:
-    from . import CloseableContainer
-
-if True:
-    from . import HeatCoolShake
-
-if True:
-    from . import Pipette
-
-if True:
-    from . import StorageDevice
-
-if True:
-    from . import MagneticRack
-
-
-# IDK why i need this with pydantic dataclasses. DO NOT DELETE IT!!!
-import pydantic
 
 for cls in Tools.BaseClasses.HALDevice.HALDevices.values():
     pydantic.dataclasses.rebuild_dataclass(cls)  # type:ignore

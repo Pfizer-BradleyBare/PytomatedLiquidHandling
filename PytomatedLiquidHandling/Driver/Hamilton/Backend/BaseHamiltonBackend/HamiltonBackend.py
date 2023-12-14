@@ -5,7 +5,7 @@ from dataclasses import field
 from platform import platform
 from typing import Type, TypeVar
 
-from pydantic import dataclasses, Field
+from pydantic import Field, dataclasses
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
 

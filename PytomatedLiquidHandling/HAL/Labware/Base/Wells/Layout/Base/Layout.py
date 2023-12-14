@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from pydantic import dataclasses
-
 from enum import Enum
+
+from pydantic import dataclasses
 
 
 class InvalidPositionError(ValueError):

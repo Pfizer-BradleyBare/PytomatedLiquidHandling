@@ -1,11 +1,9 @@
-from pydantic import Field, field_validator
+from pydantic import Field, dataclasses, field_validator
 
 from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 
 from .Base import LayoutItemABC
 from .Lid import Lid
-
-from pydantic import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

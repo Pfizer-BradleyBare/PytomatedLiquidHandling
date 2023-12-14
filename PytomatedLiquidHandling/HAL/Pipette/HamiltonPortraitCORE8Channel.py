@@ -1,13 +1,13 @@
 import itertools
 from typing import Any, DefaultDict, Literal, cast
 
+from pydantic import dataclasses
+
 from PytomatedLiquidHandling.HAL import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.ML_STAR import Channel1000uL
 from .Base import PipetteABC, PipetteTip, TransferOptions
-
-from pydantic import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

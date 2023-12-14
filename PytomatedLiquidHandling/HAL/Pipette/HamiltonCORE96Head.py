@@ -1,7 +1,7 @@
 from math import ceil
 from typing import cast
 
-from pydantic import field_validator, dataclasses
+from pydantic import dataclasses, field_validator
 
 from PytomatedLiquidHandling.HAL import Labware
 

@@ -1,6 +1,6 @@
-from .Base import CarrierABC
-
 from pydantic import dataclasses
+
+from .Base import CarrierABC
 
 
 @dataclasses.dataclass(kw_only=True)

@@ -1,6 +1,6 @@
-from .Base import LabwareABC, Wells
-
 from pydantic import dataclasses
+
+from .Base import LabwareABC, Wells
 
 
 @dataclasses.dataclass(kw_only=True)

@@ -1,6 +1,6 @@
-from .MoveableCarrier import MoveableCarrier
-
 from pydantic import dataclasses
+
+from .MoveableCarrier import MoveableCarrier
 
 
 @dataclasses.dataclass(kw_only=True)

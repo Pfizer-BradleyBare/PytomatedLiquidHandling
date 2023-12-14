@@ -1,7 +1,7 @@
+from pydantic import dataclasses
+
 from .Layout import AlphaNumeric, Numeric
 from .Segment import Segment
-
-from pydantic import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

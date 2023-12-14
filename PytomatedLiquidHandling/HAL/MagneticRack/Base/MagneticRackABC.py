@@ -1,4 +1,4 @@
-from pydantic import ValidationInfo, field_validator, dataclasses
+from pydantic import ValidationInfo, dataclasses, field_validator
 
 from PytomatedLiquidHandling.HAL import LayoutItem, Pipette
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice

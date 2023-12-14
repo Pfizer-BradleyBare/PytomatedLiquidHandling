@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING
-from pydantic import dataclasses, ValidationInfo, field_serializer, field_validator
+
+from pydantic import ValidationInfo, dataclasses, field_serializer, field_validator
 
 if TYPE_CHECKING:
     from PytomatedLiquidHandling.HAL import Transport

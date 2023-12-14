@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Self
+
 from pydantic import dataclasses
-from typing import Self, TYPE_CHECKING
+
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
 from .Base.TransportConfig import TransportConfig

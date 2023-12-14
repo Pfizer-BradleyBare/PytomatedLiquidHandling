@@ -1,10 +1,10 @@
 from PytomatedLiquidHandling.API.Tools import Container
 from PytomatedLiquidHandling.HAL import (
     DeckLocation,
+    Labware,
     LayoutItem,
     LayoutItems,
     TransportDevice,
-    Labware,
 )
 
 from .Loading import GetLoadedLayoutItems, LoadedWells

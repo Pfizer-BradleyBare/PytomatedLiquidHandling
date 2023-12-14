@@ -3,9 +3,9 @@ from __future__ import annotations
 from abc import abstractmethod
 from typing import TYPE_CHECKING
 
-from pydantic import field_validator, Field
+from pydantic import Field, dataclasses, field_validator
 
-from PytomatedLiquidHandling.HAL import Labware
+from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
 from ...Tools.BaseClasses import Interface
@@ -14,10 +14,6 @@ from .Exceptions import (
     TransportDevicesNotCompatibleError,
     WrongDeviceTransportOptionsError,
 )
-
-from PytomatedLiquidHandling.HAL import LayoutItem, DeckLocation
-
-from pydantic import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)
