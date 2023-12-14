@@ -9,7 +9,7 @@ from PytomatedLiquidHandling.Driver.Hamilton import (
     EntryExit,
     HSLTipCountingLib,
 )
-from PytomatedLiquidHandling.HAL import LayoutItem
+from PytomatedLiquidHandling.HAL import LayoutItem, DeckLocation
 
 from .Base import TipABC
 
@@ -87,12 +87,14 @@ class HamiltonEEFTR(TipABC):
 
                 Stack._StackCount -= 1
 
-                TransportDevice = Rack.DeckLocation.TransportConfig.TransportDevice
-                TransportDevice.Transport(Rack, self.TipRackWaste)
+                DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
+                    Rack.DeckLocation, self.TipRackWaste.DeckLocation
+                )[0][0].TransportDevice.Transport(Rack, self.TipRackWaste)
                 # Dispose of the empty rack
 
-                TransportDevice = Rack.DeckLocation.TransportConfig.TransportDevice
-                TransportDevice.Transport(Rack, Stack.TipRack)
+                DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
+                    Rack.DeckLocation, self.TipRackWaste.DeckLocation
+                )[0][0].TransportDevice.Transport(Rack, Stack.TipRack)
                 # Move the full rack from the stack.
 
     def UpdateAvailablePositions(self):

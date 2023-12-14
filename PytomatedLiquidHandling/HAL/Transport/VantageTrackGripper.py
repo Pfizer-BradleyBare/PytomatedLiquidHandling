@@ -4,7 +4,7 @@ from typing import cast
 from pydantic import dataclasses
 
 from PytomatedLiquidHandling.Driver.Hamilton import ML_STAR, Backend, TrackGripper
-from PytomatedLiquidHandling.HAL import LayoutItem
+from PytomatedLiquidHandling.HAL import LayoutItem, DeckLocation
 
 from .Base import TransportABC
 
@@ -48,11 +48,18 @@ class VantageTrackGripper(TransportABC):
         if SourceLayoutItem.DeckLocation == DestinationLayoutItem.DeckLocation:
             return
 
+        CompatibleConfigs = (
+            DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
+                SourceLayoutItem.DeckLocation,
+                DestinationLayoutItem.DeckLocation,
+            )[0]
+        )
+
         Labware = SourceLayoutItem.Labware
 
         PickupOptions = cast(
             VantageTrackGripper.PickupOptions,
-            SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions,
+            CompatibleConfigs[0].PickupOptions,
         )
 
         if (
@@ -82,7 +89,7 @@ class VantageTrackGripper(TransportABC):
 
         DropoffOptions = cast(
             VantageTrackGripper.DropoffOptions,
-            DestinationLayoutItem.DeckLocation.TransportConfig.DropoffOptions,
+            CompatibleConfigs[1].DropoffOptions,
         )
 
         CommandInstance = TrackGripper.PlacePlateToTaughtPosition.Command(

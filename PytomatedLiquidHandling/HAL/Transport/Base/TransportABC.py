@@ -6,11 +6,7 @@ from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
 from ...Tools.BaseClasses import Interface
-from .Exceptions import (
-    PickupOptionsNotEqualError,
-    TransportDevicesNotCompatibleError,
-    WrongDeviceTransportOptionsError,
-)
+from .Exceptions import WrongTransportDeviceError
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -101,34 +97,33 @@ class TransportABC(Interface, HALDevice):
             )
         # Check is transportable
 
-        SourceTransportableDeckLocation = cast(
-            DeckLocation.TransportableDeckLocation, SourceLayoutItem.DeckLocation
-        )
-        DestinationTransportableDeckLocation = cast(
-            DeckLocation.TransportableDeckLocation, DestinationLayoutItem.DeckLocation
-        )
-
-        if (
+        CompatibleTransportConfigs = (
             DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
-                SourceTransportableDeckLocation, DestinationTransportableDeckLocation
+                SourceLayoutItem.DeckLocation, DestinationLayoutItem.DeckLocation
             )
-            is None
-        ):
+        )
+        if len(CompatibleTransportConfigs) == 0:
             Exceptions.append(
                 DeckLocation.Base.Exceptions.DeckLocationTransportConfigsNotCompatible(
-                    SourceTransportableDeckLocation.TransportConfigs,
-                    DestinationTransportableDeckLocation.TransportConfigs,
+                    SourceLayoutItem.DeckLocation,
+                    DestinationLayoutItem.DeckLocation,
                 )
             )
         # Check configs are compatible
 
-        if SourceLayoutItem.Labware != DestinationLayoutItem.Labware:
+        if type(self) in [
+            type(Config[0].TransportDevice) for Config in CompatibleTransportConfigs
+        ]:
             Exceptions.append(
-                Labware.Base.Exceptions.LabwareNotEqualError(
-                    SourceLayoutItem.Labware, DestinationLayoutItem.Labware
+                WrongTransportDeviceError(
+                    self,
+                    [
+                        Config[0].TransportDevice
+                        for Config in CompatibleTransportConfigs
+                    ],
                 )
             )
-        # Are the labware compatible?
+        # Is this device actually needed by this layout item?
 
         UnsupportedLabware = list()
 
@@ -144,41 +139,13 @@ class TransportABC(Interface, HALDevice):
             )
         # Are both source and destination labware supported by this device?
 
-        SourceTransportDevice = (
-            SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice
-        )
-        DestinationTransportDevice = (
-            DestinationLayoutItem.DeckLocation.TransportConfig.TransportDevice
-        )
-        if SourceTransportDevice != DestinationTransportDevice:
+        if SourceLayoutItem.Labware != DestinationLayoutItem.Labware:
             Exceptions.append(
-                TransportDevicesNotCompatibleError(
-                    SourceTransportDevice, DestinationTransportDevice
+                Labware.Base.Exceptions.LabwareNotEqualError(
+                    SourceLayoutItem.Labware, DestinationLayoutItem.Labware
                 )
             )
-        # Are the source and destination accessible by the same transport device?
-
-        RequiredTransportDevice = SourceTransportDevice
-        if type(self) != type(RequiredTransportDevice):
-            Exceptions.append(
-                WrongDeviceTransportOptionsError(self, RequiredTransportDevice)
-            )
-        # Is this device actually needed by this layout item?
-
-        SourcePickupOptions = (
-            SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions
-        )
-        DestinationPickupOptions = (
-            DestinationLayoutItem.DeckLocation.TransportConfig.PickupOptions
-        )
-        if SourcePickupOptions != DestinationPickupOptions:
-            Exceptions.append(
-                PickupOptionsNotEqualError(
-                    SourcePickupOptions, DestinationPickupOptions
-                )
-            )
-        # We only care that the pickup options are compatible because that could determine plate orientation.
-        # If orientation is incorrect then the plate dropoff will fail.
+        # Are the labware compatible?
 
         if len(Exceptions) > 0:
             raise ExceptionGroup(

@@ -7,7 +7,7 @@ from PytomatedLiquidHandling.Driver.Hamilton import Backend
 from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import (
     Channel1000uLCOREGrip as COREGripperDriver,
 )
-from PytomatedLiquidHandling.HAL import LayoutItem
+from PytomatedLiquidHandling.HAL import LayoutItem, DeckLocation
 
 from .Base import TransportABC
 
@@ -39,6 +39,13 @@ class HamiltonCOREGripper(TransportABC):
         if SourceLayoutItem.DeckLocation == DestinationLayoutItem.DeckLocation:
             return
 
+        CompatibleConfigs = (
+            DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
+                SourceLayoutItem.DeckLocation,
+                DestinationLayoutItem.DeckLocation,
+            )[0]
+        )
+
         Labware = SourceLayoutItem.Labware
 
         GetPlateOptionsInstance = COREGripperDriver.GetPlate.Options(
@@ -59,7 +66,7 @@ class HamiltonCOREGripper(TransportABC):
 
         DropoffOptions = cast(
             HamiltonCOREGripper.DropoffOptions,
-            DestinationLayoutItem.DeckLocation.TransportConfig.DropoffOptions,
+            CompatibleConfigs[1].DropoffOptions,
         )
 
         CommandInstance = COREGripperDriver.PlacePlate.Command(

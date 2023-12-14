@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
 from pydantic import ValidationInfo, dataclasses, field_serializer, field_validator
 
@@ -68,3 +68,9 @@ class TransportConfig:
             v = dict()
 
         return TransportDevice.DropoffOptions(**v)
+
+    def __eq__(self, __value: Self) -> bool:
+        return (
+            self.TransportDevice == __value.TransportDevice
+            and self.PickupOptions == __value.PickupOptions
+        )

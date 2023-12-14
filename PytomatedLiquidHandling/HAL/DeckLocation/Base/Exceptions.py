@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -27,5 +27,21 @@ class DeckLocationNotTransportable(Exception):
 
 @dataclass
 class DeckLocationTransportConfigsNotCompatible(Exception):
-    SourceTransportConfigs: list[TransportConfig]
-    DestinationTransportConfigs: list[TransportConfig]
+    SourceDeckLocation: DeckLocationABC
+    DestinationDeckLocation: DeckLocationABC
+    SourceTransportConfigs: list[TransportConfig] = field(
+        init=False, default_factory=list
+    )
+    DestinationTransportConfigs: list[TransportConfig] = field(
+        init=False, default_factory=list
+    )
+
+    def __post_init__(self):
+        if hasattr(self.SourceDeckLocation, "TransportConfigs"):
+            self.SourceTransportConfigs = getattr(
+                self.SourceDeckLocation, "TransportConfigs"
+            )
+        if hasattr(self.DestinationDeckLocation, "TransportConfigs"):
+            self.DestinationTransportConfigs = getattr(
+                self.DestinationDeckLocation, "TransportConfigs"
+            )
