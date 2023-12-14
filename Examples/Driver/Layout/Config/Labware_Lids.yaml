@@ -1,0 +1,13 @@
+NonPipettable Labware:
+  - Identifier: AgilentBlackLid
+    Enabled: True
+    Image Filename: N/A
+    Part Number: "?"
+    Dimensions:
+      X Length: 127.5
+      Y Length: 85
+    Transport Offsets:
+      Open: 5
+      Close: 2
+      Top: 4.5
+      Bottom: 4

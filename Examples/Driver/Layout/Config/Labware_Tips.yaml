@@ -1,0 +1,26 @@
+NonPipettable Labware:
+  - Identifier: NTRTipRack
+    Enabled: True
+    Image Filename: N/A
+    Part Number: 235947(50uL) or 235950(300uL)
+    Dimensions:
+      X Length: 120.5
+      Y Length: 78.5
+    Transport Offsets:
+      Open: 10
+      Close: 2
+      Top: 33
+      Bottom: 42
+
+  - Identifier: FTRTipRack
+    Enabled: True
+    Image Filename: N/A
+    Part Number: Custom
+    Dimensions:
+      X Length: 124.75
+      Y Length: 82.75
+    Transport Offsets:
+      Open: 10
+      Close: 2
+      Top: 64
+      Bottom: 51

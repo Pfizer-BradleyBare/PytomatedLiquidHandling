@@ -32,7 +32,152 @@ Pipettable Labware:
       X Length: 124.5
       Y Length: 82
     Transport Offsets:
-      Open: 5
+      Open: 10
       Close: 2
       Top: 8
       Bottom: 4
+
+  - Identifier: Biorad200uLPCRPlate
+    Enabled: True
+    Image Filename: N/A
+    Part Number: HSP9601
+    Wells:
+      Layout:
+        Type: AlphaNumeric
+        Direction: Columnwise
+        Columns: 12
+        Rows: 8
+      Positions Per Well: 1
+      Max Volume: 200
+      Dead Volume: 10
+      Segments:
+        - Height: 0
+          Equation: h * 2.3562
+
+        - Height: 14.68
+          Equation: h * 16.4934
+
+    Dimensions:
+      X Length: 124.75
+      Y Length: 82.5
+    Transport Offsets:
+      Open: 10
+      Close: 2
+      Top: 9
+      Bottom: 6
+
+  - Identifier: Thermo400uLPCRPlate
+    Enabled: True
+    Image Filename: N/A
+    Part Number: "249949"
+    Wells:
+      Layout:
+        Type: AlphaNumeric
+        Direction: Columnwise
+        Columns: 12
+        Rows: 8
+      Positions Per Well: 1
+      Max Volume: 400
+      Dead Volume: 10
+      Segments:
+        - Height: 3
+          Equation: h * 18.9150
+
+        - Height: 8
+          Equation: h * 56.7450
+
+    Dimensions:
+      X Length: 123.25
+      Y Length: 84.75
+    Transport Offsets:
+      Open: 10
+      Close: 2
+      Top: 10
+      Bottom: 5
+
+  - Identifier: ThermoAbgene1200uLPCRPlate
+    Enabled: True
+    Image Filename: N/A
+    Part Number: AB1127
+    Wells:
+      Layout:
+        Type: AlphaNumeric
+        Direction: Columnwise
+        Columns: 12
+        Rows: 8
+      Positions Per Well: 1
+      Max Volume: 1200
+      Dead Volume: 10
+      Segments:
+        - Height: 3
+          Equation: h * 27.7088
+
+        - Height: 18
+          Equation: h * 70.5600
+
+    Dimensions:
+      X Length: 124.75
+      Y Length: 82
+    Transport Offsets:
+      Open: 10
+      Close: 2
+      Top: 13
+      Bottom: 10
+
+  - Identifier: CorningCostar2000uLPCRPlate
+    Enabled: True
+    Image Filename: N/A
+    Part Number: "3961"
+    Wells:
+      Layout:
+        Type: AlphaNumeric
+        Direction: Columnwise
+        Columns: 12
+        Rows: 8
+      Positions Per Well: 1
+      Max Volume: 2000
+      Dead Volume: 10
+      Segments:
+        - Height: 4
+          Equation: h*h*(12.5664-(1.0472*h))
+
+        - Height: 38
+          Equation: h * 64.0000
+
+    Dimensions:
+      X Length: 124.50
+      Y Length: 82.5
+    Transport Offsets:
+      Open: 10
+      Close: 2
+      Top: 33
+      Bottom: 10
+
+  - Identifier: Hamilton1500uLFlipTubeRack
+    Enabled: True
+    Image Filename: N/A
+    Part Number: "814270"
+    Wells:
+      Layout:
+        Type: Numeric
+        Direction: Columnwise
+        Columns: 6
+        Rows: 4
+      Positions Per Well: 1
+      Max Volume: 1500
+      Dead Volume: 10
+      Segments:
+        - Height: 16.1
+          Equation: h * 20.2737
+
+        - Height: 22
+          Equation: h * 65.0624
+
+    Dimensions:
+      X Length: 128
+      Y Length: 85.25
+    Transport Offsets:
+      Open: 10
+      Close: 2
+      Top: 37
+      Bottom: 5
