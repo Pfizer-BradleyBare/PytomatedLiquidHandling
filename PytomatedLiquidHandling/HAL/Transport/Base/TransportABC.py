@@ -1,10 +1,7 @@
-from __future__ import annotations
-
 from abc import abstractmethod
-from typing import TYPE_CHECKING
 
 from pydantic import Field, dataclasses, field_validator
-
+from typing import cast
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
 
@@ -83,6 +80,47 @@ class TransportABC(Interface, HALDevice):
             TransportDevice.Base.PickupOptionsNotEqualError
         """
         Exceptions = list()
+
+        if not isinstance(
+            SourceLayoutItem.DeckLocation, DeckLocation.TransportableDeckLocation
+        ):
+            Exceptions.append(
+                DeckLocation.Base.Exceptions.DeckLocationNotTransportable(
+                    SourceLayoutItem.DeckLocation
+                )
+            )
+        # Check is transportable
+
+        if not isinstance(
+            DestinationLayoutItem.DeckLocation, DeckLocation.TransportableDeckLocation
+        ):
+            Exceptions.append(
+                DeckLocation.Base.Exceptions.DeckLocationNotTransportable(
+                    DestinationLayoutItem.DeckLocation
+                )
+            )
+        # Check is transportable
+
+        SourceTransportableDeckLocation = cast(
+            DeckLocation.TransportableDeckLocation, SourceLayoutItem.DeckLocation
+        )
+        DestinationTransportableDeckLocation = cast(
+            DeckLocation.TransportableDeckLocation, DestinationLayoutItem.DeckLocation
+        )
+
+        if (
+            DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
+                SourceTransportableDeckLocation, DestinationTransportableDeckLocation
+            )
+            is None
+        ):
+            Exceptions.append(
+                DeckLocation.Base.Exceptions.DeckLocationTransportConfigsNotCompatible(
+                    SourceTransportableDeckLocation.TransportConfigs,
+                    DestinationTransportableDeckLocation.TransportConfigs,
+                )
+            )
+        # Check configs are compatible
 
         if SourceLayoutItem.Labware != DestinationLayoutItem.Labware:
             Exceptions.append(

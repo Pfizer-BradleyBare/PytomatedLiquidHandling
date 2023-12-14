@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .DeckLocationABC import DeckLocationABC
+    from .TransportConfig import TransportConfig
 
 
 @dataclass
@@ -22,3 +23,9 @@ class DeckLocationNotSupportedError(BaseException):
 @dataclass
 class DeckLocationNotTransportable(Exception):
     DeckLocation: DeckLocationABC
+
+
+@dataclass
+class DeckLocationTransportConfigsNotCompatible(Exception):
+    SourceTransportConfigs: list[TransportConfig]
+    DestinationTransportConfigs: list[TransportConfig]
