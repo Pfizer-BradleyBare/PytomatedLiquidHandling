@@ -143,7 +143,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
                     AspiratePosition = (
                         (int(NumericAddressing.GetPositionID(Opt.SourcePosition)) - 1)
-                        * AspirateLabware.Wells.SequencesPerWell
+                        * AspirateLabware.Wells.PositionsPerWell
                         + Index
                         + 1
                     )
@@ -197,7 +197,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                             )
                             - 1
                         )
-                        * DispenseLabware.Wells.SequencesPerWell
+                        * DispenseLabware.Wells.PositionsPerWell
                         + Index
                         + 1
                     )
