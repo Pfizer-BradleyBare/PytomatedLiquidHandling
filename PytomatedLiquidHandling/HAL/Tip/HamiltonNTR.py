@@ -1,13 +1,13 @@
 from copy import copy
+from dataclasses import field
 from typing import Literal, cast
 
+from pydantic import dataclasses
+
 from PytomatedLiquidHandling.Driver.Hamilton import Backend, Visual_NTR_Library
-from PytomatedLiquidHandling.HAL import LayoutItem
+from PytomatedLiquidHandling.HAL import LayoutItem, DeckLocation
 
 from .Base import TipABC
-
-from pydantic import dataclasses
-from dataclasses import field
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -60,9 +60,9 @@ class HamiltonNTR(TipABC):
 
         for TipRack in DiscardTipRacks:
             self._DiscardedTipRacks.append(TipRack)
-            TipRack.DeckLocation.TransportConfig.TransportDevice.Transport(
-                TipRack, self.TipRackWaste
-            )
+            DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
+                TipRack.DeckLocation, self.TipRackWaste.DeckLocation
+            )[0][0].TransportDevice.Transport(TipRack, self.TipRackWaste)
 
         self._AvailablePositions = [
             Pos

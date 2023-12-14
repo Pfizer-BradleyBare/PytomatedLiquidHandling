@@ -1,9 +1,9 @@
+from pydantic import dataclasses
+
 from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import StorageDeviceABC
 from .Base.Reservation import Reservation
-
-from pydantic import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

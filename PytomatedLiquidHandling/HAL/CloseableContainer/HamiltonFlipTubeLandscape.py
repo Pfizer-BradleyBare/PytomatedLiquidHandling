@@ -1,11 +1,11 @@
 from typing import DefaultDict, Literal
 
+from pydantic import dataclasses
+
 from PytomatedLiquidHandling.Driver.Hamilton import Backend, FlipTubeTool
 from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import CloseableContainerABC, OpenCloseOptions
-
-from pydantic import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

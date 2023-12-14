@@ -1,10 +1,9 @@
 import os
 
 import yaml
+from loguru import logger
 
 from PytomatedLiquidHandling import HAL
-
-from loguru import logger
 
 logger.enable("PytomatedLiquidHandling")
 

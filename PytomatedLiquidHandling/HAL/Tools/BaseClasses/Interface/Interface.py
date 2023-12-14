@@ -1,9 +1,7 @@
-from pydantic import field_validator
+from pydantic import dataclasses, field_validator
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
 from PytomatedLiquidHandling.HAL import Backend
-
-from pydantic import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

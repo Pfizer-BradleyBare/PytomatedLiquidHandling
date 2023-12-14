@@ -1,9 +1,9 @@
+from pydantic import dataclasses
+
 from PytomatedLiquidHandling.HAL.Tools import BaseClasses
 
 from .Dimensions.Dimensions import Dimensions
 from .TransportOffsets import TransportOffsets
-
-from pydantic import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

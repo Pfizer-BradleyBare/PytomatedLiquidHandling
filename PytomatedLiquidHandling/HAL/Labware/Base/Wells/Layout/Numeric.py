@@ -1,7 +1,8 @@
-from .Base import Layout
 from typing import Literal
 
 from pydantic import dataclasses
+
+from .Base import Layout
 
 
 @dataclasses.dataclass(kw_only=True)

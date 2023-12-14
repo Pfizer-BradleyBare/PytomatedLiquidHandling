@@ -1,4 +1,7 @@
+from dataclasses import field
 from typing import Literal
+
+from pydantic import dataclasses
 
 from PytomatedLiquidHandling.Driver.Hamilton import Backend
 from PytomatedLiquidHandling.Driver.Hamilton import (
@@ -8,9 +11,6 @@ from PytomatedLiquidHandling.HAL import LayoutItem
 
 from .Base import HeatCoolShakeABC
 from .Base.Exceptions import ShakingNotSupportedError
-
-from pydantic import dataclasses
-from dataclasses import field
 
 
 @dataclasses.dataclass(kw_only=True)

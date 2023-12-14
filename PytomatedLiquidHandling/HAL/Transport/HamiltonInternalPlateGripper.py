@@ -5,7 +5,7 @@ from pydantic import dataclasses
 
 from PytomatedLiquidHandling.Driver.Hamilton import Backend
 from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import iSwap as IPGDriver
-from PytomatedLiquidHandling.HAL import LayoutItem
+from PytomatedLiquidHandling.HAL import LayoutItem, DeckLocation
 
 from .Base import TransportABC
 
@@ -46,11 +46,18 @@ class HamiltonInternalPlateGripper(TransportABC):
         if SourceLayoutItem.DeckLocation == DestinationLayoutItem.DeckLocation:
             return
 
+        CompatibleConfigs = (
+            DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
+                SourceLayoutItem.DeckLocation,
+                DestinationLayoutItem.DeckLocation,
+            )[0]
+        )
+
         Labware = SourceLayoutItem.Labware
 
         PickupOptions = cast(
             HamiltonInternalPlateGripper.PickupOptions,
-            SourceLayoutItem.DeckLocation.TransportConfig.PickupOptions,
+            CompatibleConfigs[0].PickupOptions,
         )
 
         CommandInstance = IPGDriver.GetPlate.Command(
@@ -74,7 +81,7 @@ class HamiltonInternalPlateGripper(TransportABC):
 
         DropoffOptions = cast(
             HamiltonInternalPlateGripper.DropoffOptions,
-            DestinationLayoutItem.DeckLocation.TransportConfig.DropoffOptions,
+            CompatibleConfigs[1].DropoffOptions,
         )
 
         CommandInstance = IPGDriver.PlacePlate.Command(

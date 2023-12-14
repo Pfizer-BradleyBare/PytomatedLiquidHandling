@@ -1,10 +1,10 @@
 from typing import Literal, cast
 
+from pydantic import dataclasses
+
 from PytomatedLiquidHandling.Driver.Hamilton import Backend, HSLTipCountingLib
 
 from .Base import TipABC
-
-from pydantic import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

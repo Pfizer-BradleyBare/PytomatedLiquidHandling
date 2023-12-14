@@ -1,7 +1,6 @@
-from pydantic import field_validator
+from pydantic import dataclasses, field_validator
 
 from PytomatedLiquidHandling.HAL import LayoutItem
-from pydantic import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

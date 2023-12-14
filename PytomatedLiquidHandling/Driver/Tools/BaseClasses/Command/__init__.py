@@ -1,4 +1,4 @@
 from .CommandABC import CommandABC
+from .CommandBackendErrorHandling import CommandBackendErrorHandling
 from .CommandOptions import CommandOptions
 from .CommandOptionsListed import CommandOptionsListed
-from .CommandBackendErrorHandling import CommandBackendErrorHandling

@@ -1,12 +1,10 @@
 from abc import abstractmethod
 
-
-from pydantic import field_validator
+from pydantic import dataclasses, field_validator
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsABC
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools import BaseClasses
-from pydantic import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

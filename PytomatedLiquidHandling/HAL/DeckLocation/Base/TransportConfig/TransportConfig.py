@@ -1,8 +1,15 @@
 from __future__ import annotations
 
-from pydantic import dataclasses, ValidationInfo, field_serializer, field_validator
+from typing import TYPE_CHECKING, Self
 
-from PytomatedLiquidHandling.HAL import Transport
+from pydantic import ValidationInfo, dataclasses, field_serializer, field_validator
+
+if TYPE_CHECKING:
+    from PytomatedLiquidHandling.HAL import Transport
+
+    # There is a circular dependacy in Transport. This is ONLY because it makes configuration simpler.
+    # Basically DeckLocation should not depend on Transport. So we hide the dependacy here and below.
+    # This may be a code smell. Not sure.
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -25,6 +32,12 @@ class TransportConfig:
 
     @field_validator("TransportDevice", mode="before")
     def TransportDeviceValidate(cls, v):
+        from PytomatedLiquidHandling.HAL import Transport
+
+        # There is a circular dependacy in Transport. This is ONLY because it makes configuration simpler.
+        # Basically DeckLocation should not depend on Transport. So we hide the dependacy above and here.
+        # This may be a code smell. Not sure.
+
         Objects = Transport.Devices
         Identifier = v
 
@@ -55,3 +68,9 @@ class TransportConfig:
             v = dict()
 
         return TransportDevice.DropoffOptions(**v)
+
+    def __eq__(self, __value: Self) -> bool:
+        return (
+            self.TransportDevice == __value.TransportDevice
+            and self.PickupOptions == __value.PickupOptions
+        )
