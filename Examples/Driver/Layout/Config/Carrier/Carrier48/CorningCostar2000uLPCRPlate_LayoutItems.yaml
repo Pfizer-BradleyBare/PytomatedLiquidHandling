@@ -1,0 +1,56 @@
+Lid:
+  - Enabled: True
+    LabwareID: Carrier48_Pos1_Corning2000uL96WellPCR_Lid
+    DeckLocation: Carrier48_Pos1
+    Labware: CorningCostar2000uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Carrier48_Pos2_Corning2000uL96WellPCR_Lid
+    DeckLocation: Carrier48_Pos2
+    Labware: CorningCostar2000uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Carrier48_Pos3_Corning2000uL96WellPCR_Lid
+    DeckLocation: Carrier48_Pos3
+    Labware: CorningCostar2000uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Carrier48_Pos4_Corning2000uL96WellPCR_Lid
+    DeckLocation: Carrier48_Pos4
+    Labware: CorningCostar2000uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Carrier48_Pos5_Corning2000uL96WellPCR_Lid
+    DeckLocation: Carrier48_Pos5
+    Labware: CorningCostar2000uLPCRPlate_Lid
+
+Coverable Plate:
+  - Enabled: True
+    LabwareID: Carrier48_Pos1_Corning2000uL96WellPCR
+    DeckLocation: Carrier48_Pos1
+    Labware: CorningCostar2000uLPCRPlate
+    Lid: Carrier48_Pos1_CorningCostar2000uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Carrier48_Pos2_Corning2000uL96WellPCR
+    DeckLocation: Carrier48_Pos2
+    Labware: CorningCostar2000uLPCRPlate
+    Lid: Carrier48_Pos2_CorningCostar2000uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Carrier48_Pos3_Corning2000uL96WellPCR
+    DeckLocation: Carrier48_Pos3
+    Labware: CorningCostar2000uLPCRPlate
+    Lid: Carrier48_Pos3_CorningCostar2000uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Carrier48_Pos4_Corning2000uL96WellPCR
+    DeckLocation: Carrier48_Pos4
+    Labware: CorningCostar2000uLPCRPlate
+    Lid: Carrier48_Pos4_CorningCostar2000uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Carrier48_Pos5_Corning2000uL96WellPCR
+    DeckLocation: Carrier48_Pos5
+    Labware: CorningCostar2000uLPCRPlate
+    Lid: Carrier48_Pos5_CorningCostar2000uLPCRPlate_Lid

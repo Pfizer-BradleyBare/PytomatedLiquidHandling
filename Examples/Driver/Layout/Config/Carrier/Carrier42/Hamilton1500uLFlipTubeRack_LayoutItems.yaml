@@ -1,0 +1,10 @@
+Plate:
+  - Enabled: True
+    LabwareID: Carrier42_Pos1_HamiltonFliptube24Well
+    DeckLocation: Carrier42_Pos1
+    Labware: Hamilton1500uLFlipTubeRack
+
+  - Enabled: True
+    LabwareID: Carrier42_Pos2_HamiltonFliptube24Well
+    DeckLocation: Carrier42_Pos2
+    Labware: Hamilton1500uLFlipTubeRack
