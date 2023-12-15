@@ -13,3 +13,8 @@ Plate:
     LabwareID: HHS_Pos3_HamiltonFliptube24Well
     DeckLocation: Carrier7_Pos3
     Labware: Hamilton1500uLFlipTubeRack
+
+  - Enabled: True
+    LabwareID: Ham_24_RB_TuR_1_5ml_0001
+    DeckLocation: Carrier7_Pos4
+    Labware: Hamilton1500uLFlipTubeRack
