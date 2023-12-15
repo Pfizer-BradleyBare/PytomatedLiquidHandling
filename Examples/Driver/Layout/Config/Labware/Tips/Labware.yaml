@@ -12,7 +12,7 @@ NonPipettable Labware:
       Top: 33
       Bottom: 42
 
-  - Identifier: FTRTipRack
+  - Identifier: FTRStackableTipRack
     Enabled: True
     Image Filename: N/A
     Part Number: Custom

@@ -33,6 +33,8 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
 
     You can have as many files as required to simplify configuration."""
 
+    Warns = list()
+
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):
         for File in Files:
@@ -47,7 +49,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
                         Dict, Backend.Base.BackendABC, Backend.Devices
                     )
     if Loaded != True:
-        logger.warning(f"No {Backend.Base.BackendABC.__name__} objects were loaded.")
+        Warns.append(f"No {Backend.Base.BackendABC.__name__} objects were loaded.")
 
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):
@@ -63,7 +65,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
                         Dict, Carrier.Base.CarrierABC, Carrier.Devices
                     )
     if Loaded != True:
-        logger.warning(f"No {Carrier.Base.CarrierABC.__name__} objects were loaded.")
+        Warns.append(f"No {Carrier.Base.CarrierABC.__name__} objects were loaded.")
 
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):
@@ -79,7 +81,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
                         Dict, Labware.Base.LabwareABC, Labware.Devices
                     )
     if Loaded != True:
-        logger.warning(f"No {Labware.Base.LabwareABC.__name__} objects were loaded.")
+        Warns.append(f"No {Labware.Base.LabwareABC.__name__} objects were loaded.")
 
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):
@@ -95,9 +97,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
                         Dict, Transport.Base.TransportABC, Transport.Devices
                     )
     if Loaded != True:
-        logger.warning(
-            f"No {Transport.Base.TransportABC.__name__} objects were loaded."
-        )
+        Warns.append(f"No {Transport.Base.TransportABC.__name__} objects were loaded.")
 
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):
@@ -113,7 +113,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
                         Dict, DeckLocation.Base.DeckLocationABC, DeckLocation.Devices
                     )
     if Loaded != True:
-        logger.warning(
+        Warns.append(
             f"No {DeckLocation.Base.DeckLocationABC.__name__} objects were loaded."
         )
 
@@ -131,7 +131,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
                         Dict, LayoutItem.Base.LayoutItemABC, LayoutItem.Devices
                     )
     if Loaded != True:
-        logger.warning(
+        Warns.append(
             f"No {LayoutItem.Base.LayoutItemABC.__name__} objects were loaded."
         )
 
@@ -147,7 +147,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
 
                     Tools.ConfigLoader.DevicesLists(Dict, Tip.Base.TipABC, Tip.Devices)
     if Loaded != True:
-        logger.warning(f"No {Tip.Base.TipABC.__name__} objects were loaded.")
+        Warns.append(f"No {Tip.Base.TipABC.__name__} objects were loaded.")
 
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):
@@ -165,7 +165,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
                         CloseableContainer.Devices,
                     )
     if Loaded != True:
-        logger.warning(
+        Warns.append(
             f"No {CloseableContainer.Base.CloseableContainerABC.__name__} objects were loaded."
         )
 
@@ -185,7 +185,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
                         HeatCoolShake.Devices,
                     )
     if Loaded != True:
-        logger.warning(
+        Warns.append(
             f"No {HeatCoolShake.Base.HeatCoolShakeABC.__name__} objects were loaded."
         )
 
@@ -205,7 +205,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
                         Pipette.Devices,
                     )
     if Loaded != True:
-        logger.warning(f"No {Pipette.Base.PipetteABC.__name__} objects were loaded.")
+        Warns.append(f"No {Pipette.Base.PipetteABC.__name__} objects were loaded.")
 
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):
@@ -223,7 +223,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
                         StorageDevice.Devices,
                     )
     if Loaded != True:
-        logger.warning(
+        Warns.append(
             f"No {StorageDevice.Base.StorageDeviceABC.__name__} objects were loaded."
         )
 
@@ -243,6 +243,9 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
                         MagneticRack.Devices,
                     )
     if Loaded != True:
-        logger.warning(
+        Warns.append(
             f"No {MagneticRack.Base.MagneticRackABC.__name__} objects were loaded."
         )
+
+    for Warn in Warns:
+        logger.warning(Warn)
