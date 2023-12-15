@@ -1,0 +1,40 @@
+Lid:
+  - Enabled: True
+    LabwareID: Lid_Home_1
+    DeckLocation: Carrier14_Pos1
+    Labware: Biorad200uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Lid_Home_2
+    DeckLocation: Carrier14_Pos2
+    Labware: Biorad200uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Lid_Home_1
+    DeckLocation: Carrier14_Pos1
+    Labware: Thermo400uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Lid_Home_2
+    DeckLocation: Carrier14_Pos2
+    Labware: Thermo400uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Lid_Home_1
+    DeckLocation: Carrier14_Pos1
+    Labware: ThermoAbgene1200uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Lid_Home_2
+    DeckLocation: Carrier14_Pos2
+    Labware: ThermoAbgene1200uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Lid_Home_1
+    DeckLocation: Carrier14_Pos1
+    Labware: CorningCostar2000uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: Lid_Home_2
+    DeckLocation: Carrier14_Pos2
+    Labware: CorningCostar2000uLPCRPlate_Lid

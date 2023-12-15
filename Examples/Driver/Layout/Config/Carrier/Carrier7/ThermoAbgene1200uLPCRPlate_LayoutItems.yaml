@@ -1,0 +1,34 @@
+Lid:
+  - Enabled: True
+    LabwareID: HHS_Pos1_Thermo1200uL96WellPCR_Lid
+    DeckLocation: Carrier7_Pos1
+    Labware: ThermoAbgene1200uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: HHS_Pos2_Thermo1200uL96WellPCR_Lid
+    DeckLocation: Carrier7_Pos2
+    Labware: ThermoAbgene1200uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: HHS_Pos3_Thermo1200uL96WellPCR_Lid
+    DeckLocation: Carrier7_Pos3
+    Labware: ThermoAbgene1200uLPCRPlate_Lid
+
+Coverable Plate:
+  - Enabled: True
+    LabwareID: HHS_Pos1_Thermo1200uL96WellPCR
+    DeckLocation: Carrier7_Pos1
+    Labware: ThermoAbgene1200uLPCRPlate
+    Lid: Carrier7_Pos1_ThermoAbgene1200uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: HHS_Pos2_Thermo1200uL96WellPCR
+    DeckLocation: Carrier7_Pos2
+    Labware: ThermoAbgene1200uLPCRPlate
+    Lid: Carrier7_Pos2_ThermoAbgene1200uLPCRPlate_Lid
+
+  - Enabled: True
+    LabwareID: HHS_Pos3_Thermo1200uL96WellPCR
+    DeckLocation: Carrier7_Pos3
+    Labware: ThermoAbgene1200uLPCRPlate
+    Lid: Carrier7_Pos3_ThermoAbgene1200uLPCRPlate_Lid
