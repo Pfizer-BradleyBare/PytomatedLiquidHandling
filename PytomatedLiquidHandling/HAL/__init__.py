@@ -1,7 +1,5 @@
 import os
 
-# IDK why i need this with pydantic dataclasses. DO NOT DELETE IT!!!
-# IDK why i need this with pydantic dataclasses. DO NOT DELETE IT!!!
 import pydantic
 import yaml
 from loguru import logger
@@ -22,6 +20,7 @@ from . import (
     Transport,
 )
 
+# IDK why i need this with pydantic dataclasses. DO NOT DELETE IT!!!
 for cls in Tools.BaseClasses.HALDevice.HALDevices.values():
     pydantic.dataclasses.rebuild_dataclass(cls)  # type:ignore
 # End weirdly required processing
