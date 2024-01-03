@@ -36,7 +36,9 @@ class Interface:
         return Objects[Identifier]
 
     def Initialize(self):
-        self.Backend.StartBackend()
+        if self.Backend.IsRunning == False:
+            self.Backend.StartBackend()
 
     def Deinitialize(self):
-        self.Backend.StopBackend()
+        if self.Backend.IsRunning == True:
+            self.Backend.StopBackend()
