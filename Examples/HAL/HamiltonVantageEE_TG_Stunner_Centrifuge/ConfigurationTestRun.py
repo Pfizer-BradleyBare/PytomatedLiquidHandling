@@ -3,7 +3,7 @@ import os
 import yaml
 from loguru import logger
 
-from PytomatedLiquidHandling import HAL, Driver
+from PytomatedLiquidHandling import HAL
 
 logger.enable("PytomatedLiquidHandling")
 
