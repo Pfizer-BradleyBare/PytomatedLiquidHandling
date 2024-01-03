@@ -8,11 +8,13 @@
 Microlab Star:
   Identifier: Hammy
   Enabled: True
+  Simulation On: True
   Deck Layout Path: Path
 
 Vantage:
   Identifier: Hammy
   Enabled: True
+  Simulation On: False
   Deck Layout Path: Path
 
 Stunner:
