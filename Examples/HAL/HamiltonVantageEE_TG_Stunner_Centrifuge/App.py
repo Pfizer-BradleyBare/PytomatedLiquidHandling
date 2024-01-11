@@ -9,4 +9,19 @@ logger.enable("PytomatedLiquidHandling")
 
 HAL.LoadYamlConfiguration(os.path.join(os.path.dirname(__file__), "Config"))
 
-ClosableContainerDevice = HAL.CloseableContainer.Devices["FlipTube"]
+FlipTubePlate = HAL.LayoutItem.Devices["Carrier42_Pos1_Hamilton1500uLFlipTubeRack"]
+
+CloseableContainerDevice = HAL.CloseableContainer.Devices["FlipTube"]
+
+OpenCloseOptions: list[HAL.CloseableContainer.Base.OpenCloseOptions] = list()
+
+OpenCloseOptions.append(HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate,Position=1))
+OpenCloseOptions.append(HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate,Position=2))
+OpenCloseOptions.append(HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate,Position=3))
+OpenCloseOptions.append(HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate,Position=4))
+OpenCloseOptions.append(HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate,Position=5))
+OpenCloseOptions.append(HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate,Position=6))
+
+CloseableContainerDevice.AssertOpenCloseOptions(OpenCloseOptions)
+CloseableContainerDevice.Open(OpenCloseOptions)
+CloseableContainerDevice.Close(OpenCloseOptions)
