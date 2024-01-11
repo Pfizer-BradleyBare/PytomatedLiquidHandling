@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Literal
 
-from pydantic import dataclasses
+import dataclasses
 
 from .....Tools.BaseClasses import OptionsABC
 

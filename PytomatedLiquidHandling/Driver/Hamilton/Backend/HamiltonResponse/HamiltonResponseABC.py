@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Any, Literal, cast
 
-from pydantic import ValidationInfo, dataclasses, field_validator
+import dataclasses
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import ResponseABC
 
@@ -115,9 +115,11 @@ class HamiltonResponseABC(ResponseABC):
     - Case 2: Hamilton throws an error and the error is handled by the user. Description is not set, BlockData is available.
     We will use the MainErr to throw the correct exception."""
 
-    @field_validator("*", mode="before")
+    # TODO
+
+    # @field_validator("*", mode="before")
     # NOTE: This will attempt to validate all data but will only validate HamiltonBlockDataPackage types internally
-    def __HamiltonBlockDataValidate(cls, v, Info: ValidationInfo):
+    def __HamiltonBlockDataValidate(cls, v, Info):
         if cls.__dataclass_fields__[
             cast(str, Info.field_name)
         ].type == HamiltonBlockDataPackage and not isinstance(

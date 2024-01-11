@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Literal
 
-from pydantic import dataclasses
+import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

@@ -2,7 +2,7 @@ from collections import defaultdict
 from enum import Enum
 from typing import Any, TypeVar
 
-from pydantic import dataclasses
+import dataclasses
 
 from ....Tools.BaseClasses import CommandABC, CommandOptions, CommandOptionsListed
 

@@ -1,4 +1,4 @@
-from pydantic import dataclasses
+import dataclasses
 
 from .....Tools.BaseClasses import CommandBackendErrorHandling, CommandOptions
 from ....Backend import HamiltonActionCommandABC

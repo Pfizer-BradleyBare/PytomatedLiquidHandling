@@ -77,7 +77,7 @@ try:
         Backend.WaitForResponseBlocking(Command)
         Response = Backend.GetResponse(Command, GetStatus.Response)
 
-        print(Response.StatusCode)
+        print(Response.StatusCodeParsed)
         print(Response.MeasurementInfo)
         print("Sleep")
         time.sleep(5)
@@ -102,7 +102,7 @@ Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
 Backend.GetResponse(Command, CloseTray.Response)
 
-print(Response.Results[0][GetResults.Options.SampleName])
+print(Response.ResultsParsed[0][GetResults.Options.SampleName])
 print(Response.ResultsPath)
 
 Backend.StopBackend()

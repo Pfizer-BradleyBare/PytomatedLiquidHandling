@@ -1,4 +1,4 @@
-from pydantic import dataclasses
+import dataclasses
 from typing_extensions import TypedDict
 
 from ...Backend import HamiltonResponseABC
@@ -9,7 +9,7 @@ class SequencePositionDict(TypedDict):
     PositionID: str
 
 
-from pydantic import dataclasses
+import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

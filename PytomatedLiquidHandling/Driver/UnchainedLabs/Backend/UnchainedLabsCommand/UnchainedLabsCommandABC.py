@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from pydantic import dataclasses
+import dataclasses
 
 from ....Tools.BaseClasses import CommandABC
 
