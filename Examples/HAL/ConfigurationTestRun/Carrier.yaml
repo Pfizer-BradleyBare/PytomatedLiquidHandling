@@ -70,7 +70,7 @@ Autoload Carrier:
     Image Path 3D: 3DImage
     Image Path 2D: 2DImage
 
-  - Identifier: Kevin
+  - Identifier: Kevin 
     Enabled: True
     Carrier Labware ID: MFX_CAR_5Base_HPTab_0003
     Track Start: 42
@@ -79,14 +79,14 @@ Autoload Carrier:
     Image Path 3D: 3DImage
     Image Path 2D: 2DImage
 
-  - Identifier: Joe
+  - Identifier: Joe 
     Enabled: True
     Carrier Labware ID: MFX_CAR_5Base_HPTab_0001
     Track Start: 48
     Track End: 53
     Num Labware Positions: 5
     Image Path 3D: 3DImage
-    Image Path 2D: 2DImage
+    Image Path 2D: 2DImage       
 
   - Identifier: Nick
     Enabled: True
