@@ -137,7 +137,7 @@ private object o_JSONObject;
 private variable ToolOrientation;
 // {{ 5 "Init" "InitLocals"
 // }} ""
-// {{{ 58 1 0 "38d883e3_0cc2_460d_a068acca3f8151e5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 58 1 0 "3d18338c_d494_4309_9560bf4dbbf732a5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ToolOrientation = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:ToolOrientation:"));
 // }} ""
 // {{ 59 1 0 "4984c3d0_6779_4957_8727fb6635bc23d0" "{586C3429-F931-405f-9938-928E22C90BFA}"
@@ -443,4 +443,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-12-02 05:58$$checksum=baaa2268$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-12 14:12$$checksum=6eb3944b$$length=084$$

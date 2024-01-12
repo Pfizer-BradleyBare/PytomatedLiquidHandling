@@ -163,8 +163,8 @@ else
 // {{{ 50 1 0 "d9c2695a_52fc_4ced_992ed217e83eb882" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{{ 51 1 0 "abae7659_51a5_43b7_9c239c0d698fb524" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetStringProperty(o_JSONObject, Translate("RecoveryDetails"), RecoveryDetails);
+// {{{ 51 1 0 "a4192b04_e79d_4eda_b61f7fa45713aea9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetStringProperty(o_JSONObject, Translate("RawRecoveryDetails"), RecoveryDetails);
 // }} ""
 // {{{ 52 1 0 "fe2f960a_d16e_4987_8fdd51205b5d01e6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
@@ -255,11 +255,11 @@ else
 // {{{ 31 1 0 "95d6c9e6_5099_4def_9675205f4e168071" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{{ 32 1 0 "ce7c316d_7d02_4e84_ab20fc1809b74b1b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetStringProperty(o_JSONObject, Translate("CarrierRecoveryDetails"), CarrierRecoveryDetails);
+// {{{ 32 1 0 "7e83b598_921f_4ea1_a5b28be39f734cec" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetStringProperty(o_JSONObject, Translate("RawCarrierRecoveryDetails"), CarrierRecoveryDetails);
 // }} ""
-// {{{ 33 1 0 "b973786d_94d6_4f23_96a878741040ca2d" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetStringProperty(o_JSONObject, Translate("LabwareRecoveryDetails"), LabwareRecoveryDetails);
+// {{{ 33 1 0 "466aea72_be80_445a_b700a02614aa6b83" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetStringProperty(o_JSONObject, Translate("RawLabwareRecoveryDetails"), LabwareRecoveryDetails);
 // }} ""
 // {{{ 34 1 0 "e3e971e6_7ff5_4e13_be2d7515bd85f3f3" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
@@ -277,10 +277,8 @@ HSLJsonLib::Release(o_JSONObject);
 private function UnloadCarrier( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private object o_JSONObject;
-private variable LabwarePositions;
 private variable CustomErrorHandling;
 private variable LabwareID;
-private variable BarcodeFilePath;
 private variable RecoveryDetails;
 // {{ 5 "UnloadCarrier" "InitLocals"
 // }} ""
@@ -338,8 +336,8 @@ else
 // {{{ 68 1 0 "afe8fbe2_e506_43ca_93fdaae7f616e086" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{{ 69 1 0 "ad96e5b7_41ad_4031_89e65cc3579f0f0f" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetStringProperty(o_JSONObject, Translate("RecoveryDetails"), RecoveryDetails);
+// {{{ 69 1 0 "3a531530_a38e_4d45_be849070d9f97567" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetStringProperty(o_JSONObject, Translate("RawRecoveryDetails"), RecoveryDetails);
 // }} ""
 // {{{ 70 1 0 "0fa06d95_5437_43f4_9b66f00d4ba18cf9" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
@@ -357,4 +355,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-20 17:36$$checksum=be6dbdd6$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-12 14:24$$checksum=511820cc$$length=084$$

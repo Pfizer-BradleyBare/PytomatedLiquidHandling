@@ -4,10 +4,7 @@ from PytomatedLiquidHandling.Driver.Hamilton import HSLTipCountingLib
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
 from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import CORE96Head
 
-Backend = MicrolabSTAR(
-    Identifier="Example Star",
-    DeckLayoutPath=os.path.join(os.path.dirname(__file__), "Layout", "Example.lay"),
-)
+Backend = MicrolabSTAR(Identifier="Example Star", SimulationOn=True)
 Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 

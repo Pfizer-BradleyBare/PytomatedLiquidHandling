@@ -1,7 +1,6 @@
+import dataclasses
 from enum import Enum
 from typing import Any, Literal, cast
-
-import dataclasses
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import ResponseABC
 
@@ -108,6 +107,15 @@ class HamiltonResponseABC(ResponseABC):
     - If unhandled errors exists then an exception grouping of all unhandled errors that occrured will be raised.
     """
 
+    ErrorID: int
+    """Not used by captured for logging purposes"""
+    ErrorVectorCode: int
+    """Not used by captured for logging purposes"""
+    ErrorVectorMajorID: int
+    """Not used by captured for logging purposes"""
+    ErrorVectorMinorID: int
+    """Not used by captured for logging purposes"""
+
     ErrorDescription: str | Literal[""]
     """There are, unfortunately, 2 cases here:
     - Case 1: Hamilton throws an error and the error is not handled by the user. Description is set, BlockData may or may not be available.
@@ -139,30 +147,20 @@ class HamiltonResponseABC(ResponseABC):
         ):  # Always start from 1 because the first set of block data is empty (Hamilton delimiter stuff)
             BlockData.append(
                 HamiltonBlockData(
-                    **cast(
-                        dict,
-                        dict(
-                            Num=BlockData[i][0],
-                            MainErr=BlockData[i][1],
-                            SlaveErr=BlockData[i][2],
-                            ButtonID=int(BlockData[i][3]),
-                            StepData=BlockData[i][4],
-                            LabwareID=BlockData[i][5],
-                            PositionID=BlockData[i][6],
-                        ),
-                    )
+                    Num=BlockData[i][0],
+                    MainErr=BlockData[i][1],
+                    SlaveErr=BlockData[i][2],
+                    ButtonID=HamiltonBlockData.ButtonIDs(int(BlockData[i][3])),
+                    StepData=BlockData[i][4],
+                    LabwareID=BlockData[i][5],
+                    PositionID=BlockData[i][6],
                 )
             )
         # Extract the block data
 
         return HamiltonBlockDataPackage(
-            **cast(
-                dict,
-                dict(
-                    ErrFlag=ErrFlag,
-                    BlockData=sorted(BlockData, key=lambda x: x.Num),
-                ),
-            )
+            ErrFlag=HamiltonBlockDataPackage.ErrFlags(ErrFlag),
+            BlockData=sorted(BlockData, key=lambda x: x.Num),
         )
 
     # Only run on HamiltonBlockDataPackage types

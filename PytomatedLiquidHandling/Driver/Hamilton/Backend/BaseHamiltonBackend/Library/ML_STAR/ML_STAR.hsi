@@ -77,7 +77,6 @@ private function LockUnlockFrontCover( device & ML_STAR, object & i_EndpointOutp
 // }} ""
 private object o_JSONObject;
 private variable CustomErrorHandling;
-private variable Data;
 private variable LockState;
 private variable RecoveryDetails;
 // {{ 5 "LockUnlockFrontCover" "InitLocals"
@@ -136,8 +135,8 @@ else
 // {{{ 20 1 0 "799aa7ca_ec97_4352_9fea7636710116ab" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{{ 21 1 0 "427b3bd1_e561_4e0d_9c0d0bb26b5e3528" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetStringProperty(o_JSONObject, Translate("RecoveryDetails"), RecoveryDetails);
+// {{{ 21 1 0 "452f1f0f_8fc4_4ad9_b50dc6bbd04aa81f" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetStringProperty(o_JSONObject, Translate("RawRecoveryDetails"), RecoveryDetails);
 // }} ""
 // {{{ 22 1 0 "9673d13d_c156_4e85_b20ae4443507db29" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
@@ -155,4 +154,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-20 17:16$$checksum=7a43c207$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-12 14:27$$checksum=3ffc521d$$length=084$$
