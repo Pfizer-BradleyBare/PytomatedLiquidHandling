@@ -1,6 +1,6 @@
 from enum import Enum
 
-from pydantic import dataclasses
+import dataclasses
 
 from .....Tools.BaseClasses import OptionsABC
 

@@ -9,6 +9,8 @@ logger.enable("PytomatedLiquidHandling")
 
 HAL.LoadYamlConfiguration(os.path.join(os.path.dirname(__file__), "Config"))
 
+quit()
+
 FlipTubePlate = HAL.LayoutItem.Devices["Carrier42_Pos1_Hamilton1500uLFlipTubeRack"]
 
 CloseableContainerDevice = HAL.CloseableContainer.Devices["FlipTube"]

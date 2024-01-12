@@ -8,7 +8,7 @@ class SequencePositionDict(TypedDict):
     PositionID: str
 
 
-from pydantic import dataclasses
+import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

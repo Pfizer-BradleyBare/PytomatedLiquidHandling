@@ -2,7 +2,7 @@ import inspect
 import os
 from typing import ClassVar
 
-from pydantic import dataclasses
+import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)

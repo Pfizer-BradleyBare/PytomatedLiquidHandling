@@ -1,4 +1,4 @@
-from pydantic import dataclasses
+import dataclasses
 
 from .HamiltonCommandABC import HamiltonCommandABC
 

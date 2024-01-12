@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Any
 
-from pydantic import dataclasses, field_validator
+import dataclasses
 
 from ....Tools.BaseClasses import ResponseABC
 from ..Exceptions import ExceptionStatusCodeMap
@@ -27,14 +27,14 @@ class UnchainedLabsResponseABC(ResponseABC):
         AccessAndConnectionTrayIsMoving = 52
         ClientExitAccepted = 999
 
-    StatusCode: StatusCodes
+    StatusCodeRaw: dataclasses.InitVar[tuple | int]
+    StatusCode: StatusCodes = dataclasses.field(init=False)
 
-    @field_validator("StatusCode", mode="before")
-    def __StatusCodeValidate(cls, v):
-        if isinstance(v, tuple):
-            print(v)
-            v = v[0]
-        if v < 0:
-            raise ExceptionStatusCodeMap[v]
+    def __post_init__(self, StatusCodeRaw):
+        if isinstance(StatusCodeRaw, tuple):
+            StatusCodeRaw = StatusCodeRaw[0]
 
-        return v
+        self.StatusCode = StatusCodeRaw
+
+        if StatusCodeRaw < 0:
+            raise ExceptionStatusCodeMap[StatusCodeRaw]

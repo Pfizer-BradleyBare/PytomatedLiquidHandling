@@ -1,6 +1,5 @@
-from pydantic import Field, dataclasses
-
 from ....Tools.BaseClasses import OptionsABC
+import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -12,4 +11,4 @@ class Options(OptionsABC):
 class ListedOptions(list[Options]):
     TipCounter: str
     DialogTitle: str
-    Timeout: int = Field(default=1000)
+    Timeout: int = 1000

@@ -16,14 +16,20 @@ from .HamiltonServerBackend import HamiltonServerBackendABC
 HamiltonResponseABCType = TypeVar("HamiltonResponseABCType", bound=HamiltonResponseABC)
 
 
-@dataclasses.dataclass(kw_only=True)
+class Config:
+    arbitrary_types_allowed = True
+
+
+@dataclasses.dataclass(kw_only=True, config=Config)
 class HamiltonBackendABC(BackendABC):
     MethodPath: str
     DeckLayoutPath: str
-    SimulationOn: bool = True
+    SimulationOn: bool
     _ActionServer: HamiltonServerBackendABC = field(init=False)
     _StateServer: HamiltonServerBackendABC = field(init=False)
-    _HamiltonProcess: subprocess.Popen = field(init=False, default=Field(exclude=True))
+    _HamiltonProcess: subprocess.Popen = field(
+        init=False, default=Field(exclude=True, default=None)
+    )
 
     def __post_init__(self) -> None:
         self._ActionServer: HamiltonServerBackendABC = HamiltonServerBackendABC(

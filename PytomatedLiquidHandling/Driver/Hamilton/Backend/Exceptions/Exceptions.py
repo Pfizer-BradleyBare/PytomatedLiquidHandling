@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class HamiltonError(Exception):
-    HamiltonBlockDataPackage: HamiltonBlockData | None
+    HamiltonBlockData: HamiltonBlockData | None
 
 
 @dataclass(frozen=True)

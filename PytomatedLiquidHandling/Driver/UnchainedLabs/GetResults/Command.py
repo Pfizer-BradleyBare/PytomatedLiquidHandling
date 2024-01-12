@@ -1,6 +1,6 @@
 from typing import Any
 
-from pydantic import dataclasses
+import dataclasses
 
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import CommandOptionsListed
 

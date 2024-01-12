@@ -1,6 +1,6 @@
-from pydantic import dataclasses
+import dataclasses
 
-from ...Backend import HamiltonBlockDataPackage, HamiltonResponseABC
+from ...Backend import HamiltonResponseABC
 
 
 @dataclasses.dataclass(kw_only=True)

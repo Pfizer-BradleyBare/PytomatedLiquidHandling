@@ -8,4 +8,5 @@
 Vantage TrackGripper EntryExit:
   Identifier: Hamilton
   Enabled: True
+  Simulation On: True
   Deck Layout Path: C:\Program Files (x86)\HAMILTON\Library\PytomatedLiquidHandling\Examples\HAL\HamiltonVantageEE_TG_Stunner_Centrifuge\Config\Layout.lay

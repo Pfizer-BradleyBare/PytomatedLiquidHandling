@@ -1,6 +1,5 @@
 from enum import Enum
-
-from pydantic import Field, dataclasses
+import dataclasses
 
 from ....Tools.BaseClasses import OptionsABC
 
@@ -14,5 +13,5 @@ class Options(OptionsABC):
     OpenWidth: float
     TaughtPathName: str
     CoordinatedMovement: YesNoOptions = YesNoOptions.No
-    SpeedPercentage: int = Field(ge=0, le=100, default=50)
+    SpeedPercentage: int = 50
     CollisionControl: YesNoOptions = YesNoOptions.Yes

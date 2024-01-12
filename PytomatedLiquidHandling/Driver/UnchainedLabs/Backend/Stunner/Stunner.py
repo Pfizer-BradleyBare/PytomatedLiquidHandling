@@ -48,12 +48,12 @@ class StunnerBackend(SimpleBackendABC):
     def StartBackend(self):
         SimpleBackendABC.StartBackend(self)
 
-        UnchainedLabsResponseABC(StatusCode=self._StunnerDLLObject.Request_Access())
+        UnchainedLabsResponseABC(StatusCodeRaw=self._StunnerDLLObject.Request_Access())
 
     def StopBackend(self):
         SimpleBackendABC.StopBackend(self)
 
-        UnchainedLabsResponseABC(StatusCode=self._StunnerDLLObject.Release_Access())
+        UnchainedLabsResponseABC(StatusCodeRaw=self._StunnerDLLObject.Release_Access())
 
     def ExecuteCommand(self, CommandInstance: UnchainedLabsCommandABC):
         SimpleBackendABC.ExecuteCommand(self, CommandInstance)
