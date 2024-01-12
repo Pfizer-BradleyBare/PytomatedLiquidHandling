@@ -146,13 +146,14 @@ class HamiltonBackendABC(BackendABC):
 
         while Server._Response is None:
             if self._HamiltonProcess.poll() != None:
-                self._HamiltonProcess = subprocess.Popen(
-                    [
-                        "C:\\Program Files (x86)\\HAMILTON\\Bin\\HxRun.exe",
-                        "-t",
-                        self.MethodPath,
-                    ]
-                )
+                ...
+                # self._HamiltonProcess = subprocess.Popen(
+                #    [
+                #        "C:\\Program Files (x86)\\HAMILTON\\Bin\\HxRun.exe",
+                #        "-t",
+                #        self.MethodPath,
+                #    ]
+                # )
         # If the process closed then we need to reopen it. Only the script can close the Hamilton.
         # NOTE: This should be done differently but not sure how yet.
 
