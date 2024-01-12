@@ -115,68 +115,57 @@ class HamiltonResponseABC(ResponseABC):
     - Case 2: Hamilton throws an error and the error is handled by the user. Description is not set, BlockData is available.
     We will use the MainErr to throw the correct exception."""
 
-    # TODO
+    @staticmethod
+    def ParseHamiltonBlockData(BlockData) -> HamiltonBlockDataPackage:
+        if len(BlockData) == 0:
+            return HamiltonBlockDataPackage(
+                ErrFlag=HamiltonBlockDataPackage.ErrFlags.ErrorWithoutBlockData,
+                BlockData=[],
+            )
+        # NOTE: Not sure if this is required but putting it here for now.
 
-    # @field_validator("*", mode="before")
-    # NOTE: This will attempt to validate all data but will only validate HamiltonBlockDataPackage types internally
-    def __HamiltonBlockDataValidate(cls, v, Info):
-        if cls.__dataclass_fields__[
-            cast(str, Info.field_name)
-        ].type == HamiltonBlockDataPackage and not isinstance(
-            v, HamiltonBlockDataPackage
-        ):
-            v = cast(str, v)
+        ErrFlag = int(BlockData[:1])
+        # ErrFlag is always the first digit
 
-            if len(v) == 0:
-                return HamiltonBlockDataPackage(
-                    ErrFlag=HamiltonBlockDataPackage.ErrFlags.ErrorWithoutBlockData,
-                    BlockData=[],
-                )
-            # NOTE: Not sure if this is required but putting it here for now.
+        BlockData = BlockData[1:]
+        # Remove ErrFlag from string
 
-            ErrFlag = int(v[:1])
-            # ErrFlag is always the first digit
+        BlockData = [i.split(",") for i in BlockData.split("[")]
+        # Split based on Hamilton special block separator then split based on data separator
 
-            v = v[1:]
-            # Remove ErrFlag from string
-
-            v = [i.split(",") for i in v.split("[")]
-            # Split based on Hamilton special block separator then split based on data separator
-
-            BlockData = list()
-            for i in range(
-                1, len(v)
-            ):  # Always start from 1 because the first set of block data is empty (Hamilton delimiter stuff)
-                BlockData.append(
-                    HamiltonBlockData(
-                        **cast(
-                            dict,
-                            dict(
-                                Num=v[i][0],
-                                MainErr=v[i][1],
-                                SlaveErr=v[i][2],
-                                ButtonID=int(v[i][3]),
-                                StepData=v[i][4],
-                                LabwareID=v[i][5],
-                                PositionID=v[i][6],
-                            ),
-                        )
+        BlockData = list()
+        for i in range(
+            1, len(BlockData)
+        ):  # Always start from 1 because the first set of block data is empty (Hamilton delimiter stuff)
+            BlockData.append(
+                HamiltonBlockData(
+                    **cast(
+                        dict,
+                        dict(
+                            Num=BlockData[i][0],
+                            MainErr=BlockData[i][1],
+                            SlaveErr=BlockData[i][2],
+                            ButtonID=int(BlockData[i][3]),
+                            StepData=BlockData[i][4],
+                            LabwareID=BlockData[i][5],
+                            PositionID=BlockData[i][6],
+                        ),
                     )
                 )
-            # Extract the block data
-
-            return HamiltonBlockDataPackage(
-                **cast(
-                    dict,
-                    dict(
-                        ErrFlag=ErrFlag,
-                        BlockData=sorted(BlockData, key=lambda x: x.Num),
-                    ),
-                )
             )
-        # Only run on HamiltonBlockDataPackage types
+        # Extract the block data
 
-        return v
+        return HamiltonBlockDataPackage(
+            **cast(
+                dict,
+                dict(
+                    ErrFlag=ErrFlag,
+                    BlockData=sorted(BlockData, key=lambda x: x.Num),
+                ),
+            )
+        )
+
+    # Only run on HamiltonBlockDataPackage types
 
     def __post_init__(self) -> None:
         Exceptions = list()

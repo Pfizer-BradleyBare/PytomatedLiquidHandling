@@ -28,13 +28,13 @@ class UnchainedLabsResponseABC(ResponseABC):
         ClientExitAccepted = 999
 
     StatusCodeRaw: dataclasses.InitVar[tuple | int]
-    StatusCodeParsed: StatusCodes = dataclasses.field(init=False)
+    StatusCode: StatusCodes = dataclasses.field(init=False)
 
     def __post_init__(self, StatusCodeRaw):
         if isinstance(StatusCodeRaw, tuple):
             StatusCodeRaw = StatusCodeRaw[0]
 
-        self.StatusCodeParsed = StatusCodeRaw
+        self.StatusCode = StatusCodeRaw
 
         if StatusCodeRaw < 0:
             raise ExceptionStatusCodeMap[StatusCodeRaw]
