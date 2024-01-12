@@ -15,6 +15,8 @@ FlipTubePlate = HAL.LayoutItem.Devices["Carrier42_Pos1_Hamilton1500uLFlipTubeRac
 
 CloseableContainerDevice = HAL.CloseableContainer.Devices["FlipTube"]
 
+CloseableContainerDevice.Initialize()
+
 OpenCloseOptions: list[HAL.CloseableContainer.Base.OpenCloseOptions] = list()
 
 OpenCloseOptions.append(
@@ -39,3 +41,5 @@ OpenCloseOptions.append(
 CloseableContainerDevice.AssertOpenCloseOptions(OpenCloseOptions)
 CloseableContainerDevice.Open(OpenCloseOptions)
 CloseableContainerDevice.Close(OpenCloseOptions)
+
+CloseableContainerDevice.Deinitialize()
