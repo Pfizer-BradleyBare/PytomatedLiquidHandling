@@ -141,11 +141,11 @@ class HamiltonResponseABC(ResponseABC):
         BlockData = [i.split(",") for i in BlockData.split("[")]
         # Split based on Hamilton special block separator then split based on data separator
 
-        BlockData = list()
+        ParsedBlockData = list()
         for i in range(
             1, len(BlockData)
         ):  # Always start from 1 because the first set of block data is empty (Hamilton delimiter stuff)
-            BlockData.append(
+            ParsedBlockData.append(
                 HamiltonBlockData(
                     Num=BlockData[i][0],
                     MainErr=BlockData[i][1],
@@ -160,7 +160,7 @@ class HamiltonResponseABC(ResponseABC):
 
         return HamiltonBlockDataPackage(
             ErrFlag=HamiltonBlockDataPackage.ErrFlags(ErrFlag),
-            BlockData=sorted(BlockData, key=lambda x: x.Num),
+            BlockData=sorted(ParsedBlockData, key=lambda x: x.Num),
         )
 
     # Only run on HamiltonBlockDataPackage types
