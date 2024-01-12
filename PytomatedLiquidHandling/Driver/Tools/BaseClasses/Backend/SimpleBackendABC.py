@@ -10,7 +10,11 @@ from .BackendABC import BackendABC
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseABC)
 
 
-@dataclasses.dataclass(kw_only=True)
+class Config:
+    arbitrary_types_allowed = True
+
+
+@dataclasses.dataclass(kw_only=True, config=Config)
 class SimpleBackendABC(BackendABC):
     """The simplest implementation of a backend. This class will support 99% of backends."""
 
