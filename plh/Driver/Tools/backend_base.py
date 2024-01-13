@@ -25,7 +25,7 @@ class BackendBase:
     """Is the backend running?"""
 
     @abstractmethod
-    def start(self:BackendBase) -> None:
+    def start(self: BackendBase) -> None:
         """Should start the system software then establish communication. You should only call the method once."""
         if self.is_running is True:
             msg = f"{type(self).__name__} backend is already running"
@@ -33,7 +33,7 @@ class BackendBase:
         self.is_running = True
 
     @abstractmethod
-    def stop(self:BackendBase) -> None:
+    def stop(self: BackendBase) -> None:
         """Should close the communication layer then kill the system software."""
         if self.is_running is False:
             msg = f"{type(self).__name__} backend is not running"
@@ -41,14 +41,14 @@ class BackendBase:
         self.is_running = False
 
     @abstractmethod
-    def execute(self:BackendBase, command: CommandBase) -> None:
+    def execute(self: BackendBase, command: CommandBase) -> None:
         """Delivers the ```Command``` to the system to be executed."""
         if self.is_running is False:
             msg = f"{type(self).__name__} backend is not running"
             raise RuntimeError(msg)
 
     @abstractmethod
-    def wait(self:BackendBase, command: CommandBase) -> None:
+    def wait(self: BackendBase, command: CommandBase) -> None:
         """Waits for execution of ```Command``` to complete."""
         if self.is_running is False:
             msg = f"{type(self).__name__} backend is not running"
@@ -56,7 +56,9 @@ class BackendBase:
 
     @abstractmethod
     def acknowledge(
-        self:BackendBase, command: CommandBase, response_type: type[ResponseABCType],
+        self: BackendBase,
+        command: CommandBase,
+        response_type: type[ResponseABCType],
     ) -> ResponseABCType:
         """Returns a response described by ```ResponseType``` for the executed ```Command```.
         Response data is parsed by pydantic into the type specified. You may discard the response.

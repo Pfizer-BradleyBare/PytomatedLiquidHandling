@@ -35,7 +35,7 @@ class BackendServerBase(BackendSimpleBase):
     _app: Flask = field(init=False)
     _app_parent_thread_runner_flag: Event = field(init=False)
 
-    def __post_init__(self:BackendServerBase) -> None:
+    def __post_init__(self: BackendServerBase) -> None:
         """Creates the web API based on ```Address```, ```Port```, ```SubDomain```, and ```Views```."""
         self._app_parent_thread_runner_flag = Event()
 
@@ -52,7 +52,7 @@ class BackendServerBase(BackendSimpleBase):
                 methods=["GET", "POST"],
             )
 
-    def __server_thread_runner(self:BackendServerBase) -> None:
+    def __server_thread_runner(self: BackendServerBase) -> None:
         Thread(
             name="Flask App Thread-> " + str(self.identifier),
             target=self.__run,
@@ -65,10 +65,10 @@ class BackendServerBase(BackendSimpleBase):
     def __run(self: BackendServerBase) -> None:
         self._app.run(self.address, self.port)
 
-    def _get_endpoint_id(self:BackendServerBase, endpoint: str) -> str:
+    def _get_endpoint_id(self: BackendServerBase, endpoint: str) -> str:
         return f"{self.__class__.__name__}: {self.identifier}-> {endpoint}"
 
-    def start(self:BackendServerBase) -> None:
+    def start(self: BackendServerBase) -> None:
         """- Checks that host is available. If host is not available then raises ```ValueError```.
         - Starts server as daemon thread."""
         BackendSimpleBase.start(self)
@@ -86,7 +86,7 @@ class BackendServerBase(BackendSimpleBase):
             target=self.__server_thread_runner,
         ).start()
 
-    def stop(self:BackendServerBase) -> None:
+    def stop(self: BackendServerBase) -> None:
         """Kills server and all daemon threads. NOTE: expect 1 second delay. If server is not running then raises ```RuntimeError```."""
         BackendSimpleBase.stop(self)
         host = (self.address, self.port)
@@ -98,7 +98,7 @@ class BackendServerBase(BackendSimpleBase):
 
         BackendServerBase.__hosts.remove(host)
 
-    def index(self:BackendServerBase): #noqa: ANN201
+    def index(self: BackendServerBase):  # noqa: ANN201
         """Index API endpoint."""
         bound_logger = logger.bind(Server=self)
         bound_logger.debug("Index web API request.")
@@ -112,13 +112,13 @@ class BackendServerBase(BackendSimpleBase):
         response += "</ol>"
         return response, 200
 
-    def is_active(self:BackendServerBase) -> tuple:
+    def is_active(self: BackendServerBase) -> tuple:
         """IsActive API endpoint."""
         bound_logger = logger.bind(Server=self)
         bound_logger.debug("IsActive web API request.")
         return "Running", 200
 
-    def kill(self:BackendServerBase) -> tuple:
+    def kill(self: BackendServerBase) -> tuple:
         """Kill API endpoint. Used to kill the server remotely."""
         bound_logger = logger.bind(Server=self)
         bound_logger.debug("Kill web API request.")

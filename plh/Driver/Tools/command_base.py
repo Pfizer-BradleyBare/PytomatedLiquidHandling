@@ -64,7 +64,7 @@ class CommandBase:
 
         return output[:-1]
 
-    def __post_init__(self:CommandBase) -> None:
+    def __post_init__(self: CommandBase) -> None:
         module_type = inspect.getmodule(type(self))
         if module_type is None:
             msg = "inspect.getmodule failed... This should never happen"

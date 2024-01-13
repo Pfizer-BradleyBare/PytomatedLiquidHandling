@@ -39,7 +39,7 @@ class BackendSimpleBase(BackendBase):
 
         self._command = command
 
-    def wait(self:BackendSimpleBase, command: CommandBase) -> None:
+    def wait(self: BackendSimpleBase, command: CommandBase) -> None:
         """Waits for execution of ```Command``` to complete.
 
         If the ```Command``` does not match the executing command or no command is executing then ```RuntimeError``` is raised.
@@ -58,7 +58,9 @@ class BackendSimpleBase(BackendBase):
             ...
 
     def acknowledge(
-        self:BackendSimpleBase, command: CommandBase, response_type: type[ResponseABCType],
+        self: BackendSimpleBase,
+        command: CommandBase,
+        response_type: type[ResponseABCType],
     ) -> ResponseABCType:
         """Returns a response described by ```ResponseType``` for the executed ```Command```.
 

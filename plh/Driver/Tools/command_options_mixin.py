@@ -7,7 +7,7 @@ T = TypeVar("T", bound=OptionsBase)
 
 
 @dataclasses.dataclass(kw_only=True)
-class CommandOptions(Generic[T]):
+class CommandOptionsMixin(Generic[T]):
     """Mixin for command. This gives your command the ability to have options.
     Must be typed according to your command options."""
 
