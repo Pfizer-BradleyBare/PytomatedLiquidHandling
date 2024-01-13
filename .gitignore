@@ -8,3 +8,4 @@ Logging
 .DS_Store
 Temp
 temp
+.ruff_cache
