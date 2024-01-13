@@ -1,10 +1,11 @@
+# noqa: N999 #ignore exceptions being invalid module name
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..HamiltonResponse import HamiltonBlockData
+    from .hamilton_response_base import HamiltonBlockData
 
 
 @dataclass(frozen=True)
@@ -73,7 +74,7 @@ class UnloadError(HamiltonError):
 
 
 @dataclass(frozen=True)
-class PressureLLDErrorConsequtiveAspiration(HamiltonError):
+class PressureLLDErrorConsequtiveAspirationError(HamiltonError):
     """Pressure liquid level detection in a consecutive aspiration is not allowed."""
 
 
@@ -285,7 +286,7 @@ class DelimiterError(HamiltonError):
     """Barcode contains character which is used as delimiter in result string."""
 
 
-ExceptionErrorCodeMap: dict[int, Type[HamiltonError]] = {
+error_code_map: dict[int, type[HamiltonError]] = {
     2: HardwareError,
     3: NotExecutedError,
     4: ClotError,
@@ -298,7 +299,7 @@ ExceptionErrorCodeMap: dict[int, Type[HamiltonError]] = {
     11: PressureLLDError,
     12: CalibrateError,
     13: UnloadError,
-    14: PressureLLDErrorConsequtiveAspiration,
+    14: PressureLLDErrorConsequtiveAspirationError,
     15: ParameterError,
     16: CoverOpenError,
     17: ImproperAspirationDispenseError,
@@ -335,7 +336,7 @@ ExceptionErrorCodeMap: dict[int, Type[HamiltonError]] = {
     113: DelimiterError,
 }
 
-ErrorCodeDescriptionMap: dict[str, int] = {
+error_code_description_map: dict[str, int] = {
     "": 2,
     "": 3,
     "": 4,
