@@ -1,7 +1,7 @@
 *.pyc
 *.pyo
 ~*
-PytomatedLiquidHandling.egg-info
+plh.egg-info
 build
 .vscode
 Logging

@@ -1,4 +1,4 @@
-""" 
+"""
 # What is Pytomated Liquid Handling (PLH)?
 
 PLH is an abstraction layer package for automated liquid handlers.
@@ -18,4 +18,3 @@ from loguru import logger
 logger.disable("PytomatedLiquidHandling")
 # Programmer is excepted to enable loguru to see PLH logs
 
-from . import HAL, Driver

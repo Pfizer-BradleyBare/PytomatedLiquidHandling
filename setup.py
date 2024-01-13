@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="PytomatedLiquidHandling",
+    name="plh",
     version="3.0",
     packages=find_packages(exclude=["Examples"]),
     license="MIT",
