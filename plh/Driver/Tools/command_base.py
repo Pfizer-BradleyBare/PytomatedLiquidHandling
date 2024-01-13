@@ -1,12 +1,13 @@
-import inspect
-import os
-from typing import ClassVar
+from __future__ import annotations
 
 import dataclasses
+import inspect
+import pathlib
+from typing import ClassVar
 
 
 @dataclasses.dataclass(kw_only=True)
-class CommandABC:
+class CommandBase:
     """Base dataclass for all commands. All commands must be a dataclass with ```kw_only=True``` for consistency sake.
 
     Commands should be contained in a folder with 4 files below. These 4 files make up a single command that can be executed on your backend:.
@@ -16,17 +17,17 @@ class CommandABC:
     - Response.py
     """
 
-    Identifier: str = "N/A"
+    identifier: str = "N/A"
     """All commands have an optional identifier. Provided for more logging context."""
 
-    ModuleName: ClassVar[str]
+    module_name: ClassVar[str]
     """This is the path from the ```Driver``` folder. This is autodetermined upon dataclass creation."""
 
-    CommandName: ClassVar[str]
+    command_name: ClassVar[str]
     """This is the folder name where your 4 files are contained. This is autodetermined upon dataclass creation."""
 
     @staticmethod
-    def __GetCommandName(__file__: str) -> str:
+    def __get_command_name(__file__: str) -> str:
         """Uses the path of the python module to extract a command name
 
         Args:
@@ -35,10 +36,10 @@ class CommandABC:
         Returns:
             str: Command name
         """
-        return os.path.basename(os.path.dirname(__file__))
+        return pathlib.Path(__file__).parent.name
 
     @staticmethod
-    def __GetModuleName(__file__: str) -> str:
+    def __get_module_name(__file__: str) -> str:
         """Uses the path of the python module to extract a module name
 
         Args:
@@ -47,27 +48,28 @@ class CommandABC:
         Returns:
             str: Module name
         """
-        Modules = list()
-        Path = os.path.dirname(os.path.dirname(__file__))
+        modules = []
+        path = pathlib.Path(__file__).parent.parent
 
-        while os.path.basename(Path) != "Driver":
-            Modules.append(os.path.basename(Path))
-            Path = os.path.dirname(Path)
+        while path.name != "Driver":
+            modules.append(path.name)
+            path = path.parent
 
-        Modules.reverse()
-        Output = ""
+        modules.reverse()
+        output = ""
 
-        for Module in Modules:
-            Output += Module
-            Output += " "
+        for module in modules:
+            output += module
+            output += " "
 
-        return Output[:-1]
+        return output[:-1]
 
-    def __post_init__(self):
-        ModuleType = inspect.getmodule(type(self))
-        if ModuleType is None:
-            raise RuntimeError("inspect.getmodule failed... This should never happen")
-        FilePath = ModuleType.__file__
+    def __post_init__(self:CommandBase) -> None:
+        module_type = inspect.getmodule(type(self))
+        if module_type is None:
+            msg = "inspect.getmodule failed... This should never happen"
+            raise RuntimeError(msg)
+        file_path = module_type.__file__
 
-        CommandABC.ModuleName = CommandABC.__GetModuleName(str(FilePath))
-        CommandABC.CommandName = CommandABC.__GetCommandName(str(FilePath))
+        CommandBase.module_name = CommandBase.__get_module_name(str(file_path))
+        CommandBase.command_name = CommandBase.__get_command_name(str(file_path))
