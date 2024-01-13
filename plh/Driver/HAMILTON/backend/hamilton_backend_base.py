@@ -168,7 +168,7 @@ class HamiltonBackendBase(BackendBase):
         HamiltonBackendBase.start(self)
 
         layout_base_path = pathlib.Path(
-            "C:\\Program Files (x86)\\HAMILTON\\Library\\plh\\plh\\driver\\hamilton\\backend\\layout\\Layout.lay",
+            "C:\\Program Files (x86)\\HAMILTON\\Library\\plh\\plh\\driver\\HAMILTON\\backend\\layout\\Layout.lay",
         )
         pathlib.Path(layout_base_path).mkdir(mode=777, exist_ok=True, parents=True)
 
