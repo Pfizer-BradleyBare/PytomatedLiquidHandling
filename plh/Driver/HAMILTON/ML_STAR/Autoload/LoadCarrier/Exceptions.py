@@ -1,4 +1,4 @@
-from ....Backend.Exceptions import (
+from plh.driver.HAMILTON.backend.exceptions import (
     BarcodeAlreadyUsedError,
     BarcodeError,
     BarcodeMaskError,
@@ -16,3 +16,22 @@ from ....Backend.Exceptions import (
     WrongCarrierError,
     WrongLabwareError,
 )
+
+__all__ = [
+    "BarcodeAlreadyUsedError",
+    "BarcodeError",
+    "BarcodeMaskError",
+    "BarcodeNotUniqueError",
+    "CoverOpenError",
+    "DelimiterError",
+    "ExecutionError",
+    "HardwareError",
+    "NoCarrierBarcodeError",
+    "NoCarrierError",
+    "NoLabwareError",
+    "NotDetectedError",
+    "NotExecutedError",
+    "UnexpectedLabwareError",
+    "WrongCarrierError",
+    "WrongLabwareError",
+]

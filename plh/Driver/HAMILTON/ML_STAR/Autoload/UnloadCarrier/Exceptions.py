@@ -1,1 +1,5 @@
-from ....Backend.Exceptions import CoverOpenError
+from plh.driver.HAMILTON.backend.exceptions import CoverOpenError
+
+__all__ = [
+    "CoverOpenError",
+]
