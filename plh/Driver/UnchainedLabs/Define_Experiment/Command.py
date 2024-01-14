@@ -21,14 +21,14 @@ class Command(UnchainedLabsCommandBase, CommandOptionsListMixin[ListedOptions]):
         # Do not use so set as default
 
         plate_info: dict[str, tuple[str, str]] = {
-            Opt.SampleName: (Opt.SamplePlateID, Opt.SamplePlatePosition)
+            Opt.sample_name: (Opt.sample_plate_id, Opt.sample_plate_position)
             for Opt in self.options
         }
 
         blanks = [
-            Opt.BlankSampleName
+            Opt.blank_sample_name
             for Opt in self.options
-            if Opt.BlankSampleName is not None
+            if Opt.blank_sample_name is not None
         ]
 
         if all(Blank is None for Blank in blanks):
@@ -73,27 +73,27 @@ class Command(UnchainedLabsCommandBase, CommandOptionsListMixin[ListedOptions]):
         sample_definition = ""
         for opt in self.options:
             line = []
-            line.append(opt.SampleName)
-            line.append(opt.SamplePlateID)
-            line.append(opt.SamplePlatePosition)
-            line.append(f"SG{opt.SampleGroup}")
-            line.append(str(opt.AnalyteMetaData))
-            line.append(str(opt.BufferMetaData))
-            line.append(str(opt.ExtinctionCoefficient * 10))
+            line.append(opt.sample_name)
+            line.append(opt.sample_plate_id)
+            line.append(opt.sample_plate_position)
+            line.append(f"SG{opt.sample_group}")
+            line.append(str(opt.analyte_meta_data))
+            line.append(str(opt.buffer_meta_data))
+            line.append(str(opt.extinction_coefficient * 10))
 
             if blanking_information == 3:
-                line.append(plate_info[str(opt.BlankSampleName)][0])
-                line.append(plate_info[str(opt.BlankSampleName)][1])
+                line.append(plate_info[str(opt.blank_sample_name)][0])
+                line.append(plate_info[str(opt.blank_sample_name)][1])
 
             sample_definition += ",".join(line) + "\n"
         # Assemble Sample Definition
 
         experiment_definition = "[Experiment definition]"
         experiment_definition += "\n"
-        experiment_definition += f'experiment_name="{self.options.ExperimentName}"'
+        experiment_definition += f'experiment_name="{self.options.experiment_name}"'
         experiment_definition += "\n"
         experiment_definition += (
-            f'application_name="{self.options.ApplicationName.value}"'
+            f'application_name="{self.options.application_name.value}"'
         )
         experiment_definition += "\n"
         experiment_definition += 'dropplate_type="Stunner Plate"'

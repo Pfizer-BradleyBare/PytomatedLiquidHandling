@@ -16,7 +16,7 @@ class Command(UnchainedLabsCommandBase, CommandOptionsMixin[Options]):
     ) -> dict | Exception:
         from System import String  # type:ignore
 
-        plate_id = self.options.PlateID
+        plate_id = self.options.plate_id
         if plate_id is None:
             status_code_raw, plate_id = stunner_dll_object.Measure()
 

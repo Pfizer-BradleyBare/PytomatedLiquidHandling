@@ -1,7 +1,8 @@
-from enum import Enum
-from typing import Literal
+from __future__ import annotations
 
 import dataclasses
+from enum import Enum
+from typing import Literal
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -32,5 +33,5 @@ class Options(str, Enum):
 
 @dataclasses.dataclass(kw_only=True)
 class ListedOptions(list[Options]):
-    Separator: Literal[";"] | Literal[","] | Literal["tab"] = ","
+    Separator: Literal[";", ",", "tab"] = ","
     NoResultValue: str = "N/A"
