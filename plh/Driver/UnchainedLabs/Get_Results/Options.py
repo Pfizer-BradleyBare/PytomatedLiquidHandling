@@ -32,6 +32,6 @@ class Options(str, Enum):
 
 
 @dataclasses.dataclass(kw_only=True)
-class ListedOptions(list[Options]):
+class OptionsList(list[Options]):
     Separator: Literal[";", ",", "tab"] = ","
     NoResultValue: str = "N/A"

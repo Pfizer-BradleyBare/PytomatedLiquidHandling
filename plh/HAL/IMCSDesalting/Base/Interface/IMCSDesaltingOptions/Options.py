@@ -13,6 +13,6 @@ class Options(OptionsBase):
 
 
 @dataclass(kw_only=True)
-class ListedOptions(list[Options]):
+class OptionsList(list[Options]):
     TipType: DesaltingTip.TipTypes
     ElutionMethod: str

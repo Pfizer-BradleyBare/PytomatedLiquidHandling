@@ -9,6 +9,6 @@ class Options(OptionsBase):
 
 
 @dataclasses.dataclass(kw_only=True)
-class ListedOptions(list[Options]):
+class OptionsList(list[Options]):
     PropertyKey: str
     PropertyValue: str | int

@@ -1,7 +1,6 @@
 from typing import Literal, cast
 
 from pydantic import dataclasses
-
 from PytomatedLiquidHandling.Driver.Hamilton import Backend, HSLTipCountingLib
 
 from .Base import TipABC
@@ -20,16 +19,16 @@ class HamiltonFTR(TipABC):
 
     def UpdateAvailablePositions(self):
         CommandInstance = HSLTipCountingLib.Edit.Command(
-            Options=HSLTipCountingLib.Edit.ListedOptions(
+            Options=HSLTipCountingLib.Edit.OptionsList(
                 TipCounter="HamiltonTipFTR_" + str(self.Volume) + "uL_TipCounter",
                 DialogTitle="Please update the number of "
                 + str(self.Volume)
                 + "uL tips currently loaded on the system",
-            )
+            ),
         )
         for TipRack in self.TipRacks:
             CommandInstance.Options.append(
-                HSLTipCountingLib.Edit.Options(LabwareID=TipRack.LabwareID)
+                HSLTipCountingLib.Edit.Options(LabwareID=TipRack.LabwareID),
             )
 
         self.Backend.ExecuteCommand(CommandInstance)
@@ -38,7 +37,8 @@ class HamiltonFTR(TipABC):
             cast(
                 list[dict[str, str]],
                 self.Backend.GetResponse(
-                    CommandInstance, HSLTipCountingLib.Edit.Response
+                    CommandInstance,
+                    HSLTipCountingLib.Edit.Response,
                 ).AvailablePositions,
-            )
+            ),
         )

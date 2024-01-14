@@ -9,5 +9,5 @@ class Options(OptionsBase):
 
 
 @dataclasses.dataclass(kw_only=True)
-class ListedOptions(list[OptionsBase]):
+class OptionsList(list[OptionsBase]):
     LabwareID: str

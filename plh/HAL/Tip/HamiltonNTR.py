@@ -1,11 +1,9 @@
-from copy import copy
 from dataclasses import field
 from typing import Literal, cast
 
 from pydantic import dataclasses
-
 from PytomatedLiquidHandling.Driver.Hamilton import Backend, Visual_NTR_Library
-from PytomatedLiquidHandling.HAL import LayoutItem, DeckLocation
+from PytomatedLiquidHandling.HAL import DeckLocation, LayoutItem
 
 from .Base import TipABC
 
@@ -19,7 +17,8 @@ class HamiltonNTR(TipABC):
     TipRackWaste: LayoutItem.TipRack
     _TierDiscardNumber: int = field(init=False, default=100)
     _DiscardedTipRacks: list[LayoutItem.TipRack] = field(
-        init=False, default_factory=list
+        init=False,
+        default_factory=list,
     )
 
     def RemainingTipsInTier(self) -> int:
@@ -39,7 +38,7 @@ class HamiltonNTR(TipABC):
 
     def DiscardLayerToWaste(self):
         PresentLabwareIDs = list(
-            set([Pos.LabwareID for Pos in self._AvailablePositions])
+            set([Pos.LabwareID for Pos in self._AvailablePositions]),
         )
         PresentTipRacks = [
             TipRack
@@ -53,7 +52,7 @@ class HamiltonNTR(TipABC):
             and TipRack not in self._DiscardedTipRacks
         ]
 
-        for i in range(0, self._TierDiscardNumber - len(DiscardTipRacks)):
+        for i in range(self._TierDiscardNumber - len(DiscardTipRacks)):
             DiscardTipRacks.append(PresentTipRacks[i])
         # Basically we should always discard the same number of racks as we have tiers.
         # There is a special case during tip counter edit where an NTR rack is removed manually by the user. We handle that here.
@@ -61,7 +60,8 @@ class HamiltonNTR(TipABC):
         for TipRack in DiscardTipRacks:
             self._DiscardedTipRacks.append(TipRack)
             DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
-                TipRack.DeckLocation, self.TipRackWaste.DeckLocation
+                TipRack.DeckLocation,
+                self.TipRackWaste.DeckLocation,
             )[0][0].TransportDevice.Transport(TipRack, self.TipRackWaste)
 
         self._AvailablePositions = [
@@ -80,18 +80,18 @@ class HamiltonNTR(TipABC):
 
     def UpdateAvailablePositions(self):
         CommandInstance = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
-            Options=Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
+            Options=Visual_NTR_Library.Channels_TipCounter_Edit.OptionsList(
                 TipCounter="HamiltonTipNTR_" + str(self.Volume) + "uL_TipCounter",
                 DialogTitle="Please update the number of "
                 + str(self.Volume)
                 + "uL tips currently loaded on the system",
-            )
+            ),
         )
         for TipRack in self.TipRacks:
             CommandInstance.Options.append(
                 Visual_NTR_Library.Channels_TipCounter_Edit.Options(
-                    LabwareID=TipRack.LabwareID
-                )
+                    LabwareID=TipRack.LabwareID,
+                ),
             )
 
         self.Backend.ExecuteCommand(CommandInstance)
@@ -103,7 +103,7 @@ class HamiltonNTR(TipABC):
                     CommandInstance,
                     Visual_NTR_Library.Channels_TipCounter_Edit.Response,
                 ).AvailablePositions,
-            )
+            ),
         )
 
         AvailableIDs = set([Pos.LabwareID for Pos in self._AvailablePositions])

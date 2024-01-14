@@ -20,7 +20,7 @@ def Main():
 
     logger.info("Pickup")
     Command = FlipTubeTool.ToolsPickUp.Command(
-        Options=FlipTubeTool.ToolsPickUp.ListedOptions(LabwareID="FlipTubeTools"),
+        Options=FlipTubeTool.ToolsPickUp.OptionsList(LabwareID="FlipTubeTools"),
     )
     Command.Options.append(FlipTubeTool.ToolsPickUp.Options(ChannelNumber=1))
     Command.Options.append(FlipTubeTool.ToolsPickUp.Options(ChannelNumber=2))

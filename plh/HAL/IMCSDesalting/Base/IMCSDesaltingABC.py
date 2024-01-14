@@ -28,9 +28,9 @@ class IMCSDesaltingABC(Interface, HALDevice):
     IsEquilibrated: bool = field(init=False, default=False)
 
     @abstractmethod
-    def Equilibrate(self, Options: IMCSDesaltingOptions.ListedOptions):
+    def Equilibrate(self, Options: IMCSDesaltingOptions.OptionsList):
         self.IsEquilibrated = True
 
     @abstractmethod
-    def Desalt(self, Options: IMCSDesaltingOptions.ListedOptions):
+    def Desalt(self, Options: IMCSDesaltingOptions.OptionsList):
         self.IsEquilibrated = False

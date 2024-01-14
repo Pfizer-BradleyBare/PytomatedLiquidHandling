@@ -6,11 +6,11 @@ from typing import Any
 from plh.driver.tools import CommandOptionsListMixin
 from plh.driver.UnchainedLabs.backend import UnchainedLabsCommandBase
 
-from .Options import ListedOptions
+from .Options import OptionsList
 
 
 @dataclasses.dataclass(kw_only=True)
-class Command(UnchainedLabsCommandBase, CommandOptionsListMixin[ListedOptions]):
+class Command(UnchainedLabsCommandBase, CommandOptionsListMixin[OptionsList]):
     def execute_command_helper(self: Command, stunner_dll_object) -> Any:
         results_definition = "[Export results]"
         results_definition += "\n"

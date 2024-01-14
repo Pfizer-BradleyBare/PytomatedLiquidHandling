@@ -1,15 +1,13 @@
-from copy import copy
 from dataclasses import field
 from typing import cast
 
 from pydantic import dataclasses
-
 from PytomatedLiquidHandling.Driver.Hamilton import (
     Backend,
     EntryExit,
     HSLTipCountingLib,
 )
-from PytomatedLiquidHandling.HAL import LayoutItem, DeckLocation
+from PytomatedLiquidHandling.HAL import DeckLocation, LayoutItem
 
 from .Base import TipABC
 
@@ -33,16 +31,16 @@ class HamiltonEEFTR(TipABC):
         TipABC.Initialize(self)
 
         CommandInstance = HSLTipCountingLib.Edit.Command(
-            Options=HSLTipCountingLib.Edit.ListedOptions(
+            Options=HSLTipCountingLib.Edit.OptionsList(
                 TipCounter="HamiltonTipFTR_" + str(self.Volume) + "uL_TipCounter",
                 DialogTitle="Please update the number of "
                 + str(self.Volume)
                 + "uL tips currently loaded on the system",
-            )
+            ),
         )
         for TipRack in self.TipRacks:
             CommandInstance.Options.append(
-                HSLTipCountingLib.Edit.Options(LabwareID=TipRack.LabwareID)
+                HSLTipCountingLib.Edit.Options(LabwareID=TipRack.LabwareID),
             )
 
         self.Backend.ExecuteCommand(CommandInstance)
@@ -51,14 +49,15 @@ class HamiltonEEFTR(TipABC):
             cast(
                 list[dict[str, str]],
                 self.Backend.GetResponse(
-                    CommandInstance, HSLTipCountingLib.Edit.Response
+                    CommandInstance,
+                    HSLTipCountingLib.Edit.Response,
                 ).AvailablePositions,
-            )
+            ),
         )
 
     def RemainingTips(self) -> int:
         return self.RemainingTipsInTier() + sum(
-            [self.TipsPerRack * Stack._StackCount for Stack in self.TipStacks]
+            [self.TipsPerRack * Stack._StackCount for Stack in self.TipStacks],
         )
 
     def RemainingTipsInTier(self) -> int:
@@ -88,12 +87,14 @@ class HamiltonEEFTR(TipABC):
                 Stack._StackCount -= 1
 
                 DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
-                    Rack.DeckLocation, self.TipRackWaste.DeckLocation
+                    Rack.DeckLocation,
+                    self.TipRackWaste.DeckLocation,
                 )[0][0].TransportDevice.Transport(Rack, self.TipRackWaste)
                 # Dispose of the empty rack
 
                 DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
-                    Rack.DeckLocation, self.TipRackWaste.DeckLocation
+                    Rack.DeckLocation,
+                    self.TipRackWaste.DeckLocation,
                 )[0][0].TransportDevice.Transport(Rack, Stack.TipRack)
                 # Move the full rack from the stack.
 
@@ -111,20 +112,21 @@ class HamiltonEEFTR(TipABC):
             self.Backend.ExecuteCommand(CommandInstance)
             self.Backend.WaitForResponseBlocking(CommandInstance)
             Stack._StackCount = self.Backend.GetResponse(
-                CommandInstance, EntryExit.CountLabwareInStack.Response
+                CommandInstance,
+                EntryExit.CountLabwareInStack.Response,
             ).NumLabware
 
         CommandInstance = HSLTipCountingLib.Edit.Command(
-            Options=HSLTipCountingLib.Edit.ListedOptions(
+            Options=HSLTipCountingLib.Edit.OptionsList(
                 TipCounter="HamiltonTipFTR_" + str(self.Volume) + "uL_TipCounter",
                 DialogTitle="Please update the number of "
                 + str(self.Volume)
                 + "uL tips currently loaded on the system",
-            )
+            ),
         )
         for TipRack in self.TipRacks:
             CommandInstance.Options.append(
-                HSLTipCountingLib.Edit.Options(LabwareID=TipRack.LabwareID)
+                HSLTipCountingLib.Edit.Options(LabwareID=TipRack.LabwareID),
             )
 
         self.Backend.ExecuteCommand(CommandInstance)
@@ -133,7 +135,8 @@ class HamiltonEEFTR(TipABC):
             cast(
                 list[dict[str, str]],
                 self.Backend.GetResponse(
-                    CommandInstance, HSLTipCountingLib.Edit.Response
+                    CommandInstance,
+                    HSLTipCountingLib.Edit.Response,
                 ).AvailablePositions,
-            )
+            ),
         )

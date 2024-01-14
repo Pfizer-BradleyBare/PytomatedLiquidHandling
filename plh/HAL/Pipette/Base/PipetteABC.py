@@ -152,15 +152,15 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
         Options: TransferOptions,
         Volume: float,
     ) -> list[TransferOptions]:
-        UpdatedListedOptions = list()
+        UpdatedOptionsList = list()
 
         NumTransfers = ceil(Options.TransferVolume / Volume)
         TransferOptions.TransferVolume /= NumTransfers
 
         for _ in range(NumTransfers):
-            UpdatedListedOptions.append(TransferOptions)
+            UpdatedOptionsList.append(TransferOptions)
 
-        return UpdatedListedOptions
+        return UpdatedOptionsList
 
     def _GetTip(
         self,
@@ -196,9 +196,9 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
         ][-1]
 
     @abstractmethod
-    def Transfer(self, ListedOptions: list[TransferOptions]):
+    def Transfer(self, OptionsList: list[TransferOptions]):
         ...
 
     @abstractmethod
-    def TimeToTransfer(self, ListedOptions: list[TransferOptions]):
+    def TimeToTransfer(self, OptionsList: list[TransferOptions]):
         ...

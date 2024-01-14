@@ -10,7 +10,7 @@ class Options(OptionsBase):
 
 
 @dataclasses.dataclass(kw_only=True)
-class ListedOptions(list[Options]):
+class OptionsList(list[Options]):
     class SortingOptions(Enum):
         RackColumns = 0
         TierColumns = 1

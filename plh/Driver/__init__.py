@@ -30,7 +30,7 @@ Backend.StartBackend()
 # Creates the Backend so we can communicate with the Hamilton
 
 Command = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
-    Options=Visual_NTR_Library.Channels_TipCounter_Edit.ListedOptions(
+    Options=Visual_NTR_Library.Channels_TipCounter_Edit.OptionsList(
         TipCounter="My custom tip counter", DialogTitle="Edit 50uL Tip Positions"
     )
 )
@@ -139,7 +139,7 @@ ResponseInstance = Backend.GetResponse(Command, Channel1000uL.Eject.Response)
 # We set BackendErrorHandling as True so the Hamilton software will handle errors for us.
 
 Command = Visual_NTR_Library.Channels_TipCounter_Write.Command(
-    Options=Visual_NTR_Library.Channels_TipCounter_Write.ListedOptions(
+    Options=Visual_NTR_Library.Channels_TipCounter_Write.OptionsList(
         TipCounter="My custom tip counter"
     )
 )

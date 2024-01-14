@@ -9,7 +9,7 @@ class Options(OptionsBase):
 
 
 @dataclasses.dataclass(kw_only=True)
-class ListedOptions(list[Options]):
+class OptionsList(list[Options]):
     TipCounter: str
     DialogTitle: str
     Timeout: int = 1000

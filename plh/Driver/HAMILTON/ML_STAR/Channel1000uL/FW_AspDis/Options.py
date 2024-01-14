@@ -12,7 +12,7 @@ class Options(OptionsBase):
 
 
 @dataclasses.dataclass(kw_only=True)
-class ListedOptions(list[Options]):
+class OptionsList(list[Options]):
     class ModeOptions(Enum):
         Aspiration = 0
         ConsequtiveAspiration = 1

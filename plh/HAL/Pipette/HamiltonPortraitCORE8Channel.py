@@ -1,8 +1,7 @@
 import itertools
-from typing import Any, DefaultDict, Literal, cast
+from typing import DefaultDict, Literal, cast
 
 from pydantic import dataclasses
-
 from PytomatedLiquidHandling.HAL import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
@@ -25,7 +24,8 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
     ]
 
     def _GroupOptions(
-        self, Options: list[TransferOptions]
+        self,
+        Options: list[TransferOptions],
     ) -> DefaultDict[str, list[tuple[PipetteTip, TransferOptions]]]:
         LiquidClassMaxVolumes: dict[str, float] = dict()
         for Opt in Options:
@@ -35,7 +35,8 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
             if CombinedName not in LiquidClassMaxVolumes:
                 LiquidClassMaxVolumes[CombinedName] = self._GetMaxTransferVolume(
-                    Opt.SourceLiquidClassCategory, Opt.DestinationLiquidClassCategory
+                    Opt.SourceLiquidClassCategory,
+                    Opt.DestinationLiquidClassCategory,
                 )
         # Max volume for each liquid class pairing. Important
 
@@ -48,7 +49,8 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
             )
 
             TruncatedOptions = self._TruncateTransferVolume(
-                Opt, LiquidClassMaxVolumes[CombinedName]
+                Opt,
+                LiquidClassMaxVolumes[CombinedName],
             )
 
             if len(TruncatedOptions) == 1:
@@ -62,7 +64,8 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
         FinalTransferOptions += [
             i
             for l in itertools.zip_longest(
-                *TruncatedFinalTransferOptions, fillvalue=None
+                *TruncatedFinalTransferOptions,
+                fillvalue=None,
             )
             for i in l
             if i is not None
@@ -70,7 +73,8 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
         # Shuffle our truncated options then add to the end.
 
         TipGroupedOptions: DefaultDict[
-            str, list[tuple[PipetteTip, TransferOptions]]
+            str,
+            list[tuple[PipetteTip, TransferOptions]],
         ] = DefaultDict(list)
         for Opt in Options:
             Tip = self._GetTip(
@@ -109,14 +113,14 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
                 PickupOptions: list[Channel1000uL.Pickup.Options] = list()
                 for Index, (Opt, ChannelNumber) in enumerate(
-                    zip(Opts, self.ActiveChannels)
+                    zip(Opts, self.ActiveChannels),
                 ):
                     PickupOptions.append(
                         Channel1000uL.Pickup.Options(
                             ChannelNumber=ChannelNumber,
                             LabwareID=TipPositions[Index].LabwareID,
                             PositionID=TipPositions[Index].PositionID,
-                        )
+                        ),
                     )
                 Command = Channel1000uL.Pickup.Command(
                     BackendErrorHandling=self.BackendErrorHandling,
@@ -128,10 +132,11 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
                 AspirateOptions: list[Channel1000uL.Aspirate.Options] = list()
                 for Index, (Opt, ChannelNumber) in enumerate(
-                    zip(Opts, self.ActiveChannels)
+                    zip(Opts, self.ActiveChannels),
                 ):
                     AspirateLabware = cast(
-                        Labware.PipettableLabware, Opt.SourceLayoutItemInstance.Labware
+                        Labware.PipettableLabware,
+                        Opt.SourceLayoutItemInstance.Labware,
                     )
 
                     NumericAddressing = Labware.Base.Layout.Numeric(
@@ -155,16 +160,16 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                             ChannelNumber=ChannelNumber,
                             LabwareID=Opt.SourceLayoutItemInstance.LabwareID,
                             PositionID=Opt.SourceLayoutItemInstance.Labware.Wells.Layout.GetPositionID(
-                                AspiratePosition
+                                AspiratePosition,
                             ),
                             LiquidClass=str(
                                 self._GetLiquidClass(
                                     Opt.SourceLiquidClassCategory,
                                     Opt.TransferVolume,
-                                )
+                                ),
                             ),
                             Volume=Opt.TransferVolume,
-                        )
+                        ),
                     )
 
                 Command = Channel1000uL.Aspirate.Command(
@@ -176,7 +181,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
                 DispenseOptions: list[Channel1000uL.Dispense.Options] = list()
                 for Index, (Opt, ChannelNumber) in enumerate(
-                    zip(Opts, self.ActiveChannels)
+                    zip(Opts, self.ActiveChannels),
                 ):
                     DispenseLabware = cast(
                         Labware.PipettableLabware,
@@ -193,7 +198,9 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                     DispensePosition = (
                         (
                             int(
-                                NumericAddressing.GetPositionID(Opt.DestinationPosition)
+                                NumericAddressing.GetPositionID(
+                                    Opt.DestinationPosition
+                                ),
                             )
                             - 1
                         )
@@ -209,16 +216,16 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                             ChannelNumber=ChannelNumber,
                             LabwareID=Opt.DestinationLayoutItemInstance.LabwareID,
                             PositionID=Opt.DestinationLayoutItemInstance.Labware.Wells.Layout.GetPositionID(
-                                DispensePosition
+                                DispensePosition,
                             ),
                             LiquidClass=str(
                                 self._GetLiquidClass(
                                     Opt.DestinationLiquidClassCategory,
                                     Opt.TransferVolume,
-                                )
+                                ),
                             ),
                             Volume=Opt.TransferVolume,
-                        )
+                        ),
                     )
 
                 Command = Channel1000uL.Dispense.Command(
@@ -232,14 +239,14 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 # Hamilton waste always has 16 positions. Do be compatible with liquid waste we want to use the outer positions
                 EjectOptions: list[Channel1000uL.Eject.Options] = list()
                 for Index, (Opt, ChannelNumber) in enumerate(
-                    zip(Opts, self.ActiveChannels)
+                    zip(Opts, self.ActiveChannels),
                 ):
                     EjectOptions.append(
                         Channel1000uL.Eject.Options(
                             LabwareID=Tip.TipWasteLabwareID,
                             ChannelNumber=ChannelNumber,
                             PositionID=EjectPositions[Index],
-                        )
+                        ),
                     )
 
                 Command = Channel1000uL.Eject.Command(
@@ -249,5 +256,5 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 self.Backend.ExecuteCommand(Command)
                 self.Backend.GetResponse(Command, Channel1000uL.Eject.Response)
 
-    def TimeToTransfer(self, ListedOptionsInstance: list[TransferOptions]) -> float:
+    def TimeToTransfer(self, OptionsListInstance: list[TransferOptions]) -> float:
         return 0

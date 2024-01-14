@@ -3,8 +3,6 @@ from PytomatedLiquidHandling.Driver.UnchainedLabs import (
     DefineExperiment,
     GetResults,
     GetStatus,
-    OpenTray,
-    Reset,
     StartMeasurement,
 )
 from PytomatedLiquidHandling.Driver.UnchainedLabs.Backend import StunnerBackend
@@ -25,30 +23,42 @@ Backend.WaitForResponseBlocking(Command)
 Backend.GetResponse(Command, CloseTray.Response)
 
 Command = DefineExperiment.Command(
-    Options=DefineExperiment.ListedOptions(
+    Options=DefineExperiment.OptionsList(
         ExperimentName="Test",
-        ApplicationName=DefineExperiment.ListedOptions.ApplicationNameOptions.ProteinSinglePoint,
-    )
+        ApplicationName=DefineExperiment.OptionsList.ApplicationNameOptions.ProteinSinglePoint,
+    ),
 )
 Command.Options.append(
     DefineExperiment.Options(
-        SampleName="A", SamplePlateID="Plate 1", SamplePlatePosition="A1", SampleGroup=1
-    )
+        SampleName="A",
+        SamplePlateID="Plate 1",
+        SamplePlatePosition="A1",
+        SampleGroup=1,
+    ),
 )
 Command.Options.append(
     DefineExperiment.Options(
-        SampleName="B", SamplePlateID="Plate 1", SamplePlatePosition="B1", SampleGroup=1
-    )
+        SampleName="B",
+        SamplePlateID="Plate 1",
+        SamplePlatePosition="B1",
+        SampleGroup=1,
+    ),
 )
 Command.Options.append(
     DefineExperiment.Options(
-        SampleName="C", SamplePlateID="Plate 1", SamplePlatePosition="C1", SampleGroup=1
-    )
+        SampleName="C",
+        SamplePlateID="Plate 1",
+        SamplePlatePosition="C1",
+        SampleGroup=1,
+    ),
 )
 Command.Options.append(
     DefineExperiment.Options(
-        SampleName="D", SamplePlateID="Plate 1", SamplePlatePosition="D1", SampleGroup=1
-    )
+        SampleName="D",
+        SamplePlateID="Plate 1",
+        SamplePlatePosition="D1",
+        SampleGroup=1,
+    ),
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
@@ -61,7 +71,7 @@ Backend.WaitForResponseBlocking(Command)
 Response = Backend.GetResponse(Command, GetStatus.Response)
 
 Command = StartMeasurement.Command(
-    Options=StartMeasurement.Options(PlateID=Response1.DefinedPlateIDs[0])
+    Options=StartMeasurement.Options(PlateID=Response1.DefinedPlateIDs[0]),
 )
 Backend.ExecuteCommand(Command)
 Backend.WaitForResponseBlocking(Command)
@@ -87,7 +97,7 @@ except:
     print("LEAVING!")
     time.sleep(1)
 
-Command = GetResults.Command(Options=GetResults.ListedOptions())
+Command = GetResults.Command(Options=GetResults.OptionsList())
 Command.Options += [
     GetResults.Options.SampleName,
     GetResults.Options.A280,

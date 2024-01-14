@@ -1,7 +1,6 @@
 from typing import DefaultDict, Literal
 
 from pydantic import dataclasses
-
 from PytomatedLiquidHandling.Driver.Hamilton import Backend, FlipTubeTool
 from PytomatedLiquidHandling.HAL import LayoutItem
 
@@ -30,8 +29,8 @@ class HamiltonFlipTubeLandscape(CloseableContainerABC):
 
         Command = FlipTubeTool.Initialize.Command(
             Options=FlipTubeTool.Initialize.Options(
-                ToolOrientation=FlipTubeTool.Initialize.Options.ToolOrientationOptions.Landscape
-            )
+                ToolOrientation=FlipTubeTool.Initialize.Options.ToolOrientationOptions.Landscape,
+            ),
         )
         self.Backend.ExecuteCommand(Command)
         self.Backend.WaitForResponseBlocking(Command)
@@ -42,7 +41,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerABC):
         Options: list[OpenCloseOptions],
     ):
         Command = FlipTubeTool.ToolsPickUp.Command(
-            Options=FlipTubeTool.ToolsPickUp.ListedOptions(LabwareID=self.ToolLabwareID)
+            Options=FlipTubeTool.ToolsPickUp.OptionsList(LabwareID=self.ToolLabwareID),
         )
         Command.Options += [
             FlipTubeTool.ToolsPickUp.Options(ChannelNumber=i) for i in range(1, 5)
@@ -65,7 +64,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerABC):
 
         for Key in LayoutItemPositions:
             Groups = LayoutItemKeys[Key].Labware.Wells.Layout.GroupPositionsColumnwise(
-                LayoutItemPositions[Key]
+                LayoutItemPositions[Key],
             )
 
             LayoutItemPositions[Key] = [
@@ -84,7 +83,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerABC):
                             LabwareID=LayoutItemKeys[Key].LabwareID,
                             PositionID=PosID,
                             ChannelNumber=Index + 1,
-                        )
+                        ),
                     )
                 self.Backend.ExecuteCommand(Command)
                 self.Backend.WaitForResponseBlocking(Command)
@@ -93,7 +92,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerABC):
         # It is possible that the group contains 1-4 posiitons. It should not matter.
 
         Command = FlipTubeTool.ToolsEject.Command(
-            Options=FlipTubeTool.ToolsEject.Options(LabwareID=self.ToolLabwareID)
+            Options=FlipTubeTool.ToolsEject.Options(LabwareID=self.ToolLabwareID),
         )
         self.Backend.ExecuteCommand(Command)
         self.Backend.WaitForResponseBlocking(Command)
@@ -110,7 +109,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerABC):
         Options: list[OpenCloseOptions],
     ):
         Command = FlipTubeTool.ToolsPickUp.Command(
-            Options=FlipTubeTool.ToolsPickUp.ListedOptions(LabwareID=self.ToolLabwareID)
+            Options=FlipTubeTool.ToolsPickUp.OptionsList(LabwareID=self.ToolLabwareID),
         )
         Command.Options += [
             FlipTubeTool.ToolsPickUp.Options(ChannelNumber=i) for i in range(1, 5)
@@ -133,7 +132,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerABC):
 
         for Key in LayoutItemPositions:
             Groups = LayoutItemKeys[Key].Labware.Wells.Layout.GroupPositionsColumnwise(
-                LayoutItemPositions[Key]
+                LayoutItemPositions[Key],
             )
 
             LayoutItemPositions[Key] = [
@@ -152,7 +151,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerABC):
                             LabwareID=LayoutItemKeys[Key].LabwareID,
                             PositionID=PosID,
                             ChannelNumber=Index + 1,
-                        )
+                        ),
                     )
                 self.Backend.ExecuteCommand(Command)
                 self.Backend.WaitForResponseBlocking(Command)
@@ -161,7 +160,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerABC):
         # It is possible that the group contains 1-4 posiitons. It should not matter.
 
         Command = FlipTubeTool.ToolsEject.Command(
-            Options=FlipTubeTool.ToolsEject.Options(LabwareID=self.ToolLabwareID)
+            Options=FlipTubeTool.ToolsEject.Options(LabwareID=self.ToolLabwareID),
         )
         self.Backend.ExecuteCommand(Command)
         self.Backend.WaitForResponseBlocking(Command)

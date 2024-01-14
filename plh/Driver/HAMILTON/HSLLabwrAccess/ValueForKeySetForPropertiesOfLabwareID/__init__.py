@@ -1,5 +1,5 @@
 from .command import Command
-from .options import ListedOptions, Options
+from .options import Options, OptionsList
 from .response import Response
 
-__all__ = ["Command", "Response", "Options", "ListedOptions"]
+__all__ = ["Command", "Response", "Options", "OptionsList"]

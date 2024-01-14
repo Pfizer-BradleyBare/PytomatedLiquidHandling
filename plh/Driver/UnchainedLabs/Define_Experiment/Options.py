@@ -23,6 +23,6 @@ class Options(OptionsBase):
 
 
 @dataclasses.dataclass(kw_only=True)
-class ListedOptions(list[Options]):
+class OptionsList(list[Options]):
     experiment_name: str
     application_name: ApplicationNameOptions
