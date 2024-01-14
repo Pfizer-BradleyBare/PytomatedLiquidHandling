@@ -6,7 +6,7 @@ from PytomatedLiquidHandling.Driver.Tools.BaseClasses import (
 )
 
 from ..Backend import UnchainedLabsCommandABC
-from .Options import ListedOptions
+from .options import ListedOptions
 
 
 @dataclasses.dataclass(kw_only=True)

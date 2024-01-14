@@ -3,7 +3,7 @@ import dataclasses
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import CommandOptionsMixin
 
 from ..Backend import UnchainedLabsCommandABC
-from .Options import Options
+from .options import Options
 
 
 @dataclasses.dataclass(kw_only=True)

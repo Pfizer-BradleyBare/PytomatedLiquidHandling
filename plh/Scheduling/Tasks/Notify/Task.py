@@ -6,7 +6,7 @@ from PytomatedLiquidHandling.Scheduling.ExecutionEngine.Orchastrator.RecurringNo
     TimedNotification,
 )
 
-from .Options import Options
+from .options import Options
 
 
 @dataclass
@@ -24,5 +24,5 @@ class Task(TaskABC):
             OrchastratorInstance.HALInstance,
         )
         OrchastratorInstance.TimedNotificationTrackerInstance.LoadSingle(
-            TimedNotificationInstance
+            TimedNotificationInstance,
         )

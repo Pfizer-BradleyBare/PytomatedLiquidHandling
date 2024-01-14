@@ -16,7 +16,7 @@ CommandSelf = TypeVar("CommandSelf", bound="HamiltonCommandBase")
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonCommandBase(CommandBase):
-    def serialize_options(self) -> dict[str, Any]:
+    def serialize_options(self: HamiltonCommandBase) -> dict[str, Any]:
         if isinstance(self, CommandOptionsMixin):
             output = vars(self.options)
 
