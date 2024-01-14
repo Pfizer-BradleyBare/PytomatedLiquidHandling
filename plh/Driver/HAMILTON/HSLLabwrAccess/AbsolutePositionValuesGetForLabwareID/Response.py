@@ -1,6 +1,6 @@
 import dataclasses
 
-from ...Backend import HamiltonResponseABC
+from ...Backend import HamiltonResponseBase
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -12,5 +12,5 @@ class LabwarePosition:
 
 
 @dataclasses.dataclass(kw_only=True)
-class Response(HamiltonResponseABC):
+class Response(HamiltonResponseBase):
     LabwarePositions: list[LabwarePosition]

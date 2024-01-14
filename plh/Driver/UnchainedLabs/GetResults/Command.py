@@ -1,15 +1,16 @@
+import dataclasses
 from typing import Any
 
-import dataclasses
-
-from PytomatedLiquidHandling.Driver.Tools.BaseClasses import CommandOptionsListed
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import (
+    CommandOptionsListMixin,
+)
 
 from ..Backend import UnchainedLabsCommandABC
 from .Options import ListedOptions
 
 
 @dataclasses.dataclass(kw_only=True)
-class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
+class Command(UnchainedLabsCommandABC, CommandOptionsListMixin[ListedOptions]):
     def _ExecuteCommandHelper(self, StunnerDLLObject) -> Any:
         ResultsDefinition = "[Export results]"
         ResultsDefinition += "\n"
@@ -25,7 +26,8 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
         ResultsDefinition += "\n"
 
         StatusCode, Results, ResultsPath = StunnerDLLObject.Get_Results(
-            ResultsDefinition, ""
+            ResultsDefinition,
+            "",
         )
 
         return dict(StatusCode=StatusCode, Results=Results, ResultsPath=ResultsPath)

@@ -1,11 +1,11 @@
-from enum import Enum
 import dataclasses
+from enum import Enum
 
-from ....Tools.BaseClasses import OptionsABC
+from plh.driver.tools import OptionsBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class Options(OptionsABC):
+class Options(OptionsBase):
     class YesNoOptions(Enum):
         No = 0
         Yes = 1

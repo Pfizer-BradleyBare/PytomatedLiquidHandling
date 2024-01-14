@@ -1,12 +1,11 @@
+import dataclasses
 from enum import Enum
 
-import dataclasses
-
-from ....Tools.BaseClasses import OptionsABC
+from plh.driver.tools import OptionsBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class Options(OptionsABC):
+class Options(OptionsBase):
     LabwareID: str
 
 

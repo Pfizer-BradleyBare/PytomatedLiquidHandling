@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
 from PytomatedLiquidHandling.API.Tools.Container import Container
-from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsABC
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsBase
 
 
 @dataclass
-class Options(OptionsABC):
+class Options(OptionsBase):
     SourceContainer: Container
     SourceWell: int
     DestinationContainer: Container

@@ -1,15 +1,16 @@
+import dataclasses
 from typing import Any
 
-import dataclasses
-
-from PytomatedLiquidHandling.Driver.Tools.BaseClasses import CommandOptionsListed
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import (
+    CommandOptionsListMixin,
+)
 
 from ..Backend import UnchainedLabsCommandABC
 from .Options import ListedOptions
 
 
 @dataclasses.dataclass(kw_only=True)
-class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
+class Command(UnchainedLabsCommandABC, CommandOptionsListMixin[ListedOptions]):
     def _ExecuteCommandHelper(self, StunnerDLLObject) -> Any:
         ColumnSourcePlate = -1
         ColumnSourcePosition = -1
@@ -39,7 +40,7 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
             # Blanking is either all our none.
         else:
             if len(set(Blanks)) == 1 and len(self.Options) != len(
-                set(PlateInfo.keys())
+                set(PlateInfo.keys()),
             ):
                 BlankingInformation = 1
                 BlankNameUsed = Blanks[0]
@@ -96,7 +97,7 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
             f'application_name="{self.Options.ApplicationName.value}"'
         )
         ExperimentDefinition += "\n"
-        ExperimentDefinition += f'dropplate_type="Stunner Plate"'
+        ExperimentDefinition += 'dropplate_type="Stunner Plate"'
         ExperimentDefinition += "\n"
         ExperimentDefinition += "\n"
         ExperimentDefinition += "[Import samples]"
@@ -141,7 +142,8 @@ class Command(UnchainedLabsCommandABC, CommandOptionsListed[ListedOptions]):
         # Assemble Experiment Definition
 
         StatusCode, DefinedPlateIDs = StunnerDLLObject.Define_Experiment(
-            ExperimentDefinition, SampleDefinition
+            ExperimentDefinition,
+            SampleDefinition,
         )
 
         return dict(StatusCode=StatusCode, DefinedPlateIDs=DefinedPlateIDs)

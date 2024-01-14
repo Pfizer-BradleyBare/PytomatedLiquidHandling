@@ -1,15 +1,14 @@
 import dataclasses
 
-from PytomatedLiquidHandling.Driver.Tools.BaseClasses import CommandOptions
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import CommandOptionsMixin
 
 from ..Backend import UnchainedLabsCommandABC
 from .Options import Options
 
 
 @dataclasses.dataclass(kw_only=True)
-class Command(UnchainedLabsCommandABC, CommandOptions[Options]):
+class Command(UnchainedLabsCommandABC, CommandOptionsMixin[Options]):
     def _ExecuteCommandHelper(self, StunnerDLLObject) -> dict | Exception:
-        import clr
         from System import String  # type:ignore
 
         PlateID = self.Options.PlateID

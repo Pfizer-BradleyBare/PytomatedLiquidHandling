@@ -1,10 +1,8 @@
 from abc import abstractmethod
 from math import ceil
-from typing import Any
 
 from pydantic import dataclasses, field_validator
-
-from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsABC
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsBase
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools import BaseClasses
 
@@ -12,7 +10,7 @@ from .PipetteTip import PipetteTip
 
 
 @dataclasses.dataclass(kw_only=True)
-class TransferOptions(OptionsABC):
+class TransferOptions(OptionsBase):
     SourceLayoutItemInstance: LayoutItem.CoverablePlate | LayoutItem.Plate
     SourcePosition: int | str
     # This is the labware well position. Numeric or alphanumeric.
@@ -53,7 +51,7 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
                     Identifier
                     + " is not found in "
                     + DeckLocation.Base.DeckLocationABC.__name__
-                    + " objects."
+                    + " objects.",
                 )
 
             SupportedObjects.append(Objects[Identifier])
@@ -61,7 +59,9 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
         return SupportedObjects
 
     @field_validator(
-        "SupportedSourceLabwares", "SupportedDestinationLabwares", mode="before"
+        "SupportedSourceLabwares",
+        "SupportedDestinationLabwares",
+        mode="before",
     )
     def __SupportedLabwaresValidate(cls, v):
         SupportedObjects = list()
@@ -74,7 +74,7 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
                     Identifier
                     + " is not found in "
                     + Labware.Base.LabwareABC.__name__
-                    + " objects."
+                    + " objects.",
                 )
 
             SupportedObjects.append(Objects[Identifier])
@@ -115,7 +115,7 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
                 UnsupportedLiquidClassCategories.append(SourceLiquidClassCategory)
             if not any(
                 PipetteTip.IsLiquidClassCategorySupported(
-                    DestinationLiquidClassCategory
+                    DestinationLiquidClassCategory,
                 )
                 for PipetteTip in self.SupportedTips
             ):
@@ -123,13 +123,15 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
             # Check liquid class compatibility
 
     def _GetMaxTransferVolume(
-        self, SourceLiquidClassCategory: str, DestinationLiquidClassCategory: str
+        self,
+        SourceLiquidClassCategory: str,
+        DestinationLiquidClassCategory: str,
     ) -> float:
         MaxVol = 0
 
         for Tip in self.SupportedTips:
             if Tip.IsLiquidClassCategorySupported(
-                SourceLiquidClassCategory
+                SourceLiquidClassCategory,
             ) and Tip.IsLiquidClassCategorySupported(DestinationLiquidClassCategory):
                 for LiquidClass in Tip.SupportedLiquidClassCategories[
                     SourceLiquidClassCategory
@@ -146,14 +148,16 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
         return MaxVol
 
     def _TruncateTransferVolume(
-        self, Options: TransferOptions, Volume: float
+        self,
+        Options: TransferOptions,
+        Volume: float,
     ) -> list[TransferOptions]:
         UpdatedListedOptions = list()
 
         NumTransfers = ceil(Options.TransferVolume / Volume)
         TransferOptions.TransferVolume /= NumTransfers
 
-        for _ in range(0, NumTransfers):
+        for _ in range(NumTransfers):
             UpdatedListedOptions.append(TransferOptions)
 
         return UpdatedListedOptions
@@ -169,7 +173,7 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
             for PipetteTip in self.SupportedTips
             if PipetteTip.IsLiquidClassCategorySupported(SourceLiquidClassCategory)
             and PipetteTip.IsLiquidClassCategorySupported(
-                DestinationLiquidClassCategory
+                DestinationLiquidClassCategory,
             )
         ]
 

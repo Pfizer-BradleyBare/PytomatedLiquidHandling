@@ -1,10 +1,11 @@
 import dataclasses
 
-from ....Tools.BaseClasses import CommandOptionsListed
-from ...Backend import HamiltonStateCommandABC
+from plh.driver.HAMILTON.backend import HamiltonCommandStateBase
+from plh.driver.tools import CommandOptionsListMixin
+
 from .Options import ListedOptions
 
 
 @dataclasses.dataclass(kw_only=True)
-class Command(CommandOptionsListed[ListedOptions], HamiltonStateCommandABC):
+class Command(CommandOptionsListMixin[ListedOptions], HamiltonCommandStateBase):
     ...

@@ -5,7 +5,11 @@ from collections import defaultdict
 from enum import Enum
 from typing import Any, TypeVar
 
-from plh.driver.tools import CommandBase, CommandOptionsListMixin, CommandOptionsMixin
+from plh.driver.tools import (
+    CommandBase,
+    CommandOptionsListMixin,
+    CommandOptionsMixin,
+)
 
 CommandSelf = TypeVar("CommandSelf", bound="HamiltonCommandBase")
 

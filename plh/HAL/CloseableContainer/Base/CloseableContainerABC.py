@@ -1,14 +1,13 @@
 from abc import abstractmethod
 
 from pydantic import dataclasses, field_validator
-
-from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsABC
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsBase
 from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools import BaseClasses
 
 
 @dataclasses.dataclass(kw_only=True)
-class OpenCloseOptions(OptionsABC):
+class OpenCloseOptions(OptionsBase):
     LayoutItem: LayoutItem.Plate
     Position: str | int
 
@@ -39,7 +38,7 @@ class CloseableContainerABC(BaseClasses.Interface, BaseClasses.HALDevice):
                     Identifier
                     + " is not found in "
                     + DeckLocation.Base.DeckLocationABC.__name__
-                    + " objects."
+                    + " objects.",
                 )
 
             SupportedObjects.append(Objects[Identifier])
@@ -58,7 +57,7 @@ class CloseableContainerABC(BaseClasses.Interface, BaseClasses.HALDevice):
                     Identifier
                     + " is not found in "
                     + Labware.Base.LabwareABC.__name__
-                    + " objects."
+                    + " objects.",
                 )
 
             SupportedObjects.append(Objects[Identifier])
@@ -95,19 +94,20 @@ class CloseableContainerABC(BaseClasses.Interface, BaseClasses.HALDevice):
 
         if len(UnsupportedLabwares) > 0:
             Exceptions.append(
-                Labware.Base.Exceptions.LabwareNotSupportedError(UnsupportedLabwares)
+                Labware.Base.Exceptions.LabwareNotSupportedError(UnsupportedLabwares),
             )
 
         if len(UnsupportedDeckLocations) > 0:
             Exceptions.append(
                 DeckLocation.Base.Exceptions.DeckLocationNotSupportedError(
-                    UnsupportedDeckLocations
-                )
+                    UnsupportedDeckLocations,
+                ),
             )
 
         if len(Exceptions) > 0:
             raise ExceptionGroup(
-                "ClosedContainer OpenCloseOptions Exceptions", Exceptions
+                "ClosedContainer OpenCloseOptions Exceptions",
+                Exceptions,
             )
 
     @abstractmethod

@@ -1,8 +1,8 @@
 import dataclasses
 
-from ...Backend import HamiltonResponseABC
+from ...Backend import HamiltonResponseBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class Response(HamiltonResponseABC):
+class Response(HamiltonResponseBase):
     IsSpinning: bool

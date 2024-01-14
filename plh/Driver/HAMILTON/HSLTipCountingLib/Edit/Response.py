@@ -1,6 +1,6 @@
 from typing_extensions import TypedDict
 
-from ...Backend import HamiltonResponseABC
+from ...Backend import HamiltonResponseBase
 
 
 class SequencePositionDict(TypedDict):
@@ -12,5 +12,5 @@ import dataclasses
 
 
 @dataclasses.dataclass(kw_only=True)
-class Response(HamiltonResponseABC):
+class Response(HamiltonResponseBase):
     AvailablePositions: list[SequencePositionDict]

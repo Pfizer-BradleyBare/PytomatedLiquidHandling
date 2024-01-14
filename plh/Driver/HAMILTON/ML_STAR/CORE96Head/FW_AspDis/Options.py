@@ -1,13 +1,12 @@
+import dataclasses
 from enum import Enum
 from typing import Literal
 
-import dataclasses
-
-from .....Tools.BaseClasses import OptionsABC
+from plh.driver.tools import OptionsBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class Options(OptionsABC):
+class Options(OptionsBase):
     class ModeOptions(Enum):
         Aspiration = 0
         ConsequtiveAspiration = 1

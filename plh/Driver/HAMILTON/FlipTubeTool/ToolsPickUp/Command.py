@@ -1,14 +1,15 @@
 import dataclasses
 
-from ....Tools.BaseClasses import CommandOptionsListed
-from ...Backend import HamiltonActionCommandABC
+from plh.driver.HAMILTON.backend import HamiltonCommandActionBase
+from plh.driver.tools import CommandOptionsListMixin
+
 from .Options import ListedOptions
 
 
 @dataclasses.dataclass(kw_only=True)
-class Command(CommandOptionsListed[ListedOptions], HamiltonActionCommandABC):
-    def SerializeOptions(self) -> dict[str, list]:
-        OutputDict = HamiltonActionCommandABC.SerializeOptions(self)
+class Command(CommandOptionsListMixin[ListedOptions], HamiltonCommandActionBase):
+    def serialize_options(self) -> dict[str, list]:
+        OutputDict = HamiltonCommandActionBase.serialize_options(self)
 
         ChannelNumberList = ["0"] * 8
 

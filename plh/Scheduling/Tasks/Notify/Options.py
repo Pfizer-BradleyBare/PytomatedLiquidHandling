@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsABC
+from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsBase
 
 
 @dataclass
-class Options(OptionsABC):
+class Options(OptionsBase):
     NotificationCycleTime: int

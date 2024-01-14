@@ -1,10 +1,10 @@
 import dataclasses
 
-from ....Backend import HamiltonBlockDataPackage, HamiltonResponseABC
+from plh.driver.HAMILTON.backend import HamiltonBlockDataPackage, HamiltonResponseBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class Response(HamiltonResponseABC):
+class Response(HamiltonResponseBase):
     RawCarrierRecoveryDetails: dataclasses.InitVar[str]
     RawLabwareRecoveryDetails: dataclasses.InitVar[str]
 
@@ -12,12 +12,14 @@ class Response(HamiltonResponseABC):
     LabwareRecoveryDetails: HamiltonBlockDataPackage = dataclasses.field(init=False)
 
     def __post_init__(
-        self, RawCarrierRecoveryDetails: str, RawLabwareRecoveryDetails: str
+        self,
+        RawCarrierRecoveryDetails: str,
+        RawLabwareRecoveryDetails: str,
     ) -> None:
-        self.CarrierRecoveryDetails = HamiltonResponseABC.ParseHamiltonBlockData(
-            RawCarrierRecoveryDetails
+        self.CarrierRecoveryDetails = HamiltonResponseBase.parse_block_data(
+            RawCarrierRecoveryDetails,
         )
-        self.LabwareRecoveryDetails = HamiltonResponseABC.ParseHamiltonBlockData(
-            RawLabwareRecoveryDetails
+        self.LabwareRecoveryDetails = HamiltonResponseBase.parse_block_data(
+            RawLabwareRecoveryDetails,
         )
         super().__post_init__()

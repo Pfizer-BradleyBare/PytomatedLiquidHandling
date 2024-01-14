@@ -1,8 +1,8 @@
 import dataclasses
 
-from ...Backend import HamiltonActionCommandABC
+from plh.driver.HAMILTON.backend import HamiltonCommandActionBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class Command(HamiltonActionCommandABC):
+class Command(HamiltonCommandActionBase):
     ...
