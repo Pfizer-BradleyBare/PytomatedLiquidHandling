@@ -73,7 +73,7 @@ class HamiltonBackendServer(BackendServerBase):
             return "Command not available. Try again.", 408
 
         if isinstance(command, CommandOptionsListMixin) and len(command.options) == 0:
-            self._Response = ValueError(
+            self._response = ValueError(
                 "There are no options in the options tracker",
             )
             return self.Execute()
@@ -98,7 +98,7 @@ class HamiltonBackendServer(BackendServerBase):
                 response["Command Parameters"] = command.serialize_options()
             # catch the error if it occurs and log it. Then reraise so we can cleanup.
         except KeyError:
-            self._Response = RuntimeError(
+            self._response = RuntimeError(
                 "Error while converting Options to json dict.",
             )
             return self.Execute()
