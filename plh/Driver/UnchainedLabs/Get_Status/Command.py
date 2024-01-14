@@ -11,4 +11,8 @@ class Command(UnchainedLabsCommandBase):
         self: Command,
         stunner_dll_object,
     ) -> dict | Exception:
-        return {"status_code_raw": stunner_dll_object.Reset()}
+        status_code_raw, measurement_info = stunner_dll_object.Get_Status("")
+        return {
+            "status_code_raw": status_code_raw,
+            "measurement_info": measurement_info,
+        }

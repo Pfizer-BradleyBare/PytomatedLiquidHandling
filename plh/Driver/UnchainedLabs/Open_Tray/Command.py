@@ -11,4 +11,4 @@ class Command(UnchainedLabsCommandBase):
         self: Command,
         stunner_dll_object,
     ) -> dict | Exception:
-        return {"status_code_raw": stunner_dll_object.Reset()}
+        return {"status_code_raw": stunner_dll_object.Open_Tray()}

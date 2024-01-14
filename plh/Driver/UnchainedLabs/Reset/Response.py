@@ -1,8 +1,8 @@
 import dataclasses
 
-from ..Backend import UnchainedLabsResponseABC
+from plh.driver.UnchainedLabs.backend import UnchainedLabsResponseBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class Response(UnchainedLabsResponseABC):
+class Response(UnchainedLabsResponseBase):
     ...

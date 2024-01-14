@@ -1,8 +1,8 @@
 import dataclasses
 
-from ..Backend import UnchainedLabsResponseABC
+from plh.driver.UnchainedLabs.backend import UnchainedLabsResponseBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class Response(UnchainedLabsResponseABC):
-    InternalErrorDescription: str
+class Response(UnchainedLabsResponseBase):
+    internal_error_description: str

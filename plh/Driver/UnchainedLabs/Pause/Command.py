@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 import dataclasses
 
-from ..Backend import UnchainedLabsCommandABC
+from plh.driver.UnchainedLabs.backend import UnchainedLabsCommandBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class Command(UnchainedLabsCommandABC):
-    def _ExecuteCommandHelper(self, StunnerDLLObject) -> dict | Exception:
-        return dict(StatusCode=StunnerDLLObject.Pause())
+class Command(UnchainedLabsCommandBase):
+    def execute_command_helper(
+        self: Command,
+        stunner_dll_object,
+    ) -> dict | Exception:
+        return {"status_code_raw": stunner_dll_object.Pause()}
