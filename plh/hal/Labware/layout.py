@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Callable, Literal
+from typing import Callable
 
 from pydantic import dataclasses
 
@@ -11,15 +11,16 @@ class InvalidpositionError(ValueError):
     ...
 
 
+class LayoutSorting(Enum):
+    Columnwise = "Columnwise"
+    Rowwise = "Rowwise"
+
+
 @dataclasses.dataclass(kw_only=True)
 class Layout(ABC):
-    class Sorting(Enum):
-        Columnwise = "Columnwise"
-        Rowwise = "Rowwise"
-
-    Rows: int = 8
-    Columns: int = 12
-    Direction: Sorting = Sorting.Columnwise
+    Rows: int
+    Columns: int
+    Direction: LayoutSorting
 
     def get_position_id(self: Layout, position: str | int) -> str:
         if isinstance(position, int):
@@ -35,7 +36,7 @@ class Layout(ABC):
             msg = "position can be either alphanumeric or numeric.\nAlphanumeric must contain both numbers and letters. Ex: A1, B12, 10H.\nNumeric must only contain digits. Ex: 1 13 95"
             raise InvalidpositionError(msg)
 
-        if self.Direction == Layout.Sorting.Columnwise:
+        if self.Direction == LayoutSorting.Columnwise:
             return self._get_columnwise_position_id(position)
 
         return self._get_rowwise_position_id(position)
@@ -74,14 +75,12 @@ class Layout(ABC):
 
 
 @dataclasses.dataclass(kw_only=True)
-class Numeric(Layout):
-    Type: Literal["Numeric"] = "Numeric"
-
-    def sort_positions(self: Numeric, positions: list[str | int]) -> list[str]:
+class NumericLayout(Layout):
+    def sort_positions(self: NumericLayout, positions: list[str | int]) -> list[str]:
         return sorted([self.get_position_id(pos) for pos in positions])
 
     def group_positions_columnwise(
-        self: Numeric,
+        self: NumericLayout,
         positions: list[str | int],
     ) -> list[list[str]]:
         sorted_positions = self.sort_positions(positions)
@@ -93,7 +92,7 @@ class Numeric(Layout):
         return [Group for Group in groups if len(Group) != 0]
 
     def group_positions_rowwise(
-        self: Numeric,
+        self: NumericLayout,
         positions: list[str | int],
     ) -> list[list[str]]:
         sorted_positions = self.sort_positions(positions)
@@ -104,7 +103,7 @@ class Numeric(Layout):
 
         return [Group for Group in groups if len(Group) != 0]
 
-    def _get_columnwise_position_id(self: Numeric, position: str) -> str:
+    def _get_columnwise_position_id(self: NumericLayout, position: str) -> str:
         if position.isnumeric():
             return position
 
@@ -117,7 +116,7 @@ class Numeric(Layout):
 
         return str(pos)
 
-    def _get_rowwise_position_id(self: Numeric, position: str) -> str:
+    def _get_rowwise_position_id(self: NumericLayout, position: str) -> str:
         if position.isnumeric():
             return position
 
@@ -132,11 +131,12 @@ class Numeric(Layout):
 
 
 @dataclasses.dataclass(kw_only=True)
-class AlphaNumeric(Layout):
-    Type: Literal["AlphaNumeric"] = "AlphaNumeric"
-
-    def sort_positions(self: AlphaNumeric, positions: list[str | int]) -> list[str]:
-        numeric_addressing = Numeric(
+class AlphaNumericLayout(Layout):
+    def sort_positions(
+        self: AlphaNumericLayout,
+        positions: list[str | int],
+    ) -> list[str]:
+        numeric_addressing = NumericLayout(
             Rows=self.Rows,
             Columns=self.Columns,
             Direction=self.Direction,
@@ -148,10 +148,10 @@ class AlphaNumeric(Layout):
         ]
 
     def group_positions_columnwise(
-        self: AlphaNumeric,
+        self: AlphaNumericLayout,
         positions: list[str | int],
     ) -> list[list[str]]:
-        numeric_addressing = Numeric(
+        numeric_addressing = NumericLayout(
             Rows=self.Rows,
             Columns=self.Columns,
             Direction=self.Direction,
@@ -163,10 +163,10 @@ class AlphaNumeric(Layout):
         ]
 
     def group_positions_rowwise(
-        self: AlphaNumeric,
+        self: AlphaNumericLayout,
         positions: list[str | int],
     ) -> list[list[str]]:
-        numeric_addressing = Numeric(
+        numeric_addressing = NumericLayout(
             Rows=self.Rows,
             Columns=self.Columns,
             Direction=self.Direction,
@@ -177,7 +177,7 @@ class AlphaNumeric(Layout):
             for Group in numeric_addressing.group_positions_rowwise(positions)
         ]
 
-    def _get_columnwise_position_id(self: AlphaNumeric, position: str) -> str:
+    def _get_columnwise_position_id(self: AlphaNumericLayout, position: str) -> str:
         if position.isalnum() and not position.isalpha() and not position.isdigit():
             return position
 
@@ -189,7 +189,7 @@ class AlphaNumeric(Layout):
 
         return character_portion + number_portion
 
-    def _get_rowwise_position_id(self: AlphaNumeric, position: str) -> str:
+    def _get_rowwise_position_id(self: AlphaNumericLayout, position: str) -> str:
         if position.isalnum() and not position.isalpha() and not position.isdigit():
             return position
 
