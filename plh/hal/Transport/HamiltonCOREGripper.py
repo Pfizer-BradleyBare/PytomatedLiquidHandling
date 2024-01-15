@@ -2,12 +2,12 @@ from dataclasses import field
 from typing import cast
 
 from pydantic import dataclasses
-
 from PytomatedLiquidHandling.Driver.Hamilton import Backend
 from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import (
     Channel1000uLCOREGrip as COREGripperDriver,
 )
-from PytomatedLiquidHandling.HAL import LayoutItem, DeckLocation
+
+from plh.hal import DeckLocation, LayoutItem
 
 from .Base import TransportABC
 
@@ -21,14 +21,12 @@ class HamiltonCOREGripper(TransportABC):
     class PickupOptions(TransportABC.PickupOptions):
         """Options to pick up labware from deck location"""
 
-        ...
-
     @dataclasses.dataclass(kw_only=True)
     class DropoffOptions(TransportABC.DropoffOptions):
         """Options to drop off labware to deck location"""
 
         CheckPlateExists: COREGripperDriver.PlacePlate.Options.YesNoOptions = field(
-            compare=False
+            compare=False,
         )
 
     def Transport(
@@ -74,7 +72,7 @@ class HamiltonCOREGripper(TransportABC):
                 LabwareID=DestinationLayoutItem.LabwareID,
                 CheckPlateExists=DropoffOptions.CheckPlateExists,
                 EjectTool=COREGripperDriver.PlacePlate.Options.YesNoOptions(
-                    int(self._LastTransportFlag)
+                    int(self._LastTransportFlag),
                 ),
             ),
             BackendErrorHandling=self.BackendErrorHandling,

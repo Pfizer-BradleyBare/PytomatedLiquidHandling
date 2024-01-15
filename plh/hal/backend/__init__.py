@@ -24,5 +24,5 @@ _HALDevice.hal_devices[_Stunner.__name__] = cast(Type[_HALDevice], _Stunner)
 # Add Stunner to HALDevice so they can be loaded during configuration
 
 
-Identifier = str
-Devices: dict[Identifier, _BackendBase] = {}
+identifier = str
+devices: dict[identifier, _BackendBase] = {}

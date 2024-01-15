@@ -1,9 +1,8 @@
 from math import ceil
-from typing import cast
 
 from pydantic import dataclasses, field_validator
 
-from PytomatedLiquidHandling.HAL import Labware
+from plh.hal import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.ML_STAR import Channel1000uL, CORE96Head
@@ -27,7 +26,7 @@ class HamiltonCORE96Head(PipetteABC):
 
         if Identifier not in Objects:
             raise ValueError(
-                Identifier + " is not found in " + PipetteABC.__name__ + " objects."
+                Identifier + " is not found in " + PipetteABC.__name__ + " objects.",
             )
 
         return Objects[Identifier]
@@ -37,7 +36,8 @@ class HamiltonCORE96Head(PipetteABC):
         # All the options should be the same. So we can just take the first one for the majority
 
         MaxVolume = self._GetMaxTransferVolume(
-            Opt.SourceLiquidClassCategory, Opt.DestinationLiquidClassCategory
+            Opt.SourceLiquidClassCategory,
+            Opt.DestinationLiquidClassCategory,
         )
 
         NumRepeats = ceil(Opt.TransferVolume / MaxVolume)
@@ -66,14 +66,14 @@ class HamiltonCORE96Head(PipetteABC):
 
             SupportPickupOptions: list[Channel1000uL.Pickup.Options] = list()
             for Index, (Opt, ChannelNumber) in enumerate(
-                zip(Opts, self.HamiltonPortraitCORE8Channel.ActiveChannels)
+                zip(Opts, self.HamiltonPortraitCORE8Channel.ActiveChannels),
             ):
                 SupportPickupOptions.append(
                     Channel1000uL.Pickup.Options(
                         ChannelNumber=ChannelNumber,
                         LabwareID=TipPositions[Index].LabwareID,
                         PositionID=TipPositions[Index].PositionID,
-                    )
+                    ),
                 )
             Command = Channel1000uL.Pickup.Command(
                 BackendErrorHandling=self.BackendErrorHandling,
@@ -89,16 +89,16 @@ class HamiltonCORE96Head(PipetteABC):
 
             SupportEjectOptions: list[Channel1000uL.Eject.Options] = list()
             for Index, (Opt, ChannelNumber) in enumerate(
-                zip(Opts, self.HamiltonPortraitCORE8Channel.ActiveChannels)
+                zip(Opts, self.HamiltonPortraitCORE8Channel.ActiveChannels),
             ):
                 SupportEjectOptions.append(
                     Channel1000uL.Eject.Options(
                         LabwareID=Tip.TipSupportDropoffLabwareID,
                         ChannelNumber=ChannelNumber,
                         PositionID=NumericAddressing.GetPositionID(
-                            Opt.SourcePosition  # Source and destination are the same
+                            Opt.SourcePosition,  # Source and destination are the same
                         ),
-                    )
+                    ),
                 )
 
             Command = Channel1000uL.Eject.Command(
@@ -111,7 +111,7 @@ class HamiltonCORE96Head(PipetteABC):
         # This picks up tips with the 1mL channels and ejects them in the tip support rack. The 96 head will now pick them up.
 
         PickupOptions = CORE96Head.Pickup.Options(
-            LabwareID=Tip.TipSupportPickupLabwareID
+            LabwareID=Tip.TipSupportPickupLabwareID,
         )
         Command = CORE96Head.Pickup.Command(
             BackendErrorHandling=self.BackendErrorHandling,
@@ -126,7 +126,7 @@ class HamiltonCORE96Head(PipetteABC):
                 self._GetLiquidClass(
                     Opt.SourceLiquidClassCategory,
                     TransferVolume,
-                )
+                ),
             ),
             Volume=TransferVolume,
         )
@@ -134,12 +134,12 @@ class HamiltonCORE96Head(PipetteABC):
         DispenseOptions = CORE96Head.Dispense.Options(
             LabwareID=Opt.SourceLayoutItemInstance.LabwareID,
             LiquidClass=str(
-                self._GetLiquidClass(Opt.SourceLiquidClassCategory, TransferVolume)
+                self._GetLiquidClass(Opt.SourceLiquidClassCategory, TransferVolume),
             ),
             Volume=TransferVolume,
         )
 
-        for _ in range(0, NumRepeats):
+        for _ in range(NumRepeats):
             Command = CORE96Head.Aspirate.Command(
                 BackendErrorHandling=self.BackendErrorHandling,
                 Options=AspirateOptions,

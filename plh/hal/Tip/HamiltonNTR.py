@@ -3,7 +3,8 @@ from typing import Literal, cast
 
 from pydantic import dataclasses
 from PytomatedLiquidHandling.Driver.Hamilton import Backend, Visual_NTR_Library
-from PytomatedLiquidHandling.HAL import DeckLocation, LayoutItem
+
+from plh.hal import DeckLocation, LayoutItem
 
 from .Base import TipABC
 

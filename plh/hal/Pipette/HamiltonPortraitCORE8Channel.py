@@ -2,7 +2,8 @@ import itertools
 from typing import DefaultDict, Literal, cast
 
 from pydantic import dataclasses
-from PytomatedLiquidHandling.HAL import Labware
+
+from plh.hal import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.ML_STAR import Channel1000uL
@@ -199,7 +200,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                         (
                             int(
                                 NumericAddressing.GetPositionID(
-                                    Opt.DestinationPosition
+                                    Opt.DestinationPosition,
                                 ),
                             )
                             - 1

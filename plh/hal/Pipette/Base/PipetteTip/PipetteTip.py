@@ -1,6 +1,6 @@
 from pydantic import dataclasses, field_validator
 
-from PytomatedLiquidHandling.HAL import Tip
+from plh.hal import Tip
 
 from .LiquidClass import LiquidClass
 
@@ -23,7 +23,7 @@ class PipetteTip:
                 Identifier
                 + " is not found in "
                 + Tip.Base.TipABC.__name__
-                + " objects."
+                + " objects.",
             )
 
         return Objects[Identifier]

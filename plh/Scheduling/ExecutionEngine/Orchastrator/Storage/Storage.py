@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from PytomatedLiquidHandling.HAL import LayoutItem
+from plh.hal import LayoutItem
 
 if TYPE_CHECKING:
     from ..Orchastrator import Orchastrator
@@ -14,7 +14,8 @@ class Storage:
     OrchastratorInstance: Orchastrator
 
     StoredItems: LayoutItem.LayoutItemTracker = field(
-        init=False, default_factory=LayoutItem.LayoutItemTracker
+        init=False,
+        default_factory=LayoutItem.LayoutItemTracker,
     )
 
     def IsStored(self):

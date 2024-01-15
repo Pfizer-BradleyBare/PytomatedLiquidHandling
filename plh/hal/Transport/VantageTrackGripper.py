@@ -2,9 +2,9 @@ from dataclasses import field
 from typing import cast
 
 from pydantic import dataclasses
-
 from PytomatedLiquidHandling.Driver.Hamilton import ML_STAR, Backend, TrackGripper
-from PytomatedLiquidHandling.HAL import LayoutItem, DeckLocation
+
+from plh.hal import DeckLocation, LayoutItem
 
 from .Base import TransportABC
 
@@ -22,10 +22,10 @@ class VantageTrackGripper(TransportABC):
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
         Orientation: ML_STAR.iSwap.GetPlate.Options.LabwareOrientationOptions = field(
-            compare=True
+            compare=True,
         )
         CoordinatedMovement: TrackGripper.GripPlateFromTaughtPosition.Options.YesNoOptions = field(
-            compare=False
+            compare=False,
         )
 
     @dataclasses.dataclass(kw_only=True)
@@ -37,7 +37,7 @@ class VantageTrackGripper(TransportABC):
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
         CoordinatedMovement: TrackGripper.PlacePlateToTaughtPosition.Options.YesNoOptions = field(
-            compare=False
+            compare=False,
         )
 
     def Transport(
@@ -84,7 +84,8 @@ class VantageTrackGripper(TransportABC):
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)
         self.Backend.GetResponse(
-            CommandInstance, TrackGripper.GripPlateFromTaughtPosition.Response
+            CommandInstance,
+            TrackGripper.GripPlateFromTaughtPosition.Response,
         )
 
         DropoffOptions = cast(
@@ -105,7 +106,8 @@ class VantageTrackGripper(TransportABC):
         self.Backend.ExecuteCommand(CommandInstance)
         self.Backend.WaitForResponseBlocking(CommandInstance)
         self.Backend.GetResponse(
-            CommandInstance, TrackGripper.PlacePlateToTaughtPosition.Response
+            CommandInstance,
+            TrackGripper.PlacePlateToTaughtPosition.Response,
         )
 
     def TransportTime(

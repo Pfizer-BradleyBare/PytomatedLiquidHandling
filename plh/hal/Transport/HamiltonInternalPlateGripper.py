@@ -2,10 +2,10 @@ from dataclasses import field
 from typing import cast
 
 from pydantic import dataclasses
-
 from PytomatedLiquidHandling.Driver.Hamilton import Backend
 from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import iSwap as IPGDriver
-from PytomatedLiquidHandling.HAL import LayoutItem, DeckLocation
+
+from plh.hal import DeckLocation, LayoutItem
 
 from .Base import TransportABC
 

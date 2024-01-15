@@ -1,6 +1,6 @@
 from pydantic import dataclasses, field_validator
 
-from PytomatedLiquidHandling.HAL import LayoutItem
+from plh.hal import LayoutItem
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -31,7 +31,7 @@ class FilterPlateConfiguration:
                 Identifier
                 + " is not found in "
                 + LayoutItem.Base.LayoutItemABC.__name__
-                + " objects."
+                + " objects.",
             )
 
         return Objects[Identifier]

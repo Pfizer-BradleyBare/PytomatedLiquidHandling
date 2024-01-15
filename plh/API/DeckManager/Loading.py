@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 
 from PytomatedLiquidHandling.API.Tools import Container
-from PytomatedLiquidHandling.HAL import Labware, LayoutItem
+
+from plh.hal import Labware, LayoutItem
 
 
 @dataclass

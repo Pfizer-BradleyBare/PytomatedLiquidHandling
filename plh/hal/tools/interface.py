@@ -24,7 +24,7 @@ class Interface:
 
     @field_validator("Backend", mode="before")
     @classmethod
-    def _validate_backend(cls: type[Interface], v: str | BackendBase) -> BackendBase:
+    def __validate_backend(cls: type[Interface], v: str | BackendBase) -> BackendBase:
         if isinstance(v, BackendBase):
             return v
 

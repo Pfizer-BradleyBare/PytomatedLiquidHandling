@@ -1,7 +1,11 @@
-from . import Base
-from .AutoloadCarrier import AutoloadCarrier
-from .MoveableCarrier import MoveableCarrier
-from .NonMoveableCarrier import NonMoveableCarrier
+from __future__ import annotations
 
-Identifier = str
-Devices: dict[Identifier, Base.CarrierABC] = dict()
+from .autoload_carrier import AutoloadCarrier
+from .carrier_base import CarrierBase
+from .moveable_carrier import MoveableCarrier
+from .non_moveable_carrier import NonMoveableCarrier
+
+__all__ = ["CarrierBase", "AutoloadCarrier", "MoveableCarrier", "NonMoveableCarrier"]
+
+identifier = str
+devices: dict[identifier, CarrierBase] = {}

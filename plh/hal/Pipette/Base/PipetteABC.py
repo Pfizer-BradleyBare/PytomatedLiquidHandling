@@ -3,8 +3,9 @@ from math import ceil
 
 from pydantic import dataclasses, field_validator
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsBase
-from PytomatedLiquidHandling.HAL import DeckLocation, Labware, LayoutItem
 from PytomatedLiquidHandling.HAL.Tools import BaseClasses
+
+from plh.hal import DeckLocation, Labware, LayoutItem
 
 from .PipetteTip import PipetteTip
 
@@ -33,7 +34,7 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
     SupportedTips: list[PipetteTip]
     SupportedSourceLabwares: list[Labware.PipettableLabware]
     SupportedDestinationLabwares: list[Labware.PipettableLabware]
-    SupportedDeckLocations: list[DeckLocation.Base.DeckLocationABC]
+    SupportedDeckLocations: list[DeckLocation.Base.DeckLocationBase]
 
     @field_validator("SupportedTips", mode="after")
     def __SupportedTipsValidate(cls, v):
@@ -50,7 +51,7 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
                 raise ValueError(
                     Identifier
                     + " is not found in "
-                    + DeckLocation.Base.DeckLocationABC.__name__
+                    + DeckLocation.Base.DeckLocationBase.__name__
                     + " objects.",
                 )
 

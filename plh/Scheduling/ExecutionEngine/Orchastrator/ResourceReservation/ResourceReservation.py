@@ -3,11 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from PytomatedLiquidHandling.HAL import DeckLocation, TempControlDevice
 from PytomatedLiquidHandling.Tools.BaseClasses import (
     UniqueObjectABC,
     UniqueObjectTrackerABC,
 )
+
+from plh.hal import DeckLocation, TempControlDevice
 
 if TYPE_CHECKING:
     from ..Orchastrator import Orchastrator
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 
 _ReservableTypes = (
     TempControlDevice.BaseTempControlDevice.TempControlDevice
-    | DeckLocation.Base.DeckLocationABC
+    | DeckLocation.Base.DeckLocationBase
 )
 
 
@@ -23,10 +24,12 @@ _ReservableTypes = (
 class ResourceReservation:
     OrchastratorInstance: Orchastrator
     Reservations: UniqueObjectTrackerABC[_ResourceReservation] = field(
-        init=False, default_factory=UniqueObjectTrackerABC
+        init=False,
+        default_factory=UniqueObjectTrackerABC,
     )
     ReservedObjects: UniqueObjectTrackerABC[_ReservableTypes] = field(
-        init=False, default_factory=UniqueObjectTrackerABC
+        init=False,
+        default_factory=UniqueObjectTrackerABC,
     )
 
     @dataclass

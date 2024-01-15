@@ -7,7 +7,8 @@ from PytomatedLiquidHandling.Driver.Hamilton import (
     EntryExit,
     HSLTipCountingLib,
 )
-from PytomatedLiquidHandling.HAL import DeckLocation, LayoutItem
+
+from plh.hal import DeckLocation, LayoutItem
 
 from .Base import TipABC
 

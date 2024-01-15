@@ -24,7 +24,7 @@ class HALDevice:
 
     @field_validator("Identifier", mode="after")
     @classmethod
-    def _validation_identifier(cls: type[HALDevice], v: str) -> str:
+    def __validation_identifier(cls: type[HALDevice], v: str) -> str:
         if " " in v:
             msg = "Spaces are not allowed in Identifiers. Please replace with underscores (_)."
             raise ValueError(msg)

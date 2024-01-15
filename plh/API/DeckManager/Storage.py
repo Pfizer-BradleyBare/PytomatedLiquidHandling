@@ -1,5 +1,6 @@
 from PytomatedLiquidHandling.API.Tools import Container
-from PytomatedLiquidHandling.HAL import DeckLocation
+
+from plh.hal import DeckLocation
 
 
 def StoreContainer(Container: Container.Container):
@@ -8,6 +9,6 @@ def StoreContainer(Container: Container.Container):
 
 def UseContainer(
     Container: Container.Container,
-    AcceptableDeckLocations: DeckLocation.Base.DeckLocationABC,
+    AcceptableDeckLocations: DeckLocation.Base.DeckLocationBase,
 ):
     ...

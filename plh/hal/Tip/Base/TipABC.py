@@ -3,8 +3,8 @@ from dataclasses import field
 
 from pydantic import dataclasses, field_validator
 
-from PytomatedLiquidHandling.HAL import LayoutItem
-from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
+from plh.hal import LayoutItem
+from plh.hal.tools import HALDevice
 
 from ...Tools.BaseClasses import Interface
 
@@ -21,7 +21,8 @@ class TipABC(Interface, HALDevice):
     TipsPerRack: int
     Volume: float
     _AvailablePositions: list[AvailablePosition] = field(
-        init=False, default_factory=list
+        init=False,
+        default_factory=list,
     )
 
     @field_validator("TipRacks", mode="before")
@@ -36,7 +37,7 @@ class TipABC(Interface, HALDevice):
                     Identifier
                     + " is not found in "
                     + LayoutItem.Base.LayoutItemABC.__name__
-                    + " objects."
+                    + " objects.",
                 )
 
             SupportedObjects.append(Objects[Identifier])
@@ -47,8 +48,9 @@ class TipABC(Interface, HALDevice):
         for Pos in AvailablePositions:
             self._AvailablePositions.append(
                 AvailablePosition(
-                    LabwareID=Pos["LabwareID"], PositionID=Pos["PositionID"]
-                )
+                    LabwareID=Pos["LabwareID"],
+                    PositionID=Pos["PositionID"],
+                ),
             )
 
     def Initialize(self):

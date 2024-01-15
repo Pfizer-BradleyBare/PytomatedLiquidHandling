@@ -3,8 +3,8 @@ from dataclasses import field
 
 from pydantic import dataclasses, field_validator
 
-from PytomatedLiquidHandling.HAL import LayoutItem
-from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
+from plh.hal import LayoutItem
+from plh.hal.tools import HALDevice
 
 from ...Tools.BaseClasses import Interface
 from .FilterPlateConfiguration import FilterPlateConfiguration
@@ -29,7 +29,7 @@ class VacuumABC(Interface, HALDevice):
                 Identifier
                 + " is not found in "
                 + LayoutItem.Base.LayoutItemABC.__name__
-                + " objects."
+                + " objects.",
             )
 
         return Objects[Identifier]

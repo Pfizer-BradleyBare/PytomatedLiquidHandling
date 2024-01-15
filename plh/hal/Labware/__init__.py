@@ -1,6 +1,4 @@
 from . import Base
-from .NonPipettableLabware import NonPipettableLabware
-from .PipettableLabware import PipettableLabware
 
-Identifier = str
-Devices: dict[Identifier, Base.LabwareABC] = dict()
+identifier = str
+devices: dict[identifier, Base.LabwareABC] = dict()

@@ -2,7 +2,8 @@ from dataclasses import dataclass, field
 
 from PytomatedLiquidHandling.API import DeckManager
 from PytomatedLiquidHandling.API.Tools import Container
-from PytomatedLiquidHandling.HAL import (
+
+from plh.hal import (
     HeatCoolShakeDevice,
     HeatCoolShakeDevices,
     Labware,
@@ -61,7 +62,7 @@ def Reserve(Container: Container.Container, Temperature: float, RPM: int):
 
     if len(LayoutItems) > len(PotentialDevices):
         raise Exception(
-            "Not enough HeatCoolShake devices available for this container..."
+            "Not enough HeatCoolShake devices available for this container...",
         )
 
     if HeatingRequired or CoolingRequired:
@@ -74,7 +75,7 @@ def Reserve(Container: Container.Container, Temperature: float, RPM: int):
         )
         PotentialDevices = [DeviceWithTemp[0] for DeviceWithTemp in DevicesWithTemp]
 
-    for Index in range(0, len(LayoutItems)):
+    for Index in range(len(LayoutItems)):
         Device = PotentialDevices[Index]
 
         Device.SetTemperature(Temperature)
@@ -124,7 +125,7 @@ def GetTimeToTemp(Container: Container.Container) -> float:
     for Key in Reservations:
         if Container == Reservations[Key].Container:
             HeatTime = HeatCoolShakeDevices[Key].SetTemperatureTime(
-                Reservations[Key].Temperature
+                Reservations[Key].Temperature,
             )
             if HeatTime > MaxHeatTime:
                 MaxHeatTime = HeatTime

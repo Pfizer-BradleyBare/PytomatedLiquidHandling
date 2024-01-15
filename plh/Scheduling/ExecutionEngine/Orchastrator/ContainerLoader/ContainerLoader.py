@@ -4,11 +4,12 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from PytomatedLiquidHandling.API.Tools.Container import ContainerTracker
-from PytomatedLiquidHandling.HAL import Labware, LayoutItem
 from PytomatedLiquidHandling.Tools.BaseClasses import (
     NonUniqueObjectABC,
     NonUniqueObjectTrackerABC,
 )
+
+from plh.hal import Labware, LayoutItem
 
 from .AssignedWell import AssignedWell, AssignedWellTracker
 
@@ -20,17 +21,20 @@ if TYPE_CHECKING:
 class ContainerLoader:
     OrchastratorInstance: Orchastrator
     InUseItems: NonUniqueObjectTrackerABC[_ContainerLoader] = field(
-        init=False, default_factory=NonUniqueObjectTrackerABC
+        init=False,
+        default_factory=NonUniqueObjectTrackerABC,
     )
     Items: NonUniqueObjectTrackerABC[_ContainerLoader] = field(
-        init=False, default_factory=NonUniqueObjectTrackerABC
+        init=False,
+        default_factory=NonUniqueObjectTrackerABC,
     )
 
     @dataclass
     class _ContainerLoader(NonUniqueObjectABC):
         LayoutItemInstance: LayoutItem.CoverablePlate | LayoutItem.Plate
         AssignedWellTrackerInstance: AssignedWellTracker = field(
-            init=False, default_factory=AssignedWellTracker
+            init=False,
+            default_factory=AssignedWellTracker,
         )
         NotUsedCounter: int = field(init=False, default=0)
 
@@ -69,7 +73,9 @@ class ContainerLoader:
             AvailableWell = self.GetNextAvailableWell()
 
             LastWell = int(
-                self.AssignedWellTrackerInstance.GetObjectsAsList()[-1].UniqueIdentifier
+                self.AssignedWellTrackerInstance.GetObjectsAsList()[
+                    -1
+                ].UniqueIdentifier,
             )
 
             return LastWell - AvailableWell + 1
