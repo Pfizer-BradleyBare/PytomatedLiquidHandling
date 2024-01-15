@@ -11,7 +11,7 @@ from .Reservation import Reservation
 
 @dataclasses.dataclass(kw_only=True)
 class StorageDeviceABC(HALDevice):
-    LayoutItems: list[LayoutItem.Base.LayoutItemABC]
+    LayoutItems: list[LayoutItem.Base.LayoutItemBase]
 
     _Reservations: dict[str, Reservation] = field(init=False, default_factory=dict)
 
@@ -26,7 +26,7 @@ class StorageDeviceABC(HALDevice):
                 raise ValueError(
                     Identifier
                     + " is not found in "
-                    + LayoutItem.Base.LayoutItemABC.__name__
+                    + LayoutItem.Base.LayoutItemBase.__name__
                     + " objects.",
                 )
 
@@ -38,7 +38,7 @@ class StorageDeviceABC(HALDevice):
     def Reserve(
         self,
         ReservationID: str,
-        LayoutItemInstance: LayoutItem.Base.LayoutItemABC,
+        LayoutItemInstance: LayoutItem.Base.LayoutItemBase,
     ):
         ...
 
@@ -47,7 +47,7 @@ class StorageDeviceABC(HALDevice):
         ...
 
     @abstractmethod
-    def Store(self, ReservationID: str) -> LayoutItem.Base.LayoutItemABC:
+    def Store(self, ReservationID: str) -> LayoutItem.Base.LayoutItemBase:
         ...
 
     @abstractmethod
@@ -59,5 +59,5 @@ class StorageDeviceABC(HALDevice):
         ...
 
     @abstractmethod
-    def Retrieve(self, ReservationID: str) -> LayoutItem.Base.LayoutItemABC:
+    def Retrieve(self, ReservationID: str) -> LayoutItem.Base.LayoutItemBase:
         ...

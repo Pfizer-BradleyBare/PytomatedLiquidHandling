@@ -1,10 +1,10 @@
 from pydantic import dataclasses
 
-from .Base import LabwareABC, Wells
+from .Base import LabwareBase, Wells
 
 
 @dataclasses.dataclass(kw_only=True)
-class PipettableLabware(LabwareABC):
+class PipettableLabware(LabwareBase):
     Wells: Wells
 
     def GetHeightFromVolume(self, Volume: float) -> float:

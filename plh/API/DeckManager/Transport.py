@@ -10,7 +10,7 @@ from plh.hal import (
 
 from .Loading import GetLoadedLayoutItems, LoadedWells
 
-TransitionPoints: dict[str, LayoutItem.Base.LayoutItemABC] = dict()
+TransitionPoints: dict[str, LayoutItem.Base.LayoutItemBase] = {}
 
 
 def TransportContainer(
@@ -45,8 +45,8 @@ def TransportContainer(
 
 
 def TransportLayoutItem(
-    SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
-    DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
+    SourceLayoutItem: LayoutItem.Base.LayoutItemBase,
+    DestinationLayoutItem: LayoutItem.Base.LayoutItemBase,
 ):
     try:
         Device = SourceLayoutItem.DeckLocation.TransportConfig.TransportDevice

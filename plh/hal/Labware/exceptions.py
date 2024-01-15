@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .LabwareABC import LabwareABC
+    from .labware_base import LabwareBase
 
 
 @dataclass
@@ -13,10 +13,10 @@ class LabwareNotSupportedError(BaseException):
     This can be thrown for any LayoutItem inputs.
 
     Attributes:
-    Labwares: List of LabwareABC objects that were not supported
+    Labwares: List of LabwareBase objects that were not supported
     """
 
-    Labwares: list[LabwareABC]
+    Labwares: list[LabwareBase]
 
 
 @dataclass
@@ -29,5 +29,5 @@ class LabwareNotEqualError(BaseException):
     Labware2: The other labware that failed
     """
 
-    Labware1: LabwareABC
-    Labware2: LabwareABC
+    Labware1: LabwareBase
+    Labware2: LabwareBase

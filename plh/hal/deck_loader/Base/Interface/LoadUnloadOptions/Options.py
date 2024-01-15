@@ -7,4 +7,4 @@ from plh.hal import LayoutItem
 
 @dataclass(kw_only=True)
 class Options(OptionsBase):
-    LayoutItemInstance: LayoutItem.Base.LayoutItemABC
+    LayoutItemInstance: LayoutItem.Base.LayoutItemBase

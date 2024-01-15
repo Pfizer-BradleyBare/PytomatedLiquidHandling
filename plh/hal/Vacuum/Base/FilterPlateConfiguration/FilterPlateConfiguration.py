@@ -30,7 +30,7 @@ class FilterPlateConfiguration:
             raise ValueError(
                 Identifier
                 + " is not found in "
-                + LayoutItem.Base.LayoutItemABC.__name__
+                + LayoutItem.Base.LayoutItemBase.__name__
                 + " objects.",
             )
 

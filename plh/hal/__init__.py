@@ -82,11 +82,11 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
 
                     Tools.ConfigLoader.DevicesLists(
                         Dict,
-                        Labware.Base.LabwareABC,
+                        Labware.Base.LabwareBase,
                         Labware.Devices,
                     )
     if Loaded != True:
-        Warns.append(f"No {Labware.Base.LabwareABC.__name__} objects were loaded.")
+        Warns.append(f"No {Labware.Base.LabwareBase.__name__} objects were loaded.")
 
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):
@@ -100,11 +100,11 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
 
                     Tools.ConfigLoader.Devices(
                         Dict,
-                        Transport.Base.TransportABC,
+                        Transport.Base.TransportBase,
                         Transport.Devices,
                     )
     if Loaded != True:
-        Warns.append(f"No {Transport.Base.TransportABC.__name__} objects were loaded.")
+        Warns.append(f"No {Transport.Base.TransportBase.__name__} objects were loaded.")
 
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):
@@ -138,12 +138,12 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
 
                     Tools.ConfigLoader.DevicesLists(
                         Dict,
-                        LayoutItem.Base.LayoutItemABC,
+                        LayoutItem.Base.LayoutItemBase,
                         LayoutItem.Devices,
                     )
     if Loaded != True:
         Warns.append(
-            f"No {LayoutItem.Base.LayoutItemABC.__name__} objects were loaded.",
+            f"No {LayoutItem.Base.LayoutItemBase.__name__} objects were loaded.",
         )
 
     Loaded = False

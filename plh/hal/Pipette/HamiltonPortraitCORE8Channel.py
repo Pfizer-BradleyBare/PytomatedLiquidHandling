@@ -28,7 +28,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
         self,
         Options: list[TransferOptions],
     ) -> DefaultDict[str, list[tuple[PipetteTip, TransferOptions]]]:
-        LiquidClassMaxVolumes: dict[str, float] = dict()
+        LiquidClassMaxVolumes: dict[str, float] = {}
         for Opt in Options:
             CombinedName = (
                 Opt.SourceLiquidClassCategory + ":" + Opt.DestinationLiquidClassCategory

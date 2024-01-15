@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .TransportABC import TransportABC
+    from .transport_base import TransportBase
 
 
 @dataclass
@@ -16,5 +16,5 @@ class WrongTransportDeviceError(BaseException):
     TransportOptionsDevice: Device required by the deck location
     """
 
-    CurrentDevice: TransportABC
-    ViableTransportDevices: list[TransportABC]
+    CurrentDevice: TransportBase
+    ViableTransportDevices: list[TransportBase]

@@ -1,4 +1,4 @@
-from . import Base
+from __future__ import annotations
 
 identifier = str
-devices: dict[identifier, Base.TipABC] = dict()
+devices: dict[identifier, Base.TipABC] = {}

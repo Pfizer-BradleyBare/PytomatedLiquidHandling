@@ -2,7 +2,6 @@ from abc import abstractmethod
 
 from pydantic import dataclasses, field_validator
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsBase
-from PytomatedLiquidHandling.HAL.Tools import BaseClasses
 
 from plh.hal import DeckLocation, Labware, LayoutItem
 
@@ -25,7 +24,7 @@ class CloseableContainerABC(BaseClasses.Interface, BaseClasses.HALDevice):
     """
 
     SupportedDeckLocations: list[DeckLocation.Base.DeckLocationBase]
-    SupportedLabwares: list[Labware.Base.LabwareABC]
+    SupportedLabwares: list[Labware.Base.LabwareBase]
 
     @field_validator("SupportedDeckLocations", mode="before")
     def __SupportedDeckLocationsValidate(cls, v):
@@ -57,7 +56,7 @@ class CloseableContainerABC(BaseClasses.Interface, BaseClasses.HALDevice):
                 raise ValueError(
                     Identifier
                     + " is not found in "
-                    + Labware.Base.LabwareABC.__name__
+                    + Labware.Base.LabwareBase.__name__
                     + " objects.",
                 )
 

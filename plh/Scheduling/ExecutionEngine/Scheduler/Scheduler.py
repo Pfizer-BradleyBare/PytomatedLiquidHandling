@@ -26,56 +26,56 @@ class Scheduler:
             start_time=datetime.now(),
         )
 
-        self.__LoadedResourceObjects = dict()
+        self.__LoadedResourceObjects = {}
 
     def LoadResources(self, OrchastratorInstance: Orchastrator):
         self.__LoadedResourceObjects.update(
             {
                 str(Device.UniqueIdentifier): processscheduler.Worker(
-                    str(Device.UniqueIdentifier)
+                    str(Device.UniqueIdentifier),
                 )
                 for Device in OrchastratorInstance.HALInstance.PipetteTrackerInstance.GetObjectsAsList()
-            }
+            },
         )
         # Load Pipette devices
 
         self.__LoadedResourceObjects.update(
             {
                 str(Device.UniqueIdentifier): processscheduler.Worker(
-                    str(Device.UniqueIdentifier)
+                    str(Device.UniqueIdentifier),
                 )
                 for Device in OrchastratorInstance.HALInstance.TransportDeviceTrackerInstance.GetObjectsAsList()
-            }
+            },
         )
         # Load Transport devices
 
         self.__LoadedResourceObjects.update(
             {
                 str(Device.UniqueIdentifier): processscheduler.Worker(
-                    str(Device.UniqueIdentifier)
+                    str(Device.UniqueIdentifier),
                 )
                 for Device in OrchastratorInstance.HALInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
-            }
+            },
         )
         # Load TempControl devices
 
         self.__LoadedResourceObjects.update(
             {
                 str(Device.UniqueIdentifier): processscheduler.Worker(
-                    str(Device.UniqueIdentifier)
+                    str(Device.UniqueIdentifier),
                 )
                 for Device in OrchastratorInstance.HALInstance.MagneticRackTrackerInstance.GetObjectsAsList()
-            }
+            },
         )
         # Load MagneticRack devices
 
         self.__LoadedResourceObjects.update(
             {
                 str(Device.UniqueIdentifier): processscheduler.Worker(
-                    str(Device.UniqueIdentifier)
+                    str(Device.UniqueIdentifier),
                 )
                 for Device in OrchastratorInstance.HALInstance.IMCSDesaltingTrackerInstance.GetObjectsAsList()
-            }
+            },
         )
         # Load IMCS Desalting devices
 
@@ -88,7 +88,7 @@ class Scheduler:
         MethodInstance: Method,
         Priority: int = 1,
     ):
-        NodeTaskObjects: dict[str | int, processscheduler.FixedDurationTask] = dict()
+        NodeTaskObjects: dict[str | int, processscheduler.FixedDurationTask] = {}
 
         TaskGraph = MethodInstance.GetTaskGraph(OrchastratorInstance)
         SortedNodes = list(networkx.topological_sort(TaskGraph))  # type:ignore
@@ -116,7 +116,7 @@ class Scheduler:
                         Resources.append(self.__LoadedResourceObjects[Name])
 
                     TaskObject.add_required_resource(
-                        processscheduler.SelectWorkers(Resources, Resource.NumRequired)
+                        processscheduler.SelectWorkers(Resources, Resource.NumRequired),
                     )
                 # Resource selection is done automatically. It doesn't actually matter which resource we select.
                 # The best fit resource will be assigned by the Orchastrator upon task execution
@@ -124,7 +124,7 @@ class Scheduler:
                 NodeTaskObjects[str(Task.UniqueIdentifier)] = TaskObject
             # Create all the tasks
 
-            for Index in range(0, len(Tasks) - 1):
+            for Index in range(len(Tasks) - 1):
                 TaskBefore = NodeTaskObjects[Tasks[Index].UniqueIdentifier]
                 TaskAfter = NodeTaskObjects[Tasks[Index + 1].UniqueIdentifier]
 
@@ -143,7 +143,8 @@ class Scheduler:
         self.SchedulingProblem.add_objective_priorities(1)
         self.SchedulingProblem.add_objective_makespan()
         Solution = processscheduler.SchedulingSolver(
-            self.SchedulingProblem, max_time=600
+            self.SchedulingProblem,
+            max_time=600,
         ).solve()
 
         if isinstance(Solution, bool):

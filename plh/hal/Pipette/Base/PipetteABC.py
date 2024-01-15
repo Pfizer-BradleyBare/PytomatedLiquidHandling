@@ -3,7 +3,6 @@ from math import ceil
 
 from pydantic import dataclasses, field_validator
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsBase
-from PytomatedLiquidHandling.HAL.Tools import BaseClasses
 
 from plh.hal import DeckLocation, Labware, LayoutItem
 
@@ -74,7 +73,7 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
                 raise ValueError(
                     Identifier
                     + " is not found in "
-                    + Labware.Base.LabwareABC.__name__
+                    + Labware.Base.LabwareBase.__name__
                     + " objects.",
                 )
 

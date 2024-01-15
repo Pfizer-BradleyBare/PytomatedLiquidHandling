@@ -1,4 +1,4 @@
-from . import Base
+from __future__ import annotations
 
 if True:
     pass
@@ -6,4 +6,4 @@ if True:
 
 
 identifier = str
-devices: dict[identifier, Base.PipetteABC] = dict()
+devices: dict[identifier, Base.PipetteABC] = {}

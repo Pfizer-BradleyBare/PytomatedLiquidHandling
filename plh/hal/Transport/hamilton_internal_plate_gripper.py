@@ -7,15 +7,15 @@ from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import iSwap as IPGDriver
 
 from plh.hal import DeckLocation, LayoutItem
 
-from .Base import TransportABC
+from .Base import TransportBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class HamiltonInternalPlateGripper(TransportABC):
+class HamiltonInternalPlateGripper(TransportBase):
     Backend: Backend.HamiltonBackendABC
 
     @dataclasses.dataclass(kw_only=True)
-    class PickupOptions(TransportABC.PickupOptions):
+    class PickupOptions(TransportBase.PickupOptions):
         """Options to pick up labware from deck location"""
 
         GripMode: IPGDriver.GetPlate.Options.GripModeOptions = field(compare=True)
@@ -28,7 +28,7 @@ class HamiltonInternalPlateGripper(TransportABC):
         InverseGrip: IPGDriver.GetPlate.Options.YesNoOptions = field(compare=True)
 
     @dataclasses.dataclass(kw_only=True)
-    class DropoffOptions(TransportABC.DropoffOptions):
+    class DropoffOptions(TransportBase.DropoffOptions):
         """Options to drop off labware to deck location"""
 
         Movement: IPGDriver.PlacePlate.Options.MovementOptions = field(compare=True)
@@ -40,8 +40,8 @@ class HamiltonInternalPlateGripper(TransportABC):
 
     def Transport(
         self,
-        SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
-        DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
+        SourceLayoutItem: LayoutItem.Base.LayoutItemBase,
+        DestinationLayoutItem: LayoutItem.Base.LayoutItemBase,
     ):
         if SourceLayoutItem.DeckLocation == DestinationLayoutItem.DeckLocation:
             return
@@ -100,7 +100,7 @@ class HamiltonInternalPlateGripper(TransportABC):
 
     def TransportTime(
         self,
-        SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
-        DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
+        SourceLayoutItem: LayoutItem.Base.LayoutItemBase,
+        DestinationLayoutItem: LayoutItem.Base.LayoutItemBase,
     ) -> float:
         return 0

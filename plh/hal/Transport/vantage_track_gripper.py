@@ -6,15 +6,15 @@ from PytomatedLiquidHandling.Driver.Hamilton import ML_STAR, Backend, TrackGripp
 
 from plh.hal import DeckLocation, LayoutItem
 
-from .Base import TransportABC
+from .Base import TransportBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class VantageTrackGripper(TransportABC):
+class VantageTrackGripper(TransportBase):
     Backend: Backend.VantageTrackGripperEntryExit
 
     @dataclasses.dataclass(kw_only=True)
-    class PickupOptions(TransportABC.PickupOptions):
+    class PickupOptions(TransportBase.PickupOptions):
         """Options to pick up labware from deck location
         NOTE: Pickup and Dropoff TaughtPathName should be same due to how track gripper works
         """
@@ -29,7 +29,7 @@ class VantageTrackGripper(TransportABC):
         )
 
     @dataclasses.dataclass(kw_only=True)
-    class DropoffOptions(TransportABC.DropoffOptions):
+    class DropoffOptions(TransportBase.DropoffOptions):
         """Options to drop off labware to deck location
         NOTE: Pickup and Dropoff TaughtPathName and PathTime should be same due to how track gripper works
         """
@@ -42,8 +42,8 @@ class VantageTrackGripper(TransportABC):
 
     def Transport(
         self,
-        SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
-        DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
+        SourceLayoutItem: LayoutItem.Base.LayoutItemBase,
+        DestinationLayoutItem: LayoutItem.Base.LayoutItemBase,
     ):
         if SourceLayoutItem.DeckLocation == DestinationLayoutItem.DeckLocation:
             return
@@ -112,7 +112,7 @@ class VantageTrackGripper(TransportABC):
 
     def TransportTime(
         self,
-        SourceLayoutItem: LayoutItem.Base.LayoutItemABC,
-        DestinationLayoutItem: LayoutItem.Base.LayoutItemABC,
+        SourceLayoutItem: LayoutItem.Base.LayoutItemBase,
+        DestinationLayoutItem: LayoutItem.Base.LayoutItemBase,
     ) -> float:
         return 0

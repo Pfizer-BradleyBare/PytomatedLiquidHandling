@@ -8,7 +8,7 @@ from .Base.Reservation import Reservation
 
 @dataclasses.dataclass(kw_only=True)
 class RandomAccessDeckStorage(StorageDeviceABC):
-    def Reserve(self, ReservationID: str, LayoutItem: LayoutItem.Base.LayoutItemABC):
+    def Reserve(self, ReservationID: str, LayoutItem: LayoutItem.Base.LayoutItemBase):
         if ReservationID in self._Reservations:
             raise Exception("Reservation ID already exists")
 
@@ -49,7 +49,7 @@ class RandomAccessDeckStorage(StorageDeviceABC):
     def PrepareStore(self, ReservationID: str):
         ...
 
-    def Store(self, ReservationID: str) -> LayoutItem.Base.LayoutItemABC:
+    def Store(self, ReservationID: str) -> LayoutItem.Base.LayoutItemBase:
         if ReservationID not in self._Reservations:
             raise Exception("Reservation ID does not exist")
 
@@ -65,7 +65,7 @@ class RandomAccessDeckStorage(StorageDeviceABC):
     def PrepareRetrieve(self, ReservationID: str):
         ...
 
-    def Retrieve(self, ReservationID: str) -> LayoutItem.Base.LayoutItemABC:
+    def Retrieve(self, ReservationID: str) -> LayoutItem.Base.LayoutItemBase:
         if ReservationID not in self._Reservations:
             raise Exception("Reservation ID does not exist")
 

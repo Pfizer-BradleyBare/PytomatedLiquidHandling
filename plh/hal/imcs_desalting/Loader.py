@@ -19,11 +19,11 @@ Logger = logging.getLogger(__name__)
 def LoadYaml(
     Backends: dict[str, BackendABC],
     DeckLocations: dict[str, DeckLocation.Base.DeckLocationBase],
-    Labwares: dict[str, Labware.Base.LabwareABC],
+    Labwares: dict[str, Labware.Base.LabwareBase],
     Tips: dict[str, Tip.Base.TipABC],
     FilePath: str,
 ) -> dict[str, IMCSDesaltingABC]:
-    IMCSDesaltingDevices: dict[str, IMCSDesaltingABC] = dict()
+    IMCSDesaltingDevices: dict[str, IMCSDesaltingABC] = {}
 
     if not os.path.exists(FilePath):
         Logger.warning("Config file does not exist. Skipped")
@@ -65,12 +65,12 @@ def LoadYaml(
         del Device["Load Liquid Class"]
         del Device["Elute Liquid Class"]
 
-        SupportedSourceLabwares: list[Labware.Base.LabwareABC] = list()
+        SupportedSourceLabwares: list[Labware.Base.LabwareBase] = list()
         for LabwareID in Device["Supported Source Labware Identifiers"]:
             SupportedSourceLabwares.append(Labwares[LabwareID])
         del Device["Supported Source Labware Identifiers"]
 
-        SupportedDestinationLabwares: list[Labware.Base.LabwareABC] = list()
+        SupportedDestinationLabwares: list[Labware.Base.LabwareBase] = list()
         for LabwareID in Device["Supported Destination Labware Identifiers"]:
             SupportedDestinationLabwares.append(Labwares[LabwareID])
         del Device["Supported Destination Labware Identifiers"]

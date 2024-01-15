@@ -38,7 +38,7 @@ def simplify_printed_hal_object(model_dump_json: str) -> str:
     return json.dumps(model_dump_json, indent=4)
 
 
-def load_device_config(
+def load_device_list_config(
     json: dict,
     base_object: type[T],
     devices: dict[str, T],

@@ -18,7 +18,7 @@ class Reservation:
     Container: Container.Container
 
 
-Reservations: dict[str, Reservation] = dict()
+Reservations: dict[str, Reservation] = {}
 
 
 def Reserve(Container: Container.Container, Temperature: float, RPM: int):

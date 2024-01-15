@@ -18,8 +18,8 @@ class IMCSDesaltingABC(Interface, HALDevice):
     IMCSTipSupportPickupSequence: str
     LoadLiquidClass: str
     EluteLiquidClass: str
-    SupportedSourceLabwares: list[Labware.Base.LabwareABC]
-    SupportedDestinationLabwares: list[Labware.Base.LabwareABC]
+    SupportedSourceLabwares: list[Labware.Base.LabwareBase]
+    SupportedDestinationLabwares: list[Labware.Base.LabwareBase]
     SupportedDeckLocationTracker: list[DeckLocation.Base.DeckLocationBase]
     DesaltingTipTrackerInstance: DesaltingTipTracker
     IMCSTipDropOffSequence: str

@@ -22,74 +22,74 @@ class TransportConfig:
         DropoffOptions: Options that are used to dropoff a labware to this DeckLocation.
     """
 
-    transport_device: transport.Base.TransportABC
-    pickup_options: transport.Base.TransportABC.PickupOptions
-    dropoff_options: transport.Base.TransportABC.DropoffOptions
+    transport_device: transport.TransportBase
+    pickup_options: transport.TransportBase.PickupOptions
+    dropoff_options: transport.TransportBase.DropoffOptions
 
-    @field_serializer("PickupOptions", "DropoffOptions")
+    @field_serializer("pickup_options", "dropoff_options")
     def __options_serializer(
         self: TransportConfig,
-        options: transport.Base.TransportABC.PickupOptions
-        | transport.Base.TransportABC.DropoffOptions,
+        options: transport.TransportBase.PickupOptions
+        | transport.TransportBase.DropoffOptions,
     ) -> dict:
         return vars(options)
 
-    @field_validator("TransportDevice", mode="before")
+    @field_validator("transport_device", mode="before")
     @classmethod
     def __transport_device_validate(
         cls: type[TransportConfig],
-        v: str | transport.Base.TransportABC,
-    ) -> transport.Base.TransportABC:
+        v: str | transport.TransportBase,
+    ) -> transport.TransportBase:
         from plh.hal import transport
 
         # There is a circular dependacy in Transport. This is ONLY because it makes configuration simpler.
         # Basically DeckLocation should not depend on Transport. So we hide the dependacy above and here.
         # This may be a code smell. Not sure.
 
-        if isinstance(v, transport.Base.TransportABC):
+        if isinstance(v, transport.TransportBase):
             return v
 
-        objects = transport.Devices
+        objects = transport.devices
         identifier = v
 
         if identifier not in objects:
             raise ValueError(
                 identifier
                 + " is not found in "
-                + transport.Base.TransportABC.__name__
+                + transport.TransportBase.__name__
                 + " objects.",
             )
 
         return objects[identifier]
 
-    @field_validator("PickupOptions", mode="before")
+    @field_validator("pickup_options", mode="before")
     @classmethod
     def __pickup_options_validate(
         cls: type[TransportConfig],
-        v: None | dict | transport.Base.TransportABC.PickupOptions,
+        v: None | dict | transport.TransportBase.PickupOptions,
         info: ValidationInfo,
-    ) -> transport.Base.TransportABC.PickupOptions:
-        if isinstance(v, transport.Base.TransportABC.PickupOptions):
+    ) -> transport.TransportBase.PickupOptions:
+        if isinstance(v, transport.TransportBase.PickupOptions):
             return v
 
-        transport_device: transport.Base.TransportABC = info.data["TransportDevice"]
+        transport_device: transport.TransportBase = info.data["TransportDevice"]
 
         if v is None:
             v = {}
 
         return transport_device.PickupOptions(**v)
 
-    @field_validator("DropoffOptions", mode="before")
+    @field_validator("dropoff_options", mode="before")
     @classmethod
     def __dropoff_options_validate(
         cls: type[TransportConfig],
-        v: None | dict | transport.Base.TransportABC.DropoffOptions,
+        v: None | dict | transport.TransportBase.DropoffOptions,
         info: ValidationInfo,
-    ) -> transport.Base.TransportABC.DropoffOptions:
-        if isinstance(v, transport.Base.TransportABC.DropoffOptions):
+    ) -> transport.TransportBase.DropoffOptions:
+        if isinstance(v, transport.TransportBase.DropoffOptions):
             return v
 
-        transport_device: transport.Base.TransportABC = info.data["TransportDevice"]
+        transport_device: transport.TransportBase = info.data["TransportDevice"]
 
         if v is None:
             v = {}

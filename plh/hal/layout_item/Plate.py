@@ -2,9 +2,9 @@ from pydantic import dataclasses
 
 from plh.hal import Labware
 
-from .Base import LayoutItemABC
+from .Base import LayoutItemBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class Plate(LayoutItemABC):
+class Plate(LayoutItemBase):
     Labware: Labware.PipettableLabware

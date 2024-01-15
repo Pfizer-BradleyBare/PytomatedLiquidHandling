@@ -1,8 +1,8 @@
 from pydantic import dataclasses
 
-from .Base import LabwareABC
+from .labware_base import LabwareBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class NonPipettableLabware(LabwareABC):
+class NonPipettableLabware(LabwareBase):
     ...

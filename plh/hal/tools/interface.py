@@ -19,8 +19,8 @@ class Interface:
         backends may not support error handling on the system.
     """
 
-    Backend: BackendBase
-    BackendErrorHandling: bool
+    backend: BackendBase
+    backend_error_handling: bool
 
     @field_validator("Backend", mode="before")
     @classmethod
@@ -28,7 +28,7 @@ class Interface:
         if isinstance(v, BackendBase):
             return v
 
-        objects = backend.Devices
+        objects = backend.devices
         identifier = v
 
         if identifier not in objects:
@@ -39,9 +39,9 @@ class Interface:
         return objects[identifier]
 
     def initialize(self: Interface) -> None:
-        if self.Backend.is_running is False:
-            self.Backend.start()
+        if self.backend.is_running is False:
+            self.backend.start()
 
     def deinitialize(self: Interface) -> None:
-        if self.Backend.is_running is True:
-            self.Backend.stop()
+        if self.backend.is_running is True:
+            self.backend.stop()

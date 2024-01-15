@@ -17,7 +17,7 @@ LoadedWells: list[LoadedWell] = list()
 
 def QueueContainer(
     Container: Container.Container,
-    Labware: Labware.Base.LabwareABC,
+    Labware: Labware.Base.LabwareBase,
     RequireLid: bool = True,
     MeasureVolume: bool = False,
     Disposable: bool = False,

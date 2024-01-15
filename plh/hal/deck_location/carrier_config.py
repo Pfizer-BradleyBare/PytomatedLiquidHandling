@@ -33,7 +33,7 @@ class CarrierConfig:
         if isinstance(v, carrier.CarrierBase):
             return v
 
-        objects = carrier.Devices
+        objects = carrier.devices
         identifier = v
 
         if identifier not in objects:
