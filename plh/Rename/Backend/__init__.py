@@ -1,16 +1,15 @@
 from typing import Type, cast
 
-from PytomatedLiquidHandling.Driver.Hamilton.Backend import (
-    MicrolabSTAR,
-    VantageTrackGripperEntryExit,
-)
 from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
+
+from plh.driver.HAMILTON.backend import MicrolabSTAR, VantageTrackGripperEntryExit
 
 from . import Base
 
 HALDevice.HALDevices[MicrolabSTAR.__name__] = cast(Type[HALDevice], MicrolabSTAR)
 HALDevice.HALDevices[VantageTrackGripperEntryExit.__name__] = cast(
-    Type[HALDevice], VantageTrackGripperEntryExit
+    Type[HALDevice],
+    VantageTrackGripperEntryExit,
 )
 # Add microlab star and vantage to HALDevice so they can be loaded during configuration
 
