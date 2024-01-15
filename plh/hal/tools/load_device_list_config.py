@@ -1,13 +1,18 @@
+from __future__ import annotations
+
 import json
-from typing import Type, TypeVar, Union, cast
+from typing import TYPE_CHECKING, TypeVar, Union, cast
 
 from loguru import logger
 from pydantic import BaseModel
-from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
 
-from .. import BaseClasses, DictTools
+from .hal_device import HALDevice
+from .remove_key_whitespace import remove_key_whitespace
 
-T = TypeVar("T", bound="Union[BaseClasses.HALDevice,BackendABC]")
+if TYPE_CHECKING:
+    from plh.driver.tools import BackendBase
+
+T = TypeVar("T", bound="Union[HALDevice, BackendBase]")
 
 
 def simplify_printed_hal_object(model_dump_json: str) -> str:
@@ -33,57 +38,64 @@ def simplify_printed_hal_object(model_dump_json: str) -> str:
     return json.dumps(model_dump_json, indent=4)
 
 
-def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
-    logger.info("Loading " + BaseObject.__name__ + " configuration.")
+def load_device_config(
+    json: dict,
+    base_object: type[T],
+    devices: dict[str, T],
+) -> dict[str, T]:
+    logger.info("Loading " + base_object.__name__ + " configuration.")
 
-    if bool(Dict) == False:
+    if bool(json) is False:
         logger.warning(
             "Empty configuration was passed. No "
-            + BaseObject.__name__
+            + base_object.__name__
             + " objects will be loaded.",
         )
 
-    Dict = DictTools.RemoveKeyWhitespace(Dict)
+    json = remove_key_whitespace(json)
 
-    for Key in Dict:
+    for key in json:
         try:
-            cls = BaseClasses.HALDevice.HALDevices[Key]
-        except:
+            cls = HALDevice.hal_devices[key]
+        except KeyError as e:
             raise ValueError(
-                Key + " not recognized as a valid " + BaseObject.__name__ + " subclass",
-            )
+                key
+                + " not recognized as a valid "
+                + base_object.__name__
+                + " subclass",
+            ) from e
 
-        if not issubclass(cls, BaseObject):
-            raise ValueError(
+        if not issubclass(cls, base_object):
+            raise TypeError(
                 cls.__name__
                 + " is not a subclass of "
-                + BaseObject.__name__
+                + base_object.__name__
                 + ". You may be trying to load a config with the wrong HALDevice.",
             )
 
-        for Item in Dict[Key]:
-            if Item["Enabled"] == True:
-                HALDevice = cls(**Item)
+        for item in json[key]:
+            if item["Enabled"] is True:
+                hal_device = cls(**item)
 
-                if HALDevice.Identifier in Devices:
+                if hal_device.identifier in devices:
                     raise ValueError(
-                        HALDevice.Identifier
+                        hal_device.identifier
                         + " already exists. Idenitifers must be unique.",
                     )
 
-                HALDevice = cast(BaseModel, HALDevice)
+                hal_device = cast(BaseModel, hal_device)
 
                 logger.debug(
-                    SimplifyPrintedHALObject(BaseModel.model_dump_json(HALDevice)),
+                    simplify_printed_hal_object(BaseModel.model_dump_json(hal_device)),
                 )
 
-                Devices[HALDevice.Identifier] = HALDevice  # type: ignore IDK why this is an error...
+                devices[hal_device.identifier] = hal_device  # type: ignore IDK why this is an error...
             else:
                 logger.warning(
-                    Item["Identifier"]
+                    item["Identifier"]
                     + " is disabled so will not be loaded as a "
-                    + BaseObject.__name__
+                    + base_object.__name__
                     + " object.",
                 )
 
-    return Devices
+    return devices
