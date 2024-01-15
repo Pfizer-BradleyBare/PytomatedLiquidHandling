@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import dataclasses
 
 from plh.driver.UnchainedLabs.backend import UnchainedLabsResponseBase
@@ -9,11 +11,17 @@ class Response(UnchainedLabsResponseBase):
     Results: list[dict] = dataclasses.field(init=False)
     ResultsPath: str
 
-    def __post_init__(self, StatusCodeRaw, ResultsRaw: str):
-        super().__post_init__(StatusCodeRaw)
+    def __post_init__(
+        self: Response,
+        status_code_raw: int | tuple,
+        results_raw: str,
+    ) -> None:
+        super().__post_init__(status_code_raw)
 
-        ResultsRaw = ResultsRaw.replace("\r", "")
+        results_raw = results_raw.replace("\r", "")
         self.Results = [
-            dict(zip([Item.split(",") for Item in ResultsRaw.split("\n")[:1]][0], List))
-            for List in [Item.split(",") for Item in ResultsRaw.split("\n")[1:]]
+            dict(
+                zip([Item.split(",") for Item in results_raw.split("\n")[:1]][0], List),
+            )
+            for List in [Item.split(",") for Item in results_raw.split("\n")[1:]]
         ]

@@ -140,12 +140,8 @@ class Command(UnchainedLabsCommandBase, CommandOptionsListMixin[OptionsList]):
         experiment_definition += f"column_stored_blanks_sample_group_name={column_stored_blanks_sample_group_name}"
         # Assemble Experiment Definition
 
-        status_code_raw, defined_plate_ids = stunner_dll_object.Define_Experiment(
-            experiment_definition,
-            sample_definition,
-        )
-
         return {
-            "status_code_raw": status_code_raw,
-            "defined_plate_ids": defined_plate_ids,
+            "status_code_raw": 0,
+            "experiment_definition": experiment_definition,
+            "sample_definition": sample_definition,
         }
