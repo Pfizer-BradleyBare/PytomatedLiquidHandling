@@ -1,7 +1,7 @@
 from typing import Any
 
 
-def RemoveKeyWhitespace(Dict) -> Any:
+def remove_key_whitespace(Dict) -> Any:
     if isinstance(Dict, dict):
         return {
             k.replace("\n", "").replace(" ", ""): RemoveKeyWhitespace(v)

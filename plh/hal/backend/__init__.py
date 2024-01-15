@@ -1,22 +1,28 @@
-from typing import Type, cast
+from __future__ import annotations
 
-from PytomatedLiquidHandling.HAL.Tools.BaseClasses import HALDevice
+from typing import TYPE_CHECKING, Type, cast
 
-from plh.driver.HAMILTON.backend import MicrolabSTAR, VantageTrackGripperEntryExit
+from plh.driver.HAMILTON.backend import MicrolabSTAR as _MicrolabStar
+from plh.driver.HAMILTON.backend import (
+    VantageTrackGripperEntryExit as _VantageTrackGripperEntryExit,
+)
+from plh.driver.UnchainedLabs_Instruments.backend import Stunner as _Stunner
+from plh.hal.tools import HALDevice as _HALDevice
 
-from . import Base
+if TYPE_CHECKING:
+    from plh.driver.tools import BackendBase as _BackendBase
 
-HALDevice.HALDevices[MicrolabSTAR.__name__] = cast(Type[HALDevice], MicrolabSTAR)
-HALDevice.HALDevices[VantageTrackGripperEntryExit.__name__] = cast(
-    Type[HALDevice],
-    VantageTrackGripperEntryExit,
+_HALDevice.hal_devices[_MicrolabStar.__name__] = cast(Type[_HALDevice], _MicrolabStar)
+_HALDevice.hal_devices[_VantageTrackGripperEntryExit.__name__] = cast(
+    Type[_HALDevice],
+    _VantageTrackGripperEntryExit,
 )
 # Add microlab star and vantage to HALDevice so they can be loaded during configuration
 
-from PytomatedLiquidHandling.Driver.UnchainedLabs.Backend import StunnerBackend
 
-HALDevice.HALDevices[StunnerBackend.__name__] = cast(Type[HALDevice], StunnerBackend)
+_HALDevice.hal_devices[_Stunner.__name__] = cast(Type[_HALDevice], _Stunner)
 # Add Stunner to HALDevice so they can be loaded during configuration
 
+
 Identifier = str
-Devices: dict[Identifier, Base.BackendABC] = dict()
+Devices: dict[Identifier, _BackendBase] = {}

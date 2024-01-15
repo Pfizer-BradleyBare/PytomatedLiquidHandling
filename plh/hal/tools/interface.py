@@ -1,4 +1,9 @@
+from __future__ import annotations
+
 from pydantic import dataclasses, field_validator
+
+from plh.driver.tools import BackendBase
+from plh.hal import backend
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -14,28 +19,29 @@ class Interface:
         backends may not support error handling on the system.
     """
 
-    Backend: BackendABC
+    Backend: BackendBase
     BackendErrorHandling: bool
 
     @field_validator("Backend", mode="before")
-    def __ValidateBackend(cls, v):
-        Objects = Backend.Devices
-        Identifier = v
+    @classmethod
+    def _validate_backend(cls: type[Interface], v: str | BackendBase) -> BackendBase:
+        if isinstance(v, BackendBase):
+            return v
 
-        if Identifier not in Objects:
+        objects = backend.Devices
+        identifier = v
+
+        if identifier not in objects:
             raise ValueError(
-                Identifier
-                + " is not found in "
-                + Backend.Base.BackendABC.__name__
-                + " objects.",
+                identifier + " is not found in " + BackendBase.__name__ + " objects.",
             )
 
-        return Objects[Identifier]
+        return objects[identifier]
 
-    def Initialize(self):
-        if self.Backend.IsRunning == False:
-            self.Backend.StartBackend()
+    def initialize(self: Interface) -> None:
+        if self.Backend.is_running is False:
+            self.Backend.start()
 
-    def Deinitialize(self):
-        if self.Backend.IsRunning == True:
-            self.Backend.StopBackend()
+    def deinitialize(self: Interface) -> None:
+        if self.Backend.is_running is True:
+            self.Backend.stop()

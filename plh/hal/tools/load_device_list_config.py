@@ -3,7 +3,6 @@ from typing import Type, TypeVar, Union, cast
 
 from loguru import logger
 from pydantic import BaseModel
-
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
 
 from .. import BaseClasses, DictTools
@@ -11,26 +10,25 @@ from .. import BaseClasses, DictTools
 T = TypeVar("T", bound="Union[BaseClasses.HALDevice,BackendABC]")
 
 
-def SimplifyPrintedHALObject(model_dump_json: str) -> str:
-    model_dump_json = json.loads(model_dump_json)
+def simplify_printed_hal_object(model_dump_json: str) -> str:
+    model_load_json = json.loads(model_dump_json)
 
-    def GetID(Dict):
-        for Key in Dict:
-            Value = Dict[Key]
+    def get_id(model_json: dict) -> None:
+        for key in model_json:
+            value = model_json[key]
 
-            if isinstance(Value, list):
-                for index, item in enumerate(Value):
-                    if isinstance(item, dict):
-                        if "Identifier" in item:
-                            Value[index] = item["Identifier"]
+            if isinstance(value, list):
+                for index, item in enumerate(value):
+                    if isinstance(item, dict) and "identifier" in item:
+                        value[index] = item["identifier"]
 
-            if isinstance(Value, dict):
-                if "Identifier" in Value:
-                    Dict[Key] = Value["Identifier"]
+            if isinstance(value, dict):
+                if "identifier" in value:
+                    model_json[key] = value["identifier"]
                 else:
-                    GetID(Value)
+                    get_id(value)
 
-    GetID(model_dump_json)
+    get_id(model_load_json)
 
     return json.dumps(model_dump_json, indent=4)
 
@@ -42,7 +40,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
         logger.warning(
             "Empty configuration was passed. No "
             + BaseObject.__name__
-            + " objects will be loaded."
+            + " objects will be loaded.",
         )
 
     Dict = DictTools.RemoveKeyWhitespace(Dict)
@@ -52,7 +50,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
             cls = BaseClasses.HALDevice.HALDevices[Key]
         except:
             raise ValueError(
-                Key + " not recognized as a valid " + BaseObject.__name__ + " subclass"
+                Key + " not recognized as a valid " + BaseObject.__name__ + " subclass",
             )
 
         if not issubclass(cls, BaseObject):
@@ -60,7 +58,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
                 cls.__name__
                 + " is not a subclass of "
                 + BaseObject.__name__
-                + ". You may be trying to load a config with the wrong HALDevice."
+                + ". You may be trying to load a config with the wrong HALDevice.",
             )
 
         for Item in Dict[Key]:
@@ -70,13 +68,13 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
                 if HALDevice.Identifier in Devices:
                     raise ValueError(
                         HALDevice.Identifier
-                        + " already exists. Idenitifers must be unique."
+                        + " already exists. Idenitifers must be unique.",
                     )
 
                 HALDevice = cast(BaseModel, HALDevice)
 
                 logger.debug(
-                    SimplifyPrintedHALObject(BaseModel.model_dump_json(HALDevice))
+                    SimplifyPrintedHALObject(BaseModel.model_dump_json(HALDevice)),
                 )
 
                 Devices[HALDevice.Identifier] = HALDevice  # type: ignore IDK why this is an error...
@@ -85,7 +83,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
                     Item["Identifier"]
                     + " is disabled so will not be loaded as a "
                     + BaseObject.__name__
-                    + " object."
+                    + " object.",
                 )
 
     return Devices
