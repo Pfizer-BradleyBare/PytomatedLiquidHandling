@@ -7,4 +7,4 @@ from .layout_item_base import LayoutItemBase
 
 @dataclasses.dataclass(kw_only=True)
 class Plate(LayoutItemBase):
-    Labware: labware.PipettableLabware
+    labware: labware.PipettableLabware

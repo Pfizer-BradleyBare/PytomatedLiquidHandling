@@ -11,7 +11,7 @@ class MagneticRackABC(HALDevice):
 
     @field_validator("SupportedPlates", mode="before")
     def __SupportedPlatesValidate(cls, v):
-        SupportedObjects = list()
+        SupportedObjects = []
 
         Objects = LayoutItem.Devices
 
@@ -30,7 +30,7 @@ class MagneticRackABC(HALDevice):
 
     @field_validator("SupportedPipettes", mode="before")
     def __SupportedPipettesValidate(cls, v, info: ValidationInfo):
-        SupportedObjects = list()
+        SupportedObjects = []
 
         Objects = Pipette.Devices
 
@@ -57,7 +57,7 @@ class MagneticRackABC(HALDevice):
                         )
 
                         if CategoryName not in Tip.SupportedLiquidClassCategories:
-                            Tip.SupportedLiquidClassCategories[CategoryName] = list()
+                            Tip.SupportedLiquidClassCategories[CategoryName] = []
                         Tip.SupportedLiquidClassCategories[CategoryName].append(
                             LiquidClass,
                         )
@@ -80,7 +80,7 @@ class MagneticRackABC(HALDevice):
                         )
 
                         if CategoryName not in Tip.SupportedLiquidClassCategories:
-                            Tip.SupportedLiquidClassCategories[CategoryName] = list()
+                            Tip.SupportedLiquidClassCategories[CategoryName] = []
                         Tip.SupportedLiquidClassCategories[CategoryName].append(
                             LiquidClass,
                         )

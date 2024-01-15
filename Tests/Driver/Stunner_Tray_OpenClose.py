@@ -97,7 +97,7 @@ except:
     print("LEAVING!")
     time.sleep(1)
 
-Command = GetResults.Command(Options=GetResults.OptionsList())
+Command = GetResults.Command(Options=GetResults.Options[])
 Command.Options += [
     GetResults.Options.SampleName,
     GetResults.Options.A280,

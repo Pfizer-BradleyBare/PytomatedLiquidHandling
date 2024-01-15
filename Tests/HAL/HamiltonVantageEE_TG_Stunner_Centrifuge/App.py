@@ -1,8 +1,6 @@
 import os
 
-import yaml
 from loguru import logger
-
 from PytomatedLiquidHandling import HAL
 
 logger.enable("PytomatedLiquidHandling")
@@ -17,25 +15,25 @@ CloseableContainerDevice = HAL.CloseableContainer.Devices["FlipTube"]
 
 CloseableContainerDevice.Initialize()
 
-OpenCloseOptions: list[HAL.CloseableContainer.Base.OpenCloseOptions] = list()
+OpenCloseOptions: list[HAL.CloseableContainer.Base.OpenCloseOptions] = []
 
 OpenCloseOptions.append(
-    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=1)
+    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=1),
 )
 OpenCloseOptions.append(
-    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=2)
+    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=2),
 )
 OpenCloseOptions.append(
-    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=3)
+    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=3),
 )
 OpenCloseOptions.append(
-    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=4)
+    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=4),
 )
 OpenCloseOptions.append(
-    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=5)
+    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=5),
 )
 OpenCloseOptions.append(
-    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=6)
+    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=6),
 )
 
 CloseableContainerDevice.AssertOpenCloseOptions(OpenCloseOptions)

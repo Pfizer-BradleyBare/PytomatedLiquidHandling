@@ -7,4 +7,4 @@ from .layout_item_base import LayoutItemBase
 
 @dataclasses.dataclass(kw_only=True)
 class VacuumManifold(LayoutItemBase):
-    Labware: labware.NonPipettableLabware
+    labware: labware.NonPipettableLabware

@@ -19,7 +19,7 @@ import time
 class RecurringNotification:
     OrchastratorInstance: Orchastrator
     Notifications: UniqueObjectTrackerABC[_RecurringNotification] = field(
-        init=False, default_factory=UniqueObjectTrackerABC
+        init=False, default_factory=UniqueObjectTrackerABC,
     )
 
     @dataclass
@@ -58,7 +58,7 @@ class RecurringNotification:
         CycleTime: int,
     ):
         Instance = self._RecurringNotification(
-            TaskInstance.UniqueIdentifier, Message, CycleTime, TaskInstance
+            TaskInstance.UniqueIdentifier, Message, CycleTime, TaskInstance,
         )
 
         self.Notifications.LoadSingle(Instance)
@@ -67,9 +67,9 @@ class RecurringNotification:
         return self.Notifications.GetObjectByName(UniqueIdentifier)
 
     def GetAcknowledgedNotifications(self) -> list[_RecurringNotification]:
-        Acknowledged = list()
+        Acknowledged = []
 
-        for Instance in self.Notifications.GetObjectsAsList():
+        for Instance in self.Notifications.GetObjectsAs[]:
             if Instance.IsAcknowledged():
                 Acknowledged.append(Instance)
                 self.Notifications.UnloadSingle(Instance)

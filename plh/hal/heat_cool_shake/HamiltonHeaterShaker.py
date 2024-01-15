@@ -25,7 +25,7 @@ class HamiltonHeaterShaker(HeatCoolShakeABC):
         Temperature: float | None = None,
         RPM: int | None = None,
     ):
-        Exceptions = list()
+        Exceptions = []
 
         try:
             super().AssertOptions(LayoutItem, Temperature, RPM)

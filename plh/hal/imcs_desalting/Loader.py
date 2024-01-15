@@ -65,17 +65,17 @@ def LoadYaml(
         del Device["Load Liquid Class"]
         del Device["Elute Liquid Class"]
 
-        SupportedSourceLabwares: list[Labware.Base.LabwareBase] = list()
+        SupportedSourceLabwares: list[Labware.Base.LabwareBase] = []
         for LabwareID in Device["Supported Source Labware Identifiers"]:
             SupportedSourceLabwares.append(Labwares[LabwareID])
         del Device["Supported Source Labware Identifiers"]
 
-        SupportedDestinationLabwares: list[Labware.Base.LabwareBase] = list()
+        SupportedDestinationLabwares: list[Labware.Base.LabwareBase] = []
         for LabwareID in Device["Supported Destination Labware Identifiers"]:
             SupportedDestinationLabwares.append(Labwares[LabwareID])
         del Device["Supported Destination Labware Identifiers"]
 
-        SupportedDeckLocations: list[DeckLocation.Base.DeckLocationBase] = list()
+        SupportedDeckLocations: list[DeckLocation.Base.DeckLocationBase] = []
         for DeckLocationID in Device["Supported Deck Location Identifiers"]:
             SupportedDeckLocations.append(DeckLocations[DeckLocationID])
         del Device["Supported Deck Location Identifiers"]

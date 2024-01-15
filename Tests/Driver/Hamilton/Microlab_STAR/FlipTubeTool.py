@@ -31,7 +31,7 @@ def Main():
     Backend.GetResponse(Command, FlipTubeTool.ToolsPickUp.Response)
 
     logger.info("Open")
-    Command = FlipTubeTool.FlipTubeOpen.Command(Options=list())
+    Command = FlipTubeTool.FlipTubeOpen.Command(Options=[])
     Command.Options.append(
         FlipTubeTool.FlipTubeOpen.Options(
             LabwareID="FlipTubes",
@@ -65,7 +65,7 @@ def Main():
     Backend.GetResponse(Command, FlipTubeTool.FlipTubeOpen.Response)
 
     logger.info("Close")
-    Command = FlipTubeTool.FlipTubeClose.Command(Options=list())
+    Command = FlipTubeTool.FlipTubeClose.Command(Options=[])
     Command.Options.append(
         FlipTubeTool.FlipTubeClose.Options(
             LabwareID="FlipTubes",

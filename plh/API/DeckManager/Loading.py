@@ -12,7 +12,7 @@ class LoadedWell:
     LayoutItemWell: int
 
 
-LoadedWells: list[LoadedWell] = list()
+LoadedWells: list[LoadedWell] = []
 
 
 def QueueContainer(

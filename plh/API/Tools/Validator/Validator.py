@@ -4,7 +4,7 @@ from types import UnionType
 def ValidateInput(
     Input: object,
     Types: type | UnionType,
-    Vals: list[object] = list(),
+    Vals: list[object] = [],
 ) -> bool:
     ValidState = True
 
@@ -35,9 +35,8 @@ def ValidateInput(
 def ValidateListInput(
     Inputs: list[object],
     Types: type | UnionType,
-    Vals: list[object] = list(),
+    Vals: list[object] = [],
 ) -> bool:
-
     if not (Types or Vals):
         return True
 
@@ -58,5 +57,5 @@ print(
         ["Bradley", "Hannah", 3],
         int | str,
         ["Hannah", "Bradley", "Tipper", "Kuni", 1, 2, 3],
-    )
+    ),
 )

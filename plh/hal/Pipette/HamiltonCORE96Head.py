@@ -64,7 +64,7 @@ class HamiltonCORE96Head(PipetteABC):
 
             TipPositions = Tip.Tip._AvailablePositions[: len(Opts)]
 
-            SupportPickupOptions: list[Channel1000uL.Pickup.Options] = list()
+            SupportPickupOptions: list[Channel1000uL.Pickup.Options] = []
             for Index, (Opt, ChannelNumber) in enumerate(
                 zip(Opts, self.HamiltonPortraitCORE8Channel.ActiveChannels),
             ):
@@ -87,7 +87,7 @@ class HamiltonCORE96Head(PipetteABC):
             # Hamilton tip positions are always numeric and are always sorted columwise.
             # So we are going to convert the desired pipetting positions to the correct numeric position
 
-            SupportEjectOptions: list[Channel1000uL.Eject.Options] = list()
+            SupportEjectOptions: list[Channel1000uL.Eject.Options] = []
             for Index, (Opt, ChannelNumber) in enumerate(
                 zip(Opts, self.HamiltonPortraitCORE8Channel.ActiveChannels),
             ):

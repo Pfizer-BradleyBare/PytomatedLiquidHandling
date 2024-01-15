@@ -1,8 +1,6 @@
 import os
 
 from loguru import logger
-
-from PytomatedLiquidHandling.Driver.Hamilton import Visual_NTR_Library
 from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
 from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import Channel1000uL
 
@@ -10,15 +8,15 @@ from PytomatedLiquidHandling.Driver.Hamilton.ML_STAR import Channel1000uL
 def Main():
     logger.info(f"Executing Main() from {__file__}")
 
-    logger.info(f"Pickup")
-    Command = Channel1000uL.Pickup.Command(BackendErrorHandling=True, Options=list())
+    logger.info("Pickup")
+    Command = Channel1000uL.Pickup.Command(BackendErrorHandling=True, Options=[])
     for i in range(1, 9):
         Command.Options.append(
             Channel1000uL.Pickup.Options(
                 LabwareID="FTR_1",
                 PositionID=str(i),
                 ChannelNumber=i,
-            )
+            ),
         )
 
     Backend.ExecuteCommand(Command)
@@ -29,8 +27,8 @@ def Main():
     # The channel number dictates exactly which channel picks up which tip.
     # We set BackendErrorHandling as True so the Hamilton software will handle errors for us.
 
-    logger.info(f"Aspirate")
-    Command = Channel1000uL.Aspirate.Command(BackendErrorHandling=True, Options=list())
+    logger.info("Aspirate")
+    Command = Channel1000uL.Aspirate.Command(BackendErrorHandling=True, Options=[])
     for i in range(1, 9):
         Command.Options.append(
             Channel1000uL.Aspirate.Options(
@@ -39,7 +37,7 @@ def Main():
                 PositionID="A1",
                 LiquidClass="StandardVolume_Water_DispenseSurface_Empty",
                 Volume=25,
-            )
+            ),
         )
 
     Backend.ExecuteCommand(Command)
@@ -50,8 +48,8 @@ def Main():
     # The channel number dictates exactly which channel aspirates.
     # We set BackendErrorHandling as True so the Hamilton software will handle errors for us.
 
-    logger.info(f"Dispense")
-    Command = Channel1000uL.Dispense.Command(BackendErrorHandling=True, Options=list())
+    logger.info("Dispense")
+    Command = Channel1000uL.Dispense.Command(BackendErrorHandling=True, Options=[])
     for i in range(1, 9):
         Command.Options.append(
             Channel1000uL.Dispense.Options(
@@ -60,7 +58,7 @@ def Main():
                 PositionID="A1",
                 LiquidClass="StandardVolume_Water_DispenseSurface_Empty",
                 Volume=25,
-            )
+            ),
         )
     Backend.ExecuteCommand(Command)
     Backend.WaitForResponseBlocking(Command)
@@ -70,15 +68,15 @@ def Main():
     # The channel number dictates exactly which channel dispenses.
     # We set BackendErrorHandling as True so the Hamilton software will handle errors for us.
 
-    logger.info(f"Eject")
-    Command = Channel1000uL.Eject.Command(BackendErrorHandling=True, Options=list())
+    logger.info("Eject")
+    Command = Channel1000uL.Eject.Command(BackendErrorHandling=True, Options=[])
     for i in range(1, 9):
         Command.Options.append(
             Channel1000uL.Eject.Options(
                 LabwareID="Waste",
                 ChannelNumber=i,
                 PositionID=str(i),
-            )
+            ),
         )
     Backend.ExecuteCommand(Command)
     Backend.WaitForResponseBlocking(Command)
@@ -86,13 +84,13 @@ def Main():
     # Eject tips to waste.
     # We set BackendErrorHandling as True so the Hamilton software will handle errors for us.
 
-    logger.info(f"GetLastLiquidLevel")
+    logger.info("GetLastLiquidLevel")
     Command = Channel1000uL.GetLastLiquidLevel.Command()
     Backend.ExecuteCommand(Command)
     Backend.WaitForResponseBlocking(Command)
     Response = Backend.GetResponse(Command, Channel1000uL.GetLastLiquidLevel.Response)
 
-    logger.info(f"FW_AspDis TODO")
+    logger.info("FW_AspDis TODO")
     # TODO
 
 

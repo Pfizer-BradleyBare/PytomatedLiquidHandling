@@ -17,7 +17,7 @@ class HeatCoolShakeABC(Interface, HALDevice):
 
     @field_validator("Plates", mode="before")
     def __SupportedPlatesValidate(cls, v):
-        SupportedObjects = list()
+        SupportedObjects = []
 
         Objects = LayoutItem.Devices
 
@@ -53,7 +53,7 @@ class HeatCoolShakeABC(Interface, HALDevice):
 
             HeatCoolShakeDevice.Base.ShakingNotSupportedError
         """
-        Exceptions = list()
+        Exceptions = []
 
         SupportedLabwares = [
             LayoutItem.Labware.Identifier for LayoutItem in self.Plates

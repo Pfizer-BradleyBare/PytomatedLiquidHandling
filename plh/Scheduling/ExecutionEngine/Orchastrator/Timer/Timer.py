@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 class Timer:
     OrcastratorInstance: Orchastrator
     Timers: UniqueObjectTrackerABC[_Timer] = field(
-        init=False, default_factory=UniqueObjectTrackerABC
+        init=False, default_factory=UniqueObjectTrackerABC,
     )
 
     @dataclass
@@ -57,9 +57,9 @@ class Timer:
         return self.Timers.GetObjectByName(UniqueIdentifier)
 
     def GetExpiredTimers(self) -> list[_Timer]:
-        Expired = list()
+        Expired = []
 
-        for Instance in self.Timers.GetObjectsAsList():
+        for Instance in self.Timers.GetObjectsAs[]:
             if Instance.IsExpired():
                 Expired.append(Instance)
                 self.Timers.UnloadSingle(Instance)

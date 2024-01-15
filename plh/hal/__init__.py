@@ -32,7 +32,7 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
 
     You can have as many files as required to simplify configuration."""
 
-    Warns = list()
+    Warns = []
 
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):

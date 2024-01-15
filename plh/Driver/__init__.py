@@ -65,7 +65,7 @@ TipPositions = AvailablePositions[:8]
 AvailablePositions = AvailablePositions[8:]
 # We want to do a single pipetting step with 8 tips.
 
-Command = Channel1000uL.Pickup.Command(BackendErrorHandling=True, Options=list())
+Command = Channel1000uL.Pickup.Command(BackendErrorHandling=True, Options=[])
 for i, Position in enumerate(TipPositions):
     Command.Options.append(
         Channel1000uL.Pickup.Options(
@@ -84,7 +84,7 @@ ResponseInstance = Backend.GetResponse(Command, Channel1000uL.Pickup.Response)
 # We set BackendErrorHandling as True so the Hamilton software will handle errors for us.
 
 
-Command = Channel1000uL.Aspirate.Command(BackendErrorHandling=True, Options=list())
+Command = Channel1000uL.Aspirate.Command(BackendErrorHandling=True, Options=[])
 for i, Position in enumerate(TipPositions):
     Command.Options.append(
         Channel1000uL.Aspirate.Options(
@@ -104,7 +104,7 @@ ResponseInstance = Backend.GetResponse(Command, Channel1000uL.Aspirate.Response)
 # The channel number dictates exactly which channel aspirates.
 # We set BackendErrorHandling as True so the Hamilton software will handle errors for us.
 
-Command = Channel1000uL.Dispense.Command(BackendErrorHandling=True, Options=list())
+Command = Channel1000uL.Dispense.Command(BackendErrorHandling=True, Options=[])
 for i, Position in enumerate(TipPositions):
     Command.Options.append(
         Channel1000uL.Dispense.Options(
@@ -123,7 +123,7 @@ ResponseInstance = Backend.GetResponse(Command, Channel1000uL.Dispense.Response)
 # The channel number dictates exactly which channel dispenses.
 # We set BackendErrorHandling as True so the Hamilton software will handle errors for us.
 
-Command = Channel1000uL.Eject.Command(BackendErrorHandling=True, Options=list())
+Command = Channel1000uL.Eject.Command(BackendErrorHandling=True, Options=[])
 for i, Position in enumerate(TipPositions):
     Command.Options.append(
         Channel1000uL.Eject.Options(

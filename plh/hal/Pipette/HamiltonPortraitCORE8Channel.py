@@ -41,8 +41,8 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 )
         # Max volume for each liquid class pairing. Important
 
-        FinalTransferOptions: list[TransferOptions] = list()
-        TruncatedFinalTransferOptions: list[list[TransferOptions]] = list()
+        FinalTransferOptions: list[TransferOptions] = []
+        TruncatedFinalTransferOptions: list[list[TransferOptions]] = []
 
         for Opt in Options:
             CombinedName = (
@@ -112,7 +112,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
                 TipPositions = Tip.Tip._AvailablePositions[: len(Opts)]
 
-                PickupOptions: list[Channel1000uL.Pickup.Options] = list()
+                PickupOptions: list[Channel1000uL.Pickup.Options] = []
                 for Index, (Opt, ChannelNumber) in enumerate(
                     zip(Opts, self.ActiveChannels),
                 ):
@@ -131,7 +131,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 self.Backend.GetResponse(Command, Channel1000uL.Pickup.Response)
                 # Pickup the tips
 
-                AspirateOptions: list[Channel1000uL.Aspirate.Options] = list()
+                AspirateOptions: list[Channel1000uL.Aspirate.Options] = []
                 for Index, (Opt, ChannelNumber) in enumerate(
                     zip(Opts, self.ActiveChannels),
                 ):
@@ -180,7 +180,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
                 self.Backend.ExecuteCommand(Command)
                 self.Backend.GetResponse(Command, Channel1000uL.Aspirate.Response)
 
-                DispenseOptions: list[Channel1000uL.Dispense.Options] = list()
+                DispenseOptions: list[Channel1000uL.Dispense.Options] = []
                 for Index, (Opt, ChannelNumber) in enumerate(
                     zip(Opts, self.ActiveChannels),
                 ):
@@ -238,7 +238,7 @@ class HamiltonPortraitCORE8Channel(PipetteABC):
 
                 EjectPositions = ["1", "2", "3", "4", "13", "14", "15", "16"]
                 # Hamilton waste always has 16 positions. Do be compatible with liquid waste we want to use the outer positions
-                EjectOptions: list[Channel1000uL.Eject.Options] = list()
+                EjectOptions: list[Channel1000uL.Eject.Options] = []
                 for Index, (Opt, ChannelNumber) in enumerate(
                     zip(Opts, self.ActiveChannels),
                 ):

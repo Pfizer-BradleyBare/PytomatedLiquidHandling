@@ -27,7 +27,7 @@ class TipABC(Interface, HALDevice):
 
     @field_validator("TipRacks", mode="before")
     def __TipRacksValidate(cls, v):
-        SupportedObjects = list()
+        SupportedObjects = []
 
         Objects = LayoutItem.Devices
 

@@ -17,7 +17,7 @@ class StorageDeviceABC(HALDevice):
 
     @field_validator("LayoutItems", mode="before")
     def __SupportedLabwaresValidate(cls, v):
-        SupportedObjects = list()
+        SupportedObjects = []
 
         Objects = LayoutItem.Devices
 

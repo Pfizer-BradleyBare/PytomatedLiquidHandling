@@ -41,7 +41,7 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
 
     @field_validator("SupportedDeckLocations", mode="before")
     def __SupportedDeckLocationsValidate(cls, v):
-        SupportedObjects = list()
+        SupportedObjects = []
 
         Objects = DeckLocation.Devices
 
@@ -64,7 +64,7 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
         mode="before",
     )
     def __SupportedLabwaresValidate(cls, v):
-        SupportedObjects = list()
+        SupportedObjects = []
 
         Objects = Labware.Devices
 
@@ -85,9 +85,9 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
         self.SupportedTips = sorted(self.SupportedTips, key=lambda x: x.Tip.Volume)
 
     def AssertTransferOptions(self, Options: list[TransferOptions]):
-        UnsupportedDeckLocations = list()
-        UnsupportedLabware = list()
-        UnsupportedLiquidClassCategories = list()
+        UnsupportedDeckLocations = []
+        UnsupportedLabware = []
+        UnsupportedLiquidClassCategories = []
 
         for Opt in Options:
             SourceLabware = Opt.SourceLayoutItemInstance.Labware
@@ -152,7 +152,7 @@ class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
         Options: TransferOptions,
         Volume: float,
     ) -> list[TransferOptions]:
-        UpdatedOptionsList = list()
+        UpdatedOptionsList = []
 
         NumTransfers = ceil(Options.TransferVolume / Volume)
         TransferOptions.TransferVolume /= NumTransfers

@@ -10,13 +10,13 @@ class Well:
     Liquids: list[Liquid] = field(init=False, default_factory=list)
 
     def Aspirate(self, Volume: float) -> list[Liquid]:
-        AspiratedLiquids: list[Liquid] = list()
+        AspiratedLiquids: list[Liquid] = []
 
         TotalVolume = sum([Liquid.Volume for Liquid in self.Liquids])
 
         if Volume > TotalVolume:
             raise Exception(
-                "You are removing more liquid than is available in the wells. This is weird."
+                "You are removing more liquid than is available in the wells. This is weird.",
             )
 
         FractionRemoved = Volume / TotalVolume
@@ -26,7 +26,7 @@ class Well:
             NewVolume = AspiratedLiquid.Volume - RemovedVolume
 
             RemovedSolution = copy.copy(
-                AspiratedLiquid
+                AspiratedLiquid,
             )  # use a shallow copy to preserve all references.
             RemovedSolution.Volume = RemovedVolume
             AspiratedLiquids.append(RemovedSolution)
@@ -54,10 +54,10 @@ class Well:
         TotalVolume = sum(Liquid.Volume for Liquid in Liquids)
         # A solution will technically not have a well volume because we never pipette into a solution. Only out of
 
-        VolatilityList = list()
-        ViscosityList = list()
-        HomogeneityList = list()
-        PolarityList = list()
+        VolatilityList = []
+        ViscosityList = []
+        HomogeneityList = []
+        PolarityList = []
 
         for Liquid in Liquids:
             Percentage = int(Liquid.Volume * 100 / TotalVolume)
@@ -89,19 +89,19 @@ class Well:
             )
 
         VolatilityValue = Volatility.GetByNumericKey(
-            int(round(sum(VolatilityList) / len(VolatilityList)))
+            int(round(sum(VolatilityList) / len(VolatilityList))),
         )
 
         ViscosityValue = Viscosity.GetByNumericKey(
-            int(round(sum(ViscosityList) / len(ViscosityList)))
+            int(round(sum(ViscosityList) / len(ViscosityList))),
         )
 
         HomogeneityValue = Homogeneity.GetByNumericKey(
-            int(round(sum(HomogeneityList) / len(HomogeneityList)))
+            int(round(sum(HomogeneityList) / len(HomogeneityList))),
         )
 
         LLDValue = Polarity.GetByNumericKey(
-            int(round(sum(PolarityList) / len(PolarityList)))
+            int(round(sum(PolarityList) / len(PolarityList))),
         )
         # We are going to process the whole shebang here
 

@@ -34,7 +34,7 @@ class Scheduler:
                 str(Device.UniqueIdentifier): processscheduler.Worker(
                     str(Device.UniqueIdentifier),
                 )
-                for Device in OrchastratorInstance.HALInstance.PipetteTrackerInstance.GetObjectsAsList()
+                for Device in OrchastratorInstance.HALInstance.PipetteTrackerInstance.GetObjectsAs[]
             },
         )
         # Load Pipette devices
@@ -44,7 +44,7 @@ class Scheduler:
                 str(Device.UniqueIdentifier): processscheduler.Worker(
                     str(Device.UniqueIdentifier),
                 )
-                for Device in OrchastratorInstance.HALInstance.TransportDeviceTrackerInstance.GetObjectsAsList()
+                for Device in OrchastratorInstance.HALInstance.TransportDeviceTrackerInstance.GetObjectsAs[]
             },
         )
         # Load Transport devices
@@ -54,7 +54,7 @@ class Scheduler:
                 str(Device.UniqueIdentifier): processscheduler.Worker(
                     str(Device.UniqueIdentifier),
                 )
-                for Device in OrchastratorInstance.HALInstance.TempControlDeviceTrackerInstance.GetObjectsAsList()
+                for Device in OrchastratorInstance.HALInstance.TempControlDeviceTrackerInstance.GetObjectsAs[]
             },
         )
         # Load TempControl devices
@@ -64,7 +64,7 @@ class Scheduler:
                 str(Device.UniqueIdentifier): processscheduler.Worker(
                     str(Device.UniqueIdentifier),
                 )
-                for Device in OrchastratorInstance.HALInstance.MagneticRackTrackerInstance.GetObjectsAsList()
+                for Device in OrchastratorInstance.HALInstance.MagneticRackTrackerInstance.GetObjectsAs[]
             },
         )
         # Load MagneticRack devices
@@ -74,7 +74,7 @@ class Scheduler:
                 str(Device.UniqueIdentifier): processscheduler.Worker(
                     str(Device.UniqueIdentifier),
                 )
-                for Device in OrchastratorInstance.HALInstance.IMCSDesaltingTrackerInstance.GetObjectsAsList()
+                for Device in OrchastratorInstance.HALInstance.IMCSDesaltingTrackerInstance.GetObjectsAs[]
             },
         )
         # Load IMCS Desalting devices
@@ -111,7 +111,7 @@ class Scheduler:
                 # To keep schedule consistent we will add that start time as a constraint
 
                 for Resource in Task.RequiredResources:
-                    Resources: list = list()
+                    Resources: list = []
                     for Name in Resource.ResourceUniqueIdentifiers:
                         Resources.append(self.__LoadedResourceObjects[Name])
 

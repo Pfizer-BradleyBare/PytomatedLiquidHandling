@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from .CloseableContainerABC import CloseableContainerABC
-from .HamiltonFlipTubeLandscape import HamiltonFlipTubeLandscape
+from .closeable_container_base import CloseableContainerBase
+from .hamilton_fliptube_landscape import HamiltonFlipTubeLandscape
 
-__all__ = ["CloseableContainerABC", "HamiltonFlipTubeLandscape"]
+__all__ = ["CloseableContainerBase", "HamiltonFlipTubeLandscape"]
 identifier = str
-devices: dict[identifier, CloseableContainerABC] = {}
+devices: dict[identifier, CloseableContainerBase] = {}

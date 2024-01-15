@@ -2,7 +2,6 @@ from dataclasses import dataclass, field
 from typing import cast
 
 import networkx
-
 from PytomatedLiquidHandling.API.Tools.Container import ContainerTracker
 from PytomatedLiquidHandling.Tools.BaseClasses import UniqueObjectABC
 
@@ -17,7 +16,8 @@ class Method(UniqueObjectABC):
     Simulate: bool
 
     ContainerTrackerInstance: ContainerTracker = field(
-        init=False, default_factory=ContainerTracker
+        init=False,
+        default_factory=ContainerTracker,
     )
 
     _TaskAddedFlag: bool = field(init=False, default=False)
@@ -46,12 +46,12 @@ class Method(UniqueObjectABC):
         ):
             StartingNodeName = NodeName
 
-            ChildrenNodes = list()
+            ChildrenNodes = []
 
-            TaskList: list[TaskABC] = list()
-            StepList: list[StepABC] = list()
+            TaskList: list[TaskABC] = []
+            StepList: list[StepABC] = []
 
-            Tasks: list[TaskABC] = list()
+            Tasks: list[TaskABC] = []
 
             while True:
                 Node = StepGraph.nodes[NodeName]
@@ -90,7 +90,7 @@ class Method(UniqueObjectABC):
 
                 if Task.SchedulingSeparator == True:
                     CombinedNodeName = "|".join(
-                        [str(Task.UniqueIdentifier) for Task in Tasks]
+                        [str(Task.UniqueIdentifier) for Task in Tasks],
                     )
 
                     TaskGraph.add_node(CombinedNodeName, Steps=StepList, Tasks=Tasks)
@@ -99,7 +99,7 @@ class Method(UniqueObjectABC):
 
                     ParentNode = CombinedNodeName
 
-                    Tasks = list()
+                    Tasks = []
             # task reordering / splitting. TODO refactor
 
             for ChildNode in ChildrenNodes:

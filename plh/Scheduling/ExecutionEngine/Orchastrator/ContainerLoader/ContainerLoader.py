@@ -55,7 +55,7 @@ class ContainerLoader:
                 self.AssignedWellTrackerInstance.LoadSingle(AssignedWell(Index))
 
         def GetNextAvailableWell(self) -> int:
-            Reversed = self.AssignedWellTrackerInstance.GetObjectsAsList()[:]
+            Reversed = self.AssignedWellTrackerInstance.GetObjectsAs[][:]
             LastWell = Reversed[-1]
             Reversed.reverse()
             # always start at the end because we are allowed to skip wells
@@ -73,7 +73,7 @@ class ContainerLoader:
             AvailableWell = self.GetNextAvailableWell()
 
             LastWell = int(
-                self.AssignedWellTrackerInstance.GetObjectsAsList()[
+                self.AssignedWellTrackerInstance.GetObjectsAs[][
                     -1
                 ].UniqueIdentifier,
             )
