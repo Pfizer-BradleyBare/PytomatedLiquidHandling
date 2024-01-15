@@ -18,9 +18,9 @@ class LayoutSorting(Enum):
 
 @dataclasses.dataclass(kw_only=True)
 class Layout(ABC):
-    Rows: int
-    Columns: int
-    Direction: LayoutSorting
+    rows: int
+    columns: int
+    direction: LayoutSorting
 
     def get_position_id(self: Layout, position: str | int) -> str:
         if isinstance(position, int):
@@ -36,7 +36,7 @@ class Layout(ABC):
             msg = "position can be either alphanumeric or numeric.\nAlphanumeric must contain both numbers and letters. Ex: A1, B12, 10H.\nNumeric must only contain digits. Ex: 1 13 95"
             raise InvalidpositionError(msg)
 
-        if self.Direction == LayoutSorting.Columnwise:
+        if self.direction == LayoutSorting.Columnwise:
             return self._get_columnwise_position_id(position)
 
         return self._get_rowwise_position_id(position)
@@ -85,9 +85,9 @@ class NumericLayout(Layout):
     ) -> list[list[str]]:
         sorted_positions = self.sort_positions(positions)
 
-        groups = [[] for _ in range(self.Columns)]
+        groups = [[] for _ in range(self.columns)]
         for pos in sorted_positions:
-            groups[int((int(pos) - 1) / self.Rows)].append(pos)
+            groups[int((int(pos) - 1) / self.rows)].append(pos)
 
         return [Group for Group in groups if len(Group) != 0]
 
@@ -97,9 +97,9 @@ class NumericLayout(Layout):
     ) -> list[list[str]]:
         sorted_positions = self.sort_positions(positions)
 
-        groups = [[] for _ in range(self.Rows)]
+        groups = [[] for _ in range(self.rows)]
         for pos in sorted_positions:
-            groups[int((int(pos) - 1) / self.Columns)].append(pos)
+            groups[int((int(pos) - 1) / self.columns)].append(pos)
 
         return [Group for Group in groups if len(Group) != 0]
 
@@ -110,7 +110,7 @@ class NumericLayout(Layout):
         number_portion = "".join([c for c in position if c.isdigit()])
         character_portion = "".join([c for c in position if c.isalpha()])
 
-        pos = (int(number_portion) - 1) * self.Rows
+        pos = (int(number_portion) - 1) * self.rows
 
         pos += ord(character_portion) + 1 - 65  # ascii A
 
@@ -125,7 +125,7 @@ class NumericLayout(Layout):
 
         pos = int(number_portion)
 
-        pos += (ord(character_portion) - 65) * self.Columns  # ascii A
+        pos += (ord(character_portion) - 65) * self.columns  # ascii A
 
         return str(pos)
 
@@ -137,9 +137,9 @@ class AlphaNumericLayout(Layout):
         positions: list[str | int],
     ) -> list[str]:
         numeric_addressing = NumericLayout(
-            Rows=self.Rows,
-            Columns=self.Columns,
-            Direction=self.Direction,
+            rows=self.rows,
+            columns=self.columns,
+            direction=self.direction,
         )
 
         return [
@@ -152,9 +152,9 @@ class AlphaNumericLayout(Layout):
         positions: list[str | int],
     ) -> list[list[str]]:
         numeric_addressing = NumericLayout(
-            Rows=self.Rows,
-            Columns=self.Columns,
-            Direction=self.Direction,
+            rows=self.rows,
+            columns=self.columns,
+            direction=self.direction,
         )
 
         return [
@@ -167,9 +167,9 @@ class AlphaNumericLayout(Layout):
         positions: list[str | int],
     ) -> list[list[str]]:
         numeric_addressing = NumericLayout(
-            Rows=self.Rows,
-            Columns=self.Columns,
-            Direction=self.Direction,
+            rows=self.rows,
+            columns=self.columns,
+            direction=self.direction,
         )
 
         return [
@@ -183,9 +183,9 @@ class AlphaNumericLayout(Layout):
 
         pos = int(position)
 
-        number_portion = str(((pos - 1) // self.Rows) + 1)
+        number_portion = str(((pos - 1) // self.rows) + 1)
 
-        character_portion = chr(((pos - 1) % self.Rows) + 65)
+        character_portion = chr(((pos - 1) % self.rows) + 65)
 
         return character_portion + number_portion
 
@@ -195,8 +195,8 @@ class AlphaNumericLayout(Layout):
 
         pos = int(position)
 
-        number_portion = str(pos % self.Columns)
+        number_portion = str(pos % self.columns)
 
-        character_portion = chr((pos // self.Columns) + 65)
+        character_portion = chr((pos // self.columns) + 65)
 
         return character_portion + number_portion

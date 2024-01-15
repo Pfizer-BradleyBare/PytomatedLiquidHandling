@@ -1,13 +1,17 @@
+from __future__ import annotations
+
 from dataclasses import field
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 from pydantic import dataclasses
 
-from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uLCOREGrip
 from plh.hal import deck_location, layout_item
 
 from .transport_base import TransportBase
+
+if TYPE_CHECKING:
+    from plh.driver.HAMILTON.backend import HamiltonBackendBase
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -27,67 +31,67 @@ class HamiltonCOREGripper(TransportBase):
             compare=False,
         )
 
-    def Transport(
-        self,
-        SourceLayoutItem: layout_item.LayoutItemBase,
-        DestinationLayoutItem: layout_item.LayoutItemBase,
-    ):
-        if SourceLayoutItem.deck_location == DestinationLayoutItem.deck_location:
+    def transport(
+        self: HamiltonCOREGripper,
+        source_layout_item: layout_item.LayoutItemBase,
+        destination_layout_item: layout_item.LayoutItemBase,
+    ) -> None:
+        if source_layout_item.deck_location == destination_layout_item.deck_location:
             return
 
-        CompatibleConfigs = (
+        compatible_configs = (
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                SourceLayoutItem.deck_location,
-                DestinationLayoutItem.deck_location,
+                source_layout_item.deck_location,
+                destination_layout_item.deck_location,
             )[0]
         )
 
-        Labware = SourceLayoutItem.labware
+        labware = source_layout_item.labware
 
-        GetPlateOptionsInstance = Channel1000uLCOREGrip.GetPlate.Options(
+        get_plate_options = Channel1000uLCOREGrip.GetPlate.Options(
             GripperLabwareID=self.gripper_labware_id,
-            PlateLabwareID=SourceLayoutItem.labware_id,
-            GripWidth=Labware.Dimensions.YLength - Labware.TransportOffsets.Close,
-            OpenWidth=Labware.Dimensions.YLength + Labware.TransportOffsets.Open,
-            GripHeight=Labware.TransportOffsets.Top,
+            PlateLabwareID=source_layout_item.labware_id,
+            GripWidth=labware.dimensions.y_length - labware.transport_offsets.close,
+            OpenWidth=labware.dimensions.y_length + labware.transport_offsets.open,
+            GripHeight=labware.transport_offsets.top,
         )
 
-        CommandInstance = Channel1000uLCOREGrip.GetPlate.Command(
-            Options=GetPlateOptionsInstance,
-            BackendErrorHandling=self.BackendErrorHandling,
+        command = Channel1000uLCOREGrip.GetPlate.Command(
+            options=get_plate_options,
+            backend_error_handling=self.backend_error_handling,
         )
-        self.Backend.ExecuteCommand(CommandInstance)
-        self.Backend.WaitForResponseBlocking(CommandInstance)
-        self.Backend.GetResponse(
-            CommandInstance,
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(
+            command,
             Channel1000uLCOREGrip.GetPlate.Response,
         )
 
-        DropoffOptions = cast(
+        dropoff_options = cast(
             HamiltonCOREGripper.DropoffOptions,
-            CompatibleConfigs[1].DropoffOptions,
+            compatible_configs[1].dropoff_options,
         )
 
-        CommandInstance = Channel1000uLCOREGrip.PlacePlate.Command(
-            Options=Channel1000uLCOREGrip.PlacePlate.Options(
-                LabwareID=DestinationLayoutItem.LabwareID,
-                CheckPlateExists=DropoffOptions.CheckPlateExists,
+        command = Channel1000uLCOREGrip.PlacePlate.Command(
+            options=Channel1000uLCOREGrip.PlacePlate.Options(
+                LabwareID=destination_layout_item.labware_id,
+                CheckPlateExists=dropoff_options.CheckPlateExists,
                 EjectTool=Channel1000uLCOREGrip.PlacePlate.Options.YesNoOptions(
-                    int(self._LastTransportFlag),
+                    int(self._last_transport_flag),
                 ),
             ),
-            BackendErrorHandling=self.BackendErrorHandling,
+            backend_error_handling=self.backend_error_handling,
         )
-        self.Backend.ExecuteCommand(CommandInstance)
-        self.Backend.WaitForResponseBlocking(CommandInstance)
-        self.Backend.GetResponse(
-            CommandInstance,
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(
+            command,
             Channel1000uLCOREGrip.PlacePlate.Response,
         )
 
-    def TransportTime(
-        self,
-        SourceLayoutItem: layout_item.LayoutItemBase,
-        DestinationLayoutItem: layout_item.LayoutItemBase,
+    def transport_time(
+        self: HamiltonCOREGripper,
+        source_layout_item: layout_item.LayoutItemBase,
+        destination_layout_item: layout_item.LayoutItemBase,
     ) -> float:
-        return 0
+        ...

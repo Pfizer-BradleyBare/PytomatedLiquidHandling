@@ -1,6 +1,6 @@
 import dataclasses
 
-from ...Backend import HamiltonResponseBase
+from plh.driver.HAMILTON.backend import HamiltonResponseBase
 
 
 @dataclasses.dataclass(kw_only=True)

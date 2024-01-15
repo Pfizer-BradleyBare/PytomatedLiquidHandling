@@ -16,7 +16,7 @@ class LabwareNotSupportedError(BaseException):
     Labwares: List of LabwareBase objects that were not supported
     """
 
-    Labwares: list[LabwareBase]
+    labwares: list[LabwareBase]
 
 
 @dataclass
@@ -29,5 +29,5 @@ class LabwareNotEqualError(BaseException):
     Labware2: The other labware that failed
     """
 
-    Labware1: LabwareBase
-    Labware2: LabwareBase
+    labware1: LabwareBase
+    labware2: LabwareBase

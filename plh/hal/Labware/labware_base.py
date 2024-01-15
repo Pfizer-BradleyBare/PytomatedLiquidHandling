@@ -3,7 +3,7 @@ from pydantic import dataclasses
 from plh.hal.tools import HALDevice
 
 from .dimensions import Dimensions
-from .TransportOffsets import TransportOffsets
+from .transport_offsets import TransportOffsets
 
 
 @dataclasses.dataclass(kw_only=True)

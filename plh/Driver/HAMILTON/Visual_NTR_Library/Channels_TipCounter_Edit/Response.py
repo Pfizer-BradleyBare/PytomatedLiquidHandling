@@ -2,7 +2,7 @@ import dataclasses
 
 from typing_extensions import TypedDict
 
-from ...Backend import HamiltonResponseBase
+from plh.driver.HAMILTON.backend import HamiltonResponseBase
 
 
 class SequencePositionDict(TypedDict):

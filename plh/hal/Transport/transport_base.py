@@ -37,7 +37,8 @@ class TransportBase(Interface, HALDevice):
                     + " objects.",
                 )
 
-            supported_objects.append(objects[item])
+            else:
+                supported_objects.append(objects[item])
 
         return supported_objects
 
@@ -138,10 +139,10 @@ class TransportBase(Interface, HALDevice):
 
         unsupported_labware = []
 
-        if source_layout_item.labware.Identifier not in self.supported_labware:
+        if source_layout_item.labware.identifier not in self.supported_labware:
             unsupported_labware.append(source_layout_item.labware)
 
-        if destination_layout_item.labware.Identifier not in self.supported_labware:
+        if destination_layout_item.labware.identifier not in self.supported_labware:
             unsupported_labware.append(destination_layout_item.labware)
 
         if len(unsupported_labware) > 0:

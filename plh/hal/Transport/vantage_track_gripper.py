@@ -1,17 +1,22 @@
+from __future__ import annotations
+
 from dataclasses import field
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 from pydantic import dataclasses
-from PytomatedLiquidHandling.Driver.Hamilton import ML_STAR, Backend, TrackGripper
 
-from plh.hal import DeckLocation, LayoutItem
+from plh.driver.HAMILTON import ML_STAR, TrackGripper
+from plh.hal import deck_location, layout_item
 
-from .Base import TransportBase
+from .transport_base import TransportBase
+
+if TYPE_CHECKING:
+    from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
 
 
 @dataclasses.dataclass(kw_only=True)
 class VantageTrackGripper(TransportBase):
-    Backend: Backend.VantageTrackGripperEntryExit
+    backend: VantageTrackGripperEntryExit
 
     @dataclasses.dataclass(kw_only=True)
     class PickupOptions(TransportBase.PickupOptions):
@@ -40,79 +45,79 @@ class VantageTrackGripper(TransportBase):
             compare=False,
         )
 
-    def Transport(
-        self,
-        SourceLayoutItem: LayoutItem.Base.LayoutItemBase,
-        DestinationLayoutItem: LayoutItem.Base.LayoutItemBase,
-    ):
-        if SourceLayoutItem.DeckLocation == DestinationLayoutItem.DeckLocation:
+    def transport(
+        self: VantageTrackGripper,
+        source_layout_item: layout_item.LayoutItemBase,
+        destination_layout_item: layout_item.LayoutItemBase,
+    ) -> None:
+        if source_layout_item.deck_location == destination_layout_item.deck_location:
             return
 
-        CompatibleConfigs = (
-            DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
-                SourceLayoutItem.DeckLocation,
-                DestinationLayoutItem.DeckLocation,
+        compatible_configs = (
+            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+                source_layout_item.deck_location,
+                destination_layout_item.deck_location,
             )[0]
         )
 
-        Labware = SourceLayoutItem.Labware
+        labware = source_layout_item.labware
 
-        PickupOptions = cast(
+        pickup_options = cast(
             VantageTrackGripper.PickupOptions,
-            CompatibleConfigs[0].PickupOptions,
+            compatible_configs[0].pickup_options,
         )
 
         if (
-            PickupOptions.Orientation
+            pickup_options.Orientation
             == ML_STAR.iSwap.GetPlate.Options.LabwareOrientationOptions.PositiveYAxis
         ):
-            OpenWidth = Labware.Dimensions.XLength + Labware.TransportOffsets.Open
+            open_width = labware.dimensions.x_length + labware.transport_offsets.open
         else:
-            OpenWidth = Labware.Dimensions.YLength + Labware.TransportOffsets.Open
+            open_width = labware.dimensions.y_length + labware.transport_offsets.open
 
-        CommandInstance = TrackGripper.GripPlateFromTaughtPosition.Command(
-            Options=TrackGripper.GripPlateFromTaughtPosition.Options(
-                OpenWidth=OpenWidth,
-                CoordinatedMovement=PickupOptions.CoordinatedMovement,
+        command = TrackGripper.GripPlateFromTaughtPosition.Command(
+            options=TrackGripper.GripPlateFromTaughtPosition.Options(
+                OpenWidth=open_width,
+                CoordinatedMovement=pickup_options.CoordinatedMovement,
                 GripForcePercentage=100,
                 SpeedPercentage=100,
                 CollisionControl=TrackGripper.GripPlateFromTaughtPosition.Options.YesNoOptions.Yes,
-                TaughtPathName=PickupOptions.TaughtPathName,
+                TaughtPathName=pickup_options.TaughtPathName,
             ),
-            BackendErrorHandling=self.BackendErrorHandling,
+            backend_error_handling=self.backend_error_handling,
         )
-        self.Backend.ExecuteCommand(CommandInstance)
-        self.Backend.WaitForResponseBlocking(CommandInstance)
-        self.Backend.GetResponse(
-            CommandInstance,
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(
+            command,
             TrackGripper.GripPlateFromTaughtPosition.Response,
         )
 
-        DropoffOptions = cast(
+        dropoff_options = cast(
             VantageTrackGripper.DropoffOptions,
-            CompatibleConfigs[1].DropoffOptions,
+            compatible_configs[1].dropoff_options,
         )
 
-        CommandInstance = TrackGripper.PlacePlateToTaughtPosition.Command(
-            Options=TrackGripper.PlacePlateToTaughtPosition.Options(
-                OpenWidth=Labware.TransportOffsets.Open,
-                TaughtPathName=DropoffOptions.TaughtPathName,
-                CoordinatedMovement=DropoffOptions.CoordinatedMovement,
+        command = TrackGripper.PlacePlateToTaughtPosition.Command(
+            options=TrackGripper.PlacePlateToTaughtPosition.Options(
+                OpenWidth=labware.transport_offsets.open,
+                TaughtPathName=dropoff_options.TaughtPathName,
+                CoordinatedMovement=dropoff_options.CoordinatedMovement,
                 SpeedPercentage=100,
                 CollisionControl=TrackGripper.PlacePlateToTaughtPosition.Options.YesNoOptions.Yes,
             ),
-            BackendErrorHandling=self.BackendErrorHandling,
+            backend_error_handling=self.backend_error_handling,
         )
-        self.Backend.ExecuteCommand(CommandInstance)
-        self.Backend.WaitForResponseBlocking(CommandInstance)
-        self.Backend.GetResponse(
-            CommandInstance,
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(
+            command,
             TrackGripper.PlacePlateToTaughtPosition.Response,
         )
 
-    def TransportTime(
-        self,
-        SourceLayoutItem: LayoutItem.Base.LayoutItemBase,
-        DestinationLayoutItem: LayoutItem.Base.LayoutItemBase,
+    def transport_time(
+        self: VantageTrackGripper,
+        source_layout_item: layout_item.LayoutItemBase,
+        destination_layout_item: layout_item.LayoutItemBase,
     ) -> float:
-        return 0
+        ...
