@@ -3,7 +3,6 @@ from typing import Type, TypeVar, Union, cast
 
 from loguru import logger
 from pydantic import BaseModel
-
 from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
 
 from .. import BaseClasses, DictTools
@@ -42,7 +41,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
         logger.warning(
             "Empty configuration was passed. No "
             + BaseObject.__name__
-            + " objects will be loaded."
+            + " objects will be loaded.",
         )
 
     Dict = DictTools.RemoveKeyWhitespace(Dict)
@@ -52,7 +51,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
             cls = BaseClasses.HALDevice.HALDevices[Key]
         except:
             raise ValueError(
-                Key + " not recognized as a valid " + BaseObject.__name__ + " subclass"
+                Key + " not recognized as a valid " + BaseObject.__name__ + " subclass",
             )
 
         if not issubclass(cls, BaseObject):
@@ -60,7 +59,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
                 cls.__name__
                 + " is not a subclass of "
                 + BaseObject.__name__
-                + ". You may be trying to load a config with the wrong HALDevice."
+                + ". You may be trying to load a config with the wrong HALDevice.",
             )
 
         Item = Dict[Key]
@@ -70,7 +69,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
             if HALDevice.Identifier in Devices:
                 raise ValueError(
                     HALDevice.Identifier
-                    + " already exists. Idenitifers must be unique."
+                    + " already exists. Idenitifers must be unique.",
                 )
 
             HALDevice = cast(BaseModel, HALDevice)
@@ -83,7 +82,7 @@ def Load(Dict: dict, BaseObject: Type[T], Devices: dict[str, T]):
                 Item["Identifier"]
                 + " is disabled so will not be loaded as a "
                 + BaseObject.__name__
-                + " object."
+                + " object.",
             )
 
     return Devices

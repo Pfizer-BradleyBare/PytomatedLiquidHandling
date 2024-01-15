@@ -1,4 +1,6 @@
-from typing import ClassVar, Self, Type
+from __future__ import annotations
+
+from typing import ClassVar, Self
 
 from pydantic import dataclasses, field_validator
 
@@ -16,25 +18,25 @@ class HALDevice:
         Indentifier: A unique name per each device base class. Facilitates organization and easy retrieval of devices by name.
     """
 
-    HALDevices: ClassVar[dict[str, Type[Self]]] = dict()
+    hal_devices: ClassVar[dict[str, type[Self]]] = {}
 
-    Identifier: str
+    identifier: str
 
     @field_validator("Identifier", mode="after")
-    def __ValidateIdentifier(cls, v):
+    @classmethod
+    def _validation_identifier(cls: type[HALDevice], v: str) -> str:
         if " " in v:
-            raise ValueError(
-                "Spaces are not allowed in Identifiers. Please replace with underscores (_)."
-            )
+            msg = "Spaces are not allowed in Identifiers. Please replace with underscores (_)."
+            raise ValueError(msg)
         return v
 
-    def __eq__(self, __value: Type[Self]) -> bool:
-        return (type(self).__name__ + self.Identifier) == (
-            type(__value).__name__ + __value.Identifier
+    def __eq__(self: HALDevice, __value: HALDevice) -> bool:
+        return (type(self).__name__ + self.identifier) == (
+            type(__value).__name__ + __value.identifier
         )
 
-    def __hash__(self) -> int:
-        return hash(type(self).__name__ + self.Identifier)
+    def __hash__(self: HALDevice) -> int:
+        return hash(type(self).__name__ + self.identifier)
 
-    def __init_subclass__(cls):
-        cls.HALDevices[cls.__name__] = cls
+    def __init_subclass__(cls: type[HALDevice]) -> None:
+        cls.hal_devices[cls.__name__] = cls

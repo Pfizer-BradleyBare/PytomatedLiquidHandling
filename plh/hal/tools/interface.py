@@ -1,8 +1,5 @@
 from pydantic import dataclasses, field_validator
 
-from PytomatedLiquidHandling.Driver.Tools.BaseClasses import BackendABC
-from PytomatedLiquidHandling.HAL import Backend
-
 
 @dataclasses.dataclass(kw_only=True)
 class Interface:
@@ -30,7 +27,7 @@ class Interface:
                 Identifier
                 + " is not found in "
                 + Backend.Base.BackendABC.__name__
-                + " objects."
+                + " objects.",
             )
 
         return Objects[Identifier]
