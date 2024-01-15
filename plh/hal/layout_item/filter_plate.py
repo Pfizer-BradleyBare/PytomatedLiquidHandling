@@ -1,6 +1,6 @@
 from pydantic import dataclasses
 
-from .Plate import Plate
+from .plate import Plate
 
 
 @dataclasses.dataclass(kw_only=True)

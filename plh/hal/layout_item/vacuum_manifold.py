@@ -6,5 +6,5 @@ from .layout_item_base import LayoutItemBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class Lid(LayoutItemBase):
+class VacuumManifold(LayoutItemBase):
     Labware: labware.NonPipettableLabware
