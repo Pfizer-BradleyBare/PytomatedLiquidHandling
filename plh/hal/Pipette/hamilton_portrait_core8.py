@@ -7,11 +7,11 @@ from plh.hal import Labware
 
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.ML_STAR import Channel1000uL
-from .Base import PipetteABC, PipetteTip, TransferOptions
+from .Base import PipetteBase, PipetteTip, TransferOptions
 
 
 @dataclasses.dataclass(kw_only=True)
-class HamiltonPortraitCORE8Channel(PipetteABC):
+class HamiltonPortraitCORE8Channel(PipetteBase):
     Backend: HamiltonBackendABC
     ActiveChannels: list[
         Literal[1]

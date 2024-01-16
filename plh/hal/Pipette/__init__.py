@@ -6,4 +6,4 @@ if True:
 
 
 identifier = str
-devices: dict[identifier, Base.PipetteABC] = {}
+devices: dict[identifier, Base.PipetteBase] = {}

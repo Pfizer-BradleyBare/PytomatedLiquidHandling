@@ -1,19 +1,21 @@
+from __future__ import annotations
+
 from pydantic import ValidationInfo, dataclasses, field_validator
 
-from plh.hal import LayoutItem, Pipette
+from plh.hal import layout_item, pipette
 from plh.hal.tools import HALDevice
 
 
 @dataclasses.dataclass(kw_only=True)
-class MagneticRackABC(HALDevice):
-    SupportedPlates: list[LayoutItem.CoverablePlate | LayoutItem.Plate]
-    SupportedPipettes: list[Pipette.Base.PipetteABC]
+class MagneticRackBase(HALDevice):
+    supported_plates: list[layout_item.CoverablePlate | layout_item.Plate]
+    supported_pipettes: list[pipette.Base.PipetteBase]
 
     @field_validator("SupportedPlates", mode="before")
     def __SupportedPlatesValidate(cls, v):
         SupportedObjects = []
 
-        Objects = LayoutItem.Devices
+        Objects = layout_item.devices
 
         for Identifier in v:
             if Identifier not in Objects:
@@ -40,7 +42,7 @@ class MagneticRackABC(HALDevice):
                 raise ValueError(
                     Identifier
                     + " is not found in "
-                    + Pipette.Base.PipetteABC.__name__
+                    + Pipette.Base.PipetteBase.__name__
                     + " objects.",
                 )
             Object = Objects[Identifier]

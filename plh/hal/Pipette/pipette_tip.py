@@ -7,7 +7,7 @@ from .LiquidClass import LiquidClass
 
 @dataclasses.dataclass(kw_only=True)
 class PipetteTip:
-    Tip: Tip.Base.TipABC
+    Tip: Tip.Base.TipBase
     TipSupportDropoffLabwareID: str
     TipSupportPickupLabwareID: str
     TipWasteLabwareID: str
@@ -22,7 +22,7 @@ class PipetteTip:
             raise ValueError(
                 Identifier
                 + " is not found in "
-                + Tip.Base.TipABC.__name__
+                + Tip.Base.TipBase.__name__
                 + " objects.",
             )
 

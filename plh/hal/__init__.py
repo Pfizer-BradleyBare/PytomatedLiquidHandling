@@ -156,9 +156,9 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
                     with open(os.path.join(Root, File)) as ConfigFile:
                         Dict = yaml.full_load(ConfigFile)
 
-                    Tools.ConfigLoader.DevicesLists(Dict, Tip.Base.TipABC, Tip.Devices)
+                    Tools.ConfigLoader.DevicesLists(Dict, Tip.Base.TipBase, Tip.Devices)
     if Loaded != True:
-        Warns.append(f"No {Tip.Base.TipABC.__name__} objects were loaded.")
+        Warns.append(f"No {Tip.Base.TipBase.__name__} objects were loaded.")
 
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):
@@ -212,11 +212,11 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
 
                     Tools.ConfigLoader.DevicesLists(
                         Dict,
-                        Pipette.Base.PipetteABC,
+                        Pipette.Base.PipetteBase,
                         Pipette.Devices,
                     )
     if Loaded != True:
-        Warns.append(f"No {Pipette.Base.PipetteABC.__name__} objects were loaded.")
+        Warns.append(f"No {Pipette.Base.PipetteBase.__name__} objects were loaded.")
 
     Loaded = False
     for Root, Dirs, Files in os.walk(ConfigBaseFolder):
@@ -250,12 +250,12 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
 
                     Tools.ConfigLoader.DevicesLists(
                         Dict,
-                        MagneticRack.Base.MagneticRackABC,
+                        MagneticRack.Base.MagneticRackBase,
                         MagneticRack.Devices,
                     )
     if Loaded != True:
         Warns.append(
-            f"No {MagneticRack.Base.MagneticRackABC.__name__} objects were loaded.",
+            f"No {MagneticRack.Base.MagneticRackBase.__name__} objects were loaded.",
         )
 
     for Warn in Warns:

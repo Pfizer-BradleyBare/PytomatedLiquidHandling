@@ -11,7 +11,7 @@ from .Interface import IMCSDesaltingOptions
 
 @dataclass
 class IMCSDesaltingABC(Interface, HALDevice):
-    TipInstance: Tip.Base.TipABC
+    TipInstance: Tip.Base.TipBase
     PipetteTipSupportDropOffSequence: str
     PipetteTipSupportPickupSequence: str
     IMCSTipSupportDropOffSequence: str

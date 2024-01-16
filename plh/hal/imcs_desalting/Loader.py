@@ -20,7 +20,7 @@ def LoadYaml(
     Backends: dict[str, BackendABC],
     DeckLocations: dict[str, DeckLocation.Base.DeckLocationBase],
     Labwares: dict[str, Labware.Base.LabwareBase],
-    Tips: dict[str, Tip.Base.TipABC],
+    Tips: dict[str, Tip.Base.TipBase],
     FilePath: str,
 ) -> dict[str, IMCSDesaltingABC]:
     IMCSDesaltingDevices: dict[str, IMCSDesaltingABC] = {}

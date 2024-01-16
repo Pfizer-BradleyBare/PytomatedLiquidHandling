@@ -7,11 +7,11 @@ from plh.hal import Labware
 from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
 from ...Driver.Hamilton.ML_STAR import Channel1000uL, CORE96Head
 from . import HamiltonPortraitCORE8Channel
-from .Base import PipetteABC, TransferOptions
+from .Base import PipetteBase, TransferOptions
 
 
 @dataclasses.dataclass(kw_only=True)
-class HamiltonCORE96Head(PipetteABC):
+class HamiltonCORE96Head(PipetteBase):
     Backend: HamiltonBackendABC
     HamiltonPortraitCORE8Channel: HamiltonPortraitCORE8Channel
 
@@ -26,7 +26,7 @@ class HamiltonCORE96Head(PipetteABC):
 
         if Identifier not in Objects:
             raise ValueError(
-                Identifier + " is not found in " + PipetteABC.__name__ + " objects.",
+                Identifier + " is not found in " + PipetteBase.__name__ + " objects.",
             )
 
         return Objects[Identifier]

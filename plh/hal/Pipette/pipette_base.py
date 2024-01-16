@@ -29,7 +29,7 @@ class TransferOptions(OptionsBase):
 
 
 @dataclasses.dataclass(kw_only=True)
-class PipetteABC(BaseClasses.Interface, BaseClasses.HALDevice):
+class PipetteBase(BaseClasses.Interface, BaseClasses.HALDevice):
     SupportedTips: list[PipetteTip]
     SupportedSourceLabwares: list[Labware.PipettableLabware]
     SupportedDestinationLabwares: list[Labware.PipettableLabware]

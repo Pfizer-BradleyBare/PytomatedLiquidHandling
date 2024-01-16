@@ -10,11 +10,11 @@ from PytomatedLiquidHandling.Driver.Hamilton import (
 
 from plh.hal import DeckLocation, LayoutItem
 
-from .Base import TipABC
+from .Base import TipBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class HamiltonEEFTR(TipABC):
+class HamiltonEENTR(TipBase):
     @dataclasses.dataclass(kw_only=True)
     class TipStack:
         TipRack: LayoutItem.TipRack
@@ -29,32 +29,7 @@ class HamiltonEEFTR(TipABC):
     TipRackWaste: LayoutItem.TipRack
 
     def Initialize(self):
-        TipABC.Initialize(self)
-
-        CommandInstance = HSLTipCountingLib.Edit.Command(
-            Options=HSLTipCountingLib.Edit.OptionsList(
-                TipCounter="HamiltonTipFTR_" + str(self.Volume) + "uL_TipCounter",
-                DialogTitle="Please update the number of "
-                + str(self.Volume)
-                + "uL tips currently loaded on the system",
-            ),
-        )
-        for TipRack in self.TipRacks:
-            CommandInstance.Options.append(
-                HSLTipCountingLib.Edit.Options(LabwareID=TipRack.LabwareID),
-            )
-
-        self.Backend.ExecuteCommand(CommandInstance)
-        self.Backend.WaitForResponseBlocking(CommandInstance)
-        self._ParseAvailablePositions(
-            cast(
-                list[dict[str, str]],
-                self.Backend.GetResponse(
-                    CommandInstance,
-                    HSLTipCountingLib.Edit.Response,
-                ).AvailablePositions,
-            ),
-        )
+        TipBase.Initialize(self)
 
     def RemainingTips(self) -> int:
         return self.RemainingTipsInTier() + sum(
@@ -62,7 +37,7 @@ class HamiltonEEFTR(TipABC):
         )
 
     def RemainingTipsInTier(self) -> int:
-        return TipABC.RemainingTips(self)
+        return TipBase.RemainingTips(self)
 
     def DiscardLayerToWaste(self):
         for Rack in self.TipRacks:
@@ -106,7 +81,7 @@ class HamiltonEEFTR(TipABC):
                     ModuleNumber=Stack.ModuleNumber,
                     StackNumber=Stack.StackNumber,
                     LabwareID=Stack.TipRack.LabwareID,
-                    IsNTRRack=False,
+                    IsNTRRack=True,
                 ),
                 BackendErrorHandling=self.BackendErrorHandling,
             )
