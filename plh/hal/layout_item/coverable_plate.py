@@ -17,8 +17,11 @@ class CoverablePlate(LayoutItemBase):
 
     @field_validator("Lid", mode="before")
     @classmethod
-    def __lid_validate(cls: type[CoverablePlate], v: str | Lid) -> LayoutItemBase:
-        if isinstance(v, Lid):
+    def __lid_validate(
+        cls: type[CoverablePlate],
+        v: str | LayoutItemBase,
+    ) -> LayoutItemBase:
+        if isinstance(v, LayoutItemBase):
             return v
 
         objects = devices

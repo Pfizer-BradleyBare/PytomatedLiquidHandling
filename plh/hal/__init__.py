@@ -192,12 +192,12 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
 
                     Tools.ConfigLoader.DevicesLists(
                         Dict,
-                        HeatCoolShake.Base.HeatCoolShakeABC,
+                        HeatCoolShake.Base.HeatCoolShakeBase,
                         HeatCoolShake.Devices,
                     )
     if Loaded != True:
         Warns.append(
-            f"No {HeatCoolShake.Base.HeatCoolShakeABC.__name__} objects were loaded.",
+            f"No {HeatCoolShake.Base.HeatCoolShakeBase.__name__} objects were loaded.",
         )
 
     Loaded = False
