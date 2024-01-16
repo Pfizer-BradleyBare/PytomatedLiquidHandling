@@ -9,8 +9,8 @@ from plh.driver.HAMILTON.backend import (
 from plh.driver.UnchainedLabs_Instruments.backend import Stunner as _Stunner
 from plh.hal.tools import HALDevice as _HALDevice
 
-if TYPE_CHECKING:
-    from plh.driver.tools import BackendBase as _BackendBase
+
+from plh.driver.tools import BackendBase as _BackendBase
 
 _HALDevice.hal_devices[_MicrolabStar.__name__] = cast(Type[_HALDevice], _MicrolabStar)
 _HALDevice.hal_devices[_VantageTrackGripperEntryExit.__name__] = cast(

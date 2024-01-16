@@ -158,6 +158,6 @@ Backend.GetResponse(Command, Visual_NTR_Library.Channels_TipCounter_Write.Respon
 
 """
 
-from . import Hamilton, UnchainedLabs_Instruments, tools
+from . import HAMILTON, UnchainedLabs_Instruments, tools
 
-__all__ = ["Hamilton", "UnchainedLabs_Instruments", "tools"]
+__all__ = ["HAMILTON", "UnchainedLabs_Instruments", "tools"]

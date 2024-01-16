@@ -1,13 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from pydantic import dataclasses
 
 from .labware_base import LabwareBase
-
-if TYPE_CHECKING:
-    from .well import Well
+from .well import Well
 
 
 @dataclasses.dataclass(kw_only=True)

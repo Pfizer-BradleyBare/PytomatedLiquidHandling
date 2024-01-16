@@ -1,17 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import field
-from typing import TYPE_CHECKING, cast
+from typing import cast
 
 from pydantic import dataclasses
 
+from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uLCOREGrip
 from plh.hal import deck_location, layout_item
 
 from .transport_base import TransportBase
-
-if TYPE_CHECKING:
-    from plh.driver.HAMILTON.backend import HamiltonBackendBase
 
 
 @dataclasses.dataclass(kw_only=True)

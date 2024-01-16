@@ -31,9 +31,11 @@ class CommandBase:
         """Uses the path of the python module to extract a command name
 
         Args:
+        ----
             __file__ (str): The path of the python module
 
         Returns:
+        -------
             str: Command name
         """
         return pathlib.Path(__file__).parent.name
@@ -43,9 +45,11 @@ class CommandBase:
         """Uses the path of the python module to extract a module name
 
         Args:
+        ----
             __file__ (str): The path of the python module
 
         Returns:
+        -------
             str: Module name
         """
         modules = []

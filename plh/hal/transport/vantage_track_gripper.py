@@ -1,17 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import field
-from typing import TYPE_CHECKING, cast
+from typing import cast
 
 from pydantic import dataclasses
 
 from plh.driver.HAMILTON import ML_STAR, TrackGripper
+from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.hal import deck_location, layout_item
 
 from .transport_base import TransportBase
-
-if TYPE_CHECKING:
-    from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
 
 
 @dataclasses.dataclass(kw_only=True)

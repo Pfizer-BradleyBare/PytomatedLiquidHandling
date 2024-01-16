@@ -1,16 +1,15 @@
 from __future__ import annotations
 
 import json
-from typing import TYPE_CHECKING, TypeVar, Union, cast
+from typing import TypeVar, Union, cast
 
 from loguru import logger
 from pydantic import BaseModel
 
+from plh.driver.tools import BackendBase
+
 from .hal_device import HALDevice
 from .remove_key_whitespace import remove_key_whitespace
-
-if TYPE_CHECKING:
-    from plh.driver.tools import BackendBase
 
 T = TypeVar("T", bound="Union[HALDevice, BackendBase]")
 

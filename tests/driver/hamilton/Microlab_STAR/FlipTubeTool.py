@@ -6,13 +6,13 @@ from plh.driver.HAMILTON import FlipTubeTool
 from plh.driver.HAMILTON.backend import MicrolabSTAR
 
 
-def main(backend: MicrolabSTAR):
+def main(backend: MicrolabSTAR) -> None:
     logger.info(f"Executing Main() from {__file__}")
 
     logger.info("Initialize")
     command = FlipTubeTool.Initialize.Command(
         options=FlipTubeTool.Initialize.Options(
-            ToolOrientation=FlipTubeTool.Initialize.options.ToolOrientationoptions.Landscape,
+            ToolOrientation=FlipTubeTool.Initialize.ToolOrientationOptions.Landscape,
         ),
     )
     backend.execute(command)
@@ -111,15 +111,16 @@ def main(backend: MicrolabSTAR):
 if __name__ == "__main__":
     logger.enable("PytomatedLiquidHandling")
 
-    backend = MicrolabSTAR(
+    MicrolabSTAR(
         identifier="Example Star",
         simulation_on=True,
         deck_layout=pathlib.Path(__file__).parent / "SimulationLayout.lay",
     )
+    quit()
     backend.start()
     # Creates the backend so we can communicate with the Hamilton
 
-    main(backend)
+    # main(backend)
 
     input("Press <Enter> to quit.")
 

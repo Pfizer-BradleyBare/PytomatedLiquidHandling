@@ -1,11 +1,8 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from pydantic import dataclasses
 
-if TYPE_CHECKING:
-    from .well_segment import WellSegment
+from .well_segment import WellSegment
 
 
 @dataclasses.dataclass(kw_only=True)

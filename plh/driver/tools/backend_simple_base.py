@@ -1,15 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import field
-from typing import TYPE_CHECKING, TypeVar
+from typing import TypeVar
 
 from pydantic import dataclasses
 
 from .backend_base import BackendBase
+from .command_base import CommandBase
 from .response_base import ResponseBase
-
-if TYPE_CHECKING:
-    from .command_base import CommandBase
 
 ResponseABCType = TypeVar("ResponseABCType", bound=ResponseBase)
 

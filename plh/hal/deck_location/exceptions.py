@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from .deck_location_base import DeckLocationBase
-    from .transport_config import TransportConfig
+from .deck_location_base import DeckLocationBase
+from .transport_config import TransportConfig
 
 
 @dataclass
@@ -13,7 +11,8 @@ class DeckLocationNotSupportedError(BaseException):
     """HAL device does not support your DeckLocation.
     This can be thrown for any LayoutItem inputs.
 
-    Attributes:
+    Attributes
+    ----------
     DeckLocations: List of DeckLocationBase objects that were not supported
     """
 

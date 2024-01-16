@@ -34,7 +34,7 @@ class Config:
     arbitrary_types_allowed = True
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, config=Config)
 class HamiltonBackendServer(BackendServerBase):
     views: list[Callable] = field(init=False)
 
@@ -136,14 +136,14 @@ class HamiltonBackendServer(BackendServerBase):
         return "Response received.", 200
 
 
-@dataclasses.dataclass(kw_only=True, config=Config)
+@dataclasses.dataclass(kw_only=True)
 class HamiltonBackendBase(BackendBase):
     method: pathlib.Path
     deck_layout: pathlib.Path
-    simulation_on: bool = Field(validation_alias="SimulationOn")
+    simulation_on: bool
     _action_server: HamiltonBackendServer = field(init=False)
     _state_server: HamiltonBackendServer = field(init=False)
-    _hamilton_process: subprocess.Popen = field(
+    _hamilton_process: None = field(
         init=False,
         default=Field(exclude=True, default=None),
     )

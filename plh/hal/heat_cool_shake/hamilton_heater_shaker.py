@@ -1,18 +1,16 @@
 from __future__ import annotations
 
 from dataclasses import field
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 
 from pydantic import dataclasses
 
 from plh.driver.HAMILTON import HSLHamHeaterShakerLib
+from plh.driver.HAMILTON.backend import HamiltonBackendBase
+from plh.hal import layout_item as li
 
 from .exceptions import CoolingNotSupportedError
 from .heat_cool_shake_base import HeatCoolShakeBase
-
-if TYPE_CHECKING:
-    from plh.driver.HAMILTON.backend import HamiltonBackendBase
-    from plh.hal import layout_item as li
 
 
 @dataclasses.dataclass(kw_only=True)

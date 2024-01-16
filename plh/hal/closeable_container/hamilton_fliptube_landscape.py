@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, DefaultDict, Literal
+from typing import DefaultDict, Literal
 
 from pydantic import dataclasses
 
 from plh.driver.HAMILTON import FlipTubeTool
+from plh.driver.HAMILTON.backend import HamiltonBackendBase
+from plh.hal import layout_item
 
 from .closeable_container_base import CloseableContainerBase, OpenCloseOptions
-
-if TYPE_CHECKING:
-    from plh.driver.HAMILTON.backend import HamiltonBackendBase
-    from plh.hal import layout_item
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -19,7 +17,8 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
 
     This device only supports FlipTubes in the landscape orientation.
 
-    Attributes:
+    Attributes
+    ----------
         Backend: Only Hamilton backends are supported
         BackendErrorHandling: User handling is not possible for fliptubes.
         ToolLabwareID: The labware ID of the fliptube tool. Typically available on deck as a set of 4 tools.

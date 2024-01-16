@@ -1,4 +1,4 @@
-# noqa: N999 #ignore exceptions being invalid module name
+# ignore exceptions being invalid module name
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -105,11 +105,10 @@ class TemperatureError(HamiltonError):
 
 @dataclass(frozen=True)
 class TADMOvershotError(HamiltonError):
-    """
-    Overshot of limits during aspirate or dispense.
+    """Overshot of limits during aspirate or dispense.
 
     Note:
-
+    ----
     DO NOT USE THIS ERROR. Instead use the following:
 
     On aspirate this error is returned as main error 17 (ImproperAspirationDispenseError).
@@ -145,11 +144,10 @@ class IllegalInterventionError(HamiltonError):
 
 @dataclass(frozen=True)
 class TADMUndershotError(HamiltonError):
-    """
-    Undershot of limits during aspirate or dispense.
+    """Undershot of limits during aspirate or dispense.
 
     Note:
-
+    ----
     DO NOT USE THIS ERROR. Instead use the following:
 
     On aspirate this error is returned as main error 4 (ClotError).
@@ -210,8 +208,7 @@ class NoCarrierBarcodeError(HamiltonError):
 
 @dataclass(frozen=True)
 class LiquidLevelError(HamiltonError):
-    """
-    Liquid surface not detected.
+    """Liquid surface not detected.
 
     This error is created from main / slave error 06/70, 06/73 and 06/87.
     """
@@ -224,8 +221,7 @@ class NotDetectedError(HamiltonError):
 
 @dataclass(frozen=True)
 class NotAspiratedError(HamiltonError):
-    """
-    Dispense volume exceeds the aspirated volume.
+    """Dispense volume exceeds the aspirated volume.
 
     This error is created from main / slave error 02/54.
     """
@@ -233,8 +229,7 @@ class NotAspiratedError(HamiltonError):
 
 @dataclass(frozen=True)
 class ImproperDispenseError(HamiltonError):
-    """
-    The dispensed volume is out of tolerance (may only occur for Nano Pipettor Dispense steps).
+    """The dispensed volume is out of tolerance (may only occur for Nano Pipettor Dispense steps).
 
     This error is created from main / slave error 02/52 and 02/54.
     """
@@ -242,11 +237,10 @@ class ImproperDispenseError(HamiltonError):
 
 @dataclass(frozen=True)
 class NoLabwareError(HamiltonError):
-    """
-    The labware to be loaded was not detected by autoload module.
+    """The labware to be loaded was not detected by autoload module.
 
     Note:
-
+    ----
     May only occur on a Reload Carrier step if the labware property 'MlStarCarPosAreRecognizable' is set to 1.
     """
 
