@@ -1,166 +1,185 @@
+from __future__ import annotations
+
 from math import ceil
 
 from pydantic import dataclasses, field_validator
 
-from plh.hal import Labware
+from plh.driver.HAMILTON.backend import HamiltonBackendBase
+from plh.driver.HAMILTON.ML_STAR import Channel1000uL, CORE96Head
+from plh.hal import labware
 
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ...Driver.Hamilton.ML_STAR import Channel1000uL, CORE96Head
-from . import HamiltonPortraitCORE8Channel
-from .Base import PipetteBase, TransferOptions
+from .hamilton_portrait_core8 import HamiltonPortraitCORE8
+from .pipette_base import PipetteBase, TransferOptions
 
 
 @dataclasses.dataclass(kw_only=True)
-class HamiltonCORE96Head(PipetteBase):
-    Backend: HamiltonBackendABC
-    HamiltonPortraitCORE8Channel: HamiltonPortraitCORE8Channel
+class HamiltonCORE96(PipetteBase):
+    backend: HamiltonBackendBase
+    hamilton_portrait_core_8: HamiltonPortraitCORE8
 
     @field_validator("HamiltonPortraitCORE8Channel", mode="before")
-    def __HamiltonPortraitCORE8ChannelValidate(cls, v):
-        from . import Devices
+    @classmethod
+    def __hamilton_portrait_core_8_validate(
+        cls: type[HamiltonCORE96],
+        v: str | PipetteBase,
+    ) -> PipetteBase:
+        if isinstance(v, PipetteBase):
+            return v
+
+        from . import devices
 
         # Import here otherwise we get circular import error... Nature of the beast
 
-        Objects = Devices
-        Identifier = v
+        objects = devices
+        identifier = v
 
-        if Identifier not in Objects:
+        if identifier not in objects:
             raise ValueError(
-                Identifier + " is not found in " + PipetteBase.__name__ + " objects.",
+                identifier + " is not found in " + PipetteBase.__name__ + " objects.",
             )
 
-        return Objects[Identifier]
+        return objects[identifier]
 
-    def Transfer(self, Options: list[TransferOptions]):
-        Opt = Options[0]
+    def transfer(self: HamiltonCORE96, options: list[TransferOptions]) -> None:
+        opt = options[0]
         # All the options should be the same. So we can just take the first one for the majority
 
-        MaxVolume = self._GetMaxTransferVolume(
-            Opt.SourceLiquidClassCategory,
-            Opt.DestinationLiquidClassCategory,
+        max_volume = self._get_max_transfer_volume(
+            opt.SourceLiquidClassCategory,
+            opt.DestinationLiquidClassCategory,
         )
 
-        NumRepeats = ceil(Opt.TransferVolume / MaxVolume)
-        TransferVolume = Opt.TransferVolume / NumRepeats
+        num_repeats = ceil(opt.TransferVolume / max_volume)
+        transfer_volume = opt.TransferVolume / num_repeats
         # Find out how many transfers we need to do
 
-        Tip = self._GetTip(
-            Opt.SourceLiquidClassCategory,
-            Opt.DestinationLiquidClassCategory,
-            TransferVolume,
+        tip = self._get_tip(
+            opt.SourceLiquidClassCategory,
+            opt.DestinationLiquidClassCategory,
+            transfer_volume,
         )
 
-        NumActiveChannels = len(self.HamiltonPortraitCORE8Channel.ActiveChannels)
+        num_active_channels = len(self.hamilton_portrait_core_8.active_channels)
 
-        PackagedOpts = [
-            Options[x : x + NumActiveChannels]
-            for x in range(0, len(Options), NumActiveChannels)
+        packaged_opts = [
+            options[x : x + num_active_channels]
+            for x in range(0, len(options), num_active_channels)
         ]
 
-        for Opts in PackagedOpts:
-            if Tip.Tip.RemainingTipsInTier() < len(Opts):
-                Tip.Tip.DiscardLayerToWaste()
+        for opts in packaged_opts:
+            if tip.tip.remaining_tips_in_tier() < len(opts):
+                tip.tip.discard_layer_to_waste()
             # If not enough tips then get user to help
 
-            TipPositions = Tip.Tip._AvailablePositions[: len(Opts)]
+            tip_positions = tip.tip.available_positions[: len(opts)]
 
-            SupportPickupOptions: list[Channel1000uL.Pickup.Options] = []
-            for Index, (Opt, ChannelNumber) in enumerate(
-                zip(Opts, self.HamiltonPortraitCORE8Channel.ActiveChannels),
+            support_pickup_options: list[Channel1000uL.Pickup.Options] = []
+            for index, (opt, channel_number) in enumerate(
+                zip(opts, self.hamilton_portrait_core_8.active_channels),
             ):
-                SupportPickupOptions.append(
+                support_pickup_options.append(
                     Channel1000uL.Pickup.Options(
-                        ChannelNumber=ChannelNumber,
-                        LabwareID=TipPositions[Index].LabwareID,
-                        PositionID=TipPositions[Index].PositionID,
+                        ChannelNumber=channel_number,
+                        LabwareID=tip_positions[index].LabwareID,
+                        PositionID=tip_positions[index].PositionID,
                     ),
                 )
-            Command = Channel1000uL.Pickup.Command(
-                BackendErrorHandling=self.BackendErrorHandling,
-                Options=SupportPickupOptions,
+            command = Channel1000uL.Pickup.Command(
+                backend_error_handling=self.backend_error_handling,
+                options=support_pickup_options,
             )
-            self.Backend.ExecuteCommand(Command)
-            self.Backend.GetResponse(Command, Channel1000uL.Pickup.Response)
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(command, Channel1000uL.Pickup.Response)
             # Pickup the tips
 
-            NumericAddressing = Labware.Base.Layout.Numeric()
+            numeric_layout = labware.NumericLayout(
+                rows=8,
+                columns=12,
+                direction=labware.LayoutSorting.Columnwise,
+            )
             # Hamilton tip positions are always numeric and are always sorted columwise.
             # So we are going to convert the desired pipetting positions to the correct numeric position
 
-            SupportEjectOptions: list[Channel1000uL.Eject.Options] = []
-            for Index, (Opt, ChannelNumber) in enumerate(
-                zip(Opts, self.HamiltonPortraitCORE8Channel.ActiveChannels),
+            support_eject_options: list[Channel1000uL.Eject.Options] = []
+            for index, (opt, channel_number) in enumerate(
+                zip(opts, self.hamilton_portrait_core_8.active_channels),
             ):
-                SupportEjectOptions.append(
+                support_eject_options.append(
                     Channel1000uL.Eject.Options(
-                        LabwareID=Tip.TipSupportDropoffLabwareID,
-                        ChannelNumber=ChannelNumber,
-                        PositionID=NumericAddressing.GetPositionID(
-                            Opt.SourcePosition,  # Source and destination are the same
+                        LabwareID=tip.tip_support_dropoff_labware_id,
+                        ChannelNumber=channel_number,
+                        PositionID=numeric_layout.get_position_id(
+                            opt.SourcePosition,  # Source and destination are the same
                         ),
                     ),
                 )
 
-            Command = Channel1000uL.Eject.Command(
-                BackendErrorHandling=self.BackendErrorHandling,
-                Options=SupportEjectOptions,
+            command = Channel1000uL.Eject.Command(
+                backend_error_handling=self.backend_error_handling,
+                options=support_eject_options,
             )
-            self.Backend.ExecuteCommand(Command)
-            self.Backend.GetResponse(Command, Channel1000uL.Eject.Response)
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(command, Channel1000uL.Eject.Response)
             # Eject into the tip support at the correct position
         # This picks up tips with the 1mL channels and ejects them in the tip support rack. The 96 head will now pick them up.
 
-        PickupOptions = CORE96Head.Pickup.Options(
-            LabwareID=Tip.TipSupportPickupLabwareID,
+        pickup_options = CORE96Head.Pickup.Options(
+            LabwareID=tip.tip_support_pickup_labware_id,
         )
-        Command = CORE96Head.Pickup.Command(
-            BackendErrorHandling=self.BackendErrorHandling,
-            Options=PickupOptions,
+        command = CORE96Head.Pickup.Command(
+            backend_error_handling=self.backend_error_handling,
+            options=pickup_options,
         )
-        self.Backend.ExecuteCommand(Command)
-        self.Backend.GetResponse(Command, CORE96Head.Pickup.Response)
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, CORE96Head.Pickup.Response)
 
-        AspirateOptions = CORE96Head.Aspirate.Options(
-            LabwareID=Opt.SourceLayoutItemInstance.LabwareID,
+        aspirate_options = CORE96Head.Aspirate.Options(
+            LabwareID=opt.SourceLayoutItemInstance.labware_id,
             LiquidClass=str(
-                self._GetLiquidClass(
-                    Opt.SourceLiquidClassCategory,
-                    TransferVolume,
+                self._get_liquid_class(
+                    opt.SourceLiquidClassCategory,
+                    transfer_volume,
                 ),
             ),
-            Volume=TransferVolume,
+            Volume=transfer_volume,
         )
 
-        DispenseOptions = CORE96Head.Dispense.Options(
-            LabwareID=Opt.SourceLayoutItemInstance.LabwareID,
+        dispense_options = CORE96Head.Dispense.Options(
+            LabwareID=opt.SourceLayoutItemInstance.labware_id,
             LiquidClass=str(
-                self._GetLiquidClass(Opt.SourceLiquidClassCategory, TransferVolume),
+                self._get_liquid_class(opt.SourceLiquidClassCategory, transfer_volume),
             ),
-            Volume=TransferVolume,
+            Volume=transfer_volume,
         )
 
-        for _ in range(NumRepeats):
-            Command = CORE96Head.Aspirate.Command(
-                BackendErrorHandling=self.BackendErrorHandling,
-                Options=AspirateOptions,
+        for _ in range(num_repeats):
+            command = CORE96Head.Aspirate.Command(
+                backend_error_handling=self.backend_error_handling,
+                options=aspirate_options,
             )
-            self.Backend.ExecuteCommand(Command)
-            self.Backend.GetResponse(Command, CORE96Head.Aspirate.Response)
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(command, CORE96Head.Aspirate.Response)
 
-            Command = CORE96Head.Dispense.Command(
-                BackendErrorHandling=self.BackendErrorHandling,
-                Options=DispenseOptions,
+            command = CORE96Head.Dispense.Command(
+                backend_error_handling=self.backend_error_handling,
+                options=dispense_options,
             )
-            self.Backend.ExecuteCommand(Command)
-            self.Backend.GetResponse(Command, CORE96Head.Dispense.Response)
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(command, CORE96Head.Dispense.Response)
 
-        EjectOptions = CORE96Head.Eject.Options(LabwareID=Tip.TipWasteLabwareID)
-        Command = CORE96Head.Eject.Command(
-            BackendErrorHandling=self.BackendErrorHandling,
-            Options=EjectOptions,
+        eject_options = CORE96Head.Eject.Options(LabwareID=tip.tip_waste_labware_id)
+        command = CORE96Head.Eject.Command(
+            backend_error_handling=self.backend_error_handling,
+            options=eject_options,
         )
-        self.Backend.ExecuteCommand(Command)
-        self.Backend.GetResponse(Command, CORE96Head.Eject.Response)
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, CORE96Head.Eject.Response)
 
-    def TimeToTransfer(self, Options: list[TransferOptions]) -> float:
+    def time_to_transfer(self: HamiltonCORE96, options: list[TransferOptions]) -> float:
         return 0

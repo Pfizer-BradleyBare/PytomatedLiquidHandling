@@ -1,71 +1,66 @@
+from __future__ import annotations
+
 import itertools
-from typing import DefaultDict, Literal, cast
+from collections import defaultdict
+from typing import Literal, cast
 
 from pydantic import dataclasses
 
-from plh.hal import Labware
+from plh.driver.HAMILTON.backend import HamiltonBackendBase
+from plh.driver.HAMILTON.ML_STAR import Channel1000uL
+from plh.hal import labware
 
-from ...Driver.Hamilton.Backend.BaseHamiltonBackend import HamiltonBackendABC
-from ...Driver.Hamilton.ML_STAR import Channel1000uL
-from .Base import PipetteBase, PipetteTip, TransferOptions
+from .pipette_base import PipetteBase, TransferOptions
+from .pipette_tip import PipetteTip
 
 
 @dataclasses.dataclass(kw_only=True)
-class HamiltonPortraitCORE8Channel(PipetteBase):
-    Backend: HamiltonBackendABC
-    ActiveChannels: list[
-        Literal[1]
-        | Literal[2]
-        | Literal[3]
-        | Literal[4]
-        | Literal[5]
-        | Literal[6]
-        | Literal[7]
-        | Literal[8]
-    ]
+class HamiltonPortraitCORE8(PipetteBase):
+    backend: HamiltonBackendBase
+    active_channels: list[Literal[1, 2, 3, 4, 5, 6, 7, 8]]
 
-    def _GroupOptions(
-        self,
-        Options: list[TransferOptions],
-    ) -> DefaultDict[str, list[tuple[PipetteTip, TransferOptions]]]:
-        LiquidClassMaxVolumes: dict[str, float] = {}
-        for Opt in Options:
-            CombinedName = (
-                Opt.SourceLiquidClassCategory + ":" + Opt.DestinationLiquidClassCategory
+    def _group_options(
+        self: HamiltonPortraitCORE8,
+        options: list[TransferOptions],
+    ) -> defaultdict[str, list[tuple[PipetteTip, TransferOptions]]]:
+        liquid_class_max_volumes: dict[str, float] = {}
+        for opt in options:
+            combined_name = (
+                opt.SourceLiquidClassCategory + ":" + opt.DestinationLiquidClassCategory
             )
 
-            if CombinedName not in LiquidClassMaxVolumes:
-                LiquidClassMaxVolumes[CombinedName] = self._GetMaxTransferVolume(
-                    Opt.SourceLiquidClassCategory,
-                    Opt.DestinationLiquidClassCategory,
+            if combined_name not in liquid_class_max_volumes:
+                liquid_class_max_volumes[combined_name] = self._get_max_transfer_volume(
+                    opt.SourceLiquidClassCategory,
+                    opt.DestinationLiquidClassCategory,
                 )
         # Max volume for each liquid class pairing. Important
 
-        FinalTransferOptions: list[TransferOptions] = []
-        TruncatedFinalTransferOptions: list[list[TransferOptions]] = []
+        final_tranfer_options: list[TransferOptions] = []
+        truncated_final_tranfer_options: list[list[TransferOptions]] = []
 
-        for Opt in Options:
-            CombinedName = (
-                Opt.SourceLiquidClassCategory + ":" + Opt.DestinationLiquidClassCategory
+        for opt in options:
+            combined_name = (
+                opt.SourceLiquidClassCategory + ":" + opt.DestinationLiquidClassCategory
             )
 
-            TruncatedOptions = self._TruncateTransferVolume(
-                Opt,
-                LiquidClassMaxVolumes[CombinedName],
+            truncated_options = self._truncate_transfer_volume(
+                opt,
+                liquid_class_max_volumes[combined_name],
             )
 
-            if len(TruncatedOptions) == 1:
-                FinalTransferOptions += TruncatedOptions
+            if len(truncated_options) == 1:
+                final_tranfer_options += truncated_options
                 # If there is only 1 option then no truncation occured. We want to perform all non truncated transfers first.
             else:
-                TruncatedFinalTransferOptions.append(TruncatedOptions)
+                truncated_final_tranfer_options.append(truncated_options)
                 # If there is more than one we want to collect them so we can shuffle. This may increaes final pipetting speed.=
         # Truncate based on max volume
 
-        FinalTransferOptions += [
+        final_tranfer_options += [
             i
             for l in itertools.zip_longest(
-                *TruncatedFinalTransferOptions,
+                *truncated_final_tranfer_options,
                 fillvalue=None,
             )
             for i in l
@@ -73,189 +68,195 @@ class HamiltonPortraitCORE8Channel(PipetteBase):
         ]
         # Shuffle our truncated options then add to the end.
 
-        TipGroupedOptions: DefaultDict[
+        tip_grouped_options: defaultdict[
             str,
             list[tuple[PipetteTip, TransferOptions]],
-        ] = DefaultDict(list)
-        for Opt in Options:
-            Tip = self._GetTip(
-                Opt.SourceLiquidClassCategory,
-                Opt.DestinationLiquidClassCategory,
-                Opt.TransferVolume,
+        ] = defaultdict(list)
+        for opt in options:
+            tip = self._get_tip(
+                opt.SourceLiquidClassCategory,
+                opt.DestinationLiquidClassCategory,
+                opt.TransferVolume,
             )
 
-            TipGroupedOptions[Tip.Tip.Identifier].append((Tip, Opt))
-        return TipGroupedOptions
+            tip_grouped_options[tip.tip.identifier].append((tip, opt))
+        return tip_grouped_options
 
-    def Transfer(self, Options: list[TransferOptions]):
-        NumActiveChannels = len(self.ActiveChannels)
+    def transfer(self: HamiltonPortraitCORE8, options: list[TransferOptions]) -> None:
+        num_active_channels = len(self.active_channels)
 
-        TipGroupedOptions = self._GroupOptions(Options)
+        tip_grouped_options = self._group_options(options)
 
-        for TipOptGroup in TipGroupedOptions.values():
-            Tip = TipOptGroup[0][0]
+        for tip_opt_group in tip_grouped_options.values():
+            tip = tip_opt_group[0][0]
 
-            PackagedOpts = [
-                [TipOpt[1] for TipOpt in TipOptGroup][x : x + NumActiveChannels]
-                for x in range(0, len(TipOptGroup), NumActiveChannels)
+            packages_opts = [
+                [tip_opt[1] for tip_opt in tip_opt_group][x : x + num_active_channels]
+                for x in range(0, len(tip_opt_group), num_active_channels)
             ]
             # Packaging in sets of num channels
 
-            if len(PackagedOpts) > Tip.Tip.RemainingTips():
+            if len(packages_opts) > tip.tip.remaining_tips():
                 raise RuntimeError("Not enough tips left")
             # are there at minimum enough tips left?
 
-            for Opts in PackagedOpts:
-                if Tip.Tip.RemainingTipsInTier() < len(Opts):
-                    Tip.Tip.DiscardLayerToWaste()
+            for opts in packages_opts:
+                if tip.tip.remaining_tips_in_tier() < len(opts):
+                    tip.tip.discard_layer_to_waste()
                 # If not enough tips then get user to help
 
-                TipPositions = Tip.Tip._AvailablePositions[: len(Opts)]
+                tip_positions = tip.tip.available_positions[: len(opts)]
 
-                PickupOptions: list[Channel1000uL.Pickup.Options] = []
-                for Index, (Opt, ChannelNumber) in enumerate(
-                    zip(Opts, self.ActiveChannels),
+                pickup_options: list[Channel1000uL.Pickup.Options] = []
+                for index, (opt, channel_number) in enumerate(
+                    zip(opts, self.active_channels),
                 ):
-                    PickupOptions.append(
+                    pickup_options.append(
                         Channel1000uL.Pickup.Options(
-                            ChannelNumber=ChannelNumber,
-                            LabwareID=TipPositions[Index].LabwareID,
-                            PositionID=TipPositions[Index].PositionID,
+                            ChannelNumber=channel_number,
+                            LabwareID=tip_positions[index].LabwareID,
+                            PositionID=tip_positions[index].PositionID,
                         ),
                     )
-                Command = Channel1000uL.Pickup.Command(
-                    BackendErrorHandling=self.BackendErrorHandling,
-                    Options=PickupOptions,
+                command = Channel1000uL.Pickup.Command(
+                    backend_error_handling=self.backend_error_handling,
+                    options=pickup_options,
                 )
-                self.Backend.ExecuteCommand(Command)
-                self.Backend.GetResponse(Command, Channel1000uL.Pickup.Response)
+                self.backend.execute(command)
+                self.backend.wait(command)
+                self.backend.acknowledge(command, Channel1000uL.Pickup.Response)
                 # Pickup the tips
 
-                AspirateOptions: list[Channel1000uL.Aspirate.Options] = []
-                for Index, (Opt, ChannelNumber) in enumerate(
-                    zip(Opts, self.ActiveChannels),
+                aspirate_options: list[Channel1000uL.Aspirate.Options] = []
+                for index, (opt, channel_number) in enumerate(
+                    zip(opts, self.active_channels),
                 ):
-                    AspirateLabware = cast(
-                        Labware.PipettableLabware,
-                        Opt.SourceLayoutItemInstance.Labware,
+                    aspirate_labware = cast(
+                        labware.PipettableLabware,
+                        opt.SourceLayoutItemInstance.labware,
                     )
 
-                    NumericAddressing = Labware.Base.Layout.Numeric(
-                        Rows=Opt.SourceLayoutItemInstance.Labware.Wells.Layout.Rows,
-                        Columns=Opt.SourceLayoutItemInstance.Labware.Wells.Layout.Columns,
-                        Direction=Opt.SourceLayoutItemInstance.Labware.Wells.Layout.Direction,
+                    numeric_layout = labware.NumericLayout(
+                        rows=opt.SourceLayoutItemInstance.labware.layout.rows,
+                        columns=opt.SourceLayoutItemInstance.labware.layout.columns,
+                        direction=opt.SourceLayoutItemInstance.labware.layout.direction,
                     )
                     # we need to do some numeric offsets to the position so convert it to a number first if it is not one.
 
-                    AspiratePosition = (
-                        (int(NumericAddressing.GetPositionID(Opt.SourcePosition)) - 1)
-                        * AspirateLabware.Wells.PositionsPerWell
-                        + Index
+                    aspirate_position = (
+                        (int(numeric_layout.get_position_id(opt.SourcePosition)) - 1)
+                        * aspirate_labware.well_definition.positions_per_well
+                        + index
                         + 1
                     )
                     # The position MUST take into account the number of sequences per well.
                     # This calculates the proper position in the well for each channel if the container has multiple position positions.
 
-                    AspirateOptions.append(
+                    aspirate_options.append(
                         Channel1000uL.Aspirate.Options(
-                            ChannelNumber=ChannelNumber,
-                            LabwareID=Opt.SourceLayoutItemInstance.LabwareID,
-                            PositionID=Opt.SourceLayoutItemInstance.Labware.Wells.Layout.GetPositionID(
-                                AspiratePosition,
+                            ChannelNumber=channel_number,
+                            LabwareID=opt.SourceLayoutItemInstance.labware_id,
+                            PositionID=opt.SourceLayoutItemInstance.labware.layout.get_position_id(
+                                aspirate_position,
                             ),
                             LiquidClass=str(
-                                self._GetLiquidClass(
-                                    Opt.SourceLiquidClassCategory,
-                                    Opt.TransferVolume,
+                                self._get_liquid_class(
+                                    opt.SourceLiquidClassCategory,
+                                    opt.TransferVolume,
                                 ),
                             ),
-                            Volume=Opt.TransferVolume,
+                            Volume=opt.TransferVolume,
                         ),
                     )
 
-                Command = Channel1000uL.Aspirate.Command(
-                    BackendErrorHandling=self.BackendErrorHandling,
-                    Options=AspirateOptions,
+                command = Channel1000uL.Aspirate.Command(
+                    backend_error_handling=self.backend_error_handling,
+                    options=aspirate_options,
                 )
-                self.Backend.ExecuteCommand(Command)
-                self.Backend.GetResponse(Command, Channel1000uL.Aspirate.Response)
+                self.backend.execute(command)
+                self.backend.wait(command)
+                self.backend.acknowledge(command, Channel1000uL.Aspirate.Response)
 
-                DispenseOptions: list[Channel1000uL.Dispense.Options] = []
-                for Index, (Opt, ChannelNumber) in enumerate(
-                    zip(Opts, self.ActiveChannels),
+                dispense_options: list[Channel1000uL.Dispense.Options] = []
+                for index, (opt, channel_number) in enumerate(
+                    zip(opts, self.active_channels),
                 ):
-                    DispenseLabware = cast(
-                        Labware.PipettableLabware,
-                        Opt.DestinationLayoutItemInstance.Labware,
+                    dispense_labware = cast(
+                        labware.PipettableLabware,
+                        opt.DestinationLayoutItemInstance.labware,
                     )
 
-                    NumericAddressing = Labware.Base.Layout.Numeric(
-                        Rows=Opt.DestinationLayoutItemInstance.Labware.Wells.Layout.Rows,
-                        Columns=Opt.DestinationLayoutItemInstance.Labware.Wells.Layout.Columns,
-                        Direction=Opt.DestinationLayoutItemInstance.Labware.Wells.Layout.Direction,
+                    numeric_layout = labware.NumericLayout(
+                        rows=opt.DestinationLayoutItemInstance.labware.layout.rows,
+                        columns=opt.DestinationLayoutItemInstance.labware.layout.columns,
+                        direction=opt.DestinationLayoutItemInstance.labware.layout.direction,
                     )
                     # we need to do some numeric offsets to the position so convert it to a number first if it is not one.
 
-                    DispensePosition = (
+                    dispense_position = (
                         (
                             int(
-                                NumericAddressing.GetPositionID(
-                                    Opt.DestinationPosition,
+                                numeric_layout.get_position_id(
+                                    opt.DestinationPosition,
                                 ),
                             )
                             - 1
                         )
-                        * DispenseLabware.Wells.PositionsPerWell
-                        + Index
+                        * dispense_labware.well_definition.positions_per_well
+                        + index
                         + 1
                     )
                     # The position MUST take into account the number of sequences per well.
                     # This calculates the proper position in the well for each channel if the container has multiple position positions.
 
-                    DispenseOptions.append(
+                    dispense_options.append(
                         Channel1000uL.Dispense.Options(
-                            ChannelNumber=ChannelNumber,
-                            LabwareID=Opt.DestinationLayoutItemInstance.LabwareID,
-                            PositionID=Opt.DestinationLayoutItemInstance.Labware.Wells.Layout.GetPositionID(
-                                DispensePosition,
+                            ChannelNumber=channel_number,
+                            LabwareID=opt.DestinationLayoutItemInstance.labware_id,
+                            PositionID=opt.DestinationLayoutItemInstance.labware.layout.get_position_id(
+                                dispense_position,
                             ),
                             LiquidClass=str(
-                                self._GetLiquidClass(
-                                    Opt.DestinationLiquidClassCategory,
-                                    Opt.TransferVolume,
+                                self._get_liquid_class(
+                                    opt.DestinationLiquidClassCategory,
+                                    opt.TransferVolume,
                                 ),
                             ),
-                            Volume=Opt.TransferVolume,
+                            Volume=opt.TransferVolume,
                         ),
                     )
 
-                Command = Channel1000uL.Dispense.Command(
-                    BackendErrorHandling=self.BackendErrorHandling,
-                    Options=DispenseOptions,
+                command = Channel1000uL.Dispense.Command(
+                    backend_error_handling=self.backend_error_handling,
+                    options=dispense_options,
                 )
-                self.Backend.ExecuteCommand(Command)
-                self.Backend.GetResponse(Command, Channel1000uL.Dispense.Response)
+                self.backend.execute(command)
+                self.backend.wait(command)
+                self.backend.acknowledge(command, Channel1000uL.Dispense.Response)
 
-                EjectPositions = ["1", "2", "3", "4", "13", "14", "15", "16"]
+                eject_positions = ["1", "2", "3", "4", "13", "14", "15", "16"]
                 # Hamilton waste always has 16 positions. Do be compatible with liquid waste we want to use the outer positions
-                EjectOptions: list[Channel1000uL.Eject.Options] = []
-                for Index, (Opt, ChannelNumber) in enumerate(
-                    zip(Opts, self.ActiveChannels),
+                eject_options: list[Channel1000uL.Eject.Options] = []
+                for index, (opt, channel_number) in enumerate(
+                    zip(opts, self.active_channels),
                 ):
-                    EjectOptions.append(
+                    eject_options.append(
                         Channel1000uL.Eject.Options(
-                            LabwareID=Tip.TipWasteLabwareID,
-                            ChannelNumber=ChannelNumber,
-                            PositionID=EjectPositions[Index],
+                            LabwareID=tip.tip_waste_labware_id,
+                            ChannelNumber=channel_number,
+                            PositionID=eject_positions[index],
                         ),
                     )
 
-                Command = Channel1000uL.Eject.Command(
-                    BackendErrorHandling=self.BackendErrorHandling,
-                    Options=EjectOptions,
+                command = Channel1000uL.Eject.Command(
+                    backend_error_handling=self.backend_error_handling,
+                    options=eject_options,
                 )
-                self.Backend.ExecuteCommand(Command)
-                self.Backend.GetResponse(Command, Channel1000uL.Eject.Response)
+                self.backend.execute(command)
+                self.backend.wait(command)
+                self.backend.acknowledge(command, Channel1000uL.Eject.Response)
 
-    def TimeToTransfer(self, OptionsListInstance: list[TransferOptions]) -> float:
+    def time_to_transfer(
+        self: HamiltonPortraitCORE8, options: list[TransferOptions]
+    ) -> float:
         return 0

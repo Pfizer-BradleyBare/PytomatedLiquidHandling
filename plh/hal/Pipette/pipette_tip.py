@@ -1,39 +1,46 @@
+from __future__ import annotations
+
 from pydantic import dataclasses, field_validator
 
-from plh.hal import Tip
+from plh.hal import tip
 
-from .LiquidClass import LiquidClass
+from .liquid_class import LiquidClass
 
 
 @dataclasses.dataclass(kw_only=True)
 class PipetteTip:
-    Tip: Tip.Base.TipBase
-    TipSupportDropoffLabwareID: str
-    TipSupportPickupLabwareID: str
-    TipWasteLabwareID: str
-    SupportedLiquidClassCategories: dict[str, list[LiquidClass]]
+    tip: tip.TipBase
+    tip_support_dropoff_labware_id: str
+    tip_support_pickup_labware_id: str
+    tip_waste_labware_id: str
+    supported_liquid_class_categories: dict[str, list[LiquidClass]]
 
     @field_validator("Tip", mode="before")
-    def __TipValidate(cls, v):
-        Objects = Tip.Devices
-        Identifier = v
+    @classmethod
+    def __tip_validate(cls: type[PipetteTip], v: str | tip.TipBase) -> tip.TipBase:
+        if isinstance(v, tip.TipBase):
+            return v
 
-        if Identifier not in Objects:
+        objects = tip.devices
+        identifier = v
+
+        if identifier not in objects:
             raise ValueError(
-                Identifier
-                + " is not found in "
-                + Tip.Base.TipBase.__name__
-                + " objects.",
+                identifier + " is not found in " + tip.TipBase.__name__ + " objects.",
             )
 
-        return Objects[Identifier]
+        return objects[identifier]
 
     @field_validator("SupportedLiquidClassCategories", mode="after")
-    def __SupportedLiquidClassCategoriesValdate(cls, v):
-        for Category in v:
-            v[Category] = sorted(v[Category], key=lambda x: x.MaxVolume)
+    @classmethod
+    def __supported_liquid_class_categories_valdate(
+        cls: type[PipetteTip],
+        v: dict,
+    ) -> dict:
+        for category in v:
+            v[category] = sorted(v[category], key=lambda x: x.max_volume)
 
         return v
 
-    def IsLiquidClassCategorySupported(self, Category: str) -> bool:
-        return Category in self.SupportedLiquidClassCategories
+    def is_liquid_class_category_supported(self: PipetteTip, category: str) -> bool:
+        return category in self.supported_liquid_class_categories

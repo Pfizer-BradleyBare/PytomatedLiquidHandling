@@ -1,24 +1,27 @@
+from __future__ import annotations
+
 from abc import abstractmethod
 from math import ceil
 
 from pydantic import dataclasses, field_validator
-from PytomatedLiquidHandling.Driver.Tools.BaseClasses import OptionsBase
 
-from plh.hal import DeckLocation, Labware, LayoutItem
+from plh.driver.tools import OptionsBase
+from plh.hal import deck_location, labware, layout_item
+from plh.hal.tools import HALDevice, Interface
 
-from .PipetteTip import PipetteTip
+from .pipette_tip import PipetteTip
 
 
 @dataclasses.dataclass(kw_only=True)
 class TransferOptions(OptionsBase):
-    SourceLayoutItemInstance: LayoutItem.CoverablePlate | LayoutItem.Plate
+    SourceLayoutItemInstance: layout_item.LayoutItemBase
     SourcePosition: int | str
     # This is the labware well position. Numeric or alphanumeric.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
     CurrentSourceVolme: float
     SourceMixCycles: int
     SourceLiquidClassCategory: str
-    DestinationLayoutItemInstance: LayoutItem.CoverablePlate | LayoutItem.Plate
+    DestinationLayoutItemInstance: layout_item.LayoutItemBase
     DestinationPosition: int | str
     # This is the labware well position. Numeric or alphanumeric.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
@@ -29,176 +32,207 @@ class TransferOptions(OptionsBase):
 
 
 @dataclasses.dataclass(kw_only=True)
-class PipetteBase(BaseClasses.Interface, BaseClasses.HALDevice):
-    SupportedTips: list[PipetteTip]
-    SupportedSourceLabwares: list[Labware.PipettableLabware]
-    SupportedDestinationLabwares: list[Labware.PipettableLabware]
-    SupportedDeckLocations: list[DeckLocation.Base.DeckLocationBase]
+class PipetteBase(Interface, HALDevice):
+    supported_tips: list[PipetteTip]
+    supported_source_labware: list[labware.PipettableLabware]
+    supported_destination_labware: list[labware.PipettableLabware]
+    supported_deck_locations: list[deck_location.DeckLocationBase]
 
     @field_validator("SupportedTips", mode="after")
-    def __SupportedTipsValidate(cls, v):
-        return sorted(v, key=lambda x: x.Tip.Volume)
+    @classmethod
+    def __supported_tips_validate(
+        cls: type[PipetteBase],
+        v: list[PipetteTip],
+    ) -> list[PipetteTip]:
+        return sorted(v, key=lambda x: x.tip.volume)
 
     @field_validator("SupportedDeckLocations", mode="before")
-    def __SupportedDeckLocationsValidate(cls, v):
-        SupportedObjects = []
+    @classmethod
+    def __supported_deck_locations_validate(
+        cls: type[PipetteBase],
+        v: list[str] | list[deck_location.DeckLocationBase],
+    ) -> list[deck_location.DeckLocationBase]:
+        supported_objects = []
 
-        Objects = DeckLocation.Devices
+        objects = deck_location.devices
 
-        for Identifier in v:
-            if Identifier not in Objects:
+        for item in v:
+            if isinstance(item, deck_location.DeckLocationBase):
+                supported_objects.append(item)
+
+            elif item not in objects:
                 raise ValueError(
-                    Identifier
+                    item
                     + " is not found in "
-                    + DeckLocation.Base.DeckLocationBase.__name__
+                    + deck_location.DeckLocationBase.__name__
                     + " objects.",
                 )
 
-            SupportedObjects.append(Objects[Identifier])
+            else:
+                supported_objects.append(objects[item])
 
-        return SupportedObjects
+        return supported_objects
 
     @field_validator(
-        "SupportedSourceLabwares",
-        "SupportedDestinationLabwares",
+        "Supportedsource_labwares",
+        "Supporteddestination_labwares",
         mode="before",
     )
-    def __SupportedLabwaresValidate(cls, v):
-        SupportedObjects = []
+    @classmethod
+    def __supported_labwares_validate(
+        cls: type[PipetteBase],
+        v: list[str] | list[labware.LabwareBase],
+    ) -> list[labware.LabwareBase]:
+        supported_objects = []
 
-        Objects = Labware.Devices
+        objects = labware.devices
 
-        for Identifier in v:
-            if Identifier not in Objects:
+        for item in v:
+            if isinstance(item, labware.LabwareBase):
+                supported_objects.append(item)
+
+            elif item not in objects:
                 raise ValueError(
-                    Identifier
+                    item
                     + " is not found in "
-                    + Labware.Base.LabwareBase.__name__
+                    + labware.LabwareBase.__name__
                     + " objects.",
                 )
 
-            SupportedObjects.append(Objects[Identifier])
+            else:
+                supported_objects.append(objects[item])
 
-        return SupportedObjects
+        return supported_objects
 
-    def __post_init__(self) -> None:
-        self.SupportedTips = sorted(self.SupportedTips, key=lambda x: x.Tip.Volume)
+    def assert_transfer_options(
+        self: PipetteBase,
+        options: list[TransferOptions],
+    ) -> None:
+        unsupported_deck_locations = []
+        unsupported_labware = []
+        unsupported_liquid_class_categories = []
 
-    def AssertTransferOptions(self, Options: list[TransferOptions]):
-        UnsupportedDeckLocations = []
-        UnsupportedLabware = []
-        UnsupportedLiquidClassCategories = []
-
-        for Opt in Options:
-            SourceLabware = Opt.SourceLayoutItemInstance.Labware
-            DestinationLabware = Opt.DestinationLayoutItemInstance.Labware
-            if SourceLabware not in self.SupportedSourceLabwares:
-                UnsupportedLabware.append(SourceLabware)
-            if DestinationLabware not in self.SupportedDestinationLabwares:
-                UnsupportedLabware.append(DestinationLabware)
+        for opt in options:
+            source_labware = opt.SourceLayoutItemInstance.labware
+            destination_labware = opt.DestinationLayoutItemInstance.labware
+            if source_labware not in self.supported_source_labware:
+                unsupported_labware.append(source_labware)
+            if destination_labware not in self.supported_destination_labware:
+                unsupported_labware.append(destination_labware)
             # Check Labware Compatibility
 
-            SourceDeckLocation = Opt.SourceLayoutItemInstance.DeckLocation
-            DestinationDeckLocation = Opt.DestinationLayoutItemInstance.DeckLocation
-            if SourceDeckLocation not in self.SupportedDeckLocations:
-                UnsupportedDeckLocations.append(SourceDeckLocation)
-            if DestinationDeckLocation not in self.SupportedDeckLocations:
-                UnsupportedDeckLocations.append(DestinationDeckLocation)
+            source_deck_location = opt.SourceLayoutItemInstance.deck_location
+            destination_deck_location = opt.DestinationLayoutItemInstance.deck_location
+            if source_deck_location not in self.supported_deck_locations:
+                unsupported_deck_locations.append(source_deck_location)
+            if destination_deck_location not in self.supported_deck_locations:
+                unsupported_deck_locations.append(destination_deck_location)
             # Check DeckLocation compatibility
 
-            SourceLiquidClassCategory = Opt.SourceLiquidClassCategory
-            DestinationLiquidClassCategory = Opt.DestinationLiquidClassCategory
+            source_liquid_class_category = opt.SourceLiquidClassCategory
+            destination_liquid_class_category = opt.DestinationLiquidClassCategory
             if not any(
-                PipetteTip.IsLiquidClassCategorySupported(SourceLiquidClassCategory)
-                for PipetteTip in self.SupportedTips
-            ):
-                UnsupportedLiquidClassCategories.append(SourceLiquidClassCategory)
-            if not any(
-                PipetteTip.IsLiquidClassCategorySupported(
-                    DestinationLiquidClassCategory,
+                PipetteTip.is_liquid_class_category_supported(
+                    source_liquid_class_category,
                 )
-                for PipetteTip in self.SupportedTips
+                for PipetteTip in self.supported_tips
             ):
-                UnsupportedLiquidClassCategories.append(DestinationLiquidClassCategory)
+                unsupported_liquid_class_categories.append(source_liquid_class_category)
+            if not any(
+                PipetteTip.is_liquid_class_category_supported(
+                    destination_liquid_class_category,
+                )
+                for PipetteTip in self.supported_tips
+            ):
+                unsupported_liquid_class_categories.append(
+                    destination_liquid_class_category,
+                )
             # Check liquid class compatibility
 
-    def _GetMaxTransferVolume(
-        self,
-        SourceLiquidClassCategory: str,
-        DestinationLiquidClassCategory: str,
+    def _get_max_transfer_volume(
+        self: PipetteBase,
+        source_liquid_class_category: str,
+        destination_liquid_class_category: str,
     ) -> float:
-        MaxVol = 0
+        max_volume = 0
 
-        for Tip in self.SupportedTips:
-            if Tip.IsLiquidClassCategorySupported(
-                SourceLiquidClassCategory,
-            ) and Tip.IsLiquidClassCategorySupported(DestinationLiquidClassCategory):
-                for LiquidClass in Tip.SupportedLiquidClassCategories[
-                    SourceLiquidClassCategory
+        for tip in self.supported_tips:
+            if tip.is_liquid_class_category_supported(
+                source_liquid_class_category,
+            ) and tip.is_liquid_class_category_supported(
+                destination_liquid_class_category,
+            ):
+                for liquid_class in tip.supported_liquid_class_categories[
+                    source_liquid_class_category
                 ]:
-                    if LiquidClass.MaxVolume > MaxVol:
-                        MaxVol = LiquidClass.MaxVolume
+                    if liquid_class.max_volume > max_volume:
+                        max_volume = liquid_class.max_volume
 
-                for LiquidClass in Tip.SupportedLiquidClassCategories[
-                    DestinationLiquidClassCategory
+                for liquid_class in tip.supported_liquid_class_categories[
+                    destination_liquid_class_category
                 ]:
-                    if LiquidClass.MaxVolume > MaxVol:
-                        MaxVol = LiquidClass.MaxVolume
+                    if liquid_class.max_volume > max_volume:
+                        max_volume = liquid_class.max_volume
 
-        return MaxVol
+        return max_volume
 
-    def _TruncateTransferVolume(
-        self,
-        Options: TransferOptions,
-        Volume: float,
+    def _truncate_transfer_volume(
+        self: PipetteBase,
+        options: TransferOptions,
+        volume: float,
     ) -> list[TransferOptions]:
-        UpdatedOptionsList = []
+        num_transfers = ceil(options.TransferVolume / volume)
+        options.TransferVolume /= num_transfers
 
-        NumTransfers = ceil(Options.TransferVolume / Volume)
-        TransferOptions.TransferVolume /= NumTransfers
+        return [options for _ in range(num_transfers)]
 
-        for _ in range(NumTransfers):
-            UpdatedOptionsList.append(TransferOptions)
-
-        return UpdatedOptionsList
-
-    def _GetTip(
-        self,
-        SourceLiquidClassCategory: str,
-        DestinationLiquidClassCategory: str,
-        Volume: float,
+    def _get_tip(
+        self: PipetteBase,
+        source_liquid_class_category: str,
+        destination_liquid_class_category: str,
+        volume: float,
     ) -> PipetteTip:
-        PossiblePipetteTips = [
-            PipetteTip
-            for PipetteTip in self.SupportedTips
-            if PipetteTip.IsLiquidClassCategorySupported(SourceLiquidClassCategory)
-            and PipetteTip.IsLiquidClassCategorySupported(
-                DestinationLiquidClassCategory,
+        possible_pipette_tips = [
+            pipette_tip
+            for pipette_tip in self.supported_tips
+            if pipette_tip.is_liquid_class_category_supported(
+                source_liquid_class_category,
+            )
+            and pipette_tip.is_liquid_class_category_supported(
+                destination_liquid_class_category,
             )
         ]
 
-        for PipetteTip in PossiblePipetteTips:
-            if PipetteTip.Tip.Volume >= Volume:
-                return PipetteTip
+        for pipette_tip in possible_pipette_tips:
+            if pipette_tip.tip.volume >= volume:
+                return pipette_tip
 
-        return PossiblePipetteTips[-1]
+        return possible_pipette_tips[-1]
 
-    def _GetLiquidClass(self, LiquidClassCategory: str, Volume: float) -> str:
-        Tip = self._GetTip(LiquidClassCategory, LiquidClassCategory, Volume)
+    def _get_liquid_class(
+        self: PipetteBase,
+        liquid_class_category: str,
+        volume: float,
+    ) -> str:
+        tip = self._get_tip(liquid_class_category, liquid_class_category, volume)
 
-        for Class in Tip.SupportedLiquidClassCategories[LiquidClassCategory]:
-            if Class.MaxVolume > Volume:
-                return Class.LiquidClassName
+        for liquid_class in tip.supported_liquid_class_categories[
+            liquid_class_category
+        ]:
+            if liquid_class.max_volume > volume:
+                return liquid_class.liquid_class_name
 
         return [
-            Class.LiquidClassName
-            for Class in Tip.SupportedLiquidClassCategories[LiquidClassCategory]
+            liquid_class.liquid_class_name
+            for liquid_class in tip.supported_liquid_class_categories[
+                liquid_class_category
+            ]
         ][-1]
 
     @abstractmethod
-    def Transfer(self, OptionsList: list[TransferOptions]):
+    def transfer(self: PipetteBase, options: list[TransferOptions]) -> None:
         ...
 
     @abstractmethod
-    def TimeToTransfer(self, OptionsList: list[TransferOptions]):
+    def time_to_transfer(self: PipetteBase, options: list[TransferOptions]) -> float:
         ...
