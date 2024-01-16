@@ -1,125 +1,126 @@
-import os
+import pathlib
 
 from loguru import logger
-from PytomatedLiquidHandling.Driver.Hamilton import FlipTubeTool
-from PytomatedLiquidHandling.Driver.Hamilton.Backend import MicrolabSTAR
+
+from plh.driver.HAMILTON import FlipTubeTool
+from plh.driver.HAMILTON.backend import MicrolabSTAR
 
 
-def Main():
+def main(backend: MicrolabSTAR):
     logger.info(f"Executing Main() from {__file__}")
 
     logger.info("Initialize")
-    Command = FlipTubeTool.Initialize.Command(
-        Options=FlipTubeTool.Initialize.Options(
-            ToolOrientation=FlipTubeTool.Initialize.Options.ToolOrientationOptions.Landscape,
+    command = FlipTubeTool.Initialize.Command(
+        options=FlipTubeTool.Initialize.Options(
+            ToolOrientation=FlipTubeTool.Initialize.options.ToolOrientationoptions.Landscape,
         ),
     )
-    Backend.ExecuteCommand(Command)
-    Backend.WaitForResponseBlocking(Command)
-    Backend.GetResponse(Command, FlipTubeTool.Initialize.Response)
+    backend.execute(command)
+    backend.wait(command)
+    backend.acknowledge(command, FlipTubeTool.Initialize.Response)
 
     logger.info("Pickup")
-    Command = FlipTubeTool.ToolsPickUp.Command(
-        Options=FlipTubeTool.ToolsPickUp.OptionsList(LabwareID="FlipTubeTools"),
+    command = FlipTubeTool.ToolsPickUp.Command(
+        options=FlipTubeTool.ToolsPickUp.OptionsList(LabwareID="FlipTubeTools"),
     )
-    Command.Options.append(FlipTubeTool.ToolsPickUp.Options(ChannelNumber=1))
-    Command.Options.append(FlipTubeTool.ToolsPickUp.Options(ChannelNumber=2))
-    Command.Options.append(FlipTubeTool.ToolsPickUp.Options(ChannelNumber=3))
-    Command.Options.append(FlipTubeTool.ToolsPickUp.Options(ChannelNumber=4))
-    Backend.ExecuteCommand(Command)
-    Backend.WaitForResponseBlocking(Command)
-    Backend.GetResponse(Command, FlipTubeTool.ToolsPickUp.Response)
+    command.options.append(FlipTubeTool.ToolsPickUp.Options(ChannelNumber=1))
+    command.options.append(FlipTubeTool.ToolsPickUp.Options(ChannelNumber=2))
+    command.options.append(FlipTubeTool.ToolsPickUp.Options(ChannelNumber=3))
+    command.options.append(FlipTubeTool.ToolsPickUp.Options(ChannelNumber=4))
+    backend.execute(command)
+    backend.wait(command)
+    backend.acknowledge(command, FlipTubeTool.ToolsPickUp.Response)
 
     logger.info("Open")
-    Command = FlipTubeTool.FlipTubeOpen.Command(Options=[])
-    Command.Options.append(
+    command = FlipTubeTool.FlipTubeOpen.Command(options=[])
+    command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
             LabwareID="FlipTubes",
             PositionID="1",
             ChannelNumber=1,
         ),
     )
-    Command.Options.append(
+    command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
             LabwareID="FlipTubes",
             PositionID="2",
             ChannelNumber=2,
         ),
     )
-    Command.Options.append(
+    command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
             LabwareID="Plate_1",
             PositionID="A1",
             ChannelNumber=3,
         ),
     )
-    Command.Options.append(
+    command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
             LabwareID="FlipTubes",
             PositionID="4",
             ChannelNumber=4,
         ),
     )
-    Backend.ExecuteCommand(Command)
-    Backend.WaitForResponseBlocking(Command)
-    Backend.GetResponse(Command, FlipTubeTool.FlipTubeOpen.Response)
+    backend.execute(command)
+    backend.wait(command)
+    backend.acknowledge(command, FlipTubeTool.FlipTubeOpen.Response)
 
     logger.info("Close")
-    Command = FlipTubeTool.FlipTubeClose.Command(Options=[])
-    Command.Options.append(
+    command = FlipTubeTool.FlipTubeClose.Command(options=[])
+    command.options.append(
         FlipTubeTool.FlipTubeClose.Options(
             LabwareID="FlipTubes",
             PositionID="1",
             ChannelNumber=1,
         ),
     )
-    Command.Options.append(
+    command.options.append(
         FlipTubeTool.FlipTubeClose.Options(
             LabwareID="FlipTubes",
             PositionID="2",
             ChannelNumber=2,
         ),
     )
-    Command.Options.append(
+    command.options.append(
         FlipTubeTool.FlipTubeClose.Options(
             LabwareID="FlipTubes",
             PositionID="3",
             ChannelNumber=3,
         ),
     )
-    Command.Options.append(
+    command.options.append(
         FlipTubeTool.FlipTubeClose.Options(
             LabwareID="FlipTubes",
             PositionID="4",
             ChannelNumber=4,
         ),
     )
-    Backend.ExecuteCommand(Command)
-    Backend.WaitForResponseBlocking(Command)
-    Backend.GetResponse(Command, FlipTubeTool.FlipTubeOpen.Response)
+    backend.execute(command)
+    backend.wait(command)
+    backend.acknowledge(command, FlipTubeTool.FlipTubeOpen.Response)
 
     logger.info("Eject")
-    Command = FlipTubeTool.ToolsEject.Command(
-        Options=FlipTubeTool.ToolsEject.Options(LabwareID="FlipTubeTools"),
+    command = FlipTubeTool.ToolsEject.Command(
+        options=FlipTubeTool.ToolsEject.Options(LabwareID="FlipTubeTools"),
     )
-    Backend.ExecuteCommand(Command)
-    Backend.WaitForResponseBlocking(Command)
-    Backend.GetResponse(Command, FlipTubeTool.ToolsPickUp.Response)
+    backend.execute(command)
+    backend.wait(command)
+    backend.acknowledge(command, FlipTubeTool.ToolsPickUp.Response)
 
 
 if __name__ == "__main__":
     logger.enable("PytomatedLiquidHandling")
 
-    Backend = MicrolabSTAR(
-        Identifier="Example Star",
-        SimulationOn=True,
-        DeckLayoutPath=os.path.join(os.path.dirname(__file__), "SimulationLayout.lay"),
+    backend = MicrolabSTAR(
+        identifier="Example Star",
+        simulation_on=True,
+        deck_layout=pathlib.Path(__file__).parent / "SimulationLayout.lay",
     )
-    Backend.StartBackend()
-    # Creates the Backend so we can communicate with the Hamilton
+    backend.start()
+    # Creates the backend so we can communicate with the Hamilton
 
-    Main()
+    main(backend)
 
     input("Press <Enter> to quit.")
 
-    Backend.StopBackend()
+    backend.stop()

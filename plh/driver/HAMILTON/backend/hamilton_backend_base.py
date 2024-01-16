@@ -140,7 +140,7 @@ class HamiltonBackendServer(BackendServerBase):
 class HamiltonBackendBase(BackendBase):
     method: pathlib.Path
     deck_layout: pathlib.Path
-    simulation_on: bool = Field(alias="SimulationOn")
+    simulation_on: bool = Field(validation_alias="SimulationOn")
     _action_server: HamiltonBackendServer = field(init=False)
     _state_server: HamiltonBackendServer = field(init=False)
     _hamilton_process: subprocess.Popen = field(

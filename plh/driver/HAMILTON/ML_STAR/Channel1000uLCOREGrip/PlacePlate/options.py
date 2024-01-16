@@ -4,19 +4,21 @@ from enum import Enum
 from plh.driver.tools import OptionsBase
 
 
+class YesNoOptions(Enum):
+    No = 0
+    Yes = 1
+
+
+class XSpeedOptions(Enum):
+    XSpeed1 = 1
+    XSpeed2 = 2
+    XSpeed3 = 3
+    XSpeed4 = 4
+    XSpeed5 = 5
+
+
 @dataclasses.dataclass(kw_only=True)
 class Options(OptionsBase):
-    class YesNoOptions(Enum):
-        No = 0
-        Yes = 1
-
-    class XSpeedOptions(Enum):
-        XSpeed1 = 1
-        XSpeed2 = 2
-        XSpeed3 = 3
-        XSpeed4 = 4
-        XSpeed5 = 5
-
     LabwareID: str
     EjectTool: YesNoOptions = YesNoOptions.No
     XSpeed: XSpeedOptions = XSpeedOptions.XSpeed4
