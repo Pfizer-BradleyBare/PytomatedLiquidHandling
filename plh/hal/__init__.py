@@ -30,8 +30,8 @@ for cls in Tools.BaseClasses.HALDevice.HALDevices.values():
 def LoadYamlConfiguration(ConfigBaseFolder: str):
     """Walks through ```ConfigBaseFolder``` looking for ```.yaml``` files with ```HAL``` module names in the filename.
 
-    You can have as many files as required to simplify configuration."""
-
+    You can have as many files as required to simplify configuration.
+    """
     Warns = []
 
     Loaded = False
@@ -230,12 +230,12 @@ def LoadYamlConfiguration(ConfigBaseFolder: str):
 
                     Tools.ConfigLoader.DevicesLists(
                         Dict,
-                        StorageDevice.Base.StorageDeviceABC,
+                        StorageDevice.Base.StorageDeviceBase,
                         StorageDevice.Devices,
                     )
     if Loaded != True:
         Warns.append(
-            f"No {StorageDevice.Base.StorageDeviceABC.__name__} objects were loaded.",
+            f"No {StorageDevice.Base.StorageDeviceBase.__name__} objects were loaded.",
         )
 
     Loaded = False

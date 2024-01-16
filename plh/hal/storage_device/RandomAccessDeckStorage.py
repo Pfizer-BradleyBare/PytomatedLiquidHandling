@@ -1,79 +1,92 @@
+from __future__ import annotations
+
 from pydantic import dataclasses
 
-from plh.hal import LayoutItem
+from plh.hal import layout_item as li
 
-from .Base import StorageDeviceABC
-from .Base.Reservation import Reservation
+from .reservation import Reservation
+from .storage_device_base import StorageDeviceBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class RandomAccessDeckStorage(StorageDeviceABC):
-    def Reserve(self, ReservationID: str, LayoutItem: LayoutItem.Base.LayoutItemBase):
-        if ReservationID in self._Reservations:
-            raise Exception("Reservation ID already exists")
+class RandomAccessDeckStorage(StorageDeviceBase):
+    def reserve(
+        self: RandomAccessDeckStorage,
+        reservation_id: str,
+        layout_item: li.LayoutItemBase,
+    ) -> None:
+        if reservation_id in self.reservations:
+            msg = "Reservation ID already exists"
+            raise RuntimeError(msg)
 
-        ReservedSites = [
-            Site.LayoutItem.DeckLocation for Site in self._Reservations.values()
+        reserved_sites = [
+            Site.layout_item.deck_location for Site in self.reservations.values()
         ]
 
-        ReservationLabware = LayoutItem.Labware
+        reservation_labware = layout_item.labware
 
-        FreeSites = [
-            Site
-            for Site in self.LayoutItems
-            if Site.Labware == ReservationLabware
-            and Site.DeckLocation not in ReservedSites
+        free_sites = [
+            site
+            for site in self.layout_items
+            if site.labware == reservation_labware
+            and site.deck_location not in reserved_sites
         ]
         # site must support the labware and must also not overlap with already reserved deck locations
 
-        if len(FreeSites) == 0:
-            raise Exception(
-                "No sites available...",
-            )  # Could we potentially move something? Thought...
+        if len(free_sites) == 0:
+            msg = "No sites available..."
+            raise RuntimeError(msg)  # Could we potentially move something? Thought...
 
-        self._Reservations[ReservationID] = Reservation(LayoutItem=FreeSites[0])
+        self.reservations[reservation_id] = Reservation(layout_item=free_sites[0])
 
-    def Release(self, ReservationID: str):
-        if ReservationID not in self._Reservations:
-            raise Exception("Reservation ID does not exist")
+    def release(self: RandomAccessDeckStorage, reservation_id: str) -> None:
+        if reservation_id not in self.reservations:
+            msg = "Reservation ID does not exist."
+            raise RuntimeError(msg)
 
-        Reservation = self._Reservations[ReservationID]
+        reservation = self.reservations[reservation_id]
 
-        if Reservation._IsStored == True:
-            raise Exception(
-                "You must remove the object from storage before you can release the reservation",
-            )
+        if reservation.is_stored is True:
+            msg = "You must remove the object from storage before you can release the reservation"
+            raise RuntimeError(msg)
 
-        del self._Reservations[ReservationID]
+        del self.reservations[reservation_id]
 
-    def PrepareStore(self, ReservationID: str):
+    def prepare_store(self: RandomAccessDeckStorage, reservation_id: str) -> None:
         ...
 
-    def Store(self, ReservationID: str) -> LayoutItem.Base.LayoutItemBase:
-        if ReservationID not in self._Reservations:
-            raise Exception("Reservation ID does not exist")
+    def store(self: RandomAccessDeckStorage, reservation_id: str) -> li.LayoutItemBase:
+        if reservation_id not in self.reservations:
+            msg = "Reservation ID does not exist."
+            raise RuntimeError(msg)
 
-        Reservation = self._Reservations[ReservationID]
+        reservation = self.reservations[reservation_id]
 
-        if Reservation._IsStored == True:
-            raise Exception("Object already stored")
+        if reservation.is_stored is True:
+            msg = "Object already stored"
+            raise RuntimeError(msg)
 
-        Reservation._IsStored = True
+        reservation.is_stored = True
 
-        return Reservation.LayoutItem
+        return reservation.layout_item
 
-    def PrepareRetrieve(self, ReservationID: str):
+    def prepare_retrieve(self: RandomAccessDeckStorage, reservation_id: str) -> None:
         ...
 
-    def Retrieve(self, ReservationID: str) -> LayoutItem.Base.LayoutItemBase:
-        if ReservationID not in self._Reservations:
-            raise Exception("Reservation ID does not exist")
+    def retrieve(
+        self: RandomAccessDeckStorage,
+        reservation_id: str,
+    ) -> li.LayoutItemBase:
+        if reservation_id not in self.reservations:
+            msg = "Reservation ID does not exist."
+            raise RuntimeError(msg)
 
-        Reservation = self._Reservations[ReservationID]
+        reservation = self.reservations[reservation_id]
 
-        if Reservation._IsStored == False:
-            raise Exception("Object not yet stored")
+        if reservation.is_stored is False:
+            msg = "Object not yet stored"
+            raise RuntimeError(msg)
 
-        Reservation._IsStored = False
+        reservation.is_stored = False
 
-        return Reservation.LayoutItem
+        return reservation.layout_item
