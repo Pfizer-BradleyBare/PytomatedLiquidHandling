@@ -4,7 +4,7 @@ import dataclasses
 from typing import Any
 
 from plh.driver.tools import CommandOptionsListMixin
-from plh.driver.UnchainedLabs.backend import UnchainedLabsCommandBase
+from plh.driver.UnchainedLabs_Instruments.backend import UnchainedLabsCommandBase
 
 from .options import OptionsList
 

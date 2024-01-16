@@ -1,5 +1,4 @@
-"""
-# What is the Driver layer?
+"""# What is the Driver layer?
 
 Driver layer facilitates raw command execution on a given backend (system).
 - This is a no compromises layer. All commands that can be executed on your system are executable here.
@@ -7,7 +6,8 @@ Driver layer facilitates raw command execution on a given backend (system).
 - Generally, only a single command can be queued per backend (command queue support is implementation specific).
 - You must handle raw errors returned by the system.
 
-Notes:
+Notes
+-----
 - Commands may or may not require options.
 - Command options can either be a single option class or a list of option classes.
 - If commands return information then that information will be accessible in the associated response class.
@@ -155,8 +155,9 @@ Backend.WaitForResponseBlocking(Command)
 Backend.GetResponse(Command, Visual_NTR_Library.Channels_TipCounter_Write.Response)
 # Write our tip counter so during the next tip edit it is already correctly selected.
 ```
+
 """
 
-from . import Hamilton, UnchainedLabs, tools
+from . import Hamilton, UnchainedLabs_Instruments, tools
 
-__all__ = ["Hamilton", "UnchainedLabs", "tools"]
+__all__ = ["Hamilton", "UnchainedLabs_Instruments", "tools"]

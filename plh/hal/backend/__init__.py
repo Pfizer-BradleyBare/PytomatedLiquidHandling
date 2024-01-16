@@ -6,7 +6,7 @@ from plh.driver.HAMILTON.backend import MicrolabSTAR as _MicrolabStar
 from plh.driver.HAMILTON.backend import (
     VantageTrackGripperEntryExit as _VantageTrackGripperEntryExit,
 )
-from plh.driver.UnchainedLabs_Instruments.backend import Stunner as _Stunner
+from plh.driver.UnchainedLabs_Instruments.Instruments.backend import Stunner as _Stunner
 from plh.hal.tools import HALDevice as _HALDevice
 
 if TYPE_CHECKING:

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 
-from plh.driver.UnchainedLabs.backend import UnchainedLabsCommandBase
+from plh.driver.UnchainedLabs_Instruments.backend import UnchainedLabsCommandBase
 
 
 @dataclasses.dataclass(kw_only=True)
