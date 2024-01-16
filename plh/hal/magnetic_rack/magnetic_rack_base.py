@@ -40,71 +40,77 @@ class MagneticRackBase(HALDevice):
         return supported_objects
 
     @field_validator("SupportedPipettes", mode="before")
-    # TODO
-    def __supported_pipettes_validate(cls, v, info: ValidationInfo):
-        SupportedObjects = []
+    @classmethod
+    def __supported_pipettes_validate(
+        cls: type[MagneticRackBase],
+        v: list[dict],
+        info: ValidationInfo,
+    ) -> list[pipette.PipetteBase]:
+        supported_objects = []
 
-        Objects = Pipette.Devices
+        objects = pipette.devices
 
-        for Item in v:
-            Identifier = Item["Pipette"]
-            if Identifier not in Objects:
+        for item in v:
+            if item["Pipette"] not in objects:
                 raise ValueError(
-                    Identifier
+                    item["Pipette"]
                     + " is not found in "
-                    + Pipette.Base.PipetteBase.__name__
+                    + pipette.PipetteBase.__name__
                     + " objects.",
                 )
-            Object = Objects[Identifier]
 
-            for PipetteConfig in Item["LiquidClasses"]["Aspirate"]:
-                LiquidClass = Pipette.Base.LiquidClass(
-                    LiquidClassName=PipetteConfig["LiquidClassName"],
-                    MaxVolume=PipetteConfig["MaxVolume"],
+            pipette_object = objects[item["Pipette"]]
+
+            for pipette_config in item["liquid_classes"]["Aspirate"]:
+                liquid_class = pipette.LiquidClass(
+                    liquid_class_name=pipette_config["LiquidClassName"],
+                    max_volume=pipette_config["MaxVolume"],
                 )
-                for Tip in Object.SupportedTips:
-                    if Tip.Tip.Volume >= LiquidClass.MaxVolume:
-                        CategoryName = (
+                for tip in pipette_object.supported_tips:
+                    if tip.tip.volume >= liquid_class.max_volume:
+                        category_name = (
                             "MagneticRack: " + info.data["Identifier"] + " Aspirate"
                         )
 
-                        if CategoryName not in Tip.SupportedLiquidClassCategories:
-                            Tip.SupportedLiquidClassCategories[CategoryName] = []
-                        Tip.SupportedLiquidClassCategories[CategoryName].append(
-                            LiquidClass,
+                        if category_name not in tip.supported_liquid_class_categories:
+                            tip.supported_liquid_class_categories[category_name] = []
+
+                        tip.supported_liquid_class_categories[category_name].append(
+                            liquid_class,
                         )
-                        Tip.SupportedLiquidClassCategories[CategoryName] = sorted(
-                            Tip.SupportedLiquidClassCategories[CategoryName],
-                            key=lambda x: x.MaxVolume,
+                        tip.supported_liquid_class_categories[category_name] = sorted(
+                            tip.supported_liquid_class_categories[category_name],
+                            key=lambda x: x.max_volume,
                         )
 
                         break
 
-            for PipetteConfig in Item["LiquidClasses"]["Dispense"]:
-                LiquidClass = Pipette.Base.LiquidClass(
-                    LiquidClassName=PipetteConfig["LiquidClassName"],
-                    MaxVolume=PipetteConfig["MaxVolume"],
+            for pipette_config in item["liquid_classes"]["Dispense"]:
+                liquid_class = pipette.LiquidClass(
+                    liquid_class_name=pipette_config["LiquidClassName"],
+                    max_volume=pipette_config["MaxVolume"],
                 )
-                for Tip in Object.SupportedTips:
-                    if Tip.Tip.Volume >= LiquidClass.MaxVolume:
-                        CategoryName = (
+                for tip in pipette_object.supported_tips:
+                    if tip.tip.volume >= liquid_class.max_volume:
+                        category_name = (
                             "MagneticRack: " + info.data["Identifier"] + " Dispense"
                         )
 
-                        if CategoryName not in Tip.SupportedLiquidClassCategories:
-                            Tip.SupportedLiquidClassCategories[CategoryName] = []
-                        Tip.SupportedLiquidClassCategories[CategoryName].append(
-                            LiquidClass,
+                        if category_name not in tip.supported_liquid_class_categories:
+                            tip.supported_liquid_class_categories[category_name] = []
+
+                        tip.supported_liquid_class_categories[category_name].append(
+                            liquid_class,
                         )
-                        Tip.SupportedLiquidClassCategories[CategoryName] = sorted(
-                            Tip.SupportedLiquidClassCategories[CategoryName],
-                            key=lambda x: x.MaxVolume,
+                        tip.supported_liquid_class_categories[category_name] = sorted(
+                            tip.supported_liquid_class_categories[category_name],
+                            key=lambda x: x.max_volume,
                         )
                         break
 
-            SupportedObjects.append(Object)
+            supported_objects.append(pipette_object)
 
-        return SupportedObjects
+        return supported_objects
 
     def get_layout_item(
         self: MagneticRackBase,
