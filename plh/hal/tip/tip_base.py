@@ -29,7 +29,7 @@ class TipBase(Interface, HALDevice):
     @classmethod
     def __tip_racks_validate(
         cls: type[TipBase],
-        v: list[str] | list[layout_item.LayoutItemBase],
+        v: list[str | layout_item.LayoutItemBase],
     ) -> list[layout_item.LayoutItemBase]:
         supported_objects = []
 

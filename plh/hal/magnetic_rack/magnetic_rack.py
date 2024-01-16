@@ -1,6 +1,6 @@
 from pydantic import dataclasses
 
-from .Base import MagneticRackBase
+from .magnetic_rack_base import MagneticRackBase
 
 
 @dataclasses.dataclass(kw_only=True)

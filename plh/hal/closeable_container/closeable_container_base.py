@@ -21,7 +21,8 @@ class CloseableContainerBase(Interface, HALDevice):
 
     This is NOT the same as a lid for a plate.
 
-    Attributes:
+    Attributes
+    ----------
         SupportedDeckLocations: The rack must be in one of these deck locations to perform an operation.
         SupportedLabwares: The device can only open labware of this type(s).
     """
@@ -33,7 +34,7 @@ class CloseableContainerBase(Interface, HALDevice):
     @classmethod
     def __supported_deck_locations_validate(
         cls: type[CloseableContainerBase],
-        v: list[str] | list[deck_location.DeckLocationBase],
+        v: list[str | deck_location.DeckLocationBase],
     ) -> list[deck_location.DeckLocationBase]:
         supported_objects = []
 
@@ -60,7 +61,7 @@ class CloseableContainerBase(Interface, HALDevice):
     @classmethod
     def __supported_labwares_validate(
         cls: type[CloseableContainerBase],
-        v: list[str] | list[labware.LabwareBase],
+        v: list[str | labware.LabwareBase],
     ) -> list[labware.LabwareBase]:
         supported_objects = []
 
@@ -98,7 +99,6 @@ class CloseableContainerBase(Interface, HALDevice):
 
             DeckLocation.Base.DeckLocationNotSupportedError
         """
-
         excepts = []
 
         unsupported_deck_locations = []

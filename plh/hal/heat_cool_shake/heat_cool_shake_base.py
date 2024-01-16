@@ -17,7 +17,7 @@ class HeatCoolShakeBase(Interface, HALDevice):
     @classmethod
     def __supported_plates_validate(
         cls: type[HeatCoolShakeBase],
-        v: list[str] | list[li.LayoutItemBase],
+        v: list[str | li.LayoutItemBase],
     ) -> list[li.LayoutItemBase]:
         supported_objects = []
 

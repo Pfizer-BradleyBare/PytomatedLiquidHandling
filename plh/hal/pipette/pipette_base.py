@@ -50,7 +50,7 @@ class PipetteBase(Interface, HALDevice):
     @classmethod
     def __supported_deck_locations_validate(
         cls: type[PipetteBase],
-        v: list[str] | list[deck_location.DeckLocationBase],
+        v: list[str | deck_location.DeckLocationBase],
     ) -> list[deck_location.DeckLocationBase]:
         supported_objects = []
 
@@ -81,7 +81,7 @@ class PipetteBase(Interface, HALDevice):
     @classmethod
     def __supported_labwares_validate(
         cls: type[PipetteBase],
-        v: list[str] | list[labware.LabwareBase],
+        v: list[str | labware.LabwareBase],
     ) -> list[labware.LabwareBase]:
         supported_objects = []
 

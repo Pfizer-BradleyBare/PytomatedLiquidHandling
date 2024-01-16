@@ -19,7 +19,7 @@ class TransportBase(Interface, HALDevice):
     @classmethod
     def __supported_labware_validate(
         cls: type[TransportBase],
-        v: list[str] | list[labware.LabwareBase],
+        v: list[str | labware.LabwareBase],
     ) -> list[labware.LabwareBase]:
         supported_objects = []
 

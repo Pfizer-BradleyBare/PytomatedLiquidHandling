@@ -2,36 +2,46 @@ from __future__ import annotations
 
 from pydantic import ValidationInfo, dataclasses, field_validator
 
-from plh.hal import layout_item, pipette
+from plh.hal import labware, pipette
+from plh.hal import layout_item as li
 from plh.hal.tools import HALDevice
 
 
 @dataclasses.dataclass(kw_only=True)
 class MagneticRackBase(HALDevice):
-    supported_plates: list[layout_item.CoverablePlate | layout_item.Plate]
-    supported_pipettes: list[pipette.Base.PipetteBase]
+    supported_plates: list[li.CoverablePlate | li.Plate]
+    supported_pipettes: list[pipette.PipetteBase]
 
     @field_validator("SupportedPlates", mode="before")
-    def __SupportedPlatesValidate(cls, v):
-        SupportedObjects = []
+    @classmethod
+    def __supported_plates_validate(
+        cls: type[MagneticRackBase],
+        v: list[str | li.LayoutItemBase],
+    ) -> list[li.CoverablePlate | li.Plate]:
+        supported_objects = []
 
-        Objects = layout_item.devices
+        objects = li.devices
 
-        for Identifier in v:
-            if Identifier not in Objects:
+        for item in v:
+            if isinstance(item, li.LayoutItemBase):
+                supported_objects.append(item)
+
+            elif item not in objects:
                 raise ValueError(
-                    Identifier
+                    item
                     + " is not found in "
-                    + LayoutItem.Base.LayoutItemBase.__name__
+                    + li.LayoutItemBase.__name__
                     + " objects.",
                 )
 
-            SupportedObjects.append(Objects[Identifier])
+            else:
+                supported_objects.append(objects[item])
 
-        return SupportedObjects
+        return supported_objects
 
     @field_validator("SupportedPipettes", mode="before")
-    def __SupportedPipettesValidate(cls, v, info: ValidationInfo):
+    # TODO
+    def __supported_pipettes_validate(cls, v, info: ValidationInfo):
         SupportedObjects = []
 
         Objects = Pipette.Devices
@@ -96,29 +106,26 @@ class MagneticRackBase(HALDevice):
 
         return SupportedObjects
 
-    def GetLayoutItem(
-        self,
-        LayoutItemInstance: LayoutItem.CoverablePlate | LayoutItem.Plate,
-    ) -> LayoutItem.CoverablePlate:
-        for SupportedLayoutItemInstance in self.SupportedPlates:
-            if SupportedLayoutItemInstance.Labware == LayoutItemInstance.Labware:
-                if not isinstance(
-                    SupportedLayoutItemInstance,
-                    LayoutItem.CoverablePlate,
-                ):
-                    raise Exception("This should never happen")
+    def get_layout_item(
+        self: MagneticRackBase,
+        layout_item: li.CoverablePlate | li.Plate,
+    ) -> li.CoverablePlate | li.Plate:
+        for supported_layout_item in self.supported_plates:
+            if supported_layout_item.labware == layout_item.labware:
+                if isinstance(supported_layout_item, li.CoverablePlate):
+                    if isinstance(layout_item, li.CoverablePlate):
+                        supported_layout_item.is_covered = layout_item.is_covered
+                    else:
+                        supported_layout_item.is_covered = False
 
-                if isinstance(LayoutItemInstance, LayoutItem.CoverablePlate):
-                    SupportedLayoutItemInstance.IsCovered = LayoutItemInstance.IsCovered
-                else:
-                    SupportedLayoutItemInstance.IsCovered = False
+                return supported_layout_item
 
-                return SupportedLayoutItemInstance
+        raise labware.LabwareNotSupportedError([layout_item.labware])
 
-        raise Exception("This rack does not support your layout item")
+    def get_aspirate_storage_buffer_liquid_class_category(
+        self: MagneticRackBase,
+    ) -> str:
+        return "MagneticRack: " + self.identifier + " Aspirate"
 
-    def GetAspirateStorageBufferLiquidClassCategory(self):
-        return "MagneticRack: " + self.Identifier + " Aspirate"
-
-    def GetAddStorageBufferLiquidClassCategory(self):
-        return "MagneticRack: " + self.Identifier + " Dispense"
+    def get_add_storage_buffer_liquid_class_category(self: MagneticRackBase) -> str:
+        return "MagneticRack: " + self.identifier + " Dispense"
