@@ -1,117 +1,130 @@
+from __future__ import annotations
+
 from dataclasses import field
 from typing import cast
 
 from pydantic import dataclasses
-from PytomatedLiquidHandling.Driver.Hamilton import (
-    Backend,
-    EntryExit,
-    HSLTipCountingLib,
-)
 
-from plh.hal import DeckLocation, LayoutItem
+from plh.driver.HAMILTON import EntryExit, HSLTipCountingLib
+from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.hal import deck_location, layout_item
 
-from .Base import TipBase
+from .tip_base import TipBase
 
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonEENTR(TipBase):
     @dataclasses.dataclass(kw_only=True)
     class TipStack:
-        TipRack: LayoutItem.TipRack
-        ModuleNumber: int
-        StackNumber: int
-        _StackCount: int = field(init=False, default=0)
+        tip_rack: layout_item.TipRack
+        module_number: int
+        stack_number: int
+        stack_count: int = field(init=False, default=0)
 
-    Backend: Backend.HamiltonBackendABC
+    backend: VantageTrackGripperEntryExit
 
-    TipStacks: list[TipStack]
-    RacksPerStack: int
-    TipRackWaste: LayoutItem.TipRack
+    tip_stacks: list[TipStack]
+    racks_per_stack: int
+    tip_rack_waste: layout_item.TipRack
 
-    def Initialize(self):
-        TipBase.Initialize(self)
+    def initialize(self: HamiltonEENTR) -> None:
+        TipBase.initialize(self)
 
-    def RemainingTips(self) -> int:
-        return self.RemainingTipsInTier() + sum(
-            [self.TipsPerRack * Stack._StackCount for Stack in self.TipStacks],
+    def remaining_tips(self: HamiltonEENTR) -> int:
+        return self.remaining_tips_in_tier() + sum(
+            [self.tips_per_rack * stack.stack_count for stack in self.tip_stacks],
         )
 
-    def RemainingTipsInTier(self) -> int:
-        return TipBase.RemainingTips(self)
+    def remaining_tips_in_tier(self: HamiltonEENTR) -> int:
+        return TipBase.remaining_tips(self)
 
-    def DiscardLayerToWaste(self):
-        for Rack in self.TipRacks:
-            for Stack in self.TipStacks:
-                if Stack._StackCount == 0:
+    def discard_layer_to_waste(self: HamiltonEENTR) -> None:
+        for rack in self.tip_racks:
+            for stack in self.tip_stacks:
+                if stack.stack_count == 0:
                     continue
                 # only use stacks that have racks
 
-                CommandInstance = EntryExit.MoveToBeam.Command(
-                    Options=EntryExit.MoveToBeam.Options(
-                        ModuleNumber=Stack.ModuleNumber,
-                        StackNumber=Stack.StackNumber,
+                command = EntryExit.MoveToBeam.Command(
+                    options=EntryExit.MoveToBeam.Options(
+                        ModuleNumber=stack.module_number,
+                        StackNumber=stack.stack_number,
                         OffsetFromBeam=0,
                     ),
-                    BackendErrorHandling=self.BackendErrorHandling,
+                    backend_error_handling=self.backend_error_handling,
                 )
 
-                self.Backend.ExecuteCommand(CommandInstance)
-                self.Backend.WaitForResponseBlocking(CommandInstance)
-                self.Backend.GetResponse(CommandInstance, EntryExit.MoveToBeam.Response)
+                self.backend.execute(command)
+                self.backend.wait(command)
+                self.backend.acknowledge(command, EntryExit.MoveToBeam.Response)
                 # Move the stack to beam so we can access the tip rack.
 
-                Stack._StackCount -= 1
+                stack.stack_count -= 1
 
-                DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
-                    Rack.DeckLocation,
-                    self.TipRackWaste.DeckLocation,
-                )[0][0].TransportDevice.Transport(Rack, self.TipRackWaste)
+                deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+                    rack.deck_location,
+                    self.tip_rack_waste.deck_location,
+                )[
+                    0
+                ][
+                    0
+                ].transport_device.transport(
+                    rack,
+                    self.tip_rack_waste,
+                )
                 # Dispose of the empty rack
 
-                DeckLocation.TransportableDeckLocation.GetCompatibleTransportConfigs(
-                    Rack.DeckLocation,
-                    self.TipRackWaste.DeckLocation,
-                )[0][0].TransportDevice.Transport(Rack, Stack.TipRack)
+                deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+                    rack.deck_location,
+                    self.tip_rack_waste.deck_location,
+                )[
+                    0
+                ][
+                    0
+                ].transport_device.transport(
+                    rack,
+                    stack.tip_rack,
+                )
                 # Move the full rack from the stack.
 
-    def UpdateAvailablePositions(self):
-        for Stack in self.TipStacks:
-            CommandInstance = EntryExit.CountLabwareInStack.Command(
-                Options=EntryExit.CountLabwareInStack.Options(
-                    ModuleNumber=Stack.ModuleNumber,
-                    StackNumber=Stack.StackNumber,
-                    LabwareID=Stack.TipRack.LabwareID,
+    def update_available_positions(self: HamiltonEENTR) -> None:
+        for stack in self.tip_stacks:
+            command = EntryExit.CountLabwareInStack.Command(
+                options=EntryExit.CountLabwareInStack.Options(
+                    ModuleNumber=stack.module_number,
+                    StackNumber=stack.stack_number,
+                    LabwareID=stack.tip_rack.labware_id,
                     IsNTRRack=True,
                 ),
-                BackendErrorHandling=self.BackendErrorHandling,
+                backend_error_handling=self.backend_error_handling,
             )
-            self.Backend.ExecuteCommand(CommandInstance)
-            self.Backend.WaitForResponseBlocking(CommandInstance)
-            Stack._StackCount = self.Backend.GetResponse(
-                CommandInstance,
+            self.backend.execute(command)
+            self.backend.wait(command)
+            stack.stack_count = self.backend.acknowledge(
+                command,
                 EntryExit.CountLabwareInStack.Response,
             ).NumLabware
 
-        CommandInstance = HSLTipCountingLib.Edit.Command(
-            Options=HSLTipCountingLib.Edit.OptionsList(
-                TipCounter="HamiltonTipFTR_" + str(self.Volume) + "uL_TipCounter",
+        command = HSLTipCountingLib.Edit.Command(
+            options=HSLTipCountingLib.Edit.OptionsList(
+                TipCounter="HamiltonTipFTR_" + str(self.volume) + "uL_TipCounter",
                 DialogTitle="Please update the number of "
-                + str(self.Volume)
+                + str(self.volume)
                 + "uL tips currently loaded on the system",
             ),
         )
-        for TipRack in self.TipRacks:
-            CommandInstance.Options.append(
-                HSLTipCountingLib.Edit.Options(LabwareID=TipRack.LabwareID),
+        for tip_rack in self.tip_racks:
+            command.options.append(
+                HSLTipCountingLib.Edit.Options(LabwareID=tip_rack.labware_id),
             )
 
-        self.Backend.ExecuteCommand(CommandInstance)
-        self.Backend.WaitForResponseBlocking(CommandInstance)
-        self._ParseAvailablePositions(
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self._parse_available_positions(
             cast(
                 list[dict[str, str]],
-                self.Backend.GetResponse(
-                    CommandInstance,
+                self.backend.acknowledge(
+                    command,
                     HSLTipCountingLib.Edit.Response,
                 ).AvailablePositions,
             ),
