@@ -163,8 +163,8 @@ CommandName = JSONPARSER::GetJSONElement(i_JSONObject, Translate("Command Name:"
 if (ModuleName == "HAMILTON")
 {
 // }} ""
-// {{{ 32 1 0 "6245a3cb_4a15_4578_b88e4576cb72df78" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ACTIONSERVERENDPOINTS::RespondToCommand(EndpointOutputDataJSONObject);
+// {{{ 32 1 0 "20e63fa3_e778_44bf_8d12c09499a8b639" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(i_JSONObject);
 // }} ""
 // {{ 33 1 0 "d7ffd749_466d_47cc_a47b71ac45be4c55" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
 MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@\n\n       .__(.)< (MEOW)\n        \\___)\n\nAbort command received. Goodbye!\n\n              .__(.)< (MEOW)\n               \\___)\n\n@@@@@@@@@@@@@@@@"));
@@ -522,4 +522,4 @@ abort;
 }
 // }} ""
 /* {{ 2 "SubmethodInsertLine" "" */ // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-17 10:59$$checksum=ddf64af1$$length=091$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-17 11:02$$checksum=fffce24c$$length=091$$
