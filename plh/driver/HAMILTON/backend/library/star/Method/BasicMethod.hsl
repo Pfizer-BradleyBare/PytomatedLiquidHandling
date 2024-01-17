@@ -90,6 +90,9 @@
  namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLML_STARLib\\HSLML_STARLib.hs_" } 
  namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLML_STARLib\\HSLML_STARLib.hs_" } 
  namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLML_STARLib\\HSLML_STARLib.hs_" } 
+ namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLHiGCentrifugeLib\\HSLHiGCentrifugeLib.hs_" } 
+ namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLHiGCentrifugeLib\\HSLHiGCentrifugeLib.hs_" } 
+ namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLHiGCentrifugeLib\\HSLHiGCentrifugeLib.hs_" } 
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable StateServerProc;
 variable ActionServerProc;
@@ -170,6 +173,7 @@ _HSLTIPCOUNTINGLIB::_InitLibrary();
 TIMER::_InitLibrary();
 FLIPTUBETOOL::_InitLibrary();
 HSLML_STARLIB::_InitLibrary();
+HSLHIGCENTRIFUGELIB::_InitLibrary();
 ::RegisterAbortHandler( "OnAbort");
 // }} ""
 // {{ 1 1 0 "4951b2df_c557_48cd_a156d3b5772b8970" "ML_STAR:{1C0C0CB0-7C87-11D3-AD83-0004ACB1DCB2}"
@@ -224,8 +228,9 @@ _HSLTIPCOUNTINGLIB::_ExitLibrary();
 TIMER::_ExitLibrary();
 FLIPTUBETOOL::_ExitLibrary();
 HSLML_STARLIB::_ExitLibrary();
+HSLHIGCENTRIFUGELIB::_ExitLibrary();
 // }} ""
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 15:14$$checksum=4a100bdb$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-17 15:38$$checksum=2d06776b$$length=084$$

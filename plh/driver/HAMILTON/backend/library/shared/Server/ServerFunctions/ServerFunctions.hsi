@@ -48,9 +48,11 @@ Request = StrConcat4(Translate("http://localhost"), Translate(":"), Port, i_Endp
 // {{{ 3 1 0 "2787ee23_7599_44ce_bd8319b3e2bc2b27" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLHttp::Initialize(HttpObject);
 // }} ""
+/* {{ 1 "" "0" */ if(0){  /* }} "" */
 // {{{ 4 1 0 "ebe6275f_1ca1_4731_b2dc2cbdd3d9bcac" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLHttp::SetTimeout(HttpObject, Timeout);
 // }} ""
+/* {{ 1 "" "1" */ } /* }} "" */
 // {{{ 5 1 0 "d88d9c0e_2022_4d3a_b21cbb3e7886da0e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 Content = HSLHttp::HttpGET(HttpObject, Request, ReturnStatusCode);
 // }} ""
@@ -87,9 +89,11 @@ Request = StrConcat4(Translate("http://localhost"), Translate(":"), Port, Endpoi
 // {{{ 13 1 0 "0a3311cb_04ad_4a4b_818f28aa0dba9800" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLHttp::Initialize(HttpObject);
 // }} ""
+/* {{ 1 "" "0" */ if(0){  /* }} "" */
 // {{{ 14 1 0 "c1ef788e_6f1e_464c_9b3beedb016101b3" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLHttp::SetTimeout(HttpObject, Timeout);
 // }} ""
+/* {{ 1 "" "1" */ } /* }} "" */
 // {{{ 15 1 0 "db91f22b_901c_4a6a_9b445ee6794566a2" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 Content = HSLHttp::HttpPOST(HttpObject, Request, Content, HSLHttp::ContentType_JSON, ReturnStatusCode);
 // }} ""
@@ -109,4 +113,4 @@ return (ReturnStatusCode);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 08:51$$checksum=2aa85aaa$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-17 15:39$$checksum=173f6a36$$length=084$$
