@@ -1,0 +1,17 @@
+
+// this ALWAYS GENERATED file contains the sub-method library header
+// Generated at 1/17/2024 3:17:19 PM
+
+#pragma once
+#ifndef HSL_RUNTIME
+namespace HSLHIGCENTRIFUGELIB {
+function _InitLibrary() { }
+function _ExitLibrary() { }
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void { }
+} // namespace
+#endif
+
+#ifdef HSL_RUNTIME
+#include __filename__ ".hsi"
+#endif
+// $$author=BAREB$$valid=0$$time=2024-01-17 15:17$$checksum=456f7f33$$length=082$$
