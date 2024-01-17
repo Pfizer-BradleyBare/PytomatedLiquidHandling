@@ -2,7 +2,6 @@ import os
 import pathlib
 import sys
 
-import pydantic
 import yaml
 from loguru import logger
 
@@ -37,11 +36,6 @@ __all__ = [
     "tools",
     "transport",
 ]
-
-# IDK why i need this with pydantic dataclasses. DO NOT DELETE IT!!!
-for cls in tools.HALDevice.hal_devices.values():
-    pydantic.dataclasses.rebuild_dataclass(cls)  # type:ignore
-# End weirdly required processing
 
 
 @logger.catch(onerror=lambda _: sys.exit())

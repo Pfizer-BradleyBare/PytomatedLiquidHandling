@@ -4,7 +4,6 @@ from pydantic import Field, dataclasses, field_validator
 
 from plh.hal import labware
 
-from . import devices
 from .layout_item_base import LayoutItemBase
 from .lid import Lid
 
@@ -23,6 +22,8 @@ class CoverablePlate(LayoutItemBase):
     ) -> LayoutItemBase:
         if isinstance(v, LayoutItemBase):
             return v
+
+        from . import devices
 
         objects = devices
         identifier = v

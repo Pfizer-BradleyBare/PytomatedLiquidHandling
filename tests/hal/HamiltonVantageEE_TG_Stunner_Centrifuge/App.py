@@ -1,11 +1,13 @@
 import os
 
 from loguru import logger
-from PytomatedLiquidHandling import HAL
+
+from plh import hal
 
 logger.enable("PytomatedLiquidHandling")
 
-HAL.LoadYamlConfiguration(os.path.join(os.path.dirname(__file__), "Config"))
+
+hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
 
 quit()
 
