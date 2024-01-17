@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pydantic import Field, dataclasses, model_validator
+from pydantic import dataclasses, model_validator
 
 from plh.hal.tools import HALDevice
 
@@ -19,11 +19,11 @@ class CarrierBase(HALDevice):
 
     identifier: str = "None"
 
-    track_start: int = Field(validation_alias="trackstart")
-    track_end: int = Field(validation_alias="trackend")
-    num_labware_positions: int = Field(validation_alias="numlabwarepositions")
-    image_path_3d: str = Field(validation_alias="imagepath3d")
-    image_path_2d: str = Field(validation_alias="imagepath2d")
+    track_start: int
+    track_end: int
+    num_labware_positions: int
+    image_path_3d: str
+    image_path_2d: str
 
     @model_validator(mode="after")
     @staticmethod
