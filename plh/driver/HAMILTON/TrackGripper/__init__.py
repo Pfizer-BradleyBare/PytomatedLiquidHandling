@@ -4,3 +4,10 @@ from . import (
     MoveToHomePosition,
     PlacePlateToTaughtPosition,
 )
+
+__all__ = [
+    "GripPlateFromTaughtPosition",
+    "LockUnlockDoors",
+    "MoveToHomePosition",
+    "PlacePlateToTaughtPosition",
+]

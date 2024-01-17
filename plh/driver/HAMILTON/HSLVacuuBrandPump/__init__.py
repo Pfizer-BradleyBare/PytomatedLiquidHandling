@@ -1,1 +1,17 @@
-from . import Initialize, ReqActualPressure, StartPressureControl, StopPumpImmediately
+from . import (
+    Initialize,
+    OpenAirAdmittanceValve,
+    ReqActualPressure,
+    StartPressureControl,
+    StopPumpImmediately,
+    Terminate,
+)
+
+__all__ = [
+    "Initialize",
+    "ReqActualPressure",
+    "StartPressureControl",
+    "StopPumpImmediately",
+    "OpenAirAdmittanceValve",
+    "Terminate",
+]
