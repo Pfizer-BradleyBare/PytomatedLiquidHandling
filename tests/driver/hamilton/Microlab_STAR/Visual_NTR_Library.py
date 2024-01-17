@@ -7,7 +7,7 @@ from plh.driver.HAMILTON.backend import MicrolabSTAR
 
 
 def main(backend: MicrolabSTAR) -> None:
-    logger.info(f"Executing Main() from {__file__}")
+    logger.info(f"Executing main() from {__file__}")
 
     logger.info("Channels_TipCounter_Edit - Initial")
     command = Visual_NTR_Library.Channels_TipCounter_Edit.Command(

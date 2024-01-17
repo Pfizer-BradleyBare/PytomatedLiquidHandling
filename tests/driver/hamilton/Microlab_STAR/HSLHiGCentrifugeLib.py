@@ -9,7 +9,7 @@ ADAPTER_ID = "HX1"
 
 
 def main(backend: MicrolabSTAR) -> None:
-    logger.info(f"Executing Main() from {__file__}")
+    logger.info(f"Executing main() from {__file__}")
 
     logger.info("Connect")
     command = HSLHiGCentrifugeLib.Connect.Command(

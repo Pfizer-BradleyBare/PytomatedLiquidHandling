@@ -7,7 +7,7 @@ from plh.driver.HAMILTON.backend import MicrolabSTAR
 
 
 def main(backend: MicrolabSTAR) -> None:
-    logger.info(f"Executing Main() from {__file__}")
+    logger.info(f"Executing main() from {__file__}")
 
     logger.info("AntiDropletControl_1000uLChannel_On")
     command = HSLML_STARLib.AntiDropletControl_1000uLChannel_On.Command()

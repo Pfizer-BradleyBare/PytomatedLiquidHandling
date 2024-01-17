@@ -9,7 +9,7 @@ COM_PORT = 1
 
 
 def main(backend: MicrolabSTAR) -> None:
-    logger.info(f"Executing Main() from {__file__}")
+    logger.info(f"Executing main() from {__file__}")
 
     logger.info("CreateUSBDevice")
     command = HSLHamHeaterShakerLib.CreateUSBDevice.Command(

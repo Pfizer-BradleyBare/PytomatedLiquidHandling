@@ -13,7 +13,7 @@ class LabwarePositionsOptions(Enum):
 @dataclasses.dataclass(kw_only=True)
 class Options(OptionsBase):
     LabwareID: str
-    BarcodeFilePath: str
+    BarcodeFilePath: str = "barcode_1.txt"
     LabwarePositions: LabwarePositionsOptions = (
         LabwarePositionsOptions.ReadPresentLabware
     )

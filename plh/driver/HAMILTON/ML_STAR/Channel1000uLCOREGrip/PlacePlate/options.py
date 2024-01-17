@@ -20,7 +20,7 @@ class XSpeedOptions(Enum):
 @dataclasses.dataclass(kw_only=True)
 class Options(OptionsBase):
     LabwareID: str
-    EjectTool: YesNoOptions = YesNoOptions.No
+    EjectTool: YesNoOptions
     XSpeed: XSpeedOptions = XSpeedOptions.XSpeed4
     ZSpeed: float = 128.7
     PressOnDistance: float = 1

@@ -9,7 +9,7 @@ COM_PORT = "COM7"
 
 
 def main(backend: MicrolabSTAR) -> None:
-    logger.info(f"Executing Main() from {__file__}")
+    logger.info(f"Executing main() from {__file__}")
 
     logger.info("Connect")
     command = HamiltonHeaterCooler.Connect.Command(

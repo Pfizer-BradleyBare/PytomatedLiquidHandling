@@ -10,7 +10,7 @@ PUMP_ID = 1
 
 
 def main(backend: MicrolabSTAR) -> None:
-    logger.info(f"Executing Main() from {__file__}")
+    logger.info(f"Executing main() from {__file__}")
 
     logger.info("Initialize")
     command = HSLVacuuBrandPump.Initialize.Command(
