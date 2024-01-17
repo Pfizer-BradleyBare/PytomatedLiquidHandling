@@ -111,12 +111,12 @@ def main(backend: MicrolabSTAR) -> None:
 if __name__ == "__main__":
     logger.enable("PytomatedLiquidHandling")
 
-    MicrolabSTAR(
+    backend = MicrolabSTAR(
         identifier="Example Star",
         simulation_on=True,
         deck_layout=pathlib.Path(__file__).parent / "SimulationLayout.lay",
     )
-    quit()
+
     backend.start()
     # Creates the backend so we can communicate with the Hamilton
 

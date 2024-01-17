@@ -165,7 +165,7 @@ class HamiltonBackendBase(BackendBase):
             msg = "Hamilton backend is only supported on Windows PCs. Sorry!"
             raise RuntimeError(msg)
 
-        HamiltonBackendBase.start(self)
+        BackendBase.start(self)
 
         layout_base_path = pathlib.Path(
             "C:\\Program Files (x86)\\HAMILTON\\Library\\plh\\plh\\driver\\HAMILTON\\backend\\layout\\Layout.lay",
