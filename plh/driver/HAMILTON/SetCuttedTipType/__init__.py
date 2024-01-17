@@ -1,1 +1,3 @@
-from . import ResetAllTipTypes, SetCuttedTipTypeByLength
+from . import ResetAllTipTypes, ResetTipType, SetCuttedTipTypeByLength
+
+__all__ = ["ResetAllTipTypes", "SetCuttedTipTypeByLength", "ResetTipType"]

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import dataclasses
 from collections import defaultdict
 from enum import Enum
@@ -40,9 +41,10 @@ class HamiltonCommandBase(CommandBase):
                     else:
                         output[key].append(value)
 
-            if not isinstance(self.options, list):
+            with contextlib.suppress(TypeError):
                 output = output | vars(self.options)
             # custom list type so we need to get extra options.
+            # if just a list then it will throw a type error. If a list subclass then it will extract other options
 
             for key, value in output.items():
                 if isinstance(value, Enum):

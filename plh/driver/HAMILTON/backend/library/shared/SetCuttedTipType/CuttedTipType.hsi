@@ -20,6 +20,7 @@ namespace CUTTEDTIPTYPE {
 // {{{ 2 "SubmethodForwardDeclaration" ""
 function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void ;
 private function ResetAllTipTypes( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+private function ResetTipType( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
 private function SetCuttedTipTypeByLength( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
 // }} ""
 function _InitLibrary() {
@@ -51,43 +52,31 @@ SETCUTTEDTIPTYPE_UNIVERSAL_V2::_ExitLibrary();
 // {{{ 5 "ResetAllTipTypes" "Begin"
 private function ResetAllTipTypes( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 // {{ 5 "ResetAllTipTypes" "InitLocals"
 // }} ""
-// {{ 12 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 16 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 13 1 0 "2c080b81_e588_49c0_94f0bb7e95f6ed14" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-CustomErrorHandling = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
-// }} ""
-// {{ 14 1 0 "d91c3acb_d3c5_43c0_8dc9bb9a6fd757ee" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
-State = 1;
-// }} ""
-// {{ 15 1 0 "a7620655_4849_443d_b88a502a056a14f9" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
-Message = Translate("Success");
-// }} ""
-// {{ 16 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 17 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 17 1 0 "0136c7db_ed70_4412_a517693cc53c31db" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 18 1 0 "0136c7db_ed70_4412_a517693cc53c31db" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 SETCUTTEDTIPTYPE_UNIVERSAL_V2::ResetAllTipTypes(ML_STAR);
 // }} ""
-// {{ 18 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 19 1 0 "9eb8b701_5f76_407c_abe4e2ffcea8d217" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 19 1 0 "8be5f2de_0edf_4a70_91aafe3c38f2859b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 20 1 0 "8be5f2de_0edf_4a70_91aafe3c38f2859b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{{ 20 1 0 "68740169_079f_44be_8149226772b263bf" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 21 1 0 "68740169_079f_44be_8149226772b263bf" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
-// {{{ 21 1 0 "3adf1c5a_3721_4546_8457254f90e6b3a9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 22 1 0 "3adf1c5a_3721_4546_8457254f90e6b3a9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
 // }} ""
-// {{ 22 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 23 1 0 "c1485f9f_77e4_4a71_be598a492de87a9f" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
 // {{{ 5 "ResetAllTipTypes" "End"
@@ -111,23 +100,36 @@ return;
 // {{ 4 1 0 "9e52d153_fc4c_4a47_a2dd0f40f661719d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 5 1 0 "b792b623_26be_4575_83f53bf3d3ae7b76" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 5 1 0 "9920f74f_3219_446d_b4b96905480e32bd" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "ResetTipType")
+{
+// }} ""
+// {{{ 6 1 0 "4e6ba605_062e_4000_90c68b6d1bfe114b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ResetTipType(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 7 1 0 "538a2c4b_16fb_4785_91ea18a644471d98" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 8 1 0 "9920f74f_3219_446d_b4b96905480e32bd" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 9 1 0 "b792b623_26be_4575_83f53bf3d3ae7b76" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (CommandName == "SetCuttedTipTypeByLength")
 {
 // }} ""
-// {{{ 6 1 0 "fc8c8368_256c_46e5_af38d0637b432746" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 10 1 0 "fc8c8368_256c_46e5_af38d0637b432746" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 SetCuttedTipTypeByLength(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 7 1 0 "9e486e11_6649_41b8_ae4b8ccab7719fda" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 11 1 0 "9e486e11_6649_41b8_ae4b8ccab7719fda" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 8 1 0 "b792b623_26be_4575_83f53bf3d3ae7b76" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 12 1 0 "b792b623_26be_4575_83f53bf3d3ae7b76" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 9 1 0 "7eba0f5d_73bc_4c95_9aaf8fb35768504f" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+// {{ 13 1 0 "7eba0f5d_73bc_4c95_9aaf8fb35768504f" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
 MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nCommand not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
 // }} ""
-// {{ 10 1 0 "60a5dee6_353e_4d2f_88d4468acb0b851f" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+// {{ 14 1 0 "60a5dee6_353e_4d2f_88d4468acb0b851f" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
 abort;
 // }} ""
 // {{{ 5 "HandleCommand" "End"
@@ -137,57 +139,82 @@ abort;
 private function SetCuttedTipTypeByLength( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private object o_JSONObject;
-private variable CustomErrorHandling;
-private variable Message;
-private variable State;
 private variable CutLength;
 private variable TipType;
 // {{ 5 "SetCuttedTipTypeByLength" "InitLocals"
 // }} ""
-// {{{ 24 1 0 "60efa556_caa2_4560_851fe1ef5cbf4c4b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 35 1 0 "60efa556_caa2_4560_851fe1ef5cbf4c4b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 TipType = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:TipType:"));
 // }} ""
-// {{{ 25 1 0 "d216377c_399c_4f8f_bf44f6c0660ffa67" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 36 1 0 "d216377c_399c_4f8f_bf44f6c0660ffa67" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 CutLength = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:CutLength:"));
 // }} ""
-// {{ 26 1 0 "50a5cbf6_72f7_4e3a_9cb28b78a83b8b36" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 37 1 0 "50a5cbf6_72f7_4e3a_9cb28b78a83b8b36" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 27 1 0 "e8bd58a7_a1f1_42d3_8c54e7c918763779" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-CustomErrorHandling = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("CustomErrorHandling:"));
-// }} ""
-// {{ 28 1 0 "b63f0bfe_5df9_4301_8ac0c8402482cbc1" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
-State = 1;
-// }} ""
-// {{ 29 1 0 "2cbdb42f_c294_4372_98c74eee39e54f6c" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
-Message = Translate("Success");
-// }} ""
-// {{ 30 1 0 "2b55153f_1b2c_423a_90d73ae4ec170aab" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 38 1 0 "2b55153f_1b2c_423a_90d73ae4ec170aab" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 31 1 0 "05a0625a_3cf2_44ab_9aa5c79ffba4a202" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 39 1 0 "05a0625a_3cf2_44ab_9aa5c79ffba4a202" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 SETCUTTEDTIPTYPE_UNIVERSAL_V2::SetCuttedTipTypeByLength(ML_STAR, TipType, CutLength);
 // }} ""
-// {{ 32 1 0 "2b55153f_1b2c_423a_90d73ae4ec170aab" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 40 1 0 "2b55153f_1b2c_423a_90d73ae4ec170aab" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 33 1 0 "a41b707e_95e9_40f0_aa9e073b3ab60607" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 41 1 0 "a41b707e_95e9_40f0_aa9e073b3ab60607" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{{ 34 1 0 "3921c71f_5e24_44a1_bcf2cb9dc84528f7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 42 1 0 "3921c71f_5e24_44a1_bcf2cb9dc84528f7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
-// {{{ 35 1 0 "cb986874_a967_45c2_b29a5eb574000f9e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 43 1 0 "cb986874_a967_45c2_b29a5eb574000f9e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
 // }} ""
-// {{ 36 1 0 "50a5cbf6_72f7_4e3a_9cb28b78a83b8b36" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 44 1 0 "50a5cbf6_72f7_4e3a_9cb28b78a83b8b36" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
 // {{{ 5 "SetCuttedTipTypeByLength" "End"
+}
+// }} ""
+// {{{ 5 "ResetTipType" "Begin"
+private function ResetTipType( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private object o_JSONObject;
+private variable TipType;
+// {{ 5 "ResetTipType" "InitLocals"
+// }} ""
+// {{{ 25 1 0 "a8bfb627_3060_42b6_9238ae327b3463dd" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+TipType = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:TipType:"));
+// }} ""
+// {{ 26 1 0 "0ebf3106_2dd1_482d_be9db66eb6e18d67" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 27 1 0 "1e1c96af_12cc_4d75_beee42bcbcc13732" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 28 1 0 "4a286da1_0408_48c4_b911958e072ddef6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+SETCUTTEDTIPTYPE_UNIVERSAL_V2::ResetTipType(ML_STAR, TipType);
+// }} ""
+// {{ 29 1 0 "1e1c96af_12cc_4d75_beee42bcbcc13732" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 30 1 0 "8dac7fca_391f_4b14_bb021d2601b06be7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Create(o_JSONObject);
+// }} ""
+// {{{ 31 1 0 "45681f9b_8518_40d7_9893e6f8a9f5521e" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
+// }} ""
+// {{{ 32 1 0 "47222329_241b_4150_b1569dd84c042ae2" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
+// }} ""
+// {{ 33 1 0 "0ebf3106_2dd1_482d_be9db66eb6e18d67" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "ResetTipType" "End"
 }
 // }} ""
 /* {{ 2 "SubmethodInsertLine" "" */ // }} ""
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 08:50$$checksum=09ea03d5$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-17 13:59$$checksum=a442e9c5$$length=084$$

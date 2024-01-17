@@ -14,6 +14,7 @@ from . import (
     HSL_LiquidClassLib,
     HSLHamHeaterShakerLib,
     HSLHiGCentrifugeLib,
+    HSLLabwrAccess,
     HSLML_STARLib,
     HSLTipCountingLib,
     HSLVacuuBrandPump,
@@ -39,4 +40,5 @@ __all__ = [
     "SetCuttedTipType",
     "TrackGripper",
     "Visual_NTR_Library",
+    "HSLLabwrAccess",
 ]

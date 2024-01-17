@@ -50,8 +50,8 @@ def main(backend: MicrolabSTAR) -> None:
     )
     command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
-            LabwareID="Plate_1",
-            PositionID="A1",
+            LabwareID="FlipTubes",
+            PositionID="3",
             ChannelNumber=3,
         ),
     )

@@ -12,4 +12,4 @@ class PlateLockStateOptions(Enum):
 @dataclasses.dataclass(kw_only=True)
 class Options(OptionsBase):
     HandleID: int
-    PlateLockState: int
+    PlateLockState: PlateLockStateOptions

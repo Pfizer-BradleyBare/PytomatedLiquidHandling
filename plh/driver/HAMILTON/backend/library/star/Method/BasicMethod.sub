@@ -240,8 +240,8 @@ return;
 // {{ 54 1 0 "264ab9b2_b8b4_4ea3_80e0fe2c8f1d1592" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 55 1 0 "1755ed59_5a9d_458a_bda6e11e75818dfd" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (ModuleName == "HAMILTON HSLLiquidClassLib")
+// {{ 55 1 0 "753e3d65_439e_4fc3_89c74ca50fac2450" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (ModuleName == "HAMILTON HSL_LiquidClassLib")
 {
 // }} ""
 // {{{ 56 1 0 "d3612462_4856_4040_ba27f12b1935586b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -250,7 +250,7 @@ HSL_LIQUIDCLASSLIB::HandleCommand(ML_STAR, CommandName, i_JSONObject);
 // {{{ 57 1 0 "d2357886_3d01_45bb_92cba8b0bd9aa372" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 58 1 0 "1755ed59_5a9d_458a_bda6e11e75818dfd" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 58 1 0 "753e3d65_439e_4fc3_89c74ca50fac2450" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
 // {{ 59 1 0 "264ab9b2_b8b4_4ea3_80e0fe2c8f1d1592" "{586C3429-F931-405f-9938-928E22C90BFA}"
@@ -483,4 +483,4 @@ abort;
 }
 // }} ""
 /* {{ 2 "SubmethodInsertLine" "" */ // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 10:16$$checksum=8d684ac3$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-17 12:04$$checksum=1cbf597a$$length=084$$

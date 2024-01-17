@@ -57,9 +57,6 @@ private variable ComPort;
 private variable Name;
 private variable Trash;
 private variable HandleArray[];
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 private variable Handle;
 private variable Status;
@@ -134,9 +131,6 @@ private function SetTemperature( device & ML_STAR, object & i_EndpointOutputData
 private variable HandleID;
 private variable Temperature;
 private variable Name;
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 private variable FloatTemperature;
 private variable Status;
@@ -199,9 +193,6 @@ private function StopTemperatureControl( device & ML_STAR, object & i_EndpointOu
 // }} ""
 private variable HandleID;
 private variable Name;
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 private variable Status;
 // {{ 5 "StopTemperatureControl" "InitLocals"
@@ -255,9 +246,6 @@ private function GetTemperature( device & ML_STAR, object & i_EndpointOutputData
 private variable HandleID;
 private variable Temperature;
 private variable Name;
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 private variable Status;
 // {{ 5 "GetTemperature" "InitLocals"
@@ -393,4 +381,4 @@ abort;
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 08:45$$checksum=5b24e841$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-17 12:38$$checksum=76db854d$$length=084$$
