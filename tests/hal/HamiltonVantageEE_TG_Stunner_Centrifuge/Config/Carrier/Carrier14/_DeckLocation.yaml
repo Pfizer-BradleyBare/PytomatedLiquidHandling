@@ -1,20 +1,20 @@
-NonTransportable DeckLocation:
-  - Enabled: True
-    Carrier Config:
-      Carrier: Carrier14
-      Position: 1
+NonTransportable deck_location:
+  - enabled: True
+    carrier_config:
+      carrier: Carrier14
+      position: 1
 
-  - Enabled: True
-    Carrier Config:
-      Carrier: Carrier14
-      Position: 2
+  - enabled: True
+    carrier_config:
+      carrier: Carrier14
+      position: 2
 
-  - Enabled: True
-    Carrier Config:
-      Carrier: Carrier14
-      Position: 3
+  - enabled: True
+    carrier_config:
+      carrier: Carrier14
+      position: 3
 
-  - Enabled: True
-    Carrier Config:
-      Carrier: Carrier14
-      Position: 4
+  - enabled: True
+    carrier_config:
+      carrier: Carrier14
+      position: 4

@@ -1,25 +1,25 @@
-NonTransportable DeckLocation:
-  - Enabled: True
-    Carrier Config:
-      Carrier: Carrier48
-      Position: 1
+NonTransportable deck_location:
+  - enabled: True
+    carrier_config:
+      carrier: Carrier48
+      position: 1
 
-  - Enabled: True
-    Carrier Config:
-      Carrier: Carrier48
-      Position: 2
+  - enabled: True
+    carrier_config:
+      carrier: Carrier48
+      position: 2
 
-  - Enabled: True
-    Carrier Config:
-      Carrier: Carrier48
-      Position: 3
+  - enabled: True
+    carrier_config:
+      carrier: Carrier48
+      position: 3
 
-  - Enabled: True
-    Carrier Config:
-      Carrier: Carrier48
-      Position: 4
+  - enabled: True
+    carrier_config:
+      carrier: Carrier48
+      position: 4
 
-  - Enabled: True
-    Carrier Config:
-      Carrier: Carrier48
-      Position: 5
+  - enabled: True
+    carrier_config:
+      carrier: Carrier48
+      position: 5

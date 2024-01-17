@@ -1,20 +1,20 @@
 Plate:
-  - Enabled: True
-    LabwareID: HHS_Pos1_HamiltonFliptube24Well
-    DeckLocation: Carrier7_Pos1
-    Labware: Hamilton1500uLFlipTubeRack
+  - enabled: True
+    labware_id: HHS_Pos1_HamiltonFliptube24Well
+    deck_location: Carrier7_Pos1
+    labware: Hamilton1500uLFlipTubeRack
 
-  - Enabled: True
-    LabwareID: HHS_Pos2_HamiltonFliptube24Well
-    DeckLocation: Carrier7_Pos2
-    Labware: Hamilton1500uLFlipTubeRack
+  - enabled: True
+    labware_id: HHS_Pos2_HamiltonFliptube24Well
+    deck_location: Carrier7_Pos2
+    labware: Hamilton1500uLFlipTubeRack
 
-  - Enabled: True
-    LabwareID: HHS_Pos3_HamiltonFliptube24Well
-    DeckLocation: Carrier7_Pos3
-    Labware: Hamilton1500uLFlipTubeRack
+  - enabled: True
+    labware_id: HHS_Pos3_HamiltonFliptube24Well
+    deck_location: Carrier7_Pos3
+    labware: Hamilton1500uLFlipTubeRack
 
-  - Enabled: True
-    LabwareID: Ham_24_RB_TuR_1_5ml_0001
-    DeckLocation: Carrier7_Pos4
-    Labware: Hamilton1500uLFlipTubeRack
+  - enabled: True
+    labware_id: Ham_24_RB_TuR_1_5ml_0001
+    deck_location: Carrier7_Pos4
+    labware: Hamilton1500uLFlipTubeRack

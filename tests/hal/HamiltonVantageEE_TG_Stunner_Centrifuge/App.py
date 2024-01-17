@@ -1,7 +1,6 @@
 import os
 
 from loguru import logger
-
 from plh import hal
 
 logger.enable("PytomatedLiquidHandling")
@@ -11,35 +10,35 @@ hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
 
 quit()
 
-FlipTubePlate = HAL.LayoutItem.Devices["Carrier42_Pos1_Hamilton1500uLFlipTubeRack"]
+FlipTubePlate = HAL.layoutItem.Devices["Carrier42_Pos1_Hamilton1500uLFlipTubeRack"]
 
-CloseableContainerDevice = HAL.CloseableContainer.Devices["FlipTube"]
+closeableContainerDevice = HAL.closeableContainer.Devices["FlipTube"]
 
-CloseableContainerDevice.Initialize()
+closeableContainerDevice.Initialize()
 
-OpenCloseOptions: list[HAL.CloseableContainer.Base.OpenCloseOptions] = []
+opencloseOptions: list[HAL.closeableContainer.Base.opencloseOptions] = []
 
-OpenCloseOptions.append(
-    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=1),
+opencloseOptions.append(
+    HAL.closeableContainer.Base.opencloseOptions(layoutItem=FlipTubePlate, Position=1),
 )
-OpenCloseOptions.append(
-    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=2),
+opencloseOptions.append(
+    HAL.closeableContainer.Base.opencloseOptions(layoutItem=FlipTubePlate, Position=2),
 )
-OpenCloseOptions.append(
-    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=3),
+opencloseOptions.append(
+    HAL.closeableContainer.Base.opencloseOptions(layoutItem=FlipTubePlate, Position=3),
 )
-OpenCloseOptions.append(
-    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=4),
+opencloseOptions.append(
+    HAL.closeableContainer.Base.opencloseOptions(layoutItem=FlipTubePlate, Position=4),
 )
-OpenCloseOptions.append(
-    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=5),
+opencloseOptions.append(
+    HAL.closeableContainer.Base.opencloseOptions(layoutItem=FlipTubePlate, Position=5),
 )
-OpenCloseOptions.append(
-    HAL.CloseableContainer.Base.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=6),
+opencloseOptions.append(
+    HAL.closeableContainer.Base.opencloseOptions(layoutItem=FlipTubePlate, Position=6),
 )
 
-CloseableContainerDevice.AssertOpenCloseOptions(OpenCloseOptions)
-CloseableContainerDevice.Open(OpenCloseOptions)
-CloseableContainerDevice.Close(OpenCloseOptions)
+closeableContainerDevice.AssertopencloseOptions(opencloseOptions)
+closeableContainerDevice.open(opencloseOptions)
+closeableContainerDevice.close(opencloseOptions)
 
-CloseableContainerDevice.Deinitialize()
+closeableContainerDevice.Deinitialize()

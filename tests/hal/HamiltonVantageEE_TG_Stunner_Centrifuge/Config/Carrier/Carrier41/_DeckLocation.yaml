@@ -1,5 +1,5 @@
-NonTransportable DeckLocation:
-  - Enabled: True
-    Carrier Config:
-      Carrier: Carrier41
-      Position: 1
+NonTransportable deck_location:
+  - enabled: True
+    carrier_config:
+      carrier: Carrier41
+      position: 1

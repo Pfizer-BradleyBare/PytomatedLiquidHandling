@@ -1,56 +1,56 @@
 Lid:
-  - Enabled: True
-    LabwareID: Carrier54_Pos1_Biorad200uL96WellPCR_Lid
-    DeckLocation: Carrier54_Pos1
-    Labware: Biorad200uLPCRPlate_Lid
+  - enabled: True
+    labware_id: Carrier54_Pos1_Biorad200uL96WellPCR_Lid
+    deck_location: Carrier54_Pos1
+    labware: Biorad200uLPCRPlate_Lid
 
-  - Enabled: True
-    LabwareID: Carrier54_Pos2_Biorad200uL96WellPCR_Lid
-    DeckLocation: Carrier54_Pos2
-    Labware: Biorad200uLPCRPlate_Lid
+  - enabled: True
+    labware_id: Carrier54_Pos2_Biorad200uL96WellPCR_Lid
+    deck_location: Carrier54_Pos2
+    labware: Biorad200uLPCRPlate_Lid
 
-  - Enabled: True
-    LabwareID: Carrier54_Pos3_Biorad200uL96WellPCR_Lid
-    DeckLocation: Carrier54_Pos3
-    Labware: Biorad200uLPCRPlate_Lid
+  - enabled: True
+    labware_id: Carrier54_Pos3_Biorad200uL96WellPCR_Lid
+    deck_location: Carrier54_Pos3
+    labware: Biorad200uLPCRPlate_Lid
 
-  - Enabled: True
-    LabwareID: Carrier54_Pos4_Biorad200uL96WellPCR_Lid
-    DeckLocation: Carrier54_Pos4
-    Labware: Biorad200uLPCRPlate_Lid
+  - enabled: True
+    labware_id: Carrier54_Pos4_Biorad200uL96WellPCR_Lid
+    deck_location: Carrier54_Pos4
+    labware: Biorad200uLPCRPlate_Lid
 
-  - Enabled: True
-    LabwareID: Carrier54_Pos5_Biorad200uL96WellPCR_Lid
-    DeckLocation: Carrier54_Pos5
-    Labware: Biorad200uLPCRPlate_Lid
+  - enabled: True
+    labware_id: Carrier54_Pos5_Biorad200uL96WellPCR_Lid
+    deck_location: Carrier54_Pos5
+    labware: Biorad200uLPCRPlate_Lid
 
 Coverable Plate:
-  - Enabled: True
-    LabwareID: Carrier54_Pos1_Biorad200uL96WellPCR
-    DeckLocation: Carrier54_Pos1
-    Labware: Biorad200uLPCRPlate
+  - enabled: True
+    labware_id: Carrier54_Pos1_Biorad200uL96WellPCR
+    deck_location: Carrier54_Pos1
+    labware: Biorad200uLPCRPlate
     Lid: Carrier54_Pos1_Biorad200uLPCRPlate_Lid
 
-  - Enabled: True
-    LabwareID: Carrier54_Pos2_Biorad200uL96WellPCR
-    DeckLocation: Carrier54_Pos2
-    Labware: Biorad200uLPCRPlate
+  - enabled: True
+    labware_id: Carrier54_Pos2_Biorad200uL96WellPCR
+    deck_location: Carrier54_Pos2
+    labware: Biorad200uLPCRPlate
     Lid: Carrier54_Pos2_Biorad200uLPCRPlate_Lid
 
-  - Enabled: True
-    LabwareID: Carrier54_Pos3_Biorad200uL96WellPCR
-    DeckLocation: Carrier54_Pos3
-    Labware: Biorad200uLPCRPlate
+  - enabled: True
+    labware_id: Carrier54_Pos3_Biorad200uL96WellPCR
+    deck_location: Carrier54_Pos3
+    labware: Biorad200uLPCRPlate
     Lid: Carrier54_Pos3_Biorad200uLPCRPlate_Lid
 
-  - Enabled: True
-    LabwareID: Carrier54_Pos4_Biorad200uL96WellPCR
-    DeckLocation: Carrier54_Pos4
-    Labware: Biorad200uLPCRPlate
+  - enabled: True
+    labware_id: Carrier54_Pos4_Biorad200uL96WellPCR
+    deck_location: Carrier54_Pos4
+    labware: Biorad200uLPCRPlate
     Lid: Carrier54_Pos4_Biorad200uLPCRPlate_Lid
 
-  - Enabled: True
-    LabwareID: Carrier54_Pos5_Biorad200uL96WellPCR
-    DeckLocation: Carrier54_Pos5
-    Labware: Biorad200uLPCRPlate
+  - enabled: True
+    labware_id: Carrier54_Pos5_Biorad200uL96WellPCR
+    deck_location: Carrier54_Pos5
+    labware: Biorad200uLPCRPlate
     Lid: Carrier54_Pos5_Biorad200uLPCRPlate_Lid

@@ -1,7 +1,7 @@
-Moveable Carrier:
-  - Enabled: True
-    Track Start: 39
-    Track End: 39
-    Num Labware Positions: 5
-    Image Path 3D: 3DImage
-    Image Path 2D: 2DImage
+Moveable carrier:
+  - enabled: True
+    track_start: 39
+    track_end: 39
+    num_labware_positions: 5
+    image_path_3d: 3DImage
+    image_path_2d: 2DImage

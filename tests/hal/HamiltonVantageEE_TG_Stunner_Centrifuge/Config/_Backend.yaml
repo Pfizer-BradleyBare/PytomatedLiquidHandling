@@ -1,7 +1,7 @@
 #############################################################
 #
 # Devices: The pipetting devices available on this system. Options per device are different.
-# Enabled: True: Can be used. False: Cannot be used
+# enabled: True: Can be used. False: Cannot be used
 #
 #############################################################
 
@@ -9,4 +9,4 @@ Vantage TrackGripper EntryExit:
   identifier: Hamilton
   enabled: True
   simulation_on: True
-  deck_layout: C:\Program Files (x86)\HAMILTON\Library\PytomatedLiquidHandling\Examples\HAL\HamiltonVantageEE_TG_Stunner_Centrifuge\Config\Layout.lay
+  deck_layout: C:\Program Files (x86)\HAMILTON\Library\PytomatedLiquidHandling\Examples\HAL\HamiltonVantageEE_TG_Stunner_Centrifuge\Config\layout.lay

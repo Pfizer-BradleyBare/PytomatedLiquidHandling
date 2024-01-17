@@ -1,7 +1,7 @@
-NonMoveable Carrier:
-  - Enabled: True
-    Track Start: 14
-    Track End: 20
-    Num Labware Positions: 4
-    Image Path 3D: 3DImage
-    Image Path 2D: 2DImage
+NonMoveable carrier:
+  - enabled: True
+    track_start: 14
+    track_end: 20
+    num_labware_positions: 4
+    image_path_3d: 3DImage
+    image_path_2d: 2DImage

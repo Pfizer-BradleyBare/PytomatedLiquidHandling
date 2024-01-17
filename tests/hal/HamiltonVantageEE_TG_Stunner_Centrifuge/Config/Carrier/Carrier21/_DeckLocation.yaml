@@ -1,30 +1,30 @@
-NonTransportable DeckLocation:
-  - Identifier: Carrier21_Pos1_IMCSTips
-    Enabled: True
-    Carrier Config:
-      Carrier: Carrier21
-      Position: 1
+NonTransportable deck_location:
+  - identifier: Carrier21_Pos1_IMCSTips
+    enabled: True
+    carrier_config:
+      carrier: Carrier21
+      position: 1
 
-  - Identifier: Carrier21_Pos2_IMCSTips
-    Enabled: True
-    Carrier Config:
-      Carrier: Carrier21
-      Position: 2
+  - identifier: Carrier21_Pos2_IMCSTips
+    enabled: True
+    carrier_config:
+      carrier: Carrier21
+      position: 2
 
-  - Identifier: Carrier21_Pos3_IMCSTips
-    Enabled: True
-    Carrier Config:
-      Carrier: Carrier21
-      Position: 3
+  - identifier: Carrier21_Pos3_IMCSTips
+    enabled: True
+    carrier_config:
+      carrier: Carrier21
+      position: 3
 
-  - Identifier: Carrier21_Pos4_IMCSTips
-    Enabled: True
-    Carrier Config:
-      Carrier: Carrier21
-      Position: 4
+  - identifier: Carrier21_Pos4_IMCSTips
+    enabled: True
+    carrier_config:
+      carrier: Carrier21
+      position: 4
 
-  - Identifier: Carrier21_Pos5_IMCSTips
-    Enabled: True
-    Carrier Config:
-      Carrier: Carrier21
-      Position: 5
+  - identifier: Carrier21_Pos5_IMCSTips
+    enabled: True
+    carrier_config:
+      carrier: Carrier21
+      position: 5

@@ -1,19 +1,19 @@
 #############################################################
 #
 # Devices: The pipetting devices available on this system. Options per device are different.
-# Enabled: True: Can be used. False: Cannot be used
+# enabled: True: Can be used. False: Cannot be used
 #
 #############################################################
 
 Hamilton FlipTube Landscape:
-  - Identifier: FlipTube
-    Enabled: True
-    Backend: Hamilton
-    Tool Labware ID: Ham_4_FlipTubeTools_OnWaste_0001
-    Supported Labwares:
+  - identifier: FlipTube
+    enabled: True
+    backend: Hamilton
+    tool_labware_id: Ham_4_FlipTubeTools_OnWaste_0001
+    supported_labware:
       - Hamilton1500uLFlipTubeCarrier
       - Hamilton1500uLFlipTubeRack
-    Supported Deck Locations:
+    supported_deck_locations:
       - Carrier42_Pos1
       - Carrier42_Pos2
       - Carrier42_Pos3

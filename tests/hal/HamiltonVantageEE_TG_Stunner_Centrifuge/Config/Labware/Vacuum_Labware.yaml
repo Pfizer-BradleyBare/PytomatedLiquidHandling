@@ -1,13 +1,13 @@
-NonPipettable Labware:
-  - Identifier: VacuumManifoldShort
-    Enabled: True
-    Image Filename: N/A
-    Part Number: "?"
-    Dimensions:
-      X Length: 154
-      Y Length: 95
-    Transport Offsets:
-      Open: 10
-      Close: 2
-      Top: 6
-      Bottom: 23
+NonPipettable labware:
+  - identifier: VacuumManifoldShort
+    enabled: True
+    image_filename: N/A
+    part_number: "?"
+    dimensions:
+      x_length: 154
+      y_length: 95
+    transport_offsets:
+      open: 10
+      close: 2
+      top: 6
+      bottom: 23

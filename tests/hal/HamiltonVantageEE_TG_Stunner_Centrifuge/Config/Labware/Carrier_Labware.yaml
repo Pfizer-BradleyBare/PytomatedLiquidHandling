@@ -1,29 +1,29 @@
-Pipettable Labware:
-  - Identifier: Hamilton1500uLFlipTubeCarrier
-    Enabled: True
-    Image Filename: N/A
-    Part Number: "?"
-    Wells:
-      Layout:
-        Type: Numeric
-        Direction: Columnwise
-        Columns: 1
-        Rows: 32
-      Positions Per Well: 1
-      Max Volume: 1500
-      Dead Volume: 10
-      Segments:
-        - Height: 16.1
-          Equation: h * 20.2737
+Pipettable labware:
+  - identifier: Hamilton1500uLFlipTubeCarrier
+    enabled: True
+    image_filename: N/A
+    part_number: "?"
+    wells:
+      layout:
+        Numeric:
+          direction: Columnwise
+          columns: 1
+          rows: 32
+      positions_per_well: 1
+      max_volume: 1500
+      dead_volume: 10
+      segments:
+        - height: 16.1
+          equation: h * 20.2737
 
-        - Height: 22
-          Equation: h * 65.0624
+        - height: 22
+          equation: h * 65.0624
 
-    Dimensions:
-      X Length: 0
-      Y Length: 0
-    Transport Offsets:
-      Open: 0
-      Close: 0
-      Top: 0
-      Bottom: 0
+    dimensions:
+      x_length: 0
+      y_length: 0
+    transport_offsets:
+      open: 0
+      close: 0
+      top: 0
+      bottom: 0

@@ -1,10 +1,10 @@
 Lid:
-  - Enabled: True
-    LabwareID: _Vacuum_ManifoldHome
-    DeckLocation: Carrier14_Pos3
-    Labware: VacuumManifoldShort
+  - enabled: True
+    labware_id: _Vacuum_ManifoldHome
+    deck_location: Carrier14_Pos3
+    labware: VacuumManifoldShort
 
-  - Enabled: True
-    LabwareID: _Vacuum_ManifoldVacuum
-    DeckLocation: Carrier14_Pos4
-    Labware: VacuumManifoldShort
+  - enabled: True
+    labware_id: _Vacuum_ManifoldVacuum
+    deck_location: Carrier14_Pos4
+    labware: VacuumManifoldShort

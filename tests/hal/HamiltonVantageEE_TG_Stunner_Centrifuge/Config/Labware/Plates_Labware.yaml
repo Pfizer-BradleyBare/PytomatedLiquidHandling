@@ -1,183 +1,183 @@
-Pipettable Labware:
-  - Identifier: UnchainedLabsStunnerUVPlate
-    Enabled: True
-    Image Filename: N/A
-    Part Number: 701-2022
-    Wells:
-      Layout:
-        Type: AlphaNumeric
-        Direction: Columnwise
-        Columns: 12
-        Rows: 8
-      Positions Per Well: 1
-      Max Volume: 3
-      Dead Volume: 0
-      Segments:
-        - Height: 0.001
-          Equation: h * 0.0942
+Pipettable labware:
+  - identifier: UnchainedLabsStunnerUVPlate
+    enabled: True
+    image_filename: N/A
+    part_number: 701-2022
+    wells:
+      layout:
+        AlphaNumeric:
+          direction: Columnwise
+          columns: 12
+          rows: 8
+      positions_per_well: 1
+      max_volume: 3
+      dead_volume: 0
+      segments:
+        - height: 0.001
+          equation: h * 0.0942
 
-        - Height: 0.12
-          Equation: h * 0.2827
+        - height: 0.12
+          equation: h * 0.2827
 
-        - Height: 0.13
-          Equation: h * 0.3325
+        - height: 0.13
+          equation: h * 0.3325
 
-        - Height: 0.95
-          Equation: h * 1.9906
+        - height: 0.95
+          equation: h * 1.9906
 
-        - Height: 0.7
-          Equation: h * 4.4305
+        - height: 0.7
+          equation: h * 4.4305
 
-    Dimensions:
-      X Length: 124.5
-      Y Length: 82
-    Transport Offsets:
-      Open: 10
-      Close: 2
-      Top: 8
-      Bottom: 4
+    dimensions:
+      x_length: 124.5
+      y_length: 82
+    transport_offsets:
+      open: 10
+      close: 2
+      top: 8
+      bottom: 4
 
-  - Identifier: Biorad200uLPCRPlate
-    Enabled: True
-    Image Filename: N/A
-    Part Number: HSP9601
-    Wells:
-      Layout:
-        Type: AlphaNumeric
-        Direction: Columnwise
-        Columns: 12
-        Rows: 8
-      Positions Per Well: 1
-      Max Volume: 200
-      Dead Volume: 10
-      Segments:
-        - Height: 0
-          Equation: h * 2.3562
+  - identifier: Biorad200uLPCRPlate
+    enabled: True
+    image_filename: N/A
+    part_number: HSP9601
+    wells:
+      layout:
+        AlphaNumeric:
+          direction: Columnwise
+          columns: 12
+          rows: 8
+      positions_per_well: 1
+      max_volume: 200
+      dead_volume: 10
+      segments:
+        - height: 0
+          equation: h * 2.3562
 
-        - Height: 14.68
-          Equation: h * 16.4934
+        - height: 14.68
+          equation: h * 16.4934
 
-    Dimensions:
-      X Length: 124.75
-      Y Length: 82.5
-    Transport Offsets:
-      Open: 10
-      Close: 2
-      Top: 9
-      Bottom: 6
+    dimensions:
+      x_length: 124.75
+      y_length: 82.5
+    transport_offsets:
+      open: 10
+      close: 2
+      top: 9
+      bottom: 6
 
-  - Identifier: Thermo400uLPCRPlate
-    Enabled: True
-    Image Filename: N/A
-    Part Number: "249949"
-    Wells:
-      Layout:
-        Type: AlphaNumeric
-        Direction: Columnwise
-        Columns: 12
-        Rows: 8
-      Positions Per Well: 1
-      Max Volume: 400
-      Dead Volume: 10
-      Segments:
-        - Height: 3
-          Equation: h * 18.9150
+  - identifier: Thermo400uLPCRPlate
+    enabled: True
+    image_filename: N/A
+    part_number: "249949"
+    wells:
+      layout:
+        AlphaNumeric:
+          direction: Columnwise
+          columns: 12
+          rows: 8
+      positions_per_well: 1
+      max_volume: 400
+      dead_volume: 10
+      segments:
+        - height: 3
+          equation: h * 18.9150
 
-        - Height: 8
-          Equation: h * 56.7450
+        - height: 8
+          equation: h * 56.7450
 
-    Dimensions:
-      X Length: 123.25
-      Y Length: 84.75
-    Transport Offsets:
-      Open: 10
-      Close: 2
-      Top: 10
-      Bottom: 5
+    dimensions:
+      x_length: 123.25
+      y_length: 84.75
+    transport_offsets:
+      open: 10
+      close: 2
+      top: 10
+      bottom: 5
 
-  - Identifier: ThermoAbgene1200uLPCRPlate
-    Enabled: True
-    Image Filename: N/A
-    Part Number: AB1127
-    Wells:
-      Layout:
-        Type: AlphaNumeric
-        Direction: Columnwise
-        Columns: 12
-        Rows: 8
-      Positions Per Well: 1
-      Max Volume: 1200
-      Dead Volume: 10
-      Segments:
-        - Height: 3
-          Equation: h * 27.7088
+  - identifier: ThermoAbgene1200uLPCRPlate
+    enabled: True
+    image_filename: N/A
+    part_number: AB1127
+    wells:
+      layout:
+        AlphaNumeric:
+          direction: Columnwise
+          columns: 12
+          rows: 8
+      positions_per_well: 1
+      max_volume: 1200
+      dead_volume: 10
+      segments:
+        - height: 3
+          equation: h * 27.7088
 
-        - Height: 18
-          Equation: h * 70.5600
+        - height: 18
+          equation: h * 70.5600
 
-    Dimensions:
-      X Length: 124.75
-      Y Length: 82
-    Transport Offsets:
-      Open: 10
-      Close: 2
-      Top: 13
-      Bottom: 10
+    dimensions:
+      x_length: 124.75
+      y_length: 82
+    transport_offsets:
+      open: 10
+      close: 2
+      top: 13
+      bottom: 10
 
-  - Identifier: CorningCostar2000uLPCRPlate
-    Enabled: True
-    Image Filename: N/A
-    Part Number: "3961"
-    Wells:
-      Layout:
-        Type: AlphaNumeric
-        Direction: Columnwise
-        Columns: 12
-        Rows: 8
-      Positions Per Well: 1
-      Max Volume: 2000
-      Dead Volume: 10
-      Segments:
-        - Height: 4
-          Equation: h*h*(12.5664-(1.0472*h))
+  - identifier: CorningCostar2000uLPCRPlate
+    enabled: True
+    image_filename: N/A
+    part_number: "3961"
+    wells:
+      layout:
+        AlphaNumeric:
+          direction: Columnwise
+          columns: 12
+          rows: 8
+      positions_per_well: 1
+      max_volume: 2000
+      dead_volume: 10
+      segments:
+        - height: 4
+          equation: h*h*(12.5664-(1.0472*h))
 
-        - Height: 38
-          Equation: h * 64.0000
+        - height: 38
+          equation: h * 64.0000
 
-    Dimensions:
-      X Length: 124.50
-      Y Length: 82.5
-    Transport Offsets:
-      Open: 10
-      Close: 2
-      Top: 33
-      Bottom: 10
+    dimensions:
+      x_length: 124.50
+      y_length: 82.5
+    transport_offsets:
+      open: 10
+      close: 2
+      top: 33
+      bottom: 10
 
-  - Identifier: Hamilton1500uLFlipTubeRack
-    Enabled: True
-    Image Filename: N/A
-    Part Number: "814270"
-    Wells:
-      Layout:
-        Type: Numeric
-        Direction: Columnwise
-        Columns: 6
-        Rows: 4
-      Positions Per Well: 1
-      Max Volume: 1500
-      Dead Volume: 10
-      Segments:
-        - Height: 16.1
-          Equation: h * 20.2737
+  - identifier: Hamilton1500uLFlipTubeRack
+    enabled: True
+    image_filename: N/A
+    part_number: "814270"
+    wells:
+      layout:
+        Numeric:
+          direction: Columnwise
+          columns: 6
+          rows: 4
+      positions_per_well: 1
+      max_volume: 1500
+      dead_volume: 10
+      segments:
+        - height: 16.1
+          equation: h * 20.2737
 
-        - Height: 22
-          Equation: h * 65.0624
+        - height: 22
+          equation: h * 65.0624
 
-    Dimensions:
-      X Length: 128
-      Y Length: 85.25
-    Transport Offsets:
-      Open: 10
-      Close: 2
-      Top: 37
-      Bottom: 5
+    dimensions:
+      x_length: 128
+      y_length: 85.25
+    transport_offsets:
+      open: 10
+      close: 2
+      top: 37
+      bottom: 5

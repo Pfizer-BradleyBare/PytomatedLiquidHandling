@@ -1,34 +1,34 @@
 Lid:
-  - Enabled: True
-    LabwareID: HHS_Pos1_Thermo400uL96WellPCR_Lid
-    DeckLocation: Carrier7_Pos1
-    Labware: Thermo400uLPCRPlate_Lid
+  - enabled: True
+    labware_id: HHS_Pos1_Thermo400uL96WellPCR_Lid
+    deck_location: Carrier7_Pos1
+    labware: Thermo400uLPCRPlate_Lid
 
-  - Enabled: True
-    LabwareID: HHS_Pos2_Thermo400uL96WellPCR_Lid
-    DeckLocation: Carrier7_Pos2
-    Labware: Thermo400uLPCRPlate_Lid
+  - enabled: True
+    labware_id: HHS_Pos2_Thermo400uL96WellPCR_Lid
+    deck_location: Carrier7_Pos2
+    labware: Thermo400uLPCRPlate_Lid
 
-  - Enabled: True
-    LabwareID: HHS_Pos3_Thermo400uL96WellPCR_Lid
-    DeckLocation: Carrier7_Pos3
-    Labware: Thermo400uLPCRPlate_Lid
+  - enabled: True
+    labware_id: HHS_Pos3_Thermo400uL96WellPCR_Lid
+    deck_location: Carrier7_Pos3
+    labware: Thermo400uLPCRPlate_Lid
 
 Coverable Plate:
-  - Enabled: True
-    LabwareID: HHS_Pos1_Thermo400uL96WellPCR
-    DeckLocation: Carrier7_Pos1
-    Labware: Thermo400uLPCRPlate
+  - enabled: True
+    labware_id: HHS_Pos1_Thermo400uL96WellPCR
+    deck_location: Carrier7_Pos1
+    labware: Thermo400uLPCRPlate
     Lid: Carrier7_Pos1_Thermo400uLPCRPlate_Lid
 
-  - Enabled: True
-    LabwareID: HHS_Pos1_Thermo400uL96WellPCR
-    DeckLocation: Carrier7_Pos2
-    Labware: Thermo400uLPCRPlate
+  - enabled: True
+    labware_id: HHS_Pos1_Thermo400uL96WellPCR
+    deck_location: Carrier7_Pos2
+    labware: Thermo400uLPCRPlate
     Lid: Carrier7_Pos2_Thermo400uLPCRPlate_Lid
 
-  - Enabled: True
-    LabwareID: HHS_Pos1_Thermo400uL96WellPCR
-    DeckLocation: Carrier7_Pos3
-    Labware: Thermo400uLPCRPlate
+  - enabled: True
+    labware_id: HHS_Pos1_Thermo400uL96WellPCR
+    deck_location: Carrier7_Pos3
+    labware: Thermo400uLPCRPlate
     Lid: Carrier7_Pos3_Thermo400uLPCRPlate_Lid
