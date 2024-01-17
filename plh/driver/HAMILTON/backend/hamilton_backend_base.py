@@ -39,12 +39,15 @@ class HamiltonBackendServer(BackendServerBase):
     views: list[Callable] = field(init=False)
 
     def __post_init__(self: HamiltonBackendServer) -> None:
-        self.views = [self.execute, self.acknowledge]
+        self.views = [self.Execute, self.Acknowledge]
         BackendServerBase.__post_init__(self)
 
     def Execute(self: HamiltonBackendServer) -> tuple:  # noqa:N802
         bound_logger = logger.bind(Request=request.get_data(), Server=self)
-        bound_logger.debug("GetNextCommand web API request.")
+        bound_logger.debug(
+            "{server} | Execute web API request.",
+            server=self.identifier,
+        )
 
         if request.is_json is False:
             bound_logger.error("Request from Hamilton is not json format.")
@@ -62,10 +65,9 @@ class HamiltonBackendServer(BackendServerBase):
         counter = 0
 
         while self._command is None or self._response is not None:
+            time.sleep(0.1)
             if counter >= timeout * 10:
                 break
-
-            time.sleep(0.1)
 
         command = cast(HamiltonCommandBase, self._command)
 
@@ -94,7 +96,7 @@ class HamiltonBackendServer(BackendServerBase):
             # TODO: change Hamilton libraries to Backend Error Handling
 
         try:
-            with bound_logger.catch(reraise=True, level="critical"):
+            with bound_logger.catch(reraise=True):
                 response["Command Parameters"] = command.serialize_options()
             # catch the error if it occurs and log it. Then reraise so we can cleanup.
         except KeyError:
@@ -113,7 +115,10 @@ class HamiltonBackendServer(BackendServerBase):
 
     def Acknowledge(self: HamiltonBackendServer) -> tuple:  # noqa:N802
         bound_logger = logger.bind(Request=request.get_data(), Server=self)
-        bound_logger.debug("RespondToCommand web API request.")
+        bound_logger.debug(
+            "{server} | Acknowledge web API request.",
+            server=self.identifier,
+        )
 
         if request.is_json is False:
             bound_logger.error("Request from Hamilton is not json format.")
@@ -171,7 +176,9 @@ class HamiltonBackendBase(BackendBase):
             "C:\\Program Files (x86)\\HAMILTON\\Library\\plh\\plh\\driver\\HAMILTON\\backend\\layout\\Layout.lay",
         )
         pathlib.Path(layout_base_path).parent.mkdir(
-            mode=777, exist_ok=True, parents=True
+            mode=777,
+            exist_ok=True,
+            parents=True,
         )
 
         if not self.deck_layout.exists():

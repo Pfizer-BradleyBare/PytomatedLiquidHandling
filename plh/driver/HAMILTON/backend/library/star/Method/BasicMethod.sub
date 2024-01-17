@@ -158,8 +158,8 @@ CommandName = JSONPARSER::GetJSONElement(i_JSONObject, Translate("Command Name:"
 // {{ 28 1 0 "85e8323f_41b9_4a14_9e5e8491f1bd4e1f" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 29 1 0 "a695cb89_b1ec_49d2_90120521460f6ac9" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (ModuleName == "HAMILTON Backend")
+// {{ 29 1 0 "94aa5b01_ec00_477f_8aca11a5a6f5f448" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (ModuleName == "HAMILTON")
 {
 // }} ""
 // {{{ 30 1 0 "9c5fcbf9_6e11_4b52_a50434fd1d1975dc" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -174,7 +174,7 @@ abort;
 // {{{ 33 1 0 "d1736c25_fef3_46f5_af1cfef08b048b1e" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 34 1 0 "a695cb89_b1ec_49d2_90120521460f6ac9" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 34 1 0 "94aa5b01_ec00_477f_8aca11a5a6f5f448" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
 // {{ 35 1 0 "85e8323f_41b9_4a14_9e5e8491f1bd4e1f" "{586C3429-F931-405f-9938-928E22C90BFA}"
@@ -483,4 +483,4 @@ abort;
 }
 // }} ""
 /* {{ 2 "SubmethodInsertLine" "" */ // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 09:00$$checksum=431a0bb7$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-17 09:48$$checksum=a16cac30$$length=084$$

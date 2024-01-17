@@ -55,7 +55,7 @@ class CommandBase:
         modules = []
         path = pathlib.Path(__file__).parent.parent
 
-        while path.name != "Driver":
+        while path.name.lower() != "driver":
             modules.append(path.name)
             path = path.parent
 

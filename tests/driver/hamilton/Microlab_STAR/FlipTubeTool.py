@@ -1,6 +1,5 @@
 import pathlib
 
-
 from loguru import logger
 
 from plh.driver.HAMILTON import FlipTubeTool
@@ -21,6 +20,7 @@ def main(backend: MicrolabSTAR) -> None:
     backend.acknowledge(command, FlipTubeTool.Initialize.Response)
 
     logger.info("Pickup")
+
     command = FlipTubeTool.ToolsPickUp.Command(
         options=FlipTubeTool.ToolsPickUp.OptionsList(LabwareID="FlipTubeTools"),
     )
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     backend.start()
     # Creates the backend so we can communicate with the Hamilton
 
-    # main(backend)
+    main(backend)
 
     input("Press <Enter> to quit.")
 

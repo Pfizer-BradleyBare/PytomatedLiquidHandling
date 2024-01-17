@@ -40,7 +40,7 @@ class HamiltonCommandBase(CommandBase):
                     else:
                         output[key].append(value)
 
-            if isinstance(self.options, list):
+            if not isinstance(self.options, list):
                 output = output | vars(self.options)
             # custom list type so we need to get extra options.
 

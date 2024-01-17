@@ -34,13 +34,6 @@ private variable Minor;
 private variable Major;
 private variable Code;
 private variable Description;
-private object ErrorObject;
-private variable NumErrorData;
-private variable Counter;
-private variable Data;
-private variable Test;
-private variable LowercaseDescription;
-private variable Pos;
 // {{ 5 "ExtractErrorInfo" "InitLocals"
 // }} ""
 // {{ 1 1 0 "6d74dc7a_bf2b_42c6_8e599e8bed763a5f" "{586C3429-F931-405f-9938-928E22C90BFA}"
@@ -49,8 +42,8 @@ private variable Pos;
 // {{{ 2 1 0 "ac985d8f_d783_42da_b3e4b53df1b6b06f" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 ID = ErrGetId();
 // }} ""
-// {{{ 3 1 0 "ddcb2fac_e924_49ed_98906bda4499aea5" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetIntegerProperty(JsonObject, Translate("ErrorID"), ID);
+// {{{ 3 1 0 "14853ba4_554a_49f8_b14165ea874d6b1e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetIntegerProperty(JsonObject, Translate("error_id"), ID);
 // }} ""
 // {{ 4 1 0 "6d74dc7a_bf2b_42c6_8e599e8bed763a5f" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -61,20 +54,20 @@ HSLJsonLib::SetIntegerProperty(JsonObject, Translate("ErrorID"), ID);
 // {{{ 6 1 0 "ddceff86_87ab_4a08_b595a327a4345e11" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 Code = ErrCode(ID);
 // }} ""
-// {{{ 7 1 0 "992a474b_b316_42a6_87a66a3885465720" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetIntegerProperty(JsonObject, Translate("ErrorVectorCode"), Code);
+// {{{ 7 1 0 "7212c5a9_6600_4245_bf16081b3948f4fb" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetIntegerProperty(JsonObject, Translate("error_vector_code"), Code);
 // }} ""
 // {{{ 8 1 0 "b81e2562_d764_4494_a6039105afaeef93" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 Major = ErrMajor(ID);
 // }} ""
-// {{{ 9 1 0 "cfe64092_bed2_4274_92c9cb38d4c3d173" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetIntegerProperty(JsonObject, Translate("ErrorVectorMajorID"), Major);
+// {{{ 9 1 0 "c6a45a74_e97b_4228_9238c2c875d92089" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetIntegerProperty(JsonObject, Translate("error_vector_major_id"), Major);
 // }} ""
 // {{{ 10 1 0 "2e70c674_a5a5_44d6_a9755991278461a5" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 Minor = ErrMinor(ID);
 // }} ""
-// {{{ 11 1 0 "3a534223_89ca_4b66_a8599983a0dd081a" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetIntegerProperty(JsonObject, Translate("ErrorVectorMinorID"), Minor);
+// {{{ 11 1 0 "40d68f49_9ce3_4ed9_b62e58e87f77d37f" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetIntegerProperty(JsonObject, Translate("error_vector_minor_id"), Minor);
 // }} ""
 // {{ 12 1 0 "991f40be_c18c_465d_9b3b9a725c187990" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -85,8 +78,8 @@ HSLJsonLib::SetIntegerProperty(JsonObject, Translate("ErrorVectorMinorID"), Mino
 // {{{ 14 1 0 "a104329b_e7eb_4894_b279e756620a1996" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 Description = ErrGetDescription();
 // }} ""
-// {{{ 15 1 0 "a14bd67c_ff3b_4d61_b8bf36487fd7d5aa" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetStringProperty(JsonObject, Translate("ErrorDescription"), Description);
+// {{{ 15 1 0 "8f9c5293_3ab3_4ced_acb5cc5ae8cc489c" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetStringProperty(JsonObject, Translate("error_description"), Description);
 // }} ""
 // {{ 16 1 0 "58ef373b_6a02_4373_83272e27b5d1fd10" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
@@ -101,4 +94,4 @@ ErrClear();
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-21 13:58$$checksum=14a7b62f$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-17 09:34$$checksum=033a538f$$length=084$$
