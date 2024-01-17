@@ -5,23 +5,39 @@ import yaml
 from loguru import logger
 
 from . import (
-    Backend,
-    Carrier,
-    CloseableContainer,
-    DeckLocation,
-    HeatCoolShake,
-    Labware,
-    LayoutItem,
-    MagneticRack,
-    Pipette,
-    StorageDevice,
-    Tip,
-    Tools,
-    Transport,
+    backend,
+    carrier,
+    closeable_container,
+    deck_location,
+    heat_cool_shake,
+    labware,
+    layout_item,
+    magnetic_rack,
+    pipette,
+    storage_device,
+    tip,
+    tools,
+    transport,
 )
 
+__all__ = [
+    "backend",
+    "carrier",
+    "closeable_container",
+    "deck_location",
+    "heat_cool_shake",
+    "labware",
+    "layout_item",
+    "magnetic_rack",
+    "pipette",
+    "storage_device",
+    "tip",
+    "tools",
+    "transport",
+]
+
 # IDK why i need this with pydantic dataclasses. DO NOT DELETE IT!!!
-for cls in Tools.BaseClasses.HALDevice.HALDevices.values():
+for cls in tools.HALDevice.hal_devices.values():
     pydantic.dataclasses.rebuild_dataclass(cls)  # type:ignore
 # End weirdly required processing
 
