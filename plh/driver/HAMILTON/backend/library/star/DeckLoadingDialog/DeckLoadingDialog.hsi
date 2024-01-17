@@ -1,11 +1,11 @@
 // {{{ 2 "IncludeGuard" "PragmaOnce"
 #pragma once
 // }} ""
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\JsonParser\\JsonParser.hs_"
+#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_"
 #include "HSLStrLib.hsl"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -632,4 +632,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-11-17 16:02$$checksum=236311f4$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-17 08:44$$checksum=d0175c21$$length=084$$

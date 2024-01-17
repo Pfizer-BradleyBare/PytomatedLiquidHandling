@@ -170,7 +170,9 @@ class HamiltonBackendBase(BackendBase):
         layout_base_path = pathlib.Path(
             "C:\\Program Files (x86)\\HAMILTON\\Library\\plh\\plh\\driver\\HAMILTON\\backend\\layout\\Layout.lay",
         )
-        pathlib.Path(layout_base_path).mkdir(mode=777, exist_ok=True, parents=True)
+        pathlib.Path(layout_base_path).parent.mkdir(
+            mode=777, exist_ok=True, parents=True
+        )
 
         if not self.deck_layout.exists():
             raise RuntimeError(

@@ -1,13 +1,13 @@
 // {{{ 2 "IncludeGuard" "PragmaOnce"
 #pragma once
 // }} ""
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\JsonParser\\JsonParser.hs_"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_"
+#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
 #include "HSLSeqLib.hsl"
 #include "HSLDevLib.hsl"
-#include "PytomatedLiquidHandling\\PytomatedLiquidHandling\\Driver\\Hamilton\\Backend\\BaseHamiltonBackend\\Library\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
+#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -413,4 +413,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-12-04 14:28$$checksum=7aa49874$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-17 08:46$$checksum=fec78185$$length=084$$
