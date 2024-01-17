@@ -99,6 +99,8 @@ variable ActionServerProc;
 global device ML_STAR ("plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.lay", "ML_STAR", hslTrue);
 global device EntryExit ("plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.lay", "EntryExit", hslTrue);
 global device TrackGripper ("plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.lay", "TrackGripper", hslTrue);
+object Object;
+variable out;
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
  namespace _Method { #include "HSLMETEDLib.hs_" } 
@@ -248,4 +250,4 @@ FLIPTUBETOOL::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-17 10:21$$checksum=b39fc01e$$length=091$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-17 10:54$$checksum=23e1dd84$$length=091$$
