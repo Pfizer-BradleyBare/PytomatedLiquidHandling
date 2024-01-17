@@ -86,11 +86,11 @@
  namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\star\\FlipTubeTool\\FlipTubeTool.hs_" } 
  namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\star\\FlipTubeTool\\FlipTubeTool.hs_" } 
  namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\star\\FlipTubeTool\\FlipTubeTool.hs_" } 
-#include "plh\\plh\\driver\\HAMILTON\\backend\\layout\\Layout.res"
+#include "plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.res"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable StateServerProc;
 variable ActionServerProc;
-global device ML_STAR ("plh\\plh\\driver\\HAMILTON\\backend\\layout\\Layout.lay", "ML_STAR", hslTrue);
+global device ML_STAR ("plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.lay", "ML_STAR", hslTrue);
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
  namespace _Method { #include "HSLMETEDLib.hs_" } 
@@ -223,4 +223,4 @@ FLIPTUBETOOL::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 09:48$$checksum=2c6edebc$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-17 10:16$$checksum=5e5563f7$$length=084$$
