@@ -83,7 +83,6 @@
  namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\General\\Timer.hs_" } 
  namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\General\\Timer.hs_" } 
  namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\General\\Timer.hs_" } 
-#include "Example Layout.res"
  namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\EntryExit\\EntryExit.hs_" } 
  namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\EntryExit\\EntryExit.hs_" } 
  namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\EntryExit\\EntryExit.hs_" } 
@@ -93,12 +92,13 @@
  namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\FlipTubeTool\\FlipTubeTool.hs_" } 
  namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\FlipTubeTool\\FlipTubeTool.hs_" } 
  namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\FlipTubeTool\\FlipTubeTool.hs_" } 
+#include "plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.res"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable StateServerProc;
 variable ActionServerProc;
-global device ML_STAR ("Example Layout.lay", "ML_STAR", hslTrue);
-global device EntryExit ("Example Layout.lay", "EntryExit", hslTrue);
-global device TrackGripper ("Example Layout.lay", "TrackGripper", hslTrue);
+global device ML_STAR ("plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.lay", "ML_STAR", hslTrue);
+global device EntryExit ("plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.lay", "EntryExit", hslTrue);
+global device TrackGripper ("plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.lay", "TrackGripper", hslTrue);
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
  namespace _Method { #include "HSLMETEDLib.hs_" } 
@@ -248,4 +248,4 @@ FLIPTUBETOOL::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-17 10:01$$checksum=fa89790a$$length=091$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-17 10:21$$checksum=b39fc01e$$length=091$$

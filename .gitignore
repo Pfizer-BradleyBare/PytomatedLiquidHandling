@@ -9,3 +9,5 @@ Logging
 Temp
 temp
 .ruff_cache
+__active_layout__.lay
+__active_layout__.res
