@@ -24,11 +24,13 @@ class VantageTrackGripper(TransportBase):
 
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
-        Orientation: ML_STAR.iSwap.GetPlate.Options.LabwareOrientationOptions = field(
+        Orientation: ML_STAR.iSwap.GetPlate.LabwareOrientationOptions = field(
             compare=True,
         )
-        CoordinatedMovement: TrackGripper.GripPlateFromTaughtPosition.Options.YesNoOptions = field(
-            compare=False,
+        CoordinatedMovement: TrackGripper.GripPlateFromTaughtPosition.YesNoOptions = (
+            field(
+                compare=False,
+            )
         )
 
     @dataclasses.dataclass(kw_only=True)
@@ -39,8 +41,10 @@ class VantageTrackGripper(TransportBase):
 
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
-        CoordinatedMovement: TrackGripper.PlacePlateToTaughtPosition.Options.YesNoOptions = field(
-            compare=False,
+        CoordinatedMovement: TrackGripper.PlacePlateToTaughtPosition.YesNoOptions = (
+            field(
+                compare=False,
+            )
         )
 
     def transport(
@@ -67,7 +71,7 @@ class VantageTrackGripper(TransportBase):
 
         if (
             pickup_options.Orientation
-            == ML_STAR.iSwap.GetPlate.Options.LabwareOrientationOptions.PositiveYAxis
+            == ML_STAR.iSwap.GetPlate.LabwareOrientationOptions.PositiveYAxis
         ):
             open_width = labware.dimensions.x_length + labware.transport_offsets.open
         else:
@@ -79,7 +83,7 @@ class VantageTrackGripper(TransportBase):
                 CoordinatedMovement=pickup_options.CoordinatedMovement,
                 GripForcePercentage=100,
                 SpeedPercentage=100,
-                CollisionControl=TrackGripper.GripPlateFromTaughtPosition.Options.YesNoOptions.Yes,
+                CollisionControl=TrackGripper.GripPlateFromTaughtPosition.YesNoOptions.Yes,
                 TaughtPathName=pickup_options.TaughtPathName,
             ),
             backend_error_handling=self.backend_error_handling,
@@ -102,7 +106,7 @@ class VantageTrackGripper(TransportBase):
                 TaughtPathName=dropoff_options.TaughtPathName,
                 CoordinatedMovement=dropoff_options.CoordinatedMovement,
                 SpeedPercentage=100,
-                CollisionControl=TrackGripper.PlacePlateToTaughtPosition.Options.YesNoOptions.Yes,
+                CollisionControl=TrackGripper.PlacePlateToTaughtPosition.YesNoOptions.Yes,
             ),
             backend_error_handling=self.backend_error_handling,
         )

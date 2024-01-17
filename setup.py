@@ -12,7 +12,7 @@ setup(
         "flask",
         "networkx",
         "processscheduler",
-        "pydantic",
+        "pydantic==2.4.2",
         "pythonnet",
         "redmail",
         "redbox",

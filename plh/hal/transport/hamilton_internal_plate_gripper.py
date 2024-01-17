@@ -20,23 +20,23 @@ class HamiltonInternalPlateGripper(TransportBase):
     class PickupOptions(TransportBase.PickupOptions):
         """Options to pick up labware from deck location"""
 
-        GripMode: iSwap.GetPlate.Options.GripModeOptions = field(compare=True)
-        Movement: iSwap.GetPlate.Options.MovementOptions = field(compare=True)
+        GripMode: iSwap.GetPlate.GripModeOptions = field(compare=True)
+        Movement: iSwap.GetPlate.MovementOptions = field(compare=True)
         RetractDistance: float = field(compare=False)
         LiftupHeight: float = field(compare=False)
-        LabwareOrientation: iSwap.GetPlate.Options.LabwareOrientationOptions = field(
+        LabwareOrientation: iSwap.GetPlate.LabwareOrientationOptions = field(
             compare=True,
         )
-        InverseGrip: iSwap.GetPlate.Options.YesNoOptions = field(compare=True)
+        InverseGrip: iSwap.GetPlate.YesNoOptions = field(compare=True)
 
     @dataclasses.dataclass(kw_only=True)
     class DropoffOptions(TransportBase.DropoffOptions):
         """Options to drop off labware to deck location"""
 
-        Movement: iSwap.PlacePlate.Options.MovementOptions = field(compare=True)
+        Movement: iSwap.PlacePlate.MovementOptions = field(compare=True)
         RetractDistance: float = field(compare=False)
         LiftupHeight: float = field(compare=False)
-        LabwareOrientation: iSwap.PlacePlate.Options.LabwareOrientationOptions = field(
+        LabwareOrientation: iSwap.PlacePlate.LabwareOrientationOptions = field(
             compare=True,
         )
 

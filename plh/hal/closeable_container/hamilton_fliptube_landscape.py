@@ -34,7 +34,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
 
         command = FlipTubeTool.Initialize.Command(
             options=FlipTubeTool.Initialize.Options(
-                ToolOrientation=FlipTubeTool.Initialize.Options.ToolOrientationOptions.Landscape,
+                ToolOrientation=FlipTubeTool.Initialize.ToolOrientationOptions.Landscape,
             ),
         )
         self.backend.execute(command)

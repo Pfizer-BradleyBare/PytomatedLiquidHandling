@@ -25,7 +25,7 @@ class HamiltonCOREGripper(TransportBase):
     class DropoffOptions(TransportBase.DropoffOptions):
         """Options to drop off labware to deck location"""
 
-        CheckPlateExists: Channel1000uLCOREGrip.PlacePlate.Options.YesNoOptions = field(
+        CheckPlateExists: Channel1000uLCOREGrip.PlacePlate.YesNoOptions = field(
             compare=False,
         )
 
@@ -74,7 +74,7 @@ class HamiltonCOREGripper(TransportBase):
             options=Channel1000uLCOREGrip.PlacePlate.Options(
                 LabwareID=destination_layout_item.labware_id,
                 CheckPlateExists=dropoff_options.CheckPlateExists,
-                EjectTool=Channel1000uLCOREGrip.PlacePlate.Options.YesNoOptions(
+                EjectTool=Channel1000uLCOREGrip.PlacePlate.YesNoOptions(
                     int(self._last_transport_flag),
                 ),
             ),

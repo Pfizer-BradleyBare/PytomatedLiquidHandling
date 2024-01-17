@@ -39,7 +39,7 @@ class HamiltonBackendServer(BackendServerBase):
     views: list[Callable] = field(init=False)
 
     def __post_init__(self: HamiltonBackendServer) -> None:
-        self.Views = [self.execute, self.acknowledge]
+        self.views = [self.execute, self.acknowledge]
         BackendServerBase.__post_init__(self)
 
     def Execute(self: HamiltonBackendServer) -> tuple:  # noqa:N802
