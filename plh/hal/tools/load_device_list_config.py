@@ -73,7 +73,7 @@ def load_device_list_config(
             )
 
         for item in json[key]:
-            if item["Enabled"] is True:
+            if item["enabled"] is True:
                 hal_device = cls(**item)
 
                 if hal_device.identifier in devices:
