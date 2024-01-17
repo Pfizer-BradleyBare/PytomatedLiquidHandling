@@ -114,7 +114,7 @@ class MagneticRackBase(HALDevice):
 
     def get_layout_item(
         self: MagneticRackBase,
-        layout_item: li.CoverablePlate | li.Plate,
+        layout_item: li.LayoutItemBase,
     ) -> li.CoverablePlate | li.Plate:
         for supported_layout_item in self.supported_plates:
             if supported_layout_item.labware == layout_item.labware:
