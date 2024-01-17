@@ -1,4 +1,4 @@
-NonPipettable labware:
+NonPipettable Labware:
   - identifier: Biorad200uLPCRPlate_Lid
     enabled: True
     image_filename: N/A

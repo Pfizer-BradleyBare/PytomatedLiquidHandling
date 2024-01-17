@@ -1,4 +1,4 @@
-NonMoveable carrier:
+NonMoveable Carrier:
   - enabled: True
     track_start: 7
     track_end: 13

@@ -1,4 +1,4 @@
-NonPipettable labware:
+NonPipettable Labware:
   - identifier: VacuumManifoldShort
     enabled: True
     image_filename: N/A
