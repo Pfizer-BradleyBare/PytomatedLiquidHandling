@@ -1,4 +1,6 @@
 import os
+import pathlib
+import sys
 
 import pydantic
 import yaml
@@ -42,237 +44,225 @@ for cls in tools.HALDevice.hal_devices.values():
 # End weirdly required processing
 
 
-@logger.catch(onerror=lambda _: quit())
-def LoadYamlConfiguration(ConfigBaseFolder: str):
-    """Walks through ```ConfigBaseFolder``` looking for ```.yaml``` files with ```HAL``` module names in the filename.
+@logger.catch(onerror=lambda _: sys.exit())
+def load_yaml_configuration(config_base_folder: str) -> None:
+    """Walks through ```config_base_folder``` looking for ```.yaml``` files with ```HAL``` module names in the filename.
 
     You can have as many files as required to simplify configuration.
     """
-    Warns = []
+    warns = []
 
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
-                if "_backend" in File.lower():
-                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_backend" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
 
-                    Tools.ConfigLoader.Devices(
-                        Dict,
-                        Backend.Base.BackendABC,
-                        Backend.Devices,
-                    )
-    if Loaded != True:
-        Warns.append(f"No {Backend.Base.BackendABC.__name__} objects were loaded.")
+                tools.load_device_config(
+                    json,
+                    backend.BackendBase,
+                    backend.devices,
+                )
+    if loaded is not True:
+        warns.append(f"No {backend.BackendBase.__name__} objects were loaded.")
 
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
-                if "_carrier" in File.lower():
-                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_carrier" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
 
-                    Tools.ConfigLoader.DevicesLists(
-                        Dict,
-                        Carrier.Base.CarrierBase,
-                        Carrier.Devices,
-                    )
-    if Loaded != True:
-        Warns.append(f"No {Carrier.Base.CarrierBase.__name__} objects were loaded.")
+                tools.load_device_list_config(
+                    json,
+                    carrier.CarrierBase,
+                    carrier.devices,
+                )
+    if loaded is not True:
+        warns.append(f"No {carrier.CarrierBase.__name__} objects were loaded.")
 
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
-                if "_labware" in File.lower():
-                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_labware" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
 
-                    Tools.ConfigLoader.DevicesLists(
-                        Dict,
-                        Labware.Base.LabwareBase,
-                        Labware.Devices,
-                    )
-    if Loaded != True:
-        Warns.append(f"No {Labware.Base.LabwareBase.__name__} objects were loaded.")
+                tools.load_device_list_config(
+                    json,
+                    labware.LabwareBase,
+                    labware.devices,
+                )
+    if loaded is not True:
+        warns.append(f"No {labware.LabwareBase.__name__} objects were loaded.")
 
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
-                if "_transport" in File.lower():
-                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_transport" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
 
-                    Tools.ConfigLoader.Devices(
-                        Dict,
-                        Transport.Base.TransportBase,
-                        Transport.Devices,
-                    )
-    if Loaded != True:
-        Warns.append(f"No {Transport.Base.TransportBase.__name__} objects were loaded.")
+                tools.load_device_config(
+                    json,
+                    transport.TransportBase,
+                    transport.devices,
+                )
+    if loaded is not True:
+        warns.append(f"No {transport.TransportBase.__name__} objects were loaded.")
 
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
-                if "_decklocation" in File.lower():
-                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_decklocation" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
 
-                    Tools.ConfigLoader.DevicesLists(
-                        Dict,
-                        DeckLocation.Base.DeckLocationBase,
-                        DeckLocation.Devices,
-                    )
-    if Loaded != True:
-        Warns.append(
-            f"No {DeckLocation.Base.DeckLocationBase.__name__} objects were loaded.",
+                tools.load_device_list_config(
+                    json,
+                    deck_location.DeckLocationBase,
+                    deck_location.devices,
+                )
+    if loaded is not True:
+        warns.append(
+            f"No {deck_location.DeckLocationBase.__name__} objects were loaded.",
         )
 
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
-                if "_layoutitem" in File.lower():
-                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_layoutitem" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
 
-                    Tools.ConfigLoader.DevicesLists(
-                        Dict,
-                        LayoutItem.Base.LayoutItemBase,
-                        LayoutItem.Devices,
-                    )
-    if Loaded != True:
-        Warns.append(
-            f"No {LayoutItem.Base.LayoutItemBase.__name__} objects were loaded.",
+                tools.load_device_list_config(
+                    json,
+                    layout_item.LayoutItemBase,
+                    layout_item.devices,
+                )
+    if loaded is not True:
+        warns.append(
+            f"No {layout_item.LayoutItemBase.__name__} objects were loaded.",
         )
 
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
-                if "_tip" in File.lower():
-                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_tip" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
 
-                    Tools.ConfigLoader.DevicesLists(Dict, Tip.Base.TipBase, Tip.Devices)
-    if Loaded != True:
-        Warns.append(f"No {Tip.Base.TipBase.__name__} objects were loaded.")
+                tools.load_device_list_config(json, tip.TipBase, tip.devices)
+    if loaded is not True:
+        warns.append(f"No {tip.TipBase.__name__} objects were loaded.")
 
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
-                if "_closeablecontainer" in File.lower():
-                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_closeablecontainer" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
 
-                    Tools.ConfigLoader.DevicesLists(
-                        Dict,
-                        CloseableContainer.Base.CloseableContainerABC,
-                        CloseableContainer.Devices,
-                    )
-    if Loaded != True:
-        Warns.append(
-            f"No {CloseableContainer.Base.CloseableContainerABC.__name__} objects were loaded.",
+                tools.load_device_list_config(
+                    json,
+                    closeable_container.CloseableContainerBase,
+                    closeable_container.devices,
+                )
+    if loaded is not True:
+        warns.append(
+            f"No {closeable_container.CloseableContainerBase.__name__} objects were loaded.",
         )
 
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
-                if "_heatcoolshake" in File.lower():
-                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_heatcoolshake" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
 
-                    Tools.ConfigLoader.DevicesLists(
-                        Dict,
-                        HeatCoolShake.Base.HeatCoolShakeBase,
-                        HeatCoolShake.Devices,
-                    )
-    if Loaded != True:
-        Warns.append(
-            f"No {HeatCoolShake.Base.HeatCoolShakeBase.__name__} objects were loaded.",
+                tools.load_device_list_config(
+                    json,
+                    heat_cool_shake.HeatCoolShakeBase,
+                    heat_cool_shake.devices,
+                )
+    if loaded is not True:
+        warns.append(
+            f"No {heat_cool_shake.HeatCoolShakeBase.__name__} objects were loaded.",
         )
 
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
-                if "_pipette" in File.lower():
-                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_pipette" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
 
-                    Tools.ConfigLoader.DevicesLists(
-                        Dict,
-                        Pipette.Base.PipetteBase,
-                        Pipette.Devices,
-                    )
-    if Loaded != True:
-        Warns.append(f"No {Pipette.Base.PipetteBase.__name__} objects were loaded.")
+                tools.load_device_list_config(
+                    json,
+                    pipette.PipetteBase,
+                    pipette.devices,
+                )
+    if loaded is not True:
+        warns.append(f"No {pipette.PipetteBase.__name__} objects were loaded.")
 
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
-                if "_storagedevice" in File.lower():
-                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_storagedevice" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
 
-                    Tools.ConfigLoader.DevicesLists(
-                        Dict,
-                        StorageDevice.Base.StorageDeviceBase,
-                        StorageDevice.Devices,
-                    )
-    if Loaded != True:
-        Warns.append(
-            f"No {StorageDevice.Base.StorageDeviceBase.__name__} objects were loaded.",
+                tools.load_device_list_config(
+                    json,
+                    storage_device.StorageDeviceBase,
+                    storage_device.devices,
+                )
+    if loaded is not True:
+        warns.append(
+            f"No {storage_device.StorageDeviceBase.__name__} objects were loaded.",
         )
 
-    Loaded = False
-    for Root, Dirs, Files in os.walk(ConfigBaseFolder):
-        for File in Files:
-            if File.lower().endswith(".yaml"):
-                if "_magneticrack" in File.lower():
-                    logger.debug(f"Starting to load {os.path.join(Root,File)}")
-                    Loaded = True
-                    with open(os.path.join(Root, File)) as ConfigFile:
-                        Dict = yaml.full_load(ConfigFile)
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_magneticrack" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
 
-                    Tools.ConfigLoader.DevicesLists(
-                        Dict,
-                        MagneticRack.Base.MagneticRackBase,
-                        MagneticRack.Devices,
-                    )
-    if Loaded != True:
-        Warns.append(
-            f"No {MagneticRack.Base.MagneticRackBase.__name__} objects were loaded.",
+                tools.load_device_list_config(
+                    json,
+                    magnetic_rack.MagneticRackBase,
+                    magnetic_rack.devices,
+                )
+    if loaded is not True:
+        warns.append(
+            f"No {magnetic_rack.MagneticRackBase.__name__} objects were loaded.",
         )
 
-    for Warn in Warns:
-        logger.warning(Warn)
+    for warn in warns:
+        logger.warning(warn)
