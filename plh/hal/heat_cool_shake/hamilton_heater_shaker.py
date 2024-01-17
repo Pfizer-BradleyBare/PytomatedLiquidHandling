@@ -60,7 +60,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
         command = HSLHamHeaterShakerLib.SetPlateLock.Command(
             options=HSLHamHeaterShakerLib.SetPlateLock.Options(
                 HandleID=int(self.handle_id),
-                PlateLockState=1,
+                PlateLockState=HSLHamHeaterShakerLib.SetPlateLock.PlateLockStateOptions.Locked,
             ),
         )
         self.backend.execute(command)
@@ -73,7 +73,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
         command = HSLHamHeaterShakerLib.SetPlateLock.Command(
             options=HSLHamHeaterShakerLib.SetPlateLock.Options(
                 HandleID=int(self.handle_id),
-                PlateLockState=0,
+                PlateLockState=HSLHamHeaterShakerLib.SetPlateLock.PlateLockStateOptions.Unlocked,
             ),
         )
         self.backend.execute(command)
@@ -111,7 +111,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
         command = HSLHamHeaterShakerLib.SetPlateLock.Command(
             options=HSLHamHeaterShakerLib.SetPlateLock.Options(
                 HandleID=int(self.handle_id),
-                PlateLockState=0,
+                PlateLockState=HSLHamHeaterShakerLib.SetPlateLock.PlateLockStateOptions.Unlocked,
             ),
         )
         self.backend.execute(command)
@@ -175,7 +175,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
             command = HSLHamHeaterShakerLib.SetPlateLock.Command(
                 options=HSLHamHeaterShakerLib.SetPlateLock.Options(
                     HandleID=int(self.handle_id),
-                    PlateLockState=0,
+                    PlateLockState=HSLHamHeaterShakerLib.SetPlateLock.PlateLockStateOptions.Unlocked,
                 ),
             )
             self.backend.execute(command)
@@ -189,7 +189,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
             command = HSLHamHeaterShakerLib.SetPlateLock.Command(
                 options=HSLHamHeaterShakerLib.SetPlateLock.Options(
                     HandleID=int(self.handle_id),
-                    PlateLockState=1,
+                    PlateLockState=HSLHamHeaterShakerLib.SetPlateLock.PlateLockStateOptions.Locked,
                 ),
             )
             self.backend.execute(command)
