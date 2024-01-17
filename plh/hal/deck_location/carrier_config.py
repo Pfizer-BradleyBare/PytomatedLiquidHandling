@@ -22,7 +22,7 @@ class CarrierConfig:
     position: int
 
     @field_validator(
-        "Carrier",
+        "carrier",
         mode="before",
     )
     @classmethod

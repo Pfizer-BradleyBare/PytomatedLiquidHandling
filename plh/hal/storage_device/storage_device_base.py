@@ -17,7 +17,7 @@ class StorageDeviceBase(HALDevice):
 
     reservations: dict[str, Reservation] = field(init=False, default_factory=dict)
 
-    @field_validator("LayoutItems", mode="before")
+    @field_validator("layout_items", mode="before")
     @classmethod
     def __supported_lis_validate(
         cls: type[StorageDeviceBase],

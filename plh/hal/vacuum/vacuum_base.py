@@ -19,7 +19,7 @@ class VacuumBase(Interface, HALDevice):
     supported_filter_plate_configurations: dict[str, FilterPlateConfiguration]
     handle_id: int = field(init=False)
 
-    @field_validator("ManifoldPark", "ManifoldProcessing", mode="before")
+    @field_validator("manifold_park", "manifold_processing", mode="before")
     @classmethod
     def __manifolds_validate(
         cls: type[VacuumBase],

@@ -25,7 +25,7 @@ class TipBase(Interface, HALDevice):
         default_factory=list,
     )
 
-    @field_validator("TipRacks", mode="before")
+    @field_validator("tip_racks", mode="before")
     @classmethod
     def __tip_racks_validate(
         cls: type[TipBase],

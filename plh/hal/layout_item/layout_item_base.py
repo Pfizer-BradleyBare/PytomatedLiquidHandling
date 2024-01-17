@@ -14,7 +14,7 @@ class LayoutItemBase(HALDevice):
     deck_location: deck_location.DeckLocationBase
     labware: labware.LabwareBase
 
-    @field_validator("DeckLocation", mode="before")
+    @field_validator("deck_location", mode="before")
     @classmethod
     def __deck_location_validate(
         cls: type[LayoutItemBase],
@@ -36,7 +36,7 @@ class LayoutItemBase(HALDevice):
 
         return objects[identifier]
 
-    @field_validator("Labware", mode="before")
+    @field_validator("labware", mode="before")
     @classmethod
     def __labware_validate(
         cls: type[LayoutItemBase],

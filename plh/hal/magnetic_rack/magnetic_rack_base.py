@@ -12,7 +12,7 @@ class MagneticRackBase(HALDevice):
     supported_plates: list[li.CoverablePlate | li.Plate]
     supported_pipettes: list[pipette.PipetteBase]
 
-    @field_validator("SupportedPlates", mode="before")
+    @field_validator("supported_plates", mode="before")
     @classmethod
     def __supported_plates_validate(
         cls: type[MagneticRackBase],
@@ -39,7 +39,7 @@ class MagneticRackBase(HALDevice):
 
         return supported_objects
 
-    @field_validator("SupportedPipettes", mode="before")
+    @field_validator("supported_pipettes", mode="before")
     @classmethod
     def __supported_pipettes_validate(
         cls: type[MagneticRackBase],

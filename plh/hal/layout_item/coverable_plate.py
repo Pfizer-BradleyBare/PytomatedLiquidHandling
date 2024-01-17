@@ -14,7 +14,7 @@ class CoverablePlate(LayoutItemBase):
     lid: Lid
     is_covered: bool = Field(exclude=True, default=False)
 
-    @field_validator("Lid", mode="before")
+    @field_validator("lid", mode="before")
     @classmethod
     def __lid_validate(
         cls: type[CoverablePlate],

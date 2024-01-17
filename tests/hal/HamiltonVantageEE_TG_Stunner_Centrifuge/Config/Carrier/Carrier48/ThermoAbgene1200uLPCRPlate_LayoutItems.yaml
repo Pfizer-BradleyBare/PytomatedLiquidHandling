@@ -29,28 +29,28 @@ Coverable Plate:
     labware_id: Carrier48_Pos1_Thermo1200uL96WellPCR
     deck_location: Carrier48_Pos1
     labware: ThermoAbgene1200uLPCRPlate
-    Lid: Carrier48_Pos1_ThermoAbgene1200uLPCRPlate_Lid
+    lid: Carrier48_Pos1_ThermoAbgene1200uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier48_Pos2_Thermo1200uL96WellPCR
     deck_location: Carrier48_Pos2
     labware: ThermoAbgene1200uLPCRPlate
-    Lid: Carrier48_Pos2_ThermoAbgene1200uLPCRPlate_Lid
+    lid: Carrier48_Pos2_ThermoAbgene1200uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier48_Pos3_Thermo1200uL96WellPCR
     deck_location: Carrier48_Pos3
     labware: ThermoAbgene1200uLPCRPlate
-    Lid: Carrier48_Pos3_ThermoAbgene1200uLPCRPlate_Lid
+    lid: Carrier48_Pos3_ThermoAbgene1200uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier48_Pos4_Thermo1200uL96WellPCR
     deck_location: Carrier48_Pos4
     labware: ThermoAbgene1200uLPCRPlate
-    Lid: Carrier48_Pos4_ThermoAbgene1200uLPCRPlate_Lid
+    lid: Carrier48_Pos4_ThermoAbgene1200uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier48_Pos5_Thermo1200uL96WellPCR
     deck_location: Carrier48_Pos5
     labware: ThermoAbgene1200uLPCRPlate
-    Lid: Carrier48_Pos5_ThermoAbgene1200uLPCRPlate_Lid
+    lid: Carrier48_Pos5_ThermoAbgene1200uLPCRPlate_Lid

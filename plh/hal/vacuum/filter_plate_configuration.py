@@ -19,7 +19,7 @@ class FilterPlateConfiguration:
     max_pressure: float
     default_vacuum_pressures: DefaultVacuumPressures
 
-    @field_validator("FilterPlate", "CollectionPlate", mode="before")
+    @field_validator("filter_plate", "collection_plate", mode="before")
     @classmethod
     def __plates_validate(
         cls: type[FilterPlateConfiguration],

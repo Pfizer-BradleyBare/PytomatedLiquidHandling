@@ -19,16 +19,16 @@ Coverable Plate:
     labware_id: HHS_Pos1_Thermo400uL96WellPCR
     deck_location: Carrier7_Pos1
     labware: Thermo400uLPCRPlate
-    Lid: Carrier7_Pos1_Thermo400uLPCRPlate_Lid
+    lid: Carrier7_Pos1_Thermo400uLPCRPlate_Lid
 
   - enabled: True
     labware_id: HHS_Pos1_Thermo400uL96WellPCR
     deck_location: Carrier7_Pos2
     labware: Thermo400uLPCRPlate
-    Lid: Carrier7_Pos2_Thermo400uLPCRPlate_Lid
+    lid: Carrier7_Pos2_Thermo400uLPCRPlate_Lid
 
   - enabled: True
     labware_id: HHS_Pos1_Thermo400uL96WellPCR
     deck_location: Carrier7_Pos3
     labware: Thermo400uLPCRPlate
-    Lid: Carrier7_Pos3_Thermo400uLPCRPlate_Lid
+    lid: Carrier7_Pos3_Thermo400uLPCRPlate_Lid

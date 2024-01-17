@@ -28,7 +28,7 @@
   Enabled: True
   Image Filename: PlateBiorad200uL96Well
   Part Number: HSP9601
-  Wells:
+  well_definition:
     Addressing:
       Type: AlphaNumeric
       Direction: Columnwise
@@ -56,7 +56,7 @@
   Enabled: True
   Image Filename: PlateThermo400uL96Well
   Part Number: 12-656-440
-  Wells:
+  well_definition:
     Addressing:
       Type: AlphaNumeric
       Direction: Columnwise
@@ -84,7 +84,7 @@
   Enabled: True
   Image Filename: PlateThermo1200uL96Well
   Part Number: AB1127
-  Wells:
+  well_definition:
     Addressing:
       Type: AlphaNumeric
       Direction: Columnwise
@@ -112,7 +112,7 @@
   Enabled: True
   Image Filename: PlateCorning2000uL96Well
   Part Number: 6604337-01
-  Wells:
+  well_definition:
     Addressing:
       Type: AlphaNumeric
       Direction: Columnwise

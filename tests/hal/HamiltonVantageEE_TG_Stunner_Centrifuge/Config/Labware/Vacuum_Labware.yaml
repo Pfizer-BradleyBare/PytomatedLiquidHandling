@@ -3,6 +3,11 @@ NonPipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: "?"
+    layout:
+      type: Numeric
+      direction: Columnwise
+      columns: 1
+      rows: 1
     dimensions:
       x_length: 154
       y_length: 95

@@ -18,4 +18,4 @@ Coverable Plate:
     LabwareID: Carrier38_Pos2_96WellPCRPlate2000uL_1mLChannel
     Labware: 2000uL Corning 96 Well PCR Plate
     Deck Location: Carrier38_Pos2
-    Lid: Lid
+    lid: Lid

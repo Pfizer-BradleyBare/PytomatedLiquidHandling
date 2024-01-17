@@ -17,7 +17,7 @@ class HamiltonCORE96(PipetteBase):
     backend: HamiltonBackendBase
     hamilton_portrait_core_8: HamiltonPortraitCORE8
 
-    @field_validator("HamiltonPortraitCORE8Channel", mode="before")
+    @field_validator("hamilton_portrait_core_8", mode="before")
     @classmethod
     def __hamilton_portrait_core_8_validate(
         cls: type[HamiltonCORE96],

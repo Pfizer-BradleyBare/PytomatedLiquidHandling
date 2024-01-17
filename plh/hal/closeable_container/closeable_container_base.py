@@ -30,7 +30,7 @@ class CloseableContainerBase(Interface, HALDevice):
     supported_deck_locations: list[deck_location.DeckLocationBase]
     supported_labware: list[labware.LabwareBase]
 
-    @field_validator("SupportedDeckLocations", mode="before")
+    @field_validator("supported_deck_locations", mode="before")
     @classmethod
     def __supported_deck_locations_validate(
         cls: type[CloseableContainerBase],
@@ -57,7 +57,7 @@ class CloseableContainerBase(Interface, HALDevice):
 
         return supported_objects
 
-    @field_validator("SupportedLabwares", mode="before")
+    @field_validator("supported_labware", mode="before")
     @classmethod
     def __supported_labwares_validate(
         cls: type[CloseableContainerBase],

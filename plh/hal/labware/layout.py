@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Callable
+from typing import Callable, Literal
 
 from pydantic import dataclasses
 
@@ -76,6 +76,8 @@ class Layout(ABC):
 
 @dataclasses.dataclass(kw_only=True)
 class NumericLayout(Layout):
+    type: Literal["Numeric"] = "Numeric"
+
     def sort_positions(self: NumericLayout, positions: list[str | int]) -> list[str]:
         return sorted([self.get_position_id(pos) for pos in positions])
 
@@ -131,9 +133,11 @@ class NumericLayout(Layout):
 
 
 @dataclasses.dataclass(kw_only=True)
-class AlphaNumericLayout(Layout):
+class AlphanumericLayout(Layout):
+    type: Literal["Alphanumeric"] = "Alphanumeric"
+
     def sort_positions(
-        self: AlphaNumericLayout,
+        self: AlphanumericLayout,
         positions: list[str | int],
     ) -> list[str]:
         numeric_addressing = NumericLayout(
@@ -148,7 +152,7 @@ class AlphaNumericLayout(Layout):
         ]
 
     def group_positions_columnwise(
-        self: AlphaNumericLayout,
+        self: AlphanumericLayout,
         positions: list[str | int],
     ) -> list[list[str]]:
         numeric_addressing = NumericLayout(
@@ -163,7 +167,7 @@ class AlphaNumericLayout(Layout):
         ]
 
     def group_positions_rowwise(
-        self: AlphaNumericLayout,
+        self: AlphanumericLayout,
         positions: list[str | int],
     ) -> list[list[str]]:
         numeric_addressing = NumericLayout(
@@ -177,7 +181,7 @@ class AlphaNumericLayout(Layout):
             for Group in numeric_addressing.group_positions_rowwise(positions)
         ]
 
-    def _get_columnwise_position_id(self: AlphaNumericLayout, position: str) -> str:
+    def _get_columnwise_position_id(self: AlphanumericLayout, position: str) -> str:
         if position.isalnum() and not position.isalpha() and not position.isdigit():
             return position
 
@@ -189,7 +193,7 @@ class AlphaNumericLayout(Layout):
 
         return character_portion + number_portion
 
-    def _get_rowwise_position_id(self: AlphaNumericLayout, position: str) -> str:
+    def _get_rowwise_position_id(self: AlphanumericLayout, position: str) -> str:
         if position.isalnum() and not position.isalpha() and not position.isdigit():
             return position
 

@@ -13,7 +13,7 @@ from plh.hal.tools import HALDevice, Interface
 class HeatCoolShakeBase(Interface, HALDevice):
     plates: list[li.CoverablePlate | li.Plate]
 
-    @field_validator("Plates", mode="before")
+    @field_validator("plates", mode="before")
     @classmethod
     def __supported_plates_validate(
         cls: type[HeatCoolShakeBase],

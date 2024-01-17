@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pydantic import Field, dataclasses, model_validator
+from pydantic import dataclasses, model_validator
 
 from plh.hal.tools import HALDevice
 
@@ -18,7 +18,7 @@ class DeckLocationBase(HALDevice):
 
     identifier: str = "None"
 
-    carrier_config: CarrierConfig = Field(validation_alias="carrierconfig")
+    carrier_config: CarrierConfig
 
     @model_validator(mode="after")
     @staticmethod

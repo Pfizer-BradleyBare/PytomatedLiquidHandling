@@ -3,6 +3,11 @@ NonPipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: 235947(50uL) or 235950(300uL)
+    layout:
+      type: Numeric
+      direction: Columnwise
+      columns: 12
+      rows: 8
     dimensions:
       x_length: 120.5
       y_length: 78.5
@@ -16,6 +21,11 @@ NonPipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: Custom
+    layout:
+      type: Numeric
+      direction: Columnwise
+      columns: 12
+      rows: 8
     dimensions:
       x_length: 124.75
       y_length: 82.75

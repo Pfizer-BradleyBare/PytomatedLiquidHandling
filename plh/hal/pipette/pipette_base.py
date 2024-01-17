@@ -38,7 +38,7 @@ class PipetteBase(Interface, HALDevice):
     supported_destination_labware: list[labware.PipettableLabware]
     supported_deck_locations: list[deck_location.DeckLocationBase]
 
-    @field_validator("SupportedTips", mode="after")
+    @field_validator("supported_tips", mode="after")
     @classmethod
     def __supported_tips_validate(
         cls: type[PipetteBase],
@@ -46,7 +46,7 @@ class PipetteBase(Interface, HALDevice):
     ) -> list[PipetteTip]:
         return sorted(v, key=lambda x: x.tip.volume)
 
-    @field_validator("SupportedDeckLocations", mode="before")
+    @field_validator("supported_deck_locations", mode="before")
     @classmethod
     def __supported_deck_locations_validate(
         cls: type[PipetteBase],
@@ -74,8 +74,8 @@ class PipetteBase(Interface, HALDevice):
         return supported_objects
 
     @field_validator(
-        "Supportedsource_labwares",
-        "Supporteddestination_labwares",
+        "supported_source_labware",
+        "supported_destination_labware",
         mode="before",
     )
     @classmethod

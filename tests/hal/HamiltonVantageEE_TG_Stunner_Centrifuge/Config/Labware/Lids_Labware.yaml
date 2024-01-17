@@ -3,6 +3,11 @@ NonPipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: "?"
+    layout:
+      type: Numeric
+      direction: Columnwise
+      columns: 1
+      rows: 1
     dimensions:
       x_length: 127.5
       y_length: 85
@@ -16,6 +21,11 @@ NonPipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: "?"
+    layout:
+      type: Numeric
+      direction: Columnwise
+      columns: 1
+      rows: 1
     dimensions:
       x_length: 127.5
       y_length: 85
@@ -29,6 +39,11 @@ NonPipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: "?"
+    layout:
+      type: Numeric
+      direction: Columnwise
+      columns: 1
+      rows: 1
     dimensions:
       x_length: 127.5
       y_length: 85
@@ -42,6 +57,11 @@ NonPipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: "?"
+    layout:
+      type: Numeric
+      direction: Columnwise
+      columns: 1
+      rows: 1
     dimensions:
       x_length: 127.5
       y_length: 85

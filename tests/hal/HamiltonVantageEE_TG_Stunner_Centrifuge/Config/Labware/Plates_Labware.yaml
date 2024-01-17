@@ -3,12 +3,12 @@ Pipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: 701-2022
-    wells:
-      layout:
-        AlphaNumeric:
-          direction: Columnwise
-          columns: 12
-          rows: 8
+    layout:
+      type: Alphanumeric
+      direction: Columnwise
+      columns: 12
+      rows: 8
+    well_definition:
       positions_per_well: 1
       max_volume: 3
       dead_volume: 0
@@ -41,12 +41,12 @@ Pipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: HSP9601
-    wells:
-      layout:
-        AlphaNumeric:
-          direction: Columnwise
-          columns: 12
-          rows: 8
+    layout:
+      type: Alphanumeric
+      direction: Columnwise
+      columns: 12
+      rows: 8
+    well_definition:
       positions_per_well: 1
       max_volume: 200
       dead_volume: 10
@@ -70,12 +70,12 @@ Pipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: "249949"
-    wells:
-      layout:
-        AlphaNumeric:
-          direction: Columnwise
-          columns: 12
-          rows: 8
+    layout:
+      type: Alphanumeric
+      direction: Columnwise
+      columns: 12
+      rows: 8
+    well_definition:
       positions_per_well: 1
       max_volume: 400
       dead_volume: 10
@@ -99,12 +99,12 @@ Pipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: AB1127
-    wells:
-      layout:
-        AlphaNumeric:
-          direction: Columnwise
-          columns: 12
-          rows: 8
+    layout:
+      type: Alphanumeric
+      direction: Columnwise
+      columns: 12
+      rows: 8
+    well_definition:
       positions_per_well: 1
       max_volume: 1200
       dead_volume: 10
@@ -128,12 +128,12 @@ Pipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: "3961"
-    wells:
-      layout:
-        AlphaNumeric:
-          direction: Columnwise
-          columns: 12
-          rows: 8
+    layout:
+      type: Alphanumeric
+      direction: Columnwise
+      columns: 12
+      rows: 8
+    well_definition:
       positions_per_well: 1
       max_volume: 2000
       dead_volume: 10
@@ -157,12 +157,12 @@ Pipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: "814270"
-    wells:
-      layout:
-        Numeric:
-          direction: Columnwise
-          columns: 6
-          rows: 4
+    layout:
+      type: Numeric
+      direction: Columnwise
+      columns: 6
+      rows: 4
+    well_definition:
       positions_per_well: 1
       max_volume: 1500
       dead_volume: 10

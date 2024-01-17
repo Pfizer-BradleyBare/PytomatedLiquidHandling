@@ -29,28 +29,28 @@ Coverable Plate:
     labware_id: Carrier48_Pos1_Corning2000uL96WellPCR
     deck_location: Carrier48_Pos1
     labware: CorningCostar2000uLPCRPlate
-    Lid: Carrier48_Pos1_CorningCostar2000uLPCRPlate_Lid
+    lid: Carrier48_Pos1_CorningCostar2000uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier48_Pos2_Corning2000uL96WellPCR
     deck_location: Carrier48_Pos2
     labware: CorningCostar2000uLPCRPlate
-    Lid: Carrier48_Pos2_CorningCostar2000uLPCRPlate_Lid
+    lid: Carrier48_Pos2_CorningCostar2000uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier48_Pos3_Corning2000uL96WellPCR
     deck_location: Carrier48_Pos3
     labware: CorningCostar2000uLPCRPlate
-    Lid: Carrier48_Pos3_CorningCostar2000uLPCRPlate_Lid
+    lid: Carrier48_Pos3_CorningCostar2000uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier48_Pos4_Corning2000uL96WellPCR
     deck_location: Carrier48_Pos4
     labware: CorningCostar2000uLPCRPlate
-    Lid: Carrier48_Pos4_CorningCostar2000uLPCRPlate_Lid
+    lid: Carrier48_Pos4_CorningCostar2000uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier48_Pos5_Corning2000uL96WellPCR
     deck_location: Carrier48_Pos5
     labware: CorningCostar2000uLPCRPlate
-    Lid: Carrier48_Pos5_CorningCostar2000uLPCRPlate_Lid
+    lid: Carrier48_Pos5_CorningCostar2000uLPCRPlate_Lid

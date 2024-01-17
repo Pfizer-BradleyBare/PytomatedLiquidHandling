@@ -3,7 +3,7 @@ from __future__ import annotations
 from .dimensions import Dimensions
 from .exceptions import LabwareNotEqualError, LabwareNotSupportedError
 from .labware_base import LabwareBase
-from .layout import AlphaNumericLayout, LayoutSorting, NumericLayout
+from .layout import AlphanumericLayout, LayoutSorting, NumericLayout
 from .non_pipettable_labware import NonPipettableLabware
 from .pipettable_labware import PipettableLabware
 from .well import Well
@@ -14,7 +14,7 @@ __all__ = [
     "LabwareNotEqualError",
     "LabwareNotSupportedError",
     "LayoutSorting",
-    "AlphaNumericLayout",
+    "AlphanumericLayout",
     "NumericLayout",
     "Dimensions",
     "NonPipettableLabware",

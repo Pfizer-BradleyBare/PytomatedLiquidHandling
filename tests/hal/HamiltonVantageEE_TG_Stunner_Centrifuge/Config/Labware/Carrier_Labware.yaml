@@ -3,12 +3,12 @@ Pipettable Labware:
     enabled: True
     image_filename: N/A
     part_number: "?"
-    wells:
-      layout:
-        Numeric:
-          direction: Columnwise
-          columns: 1
-          rows: 32
+    layout:
+      type: Numeric
+      direction: Columnwise
+      columns: 1
+      rows: 32
+    well_definition:
       positions_per_well: 1
       max_volume: 1500
       dead_volume: 10

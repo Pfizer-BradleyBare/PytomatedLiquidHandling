@@ -1,4 +1,4 @@
-NonTransportable deck_location:
+NonTransportable Deck Location:
   - enabled: True
     carrier_config:
       carrier: Carrier41
