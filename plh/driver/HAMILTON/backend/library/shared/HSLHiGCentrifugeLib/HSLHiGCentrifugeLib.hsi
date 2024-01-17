@@ -4,6 +4,9 @@
 #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLML_STARLib.hsl"
+#include "BioNex HiG\\HSLHiGCentrifugeLib.hsl"
+#include "HSLErrLib.hsl"
+#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -40,17 +43,22 @@ PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
 PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
 PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
 ACTIONSERVERENDPOINTS::_InitLibrary();
+JSONPARSER::_InitLibrary();
 // }} ""
 }
 function _ExitLibrary() {
 // {{ 2 "AutoExitBlock" ""
 ACTIONSERVERENDPOINTS::_ExitLibrary();
+JSONPARSER::_ExitLibrary();
 // }} ""
 }
 // {{{ 5 "AbortSpin" "Begin"
 private function AbortSpin( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private object o_JSONObject;
+private variable Status;
+private variable Handle;
+private variable HandleArray[];
 // {{ 5 "AbortSpin" "InitLocals"
 // }} ""
 // {{ 1 1 0 "3ebddd88_8084_4dea_8f2660965a139da7" "{586C3429-F931-405f-9938-928E22C90BFA}"
@@ -62,19 +70,29 @@ HSLJsonLib::Create(o_JSONObject);
 // {{ 3 1 0 "b6344547_4f99_4fd1_868227b9260bb109" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 4 1 0 "6baf9146_a009_4c72_82e6fdc94b445ed5" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLML_STAR::AntiDropletControl_1000ulChannel_Off(ML_STAR);
+// {{{ 4 1 0 "6e825270_7734_4751_844935df0a2fad82" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Status = HSLHiGCentrifugeLib::AbortSpin();
 // }} ""
-// {{ 5 1 0 "b6344547_4f99_4fd1_868227b9260bb109" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 5 1 0 "e81b0cf1_8407_489b_9ffdbeb751f113f3" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Status != 0)
+{
+// }} ""
+// {{{ 6 1 0 "fc9ae0b9_f363_4294_b2b292d12333137a" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+ErrSetDescription(Translate("Peripheral device communication failed"));
+// }} ""
+// {{ 7 1 0 "e81b0cf1_8407_489b_9ffdbeb751f113f3" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 8 1 0 "b6344547_4f99_4fd1_868227b9260bb109" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 6 1 0 "8e064631_9d37_4993_baa9314e168d50b7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 9 1 0 "8e064631_9d37_4993_baa9314e168d50b7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
-// {{{ 7 1 0 "6f14df24_dffc_43a4_8464aa7597ba4faf" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 10 1 0 "6f14df24_dffc_43a4_8464aa7597ba4faf" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
 // }} ""
-// {{ 8 1 0 "3ebddd88_8084_4dea_8f2660965a139da7" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 11 1 0 "3ebddd88_8084_4dea_8f2660965a139da7" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
 // {{{ 5 "AbortSpin" "End"
@@ -85,88 +103,114 @@ function HandleCommand( device & ML_STAR, variable CommandName, object & i_Endpo
 // }} ""
 // {{ 5 "HandleCommand" "InitLocals"
 // }} ""
-// {{ 37 1 0 "47f51408_eec6_4447_96f44e09181e077f" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "AntiDropletControl_1000uLChannel_Off")
+// {{ 52 1 0 "7a4b504e_a3ba_4867_afa1ebfad0e303c4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "AbortSpin")
 {
 // }} ""
-// {{{ 38 1 0 "d203f348_ee94_42ff_8c27069ff86a580e" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-AntiDropletControl_1000uLChannel_Off(ML_STAR, i_EndpointOutputDataJSONObject);
+// {{{ 53 1 0 "cb97d4ad_a7fb_4fbe_a52ddb2a6b0fb4bb" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+AbortSpin(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 39 1 0 "082880ad_0be2_4e27_a9e46315be3836c2" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 54 1 0 "082880ad_0be2_4e27_a9e46315be3836c2" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 40 1 0 "47f51408_eec6_4447_96f44e09181e077f" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 55 1 0 "7a4b504e_a3ba_4867_afa1ebfad0e303c4" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 41 1 0 "051a2d8a_36e0_4215_8c668cae43f1b603" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "AntiDropletControl_1000uLChannel_On")
+// {{ 56 1 0 "c19bab10_d7ba_453e_8dc37b8e0ff5825c" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "CloseShield")
 {
 // }} ""
-// {{{ 42 1 0 "c21ef1e9_c297_4636_95269dd93c3efd2c" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-AntiDropletControl_1000uLChannel_On(ML_STAR, i_EndpointOutputDataJSONObject);
+// {{{ 57 1 0 "635c1506_dd81_4aea_b024929133aedbc0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+CloseShield(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 43 1 0 "6192388a_7670_4b48_ae54d173b97a2f85" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 58 1 0 "6192388a_7670_4b48_ae54d173b97a2f85" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 44 1 0 "051a2d8a_36e0_4215_8c668cae43f1b603" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 59 1 0 "c19bab10_d7ba_453e_8dc37b8e0ff5825c" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 45 1 0 "4e85a97b_95fc_4ac0_83e338e426f72d0e" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "AspirationMonitoring_1000uLChannel_Off")
+// {{ 60 1 0 "62da9a96_a792_4e03_bba9fcd10926904f" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "Connect")
 {
 // }} ""
-// {{{ 46 1 0 "8a9dcb86_9ddb_44b8_94ee9dd81a4b5610" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-AspirationMonitoring_1000uLChannel_Off(ML_STAR, i_EndpointOutputDataJSONObject);
+// {{{ 61 1 0 "845908b0_f3fb_4cb7_9b3825ca2f578d5f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Connect(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 47 1 0 "720798be_97c6_4415_b445e5ceb2b9bfcb" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 62 1 0 "720798be_97c6_4415_b445e5ceb2b9bfcb" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 48 1 0 "4e85a97b_95fc_4ac0_83e338e426f72d0e" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 63 1 0 "62da9a96_a792_4e03_bba9fcd10926904f" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 49 1 0 "7c18c24f_0c0c_4959_983cf79e0b863ba7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "AspirationMonitoring_1000uLChannel_On")
+// {{ 64 1 0 "2f9788e7_4cc5_4b32_a866164ef3401de2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "Disconnect")
 {
 // }} ""
-// {{{ 50 1 0 "23fa3cd3_7012_456a_8a3c0940540915c5" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-AspirationMonitoring_1000uLChannel_On(ML_STAR, i_EndpointOutputDataJSONObject);
+// {{{ 65 1 0 "1ac4c7fe_4955_4ad6_aea91b1ae15dfde0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Disconnect(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 51 1 0 "0c9c5b27_5149_4708_bfe1b378c527deb4" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 66 1 0 "0c9c5b27_5149_4708_bfe1b378c527deb4" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 52 1 0 "7c18c24f_0c0c_4959_983cf79e0b863ba7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 67 1 0 "2f9788e7_4cc5_4b32_a866164ef3401de2" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 53 1 0 "ba00db9c_7c89_4d4b_b383b44084830724" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "ClotDetectionMonitoring_1000uLChannel_Off")
+// {{ 68 1 0 "2e084ef6_a9a3_4d0f_af895ae1a907f4a5" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "Home")
 {
 // }} ""
-// {{{ 54 1 0 "7e24fb34_4e79_4f2d_a86f0a13bd056860" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ClotDetectionMonitoring_1000uLChannel_Off(ML_STAR, i_EndpointOutputDataJSONObject);
+// {{{ 69 1 0 "a80de73f_475e_4665_85898bc4a8d32ae9" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Home(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 55 1 0 "167d7639_a16d_4d23_a34a7972322c030d" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 70 1 0 "167d7639_a16d_4d23_a34a7972322c030d" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 56 1 0 "ba00db9c_7c89_4d4b_b383b44084830724" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 71 1 0 "2e084ef6_a9a3_4d0f_af895ae1a907f4a5" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 57 1 0 "74e99b99_ed98_4f48_9b900eaf989b61db" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "ClotDetectionMonitoring_1000uLChannel_On")
+// {{ 72 1 0 "da31139f_2e43_43c2_8c0501f1e832afd9" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "IsSpinning")
 {
 // }} ""
-// {{{ 58 1 0 "4fdb88d9_572c_4e8c_82d4bfe32d76256b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ClotDetectionMonitoring_1000uLChannel_On(ML_STAR, i_EndpointOutputDataJSONObject);
+// {{{ 73 1 0 "65268dc8_25a5_4d9d_9a3f9c9f295cab49" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+IsSpinning(ML_STAR, i_EndpointOutputDataJSONObject);
 // }} ""
-// {{{ 59 1 0 "f349cc24_ede7_459c_86d9650aaa438eed" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+// {{{ 74 1 0 "f349cc24_ede7_459c_86d9650aaa438eed" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
 return;
 // }} ""
-// {{ 60 1 0 "74e99b99_ed98_4f48_9b900eaf989b61db" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 75 1 0 "da31139f_2e43_43c2_8c0501f1e832afd9" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 61 1 0 "1689c1c8_e978_40ba_b6c8933fd0fe578b" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+// {{ 76 1 0 "31c0e374_a8a3_4597_9f877308e5395574" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "OpenShield")
+{
+// }} ""
+// {{{ 77 1 0 "4fe68f7a_dcb3_413a_bcb5397557b96058" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+OpenShield(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 78 1 0 "1c0d74dd_4249_4b97_99ba1a1b99745895" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 79 1 0 "31c0e374_a8a3_4597_9f877308e5395574" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 80 1 0 "74c4f0d7_f237_42f5_bef10bd504560552" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "Spin")
+{
+// }} ""
+// {{{ 81 1 0 "14fe06d3_370c_4e5f_816906583b5c2001" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+Spin(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 82 1 0 "1f5492b2_486b_4f2a_badccd5523b718ab" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 83 1 0 "74c4f0d7_f237_42f5_bef10bd504560552" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 84 1 0 "1689c1c8_e978_40ba_b6c8933fd0fe578b" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
 MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nCommand not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
 // }} ""
-// {{ 62 1 0 "1b64ed4a_0150_4e4f_884bc5d949c97d51" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+// {{ 85 1 0 "1b64ed4a_0150_4e4f_884bc5d949c97d51" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
 abort;
 // }} ""
 // {{{ 5 "HandleCommand" "End"
@@ -176,30 +220,41 @@ abort;
 private function CloseShield( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private object o_JSONObject;
+private variable Status;
 // {{ 5 "CloseShield" "InitLocals"
 // }} ""
-// {{ 10 1 0 "acad3b21_8b8e_4759_964fc24b107f97b1" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 13 1 0 "acad3b21_8b8e_4759_964fc24b107f97b1" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 11 1 0 "5378f61a_40cc_4ad7_bc21851525267b85" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 14 1 0 "5378f61a_40cc_4ad7_bc21851525267b85" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{ 12 1 0 "5d61e262_7a34_4fc9_abce1065f05a353f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 15 1 0 "5d61e262_7a34_4fc9_abce1065f05a353f" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 13 1 0 "8972189a_7309_492c_9313fd0354ff93d4" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLML_STAR::AntiDropletControl_1000ulChannel_On(ML_STAR);
+// {{{ 16 1 0 "52e32c10_42d4_4193_a4bc15e5ef81a0fc" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Status = HSLHiGCentrifugeLib::CloseShield();
 // }} ""
-// {{ 14 1 0 "5d61e262_7a34_4fc9_abce1065f05a353f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 17 1 0 "d00417b9_b6d4_4f0a_8f460bcab3430b85" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Status != 0)
+{
+// }} ""
+// {{{ 18 1 0 "ea638e67_1166_4e5c_a469fc7f6526aec3" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+ErrSetDescription(Translate("Peripheral device communication failed"));
+// }} ""
+// {{ 19 1 0 "d00417b9_b6d4_4f0a_8f460bcab3430b85" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 20 1 0 "5d61e262_7a34_4fc9_abce1065f05a353f" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 15 1 0 "048e83e6_c978_44ea_a9a444c9c584105e" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 21 1 0 "048e83e6_c978_44ea_a9a444c9c584105e" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
-// {{{ 16 1 0 "54297eee_adb5_484c_b3bee9580c08f57d" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 22 1 0 "54297eee_adb5_484c_b3bee9580c08f57d" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
 // }} ""
-// {{ 17 1 0 "acad3b21_8b8e_4759_964fc24b107f97b1" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 23 1 0 "acad3b21_8b8e_4759_964fc24b107f97b1" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
 // {{{ 5 "CloseShield" "End"
@@ -209,30 +264,53 @@ HSLJsonLib::Release(o_JSONObject);
 private function Connect( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private object o_JSONObject;
+private variable AdapterID;
+private variable SimulateMode;
+private variable FirmwareVersion;
+private variable Status;
 // {{ 5 "Connect" "InitLocals"
 // }} ""
-// {{ 19 1 0 "456ff35a_c7d6_456d_afe251931148445f" "{586C3429-F931-405f-9938-928E22C90BFA}"
-
-// }} ""
-// {{{ 20 1 0 "95a1bf15_894e_4539_9e1a2255bf7e5836" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::Create(o_JSONObject);
-// }} ""
-// {{ 21 1 0 "92af7f6d_8a22_47bf_986e149751dabf14" "{586C3429-F931-405f-9938-928E22C90BFA}"
-
-// }} ""
-// {{{ 22 1 0 "912b07cf_3eac_49f6_92bb76d97b79cfed" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLML_STAR::AspirationMonitoring_1000ulChannel_Off(ML_STAR);
-// }} ""
-// {{ 23 1 0 "92af7f6d_8a22_47bf_986e149751dabf14" "{586C3429-F931-405f-9938-928E22C90BFA}"
-
-// }} ""
-// {{{ 24 1 0 "cfb839ca_c1c8_4844_a441910c7eb1266c" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
-// }} ""
-// {{{ 25 1 0 "cfdd8fce_4064_4b7b_b473de8a1fe7e27e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::Release(o_JSONObject);
+// {{{ 25 1 0 "3544dd9b_a9ac_4ba5_bfc8ff3c2eb75012" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+AdapterID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:AdapterID:"));
 // }} ""
 // {{ 26 1 0 "456ff35a_c7d6_456d_afe251931148445f" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 27 1 0 "95a1bf15_894e_4539_9e1a2255bf7e5836" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Create(o_JSONObject);
+// }} ""
+// {{ 28 1 0 "92af7f6d_8a22_47bf_986e149751dabf14" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 29 1 0 "40cfbef4_8fe2_4ad1_ac6140bdf04f7fa7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+SimulateMode = HSLML_STAR::IsSimulatorMode(ML_STAR);
+// }} ""
+// {{{ 30 1 0 "34612ddc_1ebd_4e66_a5ea8bc7245798a6" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Status = HSLHiGCentrifugeLib::Connect(Translate("ABN Centrifuge Device"), AdapterID, SimulateMode, FirmwareVersion);
+// }} ""
+// {{ 31 1 0 "4584406c_f5c7_44d5_bd4141a5c8ad771f" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Status != 0)
+{
+// }} ""
+// {{{ 32 1 0 "fc37c9af_f3aa_4ead_a4e0538faaa7890a" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+ErrSetDescription(Translate("Peripheral device communication failed"));
+// }} ""
+// {{ 33 1 0 "4584406c_f5c7_44d5_bd4141a5c8ad771f" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 34 1 0 "713cec54_675f_4bca_a3bbe07de67faf96" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetStringProperty(o_JSONObject, Translate("FirmwareVersion"), FirmwareVersion);
+// }} ""
+// {{ 35 1 0 "92af7f6d_8a22_47bf_986e149751dabf14" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 36 1 0 "cfb839ca_c1c8_4844_a441910c7eb1266c" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
+// }} ""
+// {{{ 37 1 0 "cfdd8fce_4064_4b7b_b473de8a1fe7e27e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
+// }} ""
+// {{ 38 1 0 "456ff35a_c7d6_456d_afe251931148445f" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
 // {{{ 5 "Connect" "End"
@@ -242,30 +320,41 @@ HSLJsonLib::Release(o_JSONObject);
 private function Disconnect( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private object o_JSONObject;
+private variable Status;
 // {{ 5 "Disconnect" "InitLocals"
 // }} ""
-// {{ 28 1 0 "c04e1e40_639f_4896_91f410be95add69b" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 40 1 0 "c04e1e40_639f_4896_91f410be95add69b" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 29 1 0 "83622997_f894_4b91_9eab01aa53c8c30e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 41 1 0 "83622997_f894_4b91_9eab01aa53c8c30e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{ 30 1 0 "d96607b0_9ba5_4e76_9d98c15cc648f2ef" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 42 1 0 "d96607b0_9ba5_4e76_9d98c15cc648f2ef" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 31 1 0 "3ffb0aef_68e3_41c2_8df682e4eceeab4b" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLML_STAR::AspirationMonitoring_1000ulChannel_On(ML_STAR);
+// {{{ 43 1 0 "6ac271f2_0fe4_4a9c_9fd40292d1e26cc7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Status = HSLHiGCentrifugeLib::Disconnect();
 // }} ""
-// {{ 32 1 0 "d96607b0_9ba5_4e76_9d98c15cc648f2ef" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 44 1 0 "ab87852b_c8b2_4440_8e4dcf683edb66a6" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Status != 0)
+{
+// }} ""
+// {{{ 45 1 0 "2eabc481_b368_4b54_b987d679c90f528f" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+ErrSetDescription(Translate("Peripheral device communication failed"));
+// }} ""
+// {{ 46 1 0 "ab87852b_c8b2_4440_8e4dcf683edb66a6" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 47 1 0 "d96607b0_9ba5_4e76_9d98c15cc648f2ef" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 33 1 0 "a7763347_e7e9_4361_8e42c9d82994d943" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 48 1 0 "a7763347_e7e9_4361_8e42c9d82994d943" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
-// {{{ 34 1 0 "bf6ce235_642d_4553_9f64a59505af9d0a" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 49 1 0 "bf6ce235_642d_4553_9f64a59505af9d0a" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
 // }} ""
-// {{ 35 1 0 "c04e1e40_639f_4896_91f410be95add69b" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 50 1 0 "c04e1e40_639f_4896_91f410be95add69b" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
 // {{{ 5 "Disconnect" "End"
@@ -275,30 +364,41 @@ HSLJsonLib::Release(o_JSONObject);
 private function Home( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private object o_JSONObject;
+private variable Status;
 // {{ 5 "Home" "InitLocals"
 // }} ""
-// {{ 64 1 0 "cfd1f5cc_b330_43ff_80c5a2c5a70c59aa" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 87 1 0 "cfd1f5cc_b330_43ff_80c5a2c5a70c59aa" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 65 1 0 "d120bfbd_d8f9_45bd_b9aa89cb7cfaffba" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 88 1 0 "d120bfbd_d8f9_45bd_b9aa89cb7cfaffba" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{ 66 1 0 "36700947_3911_4f5d_bb03cba2eb33a84b" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 89 1 0 "36700947_3911_4f5d_bb03cba2eb33a84b" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 67 1 0 "ac2fee02_2e0b_4f80_94c2f9eb5337d9b4" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLML_STAR::ClotDetectionMonitoring_1000ulChannel_Off(ML_STAR);
+// {{{ 90 1 0 "c9fd4ceb_5a61_487b_bf585dd1c21b35e7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Status = HSLHiGCentrifugeLib::Home();
 // }} ""
-// {{ 68 1 0 "36700947_3911_4f5d_bb03cba2eb33a84b" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 91 1 0 "1276810a_d5fe_450f_935df4d1036adcec" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Status != 0)
+{
+// }} ""
+// {{{ 92 1 0 "ed9c1653_7334_4eb0_bd4d64e045b0b45a" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+ErrSetDescription(Translate("Peripheral device communication failed"));
+// }} ""
+// {{ 93 1 0 "1276810a_d5fe_450f_935df4d1036adcec" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 94 1 0 "36700947_3911_4f5d_bb03cba2eb33a84b" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 69 1 0 "a66cf53e_7074_4814_8c66c8a7f6c1e282" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 95 1 0 "a66cf53e_7074_4814_8c66c8a7f6c1e282" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
-// {{{ 70 1 0 "5221db20_c0f1_46c6_b6d5575c566a6bcb" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 96 1 0 "5221db20_c0f1_46c6_b6d5575c566a6bcb" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
 // }} ""
-// {{ 71 1 0 "cfd1f5cc_b330_43ff_80c5a2c5a70c59aa" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 97 1 0 "cfd1f5cc_b330_43ff_80c5a2c5a70c59aa" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
 // {{{ 5 "Home" "End"
@@ -308,30 +408,45 @@ HSLJsonLib::Release(o_JSONObject);
 private function IsSpinning( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private object o_JSONObject;
+private variable Status;
+private variable Spinning;
 // {{ 5 "IsSpinning" "InitLocals"
 // }} ""
-// {{ 73 1 0 "88bed4ee_15ff_4c5f_8176a3e4c65fec7e" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 99 1 0 "88bed4ee_15ff_4c5f_8176a3e4c65fec7e" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 74 1 0 "833cc998_119c_40ad_9ba06b23ec9f26fe" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 100 1 0 "833cc998_119c_40ad_9ba06b23ec9f26fe" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{ 75 1 0 "b018001d_0ffa_41f4_acb92ef6183ed505" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 101 1 0 "b018001d_0ffa_41f4_acb92ef6183ed505" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 76 1 0 "400bb8e5_c482_4e96_b7910605acc4a80d" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLML_STAR::ClotDetectionMonitoring_1000ulChannel_On(ML_STAR);
+// {{{ 102 1 0 "828bdb74_c0fd_4f34_a00f5ec28dac284e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Status = HSLHiGCentrifugeLib::IsSpinning(Spinning);
 // }} ""
-// {{ 77 1 0 "b018001d_0ffa_41f4_acb92ef6183ed505" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 103 1 0 "62cd347f_ee12_4013_8bc5e04423609898" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Status != 0)
+{
+// }} ""
+// {{{ 104 1 0 "f2181db1_e821_4b6c_8514a30eae05b49f" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+ErrSetDescription(Translate("Peripheral device communication failed"));
+// }} ""
+// {{ 105 1 0 "62cd347f_ee12_4013_8bc5e04423609898" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{{ 106 1 0 "7dcc24d4_ad42_4864_8dcc9be8a92371f4" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetBooleanProperty(o_JSONObject, Translate("IsSpinning"), Spinning);
+// }} ""
+// {{ 107 1 0 "b018001d_0ffa_41f4_acb92ef6183ed505" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 78 1 0 "161a53bd_b129_4f14_8cf1747c879e5b33" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 108 1 0 "161a53bd_b129_4f14_8cf1747c879e5b33" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
-// {{{ 79 1 0 "917c8245_ea29_468f_a4c798934e09bc85" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 109 1 0 "917c8245_ea29_468f_a4c798934e09bc85" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
 // }} ""
-// {{ 80 1 0 "88bed4ee_15ff_4c5f_8176a3e4c65fec7e" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 110 1 0 "88bed4ee_15ff_4c5f_8176a3e4c65fec7e" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
 // {{{ 5 "IsSpinning" "End"
@@ -341,30 +456,46 @@ HSLJsonLib::Release(o_JSONObject);
 private function OpenShield( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private object o_JSONObject;
+private variable Status;
+private variable BucketIndex;
+private variable AdapterID;
 // {{ 5 "OpenShield" "InitLocals"
 // }} ""
-// {{ 82 1 0 "a5cafdfc_324c_4500_bb5a09c7ac52f4ff" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{{ 112 1 0 "1a23e020_2102_4446_8859463d2c41f1ad" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+BucketIndex = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:BucketIndex:"));
+// }} ""
+// {{ 113 1 0 "a5cafdfc_324c_4500_bb5a09c7ac52f4ff" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 83 1 0 "c3555606_4568_4194_85eb3ba4bbf6efc1" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 114 1 0 "c3555606_4568_4194_85eb3ba4bbf6efc1" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{ 84 1 0 "f6f9c4d2_0ed9_4b6a_94f1577c8e0d858b" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 115 1 0 "f6f9c4d2_0ed9_4b6a_94f1577c8e0d858b" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 85 1 0 "21974bea_203b_47e6_8a3ce5aecd7aa292" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLML_STAR::ClotDetectionMonitoring_1000ulChannel_On(ML_STAR);
+// {{ 116 1 0 "728ec50e_21b0_42c6_9ce7cb71e57edab6" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Status != 0)
+{
 // }} ""
-// {{ 86 1 0 "f6f9c4d2_0ed9_4b6a_94f1577c8e0d858b" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{{ 117 1 0 "a1196e28_4976_47b2_b8cc09db22d4d0a3" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Status = HSLHiGCentrifugeLib::OpenShield(BucketIndex);
+// }} ""
+// {{{ 118 1 0 "81f526ae_68ae_4c85_a70aeaa0e65e3900" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+ErrSetDescription(Translate("Peripheral device communication failed"));
+// }} ""
+// {{ 119 1 0 "728ec50e_21b0_42c6_9ce7cb71e57edab6" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 120 1 0 "f6f9c4d2_0ed9_4b6a_94f1577c8e0d858b" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 87 1 0 "43cf3dd5_9c72_44fc_bc751a9422a3a039" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 121 1 0 "43cf3dd5_9c72_44fc_bc751a9422a3a039" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
-// {{{ 88 1 0 "71670527_2a70_4039_b0154895c20bcec8" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 122 1 0 "71670527_2a70_4039_b0154895c20bcec8" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
 // }} ""
-// {{ 89 1 0 "a5cafdfc_324c_4500_bb5a09c7ac52f4ff" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 123 1 0 "a5cafdfc_324c_4500_bb5a09c7ac52f4ff" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
 // {{{ 5 "OpenShield" "End"
@@ -374,30 +505,54 @@ HSLJsonLib::Release(o_JSONObject);
 private function Spin( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private object o_JSONObject;
+private variable Status;
+private variable BucketIndex;
+private variable DecelerationPercent;
+private variable GForce;
+private variable AccelerationPercent;
 // {{ 5 "Spin" "InitLocals"
 // }} ""
-// {{ 91 1 0 "703df760_8131_406c_8b3c1f7224415307" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{{ 125 1 0 "23be84e2_e4e8_44c3_93a79b726ddd6e92" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+GForce = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:GForce:"));
+// }} ""
+// {{{ 126 1 0 "ba299af1_58d8_40c4_8d00afb09750bde3" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+AccelerationPercent = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:AccelerationPercent:"));
+// }} ""
+// {{{ 127 1 0 "5a8f328b_2ce7_4eba_b9d6cc32cfafc0cd" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+DecelerationPercent = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:DecelerationPercent:"));
+// }} ""
+// {{ 128 1 0 "703df760_8131_406c_8b3c1f7224415307" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 92 1 0 "9185c8bf_bc9e_468c_b7f806bb22e6599a" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 129 1 0 "9185c8bf_bc9e_468c_b7f806bb22e6599a" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{ 93 1 0 "da7a7933_5d97_4243_bc8d4a1438f53a82" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 130 1 0 "da7a7933_5d97_4243_bc8d4a1438f53a82" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 94 1 0 "f2410c39_c991_4a8d_b05e7519d0cc7992" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLML_STAR::ClotDetectionMonitoring_1000ulChannel_On(ML_STAR);
+// {{{ 131 1 0 "1aff4a64_5390_46f6_90de8c1c1d0523bf" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+Status = HSLHiGCentrifugeLib::Spin(GForce, AccelerationPercent, DecelerationPercent, 216000);
 // }} ""
-// {{ 95 1 0 "da7a7933_5d97_4243_bc8d4a1438f53a82" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 132 1 0 "73ca1f6c_0f26_48a6_96bab852f06a3898" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Status != 0)
+{
+// }} ""
+// {{{ 133 1 0 "d612dc47_7d4f_42e0_ae474a26ca62e2b1" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+ErrSetDescription(Translate("Peripheral device communication failed"));
+// }} ""
+// {{ 134 1 0 "73ca1f6c_0f26_48a6_96bab852f06a3898" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 135 1 0 "da7a7933_5d97_4243_bc8d4a1438f53a82" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 96 1 0 "2bf227f8_1df1_427b_929c10985b23d396" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 136 1 0 "2bf227f8_1df1_427b_929c10985b23d396" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
-// {{{ 97 1 0 "4ff4a66e_8040_42cf_9d0a390905af36b9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+// {{{ 137 1 0 "4ff4a66e_8040_42cf_9d0a390905af36b9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
 // }} ""
-// {{ 98 1 0 "703df760_8131_406c_8b3c1f7224415307" "{586C3429-F931-405f-9938-928E22C90BFA}"
+// {{ 138 1 0 "703df760_8131_406c_8b3c1f7224415307" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
 // {{{ 5 "Spin" "End"
@@ -407,4 +562,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 15:17$$checksum=2f8c4153$$length=084$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-17 15:35$$checksum=52ec667f$$length=091$$
