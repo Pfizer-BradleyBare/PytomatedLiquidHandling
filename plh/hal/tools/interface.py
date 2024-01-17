@@ -22,7 +22,7 @@ class Interface:
     backend: BackendBase
     backend_error_handling: bool
 
-    @field_validator("Backend", mode="before")
+    @field_validator("backend", mode="before")
     @classmethod
     def __validate_backend(cls: type[Interface], v: str | BackendBase) -> BackendBase:
         if isinstance(v, BackendBase):

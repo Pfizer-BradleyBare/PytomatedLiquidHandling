@@ -8,6 +8,7 @@ from plh.driver.HAMILTON import FlipTubeTool
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.hal import layout_item
 
+from .closeable_container_base import *
 from .closeable_container_base import CloseableContainerBase, OpenCloseOptions
 
 

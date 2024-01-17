@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, cast
 
 from pydantic import dataclasses
 
+from .deck_location_base import *
 from .deck_location_base import DeckLocationBase
 from .exceptions import DeckLocationNotTransportableError
 

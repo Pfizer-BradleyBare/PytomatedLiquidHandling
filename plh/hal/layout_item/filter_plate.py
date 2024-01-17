@@ -1,5 +1,6 @@
 from pydantic import dataclasses
 
+from .layout_item_base import *
 from .plate import Plate
 
 

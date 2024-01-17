@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pydantic import dataclasses
 
+from .labware_base import *
 from .labware_base import LabwareBase
 from .well import Well
 

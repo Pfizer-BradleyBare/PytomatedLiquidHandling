@@ -34,7 +34,7 @@ def simplify_printed_hal_object(model_dump_json: str) -> str:
 
     get_id(model_load_json)
 
-    return json.dumps(model_dump_json, indent=4)
+    return json.dumps(model_dump_json, indent=4).replace('\\"', "")
 
 
 def load_device_config(
@@ -87,7 +87,6 @@ def load_device_config(
             logger.debug(
                 simplify_printed_hal_object(BaseModel.model_dump_json(hal_device)),
             )
-
             devices[hal_device.identifier] = hal_device  # type: ignore IDK why this is an error...
         else:
             logger.warning(

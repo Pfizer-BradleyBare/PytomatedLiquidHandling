@@ -1,5 +1,6 @@
 from pydantic import dataclasses
 
+from .deck_location_base import *
 from .deck_location_base import DeckLocationBase
 
 

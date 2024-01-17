@@ -4,6 +4,7 @@ from pydantic import Field, dataclasses, field_validator
 
 from plh.hal import labware
 
+from .layout_item_base import *
 from .layout_item_base import LayoutItemBase
 from .lid import Lid
 

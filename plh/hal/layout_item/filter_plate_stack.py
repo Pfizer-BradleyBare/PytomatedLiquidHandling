@@ -6,6 +6,7 @@ from plh.hal import labware
 
 from .coverable_filter_plate import CoverableFilterPlate
 from .filter_plate import FilterPlate
+from .layout_item_base import *
 from .layout_item_base import LayoutItemBase
 
 
