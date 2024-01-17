@@ -42,8 +42,8 @@ class BackendServerBase(BackendSimpleBase):
         self._app = Flask(str(self.identifier))
         logging.getLogger("werkzeug").disabled = True
 
-        self.views += [self.is_active, self.kill]
-        self._app.add_url_rule(self.sub_domain, "Index", self.index)
+        self.views += [self.IsActive, self.Kill]
+        self._app.add_url_rule(self.sub_domain, "Index", self.Index)
         for view in self.views:
             self._app.add_url_rule(
                 self.sub_domain + view.__name__,
@@ -70,7 +70,8 @@ class BackendServerBase(BackendSimpleBase):
 
     def start(self: BackendServerBase) -> None:
         """- Checks that host is available. If host is not available then raises ```ValueError```.
-        - Starts server as daemon thread."""
+        - Starts server as daemon thread.
+        """
         BackendSimpleBase.start(self)
         host = (self.address, self.port)
         if host in BackendServerBase.__hosts:
@@ -98,7 +99,7 @@ class BackendServerBase(BackendSimpleBase):
 
         BackendServerBase.__hosts.remove(host)
 
-    def index(self: BackendServerBase):  # noqa: ANN201
+    def Index(self: BackendServerBase):  # noqa: ANN201
         """Index API endpoint."""
         bound_logger = logger.bind(Server=self)
         bound_logger.debug("Index web API request.")
@@ -112,13 +113,13 @@ class BackendServerBase(BackendSimpleBase):
         response += "</ol>"
         return response, 200
 
-    def is_active(self: BackendServerBase) -> tuple:
+    def IsActive(self: BackendServerBase) -> tuple:
         """IsActive API endpoint."""
         bound_logger = logger.bind(Server=self)
         bound_logger.debug("IsActive web API request.")
         return "Running", 200
 
-    def kill(self: BackendServerBase) -> tuple:
+    def Kill(self: BackendServerBase) -> tuple:
         """Kill API endpoint. Used to kill the server remotely."""
         bound_logger = logger.bind(Server=self)
         bound_logger.debug("Kill web API request.")

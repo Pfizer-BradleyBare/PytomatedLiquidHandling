@@ -43,7 +43,7 @@ private variable StatusCode;
 private variable Content;
 // {{ 5 "ServerIsAlive" "InitLocals"
 // }} ""
-// {{{ 27 1 0 "43e96cfd_ed73_4866_8e942784338b0631" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 27 1 0 "4d948b23_9f05_4ab9_8383305a5994289b" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 StatusCode = SERVERFUNCTIONS::RequestGET(767, Translate("/ActionServer/IsActive"), 5, Content);
 // }} ""
 // {{ 28 1 0 "96d0c78a_7c9d_49c3_876ae24d727547c3" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
@@ -75,7 +75,7 @@ private variable StatusCode;
 private variable Content;
 // {{ 5 "ServerKill" "InitLocals"
 // }} ""
-// {{{ 34 1 0 "4173ccc7_0854_4eb3_bc6218026b954d2e" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 34 1 0 "200f82c2_ec47_496d_ae83e1b3f6f2e3e0" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 StatusCode = SERVERFUNCTIONS::RequestGET(767, Translate("/ActionServer/Kill"), 5, Content);
 // }} ""
 // {{{ 35 1 0 "3c9d83e4_b87f_4373_99cf012d993d8032" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
@@ -101,8 +101,8 @@ HSLJsonLib::Create(JSONObject);
 // {{{ 2 1 0 "23060a60_1607_4613_a7a87b4da8ec3144" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::SetIntegerProperty(JSONObject, Translate("Timeout"), Timeout);
 // }} ""
-// {{{ 3 1 0 "f3c7836e_e660_4bf5_b915b30ec55f46f3" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-StatusCode = SERVERFUNCTIONS::RequestPOST(767, Translate("/ActionServer/GetNextCommand"), Timeout, JSONObject, Content);
+// {{{ 3 1 0 "74cdb8bd_a534_4817_9f05e0d980ee2baf" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StatusCode = SERVERFUNCTIONS::RequestPOST(767, Translate("/ActionServer/Execute"), Timeout, JSONObject, Content);
 // }} ""
 // {{{ 4 1 0 "6dc2304b_e4c0_48d1_82686d085e596d5f" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(JSONObject);
@@ -160,8 +160,8 @@ TrcTrace(JSONObjectString, Translate(""));
 // {{ 18 1 0 "fe329372_f8c9_4239_a8f119d4c0f4de6e" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
 MECC::TraceComment(Translate("###################### END RESPONSE ###################### \n\n"));
 // }} ""
-// {{{ 19 1 0 "0296994e_8c7a_4ce9_b7781b008dd20600" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-StatusCode = SERVERFUNCTIONS::RequestPOST(767, Translate("/ActionServer/RespondToCommand"), 5, i_ResponseData_JSONObject, Content);
+// {{{ 19 1 0 "12397532_4349_4d05_8feba7713b0be1d4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+StatusCode = SERVERFUNCTIONS::RequestPOST(767, Translate("/ActionServer/Acknowledge"), 5, i_ResponseData_JSONObject, Content);
 // }} ""
 // {{{ 20 1 0 "e1cb291e_0b5c_463e_a664b12ef02a75e6" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(i_ResponseData_JSONObject);
@@ -191,4 +191,4 @@ return (0);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 08:50$$checksum=b6672f7b$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-17 08:57$$checksum=7a2f11dc$$length=084$$
