@@ -17,10 +17,6 @@ closeable_container_device = hal.closeable_container.devices["FlipTube"]
 
 closeable_container_device.initialize()
 
-closeable_container_device.deinitialize()
-
-quit()
-
 open_close_options: list[hal.closeable_container.OpenCloseOptions] = []
 
 open_close_options.append(
@@ -45,3 +41,5 @@ open_close_options.append(
 closeable_container_device.assert_open_close_options(open_close_options)
 closeable_container_device.open(open_close_options)
 closeable_container_device.close(open_close_options)
+
+closeable_container_device.deinitialize()
