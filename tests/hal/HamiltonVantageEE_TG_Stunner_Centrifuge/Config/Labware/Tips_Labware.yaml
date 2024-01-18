@@ -17,6 +17,24 @@ NonPipettable Labware:
       top: 33
       bottom: 42
 
+  - identifier: FTRTipRack
+    enabled: True
+    image_filename: N/A
+    part_number: 235904(1000uL)
+    layout:
+      type: Numeric
+      direction: Columnwise
+      columns: 12
+      rows: 8
+    dimensions:
+      x_length: 120.5
+      y_length: 78.5
+    transport_offsets:
+      open: 10
+      close: 2
+      top: 33
+      bottom: 42
+
   - identifier: FTRStackableTipRack
     enabled: True
     image_filename: N/A

@@ -1,0 +1,5 @@
+Tip Rack:
+  - enabled: True
+    labware_id: FlipTubes_Carrier_1
+    deck_location: Carrier41_Pos1
+    labware: Hamilton1500uLFlipTubeCarrier

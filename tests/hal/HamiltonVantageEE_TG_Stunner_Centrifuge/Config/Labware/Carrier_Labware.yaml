@@ -27,3 +27,61 @@ Pipettable Labware:
       close: 0
       top: 0
       bottom: 0
+
+  - identifier: 15mLCentrifugeTubeCarrier
+    enabled: True
+    image_filename: N/A
+    part_number: "?"
+    layout:
+      type: Numeric
+      direction: Columnwise
+      columns: 1
+      rows: 24
+    well_definition:
+      positions_per_well: 1
+      max_volume: 15000
+      dead_volume: 500
+      segments:
+        - height: 23.36
+          equation: h * 62.5430
+
+        - height: 95.25
+          equation: h * 144.9724
+
+    dimensions:
+      x_length: 0
+      y_length: 0
+    transport_offsets:
+      open: 0
+      close: 0
+      top: 0
+      bottom: 0
+
+  - identifier: Hamilton60mLReagentReservoirCarrier
+    enabled: True
+    image_filename: N/A
+    part_number: "?"
+    layout:
+      type: Numeric
+      direction: Columnwise
+      columns: 1
+      rows: 5
+    well_definition:
+      positions_per_well: 8
+      max_volume: 60000
+      dead_volume: 500
+      segments:
+        - height: 6.72
+          equation: h * 67.0206
+
+        - height: 56
+          equation: h * 170.5500
+
+    dimensions:
+      x_length: 0
+      y_length: 0
+    transport_offsets:
+      open: 0
+      close: 0
+      top: 0
+      bottom: 0
