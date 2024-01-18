@@ -7,6 +7,7 @@
 #include "BioNex HiG\\HSLHiGCentrifugeLib.hsl"
 #include "HSLErrLib.hsl"
 #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_"
+#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
 #include "HSLMETEDLib.hs_"
@@ -44,12 +45,14 @@ PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
 PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
 ACTIONSERVERENDPOINTS::_InitLibrary();
 JSONPARSER::_InitLibrary();
+STATESERVERENDPOINTS::_InitLibrary();
 // }} ""
 }
 function _ExitLibrary() {
 // {{ 2 "AutoExitBlock" ""
 ACTIONSERVERENDPOINTS::_ExitLibrary();
 JSONPARSER::_ExitLibrary();
+STATESERVERENDPOINTS::_ExitLibrary();
 // }} ""
 }
 // {{{ 5 "AbortSpin" "Begin"
@@ -57,8 +60,6 @@ private function AbortSpin( device & ML_STAR, object & i_EndpointOutputDataJSONO
 // }} ""
 private object o_JSONObject;
 private variable Status;
-private variable Handle;
-private variable HandleArray[];
 // {{ 5 "AbortSpin" "InitLocals"
 // }} ""
 // {{ 1 1 0 "3ebddd88_8084_4dea_8f2660965a139da7" "{586C3429-F931-405f-9938-928E22C90BFA}"
@@ -298,9 +299,11 @@ ErrSetDescription(Translate("Peripheral device communication failed"));
 // {{ 33 1 0 "4584406c_f5c7_44d5_bd4141a5c8ad771f" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
+/* {{ 1 "" "0" */ if(0){  /* }} "" */
 // {{{ 34 1 0 "713cec54_675f_4bca_a3bbe07de67faf96" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::SetStringProperty(o_JSONObject, Translate("FirmwareVersion"), FirmwareVersion);
 // }} ""
+/* {{ 1 "" "1" */ } /* }} "" */
 // {{ 35 1 0 "92af7f6d_8a22_47bf_986e149751dabf14" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
@@ -440,8 +443,8 @@ HSLJsonLib::SetBooleanProperty(o_JSONObject, Translate("IsSpinning"), Spinning);
 // {{ 107 1 0 "b018001d_0ffa_41f4_acb92ef6183ed505" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{{ 108 1 0 "161a53bd_b129_4f14_8cf1747c879e5b33" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
+// {{{ 108 1 0 "188b8b82_543b_4581_922ba44620df8795" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+STATESERVERENDPOINTS::RespondToCommand(o_JSONObject);
 // }} ""
 // {{{ 109 1 0 "917c8245_ea29_468f_a4c798934e09bc85" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Release(o_JSONObject);
@@ -458,7 +461,6 @@ private function OpenShield( device & ML_STAR, object & i_EndpointOutputDataJSON
 private object o_JSONObject;
 private variable Status;
 private variable BucketIndex;
-private variable AdapterID;
 // {{ 5 "OpenShield" "InitLocals"
 // }} ""
 // {{{ 112 1 0 "1a23e020_2102_4446_8859463d2c41f1ad" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -506,7 +508,6 @@ private function Spin( device & ML_STAR, object & i_EndpointOutputDataJSONObject
 // }} ""
 private object o_JSONObject;
 private variable Status;
-private variable BucketIndex;
 private variable DecelerationPercent;
 private variable GForce;
 private variable AccelerationPercent;
@@ -562,4 +563,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-17 15:35$$checksum=52ec667f$$length=091$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-18 09:53$$checksum=5f6dfc1e$$length=091$$

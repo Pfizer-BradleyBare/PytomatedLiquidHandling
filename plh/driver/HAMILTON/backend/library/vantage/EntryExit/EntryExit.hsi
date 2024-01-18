@@ -54,27 +54,11 @@ STATESERVERENDPOINTS::_ExitLibrary();
 // {{{ 5 "MoveToBeam" "Begin"
 private function MoveToBeam( device & ML_STAR, device & EntryExit, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
-private variable GripHeight;
-private variable GripWidth;
-private variable GripForce;
-private variable OpenWidth;
-private sequence Sequence;
-private variable InverseGrip;
-private variable CollisionControl;
-private variable LiftupHeight;
-private variable RetractDistance;
-private variable LabwareOrientation;
-private variable GripMode;
-private variable Tolerance;
-private variable Movement;
 private variable CustomErrorHandling;
 private object o_JSONObject;
-private variable PlateLabwareID;
-private variable RecoveryDetails;
 private variable ModuleNumber;
 private variable StackNumber;
 private variable OffsetFromBeam;
-private variable Position;
 // {{ 5 "MoveToBeam" "InitLocals"
 // }} ""
 // {{{ 84 1 0 "6fda76be_8b26_47f0_a8f99b8c8428ab7d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
@@ -257,8 +241,8 @@ else
 // {{{ 17 1 0 "7ef35986_bc5e_4f4c_8d8eb7e9642ed34c" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 HSLJsonLib::Create(o_JSONObject);
 // }} ""
-// {{{ 18 1 0 "de9154af_025f_4893_a2a84f3badc04d87" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetStringProperty(o_JSONObject, Translate("NumLabware"), NumLabware);
+// {{{ 18 1 0 "420c6660_34f3_402d_9269955ceeba3292" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetIntegerProperty(o_JSONObject, Translate("NumLabware"), NumLabware);
 // }} ""
 // {{{ 19 1 0 "ef00dd65_29fb_484a_9bc90274344a544d" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
@@ -342,15 +326,7 @@ abort;
 private function LockUnlockDoors( device & ML_STAR, device & EntryExit, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private object o_JSONObject;
-private variable PlateLabwareID;
-private variable RecoveryDetails;
 private variable CustomErrorHandling;
-private variable CollisionControl;
-private variable LiftupHeight;
-private variable RetractDistance;
-private variable LabwareOrientation;
-private variable Movement;
-private sequence Sequence;
 private variable LockState;
 // {{ 5 "LockUnlockDoors" "InitLocals"
 // }} ""
@@ -526,4 +502,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-17 09:55$$checksum=0a717d8a$$length=091$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-18 09:37$$checksum=bf361a2c$$length=091$$

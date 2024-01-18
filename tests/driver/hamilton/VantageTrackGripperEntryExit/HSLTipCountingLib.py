@@ -13,11 +13,11 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
             DialogTitle="Title",
         ),
     )
-    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="FTR_1"))
-    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="FTR_2"))
-    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="FTR_3"))
-    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="FTR_4"))
-    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="FTR_5"))
+    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="Tips_FTR_1000uL_1"))
+    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="Tips_FTR_1000uL_2"))
+    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="Tips_FTR_1000uL_3"))
+    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="Tips_FTR_1000uL_4"))
+    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="Tips_FTR_1000uL_5"))
     backend.execute(command)
     backend.wait(command)
     available_positions = backend.acknowledge(
@@ -52,11 +52,11 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
             DialogTitle="Title",
         ),
     )
-    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="FTR_1"))
-    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="FTR_2"))
-    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="FTR_3"))
-    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="FTR_4"))
-    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="FTR_5"))
+    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="Tips_FTR_1000uL_1"))
+    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="Tips_FTR_1000uL_2"))
+    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="Tips_FTR_1000uL_3"))
+    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="Tips_FTR_1000uL_4"))
+    command.options.append(HSLTipCountingLib.Edit.Options(LabwareID="Tips_FTR_1000uL_5"))
     backend.execute(command)
     backend.wait(command)
     backend.acknowledge(

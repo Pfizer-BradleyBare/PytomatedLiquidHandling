@@ -16,11 +16,9 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     )
     backend.execute(command)
     backend.wait(command)
-    logger.info(
-        backend.acknowledge(
-            command,
-            HSLHiGCentrifugeLib.Connect.Response,
-        ).FirmwareVersion,
+    backend.acknowledge(
+        command,
+        HSLHiGCentrifugeLib.Connect.Response,
     )
 
     logger.info("Home")

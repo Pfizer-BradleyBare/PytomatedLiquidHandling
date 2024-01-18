@@ -19,7 +19,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     logger.info("Pickup")
 
     command = FlipTubeTool.ToolsPickUp.Command(
-        options=FlipTubeTool.ToolsPickUp.OptionsList(LabwareID="FlipTubeTools"),
+        options=FlipTubeTool.ToolsPickUp.OptionsList(LabwareID="Tool_FlipTube_4"),
     )
     command.options.append(FlipTubeTool.ToolsPickUp.Options(ChannelNumber=1))
     command.options.append(FlipTubeTool.ToolsPickUp.Options(ChannelNumber=2))
@@ -33,28 +33,28 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     command = FlipTubeTool.FlipTubeOpen.Command(options=[])
     command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
-            LabwareID="FlipTubes",
+            LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
             PositionID="1",
             ChannelNumber=1,
         ),
     )
     command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
-            LabwareID="FlipTubes",
+            LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
             PositionID="2",
             ChannelNumber=2,
         ),
     )
     command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
-            LabwareID="FlipTubes",
+            LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
             PositionID="3",
             ChannelNumber=3,
         ),
     )
     command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
-            LabwareID="FlipTubes",
+            LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
             PositionID="4",
             ChannelNumber=4,
         ),
@@ -67,28 +67,28 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     command = FlipTubeTool.FlipTubeClose.Command(options=[])
     command.options.append(
         FlipTubeTool.FlipTubeClose.Options(
-            LabwareID="FlipTubes",
+            LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
             PositionID="1",
             ChannelNumber=1,
         ),
     )
     command.options.append(
         FlipTubeTool.FlipTubeClose.Options(
-            LabwareID="FlipTubes",
+            LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
             PositionID="2",
             ChannelNumber=2,
         ),
     )
     command.options.append(
         FlipTubeTool.FlipTubeClose.Options(
-            LabwareID="FlipTubes",
+            LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
             PositionID="3",
             ChannelNumber=3,
         ),
     )
     command.options.append(
         FlipTubeTool.FlipTubeClose.Options(
-            LabwareID="FlipTubes",
+            LabwareID="SMP_CAR_32_FlipTubes_A02_0001",
             PositionID="4",
             ChannelNumber=4,
         ),
@@ -99,7 +99,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
 
     logger.info("Eject")
     command = FlipTubeTool.ToolsEject.Command(
-        options=FlipTubeTool.ToolsEject.Options(LabwareID="FlipTubeTools"),
+        options=FlipTubeTool.ToolsEject.Options(LabwareID="Tool_FlipTube_4"),
     )
     backend.execute(command)
     backend.wait(command)

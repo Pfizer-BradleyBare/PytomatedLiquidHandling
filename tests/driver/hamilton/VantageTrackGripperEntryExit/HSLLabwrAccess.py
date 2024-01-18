@@ -10,7 +10,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     command = HSLLabwrAccess.AbsolutePositionValuesGetForLabwareID.Command(
         options=[
             HSLLabwrAccess.AbsolutePositionValuesGetForLabwareID.Options(
-                LabwareID="Plate_1",
+                LabwareID="Ham_24_RB_TuR_1_5ml_0001",
             ),
         ],
     )
@@ -27,7 +27,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     command = HSLLabwrAccess.AbsolutePositionValuesSetForLabwareID.Command(
         options=[
             HSLLabwrAccess.AbsolutePositionValuesSetForLabwareID.Options(
-                LabwareID="Plate_1",
+                LabwareID="Ham_24_RB_TuR_1_5ml_0001",
                 XPosition=0,
                 YPosition=0,
                 ZPosition=0,
@@ -51,7 +51,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     )
     command.options.append(
         HSLLabwrAccess.ValueForKeySetForPropertiesOfLabwareID.Options(
-            LabwareID="Plate_1",
+            LabwareID="Ham_24_RB_TuR_1_5ml_0001",
         ),
     )
     backend.execute(command)
@@ -65,7 +65,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     command = HSLLabwrAccess.TestLabwareIDExists.Command(
         options=[
             HSLLabwrAccess.TestLabwareIDExists.Options(
-                LabwareID="Plate_1",
+                LabwareID="Ham_24_RB_TuR_1_5ml_0001",
             ),
         ],
     )

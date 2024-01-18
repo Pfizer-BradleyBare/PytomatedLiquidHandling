@@ -44,7 +44,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     command = TrackGripper.GripPlateFromTaughtPosition.Command(
         options=TrackGripper.GripPlateFromTaughtPosition.Options(
             OpenWidth=135,
-            TaughtPathName="",
+            TaughtPathName="On Deck Transition Point",
         ),
         backend_error_handling=True,
     )
@@ -57,7 +57,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     command = TrackGripper.PlacePlateToTaughtPosition.Command(
         options=TrackGripper.PlacePlateToTaughtPosition.Options(
             OpenWidth=10,
-            TaughtPathName="",
+            TaughtPathName="On Deck Transition Point",
         ),
         backend_error_handling=True,
     )

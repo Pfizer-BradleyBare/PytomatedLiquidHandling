@@ -33,23 +33,23 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
 
     command = EntryExit.CountLabwareInStack.Command(
         options=EntryExit.CountLabwareInStack.Options(
-            ModuleNumber=1,
-            StackNumber=3,
-            LabwareID="",
+            ModuleNumber=4,
+            StackNumber=4,
+            LabwareID="Tips_NTR_50uL_EntryExit",
             IsNTRRack=True,
         ),
         backend_error_handling=True,
     )
     backend.execute(command)
     backend.wait(command)
-    backend.acknowledge(command, EntryExit.CountLabwareInStack.Response)
+    logger.info(backend.acknowledge(command, EntryExit.CountLabwareInStack.Response).NumLabware)
 
     logger.info("MoveRandomShelfAccess")
 
     command = EntryExit.MoveRandomShelfAccess.Command(
         options=EntryExit.MoveRandomShelfAccess.Options(
-            ModuleNumber=1,
-            StackNumber=3,
+            ModuleNumber=4,
+            StackNumber=4,
             Position=EntryExit.MoveRandomShelfAccess.PositionOptions.Bottom,
         ),
         backend_error_handling=True,
@@ -62,8 +62,8 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
 
     command = EntryExit.MoveToBeam.Command(
         options=EntryExit.MoveToBeam.Options(
-            ModuleNumber=1,
-            StackNumber=3,
+            ModuleNumber=4,
+            StackNumber=4,
             OffsetFromBeam=0,
         ),
         backend_error_handling=True,
