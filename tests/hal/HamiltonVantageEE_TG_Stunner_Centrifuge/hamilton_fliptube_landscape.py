@@ -26,7 +26,7 @@ open_close_options.append(
     hal.closeable_container.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=2),
 )
 open_close_options.append(
-    hal.closeable_container.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=3),
+    hal.closeable_container.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=6),
 )
 open_close_options.append(
     hal.closeable_container.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=4),
@@ -35,11 +35,13 @@ open_close_options.append(
     hal.closeable_container.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=5),
 )
 open_close_options.append(
-    hal.closeable_container.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=6),
+    hal.closeable_container.OpenCloseOptions(LayoutItem=FlipTubePlate, Position=3),
 )
 
 closeable_container_device.assert_open_close_options(open_close_options)
 closeable_container_device.open(open_close_options)
 closeable_container_device.close(open_close_options)
+
+input("ENTER")
 
 closeable_container_device.deinitialize()
