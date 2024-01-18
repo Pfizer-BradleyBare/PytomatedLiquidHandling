@@ -7,6 +7,7 @@ from pydantic import dataclasses
 from plh.driver.HAMILTON import HSLTipCountingLib
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 
+from .tip_base import *
 from .tip_base import TipBase
 
 

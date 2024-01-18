@@ -1,0 +1,36 @@
+#############################################################
+#
+# Device IDs: This identifies the Device to users
+# Enabled: True: Can be used. False: Cannot be used
+# Com Port: Port to communicate with the Device
+# Device Type: HeaterShaker or HeaterCooler
+# Ambient Temp: Above ambient temp will heat, below ambient will cool. If device cannot cool then this is ignored
+# Stable Temp Delta: If device temp is +- this value of set temp. Device is considered equilibrated and stable.
+# Supported Labware: These are the plate supported by this device. This associates with the deck sequences file
+# Plate Sequence: Sequence for that plate on the device
+# Lid Sequence: Sequence for associated lid on the device
+#
+#############################################################
+
+Hamilton Heater Shaker:
+  - identifier: Heater Shaker 1
+    enabled: True
+    backend: Hamilton
+    com_port: 1
+    plates:
+      - Carrier7_Pos1_Biorad200uLPCRPlate
+      - Carrier7_Pos1_CorningCostar2000uLPCRPlate
+      - Carrier7_Pos1_Hamilton1500uLFlipTubeRack
+      - Carrier7_Pos1_Thermo400uLPCRPlate
+      - Carrier7_Pos1_ThermoAbgene1200uLPCRPlate
+
+  - identifier: Heater Shaker 2
+    enabled: True
+    backend: Hamilton
+    com_port: 2
+    plates:
+      - Carrier7_Pos2_Biorad200uLPCRPlate
+      - Carrier7_Pos2_CorningCostar2000uLPCRPlate
+      - Carrier7_Pos2_Hamilton1500uLFlipTubeRack
+      - Carrier7_Pos2_Thermo400uLPCRPlate
+      - Carrier7_Pos2_ThermoAbgene1200uLPCRPlate

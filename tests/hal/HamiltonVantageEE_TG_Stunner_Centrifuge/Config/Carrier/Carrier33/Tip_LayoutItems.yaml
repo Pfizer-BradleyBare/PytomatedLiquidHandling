@@ -5,6 +5,6 @@ Tip Rack:
     labware: NTRTipRack
 
   - enabled: True
-    labware_id: Tips_FTR_1000uL_2
+    labware_id: Tips_NTR_50uL
     deck_location: Carrier33_Pos4
     labware: NTRTipRack

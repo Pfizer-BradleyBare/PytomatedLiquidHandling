@@ -19,7 +19,7 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
     backend: HamiltonBackendBase
     backend_error_handling: Literal["N/A"] = "N/A"
 
-    handle_id: str = field(init=False)
+    handle_id: str = field(init=False, default="NONE")
 
     def assert_options(
         self: HamiltonHeaterCooler,

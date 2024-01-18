@@ -18,7 +18,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
     com_port: int
     backend: HamiltonBackendBase
     backend_error_handling: Literal["N/A"] = "N/A"
-    handle_id: int = field(init=False)
+    handle_id: int = field(init=False, default=0)
 
     def assert_options(
         self: HamiltonHeaterShaker,
@@ -59,7 +59,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
 
         command = HSLHamHeaterShakerLib.SetPlateLock.Command(
             options=HSLHamHeaterShakerLib.SetPlateLock.Options(
-                HandleID=int(self.handle_id),
+                HandleID=self.handle_id,
                 PlateLockState=HSLHamHeaterShakerLib.SetPlateLock.PlateLockStateOptions.Locked,
             ),
         )
@@ -72,7 +72,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
 
         command = HSLHamHeaterShakerLib.SetPlateLock.Command(
             options=HSLHamHeaterShakerLib.SetPlateLock.Options(
-                HandleID=int(self.handle_id),
+                HandleID=self.handle_id,
                 PlateLockState=HSLHamHeaterShakerLib.SetPlateLock.PlateLockStateOptions.Unlocked,
             ),
         )
@@ -86,7 +86,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
     def deinitialize(self: HamiltonHeaterShaker) -> None:
         command = HSLHamHeaterShakerLib.StopTempCtrl.Command(
             options=HSLHamHeaterShakerLib.StopTempCtrl.Options(
-                HandleID=int(self.handle_id),
+                HandleID=self.handle_id,
             ),
         )
         self.backend.execute(command)
@@ -98,7 +98,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
 
         command = HSLHamHeaterShakerLib.StopShaker.Command(
             options=HSLHamHeaterShakerLib.StopShaker.Options(
-                HandleID=int(self.handle_id),
+                HandleID=self.handle_id,
             ),
         )
         self.backend.execute(command)
@@ -110,7 +110,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
 
         command = HSLHamHeaterShakerLib.SetPlateLock.Command(
             options=HSLHamHeaterShakerLib.SetPlateLock.Options(
-                HandleID=int(self.handle_id),
+                HandleID=self.handle_id,
                 PlateLockState=HSLHamHeaterShakerLib.SetPlateLock.PlateLockStateOptions.Unlocked,
             ),
         )
@@ -129,7 +129,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
 
         command = HSLHamHeaterShakerLib.StartTempCtrl.Command(
             options=HSLHamHeaterShakerLib.StartTempCtrl.Options(
-                HandleID=int(self.handle_id),
+                HandleID=self.handle_id,
                 Temperature=temperature,
             ),
         )
@@ -146,7 +146,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
     def get_temperature(self: HamiltonHeaterShaker) -> float:
         command = HSLHamHeaterShakerLib.GetTemperature.Command(
             options=HSLHamHeaterShakerLib.GetTemperature.Options(
-                HandleID=int(self.handle_id),
+                HandleID=self.handle_id,
             ),
         )
         self.backend.execute(command)
@@ -162,7 +162,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
         if rpm == 0:
             command = HSLHamHeaterShakerLib.StopShaker.Command(
                 options=HSLHamHeaterShakerLib.StopShaker.Options(
-                    HandleID=int(self.handle_id),
+                    HandleID=self.handle_id,
                 ),
             )
             self.backend.execute(command)
@@ -174,7 +174,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
 
             command = HSLHamHeaterShakerLib.SetPlateLock.Command(
                 options=HSLHamHeaterShakerLib.SetPlateLock.Options(
-                    HandleID=int(self.handle_id),
+                    HandleID=self.handle_id,
                     PlateLockState=HSLHamHeaterShakerLib.SetPlateLock.PlateLockStateOptions.Unlocked,
                 ),
             )
@@ -188,7 +188,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
         else:
             command = HSLHamHeaterShakerLib.SetPlateLock.Command(
                 options=HSLHamHeaterShakerLib.SetPlateLock.Options(
-                    HandleID=int(self.handle_id),
+                    HandleID=self.handle_id,
                     PlateLockState=HSLHamHeaterShakerLib.SetPlateLock.PlateLockStateOptions.Locked,
                 ),
             )
@@ -201,7 +201,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
 
             command = HSLHamHeaterShakerLib.StartShaker.Command(
                 options=HSLHamHeaterShakerLib.StartShaker.Options(
-                    HandleID=int(self.handle_id),
+                    HandleID=self.handle_id,
                     ShakingSpeed=rpm,
                 ),
             )
@@ -215,7 +215,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
     def get_shaking_speed(self: HamiltonHeaterShaker) -> int:
         command = HSLHamHeaterShakerLib.GetShakerSpeed.Command(
             options=HSLHamHeaterShakerLib.GetShakerSpeed.Options(
-                HandleID=int(self.handle_id),
+                HandleID=self.handle_id,
             ),
         )
         self.backend.execute(command)

@@ -9,6 +9,7 @@ from plh.driver.HAMILTON import Visual_NTR_Library
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.hal import deck_location, layout_item
 
+from .tip_base import *
 from .tip_base import TipBase
 
 

@@ -1,4 +1,4 @@
-Tip Rack:
+Plate:
   - enabled: True
     labware_id: Centrifuge_Tubes_1
     deck_location: Carrier40_Pos1

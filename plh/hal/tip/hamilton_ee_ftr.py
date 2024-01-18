@@ -9,6 +9,7 @@ from plh.driver.HAMILTON import EntryExit, HSLTipCountingLib
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.hal import deck_location, layout_item
 
+from .tip_base import *
 from .tip_base import TipBase
 
 
@@ -24,7 +25,7 @@ class HamiltonEEFTR(TipBase):
     backend: VantageTrackGripperEntryExit
 
     tip_stacks: list[TipStack]
-    racks_per_stack: int
+    # racks_per_stack: int
     tip_rack_waste: layout_item.TipRack
 
     def initialize(self: HamiltonEEFTR) -> None:
