@@ -181,6 +181,9 @@ class HamiltonEENTR(TipBase):
                 EntryExit.CountLabwareInStack.Response,
             ).NumLabware
 
+            if self.backend.simulation_on is True:
+                stack.stack_count = 100
+
         command = HSLTipCountingLib.Edit.Command(
             options=HSLTipCountingLib.Edit.OptionsList(
                 TipCounter=f"{type(self).__name__}_{int(self.volume)}",
