@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from pydantic import dataclasses, field_validator
-
+from abc import ABC, abstractmethod
 from plh.driver.tools import BackendBase
 from plh.hal import backend
 
 
 @dataclasses.dataclass(kw_only=True)
-class Interface:
+class Interface(ABC):
     """Allows devices to abstract away functionality.
 
     Example: There are many systems which utilize pipette devices.
@@ -38,10 +38,10 @@ class Interface:
 
         return objects[identifier]
 
+    @abstractmethod
     def initialize(self: Interface) -> None:
-        if self.backend.is_running is False:
-            self.backend.start()
-
+        ...
+    
+    @abstractmethod
     def deinitialize(self: Interface) -> None:
-        if self.backend.is_running is True:
-            self.backend.stop()
+        ...

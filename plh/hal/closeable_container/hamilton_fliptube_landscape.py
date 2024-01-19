@@ -7,6 +7,7 @@ from pydantic import dataclasses
 from plh.driver.HAMILTON import FlipTubeTool
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.hal import layout_item
+from plh.hal.tools.interface import Interface
 
 from .closeable_container_base import *
 from .closeable_container_base import CloseableContainerBase, OpenCloseOptions
@@ -31,8 +32,6 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
     tool_labware_id: str
 
     def initialize(self: HamiltonFlipTubeLandscape) -> None:
-        CloseableContainerBase.initialize(self)
-
         command = FlipTubeTool.Initialize.Command(
             options=FlipTubeTool.Initialize.Options(
                 ToolOrientation=FlipTubeTool.Initialize.ToolOrientationOptions.Landscape,
@@ -41,6 +40,9 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         self.backend.execute(command)
         self.backend.wait(command)
         self.backend.acknowledge(command, FlipTubeTool.Initialize.Response)
+
+    def deinitialize(self: HamiltonFlipTubeLandscape) -> None:
+        ...
 
     def open(
         self: HamiltonFlipTubeLandscape,

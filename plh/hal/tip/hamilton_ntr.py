@@ -26,6 +26,12 @@ class HamiltonNTR(TipBase):
         default_factory=list,
     )
 
+    def initialize(self: HamiltonNTR) -> None:
+        ...
+
+    def deinitialize(self: HamiltonNTR) -> None:
+        ...
+
     def remaining_tips_in_tier(self: HamiltonNTR) -> int:
         remaining = self.remaining_tips() % (self.tips_per_rack * self.tiers)
 

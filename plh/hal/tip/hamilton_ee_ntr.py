@@ -73,7 +73,10 @@ class HamiltonEENTR(TipBase):
         return objects[identifier]
 
     def initialize(self: HamiltonEENTR) -> None:
-        TipBase.initialize(self)
+        ...
+
+    def deinitialize(self: HamiltonEENTR) -> None:
+        ...
 
     def remaining_tips(self: HamiltonEENTR) -> int:
         return self.remaining_tips_in_tier() + sum(

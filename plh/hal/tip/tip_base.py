@@ -64,23 +64,20 @@ class TipBase(Interface, HALDevice):
                 ),
             )
 
-    def initialize(self: TipBase) -> None:
-        Interface.initialize(self)
+    @abstractmethod
+    def tips_in_teir(self: TipBase) -> list[AvailablePosition]:
+        """All accessible tips."""
+        ...
 
-    def get_tips(self: TipBase, num: int) -> list[AvailablePosition]:
-        if len(self._AvailablePositions) < num:
-            msg = "Not enough tips available"
-            raise RuntimeError(msg)
-
-        tips = self._AvailablePositions[:num]
-        self._AvailablePositions = self._AvailablePositions[num:]
-        return tips
+    def use_tips(self: TipBase, num: int) -> None:
+        """Indicated that the following number of tips have been used and are no longer available."""
+        self.available_positions = self.available_positions[num:]
 
     def remaining_tips(self: TipBase) -> int:
         """Total number of tips.
         NOTE: This is not guarenteed to be the number of accessible tips. Call RemainingTipsInTier for that info.
         """
-        return len(self._AvailablePositions)
+        return len(self.available_positions)
 
     @abstractmethod
     def update_available_positions(self: TipBase) -> None:

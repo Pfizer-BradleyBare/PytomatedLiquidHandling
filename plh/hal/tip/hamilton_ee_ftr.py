@@ -73,32 +73,10 @@ class HamiltonEEFTR(TipBase):
         return objects[identifier]
 
     def initialize(self: HamiltonEEFTR) -> None:
-        TipBase.initialize(self)
+        ...
 
-        command = HSLTipCountingLib.Edit.Command(
-            options=HSLTipCountingLib.Edit.OptionsList(
-                TipCounter="HamiltonTipFTR_" + str(self.volume) + "uL_TipCounter",
-                DialogTitle="Please update the number of "
-                + str(self.volume)
-                + "uL tips currently loaded on the system",
-            ),
-        )
-        for tip_rack in self.tip_racks:
-            command.options.append(
-                HSLTipCountingLib.Edit.Options(LabwareID=tip_rack.labware_id),
-            )
-
-        self.backend.execute(command)
-        self.backend.wait(command)
-        self._parse_available_positions(
-            cast(
-                list[dict[str, str]],
-                self.backend.acknowledge(
-                    command,
-                    HSLTipCountingLib.Edit.Response,
-                ).AvailablePositions,
-            ),
-        )
+    def deinitialize(self: HamiltonEEFTR) -> None:
+        ...
 
     def remaining_tips(self: HamiltonEEFTR) -> int:
         return self.remaining_tips_in_tier() + sum(
