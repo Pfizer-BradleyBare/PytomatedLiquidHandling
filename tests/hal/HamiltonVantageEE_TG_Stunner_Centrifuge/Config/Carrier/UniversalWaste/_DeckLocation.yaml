@@ -1,0 +1,20 @@
+NonTransportable Deck Location:
+  - enabled: True
+    carrier_config:
+      carrier: Carrier60
+      position: 1
+
+  - enabled: True
+    carrier_config:
+      carrier: Carrier60
+      position: 2
+
+  - enabled: True
+    carrier_config:
+      carrier: Carrier60
+      position: 3
+
+  - enabled: True
+    carrier_config:
+      carrier: Carrier60
+      position: 4

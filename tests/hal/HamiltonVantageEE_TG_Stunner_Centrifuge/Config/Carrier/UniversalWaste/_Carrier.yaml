@@ -2,6 +2,6 @@ Non Moveable Carrier:
   - enabled: True
     track_start: 60
     track_end: 69
-    num_labware_positions: 5
+    num_labware_positions: 4
     image_path_3d: 3DImage
     image_path_2d: 2DImage
