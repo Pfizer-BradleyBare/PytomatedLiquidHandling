@@ -26,30 +26,30 @@ Hamilton FTR:
       - Carrier27_Pos5_FTRTipRack
 
 Hamilton EE NTR:
-  - identifier: 50uL NTR
-    enabled: True
-    backend: Hamilton
-    backend_error_handling: False
-    tips_per_rack: 96
-    volume: 300
-    tip_rack_waste: Carrier27_Pos1_FTRTipRack
-    tip_stacks:
-      - module_number: 4
-        stack_number: 3
-        tip_rack: Carrier27_Pos1_FTRTipRack
-    tip_racks:
-      - Carrier33_Pos4_NTRTipRack
-
   - identifier: 300uL NTR
     enabled: True
     backend: Hamilton
     backend_error_handling: False
     tips_per_rack: 96
     volume: 300
-    tip_rack_waste: Carrier27_Pos1_FTRTipRack
+    tip_rack_waste: Carrier60_Pos3_Waste_NTR_300uL
     tip_stacks:
       - module_number: 4
         stack_number: 3
-        tip_rack: Carrier27_Pos1_FTRTipRack
+        tip_rack: Carrier70_Pos3_NTRTipRack
     tip_racks:
       - Carrier33_Pos3_NTRTipRack
+
+  - identifier: 50uL NTR
+    enabled: True
+    backend: Hamilton
+    backend_error_handling: False
+    tips_per_rack: 96
+    volume: 300
+    tip_rack_waste: Carrier60_Pos3_Waste_NTR_50uL
+    tip_stacks:
+      - module_number: 4
+        stack_number: 4
+        tip_rack: Carrier70_Pos4_NTRTipRack
+    tip_racks:
+      - Carrier33_Pos4_NTRTipRack

@@ -34,7 +34,7 @@ def simplify_printed_hal_object(model_dump_json: str) -> str:
 
     get_id(model_load_json)
 
-    return json.dumps(model_dump_json, indent=4).replace('\\"', "")
+    return json.dumps(model_load_json, indent=4)
 
 
 def load_device_list_config(

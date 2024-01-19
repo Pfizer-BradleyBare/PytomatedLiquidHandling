@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import field
 from typing import cast
 
-from pydantic import dataclasses
+from pydantic import dataclasses, field_validator
 
 from plh.driver.HAMILTON import EntryExit, HSLTipCountingLib
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
@@ -22,11 +22,55 @@ class HamiltonEENTR(TipBase):
         stack_number: int
         stack_count: int = field(init=False, default=0)
 
+        @field_validator("tip_rack", mode="before")
+        @classmethod
+        def __tip_rack_validate(
+            cls,
+            v: str | layout_item.LayoutItemBase,
+        ) -> layout_item.LayoutItemBase:
+            if isinstance(v, layout_item.LayoutItemBase):
+                return v
+
+            objects = layout_item.devices
+            identifier = v
+
+            if identifier not in objects:
+                raise ValueError(
+                    identifier
+                    + " is not found in "
+                    + layout_item.LayoutItemBase.__name__
+                    + " objects.",
+                )
+
+            return objects[identifier]
+
     backend: VantageTrackGripperEntryExit
 
     tip_stacks: list[TipStack]
     # racks_per_stack: int
     tip_rack_waste: layout_item.TipRack
+
+    @field_validator("tip_rack_waste", mode="before")
+    @classmethod
+    def __tip_rack_validate(
+        cls: type[HamiltonEENTR],
+        v: str | layout_item.LayoutItemBase,
+    ) -> layout_item.LayoutItemBase:
+        if isinstance(v, layout_item.LayoutItemBase):
+            return v
+
+        objects = layout_item.devices
+        identifier = v
+
+        if identifier not in objects:
+            raise ValueError(
+                identifier
+                + " is not found in "
+                + layout_item.LayoutItemBase.__name__
+                + " objects.",
+            )
+
+        return objects[identifier]
 
     def initialize(self: HamiltonEENTR) -> None:
         TipBase.initialize(self)
