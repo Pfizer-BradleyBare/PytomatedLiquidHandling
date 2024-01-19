@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import json
-from typing import TypeVar, Union, cast
+from typing import TypeVar, Union
 
 from loguru import logger
-from pydantic import BaseModel
 
 from plh.driver.tools import BackendBase
 
@@ -12,29 +10,6 @@ from .hal_device import HALDevice
 from .remove_key_whitespace import remove_key_whitespace
 
 T = TypeVar("T", bound="Union[HALDevice, BackendBase]")
-
-
-def simplify_printed_hal_object(model_dump_json: str) -> str:
-    model_load_json = json.loads(model_dump_json)
-
-    def get_id(model_json: dict) -> None:
-        for key in model_json:
-            value = model_json[key]
-
-            if isinstance(value, list):
-                for index, item in enumerate(value):
-                    if isinstance(item, dict) and "identifier" in item:
-                        value[index] = item["identifier"]
-
-            if isinstance(value, dict):
-                if "identifier" in value:
-                    model_json[key] = value["identifier"]
-                else:
-                    get_id(value)
-
-    get_id(model_load_json)
-
-    return json.dumps(model_load_json, indent=4)
 
 
 def load_device_config(
@@ -82,10 +57,8 @@ def load_device_config(
                     + " already exists. Idenitifers must be unique.",
                 )
 
-            hal_device = cast(BaseModel, hal_device)
-
             logger.debug(
-                simplify_printed_hal_object(BaseModel.model_dump_json(hal_device)),
+                hal_device.simple_representation(),
             )
             devices[hal_device.identifier] = hal_device  # type: ignore IDK why this is an error...
         else:

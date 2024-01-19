@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import ClassVar, Self
+import json
+from typing import ClassVar, Self, cast
 
-from pydantic import dataclasses, field_validator
+from pydantic import BaseModel, dataclasses, field_validator
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -14,7 +15,8 @@ class HALDevice:
     A more complex system may add heaters, shakers, vacuums, etc. to increase the capability of the system. All devices
     that increase the capability of an automation system shall be described by this class.
 
-    Attributes:
+    Attributes
+    ----------
         Indentifier: A unique name per each device base class. Facilitates organization and easy retrieval of devices by name.
     """
 
@@ -40,3 +42,25 @@ class HALDevice:
 
     def __init_subclass__(cls: type[HALDevice]) -> None:
         cls.hal_devices[cls.__name__] = cls
+
+    def simple_representation(self) -> str:
+        model_load_json = json.loads(BaseModel.model_dump_json(cast(BaseModel, self)))
+
+        def get_id(model_json: dict) -> None:
+            for key in model_json:
+                value = model_json[key]
+
+                if isinstance(value, list):
+                    for index, item in enumerate(value):
+                        if isinstance(item, dict) and "identifier" in item:
+                            value[index] = item["identifier"]
+
+                if isinstance(value, dict):
+                    if "identifier" in value:
+                        model_json[key] = value["identifier"]
+                    else:
+                        get_id(value)
+
+        get_id(model_load_json)
+
+        return json.dumps(model_load_json, indent=4)

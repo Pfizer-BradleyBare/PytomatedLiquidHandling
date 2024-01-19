@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import json
 from abc import abstractmethod
 from dataclasses import field
-from typing import TypeVar
+from typing import TypeVar, cast
 
-from pydantic import dataclasses
+from pydantic import BaseModel, dataclasses
 
 from .command_base import CommandBase
 from .response_base import ResponseBase
@@ -65,3 +66,25 @@ class BackendBase:
         if self.is_running is False:
             msg = f"{type(self).__name__} backend is not running"
             raise RuntimeError(msg)
+
+    def simple_representation(self) -> str:
+        model_load_json = json.loads(BaseModel.model_dump_json(cast(BaseModel, self)))
+
+        def get_id(model_json: dict) -> None:
+            for key in model_json:
+                value = model_json[key]
+
+                if isinstance(value, list):
+                    for index, item in enumerate(value):
+                        if isinstance(item, dict) and "identifier" in item:
+                            value[index] = item["identifier"]
+
+                if isinstance(value, dict):
+                    if "identifier" in value:
+                        model_json[key] = value["identifier"]
+                    else:
+                        get_id(value)
+
+        get_id(model_load_json)
+
+        return json.dumps(model_load_json, indent=4)
