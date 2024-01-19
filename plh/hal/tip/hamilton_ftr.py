@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Literal, cast
+from typing import cast
 
 from pydantic import dataclasses
 
@@ -8,32 +8,36 @@ from plh.driver.HAMILTON import HSLTipCountingLib
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 
 from .tip_base import *
-from .tip_base import AvailablePosition, TipBase
+from .tip_base import TipBase
 
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonFTR(TipBase):
     backend: HamiltonBackendBase
-    backend_error_handling: Literal["N/A"] = "N/A"
-
-    def initialize(self: HamiltonFTR) -> None:
-        self.update_available_positions()
 
     def deinitialize(self: HamiltonFTR) -> None:
-        command = HSLTipCountingLib.Write.Command(options=HSLTipCountingLib.Write.OptionsList(TipCounter=f"{type(self).__name__}_{int(self.volume)}"))
+        command = HSLTipCountingLib.Write.Command(
+            options=HSLTipCountingLib.Write.OptionsList(
+                TipCounter=f"{type(self).__name__}_{int(self.volume)}",
+            ),
+        )
         for pos in self.available_positions:
-            command.options.append(HSLTipCountingLib.Write.Options(LabwareID=pos.LabwareID,PositionID=pos.PositionID))
+            command.options.append(
+                HSLTipCountingLib.Write.Options(
+                    LabwareID=pos.LabwareID,
+                    PositionID=pos.PositionID,
+                ),
+            )
 
         self.backend.execute(command)
         self.backend.wait(command)
-        self.backend.acknowledge(command,HSLTipCountingLib.Write.Response)
+        self.backend.acknowledge(command, HSLTipCountingLib.Write.Response)
 
-    def tips_in_teir(self: TipBase) -> list[AvailablePosition]:
-        return self.available_positions
+    def remaining_tips(self: HamiltonFTR) -> int:
+        return len(self.available_positions)
 
-    def discard_layer_to_waste(self: HamiltonFTR) -> None:
-        msg = "FTR tips cannot waste tiers. Reload tips."
-        raise RuntimeError(msg)
+    def discard_teir(self: HamiltonFTR) -> None:
+        raise RuntimeError("TODO: Tip reload error")
 
     def update_available_positions(self: HamiltonFTR) -> None:
         command = HSLTipCountingLib.Edit.Command(

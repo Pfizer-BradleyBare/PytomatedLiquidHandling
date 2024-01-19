@@ -22,6 +22,9 @@ class Layout(ABC):
     columns: int
     direction: LayoutSorting
 
+    def total_positions(self: Layout) -> int:
+        return self.rows * self.columns
+
     def get_position_id(self: Layout, position: str | int) -> str:
         if isinstance(position, int):
             position = str(position)

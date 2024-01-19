@@ -18,7 +18,6 @@ class AvailablePosition:
 @dataclasses.dataclass(kw_only=True)
 class TipBase(Interface, HALDevice):
     tip_racks: list[layout_item.TipRack]
-    tips_per_rack: int
     volume: float
     available_positions: list[AvailablePosition] = field(
         init=False,
@@ -64,34 +63,28 @@ class TipBase(Interface, HALDevice):
                 ),
             )
 
-    @abstractmethod
+    def initialize(self: TipBase) -> None:
+        self.update_available_positions()
+
     def tips_in_teir(self: TipBase) -> list[AvailablePosition]:
-        """All accessible tips."""
-        ...
+        return self.available_positions
 
     def use_tips(self: TipBase, num: int) -> None:
-        """Indicated that the following number of tips have been used and are no longer available."""
+        """Indicate that the following number of tips have been used and are no longer available."""
         self.available_positions = self.available_positions[num:]
 
+    @abstractmethod
     def remaining_tips(self: TipBase) -> int:
         """Total number of tips.
         NOTE: This is not guarenteed to be the number of accessible tips. Call RemainingTipsInTier for that info.
         """
-        return len(self.available_positions)
+        ...
+
+    @abstractmethod
+    def discard_teir(self: TipBase) -> None:
+        """This will throw an error which contains the layout items to discard"""
+        ...
 
     @abstractmethod
     def update_available_positions(self: TipBase) -> None:
-        """This initiates a update of the available positions. This is not neccesarily the same as Initialize"""
-
-    @abstractmethod
-    def remaining_tips_in_tier(self: TipBase) -> int:
-        """Total number of accessible tips."""
-        ...
-
-    @abstractmethod
-    def discard_layer_to_waste(self: TipBase) -> None:
-        """For stacked tips, discards the uppermost layer to make the next layer accessible.
-
-        For non-stacked tips, should probably request a tip reload from the user.
-        """
-        ...
+        """Initiates an update of the available positions. This is not neccesarily the same as Initialize"""

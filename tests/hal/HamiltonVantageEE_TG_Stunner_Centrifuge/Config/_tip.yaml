@@ -29,7 +29,6 @@ Hamilton EE NTR:
   - identifier: 300uL NTR
     enabled: True
     backend: Hamilton
-    backend_error_handling: False
     tips_per_rack: 96
     volume: 300
     tip_rack_waste: Carrier60_Pos3_Waste_NTR_300uL
@@ -43,7 +42,6 @@ Hamilton EE NTR:
   - identifier: 50uL NTR
     enabled: True
     backend: Hamilton
-    backend_error_handling: False
     tips_per_rack: 96
     volume: 300
     tip_rack_waste: Carrier60_Pos3_Waste_NTR_50uL

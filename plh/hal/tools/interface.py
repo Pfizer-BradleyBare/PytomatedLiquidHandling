@@ -1,7 +1,9 @@
 from __future__ import annotations
 
-from pydantic import dataclasses, field_validator
 from abc import ABC, abstractmethod
+
+from pydantic import dataclasses, field_validator
+
 from plh.driver.tools import BackendBase
 from plh.hal import backend
 
@@ -13,14 +15,14 @@ class Interface(ABC):
     Example: There are many systems which utilize pipette devices.
     Devices that inherit from interface will expose a set of abstract functions to simplify interaction across all systems.
 
-    Attributes:
+    Attributes
+    ----------
         Backend: The backend that will be used to execute physical actions. NOTE: devices are backend specific.
         BackendErrorHandling: Allows users to handle errors directly on the system or to return them to the HAL device. NOTE: some
         backends may not support error handling on the system.
     """
 
     backend: BackendBase
-    backend_error_handling: bool
 
     @field_validator("backend", mode="before")
     @classmethod
@@ -41,7 +43,7 @@ class Interface(ABC):
     @abstractmethod
     def initialize(self: Interface) -> None:
         ...
-    
+
     @abstractmethod
     def deinitialize(self: Interface) -> None:
         ...

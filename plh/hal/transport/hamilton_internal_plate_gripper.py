@@ -75,7 +75,7 @@ class HamiltonInternalPlateGripper(TransportBase):
                 LabwareOrientation=pickup_options.LabwareOrientation,
                 InverseGrip=pickup_options.InverseGrip,
             ),
-            backend_error_handling=self.backend_error_handling,
+            backend_error_handling=False,
         )
         self.backend.execute(command)
         self.backend.wait(command)
@@ -94,7 +94,7 @@ class HamiltonInternalPlateGripper(TransportBase):
                 LiftupHeight=dropoff_options.LiftupHeight,
                 LabwareOrientation=dropoff_options.LabwareOrientation,
             ),
-            backend_error_handling=self.backend_error_handling,
+            backend_error_handling=False,
         )
         self.backend.execute(command)
         self.backend.wait(command)

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import field
-from typing import Literal, cast
+from typing import cast
 
 from pydantic import dataclasses
 
@@ -10,90 +10,78 @@ from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.hal import deck_location, layout_item
 
 from .tip_base import *
-from .tip_base import TipBase
+from .tip_base import AvailablePosition, TipBase
 
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonNTR(TipBase):
     backend: HamiltonBackendBase
-    backend_error_handling: Literal["N/A"] = "N/A"
 
-    tiers: int
     tip_rack_waste: layout_item.TipRack
-    tier_discard_number: int = field(init=False, default=100)
-    discarded_tip_racks: list[layout_item.TipRack] = field(
+    available_positions_per_teir: list[list[AvailablePosition]] = field(
+        init=False,
+        default_factory=list,
+    )
+    available_racks_per_teir: list[list[layout_item.TipRack]] = field(
         init=False,
         default_factory=list,
     )
 
-    def initialize(self: HamiltonNTR) -> None:
-        ...
-
     def deinitialize(self: HamiltonNTR) -> None:
-        ...
+        command = Visual_NTR_Library.Channels_TipCounter_Write.Command(
+            options=Visual_NTR_Library.Channels_TipCounter_Write.OptionsList(
+                TipCounter=f"{type(self).__name__}_{int(self.volume)}",
+            ),
+        )
 
-    def remaining_tips_in_tier(self: HamiltonNTR) -> int:
-        remaining = self.remaining_tips() % (self.tips_per_rack * self.tiers)
+        for pos in self.available_positions + [
+            pos for teir in self.available_positions_per_teir for pos in teir
+        ]:
+            command.options.append(
+                Visual_NTR_Library.Channels_TipCounter_Write.Options(
+                    LabwareID=pos.LabwareID,
+                    PositionID=pos.PositionID,
+                ),
+            )
 
-        if remaining == 0:
-            available_ids = {pos.LabwareID for pos in self.available_positions}
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(
+            command,
+            Visual_NTR_Library.Channels_TipCounter_Write.Response,
+        )
 
-            if len(available_ids) + len(self.discarded_tip_racks) == len(
-                self.tip_racks,
-            ):
-                return self.tips_per_rack * self.tiers
-                # We are at the start of a fresh layer
+    def remaining_tips(self: HamiltonNTR) -> int:
+        tips_per_rack = self.tip_racks[0].labware.layout.total_positions()
 
-            return 0
-            # We just emptied a layer and must discard
+        return (
+            len(
+                [rack for teir in self.available_racks_per_teir for rack in teir],
+            )
+            * tips_per_rack
+        )
+        # available_racks_per_teir is guarenteed to be all present racks before a discard.
 
-        return remaining
-
-    def discard_layer_to_waste(self: HamiltonNTR) -> None:
-        present_labware_ids = {pos.LabwareID for pos in self.available_positions}
-        present_tip_racks = [
-            tip_rack
-            for tip_rack in self.tip_racks
-            if tip_rack.labware_id not in present_labware_ids
-        ]
-        discard_tip_racks = [
-            tip_rack
-            for tip_rack in self.tip_racks
-            if tip_rack.labware_id not in present_labware_ids
-            and tip_rack not in self.discarded_tip_racks
-        ]
-
-        for i in range(self._TierDiscardNumber - len(discard_tip_racks)):
-            discard_tip_racks.append(present_tip_racks[i])
-        # Basically we should always discard the same number of racks as we have tiers.
-        # There is a special case during tip counter edit where an NTR rack is removed manually by the user. We handle that here.
-
-        for tip_rack in discard_tip_racks:
-            self.discarded_tip_racks.append(tip_rack)
+    def discard_teir(self: HamiltonNTR) -> None:
+        for rack in self.available_racks_per_teir[0]:
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                tip_rack.deck_location,
+                rack.deck_location,
                 self.tip_rack_waste.deck_location,
-            )[0][0].transport_device.transport(tip_rack, self.tip_rack_waste)
+            )[0][0].transport_device.transport(rack, self.tip_rack_waste)
+        # Discard the rack
 
-        self.available_positions = [
-            pos
-            for pos in self.available_positions
-            if pos.LabwareID
-            not in [tip_rack.labware_id for tip_rack in self.discarded_tip_racks]
-        ]
-        # Update available positions
+        self.available_racks_per_teir = self.available_racks_per_teir[1:]
 
-        self.tier_discard_number = self.tiers
-        # Reset the Tier discard number. This will only be changed here and in the TipCounterEdit method
+        if len(self.available_racks_per_teir) == 0:
+            raise RuntimeError("TODO: tip reload error")
 
-        if len(self.available_positions) == 0:
-            msg = "Out of tips. Reload tips."
-            raise RuntimeError(msg)
+        self.available_positions = self.available_positions_per_teir[0]
+        self.available_positions_per_teir = self.available_positions_per_teir[1:]
 
     def update_available_positions(self: HamiltonNTR) -> None:
         command = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
             options=Visual_NTR_Library.Channels_TipCounter_Edit.OptionsList(
-                TipCounter="HamiltonTipNTR_" + str(self.volume) + "uL_TipCounter",
+                TipCounter=f"{type(self).__name__}_{int(self.volume)}",
                 DialogTitle="Please update the number of "
                 + str(self.volume)
                 + "uL tips currently loaded on the system",
@@ -118,14 +106,45 @@ class HamiltonNTR(TipBase):
             ),
         )
 
-        available_ids = {pos.LabwareID for pos in self.available_positions}
-        self.discarded_tip_racks = [
-            tip_rack
-            for tip_rack in self.tip_racks
-            if tip_rack.labware_id not in available_ids
-        ]
-        # We automatically assume the if a labwareID is NOT in the available positions, then it is basically already discarded.
+        teirs = len(self.tip_racks)
+        tips_per_rack = self.tip_racks[0].labware.layout.total_positions()
 
-        self._TierDiscardNumber = len(self.discarded_tip_racks) % self.tiers
-        # Once we know which labwareIDs are already gone we can calculate how many to throw away on the first pass.
-        # We basically say: "I assume to have a multiple of NumTiers so if I have any remainder then that is number of tiers to be thrown away."
+        available_positions_per_teir = list(
+            reversed(
+                [
+                    list(
+                        reversed(
+                            list(reversed(self.available_positions))[
+                                i : i + teirs * tips_per_rack
+                            ],
+                        ),
+                    )
+                    for i in range(
+                        0,
+                        len(self.available_positions),
+                        teirs * tips_per_rack,
+                    )
+                ],
+            ),
+        )
+        # NTR returns all the tips available accross all teirs. So we parse that down to a list of list of positions.
+        # The list of positions can be considered all positions available across a teir.
+        # the list of list of positions is each row through the teirs.
+        # What does the function above do? Copy it and try it on a list of your own.
+
+        self.available_positions_per_teir = available_positions_per_teir[1:]
+        self.available_positions = available_positions_per_teir[0]
+
+        self.available_racks_per_teir = []
+
+        for teir in available_positions_per_teir:
+            teir_labware_ids = {pos.LabwareID for pos in teir}
+
+            self.available_racks_per_teir.append(
+                [
+                    rack
+                    for rack in self.tip_racks
+                    if rack.labware_id in teir_labware_ids
+                ],
+            )
+        # We need to be able to track the racks per teir as well to enable discards

@@ -47,7 +47,6 @@ class HamiltonEENTR(TipBase):
     backend: VantageTrackGripperEntryExit
 
     tip_stacks: list[TipStack]
-    # racks_per_stack: int
     tip_rack_waste: layout_item.TipRack
 
     @field_validator("tip_rack_waste", mode="before")
@@ -72,22 +71,46 @@ class HamiltonEENTR(TipBase):
 
         return objects[identifier]
 
-    def initialize(self: HamiltonEENTR) -> None:
-        ...
-
     def deinitialize(self: HamiltonEENTR) -> None:
-        ...
+        command = HSLTipCountingLib.Write.Command(
+            options=HSLTipCountingLib.Write.OptionsList(
+                TipCounter=f"{type(self).__name__}_{int(self.volume)}",
+            ),
+        )
+        for pos in self.available_positions:
+            command.options.append(
+                HSLTipCountingLib.Write.Options(
+                    LabwareID=pos.LabwareID,
+                    PositionID=pos.PositionID,
+                ),
+            )
+
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, HSLTipCountingLib.Write.Response)
+
+        for stack in self.tip_stacks:
+            command = EntryExit.MoveRandomShelfAccess.Command(
+                options=EntryExit.MoveRandomShelfAccess.Options(
+                    ModuleNumber=stack.module_number,
+                    StackNumber=stack.stack_number,
+                    Position=EntryExit.MoveRandomShelfAccess.PositionOptions.Bottom,
+                ),
+                backend_error_handling=False,
+            )
 
     def remaining_tips(self: HamiltonEENTR) -> int:
-        return self.remaining_tips_in_tier() + sum(
-            [self.tips_per_rack * stack.stack_count for stack in self.tip_stacks],
+        tips_per_rack = self.tip_racks[0].labware.layout.total_positions()
+
+        return len(self.tips_in_teir()) + sum(
+            [tips_per_rack * stack.stack_count for stack in self.tip_stacks],
         )
 
-    def remaining_tips_in_tier(self: HamiltonEENTR) -> int:
-        return TipBase.remaining_tips(self)
-
-    def discard_layer_to_waste(self: HamiltonEENTR) -> None:
+    def discard_teir(self: HamiltonEENTR) -> None:
         for rack in self.tip_racks:
+            success_flag = False
+            # So we can track if we actually replaced a rack
+
             for stack in self.tip_stacks:
                 if stack.stack_count == 0:
                     continue
@@ -99,7 +122,7 @@ class HamiltonEENTR(TipBase):
                         StackNumber=stack.stack_number,
                         OffsetFromBeam=0,
                     ),
-                    backend_error_handling=self.backend_error_handling,
+                    backend_error_handling=False,
                 )
 
                 self.backend.execute(command)
@@ -134,6 +157,11 @@ class HamiltonEENTR(TipBase):
                     stack.tip_rack,
                 )
                 # Move the full rack from the stack.
+                success_flag = True
+                break
+
+            if success_flag == False:
+                raise RuntimeError("TODO: tip reload error")
 
     def update_available_positions(self: HamiltonEENTR) -> None:
         for stack in self.tip_stacks:
@@ -144,7 +172,7 @@ class HamiltonEENTR(TipBase):
                     LabwareID=stack.tip_rack.labware_id,
                     IsNTRRack=True,
                 ),
-                backend_error_handling=self.backend_error_handling,
+                backend_error_handling=False,
             )
             self.backend.execute(command)
             self.backend.wait(command)
@@ -155,7 +183,7 @@ class HamiltonEENTR(TipBase):
 
         command = HSLTipCountingLib.Edit.Command(
             options=HSLTipCountingLib.Edit.OptionsList(
-                TipCounter="HamiltonTipFTR_" + str(self.volume) + "uL_TipCounter",
+                TipCounter=f"{type(self).__name__}_{int(self.volume)}",
                 DialogTitle="Please update the number of "
                 + str(self.volume)
                 + "uL tips currently loaded on the system",

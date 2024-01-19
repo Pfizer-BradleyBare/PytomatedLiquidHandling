@@ -56,7 +56,7 @@ class HamiltonCOREGripper(TransportBase):
 
         command = Channel1000uLCOREGrip.GetPlate.Command(
             options=get_plate_options,
-            backend_error_handling=self.backend_error_handling,
+            backend_error_handling=False,
         )
         self.backend.execute(command)
         self.backend.wait(command)
@@ -78,7 +78,7 @@ class HamiltonCOREGripper(TransportBase):
                     int(self._last_transport_flag),
                 ),
             ),
-            backend_error_handling=self.backend_error_handling,
+            backend_error_handling=False,
         )
         self.backend.execute(command)
         self.backend.wait(command)

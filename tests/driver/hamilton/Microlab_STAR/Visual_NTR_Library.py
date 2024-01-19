@@ -88,6 +88,8 @@ def main(backend: MicrolabSTAR) -> None:
         Visual_NTR_Library.Channels_TipCounter_Edit.Response,
     ).AvailablePositions
 
+    logger.info(available_positions)
+
     logger.info("Channels_TipCounter_Write")
     command = Visual_NTR_Library.Channels_TipCounter_Write.Command(
         options=Visual_NTR_Library.Channels_TipCounter_Write.OptionsList(

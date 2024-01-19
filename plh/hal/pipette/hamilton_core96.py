@@ -85,7 +85,7 @@ class HamiltonCORE96(PipetteBase):
                     ),
                 )
             command = Channel1000uL.Pickup.Command(
-                backend_error_handling=self.backend_error_handling,
+                backend_error_handling=False,
                 options=support_pickup_options,
             )
             self.backend.execute(command)
@@ -116,7 +116,7 @@ class HamiltonCORE96(PipetteBase):
                 )
 
             command = Channel1000uL.Eject.Command(
-                backend_error_handling=self.backend_error_handling,
+                backend_error_handling=False,
                 options=support_eject_options,
             )
             self.backend.execute(command)
@@ -129,7 +129,7 @@ class HamiltonCORE96(PipetteBase):
             LabwareID=tip.tip_support_pickup_labware_id,
         )
         command = CORE96Head.Pickup.Command(
-            backend_error_handling=self.backend_error_handling,
+            backend_error_handling=False,
             options=pickup_options,
         )
         self.backend.execute(command)
@@ -157,7 +157,7 @@ class HamiltonCORE96(PipetteBase):
 
         for _ in range(num_repeats):
             command = CORE96Head.Aspirate.Command(
-                backend_error_handling=self.backend_error_handling,
+                backend_error_handling=False,
                 options=aspirate_options,
             )
             self.backend.execute(command)
@@ -165,7 +165,7 @@ class HamiltonCORE96(PipetteBase):
             self.backend.acknowledge(command, CORE96Head.Aspirate.Response)
 
             command = CORE96Head.Dispense.Command(
-                backend_error_handling=self.backend_error_handling,
+                backend_error_handling=False,
                 options=dispense_options,
             )
             self.backend.execute(command)
@@ -174,7 +174,7 @@ class HamiltonCORE96(PipetteBase):
 
         eject_options = CORE96Head.Eject.Options(LabwareID=tip.tip_waste_labware_id)
         command = CORE96Head.Eject.Command(
-            backend_error_handling=self.backend_error_handling,
+            backend_error_handling=False,
             options=eject_options,
         )
         self.backend.execute(command)

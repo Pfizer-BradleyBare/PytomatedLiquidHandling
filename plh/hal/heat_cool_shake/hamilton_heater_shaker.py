@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import field
-from typing import Literal
 
 from pydantic import dataclasses
 
@@ -17,7 +16,6 @@ from .heat_cool_shake_base import HeatCoolShakeBase
 class HamiltonHeaterShaker(HeatCoolShakeBase):
     com_port: int
     backend: HamiltonBackendBase
-    backend_error_handling: Literal["N/A"] = "N/A"
     handle_id: int = field(init=False, default=0)
 
     def assert_options(

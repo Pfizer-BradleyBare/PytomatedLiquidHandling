@@ -119,7 +119,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                         ),
                     )
                 command = Channel1000uL.Pickup.Command(
-                    backend_error_handling=self.backend_error_handling,
+                    backend_error_handling=False,
                     options=pickup_options,
                 )
                 self.backend.execute(command)
@@ -170,7 +170,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                     )
 
                 command = Channel1000uL.Aspirate.Command(
-                    backend_error_handling=self.backend_error_handling,
+                    backend_error_handling=False,
                     options=aspirate_options,
                 )
                 self.backend.execute(command)
@@ -227,7 +227,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                     )
 
                 command = Channel1000uL.Dispense.Command(
-                    backend_error_handling=self.backend_error_handling,
+                    backend_error_handling=False,
                     options=dispense_options,
                 )
                 self.backend.execute(command)
@@ -249,7 +249,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                     )
 
                 command = Channel1000uL.Eject.Command(
-                    backend_error_handling=self.backend_error_handling,
+                    backend_error_handling=False,
                     options=eject_options,
                 )
                 self.backend.execute(command)
@@ -257,6 +257,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                 self.backend.acknowledge(command, Channel1000uL.Eject.Response)
 
     def time_to_transfer(
-        self: HamiltonPortraitCORE8, options: list[TransferOptions]
+        self: HamiltonPortraitCORE8,
+        options: list[TransferOptions],
     ) -> float:
         return 0

@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from typing import DefaultDict, Literal
+from typing import DefaultDict
 
 from pydantic import dataclasses
 
 from plh.driver.HAMILTON import FlipTubeTool
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.hal import layout_item
-from plh.hal.tools.interface import Interface
 
 from .closeable_container_base import *
 from .closeable_container_base import CloseableContainerBase, OpenCloseOptions
@@ -27,7 +26,6 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
     """
 
     backend: HamiltonBackendBase
-    backend_error_handling: Literal["N/A"] = "N/A"
 
     tool_labware_id: str
 

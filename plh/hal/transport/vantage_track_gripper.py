@@ -86,7 +86,7 @@ class VantageTrackGripper(TransportBase):
                 CollisionControl=TrackGripper.GripPlateFromTaughtPosition.YesNoOptions.Yes,
                 TaughtPathName=pickup_options.TaughtPathName,
             ),
-            backend_error_handling=self.backend_error_handling,
+            backend_error_handling=False,
         )
         self.backend.execute(command)
         self.backend.wait(command)
@@ -108,7 +108,7 @@ class VantageTrackGripper(TransportBase):
                 SpeedPercentage=100,
                 CollisionControl=TrackGripper.PlacePlateToTaughtPosition.YesNoOptions.Yes,
             ),
-            backend_error_handling=self.backend_error_handling,
+            backend_error_handling=False,
         )
         self.backend.execute(command)
         self.backend.wait(command)
