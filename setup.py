@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 setup(
     name="plh",
     version="3.0",
-    packages=find_packages(exclude=["Examples"]),
+    packages=find_packages(),
     license="MIT",
     description="Python for labware automation",
     install_requires=[
@@ -17,9 +17,15 @@ setup(
         "redmail",
         "redbox",
         "loguru",
+        "click",
     ],
     url="https://github.com/Pfizer-BradleyBare/PytomatedLiquidHandling.git",
     author="Bradley Bare",
     author_email="Bradley.Bare@pfizer.com",
     include_package_data=True,
+    entry_points="""
+        [console_scripts]
+        plh-hamilton-install-venus4=plh.cli:install_hamilton_venus4_files
+        plh=plh.cli:plh_help
+    """,
 )

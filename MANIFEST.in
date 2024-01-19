@@ -1,2 +1,3 @@
-include PytomatedLiquidHandling/Driver/UnchainedLabs/Backend/Stunner/streams.exe
-include PytomatedLiquidHandling/Driver/UnchainedLabs/Backend/Stunner/Stunner.dll
+recursive-include plh/driver/HAMILTON/backend/bin/ *
+
+recursive-include plh/driver/UnchainedLabs_Instruments/backend/bin/ *
