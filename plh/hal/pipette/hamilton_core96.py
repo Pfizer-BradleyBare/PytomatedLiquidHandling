@@ -67,8 +67,8 @@ class HamiltonCORE96(PipetteBase):
         ]
 
         for opts in packaged_opts:
-            if tip.tip.remaining_tips_in_tier() < len(opts):
-                tip.tip.discard_layer_to_waste()
+            if len(tip.tip.tips_in_teir()) < len(opts):
+                tip.tip.discard_teir()
             # If not enough tips then get user to help
 
             tip_positions = tip.tip.available_positions[: len(opts)]
