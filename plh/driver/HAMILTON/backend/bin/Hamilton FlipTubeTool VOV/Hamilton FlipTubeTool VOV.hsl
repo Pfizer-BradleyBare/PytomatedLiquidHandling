@@ -1,0 +1,1877 @@
+//***********************************************************************************************************************
+//*    _    _                 _ _ _                _____       _           _   _                                         
+//*   | |  | |               (_) | |              |  __ \     | |         | | (_)                                        
+//*   | |__| | __ _ _ __ ___  _| | |_ ___  _ __   | |__) |___ | |__   ___ | |_ _  ___ ___                                
+//*   |  __  |/ _` | '_ ` _ \| | | __/ _ \| '_ \  |  _  // _ \| '_ \ / _ \| __| |/ __/ __|                               
+//*   | |  | | (_| | | | | | | | | || (_) | | | | | | \ \ (_) | |_) | (_) | |_| | (__\__ \                               
+//*   |_|  |_|\__,_|_| |_| |_|_|_|\__\___/|_| |_| |_|  \_\___/|_.__/ \___/ \__|_|\___|___/                               
+//*                                                                                                                      
+//*
+//*   Projekt: Hamilton Flip Tube Tool
+//*
+//*   Copyright (C)2014 by HAMILTON Bonaduz AG, CH-7402 Bonaduz.
+//*
+//***********************************************************************************************************************
+//*
+//*   Revision History:
+//*
+//*   2010-10-05                  Thomas Benz:    created
+//*   2012-02-28                  Urban Bernhard: Add new function OpenFlipTube2(), CloseFlipTube2()
+//*   2012-08-06                  Urban Bernhard: Library was developed with VENUS two (enhanced HSL syntax).
+//*                                               Modified library to work with VENUS one (FW command step).
+//*   2012-09-24                  Urban Bernhard: Renamed member m_initializedLib -> m_initializedFlipTubeLib
+//*                                               due to a naming conflict with the HHS Library.
+//*                                               Declared function SetParameter(), OpenFlipTube(), CloseFlipTube() as static (obsolete flip tube tool)
+//*                                               Disabled exported constants of obsolte flip tube tool;
+//*   2012-11-02                  Urban Bernhard: Corrected y-Shift (m_nt_close_y_offset) within function CloseFlipTube2()
+//*   2012-11-21                  Urban Bernhard: Changed default for m_nt_preOpen_z_end from 14.15 to 14.95 (based on input from QTE)
+//*                                               Added new parameter m_nt_open_z_speed_smoothOpening and set default value to 100 (based on input from QTE)
+//*                                               Enhanced function OpenFlipTube2(): smooth opening ("hooking" of flip tube lid) with reduced z-Speed 
+//*                                               Corrected value of m_nt_open_z_start from 38.0 to 43.3
+//*                                               Corrected value of m_nt_open_z_end from 43.3 to 38.0
+//*   2012-11-26                  Urban Bernhard: OpenFlipTube2(), optimized z-movements during pre-open and open task
+//*   2012-11-27                  Urban Bernhard: Changed start offset m_nt_open_z_start from  43.3 to 42.3
+//*   2014-09-01        v0.1      DanielKaufmann  Library created
+//*                     v0.2      DanielKaufmann  several fixes
+//*   2014-09-30        v0.3      DanielKaufmann  several fixes in movement etc.
+//*   2014-10-01        v1.0      DanielKaufmann  bugfixes in Landscape movement
+//*   2014-12-11        v1.2      DanielKaufmann  fixed critical movement when sequence has different X Positions
+//*   2015-01-26        v1.3      DanielKaufmann  fixed Venus II issue with Device Reference.
+//*   2015-08-13        v1.6      DanielKaufmann  added support for older FW Versions - th and zp must not be equal --> no Z movement
+//*   2015-12-07        v1.7   BastiaanHoogeland  Added errorhandling, changed default parameter
+//*   2015-12-07        v1.8   BastiaanHoogeland  fixed bug when channel pattern starts with '0'
+//*                                               Correct use of Landscape vs Portrait (call default tool orientation landscape)
+//*                                               fixed critical movement when tools are in portrait --> channels/tools do no longer fit in 9mm raster, causing collisions
+//*   2016-05-11        v1.9   BastiaanHoogeland  Correct function name 'ToolsEject' (was ToolsEdject)
+//*                                               Tool orientation as input parameter in Initialize (no longer determined based on the tool sequence)
+//*                                               Add check that sequence y positions are decreasing to force that the channels operate in parallel
+//*                                               Removed step to move ununsed channels uot of the way in portait mode
+//*   2016-11-21        v1.10  BastiaanHoogeland  change landscape default parameter _fltCloseX_Start_Offset from 13.0 to 8.0 (line 1015)
+//*   2017-02-17        v1.11a Lori Jensen        Converted FW commands to Vantage
+//*   2017-03-07        v1.11  David Schmidt      Debugged Vantage FW commands;
+//*                                               Used defaults rather than querying for Z-Power and Z-Speed setting (Querying requires '"' in
+//*                                               FW command string, which Venus strips out);
+//*                                               Added SetZPowerToRestore and SetZSpeedToRestore to compensate;
+//*                                               Note: Library still only worked with TipType Detection disabled and TipType 47's total length
+//*                                               modified from 54.5 to 58.0.
+//*
+//***********************************************************************************************************************
+
+//***********************************************************************************************************************
+//*
+//*   DEPENDANCIES
+//*
+//***********************************************************************************************************************
+
+// ----------------------------------------------------------------------------------------------------------------------
+// Device (for development only! Comment out for release version.)
+// device ML_STAR;
+// ----------------------------------------------------------------------------------------------------------------------
+
+#ifndef __FLIPTUBETOOL_hsl__
+  #define __FLIPTUBETOOL_hsl__ 1
+
+  #ifndef __Hamilton_DriverTools_hsl__
+    #include "Hamilton DriverTools\\Hamilton DriverTools.hsl"
+  #endif
+
+  #ifndef __TraceLevel_hsl__
+    #include "ASWStandard\\TraceLevel\\TraceLevel.hsl"
+  #endif
+
+  #ifndef __ASWGLOBAL_hsl__
+    #include "ASWStandard\\ASWGlobal\\ASWGlobal.hsl"
+  #endif
+
+  #ifndef __HSLMthLib_hsl__
+    #include "HSLMthLib.hsl"
+  #endif
+
+  namespace FLIPTUBETOOL
+  {
+    //*******************************************************************************************************************
+    //*
+    //* VARIABLE DECLARATIONS
+    //*
+    //*******************************************************************************************************************
+    //Library Variables
+    const static variable _strLibrary_Version                           ("v1.11");
+    const static variable _strLibraryName                               ("Hamilton FlipTubeTool VOV");
+          static variable _intTraceLevel                                (TRACE_LEVEL_RELEASE);
+          static variable _blnSimulationMode                            (ASWGLOBAL::BOOL::FALSE);
+          static variable _blnLibraryInitialized                        (ASWGLOBAL::BOOL::FALSE);
+
+    const variable FLIPTUBETOOL_FOR_PORTRAIT                     (1);
+    const variable FLIPTUBETOOL_FOR_LANDSCAPE                    (0);
+
+    static variable _intToolOrientation                                 (FLIPTUBETOOL_FOR_LANDSCAPE);
+    static variable _intNumberOfChannels                                (8);
+    static variable _intMinYposition                                    (60);
+    static variable _strToolChannelPattern;
+    static variable _strProcessState[];
+
+    // OffestVariables for FlipTubeTool
+    static variable _fltPreOpen_X_Offset[];
+    static variable _fltPreOpen_Y_Offset[];
+
+    static variable _fltOpen_X_Offset[];
+    static variable _fltOpen_Y_Offset[];
+
+    static variable _fltPreOpen_Z_Start                                 (0);
+    static variable _fltPreOpen_Z_End                                   (0);
+
+    static variable _fltCloseX_Start_Offset[];
+    static variable _fltCloseX_End_Offset[];
+    static variable _fltCloseY_Offset[];
+    static variable _fltCloseY_Start_Offset[];
+    static variable _fltCloseY_End_Offset[];
+    static variable _fltCloseX_Offset[];
+
+    static variable _fltClose_Z_Start                                   (50.2);
+    static variable _fltClose_Z_End                                     (41.1);
+    static variable _intClose_Z_Power                                   (5);
+    static variable _intClose_Z_Speed                                   (5000);
+
+    // OffestVariables for FlipTubeTool General
+    static variable _fltOpen_Z_Start                                    (0);
+    static variable _fltOpen_Z_End                                      (0);
+    static variable _intOpen_Z_Power                                    (0);
+    static variable _intOpen_Z_Speed                                    (0);
+    static variable _intOpen_Z_SpeedSmooth                              (0);
+
+    // initialization state of the HSL Flip Tube library
+    static variable _intInstrumentZPower( 1000 );
+    static variable _intInstrumentZSpeed( 25000 );
+    static variable _fltTraverseHeight( 245.0 );
+
+
+    //*******************************************************************************************************************
+    //*
+    //* FUNCTION DECLARATIONS
+    //*
+    //*******************************************************************************************************************
+    function Initialize(variable i_intToolOrientation)variable;
+
+    function SetTraceLevel(variable i_intTraceLevel)variable;
+
+    function SetToolOffsetValues(variable fltPreOpen_Z_End,
+                                 variable fltOpen_Z_Start,
+                                 variable fltOpen_Z_End,
+                                 variable fltClose_Z_Start,
+                                 variable fltClose_Z_End)variable;
+
+    function SetZPowerToRestore( variable intZPowerMilliAmps );
+
+    function SetZSpeedToRestore( variable intZSpeedIncrementsPerSec );
+
+    function GetToolOffsetValues(variable& fltPreOpen_Z_End,
+                                 variable& fltOpen_Z_Start,
+                                 variable& fltOpen_Z_End,
+                                 variable& fltClose_Z_Start,
+                                 variable& fltClose_Z_End)variable;
+
+
+    function FlipTubeClose(sequence& i_seqFlipTubes,
+                           variable i_blnSequenceeCounting,
+                           variable i_strChannelPattern) variable;
+
+    function FlipTubeOpen(sequence& i_seqFlipTubes,
+                          variable i_blnSequenceCounting,
+                          variable i_strChannelPattern)variable;
+
+    function ToolsPickUp(variable i_strChannelPattern, 
+                         sequence& i_seqTools) variable;
+
+    function ToolsEject(sequence& i_seqTools) variable;
+
+    function GetProcessState(variable& o_strState) variable;
+
+    //*******************************************************************************************************************
+    //*
+    //* PRIVATE FUNCTION DECLARATION
+    //*
+    //*******************************************************************************************************************
+    private function _GetML_STAR() device;
+
+    private function _LoadDefaultValues() void;
+
+    private function _GetChannelPositions(sequence& i_seqTubes,
+                                          variable  sequenceCounting,
+                                          string&   i_strChannelPattern,
+                                          variable& o_fltarrXPosition[],
+                                          variable& o_fltarrYPosition[],
+                                          variable& o_fltarrZPosition[]) variable;
+
+    private function _SetZParameter(variable i_intZPower, variable i_intZSpeed);
+
+    private function _MoveChannels(string i_strChannelPattern,
+                                   string i_strCurrentPattern,
+                                   variable i_fltXPosition,
+                                   variable i_fltarrYPositions[],
+                                   variable i_fltarrZPositions[],
+                                   variable i_fltTraverseHeight) variable;
+
+    private function _ComposeCompleteNormalizePrm(variable i_strParameterName,
+                                                  variable i_intNumberOfDigits,
+                                                  variable i_intValue) variable;
+
+    private function _ComposeCompletePrm(variable strParameterName,
+                                         variable intNumberOfDigits,
+                                         variable intValue)string;
+
+    private function _SendFirmwareCommand(variable i_strCommand,
+                                          variable i_strParameter) variable;
+
+    private function _SendVantageFirmwareCommand(variable i_strCommand,
+                                          variable i_strParameter) variable;
+
+    private function _InitializeLibrary()void;
+
+    private function _CheckDifferentXPositions(variable i_arrXpositions[], 
+                                               variable& o_intSameXPosCount[]) void;
+
+    private function _CreateChannelPattern(string i_strRefChPattern,
+                                           variable i_intNumberOfSamples) variable;
+
+    private function _CreateSeqPositions(variable i_intSampleCount,
+                                         variable& fltarrXPositionBuffer[], 
+                                         variable& fltarrYPositionsBuffer[], 
+                                         variable& fltarrZPositionsBuffer[],
+                                         variable& fltarrXPosition[], 
+                                         variable& fltarrYPositions[], 
+                                         variable& fltarrZPositions[]) void;
+
+    private function _CheckForDoubleYValues(variable i_arrYPositions[])variable;
+
+    private function _CheckForDecreasingYValues(variable i_arrYPositions[])variable;
+
+    private function _ResetProcessState() void;
+
+    private function _InitProcessState(string i_strChannelPattern) void;
+
+    private function _Join(variable i_arrValues[]) variable;
+
+    private function _ConvertToArray(string i_strValue) variable[];
+
+    private function _EvaluateResponse(string strResponse, variable intOffset, string& strChannelPattern) variable;
+
+    private function _StrReplace(variable& str, variable& oldSubStr, variable& newSubStr) variable;
+
+    private function _Str(variable& str) variable;
+
+    private function _InvertChannelPattern(string i_strChannelPattern) variable;
+
+    //*******************************************************************************************************************
+    //*
+    //* FUNCTION IMPLEMENTATION
+    //*
+    //*******************************************************************************************************************
+    //===================================================================================================================
+    //
+    //  FUNCTION Initialize
+    //
+    //===================================================================================================================
+    function Initialize(variable i_intToolOrientation)variable
+    {
+      variable strFunctionName("");
+
+      device ML_STAR_Ref("", "", hslTrue);
+
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+       return(ASWGLOBAL::BOOL::FALSE);
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::START, TRACE_LEVEL_RELEASE,
+                                        "",
+                                        strFunctionName, _intTraceLevel, _strLibraryName);
+
+      //check input parameter i_intToolOrientation
+      if(!Hamilton_DriverTools::CheckIntegerRange(i_intToolOrientation,
+                                                  "i_intToolOrientation", FLIPTUBETOOL_FOR_LANDSCAPE, FLIPTUBETOOL_FOR_PORTRAIT,
+                                                  strFunctionName, _strLibraryName)) return(ASWGLOBAL::BOOL::FALSE);
+      
+      //Set default TraceLevel
+      _intTraceLevel = TRACELEVEL::GetTraceLevel();
+
+      // Check whether we're in simulation. Do this BEFORE attempting to send instrument
+      // commands during init. (v1.11)
+      if(GetSimulationMode() == ASWGLOBAL::BOOL::TRUE)
+        _blnSimulationMode = ASWGLOBAL::BOOL::TRUE;
+
+      //GetStar
+      ML_STAR_Ref = _GetML_STAR();
+
+      //Load default Values
+      _LoadDefaultValues();
+
+      // get defaults from instrument
+      _InitializeLibrary();
+
+      // Set Tool Type
+      _intToolOrientation = i_intToolOrientation;
+
+      if(_intToolOrientation == FLIPTUBETOOL_FOR_PORTRAIT)
+      {
+        Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::PROGRESS, TRACE_LEVEL_RELEASE,
+                                          "Rack orientation = Portrait", 
+                                          strFunctionName, _intTraceLevel, _strLibraryName);
+      }
+      else
+      {
+        Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::PROGRESS, TRACE_LEVEL_RELEASE,
+                                          "Rack orientation = Landscape", 
+                                          strFunctionName, _intTraceLevel, _strLibraryName);
+      }
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE, TRACE_LEVEL_RELEASE,
+                                       "", 
+                                       strFunctionName, _intTraceLevel, _strLibraryName);
+      return(ASWGLOBAL::BOOL::TRUE);
+    }
+
+    //===================================================================================================================
+    //
+    //  FUNCTION SetTraceLevel
+    //
+    //===================================================================================================================
+    function SetTraceLevel(variable i_intTraceLevel)variable
+    {
+      variable strFunctionName("");
+
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+       return(ASWGLOBAL::BOOL::FALSE);
+
+        if(Hamilton_DriverTools::CheckIntegerRange(i_intTraceLevel, "i_intTraceLevel", TRACE_LEVEL_NONE, TRACE_LEVEL_DEBUG, strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+          return(ASWGLOBAL::BOOL::FALSE);
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::START, TRACE_LEVEL_RELEASE,
+                                        "",
+                                        strFunctionName, _intTraceLevel, _strLibraryName);
+
+      _intTraceLevel = i_intTraceLevel;
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE, TRACE_LEVEL_RELEASE,
+                                       "i_intTraceLevel = " + IStr(i_intTraceLevel), 
+                                       strFunctionName, _intTraceLevel, _strLibraryName);
+      return(ASWGLOBAL::BOOL::TRUE);
+    }
+
+    //===================================================================================================================
+    //
+    //  FUNCTION GetToolOffsetValues
+    //
+    //===================================================================================================================
+    function GetToolOffsetValues(variable& fltPreOpen_Z_End,
+                                 variable& fltOpen_Z_Start,
+                                 variable& fltOpen_Z_End,
+                                 variable& fltClose_Z_Start,
+                                 variable& fltClose_Z_End)variable
+    {
+      variable strFunctionName("");
+
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+       return(ASWGLOBAL::BOOL::FALSE);
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::START, TRACE_LEVEL_RELEASE,
+                                        "",
+                                        strFunctionName, _intTraceLevel, _strLibraryName);
+
+       fltPreOpen_Z_End = _fltPreOpen_Z_End;
+       fltOpen_Z_Start = _fltOpen_Z_Start;
+       fltOpen_Z_End = _fltOpen_Z_End;
+       fltClose_Z_Start = _fltClose_Z_Start;
+       fltClose_Z_End = _fltClose_Z_End;
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE, TRACE_LEVEL_RELEASE,
+                                       "", 
+                                       strFunctionName, _intTraceLevel, _strLibraryName);
+      return(ASWGLOBAL::BOOL::TRUE);
+    }
+
+    //===================================================================================================================
+    //
+    //  FUNCTION SetToolOffsetValues
+    //
+    //===================================================================================================================
+    function SetToolOffsetValues(variable fltPreOpen_Z_End,
+                                 variable fltOpen_Z_Start,
+                                 variable fltOpen_Z_End,
+                                 variable fltClose_Z_Start,
+                                 variable fltClose_Z_End)variable
+    {
+      variable strFunctionName("");
+
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+       return(ASWGLOBAL::BOOL::FALSE);
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::START, TRACE_LEVEL_RELEASE,
+                                        "",
+                                        strFunctionName, _intTraceLevel, _strLibraryName);
+
+      _fltPreOpen_Z_End = _fltPreOpen_Z_End + fltPreOpen_Z_End;
+      _fltOpen_Z_Start = _fltOpen_Z_Start + fltOpen_Z_Start;
+      _fltOpen_Z_End = _fltOpen_Z_End + fltOpen_Z_End;
+      _fltClose_Z_Start = _fltClose_Z_Start + fltClose_Z_Start;
+      _fltClose_Z_End = _fltClose_Z_End + fltClose_Z_End;
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE, TRACE_LEVEL_RELEASE,
+                                       "", 
+                                       strFunctionName, _intTraceLevel, _strLibraryName);
+      return(ASWGLOBAL::BOOL::TRUE);
+    }
+
+    //===================================================================================================================
+    //
+    //  FUNCTION SetZPowerToRestore
+    //  
+    //  The electrical current limit of the channels' Z drive is adjusted when they are in use and restored afterward.
+    //  This function sets the value that is restored afterward. By default it is set to the instrument default (1000).
+    //  Note that this should not be necessary unless a custom current limit setting is in use before (and expected
+    //  after) the use of the FlipTube tools. Valid values are in the range of 0 to 1200, inclusive.
+    //
+    //===================================================================================================================
+    function SetZPowerToRestore( variable intZPowerMilliAmps )
+    {
+    	variable strType;
+    	variable message;
+
+    	strType = GetType( intZPowerMilliAmps );
+    
+        if ( "i" != strType )
+            {
+            message = "Error setting Z Power To Restore. Bad argument: an integer is required, but type "
+                     + strType + " was given.";
+            Trace( message );
+            err.Raise( 1, message );
+            }
+
+        if ( 0 > intZPowerMilliAmps )
+        	{
+        	message = "Error setting Z Power To Restore. Bad argument: the given current limit must be greater "
+        	         + "than or equal to 0, but " + IStr( intZPowerMilliAmps ) + " was given.";
+        	Trace( message );
+        	err.Raise( 2, message );
+        	}
+
+        if ( 1200 < intZPowerMilliAmps )
+            {
+            message = "Error setting Z Power to Restore. Bad argument: the given current limit must be less "
+                     + "than or equal to 1200, but " + IStr( intZPowerMilliAmps ) + " was given.";
+            Trace( message );
+            err.Raise( 3, message );
+            }
+
+        _intInstrumentZPower = intZPowerMilliAmps;
+
+    } // SetZPowerToRestore
+
+
+    //===================================================================================================================
+    //
+    //  FUNCTION SetZSpeedToRestore
+    //  
+    //  The speed of the channels' Z drive is adjusted when they are in use and restored afterward. This function sets
+    //  the value that is restored afterward. By default, it is set to the instrument default (25000). Note that this
+    //  should not be necessary unless a custom speed setting is in use before (and expected after) the use of the
+    //  FlipTube tools. Valid values are in the range of 20 to 25000, inclusive.
+    //
+    //===================================================================================================================
+    function SetZSpeedToRestore( variable intZSpeedIncrementsPerSec )
+    {
+    	variable strType;
+    	variable message;
+
+    	strType = GetType( intZSpeedIncrementsPerSec );
+
+        if ( "i" != strType )
+            {
+            message = "Error setting Z Speed To Restore. Bad argument: an integer is required, but type "
+                     + strType + " was given.";
+            Trace( message );
+            err.Raise( 1, message );
+            }
+
+        if ( 20 > intZSpeedIncrementsPerSec )
+            {
+            message = "Error setting Z Speed to Restore. Bad argument: the given speed must be greater than "
+                     + "or equal to 20, but " + IStr( intZSpeedIncrementsPerSec ) + " was given.";
+            Trace( message );
+            err.Raise( 2, message );
+            }
+
+        if ( 25000 < intZSpeedIncrementsPerSec )
+            {
+            message = "Error setting Z Speed to Restore. Bad argument: the given speed must be less than "
+                     + "or equal to 25000, but " + IStr( intZSpeedIncrementsPerSec ) + " was given.";
+            Trace( message );
+            err.Raise( 3, message );
+            }
+
+        _intInstrumentZSpeed = intZSpeedIncrementsPerSec;
+
+    } // SetZSpeedToRestore
+
+
+    //===================================================================================================================
+    //
+    //  FUNCTION FlipTubeClose
+    //
+    //===================================================================================================================
+    function FlipTubeClose(sequence& i_seqFlipTubes,
+                           variable i_blnSequenceCounting,
+                           variable i_strChannelPattern) variable
+    {
+      variable strFunctionName(""), strChannelPatternReference(i_strChannelPattern), strCurrentPattern;
+      string strErrorPattern, strResponse;
+
+      variable intPosition, intIndex(0), intOffset(0), intXPosCounter, blnErrorFlag(ASWGLOBAL::BOOL::FALSE);
+      variable fltXPosition, fltMoveXPosition, fltTraverseHeight;
+      variable fltarrXPosition[], fltarrYPositions[], fltarrZPositions[], fltarrMoveYPositions[], fltarrMoveZPositions[], fltarrRecoveryYPositions[], fltarrRecoveryZPositions[], intarrXPosCounter[];
+
+      variable fltarrXPositionBuffer[], fltarrYPositionsBuffer[], fltarrZPositionsBuffer[]; // , fltarrMoveYPositionsBuffer[], fltarrMoveZPositionsBuffer[]
+
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+       return(ASWGLOBAL::BOOL::FALSE);
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::START, TRACE_LEVEL_RELEASE,
+                                        "",
+                                        strFunctionName, _intTraceLevel, _strLibraryName);
+
+      //Check if i_strChannelPattern has more '1' as tool pickup pattern (_strToolChannelPattern)
+      if(_StrReplace(i_strChannelPattern, "1", "1") > _StrReplace(_strToolChannelPattern, "1", "1"))
+      {
+        Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE_WITH_ERROR, TRACE_LEVEL_RELEASE,
+                                      "Can't use channels without a tool attached! Compare the channel patterns for ToolsPickUp and FlipTubeClose", 
+                                      strFunctionName, _intTraceLevel, _strLibraryName);
+        return(ASWGLOBAL::BOOL::FALSE);
+      }
+
+      // get x, y and z position for each active channel dependent of channelPattern
+
+      if(!_GetChannelPositions(i_seqFlipTubes, i_blnSequenceCounting, i_strChannelPattern, fltarrXPositionBuffer, fltarrYPositionsBuffer, fltarrZPositionsBuffer))
+        return(ASWGLOBAL::BOOL::FALSE);
+
+      _InitProcessState(i_strChannelPattern);
+
+      _CheckDifferentXPositions(fltarrXPositionBuffer, intarrXPosCounter); //(arg_in, arg_out)
+
+      //build array with z-positions for error recovery
+      fltarrRecoveryZPositions.SetSize(0);
+      for(intPosition = 0; intPosition < _intNumberOfChannels; intPosition++)
+      {
+         fltarrRecoveryZPositions.AddAsLast(_fltTraverseHeight); //_fltTraverseHeight
+      }
+
+      for(intIndex = 0; intIndex < intarrXPosCounter.GetSize(); intIndex++)
+      {
+        intXPosCounter = intarrXPosCounter[intIndex];
+        i_strChannelPattern = _CreateChannelPattern(strChannelPatternReference, intXPosCounter);
+        strCurrentPattern = i_strChannelPattern;
+
+        _CreateSeqPositions(intarrXPosCounter[intIndex], //Number of samples on the same X coordinate
+                            fltarrXPositionBuffer, fltarrYPositionsBuffer, fltarrZPositionsBuffer, //Buffer Position array will be shortened by number of used
+                            fltarrXPosition, fltarrYPositions, fltarrZPositions); // current number of samples to be used
+
+        if(!_CheckForDoubleYValues(fltarrYPositions))
+        {
+          Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE_WITH_ERROR, TRACE_LEVEL_RELEASE,
+                                      "There is a potential collision on the Y axis. There will be no movement! Check your sequence for overlaying positions!", 
+                                      strFunctionName, _intTraceLevel, _strLibraryName);
+          _ResetProcessState();
+          return(ASWGLOBAL::BOOL::FALSE);
+        }
+
+        if(!_CheckForDecreasingYValues(fltarrYPositions))
+        {
+          Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE_WITH_ERROR, TRACE_LEVEL_RELEASE,
+                                      "Unable to operate channels in parallel. There will be no movement! Check your sequence: sort from back of instrument to front (Decreasing y-position value for same x-position value)!", 
+                                      strFunctionName, _intTraceLevel, _strLibraryName);
+          _ResetProcessState();
+          return(ASWGLOBAL::BOOL::FALSE);
+        }
+
+        fltXPosition = fltarrXPosition[0];
+
+
+        if(_intToolOrientation == FLIPTUBETOOL_FOR_LANDSCAPE)
+        {
+          // move to X close start position (stay on x offset, z start)
+          fltMoveXPosition = fltXPosition + _fltCloseX_Start_Offset.GetAt(_intToolOrientation);
+          fltarrMoveYPositions.SetSize(0);
+          fltarrMoveZPositions.SetSize(0);
+
+          for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
+          {
+             fltarrMoveZPositions.AddAsLast(fltarrZPositions.GetAt(intPosition) + _fltClose_Z_Start);
+             fltarrMoveYPositions.AddAsLast(fltarrYPositions.GetAt(intPosition) + _fltCloseY_Offset.GetAt(_intToolOrientation));
+          }
+
+          strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, _fltTraverseHeight );
+          strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+          // move erronous channel up to traverse height
+          if(strErrorPattern.Find("1") >= 0)
+          {
+            _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, _fltTraverseHeight );
+            blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+          }
+
+          // move to X close end position --> X right (stay on x, z start)
+          fltTraverseHeight = fltarrMoveZPositions.GetAt(0);
+          fltMoveXPosition = fltXPosition + _fltCloseX_End_Offset.GetAt(_intToolOrientation);
+
+          strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, fltTraverseHeight );
+          strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+          // move erronous channel up to traverse height
+          if(strErrorPattern.Find("1") >= 0)
+          {
+            _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, fltTraverseHeight );
+            blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+          }
+
+          // set speed and power
+          _SetZParameter(_intClose_Z_Power, _intClose_Z_Speed);
+        }
+        else
+        {
+          // move to X close start position (stay on x offset, z start)
+          fltMoveXPosition = fltXPosition + _fltCloseX_Offset.GetAt(_intToolOrientation);
+          fltarrMoveYPositions.SetSize(0);
+          fltarrMoveZPositions.SetSize(0);
+
+          for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
+          {
+             fltarrMoveZPositions.AddAsLast(fltarrZPositions.GetAt(intPosition) + _fltClose_Z_Start);
+             fltarrMoveYPositions.AddAsLast(fltarrYPositions.GetAt(intPosition) + _fltCloseY_Start_Offset.GetAt(_intToolOrientation));
+          }
+
+          strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, _fltTraverseHeight );
+          strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+          // move erronous channel up to traverse height
+          if(strErrorPattern.Find("1") >= 0)
+          {
+            _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, _fltTraverseHeight );
+            blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+          }
+
+          // move to X close end position --> X right (stay on x, z start)
+          fltTraverseHeight = fltarrMoveZPositions.GetAt(0);
+          fltMoveXPosition = fltXPosition + _fltCloseX_Offset.GetAt(_intToolOrientation);
+          fltarrMoveYPositions.SetSize(0);
+          fltarrMoveZPositions.SetSize(0);
+
+          for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
+          {
+             fltarrMoveZPositions.AddAsLast(fltarrZPositions.GetAt(intPosition) + _fltClose_Z_Start);
+             fltarrMoveYPositions.AddAsLast(fltarrYPositions.GetAt(intPosition) + _fltCloseY_End_Offset.GetAt(_intToolOrientation));
+          }
+
+          strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, fltTraverseHeight );
+          strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+          // move erronous channel up to traverse height
+          if(strErrorPattern.Find("1") >= 0)
+          {
+            _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, fltTraverseHeight );
+            blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+          }
+
+          // set speed and power
+          _SetZParameter(_intClose_Z_Power, _intClose_Z_Speed);
+        }
+
+        // close tube (z-move)
+        fltarrMoveZPositions.SetSize(0);
+        for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
+        {
+           fltarrMoveZPositions.AddAsLast(fltarrZPositions.GetAt(intPosition) + _fltClose_Z_End);
+        }
+
+        strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, fltTraverseHeight );
+        strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+        // move erronous channel up to traverse height
+        if(strErrorPattern.Find("1") >= 0)
+        {
+          _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, fltTraverseHeight );
+          blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+        }
+
+        // reset speed and power to instrument defaults
+        _SetZParameter(_intInstrumentZPower, _intInstrumentZSpeed);
+
+        // move up to traverse height
+        fltarrMoveZPositions.SetSize(0);
+        for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
+        {
+           fltarrMoveZPositions.AddAsLast( _fltTraverseHeight );
+        }
+
+        strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, _fltTraverseHeight );
+        strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+        // move erronous channel up to traverse height
+        if(strErrorPattern.Find("1") >= 0)
+        {
+          _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, _fltTraverseHeight );
+          blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+        }
+
+        intOffset = intOffset + intXPosCounter;
+        //Trace(intOffset);
+      }
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE, TRACE_LEVEL_RELEASE,
+                                       "", 
+                                       strFunctionName, _intTraceLevel, _strLibraryName);
+
+      if(blnErrorFlag)
+      {
+        return(ASWGLOBAL::BOOL::FALSE);
+      }
+      else
+      {
+        return(ASWGLOBAL::BOOL::TRUE);
+      }
+    } //end FlipTubeClose
+
+    //===================================================================================================================
+    //
+    //  FUNCTION FlipTubeOpen
+    //
+    //===================================================================================================================
+    function FlipTubeOpen(sequence& i_seqFlipTubes,
+                          variable i_blnSequenceCounting,
+                          variable i_strChannelPattern)variable
+    {
+      variable strFunctionName(""), strChannelPatternReference(i_strChannelPattern), strCurrentPattern;
+      string strErrorPattern, strResponse;
+
+      variable intPosition, intIndex(0), intOffset(0), intXPosCounter, blnErrorFlag(ASWGLOBAL::BOOL::FALSE);
+      variable fltXPosition, fltMoveXPosition, fltTraverseHeight;
+      variable fltarrXPosition[], fltarrYPositions[], fltarrZPositions[], fltarrMoveYPositions[], fltarrMoveZPositions[], fltarrRecoveryYPositions[], fltarrRecoveryZPositions[], intarrXPosCounter[];
+
+      variable fltarrXPositionBuffer[], fltarrYPositionsBuffer[], fltarrZPositionsBuffer[]; //, fltarrMoveYPositionsBuffer[], fltarrMoveZPositionsBuffer[]
+
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+        return(ASWGLOBAL::BOOL::FALSE);
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::START, TRACE_LEVEL_RELEASE,
+                                        "",
+                                        strFunctionName, _intTraceLevel, _strLibraryName);
+
+      //Check if i_strChannelPattern has more '1' as tool pickup pattern (_strToolChannelPattern)
+      //strOriginalPattern = i_strChannelPattern;
+      if(_StrReplace(i_strChannelPattern, "1", "1") > _StrReplace(_strToolChannelPattern, "1", "1"))
+      {
+        Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE_WITH_ERROR, TRACE_LEVEL_RELEASE,
+                                      "Can't use channels without a tool attached! Compare the channel patterns for ToolsPickUp and FlipTubeOpen", 
+                                      strFunctionName, _intTraceLevel, _strLibraryName);
+        return(ASWGLOBAL::BOOL::FALSE);
+      }
+
+      if(!_GetChannelPositions(i_seqFlipTubes, i_blnSequenceCounting, i_strChannelPattern, fltarrXPositionBuffer, fltarrYPositionsBuffer, fltarrZPositionsBuffer))
+        return(ASWGLOBAL::BOOL::FALSE);
+
+      _InitProcessState(i_strChannelPattern);
+
+      _CheckDifferentXPositions(fltarrXPositionBuffer, intarrXPosCounter); //(arg_in, arg_out)
+
+      //build array with z-positions for error recovery
+      fltarrRecoveryZPositions.SetSize(0);
+      for(intPosition = 0; intPosition < _intNumberOfChannels; intPosition++)
+      {
+         fltarrRecoveryZPositions.AddAsLast(_fltTraverseHeight); //_fltTraverseHeight
+      }
+
+      for(intIndex = 0; intIndex < intarrXPosCounter.GetSize(); intIndex++)
+      {
+        intXPosCounter = intarrXPosCounter[intIndex];
+
+
+        i_strChannelPattern = _CreateChannelPattern(strChannelPatternReference, intarrXPosCounter[intIndex]);
+        strCurrentPattern = i_strChannelPattern;
+        _CreateSeqPositions(intarrXPosCounter[intIndex], //Number of tubes on the same X coordinate
+                            fltarrXPositionBuffer, fltarrYPositionsBuffer, fltarrZPositionsBuffer, //Buffer Position array will be shortened by number of used channels / tubes
+                            fltarrXPosition, fltarrYPositions, fltarrZPositions); // positions of current tubes
+
+        if(!_CheckForDoubleYValues(fltarrYPositions))
+        {
+          Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE_WITH_ERROR, TRACE_LEVEL_RELEASE,
+                                      "There is a potential collision on the Y axis. There will be no movement! Check your sequence for overlaying positions!", 
+                                      strFunctionName, _intTraceLevel, _strLibraryName);
+          _ResetProcessState();
+          return(ASWGLOBAL::BOOL::FALSE);
+        }
+
+        if(!_CheckForDecreasingYValues(fltarrYPositions))
+        {
+          Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE_WITH_ERROR, TRACE_LEVEL_RELEASE,
+                                      "Unable to operate channels in parallel. There will be no movement! Check your sequence: sort from back of instrument to front (Decreasing y-position value for same x-position value)!", 
+                                      strFunctionName, _intTraceLevel, _strLibraryName);
+          _ResetProcessState();
+          return(ASWGLOBAL::BOOL::FALSE);
+        }
+
+        fltXPosition = fltarrXPosition[0];
+
+        // Pre Open
+
+        // move to X/Y pre-open position (stay on _fltTraverseHeight)
+        fltMoveXPosition = fltXPosition + _fltPreOpen_X_Offset.GetAt(_intToolOrientation);
+        fltarrMoveYPositions.SetSize(0);
+        fltarrMoveZPositions.SetSize(0);
+
+        for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
+        {
+           fltarrMoveYPositions.AddAsLast(fltarrYPositions.GetAt(intPosition) + _fltPreOpen_Y_Offset.GetAt(_intToolOrientation));
+           fltarrMoveZPositions.AddAsLast(_fltTraverseHeight);
+        }
+
+        strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, _fltTraverseHeight);
+        strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+        // move erronous channel up to traverse height
+        if(strErrorPattern.Find("1") >= 0)
+        {
+          _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, _fltTraverseHeight );
+          blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+        }
+
+        // z-move with default z-speed (stop 5mm above _fltPreOpen_Z_End)
+        fltTraverseHeight = fltarrZPositions.GetAt(0) +_fltPreOpen_Z_End + 5; 
+
+        fltarrMoveZPositions.SetSize(0);
+        for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
+        {
+           fltarrMoveZPositions.AddAsLast(fltarrZPositions.GetAt(intPosition) + _fltPreOpen_Z_End + 5);
+        }
+
+        strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, fltTraverseHeight);
+        strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+        // move erronous channel up to traverse height
+        if(strErrorPattern.Find("1") >= 0)
+        {
+          _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, _fltTraverseHeight );
+          blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+        }
+
+        // pre-open tube (z-move to _preOpen_z_end with modified speed&power
+        _SetZParameter(_intOpen_Z_Power, _intOpen_Z_Speed);
+
+        fltarrMoveZPositions.SetSize(0);
+        for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
+        {
+           fltarrMoveZPositions.AddAsLast(fltarrZPositions.GetAt(intPosition) + _fltPreOpen_Z_End);
+        }
+
+        fltTraverseHeight = fltarrZPositions.GetAt(0) + _fltPreOpen_Z_End;
+        strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, fltTraverseHeight);
+        strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+        // move erronous channel up to traverse height
+        if(strErrorPattern.Find("1") >= 0)
+        {
+          _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, _fltTraverseHeight );
+          blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+        }
+
+        // move up to traverse height with modified speed&power
+        fltarrMoveZPositions.SetSize(0);
+        for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
+        {
+           fltarrMoveZPositions.AddAsLast(_fltTraverseHeight);
+        }
+        strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, _fltTraverseHeight);
+        strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+        // move erronous channel up to traverse height
+        if(strErrorPattern.Find("1") >= 0)
+        {
+          _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, _fltTraverseHeight );
+          blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+        }
+
+         // end Pre open
+
+        // Open
+
+        // move to X/Y/Z open position (_fltOpen_Z_Start)
+        fltMoveXPosition = fltXPosition + _fltOpen_X_Offset.GetAt(_intToolOrientation);
+        fltarrMoveYPositions.SetSize(0);
+        fltarrMoveZPositions.SetSize(0);
+
+        for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
+        {
+           fltarrMoveYPositions.AddAsLast(fltarrYPositions.GetAt(intPosition) + _fltOpen_Y_Offset.GetAt(_intToolOrientation));
+           fltarrMoveZPositions.AddAsLast(fltarrZPositions.GetAt(intPosition) + _fltOpen_Z_Start);
+        }
+
+        fltTraverseHeight = fltarrZPositions.GetAt(0) + _fltOpen_Z_Start;
+        strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, fltTraverseHeight );
+        strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+        // move erronous channel up to traverse height
+        if(strErrorPattern.Find("1") >= 0)
+        {
+          _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, _fltTraverseHeight );
+          blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+        }
+
+        // open tube: move to Z to open position (_fltOpen_Z_End)
+        // smooth opening ("hooking" of flip tube lid) with reduced z-Speed, based on input of QTE
+        _SetZParameter(_intOpen_Z_Power, _intOpen_Z_SpeedSmooth);
+
+        fltarrMoveZPositions.SetSize(0);
+        for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
+        {
+           fltarrMoveZPositions.AddAsLast(fltarrZPositions.GetAt(intPosition) + (_fltOpen_Z_End));
+        }
+
+        fltTraverseHeight = fltarrZPositions.GetAt(0) + (_fltOpen_Z_End);
+        strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, fltTraverseHeight );
+        strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+        // move erronous channel up to traverse height
+        if(strErrorPattern.Find("1") >= 0)
+        {
+          _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, _fltTraverseHeight );
+          blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+        }
+
+        // set speed and power
+        _SetZParameter(_intInstrumentZPower, _intOpen_Z_Speed); // v1.7: move up with _intOpen_Z_Speed (was _intInstrumentZSpeed)
+
+        // move up to traverse height
+        fltarrMoveZPositions.SetSize(0);
+        for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
+        {
+           fltarrMoveZPositions.AddAsLast(_fltTraverseHeight);
+        }
+
+        strResponse = _MoveChannels(i_strChannelPattern, strCurrentPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrMoveZPositions, _fltTraverseHeight );
+        strErrorPattern = _EvaluateResponse(strResponse, intOffset, strCurrentPattern);
+        // move erronous channel up to traverse height
+        if(strErrorPattern.Find("1") >= 0)
+        {
+          _MoveChannels(i_strChannelPattern, strErrorPattern, fltMoveXPosition, fltarrMoveYPositions, fltarrRecoveryZPositions, _fltTraverseHeight );
+          blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
+        }
+
+        // reset speed and power to instrument defaults
+        _SetZParameter(_intInstrumentZPower, _intInstrumentZSpeed); // v1.7: moved reset of power and speed to the end of the cycle
+
+        intOffset = intOffset + intXPosCounter;
+        //Trace(intOffset);
+
+        // end Open
+      }
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE, TRACE_LEVEL_RELEASE,
+                                       "", 
+                                       strFunctionName, _intTraceLevel, _strLibraryName);
+      
+      if(blnErrorFlag)
+      {
+        return(ASWGLOBAL::BOOL::FALSE);
+      }
+      else
+      {
+        return(ASWGLOBAL::BOOL::TRUE);
+      }
+    }// end FlipTubeOpen
+
+    //===================================================================================================================
+    //
+    //  FUNCTION ToolsPickUp
+    //
+    //===================================================================================================================
+    function ToolsPickUp(variable i_strChannelPattern,
+                         sequence& i_seqTools) variable
+    {
+      variable strFunctionName("");
+      device ML_STAR_Ref("", "", hslTrue);
+      
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+       return(ASWGLOBAL::BOOL::FALSE);
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::START, TRACE_LEVEL_RELEASE,
+                                        "",
+                                        strFunctionName, _intTraceLevel, _strLibraryName);
+
+      _strToolChannelPattern = i_strChannelPattern;
+
+      if(!_blnSimulationMode)
+      {
+        //GetDevice
+        ML_STAR_Ref = _GetML_STAR();
+        ML_STAR_Ref._541143FA_7FA2_11D3_AD85_0004ACB1DCB2( "79213cc4_6af3_498d_87d3ed57a9151704" ); // TipPickUp
+      }
+      else
+      {
+        Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::PROGRESS, TRACE_LEVEL_DEBUG,
+                                         "Running in simulation mode!", 
+                                         strFunctionName, _intTraceLevel, _strLibraryName);
+      }
+
+      _ResetProcessState();
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE, TRACE_LEVEL_RELEASE,
+                                       "", 
+                                       strFunctionName, _intTraceLevel, _strLibraryName);
+      return(ASWGLOBAL::BOOL::TRUE);
+    } //end ToolsPickUp
+
+    //===================================================================================================================
+    //
+    //  FUNCTION ToolsEject
+    //
+    //===================================================================================================================
+    function ToolsEject(sequence& i_seqTools) variable
+    {
+      variable strFunctionName("");
+      device ML_STAR_Ref("", "", hslTrue);
+
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+       return(ASWGLOBAL::BOOL::FALSE);
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::START, TRACE_LEVEL_RELEASE,
+                                        "",
+                                        strFunctionName, _intTraceLevel, _strLibraryName);
+      if(!_blnSimulationMode)
+      {
+        //GetDevice
+        ML_STAR_Ref = _GetML_STAR();
+        ML_STAR_Ref._541143FC_7FA2_11D3_AD85_0004ACB1DCB2( "d82ce81c_4fdf_4fcf_b159666c83ecbe63" ); // TipEject
+      }
+      else
+      {
+        Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::PROGRESS, TRACE_LEVEL_DEBUG,
+                                         "Running in simulation mode!", 
+                                         strFunctionName, _intTraceLevel, _strLibraryName);
+
+      }
+      _ResetProcessState();
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE, TRACE_LEVEL_RELEASE,
+                                       "", 
+                                       strFunctionName, _intTraceLevel, _strLibraryName);
+      return(ASWGLOBAL::BOOL::TRUE);
+    } //end ToolsEdject
+
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- FUNCTION GetProcessState
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    function GetProcessState(variable& o_strState) variable
+    {
+      variable intChannelNumber, strFunctionName("");
+      string strState("");
+      
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+       return(ASWGLOBAL::BOOL::FALSE);
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::START, TRACE_LEVEL_RELEASE,
+                                        "",
+                                        strFunctionName, _intTraceLevel, _strLibraryName);
+
+      o_strState = _Join(_strProcessState);
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE, TRACE_LEVEL_RELEASE,
+                                       "", 
+                                       strFunctionName, _intTraceLevel, _strLibraryName);
+
+      return(ASWGLOBAL::BOOL::TRUE);
+    } // end GetProcessState
+
+
+    //*******************************************************************************************************************
+    //*
+    //* PRIVATE FUNCTION IMPLEMENTATION
+    //*
+    //*******************************************************************************************************************
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _GetSystem
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _GetML_STAR() device
+    {
+      return (GetDeviceRef("ML_STAR"));
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _LoadDefaultValues
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _LoadDefaultValues() void
+    {
+      _fltPreOpen_X_Offset.SetSize(2);
+      _fltPreOpen_Y_Offset.SetSize(2);
+
+      _fltOpen_X_Offset.SetSize(2);
+      _fltOpen_Y_Offset.SetSize(2);
+
+      _fltCloseX_Start_Offset.SetSize(2);
+      _fltCloseX_End_Offset.SetSize(2);
+      _fltCloseY_Offset.SetSize(2);
+
+      _fltCloseY_Start_Offset.SetSize(2);
+      _fltCloseY_End_Offset.SetSize(2);
+      _fltCloseX_Offset.SetSize(2);
+
+      // OffestVariables for FlipTubeTool Landscape
+      _fltPreOpen_X_Offset.SetAt(0, -6.8);
+      _fltPreOpen_Y_Offset.SetAt(0, 2.55);
+
+      _fltOpen_X_Offset.SetAt(0, -6.3);
+      _fltOpen_Y_Offset.SetAt(0, -2.45);
+
+      _fltCloseX_Start_Offset.SetAt(0, -8.0); // V1.10: changed to -8.0 (from -13.0)
+      _fltCloseX_End_Offset.SetAt(0, 4.0);
+      _fltCloseY_Offset.SetAt(0, -2.45);
+
+
+      // OffestVariables for FlipTubeTool Portrait
+      _fltPreOpen_X_Offset.SetAt(1, 2.55);
+      _fltPreOpen_Y_Offset.SetAt(1, 6.8);
+
+      _fltOpen_X_Offset.SetAt(1, -2.45); 
+      _fltOpen_Y_Offset.SetAt(1, 6.3);
+
+      _fltCloseX_Start_Offset.SetAt(1, -13.0);
+      _fltCloseX_End_Offset.SetAt(1, 4.0);
+      _fltCloseY_Offset.SetAt(1, -2.45);
+
+      _fltCloseY_Start_Offset.SetAt(1, 13.0);
+      _fltCloseY_End_Offset.SetAt(1, -4.0);
+      _fltCloseX_Offset.SetAt(1, -2.45);
+
+      // OffestVariables for FlipTubeTool General
+      _fltPreOpen_Z_End = 14.55; // v1.7: reduced to 14.55 (from 14.95)
+
+      _fltOpen_Z_Start = 42.3;
+      _fltOpen_Z_End = 38.0;
+
+      _intOpen_Z_Power = 7;
+      _intOpen_Z_Speed = 2000; // v1.7: reduced to 2000 (from 3000)
+      _intOpen_Z_SpeedSmooth = 100;
+
+      _fltClose_Z_Start = 50.2;
+      _fltClose_Z_End = 41.1;
+
+      _intClose_Z_Power = 5;
+      _intClose_Z_Speed = 5000;
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _GetChannelPositions
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _GetChannelPositions(sequence& i_seqTubes,
+                                          variable  i_blnSequenceeCounting,
+                                          string&   i_strChannelPattern,
+                                          variable& o_fltarrXPosition[],
+                                          variable& o_fltarrYPosition[],
+                                          variable& o_fltarrZPosition[]) variable
+    {
+      variable intChannelNumber, intLengthOfChannelPattern;
+      variable intChannelCount(0);
+      variable intCurrentPositionBackUp;// backup of current sequence position
+      variable fltFirstXPosition;
+      variable blnPatternStartOn(hslFalse);
+      variable blnPatternOnAfterStart(hslFalse);
+
+      variable strFunctionName("");
+
+      device ML_STAR_Ref("", "", hslTrue);
+      ML_STAR_Ref = _GetML_STAR();
+
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+       return(ASWGLOBAL::BOOL::FALSE);
+
+      if(Hamilton_DriverTools::CheckChannelPattern(i_strChannelPattern, "i_strChannelPattern", _intNumberOfChannels, strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE)
+        return(ASWGLOBAL::BOOL::FALSE);
+
+      o_fltarrYPosition.SetSize(0);
+      o_fltarrZPosition.SetSize(0);
+
+      // Look up for activated channels
+      intLengthOfChannelPattern = i_strChannelPattern.GetLength();
+
+      for(intChannelNumber = 0; intChannelNumber < _intNumberOfChannels; intChannelNumber++)
+      {
+        if(intLengthOfChannelPattern <= intChannelNumber)
+          i_strChannelPattern = i_strChannelPattern + "0";
+
+        if("1" == i_strChannelPattern.Mid(intChannelNumber, 1))
+        {
+          intChannelCount++;
+          blnPatternStartOn = hslTrue;
+          if(blnPatternOnAfterStart)
+          {
+            Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE_WITH_ERROR, TRACE_LEVEL_RELEASE,
+                                              "Wrong channelPattern format, inactive channel between active channels is not allowed", 
+                                              strFunctionName, _intTraceLevel, _strLibraryName);
+            return(ASWGLOBAL::BOOL::FALSE);
+          }
+        }
+        else
+        {
+          // check for inactive channel after an active channel
+          if(blnPatternStartOn)
+            blnPatternOnAfterStart = hslTrue;
+        }
+      }
+
+      // backup current position
+      intCurrentPositionBackUp = i_seqTubes.GetCurrentPosition();
+
+      if(i_seqTubes.GetMax() < intChannelCount)
+      {
+        Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::COMPLETE_WITH_ERROR, TRACE_LEVEL_RELEASE,
+                                          "Not enough sequence positions available", 
+                                          strFunctionName, _intTraceLevel, _strLibraryName);
+        return(ASWGLOBAL::BOOL::FALSE);
+      }
+      // get positions of needle sequence
+      for(intChannelNumber = 0; intChannelNumber < intChannelCount; intChannelNumber++)
+      {
+        variable fltarrPosition[];
+        fltarrPosition.SetSize(0);
+
+        ML_STAR_Ref.GetLabwarePosition( i_seqTubes.GetLabwareId(), fltarrPosition, i_seqTubes.GetPositionId() );
+        o_fltarrXPosition.AddAsLast(fltarrPosition.GetAt(0));
+        o_fltarrYPosition.AddAsLast(fltarrPosition.GetAt(1));
+        o_fltarrZPosition.AddAsLast(fltarrPosition.GetAt(2));
+        
+        i_seqTubes.Increment(1);
+      }
+        // restore current position
+        i_seqTubes.SetCurrentPosition(intCurrentPositionBackUp);
+
+      if(i_blnSequenceeCounting == 1)
+      {
+         i_seqTubes.Increment(intChannelCount);
+      }
+      return(ASWGLOBAL::BOOL::TRUE);
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _MoveChannels
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _MoveChannels(string i_strChannelPattern,
+                                   string i_strCurrentPattern,
+                                   variable i_fltXPosition,
+                                   variable i_fltarrYPositions[],
+                                   variable i_fltarrZPositions[],
+                                   variable i_fltTraverseHeight) variable
+    {
+      variable intChannelNumber(0), intChannelCounter(0);
+      //string strCommand("C0JM"), strCommandParameter("tm"), strFunctionName(""), strResponse(""), strMessage("");
+      string strCommand("A1PMDN"), strCommandParameter("tm"), strFunctionName(""), strResponse(""), strMessage("");
+
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+       return("");
+
+      for(intChannelNumber = 0; intChannelNumber < _intNumberOfChannels; intChannelNumber++)
+      {
+        if(intChannelNumber == 0)
+          strCommandParameter = strCommandParameter + i_strCurrentPattern.Mid(intChannelNumber, 1);//++++++++++++++++++++++
+        else
+        {
+          strCommandParameter = strCommandParameter + " ";
+          strCommandParameter = strCommandParameter + i_strCurrentPattern.Mid(intChannelNumber, 1);//++++++++++++++++++++++
+        }
+      }
+
+      // Append the traverse height parameter.
+      strCommandParameter = strCommandParameter + _ComposeCompleteNormalizePrm("th", 4, i_fltTraverseHeight - 0.1);
+
+      // The '&' indicates that the parameter should apply to all channels - Vantage insists on this for "xp".
+      strCommandParameter = strCommandParameter + "&";
+      strCommandParameter = strCommandParameter + _ComposeCompleteNormalizePrm("xp", 5, i_fltXPosition);
+
+      // An '&' is also required for "yp", possibly due to the use of repeated values? (Y-Position array is returned
+      // with duplicate values for any unused channels, having the same yp value as the last used channel's in the
+      // array. For instance: [90, 180, 270, 270, 270, ...])
+      strCommandParameter = strCommandParameter + "&";
+
+      for(intChannelNumber = 0; intChannelNumber < _intNumberOfChannels; intChannelNumber++)
+      {
+        if(intChannelNumber == 0)
+          strCommandParameter = strCommandParameter + _ComposeCompleteNormalizePrm("yp", 4, i_fltarrYPositions[intChannelCounter]);
+        else
+          strCommandParameter = strCommandParameter + _ComposeCompleteNormalizePrm(" ", 4, i_fltarrYPositions[intChannelCounter]);
+
+        if ("1" == i_strChannelPattern.Mid(intChannelNumber, 1))
+        intChannelCounter++;
+
+        if(intChannelCounter == i_fltarrYPositions.GetSize())
+           intChannelCounter = intChannelCounter-1;
+      }
+
+      intChannelCounter = 0;
+      for(intChannelNumber = 0; intChannelNumber < _intNumberOfChannels; intChannelNumber++)
+      {
+        if(intChannelNumber == 0)
+          strCommandParameter = strCommandParameter + _ComposeCompleteNormalizePrm("zp", 4, i_fltarrZPositions[intChannelCounter]);
+        else
+          strCommandParameter = strCommandParameter + _ComposeCompleteNormalizePrm(" ", 4, i_fltarrZPositions[intChannelCounter]);
+
+        if ("1" == i_strChannelPattern.Mid(intChannelNumber, 1))
+        intChannelCounter++;
+
+        if(intChannelCounter == i_fltarrZPositions.GetSize())
+          intChannelCounter = intChannelCounter-1;
+      }
+
+      strMessage = strCommand + " ";
+      strMessage = strMessage + strCommandParameter;
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::PROGRESS, TRACE_LEVEL_DEBUG,
+                                        strMessage, 
+                                        strFunctionName, _intTraceLevel, _strLibraryName);
+
+      strResponse = _SendVantageFirmwareCommand(strCommand, strCommandParameter);
+      
+
+      Hamilton_DriverTools::StatusTrace(Hamilton_DriverTools::ACTION::PROGRESS, TRACE_LEVEL_DEBUG,
+                                        strResponse, 
+                                        strFunctionName, _intTraceLevel, _strLibraryName);
+
+      return (strResponse);
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _ComposeCompleteNormalizePrm
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _ComposeCompleteNormalizePrm(variable i_strParameterName,
+                                                  variable i_intNumberOfDigits,
+                                                  variable i_intValue) variable
+    {
+      variable strFunctionName("");
+      variable strCompleteParameter(""); 
+
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+       return(ASWGLOBAL::BOOL::FALSE);
+
+      strCompleteParameter = IStr(Floor(MthRound(i_intValue * 10, 0)));
+      strCompleteParameter = i_strParameterName + Hamilton_DriverTools::FillLeft(strCompleteParameter, "0", i_intNumberOfDigits, strFunctionName, _strLibraryName);
+      return (strCompleteParameter);
+    }
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _ComposeCompletePrm
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _ComposeCompletePrm(variable strParameterName,
+                                         variable intNumberOfDigits,
+                                         variable intValue)string
+    {
+      variable strFunctionName("");
+      variable strCompleteParameter;
+
+      if(Hamilton_DriverTools::ExtractFunctionName(GetFunctionName(), strFunctionName, _strLibraryName) == ASWGLOBAL::BOOL::FALSE) 
+       return(ASWGLOBAL::BOOL::FALSE);
+
+      strCompleteParameter = IStr( Ceiling( intValue ));
+      strCompleteParameter = strParameterName + Hamilton_DriverTools::FillLeft(strCompleteParameter, "0", intNumberOfDigits, strFunctionName, _strLibraryName);
+      return( strCompleteParameter );
+    }
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _SetZParameter
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _SetZParameter(variable i_intZPower, variable i_intZSpeed)
+    {
+      variable strParameter;
+
+      if(GetSimulationMode() == 1)
+        return;
+      // set z power
+      // AAzw
+      // LAM - Commenting out for VoV (3/7, DCS) - No idea why this actually was being done, but units changed from STAR
+      // and are causing step loss.
+      // strParameter = _ComposeCompletePrm("zw", 1, i_intZPower );
+      //_SendFirmwareCommand("PXAA", strParameter);
+      // _SendVantageFirmwareCommand("A1PXAA", strParameter);
+
+      // set z speed
+      // AAzv
+      strParameter = _ComposeCompletePrm( "zv", 5, i_intZSpeed );
+      //_SendFirmwareCommand("PXAA", strParameter);
+      _SendVantageFirmwareCommand("A1PXAA", strParameter);
+    }// end _SetZParameter
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _SendFirmwareCommand
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _SendFirmwareCommand(variable i_strCommand,
+                                          variable i_strParameter) variable
+    {
+      variable atrarrReturnValues[];
+      string strReturnValue("");
+      //variable startPos(0);
+
+      device ML_STAR_Ref("", "", hslTrue);
+
+      ML_STAR_Ref = _GetML_STAR();
+
+      if(!_blnSimulationMode)
+      {
+        atrarrReturnValues = ML_STAR_Ref._1FB5DA01_3ACB_11d4_AE1F_0004ACB1DCB2( "b09eec04_5dbb_455f_9f205a291be090fc" ); // FirmwareCommand
+ 
+        if(atrarrReturnValues.GetSize() > 2)
+          strReturnValue = atrarrReturnValues.GetAt(3);
+
+      }
+      return (strReturnValue);
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _SendVantageFirmwareCommand
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _SendVantageFirmwareCommand(variable i_strCommand,
+                                          variable i_strParameter) variable
+    {
+        variable strReturnValue;
+        variable strVantageCommand;
+        variable strVantageParameter;
+
+        // All Vantage firmware commands must be sent entirely as parameters in VoV.
+        strVantageCommand = "####";
+        strVantageParameter = i_strCommand + i_strParameter;
+
+        strReturnValue = _SendFirmwareCommand( strVantageCommand, strVantageParameter );
+
+        return ( strReturnValue );
+
+    } // _SendVantageFirmwareCommand
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _InitializeLibrary
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _InitializeLibrary()void
+    {
+      if(!_blnLibraryInitialized)
+      {
+      	string strFirmwareCommand;
+      	string strFirmwareParameter;
+        string strFirmwareResponse;
+        variable intChannelCounter, intMinYPos;
+
+        if(!_blnSimulationMode)
+        {
+          // read current z power
+          // RArazw ==> RAzwX
+          // strFirmwareResponse = _SendFirmwareCommand("P1RA", "razw");
+          // strFirmwareCommand = "A1P1RAra";
+          // strFirmwareParameter = "\"zw\"";
+          // FIXME - This Vantage command doesn't work, because Venus strips out quotes from the firmware
+          // string (which are required for this command)! Using a default until this is fixed (if ever).
+          // strFirmwareResponse = _SendVantageFirmwareCommand(strFirmwareCommand, strFirmwareParameter);
+
+		  // TODO - find "zw", index from there
+          // if( strFirmwareResponse.GetLength() > 8 )
+          // _intInstrumentZPower = IVal( strFirmwareResponse.Mid( 8, 1 ) );
+
+          // read current z speed
+          // RArazv ==> RAzvXXXXX
+          // strFirmwareResponse = _SendFirmwareCommand("P1RA", "razv");
+          // strFirmwareCommand = "A1P1RAra";
+          // strFirmwareParameter = "\"zv\"";
+          // FIXME - This Vantage command doesn't work, because Venus strips out quotes from the firmware
+          // string (which are required for this command)! Using a default until this is fixed (if ever).
+          // strFirmwareResponse = _SendVantageFirmwareCommand(strFirmwareCommand, strFirmwareParameter);
+
+		  // TODO - find "zv", index from there
+          // if( strFirmwareResponse.GetLength() > 12 )
+          // _intInstrumentZSpeed = IVal( strFirmwareResponse.Mid( 8, 5 ) );
+        }
+
+        // read current installed channels
+        // RArakp ==> RAkpXX
+        //strFirmwareResponse = _SendFirmwareCommand("C0RM", "");
+        strFirmwareCommand = "A1AMQY";
+        strFirmwareParameter = "";
+        strFirmwareResponse = _SendVantageFirmwareCommand(strFirmwareCommand, strFirmwareParameter);
+
+        //intChannelCounter = strFirmwareResponse.Find("kp");
+        intChannelCounter = strFirmwareResponse.Find("kc");
+        if( intChannelCounter > 0)
+        _intNumberOfChannels = 8;
+        //_intNumberOfChannels = IVal( strFirmwareResponse.Mid(intChannelCounter + 2, 1));
+
+        // get minimal y position left arm
+        // C0QM ==> QMyuXXXX
+        //strFirmwareResponse = _SendFirmwareCommand("C0QM", "");
+        strFirmwareCommand = "A1AMQY";
+        strFirmwareParameter = "";
+        strFirmwareResponse = _SendVantageFirmwareCommand(strFirmwareCommand, strFirmwareParameter);
+
+        //intMinYPos = strFirmwareResponse.Find("yu");
+        intMinYPos = strFirmwareResponse.Find("ky");
+        if( intMinYPos > 0)
+        _intMinYposition = IVal( strFirmwareResponse.Mid(intMinYPos + 2, 4));
+
+        // init _strProcessState[]
+        _strProcessState.SetSize(_intNumberOfChannels);
+        _ResetProcessState();
+        _blnLibraryInitialized = hslTrue;
+      }
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _CheckDifferentXPositions
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _CheckDifferentXPositions(variable i_arrXpositions[], 
+                                               variable& o_intSameXPosCount[]) void
+    {
+      variable intIndex(0), intIncrement(0), intArrIndex(0), intSameXPosCount(0);
+
+      o_intSameXPosCount.SetSize(1);
+
+      for(intIndex = 0; intIndex < i_arrXpositions.GetSize(); intIndex++)
+      {
+        if(i_arrXpositions.ElementAt(intIndex) == i_arrXpositions.ElementAt(intIncrement))
+        {
+          intSameXPosCount++;
+        }
+        else
+        {
+          intIncrement = intIndex;
+          intArrIndex++;
+          o_intSameXPosCount.SetSize(intArrIndex + 1);
+          intSameXPosCount = 1;
+        }
+        o_intSameXPosCount.SetAt(intArrIndex, intSameXPosCount);
+      }
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _CreateChannelPattern
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _CreateChannelPattern(string i_strRefChPattern,
+                                          variable i_intNumberOfSamples) variable
+    {
+      string strReturnPattern(""), strTemp("");
+      variable intStringIndex(0), intChannelCount(0), intSampleCount(0);
+
+      for(intStringIndex = 0; intStringIndex < i_strRefChPattern.GetLength(); intStringIndex++)
+      {
+        strTemp = i_strRefChPattern.Mid(intStringIndex, 1);
+
+        if(strTemp.Compare("0") != 0)
+        {
+          if(intChannelCount < i_intNumberOfSamples)
+          {
+            strReturnPattern = strReturnPattern + "1";
+            intChannelCount++;
+          }
+          else
+          {
+            strReturnPattern = strReturnPattern + "0";
+          }
+        }
+        else
+        {
+          strReturnPattern = strReturnPattern + "0";
+        }
+      }
+      return(strReturnPattern);
+    }
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _CreateSeqPositions
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _CreateSeqPositions(variable i_intSampleCount,
+                                         variable& fltarrXPositionBuffer[], 
+                                         variable& fltarrYPositionsBuffer[], 
+                                         variable& fltarrZPositionsBuffer[],
+                                         variable& fltarrXPosition[], 
+                                         variable& fltarrYPositions[], 
+                                         variable& fltarrZPositions[]) void
+    {
+      variable intIndex(0);
+
+      fltarrXPosition.SetSize(0);
+      fltarrYPositions.SetSize(0);
+      fltarrZPositions.SetSize(0);
+
+      for(intIndex = 0; intIndex < i_intSampleCount; intIndex++)
+      {
+        fltarrXPosition.AddAsLast(fltarrXPositionBuffer[0]);
+        fltarrYPositions.AddAsLast(fltarrYPositionsBuffer[0]);
+        fltarrZPositions.AddAsLast(fltarrZPositionsBuffer[0]);
+
+        fltarrXPositionBuffer.RemoveElementAt(0);
+        fltarrYPositionsBuffer.RemoveElementAt(0);
+        fltarrZPositionsBuffer.RemoveElementAt(0);
+      }
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _CheckForDoubleYValues
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _CheckForDoubleYValues(variable i_arrYPositions[])variable
+    {
+      variable intIndex(0), intIndex2(0), fltValue;
+
+      for(intIndex = 0; intIndex < i_arrYPositions.GetSize(); intIndex++)
+      {
+        for(intIndex2 = 1 + intIndex; intIndex2 < i_arrYPositions.GetSize(); intIndex2++)
+        {
+          fltValue = i_arrYPositions.ElementAt(intIndex) - i_arrYPositions.ElementAt(intIndex2);
+
+          if(fltValue < 8 && fltValue > 0 || fltValue > - 8 && fltValue < 0)
+          {
+            return(hslFalse);
+          }
+        }
+      }
+      return(hslTrue);
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _CheckForDecreasingYValues
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _CheckForDecreasingYValues(variable i_arrYPositions[])variable
+    {
+      variable intIndex(0), fltValue(1000), fltCurrentValue;
+
+      for(intIndex = 0; intIndex < i_arrYPositions.GetSize(); intIndex++)
+      {
+         fltCurrentValue = i_arrYPositions.ElementAt(intIndex);
+         if(fltCurrentValue < fltValue)
+         {
+            fltValue = fltCurrentValue;
+         }
+         else
+         {
+            return(hslFalse);
+         }
+      }
+      return(hslTrue);
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _ResetProcessState
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _ResetProcessState() void
+    {
+      variable intChannelNumber;
+
+      for (intChannelNumber = 0; intChannelNumber < _strProcessState.GetSize(); intChannelNumber++)
+      {
+        _strProcessState.SetAt(intChannelNumber, "0");
+      }
+    } // end _ResetProcessState
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _InitProcessState
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _InitProcessState(string i_strChannelPattern) void
+    {
+      variable intChannelNumber;
+
+      for (intChannelNumber = 0; intChannelNumber < _strProcessState.GetSize(); intChannelNumber++)
+      {
+        _strProcessState.SetAt(intChannelNumber, i_strChannelPattern.Mid(intChannelNumber, 1));
+      }
+    } // end _InitProcessState
+
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PPIVATE FUNCTION _Join
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _Join(variable i_arrValues[]) variable
+    {
+      variable strOut;
+      variable intSize;
+      variable i;
+
+      //init
+      strOut = "";
+
+      //join
+      intSize = i_arrValues.GetSize();
+
+      for(i=0; i<intSize; i++)
+      {
+        strOut = strOut + i_arrValues.GetAt(i);
+      }
+
+      return(strOut);
+    } // end _Join
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PPIVATE FUNCTION _ConvertToArray
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _ConvertToArray(string i_strValue) variable[]
+    {
+      variable arrChars[];
+      variable intSize;
+      variable i;
+      string strActualChar;
+      string strRemainingString;
+
+      //init
+      arrChars.SetSize(0);
+
+      intSize = i_strValue.GetLength();
+      strRemainingString = i_strValue;
+
+      for(i=0; i<intSize; i++)
+      {
+        strActualChar = strRemainingString.Left(1);
+        strRemainingString = strRemainingString.Right(intSize - i - 1);
+
+        arrChars.AddAsLast(strActualChar);
+      }
+
+      return(arrChars);
+    } // end _ConvertToArray
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PPIVATE FUNCTION _EvaluateResponse
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _EvaluateResponse(string strResponse, variable intOffset, string& strChannelPattern) variable
+    {
+      variable startPos(0), intChannelNumber, intPosition;
+      string strErrorPattern(""), strTemp;
+      variable strArrChannelPattern[];
+
+     strArrChannelPattern = _ConvertToArray(strChannelPattern);
+
+      startPos = strResponse.Find("er");
+      if(startPos >= 0)
+      {
+        if(strResponse.Find("er00") < 0)
+        {
+          if(strResponse.Mid(startPos, 7) == "er99/00")
+          {
+            //Trace("Error involving channels");
+            for(intChannelNumber = 0; intChannelNumber < _intNumberOfChannels; intChannelNumber++)
+            {
+              strTemp = "P";
+              strTemp = strTemp + IStr(intChannelNumber + 1);
+              if(strResponse.Find(strTemp) >= 0)
+              {
+                intPosition = intChannelNumber + intOffset;
+                _strProcessState.SetAt(intPosition, "0");
+                strArrChannelPattern.SetAt(intChannelNumber, "0");
+                strErrorPattern = strErrorPattern + "1";
+              }
+              else
+              {
+                strErrorPattern = strErrorPattern + "0";
+              }
+            }
+          }
+        }
+      }
+
+      strChannelPattern = _Join(strArrChannelPattern);
+
+      return(strErrorPattern);
+
+    } // end _EvaluateResponse
+
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PPIVATE FUNCTION _StrReplace
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _StrReplace(variable& str, variable& oldSubStr, variable& newSubStr) variable
+    {
+      variable index;
+      variable result("");
+      variable strLength;
+      variable oldLength;
+      variable replacements(0);
+      string old;
+      string strStr;
+
+      strStr = str;
+      old = oldSubStr;
+      strLength = strStr.GetLength();
+      oldLength = old.GetLength();
+      for (index = strStr.Find(old); 
+        index != -1; 
+        index = strStr.Find(old))
+      {
+        result = result + strStr.Left(index) + newSubStr;
+        strStr = strStr.Mid(index + oldLength, strLength);
+        replacements++;
+      }
+      if (0 < replacements)
+        str = result + _Str(strStr);
+      return(replacements);
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PPIVATE FUNCTION _Str
+    //- helper
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _Str(variable& str) variable
+    {
+      return(str);
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //-
+    //- PRIVATE FUNCTION _InvertChannelPatern
+    //-
+    //-------------------------------------------------------------------------------------------------------------------
+    private function _InvertChannelPattern(string i_strChannelPattern) variable
+    {
+      variable intIndex;
+      string strInvertedPattern(""), strTemp("");
+
+      for (intIndex = 0; intIndex < i_strChannelPattern.GetLength(); intIndex++)
+      {
+        strTemp = i_strChannelPattern.Mid(intIndex, 1);
+        if (strTemp.Compare("1") == 0)
+        {
+          strInvertedPattern = strInvertedPattern + "0";
+        }
+        else
+        {
+          strInvertedPattern = strInvertedPattern + "1";
+        }
+      }
+      return(strInvertedPattern);
+    } // end _InvertChannelPatern
+
+
+  }// END FLIPTUBETOOL
+
+
+#endif
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2023-03-09 13:36$$checksum=77454cba$$length=091$$
