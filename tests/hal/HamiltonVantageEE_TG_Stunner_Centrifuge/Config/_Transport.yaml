@@ -1,0 +1,33 @@
+#############################################################
+#
+# Device IDs: This identifies the Device to users
+# Enabled: True: Can be used. False: Cannot be used
+# Com Port: Port to communicate with the Device
+# Device Type: HeaterShaker or HeaterCooler
+# Ambient Temp: Above ambient temp will heat, below ambient will cool. If device cannot cool then this is ignored
+# Stable Temp Delta: If device temp is +- this value of set temp. Device is considered equilibrated and stable.
+# Supported Plate Types: These are the plate supported by this device. This associates with the deck sequences file
+# Plate Sequence: Sequence for that plate on the device
+# Lid Sequence: Sequence for associated lid on the device
+#
+#############################################################
+HamiltonCOREGripper:
+  identifier: Gripper
+  enabled: True
+  backend: Hamilton
+  gripper_labware_id: seq_COREGripTool
+  supported_labware:
+    - Biorad200uLPCRPlate_Lid
+    - Thermo400uLPCRPlate_Lid
+    - ThermoAbgene1200uLPCRPlate_Lid
+    - CorningCostar2000uLPCRPlate_Lid
+    - UnchainedLabsStunnerUVPlate
+    - Biorad200uLPCRPlate
+    - Thermo400uLPCRPlate
+    - ThermoAbgene1200uLPCRPlate
+    - CorningCostar2000uLPCRPlate
+    - Hamilton1500uLFlipTubeRack
+    - NTRTipRack
+    - FTRTipRack
+    - FTRStackableTipRack
+    - VacuumManifoldShort
