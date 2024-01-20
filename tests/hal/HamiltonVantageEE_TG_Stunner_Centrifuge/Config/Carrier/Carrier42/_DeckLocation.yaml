@@ -3,6 +3,7 @@ Transportable Deck Location:
     carrier_config:
       carrier: Carrier42
       position: 1
+          
     transport_configs:
       - transport_device: COREGripper
         pickup_options:
@@ -13,6 +14,7 @@ Transportable Deck Location:
     carrier_config:
       carrier: Carrier42
       position: 2
+          
     transport_configs:
       - transport_device: COREGripper
         pickup_options:
@@ -23,6 +25,7 @@ Transportable Deck Location:
     carrier_config:
       carrier: Carrier42
       position: 3
+          
     transport_configs:
       - transport_device: COREGripper
         pickup_options:
@@ -33,6 +36,7 @@ Transportable Deck Location:
     carrier_config:
       carrier: Carrier42
       position: 4
+          
     transport_configs:
       - transport_device: COREGripper
         pickup_options:
@@ -43,6 +47,7 @@ Transportable Deck Location:
     carrier_config:
       carrier: Carrier42
       position: 5
+          
     transport_configs:
       - transport_device: COREGripper
         pickup_options:
