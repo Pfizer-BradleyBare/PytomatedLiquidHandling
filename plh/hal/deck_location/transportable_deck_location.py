@@ -1,15 +1,15 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, cast
+from typing import cast
 
 from pydantic import dataclasses
+
+from plh.driver.tools import *
 
 from .deck_location_base import *
 from .deck_location_base import DeckLocationBase
 from .exceptions import DeckLocationNotTransportableError
-
-if TYPE_CHECKING:
-    from .transport_config import TransportConfig
+from .transport_config import TransportConfig
 
 
 @dataclasses.dataclass(kw_only=True)

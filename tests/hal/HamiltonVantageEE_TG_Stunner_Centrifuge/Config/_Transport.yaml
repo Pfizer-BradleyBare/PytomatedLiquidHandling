@@ -12,7 +12,7 @@
 #
 #############################################################
 HamiltonCOREGripper:
-  identifier: Gripper
+  identifier: COREGripper
   enabled: True
   backend: Hamilton
   gripper_labware_id: seq_COREGripTool

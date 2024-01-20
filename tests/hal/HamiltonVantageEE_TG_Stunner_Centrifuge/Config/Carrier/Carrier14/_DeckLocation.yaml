@@ -1,20 +1,40 @@
-NonTransportable Deck Location:
+Transportable Deck Location:
   - enabled: True
     carrier_config:
       carrier: Carrier14
       position: 1
+    transport_configs:
+      - transport_device: COREGripper
+        pickup_options:
+        dropoff_options:
+          CheckPlateExists: False
 
   - enabled: True
     carrier_config:
       carrier: Carrier14
       position: 2
+    transport_configs:
+      - transport_device: COREGripper
+        pickup_options:
+        dropoff_options:
+          CheckPlateExists: False
 
   - enabled: True
     carrier_config:
       carrier: Carrier14
       position: 3
+    transport_configs:
+      - transport_device: COREGripper
+        pickup_options:
+        dropoff_options:
+          CheckPlateExists: False
 
   - enabled: True
     carrier_config:
       carrier: Carrier14
       position: 4
+    transport_configs:
+      - transport_device: COREGripper
+        pickup_options:
+        dropoff_options:
+          CheckPlateExists: False

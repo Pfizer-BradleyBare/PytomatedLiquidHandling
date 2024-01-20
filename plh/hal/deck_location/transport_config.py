@@ -1,15 +1,12 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from pydantic import ValidationInfo, dataclasses, field_serializer, field_validator
 
-if TYPE_CHECKING:
-    from plh.hal import transport
+from plh.hal import transport
 
-    # There is a circular dependacy in Transport. This is ONLY because it makes configuration simpler.
-    # Basically DeckLocation should not depend on Transport. So we hide the dependacy here and below.
-    # This may be a code smell. Not sure.
+# There is a circular dependacy in Transport. This is ONLY because it makes configuration simpler.
+# Basically DeckLocation should not depend on Transport. So we hide the dependacy here and below.
+# This may be a code smell. Not sure.
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -40,8 +37,6 @@ class TransportConfig:
         cls: type[TransportConfig],
         v: str | transport.TransportBase,
     ) -> transport.TransportBase:
-        from plh.hal import transport
-
         # There is a circular dependacy in Transport. This is ONLY because it makes configuration simpler.
         # Basically DeckLocation should not depend on Transport. So we hide the dependacy above and here.
         # This may be a code smell. Not sure.
@@ -72,7 +67,7 @@ class TransportConfig:
         if isinstance(v, transport.TransportBase.PickupOptions):
             return v
 
-        transport_device: transport.TransportBase = info.data["TransportDevice"]
+        transport_device: transport.TransportBase = info.data["transport_device"]
 
         if v is None:
             v = {}
@@ -89,7 +84,7 @@ class TransportConfig:
         if isinstance(v, transport.TransportBase.DropoffOptions):
             return v
 
-        transport_device: transport.TransportBase = info.data["TransportDevice"]
+        transport_device: transport.TransportBase = info.data["transport_device"]
 
         if v is None:
             v = {}

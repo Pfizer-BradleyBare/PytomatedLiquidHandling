@@ -50,6 +50,12 @@ class TransportBase(Interface, HALDevice):
     class DropoffOptions:
         ...
 
+    def initialize(self: TransportBase) -> None:
+        ...
+
+    def deinitialize(self: TransportBase) -> None:
+        ...
+
     def assert_transport_options(
         self: TransportBase,
         source_layout_item: layout_item.LayoutItemBase,
