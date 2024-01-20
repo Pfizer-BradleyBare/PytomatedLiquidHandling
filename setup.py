@@ -25,7 +25,6 @@ setup(
     include_package_data=True,
     entry_points="""
         [console_scripts]
-        plh-hamilton-install-venus4=plh.cli:install_hamilton_venus4_files
-        plh=plh.cli:plh_help
+        plh=plh.cli:plh_main
     """,
 )
