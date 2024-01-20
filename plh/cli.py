@@ -5,23 +5,23 @@ import subprocess
 import click
 
 
-@click.command()
-def plh_help() -> None:
-    print(
-        """
-The following commands are available:
-    plh-install-hamilton-venus4-files | Installs all Venus4 libraries required by the Hamilton base methods in plh.
-    """,
-    )
+@click.group()
+def plh_main() -> bool:
+    ...
 
 
-@click.command()
-def install_hamilton_venus4_files() -> None:
+@plh_main.command()
+def install_venus4() -> None:
+    """This command installs all Venus4 libraries required by plh by invoking a set of Hamilton supplied .exe files."""
     if not pathlib.Path("C:\\Program Files (x86)\\HAMILTON").exists():
         print(
             "Hamilton Venus4 software does not appear to be installed. Please install before running this command",
         )
         return
+
+    input(
+        "Press <Enter> to continue Venus4 library installation. Otherwise, cancel with <Ctrl+C>",
+    )
 
     from plh.driver.HAMILTON.backend import bin as HAMILTON_bin
 
