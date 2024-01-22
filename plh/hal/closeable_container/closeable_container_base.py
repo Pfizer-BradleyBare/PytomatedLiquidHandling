@@ -98,9 +98,9 @@ class CloseableContainerBase(Interface, HALDevice):
 
         Raises ExceptionGroup of the following:
 
-            Labware.Base.LabwareNotSupportedError
+            Labware.LabwareNotSupportedError
 
-            DeckLocation.Base.DeckLocationNotSupportedError
+            DeckLocation.DeckLocationNotSupportedError
         """
         excepts = []
 

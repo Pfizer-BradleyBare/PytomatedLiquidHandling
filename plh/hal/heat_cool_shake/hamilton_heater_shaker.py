@@ -27,7 +27,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
 
     def assert_options(
         self: HamiltonHeaterShaker,
-        layout_item: li.LayoutItemBase,
+        layout_item: li.LayoutItemBase | None = None,
         temperature: float | None = None,
         rpm: int | None = None,
     ) -> None:
@@ -46,6 +46,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
             raise ExceptionGroup(msg, excepts)
 
     def initialize(self: HamiltonHeaterShaker) -> None:
+        """Connects to the Hamilton HeaterShaker then locks and unlocks the plate lock as a reset mechanism."""
         HeatCoolShakeBase.initialize(self)
 
         command = HSLHamHeaterShakerLib.CreateUSBDevice.Command(
@@ -89,6 +90,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
         )
 
     def deinitialize(self: HamiltonHeaterShaker) -> None:
+        """Stops all temperature and shaking control then unlocks the plate lock."""
         command = HSLHamHeaterShakerLib.StopTempCtrl.Command(
             options=HSLHamHeaterShakerLib.StopTempCtrl.Options(
                 HandleID=self.handle_id,
@@ -129,8 +131,8 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
         HeatCoolShakeBase.deinitialize(self)
 
     def set_temperature(self: HamiltonHeaterShaker, temperature: float) -> None:
-        if temperature < 25:
-            raise CoolingNotSupportedError
+        """Minimum supported temperature is ambient or 25C."""
+        self.assert_options(temperature=temperature)
 
         command = HSLHamHeaterShakerLib.StartTempCtrl.Command(
             options=HSLHamHeaterShakerLib.StartTempCtrl.Options(
@@ -145,7 +147,8 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
             HSLHamHeaterShakerLib.StartTempCtrl.Response,
         )
 
-    def time_to_temperature(self: HamiltonHeaterShaker, temperature: float) -> float:
+    def set_temperature_time(self: HamiltonHeaterShaker, temperature: float) -> float:
+        self.assert_options(temperature=temperature)
         return 0
 
     def get_temperature(self: HamiltonHeaterShaker) -> float:
@@ -164,6 +167,8 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
         return response.Temperature
 
     def set_shaking_speed(self: HamiltonHeaterShaker, rpm: int) -> None:
+        self.assert_options(rpm=rpm)
+
         if rpm == 0:
             command = HSLHamHeaterShakerLib.StopShaker.Command(
                 options=HSLHamHeaterShakerLib.StopShaker.Options(

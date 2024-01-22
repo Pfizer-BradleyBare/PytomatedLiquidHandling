@@ -101,7 +101,7 @@ class HamiltonPortraitCORE8(PipetteBase):
             # are there at minimum enough tips left?
 
             for opts in packages_opts:
-                if len(tip.tip.tips_in_teir()) < len(opts):
+                if len(tip.tip.available_positions) < len(opts):
                     tip.tip.discard_teir()
                 # If not enough tips then get user to help
 

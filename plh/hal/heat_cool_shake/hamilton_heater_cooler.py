@@ -27,7 +27,7 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
 
     def assert_options(
         self: HamiltonHeaterCooler,
-        layout_item: li.LayoutItemBase,
+        layout_item: li.LayoutItemBase | None = None,
         temperature: float | None = None,
         rpm: int | None = None,
     ) -> None:
@@ -46,6 +46,8 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
             raise ExceptionGroup(msg, excepts)
 
     def initialize(self: HamiltonHeaterCooler) -> None:
+        """Connects to Hamilton HeaterCooler device."""
+
         HeatCoolShakeBase.initialize(self)
 
         command = HamiltonHeaterCoolerDriver.Connect.Command(
@@ -63,6 +65,7 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
         self._HandleID = response.HandleID
 
     def deinitialize(self: HamiltonHeaterCooler) -> None:
+        """Stops temperature control on device."""
         HeatCoolShakeBase.deinitialize(self)
 
         command = HamiltonHeaterCoolerDriver.StopTemperatureControl.Command(
@@ -78,6 +81,8 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
         )
 
     def set_temperature(self: HamiltonHeaterCooler, temperature: float) -> None:
+        self.assert_options(temperature=temperature)
+
         command = HamiltonHeaterCoolerDriver.SetTemperature.Command(
             options=HamiltonHeaterCoolerDriver.SetTemperature.Options(
                 HandleID=str(self.handle_id),
@@ -91,7 +96,9 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
             HamiltonHeaterCoolerDriver.SetTemperature.Response,
         )
 
-    def time_to_temperature(self: HamiltonHeaterCooler, temperature: float) -> float:
+    def set_temperature_time(self: HamiltonHeaterCooler, temperature: float) -> float:
+        self.assert_options(temperature=temperature)
+
         return 0
 
     def get_temperature(
@@ -112,7 +119,9 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
         return response.Temperature
 
     def set_shaking_speed(self: HamiltonHeaterCooler, rpm: int) -> None:
-        raise ShakingNotSupportedError
+        """Shaking is not supported for this device."""
+        self.assert_options(rpm=rpm)
 
     def get_shaking_speed(self: HamiltonHeaterCooler) -> int:
-        raise ShakingNotSupportedError
+        """Shaking is not supported for this device. Nonetheless, returns 0"""
+        return 0

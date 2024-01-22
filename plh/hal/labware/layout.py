@@ -98,7 +98,10 @@ class Layout(ABC):
 
 @dataclasses.dataclass(kw_only=True)
 class NumericLayout(Layout):
+    """A numeric representation of a container layout."""
+
     type: Literal["Numeric"] = "Numeric"
+    """Pydantic requirement. Never used except for input validation."""
 
     def sort_positions(self: NumericLayout, positions: list[str | int]) -> list[str]:
         """Sorts by number."""
@@ -159,13 +162,16 @@ class NumericLayout(Layout):
 
 @dataclasses.dataclass(kw_only=True)
 class AlphanumericLayout(Layout):
+    """An Alphanumeric representation of a container layout."""
+
     type: Literal["Alphanumeric"] = "Alphanumeric"
+    """Pydantic requirement. Never used except for input validation."""
 
     def sort_positions(
         self: AlphanumericLayout,
         positions: list[str | int],
     ) -> list[str]:
-        """Converts alphanumeric id to number then sorts by number."""
+        """Converts alphanumeric id to number, sorts by number, then converts back to alphanumeric."""
         numeric_addressing = NumericLayout(
             rows=self.rows,
             columns=self.columns,

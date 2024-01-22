@@ -14,7 +14,7 @@ class HeatCoolShakeBase(Interface, HALDevice):
     """A device that can perform either heating, cooling, and shaking or any combination of the three."""
 
     plates: list[li.CoverablePlate | li.Plate]
-    """Supported plates"""
+    """Plates where incubations, shaking will occur."""
 
     @field_validator("plates", mode="before")
     @classmethod
@@ -45,33 +45,35 @@ class HeatCoolShakeBase(Interface, HALDevice):
 
     def assert_options(
         self: HeatCoolShakeBase,
-        layout_item: li.LayoutItemBase,
+        layout_item: li.LayoutItemBase | None = None,
         temperature: None | float = None,
         rpm: None | int = None,
     ) -> None:
-        """Must called before calling SetTemperature, SetTemperatureTime, or SetShakingSpeed.
+        """Must called before calling ```get_layout_item```, ```set_temperature```, ```set_temperature_time```, and ```set_shaking_speed```.
 
         If any exceptions are thrown then you are trying to use an incompatible device.
 
         Raises ExceptionGroup of the following:
-            Labware.Base.LabwareNotSupportedError
 
-            HeatCoolShakeDevice.Base.CoolingNotSupportedError
+            Labware.LabwareNotSupportedError
 
-            HeatCoolShakeDevice.Base.HeatingNotSupportedError
+            HeatCoolShakeDevice.CoolingNotSupportedError
 
-            HeatCoolShakeDevice.Base.ShakingNotSupportedError
+            HeatCoolShakeDevice.HeatingNotSupportedError
+
+            HeatCoolShakeDevice.ShakingNotSupportedError
         """
         excepts = []
 
-        supported_labware = [
-            layout_item.labware.identifier for LayoutItem in self.plates
-        ]
+        if layout_item is not None:
+            supported_labware = [
+                layout_item.labware.identifier for LayoutItem in self.plates
+            ]
 
-        if layout_item.labware not in supported_labware:
-            excepts.append(
-                labware.LabwareNotSupportedError([layout_item.labware]),
-            )
+            if layout_item.labware not in supported_labware:
+                excepts.append(
+                    labware.LabwareNotSupportedError([layout_item.labware]),
+                )
 
         if len(excepts) > 0:
             msg = "HeatCoolShakeDevice Options Exceptions"
@@ -81,6 +83,8 @@ class HeatCoolShakeBase(Interface, HALDevice):
         self: HeatCoolShakeBase,
         layout_item: li.LayoutItemBase,
     ) -> li.CoverablePlate | li.Plate:
+        """Gets a layout item on the heat_cool_shake device that is compatible with your current layout item."""
+
         for supported_layout_item in self.plates:
             if supported_layout_item.labware == layout_item.labware:
                 if isinstance(supported_layout_item, li.CoverablePlate):
@@ -95,20 +99,25 @@ class HeatCoolShakeBase(Interface, HALDevice):
 
     @abstractmethod
     def set_temperature(self: HeatCoolShakeBase, temperature: float) -> None:
+        """Sets temperature on the device."""
         ...
 
     @abstractmethod
-    def time_to_temperature(self: HeatCoolShakeBase, temperature: float) -> float:
+    def set_temperature_time(self: HeatCoolShakeBase, temperature: float) -> float:
+        """Calculates the time to cool or heat to your desired temperature."""
         ...
 
     @abstractmethod
     def get_temperature(self: HeatCoolShakeBase) -> float:
+        """Gets the current temperature."""
         ...
 
     @abstractmethod
     def set_shaking_speed(self: HeatCoolShakeBase, rpm: int) -> None:
+        """Sets the shaking speed on your device. NOTE: To turn off shaking set the speed to 0."""
         ...
 
     @abstractmethod
     def get_shaking_speed(self: HeatCoolShakeBase) -> int:
+        """Get current shaking speed."""
         ...

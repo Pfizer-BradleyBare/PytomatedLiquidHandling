@@ -26,7 +26,12 @@ class TransportableDeckLocation(DeckLocationBase):
         destination_deck_location: DeckLocationBase,
     ) -> list[tuple[TransportConfig, TransportConfig]]:
         """Gets a list of compatible transport configurations for 2 different deck locations.
-        You should call ```"""
+
+        If DeckLocationNotTransportableError is thrown then your deck location is not compatible with transport.
+
+        Raises ExceptionGroup of the following:
+
+            DeckLocation.DeckLocationNotTransportableError"""
 
         excepts = []
 

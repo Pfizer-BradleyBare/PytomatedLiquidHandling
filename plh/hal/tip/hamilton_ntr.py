@@ -36,6 +36,8 @@ class HamiltonNTR(TipBase):
     """NTR racks are stacked. Thus, we need to track the racks in each row of the stack. These are all racks (active and inactive)."""
 
     def deinitialize(self: HamiltonNTR) -> None:
+        """Saves the current position of the tips using the NTR driver."""
+
         command = Visual_NTR_Library.Channels_TipCounter_Write.Command(
             options=Visual_NTR_Library.Channels_TipCounter_Write.OptionsList(
                 TipCounter=f"{type(self).__name__}_{int(self.volume)}",
@@ -60,17 +62,22 @@ class HamiltonNTR(TipBase):
         )
 
     def remaining_tips(self: HamiltonNTR) -> int:
+        """Remaining tips is the number of available positions + the number of unused teirs."""
         tips_per_rack = self.tip_racks[0].labware.layout.total_positions()
 
-        return (
+        return len(self.available_positions) + (
             len(
-                [rack for teir in self.available_racks_per_teir for rack in teir],
+                [rack for teir in self.available_racks_per_teir[1:] for rack in teir],
             )
             * tips_per_rack
         )
-        # available_racks_per_teir is guarenteed to be all present racks before a discard.
 
     def discard_teir(self: HamiltonNTR) -> None:
+        """Will remove the top layer of an NTR teir.
+        NOTE: The top teir after edit will be partially available.
+        Thus, we use the ```available_positions_per_teir``` information to only discard the remaining teirs.
+        """
+
         for rack in self.available_racks_per_teir[0]:
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(
                 rack.deck_location,
@@ -87,6 +94,10 @@ class HamiltonNTR(TipBase):
         self.available_positions_per_teir = self.available_positions_per_teir[1:]
 
     def update_available_positions(self: HamiltonNTR) -> None:
+        """Uses the NTR library to edit the number of available tips.
+        After tip selection we need to extract information about the teirs in current and subsequence layers.
+        """
+
         command = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
             options=Visual_NTR_Library.Channels_TipCounter_Edit.OptionsList(
                 TipCounter=f"{type(self).__name__}_{int(self.volume)}",

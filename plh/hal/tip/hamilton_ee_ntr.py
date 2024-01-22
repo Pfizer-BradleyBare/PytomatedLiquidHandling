@@ -50,6 +50,8 @@ class HamiltonEENTR(TipBase):
         return objects[identifier]
 
     def deinitialize(self: HamiltonEENTR) -> None:
+        """Saves the current position using the FTR driver. Moves the EE stacks to the bottom position."""
+
         command = HSLTipCountingLib.Write.Command(
             options=HSLTipCountingLib.Write.OptionsList(
                 TipCounter=f"{type(self).__name__}_{int(self.volume)}",
@@ -78,19 +80,27 @@ class HamiltonEENTR(TipBase):
             )
 
     def remaining_tips(self: HamiltonEENTR) -> int:
+        """Remaining tips is the number of available positions + the number of stacks."""
+
         tips_per_rack = self.tip_racks[0].labware.layout.total_positions()
 
-        return len(self.tips_in_teir()) + sum(
+        return len(self.available_positions) + sum(
             [tips_per_rack * stack.stack_count for stack in self.tip_stacks],
         )
 
     def discard_teir(self: HamiltonEENTR) -> None:
+        """For any given number of racks the tip stacks will be used to replenish.
+        If a stack runs out of tips then the stack will be moved to the so stacks are depleted in order.
+        """
+
         for rack in self.tip_racks:
             success_flag = False
             # So we can track if we actually replaced a rack
 
             for stack in self.tip_stacks:
                 if stack.stack_count == 0:
+                    self.tip_stacks.remove(stack)
+                    self.tip_stacks.append(stack)
                     continue
                 # only use stacks that have racks
 
@@ -142,6 +152,8 @@ class HamiltonEENTR(TipBase):
                 raise RuntimeError("TODO: tip reload error")
 
     def update_available_positions(self: HamiltonEENTR) -> None:
+        """Counts the number of items in each stack. Edits the number of available tips using FTR edit."""
+
         for stack in self.tip_stacks:
             command = EntryExit.CountLabwareInStack.Command(
                 options=EntryExit.CountLabwareInStack.Options(

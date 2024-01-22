@@ -67,7 +67,7 @@ class HamiltonCORE96(PipetteBase):
         ]
 
         for opts in packaged_opts:
-            if len(tip.tip.tips_in_teir()) < len(opts):
+            if len(tip.tip.available_positions) < len(opts):
                 tip.tip.discard_teir()
             # If not enough tips then get user to help
 

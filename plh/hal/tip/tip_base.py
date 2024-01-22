@@ -76,13 +76,11 @@ class TipBase(Interface, HALDevice):
             )
 
     def initialize(self: TipBase) -> None:
+        """Initiates a user update of the available tip positions then stores in the device using the ```update_available_positions``` instance method."""
         self.update_available_positions()
 
-    def tips_in_teir(self: TipBase) -> list[AvailablePosition]:
-        return self.available_positions
-
     def use_tips(self: TipBase, num: int) -> None:
-        """Indicate that the following number of tips have been used and are no longer available."""
+        """Indicates that the following number of tips have been used and are no longer available."""
         self.available_positions = self.available_positions[num:]
 
     @abstractmethod
@@ -94,7 +92,7 @@ class TipBase(Interface, HALDevice):
 
     @abstractmethod
     def discard_teir(self: TipBase) -> None:
-        """This will throw an error which contains the layout items to discard"""
+        """This will attempt to discard the teir. If no teirs are left then an exception will be throw to reload."""
         ...
 
     @abstractmethod
