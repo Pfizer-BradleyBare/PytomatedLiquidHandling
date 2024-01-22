@@ -25,6 +25,6 @@ setup(
     include_package_data=True,
     entry_points="""
         [console_scripts]
-        plh=plh.cli:plh_main
+        plh=plh.cli:plh
     """,
 )

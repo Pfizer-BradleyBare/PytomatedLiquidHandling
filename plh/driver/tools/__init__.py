@@ -16,12 +16,12 @@ from .response_base import ResponseBase
 
 __all__ = [
     "BackendBase",
-    "BackendServerBase",
     "BackendSimpleBase",
-    "CommandBackendErrorHandlingMixin",
+    "BackendServerBase",
     "CommandBase",
-    "CommandOptionsListMixin",
     "CommandOptionsMixin",
+    "CommandOptionsListMixin",
+    "CommandBackendErrorHandlingMixin",
     "OptionsBase",
     "ResponseBase",
 ]

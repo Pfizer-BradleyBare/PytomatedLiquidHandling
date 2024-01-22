@@ -16,7 +16,7 @@ from loguru import logger
 
 from . import cli, driver, hal
 
-__all__ = ["cli", "driver", "hal"]
+__all__ = ["cli", "hal", "driver"]
 
 logger.disable("PytomatedLiquidHandling")
 # Programmer is excepted to enable loguru to see PLH logs
