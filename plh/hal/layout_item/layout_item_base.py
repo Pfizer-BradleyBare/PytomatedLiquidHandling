@@ -60,7 +60,7 @@ class LayoutItemBase(HALDevice):
 
     @model_validator(mode="after")
     @staticmethod
-    def __model_validate(v: LayoutItemBase):
+    def __model_validate(v: LayoutItemBase) -> LayoutItemBase:
         if v.identifier == "None":
             v.identifier = f"{v.deck_location.identifier}_{v.labware.identifier!s}"
         return v
