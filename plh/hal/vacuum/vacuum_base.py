@@ -12,7 +12,7 @@ from .filter_plate_configuration import FilterPlateConfiguration
 
 @dataclasses.dataclass(kw_only=True)
 class VacuumBase(Interface, HALDevice):
-    """TODO"""
+    """Describes an on deck vacuum device."""
 
     manifold_park: layout_item.VacuumManifold
     """Park position for the vacuum manifold."""

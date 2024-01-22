@@ -19,6 +19,7 @@ from . import (
     tip,
     tools,
     transport,
+    vacuum,
 )
 
 __all__ = [
@@ -35,6 +36,7 @@ __all__ = [
     "tip",
     "tools",
     "transport",
+    "vacuum",
 ]
 
 

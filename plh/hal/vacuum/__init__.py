@@ -5,10 +5,10 @@ from .hamilton_vacuum import HamiltonVacuum
 from .vacuum_base import VacuumBase
 
 __all__ = [
-    "DefaultVacuumPressures",
-    "FilterPlateConfiguration",
-    "HamiltonVacuum",
     "VacuumBase",
+    "FilterPlateConfiguration",
+    "DefaultVacuumPressures",
+    "HamiltonVacuum",
 ]
 
 identifier = str

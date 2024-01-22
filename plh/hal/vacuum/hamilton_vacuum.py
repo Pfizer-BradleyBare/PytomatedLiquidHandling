@@ -9,6 +9,13 @@ from .vacuum_base import VacuumBase
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonVacuum(VacuumBase):
-    com_port: str
+    """Hamilton vacuubrand pump device."""
+
     backend: HamiltonBackendBase
+    """Only Hamilton backends."""
+
+    com_port: str
+    """Port to connect. "COM4"."""
+
     handle_id: int = field(init=False, default=0)
+    """The handle to use for all actions post connection."""
