@@ -10,7 +10,7 @@ class CarrierBase(HALDevice):
     """A physical carrier on an automation system deck."""
 
     identifier: str = "None"
-    """It is optional to specify an identifier. If one is not specified then the identifier will be 'Carrier_<track_start>'"""
+    """It is optional to specify an identifier. If one is not specified then the identifier will be ```Carrier_<track_start>```"""
 
     track_start: int
     """The deck track where the carrier starts (Starting contact point)."""

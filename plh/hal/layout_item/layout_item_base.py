@@ -11,7 +11,7 @@ class LayoutItemBase(HALDevice):
     """A labware position on a deck."""
 
     identifier: str = "None"
-    """Identifier is optional. If identifier is not specified than identifier will be '<deck_location.identifier>_<labware.identifier>'"""
+    """Identifier is optional. If identifier is not specified than identifier will be ```<deck_location.identifier>_<labware.identifier>```"""
 
     labware_id: str
     """Labware id from the automation software for this deck position."""
