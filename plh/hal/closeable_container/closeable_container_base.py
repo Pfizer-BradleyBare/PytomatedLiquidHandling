@@ -11,15 +11,20 @@ from plh.hal.tools import HALDevice, Interface
 
 @dataclasses.dataclass(kw_only=True)
 class OpenCloseOptions(OptionsBase):
+    """Options that can be used for ```open```, ```open_time```, ```close```, or ```close_time```."""
+
     LayoutItem: layout_item.LayoutItemBase
+    """Compatible layout item you want to open/close."""
+
     Position: str | int
+    """Position to open/close. NOTE: position will be converted to correct type (alpha vs numeric) based on labware layout info."""
 
 
 @dataclasses.dataclass(kw_only=True)
 class CloseableContainerBase(Interface, HALDevice):
-    """A container that is part of a rack that can be opened with some kind of tool.
+    """A container that is part of a labware type that can be opened with some kind of tool.
 
-    NOTE: This is NOT the same as a lid for a plate."""
+    NOTE: This is NOT the same as a lid for a coverable plate."""
 
     supported_deck_locations: list[deck_location.DeckLocationBase]
     """The supported deck locations to where an open/close operation can occur."""
@@ -85,13 +90,14 @@ class CloseableContainerBase(Interface, HALDevice):
         self: CloseableContainerBase,
         options: list[OpenCloseOptions],
     ) -> None:
-        """Must be called before calling Open, OpenTime, Close, or CloseTime.
+        """Must be called before calling ```open```, ```open_time```, ```close```, or ```close_time```.
 
         If LabwareNotSupportedError is thrown then you are trying to use the wrong ClosedContainerDevice.
 
         If DeckLocationNotSupportedError is thrown then you need to move the LayoutItem to a compatible location.
 
         Raises ExceptionGroup of the following:
+
             Labware.Base.LabwareNotSupportedError
 
             DeckLocation.Base.DeckLocationNotSupportedError
@@ -129,22 +135,22 @@ class CloseableContainerBase(Interface, HALDevice):
 
     @abstractmethod
     def open(self: CloseableContainerBase, options: list[OpenCloseOptions]) -> None:
-        ...
+        """Initiates an open event dependent on ```OpenCloseOptions```."""
 
     @abstractmethod
-    def time_to_open(
+    def open_time(
         self: CloseableContainerBase,
         options: list[OpenCloseOptions],
     ) -> float:
-        ...
+        """Calculates the time to open dependent on ```OpenCloseOptions```."""
 
     @abstractmethod
     def close(self: CloseableContainerBase, options: list[OpenCloseOptions]) -> None:
-        ...
+        """Initiates an close event dependent on ```OpenCloseOptions```."""
 
     @abstractmethod
-    def time_to_close(
+    def close_time(
         self: CloseableContainerBase,
         options: list[OpenCloseOptions],
     ) -> float:
-        ...
+        """Calculates the time to close dependent on ```OpenCloseOptions```."""

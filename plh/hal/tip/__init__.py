@@ -8,11 +8,11 @@ from .hamilton_ntr import HamiltonNTR
 from .tip_base import TipBase
 
 __all__ = [
-    "HamiltonEEFTR",
-    "HamiltonEENTR",
+    "TipBase",
     "HamiltonFTR",
     "HamiltonNTR",
-    "TipBase",
+    "HamiltonEEFTR",
+    "HamiltonEENTR",
     "EETipStack",
 ]
 

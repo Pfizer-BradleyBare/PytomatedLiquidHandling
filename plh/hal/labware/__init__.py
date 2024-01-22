@@ -11,16 +11,16 @@ from .well_segment import WellSegment
 
 __all__ = [
     "LabwareBase",
-    "LabwareNotEqualError",
-    "LabwareNotSupportedError",
-    "LayoutSorting",
+    "Dimensions",
     "AlphanumericLayout",
     "NumericLayout",
-    "Dimensions",
+    "LayoutSorting",
     "NonPipettableLabware",
     "PipettableLabware",
     "Well",
     "WellSegment",
+    "LabwareNotEqualError",
+    "LabwareNotSupportedError",
 ]
 
 identifier = str

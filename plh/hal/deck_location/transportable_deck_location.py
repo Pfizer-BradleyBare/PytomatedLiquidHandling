@@ -25,6 +25,9 @@ class TransportableDeckLocation(DeckLocationBase):
         source_deck_location: DeckLocationBase,
         destination_deck_location: DeckLocationBase,
     ) -> list[tuple[TransportConfig, TransportConfig]]:
+        """Gets a list of compatible transport configurations for 2 different deck locations.
+        You should call ```"""
+
         excepts = []
 
         if not isinstance(source_deck_location, TransportableDeckLocation):
