@@ -15,17 +15,25 @@ from .tip_base import AvailablePosition, TipBase
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonNTR(TipBase):
+    """Hamilton NTR(Nested Tip Rack) tip device."""
+
     backend: HamiltonBackendBase
+    """Only supported on Hamilton systems."""
 
     tip_rack_waste: layout_item.TipRack
+    """Rack waste location. Empty racks will be transport here to be thrown away."""
+
     available_positions_per_teir: list[list[AvailablePosition]] = field(
         init=False,
         default_factory=list,
     )
+    """NTR racks are stacked. Thus, we need to track the available positions in each row of the stack. These are the inactive positions."""
+
     available_racks_per_teir: list[list[layout_item.TipRack]] = field(
         init=False,
         default_factory=list,
     )
+    """NTR racks are stacked. Thus, we need to track the racks in each row of the stack. These are all racks (active and inactive)."""
 
     def deinitialize(self: HamiltonNTR) -> None:
         command = Visual_NTR_Library.Channels_TipCounter_Write.Command(

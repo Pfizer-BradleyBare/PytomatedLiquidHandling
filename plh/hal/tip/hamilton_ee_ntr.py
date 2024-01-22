@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import field
 from typing import cast
 
+from ee_tip_stack import EETipStack
 from pydantic import dataclasses, field_validator
 
 from plh.driver.HAMILTON import EntryExit, HSLTipCountingLib
@@ -15,39 +15,17 @@ from .tip_base import TipBase
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonEENTR(TipBase):
-    @dataclasses.dataclass(kw_only=True)
-    class TipStack:
-        tip_rack: layout_item.TipRack
-        module_number: int
-        stack_number: int
-        stack_count: int = field(init=False, default=0)
-
-        @field_validator("tip_rack", mode="before")
-        @classmethod
-        def __tip_rack_validate(
-            cls,
-            v: str | layout_item.LayoutItemBase,
-        ) -> layout_item.LayoutItemBase:
-            if isinstance(v, layout_item.LayoutItemBase):
-                return v
-
-            objects = layout_item.devices
-            identifier = v
-
-            if identifier not in objects:
-                raise ValueError(
-                    identifier
-                    + " is not found in "
-                    + layout_item.LayoutItemBase.__name__
-                    + " objects.",
-                )
-
-            return objects[identifier]
+    """Hamilton FTR (Filtered Tip Rack) tip device with integration with EE (entry exit) for higher tip capacity.
+    In this configuration tips are stored in EE until needed then moved to the deck."""
 
     backend: VantageTrackGripperEntryExit
+    """Only supported on Hamilton Vantage systems."""
 
-    tip_stacks: list[TipStack]
+    tip_stacks: list[EETipStack]
+    """Stacks associated with this tip device."""
+
     tip_rack_waste: layout_item.TipRack
+    """Rack waste location. Empty racks will be transport here to be thrown away."""
 
     @field_validator("tip_rack_waste", mode="before")
     @classmethod

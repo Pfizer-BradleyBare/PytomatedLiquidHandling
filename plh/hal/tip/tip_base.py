@@ -11,18 +11,30 @@ from plh.hal.tools import HALDevice, Interface
 
 @dataclasses.dataclass(kw_only=True)
 class AvailablePosition:
+    """A tip position."""
+
     LabwareID: str
+    """The labware id for the position."""
+
     PositionID: str
+    """The position id for the position."""
 
 
 @dataclasses.dataclass(kw_only=True)
 class TipBase(Interface, HALDevice):
+    """A tip device that facilitates tip tracking and tier removal as needed."""
+
     tip_racks: list[layout_item.TipRack]
+    """Rack layout items associated with the device."""
+
     volume: float
+    """Tip volume."""
+
     available_positions: list[AvailablePosition] = field(
         init=False,
         default_factory=list,
     )
+    """Tip positions that are immediately available for use."""
 
     @field_validator("tip_racks", mode="before")
     @classmethod

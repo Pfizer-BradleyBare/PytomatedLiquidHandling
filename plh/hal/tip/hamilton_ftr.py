@@ -13,7 +13,10 @@ from .tip_base import TipBase
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonFTR(TipBase):
+    """Hamilton FTR (Filtered Tip Rack) tip device."""
+
     backend: HamiltonBackendBase
+    """Only supported on Hamilton systems."""
 
     def deinitialize(self: HamiltonFTR) -> None:
         command = HSLTipCountingLib.Write.Command(
