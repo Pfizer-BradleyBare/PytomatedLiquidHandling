@@ -4,13 +4,12 @@ from abc import abstractmethod
 
 from pydantic import dataclasses, field_validator
 
-from plh.driver.tools import OptionsBase
 from plh.hal import deck_location, labware, layout_item
 from plh.hal.tools import HALDevice, Interface
 
 
 @dataclasses.dataclass(kw_only=True)
-class OpenCloseOptions(OptionsBase):
+class OpenCloseOptions:
     """Options that can be used for ```open```, ```open_time```, ```close```, or ```close_time```."""
 
     layout_item: layout_item.LayoutItemBase
@@ -88,7 +87,7 @@ class CloseableContainerBase(Interface, HALDevice):
 
         return supported_objects
 
-    def assert_open_close_options(
+    def assert_options(
         self: CloseableContainerBase,
         options: list[OpenCloseOptions],
     ) -> None:

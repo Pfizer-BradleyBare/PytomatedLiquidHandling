@@ -45,7 +45,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         """Hamilton FlipTube tool supports a max of 4 tools in use simultaneously in the driver.
         Thus, the function will sort the desired open positions then creates groups of 4 to open.
         """
-        self.assert_open_close_options(options)
+        self.assert_options(options)
 
         command = FlipTubeTool.ToolsPickUp.Command(
             options=FlipTubeTool.ToolsPickUp.OptionsList(
@@ -112,7 +112,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         options: list[OpenCloseOptions],
     ) -> float:
         """TODO"""
-        self.assert_open_close_options(options)
+        self.assert_options(options)
         return 0
 
     def close(
@@ -122,7 +122,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         """Hamilton FlipTube tool supports a max of 4 tools in use simultaneously in the driver.
         Thus, the function will sort the desired open positions then creates groups of 4 to open.
         """
-        self.assert_open_close_options(options)
+        self.assert_options(options)
 
         command = FlipTubeTool.ToolsPickUp.Command(
             options=FlipTubeTool.ToolsPickUp.OptionsList(
@@ -189,5 +189,5 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         options: list[OpenCloseOptions],
     ) -> float:
         """TODO"""
-        self.assert_open_close_options(options)
+        self.assert_options(options)
         return 0

@@ -67,7 +67,7 @@ class TransportBase(Interface, HALDevice):
     def deinitialize(self: TransportBase) -> None:
         ...
 
-    def assert_transport_options(
+    def assert_options(
         self: TransportBase,
         options: TransportOptions,
     ) -> None:

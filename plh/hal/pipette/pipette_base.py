@@ -5,7 +5,6 @@ from math import ceil
 
 from pydantic import dataclasses, field_validator
 
-from plh.driver.tools import OptionsBase
 from plh.hal import deck_location, labware, layout_item
 from plh.hal.tools import HALDevice, Interface
 
@@ -13,7 +12,25 @@ from .pipette_tip import PipetteTip
 
 
 @dataclasses.dataclass(kw_only=True)
-class TransferOptions(OptionsBase):
+class PickupOptions:
+    ...
+
+
+@dataclasses.dataclass(kw_only=True)
+class AspirateDispenseOptions:
+    layout_item: layout_item.LayoutItemBase
+    position: int | str
+    # This is the labware well position. Numeric or alphanumeric.
+    # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
+    well_volume: float
+    mix_cycles: int
+    liquid_class_category: str
+
+    pipette_volume: float
+
+
+@dataclasses.dataclass(kw_only=True)
+class TransferOptions:
     SourceLayoutItemInstance: layout_item.LayoutItemBase
     SourcePosition: int | str
     # This is the labware well position. Numeric or alphanumeric.
