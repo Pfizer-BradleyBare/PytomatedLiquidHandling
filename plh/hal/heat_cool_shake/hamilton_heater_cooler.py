@@ -8,6 +8,7 @@ from plh.driver.HAMILTON import HamiltonHeaterCooler as HamiltonHeaterCoolerDriv
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 
 from .exceptions import ShakingNotSupportedError
+from .heat_cool_shake_base import *
 from .heat_cool_shake_base import HeatCoolShakeBase, HeatCoolShakeOptions
 
 
