@@ -19,16 +19,13 @@ class OpenCloseOptions(OptionsBase):
 class CloseableContainerBase(Interface, HALDevice):
     """A container that is part of a rack that can be opened with some kind of tool.
 
-    This is NOT the same as a lid for a plate.
-
-    Attributes
-    ----------
-        SupportedDeckLocations: The rack must be in one of these deck locations to perform an operation.
-        SupportedLabwares: The device can only open labware of this type(s).
-    """
+    NOTE: This is NOT the same as a lid for a plate."""
 
     supported_deck_locations: list[deck_location.DeckLocationBase]
+    """The supported deck locations to where an open/close operation can occur."""
+
     supported_labware: list[labware.LabwareBase]
+    """The device can only open/close labware of this type(s)."""
 
     @field_validator("supported_deck_locations", mode="before")
     @classmethod

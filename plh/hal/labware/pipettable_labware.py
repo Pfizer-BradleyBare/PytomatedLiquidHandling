@@ -9,7 +9,10 @@ from .well import Well
 
 @dataclasses.dataclass(kw_only=True)
 class PipettableLabware(LabwareBase):
+    """Labware type that can be pipetted to/from."""
+
     well_definition: Well
+    """Well object."""
 
     def get_height_from_volume(self: PipettableLabware, volume: float) -> float:
         calculated_height = 0.0

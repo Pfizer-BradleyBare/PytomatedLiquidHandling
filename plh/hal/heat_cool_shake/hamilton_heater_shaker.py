@@ -14,9 +14,16 @@ from .heat_cool_shake_base import HeatCoolShakeBase
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonHeaterShaker(HeatCoolShakeBase):
+    """Hamilton device that can heat and shake."""
+
     com_port: int
+    """Port to communicate with the device '1'."""
+
     backend: HamiltonBackendBase
+    """This device is only supported by Hamilton backends."""
+
     handle_id: int = field(init=False, default=0)
+    """Handle id used to perform actions after initialization."""
 
     def assert_options(
         self: HamiltonHeaterShaker,

@@ -11,7 +11,10 @@ from plh.hal.tools import HALDevice, Interface
 
 @dataclasses.dataclass(kw_only=True)
 class HeatCoolShakeBase(Interface, HALDevice):
+    """A device that can perform either heating, cooling, and shaking or any combination of the three."""
+
     plates: list[li.CoverablePlate | li.Plate]
+    """Supported plates"""
 
     @field_validator("plates", mode="before")
     @classmethod

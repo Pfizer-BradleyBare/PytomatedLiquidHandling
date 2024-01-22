@@ -11,8 +11,19 @@ from .transport_offsets import TransportOffsets
 
 @dataclasses.dataclass(kw_only=True)
 class LabwareBase(HALDevice):
-    image_filename: str
+    """Type of physical labware (200uL plate, lid, etc.)."""
+
     part_number: str
+    """Part number of the labware."""
+
+    image_filename: str
+    """Path to an image file."""
+
     dimensions: Dimensions
+    """Dimensions object."""
+
     transport_offsets: TransportOffsets
+    """Transport offsets object."""
+
     layout: AlphanumericLayout | NumericLayout
+    """Layout object."""

@@ -14,14 +14,10 @@ from .transport_config import TransportConfig
 
 @dataclasses.dataclass(kw_only=True)
 class TransportableDeckLocation(DeckLocationBase):
-    """A specific location on an automation deck.
-
-    Attributes:
-        CarrierConfig: See DeckLocation.Base.CarrierConfig class.
-        TransportConfig: See DeckLocation.Base.TransportConfig class.
-    """
+    """A specific location on an automation deck."""
 
     transport_configs: list[TransportConfig]
+    """A list of possible ways to transport to/from this deck location."""
 
     @classmethod
     def get_compatible_transport_configs(

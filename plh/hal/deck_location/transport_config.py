@@ -11,17 +11,16 @@ from plh.hal import transport
 
 @dataclasses.dataclass(kw_only=True)
 class TransportConfig:
-    """Compatible transport device and options for a DeckLocation. Enables seamless transport of labware at a DeckLocation.
-
-    Attributes:
-        TransportDevice: Compatible transport device.
-        PickupOptions: Options that are used to pickup a labware from this DeckLocation.
-        DropoffOptions: Options that are used to dropoff a labware to this DeckLocation.
-    """
+    """Associated settings to get/place an object at this deck location with a specific transport device."""
 
     transport_device: transport.TransportBase
+    """Transport object that will be used to transfer."""
+
     pickup_options: transport.TransportBase.PickupOptions
+    """Get options to be used by above transport object."""
+
     dropoff_options: transport.TransportBase.DropoffOptions
+    """Place options to be used by above transport object."""
 
     @field_serializer("pickup_options", "dropoff_options")
     def __options_serializer(
