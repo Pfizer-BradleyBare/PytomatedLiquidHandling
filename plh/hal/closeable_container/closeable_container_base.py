@@ -17,7 +17,9 @@ class OpenCloseOptions(OptionsBase):
     """Compatible layout item you want to open/close."""
 
     position: str | int
-    """Position to open/close. NOTE: position will be converted to correct type (alpha vs numeric) based on labware layout info."""
+    """Position to open/close. NOTE: position will be converted to correct type (alpha vs numeric) based on labware layout info.
+    NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
+    """
 
 
 @dataclasses.dataclass(kw_only=True)
