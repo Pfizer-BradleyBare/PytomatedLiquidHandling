@@ -13,25 +13,54 @@ from .pipette_tip import PipetteTip
 
 @dataclasses.dataclass(kw_only=True)
 class TransferOptions:
+    """Options that can be used for ```transfer``` and ```transfer_time```."""
+
     source_layout_item: layout_item.LayoutItemBase
+    """What layout item we are aspirating from."""
+
     source_position: int | str
+    """What position in the ```source_layout_item``` we are aspirating from.
+    NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
     # This is the labware well position. Numeric or alphanumeric.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
+
     source_well_volume: float
+    """Current volume in ```source_position``` of ```source_layout_item```."""
+
     source_mix_cycles: int
+    """Cycles to mix before aspiration."""
+
     source_liquid_class_category: str
+    """What liquid class category to use for aspiration."""
+
     source_sample_group: int | None = None
+    """This indicates that the sources with the same sample group number have the exact same solution composition.
+    So no contamination will occur upon multiple aspiration."""
 
     destination_layout_item: layout_item.LayoutItemBase
+    """What layout item we are dispensing to."""
+
     destination_position: int | str
+    """What position in the ```destination_layout_item``` we are dispensing to.
+    NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
     # This is the labware well position. Numeric or alphanumeric.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
-    destination_well_volume: float
-    destination_mix_cycles: int
-    destination_liquid_class_category: str
-    destination_sample_group: int | None = None
 
-    TransferVolume: float
+    destination_well_volume: float
+    """Current volume in ```destination_position``` of ```destination_layout_item```."""
+
+    destination_mix_cycles: int
+    """Cycles to mix after dispense."""
+
+    destination_liquid_class_category: str
+    """What liquid class category to use for dispense."""
+
+    destination_sample_group: int | None = None
+    """This indicates that the destinations with the same sample group number have the exact same solution composition.
+    So no contamination will occur upon multiple dispense."""
+
+    transfer_volume: float
+    """Volume that is transfered from source to destination."""
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -184,8 +213,8 @@ class PipetteBase(Interface, HALDevice):
         options: TransferOptions,
         volume: float,
     ) -> list[TransferOptions]:
-        num_transfers = ceil(options.TransferVolume / volume)
-        options.TransferVolume /= num_transfers
+        num_transfers = ceil(options.transfer_volume / volume)
+        options.transfer_volume /= num_transfers
 
         return [options for _ in range(num_transfers)]
 

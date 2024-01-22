@@ -80,7 +80,7 @@ class HamiltonPortraitCORE8(PipetteBase):
             tip = self._get_tip(
                 opt.source_liquid_class_category,
                 opt.destination_liquid_class_category,
-                opt.TransferVolume,
+                opt.transfer_volume,
             )
 
             tip_grouped_options[tip.tip.identifier].append((tip, opt))
@@ -166,10 +166,10 @@ class HamiltonPortraitCORE8(PipetteBase):
                             LiquidClass=str(
                                 self._get_liquid_class(
                                     opt.source_liquid_class_category,
-                                    opt.TransferVolume,
+                                    opt.transfer_volume,
                                 ),
                             ),
-                            Volume=opt.TransferVolume,
+                            Volume=opt.transfer_volume,
                         ),
                     )
 
@@ -223,10 +223,10 @@ class HamiltonPortraitCORE8(PipetteBase):
                             LiquidClass=str(
                                 self._get_liquid_class(
                                     opt.destination_liquid_class_category,
-                                    opt.TransferVolume,
+                                    opt.transfer_volume,
                                 ),
                             ),
-                            Volume=opt.TransferVolume,
+                            Volume=opt.transfer_volume,
                         ),
                     )
 

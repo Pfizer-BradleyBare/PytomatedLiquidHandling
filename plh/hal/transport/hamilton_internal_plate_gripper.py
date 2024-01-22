@@ -15,12 +15,13 @@ from .transport_base import TransportBase, TransportOptions
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonInternalPlateGripper(TransportBase):
+    """Gripper that uses the Hamilton IPG (internal plate gripper)."""
+
     backend: HamiltonBackendBase
+    """Only Hamilton backends."""
 
     @dataclasses.dataclass(kw_only=True)
     class GetOptions(TransportBase.GetOptions):
-        """Options to pick up labware from deck location"""
-
         GripMode: iSwap.GetPlate.GripModeOptions = field(compare=True)
         Movement: iSwap.GetPlate.MovementOptions = field(compare=True)
         RetractDistance: float = field(compare=False)
@@ -32,8 +33,6 @@ class HamiltonInternalPlateGripper(TransportBase):
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
-        """Options to drop off labware to deck location"""
-
         Movement: iSwap.PlacePlate.MovementOptions = field(compare=True)
         RetractDistance: float = field(compare=False)
         LiftupHeight: float = field(compare=False)

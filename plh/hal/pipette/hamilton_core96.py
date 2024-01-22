@@ -49,8 +49,8 @@ class HamiltonCORE96(PipetteBase):
             opt.destination_liquid_class_category,
         )
 
-        num_repeats = ceil(opt.TransferVolume / max_volume)
-        transfer_volume = opt.TransferVolume / num_repeats
+        num_repeats = ceil(opt.transfer_volume / max_volume)
+        transfer_volume = opt.transfer_volume / num_repeats
         # Find out how many transfers we need to do
 
         tip = self._get_tip(
@@ -151,7 +151,8 @@ class HamiltonCORE96(PipetteBase):
             LabwareID=opt.source_layout_item.labware_id,
             LiquidClass=str(
                 self._get_liquid_class(
-                    opt.source_liquid_class_category, transfer_volume
+                    opt.source_liquid_class_category,
+                    transfer_volume,
                 ),
             ),
             Volume=transfer_volume,

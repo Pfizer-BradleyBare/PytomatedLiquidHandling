@@ -23,8 +23,14 @@ class TransportOptions:
 
 @dataclasses.dataclass(kw_only=True)
 class TransportBase(Interface, HALDevice):
+    """Describes devices that can move layout items around the deck."""
+
     supported_labware: list[labware.LabwareBase]
-    _last_transport_flag: bool = Field(exclude=False, default=False)
+    """Labware that can be moved by the device."""
+
+    last_transport_flag: bool = Field(exclude=False, default=False)
+    """Flag that indicates if the current transport is the last transport.
+    This should be managed for multiple transports if you do not want repeated park operations occuring."""
 
     @field_validator("supported_labware", mode="before")
     @classmethod
@@ -55,16 +61,26 @@ class TransportBase(Interface, HALDevice):
 
     @dataclasses.dataclass(kw_only=True)
     class GetOptions:
-        ...
+        """Options that will be passed directly to the driver layer for the given transport device.
+        These options are deck location dependent.
+        This helps facilitate complex get options based on the complexity of your deck.
+        NOTE: options should be dataclass fields with the appropraite compare boolean set.
+        Boolean should be True if the setting is critical, otherwise false."""
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions:
-        ...
+        """Options that will be passed directly to the driver layer for the given transport device.
+        These options are deck location dependent.
+        This helps facilitate complex get options based on the complexity of your deck.
+        NOTE: options should be dataclass fields with the appropraite compare boolean set.
+        Boolean should be True if the setting is critical, otherwise false."""
 
     def initialize(self: TransportBase) -> None:
+        """No initialization actions are performed."""
         ...
 
     def deinitialize(self: TransportBase) -> None:
+        """No deinitialization actions are performed."""
         ...
 
     def assert_options(
@@ -90,6 +106,7 @@ class TransportBase(Interface, HALDevice):
 
 
         Raises ExceptionGroup of the following:
+
             labware.Base.labwareNotEqualError
 
             labware.Base.labwareNotSupportedError
@@ -188,6 +205,7 @@ class TransportBase(Interface, HALDevice):
         self: TransportBase,
         options: TransportOptions,
     ) -> None:
+        """Gets a layout item from the deck."""
         ...
 
     @abstractmethod
@@ -195,6 +213,7 @@ class TransportBase(Interface, HALDevice):
         self: TransportBase,
         options: TransportOptions,
     ) -> float:
+        """Calculates time required to get a layout item from the deck."""
         ...
 
     @abstractmethod
@@ -202,6 +221,7 @@ class TransportBase(Interface, HALDevice):
         self: TransportBase,
         options: TransportOptions,
     ) -> None:
+        """Places a layout item on the deck."""
         ...
 
     @abstractmethod
@@ -209,4 +229,5 @@ class TransportBase(Interface, HALDevice):
         self: TransportBase,
         options: TransportOptions,
     ) -> float:
+        """Calculates time required to place a layout item on the deck."""
         ...

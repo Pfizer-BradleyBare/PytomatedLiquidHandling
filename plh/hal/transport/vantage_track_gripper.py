@@ -19,10 +19,6 @@ class VantageTrackGripper(TransportBase):
 
     @dataclasses.dataclass(kw_only=True)
     class GetOptions(TransportBase.GetOptions):
-        """Options to pick up labware from deck location
-        NOTE: Pickup and Dropoff TaughtPathName should be same due to how track gripper works
-        """
-
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
         Orientation: ML_STAR.iSwap.GetPlate.LabwareOrientationOptions = field(
@@ -36,10 +32,6 @@ class VantageTrackGripper(TransportBase):
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
-        """Options to drop off labware to deck location
-        NOTE: Pickup and Dropoff TaughtPathName and PathTime should be same due to how track gripper works
-        """
-
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
         CoordinatedMovement: TrackGripper.PlacePlateToTaughtPosition.YesNoOptions = (

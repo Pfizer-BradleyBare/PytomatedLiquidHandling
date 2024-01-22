@@ -15,17 +15,20 @@ from .transport_base import TransportBase, TransportOptions
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonCOREGripper(TransportBase):
+    """Gripper that uses Hamilton CORE channels."""
+
     backend: HamiltonBackendBase
+    """Only Hamilton backends."""
+
     gripper_labware_id: str
+    """Labware id to pick up the gripper from the deck."""
 
     @dataclasses.dataclass(kw_only=True)
     class GetOptions(TransportBase.GetOptions):
-        """Options to pick up labware from deck location"""
+        ...
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
-        """Options to drop off labware to deck location"""
-
         CheckPlateExists: Channel1000uLCOREGrip.PlacePlate.YesNoOptions = field(
             compare=False,
         )
@@ -85,7 +88,7 @@ class HamiltonCOREGripper(TransportBase):
                 LabwareID=destination_layout_item.labware_id,
                 CheckPlateExists=place_options.CheckPlateExists,
                 EjectTool=Channel1000uLCOREGrip.PlacePlate.YesNoOptions(
-                    int(self._last_transport_flag),
+                    int(self.last_transport_flag),
                 ),
             ),
             backend_error_handling=False,
