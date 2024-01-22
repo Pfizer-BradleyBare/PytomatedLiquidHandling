@@ -25,22 +25,22 @@ open_close_options: list[hal.closeable_container.OpenCloseOptions] = []
 
 
 open_close_options.append(
-    hal.closeable_container.OpenCloseOptions(LayoutItem=flip_tube_plate, Position=2),
+    hal.closeable_container.OpenCloseOptions(layout_item=flip_tube_plate, position=2),
 )
 open_close_options.append(
-    hal.closeable_container.OpenCloseOptions(LayoutItem=flip_tube_plate, Position=6),
+    hal.closeable_container.OpenCloseOptions(layout_item=flip_tube_plate, position=6),
 )
 open_close_options.append(
-    hal.closeable_container.OpenCloseOptions(LayoutItem=flip_tube_plate, Position=4),
+    hal.closeable_container.OpenCloseOptions(layout_item=flip_tube_plate, position=4),
 )
 open_close_options.append(
-    hal.closeable_container.OpenCloseOptions(LayoutItem=flip_tube_plate, Position=5),
+    hal.closeable_container.OpenCloseOptions(layout_item=flip_tube_plate, position=5),
 )
 open_close_options.append(
-    hal.closeable_container.OpenCloseOptions(LayoutItem=flip_tube_plate, Position=3),
+    hal.closeable_container.OpenCloseOptions(layout_item=flip_tube_plate, position=3),
 )
 
-closeable_container_device.assert_open_close_options(open_close_options)
+closeable_container_device.assert_options(open_close_options)
 closeable_container_device.open(open_close_options)
 closeable_container_device.close(open_close_options)
 
