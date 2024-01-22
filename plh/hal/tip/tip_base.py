@@ -5,7 +5,7 @@ from dataclasses import field
 
 from pydantic import dataclasses, field_validator
 
-from plh.hal import layout_item
+from plh.hal import layout_item, transport
 from plh.hal.tools import HALDevice, Interface
 
 
@@ -91,8 +91,8 @@ class TipBase(Interface, HALDevice):
         ...
 
     @abstractmethod
-    def discard_teir(self: TipBase) -> None:
-        """This will attempt to discard the teir. If no teirs are left then an exception will be throw to reload."""
+    def discard_teir(self: TipBase) -> list[transport.TransportOptions]:
+        """Returns a list of transport options to discard the current teir."""
         ...
 
     @abstractmethod

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from dataclasses import field
 
 from pydantic import dataclasses, field_validator
 
@@ -13,11 +12,16 @@ from .filter_plate_configuration import FilterPlateConfiguration
 
 @dataclasses.dataclass(kw_only=True)
 class VacuumBase(Interface, HALDevice):
-    com_port: str
+    """TODO"""
+
     manifold_park: layout_item.VacuumManifold
+    """Park position for the vacuum manifold."""
+
     manifold_processing: layout_item.VacuumManifold
-    supported_filter_plate_configurations: dict[str, FilterPlateConfiguration]
-    handle_id: int = field(init=False)
+    """Vacuum position for the vacuum manifold."""
+
+    filter_plate_configurations: dict[str, FilterPlateConfiguration]
+    """Operational configurations for each filter plate supported by the vacuum device."""
 
     @field_validator("manifold_park", "manifold_processing", mode="before")
     @classmethod
@@ -58,8 +62,10 @@ class VacuumBase(Interface, HALDevice):
 
     @abstractmethod
     def set_vacuum_pressure(self: VacuumBase, pressure: float) -> None:
+        """Turns the vacuum on at the specified absolute pressure."""
         ...
 
     @abstractmethod
     def get_vacuum_pressure(self: VacuumBase) -> float:
+        """Get the current absolute pressure."""
         ...

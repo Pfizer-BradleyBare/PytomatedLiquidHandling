@@ -7,10 +7,10 @@ from pydantic import dataclasses
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uLCOREGrip
-from plh.hal import deck_location, layout_item
+from plh.hal import deck_location
 
 from .transport_base import *
-from .transport_base import TransportBase
+from .transport_base import TransportBase, TransportOptions
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -30,33 +30,22 @@ class HamiltonCOREGripper(TransportBase):
             compare=False,
         )
 
-    def transport(
+    def get(
         self: HamiltonCOREGripper,
-        source_layout_item: layout_item.LayoutItemBase,
-        destination_layout_item: layout_item.LayoutItemBase,
+        options: TransportOptions,
     ) -> None:
-        if source_layout_item.deck_location == destination_layout_item.deck_location:
-            return
-
-        compatible_configs = (
-            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                source_layout_item.deck_location,
-                destination_layout_item.deck_location,
-            )[0]
-        )
+        source_layout_item = options.SourceLayoutItem
 
         labware = source_layout_item.labware
 
-        get_plate_options = Channel1000uLCOREGrip.GetPlate.Options(
-            GripperLabwareID=self.gripper_labware_id,
-            PlateLabwareID=source_layout_item.labware_id,
-            GripWidth=labware.dimensions.y_length - labware.transport_offsets.close,
-            OpenWidth=labware.dimensions.y_length + labware.transport_offsets.open,
-            GripHeight=labware.transport_offsets.top,
-        )
-
         command = Channel1000uLCOREGrip.GetPlate.Command(
-            options=get_plate_options,
+            options=Channel1000uLCOREGrip.GetPlate.Options(
+                GripperLabwareID=self.gripper_labware_id,
+                PlateLabwareID=source_layout_item.labware_id,
+                GripWidth=labware.dimensions.y_length - labware.transport_offsets.close,
+                OpenWidth=labware.dimensions.y_length + labware.transport_offsets.open,
+                GripHeight=labware.transport_offsets.top,
+            ),
             backend_error_handling=False,
         )
         self.backend.execute(command)
@@ -64,6 +53,26 @@ class HamiltonCOREGripper(TransportBase):
         self.backend.acknowledge(
             command,
             Channel1000uLCOREGrip.GetPlate.Response,
+        )
+
+    def get_time(
+        self: HamiltonCOREGripper,
+        options: TransportOptions,
+    ) -> float:
+        ...
+
+    def place(
+        self: HamiltonCOREGripper,
+        options: TransportOptions,
+    ) -> None:
+        source_layout_item = options.SourceLayoutItem
+        destination_layout_item = options.DestinationLayoutItem
+
+        compatible_configs = (
+            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+                source_layout_item.deck_location,
+                destination_layout_item.deck_location,
+            )[0]
         )
 
         place_options = cast(
@@ -88,9 +97,8 @@ class HamiltonCOREGripper(TransportBase):
             Channel1000uLCOREGrip.PlacePlate.Response,
         )
 
-    def transport_time(
+    def place_time(
         self: HamiltonCOREGripper,
-        source_layout_item: layout_item.LayoutItemBase,
-        destination_layout_item: layout_item.LayoutItemBase,
+        options: TransportOptions,
     ) -> float:
         ...

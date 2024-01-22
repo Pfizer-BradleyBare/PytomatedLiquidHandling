@@ -6,6 +6,7 @@ from pydantic import dataclasses
 
 from plh.driver.HAMILTON import HSLTipCountingLib
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
+from plh.hal import transport
 
 from .tip_base import *
 from .tip_base import TipBase
@@ -42,7 +43,7 @@ class HamiltonFTR(TipBase):
         """FTR tips do not have teirs so remaining tips is just all the tips left."""
         return len(self.available_positions)
 
-    def discard_teir(self: HamiltonFTR) -> None:
+    def discard_teir(self: HamiltonFTR) -> list[transport.TransportOptions]:
         """Cannot discard teir. You must load more tips."""
         raise RuntimeError("TODO: Tip reload error")
 

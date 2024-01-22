@@ -7,7 +7,7 @@ from pydantic import dataclasses
 
 from plh.driver.HAMILTON import Visual_NTR_Library
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
-from plh.hal import deck_location, layout_item
+from plh.hal import layout_item, transport
 
 from .tip_base import *
 from .tip_base import AvailablePosition, TipBase
@@ -72,19 +72,13 @@ class HamiltonNTR(TipBase):
             * tips_per_rack
         )
 
-    def discard_teir(self: HamiltonNTR) -> None:
-        """Will remove the top layer of an NTR teir.
+    def discard_teir(self: HamiltonNTR) -> list[transport.TransportOptions]:
+        """Returns the layout items from the top layer of a teir with the appropraite discard location.
         NOTE: The top teir after edit will be partially available.
         Thus, we use the ```available_positions_per_teir``` information to only discard the remaining teirs.
         """
 
-        for rack in self.available_racks_per_teir[0]:
-            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                rack.deck_location,
-                self.tip_rack_waste.deck_location,
-            )[0][0].transport_device.transport(rack, self.tip_rack_waste)
-        # Discard the rack
-
+        discard_racks = self.available_racks_per_teir[0]
         self.available_racks_per_teir = self.available_racks_per_teir[1:]
 
         if len(self.available_racks_per_teir) == 0:
@@ -92,6 +86,14 @@ class HamiltonNTR(TipBase):
 
         self.available_positions = self.available_positions_per_teir[0]
         self.available_positions_per_teir = self.available_positions_per_teir[1:]
+
+        return [
+            transport.TransportOptions(
+                SourceLayoutItem=rack,
+                DestinationLayoutItem=self.tip_rack_waste,
+            )
+            for rack in discard_racks
+        ]
 
     def update_available_positions(self: HamiltonNTR) -> None:
         """Uses the NTR library to edit the number of available tips.

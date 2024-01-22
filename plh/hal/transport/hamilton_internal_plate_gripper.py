@@ -7,10 +7,10 @@ from pydantic import dataclasses
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import iSwap
-from plh.hal import deck_location, layout_item
+from plh.hal import deck_location
 
 from .transport_base import *
-from .transport_base import TransportBase
+from .transport_base import TransportBase, TransportOptions
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -41,13 +41,12 @@ class HamiltonInternalPlateGripper(TransportBase):
             compare=True,
         )
 
-    def transport(
+    def get(
         self: HamiltonInternalPlateGripper,
-        source_layout_item: layout_item.LayoutItemBase,
-        destination_layout_item: layout_item.LayoutItemBase,
+        options: TransportOptions,
     ) -> None:
-        if source_layout_item.deck_location == destination_layout_item.deck_location:
-            return
+        source_layout_item = options.SourceLayoutItem
+        destination_layout_item = options.DestinationLayoutItem
 
         compatible_configs = (
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(
@@ -82,6 +81,26 @@ class HamiltonInternalPlateGripper(TransportBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, iSwap.GetPlate.Response)
 
+    def get_time(
+        self: HamiltonInternalPlateGripper,
+        options: TransportOptions,
+    ) -> float:
+        ...
+
+    def place(
+        self: HamiltonInternalPlateGripper,
+        options: TransportOptions,
+    ) -> None:
+        source_layout_item = options.SourceLayoutItem
+        destination_layout_item = options.DestinationLayoutItem
+
+        compatible_configs = (
+            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+                source_layout_item.deck_location,
+                destination_layout_item.deck_location,
+            )[0]
+        )
+
         place_options = cast(
             HamiltonInternalPlateGripper.PlaceOptions,
             compatible_configs[1].place_options,
@@ -101,9 +120,8 @@ class HamiltonInternalPlateGripper(TransportBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, iSwap.PlacePlate.Response)
 
-    def transport_time(
+    def place_time(
         self: HamiltonInternalPlateGripper,
-        source_layout_item: layout_item.LayoutItemBase,
-        destination_layout_item: layout_item.LayoutItemBase,
+        options: TransportOptions,
     ) -> float:
         ...

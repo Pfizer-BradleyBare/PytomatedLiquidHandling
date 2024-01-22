@@ -11,6 +11,17 @@ from .exceptions import WrongTransportDeviceError
 
 
 @dataclasses.dataclass(kw_only=True)
+class TransportOptions:
+    """Options passed to transport"""
+
+    SourceLayoutItem: layout_item.LayoutItemBase
+    """Layout item to get."""
+
+    DestinationLayoutItem: layout_item.LayoutItemBase
+    """Layout item where you will placed the getted layout item."""
+
+
+@dataclasses.dataclass(kw_only=True)
 class TransportBase(Interface, HALDevice):
     supported_labware: list[labware.LabwareBase]
     _last_transport_flag: bool = Field(exclude=False, default=False)
@@ -58,8 +69,7 @@ class TransportBase(Interface, HALDevice):
 
     def assert_transport_options(
         self: TransportBase,
-        source_layout_item: layout_item.LayoutItemBase,
-        destination_layout_item: layout_item.LayoutItemBase,
+        options: TransportOptions,
     ) -> None:
         """Must be called before calling Transport or TransportTime
 
@@ -91,6 +101,9 @@ class TransportBase(Interface, HALDevice):
             TransportDevice.Base.GetOptionsNotEqualError
         """
         excepts = []
+
+        source_layout_item = options.SourceLayoutItem
+        destination_layout_item = options.__subclasshook__
 
         if not isinstance(
             source_layout_item.deck_location,
@@ -171,17 +184,29 @@ class TransportBase(Interface, HALDevice):
             raise ExceptionGroup(msg, excepts)
 
     @abstractmethod
-    def transport(
+    def get(
         self: TransportBase,
-        source_layout_item: layout_item.LayoutItemBase,
-        destination_layout_item: layout_item.LayoutItemBase,
+        options: TransportOptions,
     ) -> None:
         ...
 
     @abstractmethod
-    def transport_time(
+    def get_time(
         self: TransportBase,
-        source_layout_item: layout_item.LayoutItemBase,
-        destination_layout_item: layout_item.LayoutItemBase,
+        options: TransportOptions,
+    ) -> float:
+        ...
+
+    @abstractmethod
+    def place(
+        self: TransportBase,
+        options: TransportOptions,
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def place_time(
+        self: TransportBase,
+        options: TransportOptions,
     ) -> float:
         ...
