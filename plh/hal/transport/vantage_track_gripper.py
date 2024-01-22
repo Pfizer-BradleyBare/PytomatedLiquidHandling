@@ -18,7 +18,7 @@ class VantageTrackGripper(TransportBase):
     backend: VantageTrackGripperEntryExit
 
     @dataclasses.dataclass(kw_only=True)
-    class PickupOptions(TransportBase.PickupOptions):
+    class GetOptions(TransportBase.GetOptions):
         """Options to pick up labware from deck location
         NOTE: Pickup and Dropoff TaughtPathName should be same due to how track gripper works
         """
@@ -35,7 +35,7 @@ class VantageTrackGripper(TransportBase):
         )
 
     @dataclasses.dataclass(kw_only=True)
-    class DropoffOptions(TransportBase.DropoffOptions):
+    class PlaceOptions(TransportBase.PlaceOptions):
         """Options to drop off labware to deck location
         NOTE: Pickup and Dropoff TaughtPathName and PathTime should be same due to how track gripper works
         """
@@ -65,13 +65,13 @@ class VantageTrackGripper(TransportBase):
 
         labware = source_layout_item.labware
 
-        pickup_options = cast(
-            VantageTrackGripper.PickupOptions,
-            compatible_configs[0].pickup_options,
+        get_options = cast(
+            VantageTrackGripper.GetOptions,
+            compatible_configs[0].get_options,
         )
 
         if (
-            pickup_options.Orientation
+            get_options.Orientation
             == ML_STAR.iSwap.GetPlate.LabwareOrientationOptions.PositiveYAxis
         ):
             open_width = labware.dimensions.x_length + labware.transport_offsets.open
@@ -81,11 +81,11 @@ class VantageTrackGripper(TransportBase):
         command = TrackGripper.GripPlateFromTaughtPosition.Command(
             options=TrackGripper.GripPlateFromTaughtPosition.Options(
                 OpenWidth=open_width,
-                CoordinatedMovement=pickup_options.CoordinatedMovement,
+                CoordinatedMovement=get_options.CoordinatedMovement,
                 GripForcePercentage=100,
                 SpeedPercentage=100,
                 CollisionControl=TrackGripper.GripPlateFromTaughtPosition.YesNoOptions.Yes,
-                TaughtPathName=pickup_options.TaughtPathName,
+                TaughtPathName=get_options.TaughtPathName,
             ),
             backend_error_handling=False,
         )
@@ -96,16 +96,16 @@ class VantageTrackGripper(TransportBase):
             TrackGripper.GripPlateFromTaughtPosition.Response,
         )
 
-        dropoff_options = cast(
-            VantageTrackGripper.DropoffOptions,
-            compatible_configs[1].dropoff_options,
+        place_options = cast(
+            VantageTrackGripper.PlaceOptions,
+            compatible_configs[1].place_options,
         )
 
         command = TrackGripper.PlacePlateToTaughtPosition.Command(
             options=TrackGripper.PlacePlateToTaughtPosition.Options(
                 OpenWidth=labware.transport_offsets.open,
-                TaughtPathName=dropoff_options.TaughtPathName,
-                CoordinatedMovement=dropoff_options.CoordinatedMovement,
+                TaughtPathName=place_options.TaughtPathName,
+                CoordinatedMovement=place_options.CoordinatedMovement,
                 SpeedPercentage=100,
                 CollisionControl=TrackGripper.PlacePlateToTaughtPosition.YesNoOptions.Yes,
             ),

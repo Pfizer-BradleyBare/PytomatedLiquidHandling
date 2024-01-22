@@ -16,17 +16,17 @@ class TransportConfig:
     transport_device: transport.TransportBase
     """Transport object that will be used to transfer."""
 
-    pickup_options: transport.TransportBase.PickupOptions
+    get_options: transport.TransportBase.GetOptions
     """Get options to be used by above transport object."""
 
-    dropoff_options: transport.TransportBase.DropoffOptions
+    place_options: transport.TransportBase.PlaceOptions
     """Place options to be used by above transport object."""
 
-    @field_serializer("pickup_options", "dropoff_options")
+    @field_serializer("get_options", "place_options")
     def __options_serializer(
         self: TransportConfig,
-        options: transport.TransportBase.PickupOptions
-        | transport.TransportBase.DropoffOptions,
+        options: transport.TransportBase.GetOptions
+        | transport.TransportBase.PlaceOptions,
     ) -> dict:
         return vars(options)
 
@@ -56,14 +56,14 @@ class TransportConfig:
 
         return objects[identifier]
 
-    @field_validator("pickup_options", mode="before")
+    @field_validator("get_options", mode="before")
     @classmethod
-    def __pickup_options_validate(
+    def __get_options_validate(
         cls: type[TransportConfig],
-        v: None | dict | transport.TransportBase.PickupOptions,
+        v: None | dict | transport.TransportBase.GetOptions,
         info: ValidationInfo,
-    ) -> transport.TransportBase.PickupOptions:
-        if isinstance(v, transport.TransportBase.PickupOptions):
+    ) -> transport.TransportBase.GetOptions:
+        if isinstance(v, transport.TransportBase.GetOptions):
             return v
 
         transport_device: transport.TransportBase = info.data["transport_device"]
@@ -71,16 +71,16 @@ class TransportConfig:
         if v is None:
             v = {}
 
-        return transport_device.PickupOptions(**v)
+        return transport_device.GetOptions(**v)
 
-    @field_validator("dropoff_options", mode="before")
+    @field_validator("place_options", mode="before")
     @classmethod
-    def __dropoff_options_validate(
+    def __place_options_validate(
         cls: type[TransportConfig],
-        v: None | dict | transport.TransportBase.DropoffOptions,
+        v: None | dict | transport.TransportBase.PlaceOptions,
         info: ValidationInfo,
-    ) -> transport.TransportBase.DropoffOptions:
-        if isinstance(v, transport.TransportBase.DropoffOptions):
+    ) -> transport.TransportBase.PlaceOptions:
+        if isinstance(v, transport.TransportBase.PlaceOptions):
             return v
 
         transport_device: transport.TransportBase = info.data["transport_device"]
@@ -88,10 +88,10 @@ class TransportConfig:
         if v is None:
             v = {}
 
-        return transport_device.DropoffOptions(**v)
+        return transport_device.PlaceOptions(**v)
 
     def __eq__(self: TransportConfig, __value: TransportConfig) -> bool:
         return (
             self.transport_device == __value.transport_device
-            and self.pickup_options == __value.pickup_options
+            and self.get_options == __value.get_options
         )

@@ -6,8 +6,8 @@ Transportable Deck Location:
           
     transport_configs:
       - transport_device: COREGripper
-        pickup_options:
-        dropoff_options:
+        get_options:
+        place_options:
           CheckPlateExists: False
 
   - enabled: True
@@ -17,8 +17,8 @@ Transportable Deck Location:
           
     transport_configs:
       - transport_device: COREGripper
-        pickup_options:
-        dropoff_options:
+        get_options:
+        place_options:
           CheckPlateExists: False
 
   - enabled: True
@@ -28,8 +28,8 @@ Transportable Deck Location:
           
     transport_configs:
       - transport_device: COREGripper
-        pickup_options:
-        dropoff_options:
+        get_options:
+        place_options:
           CheckPlateExists: False
 
   - enabled: True
@@ -39,8 +39,8 @@ Transportable Deck Location:
           
     transport_configs:
       - transport_device: COREGripper
-        pickup_options:
-        dropoff_options:
+        get_options:
+        place_options:
           CheckPlateExists: False
 
   - enabled: True
@@ -50,6 +50,6 @@ Transportable Deck Location:
           
     transport_configs:
       - transport_device: COREGripper
-        pickup_options:
-        dropoff_options:
+        get_options:
+        place_options:
           CheckPlateExists: False

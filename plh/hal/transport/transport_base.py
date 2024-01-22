@@ -43,11 +43,11 @@ class TransportBase(Interface, HALDevice):
         return supported_objects
 
     @dataclasses.dataclass(kw_only=True)
-    class PickupOptions:
+    class GetOptions:
         ...
 
     @dataclasses.dataclass(kw_only=True)
-    class DropoffOptions:
+    class PlaceOptions:
         ...
 
     def initialize(self: TransportBase) -> None:
@@ -75,7 +75,7 @@ class TransportBase(Interface, HALDevice):
 
         If WrongDeviceTransportOptionsError is thrown then you are trying to use a incompatible device.
 
-        If PickupOptionsNotEqualError is thrown then your Source and Destination require different orientations.
+        If GetOptionsNotEqualError is thrown then your Source and Destination require different orientations.
         Use a transition point to bridge the gap.
 
 
@@ -88,7 +88,7 @@ class TransportBase(Interface, HALDevice):
 
             TransportDevice.Base.WrongDeviceTransportOptionsError
 
-            TransportDevice.Base.PickupOptionsNotEqualError
+            TransportDevice.Base.GetOptionsNotEqualError
         """
         excepts = []
 

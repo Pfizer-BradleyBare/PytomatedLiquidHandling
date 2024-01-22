@@ -19,11 +19,11 @@ class HamiltonCOREGripper(TransportBase):
     gripper_labware_id: str
 
     @dataclasses.dataclass(kw_only=True)
-    class PickupOptions(TransportBase.PickupOptions):
+    class GetOptions(TransportBase.GetOptions):
         """Options to pick up labware from deck location"""
 
     @dataclasses.dataclass(kw_only=True)
-    class DropoffOptions(TransportBase.DropoffOptions):
+    class PlaceOptions(TransportBase.PlaceOptions):
         """Options to drop off labware to deck location"""
 
         CheckPlateExists: Channel1000uLCOREGrip.PlacePlate.YesNoOptions = field(
@@ -66,15 +66,15 @@ class HamiltonCOREGripper(TransportBase):
             Channel1000uLCOREGrip.GetPlate.Response,
         )
 
-        dropoff_options = cast(
-            HamiltonCOREGripper.DropoffOptions,
-            compatible_configs[1].dropoff_options,
+        place_options = cast(
+            HamiltonCOREGripper.PlaceOptions,
+            compatible_configs[1].place_options,
         )
 
         command = Channel1000uLCOREGrip.PlacePlate.Command(
             options=Channel1000uLCOREGrip.PlacePlate.Options(
                 LabwareID=destination_layout_item.labware_id,
-                CheckPlateExists=dropoff_options.CheckPlateExists,
+                CheckPlateExists=place_options.CheckPlateExists,
                 EjectTool=Channel1000uLCOREGrip.PlacePlate.YesNoOptions(
                     int(self._last_transport_flag),
                 ),

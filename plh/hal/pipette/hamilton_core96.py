@@ -73,11 +73,11 @@ class HamiltonCORE96(PipetteBase):
 
             tip_positions = tip.tip.available_positions[: len(opts)]
 
-            support_pickup_options: list[Channel1000uL.Pickup.Options] = []
+            support_get_options: list[Channel1000uL.Pickup.Options] = []
             for index, (opt, channel_number) in enumerate(
                 zip(opts, self.hamilton_portrait_core_8.active_channels),
             ):
-                support_pickup_options.append(
+                support_get_options.append(
                     Channel1000uL.Pickup.Options(
                         ChannelNumber=channel_number,
                         LabwareID=tip_positions[index].LabwareID,
@@ -86,7 +86,7 @@ class HamiltonCORE96(PipetteBase):
                 )
             command = Channel1000uL.Pickup.Command(
                 backend_error_handling=False,
-                options=support_pickup_options,
+                options=support_get_options,
             )
             self.backend.execute(command)
             self.backend.wait(command)
@@ -125,12 +125,12 @@ class HamiltonCORE96(PipetteBase):
             # Eject into the tip support at the correct position
         # This picks up tips with the 1mL channels and ejects them in the tip support rack. The 96 head will now pick them up.
 
-        pickup_options = CORE96Head.Pickup.Options(
+        get_options = CORE96Head.Pickup.Options(
             LabwareID=tip.tip_support_pickup_labware_id,
         )
         command = CORE96Head.Pickup.Command(
             backend_error_handling=False,
-            options=pickup_options,
+            options=get_options,
         )
         self.backend.execute(command)
         self.backend.wait(command)

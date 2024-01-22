@@ -107,11 +107,11 @@ class HamiltonPortraitCORE8(PipetteBase):
 
                 tip_positions = tip.tip.available_positions[: len(opts)]
 
-                pickup_options: list[Channel1000uL.Pickup.Options] = []
+                get_options: list[Channel1000uL.Pickup.Options] = []
                 for index, (opt, channel_number) in enumerate(
                     zip(opts, self.active_channels),
                 ):
-                    pickup_options.append(
+                    get_options.append(
                         Channel1000uL.Pickup.Options(
                             ChannelNumber=channel_number,
                             LabwareID=tip_positions[index].LabwareID,
@@ -120,7 +120,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                     )
                 command = Channel1000uL.Pickup.Command(
                     backend_error_handling=False,
-                    options=pickup_options,
+                    options=get_options,
                 )
                 self.backend.execute(command)
                 self.backend.wait(command)
