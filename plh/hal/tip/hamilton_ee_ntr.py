@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from typing import cast
 
-from ee_tip_stack import EETipStack
 from pydantic import dataclasses, field_validator
 
 from plh.driver.HAMILTON import EntryExit, HSLTipCountingLib
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.hal import deck_location, layout_item
 
+from .ee_tip_stack import EETipStack
 from .tip_base import *
 from .tip_base import TipBase
 
