@@ -36,7 +36,7 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
         except ExceptionGroup as e:
             excepts += e.exceptions
 
-        rpm = options.RPM
+        rpm = options.rpm
 
         if rpm is not None:
             excepts.append(ShakingNotSupportedError)
@@ -86,7 +86,7 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
     ) -> None:
         self.assert_options(options)
 
-        temperature = options.Temperature
+        temperature = options.temperature
 
         assert temperature is not None
 

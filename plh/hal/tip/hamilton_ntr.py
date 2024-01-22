@@ -89,8 +89,8 @@ class HamiltonNTR(TipBase):
 
         return [
             transport.TransportOptions(
-                SourceLayoutItem=rack,
-                DestinationLayoutItem=self.tip_rack_waste,
+                source_layout_item=rack,
+                destination_layout_item=self.tip_rack_waste,
             )
             for rack in discard_racks
         ]

@@ -31,7 +31,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
     ) -> None:
         excepts = []
 
-        temperature = options.Temperature
+        temperature = options.temperature
 
         try:
             super().assert_options(options)
@@ -137,7 +137,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
         """Minimum supported temperature is ambient or 25C."""
         self.assert_options(options)
 
-        temperature = options.Temperature
+        temperature = options.temperature
 
         assert temperature is not None
 
@@ -182,7 +182,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
     ) -> None:
         self.assert_options(options)
 
-        rpm = options.RPM
+        rpm = options.rpm
 
         assert rpm is not None
 

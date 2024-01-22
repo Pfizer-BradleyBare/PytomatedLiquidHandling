@@ -34,7 +34,7 @@ class HamiltonCOREGripper(TransportBase):
         self: HamiltonCOREGripper,
         options: TransportOptions,
     ) -> None:
-        source_layout_item = options.SourceLayoutItem
+        source_layout_item = options.source_layout_item
 
         labware = source_layout_item.labware
 
@@ -65,8 +65,8 @@ class HamiltonCOREGripper(TransportBase):
         self: HamiltonCOREGripper,
         options: TransportOptions,
     ) -> None:
-        source_layout_item = options.SourceLayoutItem
-        destination_layout_item = options.DestinationLayoutItem
+        source_layout_item = options.source_layout_item
+        destination_layout_item = options.destination_layout_item
 
         compatible_configs = (
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(

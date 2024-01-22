@@ -13,10 +13,10 @@ from plh.hal.tools import HALDevice, Interface
 class OpenCloseOptions(OptionsBase):
     """Options that can be used for ```open```, ```open_time```, ```close```, or ```close_time```."""
 
-    LayoutItem: layout_item.LayoutItemBase
+    layout_item: layout_item.LayoutItemBase
     """Compatible layout item you want to open/close."""
 
-    Position: str | int
+    position: str | int
     """Position to open/close. NOTE: position will be converted to correct type (alpha vs numeric) based on labware layout info."""
 
 
@@ -108,8 +108,8 @@ class CloseableContainerBase(Interface, HALDevice):
         unsupported_labware = []
 
         for opt in options:
-            deck_location_instance = opt.LayoutItem.deck_location
-            labware_instance = opt.LayoutItem.labware
+            deck_location_instance = opt.layout_item.deck_location
+            labware_instance = opt.layout_item.labware
 
             if deck_location_instance not in self.supported_deck_locations:
                 unsupported_deck_locations.append(deck_location_instance)

@@ -52,8 +52,8 @@ class VantageTrackGripper(TransportBase):
         self: VantageTrackGripper,
         options: TransportOptions,
     ) -> None:
-        source_layout_item = options.SourceLayoutItem
-        destination_layout_item = options.DestinationLayoutItem
+        source_layout_item = options.source_layout_item
+        destination_layout_item = options.destination_layout_item
 
         compatible_configs = (
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(
@@ -105,8 +105,8 @@ class VantageTrackGripper(TransportBase):
         self: VantageTrackGripper,
         options: TransportOptions,
     ) -> None:
-        source_layout_item = options.SourceLayoutItem
-        destination_layout_item = options.DestinationLayoutItem
+        source_layout_item = options.source_layout_item
+        destination_layout_item = options.destination_layout_item
 
         compatible_configs = (
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(

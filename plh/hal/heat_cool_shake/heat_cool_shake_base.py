@@ -11,9 +11,9 @@ from plh.hal.tools import HALDevice, Interface
 
 @dataclasses.dataclass(kw_only=True)
 class HeatCoolShakeOptions:
-    LayoutItem: li.LayoutItemBase | None = None
-    Temperature: None | float = None
-    RPM: None | int = None
+    layout_item: li.LayoutItemBase | None = None
+    temperature: None | float = None
+    rpm: None | int = None
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -70,7 +70,7 @@ class HeatCoolShakeBase(Interface, HALDevice):
         """
         excepts = []
 
-        layout_item = options.LayoutItem
+        layout_item = options.layout_item
 
         if layout_item is not None:
             supported_labware = [
@@ -92,7 +92,7 @@ class HeatCoolShakeBase(Interface, HALDevice):
     ) -> li.CoverablePlate | li.Plate:
         """Gets a layout item on the heat_cool_shake device that is compatible with your current layout item."""
 
-        layout_item = options.LayoutItem
+        layout_item = options.layout_item
 
         assert layout_item is not None
 

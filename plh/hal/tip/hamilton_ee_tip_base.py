@@ -94,12 +94,12 @@ class HamiltonEETipBase(TipBase):
             [
                 [
                     transport.TransportOptions(
-                        SourceLayoutItem=rack,
-                        DestinationLayoutItem=self.tip_rack_waste,
+                        source_layout_item=rack,
+                        destination_layout_item=self.tip_rack_waste,
                     ),
                     transport.TransportOptions(
-                        SourceLayoutItem=stack.tip_rack,
-                        DestinationLayoutItem=rack,
+                        source_layout_item=stack.tip_rack,
+                        destination_layout_item=rack,
                     ),
                 ]
                 for rack, stack in zip(self.tip_racks, self.tip_stacks)

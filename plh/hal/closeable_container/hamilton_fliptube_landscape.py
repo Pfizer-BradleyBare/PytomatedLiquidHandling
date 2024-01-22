@@ -62,13 +62,13 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         # Pickup
 
         layout_item_keys: dict[str, layout_item.LayoutItemBase] = {
-            opt.LayoutItem.identifier: opt.LayoutItem for opt in options
+            opt.layout_item.identifier: opt.layout_item for opt in options
         }
         layout_item_positions = DefaultDict(list)
         # Open
 
         for opt in options:
-            layout_item_positions[opt.LayoutItem.identifier].append(opt.Position)
+            layout_item_positions[opt.layout_item.identifier].append(opt.position)
         # Collect positions organized by layout item
 
         for key in layout_item_positions:
@@ -139,13 +139,13 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         # Pickup
 
         layout_item_keys: dict[str, layout_item.LayoutItemBase] = {
-            opt.LayoutItem.identifier: opt.LayoutItem for opt in options
+            opt.layout_item.identifier: opt.layout_item for opt in options
         }
         layout_item_positions = DefaultDict(list)
         # Open
 
         for opt in options:
-            layout_item_positions[opt.LayoutItem.identifier].append(opt.Position)
+            layout_item_positions[opt.layout_item.identifier].append(opt.position)
         # Collect positions organized by layout item
 
         for key in layout_item_positions:

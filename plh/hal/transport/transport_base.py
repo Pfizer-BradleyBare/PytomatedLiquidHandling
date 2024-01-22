@@ -14,10 +14,10 @@ from .exceptions import WrongTransportDeviceError
 class TransportOptions:
     """Options passed to transport"""
 
-    SourceLayoutItem: layout_item.LayoutItemBase
+    source_layout_item: layout_item.LayoutItemBase
     """Layout item to get."""
 
-    DestinationLayoutItem: layout_item.LayoutItemBase
+    destination_layout_item: layout_item.LayoutItemBase
     """Layout item where you will placed the getted layout item."""
 
 
@@ -102,8 +102,8 @@ class TransportBase(Interface, HALDevice):
         """
         excepts = []
 
-        source_layout_item = options.SourceLayoutItem
-        destination_layout_item = options.__subclasshook__
+        source_layout_item = options.source_layout_item
+        destination_layout_item = options.destination_layout_item
 
         if not isinstance(
             source_layout_item.deck_location,
