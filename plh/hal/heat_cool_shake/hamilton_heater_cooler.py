@@ -6,10 +6,9 @@ from pydantic import dataclasses
 
 from plh.driver.HAMILTON import HamiltonHeaterCooler as HamiltonHeaterCoolerDriver
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
-from plh.hal import layout_item as li
 
 from .exceptions import ShakingNotSupportedError
-from .heat_cool_shake_base import HeatCoolShakeBase
+from .heat_cool_shake_base import HeatCoolShakeBase, HeatCoolShakeOptions
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -27,16 +26,16 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
 
     def assert_options(
         self: HamiltonHeaterCooler,
-        layout_item: li.LayoutItemBase | None = None,
-        temperature: float | None = None,
-        rpm: int | None = None,
+        options: HeatCoolShakeOptions,
     ) -> None:
         excepts = []
 
         try:
-            super().assert_options(layout_item, temperature, rpm)
+            super().assert_options(options)
         except ExceptionGroup as e:
             excepts += e.exceptions
+
+        rpm = options.RPM
 
         if rpm is not None:
             excepts.append(ShakingNotSupportedError)
@@ -80,8 +79,15 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
             HamiltonHeaterCoolerDriver.StopTemperatureControl.Response,
         )
 
-    def set_temperature(self: HamiltonHeaterCooler, temperature: float) -> None:
-        self.assert_options(temperature=temperature)
+    def set_temperature(
+        self: HamiltonHeaterCooler,
+        options: HeatCoolShakeOptions,
+    ) -> None:
+        self.assert_options(options)
+
+        temperature = options.Temperature
+
+        assert temperature is not None
 
         command = HamiltonHeaterCoolerDriver.SetTemperature.Command(
             options=HamiltonHeaterCoolerDriver.SetTemperature.Options(
@@ -96,8 +102,11 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
             HamiltonHeaterCoolerDriver.SetTemperature.Response,
         )
 
-    def set_temperature_time(self: HamiltonHeaterCooler, temperature: float) -> float:
-        self.assert_options(temperature=temperature)
+    def set_temperature_time(
+        self: HamiltonHeaterCooler,
+        options: HeatCoolShakeOptions,
+    ) -> float:
+        self.assert_options(options)
 
         return 0
 
@@ -118,9 +127,12 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
 
         return response.Temperature
 
-    def set_shaking_speed(self: HamiltonHeaterCooler, rpm: int) -> None:
+    def set_shaking_speed(
+        self: HamiltonHeaterCooler,
+        options: HeatCoolShakeOptions,
+    ) -> None:
         """Shaking is not supported for this device."""
-        self.assert_options(rpm=rpm)
+        self.assert_options(options)
 
     def get_shaking_speed(self: HamiltonHeaterCooler) -> int:
         """Shaking is not supported for this device. Nonetheless, returns 0"""
