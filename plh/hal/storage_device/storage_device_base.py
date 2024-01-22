@@ -13,9 +13,13 @@ from .reservation import Reservation
 
 @dataclasses.dataclass(kw_only=True)
 class StorageDeviceBase(HALDevice):
+    """Can be used to store any number and any combination of labware types."""
+
     layout_items: list[li.LayoutItemBase]
+    """Associated layout item positions. These are the positions where storage will occur."""
 
     reservations: dict[str, Reservation] = field(init=False, default_factory=dict)
+    """Current reserved positions."""
 
     @field_validator("layout_items", mode="before")
     @classmethod

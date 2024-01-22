@@ -12,5 +12,7 @@ from .layout_item_base import LayoutItemBase
 
 @dataclasses.dataclass(kw_only=True)
 class FilterPlateStack(LayoutItemBase):
+    """TODO"""
+
     labware: labware.NonPipettableLabware
     filter_plate: CoverableFilterPlate | FilterPlate

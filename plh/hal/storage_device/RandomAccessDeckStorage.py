@@ -10,6 +10,8 @@ from .storage_device_base import StorageDeviceBase
 
 @dataclasses.dataclass(kw_only=True)
 class RandomAccessDeckStorage(StorageDeviceBase):
+    """Random access storage device. Labware can be stored/retrieved without limitations."""
+
     def reserve(
         self: RandomAccessDeckStorage,
         reservation_id: str,

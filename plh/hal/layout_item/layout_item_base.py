@@ -8,11 +8,19 @@ from plh.hal.tools import HALDevice
 
 @dataclasses.dataclass(kw_only=True)
 class LayoutItemBase(HALDevice):
+    """A labware position on a deck."""
+
     identifier: str = "None"
+    """Identifier is optional. If identifier is not specified than identifier will be '<deck_location.identifier>_<labware.identifier>'"""
 
     labware_id: str
+    """Labware id from the automation software for this deck position."""
+
     deck_location: deck_location.DeckLocationBase
+    """Deck location object associated with this position. NOTE: Many layout items can be in the same deck location."""
+
     labware: labware.LabwareBase
+    """Labware type for this layout item."""
 
     @field_validator("deck_location", mode="before")
     @classmethod

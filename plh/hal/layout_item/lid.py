@@ -8,4 +8,7 @@ from .layout_item_base import LayoutItemBase
 
 @dataclasses.dataclass(kw_only=True)
 class Lid(LayoutItemBase):
+    """A lid that can cover a layout item."""
+
     labware: labware.NonPipettableLabware
+    """Lids can never be pipette to/from."""
