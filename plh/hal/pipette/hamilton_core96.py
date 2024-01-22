@@ -45,8 +45,8 @@ class HamiltonCORE96(PipetteBase):
         # All the options should be the same. So we can just take the first one for the majority
 
         max_volume = self._get_max_transfer_volume(
-            opt.SourceLiquidClassCategory,
-            opt.DestinationLiquidClassCategory,
+            opt.source_liquid_class_category,
+            opt.destination_liquid_class_category,
         )
 
         num_repeats = ceil(opt.TransferVolume / max_volume)
@@ -54,8 +54,8 @@ class HamiltonCORE96(PipetteBase):
         # Find out how many transfers we need to do
 
         tip = self._get_tip(
-            opt.SourceLiquidClassCategory,
-            opt.DestinationLiquidClassCategory,
+            opt.source_liquid_class_category,
+            opt.destination_liquid_class_category,
             transfer_volume,
         )
 
@@ -110,7 +110,7 @@ class HamiltonCORE96(PipetteBase):
                         LabwareID=tip.tip_support_dropoff_labware_id,
                         ChannelNumber=channel_number,
                         PositionID=numeric_layout.get_position_id(
-                            opt.SourcePosition,  # Source and destination are the same
+                            opt.source_position,  # Source and destination are the same
                         ),
                     ),
                 )
@@ -137,10 +137,10 @@ class HamiltonCORE96(PipetteBase):
         self.backend.acknowledge(command, CORE96Head.Pickup.Response)
 
         aspirate_options = CORE96Head.Aspirate.Options(
-            LabwareID=opt.SourceLayoutItemInstance.labware_id,
+            LabwareID=opt.source_layout_item.labware_id,
             LiquidClass=str(
                 self._get_liquid_class(
-                    opt.SourceLiquidClassCategory,
+                    opt.source_liquid_class_category,
                     transfer_volume,
                 ),
             ),
@@ -148,9 +148,11 @@ class HamiltonCORE96(PipetteBase):
         )
 
         dispense_options = CORE96Head.Dispense.Options(
-            LabwareID=opt.SourceLayoutItemInstance.labware_id,
+            LabwareID=opt.source_layout_item.labware_id,
             LiquidClass=str(
-                self._get_liquid_class(opt.SourceLiquidClassCategory, transfer_volume),
+                self._get_liquid_class(
+                    opt.source_liquid_class_category, transfer_volume
+                ),
             ),
             Volume=transfer_volume,
         )

@@ -26,13 +26,15 @@ class HamiltonPortraitCORE8(PipetteBase):
         liquid_class_max_volumes: dict[str, float] = {}
         for opt in options:
             combined_name = (
-                opt.SourceLiquidClassCategory + ":" + opt.DestinationLiquidClassCategory
+                opt.source_liquid_class_category
+                + ":"
+                + opt.destination_liquid_class_category
             )
 
             if combined_name not in liquid_class_max_volumes:
                 liquid_class_max_volumes[combined_name] = self._get_max_transfer_volume(
-                    opt.SourceLiquidClassCategory,
-                    opt.DestinationLiquidClassCategory,
+                    opt.source_liquid_class_category,
+                    opt.destination_liquid_class_category,
                 )
         # Max volume for each liquid class pairing. Important
 
@@ -41,7 +43,9 @@ class HamiltonPortraitCORE8(PipetteBase):
 
         for opt in options:
             combined_name = (
-                opt.SourceLiquidClassCategory + ":" + opt.DestinationLiquidClassCategory
+                opt.source_liquid_class_category
+                + ":"
+                + opt.destination_liquid_class_category
             )
 
             truncated_options = self._truncate_transfer_volume(
@@ -74,8 +78,8 @@ class HamiltonPortraitCORE8(PipetteBase):
         ] = defaultdict(list)
         for opt in options:
             tip = self._get_tip(
-                opt.SourceLiquidClassCategory,
-                opt.DestinationLiquidClassCategory,
+                opt.source_liquid_class_category,
+                opt.destination_liquid_class_category,
                 opt.TransferVolume,
             )
 
@@ -133,18 +137,18 @@ class HamiltonPortraitCORE8(PipetteBase):
                 ):
                     aspirate_labware = cast(
                         labware.PipettableLabware,
-                        opt.SourceLayoutItemInstance.labware,
+                        opt.source_layout_item.labware,
                     )
 
                     numeric_layout = labware.NumericLayout(
-                        rows=opt.SourceLayoutItemInstance.labware.layout.rows,
-                        columns=opt.SourceLayoutItemInstance.labware.layout.columns,
-                        direction=opt.SourceLayoutItemInstance.labware.layout.direction,
+                        rows=opt.source_layout_item.labware.layout.rows,
+                        columns=opt.source_layout_item.labware.layout.columns,
+                        direction=opt.source_layout_item.labware.layout.direction,
                     )
                     # we need to do some numeric offsets to the position so convert it to a number first if it is not one.
 
                     aspirate_position = (
-                        (int(numeric_layout.get_position_id(opt.SourcePosition)) - 1)
+                        (int(numeric_layout.get_position_id(opt.source_position)) - 1)
                         * aspirate_labware.well_definition.positions_per_well
                         + index
                         + 1
@@ -155,13 +159,13 @@ class HamiltonPortraitCORE8(PipetteBase):
                     aspirate_options.append(
                         Channel1000uL.Aspirate.Options(
                             ChannelNumber=channel_number,
-                            LabwareID=opt.SourceLayoutItemInstance.labware_id,
-                            PositionID=opt.SourceLayoutItemInstance.labware.layout.get_position_id(
+                            LabwareID=opt.source_layout_item.labware_id,
+                            PositionID=opt.source_layout_item.labware.layout.get_position_id(
                                 aspirate_position,
                             ),
                             LiquidClass=str(
                                 self._get_liquid_class(
-                                    opt.SourceLiquidClassCategory,
+                                    opt.source_liquid_class_category,
                                     opt.TransferVolume,
                                 ),
                             ),
@@ -183,13 +187,13 @@ class HamiltonPortraitCORE8(PipetteBase):
                 ):
                     dispense_labware = cast(
                         labware.PipettableLabware,
-                        opt.DestinationLayoutItemInstance.labware,
+                        opt.destination_layout_item.labware,
                     )
 
                     numeric_layout = labware.NumericLayout(
-                        rows=opt.DestinationLayoutItemInstance.labware.layout.rows,
-                        columns=opt.DestinationLayoutItemInstance.labware.layout.columns,
-                        direction=opt.DestinationLayoutItemInstance.labware.layout.direction,
+                        rows=opt.destination_layout_item.labware.layout.rows,
+                        columns=opt.destination_layout_item.labware.layout.columns,
+                        direction=opt.destination_layout_item.labware.layout.direction,
                     )
                     # we need to do some numeric offsets to the position so convert it to a number first if it is not one.
 
@@ -197,7 +201,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                         (
                             int(
                                 numeric_layout.get_position_id(
-                                    opt.DestinationPosition,
+                                    opt.destination_position,
                                 ),
                             )
                             - 1
@@ -212,13 +216,13 @@ class HamiltonPortraitCORE8(PipetteBase):
                     dispense_options.append(
                         Channel1000uL.Dispense.Options(
                             ChannelNumber=channel_number,
-                            LabwareID=opt.DestinationLayoutItemInstance.labware_id,
-                            PositionID=opt.DestinationLayoutItemInstance.labware.layout.get_position_id(
+                            LabwareID=opt.destination_layout_item.labware_id,
+                            PositionID=opt.destination_layout_item.labware.layout.get_position_id(
                                 dispense_position,
                             ),
                             LiquidClass=str(
                                 self._get_liquid_class(
-                                    opt.DestinationLiquidClassCategory,
+                                    opt.destination_liquid_class_category,
                                     opt.TransferVolume,
                                 ),
                             ),

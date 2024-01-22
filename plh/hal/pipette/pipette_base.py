@@ -12,39 +12,25 @@ from .pipette_tip import PipetteTip
 
 
 @dataclasses.dataclass(kw_only=True)
-class PickupOptions:
-    ...
-
-
-@dataclasses.dataclass(kw_only=True)
-class AspirateDispenseOptions:
-    layout_item: layout_item.LayoutItemBase
-    position: int | str
-    # This is the labware well position. Numeric or alphanumeric.
-    # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
-    well_volume: float
-    mix_cycles: int
-    liquid_class_category: str
-
-    pipette_volume: float
-
-
-@dataclasses.dataclass(kw_only=True)
 class TransferOptions:
-    SourceLayoutItemInstance: layout_item.LayoutItemBase
-    SourcePosition: int | str
+    source_layout_item: layout_item.LayoutItemBase
+    source_position: int | str
     # This is the labware well position. Numeric or alphanumeric.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
-    CurrentSourceVolme: float
-    SourceMixCycles: int
-    SourceLiquidClassCategory: str
-    DestinationLayoutItemInstance: layout_item.LayoutItemBase
-    DestinationPosition: int | str
+    source_well_volume: float
+    source_mix_cycles: int
+    source_liquid_class_category: str
+    source_sample_group: int | None = None
+
+    destination_layout_item: layout_item.LayoutItemBase
+    destination_position: int | str
     # This is the labware well position. Numeric or alphanumeric.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
-    CurrentDestinationVolume: float
-    DestinationMixCycles: int
-    DestinationLiquidClassCategory: str
+    destination_well_volume: float
+    destination_mix_cycles: int
+    destination_liquid_class_category: str
+    destination_sample_group: int | None = None
+
     TransferVolume: float
 
 
@@ -121,7 +107,7 @@ class PipetteBase(Interface, HALDevice):
 
         return supported_objects
 
-    def assert_transfer_options(
+    def assert_options(
         self: PipetteBase,
         options: list[TransferOptions],
     ) -> None:
@@ -130,24 +116,24 @@ class PipetteBase(Interface, HALDevice):
         unsupported_liquid_class_categories = []
 
         for opt in options:
-            source_labware = opt.SourceLayoutItemInstance.labware
-            destination_labware = opt.DestinationLayoutItemInstance.labware
+            source_labware = opt.source_layout_item.labware
+            destination_labware = opt.destination_layout_item.labware
             if source_labware not in self.supported_source_labware:
                 unsupported_labware.append(source_labware)
             if destination_labware not in self.supported_destination_labware:
                 unsupported_labware.append(destination_labware)
             # Check Labware Compatibility
 
-            source_deck_location = opt.SourceLayoutItemInstance.deck_location
-            destination_deck_location = opt.DestinationLayoutItemInstance.deck_location
+            source_deck_location = opt.source_layout_item.deck_location
+            destination_deck_location = opt.destination_layout_item.deck_location
             if source_deck_location not in self.supported_deck_locations:
                 unsupported_deck_locations.append(source_deck_location)
             if destination_deck_location not in self.supported_deck_locations:
                 unsupported_deck_locations.append(destination_deck_location)
             # Check DeckLocation compatibility
 
-            source_liquid_class_category = opt.SourceLiquidClassCategory
-            destination_liquid_class_category = opt.DestinationLiquidClassCategory
+            source_liquid_class_category = opt.source_liquid_class_category
+            destination_liquid_class_category = opt.destination_liquid_class_category
             if not any(
                 PipetteTip.is_liquid_class_category_supported(
                     source_liquid_class_category,
