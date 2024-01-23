@@ -33,7 +33,8 @@ class TransferOptions:
 
     source_sample_group: int | None = None
     """This indicates that the sources with the same sample group number have the exact same solution composition.
-    So no contamination will occur upon multiple aspiration."""
+    So no contamination will occur upon multiple aspiration.
+    NOTE: If ```source_sample_group``` and ```destination_sample_group``` match then the device will assume they are the same as well."""
 
     destination_layout_item: layout_item.LayoutItemBase
     """What layout item we are dispensing to."""
@@ -53,7 +54,8 @@ class TransferOptions:
 
     destination_sample_group: int | None = None
     """This indicates that the destinations with the same sample group number have the exact same solution composition.
-    So no contamination will occur upon multiple dispense."""
+    So no contamination will occur upon multiple dispense.
+    NOTE: If ```source_sample_group``` and ```destination_sample_group``` match then the device will assume they are the same as well."""
 
     transfer_volume: float
     """Volume that is transfered from source to destination."""
