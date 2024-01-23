@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-from typing import cast
-
 from pydantic import dataclasses
 
 from plh.driver.tools import *
 
 from .deck_location_base import *
 from .deck_location_base import DeckLocationBase
-from .exceptions import DeckLocationNotTransportableError
 from .transport_config import TransportConfig
 
 
@@ -28,30 +25,12 @@ class TransportableDeckLocation(DeckLocationBase):
         """Gets a list of compatible transport configurations for 2 different deck locations.
 
         If DeckLocationNotTransportableError is thrown then your deck location is not compatible with transport.
-
-        Raises ExceptionGroup of the following:
-
-            DeckLocation.DeckLocationNotTransportableError"""
-
-        excepts = []
-
+        """
         if not isinstance(source_deck_location, TransportableDeckLocation):
-            excepts.append(DeckLocationNotTransportableError(source_deck_location))
+            return []
 
         if not isinstance(destination_deck_location, TransportableDeckLocation):
-            excepts.append(
-                DeckLocationNotTransportableError(destination_deck_location),
-            )
-
-        if len(excepts) != 0:
-            msg = ""
-            raise ExceptionGroup(msg, excepts)
-
-        source_deck_location = cast(TransportableDeckLocation, source_deck_location)
-        destination_deck_location = cast(
-            TransportableDeckLocation,
-            destination_deck_location,
-        )
+            return []
 
         return [
             (config, other_config)
