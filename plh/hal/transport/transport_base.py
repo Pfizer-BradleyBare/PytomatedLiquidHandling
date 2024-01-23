@@ -65,7 +65,8 @@ class TransportBase(Interface, HALDevice):
         These options are deck location dependent.
         This helps facilitate complex get options based on the complexity of your deck.
         NOTE: options should be dataclass fields with the appropraite compare boolean set.
-        Boolean should be True if the setting is critical, otherwise false."""
+        Boolean should be True if the setting is critical, otherwise false.
+        """
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions:
@@ -73,7 +74,8 @@ class TransportBase(Interface, HALDevice):
         These options are deck location dependent.
         This helps facilitate complex get options based on the complexity of your deck.
         NOTE: options should be dataclass fields with the appropraite compare boolean set.
-        Boolean should be True if the setting is critical, otherwise false."""
+        Boolean should be True if the setting is critical, otherwise false.
+        """
 
     def initialize(self: TransportBase) -> None:
         """No initialization actions are performed."""
@@ -159,7 +161,7 @@ class TransportBase(Interface, HALDevice):
             )
         # Check configs are compatible
 
-        if type(self) in [
+        if type(self) not in [
             type(Config[0].transport_device) for Config in compatible_transport_configs
         ]:
             excepts.append(
@@ -175,10 +177,10 @@ class TransportBase(Interface, HALDevice):
 
         unsupported_labware = []
 
-        if source_layout_item.labware.identifier not in self.supported_labware:
+        if source_layout_item.labware not in self.supported_labware:
             unsupported_labware.append(source_layout_item.labware)
 
-        if destination_layout_item.labware.identifier not in self.supported_labware:
+        if destination_layout_item.labware not in self.supported_labware:
             unsupported_labware.append(destination_layout_item.labware)
 
         if len(unsupported_labware) > 0:
