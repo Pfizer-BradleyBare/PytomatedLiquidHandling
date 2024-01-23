@@ -15,7 +15,7 @@ HamiltonCOREGripper:
   identifier: COREGripper
   enabled: True
   backend: Hamilton
-  gripper_labware_id: seq_COREGripTool
+  gripper_labware_id: Tool_COREGripper
   supported_labware:
     - Biorad200uLPCRPlate_Lid
     - Thermo400uLPCRPlate_Lid
