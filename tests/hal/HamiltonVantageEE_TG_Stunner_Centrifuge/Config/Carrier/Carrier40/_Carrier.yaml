@@ -3,5 +3,5 @@ Moveable Carrier:
     track_start: 40
     track_end: 40
     num_labware_positions: 1
-    image_path_3d: 3DImage
+    model_path_3d: 3DImage
     image_path_2d: 2DImage

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pathlib
+
 from pydantic import dataclasses
 
 from plh.hal.tools import HALDevice
@@ -11,8 +13,9 @@ from .transport_offsets import TransportOffsets
 
 @dataclasses.dataclass(kw_only=True)
 class LabwareBase(HALDevice):
-    image_filename: str
     part_number: str
+    model_path_3d: pathlib.Path | None
+    image_path_2d: pathlib.Path | None
     dimensions: Dimensions
     transport_offsets: TransportOffsets
     layout: AlphanumericLayout | NumericLayout

@@ -1,8 +1,9 @@
 NonPipettable Labware:
   - identifier: NTRTipRack
     enabled: True
-    image_filename: N/A
     part_number: 235947(50uL) or 235950(300uL)
+    model_path_3d: None
+    image_path_2d: None
     layout:
       type: Numeric
       direction: Columnwise
@@ -19,8 +20,9 @@ NonPipettable Labware:
 
   - identifier: FTRTipRack
     enabled: True
-    image_filename: N/A
     part_number: 235904(1000uL)
+    model_path_3d: None
+    image_path_2d: None
     layout:
       type: Numeric
       direction: Columnwise
@@ -37,8 +39,9 @@ NonPipettable Labware:
 
   - identifier: FTRStackableTipRack
     enabled: True
-    image_filename: N/A
     part_number: Custom
+    model_path_3d: None
+    image_path_2d: None
     layout:
       type: Numeric
       direction: Columnwise
