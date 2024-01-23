@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from .deck_location_base import DeckLocationBase
+from .transportable_deck_location import TransportableDeckLocation
 
 
 @dataclass
@@ -38,10 +39,10 @@ class DeckLocationTransportConfigsNotCompatibleError(Exception):
     You should find an intermediate deck location to enable comaptibility.
     """
 
-    source_deck_location: DeckLocationBase
+    source_deck_location: TransportableDeckLocation
     """Source transportable deck location."""
 
-    destination_deck_location: DeckLocationBase
+    destination_deck_location: TransportableDeckLocation
     """Destination transportable deck location."""
 
     def __str__(self) -> str:

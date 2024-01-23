@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
+from typing import cast
 
 from pydantic import Field, dataclasses, field_validator
 
@@ -155,8 +156,14 @@ class TransportBase(Interface, HALDevice):
         if len(compatible_transport_configs) == 0:
             excepts.append(
                 deck_location.DeckLocationTransportConfigsNotCompatibleError(
-                    source_layout_item.deck_location,
-                    destination_layout_item.deck_location,
+                    cast(
+                        deck_location.TransportableDeckLocation,
+                        source_layout_item.deck_location,
+                    ),
+                    cast(
+                        deck_location.TransportableDeckLocation,
+                        destination_layout_item.deck_location,
+                    ),
                 ),
             )
         # Check configs are compatible
