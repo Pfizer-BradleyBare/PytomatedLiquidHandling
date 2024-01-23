@@ -21,8 +21,6 @@ class TransferOptions:
     source_position: int | str
     """What position in the ```source_layout_item``` we are aspirating from.
     NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
-    # This is the labware well position. Numeric or alphanumeric.
-    # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
 
     source_well_volume: float
     """Current volume in ```source_position``` of ```source_layout_item```."""
@@ -43,8 +41,6 @@ class TransferOptions:
     destination_position: int | str
     """What position in the ```destination_layout_item``` we are dispensing to.
     NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
-    # This is the labware well position. Numeric or alphanumeric.
-    # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
 
     destination_well_volume: float
     """Current volume in ```destination_position``` of ```destination_layout_item```."""
