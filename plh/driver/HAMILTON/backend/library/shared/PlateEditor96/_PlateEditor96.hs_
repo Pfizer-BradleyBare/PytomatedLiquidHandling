@@ -1,0 +1,17 @@
+
+// this ALWAYS GENERATED file contains the sub-method library header
+// Generated at 1/23/2024 9:23:50 AM
+
+#pragma once
+#ifndef HSL_RUNTIME
+namespace _PLATEEDITOR96 {
+function _InitLibrary() { }
+function _ExitLibrary() { }
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void { }
+} // namespace
+#endif
+
+#ifdef HSL_RUNTIME
+#include __filename__ ".hsi"
+#endif
+// $$author=BAREB$$valid=0$$time=2024-01-23 09:23$$checksum=c931ce81$$length=082$$

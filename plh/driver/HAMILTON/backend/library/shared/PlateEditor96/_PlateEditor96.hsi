@@ -1,0 +1,209 @@
+// {{{ 2 "IncludeGuard" "PragmaOnce"
+#pragma once
+// }} ""
+#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_"
+#include "HSLJson\\HSLJson.hsl"
+#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
+#include "PlateEditor96\\PlateEditor96.hs_"
+#include "HSLSeqLib.hsl"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+#include "HSLMETEDLib.hs_"
+#include "HSLMECCLib.hs_"
+#include "HSLPTLLib.hsl"
+// }} ""
+// {{{ 2 "LibraryNamespace" "Begin"
+namespace _PLATEEDITOR96 {
+// }} ""
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{{ 2 "SubmethodForwardDeclaration" ""
+private function EditPlate96( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void ;
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void ;
+// }} ""
+function _InitLibrary() {
+// {{ 2 "AutoInitBlock" ""
+PTL::SetWashingStateDefault("RinseTime1", 5);
+PTL::SetWashingStateDefault("SoakTime1", 5);
+PTL::SetWashingStateDefault("FlowRate1", 11);
+PTL::SetWashingStateDefault("RinseTime2", 0);
+PTL::SetWashingStateDefault("SoakTime2", 0);
+PTL::SetWashingStateDefault("FlowRate2", 11);
+PTL::SetWashingStateDefault("DrainingTime", 10);
+PTL::SetWashingStateDefault("StartWashLiquid", 0);
+PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
+PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
+JSONPARSER::_InitLibrary();
+ACTIONSERVERENDPOINTS::_InitLibrary();
+PLATEEDITOR96::_InitLibrary();
+// }} ""
+}
+function _ExitLibrary() {
+// {{ 2 "AutoExitBlock" ""
+JSONPARSER::_ExitLibrary();
+ACTIONSERVERENDPOINTS::_ExitLibrary();
+PLATEEDITOR96::_ExitLibrary();
+// }} ""
+}
+// {{{ 5 "HandleCommand" "Begin"
+function HandleCommand( device & ML_STAR, variable CommandName, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+// {{ 5 "HandleCommand" "InitLocals"
+// }} ""
+// {{ 21 1 0 "7c3628c3_ab8e_4afa_a12c8d7e099465b8" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (CommandName == "EditPlate96")
+{
+// }} ""
+// {{{ 22 1 0 "d2385a79_62db_4c2b_93a7387b1cbfd47a" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+EditPlate96(ML_STAR, i_EndpointOutputDataJSONObject);
+// }} ""
+// {{{ 23 1 0 "84f60ab2_8927_4713_8da864a487a1c835" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
+return;
+// }} ""
+// {{ 24 1 0 "7c3628c3_ab8e_4afa_a12c8d7e099465b8" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 25 1 0 "8b64fdc0_ce16_413d_a74ca6e0fb752936" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nCommand not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+// }} ""
+// {{ 26 1 0 "45cb71d3_6916_4429_aae781028ebb7151" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+abort;
+// }} ""
+// {{{ 5 "HandleCommand" "End"
+}
+// }} ""
+// {{{ 5 "EditPlate96" "Begin"
+private function EditPlate96( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
+// }} ""
+private variable Pos2LabwareSupportingText;
+private variable Pos2LabwareInfoVisibility;
+private variable Pos2LabwareVisibility;
+private variable Pos1LabwareImage;
+private variable Pos4LabwareImage;
+private variable Pos3LabwareVisibility;
+private variable Pos4LabwareSupportingText;
+private variable Pos4LabwareInfoVisibility;
+private variable Pos1LabwareSupportingText;
+private variable Pos4LabwareVisibility;
+private variable Pos1LabwareInfoVisibility;
+private variable Pos2LabwareImage;
+private variable Pos5LabwareImage;
+private variable Pos5LabwareVisibility;
+private variable Pos3LabwareSupportingText;
+private variable Pos3LabwareInfoVisibility;
+private variable CarrierSupportingText;
+private variable Step1Text;
+private variable Step2Text;
+private variable Pos3LabwareImage;
+private variable DialogTitleText;
+private variable Pos1LabwareVisibility;
+private variable Pos5LabwareSupportingText;
+private variable Pos5LabwareInfoVisibility;
+private variable Carrier2DImage;
+private variable Carrier3DImage;
+private variable CarrierPositions[];
+private variable LabwareImages[];
+private variable LabwareExtendedInformations[];
+private variable LabwareSupportingTexts[];
+private variable Counter;
+private variable NumCarrierPositions;
+private variable LabwareSupportingText;
+private variable LabwareExtendedInformation;
+private variable LabwareImage;
+private variable CarrierPosition;
+private variable Pos5LabwareCheckState;
+private variable Pos1LabwareCheckState;
+private variable DialogReturn;
+private variable Pos2LabwareCheckState;
+private variable _;
+private variable Pos3LabwareCheckState;
+private variable Pos4LabwareCheckState;
+private variable Pos1LabwareArrow;
+private variable Pos4LabwareArrow;
+private variable Pos2LabwareArrow;
+private variable Pos5LabwareArrow;
+private variable Pos3LabwareArrow;
+private object o_JSONObject;
+private variable CustomErrorHandling;
+private variable Message;
+private variable State;
+private dialog customDialog9C804C0B3C8E45c3BD979311761D0825;
+private dialog customDialog90E30AD526114be58465BCAA0C964E06;
+private variable LabwareID;
+private sequence SeqOut;
+private sequence SeqIn;
+private variable NumSequencePositions;
+private variable PosID;
+// {{ 5 "EditPlate96" "InitLocals"
+// }} ""
+// {{{ 1 1 0 "1a9735cb_5181_43c5_88110ead0c2163b4" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+LabwareID = JSONPARSER::GetJSONElement(i_EndpointOutputDataJSONObject, Translate("Command Parameters:LabwareID:"));
+// }} ""
+// {{ 2 1 0 "6662b2cc_c241_4412_88cf74d79d0e85df" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 3 1 0 "06209e2a_8e75_4b52_b96567ee5c9f00d4" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Create(o_JSONObject);
+// }} ""
+// {{{ 4 1 0 "94d56d87_41c5_4418_8d743e47be209c6a" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetArray(o_JSONObject, Translate("SelectedPositions"));
+// }} ""
+// {{ 5 1 0 "faf03c87_aa24_4cec_a4eabfe0ac9c32ca" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 6 1 0 "7ea4a505_236f_461f_bd7f3d370195e606" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLLabwrAccess::GetDefaultSequenceForLabwareID(ML_STAR, LabwareID, 0, SeqIn);
+// }} ""
+// {{{ 7 1 0 "bfbc16c6_2d40_4c2e_8cdac50a5cf81d5f" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+PLATEEDITOR96::EditPlate96(SeqOut, SeqIn);
+// }} ""
+// {{{ 8 1 0 "201c2259_f3e8_4d56_851aae19486d2181" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+NumSequencePositions = SeqGetTotal(SeqOut);
+// }} ""
+// {{{ 9 1 0 "b0ddfe63_ea56_40f5_989a050a40ce6db8" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetArrayLength(o_JSONObject, Translate("SelectedPositions"), NumSequencePositions);
+// }} ""
+// {{ 10 1 0 "d34de1e2_2367_4d07_a494fd0599d5c800" "{B31F353C-5D80-11d4-A5EB-0050DA737D89}"
+SeqOut.SetCount(NumSequencePositions);
+// }} ""
+// {{ 11 1 0 "d374046f_ad73_4efd_8afd55940947d0af" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+for(Counter = 0; Counter < NumSequencePositions;)
+{
+Counter = Counter + 1;
+// }} ""
+// {{ 12 1 0 "6eb94aad_8bd1_47dc_a891fd48cc8721f2" "{B31F353A-5D80-11d4-A5EB-0050DA737D89}"
+SeqOut.SetCurrentPosition(Counter);
+// }} ""
+// {{{ 13 1 0 "4eb30156_d6ad_4768_b99d674acc63cf4e" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+PosID = SeqGetPositionId(SeqOut);
+// }} ""
+// {{{ 14 1 0 "ca111eb2_9450_4a5b_b24b3031076645ba" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetStringArrayElement(o_JSONObject, Translate("SelectedPositions"), Counter, PosID);
+// }} ""
+// {{ 15 1 0 "d374046f_ad73_4efd_8afd55940947d0af" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+}
+}
+// }} ""
+// {{ 16 1 0 "faf03c87_aa24_4cec_a4eabfe0ac9c32ca" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 17 1 0 "ca09bbb9_1f3c_4295_9c488ce3e7f62a73" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+ACTIONSERVERENDPOINTS::RespondToCommand(o_JSONObject);
+// }} ""
+// {{{ 18 1 0 "caaef611_af0a_4b64_b42a2e25f43d73d1" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::Release(o_JSONObject);
+// }} ""
+// {{ 19 1 0 "6662b2cc_c241_4412_88cf74d79d0e85df" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{{ 5 "EditPlate96" "End"
+}
+// }} ""
+/* {{ 2 "SubmethodInsertLine" "" */ // }} ""
+// {{{ 2 "LibraryNamespace" "End"
+} // library namespace
+// }} ""
+// $$author=BAREB$$valid=0$$time=2024-01-23 09:23$$checksum=d2bbb87c$$length=084$$
