@@ -7,6 +7,7 @@
 
 from . import (
     ML_STAR,
+    DeckLoadingDialog,
     EntryExit,
     FlipTubeTool,
     General,
@@ -18,6 +19,7 @@ from . import (
     HSLML_STARLib,
     HSLTipCountingLib,
     HSLVacuuBrandPump,
+    PlateEditor96,
     SetCuttedTipType,
     TrackGripper,
     Visual_NTR_Library,
@@ -26,6 +28,7 @@ from . import (
 
 __all__ = [
     "backend",
+    "DeckLoadingDialog",
     "EntryExit",
     "FlipTubeTool",
     "General",
@@ -38,6 +41,7 @@ __all__ = [
     "HSLTipCountingLib",
     "HSLVacuuBrandPump",
     "ML_STAR",
+    "PlateEditor96",
     "SetCuttedTipType",
     "TrackGripper",
     "Visual_NTR_Library",
