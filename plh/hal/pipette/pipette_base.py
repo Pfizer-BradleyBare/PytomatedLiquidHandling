@@ -21,8 +21,6 @@ class TransferOptions:
     source_position: int | str
     """What position in the ```source_layout_item``` we are aspirating from.
     NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
-    # This is the labware well position. Numeric or alphanumeric.
-    # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
 
     source_well_volume: float
     """Current volume in ```source_position``` of ```source_layout_item```."""
@@ -35,7 +33,8 @@ class TransferOptions:
 
     source_sample_group: int | None = None
     """This indicates that the sources with the same sample group number have the exact same solution composition.
-    So no contamination will occur upon multiple aspiration."""
+    So no contamination will occur upon multiple aspiration.
+    NOTE: If ```source_sample_group``` and ```destination_sample_group``` match then the device will assume they are the same as well."""
 
     destination_layout_item: layout_item.LayoutItemBase
     """What layout item we are dispensing to."""
@@ -43,8 +42,6 @@ class TransferOptions:
     destination_position: int | str
     """What position in the ```destination_layout_item``` we are dispensing to.
     NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
-    # This is the labware well position. Numeric or alphanumeric.
-    # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
 
     destination_well_volume: float
     """Current volume in ```destination_position``` of ```destination_layout_item```."""
@@ -57,7 +54,8 @@ class TransferOptions:
 
     destination_sample_group: int | None = None
     """This indicates that the destinations with the same sample group number have the exact same solution composition.
-    So no contamination will occur upon multiple dispense."""
+    So no contamination will occur upon multiple dispense.
+    NOTE: If ```source_sample_group``` and ```destination_sample_group``` match then the device will assume they are the same as well."""
 
     transfer_volume: float
     """Volume that is transfered from source to destination."""
