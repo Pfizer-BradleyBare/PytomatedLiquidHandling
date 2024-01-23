@@ -19,3 +19,6 @@ class WrongTransportDeviceError(Exception):
 
     CurrentDevice: TransportBase
     ViableTransportDevices: list[TransportBase]
+
+    def __str__(self) -> str:
+        return f"{self.CurrentDevice.identifier} != [{', '.join([device.identifier for device in self.ViableTransportDevices])}]"
