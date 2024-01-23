@@ -102,6 +102,9 @@
  namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\PlateEditor96\\_PlateEditor96.hs_" } 
  namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\PlateEditor96\\_PlateEditor96.hs_" } 
  namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\PlateEditor96\\_PlateEditor96.hs_" } 
+ namespace _Method { #include "HSLSeqLib.hsl" } 
+ namespace _ActionServerProc { #include "HSLSeqLib.hsl" } 
+ namespace _StateServerProc { #include "HSLSeqLib.hsl" } 
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable StateServerProc;
 variable ActionServerProc;
@@ -263,4 +266,4 @@ _PLATEEDITOR96::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-23 09:34$$checksum=23e3a3ef$$length=091$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-23 15:43$$checksum=536eea21$$length=091$$
