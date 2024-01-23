@@ -29,7 +29,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     backend.wait(command)
     backend.acknowledge(command, TrackGripper.LockUnlockDoors.Response)
 
-    logger.info("CountLabwareInStack")
+    logger.info("MoveToHomePosition")
 
     command = TrackGripper.MoveToHomePosition.Command(
         options=TrackGripper.MoveToHomePosition.Options(),
@@ -43,7 +43,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
 
     command = TrackGripper.GripPlateFromTaughtPosition.Command(
         options=TrackGripper.GripPlateFromTaughtPosition.Options(
-            OpenWidth=135,
+            OpenWidth=1,
             TaughtPathName="On Deck Transition Point",
         ),
         backend_error_handling=True,
@@ -56,7 +56,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
 
     command = TrackGripper.PlacePlateToTaughtPosition.Command(
         options=TrackGripper.PlacePlateToTaughtPosition.Options(
-            OpenWidth=10,
+            OpenWidth=1,
             TaughtPathName="On Deck Transition Point",
         ),
         backend_error_handling=True,
