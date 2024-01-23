@@ -1,7 +1,9 @@
 import dataclasses
-from typing import Generic, TypeVar
+from typing import Generic, Sequence, TypeVar
 
-T = TypeVar("T", bound="list")
+from .options_base import OptionsBase
+
+T = TypeVar("T", bound="Sequence[OptionsBase]")
 
 
 @dataclasses.dataclass(kw_only=True)
