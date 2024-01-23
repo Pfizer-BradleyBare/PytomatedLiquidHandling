@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pathlib
+
 from pydantic import dataclasses, model_validator
 
 from plh.hal.tools import HALDevice
@@ -21,11 +23,11 @@ class CarrierBase(HALDevice):
     num_labware_positions: int
     """Number of labware supported by the carrier."""
 
-    image_path_3d: str
-    """Full path to a 3D image."""
-
-    image_path_2d: str
+    image_path_2d: pathlib.Path | None
     """Full path to a 2D image."""
+
+    model_path_3d: pathlib.Path | None
+    """Full path to a 3D model."""
 
     @model_validator(mode="after")
     @staticmethod
