@@ -6,7 +6,7 @@ from .labware_base import LabwareBase
 
 
 @dataclass
-class LabwareNotSupportedError(BaseException):
+class LabwareNotSupportedError(Exception):
     """HAL device does not support your Labware.
     This can be thrown for any LayoutItem inputs.
     """
@@ -16,7 +16,7 @@ class LabwareNotSupportedError(BaseException):
 
 
 @dataclass
-class LabwareNotEqualError(BaseException):
+class LabwareNotEqualError(Exception):
     """Your two input Labwares are not equal.
     This can be thrown for any source and destination LayoutItem inputs.
 

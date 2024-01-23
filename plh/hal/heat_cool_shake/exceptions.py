@@ -4,15 +4,15 @@ from dataclasses import dataclass
 
 
 @dataclass
-class HeatingNotSupportedError(BaseException):
+class HeatingNotSupportedError(Exception):
     """Selected HeatCoolShakeDevice does not support heating."""
 
 
 @dataclass
-class CoolingNotSupportedError(BaseException):
+class CoolingNotSupportedError(Exception):
     """Selected HeatCoolShakeDevice does not support cooling."""
 
 
 @dataclass
-class ShakingNotSupportedError(BaseException):
+class ShakingNotSupportedError(Exception):
     """Selected HeatCoolShakeDevice does not support shaking."""

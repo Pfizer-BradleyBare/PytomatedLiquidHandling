@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class WrongTransportDeviceError(BaseException):
+class WrongTransportDeviceError(Exception):
     """Transport device is not the same as required by the DeckLocation TransportOptions.
 
     Attributes

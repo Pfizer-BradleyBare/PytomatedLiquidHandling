@@ -7,9 +7,10 @@ from .transport_config import TransportConfig
 
 
 @dataclass
-class DeckLocationNotSupportedError(BaseException):
+class DeckLocationNotSupportedError(Exception):
     """HAL device does not support your DeckLocation.
-    This can be thrown for any LayoutItem inputs."""
+    This can be thrown for any LayoutItem inputs.
+    """
 
     deck_locations: list[DeckLocationBase]
     """List of DeckLocationBase objects that were not supported."""
@@ -27,7 +28,8 @@ class DeckLocationNotTransportableError(Exception):
 class DeckLocationTransportConfigsNotCompatibleError(Exception):
     """The two transportable deck locations do not have compatible transport options.
     Thus, you cannot transport to/from these deck locations.
-    You should find an intermediate deck location to enable comaptibility."""
+    You should find an intermediate deck location to enable comaptibility.
+    """
 
     source_deck_location: DeckLocationBase
     """Source transportable deck location."""
