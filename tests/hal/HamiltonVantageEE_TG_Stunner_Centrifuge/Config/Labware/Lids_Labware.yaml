@@ -2,8 +2,8 @@ NonPipettable Labware:
   - identifier: Biorad200uLPCRPlate_Lid
     enabled: True
     part_number: "?"
-    model_path_3d: None
-    image_path_2d: None
+    model_path_3d:
+    image_path_2d:
     layout:
       type: Numeric
       direction: Columnwise
@@ -21,8 +21,8 @@ NonPipettable Labware:
   - identifier: Thermo400uLPCRPlate_Lid
     enabled: True
     part_number: "?"
-    model_path_3d: None
-    image_path_2d: None
+    model_path_3d:
+    image_path_2d:
     layout:
       type: Numeric
       direction: Columnwise
@@ -40,8 +40,8 @@ NonPipettable Labware:
   - identifier: ThermoAbgene1200uLPCRPlate_Lid
     enabled: True
     part_number: "?"
-    model_path_3d: None
-    image_path_2d: None
+    model_path_3d:
+    image_path_2d:
     layout:
       type: Numeric
       direction: Columnwise
@@ -59,8 +59,8 @@ NonPipettable Labware:
   - identifier: CorningCostar2000uLPCRPlate_Lid
     enabled: True
     part_number: "?"
-    model_path_3d: None
-    image_path_2d: None
+    model_path_3d:
+    image_path_2d:
     layout:
       type: Numeric
       direction: Columnwise

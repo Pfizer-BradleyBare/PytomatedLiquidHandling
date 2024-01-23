@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import pathlib
-
-from pydantic import dataclasses
+from pydantic import FilePath, dataclasses
 
 from plh.hal.tools import HALDevice
 
@@ -18,10 +16,10 @@ class LabwareBase(HALDevice):
     part_number: str
     """Part number of the labware."""
 
-    image_path_2d: pathlib.Path | None
+    image_path_2d: FilePath | None
     """Full path to a 2D image."""
 
-    model_path_3d: pathlib.Path | None
+    model_path_3d: FilePath | None
     """Full path to a 3D model."""
 
     dimensions: Dimensions

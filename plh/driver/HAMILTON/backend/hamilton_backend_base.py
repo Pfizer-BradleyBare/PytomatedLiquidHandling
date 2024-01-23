@@ -10,7 +10,7 @@ from typing import Callable, TypeVar, cast
 
 from flask import request
 from loguru import logger
-from pydantic import Field, dataclasses
+from pydantic import Field, FilePath, dataclasses
 
 from plh.driver.tools import (
     BackendBase,
@@ -143,8 +143,8 @@ class HamiltonBackendServer(BackendServerBase):
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonBackendBase(BackendBase):
-    method: pathlib.Path
-    deck_layout: pathlib.Path
+    method: FilePath
+    deck_layout: FilePath
     simulation_on: bool
     _action_server: HamiltonBackendServer = field(init=False)
     _state_server: HamiltonBackendServer = field(init=False)

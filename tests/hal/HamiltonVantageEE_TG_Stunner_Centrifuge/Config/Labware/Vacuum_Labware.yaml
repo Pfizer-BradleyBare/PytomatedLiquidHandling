@@ -2,8 +2,8 @@ NonPipettable Labware:
   - identifier: VacuumManifoldShort
     enabled: True
     part_number: "?"
-    model_path_3d: None
-    image_path_2d: None
+    model_path_3d:
+    image_path_2d:
     layout:
       type: Numeric
       direction: Columnwise

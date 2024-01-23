@@ -2,8 +2,8 @@ Pipettable Labware:
   - identifier: UnchainedLabsStunnerUVPlate
     enabled: True
     part_number: 701-2022
-    model_path_3d: None
-    image_path_2d: None
+    model_path_3d:
+    image_path_2d:
     layout:
       type: Alphanumeric
       direction: Columnwise
@@ -41,8 +41,8 @@ Pipettable Labware:
   - identifier: Biorad200uLPCRPlate
     enabled: True
     part_number: HSP9601
-    model_path_3d: None
-    image_path_2d: None
+    model_path_3d:
+    image_path_2d:
     layout:
       type: Alphanumeric
       direction: Columnwise
@@ -71,8 +71,8 @@ Pipettable Labware:
   - identifier: Thermo400uLPCRPlate
     enabled: True
     part_number: "249949"
-    model_path_3d: None
-    image_path_2d: None
+    model_path_3d:
+    image_path_2d:
     layout:
       type: Alphanumeric
       direction: Columnwise
@@ -101,8 +101,8 @@ Pipettable Labware:
   - identifier: ThermoAbgene1200uLPCRPlate
     enabled: True
     part_number: AB1127
-    model_path_3d: None
-    image_path_2d: None
+    model_path_3d:
+    image_path_2d:
     layout:
       type: Alphanumeric
       direction: Columnwise
@@ -131,8 +131,8 @@ Pipettable Labware:
   - identifier: CorningCostar2000uLPCRPlate
     enabled: True
     part_number: "3961"
-    model_path_3d: None
-    image_path_2d: None
+    model_path_3d:
+    image_path_2d:
     layout:
       type: Alphanumeric
       direction: Columnwise
@@ -161,8 +161,8 @@ Pipettable Labware:
   - identifier: Hamilton1500uLFlipTubeRack
     enabled: True
     part_number: "814270"
-    model_path_3d: None
-    image_path_2d: None
+    model_path_3d:
+    image_path_2d:
     layout:
       type: Numeric
       direction: Columnwise
