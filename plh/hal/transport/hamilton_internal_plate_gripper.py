@@ -7,20 +7,21 @@ from pydantic import dataclasses
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import iSwap
-from plh.hal import deck_location, layout_item
+from plh.hal import deck_location
 
 from .transport_base import *
-from .transport_base import TransportBase
+from .transport_base import TransportBase, TransportOptions
 
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonInternalPlateGripper(TransportBase):
+    """Gripper that uses the Hamilton IPG (internal plate gripper)."""
+
     backend: HamiltonBackendBase
+    """Only Hamilton backends."""
 
     @dataclasses.dataclass(kw_only=True)
-    class PickupOptions(TransportBase.PickupOptions):
-        """Options to pick up labware from deck location"""
-
+    class GetOptions(TransportBase.GetOptions):
         GripMode: iSwap.GetPlate.GripModeOptions = field(compare=True)
         Movement: iSwap.GetPlate.MovementOptions = field(compare=True)
         RetractDistance: float = field(compare=False)
@@ -31,9 +32,7 @@ class HamiltonInternalPlateGripper(TransportBase):
         InverseGrip: iSwap.GetPlate.YesNoOptions = field(compare=True)
 
     @dataclasses.dataclass(kw_only=True)
-    class DropoffOptions(TransportBase.DropoffOptions):
-        """Options to drop off labware to deck location"""
-
+    class PlaceOptions(TransportBase.PlaceOptions):
         Movement: iSwap.PlacePlate.MovementOptions = field(compare=True)
         RetractDistance: float = field(compare=False)
         LiftupHeight: float = field(compare=False)
@@ -41,13 +40,12 @@ class HamiltonInternalPlateGripper(TransportBase):
             compare=True,
         )
 
-    def transport(
+    def get(
         self: HamiltonInternalPlateGripper,
-        source_layout_item: layout_item.LayoutItemBase,
-        destination_layout_item: layout_item.LayoutItemBase,
+        options: TransportOptions,
     ) -> None:
-        if source_layout_item.deck_location == destination_layout_item.deck_location:
-            return
+        source_layout_item = options.source_layout_item
+        destination_layout_item = options.destination_layout_item
 
         compatible_configs = (
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(
@@ -58,9 +56,9 @@ class HamiltonInternalPlateGripper(TransportBase):
 
         labware = source_layout_item.labware
 
-        pickup_options = cast(
-            HamiltonInternalPlateGripper.PickupOptions,
-            compatible_configs[0].pickup_options,
+        get_options = cast(
+            HamiltonInternalPlateGripper.GetOptions,
+            compatible_configs[0].get_options,
         )
 
         command = iSwap.GetPlate.Command(
@@ -69,12 +67,12 @@ class HamiltonInternalPlateGripper(TransportBase):
                 GripWidth=labware.dimensions.y_length - labware.transport_offsets.close,
                 OpenWidth=labware.dimensions.y_length + labware.transport_offsets.open,
                 GripHeight=labware.transport_offsets.top,
-                GripMode=pickup_options.GripMode,
-                Movement=pickup_options.Movement,
-                RetractDistance=pickup_options.RetractDistance,
-                LiftupHeight=pickup_options.LiftupHeight,
-                LabwareOrientation=pickup_options.LabwareOrientation,
-                InverseGrip=pickup_options.InverseGrip,
+                GripMode=get_options.GripMode,
+                Movement=get_options.Movement,
+                RetractDistance=get_options.RetractDistance,
+                LiftupHeight=get_options.LiftupHeight,
+                LabwareOrientation=get_options.LabwareOrientation,
+                InverseGrip=get_options.InverseGrip,
             ),
             backend_error_handling=False,
         )
@@ -82,18 +80,38 @@ class HamiltonInternalPlateGripper(TransportBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, iSwap.GetPlate.Response)
 
-        dropoff_options = cast(
-            HamiltonInternalPlateGripper.DropoffOptions,
-            compatible_configs[1].dropoff_options,
+    def get_time(
+        self: HamiltonInternalPlateGripper,
+        options: TransportOptions,
+    ) -> float:
+        ...
+
+    def place(
+        self: HamiltonInternalPlateGripper,
+        options: TransportOptions,
+    ) -> None:
+        source_layout_item = options.source_layout_item
+        destination_layout_item = options.destination_layout_item
+
+        compatible_configs = (
+            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+                source_layout_item.deck_location,
+                destination_layout_item.deck_location,
+            )[0]
+        )
+
+        place_options = cast(
+            HamiltonInternalPlateGripper.PlaceOptions,
+            compatible_configs[1].place_options,
         )
 
         command = iSwap.PlacePlate.Command(
             options=iSwap.PlacePlate.Options(
                 LabwareID=destination_layout_item.labware_id,
-                Movement=dropoff_options.Movement,
-                RetractDistance=dropoff_options.RetractDistance,
-                LiftupHeight=dropoff_options.LiftupHeight,
-                LabwareOrientation=dropoff_options.LabwareOrientation,
+                Movement=place_options.Movement,
+                RetractDistance=place_options.RetractDistance,
+                LiftupHeight=place_options.LiftupHeight,
+                LabwareOrientation=place_options.LabwareOrientation,
             ),
             backend_error_handling=False,
         )
@@ -101,9 +119,8 @@ class HamiltonInternalPlateGripper(TransportBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, iSwap.PlacePlate.Response)
 
-    def transport_time(
+    def place_time(
         self: HamiltonInternalPlateGripper,
-        source_layout_item: layout_item.LayoutItemBase,
-        destination_layout_item: layout_item.LayoutItemBase,
+        options: TransportOptions,
     ) -> float:
         ...

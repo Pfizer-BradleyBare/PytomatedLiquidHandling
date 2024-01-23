@@ -14,14 +14,10 @@ from .transport_config import TransportConfig
 
 @dataclasses.dataclass(kw_only=True)
 class TransportableDeckLocation(DeckLocationBase):
-    """A specific location on an automation deck.
-
-    Attributes:
-        CarrierConfig: See DeckLocation.Base.CarrierConfig class.
-        TransportConfig: See DeckLocation.Base.TransportConfig class.
-    """
+    """A specific location on an automation deck."""
 
     transport_configs: list[TransportConfig]
+    """A list of possible ways to transport to/from this deck location."""
 
     @classmethod
     def get_compatible_transport_configs(
@@ -29,6 +25,14 @@ class TransportableDeckLocation(DeckLocationBase):
         source_deck_location: DeckLocationBase,
         destination_deck_location: DeckLocationBase,
     ) -> list[tuple[TransportConfig, TransportConfig]]:
+        """Gets a list of compatible transport configurations for 2 different deck locations.
+
+        If DeckLocationNotTransportableError is thrown then your deck location is not compatible with transport.
+
+        Raises ExceptionGroup of the following:
+
+            DeckLocation.DeckLocationNotTransportableError"""
+
         excepts = []
 
         if not isinstance(source_deck_location, TransportableDeckLocation):

@@ -3,9 +3,10 @@ from __future__ import annotations
 import dataclasses
 from enum import Enum
 
+from plh.driver.tools import OptionsBase
 
-@dataclasses.dataclass(kw_only=True)
-class Options(str, Enum):
+
+class Options(OptionsBase, str, Enum):
     PlateID = "Plate ID"
     PlatePosition = "Plate Position"
     SampleName = "Sample name"

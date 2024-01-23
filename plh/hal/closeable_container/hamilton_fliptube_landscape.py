@@ -14,22 +14,18 @@ from .closeable_container_base import CloseableContainerBase, OpenCloseOptions
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonFlipTubeLandscape(CloseableContainerBase):
-    """FlipTubes are a 1500uL conical tube that can be opened and closed on deck with a tool.
+    """Hamilton FlipTubes are a special, Hamilton compatible, 1500uL conical tube that can be opened and closed on deck with a FlipTube tool.
 
-    This device only supports FlipTubes in the landscape orientation.
-
-    Attributes
-    ----------
-        Backend: Only Hamilton backends are supported
-        BackendErrorHandling: User handling is not possible for fliptubes.
-        ToolLabwareID: The labware ID of the fliptube tool. Typically available on deck as a set of 4 tools.
-    """
+    This device only supports FlipTubes in the landscape orientation."""
 
     backend: HamiltonBackendBase
+    """Only Hamilton backends are supported."""
 
     tool_labware_id: str
+    """The labware id of the FlipTube tool."""
 
     def initialize(self: HamiltonFlipTubeLandscape) -> None:
+        """Executes the Hamilton FlipTubeTool Initialize command in the landscape orientation."""
         command = FlipTubeTool.Initialize.Command(
             options=FlipTubeTool.Initialize.Options(
                 ToolOrientation=FlipTubeTool.Initialize.ToolOrientationOptions.Landscape,
@@ -40,12 +36,17 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         self.backend.acknowledge(command, FlipTubeTool.Initialize.Response)
 
     def deinitialize(self: HamiltonFlipTubeLandscape) -> None:
-        ...
+        """No deinitialization actions are executed."""
 
     def open(
         self: HamiltonFlipTubeLandscape,
         options: list[OpenCloseOptions],
     ) -> None:
+        """Hamilton FlipTube tool supports a max of 4 tools in use simultaneously in the driver.
+        Thus, the function will sort the desired open positions then creates groups of 4 to open.
+        """
+        self.assert_options(options)
+
         command = FlipTubeTool.ToolsPickUp.Command(
             options=FlipTubeTool.ToolsPickUp.OptionsList(
                 LabwareID=self.tool_labware_id,
@@ -61,13 +62,13 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         # Pickup
 
         layout_item_keys: dict[str, layout_item.LayoutItemBase] = {
-            opt.LayoutItem.identifier: opt.LayoutItem for opt in options
+            opt.layout_item.identifier: opt.layout_item for opt in options
         }
         layout_item_positions = DefaultDict(list)
         # Open
 
         for opt in options:
-            layout_item_positions[opt.LayoutItem.identifier].append(opt.Position)
+            layout_item_positions[opt.layout_item.identifier].append(opt.position)
         # Collect positions organized by layout item
 
         for key in layout_item_positions:
@@ -106,16 +107,23 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, FlipTubeTool.ToolsEject.Response)
 
-    def time_to_open(
+    def open_time(
         self: HamiltonFlipTubeLandscape,
         options: list[OpenCloseOptions],
     ) -> float:
-        ...
+        """TODO"""
+        self.assert_options(options)
+        return 0
 
     def close(
         self: HamiltonFlipTubeLandscape,
         options: list[OpenCloseOptions],
     ) -> None:
+        """Hamilton FlipTube tool supports a max of 4 tools in use simultaneously in the driver.
+        Thus, the function will sort the desired open positions then creates groups of 4 to open.
+        """
+        self.assert_options(options)
+
         command = FlipTubeTool.ToolsPickUp.Command(
             options=FlipTubeTool.ToolsPickUp.OptionsList(
                 LabwareID=self.tool_labware_id,
@@ -131,13 +139,13 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         # Pickup
 
         layout_item_keys: dict[str, layout_item.LayoutItemBase] = {
-            opt.LayoutItem.identifier: opt.LayoutItem for opt in options
+            opt.layout_item.identifier: opt.layout_item for opt in options
         }
         layout_item_positions = DefaultDict(list)
         # Open
 
         for opt in options:
-            layout_item_positions[opt.LayoutItem.identifier].append(opt.Position)
+            layout_item_positions[opt.layout_item.identifier].append(opt.position)
         # Collect positions organized by layout item
 
         for key in layout_item_positions:
@@ -176,8 +184,10 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, FlipTubeTool.ToolsEject.Response)
 
-    def time_to_close(
+    def close_time(
         self: HamiltonFlipTubeLandscape,
         options: list[OpenCloseOptions],
     ) -> float:
-        ...
+        """TODO"""
+        self.assert_options(options)
+        return 0

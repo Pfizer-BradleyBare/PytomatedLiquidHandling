@@ -11,15 +11,13 @@ _used_carriers: list[str] = []
 
 @dataclasses.dataclass(kw_only=True)
 class CarrierConfig:
-    """Connects a DeckLocation to a specific carrier position.
-
-    Attributes:
-        Carrier: A carrier device.
-        Position: A position on that carrier.
-    """
+    """Connects a DeckLocation to a specific carrier position."""
 
     carrier: carrier.CarrierBase
+    """A carrier object."""
+
     position: int
+    """A position on the above carrier object."""
 
     @field_validator(
         "carrier",

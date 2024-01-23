@@ -57,7 +57,7 @@ def TransportLayoutItem(
         # In this case everything matches so we can just do the transport
 
     except* (
-        TransportDevice.Base.PickupOptionsNotEqualError,
+        TransportDevice.Base.GetOptionsNotEqualError,
         TransportDevice.Base.TransportDevicesNotCompatibleError,
     ):
         try:

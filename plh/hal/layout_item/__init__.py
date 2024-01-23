@@ -12,14 +12,14 @@ from .vacuum_manifold import VacuumManifold
 
 __all__ = [
     "LayoutItemBase",
-    "CoverableFilterPlate",
-    "CoverablePlate",
-    "FilterPlate",
-    "FilterPlateStack",
-    "Lid",
-    "Plate",
     "TipRack",
     "VacuumManifold",
+    "Plate",
+    "CoverablePlate",
+    "Lid",
+    "FilterPlateStack",
+    "FilterPlate",
+    "CoverableFilterPlate",
 ]
 
 identifier = str

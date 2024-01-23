@@ -14,15 +14,13 @@ class HALDevice:
     This simplified system is assumed to be able to aspirate and dispense any liquid that is compatible with the pipette.
     A more complex system may add heaters, shakers, vacuums, etc. to increase the capability of the system. All devices
     that increase the capability of an automation system shall be described by this class.
-
-    Attributes
-    ----------
-        Indentifier: A unique name per each device base class. Facilitates organization and easy retrieval of devices by name.
     """
 
     hal_devices: ClassVar[dict[str, type[Self]]] = {}
+    """All subclasses"""
 
     identifier: str
+    """A unique name. Facilitates organization and easy retrieval of devices by name."""
 
     @field_validator("Identifier", mode="after")
     @classmethod

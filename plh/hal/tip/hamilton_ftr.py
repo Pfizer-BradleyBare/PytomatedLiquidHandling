@@ -6,6 +6,7 @@ from pydantic import dataclasses
 
 from plh.driver.HAMILTON import HSLTipCountingLib
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
+from plh.hal import transport
 
 from .tip_base import *
 from .tip_base import TipBase
@@ -13,9 +14,14 @@ from .tip_base import TipBase
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonFTR(TipBase):
+    """Hamilton FTR (Filtered Tip Rack) tip device."""
+
     backend: HamiltonBackendBase
+    """Only supported on Hamilton systems."""
 
     def deinitialize(self: HamiltonFTR) -> None:
+        """Saves the current position using the FTR driver."""
+
         command = HSLTipCountingLib.Write.Command(
             options=HSLTipCountingLib.Write.OptionsList(
                 TipCounter=f"{type(self).__name__}_{int(self.volume)}",
@@ -34,12 +40,16 @@ class HamiltonFTR(TipBase):
         self.backend.acknowledge(command, HSLTipCountingLib.Write.Response)
 
     def remaining_tips(self: HamiltonFTR) -> int:
+        """FTR tips do not have teirs so remaining tips is just all the tips left."""
         return len(self.available_positions)
 
-    def discard_teir(self: HamiltonFTR) -> None:
+    def discard_teir(self: HamiltonFTR) -> list[transport.TransportOptions]:
+        """Cannot discard teir. You must load more tips."""
         raise RuntimeError("TODO: Tip reload error")
 
     def update_available_positions(self: HamiltonFTR) -> None:
+        """Uses the FTR edit command to allow the user to specify the number of tips available."""
+
         command = HSLTipCountingLib.Edit.Command(
             options=HSLTipCountingLib.Edit.OptionsList(
                 TipCounter=f"{type(self).__name__}_{int(self.volume)}",

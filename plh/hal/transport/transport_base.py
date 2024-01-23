@@ -11,9 +11,26 @@ from .exceptions import WrongTransportDeviceError
 
 
 @dataclasses.dataclass(kw_only=True)
+class TransportOptions:
+    """Options passed to transport"""
+
+    source_layout_item: layout_item.LayoutItemBase
+    """Layout item to get."""
+
+    destination_layout_item: layout_item.LayoutItemBase
+    """Layout item where you will placed the getted layout item."""
+
+
+@dataclasses.dataclass(kw_only=True)
 class TransportBase(Interface, HALDevice):
+    """Describes devices that can move layout items around the deck."""
+
     supported_labware: list[labware.LabwareBase]
-    _last_transport_flag: bool = Field(exclude=False, default=False)
+    """Labware that can be moved by the device."""
+
+    last_transport_flag: bool = Field(exclude=False, default=False)
+    """Flag that indicates if the current transport is the last transport.
+    This should be managed for multiple transports if you do not want repeated park operations occuring."""
 
     @field_validator("supported_labware", mode="before")
     @classmethod
@@ -43,23 +60,32 @@ class TransportBase(Interface, HALDevice):
         return supported_objects
 
     @dataclasses.dataclass(kw_only=True)
-    class PickupOptions:
-        ...
+    class GetOptions:
+        """Options that will be passed directly to the driver layer for the given transport device.
+        These options are deck location dependent.
+        This helps facilitate complex get options based on the complexity of your deck.
+        NOTE: options should be dataclass fields with the appropraite compare boolean set.
+        Boolean should be True if the setting is critical, otherwise false."""
 
     @dataclasses.dataclass(kw_only=True)
-    class DropoffOptions:
-        ...
+    class PlaceOptions:
+        """Options that will be passed directly to the driver layer for the given transport device.
+        These options are deck location dependent.
+        This helps facilitate complex get options based on the complexity of your deck.
+        NOTE: options should be dataclass fields with the appropraite compare boolean set.
+        Boolean should be True if the setting is critical, otherwise false."""
 
     def initialize(self: TransportBase) -> None:
+        """No initialization actions are performed."""
         ...
 
     def deinitialize(self: TransportBase) -> None:
+        """No deinitialization actions are performed."""
         ...
 
-    def assert_transport_options(
+    def assert_options(
         self: TransportBase,
-        source_layout_item: layout_item.LayoutItemBase,
-        destination_layout_item: layout_item.LayoutItemBase,
+        options: TransportOptions,
     ) -> None:
         """Must be called before calling Transport or TransportTime
 
@@ -75,11 +101,12 @@ class TransportBase(Interface, HALDevice):
 
         If WrongDeviceTransportOptionsError is thrown then you are trying to use a incompatible device.
 
-        If PickupOptionsNotEqualError is thrown then your Source and Destination require different orientations.
+        If GetOptionsNotEqualError is thrown then your Source and Destination require different orientations.
         Use a transition point to bridge the gap.
 
 
         Raises ExceptionGroup of the following:
+
             labware.Base.labwareNotEqualError
 
             labware.Base.labwareNotSupportedError
@@ -88,9 +115,12 @@ class TransportBase(Interface, HALDevice):
 
             TransportDevice.Base.WrongDeviceTransportOptionsError
 
-            TransportDevice.Base.PickupOptionsNotEqualError
+            TransportDevice.Base.GetOptionsNotEqualError
         """
         excepts = []
+
+        source_layout_item = options.source_layout_item
+        destination_layout_item = options.destination_layout_item
 
         if not isinstance(
             source_layout_item.deck_location,
@@ -171,17 +201,33 @@ class TransportBase(Interface, HALDevice):
             raise ExceptionGroup(msg, excepts)
 
     @abstractmethod
-    def transport(
+    def get(
         self: TransportBase,
-        source_layout_item: layout_item.LayoutItemBase,
-        destination_layout_item: layout_item.LayoutItemBase,
+        options: TransportOptions,
     ) -> None:
+        """Gets a layout item from the deck."""
         ...
 
     @abstractmethod
-    def transport_time(
+    def get_time(
         self: TransportBase,
-        source_layout_item: layout_item.LayoutItemBase,
-        destination_layout_item: layout_item.LayoutItemBase,
+        options: TransportOptions,
     ) -> float:
+        """Calculates time required to get a layout item from the deck."""
+        ...
+
+    @abstractmethod
+    def place(
+        self: TransportBase,
+        options: TransportOptions,
+    ) -> None:
+        """Places a layout item on the deck."""
+        ...
+
+    @abstractmethod
+    def place_time(
+        self: TransportBase,
+        options: TransportOptions,
+    ) -> float:
+        """Calculates time required to place a layout item on the deck."""
         ...

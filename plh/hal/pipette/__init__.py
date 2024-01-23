@@ -13,12 +13,12 @@ from .pipette_base import PipetteBase, TransferOptions
 from .pipette_tip import PipetteTip
 
 __all__ = [
+    "PipetteBase",
+    "PipetteTip",
+    "LiquidClass",
+    "TransferOptions",
     "HamiltonPortraitCORE8",
     "HamiltonCORE96",
-    "LiquidClass",
-    "PipetteBase",
-    "TransferOptions",
-    "PipetteTip",
     "LiquidClassCategoryNotSupportedError",
 ]
 

@@ -1,3 +1,5 @@
+"""Command Line Interface (cli) for plh.
+"""
 import pathlib
 import shutil
 import subprocess
@@ -6,11 +8,11 @@ import click
 
 
 @click.group()
-def plh_main() -> bool:
-    ...
+def plh() -> None:
+    """Main entry point for cli functions."""
 
 
-@plh_main.command()
+@plh.command()
 def install_venus4() -> None:
     """This command installs all Venus4 libraries required by plh by invoking a set of Hamilton supplied .exe files."""
     if not pathlib.Path("C:\\Program Files (x86)\\HAMILTON").exists():

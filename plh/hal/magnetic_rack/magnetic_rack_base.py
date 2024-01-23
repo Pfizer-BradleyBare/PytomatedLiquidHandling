@@ -9,12 +9,17 @@ from plh.hal.tools import HALDevice
 
 @dataclasses.dataclass(kw_only=True)
 class MagneticRackBase(HALDevice):
-    supported_plates: list[li.CoverablePlate | li.Plate]
-    supported_pipettes: list[pipette.PipetteBase]
+    """A magnetic rack to be used for condensing magnetic beads."""
 
-    @field_validator("supported_plates", mode="before")
+    plates: list[li.CoverablePlate | li.Plate]
+    """Supported plates."""
+
+    pipettes: list[pipette.PipetteBase]
+    """Supported pipettes."""
+
+    @field_validator("plates", mode="before")
     @classmethod
-    def __supported_plates_validate(
+    def __plates_validate(
         cls: type[MagneticRackBase],
         v: list[str | li.LayoutItemBase],
     ) -> list[li.CoverablePlate | li.Plate]:
@@ -39,9 +44,9 @@ class MagneticRackBase(HALDevice):
 
         return supported_objects
 
-    @field_validator("supported_pipettes", mode="before")
+    @field_validator("pipettes", mode="before")
     @classmethod
-    def __supported_pipettes_validate(
+    def __pipettes_validate(
         cls: type[MagneticRackBase],
         v: list[dict],
         info: ValidationInfo,
@@ -116,7 +121,7 @@ class MagneticRackBase(HALDevice):
         self: MagneticRackBase,
         layout_item: li.LayoutItemBase,
     ) -> li.CoverablePlate | li.Plate:
-        for supported_layout_item in self.supported_plates:
+        for supported_layout_item in self.plates:
             if supported_layout_item.labware == layout_item.labware:
                 if isinstance(supported_layout_item, li.CoverablePlate):
                     if isinstance(layout_item, li.CoverablePlate):

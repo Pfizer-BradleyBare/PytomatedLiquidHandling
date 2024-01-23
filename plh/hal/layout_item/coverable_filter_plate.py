@@ -7,4 +7,4 @@ from .layout_item_base import *
 
 @dataclasses.dataclass(kw_only=True)
 class CoverableFilterPlate(FilterPlate, CoverablePlate):
-    ...
+    """A coverable plate that contains a filter. Useful for vacuum and centrifuge filtrations."""

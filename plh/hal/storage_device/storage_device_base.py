@@ -13,9 +13,13 @@ from .reservation import Reservation
 
 @dataclasses.dataclass(kw_only=True)
 class StorageDeviceBase(HALDevice):
+    """Can be used to store any number and any combination of labware types."""
+
     layout_items: list[li.LayoutItemBase]
+    """These are the positions where storage will occur."""
 
     reservations: dict[str, Reservation] = field(init=False, default_factory=dict)
+    """Current reserved positions."""
 
     @field_validator("layout_items", mode="before")
     @classmethod
@@ -49,10 +53,13 @@ class StorageDeviceBase(HALDevice):
         reservation_id: str,
         layout_item: li.LayoutItemBase,
     ) -> None:
+        """Creates a reservation for your layout item.
+        NOTE: reservation_id must be unique."""
         ...
 
     @abstractmethod
     def prepare_store(self: StorageDeviceBase, reservation_id: str) -> None:
+        """Prepares the storage device to accept your layout item."""
         ...
 
     @abstractmethod
@@ -60,14 +67,12 @@ class StorageDeviceBase(HALDevice):
         self: StorageDeviceBase,
         reservation_id: str,
     ) -> li.LayoutItemBase:
-        ...
-
-    @abstractmethod
-    def release(self: StorageDeviceBase, reservation_id: str) -> None:
+        """Stores your layout item."""
         ...
 
     @abstractmethod
     def prepare_retrieve(self: StorageDeviceBase, reservation_id: str) -> None:
+        """Prepares the storage device for retreival of your layout item."""
         ...
 
     @abstractmethod
@@ -75,4 +80,10 @@ class StorageDeviceBase(HALDevice):
         self: StorageDeviceBase,
         reservation_id: str,
     ) -> li.LayoutItemBase:
+        """Retrieves your layout item."""
+        ...
+
+    @abstractmethod
+    def release(self: StorageDeviceBase, reservation_id: str) -> None:
+        """Removes your reservation from the storage device."""
         ...

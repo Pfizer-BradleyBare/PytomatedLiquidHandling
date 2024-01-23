@@ -12,7 +12,6 @@ from .heat_cool_shake_base import HeatCoolShakeBase
 __all__ = [
     "HeatCoolShakeBase",
     "HamiltonHeaterShaker",
-    "HamiltonHeaterShaker",
     "HamiltonHeaterCooler",
     "HeatingNotSupportedError",
     "CoolingNotSupportedError",

@@ -5,7 +5,6 @@ from math import ceil
 
 from pydantic import dataclasses, field_validator
 
-from plh.driver.tools import OptionsBase
 from plh.hal import deck_location, labware, layout_item
 from plh.hal.tools import HALDevice, Interface
 
@@ -13,22 +12,55 @@ from .pipette_tip import PipetteTip
 
 
 @dataclasses.dataclass(kw_only=True)
-class TransferOptions(OptionsBase):
-    SourceLayoutItemInstance: layout_item.LayoutItemBase
-    SourcePosition: int | str
+class TransferOptions:
+    """Options that can be used for ```transfer``` and ```transfer_time```."""
+
+    source_layout_item: layout_item.LayoutItemBase
+    """What layout item we are aspirating from."""
+
+    source_position: int | str
+    """What position in the ```source_layout_item``` we are aspirating from.
+    NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
     # This is the labware well position. Numeric or alphanumeric.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
-    CurrentSourceVolme: float
-    SourceMixCycles: int
-    SourceLiquidClassCategory: str
-    DestinationLayoutItemInstance: layout_item.LayoutItemBase
-    DestinationPosition: int | str
+
+    source_well_volume: float
+    """Current volume in ```source_position``` of ```source_layout_item```."""
+
+    source_mix_cycles: int
+    """Cycles to mix before aspiration."""
+
+    source_liquid_class_category: str
+    """What liquid class category to use for aspiration."""
+
+    source_sample_group: int | None = None
+    """This indicates that the sources with the same sample group number have the exact same solution composition.
+    So no contamination will occur upon multiple aspiration."""
+
+    destination_layout_item: layout_item.LayoutItemBase
+    """What layout item we are dispensing to."""
+
+    destination_position: int | str
+    """What position in the ```destination_layout_item``` we are dispensing to.
+    NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
     # This is the labware well position. Numeric or alphanumeric.
     # NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
-    CurrentDestinationVolume: float
-    DestinationMixCycles: int
-    DestinationLiquidClassCategory: str
-    TransferVolume: float
+
+    destination_well_volume: float
+    """Current volume in ```destination_position``` of ```destination_layout_item```."""
+
+    destination_mix_cycles: int
+    """Cycles to mix after dispense."""
+
+    destination_liquid_class_category: str
+    """What liquid class category to use for dispense."""
+
+    destination_sample_group: int | None = None
+    """This indicates that the destinations with the same sample group number have the exact same solution composition.
+    So no contamination will occur upon multiple dispense."""
+
+    transfer_volume: float
+    """Volume that is transfered from source to destination."""
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -104,7 +136,7 @@ class PipetteBase(Interface, HALDevice):
 
         return supported_objects
 
-    def assert_transfer_options(
+    def assert_options(
         self: PipetteBase,
         options: list[TransferOptions],
     ) -> None:
@@ -113,24 +145,24 @@ class PipetteBase(Interface, HALDevice):
         unsupported_liquid_class_categories = []
 
         for opt in options:
-            source_labware = opt.SourceLayoutItemInstance.labware
-            destination_labware = opt.DestinationLayoutItemInstance.labware
+            source_labware = opt.source_layout_item.labware
+            destination_labware = opt.destination_layout_item.labware
             if source_labware not in self.supported_source_labware:
                 unsupported_labware.append(source_labware)
             if destination_labware not in self.supported_destination_labware:
                 unsupported_labware.append(destination_labware)
             # Check Labware Compatibility
 
-            source_deck_location = opt.SourceLayoutItemInstance.deck_location
-            destination_deck_location = opt.DestinationLayoutItemInstance.deck_location
+            source_deck_location = opt.source_layout_item.deck_location
+            destination_deck_location = opt.destination_layout_item.deck_location
             if source_deck_location not in self.supported_deck_locations:
                 unsupported_deck_locations.append(source_deck_location)
             if destination_deck_location not in self.supported_deck_locations:
                 unsupported_deck_locations.append(destination_deck_location)
             # Check DeckLocation compatibility
 
-            source_liquid_class_category = opt.SourceLiquidClassCategory
-            destination_liquid_class_category = opt.DestinationLiquidClassCategory
+            source_liquid_class_category = opt.source_liquid_class_category
+            destination_liquid_class_category = opt.destination_liquid_class_category
             if not any(
                 PipetteTip.is_liquid_class_category_supported(
                     source_liquid_class_category,
@@ -181,8 +213,8 @@ class PipetteBase(Interface, HALDevice):
         options: TransferOptions,
         volume: float,
     ) -> list[TransferOptions]:
-        num_transfers = ceil(options.TransferVolume / volume)
-        options.TransferVolume /= num_transfers
+        num_transfers = ceil(options.transfer_volume / volume)
+        options.transfer_volume /= num_transfers
 
         return [options for _ in range(num_transfers)]
 

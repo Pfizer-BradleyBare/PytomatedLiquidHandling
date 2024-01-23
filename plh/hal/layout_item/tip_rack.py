@@ -8,4 +8,7 @@ from .layout_item_base import LayoutItemBase
 
 @dataclasses.dataclass(kw_only=True)
 class TipRack(LayoutItemBase):
+    """A rack that can hold tips used for pipetting."""
+
     labware: labware.NonPipettableLabware
+    """You should not pipette to/from a tip rack."""

@@ -17,6 +17,8 @@ def load_device_list_config(
     base_object: type[T],
     devices: dict[str, T],
 ) -> dict[str, T]:
+    """Loads a list of device configurations based on the json key."""
+
     logger.info("Loading " + base_object.__name__ + " configuration.")
 
     if bool(json) is False:

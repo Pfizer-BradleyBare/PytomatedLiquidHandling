@@ -17,8 +17,10 @@ class DeckLocationBase(HALDevice):
     """
 
     identifier: str = "None"
+    """It is optional to specify an identifier. If an identifier is not specified then identifier will be ```<carrier_config.carrier.identifier>_Pos<carrier_config.position```"""
 
     carrier_config: CarrierConfig
+    """Carrier association for the deck location."""
 
     @model_validator(mode="after")
     @staticmethod

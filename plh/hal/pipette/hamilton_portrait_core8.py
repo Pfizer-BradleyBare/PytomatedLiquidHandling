@@ -26,13 +26,15 @@ class HamiltonPortraitCORE8(PipetteBase):
         liquid_class_max_volumes: dict[str, float] = {}
         for opt in options:
             combined_name = (
-                opt.SourceLiquidClassCategory + ":" + opt.DestinationLiquidClassCategory
+                opt.source_liquid_class_category
+                + ":"
+                + opt.destination_liquid_class_category
             )
 
             if combined_name not in liquid_class_max_volumes:
                 liquid_class_max_volumes[combined_name] = self._get_max_transfer_volume(
-                    opt.SourceLiquidClassCategory,
-                    opt.DestinationLiquidClassCategory,
+                    opt.source_liquid_class_category,
+                    opt.destination_liquid_class_category,
                 )
         # Max volume for each liquid class pairing. Important
 
@@ -41,7 +43,9 @@ class HamiltonPortraitCORE8(PipetteBase):
 
         for opt in options:
             combined_name = (
-                opt.SourceLiquidClassCategory + ":" + opt.DestinationLiquidClassCategory
+                opt.source_liquid_class_category
+                + ":"
+                + opt.destination_liquid_class_category
             )
 
             truncated_options = self._truncate_transfer_volume(
@@ -74,9 +78,9 @@ class HamiltonPortraitCORE8(PipetteBase):
         ] = defaultdict(list)
         for opt in options:
             tip = self._get_tip(
-                opt.SourceLiquidClassCategory,
-                opt.DestinationLiquidClassCategory,
-                opt.TransferVolume,
+                opt.source_liquid_class_category,
+                opt.destination_liquid_class_category,
+                opt.transfer_volume,
             )
 
             tip_grouped_options[tip.tip.identifier].append((tip, opt))
@@ -101,17 +105,17 @@ class HamiltonPortraitCORE8(PipetteBase):
             # are there at minimum enough tips left?
 
             for opts in packages_opts:
-                if len(tip.tip.tips_in_teir()) < len(opts):
+                if len(tip.tip.available_positions) < len(opts):
                     tip.tip.discard_teir()
                 # If not enough tips then get user to help
 
                 tip_positions = tip.tip.available_positions[: len(opts)]
 
-                pickup_options: list[Channel1000uL.Pickup.Options] = []
+                get_options: list[Channel1000uL.Pickup.Options] = []
                 for index, (opt, channel_number) in enumerate(
                     zip(opts, self.active_channels),
                 ):
-                    pickup_options.append(
+                    get_options.append(
                         Channel1000uL.Pickup.Options(
                             ChannelNumber=channel_number,
                             LabwareID=tip_positions[index].LabwareID,
@@ -120,7 +124,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                     )
                 command = Channel1000uL.Pickup.Command(
                     backend_error_handling=False,
-                    options=pickup_options,
+                    options=get_options,
                 )
                 self.backend.execute(command)
                 self.backend.wait(command)
@@ -133,18 +137,18 @@ class HamiltonPortraitCORE8(PipetteBase):
                 ):
                     aspirate_labware = cast(
                         labware.PipettableLabware,
-                        opt.SourceLayoutItemInstance.labware,
+                        opt.source_layout_item.labware,
                     )
 
                     numeric_layout = labware.NumericLayout(
-                        rows=opt.SourceLayoutItemInstance.labware.layout.rows,
-                        columns=opt.SourceLayoutItemInstance.labware.layout.columns,
-                        direction=opt.SourceLayoutItemInstance.labware.layout.direction,
+                        rows=opt.source_layout_item.labware.layout.rows,
+                        columns=opt.source_layout_item.labware.layout.columns,
+                        direction=opt.source_layout_item.labware.layout.direction,
                     )
                     # we need to do some numeric offsets to the position so convert it to a number first if it is not one.
 
                     aspirate_position = (
-                        (int(numeric_layout.get_position_id(opt.SourcePosition)) - 1)
+                        (int(numeric_layout.get_position_id(opt.source_position)) - 1)
                         * aspirate_labware.well_definition.positions_per_well
                         + index
                         + 1
@@ -155,17 +159,17 @@ class HamiltonPortraitCORE8(PipetteBase):
                     aspirate_options.append(
                         Channel1000uL.Aspirate.Options(
                             ChannelNumber=channel_number,
-                            LabwareID=opt.SourceLayoutItemInstance.labware_id,
-                            PositionID=opt.SourceLayoutItemInstance.labware.layout.get_position_id(
+                            LabwareID=opt.source_layout_item.labware_id,
+                            PositionID=opt.source_layout_item.labware.layout.get_position_id(
                                 aspirate_position,
                             ),
                             LiquidClass=str(
                                 self._get_liquid_class(
-                                    opt.SourceLiquidClassCategory,
-                                    opt.TransferVolume,
+                                    opt.source_liquid_class_category,
+                                    opt.transfer_volume,
                                 ),
                             ),
-                            Volume=opt.TransferVolume,
+                            Volume=opt.transfer_volume,
                         ),
                     )
 
@@ -183,13 +187,13 @@ class HamiltonPortraitCORE8(PipetteBase):
                 ):
                     dispense_labware = cast(
                         labware.PipettableLabware,
-                        opt.DestinationLayoutItemInstance.labware,
+                        opt.destination_layout_item.labware,
                     )
 
                     numeric_layout = labware.NumericLayout(
-                        rows=opt.DestinationLayoutItemInstance.labware.layout.rows,
-                        columns=opt.DestinationLayoutItemInstance.labware.layout.columns,
-                        direction=opt.DestinationLayoutItemInstance.labware.layout.direction,
+                        rows=opt.destination_layout_item.labware.layout.rows,
+                        columns=opt.destination_layout_item.labware.layout.columns,
+                        direction=opt.destination_layout_item.labware.layout.direction,
                     )
                     # we need to do some numeric offsets to the position so convert it to a number first if it is not one.
 
@@ -197,7 +201,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                         (
                             int(
                                 numeric_layout.get_position_id(
-                                    opt.DestinationPosition,
+                                    opt.destination_position,
                                 ),
                             )
                             - 1
@@ -212,17 +216,17 @@ class HamiltonPortraitCORE8(PipetteBase):
                     dispense_options.append(
                         Channel1000uL.Dispense.Options(
                             ChannelNumber=channel_number,
-                            LabwareID=opt.DestinationLayoutItemInstance.labware_id,
-                            PositionID=opt.DestinationLayoutItemInstance.labware.layout.get_position_id(
+                            LabwareID=opt.destination_layout_item.labware_id,
+                            PositionID=opt.destination_layout_item.labware.layout.get_position_id(
                                 dispense_position,
                             ),
                             LiquidClass=str(
                                 self._get_liquid_class(
-                                    opt.DestinationLiquidClassCategory,
-                                    opt.TransferVolume,
+                                    opt.destination_liquid_class_category,
+                                    opt.transfer_volume,
                                 ),
                             ),
-                            Volume=opt.TransferVolume,
+                            Volume=opt.transfer_volume,
                         ),
                     )
 

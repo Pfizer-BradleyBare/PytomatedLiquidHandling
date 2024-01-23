@@ -15,11 +15,11 @@ __all__ = [
     "DeckLocationBase",
     "CarrierConfig",
     "NonTransportableDeckLocation",
+    "TransportableDeckLocation",
+    "TransportConfig",
     "DeckLocationNotSupportedError",
     "DeckLocationNotTransportableError",
     "DeckLocationTransportConfigsNotCompatibleError",
-    "TransportConfig",
-    "TransportableDeckLocation",
 ]
 
 identifier = str

@@ -5,24 +5,36 @@ from dataclasses import field
 
 from pydantic import dataclasses, field_validator
 
-from plh.hal import layout_item
+from plh.hal import layout_item, transport
 from plh.hal.tools import HALDevice, Interface
 
 
 @dataclasses.dataclass(kw_only=True)
 class AvailablePosition:
+    """A tip position."""
+
     LabwareID: str
+    """The labware id for the position."""
+
     PositionID: str
+    """The position id for the position."""
 
 
 @dataclasses.dataclass(kw_only=True)
 class TipBase(Interface, HALDevice):
+    """A tip device that facilitates tip tracking and tier removal as needed."""
+
     tip_racks: list[layout_item.TipRack]
+    """Rack layout items associated with the device."""
+
     volume: float
+    """Tip volume."""
+
     available_positions: list[AvailablePosition] = field(
         init=False,
         default_factory=list,
     )
+    """Tip positions that are immediately available for use."""
 
     @field_validator("tip_racks", mode="before")
     @classmethod
@@ -64,13 +76,11 @@ class TipBase(Interface, HALDevice):
             )
 
     def initialize(self: TipBase) -> None:
+        """Initiates a user update of the available tip positions then stores in the device using the ```update_available_positions``` instance method."""
         self.update_available_positions()
 
-    def tips_in_teir(self: TipBase) -> list[AvailablePosition]:
-        return self.available_positions
-
     def use_tips(self: TipBase, num: int) -> None:
-        """Indicate that the following number of tips have been used and are no longer available."""
+        """Indicates that the following number of tips have been used and are no longer available."""
         self.available_positions = self.available_positions[num:]
 
     @abstractmethod
@@ -81,8 +91,8 @@ class TipBase(Interface, HALDevice):
         ...
 
     @abstractmethod
-    def discard_teir(self: TipBase) -> None:
-        """This will throw an error which contains the layout items to discard"""
+    def discard_teir(self: TipBase) -> list[transport.TransportOptions]:
+        """Returns a list of transport options to discard the current teir."""
         ...
 
     @abstractmethod

@@ -12,20 +12,36 @@ class InvalidpositionError(ValueError):
 
 
 class LayoutSorting(Enum):
+    """How the positions of a labware are sorted in the automation software."""
+
     Columnwise = "Columnwise"
+    """Positions procede top-down then left-right."""
+
     Rowwise = "Rowwise"
+    """Positions procede left-right then top-down."""
 
 
 @dataclasses.dataclass(kw_only=True)
 class Layout(ABC):
+    """Full description of a labware position layout."""
+
     rows: int
+    """Number of rows in the labware."""
+
     columns: int
+    """Number of columns in the labware."""
+
     direction: LayoutSorting
+    """Sorting object."""
 
     def total_positions(self: Layout) -> int:
+        """Total positions = rows * columns"""
+
         return self.rows * self.columns
 
     def get_position_id(self: Layout, position: str | int) -> str:
+        """Dependent on sorting object the correct position id will be returned given a str or an integer. Position ID returned depends on layout subclass (Numeric vs Alphanumeric)."""
+
         if isinstance(position, int):
             position = str(position)
 
@@ -50,6 +66,7 @@ class Layout(ABC):
         positions: list[str | int],
         key: Callable = lambda x: x,
     ) -> list[str]:
+        """Simply sorts positions according to sorting object."""
         ...
 
     @abstractmethod
@@ -58,6 +75,7 @@ class Layout(ABC):
         positions: list[str | int],
         key: Callable = lambda x: x,
     ) -> list[list[str]]:
+        """Groups positions according to sorting object. Each columnwise group will be a separate list."""
         ...
 
     @abstractmethod
@@ -66,6 +84,7 @@ class Layout(ABC):
         positions: list[str | int],
         key: Callable = lambda x: x,
     ) -> list[list[str]]:
+        """Groups positions according to sorting object. Each rowwise group will be a separate list."""
         ...
 
     @abstractmethod
@@ -79,15 +98,20 @@ class Layout(ABC):
 
 @dataclasses.dataclass(kw_only=True)
 class NumericLayout(Layout):
+    """A numeric representation of a container layout."""
+
     type: Literal["Numeric"] = "Numeric"
+    """Pydantic requirement. Never used except for input validation."""
 
     def sort_positions(self: NumericLayout, positions: list[str | int]) -> list[str]:
+        """Sorts by number."""
         return sorted([self.get_position_id(pos) for pos in positions])
 
     def group_positions_columnwise(
         self: NumericLayout,
         positions: list[str | int],
     ) -> list[list[str]]:
+        """Groups positions according to sorting object. Each columnwise group will be a separate list."""
         sorted_positions = self.sort_positions(positions)
 
         groups = [[] for _ in range(self.columns)]
@@ -100,6 +124,7 @@ class NumericLayout(Layout):
         self: NumericLayout,
         positions: list[str | int],
     ) -> list[list[str]]:
+        """Groups positions according to sorting object. Each rowwise group will be a separate list."""
         sorted_positions = self.sort_positions(positions)
 
         groups = [[] for _ in range(self.rows)]
@@ -137,12 +162,16 @@ class NumericLayout(Layout):
 
 @dataclasses.dataclass(kw_only=True)
 class AlphanumericLayout(Layout):
+    """An Alphanumeric representation of a container layout."""
+
     type: Literal["Alphanumeric"] = "Alphanumeric"
+    """Pydantic requirement. Never used except for input validation."""
 
     def sort_positions(
         self: AlphanumericLayout,
         positions: list[str | int],
     ) -> list[str]:
+        """Converts alphanumeric id to number, sorts by number, then converts back to alphanumeric."""
         numeric_addressing = NumericLayout(
             rows=self.rows,
             columns=self.columns,
@@ -158,6 +187,8 @@ class AlphanumericLayout(Layout):
         self: AlphanumericLayout,
         positions: list[str | int],
     ) -> list[list[str]]:
+        """Uses numeric addressing to group positions then converts back to alphanumeric."""
+
         numeric_addressing = NumericLayout(
             rows=self.rows,
             columns=self.columns,
@@ -173,6 +204,8 @@ class AlphanumericLayout(Layout):
         self: AlphanumericLayout,
         positions: list[str | int],
     ) -> list[list[str]]:
+        """Uses numeric addressing to group positions then converts back to alphanumeric."""
+
         numeric_addressing = NumericLayout(
             rows=self.rows,
             columns=self.columns,

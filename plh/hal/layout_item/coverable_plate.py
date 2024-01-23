@@ -11,9 +11,16 @@ from .lid import Lid
 
 @dataclasses.dataclass(kw_only=True)
 class CoverablePlate(LayoutItemBase):
+    """A plate that can be covered and uncovered."""
+
     labware: labware.PipettableLabware
+    """Plates are by definition possible to pipetted to/from."""
+
     lid: Lid
+    """Lid object associated with this plate."""
+
     is_covered: bool = Field(exclude=True, default=False)
+    """Is the plate currently covered or not."""
 
     @field_validator("lid", mode="before")
     @classmethod

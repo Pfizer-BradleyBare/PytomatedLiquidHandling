@@ -11,10 +11,10 @@ from .hamilton_ee_tip_base import HamiltonEETipBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class HamiltonEENTR(HamiltonEETipBase):
-    """Hamilton NTR (Nested Tip Rack) tip device with integration with EE (entry exit) for higher tip capacity."""
+class HamiltonEECustomFTR(HamiltonEETipBase):
+    """Hamilton custom stackable FTR (Filtered Tip Rack) tip device with integration with EE (entry exit) for higher tip capacity."""
 
-    def deinitialize(self: HamiltonEENTR) -> None:
+    def deinitialize(self: HamiltonEECustomFTR) -> None:
         """Saves the current position using the FTR driver. Moves the EE stacks to the bottom position."""
 
         command = HSLTipCountingLib.Write.Command(
@@ -44,7 +44,7 @@ class HamiltonEENTR(HamiltonEETipBase):
                 backend_error_handling=False,
             )
 
-    def update_available_positions(self: HamiltonEENTR) -> None:
+    def update_available_positions(self: HamiltonEECustomFTR) -> None:
         """Counts the number of items in each stack. Edits the number of available tips using FTR edit."""
 
         for stack in self.tip_stacks:
@@ -53,7 +53,7 @@ class HamiltonEENTR(HamiltonEETipBase):
                     ModuleNumber=stack.module_number,
                     StackNumber=stack.stack_number,
                     LabwareID=stack.tip_rack.labware_id,
-                    IsNTRRack=True,
+                    IsNTRRack=False,
                 ),
                 backend_error_handling=False,
             )
