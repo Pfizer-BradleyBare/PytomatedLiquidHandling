@@ -6,8 +6,7 @@ from enum import Enum
 from plh.driver.tools import OptionsBase
 
 
-@dataclasses.dataclass(kw_only=True)
-class Options(str, Enum, OptionsBase):
+class Options(OptionsBase, str, Enum):
     PlateID = "Plate ID"
     PlatePosition = "Plate Position"
     SampleName = "Sample name"
