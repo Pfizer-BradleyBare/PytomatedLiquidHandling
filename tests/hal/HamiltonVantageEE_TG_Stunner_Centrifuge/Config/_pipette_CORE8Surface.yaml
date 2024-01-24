@@ -1,0 +1,31 @@
+#############################################################
+#
+# Devices: The pipetting devices available on this system. Options per device are different.
+# Enabled: True: Can be used. False: Cannot be used
+#
+#############################################################
+
+HamiltonPortraitCORE8ContactDispense:
+  - identifier: Pipette
+    enabled: True
+    backend: Hamilton
+    active_channels: [1, 2, 3, 4, 5, 6, 7, 8]
+
+    supported_source_labware:
+      - Biorad200uLPCRPlate
+
+    supported_destination_labware:
+      - Biorad200uLPCRPlate
+
+    supported_deck_locations:
+      - Carrier48_Pos1
+
+    supported_tips:
+      - tip: 1000uL FTR
+        tip_support_dropoff_labware_id: Test
+        tip_support_pickup_labware_id: Test
+        tip_waste_labware_id: Test
+        supported_liquid_class_categories:
+          Test:
+            - liquid_class_name: "None"
+              max_volume: 1000

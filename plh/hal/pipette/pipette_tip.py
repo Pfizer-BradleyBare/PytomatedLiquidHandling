@@ -15,7 +15,7 @@ class PipetteTip:
     tip_waste_labware_id: str
     supported_liquid_class_categories: dict[str, list[LiquidClass]]
 
-    @field_validator("Tip", mode="before")
+    @field_validator("tip", mode="before")
     @classmethod
     def __tip_validate(cls: type[PipetteTip], v: str | tip.TipBase) -> tip.TipBase:
         if isinstance(v, tip.TipBase):
@@ -31,7 +31,7 @@ class PipetteTip:
 
         return objects[identifier]
 
-    @field_validator("SupportedLiquidClassCategories", mode="after")
+    @field_validator("supported_liquid_class_categories", mode="after")
     @classmethod
     def __supported_liquid_class_categories_valdate(
         cls: type[PipetteTip],

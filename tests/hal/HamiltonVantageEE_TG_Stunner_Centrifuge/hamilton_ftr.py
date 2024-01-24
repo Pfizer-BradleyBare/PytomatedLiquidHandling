@@ -19,14 +19,6 @@ tip = hal.tip.devices["1000uL FTR"]
 
 tip.initialize()
 
-print(tip.remaining_tips())
-
-try:
-    tip.discard_teir()
-except RuntimeError as e:
-    print(e)
-
-input("ENTER")
 
 tip.deinitialize()
 

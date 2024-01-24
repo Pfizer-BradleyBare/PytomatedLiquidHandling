@@ -5,7 +5,10 @@ from math import ceil
 
 from pydantic import dataclasses, field_validator
 
+from plh.driver.tools import *
 from plh.hal import deck_location, labware, layout_item
+from plh.hal.deck_location import *
+from plh.hal.labware import *
 from plh.hal.tools import HALDevice, Interface
 
 from .pipette_tip import PipetteTip
