@@ -5,3 +5,4 @@ Non Moveable Carrier:
     num_labware_positions: 4
     model_path_3d:
     image_path_2d:
+    image_path_3d:
