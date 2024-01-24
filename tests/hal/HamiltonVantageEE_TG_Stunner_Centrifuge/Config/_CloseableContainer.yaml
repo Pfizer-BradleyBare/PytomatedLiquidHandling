@@ -9,7 +9,7 @@ Hamilton FlipTube Landscape:
   - identifier: FlipTube
     enabled: True
     backend: Hamilton
-    tool_labware_id: Ham_4_FlipTubeTools_OnWaste_0001
+    tool_labware_id: Tool_FlipTube_4
     supported_labware:
       - Hamilton1500uLFlipTubeCarrier
       - Hamilton1500uLFlipTubeRack
