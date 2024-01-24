@@ -4,6 +4,7 @@ NonPipettable Labware:
     part_number: "?"
     model_path_3d:
     image_path_2d:
+    image_path_3d:
     layout:
       type: Numeric
       direction: Columnwise

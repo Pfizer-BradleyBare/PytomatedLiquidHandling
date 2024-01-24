@@ -4,6 +4,7 @@ Pipettable Labware:
     part_number: 701-2022
     model_path_3d:
     image_path_2d:
+    image_path_3d:
     layout:
       type: Alphanumeric
       direction: Columnwise
@@ -43,6 +44,7 @@ Pipettable Labware:
     part_number: HSP9601
     model_path_3d:
     image_path_2d:
+    image_path_3d:
     layout:
       type: Alphanumeric
       direction: Columnwise
@@ -73,6 +75,7 @@ Pipettable Labware:
     part_number: "249949"
     model_path_3d:
     image_path_2d:
+    image_path_3d:
     layout:
       type: Alphanumeric
       direction: Columnwise
@@ -103,6 +106,7 @@ Pipettable Labware:
     part_number: AB1127
     model_path_3d:
     image_path_2d:
+    image_path_3d:
     layout:
       type: Alphanumeric
       direction: Columnwise
@@ -133,6 +137,7 @@ Pipettable Labware:
     part_number: "3961"
     model_path_3d:
     image_path_2d:
+    image_path_3d:
     layout:
       type: Alphanumeric
       direction: Columnwise
@@ -163,6 +168,7 @@ Pipettable Labware:
     part_number: "814270"
     model_path_3d:
     image_path_2d:
+    image_path_3d:
     layout:
       type: Numeric
       direction: Columnwise

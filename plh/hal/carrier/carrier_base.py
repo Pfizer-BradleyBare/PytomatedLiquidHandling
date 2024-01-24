@@ -24,6 +24,9 @@ class CarrierBase(HALDevice):
     image_path_2d: FilePath | None
     """Full path to a 2D image."""
 
+    image_path_3d: FilePath | None
+    """Full path to a 3D image."""
+
     model_path_3d: FilePath | None
     """Full path to a 3D model."""
 
