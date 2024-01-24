@@ -29,7 +29,7 @@ class TransportBase(Interface, HALDevice):
     supported_labware: list[labware.LabwareBase]
     """Labware that can be moved by the device."""
 
-    last_transport_flag: bool = Field(exclude=False, default=False)
+    last_transport_flag: bool = Field(exclude=False, default=True)
     """Flag that indicates if the current transport is the last transport.
     This should be managed for multiple transports if you do not want repeated park operations occuring."""
 
