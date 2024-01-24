@@ -82,6 +82,9 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                 break
                 # Yay we picked up the tips!
 
+            except* Channel1000uL.Pickup.exceptions.NotExecutedError as e:
+                pass
+
             except* Channel1000uL.Pickup.exceptions.NoTipError as e:
                 exceptions = cast(
                     tuple[Channel1000uL.Pickup.exceptions.NoTipError, ...],
