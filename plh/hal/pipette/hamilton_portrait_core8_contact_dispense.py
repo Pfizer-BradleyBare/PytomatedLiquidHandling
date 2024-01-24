@@ -34,6 +34,8 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
         successful_pickups: dict[int, tuple[str, str]] = {}
         # We can track which pickups worked here, so we do not arbitrarily waste tips when a bad tip fails to be picked up.
 
+        not_executed_pickups: dict[int, tuple[str, str]] = {}
+
         while True:
             command = Channel1000uL.Pickup.Command(
                 backend_error_handling=False,
@@ -43,16 +45,8 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
             try:
                 for channel_number, tip in zip(self.active_channels, tips):
                     if channel_number in successful_pickups:
-                        command.options.append(
-                            Channel1000uL.Pickup.Options(
-                                ChannelNumber=channel_number,
-                                LabwareID=successful_pickups[channel_number][0],
-                                PositionID=successful_pickups[channel_number][1],
-                            ),
-                        )
                         continue
-                    # We need to check first if any tips were successful in being picked up.
-                    # If so, lets repickup that tip and move on to the next.
+                    # We need to check first if any tips were successful in being picked up. If so, we do not need to pickup a tip with that channel.
 
                     try:
                         labware_id = tip.tip.available_positions[0].LabwareID
@@ -74,6 +68,9 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                     tip.tip.use_tips(1)
                     # We are going to assume straight off that the pickup will be successful. If it is not then we will handle later.
 
+                not_executed_pickups = {}
+                # We will rebild our not executed pickups on each round as needed.
+
                 self.backend.execute(command)
                 self.backend.wait(command)
                 self.backend.acknowledge(command, Channel1000uL.Pickup.Response)
@@ -83,7 +80,26 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                 # Yay we picked up the tips!
 
             except* Channel1000uL.Pickup.exceptions.NotExecutedError as e:
-                pass
+                exceptions = cast(
+                    tuple[Channel1000uL.Pickup.exceptions.NotExecutedError, ...],
+                    e.exceptions,
+                )
+
+                non_success_pickups = [
+                    exception.HamiltonBlockData.num
+                    for exception in exceptions
+                    if exception.HamiltonBlockData is not None
+                ]
+                # We cannot be sure if block data will be present.
+
+                for options in command.options:
+                    if options.ChannelNumber not in non_success_pickups:
+                        not_executed_pickups[options.ChannelNumber] = (
+                            options.LabwareID,
+                            options.PositionID,
+                        )
+                # We need to figure out which tips we should retry
+                # We are guarenteed by the Hamilton response base object that all except groups will be flat.
 
             except* Channel1000uL.Pickup.exceptions.NoTipError as e:
                 exceptions = cast(
@@ -100,29 +116,15 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                 # We cannot be sure if block data will be present.
 
                 for options in command.options:
-                    if options.ChannelNumber not in non_success_pickups:
+                    if (
+                        options.ChannelNumber not in non_success_pickups
+                        and options.ChannelNumber not in not_executed_pickups
+                    ):
                         successful_pickups[options.ChannelNumber] = (
                             options.LabwareID,
                             options.PositionID,
                         )
                 # We need to figure out which tips were picked up successfully.
-
-                command = Channel1000uL.Eject.Command(
-                    backend_error_handling=False,
-                    options=[],
-                )
-                for successful_pickup_key in successful_pickups:
-                    command.options.append(
-                        Channel1000uL.Eject.Options(
-                            ChannelNumber=successful_pickup_key,
-                            LabwareID=successful_pickups[successful_pickup_key][0],
-                            PositionID=successful_pickups[successful_pickup_key][1],
-                        ),
-                    )
-                self.backend.execute(command)
-                self.backend.wait(command)
-                self.backend.acknowledge(command, Channel1000uL.Eject.Response)
-                # Now let's put them back and so we can try again.
 
     def _eject(
         self: HamiltonPortraitCORE8ContactDispense,
