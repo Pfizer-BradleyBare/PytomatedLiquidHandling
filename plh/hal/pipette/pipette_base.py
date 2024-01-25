@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 from abc import abstractmethod
 from math import ceil
 
@@ -18,10 +19,10 @@ from .pipette_tip import PipetteTip
 class _PickupOptions:
     """Options used for low level ```_pickup``` function."""
 
-    ChannelNumber: int
+    channel_number: int
     """Channel to use to pickup the tip"""
 
-    PipetteTip: PipetteTip
+    pipette_tip: PipetteTip
     """Which ```PipetteTip``` to try to pickup."""
 
 
@@ -29,28 +30,28 @@ class _PickupOptions:
 class _AspirateDispenseOptions:
     """Options use for low level ```_aspirate``` and ```_dispense``` functions."""
 
-    ChannelNumber: int
+    channel_number: int
     "Channel to use for aspiration / dispense"
 
-    LayoutItem: layout_item.LayoutItemBase
+    layout_item: layout_item.LayoutItemBase
     "Layout item to aspirate /dispense from"
 
-    PositionID: str
+    position_id: str
     "PositionID in the layout item"
 
-    WellVolume: float
+    well_volume: float
     """Present volume in the well"""
 
-    MixCycles: int
+    mix_cycles: int
     """Cycles to mix. 0 if not needed."""
 
-    MixVolume: float
+    mix_volume: float
     """Only matter if ```MixCycles``` is greater than 0. Must be less than or equal to ```WellVolume```."""
 
-    LiquidClass: str
+    liquid_class: str
     """Liquid class name for aspiration / dispense."""
 
-    Volume: float
+    volume: float
     """Volume to aspirate / dispense."""
 
 
@@ -58,13 +59,13 @@ class _AspirateDispenseOptions:
 class _EjectOptions:
     """Options used for low level ```_eject``` function."""
 
-    ChannelNumber: int
+    channel_number: int
     """Channel to eject."""
 
-    LabwareID: str
+    labware_id: str
     """Labware ID to eject into."""
 
-    PositionID: str
+    position_id: str
     """Position ID in labware id to eject into."""
 
 
@@ -79,7 +80,7 @@ class TransferOptions:
     """What position in the ```source_layout_item``` we are aspirating from.
     NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
 
-    source_well_volume: float | None
+    source_well_volume: float
     """Current volume in ```source_position``` of ```source_layout_item```."""
 
     source_mix_cycles: int
@@ -100,7 +101,7 @@ class TransferOptions:
     """What position in the ```destination_layout_item``` we are dispensing to.
     NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
 
-    destination_well_volume: float | None
+    destination_well_volume: float
     """Current volume in ```destination_position``` of ```destination_layout_item```."""
 
     destination_mix_cycles: int
@@ -268,10 +269,11 @@ class PipetteBase(Interface, HALDevice):
         options: TransferOptions,
         volume: float,
     ) -> list[TransferOptions]:
+        options = copy.copy(options)
         num_transfers = ceil(options.transfer_volume / volume)
         options.transfer_volume /= num_transfers
 
-        return [options for _ in range(num_transfers)]
+        return [copy.copy(options) for _ in range(num_transfers)]
 
     def _get_tip(
         self: PipetteBase,
