@@ -263,6 +263,20 @@ class PipetteBase(Interface, HALDevice):
         ][-1]
 
     @abstractmethod
+    def _pickup(
+        self: PipetteBase,
+        tips: list[PipetteTip],
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def _pickup_time(
+        self: PipetteBase,
+        tips: list[PipetteTip],
+    ) -> None:
+        ...
+
+    @abstractmethod
     def transfer(self: PipetteBase, options: list[TransferOptions]) -> None:
         ...
 
