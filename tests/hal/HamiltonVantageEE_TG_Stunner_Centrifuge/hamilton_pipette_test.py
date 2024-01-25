@@ -47,13 +47,13 @@ position_ids = ["A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1"]
 well_volumes = [5, 25, 50, 100, 150, 200, 300, 400]
 volumes = [5, 25, 50, 100, 150, 200, 300, 400]
 mix_cycles = [0, 0, 0, 5, 0, 0, 0, 5]
-mix_volumes = [0, 0, 0, 100, 0, 0, 0, 400]
+mix_volumes = [0, 0, 0, 150, 0, 0, 0, 200]
 
 
 pipette._aspirate(
     [
         hal.pipette._AspirateDispenseOptions(
-            ChannelNumber=1,
+            ChannelNumber=i+1,
             LayoutItem=plate,
             PositionID=position_ids[i],
             WellVolume=well_volumes[i],
