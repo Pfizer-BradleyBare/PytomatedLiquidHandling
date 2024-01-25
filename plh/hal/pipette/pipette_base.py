@@ -270,13 +270,6 @@ class PipetteBase(Interface, HALDevice):
         ...
 
     @abstractmethod
-    def _pickup_time(
-        self: PipetteBase,
-        tips: list[PipetteTip],
-    ) -> None:
-        ...
-
-    @abstractmethod
     def transfer(self: PipetteBase, options: list[TransferOptions]) -> None:
         ...
 
