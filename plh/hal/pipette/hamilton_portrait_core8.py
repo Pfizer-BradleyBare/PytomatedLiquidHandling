@@ -260,7 +260,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                 self.backend.wait(command)
                 self.backend.acknowledge(command, Channel1000uL.Eject.Response)
 
-    def time_to_transfer(
+    def transfer_time(
         self: HamiltonPortraitCORE8,
         options: list[TransferOptions],
     ) -> float:

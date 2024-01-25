@@ -16,27 +16,56 @@ from .pipette_tip import PipetteTip
 
 @dataclasses.dataclass(kw_only=True)
 class _PickupOptions:
+    """Options used for low level ```_pickup``` function."""
+
     ChannelNumber: int
+    """Channel to use to pickup the tip"""
+
     PipetteTip: PipetteTip
+    """Which ```PipetteTip``` to try to pickup."""
 
 
 @dataclasses.dataclass(kw_only=True)
 class _AspirateDispenseOptions:
+    """Options use for low level ```_aspirate``` and ```_dispense``` functions."""
+
     ChannelNumber: int
+    "Channel to use for aspiration / dispense"
+
     LayoutItem: layout_item.LayoutItemBase
+    "Layout item to aspirate /dispense from"
+
     PositionID: str
+    "PositionID in the layout item"
+
     WellVolume: float
+    """Present volume in the well"""
+
     MixCycles: int
+    """Cycles to mix. 0 if not needed."""
+
     MixVolume: float
+    """Only matter if ```MixCycles``` is greater than 0. Must be less than or equal to ```WellVolume```."""
+
     LiquidClass: str
+    """Liquid class name for aspiration / dispense."""
+
     Volume: float
+    """Volume to aspirate / dispense."""
 
 
 @dataclasses.dataclass(kw_only=True)
 class _EjectOptions:
+    """Options used for low level ```_eject``` function."""
+
     ChannelNumber: int
+    """Channel to eject."""
+
     LabwareID: str
+    """Labware ID to eject into."""
+
     PositionID: str
+    """Position ID in labware id to eject into."""
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -292,6 +321,8 @@ class PipetteBase(Interface, HALDevice):
         self: PipetteBase,
         options: list[_PickupOptions],
     ) -> None:
+        """This function should pickup tips from a given pipette tip location."""
+        """Errors should be handled here, such that iteration will continue accross tips until either the teir runs out of positions or tips are successfully picked up."""
         ...
 
     @abstractmethod
@@ -299,6 +330,7 @@ class PipetteBase(Interface, HALDevice):
         self: PipetteBase,
         positions: list[_EjectOptions],
     ) -> None:
+        """This function should eject tips to a positions defined by ```_EjectOptions```."""
         ...
 
     @abstractmethod
@@ -314,5 +346,5 @@ class PipetteBase(Interface, HALDevice):
         ...
 
     @abstractmethod
-    def time_to_transfer(self: PipetteBase, options: list[TransferOptions]) -> float:
+    def transfer_time(self: PipetteBase, options: list[TransferOptions]) -> float:
         ...

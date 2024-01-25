@@ -184,5 +184,5 @@ class HamiltonCORE96(PipetteBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, CORE96Head.Eject.Response)
 
-    def time_to_transfer(self: HamiltonCORE96, options: list[TransferOptions]) -> float:
+    def transfer_time(self: HamiltonCORE96, options: list[TransferOptions]) -> float:
         return 0

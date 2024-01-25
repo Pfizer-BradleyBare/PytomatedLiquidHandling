@@ -251,7 +251,7 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
     ) -> None:
         ...
 
-    def time_to_transfer(
+    def transfer_time(
         self: HamiltonPortraitCORE8ContactDispense,
         options: list[TransferOptions],
     ) -> float:
