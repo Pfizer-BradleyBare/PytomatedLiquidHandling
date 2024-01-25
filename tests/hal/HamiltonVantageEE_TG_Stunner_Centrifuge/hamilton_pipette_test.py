@@ -30,14 +30,14 @@ pipette_tip = pipette.supported_tips[0]
 
 pipette._pickup(
     [
-        hal.pipette._PickupOptions(ChannelNumber=1, PipetteTip=pipette_tip),
-        hal.pipette._PickupOptions(ChannelNumber=2, PipetteTip=pipette_tip),
-        hal.pipette._PickupOptions(ChannelNumber=3, PipetteTip=pipette_tip),
-        hal.pipette._PickupOptions(ChannelNumber=4, PipetteTip=pipette_tip),
-        hal.pipette._PickupOptions(ChannelNumber=5, PipetteTip=pipette_tip),
-        hal.pipette._PickupOptions(ChannelNumber=6, PipetteTip=pipette_tip),
-        hal.pipette._PickupOptions(ChannelNumber=7, PipetteTip=pipette_tip),
-        hal.pipette._PickupOptions(ChannelNumber=8, PipetteTip=pipette_tip),
+        hal.pipette._PickupOptions(channel_number=1, pipette_tip=pipette_tip),
+        hal.pipette._PickupOptions(channel_number=2, pipette_tip=pipette_tip),
+        hal.pipette._PickupOptions(channel_number=3, pipette_tip=pipette_tip),
+        hal.pipette._PickupOptions(channel_number=4, pipette_tip=pipette_tip),
+        hal.pipette._PickupOptions(channel_number=5, pipette_tip=pipette_tip),
+        hal.pipette._PickupOptions(channel_number=6, pipette_tip=pipette_tip),
+        hal.pipette._PickupOptions(channel_number=7, pipette_tip=pipette_tip),
+        hal.pipette._PickupOptions(channel_number=8, pipette_tip=pipette_tip),
     ],
 )
 
@@ -53,14 +53,14 @@ mix_volumes = [0, 0, 0, 150, 0, 0, 0, 200]
 pipette._aspirate(
     [
         hal.pipette._AspirateDispenseOptions(
-            ChannelNumber=i+1,
-            LayoutItem=plate,
-            PositionID=position_ids[i],
-            WellVolume=well_volumes[i],
-            MixCycles=mix_cycles[i],
-            MixVolume=mix_volumes[i],
-            LiquidClass="HighVolume_Water_DispenseSurface_Empty",
-            Volume=volumes[i],
+            channel_number=i + 1,
+            layout_item=plate,
+            position_id=position_ids[i],
+            well_volume=well_volumes[i],
+            mix_cycles=mix_cycles[i],
+            mix_volume=mix_volumes[i],
+            liquid_class="HighVolume_Water_DispenseSurface_Empty",
+            volume=volumes[i],
         )
         for i in range(8)
     ],
@@ -73,9 +73,9 @@ input("enter")
 pipette._eject(
     [
         hal.pipette._EjectOptions(
-            ChannelNumber=i + 1,
-            LabwareID="VStarWaste_16Pos_0001",
-            PositionID=str(i + 1),
+            channel_number=i + 1,
+            labware_id="VStarWaste_16Pos_0001",
+            position_id=str(i + 1),
         )
         for i in range(8)
     ],
