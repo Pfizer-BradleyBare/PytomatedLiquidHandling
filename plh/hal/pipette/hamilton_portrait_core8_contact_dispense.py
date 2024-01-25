@@ -4,9 +4,9 @@ from typing import Literal, cast
 
 from pydantic import dataclasses
 
-from plh.driver.HAMILTON.backend import HamiltonBackendBase
+from plh.driver.HAMILTON.backend import HamiltonBackendBase, ButtonIDs
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
-
+from loguru import logger
 from .pipette_base import *
 from .pipette_base import PipetteBase, TransferOptions
 from .pipette_tip import PipetteTip
@@ -48,6 +48,16 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                         continue
                     # We need to check first if any tips were successful in being picked up. If so, we do not need to pickup a tip with that channel.
 
+                    if channel_number in not_executed_pickups:
+                        command.options.append(
+                            Channel1000uL.Pickup.Options(
+                                ChannelNumber=channel_number,
+                                LabwareID=not_executed_pickups[channel_number][0],
+                                PositionID=not_executed_pickups[channel_number][1],
+                            ),
+                        )  
+                        continue                 
+
                     try:
                         labware_id = tip.tip.available_positions[0].LabwareID
                         position_id = tip.tip.available_positions[0].PositionID
@@ -85,7 +95,9 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                     e.exceptions,
                 )
 
-                non_success_pickups = [
+                logger.info(exceptions)
+
+                non_executed_pickups = [
                     exception.HamiltonBlockData.num
                     for exception in exceptions
                     if exception.HamiltonBlockData is not None
@@ -93,7 +105,7 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                 # We cannot be sure if block data will be present.
 
                 for options in command.options:
-                    if options.ChannelNumber not in non_success_pickups:
+                    if options.ChannelNumber in non_executed_pickups:
                         not_executed_pickups[options.ChannelNumber] = (
                             options.LabwareID,
                             options.PositionID,
@@ -107,6 +119,8 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                     e.exceptions,
                 )
                 # We are guarenteed by the Hamilton response base object that all except groups will be flat.
+
+                logger.info(exceptions)
 
                 non_success_pickups = [
                     exception.HamiltonBlockData.num

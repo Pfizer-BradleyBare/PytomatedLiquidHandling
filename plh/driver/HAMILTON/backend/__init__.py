@@ -7,6 +7,7 @@ from .hamilton_response_base import (
     HamiltonBlockData,
     HamiltonBlockDataPackage,
     HamiltonResponseBase,
+    ButtonIDs,ErrFlags
 )
 from .microlab_star import MicrolabSTAR
 from .vantage_track_gripper_entry_exit import VantageTrackGripperEntryExit
@@ -21,5 +22,7 @@ __all__ = [
     "HamiltonResponseBase",
     "HamiltonBlockDataPackage",
     "HamiltonBlockData",
+    "ButtonIDs",
+    "ErrFlags",
     "exceptions",
 ]
