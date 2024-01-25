@@ -27,5 +27,5 @@ HamiltonPortraitCORE8ContactDispense:
         tip_waste_labware_id: Test
         supported_liquid_class_categories:
           Test:
-            - liquid_class_name: "None"
+            - liquid_class_name: "HighVolume_Water_DispenseSurface_Empty"
               max_volume: 1000
