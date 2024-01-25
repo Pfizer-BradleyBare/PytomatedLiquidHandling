@@ -42,14 +42,14 @@ input("enter")
 
 pipette._eject(
     [
-        (1, ("Waste", "1")),
-        (2, ("Waste", "2")),
-        (3, ("Waste", "3")),
-        (4, ("Waste", "4")),
-        (5, ("Waste", "1")),
-        (6, ("Waste", "2")),
-        (7, ("Waste", "3")),
-        (8, ("Waste", "4")),
+        (1, ("VStarWaste_16Pos_0001", "1")),
+        (2, ("VStarWaste_16Pos_0001", "2")),
+        (3, ("VStarWaste_16Pos_0001", "3")),
+        (4, ("VStarWaste_16Pos_0001", "4")),
+        (5, ("VStarWaste_16Pos_0001", "1")),
+        (6, ("VStarWaste_16Pos_0001", "2")),
+        (7, ("VStarWaste_16Pos_0001", "3")),
+        (8, ("VStarWaste_16Pos_0001", "4")),
     ],
 )
 
