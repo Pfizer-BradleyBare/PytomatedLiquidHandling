@@ -7,7 +7,7 @@ from pydantic import dataclasses
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
-from plh.hal import labware
+from plh.hal import labware, tip
 
 from .pipette_base import *
 from .pipette_base import (
@@ -35,10 +35,13 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
         options: list[_PickupOptions],
     ) -> None:
         """Tips is a list of tuples of (channel_number, Tip)"""
+        options = sorted(options, key=lambda x: x.ChannelNumber)
+
         successful_pickups: dict[int, tuple[str, str]] = {}
         # We can track which pickups worked here, so we do not arbitrarily waste tips when a bad tip fails to be picked up.
 
         not_executed_pickups: dict[int, tuple[str, str]] = {}
+        # If a tip isn't executed we may want to save it and try again. We only want to abort NoTipErrors
 
         while True:
             command = Channel1000uL.Pickup.Command(
@@ -80,10 +83,24 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                                 PositionID=position_id,
                             ),
                         )
-                    except IndexError as e:
-                        raise RuntimeError("Out of tips in teir.") from e
+                    except IndexError:
+                        self._eject(
+                            [
+                                _EjectOptions(
+                                    ChannelNumber=pickup_key,
+                                    LabwareID=successful_pickups[pickup_key][0],
+                                    PositionID=successful_pickups[pickup_key][1],
+                                )
+                                for pickup_key in successful_pickups
+                            ],
+                        )
+
+                        raise ExceptionGroup(
+                            "Errors during tip pickup",
+                            [tip.TierOutOfTipsError(option.PipetteTip.tip)],
+                        )
                     # It is possible that there are not enough tips in the teir to support this pickup operation.
-                    # We DO NOT want to hold tips when a teir is empty. We need to be able to grab the gripper.
+                    # We DO NOT want to hold tips when a teir is empty. We need to be able to grab the gripper. So we will eject them.
 
                     option.PipetteTip.tip.use_tips(1)
                     # We are going to assume straight off that the pickup will be successful. If it is not then we will handle later.
@@ -155,6 +172,8 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
         options: list[_EjectOptions],
     ) -> None:
         """Positions is a list of tuple of (channel_number,(labware_id,position_id))."""
+        options = sorted(options, key=lambda x: x.ChannelNumber)
+
         command = Channel1000uL.Eject.Command(backend_error_handling=False, options=[])
 
         for option in options:
@@ -174,6 +193,8 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
         self: HamiltonPortraitCORE8ContactDispense,
         options: list[_AspirateDispenseOptions],
     ) -> None:
+        options = sorted(options, key=lambda x: x.ChannelNumber)
+
         command = Channel1000uL.Aspirate.Command(
             backend_error_handling=False,
             options=[],
@@ -212,6 +233,8 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
         self: HamiltonPortraitCORE8ContactDispense,
         options: list[_AspirateDispenseOptions],
     ) -> None:
+        options = sorted(options, key=lambda x: x.ChannelNumber)
+
         command = Channel1000uL.Dispense.Command(
             backend_error_handling=False,
             options=[],

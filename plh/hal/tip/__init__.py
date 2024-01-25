@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .ee_tip_stack import EETipStack
+from .exceptions import TierOutOfTipsError
 from .hamilton_ee_custom_ftr import HamiltonEECustomFTR
 from .hamilton_ee_ntr import HamiltonEENTR
 from .hamilton_ee_tip_base import HamiltonEETipBase
@@ -16,6 +17,7 @@ __all__ = [
     "HamiltonEECustomFTR",
     "HamiltonEENTR",
     "EETipStack",
+    "TierOutOfTipsError",
 ]
 
 identifier = str
