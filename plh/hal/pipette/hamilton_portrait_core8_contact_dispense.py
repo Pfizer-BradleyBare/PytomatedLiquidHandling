@@ -25,12 +25,9 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
 
     def _pickup(
         self: HamiltonPortraitCORE8ContactDispense,
-        tips: list[PipetteTip],
+        tips: list[tuple[int,PipetteTip]],
     ) -> None:
-        if len(tips) > len(self.active_channels):
-            raise RuntimeError("Cannot pickup more tips than you have channels.")
-        # Does num of tips match num of channels?
-
+        """Tips is a list of tuples of (channel_number, Tip)"""
         successful_pickups: dict[int, tuple[str, str]] = {}
         # We can track which pickups worked here, so we do not arbitrarily waste tips when a bad tip fails to be picked up.
 
@@ -43,7 +40,7 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
             )
 
             try:
-                for channel_number, tip in zip(self.active_channels, tips):
+                for channel_number, tip in tips:
                     if channel_number in successful_pickups:
                         continue
                     # We need to check first if any tips were successful in being picked up. If so, we do not need to pickup a tip with that channel.
@@ -142,10 +139,15 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
 
     def _eject(
         self: HamiltonPortraitCORE8ContactDispense,
-        labware_ids: list[str],
-        position_ids: list[str],
+        positions: list[tuple[int,tuple[str,str]]]
     ) -> None:
-        ...
+        """positions is a list of tuple of (channel_number,(labware_id,position_id))"""
+
+        command = Channel1000uL.Eject.Command(backend_error_handling=False,options=[])
+
+        for position in positions:
+            command.options.append(Channel1000uL.Eject.Options(ChannelNumber=position[0],LabwareID=position[1][0],PositionID=position[1][1]))
+
 
     def transfer(
         self: HamiltonPortraitCORE8ContactDispense,
