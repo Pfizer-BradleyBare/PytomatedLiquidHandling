@@ -20,6 +20,8 @@ tip = hal.tip.devices["1000uL FTR"]
 
 tip.initialize()
 
+plate = hal.layout_item.devices["Carrier42_Pos1_Biorad200uLPCRPlate"]
+
 pipette = hal.pipette.devices["Pipette"]
 
 pipette.initialize()
@@ -38,6 +40,54 @@ pipette._pickup(
         hal.pipette._PickupOptions(ChannelNumber=8, PipetteTip=pipette_tip),
     ],
 )
+
+input("enter")
+
+pipette._aspirate(
+    [
+        hal.pipette._AspirateDispenseOptions(
+            ChannelNumber=1,
+            LayoutItem=plate,
+            PositionID="A1",
+            WellVolume=10,
+            MixCycles=0,
+            MixVolume=0,
+            LiquidClass="HighVolume_Water_DispenseSurface_Empty",
+            Volume=30,
+        ),
+        hal.pipette._AspirateDispenseOptions(
+            ChannelNumber=2,
+            LayoutItem=plate,
+            PositionID="B1",
+            WellVolume=50,
+            MixCycles=0,
+            MixVolume=0,
+            LiquidClass="HighVolume_Water_DispenseSurface_Empty",
+            Volume=30,
+        ),
+        hal.pipette._AspirateDispenseOptions(
+            ChannelNumber=3,
+            LayoutItem=plate,
+            PositionID="C1",
+            WellVolume=100,
+            MixCycles=0,
+            MixVolume=0,
+            LiquidClass="HighVolume_Water_DispenseSurface_Empty",
+            Volume=30,
+        ),
+        hal.pipette._AspirateDispenseOptions(
+            ChannelNumber=4,
+            LayoutItem=plate,
+            PositionID="D1",
+            WellVolume=150,
+            MixCycles=5,
+            MixVolume=100,
+            LiquidClass="HighVolume_Water_DispenseSurface_Empty",
+            Volume=30,
+        ),
+    ],
+)
+
 input("enter")
 
 pipette._eject(

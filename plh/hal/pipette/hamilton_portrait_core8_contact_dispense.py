@@ -7,9 +7,16 @@ from pydantic import dataclasses
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
+from plh.hal import labware
 
 from .pipette_base import *
-from .pipette_base import PipetteBase, TransferOptions, _EjectOptions, _PickupOptions
+from .pipette_base import (
+    PipetteBase,
+    TransferOptions,
+    _AspirateDispenseOptions,
+    _EjectOptions,
+    _PickupOptions,
+)
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -162,6 +169,81 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
         self.backend.execute(command)
         self.backend.wait(command)
         self.backend.acknowledge(command, Channel1000uL.Eject.Response)
+
+    def _aspirate(
+        self: HamiltonPortraitCORE8ContactDispense,
+        options: list[_AspirateDispenseOptions],
+    ) -> None:
+        command = Channel1000uL.Aspirate.Command(
+            backend_error_handling=False,
+            options=[],
+        )
+
+        for option in options:
+            command.options.append(
+                Channel1000uL.Aspirate.Options(
+                    ChannelNumber=option.ChannelNumber,
+                    LabwareID=option.LayoutItem.labware_id,
+                    PositionID=option.PositionID,
+                    LiquidClass=option.LiquidClass,
+                    Volume=option.Volume,
+                    Mode=Channel1000uL.Aspirate.ModeOptions.AspirateAll,
+                    CapacitiveLiquidLevelDetection=Channel1000uL.Aspirate.LLDOptions.Off,
+                    SubmergeDepth=0,
+                    PressureLiquidLevelDetection=Channel1000uL.Aspirate.LLDOptions.Off,
+                    MaxHeightDifference=0,
+                    FixHeightFromBottom=cast(
+                        labware.PipettableLabware,
+                        option.LayoutItem.labware,
+                    ).get_height_from_volume(option.WellVolume),
+                    RetractDistanceForTransportAir=5,
+                    LiquidFollowing=Channel1000uL.Aspirate.YesNoOptions.Yes,
+                    MixCycles=option.MixCycles,
+                    MixPosition=0,
+                    MixVolume=option.MixVolume,
+                ),
+            )
+
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, Channel1000uL.Aspirate.Response)
+
+    def _dispense(
+        self: HamiltonPortraitCORE8ContactDispense,
+        options: list[_AspirateDispenseOptions],
+    ) -> None:
+        command = Channel1000uL.Dispense.Command(
+            backend_error_handling=False,
+            options=[],
+        )
+
+        for option in options:
+            command.options.append(
+                Channel1000uL.Dispense.Options(
+                    ChannelNumber=option.ChannelNumber,
+                    LabwareID=option.LayoutItem.labware_id,
+                    PositionID=option.PositionID,
+                    LiquidClass=option.LiquidClass,
+                    Volume=option.Volume,
+                    Mode=Channel1000uL.Dispense.ModeOptions.FromLiquidClassDefinition,
+                    FixHeightFromBottom=cast(
+                        labware.PipettableLabware,
+                        option.LayoutItem.labware,
+                    ).get_height_from_volume(option.WellVolume),
+                    RetractDistanceForTransportAir=5,
+                    CapacitiveLiquidLevelDetection=Channel1000uL.Dispense.LLDOptions.Off,
+                    SubmergeDepth=0,
+                    SideTouch=Channel1000uL.Dispense.YesNoOptions.No,
+                    LiquidFollowing=Channel1000uL.Dispense.YesNoOptions.Yes,
+                    MixCycles=option.MixCycles,
+                    MixPosition=0,
+                    MixVolume=option.MixVolume,
+                ),
+            )
+
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, Channel1000uL.Dispense.Response)
 
     def transfer(
         self: HamiltonPortraitCORE8ContactDispense,

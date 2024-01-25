@@ -23,11 +23,13 @@ class _PickupOptions:
 @dataclasses.dataclass(kw_only=True)
 class _AspirateDispenseOptions:
     ChannelNumber: int
-    LabwareID: str
+    LayoutItem: layout_item.LayoutItemBase
     PositionID: str
-    WellVolume: float | None
+    WellVolume: float
     MixCycles: int
+    MixVolume: float
     LiquidClass: str
+    Volume: float
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -48,7 +50,7 @@ class TransferOptions:
     """What position in the ```source_layout_item``` we are aspirating from.
     NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
 
-    source_well_volume: float
+    source_well_volume: float | None
     """Current volume in ```source_position``` of ```source_layout_item```."""
 
     source_mix_cycles: int
@@ -69,7 +71,7 @@ class TransferOptions:
     """What position in the ```destination_layout_item``` we are dispensing to.
     NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
 
-    destination_well_volume: float
+    destination_well_volume: float | None
     """Current volume in ```destination_position``` of ```destination_layout_item```."""
 
     destination_mix_cycles: int
@@ -301,6 +303,10 @@ class PipetteBase(Interface, HALDevice):
 
     @abstractmethod
     def _aspirate(self: PipetteBase, options: list[_AspirateDispenseOptions]) -> None:
+        ...
+
+    @abstractmethod
+    def _dispense(self: PipetteBase, options: list[_AspirateDispenseOptions]) -> None:
         ...
 
     @abstractmethod
