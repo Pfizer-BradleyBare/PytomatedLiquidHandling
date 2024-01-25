@@ -265,7 +265,14 @@ class PipetteBase(Interface, HALDevice):
     @abstractmethod
     def _pickup(
         self: PipetteBase,
-        tips: list[PipetteTip],
+        tips: list[tuple[int, PipetteTip]],
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def _eject(
+        self: PipetteBase,
+        positions: list[tuple[int, tuple[str, str]]],
     ) -> None:
         ...
 

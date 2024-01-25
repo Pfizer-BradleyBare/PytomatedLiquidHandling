@@ -28,17 +28,30 @@ pipette_tip = pipette.supported_tips[0]
 
 pipette._pickup(
     [
-        pipette_tip,
-        pipette_tip,
-        pipette_tip,
-        pipette_tip,
-        pipette_tip,
-        pipette_tip,
-        pipette_tip,
-        pipette_tip,
+        (1, pipette_tip),
+        (2, pipette_tip),
+        (3, pipette_tip),
+        (4, pipette_tip),
+        (5, pipette_tip),
+        (6, pipette_tip),
+        (7, pipette_tip),
+        (8, pipette_tip),
     ],
 )
 input("enter")
+
+pipette._eject(
+    [
+        (1, ("Waste", "1")),
+        (2, ("Waste", "2")),
+        (3, ("Waste", "3")),
+        (4, ("Waste", "4")),
+        (5, ("Waste", "1")),
+        (6, ("Waste", "2")),
+        (7, ("Waste", "3")),
+        (8, ("Waste", "4")),
+    ],
+)
 
 pipette.deinitialize()
 

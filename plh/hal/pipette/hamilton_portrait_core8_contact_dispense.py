@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from typing import Literal, cast
 
+from loguru import logger
 from pydantic import dataclasses
 
-from plh.driver.HAMILTON.backend import HamiltonBackendBase, ButtonIDs
+from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
-from loguru import logger
+
 from .pipette_base import *
 from .pipette_base import PipetteBase, TransferOptions
 from .pipette_tip import PipetteTip
@@ -25,7 +26,7 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
 
     def _pickup(
         self: HamiltonPortraitCORE8ContactDispense,
-        tips: list[tuple[int,PipetteTip]],
+        tips: list[tuple[int, PipetteTip]],
     ) -> None:
         """Tips is a list of tuples of (channel_number, Tip)"""
         successful_pickups: dict[int, tuple[str, str]] = {}
@@ -52,8 +53,8 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                                 LabwareID=not_executed_pickups[channel_number][0],
                                 PositionID=not_executed_pickups[channel_number][1],
                             ),
-                        )  
-                        continue                 
+                        )
+                        continue
 
                     try:
                         labware_id = tip.tip.available_positions[0].LabwareID
@@ -139,15 +140,23 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
 
     def _eject(
         self: HamiltonPortraitCORE8ContactDispense,
-        positions: list[tuple[int,tuple[str,str]]]
+        positions: list[tuple[int, tuple[str, str]]],
     ) -> None:
-        """positions is a list of tuple of (channel_number,(labware_id,position_id))"""
-
-        command = Channel1000uL.Eject.Command(backend_error_handling=False,options=[])
+        """Positions is a list of tuple of (channel_number,(labware_id,position_id))."""
+        command = Channel1000uL.Eject.Command(backend_error_handling=False, options=[])
 
         for position in positions:
-            command.options.append(Channel1000uL.Eject.Options(ChannelNumber=position[0],LabwareID=position[1][0],PositionID=position[1][1]))
+            command.options.append(
+                Channel1000uL.Eject.Options(
+                    ChannelNumber=position[0],
+                    LabwareID=position[1][0],
+                    PositionID=position[1][1],
+                ),
+            )
 
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, Channel1000uL.Eject.Response)
 
     def transfer(
         self: HamiltonPortraitCORE8ContactDispense,
