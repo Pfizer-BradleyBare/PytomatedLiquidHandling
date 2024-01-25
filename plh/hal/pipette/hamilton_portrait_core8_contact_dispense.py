@@ -66,6 +66,7 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                             ),
                         )
                         continue
+                    # If there are any not executed pickups then those will trump any new positions. Let's at least give the non-attempted positions a chance.
 
                     try:
                         labware_id = option.PipetteTip.tip.available_positions[
