@@ -132,11 +132,6 @@ pipette._eject(
             LabwareID="VStarWaste_16Pos_0001",
             PositionID="8",
         ),
-        hal.pipette._EjectOptions(
-            ChannelNumber=9,
-            LabwareID="VStarWaste_16Pos_0001",
-            PositionID="",
-        ),
     ],
 )
 
