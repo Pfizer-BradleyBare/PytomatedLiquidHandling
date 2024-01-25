@@ -28,28 +28,65 @@ pipette_tip = pipette.supported_tips[0]
 
 pipette._pickup(
     [
-        (1, pipette_tip),
-        (2, pipette_tip),
-        (3, pipette_tip),
-        (4, pipette_tip),
-        (5, pipette_tip),
-        (6, pipette_tip),
-        (7, pipette_tip),
-        (8, pipette_tip),
+        hal.pipette._PickupOptions(ChannelNumber=1, PipetteTip=pipette_tip),
+        hal.pipette._PickupOptions(ChannelNumber=2, PipetteTip=pipette_tip),
+        hal.pipette._PickupOptions(ChannelNumber=3, PipetteTip=pipette_tip),
+        hal.pipette._PickupOptions(ChannelNumber=4, PipetteTip=pipette_tip),
+        hal.pipette._PickupOptions(ChannelNumber=5, PipetteTip=pipette_tip),
+        hal.pipette._PickupOptions(ChannelNumber=6, PipetteTip=pipette_tip),
+        hal.pipette._PickupOptions(ChannelNumber=7, PipetteTip=pipette_tip),
+        hal.pipette._PickupOptions(ChannelNumber=8, PipetteTip=pipette_tip),
     ],
 )
 input("enter")
 
 pipette._eject(
     [
-        (1, ("VStarWaste_16Pos_0001", "1")),
-        (2, ("VStarWaste_16Pos_0001", "2")),
-        (3, ("VStarWaste_16Pos_0001", "3")),
-        (4, ("VStarWaste_16Pos_0001", "4")),
-        (5, ("VStarWaste_16Pos_0001", "1")),
-        (6, ("VStarWaste_16Pos_0001", "2")),
-        (7, ("VStarWaste_16Pos_0001", "3")),
-        (8, ("VStarWaste_16Pos_0001", "4")),
+        hal.pipette._EjectOptions(
+            ChannelNumber=1,
+            LabwareID="VStarWaste_16Pos_0001",
+            PositionID="1",
+        ),
+        hal.pipette._EjectOptions(
+            ChannelNumber=2,
+            LabwareID="VStarWaste_16Pos_0001",
+            PositionID="2",
+        ),
+        hal.pipette._EjectOptions(
+            ChannelNumber=3,
+            LabwareID="VStarWaste_16Pos_0001",
+            PositionID="3",
+        ),
+        hal.pipette._EjectOptions(
+            ChannelNumber=4,
+            LabwareID="VStarWaste_16Pos_0001",
+            PositionID="4",
+        ),
+        hal.pipette._EjectOptions(
+            ChannelNumber=5,
+            LabwareID="VStarWaste_16Pos_0001",
+            PositionID="5",
+        ),
+        hal.pipette._EjectOptions(
+            ChannelNumber=6,
+            LabwareID="VStarWaste_16Pos_0001",
+            PositionID="6",
+        ),
+        hal.pipette._EjectOptions(
+            ChannelNumber=7,
+            LabwareID="VStarWaste_16Pos_0001",
+            PositionID="7",
+        ),
+        hal.pipette._EjectOptions(
+            ChannelNumber=8,
+            LabwareID="VStarWaste_16Pos_0001",
+            PositionID="8",
+        ),
+        hal.pipette._EjectOptions(
+            ChannelNumber=9,
+            LabwareID="VStarWaste_16Pos_0001",
+            PositionID="",
+        ),
     ],
 )
 

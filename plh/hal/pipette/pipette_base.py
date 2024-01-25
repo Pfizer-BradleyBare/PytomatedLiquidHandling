@@ -15,6 +15,29 @@ from .pipette_tip import PipetteTip
 
 
 @dataclasses.dataclass(kw_only=True)
+class _PickupOptions:
+    ChannelNumber: int
+    PipetteTip: PipetteTip
+
+
+@dataclasses.dataclass(kw_only=True)
+class _AspirateDispenseOptions:
+    ChannelNumber: int
+    LabwareID: str
+    PositionID: str
+    WellVolume: float | None
+    MixCycles: int
+    LiquidClass: str
+
+
+@dataclasses.dataclass(kw_only=True)
+class _EjectOptions:
+    ChannelNumber: int
+    LabwareID: str
+    PositionID: str
+
+
+@dataclasses.dataclass(kw_only=True)
 class TransferOptions:
     """Options that can be used for ```transfer``` and ```transfer_time```."""
 
@@ -265,15 +288,19 @@ class PipetteBase(Interface, HALDevice):
     @abstractmethod
     def _pickup(
         self: PipetteBase,
-        tips: list[tuple[int, PipetteTip]],
+        options: list[_PickupOptions],
     ) -> None:
         ...
 
     @abstractmethod
     def _eject(
         self: PipetteBase,
-        positions: list[tuple[int, tuple[str, str]]],
+        positions: list[_EjectOptions],
     ) -> None:
+        ...
+
+    @abstractmethod
+    def _aspirate(self: PipetteBase, options: list[_AspirateDispenseOptions]) -> None:
         ...
 
     @abstractmethod
