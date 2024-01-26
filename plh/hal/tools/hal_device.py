@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from typing import ClassVar, Self, cast
+from typing import ClassVar, cast
 
 from pydantic import BaseModel, dataclasses, field_validator
 
@@ -16,7 +16,7 @@ class HALDevice:
     that increase the capability of an automation system shall be described by this class.
     """
 
-    hal_devices: ClassVar[dict[str, type[Self]]] = {}
+    hal_devices: ClassVar[dict[str, type[HALDevice]]] = {}
     """All subclasses"""
 
     identifier: str
