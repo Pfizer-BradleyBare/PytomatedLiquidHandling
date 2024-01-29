@@ -25,15 +25,24 @@ class NotifierBase(HALDevice, ABC):
     def start_conversation(
         self: NotifierBase,
         identifier: str,
+        opening_text: str,
         contacts: list[ContactInfoBase],
         response_options: type[ConversationResponseOptionsEnumBase] | None,
-    ) -> ConversationBase:
-        """Creates a new conversation in the notifier object. If conversation already exists then runtime error is raised."""
+    ) -> None:
+        """Creates a new conversation in the notifier object. If conversation already exists then runtime error is raised.
+        It would be nice to send a message to contacts informing them the conversation has started.
+        """
         ...
 
     @abstractmethod
-    def end_conversation(self: NotifierBase, identifier: str) -> None:
-        """Removes converation from notifier. If conversation does exist then returns."""
+    def end_conversation(
+        self: NotifierBase,
+        identifier: str,
+        closing_text: str,
+    ) -> None:
+        """Removes converation from notifier. If conversation does not exist then returns.
+        It would be nice to send a message to contacts informing them the conversation is ended.
+        """
         ...
 
     @abstractmethod
@@ -52,5 +61,6 @@ class NotifierBase(HALDevice, ABC):
     ) -> None | ResponseOptionsEnumBase:
         """Receives response from the specified conversation.
         There are two possible responses: Message and Conversation.
-        Response priority: Message > Conversation > None"""
+        Response priority: Message > Conversation > None
+        """
         ...

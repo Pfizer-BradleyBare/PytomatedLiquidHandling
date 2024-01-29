@@ -1,5 +1,6 @@
 from .contact_info_base import ContactInfoBase
 from .conversation_base import Message
+from .email_notifier import EmailContact, EmailNotifier
 from .notifier_base import NotifierBase
 from .response_base import (
     ConversationResponseOptionsEnumBase,
@@ -12,6 +13,8 @@ __all__ = [
     "MessageResponseOptionsEnumBase",
     "ConversationResponseOptionsEnumBase",
     "Message",
+    "EmailNotifier",
+    "EmailContact",
 ]
 
 identifier = str
