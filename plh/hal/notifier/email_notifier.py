@@ -273,19 +273,20 @@ class EmailNotifier(NotifierBase):
                         )
 
                     else:
-                        text = "Response accepted.\n\n"
-                        text += f"{response.name} -> {response.value}\n\n"
-                        text += "Thanks!"
+                        # text = "Response accepted.\n\n"
+                        # text += f"{response.name} -> {response.value}\n\n"
+                        # text += "Thanks!"
 
-                        sender.send(
-                            subject=subject,
-                            sender=self.sender_email,
-                            receivers=from_,
-                            headers={
-                                "References": conversation.reference,
-                            },
-                            text=text,
-                        )
+                        # sender.send(
+                        #    subject=subject,
+                        #    sender=self.sender_email,
+                        #    receivers=from_,
+                        #    headers={
+                        #        "References": conversation.reference,
+                        #    },
+                        #    text=text,
+                        # )
+                        ...
 
                     latest_message.response = response
                     continue
@@ -297,19 +298,19 @@ class EmailNotifier(NotifierBase):
 
                 try:
                     conversation.response = conversation.response_options[body]
-                    text = "Response accepted.\n\n"
-                    text += f"{conversation.response.name} -> {conversation.response.value}\n\n"
-                    text += "Thanks!"
+                    # text = "Response accepted.\n\n"
+                    # text += f"{conversation.response.name} -> {conversation.response.value}\n\n"
+                    # text += "Thanks!"
 
-                    sender.send(
-                        subject=subject,
-                        sender=self.sender_email,
-                        receivers=from_,
-                        headers={
-                            "References": conversation.reference,
-                        },
-                        text=text,
-                    )
+                    # sender.send(
+                    #    subject=subject,
+                    #    sender=self.sender_email,
+                    #    receivers=from_,
+                    #    headers={
+                    #        "References": conversation.reference,
+                    #    },
+                    #    text=text,
+                    # )
                     continue
                 except KeyError:
                     ...
