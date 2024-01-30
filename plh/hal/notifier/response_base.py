@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from enum import Enum, EnumMeta, FlagBoundary, StrEnum, _EnumDict
+from enum import EnumMeta, FlagBoundary, StrEnum, _EnumDict
 from typing import Any
 
 
@@ -13,7 +13,7 @@ class ResponseOptionsEnumMeta(EnumMeta):
     NOTE: Type checking will complain that Enums with members cannot be subclassed. You may ignore that warning.
     """
 
-    def __getitem__(self: ResponseOptionsEnumMeta, name: str) -> Enum:
+    def __getitem__(self: ResponseOptionsEnumMeta, name: str) -> Any:
         """Case insensitive indexing."""
         return {k.lower(): self._member_map_[k] for k in self._member_map_}[
             name.lower()

@@ -9,7 +9,10 @@ from plh.hal.tools import HALDevice
 
 from .contact_info_base import ContactInfoBase
 from .conversation_base import ConversationBase, Message
-from .response_base import ConversationResponseOptionsEnumBase, ResponseOptionsEnumBase
+from .response_base import (
+    ConversationResponseOptionsEnumBase,
+    MessageResponseOptionsEnumBase,
+)
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -27,7 +30,7 @@ class NotifierBase(HALDevice, ABC):
         identifier: str,
         opening_text: str,
         contacts: list[ContactInfoBase],
-        response_options: type[ConversationResponseOptionsEnumBase] | None,
+        response_options: type[ConversationResponseOptionsEnumBase] = ConversationResponseOptionsEnumBase,
     ) -> None:
         """Creates a new conversation in the notifier object. If conversation already exists then runtime error is raised.
         It would be nice to send a message to contacts informing them the conversation has started.
@@ -55,12 +58,18 @@ class NotifierBase(HALDevice, ABC):
         ...
 
     @abstractmethod
-    def get_response(
+    def get_conversation_response(
         self: NotifierBase,
         conversation_identifier: str,
-    ) -> None | ResponseOptionsEnumBase:
-        """Receives response from the specified conversation.
-        There are two possible responses: Message and Conversation.
-        Response priority: Message > Conversation > None
-        """
+    ) -> None | ConversationResponseOptionsEnumBase:
+        """Receives response from the specified conversation if one is available."""
+        ...
+
+    @abstractmethod
+    def get_message_response(
+        self: NotifierBase,
+        conversation_identifier: str,
+        message: Message,
+    ) -> None | MessageResponseOptionsEnumBase:
+        """Receives response from the specified conversation message if one is available."""
         ...

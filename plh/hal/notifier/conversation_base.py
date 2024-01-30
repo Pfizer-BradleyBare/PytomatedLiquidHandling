@@ -19,7 +19,7 @@ class Message:
     extra_text: str | None
     """Additional information relating to the subject."""
 
-    response_options: None | type[MessageResponseOptionsEnumBase]
+    response_options: type[MessageResponseOptionsEnumBase] = MessageResponseOptionsEnumBase
     """If the message requires a response, what are the optons?"""
 
     response: None | MessageResponseOptionsEnumBase = dataclasses.field(
@@ -43,10 +43,14 @@ class ConversationBase:
     messages: list[Message] = dataclasses.field(init=False, default_factory=list)
     """All communications that occured. By default the last communication may be the one that needs a response."""
 
-    response_options: None | type[ConversationResponseOptionsEnumBase]
+    response_options: type[ConversationResponseOptionsEnumBase]
     """These are options that can be sent at anytime. These are only valid conversation responses."""
 
     response: None | ConversationResponseOptionsEnumBase = dataclasses.field(
         init=False,
         default=None,
     )
+
+t = ConversationBase(identifier="",contacts=[],response_options=ConversationResponseOptionsEnumBase)
+
+t.response = t.response_options["a"]
