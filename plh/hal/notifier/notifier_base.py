@@ -11,7 +11,6 @@ from .contact_info_base import ContactInfoBase
 from .conversation_base import ConversationBase, Message
 from .response_base import (
     ConversationResponseOptionsEnumBase,
-    MessageResponseOptionsEnumBase,
 )
 
 
@@ -59,19 +58,18 @@ class NotifierBase(HALDevice, ABC):
         """Sends message under the specified conversation."""
         ...
 
-    @abstractmethod
     def get_conversation_response(
         self: NotifierBase,
         conversation_identifier: str,
     ) -> None | ConversationResponseOptionsEnumBase:
-        """Receives response from the specified conversation if one is available."""
-        ...
+        """Receives response from the specified conversation if one is available.
+        Immediately resets the conversation response upon return."""
+        try:
+            conversation = self.conversations[conversation_identifier]
+        except KeyError:
+            raise RuntimeError("Conversation Identifier not recognized.")
 
-    @abstractmethod
-    def get_message_response(
-        self: NotifierBase,
-        conversation_identifier: str,
-        message: Message,
-    ) -> None | MessageResponseOptionsEnumBase:
-        """Receives response from the specified conversation message if one is available."""
-        ...
+        response = conversation.response
+        conversation.response = None
+
+        return response

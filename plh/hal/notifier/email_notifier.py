@@ -150,19 +150,6 @@ class EmailNotifier(NotifierBase):
     ) -> None:
         return super().send_message(conversation_identifier, message)
 
-    def get_conversation_response(
-        self: NotifierBase,
-        conversation_identifier: str,
-    ) -> ConversationResponseOptionsEnumBase | None:
-        return super().get_conversation_response(conversation_identifier)
-
-    def get_message_response(
-        self: NotifierBase,
-        conversation_identifier: str,
-        message: Message,
-    ) -> MessageResponseOptionsEnumBase | None:
-        return super().get_message_response(conversation_identifier, message)
-
     def _response_monitor(self: EmailNotifier) -> None:
         inbox = EmailBox(
             host=self.inbox_host,
