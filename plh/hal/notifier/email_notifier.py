@@ -21,21 +21,6 @@ from .response_base import (
     MessageResponseOptionsEnumBase,
 )
 
-carrier_domains = {
-    "AT&T": "mms.att.net",
-    "T-Mobile": "tmomail.net",
-    "Verizon": "vzwpix.com",
-    "Sprint": "pm.sprint.com",
-    "Virgin Mobile": "vmpix.com",
-    "Metro PCS": "mymetropcs.com",
-    "Boost Mobile": "myboostmobile.com",
-    "Cricket": "mms.cricketwireless.net",
-    "Google Fi": "msg.fi.google.com",
-    "U.S. Cellular": "email.uscc.net",
-    "Consumer Cellular": "mailmymobile.net",
-}
-# NOT USED BUT KEPT JUST INCASE
-
 
 @dataclasses.dataclass(kw_only=True)
 class EmailContact(ContactInfoBase):
@@ -68,6 +53,49 @@ class EmailNotifier(NotifierBase):
         init=False,
         default_factory=dict,
     )
+
+    def _get_responses_body(
+        self: EmailNotifier,
+        conversation: EmailConversation,
+        message: Message,
+    ) -> str:
+        newline = "\n"
+        body = ""
+
+        if len(message.response_options) > 0:
+            body += "You may send the following responses to this message only:\n"
+            body += newline.join(
+                [f'"{i.name}" for {i.value.lower()}' for i in message.response_options],
+            )
+            body += "\n\n"
+
+        if len(conversation.response_options) > 0:
+            body += "You may send the following responses at any time:\n"
+            body += newline.join(
+                [
+                    f'"{i.name}" for {i.value.lower()}'
+                    for i in conversation.response_options
+                ],
+            )
+            body += "\n\n"
+
+        return body
+
+    def _get_body(
+        self: EmailNotifier,
+        conversation: EmailConversation,
+        message: Message,
+    ) -> str:
+        body = f"{message.subject}\n\n"
+
+        if message.extra_text is not None:
+            body += f"{message.extra_text}\n\n"
+
+        body += self._get_responses_body(conversation, message)
+
+        body += "\n"
+        body += "Thanks!"
+        return body
 
     def start_conversation(
         self: EmailNotifier,
@@ -113,7 +141,7 @@ class EmailNotifier(NotifierBase):
             sender=self.sender_email,
             receivers=conversation.get_emails(),
             headers={"Message-ID": conversation.reference},
-            text=message.get_body(conversation.response_options),
+            text=self._get_body(conversation, message),
         )
 
     def end_conversation(
@@ -186,7 +214,7 @@ class EmailNotifier(NotifierBase):
             sender=self.sender_email,
             receivers=conversation.get_emails(),
             headers={"References": conversation.reference},
-            text=message.get_body(conversation.response_options),
+            text=self._get_body(conversation, message),
         )
 
     def _response_monitor(self: EmailNotifier) -> None:
@@ -317,8 +345,9 @@ class EmailNotifier(NotifierBase):
                     ...
                 # try to parse into conversation options if available
 
-                response_body = latest_message.get_responses_body(
-                    conversation.response_options,
+                response_body = self._get_responses_body(
+                    conversation,
+                    latest_message,
                 )
 
                 text = ""

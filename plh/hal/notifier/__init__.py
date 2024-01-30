@@ -6,6 +6,7 @@ from .response_base import (
     ConversationResponseOptionsEnumBase,
     MessageResponseOptionsEnumBase,
 )
+from .text_notifier import TextContact, TextNotifier
 
 __all__ = [
     "NotifierBase",
@@ -15,6 +16,8 @@ __all__ = [
     "Message",
     "EmailNotifier",
     "EmailContact",
+    "TextContact",
+    "TextNotifier",
 ]
 
 identifier = str
