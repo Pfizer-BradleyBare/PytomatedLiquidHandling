@@ -24,9 +24,9 @@ class NotifierBase(HALDevice, ABC):
     conversations: dict[str, ConversationBase] = field(init=False, default_factory=dict)
 
     @abstractmethod
-    def start_conversation(
+    def _start_conversation(
         self: NotifierBase,
-        identifier: str,
+        conversation_identifier: str,
         opening_text: str,
         contacts: list[ContactInfoBase],
         response_options: type[
@@ -39,18 +39,18 @@ class NotifierBase(HALDevice, ABC):
         ...
 
     @abstractmethod
-    def end_conversation(
+    def _end_conversation(
         self: NotifierBase,
-        identifier: str,
+        conversation_identifier: str,
         closing_text: str,
     ) -> None:
-        """Removes converation from notifier. If conversation does not exist then returns.
+        """Removes converation from notifier. If conversation does not exist then runtime error is raised.
         It would be nice to send a message to contacts informing them the conversation is ended.
         """
         ...
 
     @abstractmethod
-    def send_message(
+    def _send_message(
         self: NotifierBase,
         conversation_identifier: str,
         message: Message,
@@ -58,7 +58,7 @@ class NotifierBase(HALDevice, ABC):
         """Sends message under the specified conversation. If conversation does not exist then runtime error is raised."""
         ...
 
-    def get_conversation_response(
+    def _get_conversation_response(
         self: NotifierBase,
         conversation_identifier: str,
     ) -> None | ConversationResponseOptionsEnumBase:

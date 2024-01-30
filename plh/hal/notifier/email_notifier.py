@@ -97,7 +97,7 @@ class EmailNotifier(NotifierBase):
         body += "Thanks!"
         return body
 
-    def start_conversation(
+    def _start_conversation(
         self: EmailNotifier,
         conversation_identifier: str,
         opening_text: str,
@@ -144,7 +144,7 @@ class EmailNotifier(NotifierBase):
             text=self._get_body(conversation, message),
         )
 
-    def end_conversation(
+    def _end_conversation(
         self: EmailNotifier,
         conversation_identifier: str,
         closing_text: str,
@@ -152,7 +152,7 @@ class EmailNotifier(NotifierBase):
         conversation_identifier = conversation_identifier.replace(" ", "")
 
         if conversation_identifier not in self.conversations:
-            return
+            raise RuntimeError("Conversation ID not recognized.")
 
         conversation = self.conversations[conversation_identifier]
 
@@ -188,7 +188,7 @@ class EmailNotifier(NotifierBase):
             daemon=True,
         ).start()
 
-    def send_message(
+    def _send_message(
         self: EmailNotifier,
         conversation_identifier: str,
         message: Message,
