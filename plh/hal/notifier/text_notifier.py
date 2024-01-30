@@ -46,6 +46,7 @@ class TextContact(ContactInfoBase):
 @dataclasses.dataclass(kw_only=True)
 class TextConversation(ConversationBase):
     contacts: list[TextContact]
+    """Typed contacts."""
 
     def get_phone_numbers(self: TextConversation) -> list[str]:
         return [
