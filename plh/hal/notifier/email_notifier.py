@@ -69,14 +69,14 @@ class EmailNotifier(NotifierBase):
 
     def start_conversation(
         self: EmailNotifier,
-        identifier: str,
+        conversation_identifier: str,
         opening_text: str,
         contacts: list[ContactInfoBase],
         response_options: type[
             ConversationResponseOptionsEnumBase
         ] = ConversationResponseOptionsEnumBase,
     ) -> None:
-        if identifier in self.conversations:
+        if conversation_identifier in self.conversations:
             raise RuntimeError("Conversation already exists.")
 
         sender = EmailSender(host=self.smtp_host, port=self.smtp_port)
@@ -91,7 +91,7 @@ class EmailNotifier(NotifierBase):
         # Extra text is a following remark with more info.
 
         conversation = EmailConversation(
-            identifier=identifier,
+            identifier=conversation_identifier,
             contacts=[
                 contact for contact in contacts if isinstance(contact, EmailContact)
             ]
@@ -101,7 +101,7 @@ class EmailNotifier(NotifierBase):
             reference=sender.create_message_id(),
         )
 
-        self.conversations[identifier.replace(" ", "")] = conversation
+        self.conversations[conversation_identifier.replace(" ", "")] = conversation
         # create the conversation
 
         conversation.messages.append(message)
@@ -116,15 +116,17 @@ class EmailNotifier(NotifierBase):
 
     def end_conversation(
         self: EmailNotifier,
-        identifier: str,
+        conversation_identifier: str,
         closing_text: str,
     ) -> None:
-        if identifier not in self.conversations:
+        conversation_identifier = conversation_identifier.replace(" ", "")
+
+        if conversation_identifier not in self.conversations:
             return
 
-        conversation = self.conversations[identifier]
+        conversation = self.conversations[conversation_identifier]
 
-        del self.conversations[identifier]
+        del self.conversations[conversation_identifier]
 
         sender = EmailSender(host=self.smtp_host, port=self.smtp_port)
 
@@ -144,11 +146,29 @@ class EmailNotifier(NotifierBase):
         ).start()
 
     def send_message(
-        self: NotifierBase,
+        self: EmailNotifier,
         conversation_identifier: str,
         message: Message,
     ) -> None:
-        return super().send_message(conversation_identifier, message)
+        conversation_identifier = conversation_identifier.replace(" ", "")
+
+        if conversation_identifier not in self.conversations:
+            raise RuntimeError("Conversation ID not recognized.")
+
+        conversation = self.conversations[conversation_identifier]
+
+        conversation.messages.append(message)
+        conversation.latest_message = message
+
+        sender = EmailSender(host=self.smtp_host, port=self.smtp_port)
+
+        sender.send(
+            subject=conversation.identifier,
+            sender=self.sender_email,
+            receivers=conversation.get_emails(),
+            headers={"References": conversation.reference},
+            text=message.get_body(conversation.response_options),
+        )
 
     def _response_monitor(self: EmailNotifier) -> None:
         inbox = EmailBox(
@@ -182,7 +202,6 @@ class EmailNotifier(NotifierBase):
                         subject.replace("RE:", "").replace(" ", "")
                     ]
                 except KeyError:
-
                     text = ""
                     text += (
                         "The conversation subject line you used was not recognized.\n"
@@ -210,15 +229,9 @@ class EmailNotifier(NotifierBase):
                     ]
                     .replace(" ", "")
                     .replace("\n", "")
+                    .replace("\r", "")
                 )
                 # Strip everything from body except for a potential command.
-
-                try:
-                    conversation.response = conversation.response_options[body]
-                    continue
-                except KeyError:
-                    ...
-                # try to parse into conversation options if available
 
                 latest_message = conversation.latest_message
 
@@ -241,15 +254,60 @@ class EmailNotifier(NotifierBase):
                             text=text,
                         )
 
+                    else:
+                        text = "Response accepted.\n\n"
+                        text += f"{response.name} -> {response.value}\n\n"
+                        text += "Thanks!"
+
+                        sender.send(
+                            subject=subject,
+                            sender=self.sender_email,
+                            receivers=from_,
+                            headers={
+                                "References": conversation.reference,
+                            },
+                            text=text,
+                        )
+
                     latest_message.response = response
                     continue
                 except KeyError:
                     ...
-                # try to parse into message options if available
+                # try to parse into message options if available. We do message first.
+                # Message is highest priority.
+                # if conversation and message have the same options we need to capture message.
+
+                try:
+                    conversation.response = conversation.response_options[body]
+                    text = "Response accepted.\n\n"
+                    text += f"{conversation.response.name} -> {conversation.response.value}\n\n"
+                    text += "Thanks!"
+
+                    sender.send(
+                        subject=subject,
+                        sender=self.sender_email,
+                        receivers=from_,
+                        headers={
+                            "References": conversation.reference,
+                        },
+                        text=text,
+                    )
+                    continue
+                except KeyError:
+                    ...
+                # try to parse into conversation options if available
+
+                response_body = latest_message.get_responses_body(
+                    conversation.response_options,
+                )
 
                 text = ""
-                text += "Response not recognized. As a reminder:\n\n"
-                text += latest_message.get_responses_body(conversation.response_options)
+                if response_body == "":
+                    text += "No responses are necessary at this time.\n\n"
+
+                else:
+                    text += "Response not recognized. As a reminder:\n\n"
+                    text += response_body
                 text += "\n"
                 text += "Thanks!"
 

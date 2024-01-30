@@ -55,7 +55,7 @@ class NotifierBase(HALDevice, ABC):
         conversation_identifier: str,
         message: Message,
     ) -> None:
-        """Sends message under the specified conversation."""
+        """Sends message under the specified conversation. If conversation does not exist then runtime error is raised."""
         ...
 
     def get_conversation_response(
@@ -63,7 +63,8 @@ class NotifierBase(HALDevice, ABC):
         conversation_identifier: str,
     ) -> None | ConversationResponseOptionsEnumBase:
         """Receives response from the specified conversation if one is available.
-        Immediately resets the conversation response upon return."""
+        Immediately resets the conversation response upon return.
+        """
         try:
             conversation = self.conversations[conversation_identifier]
         except KeyError:
