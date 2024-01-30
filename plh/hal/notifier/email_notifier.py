@@ -91,7 +91,7 @@ class EmailNotifier(NotifierBase):
             reference=sender.create_message_id(),
         )
 
-        self.conversations[identifier] = conversation
+        self.conversations[identifier.replace(" ", "")] = conversation
         # create the conversation
 
         message = Message(
@@ -183,49 +183,41 @@ class EmailNotifier(NotifierBase):
                 from_ = message.from_[0][1]
                 subject = str(message.subject)
 
+                if "Returned mail" in subject or "Warning" in subject:
+                    continue
+                # skip returned mail for bad emails. Who knows if it will happen but best to ignore.
+
+                try:
+                    conversation = self.conversations[
+                        subject.replace("RE:", "").replace(" ", "")
+                    ]
+                except KeyError:
+
+                    text = ""
+                    text += "The conversation subject line you used was not recognized.\n"
+                    text += "Make sure you use the subject line that was sent to you (RE: is OK).\n"
+                    text += "NOTE: If you know you used the correct subject line then the conversation may have ended."
+                    text += "Thus, responses are no longer accepted.\n\n"
+                    text += "Thanks!"
+
+                    sender.send(
+                        subject=subject,
+                        sender=self.sender_email,
+                        receivers=from_,
+                        headers={
+                            "References": message.headers["Message-ID"],
+                        },
+                        text=text,
+                    )
+                    continue
+                # try to find the associated conversation.
+
                 body = (
                     message.body[: message.body.find("-----Original Message-----")]
                     .replace(" ", "")
                     .replace("\n", "")
                 )
                 # Strip everything from body except for a potential command.
-
-                try:
-                    references = [
-                        *message.headers["References"].split("\n "),
-                        message.headers["Message-ID"],
-                    ]
-                except KeyError:
-                    references = []
-                # References are super important.
-                # Basically we use this information to tell email software the conversation thread.
-
-                if "Returned mail" in subject or "Warning" in subject:
-                    continue
-                # skip returned mail for bad emails. Who knows if it will happen but best to ignore.
-
-                try:
-                    conversation = self.conversations[subject.replace("RE: ", "")]
-                except KeyError:
-                    sender.send(
-                        subject=subject,
-                        sender=self.sender_email,
-                        receivers=from_,
-                        headers={
-                            "Message-ID": f"{sender.create_message_id()}",
-                            "References": f"{' '.join(references)}",
-                        },
-                        text=(
-                            """The conversation subject line you used was not recognized.
-Make sure you use the subject line that was sent to you (RE: is OK).
-
-NOTE: If you know you used the correct subject line but still received this message then the conversation may have ended. Thus, responses are no longer accepted.
-
-Thanks!"""
-                        ),
-                    )
-                    continue
-                # try to find the associated waiting notification.
 
                 response_message = Message(
                     subject=conversation.identifier,
@@ -235,20 +227,17 @@ Thanks!"""
                 try:
                     conversation.response = conversation.response_options[body]
 
+                    text = ""
+                    text += "Response accepted as an anytime response."
+
                     sender.send(
                         subject=conversation.identifier,
                         sender=self.sender_email,
                         receivers=from_,
                         headers={
-                            "Message-ID": f"{sender.create_message_id()}",
-                            "References": f"{' '.join(references)}",
+                            "References": conversation.reference,
                         },
-                        text="""The conversation subject line you used was not recognized.
-Make sure you use the subject line that was sent to you (RE: is OK).
-Please try again.
-NOTE: If you know you used the correct subject line then the conversation may have ended. Thus, responses are no longer accepted.
-
-Thanks!""",
+                        text=text,
                     )
                 except KeyError:
                     ...
