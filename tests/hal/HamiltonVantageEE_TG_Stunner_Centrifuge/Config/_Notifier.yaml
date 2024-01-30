@@ -1,0 +1,14 @@
+EmailNotifier:
+  identifier: Test
+  enabled: True
+  smtp_host: SOMSMTP.AMER.PFIZER.COM
+  smtp_port: 0
+  inbox_host: imap.pfizer.com
+  inbox_port: 993
+  sender_email: HamiltonUserNotificationMailbox@pfizer.com
+  sender_username: AMER\\FCNAMR-HAMILTONUSER
+  sender_password: ""
+
+  default_contacts:
+    - name: Bradley
+      email: non

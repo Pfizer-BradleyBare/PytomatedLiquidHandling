@@ -1,0 +1,14 @@
+EmailNotifier:
+  identifier: Test
+  enabled: True
+  smtp_host: smpt.host.com
+  smtp_port: 0
+  inbox_host: imap.host.com
+  inbox_port: 993
+  sender_email: email@email.com
+  sender_username: username
+  sender_password: password
+
+  default_contacts:
+    - name: name
+      email: email@email.com

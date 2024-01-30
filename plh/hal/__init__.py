@@ -14,6 +14,7 @@ from . import (
     labware,
     layout_item,
     magnetic_rack,
+    notifier,
     pipette,
     storage_device,
     tip,
@@ -31,6 +32,7 @@ __all__ = [
     "labware",
     "layout_item",
     "magnetic_rack",
+    "notifier",
     "pipette",
     "storage_device",
     "tip",
@@ -258,6 +260,25 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     if loaded is not True:
         warns.append(
             f"No {magnetic_rack.MagneticRackBase.__name__} objects were loaded.",
+        )
+
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_notifier" in file.lower():
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
+
+                tools.load_device_config(
+                    json,
+                    notifier.NotifierBase,
+                    notifier.devices,
+                )
+    if loaded is not True:
+        warns.append(
+            f"No {notifier.NotifierBase.__name__} objects were loaded.",
         )
 
     for warn in warns:

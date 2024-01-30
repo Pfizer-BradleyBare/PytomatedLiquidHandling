@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import imaplib
 import threading
 import time
 from dataclasses import field
@@ -139,6 +140,19 @@ class EmailNotifier(NotifierBase):
         )
 
     def __post_init__(self: EmailNotifier) -> None:
+        try:
+            EmailBox(
+                host=self.inbox_host,
+                port=self.inbox_port,
+                username=self.sender_username,
+                password=self.sender_password,
+            )["INBOX"]
+        except imaplib.IMAP4.error as e:
+            raise RuntimeError(
+                "Cannot login to email inbox with provided credentials. Please check and try again.",
+            ) from e
+        # Try to login before creating the thread to ensure credentials are correct.
+
         threading.Thread(
             name="EmailTextNotifier Response Monitor",
             target=self._response_monitor,
