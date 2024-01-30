@@ -28,6 +28,24 @@ class Message:
     )
     """The response received."""
 
+    def get_body(self: Message, conversation_response_options: type[ConversationResponseOptionsEnumBase]) -> str:
+        newline = "\n"
+        body = f"{self.subject}\n\n"
+
+        if self.extra_text is not None:
+            body += f"{self.extra_text}\n\n"
+
+        if len(self.response_options) > 0:
+            body += "You may send the following responses to this message only:\n"
+            body += f"{newline.join([f'"{i.name}" for {i.value}' for i in self.response_options])}\n\n"
+
+        if len(conversation_response_options) > 0:
+            body += "You may send the following responses at any time to get more information:\n"
+            body += f"{newline.join([f'"{i.name}" for {i.value}' for i in conversation_response_options])}\n\n"
+
+        body += "\n"
+        body += "Thanks!"
+        return body
 
 @dataclasses.dataclass(kw_only=True)
 class ConversationBase:

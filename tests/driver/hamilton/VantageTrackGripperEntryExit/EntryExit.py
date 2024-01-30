@@ -42,7 +42,9 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     )
     backend.execute(command)
     backend.wait(command)
-    logger.info(backend.acknowledge(command, EntryExit.CountLabwareInStack.Response).NumLabware)
+    logger.info(
+        backend.acknowledge(command, EntryExit.CountLabwareInStack.Response).NumLabware
+    )
 
     logger.info("MoveRandomShelfAccess")
 

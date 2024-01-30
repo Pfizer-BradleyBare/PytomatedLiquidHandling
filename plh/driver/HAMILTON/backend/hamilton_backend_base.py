@@ -89,7 +89,7 @@ class HamiltonBackendServer(BackendServerBase):
 
         if isinstance(command, CommandBackendErrorHandlingMixin):
             response["CustomErrorHandling"] = int(not command.backend_error_handling)
-            
+
             # Backend error handling true corresponds to Backend Error Handling false.
             # Unfortunately when I wrote the Hamilton backend I used CustomErrorHandling. Too much work to change right now.
             # TODO: change Hamilton libraries to Backend Error Handling

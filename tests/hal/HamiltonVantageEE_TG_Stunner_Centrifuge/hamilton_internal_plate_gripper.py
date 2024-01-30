@@ -12,6 +12,4 @@ logger.enable("PytomatedLiquidHandling")
 hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
 
 
-
 input("ENTER")
-
