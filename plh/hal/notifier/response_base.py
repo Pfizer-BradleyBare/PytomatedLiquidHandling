@@ -35,7 +35,6 @@ class ResponseOptionsEnumMeta(EnumMeta):
         **kwds: Any,
     ) -> ResponseOptionsEnumMeta:
         """Copies parent member info into subclass."""
-
         enum = super().__new__(
             metacls,
             cls,
@@ -60,12 +59,17 @@ class ResponseOptionsEnumMeta(EnumMeta):
 
 class ResponseOptionsEnumBase(StrEnum, metaclass=ResponseOptionsEnumMeta):
     """Base class for all possible responses for a notification.
-    Response options should be a subclass of this with their own custom options."""
+    Response options should be a subclass of this with their own custom options.
+    """
 
 
 class MessageResponseOptionsEnumBase(ResponseOptionsEnumBase):
-    ...
+    """Response options specific to messages.
+    NOTE: This Enum can be subclassed even if members have already been defined.
+    """
 
 
 class ConversationResponseOptionsEnumBase(ResponseOptionsEnumBase):
-    ...
+    """Response options specific to conversations.
+    NOTE: This Enum can be subclassed even if members have already been defined.
+    """

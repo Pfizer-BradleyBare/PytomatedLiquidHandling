@@ -52,3 +52,4 @@ class ConversationBase:
         init=False,
         default=None,
     )
+    """The response received."""

@@ -22,6 +22,7 @@ class NotifierBase(HALDevice, ABC):
     """Notifications will always be sent to these contacts."""
 
     conversations: dict[str, ConversationBase] = field(init=False, default_factory=dict)
+    """All the conversations currently in progress."""
 
     @abstractmethod
     def _start_conversation(

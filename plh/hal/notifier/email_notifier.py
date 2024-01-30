@@ -24,7 +24,10 @@ from .response_base import (
 
 @dataclasses.dataclass(kw_only=True)
 class EmailContact(ContactInfoBase):
+    """Contact with associated email info."""
+
     email: str
+    """Email address for the contact."""
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -39,20 +42,37 @@ class EmailConversation(ConversationBase):
 
 @dataclasses.dataclass(kw_only=True)
 class EmailNotifier(NotifierBase):
+    """This notifier can send and receive emails. If an email is received it will attempt to parse into a response."""
+
     smtp_host: str
+    """smtp server host address."""
+
     smtp_port: int
+    """smtp server port. 0 is typically fine."""
+
     inbox_host: str
+    """imap server host address."""
+
     inbox_port: int
+    """imap server port. Typically 993 works."""
+
     sender_email: str
+    """Email from which all sent emails will orginate. Emails will also be received at this address."""
+
     sender_username: str
+    """Username for logging into imap server to access received emails under the ```sender_email```."""
+
     sender_password: str
+    """Password for logging into imap server to access received emails under the ```sender_email```."""
 
     default_contacts: list[EmailContact]
+    """Typed default contacts."""
 
     conversations: dict[str, EmailConversation] = field(
         init=False,
         default_factory=dict,
     )
+    """Typed conversations"""
 
     def _get_responses_body(
         self: EmailNotifier,

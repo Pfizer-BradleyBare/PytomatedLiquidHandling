@@ -34,7 +34,10 @@ carrier_domains = {
 
 @dataclasses.dataclass(kw_only=True)
 class TextContact(ContactInfoBase):
+    """Contact with associated phone number info."""
+
     phone_number: str
+    """Phone number for the contact."""
 
     def __post_init__(self: TextContact) -> None:
         self.phone_number = self.phone_number.replace("-", "")
@@ -54,16 +57,25 @@ class TextConversation(ConversationBase):
 
 @dataclasses.dataclass(kw_only=True)
 class TextNotifier(NotifierBase):
+    """This notifier can send texts. Responses are not accepted. Generally, responses should be directed to the ```EmailNotifier```."""
+
     smtp_host: str
+    """smtp server host address."""
+
     smtp_port: int
+    """smtp server port. 0 is typically fine."""
+
     sender_email: str
+    """Email from which all sent texts will orginate."""
 
     default_contacts: list[TextContact]
+    """Typed default contacts."""
 
     conversations: dict[str, TextConversation] = field(
         init=False,
         default_factory=dict,
     )
+    """Typed conversations"""
 
     def _get_body(
         self: TextNotifier,
