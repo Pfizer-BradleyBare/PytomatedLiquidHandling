@@ -81,19 +81,6 @@ class EmailNotifier(NotifierBase):
 
         sender = EmailSender(host=self.smtp_host, port=self.smtp_port)
 
-        conversation = EmailConversation(
-            identifier=identifier,
-            contacts=[
-                contact for contact in contacts if isinstance(contact, EmailContact)
-            ]
-            + self.default_contacts,
-            response_options=response_options,
-            reference=sender.create_message_id(),
-        )
-
-        self.conversations[identifier.replace(" ", "")] = conversation
-        # create the conversation
-
         message = Message(
             subject=opening_text,
             extra_text=None,
@@ -102,6 +89,20 @@ class EmailNotifier(NotifierBase):
         # Create the message. We will use the message id to help us manage email threads.
         # Our message subject will be an initial line.
         # Extra text is a following remark with more info.
+
+        conversation = EmailConversation(
+            identifier=identifier,
+            contacts=[
+                contact for contact in contacts if isinstance(contact, EmailContact)
+            ]
+            + self.default_contacts,
+            latest_message=message,
+            response_options=response_options,
+            reference=sender.create_message_id(),
+        )
+
+        self.conversations[identifier.replace(" ", "")] = conversation
+        # create the conversation
 
         conversation.messages.append(message)
 
@@ -177,11 +178,13 @@ class EmailNotifier(NotifierBase):
                 redbox_message.delete()
                 # Immediately delete the message to keep the inbox clean.
 
-                message = mailparser.parse_from_string("".join(redbox_message.content))
+                parsed_message = mailparser.parse_from_string(
+                    "".join(redbox_message.content),
+                )
                 # Parse the message. Redbox parsing is not good enough.
 
-                from_ = message.from_[0][1]
-                subject = str(message.subject)
+                from_ = parsed_message.from_[0][1]
+                subject = str(parsed_message.subject)
 
                 if "Returned mail" in subject or "Warning" in subject:
                     continue
@@ -194,7 +197,9 @@ class EmailNotifier(NotifierBase):
                 except KeyError:
 
                     text = ""
-                    text += "The conversation subject line you used was not recognized.\n"
+                    text += (
+                        "The conversation subject line you used was not recognized.\n"
+                    )
                     text += "Make sure you use the subject line that was sent to you (RE: is OK).\n"
                     text += "NOTE: If you know you used the correct subject line then the conversation may have ended."
                     text += "Thus, responses are no longer accepted.\n\n"
@@ -205,7 +210,7 @@ class EmailNotifier(NotifierBase):
                         sender=self.sender_email,
                         receivers=from_,
                         headers={
-                            "References": message.headers["Message-ID"],
+                            "References": parsed_message.headers["Message-ID"],
                         },
                         text=text,
                     )
@@ -213,36 +218,62 @@ class EmailNotifier(NotifierBase):
                 # try to find the associated conversation.
 
                 body = (
-                    message.body[: message.body.find("-----Original Message-----")]
+                    parsed_message.body[
+                        : parsed_message.body.find("-----Original Message-----")
+                    ]
                     .replace(" ", "")
                     .replace("\n", "")
                 )
                 # Strip everything from body except for a potential command.
 
-                response_message = Message(
-                    subject=conversation.identifier,
-                    extra_text=None,
-                )
-
                 try:
                     conversation.response = conversation.response_options[body]
-
-                    text = ""
-                    text += "Response accepted as an anytime response."
-
-                    sender.send(
-                        subject=conversation.identifier,
-                        sender=self.sender_email,
-                        receivers=from_,
-                        headers={
-                            "References": conversation.reference,
-                        },
-                        text=text,
-                    )
+                    continue
                 except KeyError:
                     ...
                 # try to parse into conversation options if available
 
+                latest_message = conversation.latest_message
+
+                try:
+                    response = latest_message.response_options[body]
+
+                    if latest_message.response is not None:
+                        text = ""
+                        text += "Latest message already has a response:\n\n"
+                        text += f"{latest_message.response.name} -> {latest_message.response.value}\n\n"
+                        text += "Thanks!"
+
+                        sender.send(
+                            subject=subject,
+                            sender=self.sender_email,
+                            receivers=from_,
+                            headers={
+                                "References": conversation.reference,
+                            },
+                            text=text,
+                        )
+
+                    latest_message.response = response
+                    continue
+                except KeyError:
+                    ...
                 # try to parse into message options if available
+
+                text = ""
+                text += "Response not recognized. As a reminder:\n\n"
+                text += latest_message.get_responses_body(conversation.response_options)
+                text += "\n"
+                text += "Thanks!"
+
+                sender.send(
+                    subject=subject,
+                    sender=self.sender_email,
+                    receivers=from_,
+                    headers={
+                        "References": conversation.reference,
+                    },
+                    text=text,
+                )
 
             time.sleep(1)

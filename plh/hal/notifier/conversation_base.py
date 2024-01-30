@@ -28,12 +28,9 @@ class Message:
     )
     """The response received."""
 
-    def get_body(self: Message, conversation_response_options: type[ConversationResponseOptionsEnumBase]) -> str:
+    def get_responses_body(self: Message, conversation_response_options: type[ConversationResponseOptionsEnumBase]) -> str:
         newline = "\n"
-        body = f"{self.subject}\n\n"
-
-        if self.extra_text is not None:
-            body += f"{self.extra_text}\n\n"
+        body = ""
 
         if len(self.response_options) > 0:
             body += "You may send the following responses to this message only:\n"
@@ -42,6 +39,17 @@ class Message:
         if len(conversation_response_options) > 0:
             body += "You may send the following responses at any time to get more information:\n"
             body += f"{newline.join([f'"{i.name}" for {i.value}' for i in conversation_response_options])}\n\n"
+
+        return body
+
+    def get_body(self: Message, conversation_response_options: type[ConversationResponseOptionsEnumBase]) -> str:
+
+        body = f"{self.subject}\n\n"
+
+        if self.extra_text is not None:
+            body += f"{self.extra_text}\n\n"
+
+        body += self.get_responses_body(conversation_response_options)
 
         body += "\n"
         body += "Thanks!"
@@ -58,6 +66,8 @@ class ConversationBase:
     contacts: list[ContactInfoBase]
     """Contact who receive messages."""
 
+    latest_message: Message
+
     messages: list[Message] = dataclasses.field(init=False, default_factory=list)
     """All communications that occured. By default the last communication may be the one that needs a response."""
 
@@ -68,7 +78,3 @@ class ConversationBase:
         init=False,
         default=None,
     )
-
-t = ConversationBase(identifier="",contacts=[],response_options=ConversationResponseOptionsEnumBase)
-
-t.response = t.response_options["a"]
