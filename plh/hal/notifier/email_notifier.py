@@ -172,7 +172,11 @@ class EmailNotifier(NotifierBase):
         conversation = self.conversations[conversation_identifier]
 
         conversation.messages.append(message)
-        conversation.latest_message = message
+
+        if message.response_options is not None:
+            conversation.latest_message = message
+        # only messages that require a response become the latest message.
+        # Otherwise it can be impossible to respond to messages if some other non response notification occurs.
 
         sender = EmailSender(host=self.smtp_host, port=self.smtp_port)
 

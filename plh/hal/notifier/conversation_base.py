@@ -45,7 +45,7 @@ class Message:
             body += "\n\n"
 
         if len(conversation_response_options) > 0:
-            body += "You may send the following responses at any time to get more information:\n"
+            body += "You may send the following responses at any time:\n"
             body += newline.join(
                 [
                     f'"{i.name}" for {i.value.lower()}'

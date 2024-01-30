@@ -66,7 +66,7 @@ class NotifierBase(HALDevice, ABC):
         Immediately resets the conversation response upon return.
         """
         try:
-            conversation = self.conversations[conversation_identifier]
+            conversation = self.conversations[conversation_identifier.replace(" ", "")]
         except KeyError:
             raise RuntimeError("Conversation Identifier not recognized.")
 
