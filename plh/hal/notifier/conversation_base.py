@@ -83,8 +83,6 @@ class ConversationBase:
     contacts: list[ContactInfoBase]
     """Contact who receive messages."""
 
-    latest_message: Message
-
     messages: list[Message] = dataclasses.field(init=False, default_factory=list)
     """All communications that occured. By default the last communication may be the one that needs a response."""
 

@@ -44,6 +44,7 @@ class EmailContact(ContactInfoBase):
 
 @dataclasses.dataclass(kw_only=True)
 class EmailConversation(ConversationBase):
+    latest_message: Message
     contacts: list[EmailContact]
     reference: str
 
