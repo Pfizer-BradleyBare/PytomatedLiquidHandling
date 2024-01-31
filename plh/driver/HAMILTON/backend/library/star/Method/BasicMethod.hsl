@@ -53,9 +53,9 @@
  namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
  namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
  namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\DeckLoadingDialog\\DeckLoadingDialog.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\DeckLoadingDialog\\DeckLoadingDialog.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\DeckLoadingDialog\\DeckLoadingDialog.hs_" } 
+ namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\CustomDialogs\\DeckLoadingDialog.hs_" } 
+ namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\CustomDialogs\\DeckLoadingDialog.hs_" } 
+ namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\CustomDialogs\\DeckLoadingDialog.hs_" } 
  namespace _Method { #include "HSLTrcLib.hsl" } 
  namespace _ActionServerProc { #include "HSLTrcLib.hsl" } 
  namespace _StateServerProc { #include "HSLTrcLib.hsl" } 
@@ -238,4 +238,4 @@ _PLATEEDITOR96::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-23 09:25$$checksum=950e9129$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-01-30 13:59$$checksum=ea9c675a$$length=084$$
