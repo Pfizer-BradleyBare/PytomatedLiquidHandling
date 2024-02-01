@@ -97,7 +97,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
                 self.backend.execute(command)
                 self.backend.wait(command)
                 self.backend.acknowledge(command, FlipTubeTool.FlipTubeOpen.Response)
-        # Do the pickup. Each group contains 4 positions which correspond to each of 4 picked up tools.
+        # Do the open. Each group contains 4 positions which correspond to each of 4 picked up tools.
         # It is possible that the group contains 1-4 posiitons. It should not matter.
 
         command = FlipTubeTool.ToolsEject.Command(
@@ -142,7 +142,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
             opt.layout_item.identifier: opt.layout_item for opt in options
         }
         layout_item_positions = DefaultDict(list)
-        # Open
+        # close
 
         for opt in options:
             layout_item_positions[opt.layout_item.identifier].append(opt.position)
@@ -158,7 +158,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
             ]
             # Max number in each group is 4. Truncate them here just in case
         # Sort columnwise because the fliptube tool orientation is landscape. Meaning most efficient
-        # open is along the columns
+        # close is along the columns
 
         for key in layout_item_positions:
             for group in layout_item_positions[key]:
@@ -174,7 +174,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
                 self.backend.execute(command)
                 self.backend.wait(command)
                 self.backend.acknowledge(command, FlipTubeTool.FlipTubeClose.Response)
-        # Do the pickup. Each group contains 4 positions which correspond to each of 4 picked up tools.
+        # Do the close. Each group contains 4 positions which correspond to each of 4 picked up tools.
         # It is possible that the group contains 1-4 posiitons. It should not matter.
 
         command = FlipTubeTool.ToolsEject.Command(
