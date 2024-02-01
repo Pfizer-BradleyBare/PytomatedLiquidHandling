@@ -25,6 +25,15 @@ class LabwareBase(HALDevice):
     model_path_3d: FilePath | None
     """Full path to a 3D model."""
 
+    container_image_path_2d: FilePath | None
+    """Full path to a 2D image."""
+
+    container_image_path_3d: FilePath | None
+    """Full path to a 3D image."""
+
+    container_model_path_3d: FilePath | None
+    """Full path to a 3D model."""
+
     dimensions: Dimensions
     """Dimensions object."""
 

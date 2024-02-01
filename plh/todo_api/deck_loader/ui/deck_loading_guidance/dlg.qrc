@@ -1,0 +1,19 @@
+<RCC>
+  <qresource prefix="images">
+    <file>images/BVS_Shaker0_A00.png</file>
+    <file>images/DeckLayout.png</file>
+    <file>images/flitptube-Rackjpg.jpg</file>
+    <file>images/LidAgilentBlack.jpg</file>
+    <file>images/PlateBiorad200uL96Well.jpg</file>
+    <file>images/PlateCorning2000uL96Well.jpg</file>
+    <file>images/PlateThermo400uL96Well.jpg</file>
+    <file>images/PlateThermo1200uL96Well.jpg</file>
+    <file>images/PLT_CAR_L5MD_A00.png</file>
+    <file>images/SMP_CAR_32_EPIL_A00.png</file>
+    <file>images/tip_car_480_a00.png</file>
+    <file>images/TipFTR1000uL.png</file>
+    <file>images/TipIMCSSizeX100.jpg</file>
+    <file>images/TipNTR300uL.png</file>
+    <file>images/XYZ.jpg</file>
+  </qresource>
+</RCC>
