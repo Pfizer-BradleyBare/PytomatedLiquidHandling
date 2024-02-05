@@ -9,12 +9,7 @@ from .carrier_config import CarrierConfig
 
 @dataclasses.dataclass(kw_only=True)
 class DeckLocationBase(HALDevice):
-    """A specific location on an automation deck.
-
-    Attributes
-    ----------
-        CarrierConfig: See DeckLocation.Base.CarrierConfig class.
-    """
+    """A specific location on an automation deck."""
 
     identifier: str = "None"
     """It is optional to specify an identifier. If an identifier is not specified then identifier will be ```<carrier_config.carrier.identifier>_Pos<carrier_config.position```"""

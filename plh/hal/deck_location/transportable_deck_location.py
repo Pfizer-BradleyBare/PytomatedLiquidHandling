@@ -11,7 +11,7 @@ from .transport_config import TransportConfig
 
 @dataclasses.dataclass(kw_only=True)
 class TransportableDeckLocation(DeckLocationBase):
-    """A specific location on an automation deck."""
+    """A specific location on an automation deck that can be transported to/from."""
 
     transport_configs: list[TransportConfig]
     """A list of possible ways to transport to/from this deck location."""
