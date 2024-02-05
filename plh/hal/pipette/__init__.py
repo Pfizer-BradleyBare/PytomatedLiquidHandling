@@ -9,7 +9,6 @@ if True:
     pass
 # This MUST come first so the if statement ensures that it does not get reordered by a formatter
 
-from .exceptions import LiquidClassCategoryNotSupportedError
 from .hamilton_core96 import HamiltonCORE96
 from .liquid_class import LiquidClass
 from .options import (
@@ -20,6 +19,10 @@ from .options import (
 )
 from .pipette_base import PipetteBase
 from .pipette_tip import PipetteTip
+
+if True:
+    from . import exceptions
+
 
 __all__ = [
     "PipetteBase",
@@ -32,7 +35,7 @@ __all__ = [
     "HamiltonPortraitCORE8",
     "HamiltonPortraitCORE8ContactDispense",
     "HamiltonCORE96",
-    "LiquidClassCategoryNotSupportedError",
+    "exceptions",
 ]
 
 identifier = str

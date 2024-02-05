@@ -6,12 +6,17 @@ from .options import TransportOptions
 from .transport_base import TransportBase
 from .vantage_track_gripper import VantageTrackGripper
 
+if True:
+    from . import exceptions
+
+
 __all__ = [
     "TransportBase",
     "TransportOptions",
     "HamiltonCOREGripper",
     "HamiltonInternalPlateGripper",
     "VantageTrackGripper",
+    "exceptions",
 ]
 
 identifier = str

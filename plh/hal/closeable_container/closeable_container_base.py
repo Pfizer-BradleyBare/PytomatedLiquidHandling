@@ -6,7 +6,9 @@ from pydantic import dataclasses, field_validator
 
 from plh.hal import deck_location, labware
 from plh.hal.tools import HALDevice, Interface
+
 from .options import OpenCloseOptions
+
 
 @dataclasses.dataclass(kw_only=True)
 class CloseableContainerBase(Interface, HALDevice):
@@ -108,12 +110,12 @@ class CloseableContainerBase(Interface, HALDevice):
 
         if len(unsupported_labware) > 0:
             excepts.append(
-                labware.LabwareNotSupportedError(unsupported_labware),
+                labware.exceptions.LabwareNotSupportedError(unsupported_labware),
             )
 
         if len(unsupported_deck_locations) > 0:
             excepts.append(
-                deck_location.DeckLocationNotSupportedError(
+                deck_location.exceptions.DeckLocationNotSupportedError(
                     unsupported_deck_locations,
                 ),
             )

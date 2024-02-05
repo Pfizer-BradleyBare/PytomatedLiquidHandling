@@ -101,7 +101,7 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
 
                         raise ExceptionGroup(
                             "Errors during tip pickup",
-                            [tip.TierOutOfTipsError(option.pipette_tip.tip)],
+                            [tip.exceptions.TierOutOfTipsError(option.pipette_tip.tip)],
                         )
                     # It is possible that there are not enough tips in the teir to support this pickup operation.
                     # We DO NOT want to hold tips when a teir is empty. We need to be able to grab the gripper. So we will eject them.
