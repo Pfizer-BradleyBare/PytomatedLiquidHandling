@@ -5,21 +5,11 @@ from typing import cast
 
 from pydantic import Field, dataclasses, field_validator
 
-from plh.hal import deck_location, labware, layout_item
+from plh.hal import deck_location, labware
 from plh.hal.tools import HALDevice, Interface
 
 from .exceptions import WrongTransportDeviceError
-
-
-@dataclasses.dataclass(kw_only=True)
-class TransportOptions:
-    """Options passed to transport"""
-
-    source_layout_item: layout_item.LayoutItemBase
-    """Layout item to get."""
-
-    destination_layout_item: layout_item.LayoutItemBase
-    """Layout item where you will placed the getted layout item."""
+from .options import TransportOptions
 
 
 @dataclasses.dataclass(kw_only=True)

@@ -12,13 +12,13 @@ if True:
 from .exceptions import LiquidClassCategoryNotSupportedError
 from .hamilton_core96 import HamiltonCORE96
 from .liquid_class import LiquidClass
-from .pipette_base import (
-    PipetteBase,
+from .options import (
     TransferOptions,
     _AspirateDispenseOptions,
     _EjectOptions,
     _PickupOptions,
 )
+from .pipette_base import PipetteBase
 from .pipette_tip import PipetteTip
 
 __all__ = [

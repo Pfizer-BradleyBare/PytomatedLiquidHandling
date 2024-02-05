@@ -9,14 +9,16 @@ from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.hal import layout_item
 
 from .closeable_container_base import *
-from .closeable_container_base import CloseableContainerBase, OpenCloseOptions
+from .closeable_container_base import CloseableContainerBase
+from .options import OpenCloseOptions
 
 
 @dataclasses.dataclass(kw_only=True)
 class HamiltonFlipTubeLandscape(CloseableContainerBase):
     """Hamilton FlipTubes are a special, Hamilton compatible, 1500uL conical tube that can be opened and closed on deck with a FlipTube tool.
 
-    This device only supports FlipTubes in the landscape orientation."""
+    This device only supports FlipTubes in the landscape orientation.
+    """
 
     backend: HamiltonBackendBase
     """Only Hamilton backends are supported."""

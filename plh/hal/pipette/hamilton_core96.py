@@ -9,7 +9,8 @@ from plh.driver.HAMILTON.ML_STAR import Channel1000uL, CORE96Head
 from plh.hal import labware
 
 from .hamilton_portrait_core8 import HamiltonPortraitCORE8
-from .pipette_base import PipetteBase, TransferOptions
+from .options import TransferOptions
+from .pipette_base import PipetteBase
 
 
 @dataclasses.dataclass(kw_only=True)

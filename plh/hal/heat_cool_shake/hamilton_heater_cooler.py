@@ -9,7 +9,8 @@ from plh.driver.HAMILTON.backend import HamiltonBackendBase
 
 from .exceptions import ShakingNotSupportedError
 from .heat_cool_shake_base import *
-from .heat_cool_shake_base import HeatCoolShakeBase, HeatCoolShakeOptions
+from .heat_cool_shake_base import HeatCoolShakeBase
+from .options import HeatCoolShakeOptions
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -47,7 +48,6 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
 
     def initialize(self: HamiltonHeaterCooler) -> None:
         """Connects to Hamilton HeaterCooler device."""
-
         HeatCoolShakeBase.initialize(self)
 
         command = HamiltonHeaterCoolerDriver.Connect.Command(

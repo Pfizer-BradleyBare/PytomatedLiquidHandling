@@ -4,28 +4,16 @@ from abc import abstractmethod
 
 from pydantic import dataclasses, field_validator
 
-from plh.hal import deck_location, labware, layout_item
+from plh.hal import deck_location, labware
 from plh.hal.tools import HALDevice, Interface
-
-
-@dataclasses.dataclass(kw_only=True)
-class OpenCloseOptions:
-    """Options that can be used for ```open```, ```open_time```, ```close```, or ```close_time```."""
-
-    layout_item: layout_item.LayoutItemBase
-    """Compatible layout item you want to open/close."""
-
-    position: str | int
-    """Position to open/close. NOTE: position will be converted to correct type (alpha vs numeric) based on labware layout info.
-    NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly
-    """
-
+from .options import OpenCloseOptions
 
 @dataclasses.dataclass(kw_only=True)
 class CloseableContainerBase(Interface, HALDevice):
     """A container that is part of a labware type that can be opened with some kind of tool.
 
-    NOTE: This is NOT the same as a lid for a coverable plate."""
+    NOTE: This is NOT the same as a lid for a coverable plate.
+    """
 
     supported_deck_locations: list[deck_location.DeckLocationBase]
     """The supported deck locations to where an open/close operation can occur."""

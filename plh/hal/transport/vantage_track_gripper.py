@@ -9,8 +9,9 @@ from plh.driver.HAMILTON import ML_STAR, TrackGripper
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.hal import deck_location
 
+from .options import TransportOptions
 from .transport_base import *
-from .transport_base import TransportBase, TransportOptions
+from .transport_base import TransportBase
 
 
 @dataclasses.dataclass(kw_only=True)

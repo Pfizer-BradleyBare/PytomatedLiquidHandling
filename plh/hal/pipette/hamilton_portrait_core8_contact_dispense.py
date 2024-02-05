@@ -10,14 +10,14 @@ from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
 from plh.hal import labware, tip
 
-from .pipette_base import *
-from .pipette_base import (
-    PipetteBase,
+from .options import (
     TransferOptions,
     _AspirateDispenseOptions,
     _EjectOptions,
     _PickupOptions,
 )
+from .pipette_base import *
+from .pipette_base import PipetteBase
 
 
 @dataclasses.dataclass(kw_only=True)

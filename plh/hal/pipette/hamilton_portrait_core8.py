@@ -10,7 +10,8 @@ from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
 from plh.hal import labware
 
-from .pipette_base import PipetteBase, TransferOptions
+from .options import TransferOptions
+from .pipette_base import PipetteBase
 from .pipette_tip import PipetteTip
 
 

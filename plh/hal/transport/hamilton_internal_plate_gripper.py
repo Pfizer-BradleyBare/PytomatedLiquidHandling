@@ -9,8 +9,9 @@ from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import iSwap
 from plh.hal import deck_location
 
+from .options import TransportOptions
 from .transport_base import *
-from .transport_base import TransportBase, TransportOptions
+from .transport_base import TransportBase
 
 
 @dataclasses.dataclass(kw_only=True)
