@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
-from plh.hal.exceptions import HALError, UserInteractionRequiredError
+from plh.hal.exceptions import UserInteractionRequiredError
 
 if TYPE_CHECKING:
     from .pipette_base import PipetteBase
@@ -30,22 +30,11 @@ class TransferHardwareError(UserInteractionRequiredError):
     error_device: PipetteBase
     _channel_numbers_to_waste: list[int]
 
-    def perform_error_handling(
+    def perform_cleanup(
         self: TransferHardwareError,
-        dialog_function: Callable[[HALError], None],
     ) -> None:
-        """All transfer hardware errors must be handled by ejecting the current tips to waste. So this function should do that."""
-        current_exception = self
-
-        while True:
-            dialog_function(current_exception)
-
-            try:
-                self.error_device._waste(self._channel_numbers_to_waste)
-                break
-                # Try to call the waste method, if it is successful then howdy doody. If not, then retry the dialog with our new error.
-            except TransferHardwareError as e:
-                current_exception = e
+        """All transfer hardware errors must be handled by ejecting the current tips to waste. So this function does that."""
+        self.error_device._waste(self._channel_numbers_to_waste)
 
 
 @dataclass
