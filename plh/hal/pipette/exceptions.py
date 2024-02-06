@@ -30,7 +30,7 @@ class TransferHardwareError(UserInteractionRequiredError):
     error_device: PipetteBase
     _channel_numbers_to_waste: list[int]
 
-    def perform_cleanup(
+    def callback(
         self: TransferHardwareError,
     ) -> None:
         """All transfer hardware errors must be handled by ejecting the current tips to waste. So this function does that."""

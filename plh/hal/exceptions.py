@@ -25,11 +25,11 @@ class UserInteractionRequiredError(HALError, ABC):
     """
 
     @abstractmethod
-    def perform_cleanup(
+    def callback(
         self: UserInteractionRequiredError,
     ) -> None:
-        """This function should call the user supplied dialog_function then perform cleanup or repeat action as necessary.
-        NOTE: The user supplied function in this context should NOT return a value.
+        """This function will perform cleanup or repeat action as necessary.
+        NOTE: This callback may raise a new exception so beware of that.
         """
         ...
 
@@ -40,11 +40,15 @@ class UserInputRequiredError(HALError):
     This intervention is both physical and programmatic.
     """
 
+    kwargs: dict[str, type]
+
     @abstractmethod
-    def perform_cleanup(
+    def callback(
         self: UserInputRequiredError,
+        **kwargs: dict,
     ) -> None:
-        """This function should call the user supplied dialog_function then perform cleanup or repeat action as necessary.
-        NOTE: The user supplied function in this context MUST return a value.
+        """This function will perform cleanup or repeat action as necessary.
+        kwargs can be used to figure out the input information required.
+        NOTE: This callback may raise a new exception so beware of that.
         """
         ...
