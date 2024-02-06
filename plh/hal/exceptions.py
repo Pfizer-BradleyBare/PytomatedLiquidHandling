@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 from abc import ABC, abstractmethod
+from typing import Any
 
 from plh.hal.tools import HALDevice
 
@@ -42,13 +43,15 @@ class UserInputRequiredError(HALError):
 
     @abstractmethod
     def kwargs(self: UserInputRequiredError) -> dict[str, type]:
-        """This returns a dictionary of the expected input key and it's type for the callback function."""
+        """This returns a dictionary of the expected input key and it's type for the callback function.
+        This is more for information purposes than anything else.
+        """
         ...
 
     @abstractmethod
     def callback(
         self: UserInputRequiredError,
-        **kwargs: dict,
+        **kwargs: dict[str, Any],
     ) -> None:
         """This function will perform cleanup or repeat action as necessary.
         kwargs can be used to figure out the input information required.
