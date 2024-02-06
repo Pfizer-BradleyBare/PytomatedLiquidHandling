@@ -28,6 +28,8 @@ class PipetteBase(Interface, HALDevice):
     supported_destination_labware: list[labware.PipettableLabware]
     supported_deck_locations: list[deck_location.DeckLocationBase]
 
+    waste_labware_id: str
+
     @field_validator("supported_tips", mode="after")
     @classmethod
     def __supported_tips_validate(
@@ -219,6 +221,10 @@ class PipetteBase(Interface, HALDevice):
                 liquid_class_category
             ]
         ][-1]
+
+    @abstractmethod
+    def _waste(self: PipetteBase, channel_numbers: list[int]) -> None:
+        ...
 
     @abstractmethod
     def _pickup(

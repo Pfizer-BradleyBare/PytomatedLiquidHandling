@@ -193,6 +193,21 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, Channel1000uL.Eject.Response)
 
+    def _waste(
+        self: HamiltonPortraitCORE8ContactDispense,
+        channel_numbers: list[int],
+    ) -> None:
+        self._eject(
+            [
+                _EjectOptions(
+                    channel_number=channel_number,
+                    labware_id=self.waste_labware_id,
+                    position_id=str(channel_number),
+                )
+                for channel_number in channel_numbers
+            ],
+        )
+
     def _aspirate(
         self: HamiltonPortraitCORE8ContactDispense,
         options: list[_AspirateDispenseOptions],
@@ -451,7 +466,7 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                 [
                     _EjectOptions(
                         channel_number=self.active_channels[index],
-                        labware_id="Waste",
+                        labware_id=self.waste_labware_id,
                         position_id=str(self.active_channels[index]),
                     )
                     for index, (tip, option) in enumerate(channel_group)

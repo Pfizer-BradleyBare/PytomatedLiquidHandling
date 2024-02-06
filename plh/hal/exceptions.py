@@ -28,7 +28,7 @@ class UserInteractionRequiredError(HALError, ABC):
     @abstractmethod
     def perform_error_handling(
         self: UserInteractionRequiredError,
-        dialog_function: Callable[..., None],
+        dialog_function: Callable[[HALError], None],
     ) -> None:
         """This function should call the user supplied dialog_function then perform cleanup or repeat action as necessary.
         NOTE: The user supplied function in this context should NOT return a value.
@@ -45,7 +45,7 @@ class UserInputRequiredError(HALError):
     @abstractmethod
     def perform_error_handling(
         self: UserInputRequiredError,
-        dialog_function: Callable[..., Any],
+        dialog_function: Callable[[HALError], Any],
     ) -> None:
         """This function should call the user supplied dialog_function then perform cleanup or repeat action as necessary.
         NOTE: The user supplied function in this context MUST return a value.
