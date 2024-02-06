@@ -23,7 +23,9 @@ class LiquidClassCategoryNotSupportedError(Exception):
 
 @dataclass
 class TransferHardwareError(UserInteractionRequiredError):
-    """Base class for hardware errors that occur during a transfer step."""
+    """Base class for hardware errors that occur during a transfer step.
+    NOTE: All hardware errors that occur during a transfer will be ejected then the operation should be repeated.
+    """
 
     error_device: PipetteBase
     _channel_numbers_to_waste: list[int]
