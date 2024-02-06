@@ -40,7 +40,10 @@ class UserInputRequiredError(HALError):
     This intervention is both physical and programmatic.
     """
 
-    kwargs: dict[str, type]
+    @abstractmethod
+    def kwargs(self: UserInputRequiredError) -> dict[str, type]:
+        """This returns a dictionary of the expected input key and it's type for the callback function."""
+        ...
 
     @abstractmethod
     def callback(
