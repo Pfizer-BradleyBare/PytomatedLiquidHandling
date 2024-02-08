@@ -283,7 +283,12 @@ class DelimiterError(HamiltonError):
 ###CUSTOM BELOW###
 @dataclass(frozen=True)
 class PeripheralDeviceCommunicationError(HamiltonError):
-    """Barcode contains character which is used as delimiter in result string."""
+    """Communication with integrated device failed. This is typically a usb communication error."""
+
+
+@dataclass(frozen=True)
+class GripperPickupError(HamiltonError):
+    """This error is common with the Vantage Quad-CORE-Grippers. Currently a software issue in VOV software."""
 
 
 error_code_map: dict[int, type[HamiltonError]] = {
@@ -336,6 +341,7 @@ error_code_map: dict[int, type[HamiltonError]] = {
     113: DelimiterError,
     ###CUSTOM BELOW###
     10001: PeripheralDeviceCommunicationError,
+    10002: GripperPickupError,
 }
 
 error_code_description_map: dict[str, int] = {
@@ -388,4 +394,5 @@ error_code_description_map: dict[str, int] = {
     "__TODO__": 113,
     ###CUSTOM BELOW###
     "Peripheral device communication failed": 10001,
+    "Gripper did not detect expected labware": 10002,
 }
