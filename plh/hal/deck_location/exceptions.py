@@ -27,11 +27,13 @@ class DeckLocationNotSupportedError(HALError):
 class DeckLocationNotTransportableError(HALError):
     """Your deck location is not transportable but the action you attempted requires a transportable deck location."""
 
-    deck_location: DeckLocationBase
-    """Deck location that is not transportable."""
+    deck_locations: list[DeckLocationBase]
+    """List of DeckLocationBase objects that were not transportable."""
 
     def __str__(self) -> str:
-        return self.deck_location.identifier
+        return ", ".join(
+            [deck_location.identifier for deck_location in self.deck_locations],
+        )
 
 
 @dataclass

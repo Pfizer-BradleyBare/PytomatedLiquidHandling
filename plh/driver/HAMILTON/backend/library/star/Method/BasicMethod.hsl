@@ -53,9 +53,6 @@
  namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
  namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
  namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\CustomDialogs\\DeckLoadingDialog.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\CustomDialogs\\DeckLoadingDialog.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\CustomDialogs\\DeckLoadingDialog.hs_" } 
  namespace _Method { #include "HSLTrcLib.hsl" } 
  namespace _ActionServerProc { #include "HSLTrcLib.hsl" } 
  namespace _StateServerProc { #include "HSLTrcLib.hsl" } 
@@ -165,7 +162,6 @@ HSLLABWRACCESS::_InitLibrary();
 HSL_LIQUIDCLASSLIB::_InitLibrary();
 JSONPARSER::_InitLibrary();
 HSLVACUUBRANDPUMP::_InitLibrary();
-DECKLOADINGDIALOG::_InitLibrary();
 CHANNEL1000UL::_InitLibrary();
 CHANNEL1000ULCOREGRIP::_InitLibrary();
 CORE96HEAD::_InitLibrary();
@@ -221,7 +217,6 @@ HSLLABWRACCESS::_ExitLibrary();
 HSL_LIQUIDCLASSLIB::_ExitLibrary();
 JSONPARSER::_ExitLibrary();
 HSLVACUUBRANDPUMP::_ExitLibrary();
-DECKLOADINGDIALOG::_ExitLibrary();
 CHANNEL1000UL::_ExitLibrary();
 CHANNEL1000ULCOREGRIP::_ExitLibrary();
 CORE96HEAD::_ExitLibrary();
@@ -238,4 +233,4 @@ _PLATEEDITOR96::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-30 13:59$$checksum=ea9c675a$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-02-08 11:34$$checksum=223a5681$$length=084$$
