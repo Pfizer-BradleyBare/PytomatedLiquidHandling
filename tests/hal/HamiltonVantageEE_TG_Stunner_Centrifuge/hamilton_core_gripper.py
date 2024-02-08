@@ -22,12 +22,12 @@ gripper.initialize()
 source = hal.layout_item.devices["Carrier48_Pos1_Biorad200uLPCRPlate"]
 destination = hal.layout_item.devices["Carrier48_Pos2_Biorad200uLPCRPlate"]
 
-transport_options = hal.transport.TransportOptions(
+transport_options = hal.transport.GetPlaceOptions(
     source_layout_item=source,
     destination_layout_item=destination,
 )
 
-gripper.assert_options(transport_options)
+gripper.assert_get_place(transport_options)
 
 gripper.get(transport_options)
 

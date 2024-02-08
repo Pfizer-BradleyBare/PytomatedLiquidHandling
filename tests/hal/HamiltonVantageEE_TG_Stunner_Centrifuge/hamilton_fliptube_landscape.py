@@ -40,7 +40,7 @@ open_close_options.append(
     hal.closeable_container.OpenCloseOptions(layout_item=flip_tube_plate, position=3),
 )
 
-closeable_container_device.assert_options(open_close_options)
+closeable_container_device.assert_open_close(open_close_options)
 closeable_container_device.open(open_close_options)
 closeable_container_device.close(open_close_options)
 
