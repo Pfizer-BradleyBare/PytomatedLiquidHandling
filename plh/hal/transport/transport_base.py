@@ -115,29 +115,30 @@ class TransportBase(Interface, HALDevice):
         source_layout_item = options.source_layout_item
         destination_layout_item = options.destination_layout_item
 
+        not_transportable_deck_locations = []
+
         if not isinstance(
             source_layout_item.deck_location,
             deck_location.TransportableDeckLocation,
         ):
-            excepts.append(
-                deck_location.exceptions.DeckLocationNotTransportableError(
-                    self,
-                    source_layout_item.deck_location,
-                ),
-            )
+            not_transportable_deck_locations.append(source_layout_item.deck_location)
         # Check is transportable
 
         if not isinstance(
             destination_layout_item.deck_location,
             deck_location.TransportableDeckLocation,
         ):
+            not_transportable_deck_locations.append(source_layout_item.deck_location)
+        # Check is transportable
+
+        if len(not_transportable_deck_locations) != 0:
             excepts.append(
                 deck_location.exceptions.DeckLocationNotTransportableError(
                     self,
-                    destination_layout_item.deck_location,
+                    not_transportable_deck_locations,
                 ),
             )
-        # Check is transportable
+        # if not transportable then need to add an error
 
         compatible_transport_configs = (
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(
@@ -193,8 +194,7 @@ class TransportBase(Interface, HALDevice):
             excepts.append(
                 labware.exceptions.LabwareNotEqualError(
                     self,
-                    source_layout_item.labware,
-                    destination_layout_item.labware,
+                    (source_layout_item.labware, destination_layout_item.labware),
                 ),
             )
         # Are the labware compatible?

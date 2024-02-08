@@ -11,12 +11,9 @@ if TYPE_CHECKING:
 
 @dataclass
 class WrongTransportDeviceError(HALError):
-    """Transport device is not the same as required by the DeckLocation TransportOptions.
+    """Transport device is not the same as required by the DeckLocation TransportOptions."""
 
-    Attributes
-    ----------
-    TransportOptionsDevice: Device required by the deck location
-    """
+    error_device: TransportBase
 
     ViableTransportDevices: list[TransportBase]
 

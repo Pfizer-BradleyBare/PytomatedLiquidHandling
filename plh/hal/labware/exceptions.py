@@ -24,8 +24,5 @@ class LabwareNotEqualError(HALError):
 
     """
 
-    labware1: LabwareBase
-    """Labware 1 that failed the equality"""
-
-    labware2: LabwareBase
-    """Labware 2 that failed the equality"""
+    labwares: tuple[LabwareBase, LabwareBase]
+    """tuple of LabwareBase objects that are not equal"""
