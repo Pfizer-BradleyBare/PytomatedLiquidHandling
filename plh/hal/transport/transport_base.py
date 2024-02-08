@@ -121,6 +121,7 @@ class TransportBase(Interface, HALDevice):
         ):
             excepts.append(
                 deck_location.exceptions.DeckLocationNotTransportableError(
+                    self,
                     source_layout_item.deck_location,
                 ),
             )
@@ -132,6 +133,7 @@ class TransportBase(Interface, HALDevice):
         ):
             excepts.append(
                 deck_location.exceptions.DeckLocationNotTransportableError(
+                    self,
                     destination_layout_item.deck_location,
                 ),
             )
@@ -146,6 +148,7 @@ class TransportBase(Interface, HALDevice):
         if len(compatible_transport_configs) == 0:
             excepts.append(
                 deck_location.exceptions.DeckLocationTransportConfigsNotCompatibleError(
+                    self,
                     cast(
                         deck_location.TransportableDeckLocation,
                         source_layout_item.deck_location,
@@ -182,13 +185,14 @@ class TransportBase(Interface, HALDevice):
 
         if len(unsupported_labware) > 0:
             excepts.append(
-                labware.exceptions.LabwareNotSupportedError(unsupported_labware),
+                labware.exceptions.LabwareNotSupportedError(self, unsupported_labware),
             )
         # Are both source and destination labware supported by this device?
 
         if source_layout_item.labware != destination_layout_item.labware:
             excepts.append(
                 labware.exceptions.LabwareNotEqualError(
+                    self,
                     source_layout_item.labware,
                     destination_layout_item.labware,
                 ),

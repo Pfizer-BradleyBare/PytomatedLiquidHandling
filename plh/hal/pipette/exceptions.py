@@ -28,6 +28,7 @@ class PipetteHardwareError(UserInteractionRequiredError):
     """
 
     error_device: PipetteBase
+
     _channel_numbers_to_waste: list[int]
 
     def callback(

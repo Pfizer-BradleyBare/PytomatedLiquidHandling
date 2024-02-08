@@ -40,7 +40,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
             excepts += e.exceptions
 
         if temperature is not None and temperature < 25:
-            excepts.append(CoolingNotSupportedError)
+            excepts.append(CoolingNotSupportedError(self))
 
         if len(excepts) > 0:
             msg = "HeatCoolShakeDevice Options Exceptions"

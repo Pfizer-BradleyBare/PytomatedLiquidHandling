@@ -131,7 +131,7 @@ class MagneticRackBase(HALDevice):
 
                 return supported_layout_item
 
-        raise labware.exceptions.LabwareNotSupportedError([layout_item.labware])
+        raise labware.exceptions.LabwareNotSupportedError(self, [layout_item.labware])
 
     def get_aspirate_storage_buffer_liquid_class_category(
         self: MagneticRackBase,

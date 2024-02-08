@@ -40,7 +40,7 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
         rpm = options.rpm
 
         if rpm is not None:
-            excepts.append(ShakingNotSupportedError)
+            excepts.append(ShakingNotSupportedError(self))
 
         if len(excepts) > 0:
             msg = "HeatCoolShakeDevice Options Exceptions"

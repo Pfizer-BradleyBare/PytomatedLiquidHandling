@@ -69,12 +69,15 @@ class HeatCoolShakeBase(Interface, HALDevice):
 
         if layout_item is not None:
             supported_labware = [
-                layout_item.labware.identifier for LayoutItem in self.plates
+                layout_item.labware.identifier for layout_item in self.plates
             ]
 
             if layout_item.labware not in supported_labware:
                 excepts.append(
-                    labware.exceptions.LabwareNotSupportedError([layout_item.labware]),
+                    labware.exceptions.LabwareNotSupportedError(
+                        self,
+                        [layout_item.labware],
+                    ),
                 )
 
         if len(excepts) > 0:
@@ -100,7 +103,7 @@ class HeatCoolShakeBase(Interface, HALDevice):
 
                 return supported_layout_item
 
-        raise labware.exceptions.LabwareNotSupportedError([layout_item.labware])
+        raise labware.exceptions.LabwareNotSupportedError(self, [layout_item.labware])
 
     @abstractmethod
     def set_temperature(self: HeatCoolShakeBase, options: HeatCoolShakeOptions) -> None:

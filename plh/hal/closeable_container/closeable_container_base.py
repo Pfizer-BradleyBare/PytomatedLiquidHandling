@@ -110,12 +110,13 @@ class CloseableContainerBase(Interface, HALDevice):
 
         if len(unsupported_labware) > 0:
             excepts.append(
-                labware.exceptions.LabwareNotSupportedError(unsupported_labware),
+                labware.exceptions.LabwareNotSupportedError(self, unsupported_labware),
             )
 
         if len(unsupported_deck_locations) > 0:
             excepts.append(
                 deck_location.exceptions.DeckLocationNotSupportedError(
+                    self,
                     unsupported_deck_locations,
                 ),
             )

@@ -14,10 +14,6 @@ class HALError(Exception):
     error_device: HALDevice
     """The device that the error occurred on."""
 
-    associated_devices: list[HALDevice]
-    """Other devices that were assoicated with the error. These will provide extra error context.
-    It is the responsibility of the exception catcher to parse the information to provide more context if they wish."""
-
 
 @dataclasses.dataclass
 class UserInteractionRequiredError(HALError, ABC):

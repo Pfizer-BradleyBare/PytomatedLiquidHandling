@@ -18,8 +18,7 @@ def load_device_config(
     devices: dict[str, T],
 ) -> dict[str, T]:
     """Loads a single device configuration based on the json key."""
-
-    logger.info("Loading " + base_object.__name__ + " configuration.")
+    # logger.info("Loading " + base_object.__name__ + " configuration.")
 
     if bool(json) is False:
         logger.warning(
@@ -59,9 +58,9 @@ def load_device_config(
                     + " already exists. Idenitifers must be unique.",
                 )
 
-            logger.debug(
-                hal_device.simple_representation(),
-            )
+            # logger.debug(
+            #    hal_device.simple_representation(),
+            # )
             devices[hal_device.identifier] = hal_device  # type: ignore IDK why this is an error...
         else:
             logger.warning(
