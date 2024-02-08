@@ -91,7 +91,7 @@ class TipBase(Interface, HALDevice):
         ...
 
     @abstractmethod
-    def discard_teir(self: TipBase) -> list[transport.TransportOptions]:
+    def discard_teir(self: TipBase) -> list[transport.GetPlaceOptions]:
         """Returns a list of transport options to discard the current teir."""
         ...
 

@@ -25,13 +25,6 @@ class WrongTransportDeviceError(HALError):
 
 
 @dataclass
-class IncompleteTransportError(HALError):
-    """The attempted transport failed. You need to retry."""
-
-    options: GetPlaceOptions
-
-
-@dataclass
 class TransportHardwareError(UserInteractionRequiredError):
     """Base class for hardware errors that occur while using transport devices."""
 

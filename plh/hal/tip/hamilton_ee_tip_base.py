@@ -15,7 +15,8 @@ from .tip_base import TipBase
 class HamiltonEETipBase(TipBase):
     """Hamilton tip device with integration with EE (entry exit) for higher tip capacity.
     In this configuration tips are stored in EE until needed then moved to the deck.
-    NOTE: Your number of tip racks and tip stacks must be equal."""
+    NOTE: Your number of tip racks and tip stacks must be equal.
+    """
 
     backend: VantageTrackGripperEntryExit
     """Only supported on Hamilton Vantage systems."""
@@ -58,18 +59,16 @@ class HamiltonEETipBase(TipBase):
 
     def remaining_tips(self: HamiltonEETipBase) -> int:
         """Remaining tips is the number of available positions + the number of stacks."""
-
         tips_per_rack = self.tip_racks[0].labware.layout.total_positions()
 
         return len(self.available_positions) + sum(
             [tips_per_rack * stack.stack_count for stack in self.tip_stacks],
         )
 
-    def discard_teir(self: HamiltonEETipBase) -> list[transport.TransportOptions]:
+    def discard_teir(self: HamiltonEETipBase) -> list[transport.GetPlaceOptions]:
         """For any given number of racks the tip stacks will be used to replenish.
         If a stack runs out of tips then the stack will be moved to the so stacks are depleted in order.
         """
-
         for stack in self.tip_stacks:
             if stack.stack_count == 0:
                 raise RuntimeError("Out of items. TODO reload error.")
@@ -93,11 +92,11 @@ class HamiltonEETipBase(TipBase):
         return sum(
             [
                 [
-                    transport.TransportOptions(
+                    transport.GetPlaceOptions(
                         source_layout_item=rack,
                         destination_layout_item=self.tip_rack_waste,
                     ),
-                    transport.TransportOptions(
+                    transport.GetPlaceOptions(
                         source_layout_item=stack.tip_rack,
                         destination_layout_item=rack,
                     ),

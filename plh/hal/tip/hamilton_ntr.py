@@ -37,7 +37,6 @@ class HamiltonNTR(TipBase):
 
     def deinitialize(self: HamiltonNTR) -> None:
         """Saves the current position of the tips using the NTR driver."""
-
         command = Visual_NTR_Library.Channels_TipCounter_Write.Command(
             options=Visual_NTR_Library.Channels_TipCounter_Write.OptionsList(
                 TipCounter=f"{type(self).__name__}_{int(self.volume)}",
@@ -72,12 +71,11 @@ class HamiltonNTR(TipBase):
             * tips_per_rack
         )
 
-    def discard_teir(self: HamiltonNTR) -> list[transport.TransportOptions]:
+    def discard_teir(self: HamiltonNTR) -> list[transport.GetPlaceOptions]:
         """Returns the layout items from the top layer of a teir with the appropraite discard location.
         NOTE: The top teir after edit will be partially available.
         Thus, we use the ```available_positions_per_teir``` information to only discard the remaining teirs.
         """
-
         discard_racks = self.available_racks_per_teir[0]
         self.available_racks_per_teir = self.available_racks_per_teir[1:]
 
@@ -88,7 +86,7 @@ class HamiltonNTR(TipBase):
         self.available_positions_per_teir = self.available_positions_per_teir[1:]
 
         return [
-            transport.TransportOptions(
+            transport.GetPlaceOptions(
                 source_layout_item=rack,
                 destination_layout_item=self.tip_rack_waste,
             )
@@ -99,7 +97,6 @@ class HamiltonNTR(TipBase):
         """Uses the NTR library to edit the number of available tips.
         After tip selection we need to extract information about the teirs in current and subsequence layers.
         """
-
         command = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
             options=Visual_NTR_Library.Channels_TipCounter_Edit.OptionsList(
                 TipCounter=f"{type(self).__name__}_{int(self.volume)}",

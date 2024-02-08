@@ -21,7 +21,6 @@ class HamiltonFTR(TipBase):
 
     def deinitialize(self: HamiltonFTR) -> None:
         """Saves the current position using the FTR driver."""
-
         command = HSLTipCountingLib.Write.Command(
             options=HSLTipCountingLib.Write.OptionsList(
                 TipCounter=f"{type(self).__name__}_{int(self.volume)}",
@@ -43,13 +42,12 @@ class HamiltonFTR(TipBase):
         """FTR tips do not have teirs so remaining tips is just all the tips left."""
         return len(self.available_positions)
 
-    def discard_teir(self: HamiltonFTR) -> list[transport.TransportOptions]:
+    def discard_teir(self: HamiltonFTR) -> list[transport.GetPlaceOptions]:
         """Cannot discard teir. You must load more tips."""
         raise RuntimeError("TODO: Tip reload error")
 
     def update_available_positions(self: HamiltonFTR) -> None:
         """Uses the FTR edit command to allow the user to specify the number of tips available."""
-
         command = HSLTipCountingLib.Edit.Command(
             options=HSLTipCountingLib.Edit.OptionsList(
                 TipCounter=f"{type(self).__name__}_{int(self.volume)}",
