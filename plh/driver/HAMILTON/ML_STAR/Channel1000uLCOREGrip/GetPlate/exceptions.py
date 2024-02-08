@@ -1,5 +1,6 @@
 from plh.driver.HAMILTON.backend.exceptions import (
     ExecutionError,
+    GripperPickupError,
     HardwareError,
     LabwareError,
     NotExecutedError,
@@ -14,4 +15,5 @@ __all__ = [
     "NotExecutedError",
     "NoTipError",
     "TipPresentError",
+    "GripperPickupError",
 ]
