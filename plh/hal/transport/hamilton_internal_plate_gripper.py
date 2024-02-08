@@ -9,6 +9,7 @@ from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import iSwap
 from plh.hal import deck_location
 
+from .exceptions import GetHardwareError, PlaceHardwareError
 from .options import GetPlaceOptions
 from .transport_base import *
 from .transport_base import TransportBase
@@ -79,9 +80,15 @@ class HamiltonInternalPlateGripper(TransportBase):
             ),
             backend_error_handling=False,
         )
-        self.backend.execute(command)
-        self.backend.wait(command)
-        self.backend.acknowledge(command, iSwap.GetPlate.Response)
+        try:
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(command, iSwap.GetPlate.Response)
+        except* iSwap.GetPlate.exceptions.HardwareError as e:
+            raise ExceptionGroup(
+                "Exception",
+                [GetHardwareError(self, source_layout_item)],
+            ) from e
 
     def get_time(
         self: HamiltonInternalPlateGripper,
@@ -119,9 +126,15 @@ class HamiltonInternalPlateGripper(TransportBase):
             ),
             backend_error_handling=False,
         )
-        self.backend.execute(command)
-        self.backend.wait(command)
-        self.backend.acknowledge(command, iSwap.PlacePlate.Response)
+        try:
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(command, iSwap.PlacePlate.Response)
+        except* iSwap.PlacePlate.exceptions.HardwareError as e:
+            raise ExceptionGroup(
+                "Exception",
+                [PlaceHardwareError(self, destination_layout_item)],
+            ) from e
 
     def place_time(
         self: HamiltonInternalPlateGripper,

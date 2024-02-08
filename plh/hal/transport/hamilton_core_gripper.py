@@ -9,6 +9,7 @@ from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uLCOREGrip
 from plh.hal import deck_location
 
+from .exceptions import GetHardwareError, PlaceHardwareError
 from .options import GetPlaceOptions
 from .transport_base import *
 from .transport_base import TransportBase
@@ -53,12 +54,31 @@ class HamiltonCOREGripper(TransportBase):
             ),
             backend_error_handling=False,
         )
-        self.backend.execute(command)
-        self.backend.wait(command)
-        self.backend.acknowledge(
-            command,
-            Channel1000uLCOREGrip.GetPlate.Response,
-        )
+
+        while True:
+            try:
+
+                self.backend.execute(command)
+                self.backend.wait(command)
+                self.backend.acknowledge(
+                    command,
+                    Channel1000uLCOREGrip.GetPlate.Response,
+                )
+                break
+
+            except* (
+                Channel1000uLCOREGrip.GetPlate.exceptions.ExecutionError,
+                Channel1000uLCOREGrip.GetPlate.exceptions.GripperPickupError,
+                Channel1000uLCOREGrip.GetPlate.exceptions.NotExecutedError,
+            ):
+                # skip these errors.They can be repeated without consequence
+                ...
+
+            except* Channel1000uLCOREGrip.GetPlate.exceptions.HardwareError as e:
+                raise ExceptionGroup(
+                    "Exceptions",
+                    [GetHardwareError(self, source_layout_item)],
+                ) from e
 
     def get_time(
         self: HamiltonCOREGripper,
@@ -96,12 +116,19 @@ class HamiltonCOREGripper(TransportBase):
             ),
             backend_error_handling=False,
         )
-        self.backend.execute(command)
-        self.backend.wait(command)
-        self.backend.acknowledge(
-            command,
-            Channel1000uLCOREGrip.PlacePlate.Response,
-        )
+
+        try:
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(
+                command,
+                Channel1000uLCOREGrip.PlacePlate.Response,
+            )
+        except* Channel1000uLCOREGrip.PlacePlate.exceptions.HardwareError as e:
+            raise ExceptionGroup(
+                "Exception",
+                [PlaceHardwareError(self, destination_layout_item)],
+            ) from e
 
     def place_time(
         self: HamiltonCOREGripper,

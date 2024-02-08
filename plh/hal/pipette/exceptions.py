@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING
 
 from plh.hal.exceptions import HALError, UserInteractionRequiredError
 
+from .options import TransferOptions
+
 if TYPE_CHECKING:
     from .pipette_base import PipetteBase
 
@@ -17,6 +19,13 @@ class LiquidClassCategoryNotSupportedError(HALError):
 
     Categories: list[str]
     """List of category names and associated volumes tuple[Name,Volume] that were not supported"""
+
+
+@dataclass
+class IncompleteTransferError(HALError):
+    """You're transfer operation experienced an error. You should retry with the following options."""
+
+    options: TransferOptions
 
 
 @dataclass
