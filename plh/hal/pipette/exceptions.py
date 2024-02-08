@@ -3,14 +3,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from plh.hal.exceptions import UserInteractionRequiredError
+from plh.hal.exceptions import HALError, UserInteractionRequiredError
 
 if TYPE_CHECKING:
     from .pipette_base import PipetteBase
 
 
 @dataclass
-class LiquidClassCategoryNotSupportedError(Exception):
+class LiquidClassCategoryNotSupportedError(HALError):
     """HAL device does not support your Labware. This can be thrown for any LayoutItem inputs.
 
     Attributes

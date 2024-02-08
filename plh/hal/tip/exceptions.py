@@ -2,15 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .tip_base import TipBase
+from plh.hal.exceptions import HALError
 
 
 @dataclass
-class TierOutOfTipsError(Exception):
+class TierOutOfTipsError(HALError):
     """The Tip device has no more tips available in the teir. A tip discard / reload event is required."""
 
-    tip: TipBase
-    """Tip device that is out of tips in the teir."""
-
     def __str__(self) -> str:
-        return self.tip.identifier
+        return self.error_device.identifier

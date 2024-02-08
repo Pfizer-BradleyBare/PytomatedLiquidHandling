@@ -3,27 +3,25 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from plh.hal.exceptions import UserInteractionRequiredError
+from plh.hal.exceptions import HALError, UserInteractionRequiredError
 
 if TYPE_CHECKING:
     from .transport_base import TransportBase
 
 
 @dataclass
-class WrongTransportDeviceError(Exception):
+class WrongTransportDeviceError(HALError):
     """Transport device is not the same as required by the DeckLocation TransportOptions.
 
     Attributes
     ----------
-    CurrentDevice: Device on which you called Transport
     TransportOptionsDevice: Device required by the deck location
     """
 
-    CurrentDevice: TransportBase
     ViableTransportDevices: list[TransportBase]
 
     def __str__(self) -> str:
-        return f"{self.CurrentDevice.identifier} != [{', '.join([device.identifier for device in self.ViableTransportDevices])}]"
+        return f"{self.error_device.identifier} != [{', '.join([device.identifier for device in self.ViableTransportDevices])}]"
 
 
 @dataclass
