@@ -45,40 +45,35 @@ class HeatCoolShakeBase(Interface, HALDevice):
 
         return supported_objects
 
-    def assert_options(
+    def assert_get_layout_item(
         self: HeatCoolShakeBase,
         options: HeatCoolShakeOptions,
     ) -> None:
-        """Must called before calling ```get_layout_item```, ```set_temperature```, ```set_temperature_time```, and ```set_shaking_speed```.
+        """Must called before calling ```get_layout_item```.
 
         If any exceptions are thrown then you are trying to use an incompatible device.
 
-        Raises ExceptionGroup of the following:
-
+        Raises ValueError or ExceptionGroup of the following:
             Labware.LabwareNotSupportedError
-
-            HeatCoolShakeDevice.CoolingNotSupportedError
-
-            HeatCoolShakeDevice.HeatingNotSupportedError
-
-            HeatCoolShakeDevice.ShakingNotSupportedError
         """
+        if options.layout_item is None:
+            raise ValueError("layout_item must not be None")
+
         excepts = []
 
         layout_item = options.layout_item
 
-        if layout_item is not None:
-            supported_labware = [
-                layout_item.labware.identifier for layout_item in self.plates
-            ]
+        supported_labware = [
+            layout_item.labware.identifier for layout_item in self.plates
+        ]
 
-            if layout_item.labware not in supported_labware:
-                excepts.append(
-                    labware.exceptions.LabwareNotSupportedError(
-                        self,
-                        [layout_item.labware],
-                    ),
-                )
+        if layout_item.labware not in supported_labware:
+            excepts.append(
+                labware.exceptions.LabwareNotSupportedError(
+                    self,
+                    [layout_item.labware],
+                ),
+            )
 
         if len(excepts) > 0:
             msg = "HeatCoolShakeDevice Options Exceptions"
@@ -89,6 +84,8 @@ class HeatCoolShakeBase(Interface, HALDevice):
         options: HeatCoolShakeOptions,
     ) -> li.CoverablePlate | li.Plate:
         """Gets a layout item on the heat_cool_shake device that is compatible with your current layout item."""
+        self.assert_get_layout_item(options)
+
         layout_item = options.layout_item
 
         assert layout_item is not None
@@ -104,6 +101,24 @@ class HeatCoolShakeBase(Interface, HALDevice):
                 return supported_layout_item
 
         raise labware.exceptions.LabwareNotSupportedError(self, [layout_item.labware])
+
+    @abstractmethod
+    def assert_set_temperature(
+        self: HeatCoolShakeBase,
+        options: HeatCoolShakeOptions,
+    ) -> None:
+        """Must called before calling ```set_temperature``` and ```set_temperature_time```.
+
+        If any exceptions are thrown then you are trying to use an incompatible device.
+
+        Raises ValueError or ExceptionGroup of the following:
+
+            HeatCoolShakeDevice.CoolingNotSupportedError
+
+            HeatCoolShakeDevice.HeatingNotSupportedError
+        """
+        if options.temperature is None:
+            raise ValueError("temperature must not be None")
 
     @abstractmethod
     def set_temperature(self: HeatCoolShakeBase, options: HeatCoolShakeOptions) -> None:
@@ -122,6 +137,22 @@ class HeatCoolShakeBase(Interface, HALDevice):
     def get_temperature(self: HeatCoolShakeBase) -> float:
         """Gets the current temperature."""
         ...
+
+    @abstractmethod
+    def assert_set_shaking_speed(
+        self: HeatCoolShakeBase,
+        options: HeatCoolShakeOptions,
+    ) -> None:
+        """Must called before calling ```set_shaking_speed```.
+
+        If any exceptions are thrown then you are trying to use an incompatible device.
+
+        Raises ValueError or ExceptionGroup of the following:
+
+            HeatCoolShakeDevice.ShakingNotSupportedError
+        """
+        if options.rpm is None:
+            raise ValueError("rpm must not be None")
 
     @abstractmethod
     def set_shaking_speed(

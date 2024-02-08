@@ -26,26 +26,6 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
     handle_id: str = field(init=False, default="NONE")
     """Handle id used to perform actions after initialization."""
 
-    def assert_options(
-        self: HamiltonHeaterCooler,
-        options: HeatCoolShakeOptions,
-    ) -> None:
-        excepts = []
-
-        try:
-            super().assert_options(options)
-        except ExceptionGroup as e:
-            excepts += e.exceptions
-
-        rpm = options.rpm
-
-        if rpm is not None:
-            excepts.append(ShakingNotSupportedError(self))
-
-        if len(excepts) > 0:
-            msg = "HeatCoolShakeDevice Options Exceptions"
-            raise ExceptionGroup(msg, excepts)
-
     def initialize(self: HamiltonHeaterCooler) -> None:
         """Connects to Hamilton HeaterCooler device."""
         HeatCoolShakeBase.initialize(self)
@@ -80,11 +60,17 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
             HamiltonHeaterCoolerDriver.StopTemperatureControl.Response,
         )
 
+    def assert_set_temperature(
+        self: HamiltonHeaterCooler,
+        options: HeatCoolShakeOptions,
+    ) -> None:
+        HeatCoolShakeBase.assert_set_temperature(self, options)
+
     def set_temperature(
         self: HamiltonHeaterCooler,
         options: HeatCoolShakeOptions,
     ) -> None:
-        self.assert_options(options)
+        self.assert_set_temperature(options)
 
         temperature = options.temperature
 
@@ -107,7 +93,7 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
         self: HamiltonHeaterCooler,
         options: HeatCoolShakeOptions,
     ) -> float:
-        self.assert_options(options)
+        self.assert_set_temperature(options)
 
         return 0
 
@@ -128,12 +114,29 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
 
         return response.Temperature
 
+    def assert_set_shaking_speed(
+        self: HamiltonHeaterCooler,
+        options: HeatCoolShakeOptions,
+    ) -> None:
+        HeatCoolShakeBase.assert_set_shaking_speed(self, options)
+
+        excepts = []
+
+        rpm = options.rpm
+
+        if rpm is not None:
+            excepts.append(ShakingNotSupportedError(self))
+
+        if len(excepts) > 0:
+            msg = "HeatCoolShakeDevice Options Exceptions"
+            raise ExceptionGroup(msg, excepts)
+
     def set_shaking_speed(
         self: HamiltonHeaterCooler,
         options: HeatCoolShakeOptions,
     ) -> None:
         """Shaking is not supported for this device."""
-        self.assert_options(options)
+        self.assert_set_shaking_speed(options)
 
     def get_shaking_speed(self: HamiltonHeaterCooler) -> int:
         """Shaking is not supported for this device. Nonetheless, returns 0"""

@@ -26,26 +26,6 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
     handle_id: int = field(init=False, default=0)
     """Handle id used to perform actions after initialization."""
 
-    def assert_options(
-        self: HamiltonHeaterShaker,
-        options: HeatCoolShakeOptions,
-    ) -> None:
-        excepts = []
-
-        temperature = options.temperature
-
-        try:
-            super().assert_options(options)
-        except ExceptionGroup as e:
-            excepts += e.exceptions
-
-        if temperature is not None and temperature < 25:
-            excepts.append(CoolingNotSupportedError(self))
-
-        if len(excepts) > 0:
-            msg = "HeatCoolShakeDevice Options Exceptions"
-            raise ExceptionGroup(msg, excepts)
-
     def initialize(self: HamiltonHeaterShaker) -> None:
         """Connects to the Hamilton HeaterShaker then locks and unlocks the plate lock as a reset mechanism."""
         HeatCoolShakeBase.initialize(self)
@@ -131,12 +111,29 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
 
         HeatCoolShakeBase.deinitialize(self)
 
+    def assert_set_temperature(
+        self: HamiltonHeaterShaker,
+        options: HeatCoolShakeOptions,
+    ) -> None:
+        HeatCoolShakeBase.assert_set_temperature(self, options)
+
+        excepts = []
+
+        temperature = options.temperature
+
+        if temperature is not None and temperature < 25:
+            excepts.append(CoolingNotSupportedError(self))
+
+        if len(excepts) > 0:
+            msg = "HeatCoolShakeDevice Options Exceptions"
+            raise ExceptionGroup(msg, excepts)
+
     def set_temperature(
         self: HamiltonHeaterShaker,
         options: HeatCoolShakeOptions,
     ) -> None:
         """Minimum supported temperature is ambient or 25C."""
-        self.assert_options(options)
+        self.assert_set_temperature(options)
 
         temperature = options.temperature
 
@@ -159,7 +156,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
         self: HamiltonHeaterShaker,
         options: HeatCoolShakeOptions,
     ) -> float:
-        self.assert_options(options)
+        self.assert_set_temperature(options)
         return 0
 
     def get_temperature(self: HamiltonHeaterShaker) -> float:
@@ -177,11 +174,17 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
 
         return response.Temperature
 
+    def assert_set_shaking_speed(
+        self: HamiltonHeaterShaker,
+        options: HeatCoolShakeOptions,
+    ) -> None:
+        HeatCoolShakeBase.assert_set_shaking_speed(self, options)
+
     def set_shaking_speed(
         self: HamiltonHeaterShaker,
         options: HeatCoolShakeOptions,
     ) -> None:
-        self.assert_options(options)
+        self.assert_set_shaking_speed(options)
 
         rpm = options.rpm
 

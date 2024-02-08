@@ -77,7 +77,7 @@ class CloseableContainerBase(Interface, HALDevice):
 
         return supported_objects
 
-    def assert_options(
+    def assert_open_close(
         self: CloseableContainerBase,
         options: list[OpenCloseOptions],
     ) -> None:
