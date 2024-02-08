@@ -25,11 +25,9 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
     backend: HamiltonBackendBase
     active_channels: list[Literal[1, 2, 3, 4, 5, 6, 7, 8]]
 
-    def initialize(self: HamiltonPortraitCORE8ContactDispense) -> None:
-        ...
+    def initialize(self: HamiltonPortraitCORE8ContactDispense) -> None: ...
 
-    def deinitialize(self: HamiltonPortraitCORE8ContactDispense) -> None:
-        ...
+    def deinitialize(self: HamiltonPortraitCORE8ContactDispense) -> None: ...
 
     def _pickup(
         self: HamiltonPortraitCORE8ContactDispense,
@@ -87,7 +85,7 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                                 PositionID=position_id,
                             ),
                         )
-                    except IndexError:
+                    except IndexError as e:
                         self._eject(
                             [
                                 _EjectOptions(
@@ -102,7 +100,7 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                         raise ExceptionGroup(
                             "Errors during tip pickup",
                             [tip.exceptions.TierOutOfTipsError(option.pipette_tip.tip)],
-                        )
+                        ) from e
                     # It is possible that there are not enough tips in the teir to support this pickup operation.
                     # We DO NOT want to hold tips when a teir is empty. We need to be able to grab the gripper. So we will eject them.
 
