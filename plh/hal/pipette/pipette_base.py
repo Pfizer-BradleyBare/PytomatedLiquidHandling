@@ -178,9 +178,6 @@ class PipetteBase(Interface, HALDevice):
         ][-1]
 
     @abstractmethod
-    def _waste(self: PipetteBase, channel_numbers: list[int]) -> None: ...
-
-    @abstractmethod
     def _pickup(
         self: PipetteBase,
         options: list[_PickupOptions],
@@ -199,12 +196,14 @@ class PipetteBase(Interface, HALDevice):
 
     @abstractmethod
     def _aspirate(
-        self: PipetteBase, options: list[_AspirateDispenseOptions]
+        self: PipetteBase,
+        options: list[_AspirateDispenseOptions],
     ) -> None: ...
 
     @abstractmethod
     def _dispense(
-        self: PipetteBase, options: list[_AspirateDispenseOptions]
+        self: PipetteBase,
+        options: list[_AspirateDispenseOptions],
     ) -> None: ...
 
     def assert_options(

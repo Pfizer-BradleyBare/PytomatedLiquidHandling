@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from plh.hal.exceptions import HALError, UserInteractionRequiredError
 
-from .options import TransferOptions
+from .options import TransferOptions, _EjectOptions
 
 if TYPE_CHECKING:
     from .pipette_base import PipetteBase
@@ -36,13 +36,13 @@ class PipetteHardwareError(UserInteractionRequiredError):
 
     error_device: PipetteBase
 
-    _channel_numbers_to_waste: list[int]
+    _options: list[_EjectOptions]
 
     def callback(
         self: PipetteHardwareError,
     ) -> None:
         """All transfer hardware errors must be handled by ejecting the current tips to waste. So this function does that."""
-        self.error_device._waste(self._channel_numbers_to_waste)
+        self.error_device._eject(self._options)
 
 
 @dataclass
