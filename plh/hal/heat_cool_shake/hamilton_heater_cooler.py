@@ -128,7 +128,7 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
             excepts.append(ShakingNotSupportedError(self))
 
         if len(excepts) > 0:
-            msg = "HeatCoolShakeDevice Options Exceptions"
+            msg = "Exceptions"
             raise ExceptionGroup(msg, excepts)
 
     def set_shaking_speed(

@@ -71,12 +71,12 @@ class HeatCoolShakeBase(Interface, HALDevice):
             excepts.append(
                 labware.exceptions.LabwareNotSupportedError(
                     self,
-                    [layout_item.labware],
+                    layout_item.labware,
                 ),
             )
 
         if len(excepts) > 0:
-            msg = "HeatCoolShakeDevice Options Exceptions"
+            msg = "Exceptions"
             raise ExceptionGroup(msg, excepts)
 
     def get_layout_item(
@@ -100,7 +100,7 @@ class HeatCoolShakeBase(Interface, HALDevice):
 
                 return supported_layout_item
 
-        raise labware.exceptions.LabwareNotSupportedError(self, [layout_item.labware])
+        raise labware.exceptions.LabwareNotSupportedError(self, layout_item.labware)
 
     @abstractmethod
     def assert_set_temperature(

@@ -13,7 +13,7 @@ class LabwareNotSupportedError(HALError):
     This can be thrown for any LayoutItem inputs.
     """
 
-    labwares: list[LabwareBase]
+    labware: LabwareBase
     """List of LabwareBase objects that were not supported"""
 
 

@@ -95,34 +95,25 @@ class CloseableContainerBase(Interface, HALDevice):
         """
         excepts = []
 
-        unsupported_deck_locations = []
-        unsupported_labware = []
-
         for opt in options:
             deck_location_instance = opt.layout_item.deck_location
             labware_instance = opt.layout_item.labware
 
             if deck_location_instance not in self.supported_deck_locations:
-                unsupported_deck_locations.append(deck_location_instance)
+                excepts.append(
+                    deck_location.exceptions.DeckLocationNotSupportedError(
+                        self,
+                        deck_location_instance,
+                    ),
+                )
 
             if labware_instance not in self.supported_labware:
-                unsupported_labware.append(labware_instance)
-
-        if len(unsupported_labware) > 0:
-            excepts.append(
-                labware.exceptions.LabwareNotSupportedError(self, unsupported_labware),
-            )
-
-        if len(unsupported_deck_locations) > 0:
-            excepts.append(
-                deck_location.exceptions.DeckLocationNotSupportedError(
-                    self,
-                    unsupported_deck_locations,
-                ),
-            )
+                excepts.append(
+                    labware.exceptions.LabwareNotSupportedError(self, labware_instance),
+                )
 
         if len(excepts) > 0:
-            msg = "ClosedContainer OpenCloseoptions Exceptions"
+            msg = "Exceptions"
             raise ExceptionGroup(msg, excepts)
 
     @abstractmethod

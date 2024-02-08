@@ -6,7 +6,7 @@ from plh.hal import layout_item
 
 
 @dataclasses.dataclass(kw_only=True)
-class TransportOptions:
+class GetPlaceOptions:
     """Options passed to transport"""
 
     source_layout_item: layout_item.LayoutItemBase

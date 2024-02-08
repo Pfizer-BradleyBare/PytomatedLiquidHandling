@@ -125,7 +125,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
             excepts.append(CoolingNotSupportedError(self))
 
         if len(excepts) > 0:
-            msg = "HeatCoolShakeDevice Options Exceptions"
+            msg = "Exceptions"
             raise ExceptionGroup(msg, excepts)
 
     def set_temperature(

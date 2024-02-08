@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import cast
 
 from pydantic import Field, dataclasses, field_validator
 
@@ -9,7 +8,7 @@ from plh.hal import deck_location, labware
 from plh.hal.tools import HALDevice, Interface
 
 from .exceptions import WrongTransportDeviceError
-from .options import TransportOptions
+from .options import GetPlaceOptions
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -76,137 +75,108 @@ class TransportBase(Interface, HALDevice):
         """No deinitialization actions are performed."""
         ...
 
-    def assert_options(
+    def assert_get_place(
         self: TransportBase,
-        options: TransportOptions,
+        options: GetPlaceOptions,
     ) -> None:
-        """Must be called before calling Transport or TransportTime
-
-        If labwareNotEqualError is thrown then your Source and Destination labware are different, which is not supported.
-
-        If labwareNotSupportedError is thrown then you are trying to use an incompatible device or either
-        the Source or Destination.
-        Use a transition point to bridge the gap.
-
-        If TransportDevicesNotCompatibleError is thrown then your Source and Destination require different
-        transport devices for access.
-        Use a transition point to bridge the gap.
-
-        If WrongDeviceTransportOptionsError is thrown then you are trying to use a incompatible device.
-
-        If GetOptionsNotEqualError is thrown then your Source and Destination require different orientations.
-        Use a transition point to bridge the gap.
-
-
-        Raises ExceptionGroup of the following:
-
-            labware.Base.labwareNotEqualError
-
-            labware.Base.labwareNotSupportedError
-
-            TransportDevice.Base.TransportDevicesNotCompatibleError
-
-            TransportDevice.Base.WrongDeviceTransportOptionsError
-
-            TransportDevice.Base.GetOptionsNotEqualError
-        """
+        """Must be called before calling ```Transport``` or ```TransportTime```"""
         excepts = []
 
-        source_layout_item = options.source_layout_item
-        destination_layout_item = options.destination_layout_item
+        if options.source_layout_item is None:
+            ValueError("source_layout_item must not be None")
 
-        not_transportable_deck_locations = []
-
-        if not isinstance(
-            source_layout_item.deck_location,
-            deck_location.TransportableDeckLocation,
-        ):
-            not_transportable_deck_locations.append(source_layout_item.deck_location)
-        # Check is transportable
+        excepts = []
 
         if not isinstance(
-            destination_layout_item.deck_location,
+            options.source_layout_item.deck_location,
             deck_location.TransportableDeckLocation,
         ):
-            not_transportable_deck_locations.append(source_layout_item.deck_location)
-        # Check is transportable
-
-        if len(not_transportable_deck_locations) != 0:
             excepts.append(
                 deck_location.exceptions.DeckLocationNotTransportableError(
                     self,
-                    not_transportable_deck_locations,
+                    options.source_layout_item.deck_location,
                 ),
             )
-        # if not transportable then need to add an error
+        # Check deck location is transportable
+
+        if isinstance(
+            options.source_layout_item.deck_location,
+            deck_location.TransportableDeckLocation,
+        ):
+            supported_devices = [
+                config.transport_device
+                for config in options.source_layout_item.deck_location.transport_configs
+            ]
+            if self not in supported_devices:
+                excepts.append(WrongTransportDeviceError(self, supported_devices))
+        # Transport device must support this deck location
+
+        if options.source_layout_item.labware not in self.supported_labware:
+            excepts.append(
+                labware.exceptions.LabwareNotSupportedError(
+                    self,
+                    options.source_layout_item.labware,
+                ),
+            )
+        # Check labware is supported
+
+        if not isinstance(
+            options.destination_layout_item.deck_location,
+            deck_location.TransportableDeckLocation,
+        ):
+            excepts.append(
+                deck_location.exceptions.DeckLocationNotTransportableError(
+                    self,
+                    options.destination_layout_item.deck_location,
+                ),
+            )
+        # Check deck location is transportable
+
+        if isinstance(
+            options.destination_layout_item.deck_location,
+            deck_location.TransportableDeckLocation,
+        ):
+            supported_devices = [
+                config.transport_device
+                for config in options.destination_layout_item.deck_location.transport_configs
+            ]
+            if self not in supported_devices:
+                excepts.append(WrongTransportDeviceError(self, supported_devices))
+        # Transport device must support this deck location
+
+        if options.destination_layout_item.labware not in self.supported_labware:
+            excepts.append(
+                labware.exceptions.LabwareNotSupportedError(
+                    self,
+                    options.destination_layout_item.labware,
+                ),
+            )
+        # Check labware is supported
 
         compatible_transport_configs = (
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                source_layout_item.deck_location,
-                destination_layout_item.deck_location,
+                options.source_layout_item.deck_location,
+                options.destination_layout_item.deck_location,
             )
         )
         if len(compatible_transport_configs) == 0:
             excepts.append(
                 deck_location.exceptions.DeckLocationTransportConfigsNotCompatibleError(
                     self,
-                    cast(
-                        deck_location.TransportableDeckLocation,
-                        source_layout_item.deck_location,
-                    ),
-                    cast(
-                        deck_location.TransportableDeckLocation,
-                        destination_layout_item.deck_location,
-                    ),
+                    options.source_layout_item.deck_location,
+                    options.destination_layout_item.deck_location,
                 ),
             )
         # Check configs are compatible
 
-        if type(self) not in [
-            type(Config[0].transport_device) for Config in compatible_transport_configs
-        ]:
-            excepts.append(
-                WrongTransportDeviceError(
-                    self,
-                    [
-                        Config[0].transport_device
-                        for Config in compatible_transport_configs
-                    ],
-                ),
-            )
-        # Is this device actually needed by this layout item?
-
-        unsupported_labware = []
-
-        if source_layout_item.labware not in self.supported_labware:
-            unsupported_labware.append(source_layout_item.labware)
-
-        if destination_layout_item.labware not in self.supported_labware:
-            unsupported_labware.append(destination_layout_item.labware)
-
-        if len(unsupported_labware) > 0:
-            excepts.append(
-                labware.exceptions.LabwareNotSupportedError(self, unsupported_labware),
-            )
-        # Are both source and destination labware supported by this device?
-
-        if source_layout_item.labware != destination_layout_item.labware:
-            excepts.append(
-                labware.exceptions.LabwareNotEqualError(
-                    self,
-                    (source_layout_item.labware, destination_layout_item.labware),
-                ),
-            )
-        # Are the labware compatible?
-
         if len(excepts) > 0:
-            msg = "TransportDevice TransportOptions Exceptions"
+            msg = "Exceptions"
             raise ExceptionGroup(msg, excepts)
 
     @abstractmethod
     def get(
         self: TransportBase,
-        options: TransportOptions,
+        options: GetPlaceOptions,
     ) -> None:
         """Gets a layout item from the deck."""
         ...
@@ -214,7 +184,7 @@ class TransportBase(Interface, HALDevice):
     @abstractmethod
     def get_time(
         self: TransportBase,
-        options: TransportOptions,
+        options: GetPlaceOptions,
     ) -> float:
         """Calculates time required to get a layout item from the deck."""
         ...
@@ -222,7 +192,7 @@ class TransportBase(Interface, HALDevice):
     @abstractmethod
     def place(
         self: TransportBase,
-        options: TransportOptions,
+        options: GetPlaceOptions,
     ) -> None:
         """Places a layout item on the deck."""
         ...
@@ -230,7 +200,7 @@ class TransportBase(Interface, HALDevice):
     @abstractmethod
     def place_time(
         self: TransportBase,
-        options: TransportOptions,
+        options: GetPlaceOptions,
     ) -> float:
         """Calculates time required to place a layout item on the deck."""
         ...

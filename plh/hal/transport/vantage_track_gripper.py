@@ -9,7 +9,7 @@ from plh.driver.HAMILTON import ML_STAR, TrackGripper
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.hal import deck_location
 
-from .options import TransportOptions
+from .options import GetPlaceOptions
 from .transport_base import *
 from .transport_base import TransportBase
 
@@ -43,8 +43,10 @@ class VantageTrackGripper(TransportBase):
 
     def get(
         self: VantageTrackGripper,
-        options: TransportOptions,
+        options: GetPlaceOptions,
     ) -> None:
+        self.assert_get_place(options)
+
         source_layout_item = options.source_layout_item
         destination_layout_item = options.destination_layout_item
 
@@ -90,14 +92,15 @@ class VantageTrackGripper(TransportBase):
 
     def get_time(
         self: VantageTrackGripper,
-        options: TransportOptions,
-    ) -> float:
-        ...
+        options: GetPlaceOptions,
+    ) -> float: ...
 
     def place(
         self: VantageTrackGripper,
-        options: TransportOptions,
+        options: GetPlaceOptions,
     ) -> None:
+        self.assert_get_place(options)
+
         source_layout_item = options.source_layout_item
         destination_layout_item = options.destination_layout_item
 
@@ -134,6 +137,5 @@ class VantageTrackGripper(TransportBase):
 
     def place_time(
         self: VantageTrackGripper,
-        options: TransportOptions,
-    ) -> float:
-        ...
+        options: GetPlaceOptions,
+    ) -> float: ...

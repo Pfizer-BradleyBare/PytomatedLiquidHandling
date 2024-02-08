@@ -3,7 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from plh.hal import layout_item
 from plh.hal.exceptions import HALError, UserInteractionRequiredError
+
+from .options import GetPlaceOptions
 
 if TYPE_CHECKING:
     from .transport_base import TransportBase
@@ -22,6 +25,13 @@ class WrongTransportDeviceError(HALError):
 
 
 @dataclass
+class IncompleteTransportError(HALError):
+    """The attempted transport failed. You need to retry."""
+
+    options: GetPlaceOptions
+
+
+@dataclass
 class TransportHardwareError(UserInteractionRequiredError):
     """Base class for hardware errors that occur while using transport devices."""
 
@@ -34,6 +44,13 @@ class GetHardwareError(TransportHardwareError):
     An example could be incorrect grip height which causes the grippers to hit the plate.
     """
 
+    layout_item: layout_item.LayoutItemBase
+    """layout_item that failed to be picked up"""
+
+    def callback(self: GetHardwareError) -> None:
+        """No repeat or cleanup actions are required"""
+        ...
+
 
 @dataclass
 class PlaceHardwareError(TransportHardwareError):
@@ -41,3 +58,17 @@ class PlaceHardwareError(TransportHardwareError):
     An example could be a missing layout item like a lid.
     The gripper thinks it has a lid but when it places the lid the gripper may be tighter than the plate width.
     """
+
+    layout_item: layout_item.LayoutItemBase
+    """layout_item that failed to be placed"""
+
+    def callback(self: PlaceHardwareError) -> None:
+        """Retries the place operation. We cannot leave a plate picked up.
+        NOTE: Due to the nature of the error. The source and destination are now the same.
+        """
+        self.error_device.place(
+            GetPlaceOptions(
+                source_layout_item=self.layout_item,
+                destination_layout_item=self.layout_item,
+            ),
+        )

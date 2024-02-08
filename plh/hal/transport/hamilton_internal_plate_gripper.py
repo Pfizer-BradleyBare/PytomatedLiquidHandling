@@ -9,7 +9,7 @@ from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import iSwap
 from plh.hal import deck_location
 
-from .options import TransportOptions
+from .options import GetPlaceOptions
 from .transport_base import *
 from .transport_base import TransportBase
 
@@ -43,8 +43,10 @@ class HamiltonInternalPlateGripper(TransportBase):
 
     def get(
         self: HamiltonInternalPlateGripper,
-        options: TransportOptions,
+        options: GetPlaceOptions,
     ) -> None:
+        self.assert_get_place(options)
+
         source_layout_item = options.source_layout_item
         destination_layout_item = options.destination_layout_item
 
@@ -83,14 +85,15 @@ class HamiltonInternalPlateGripper(TransportBase):
 
     def get_time(
         self: HamiltonInternalPlateGripper,
-        options: TransportOptions,
-    ) -> float:
-        ...
+        options: GetPlaceOptions,
+    ) -> float: ...
 
     def place(
         self: HamiltonInternalPlateGripper,
-        options: TransportOptions,
+        options: GetPlaceOptions,
     ) -> None:
+        self.assert_get_place(options)
+
         source_layout_item = options.source_layout_item
         destination_layout_item = options.destination_layout_item
 
@@ -122,6 +125,5 @@ class HamiltonInternalPlateGripper(TransportBase):
 
     def place_time(
         self: HamiltonInternalPlateGripper,
-        options: TransportOptions,
-    ) -> float:
-        ...
+        options: GetPlaceOptions,
+    ) -> float: ...
