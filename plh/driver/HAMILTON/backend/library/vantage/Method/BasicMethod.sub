@@ -81,51 +81,51 @@ private variable None;
 private variable Return;
 // {{ 5 "StateServer" "InitLocals"
 // }} ""
-// {{ 163 1 0 "0458332d_c89d_42cc_a2e861d356678cba" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 157 1 0 "0458332d_c89d_42cc_a2e861d356678cba" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
 {
 None = 0;
 while ("Infinite" == "Infinite")
 {
 None = None + 1;
 // }} ""
-// {{{ 164 1 0 "5b0bc75c_8f07_4c1d_81dd0c2e531de492" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 158 1 0 "5b0bc75c_8f07_4c1d_81dd0c2e531de492" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 IsReady = STATESERVERENDPOINTS::GetNextCommand(600, JSONObject);
 // }} ""
-// {{ 165 1 0 "ba9cc847_7560_463e_8edbf5f134982c3a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 159 1 0 "ba9cc847_7560_463e_8edbf5f134982c3a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (IsReady != 0)
 {
 // }} ""
-// {{{ 166 1 0 "d1771028_576a_4df3_899126551d848322" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 160 1 0 "d1771028_576a_4df3_899126551d848322" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 LOGGER::TraceComment(Translate("State Server Command Processing"));
 // }} ""
-// {{{ 167 1 0 "eba0d83d_3f7a_4ec3_a14c3763458ee3de" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 161 1 0 "eba0d83d_3f7a_4ec3_a14c3763458ee3de" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 ServeRequest(JSONObject);
 // }} ""
-// {{ 168 1 0 "ba9cc847_7560_463e_8edbf5f134982c3a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 162 1 0 "ba9cc847_7560_463e_8edbf5f134982c3a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 else
 {
 // }} ""
-// {{{ 169 1 0 "3d94d716_78bf_4d68_b591617734232584" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+// {{{ 163 1 0 "3d94d716_78bf_4d68_b591617734232584" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
 Return = STATESERVERENDPOINTS::ServerIsAlive();
 // }} ""
-// {{ 170 1 0 "8a76705a_0a97_40c3_a85e3a479ee0d06d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 164 1 0 "8a76705a_0a97_40c3_a85e3a479ee0d06d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (Return == 0)
 {
 // }} ""
-// {{ 171 1 0 "28f0ad35_c180_48e2_a0a7eac2c21d9031" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+// {{ 165 1 0 "28f0ad35_c180_48e2_a0a7eac2c21d9031" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
 MECC::TraceComment(Translate("StateServer does not appear to be running... Aborting."));
 // }} ""
-// {{ 172 1 0 "0947efff_6e57_4ac7_929361774361e475" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+// {{ 166 1 0 "0947efff_6e57_4ac7_929361774361e475" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
 abort;
 // }} ""
-// {{ 173 1 0 "8a76705a_0a97_40c3_a85e3a479ee0d06d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 167 1 0 "8a76705a_0a97_40c3_a85e3a479ee0d06d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 174 1 0 "ba9cc847_7560_463e_8edbf5f134982c3a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 168 1 0 "ba9cc847_7560_463e_8edbf5f134982c3a" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 175 1 0 "0458332d_c89d_42cc_a2e861d356678cba" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+// {{ 169 1 0 "0458332d_c89d_42cc_a2e861d356678cba" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
 }
 }
 // }} ""
@@ -549,33 +549,14 @@ return;
 // {{ 153 1 0 "1bef8e11_637c_45e9_95258e77db118dd1" "{586C3429-F931-405f-9938-928E22C90BFA}"
 
 // }} ""
-// {{ 154 1 0 "82e4ed9e_3448_4cbd_bad624cd7cdf53da" "{586C3429-F931-405f-9938-928E22C90BFA}"
-
-// }} ""
-// {{ 155 1 0 "f8fe1d44_a1e7_4466_af050f9ae6afaefb" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (ModuleName == "HAMILTON DeckLoadingDialog")
-{
-// }} ""
-// {{{ 156 1 0 "73a6940b_9f24_4f87_8b3d39a3e0d34643" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-DECKLOADINGDIALOG::HandleCommand(ML_STAR, CommandName, i_JSONObject);
-// }} ""
-// {{{ 157 1 0 "ebb423fb_05e3_4e92_aea4d3398c90f3a9" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
-return;
-// }} ""
-// {{ 158 1 0 "f8fe1d44_a1e7_4466_af050f9ae6afaefb" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-}
-// }} ""
-// {{ 159 1 0 "82e4ed9e_3448_4cbd_bad624cd7cdf53da" "{586C3429-F931-405f-9938-928E22C90BFA}"
-
-// }} ""
-// {{ 160 1 0 "2f46b945_9c0c_4bbb_a4bc500f6384bbaf" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+// {{ 154 1 0 "2f46b945_9c0c_4bbb_a4bc500f6384bbaf" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
 MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nModule not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
 // }} ""
-// {{ 161 1 0 "e13b2a44_9a9a_48aa_bbe8b61a24ec475c" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+// {{ 155 1 0 "e13b2a44_9a9a_48aa_bbe8b61a24ec475c" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
 abort;
 // }} ""
 // {{{ 5 "ServeRequest" "End"
 }
 // }} ""
 /* {{ 2 "SubmethodInsertLine" "" */ // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-01-23 15:43$$checksum=c871fd0d$$length=091$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-02-08 10:32$$checksum=d843fe81$$length=091$$
