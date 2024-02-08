@@ -8,6 +8,7 @@ from pydantic import dataclasses
 from plh.driver.HAMILTON import ML_STAR, TrackGripper
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.hal import deck_location
+from plh.hal.exceptions import CriticalHALError
 
 from .options import GetPlaceOptions
 from .transport_base import *
@@ -83,12 +84,16 @@ class VantageTrackGripper(TransportBase):
             ),
             backend_error_handling=False,
         )
-        self.backend.execute(command)
-        self.backend.wait(command)
-        self.backend.acknowledge(
-            command,
-            TrackGripper.GripPlateFromTaughtPosition.Response,
-        )
+
+        try:
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(
+                command,
+                TrackGripper.GripPlateFromTaughtPosition.Response,
+            )
+        except* TrackGripper.GripPlateFromTaughtPosition.exceptions.HardwareError as e:
+            raise ExceptionGroup("Exception", [CriticalHALError(self)]) from e
 
     def get_time(
         self: VantageTrackGripper,
@@ -128,12 +133,16 @@ class VantageTrackGripper(TransportBase):
             ),
             backend_error_handling=False,
         )
-        self.backend.execute(command)
-        self.backend.wait(command)
-        self.backend.acknowledge(
-            command,
-            TrackGripper.PlacePlateToTaughtPosition.Response,
-        )
+
+        try:
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(
+                command,
+                TrackGripper.PlacePlateToTaughtPosition.Response,
+            )
+        except* TrackGripper.PlacePlateToTaughtPosition.exceptions.HardwareError as e:
+            raise ExceptionGroup("Exception", [CriticalHALError(self)]) from e
 
     def place_time(
         self: VantageTrackGripper,

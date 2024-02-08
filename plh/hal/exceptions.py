@@ -16,6 +16,11 @@ class HALError(Exception):
 
 
 @dataclasses.dataclass
+class CriticalHALError(HALError):
+    """The error is critical and cannot be recovered at this time."""
+
+
+@dataclasses.dataclass
 class UserInteractionRequiredError(HALError, ABC):
     """Base class for all errors that require user intervention.
     This intervention is usually physical and not programmatic.
