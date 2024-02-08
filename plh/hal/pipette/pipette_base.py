@@ -96,51 +96,6 @@ class PipetteBase(Interface, HALDevice):
 
         return supported_objects
 
-    def assert_options(
-        self: PipetteBase,
-        options: list[TransferOptions],
-    ) -> None:
-        unsupported_deck_locations = []
-        unsupported_labware = []
-        unsupported_liquid_class_categories = []
-
-        for opt in options:
-            source_labware = opt.source_layout_item.labware
-            destination_labware = opt.destination_layout_item.labware
-            if source_labware not in self.supported_source_labware:
-                unsupported_labware.append(source_labware)
-            if destination_labware not in self.supported_destination_labware:
-                unsupported_labware.append(destination_labware)
-            # Check Labware Compatibility
-
-            source_deck_location = opt.source_layout_item.deck_location
-            destination_deck_location = opt.destination_layout_item.deck_location
-            if source_deck_location not in self.supported_deck_locations:
-                unsupported_deck_locations.append(source_deck_location)
-            if destination_deck_location not in self.supported_deck_locations:
-                unsupported_deck_locations.append(destination_deck_location)
-            # Check DeckLocation compatibility
-
-            source_liquid_class_category = opt.source_liquid_class_category
-            destination_liquid_class_category = opt.destination_liquid_class_category
-            if not any(
-                PipetteTip.is_liquid_class_category_supported(
-                    source_liquid_class_category,
-                )
-                for PipetteTip in self.supported_tips
-            ):
-                unsupported_liquid_class_categories.append(source_liquid_class_category)
-            if not any(
-                PipetteTip.is_liquid_class_category_supported(
-                    destination_liquid_class_category,
-                )
-                for PipetteTip in self.supported_tips
-            ):
-                unsupported_liquid_class_categories.append(
-                    destination_liquid_class_category,
-                )
-            # Check liquid class compatibility
-
     def _get_max_transfer_volume(
         self: PipetteBase,
         source_liquid_class_category: str,
@@ -223,8 +178,7 @@ class PipetteBase(Interface, HALDevice):
         ][-1]
 
     @abstractmethod
-    def _waste(self: PipetteBase, channel_numbers: list[int]) -> None:
-        ...
+    def _waste(self: PipetteBase, channel_numbers: list[int]) -> None: ...
 
     @abstractmethod
     def _pickup(
@@ -244,17 +198,62 @@ class PipetteBase(Interface, HALDevice):
         ...
 
     @abstractmethod
-    def _aspirate(self: PipetteBase, options: list[_AspirateDispenseOptions]) -> None:
-        ...
+    def _aspirate(
+        self: PipetteBase, options: list[_AspirateDispenseOptions]
+    ) -> None: ...
 
     @abstractmethod
-    def _dispense(self: PipetteBase, options: list[_AspirateDispenseOptions]) -> None:
-        ...
+    def _dispense(
+        self: PipetteBase, options: list[_AspirateDispenseOptions]
+    ) -> None: ...
+
+    def assert_options(
+        self: PipetteBase,
+        options: list[TransferOptions],
+    ) -> None:
+        unsupported_deck_locations = []
+        unsupported_labware = []
+        unsupported_liquid_class_categories = []
+
+        for opt in options:
+            source_labware = opt.source_layout_item.labware
+            destination_labware = opt.destination_layout_item.labware
+            if source_labware not in self.supported_source_labware:
+                unsupported_labware.append(source_labware)
+            if destination_labware not in self.supported_destination_labware:
+                unsupported_labware.append(destination_labware)
+            # Check Labware Compatibility
+
+            source_deck_location = opt.source_layout_item.deck_location
+            destination_deck_location = opt.destination_layout_item.deck_location
+            if source_deck_location not in self.supported_deck_locations:
+                unsupported_deck_locations.append(source_deck_location)
+            if destination_deck_location not in self.supported_deck_locations:
+                unsupported_deck_locations.append(destination_deck_location)
+            # Check DeckLocation compatibility
+
+            source_liquid_class_category = opt.source_liquid_class_category
+            destination_liquid_class_category = opt.destination_liquid_class_category
+            if not any(
+                PipetteTip.is_liquid_class_category_supported(
+                    source_liquid_class_category,
+                )
+                for PipetteTip in self.supported_tips
+            ):
+                unsupported_liquid_class_categories.append(source_liquid_class_category)
+            if not any(
+                PipetteTip.is_liquid_class_category_supported(
+                    destination_liquid_class_category,
+                )
+                for PipetteTip in self.supported_tips
+            ):
+                unsupported_liquid_class_categories.append(
+                    destination_liquid_class_category,
+                )
+            # Check liquid class compatibility
 
     @abstractmethod
-    def transfer(self: PipetteBase, options: list[TransferOptions]) -> None:
-        ...
+    def transfer(self: PipetteBase, options: list[TransferOptions]) -> None: ...
 
     @abstractmethod
-    def transfer_time(self: PipetteBase, options: list[TransferOptions]) -> float:
-        ...
+    def transfer_time(self: PipetteBase, options: list[TransferOptions]) -> float: ...
