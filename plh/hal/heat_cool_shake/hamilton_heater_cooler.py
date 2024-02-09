@@ -28,8 +28,6 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
 
     def initialize(self: HamiltonHeaterCooler) -> None:
         """Connects to Hamilton HeaterCooler device."""
-        HeatCoolShakeBase.initialize(self)
-
         command = HamiltonHeaterCoolerDriver.Connect.Command(
             options=HamiltonHeaterCoolerDriver.Connect.Options(
                 ComPort=self.com_port,
@@ -46,8 +44,6 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
 
     def deinitialize(self: HamiltonHeaterCooler) -> None:
         """Stops temperature control on device."""
-        HeatCoolShakeBase.deinitialize(self)
-
         command = HamiltonHeaterCoolerDriver.StopTemperatureControl.Command(
             options=HamiltonHeaterCoolerDriver.StopTemperatureControl.Options(
                 HandleID=str(self._HandleID),

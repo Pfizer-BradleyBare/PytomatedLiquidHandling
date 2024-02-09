@@ -28,8 +28,6 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
 
     def initialize(self: HamiltonHeaterShaker) -> None:
         """Connects to the Hamilton HeaterShaker then locks and unlocks the plate lock as a reset mechanism."""
-        HeatCoolShakeBase.initialize(self)
-
         command = HSLHamHeaterShakerLib.CreateUSBDevice.Command(
             options=HSLHamHeaterShakerLib.CreateUSBDevice.Options(
                 ComPort=self.com_port,
@@ -108,8 +106,6 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
             command,
             HSLHamHeaterShakerLib.SetPlateLock.Response,
         )
-
-        HeatCoolShakeBase.deinitialize(self)
 
     def assert_set_temperature(
         self: HamiltonHeaterShaker,
