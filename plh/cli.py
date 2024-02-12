@@ -1,5 +1,6 @@
 """Command Line Interface (cli) for plh.
 """
+
 import pathlib
 import shutil
 import subprocess
@@ -14,7 +15,7 @@ def plh() -> None:
 
 @plh.command()
 def install_venus_dependencies() -> None:
-    """This command installs all Venus4 libraries required by plh by invoking a set of Hamilton supplied .exe files."""
+    """This command installs all Venus libraries required by plh by invoking a set of Hamilton supplied .exe files."""
     if not pathlib.Path("C:\\Program Files (x86)\\HAMILTON").exists():
         print(
             "Hamilton Venus4 software does not appear to be installed. Please install before running this command",
