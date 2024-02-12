@@ -13,7 +13,7 @@ def plh() -> None:
 
 
 @plh.command()
-def install_venus4() -> None:
+def install_venus_dependencies() -> None:
     """This command installs all Venus4 libraries required by plh by invoking a set of Hamilton supplied .exe files."""
     if not pathlib.Path("C:\\Program Files (x86)\\HAMILTON").exists():
         print(
