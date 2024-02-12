@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pydantic import Field, dataclasses, field_validator
+from pydantic import dataclasses, field_validator
 
 from plh.hal import labware
 
@@ -18,9 +18,6 @@ class CoverablePlate(LayoutItemBase):
 
     lid: Lid
     """Lid object associated with this plate."""
-
-    is_covered: bool = Field(exclude=True, default=False)
-    """Is the plate currently covered or not."""
 
     @field_validator("lid", mode="before")
     @classmethod

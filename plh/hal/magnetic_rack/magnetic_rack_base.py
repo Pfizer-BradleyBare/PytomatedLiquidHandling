@@ -123,12 +123,6 @@ class MagneticRackBase(HALDevice):
     ) -> li.CoverablePlate | li.Plate:
         for supported_layout_item in self.plates:
             if supported_layout_item.labware == layout_item.labware:
-                if isinstance(supported_layout_item, li.CoverablePlate):
-                    if isinstance(layout_item, li.CoverablePlate):
-                        supported_layout_item.is_covered = layout_item.is_covered
-                    else:
-                        supported_layout_item.is_covered = False
-
                 return supported_layout_item
 
         raise labware.exceptions.LabwareNotSupportedError(self, layout_item.labware)
