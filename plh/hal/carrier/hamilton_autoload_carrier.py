@@ -5,7 +5,7 @@ from .moveable_carrier import MoveableCarrier
 
 
 @dataclasses.dataclass(kw_only=True)
-class AutoloadCarrier(MoveableCarrier):
+class HamiltonAutoloadCarrier(MoveableCarrier):
     """A carrier which can be accessed and moved by a barcode reader (autoload for Hamilton systems)."""
 
     carrier_labware_id: str
