@@ -34,7 +34,7 @@ class LiquidPropertyBase(Enum):
 
     @classmethod
     def __init_subclass__(cls: type[LiquidPropertyBase]) -> None:
-        """Ensure that all ```LiquidProperty``` items are of type ```LiquidPropertyValue```."""
+        """Ensure that all ```LiquidPropertyBase``` items are of type ```LiquidPropertyValue```."""
         for item in cls:
             if not isinstance(item.value, LiquidPropertyValue):
                 msg = f"{item} is not of type LiquidPropertyValue."
