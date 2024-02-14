@@ -39,11 +39,9 @@ loaded_wells: list[LoadedWell] = []
 """```LoadedWell``` that is actually on deck."""
 
 
-def get_loaded_wells(
-    well: Well,
-) -> list[tuple[layout_item.LayoutItemBase, int]]:
+def get_loaded_wells(well: Well) -> list[LoadedWell]:
     """Get all deck positions associated with a well."""
-    ...
+    return [loaded_well for loaded_well in loaded_wells if well is loaded_well.well]
 
 
 position_locks: set[deck_location.DeckLocationBase] = set()
@@ -65,12 +63,12 @@ class LoaderCriteria:
 
 
 def group(criteria: list[LoaderCriteria]) -> list[list[LoadedWell]]:
-    """Take a list of ```LoaderCriteria```. The list will be grouped (list of list) based on most efficient loading then returned."""
+    """Take a list of ```LoaderCriteria```. The list will be grouped (list of list) based on most efficient loading (similar carrier) then returned."""
     ...
 
 
 def prepare(loaded_wells: list[LoadedWell]) -> None:
-    """Depending on state of loaded wells: either the deck positions will be emptied to make room for loading,
+    """Depending on state of loaded wells: either the deck positions will be emptied to make room for loading
     or the deck positions will be loaded with wells currently on deck.
     """
     ...
