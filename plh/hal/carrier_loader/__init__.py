@@ -8,7 +8,6 @@ __all__ = [
     "CarrierLoaderBase",
     "HamiltonStarAutoload",
     "HamiltonVantageAutoload",
-    "AutoloadCarrier",
 ]
 
 identifier = str
