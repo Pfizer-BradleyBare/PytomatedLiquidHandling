@@ -4,12 +4,14 @@ from pydantic import dataclasses
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import ML_STAR
-from plh.hal.tools import HALDevice, Interface
+
+from .door_lock_base import *
+from .door_lock_base import DoorLockBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class HamiltonFrontCover(HALDevice, Interface):
-    """Allows to unlock all doors on a system."""
+class HamiltonFrontCover(DoorLockBase):
+    """Main Hamilton door locks."""
 
     backend: HamiltonBackendBase
 
@@ -20,7 +22,7 @@ class HamiltonFrontCover(HALDevice, Interface):
         """No deinitialization required."""
 
     def unlock(self: HamiltonFrontCover) -> None:
-        """Unlocks door associated with Track Gripper."""
+        """Unlocks Hamilton sash."""
         command = ML_STAR.LockUnlockFrontCover.Command(
             backend_error_handling=True,
             options=ML_STAR.LockUnlockFrontCover.Options(
@@ -32,7 +34,7 @@ class HamiltonFrontCover(HALDevice, Interface):
         self.backend.acknowledge(command, ML_STAR.LockUnlockFrontCover.Response)
 
     def lock(self: HamiltonFrontCover) -> None:
-        """Locks door associated with Track Gripper."""
+        """Locks Hamilton sash."""
         command = ML_STAR.LockUnlockFrontCover.Command(
             backend_error_handling=True,
             options=ML_STAR.LockUnlockFrontCover.Options(

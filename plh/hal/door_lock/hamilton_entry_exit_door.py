@@ -4,12 +4,14 @@ from pydantic import dataclasses
 
 from plh.driver.HAMILTON import EntryExit
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
-from plh.hal.tools import HALDevice, Interface
+
+from .door_lock_base import *
+from .door_lock_base import DoorLockBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class HamiltonEntryExitDoor(HALDevice, Interface):
-    """Allows to unlock all doors on a system."""
+class HamiltonEntryExitDoor(DoorLockBase):
+    """Door locks associated with Entry Exit."""
 
     backend: VantageTrackGripperEntryExit
 

@@ -9,14 +9,14 @@ from plh.hal.tools import HALDevice, Interface
 
 @dataclasses.dataclass(kw_only=True)
 class DoorLockBase(HALDevice, Interface):
-    """Allows to unlock all doors on a system."""
+    """Allows to unlock doors on a system."""
 
     @abstractmethod
     def unlock(self: DoorLockBase) -> None:
-        """Unlocks all doors"""
+        """Unlocks doors associated with this device."""
         ...
 
     @abstractmethod
     def lock(self: DoorLockBase) -> None:
-        """Locks all doors"""
+        """Locks doors associated with this device."""
         ...

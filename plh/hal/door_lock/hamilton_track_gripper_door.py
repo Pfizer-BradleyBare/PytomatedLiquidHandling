@@ -4,12 +4,14 @@ from pydantic import dataclasses
 
 from plh.driver.HAMILTON import TrackGripper
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
-from plh.hal.tools import HALDevice, Interface
+
+from .door_lock_base import *
+from .door_lock_base import DoorLockBase
 
 
 @dataclasses.dataclass(kw_only=True)
-class HamiltonTrackGripperDoor(HALDevice, Interface):
-    """Allows to unlock all doors on a system."""
+class HamiltonTrackGripperDoor(DoorLockBase):
+    """Door locks associated with Track Gripper."""
 
     backend: VantageTrackGripperEntryExit
 
@@ -20,7 +22,7 @@ class HamiltonTrackGripperDoor(HALDevice, Interface):
         """No deinitialization required."""
 
     def unlock(self: HamiltonTrackGripperDoor) -> None:
-        """Unlocks door associated with Track Gripper."""
+        """Unlocks doors associated with Track Gripper."""
         command = TrackGripper.LockUnlockDoors.Command(
             backend_error_handling=True,
             options=TrackGripper.LockUnlockDoors.Options(
@@ -32,7 +34,7 @@ class HamiltonTrackGripperDoor(HALDevice, Interface):
         self.backend.acknowledge(command, TrackGripper.LockUnlockDoors.Response)
 
     def lock(self: HamiltonTrackGripperDoor) -> None:
-        """Locks door associated with Track Gripper."""
+        """Locks doors associated with Track Gripper."""
         command = TrackGripper.LockUnlockDoors.Command(
             backend_error_handling=True,
             options=TrackGripper.LockUnlockDoors.Options(
