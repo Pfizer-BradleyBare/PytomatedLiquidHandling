@@ -23,7 +23,7 @@ class HamiltonVantageAutoload(CarrierLoaderBase):
         self: CarrierLoaderBase,
         carrier: c.CarrierBase,
     ) -> list[tuple[int, str]]:
-        """Uses the autoload to load carriers into the deck. Will read barcode of loaded positions if barcode is available."""
+        """Uses the autoload to load carriers into the deck. Will read barcode of loaded positions if barcode is available then return [(position,barcode),...]."""
         carrier = cast(c.HamiltonAutoloadCarrier, carrier)
 
         command = Autoload.LoadCarrier.Command(
