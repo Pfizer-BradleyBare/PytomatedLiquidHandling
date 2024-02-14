@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from math import ceil
 
-from plh.hal import deck_location, labware, layout_item
+from plh.hal import carrier_loader, deck_location, labware, layout_item
 
 from .container import Container, Well
 
@@ -45,7 +46,7 @@ def get_loaded_wells(well: Well) -> list[LoadedWell]:
 
 
 position_locks: set[deck_location.DeckLocationBase] = set()
-"""Prevents ```deck_location``` from being stolen by other API functions.
+"""Prevents ```deck_location``` from being "stolen" by other API functions.
 Used only during prepare steps to ensure labware is available and ready to be loaded/unloaded."""
 
 
@@ -55,16 +56,67 @@ class LoaderCriteria:
     If all the containers do not fit in the same layout_item then they will be separated but the criteria will still be valid.
     """
 
-    containers: Container
+    containers: list[Container]
     """All the containers that can be grouped together."""
 
-    labware: labware.LabwareBase
+    labware: labware.PipettableLabware
     """The labware that is to be loaded with containers."""
 
 
 def group(criteria: list[LoaderCriteria]) -> list[list[LoadedWell]]:
     """Take a list of ```LoaderCriteria```. The list will be grouped (list of list) based on most efficient loading (similar carrier) then returned."""
-    ...
+    loadable_carriers = sum(
+        [loader.supported_carriers for loader in carrier_loader.devices.values()],
+        [],
+    )
+    # We only use carriers that have an associated carrier_loader for loading.
+
+    loadable_layout_items = [
+        layout_item
+        for layout_item in layout_item.devices.values()
+        if layout_item.deck_location.carrier_config.carrier in loadable_carriers
+    ]
+    # These are all the potential layout items we can use to load.
+
+    labwares = [layout_item.labware for layout_item in loadable_layout_items]
+
+    labware_availability = dict(
+        sorted(
+            {labware: labwares.count(labware) for labware in set(labwares)}.items(),
+            key=lambda x: x[1],
+        ),
+    )
+    # get number of available labware positions. We want to try to load labware with the least positions first.
+
+    criteria = [
+        item[0]
+        for item in sorted(
+            [
+                (criterion, labware_availability[criterion.labware])
+                for criterion in criteria
+            ],
+            key=lambda x: x[1],
+        )
+    ]
+    # sort criteria based on number of available labware.
+
+    criteria_num_labware: list[tuple[LoaderCriteria, int]] = []
+
+    for criterion in criteria:
+        labware = criterion.labware
+
+        for container in criterion.containers:
+            num_physical_wells = 0
+
+            for well in container.wells:
+                num_physical_wells += ceil(
+                    well.get_total_volume() / labware.well_definition.max_volume,
+                )
+
+        criteria_num_labware.append(
+            (criterion, ceil(num_physical_wells / labware.layout.total_positions())),
+        )
+    # How many of each labware do we need for all containers?
 
 
 def prepare(loaded_wells: list[LoadedWell]) -> None:
