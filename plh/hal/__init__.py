@@ -8,6 +8,7 @@ from loguru import logger
 from . import (
     backend,
     carrier,
+    carrier_loader,
     closeable_container,
     deck_location,
     door_lock,
@@ -27,6 +28,7 @@ from . import (
 __all__ = [
     "backend",
     "carrier",
+    "carrier_loader",
     "closeable_container",
     "deck_location",
     "door_lock",
