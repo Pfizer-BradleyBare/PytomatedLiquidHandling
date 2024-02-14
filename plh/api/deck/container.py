@@ -4,6 +4,18 @@ from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from typing import Callable, ClassVar
 
+__all__ = [
+    "Container",
+    "Well",
+    "Liquid",
+    "LiquidPropertyBase",
+    "LiquidPropertyValue",
+    "Volatility",
+    "Viscosity",
+    "Homogeneity",
+    "Polarity",
+]
+
 
 @dataclass
 class LiquidPropertyValue:
@@ -12,11 +24,14 @@ class LiquidPropertyValue:
     """
 
     _numeric_value_counter: ClassVar[int] = 1
+    """A unique value for each new ```LiquidPropertyValue```. Autoincremented after assignment to ensure uniqueness."""
+
     numeric_value: int = field(init=False)
-    """Value used for composition calculations. Autoassigned."""
+    """Value used for composition calculations. Must be unique. Autoassigned."""
 
     weight: int
-    """How much contribution does this add to the overall solution properties."""
+    """How much contribution does this add to the overall solution properties.
+    For example: ACN mixed with water still makes a solution significantly non-viscous but only slightly volatile."""
 
     aspirate_mix: int
     """Minimal aspirate mix cycles required for a solution with this composition part."""
@@ -71,16 +86,21 @@ class LiquidPropertyBase(Enum):
 
         for property_volume in property_volumes:
             part_per_hundred = int(property_volume[1] * 100 / total_volume)
+            # Each property is a percentage of the solution. We convert to part_per_hundred to make the math easier.
 
             property_contributions += (
                 [property_volume[0].value.numeric_value]
                 * part_per_hundred
                 * property_volume[0].value.weight
             )
+            # We add the property numeric value to a list part_per_hundred * weight times.
+            # If we do this for all properties then we can get the average property for the composition.
 
         return cls._get_by_numeric_value(
             round(sum(property_contributions) / len(property_contributions)),
         )
+        # Because each numeric value is unique and they are grouped by each property we can round the
+        # average property value to get the most similar property that describes the composition.
 
 
 class Volatility(LiquidPropertyBase):
@@ -122,7 +142,7 @@ class Homogeneity(LiquidPropertyBase):
     """Similar to colloidal suspension."""
 
     HETERGENOUS = LiquidPropertyValue(1, 0, 0)
-    """Similar to colloidal suspension BUT the particulate does no stay suspended without mixing."""
+    """Similar to colloidal suspension BUT the particulate does not stay suspended without mixing."""
 
 
 class Polarity(LiquidPropertyBase):
@@ -160,7 +180,7 @@ class Liquid:
 
 @dataclass
 class Well:
-    """A physical well that contains liquid."""
+    """A physical well that contains a liquid or mixture of liquids."""
 
     liquid_volumes: dict[str, tuple[Liquid, float]] = field(
         init=False,
@@ -233,10 +253,16 @@ class Well:
 
 @dataclass
 class Container:
+    """A container with many wells. This is a programmatic representation of a physical object. The wells can span many different labware."""
+
     name: str
+    """Name of the container."""
+
     wells: list[Well] = field(init=False, default_factory=list)
+    """Separate wells used by the container."""
 
     num_wells: InitVar[int]
+    """Number of wells this container will have. Initialization variable."""
 
     def __post_init__(self: Container, num_wells: int) -> None:
         for _ in range(num_wells):
