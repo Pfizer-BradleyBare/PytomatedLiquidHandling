@@ -1,6 +1,6 @@
 from pydantic import dataclasses
 
-from .carrier_base import *
+from .moveable_carrier import *
 from .moveable_carrier import MoveableCarrier
 
 
