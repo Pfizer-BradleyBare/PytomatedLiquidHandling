@@ -18,5 +18,5 @@ from . import api, cli, driver, hal
 
 __all__ = ["cli", "driver", "hal", "api"]
 
-logger.disable("PytomatedLiquidHandling")
+logger.disable("plh")
 # Programmer is excepted to enable loguru to see PLH logs

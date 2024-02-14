@@ -7,7 +7,6 @@
 
 from . import (
     ML_STAR,
-    DeckLoadingDialog,
     EntryExit,
     FlipTubeTool,
     General,
@@ -28,7 +27,6 @@ from . import (
 
 __all__ = [
     "backend",
-    "DeckLoadingDialog",
     "EntryExit",
     "FlipTubeTool",
     "General",
