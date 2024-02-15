@@ -177,6 +177,20 @@ class Liquid:
 class Well:
     """A physical well that contains a liquid or mixture of liquids."""
 
+    _hashable_counter: ClassVar[int] = 0
+    _hashable_value: int = field(init=False)
+    """Simple way to define a custom hashable value for this class to make it a dict key."""
+
+    def __post_init__(self: Well) -> None:
+        self._hashable_value = Well._hashable_counter
+        Well._hashable_counter += 1
+
+    def __hash__(self: Well) -> int:
+        return hash(self._hashable_value)
+
+    def __eq__(self, __value: Well) -> bool:
+        return self._hashable_value == __value._hashable_value
+
     liquid_volumes: dict[str, tuple[Liquid, float]] = field(
         init=False,
         default_factory=dict,
