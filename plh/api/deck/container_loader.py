@@ -3,21 +3,22 @@ from __future__ import annotations
 from dataclasses import dataclass
 from math import ceil
 
-from plh.hal import carrier_loader, deck_location, labware, layout_item
+from plh.hal import carrier_loader, labware, layout_item
 
 from .container import Container, Well
 
 __all__ = [
     "LoadedWell",
     "loaded_wells",
-    "get_loaded_wells",
-    "position_locks",
     "LoaderCriteria",
     "group",
     "prepare",
     "start",
     "end",
 ]
+
+loaded_wells: dict[Well, list[tuple[layout_item.LayoutItemBase, int | str]]] = {}
+"""```Well``` that is actually present on the deck."""
 
 
 @dataclass
@@ -29,25 +30,11 @@ class LoadedWell:
     well: Well
     """A container well."""
 
-    layout_item: layout_item.LayoutItemBase
-    """The layout item where the well is located if loaded."""
+    layout_item_info: list[tuple[layout_item.LayoutItemBase, int]]
+    """The layout items where the well is located if loaded and the wells it is located in."""
 
     layout_item_well: int | str
     """The well number / position ID in the layout item where the well is located."""
-
-
-loaded_wells: list[LoadedWell] = []
-"""```LoadedWell``` that is actually on deck."""
-
-
-def get_loaded_wells(well: Well) -> list[LoadedWell]:
-    """Get all deck positions associated with a well."""
-    return [loaded_well for loaded_well in loaded_wells if well is loaded_well.well]
-
-
-position_locks: set[deck_location.DeckLocationBase] = set()
-"""Prevents ```deck_location``` from being "stolen" by other API functions.
-Used only during prepare steps to ensure labware is available and ready to be loaded/unloaded."""
 
 
 @dataclass
