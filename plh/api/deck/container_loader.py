@@ -18,7 +18,8 @@ __all__ = [
 ]
 
 loaded_wells: dict[Well, list[tuple[layout_item.LayoutItemBase, int | str]]] = {}
-"""```Well``` that is actually present on the deck."""
+"""```Well``` that is actually present on the deck.
+NOTE: depending on the volume needed for a well it can span mutliple layout items / physical wells."""
 
 
 @dataclass
