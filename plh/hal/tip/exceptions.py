@@ -13,5 +13,5 @@ class TierOutOfTipsError(HALError):
 
     error_device: TipBase
 
-    def __str__(self) -> str:
+    def __str__(self: TierOutOfTipsError) -> str:
         return self.error_device.identifier
