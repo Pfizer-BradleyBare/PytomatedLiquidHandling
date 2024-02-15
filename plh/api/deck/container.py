@@ -29,16 +29,6 @@ class LiquidPropertyValue:
     numeric_value: int = field(init=False)
     """Value used for composition calculations. Must be unique. Autoassigned."""
 
-    weight: int
-    """How much contribution does this add to the overall solution properties.
-    For example: ACN mixed with water still makes a solution significantly non-viscous but only slightly volatile."""
-
-    aspirate_mix: int
-    """Minimal aspirate mix cycles required for a solution with this composition part."""
-
-    dispense_mix: int
-    """Minimal dispense mix cycles required for a solution with this composition part."""
-
     def __post_init__(self):
         self.numeric_value = LiquidPropertyValue._numeric_value_counter
         LiquidPropertyValue._numeric_value_counter += 1
@@ -70,13 +60,13 @@ class LiquidPropertyBase(Enum):
     @classmethod
     def calculate_composition_property(
         cls: type[LiquidPropertyBase],
-        property_volumes: list[tuple[LiquidPropertyBase, float]],
+        property_volumes: list[tuple[tuple[LiquidPropertyBase, int], float]],
     ) -> LiquidPropertyBase:
         """Will calculate the combined property for a composition given a list of volumes and property values."""
         if len(property_volumes) == 0:
             raise ValueError("List must contain at least 1 item.")
 
-        if not all(isinstance(item[0], cls) for item in property_volumes):
+        if not all(isinstance(item[0][0], cls) for item in property_volumes):
             msg = "All property values must be from the same property."
             raise ValueError(msg)
 
@@ -89,9 +79,9 @@ class LiquidPropertyBase(Enum):
             # Each property is a percentage of the solution. We convert to part_per_hundred to make the math easier.
 
             property_contributions += (
-                [property_volume[0].value.numeric_value]
+                [property_volume[0][0].value.numeric_value]
                 * part_per_hundred
-                * property_volume[0].value.weight
+                * property_volume[0][1]
             )
             # We add the property numeric value to a list part_per_hundred * weight times.
             # If we do this for all properties then we can get the average property for the composition.
@@ -106,52 +96,52 @@ class LiquidPropertyBase(Enum):
 class Volatility(LiquidPropertyBase):
     """Solution property that represents Voltatility."""
 
-    LOW = LiquidPropertyValue(1, 0, 0)
+    LOW = LiquidPropertyValue()
     """Similar to glycerol."""
 
-    MEDIUM = LiquidPropertyValue(1, 0, 0)
+    MEDIUM = LiquidPropertyValue()
     """Similar to water."""
 
-    HIGH = LiquidPropertyValue(1, 0, 0)
+    HIGH = LiquidPropertyValue()
     """Similar to MeOH."""
 
 
 class Viscosity(LiquidPropertyBase):
     """Solution property that represents Viscosity."""
 
-    LOW = LiquidPropertyValue(1, 0, 0)
+    LOW = LiquidPropertyValue()
     """Similar to MeOH."""
 
-    MEDIUM = LiquidPropertyValue(1, 0, 0)
+    MEDIUM = LiquidPropertyValue()
     """Similar to water."""
 
-    HIGH = LiquidPropertyValue(1, 0, 0)
+    HIGH = LiquidPropertyValue()
     """Similar to glycerol."""
 
 
 class Homogeneity(LiquidPropertyBase):
     """Solution property that represents Homogeneity."""
 
-    HOMOGENOUS = LiquidPropertyValue(1, 0, 0)
+    HOMOGENOUS = LiquidPropertyValue()
     """Similar to salt dissolved in a liquid."""
 
-    EMULSION = LiquidPropertyValue(1, 0, 0)
+    EMULSION = LiquidPropertyValue()
     """Similar to oil mixed with water using a surfactant."""
 
-    SUSPENSION = LiquidPropertyValue(1, 0, 0)
+    SUSPENSION = LiquidPropertyValue()
     """Similar to colloidal suspension."""
 
-    HETERGENOUS = LiquidPropertyValue(1, 0, 0)
+    HETERGENOUS = LiquidPropertyValue()
     """Similar to colloidal suspension BUT the particulate does not stay suspended without mixing."""
 
 
 class Polarity(LiquidPropertyBase):
     """Solution property that represents Polarity."""
 
-    NON_POLAR = LiquidPropertyValue(1, 0, 0)
+    NON_POLAR = LiquidPropertyValue()
     """Similar to chloroform. Low to no conductivity."""
 
-    POLAR = LiquidPropertyValue(1, 0, 0)
+    POLAR = LiquidPropertyValue()
     """Similar to water. Medium to high conductivity."""
 
 
@@ -165,17 +155,22 @@ class Liquid:
     name: str
     """The liquid name."""
 
-    volatility_property: Volatility
-    """The voltaility property for the liquid."""
+    volatility_property: tuple[Volatility, int]
+    """The voltaility property and weight for the liquid.
+    For example: ACN mixed with water still makes a solution significantly non-viscous but only slightly volatile."""
 
-    viscosity_property: Viscosity
-    """The viscosity property for the liquid."""
+    viscosity_property: tuple[Viscosity, int]
+    """The viscosity property and weight for the liquid.
+    For example: ACN mixed with water still makes a solution significantly non-viscous but only slightly volatile."""
 
-    homogeneity_property: Homogeneity
-    """The homogeneity property for the liquid."""
+    homogeneity_property: tuple[Homogeneity, int]
+    """The homogeneity property and weight for the liquid.
+    For example: It's possible to have a reagent that causes a precipitation.
+    A small amount of reagent added would have to have a huge weight to change the composition."""
 
-    polarity_property: Polarity
-    """The polarity property for the liquid."""
+    polarity_property: tuple[Polarity, int]
+    """The polarity property and weight for the liquid.
+    For example: Chloroform is not conductive at all. But a small amount of water will add significant polarity."""
 
 
 @dataclass
@@ -236,7 +231,7 @@ class Well:
 
     def get_well_property(
         self: Well,
-        property_function: Callable[[Liquid], LiquidPropertyBase],
+        property_function: Callable[[Liquid], tuple[LiquidPropertyBase, int]],
     ) -> LiquidPropertyBase:
         """Get a specific liquid property based on the composition of liquids in the well."""
         if len(self.liquid_volumes) == 0:
@@ -248,7 +243,9 @@ class Well:
             for liquid_volume in self.liquid_volumes.values()
         ]
 
-        return property_volumes[0][0].calculate_composition_property(property_volumes)
+        return property_volumes[0][0][0].calculate_composition_property(
+            property_volumes,
+        )
 
 
 @dataclass
