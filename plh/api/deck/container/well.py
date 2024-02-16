@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import copy
 from dataclasses import InitVar, dataclass, field
 from typing import Callable, ClassVar, TypeVar, cast
 
 from .liquid import Liquid, LiquidVolume
 from .property import LiquidPropertyBase, PropertyWeight, PropertyWeightVolume
 
-T = TypeVar("T",bound="LiquidPropertyBase")
+T = TypeVar("T", bound="LiquidPropertyBase")
 
 
 @dataclass
@@ -38,7 +39,7 @@ class Well:
     def __hash__(self: Well) -> int:
         return hash(self._hashable_value)
 
-    def __eq__(self:Well, __value: Well) -> bool:
+    def __eq__(self: Well, __value: Well) -> bool:
         return self._hashable_value == __value._hashable_value
 
     def get_total_volume(self: Well) -> float:
@@ -57,7 +58,7 @@ class Well:
 
         removed_fraction = volume / total_volume
 
-        for liquid, volume in self.liquids.items():
+        for liquid, volume in copy.copy(self.liquids).items():
             removed_volume = volume * removed_fraction
             new_volume = volume - removed_volume
 
@@ -82,7 +83,6 @@ class Well:
 
             self.liquids[liquid] = dispensed_liquid_volume.volume + current_volume
 
-
     def get_well_property(
         self: Well,
         property_function: Callable[[Liquid], PropertyWeight[T]],
@@ -94,10 +94,14 @@ class Well:
 
         property_volumes = [
             PropertyWeightVolume(property_function(liquid), volume)
-            for liquid,volume in self.liquids.items()
+            for liquid, volume in self.liquids.items()
         ]
 
-        return cast(T,cast(LiquidPropertyBase,property_volumes[0].property_weight.property).calculate_composition_property(
-            property_volumes,
-        ))
-
+        return cast(
+            T,
+            cast(
+                LiquidPropertyBase, property_volumes[0].property_weight.property
+            ).calculate_composition_property(
+                property_volumes,
+            ),
+        )

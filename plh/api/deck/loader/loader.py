@@ -16,10 +16,6 @@ __all__ = [
     "end",
 ]
 
-loaded_wells: dict[Well, list[tuple[layout_item.LayoutItemBase, int | str]]] = {}
-"""```Well``` that is actually present on the deck.
-NOTE: depending on the volume needed for a well it can span mutliple layout items / physical wells."""
-
 
 @dataclass
 class Location:
@@ -30,11 +26,13 @@ class Location:
     well: Well
     """A container well."""
 
-    layout_item_info: list[tuple[layout_item.LayoutItemBase, int]]
-    """The layout items where the well is located if loaded and the wells it is located in."""
+    layout_item_info: list[tuple[layout_item.LayoutItemBase, int | str]]
+    """The layout items where the well is located if loaded/unloaded and the wells it is located in."""
 
-    layout_item_well: int | str
-    """The well number / position ID in the layout item where the well is located."""
+
+loaded_wells: dict[Well, Location] = {}
+"""```Well``` that is actually present on the deck.
+NOTE: depending on the volume needed for a well it can span mutliple layout items / physical wells."""
 
 
 @dataclass
@@ -53,6 +51,12 @@ class Criteria:
 
 def group(criteria: list[Criteria]) -> list[list[Location]]:
     """Take a list of ```LoaderCriteria```. The list will be grouped (list of list) based on most efficient loading (similar carrier) then returned."""
+    if not all(
+        isinstance(criterion.labware, labware.PipettableLabware)
+        for criterion in criteria
+    ):
+        raise TypeError("All labware must be of type PipettableLabware.")
+
     loadable_carriers = sum(
         [loader.supported_carriers for loader in carrier_loader.devices.values()],
         [],
@@ -66,46 +70,32 @@ def group(criteria: list[Criteria]) -> list[list[Location]]:
     ]
     # These are all the potential layout items we can use to load.
 
-    labwares = [layout_item.labware for layout_item in loadable_layout_items]
-
-    labware_availability = dict(
-        sorted(
-            {labware: labwares.count(labware) for labware in set(labwares)}.items(),
-            key=lambda x: x[1],
-        ),
-    )
-    # get number of available labware positions. We want to try to load labware with the least positions first.
-
-    criteria = [
-        item[0]
-        for item in sorted(
-            [
-                (criterion, labware_availability[criterion.labware])
-                for criterion in criteria
-            ],
-            key=lambda x: x[1],
-        )
-    ]
-    # sort criteria based on number of available labware.
-
     criteria_num_labware: list[tuple[Criteria, int]] = []
 
     for criterion in criteria:
-        labware = criterion.labware
+
+        assert isinstance(criterion.labware, labware.PipettableLabware)
+        # Already checked above.
 
         num_physical_wells = 0
 
         for well in criterion.wells:
             num_physical_wells += ceil(
-                well.get_total_volume() / labware.well_definition.max_volume,
+                well.get_total_volume() / criterion.labware.well_definition.max_volume,
             )
 
         criteria_num_labware.append(
-            (criterion, ceil(num_physical_wells / labware.layout.total_positions())),
+            (
+                criterion,
+                ceil(num_physical_wells / criterion.labware.layout.total_positions()),
+            ),
         )
-    # How many of each labware do we need for all containers?
+        # How many of each labware do we need for all containers?
 
-        print(criteria_num_labware)
+        print(
+            criteria_num_labware[0][1],
+            criteria_num_labware[0][0].wells[0].get_total_volume(),
+        )
 
 
 def prepare(locations: list[Location]) -> None:
