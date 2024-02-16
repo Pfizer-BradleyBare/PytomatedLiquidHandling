@@ -14,11 +14,11 @@ logger.enable("plh")
 hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
 
 IAA_liquid = Liquid("IAA")
-TCEP_liquid = Liquid("TCEP",viscosity_property=PropertyWeight(Viscosity.HIGH,1))
+TCEP_liquid = Liquid("TCEP",viscosity=PropertyWeight(Viscosity.HIGH,1))
 
 IAA = Well([LiquidVolume(IAA_liquid,100),LiquidVolume(IAA_liquid,100)])
 print(IAA.get_total_volume())
-print(IAA.get_well_property(lambda x:x.viscosity_property))
+print(IAA.get_well_property(lambda x:x.viscosity))
 
 c = Criteria([IAA],hal.labware.devices["Hamilton1500uLFlipTubeRack"])
 
