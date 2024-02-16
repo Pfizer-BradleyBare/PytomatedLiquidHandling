@@ -12,7 +12,7 @@ from .tip_base import *
 from .tip_base import TipBase
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonFTR(TipBase):
     """Hamilton FTR (Filtered Tip Rack) tip device."""
 

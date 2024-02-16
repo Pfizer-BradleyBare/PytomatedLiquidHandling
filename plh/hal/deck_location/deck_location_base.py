@@ -7,7 +7,7 @@ from plh.hal.tools import HALDevice
 from .carrier_config import CarrierConfig
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class DeckLocationBase(HALDevice):
     """A specific location on an automation deck."""
 

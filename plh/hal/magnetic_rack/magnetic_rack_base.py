@@ -7,7 +7,7 @@ from plh.hal import layout_item as li
 from plh.hal.tools import HALDevice
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class MagneticRackBase(HALDevice):
     """A magnetic rack to be used for condensing magnetic beads."""
 

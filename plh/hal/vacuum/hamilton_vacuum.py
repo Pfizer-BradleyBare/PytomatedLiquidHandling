@@ -7,7 +7,7 @@ from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from .vacuum_base import VacuumBase
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonVacuum(VacuumBase):
     """Hamilton vacuubrand pump device."""
 

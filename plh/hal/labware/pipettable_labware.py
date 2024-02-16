@@ -7,7 +7,7 @@ from .labware_base import LabwareBase
 from .well import Well
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class PipettableLabware(LabwareBase):
     """Labware type that can be pipetted to/from."""
 

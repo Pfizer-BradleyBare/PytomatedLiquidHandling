@@ -11,7 +11,7 @@ from plh.hal import carrier as c
 from .carrier_loader_base import CarrierLoaderBase
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonVantageAutoload(CarrierLoaderBase):
     """A device that can move a carrier in and out of a system without user intervention."""
 

@@ -10,7 +10,7 @@ from plh.hal.tools import HALDevice, Interface
 from .filter_plate_configuration import FilterPlateConfiguration
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class VacuumBase(Interface, HALDevice):
     """Describes an on deck vacuum device."""
 

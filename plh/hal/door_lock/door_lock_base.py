@@ -7,7 +7,7 @@ from pydantic import dataclasses
 from plh.hal.tools import HALDevice, Interface
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class DoorLockBase(HALDevice, Interface):
     """Allows to unlock doors on a system."""
 

@@ -11,7 +11,7 @@ from plh.hal.tools import HALDevice
 from .reservation import Reservation
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class StorageDeviceBase(HALDevice):
     """Can be used to store any number and any combination of labware types."""
 
@@ -54,7 +54,8 @@ class StorageDeviceBase(HALDevice):
         layout_item: li.LayoutItemBase,
     ) -> None:
         """Creates a reservation for your layout item.
-        NOTE: reservation_id must be unique."""
+        NOTE: reservation_id must be unique.
+        """
         ...
 
     @abstractmethod

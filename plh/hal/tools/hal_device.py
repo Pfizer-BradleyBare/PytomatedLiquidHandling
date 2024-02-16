@@ -6,7 +6,7 @@ from typing import ClassVar, cast
 from pydantic import BaseModel, dataclasses, field_validator
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HALDevice:
     """A high level device that is part of a fully functioning automation system.
 

@@ -21,7 +21,7 @@ from .options import (
 from .pipette_tip import PipetteTip
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class PipetteBase(Interface, HALDevice):
     supported_tips: list[PipetteTip]
     supported_source_labware: list[labware.PipettableLabware]

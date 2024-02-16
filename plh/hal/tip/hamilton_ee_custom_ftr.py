@@ -10,13 +10,12 @@ from .hamilton_ee_tip_base import *
 from .hamilton_ee_tip_base import HamiltonEETipBase
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonEECustomFTR(HamiltonEETipBase):
     """Hamilton custom stackable FTR (Filtered Tip Rack) tip device with integration with EE (entry exit) for higher tip capacity."""
 
     def deinitialize(self: HamiltonEECustomFTR) -> None:
         """Saves the current position using the FTR driver. Moves the EE stacks to the bottom position."""
-
         command = HSLTipCountingLib.Write.Command(
             options=HSLTipCountingLib.Write.OptionsList(
                 TipCounter=f"{type(self).__name__}_{int(self.volume)}",
@@ -46,7 +45,6 @@ class HamiltonEECustomFTR(HamiltonEETipBase):
 
     def update_available_positions(self: HamiltonEECustomFTR) -> None:
         """Counts the number of items in each stack. Edits the number of available tips using FTR edit."""
-
         for stack in self.tip_stacks:
             command = EntryExit.CountLabwareInStack.Command(
                 options=EntryExit.CountLabwareInStack.Options(

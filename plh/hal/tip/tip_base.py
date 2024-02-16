@@ -20,7 +20,7 @@ class AvailablePosition:
     """The position id for the position."""
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class TipBase(Interface, HALDevice):
     """A tip device that facilitates tip tracking and tier removal as needed."""
 

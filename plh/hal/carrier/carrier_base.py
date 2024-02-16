@@ -5,7 +5,7 @@ from pydantic import FilePath, dataclasses, model_validator
 from plh.hal.tools import HALDevice
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class CarrierBase(HALDevice):
     """A physical carrier on an automation system deck."""
 

@@ -13,7 +13,7 @@ from .heat_cool_shake_base import HeatCoolShakeBase
 from .options import HeatCoolShakeOptions
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonHeaterCooler(HeatCoolShakeBase):
     """Hamilton device that can heat and cool."""
 

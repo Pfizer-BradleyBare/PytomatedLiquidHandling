@@ -9,7 +9,7 @@ from .layout_item_base import LayoutItemBase
 from .lid import Lid
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class CoverablePlate(LayoutItemBase):
     """A plate that can be covered and uncovered."""
 

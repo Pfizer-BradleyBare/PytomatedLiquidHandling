@@ -13,7 +13,7 @@ from .options import TransferOptions
 from .pipette_base import PipetteBase
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonCORE96(PipetteBase):
     backend: HamiltonBackendBase
     hamilton_portrait_core_8: HamiltonPortraitCORE8

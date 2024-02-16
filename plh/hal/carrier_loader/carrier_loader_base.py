@@ -8,7 +8,7 @@ from plh.hal import carrier
 from plh.hal.tools import HALDevice, Interface
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class CarrierLoaderBase(HALDevice, Interface):
     """A device that can move a carrier in and out of a system without user intervention."""
 

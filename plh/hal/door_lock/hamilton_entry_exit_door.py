@@ -9,7 +9,7 @@ from .door_lock_base import *
 from .door_lock_base import DoorLockBase
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonEntryExitDoor(DoorLockBase):
     """Door locks associated with Entry Exit."""
 

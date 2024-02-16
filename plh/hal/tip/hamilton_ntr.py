@@ -13,7 +13,7 @@ from .tip_base import *
 from .tip_base import AvailablePosition, TipBase
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonNTR(TipBase):
     """Hamilton NTR(Nested Tip Rack) tip device."""
 

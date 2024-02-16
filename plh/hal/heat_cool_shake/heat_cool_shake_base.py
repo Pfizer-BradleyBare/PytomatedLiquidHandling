@@ -11,7 +11,7 @@ from plh.hal.tools import HALDevice, Interface
 from .options import HeatCoolShakeOptions
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HeatCoolShakeBase(Interface, HALDevice):
     """A device that can perform either heating, cooling, and shaking or any combination of the three."""
 

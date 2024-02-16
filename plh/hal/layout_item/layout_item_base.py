@@ -6,7 +6,7 @@ from plh.hal import deck_location, labware
 from plh.hal.tools import HALDevice
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class LayoutItemBase(HALDevice):
     """A labware position on a deck."""
 

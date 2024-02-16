@@ -10,7 +10,7 @@ from plh.hal.tools import HALDevice, Interface
 from .options import OpenCloseOptions
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class CloseableContainerBase(Interface, HALDevice):
     """A container that is part of a labware type that can be opened with some kind of tool.
 

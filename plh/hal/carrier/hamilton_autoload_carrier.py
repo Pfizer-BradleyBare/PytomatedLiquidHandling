@@ -4,7 +4,7 @@ from .moveable_carrier import *
 from .moveable_carrier import MoveableCarrier
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonAutoloadCarrier(MoveableCarrier):
     """A carrier which can be accessed and moved by a barcode reader (autoload for Hamilton systems)."""
 

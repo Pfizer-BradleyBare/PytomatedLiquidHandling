@@ -8,7 +8,7 @@ from .reservation import Reservation
 from .storage_device_base import StorageDeviceBase
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class RandomAccessDeckStorage(StorageDeviceBase):
     """Random access storage device. Labware can be stored/retrieved without limitations."""
 
@@ -54,8 +54,7 @@ class RandomAccessDeckStorage(StorageDeviceBase):
 
         del self.reservations[reservation_id]
 
-    def prepare_store(self: RandomAccessDeckStorage, reservation_id: str) -> None:
-        ...
+    def prepare_store(self: RandomAccessDeckStorage, reservation_id: str) -> None: ...
 
     def store(self: RandomAccessDeckStorage, reservation_id: str) -> li.LayoutItemBase:
         if reservation_id not in self.reservations:
@@ -72,8 +71,9 @@ class RandomAccessDeckStorage(StorageDeviceBase):
 
         return reservation.layout_item
 
-    def prepare_retrieve(self: RandomAccessDeckStorage, reservation_id: str) -> None:
-        ...
+    def prepare_retrieve(
+        self: RandomAccessDeckStorage, reservation_id: str
+    ) -> None: ...
 
     def retrieve(
         self: RandomAccessDeckStorage,

@@ -13,7 +13,7 @@ from .closeable_container_base import CloseableContainerBase
 from .options import OpenCloseOptions
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonFlipTubeLandscape(CloseableContainerBase):
     """Hamilton FlipTubes are a special, Hamilton compatible, 1500uL conical tube that can be opened and closed on deck with a FlipTube tool.
 

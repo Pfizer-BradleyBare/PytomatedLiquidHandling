@@ -6,7 +6,7 @@ from .layout_item_base import *
 from .layout_item_base import LayoutItemBase
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class TipRack(LayoutItemBase):
     """A rack that can hold tips used for pipetting."""
 

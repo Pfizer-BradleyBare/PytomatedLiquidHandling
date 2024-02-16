@@ -9,7 +9,7 @@ from .layout import AlphanumericLayout, NumericLayout
 from .transport_offsets import TransportOffsets
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class LabwareBase(HALDevice):
     """Type of physical labware (200uL plate, lid, etc.)."""
 

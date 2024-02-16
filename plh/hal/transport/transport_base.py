@@ -11,7 +11,7 @@ from .exceptions import WrongTransportDeviceError
 from .options import GetPlaceOptions
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class TransportBase(Interface, HALDevice):
     """Describes devices that can move layout items around the deck."""
 

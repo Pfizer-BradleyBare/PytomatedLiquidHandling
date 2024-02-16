@@ -20,7 +20,7 @@ from .pipette_base import *
 from .pipette_base import PipetteBase
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonPortraitCORE8ContactDispense(PipetteBase):
     backend: HamiltonBackendBase
     active_channels: list[Literal[1, 2, 3, 4, 5, 6, 7, 8]]

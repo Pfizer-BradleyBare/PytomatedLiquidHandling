@@ -15,7 +15,7 @@ from .transport_base import *
 from .transport_base import TransportBase
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class VantageTrackGripper(TransportBase):
     backend: VantageTrackGripperEntryExit
 

@@ -8,7 +8,7 @@ from plh.driver.tools import BackendBase
 from plh.hal import backend
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, eq=False)
 class Interface(ABC):
     """Allows devices to abstract away functionality.
 
@@ -36,9 +36,7 @@ class Interface(ABC):
         return objects[identifier]
 
     @abstractmethod
-    def initialize(self: Interface) -> None:
-        ...
+    def initialize(self: Interface) -> None: ...
 
     @abstractmethod
-    def deinitialize(self: Interface) -> None:
-        ...
+    def deinitialize(self: Interface) -> None: ...
