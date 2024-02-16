@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import dataclasses
 from enum import Enum
+
+from pydantic import dataclasses
 
 from plh.driver.tools import OptionsBase
 
@@ -10,7 +11,7 @@ class ApplicationNameOptions(Enum):
     ProteinSinglePoint = "Protein (Single point)"
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, frozen=True)
 class Options(OptionsBase):
     experiment_definition: str
     sample_definition: str

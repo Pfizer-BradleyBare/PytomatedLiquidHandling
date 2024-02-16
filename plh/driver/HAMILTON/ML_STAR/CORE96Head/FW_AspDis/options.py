@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-import dataclasses
 from enum import Enum
 from typing import Literal
+
+from pydantic import dataclasses
 
 from plh.driver.tools import OptionsBase
 
@@ -27,7 +28,7 @@ class YesNoOptions(Enum):
     Yes = 1
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, frozen=True)
 class Options(OptionsBase):
     LabwareID: str
     LLDSearchHeight: int

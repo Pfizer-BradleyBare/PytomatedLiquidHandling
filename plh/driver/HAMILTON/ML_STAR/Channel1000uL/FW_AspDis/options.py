@@ -1,6 +1,7 @@
-import dataclasses
 from enum import Enum
 from typing import Literal
+
+from pydantic import dataclasses
 
 from plh.driver.tools import OptionsBase
 
@@ -25,13 +26,13 @@ class YesNoOptions(Enum):
     Yes = 1
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, frozen=True)
 class Options(OptionsBase):
     LabwareID: str
     PositionID: str
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, frozen=True)
 class OptionsList(list[Options]):
     LLDSearchHeight: int
     LiquidClass: str

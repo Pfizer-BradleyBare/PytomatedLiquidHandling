@@ -1,5 +1,6 @@
-import dataclasses
 from enum import Enum
+
+from pydantic import dataclasses
 
 from plh.driver.tools import OptionsBase
 
@@ -21,7 +22,7 @@ class LabwareOrientationOptions(Enum):
     NegativeXAxis = 4
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, frozen=True)
 class Options(OptionsBase):
     LabwareID: str
     Movement: MovementOptions = MovementOptions.Simple

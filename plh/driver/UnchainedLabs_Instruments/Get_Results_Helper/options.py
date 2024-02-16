@@ -31,6 +31,6 @@ class Options(OptionsBase, str, Enum):
     PlateType = "Plate type"
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, frozen=True)
 class OptionsList(list[Options]):
     NoResultValue: str = "N/A"

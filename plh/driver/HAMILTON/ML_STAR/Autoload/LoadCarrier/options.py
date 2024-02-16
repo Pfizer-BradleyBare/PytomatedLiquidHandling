@@ -1,5 +1,6 @@
-import dataclasses
 from enum import Enum
+
+from pydantic import dataclasses
 
 from plh.driver.tools import OptionsBase
 
@@ -10,7 +11,7 @@ class LabwarePositionsOptions(Enum):
     ReadNone = ""
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass(kw_only=True, frozen=True)
 class Options(OptionsBase):
     LabwareID: str
     BarcodeFilePath: str = "barcode_1.txt"
