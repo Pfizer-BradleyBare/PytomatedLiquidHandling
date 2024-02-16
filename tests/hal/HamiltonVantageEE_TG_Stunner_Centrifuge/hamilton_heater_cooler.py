@@ -13,10 +13,6 @@ logger.enable("plh")
 
 hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
 
-print(hal.tools.HALDevice(identifier="Hello").__hash__())
-
-quit()
-
 IAA_liquid = Liquid("IAA")
 TCEP_liquid = Liquid("TCEP",viscosity_property=PropertyWeight(Viscosity.HIGH,1))
 
