@@ -214,8 +214,8 @@ class Well:
 
     def get_well_property(
         self: Well,
-        property_function: Callable[[Liquid], PropertyWeight],
-    ) -> LiquidPropertyBase:
+        property_function: Callable[[Liquid], PropertyWeight[T]],
+    ) -> T:
         """Get a specific liquid property based on the composition of liquids in the well."""
         if len(self.liquid_volumes) == 0:
             msg = "Well is empty."
@@ -226,7 +226,7 @@ class Well:
             for liquid_volume in self.liquid_volumes.values()
         ]
 
-        return cast(LiquidPropertyBase,property_volumes[0].property_weight.property).calculate_composition_property(
+        return cast(T,cast(LiquidPropertyBase,property_volumes[0].property_weight.property).calculate_composition_property(
             property_volumes,
-        )
+        ))
 
