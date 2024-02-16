@@ -17,31 +17,32 @@ def wells(
         layout_item_info[0]
         for well in wells
         for layout_item_info in loaded_wells[well].layout_item_info
+        if layout_item_info[0].deck_location not in deck_locations
     }
+    # multiple wells can be in a single layout item. Let's get the unique ones.
+    # Some layout items may already be in an acceptable location. Skip those.
 
-    InUseDeckLocations = [
-        LoadedWell.LayoutItem.DeckLocation for LoadedWell in LoadedWells
+    used_deck_locations = [layout_item.deck_location for layout_item in layout_items]
+
+    possible_deck_locations = [
+        deck_location
+        for deck_location in deck_locations
+        if deck_location not in used_deck_locations
     ]
 
-    PotentialDeckLocations = [
-        DeckLocation
-        for DeckLocation in AcceptableDeckLocations
-        if DeckLocation not in InUseDeckLocations
-    ]
-
-    if len(PotentialDeckLocations) < len(LayoutItems):
-        raise Exception(
+    if len(possible_deck_locations) < len(layout_items):
+        raise RuntimeError(
             "There are not enough free deck locations to transport this container.",
         )
 
-    PotentialLayoutItems = [
-        LayoutItem
-        for LayoutItem in LayoutItems.values()
-        if LayoutItem.DeckLocation in PotentialDeckLocations
+    possible_layout_items = [
+        layout_item
+        for layout_item in li.devices.values()
+        if layout_item.deck_location in possible_deck_locations
     ]
 
-    for Index in range(len(ContainerLayoutItems)):
-        TransportLayoutItem(ContainerLayoutItems[Index], PotentialLayoutItems[Index])
+    for source, destination in zip(layout_items, possible_layout_items):
+        layout_item(source, destination)
 
 
 def layout_item(
