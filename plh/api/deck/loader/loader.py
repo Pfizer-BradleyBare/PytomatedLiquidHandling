@@ -19,18 +19,19 @@ __all__ = [
 
 @dataclass
 class Location:
-    """A location on the deck where physical items will be loaded or unloaded.
-    NOTE: a ```Well``` can be loaded in multiple positions and layout_items.
-    """
+    """A location on the deck where physical items will be loaded or unloaded."""
 
     well: Well
     """A container well."""
 
-    layout_item_info: list[tuple[layout_item.LayoutItemBase, int | str]]
-    """The layout items where the well is located if loaded/unloaded and the wells it is located in."""
+    layout_item: layout_item.LayoutItemBase
+    """The layout item where the well is located if loaded/unloaded."""
+
+    layout_item_well: int | str
+    """The physical well in the layout item."""
 
 
-loaded_wells: dict[Well, Location] = {}
+loaded_wells: dict[Well, list[tuple[layout_item.LayoutItemBase, list[int | str]]]] = {}
 """```Well``` that is actually present on the deck.
 NOTE: depending on the volume needed for a well it can span mutliple layout items / physical wells."""
 

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections import defaultdict
+
 from plh.api.deck.container import Well
 from plh.api.deck.loader import loaded_wells
 from plh.hal import (
@@ -12,13 +14,12 @@ from plh.hal import layout_item as li
 def wells(
     wells: list[Well],
     deck_locations: list[deck_location.DeckLocationBase],
-):
-    layout_items = {
-        layout_item_info[0]
-        for well in wells
-        for layout_item_info in loaded_wells[well].layout_item_info
-        if layout_item_info[0].deck_location not in deck_locations
-    }
+) -> None:
+    layout_items: dict[li.LayoutItemBase, list[Well]] = defaultdict(list)
+
+    for well in wells:
+        for layout_item_info in loaded_wells[well]:
+            layout_items[layout_item_info[0]].append(well)
     # multiple wells can be in a single layout item. Let's get the unique ones.
     # Some layout items may already be in an acceptable location. Skip those.
 
@@ -41,14 +42,28 @@ def wells(
         if layout_item.deck_location in possible_deck_locations
     ]
 
-    for source, destination in zip(layout_items, possible_layout_items):
+    for (source, wells), destination in zip(
+        layout_items.items(),
+        possible_layout_items,
+    ):
         layout_item(source, destination)
+
+        for well in wells:
+            loaded_wells[well] = [
+                (
+                    (destination, layout_item_info[1])
+                    if layout_item_info[0] is source
+                    else layout_item_info
+                )
+                for layout_item_info in loaded_wells[well]
+            ]
+        # Change the tracked location of this layout item.
 
 
 def layout_item(
     source: li.LayoutItemBase,
     destination: li.LayoutItemBase,
-):
+) -> None:
     source_deck_location = source.deck_location
     destination_deck_location = destination.deck_location
 
