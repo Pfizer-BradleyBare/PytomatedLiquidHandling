@@ -6,7 +6,7 @@ from loguru import logger
 
 from plh import hal
 
-logger.enable("PytomatedLiquidHandling")
+logger.enable("plh")
 
 
 
@@ -43,7 +43,7 @@ pipette.transfer(
             transfer_volume=100,
         )
         for i in range(1)
-    ]
+    ],
 ),
 
 pipette.deinitialize()

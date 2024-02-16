@@ -65,7 +65,7 @@ def main(backend: MicrolabSTAR) -> None:
 
 
 if __name__ == "__main__":
-    logger.enable("PytomatedLiquidHandling")
+    logger.enable("plh")
 
     backend = MicrolabSTAR(
         identifier="Example Star",

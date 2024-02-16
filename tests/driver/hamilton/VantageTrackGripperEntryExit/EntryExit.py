@@ -43,7 +43,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     backend.execute(command)
     backend.wait(command)
     logger.info(
-        backend.acknowledge(command, EntryExit.CountLabwareInStack.Response).NumLabware
+        backend.acknowledge(command, EntryExit.CountLabwareInStack.Response).NumLabware,
     )
 
     logger.info("MoveRandomShelfAccess")
@@ -76,7 +76,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
 
 
 if __name__ == "__main__":
-    logger.enable("PytomatedLiquidHandling")
+    logger.enable("plh")
 
     backend = VantageTrackGripperEntryExit(
         identifier="Example Star",

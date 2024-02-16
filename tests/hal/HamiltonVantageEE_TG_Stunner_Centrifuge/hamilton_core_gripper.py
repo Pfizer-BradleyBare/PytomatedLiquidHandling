@@ -6,7 +6,7 @@ from loguru import logger
 
 from plh import hal
 
-logger.enable("PytomatedLiquidHandling")
+logger.enable("plh")
 
 
 hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))

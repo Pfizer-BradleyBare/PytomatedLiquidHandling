@@ -1,4 +1,5 @@
 from loguru import logger
+
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.driver.HAMILTON.ML_STAR import Channel1000uLCOREGrip
 
@@ -34,7 +35,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
 
 
 if __name__ == "__main__":
-    logger.enable("PytomatedLiquidHandling")
+    logger.enable("plh")
 
     backend = VantageTrackGripperEntryExit(
         identifier="Example Star",
