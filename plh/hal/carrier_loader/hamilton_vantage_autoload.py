@@ -17,7 +17,13 @@ class HamiltonVantageAutoload(CarrierLoaderBase):
 
     backend: VantageTrackGripperEntryExit
 
-    supported_carriers: list[c.HamiltonAutoloadCarrier]
+    supported_carriers: list[c.MoveableCarrier]
+
+    def initialize(self: HamiltonVantageAutoload) -> None:
+        """No initialization required."""
+
+    def deinitialize(self: HamiltonVantageAutoload) -> None:
+        """No deinitialization required."""
 
     def load(
         self: CarrierLoaderBase,

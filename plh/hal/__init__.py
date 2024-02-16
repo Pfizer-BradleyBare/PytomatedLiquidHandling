@@ -57,7 +57,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_backend" in file.lower():
+            if file.lower().endswith(".yaml") and "_backend.yaml" in file.lower():
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:
@@ -74,7 +74,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_carrier" in file.lower():
+            if file.lower().endswith(".yaml") and "_carrier.yaml" in file.lower():
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:
@@ -91,7 +91,29 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_labware" in file.lower():
+            if (
+                file.lower().endswith(".yaml")
+                and "_carrier_loader.yaml" in file.lower()
+            ):
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
+
+                tools.load_device_config(
+                    json,
+                    carrier_loader.CarrierLoaderBase,
+                    carrier_loader.devices,
+                )
+    if loaded is not True:
+        warns.append(
+            f"No {carrier_loader.CarrierLoaderBase.__name__} objects were loaded.",
+        )
+
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if file.lower().endswith(".yaml") and "_labware.yaml" in file.lower():
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:
@@ -108,7 +130,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_transport" in file.lower():
+            if file.lower().endswith(".yaml") and "_transport.yaml" in file.lower():
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:
@@ -125,7 +147,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_decklocation" in file.lower():
+            if file.lower().endswith(".yaml") and "_decklocation.yaml" in file.lower():
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:
@@ -144,7 +166,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_layoutitem" in file.lower():
+            if file.lower().endswith(".yaml") and "_layoutitems.yaml" in file.lower():
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:
@@ -163,7 +185,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_tip" in file.lower():
+            if file.lower().endswith(".yaml") and "_tip.yaml" in file.lower():
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:
@@ -176,7 +198,10 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_closeablecontainer" in file.lower():
+            if (
+                file.lower().endswith(".yaml")
+                and "_closeablecontainer.yaml" in file.lower()
+            ):
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:
@@ -195,7 +220,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_heatcoolshake" in file.lower():
+            if file.lower().endswith(".yaml") and "_heatcoolshake.yaml" in file.lower():
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:
@@ -214,7 +239,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_pipette" in file.lower():
+            if file.lower().endswith(".yaml") and "_pipette.yaml" in file.lower():
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:
@@ -231,7 +256,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_storagedevice" in file.lower():
+            if file.lower().endswith(".yaml") and "_storagedevice.yaml" in file.lower():
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:
@@ -250,7 +275,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_magneticrack" in file.lower():
+            if file.lower().endswith(".yaml") and "_magneticrack.yaml" in file.lower():
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:

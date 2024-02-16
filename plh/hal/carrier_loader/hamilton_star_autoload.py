@@ -19,6 +19,12 @@ class HamiltonStarAutoload(CarrierLoaderBase):
 
     supported_carriers: list[c.HamiltonAutoloadCarrier]
 
+    def initialize(self: HamiltonStarAutoload) -> None:
+        """No initialization required."""
+
+    def deinitialize(self: HamiltonStarAutoload) -> None:
+        """No deinitialization required."""
+
     def load(
         self: CarrierLoaderBase,
         carrier: c.CarrierBase,
