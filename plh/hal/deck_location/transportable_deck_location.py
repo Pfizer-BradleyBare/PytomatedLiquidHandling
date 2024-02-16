@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import cast
+
 from pydantic import dataclasses
 
 from plh.driver.tools import *
@@ -20,7 +22,7 @@ class TransportableDeckLocation(DeckLocationBase):
     def get_compatible_transport_configs(
         cls: type[TransportableDeckLocation],
         *args,
-    ) -> list[TransportConfig]:
+    ) -> list[tuple[TransportConfig, ...]]:
         """Gets a list of compatible transport configurations for different deck locations.
 
         If DeckLocationNotTransportableError is thrown then your deck location is not compatible with transport.
@@ -33,6 +35,22 @@ class TransportableDeckLocation(DeckLocationBase):
         ):
             return []
 
-        configs = [location.transport_configs for location in args]
+        location_configs = [
+            cast(TransportableDeckLocation, location).transport_configs
+            for location in args
+        ]
 
-        return list(set.intersection(*map(set, configs)))
+        return [
+            tuple(
+                [
+                    config
+                    for configs in location_configs
+                    for config in configs
+                    if config == compatible_config
+                ],
+            )
+            for compatible_config in list(set.intersection(*map(set, location_configs)))
+        ]
+
+    # Use intersection to find the compatible configs. NOTE: the hash for transport config only depends on transport device and get_config.
+    # Then use the compatible configs to contruct our tuple of location specific transport configs that are all compatible.
