@@ -1,92 +1,44 @@
 from __future__ import annotations
 
-from dataclasses import InitVar, dataclass, field
-from enum import Enum
-from typing import Callable, ClassVar
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from typing import Callable, ClassVar, Generic, TypeVar
 
-__all__ = [
-    "Container",
-    "Well",
-    "Liquid",
-    "LiquidPropertyBase",
-    "LiquidPropertyValue",
-    "Volatility",
-    "Viscosity",
-    "Homogeneity",
-    "Polarity",
-]
-
-
-@dataclass
-class LiquidPropertyValue:
-    """Representative value for a ```LiquidPropertyBase```.
-    Values are a high level representation of "Low", "Medium", "High", etc.
-    """
-
-    _numeric_value_counter: ClassVar[int] = 1
-    """A unique value for each new ```LiquidPropertyValue```. Autoincremented after assignment to ensure uniqueness."""
-
-    numeric_value: int = field(init=False)
-    """Value used for composition calculations. Must be unique. Autoassigned."""
-
-    def __post_init__(self):
-        self.numeric_value = LiquidPropertyValue._numeric_value_counter
-        LiquidPropertyValue._numeric_value_counter += 1
-
+T = TypeVar("T",bound="LiquidPropertyBase")
 
 class LiquidPropertyBase(Enum):
-    """Base enum for defining liquid properties."""
-
-    @classmethod
-    def __init_subclass__(cls: type[LiquidPropertyBase]) -> None:
-        """Ensure that all ```LiquidPropertyBase``` items are of type ```LiquidPropertyValue```."""
-        for item in cls:
-            if not isinstance(item.value, LiquidPropertyValue):
-                msg = f"{item} is not of type LiquidPropertyValue."
-                raise TypeError(msg)
-
-    @classmethod
-    def _get_by_numeric_value(
-        cls: type[LiquidPropertyBase],
-        value: int,
-    ) -> LiquidPropertyBase:
-        for item in cls:
-            if item.value.numeric_value == value:
-                return item
-
-        msg = f"No numeric key match found for {value}."
-        raise ValueError(msg)
+    """Base enum for defining liquid properties. All items should be auto()."""
 
     @classmethod
     def calculate_composition_property(
         cls: type[LiquidPropertyBase],
-        property_volumes: list[tuple[tuple[LiquidPropertyBase, int], float]],
+        property_volumes: list[PropertyWeightVolume],
     ) -> LiquidPropertyBase:
         """Will calculate the combined property for a composition given a list of volumes and property values."""
         if len(property_volumes) == 0:
             raise ValueError("List must contain at least 1 item.")
 
-        if not all(isinstance(item[0][0], cls) for item in property_volumes):
+        if not all(isinstance(item.property_weight.property, cls) for item in property_volumes):
             msg = "All property values must be from the same property."
             raise ValueError(msg)
 
-        total_volume = sum(property_volume[1] for property_volume in property_volumes)
+        total_volume = sum(property_volume.volume for property_volume in property_volumes)
 
         property_contributions = []
 
         for property_volume in property_volumes:
-            part_per_hundred = int(property_volume[1] * 100 / total_volume)
+            part_per_hundred = int(property_volume.volume * 100 / total_volume)
             # Each property is a percentage of the solution. We convert to part_per_hundred to make the math easier.
 
             property_contributions += (
-                [property_volume[0][0].value.numeric_value]
+                [property_volume.property_weight.property.value]
                 * part_per_hundred
-                * property_volume[0][1]
+                * property_volume.property_weight.weight
             )
             # We add the property numeric value to a list part_per_hundred * weight times.
             # If we do this for all properties then we can get the average property for the composition.
 
-        return cls._get_by_numeric_value(
+        return cls(
             round(sum(property_contributions) / len(property_contributions)),
         )
         # Because each numeric value is unique and they are grouped by each property we can round the
@@ -96,56 +48,71 @@ class LiquidPropertyBase(Enum):
 class Volatility(LiquidPropertyBase):
     """Solution property that represents Voltatility."""
 
-    LOW = LiquidPropertyValue()
+    LOW = auto()
     """Similar to glycerol."""
 
-    MEDIUM = LiquidPropertyValue()
+    MEDIUM = auto()
     """Similar to water."""
 
-    HIGH = LiquidPropertyValue()
+    HIGH = auto()
     """Similar to MeOH."""
 
 
 class Viscosity(LiquidPropertyBase):
     """Solution property that represents Viscosity."""
 
-    LOW = LiquidPropertyValue()
+    LOW = auto()
     """Similar to MeOH."""
 
-    MEDIUM = LiquidPropertyValue()
+    MEDIUM = auto()
     """Similar to water."""
 
-    HIGH = LiquidPropertyValue()
+    HIGH = auto()
     """Similar to glycerol."""
 
 
 class Homogeneity(LiquidPropertyBase):
     """Solution property that represents Homogeneity."""
 
-    HOMOGENOUS = LiquidPropertyValue()
+    HOMOGENOUS = auto()
     """Similar to salt dissolved in a liquid."""
 
-    EMULSION = LiquidPropertyValue()
+    EMULSION = auto()
     """Similar to oil mixed with water using a surfactant."""
 
-    SUSPENSION = LiquidPropertyValue()
+    SUSPENSION = auto()
     """Similar to colloidal suspension."""
 
-    HETERGENOUS = LiquidPropertyValue()
+    HETERGENOUS = auto()
     """Similar to colloidal suspension BUT the particulate does not stay suspended without mixing."""
 
 
 class Polarity(LiquidPropertyBase):
     """Solution property that represents Polarity."""
 
-    NON_POLAR = LiquidPropertyValue()
+    NON_POLAR = auto()
     """Similar to chloroform. Low to no conductivity."""
 
-    POLAR = LiquidPropertyValue()
+    POLAR = auto()
     """Similar to water. Medium to high conductivity."""
 
 
-@dataclass
+@dataclass(frozen=True)
+class PropertyWeight(Generic[T]):
+    property: T
+    weight: int = 1
+
+@dataclass(frozen=True)
+class LiquidVolume:
+    liquid: Liquid
+    volume: float
+
+@dataclass(frozen=True)
+class PropertyWeightVolume:
+    property_weight: PropertyWeight
+    volume: float
+
+@dataclass(frozen=True)
 class Liquid:
     """A representation of a liquid in a physical well.
     A liquid will be described by a name and physical properties. For now a liquid is defined as having 4 properties:
@@ -155,20 +122,20 @@ class Liquid:
     name: str
     """The liquid name."""
 
-    volatility_property: tuple[Volatility, int]
+    volatility_property: PropertyWeight[Volatility] = field(default=PropertyWeight(Volatility.MEDIUM))
     """The voltaility property and weight for the liquid.
     For example: ACN mixed with water still makes a solution significantly non-viscous but only slightly volatile."""
 
-    viscosity_property: tuple[Viscosity, int]
+    viscosity_property: PropertyWeight[Viscosity] = field(default=PropertyWeight(Viscosity.MEDIUM))
     """The viscosity property and weight for the liquid.
     For example: ACN mixed with water still makes a solution significantly non-viscous but only slightly volatile."""
 
-    homogeneity_property: tuple[Homogeneity, int]
+    homogeneity_property: PropertyWeight[Homogeneity] = field(default=PropertyWeight(Homogeneity.HOMOGENOUS))
     """The homogeneity property and weight for the liquid.
     For example: It's possible to have a reagent that causes a precipitation.
     A small amount of reagent added would have to have a huge weight to change the composition."""
 
-    polarity_property: tuple[Polarity, int]
+    polarity_property: PropertyWeight[Polarity] = field(default=PropertyWeight(Polarity.POLAR))
     """The polarity property and weight for the liquid.
     For example: Chloroform is not conductive at all. But a small amount of water will add significant polarity."""
 
@@ -176,6 +143,12 @@ class Liquid:
 @dataclass
 class Well:
     """A physical well that contains a liquid or mixture of liquids."""
+
+    liquid_volumes: dict[str, LiquidVolume] = field(
+        init=False,
+        default_factory=dict,
+    )
+    """Liquids and associated volume contained in the well."""
 
     _hashable_counter: ClassVar[int] = 0
     _hashable_value: int = field(init=False)
@@ -188,24 +161,20 @@ class Well:
     def __hash__(self: Well) -> int:
         return hash(self._hashable_value)
 
-    def __eq__(self, __value: Well) -> bool:
+    def __eq__(self:Well, __value: Well) -> bool:
         return self._hashable_value == __value._hashable_value
 
-    liquid_volumes: dict[str, tuple[Liquid, float]] = field(
-        init=False,
-        default_factory=dict,
-    )
-    """Liquids and associated volume contained in the well."""
+
 
     def get_total_volume(self: Well) -> float:
         """Total volume present in the well."""
         return sum(
-            [liquid_volume[1] for liquid_volume in self.liquid_volumes.values()],
+            [liquid_volume.volume for liquid_volume in self.liquid_volumes.values()],
         )
 
-    def aspirate(self: Well, volume: float) -> list[tuple[Liquid, float]]:
+    def aspirate(self: Well, volume: float) -> list[LiquidVolume]:
         """Aspirate a volume from the well. Returns a list of (liquid,volume) that was aspirated."""
-        aspirated_liquids: list[tuple[Liquid, float]] = []
+        aspirated_liquids: list[LiquidVolume] = []
 
         total_volume = self.get_total_volume()
 
@@ -216,36 +185,36 @@ class Well:
         removed_fraction = volume / total_volume
 
         for key, liquid_volume in self.liquid_volumes.items():
-            removed_volume = liquid_volume[1] * removed_fraction
-            new_volume = liquid_volume[1] - removed_volume
+            removed_volume = liquid_volume.volume * removed_fraction
+            new_volume = liquid_volume.volume - removed_volume
 
-            aspirated_liquids.append((liquid_volume[0], removed_volume))
+            aspirated_liquids.append(LiquidVolume(liquid_volume.liquid, removed_volume))
 
             if new_volume > 0:
-                self.liquid_volumes[key] = (liquid_volume[0], new_volume)
+                self.liquid_volumes[key] = LiquidVolume(liquid_volume.liquid, new_volume)
             else:
                 del self.liquid_volumes[key]
 
         return aspirated_liquids
 
-    def dispense(self: Well, liquid_volumes: list[tuple[Liquid, float]]) -> None:
+    def dispense(self: Well, liquid_volumes: list[LiquidVolume]) -> None:
         """Dispense a list of (liquid,volume) into a well."""
         for dispensed_liquid_volume in liquid_volumes:
 
-            name = dispensed_liquid_volume[0].name
+            name = dispensed_liquid_volume.liquid.name
 
             current_volume = 0
             if name in self.liquid_volumes:
-                current_volume = self.liquid_volumes[name][1]
+                current_volume = self.liquid_volumes[name].volume
 
-            self.liquid_volumes[name] = (
-                dispensed_liquid_volume[0],
-                dispensed_liquid_volume[1] + current_volume,
+            self.liquid_volumes[name] = LiquidVolume(
+                dispensed_liquid_volume.liquid,
+                dispensed_liquid_volume.volume + current_volume,
             )
 
     def get_well_property(
         self: Well,
-        property_function: Callable[[Liquid], tuple[LiquidPropertyBase, int]],
+        property_function: Callable[[Liquid], PropertyWeight],
     ) -> LiquidPropertyBase:
         """Get a specific liquid property based on the composition of liquids in the well."""
         if len(self.liquid_volumes) == 0:
@@ -253,28 +222,11 @@ class Well:
             raise ValueError(msg)
 
         property_volumes = [
-            (property_function(liquid_volume[0]), liquid_volume[1])
+            PropertyWeightVolume(property_function(liquid_volume.liquid), liquid_volume.volume)
             for liquid_volume in self.liquid_volumes.values()
         ]
 
-        return property_volumes[0][0][0].calculate_composition_property(
+        return property_volumes[0].property_weight.property.calculate_composition_property(
             property_volumes,
         )
 
-
-@dataclass
-class Container:
-    """A container with many wells. This is a programmatic representation of a physical object. The wells can span many different labware."""
-
-    name: str
-    """Name of the container."""
-
-    wells: list[Well] = field(init=False, default_factory=list)
-    """Separate wells used by the container."""
-
-    num_wells: InitVar[int]
-    """Number of wells this container will have. Initialization variable."""
-
-    def __post_init__(self: Container, num_wells: int) -> None:
-        for _ in range(num_wells):
-            self.wells.append(Well())

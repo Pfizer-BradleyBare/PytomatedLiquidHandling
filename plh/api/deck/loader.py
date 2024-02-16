@@ -5,12 +5,12 @@ from math import ceil
 
 from plh.hal import carrier_loader, labware, layout_item
 
-from .container import Container, Well
+from .container import Well
 
 __all__ = [
-    "LoadedWell",
     "loaded_wells",
-    "LoaderCriteria",
+    "Location",
+    "Criteria",
     "group",
     "prepare",
     "start",
@@ -23,7 +23,7 @@ NOTE: depending on the volume needed for a well it can span mutliple layout item
 
 
 @dataclass
-class LoadedWell:
+class Location:
     """A description of a loaded well and where it can be found on the deck.
     NOTE: a ```Well``` can be loaded in multiple positions and layout_items.
     """
@@ -39,7 +39,7 @@ class LoadedWell:
 
 
 @dataclass
-class LoaderCriteria:
+class Criteria:
     """This is how containers can be grouped when loading.
     If all the containers do not fit in the same layout_item then they will be separated but the criteria will still be valid.
     """
@@ -51,7 +51,7 @@ class LoaderCriteria:
     """The labware that is to be loaded with containers."""
 
 
-def group(criteria: list[LoaderCriteria]) -> list[list[LoadedWell]]:
+def group(criteria: list[LoaderCriteria]) -> list[list[LoaderLocation]]:
     """Take a list of ```LoaderCriteria```. The list will be grouped (list of list) based on most efficient loading (similar carrier) then returned."""
     loadable_carriers = sum(
         [loader.supported_carriers for loader in carrier_loader.devices.values()],
@@ -107,18 +107,18 @@ def group(criteria: list[LoaderCriteria]) -> list[list[LoadedWell]]:
     # How many of each labware do we need for all containers?
 
 
-def prepare(loaded_wells: list[LoadedWell]) -> None:
+def prepare(locations: list[LoaderLocation]) -> None:
     """Depending on state of loaded wells: either the deck positions will be emptied to make room for loading
     or the deck positions will be loaded with wells currently on deck.
     """
     ...
 
 
-def start(loaded_wells: list[LoadedWell]) -> None:
+def start(locations: list[LoaderLocation]) -> None:
     """Will move the deck locations out to the user if the HAL device (carrier_mover) is available."""
     ...
 
 
-def end(loaded_wells: list[LoadedWell]) -> None:
+def end(locations: list[LoaderLocation]) -> None:
     """Will move the deck locations back into the deck if the HAL device (carrier_mover) is available."""
     ...
