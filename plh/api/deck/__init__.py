@@ -1,3 +1,3 @@
-from . import container
+from . import container, loader
 
-__all__ = ["container"]
+__all__ = ["container","loader"]

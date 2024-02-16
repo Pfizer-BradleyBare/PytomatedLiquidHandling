@@ -1,23 +1,12 @@
-from .container import (
-    Homogeneity,
-    Liquid,
-    LiquidPropertyBase,
-    LiquidVolume,
-    Polarity,
-    PropertyWeight,
-    PropertyWeightVolume,
-    Viscosity,
-    Volatility,
-    Well,
-)
+from .liquid import Liquid, LiquidVolume
+from .property import Homogeneity, Polarity, PropertyWeight, Viscosity, Volatility
+from .well import Well
 
 __all__ = [
     "Well",
     "Liquid",
     "LiquidVolume",
     "PropertyWeight",
-    "PropertyWeightVolume",
-    "LiquidPropertyBase",
     "Volatility",
     "Viscosity",
     "Homogeneity",
