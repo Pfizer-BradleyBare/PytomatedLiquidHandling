@@ -99,18 +99,33 @@ class Polarity(LiquidPropertyBase):
 
 @dataclass(frozen=True)
 class PropertyWeight(Generic[T]):
+    """Grouping of a weight value for a liquid property."""
+
     property: T
+    """Any property that inherits ```LiquidPropertyBase```."""
+
     weight: int = 1
+    """The weight of this part in a solution composition."""
 
 @dataclass(frozen=True)
 class LiquidVolume:
+    """A volume of a given liquid."""
+
     liquid: Liquid
+    """The ```Liquid```."""
+
     volume: float
+    """The volume of the ```Liquid```."""
 
 @dataclass(frozen=True)
 class PropertyWeightVolume:
+    """A volume of a given weighted property."""
+
     property_weight: PropertyWeight
+    """The weighted property."""
+
     volume: float
+    """The volume of the weighted property."""
 
 @dataclass(frozen=True)
 class Liquid:
