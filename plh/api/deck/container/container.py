@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Callable, ClassVar, Generic, TypeVar
+from typing import Callable, ClassVar, Generic, TypeVar, cast
 
 T = TypeVar("T",bound="LiquidPropertyBase")
 
@@ -226,7 +226,7 @@ class Well:
             for liquid_volume in self.liquid_volumes.values()
         ]
 
-        return property_volumes[0].property_weight.property.calculate_composition_property(
+        return cast(LiquidPropertyBase,property_volumes[0].property_weight.property).calculate_composition_property(
             property_volumes,
         )
 
