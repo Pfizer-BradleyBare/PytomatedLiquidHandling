@@ -19,22 +19,20 @@ class TransportableDeckLocation(DeckLocationBase):
     @classmethod
     def get_compatible_transport_configs(
         cls: type[TransportableDeckLocation],
-        source_deck_location: DeckLocationBase,
-        destination_deck_location: DeckLocationBase,
-    ) -> list[tuple[TransportConfig, TransportConfig]]:
-        """Gets a list of compatible transport configurations for 2 different deck locations.
+        *args,
+    ) -> list[TransportConfig]:
+        """Gets a list of compatible transport configurations for different deck locations.
 
         If DeckLocationNotTransportableError is thrown then your deck location is not compatible with transport.
         """
-        if not isinstance(source_deck_location, TransportableDeckLocation):
+        if not len(args) > 1:
+            raise ValueError("Must compare 2 or more deck_locations.")
+
+        if not all(
+            isinstance(location, TransportableDeckLocation) for location in args
+        ):
             return []
 
-        if not isinstance(destination_deck_location, TransportableDeckLocation):
-            return []
+        configs = [location.transport_configs for location in args]
 
-        return [
-            (config, other_config)
-            for config in source_deck_location.transport_configs
-            for other_config in destination_deck_location.transport_configs
-            if config == other_config
-        ]
+        return list(set.intersection(*map(set, configs)))

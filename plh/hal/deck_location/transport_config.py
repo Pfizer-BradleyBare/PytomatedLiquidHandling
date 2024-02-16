@@ -25,8 +25,9 @@ class TransportConfig:
     @field_serializer("get_options", "place_options")
     def __options_serializer(
         self: TransportConfig,
-        options: transport.TransportBase.GetOptions
-        | transport.TransportBase.PlaceOptions,
+        options: (
+            transport.TransportBase.GetOptions | transport.TransportBase.PlaceOptions
+        ),
     ) -> dict:
         return vars(options)
 
@@ -95,3 +96,6 @@ class TransportConfig:
             self.transport_device == __value.transport_device
             and self.get_options == __value.get_options
         )
+
+    def __hash__(self: TransportConfig) -> int:
+        return hash(f"{self.transport_device.identifier}{self.get_options}")
