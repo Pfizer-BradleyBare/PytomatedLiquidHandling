@@ -44,10 +44,10 @@ class Criteria:
     """
 
     wells: list[Well]
-    """All the containers that can be grouped together."""
+    """All the wells that can be grouped together."""
 
     labware: labware.LabwareBase
-    """The labware that is to be loaded with containers."""
+    """The labware that is to be loaded with wells."""
 
 
 def group(criteria: list[Criteria]) -> list[list[Location]]:
