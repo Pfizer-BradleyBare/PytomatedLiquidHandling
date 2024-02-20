@@ -114,8 +114,7 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
         temperature: float,
     ) -> None:
         if temperature < 25:
-            msg = "Exceptions"
-            raise ExceptionGroup(msg, [CoolingNotSupportedError(self)])
+            raise CoolingNotSupportedError(self)
 
     def set_temperature(
         self: HamiltonHeaterShaker,

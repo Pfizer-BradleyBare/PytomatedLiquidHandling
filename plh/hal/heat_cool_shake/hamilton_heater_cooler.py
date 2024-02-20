@@ -112,8 +112,7 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
         rpm: float,
     ) -> None:
         if rpm != 0:
-            msg = "Exceptions"
-            raise ExceptionGroup(msg, [ShakingNotSupportedError(self)])
+            raise ShakingNotSupportedError(self)
 
     def set_shaking_speed(
         self: HamiltonHeaterCooler,
