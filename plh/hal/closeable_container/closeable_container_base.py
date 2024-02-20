@@ -31,44 +31,33 @@ class CloseableContainerBase(Interface, HALDevice):
     ]
     """The device can only open/close labware of this type(s)."""
 
-    def assert_open_close(
+    def assert_supported_labware(
         self: CloseableContainerBase,
-        options: list[OpenCloseOptions],
+        labwares: list[labware.LabwareBase],
     ) -> None:
-        """Must be called before calling ```open```, ```open_time```, ```close```, or ```close_time```.
+        exceptions = [
+            labware.exceptions.LabwareNotSupportedError(self, item)
+            for item in labwares
+            if item not in self.supported_labware
+        ]
 
-        If LabwareNotSupportedError is thrown then you are trying to use the wrong ClosedContainerDevice.
+        if len(exceptions) != 0:
+            msg = "Some labware is not supported."
+            raise ExceptionGroup(msg, exceptions)
 
-        If DeckLocationNotSupportedError is thrown then you need to move the LayoutItem to a compatible location.
+    def assert_supported_deck_locations(
+        self: CloseableContainerBase,
+        deck_locations: list[deck_location.DeckLocationBase],
+    ) -> None:
+        exceptions = [
+            deck_location.exceptions.DeckLocationNotSupportedError(self, item)
+            for item in deck_locations
+            if item not in self.supported_deck_locations
+        ]
 
-        Raises ExceptionGroup of the following:
-
-            Labware.LabwareNotSupportedError
-
-            DeckLocation.DeckLocationNotSupportedError
-        """
-        excepts = []
-
-        for opt in options:
-            deck_location_instance = opt.layout_item.deck_location
-            labware_instance = opt.layout_item.labware
-
-            if deck_location_instance not in self.supported_deck_locations:
-                excepts.append(
-                    deck_location.exceptions.DeckLocationNotSupportedError(
-                        self,
-                        deck_location_instance,
-                    ),
-                )
-
-            if labware_instance not in self.supported_labware:
-                excepts.append(
-                    labware.exceptions.LabwareNotSupportedError(self, labware_instance),
-                )
-
-        if len(excepts) > 0:
-            msg = "Exceptions"
-            raise ExceptionGroup(msg, excepts)
+        if len(exceptions) != 0:
+            msg = "Some deck locations are not supported."
+            raise ExceptionGroup(msg, exceptions)
 
     @abstractmethod
     def open(self: CloseableContainerBase, options: list[OpenCloseOptions]) -> None:

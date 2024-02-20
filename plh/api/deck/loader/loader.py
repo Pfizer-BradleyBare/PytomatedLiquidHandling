@@ -51,7 +51,9 @@ class Criteria:
 
 
 def group(criteria: list[Criteria]) -> list[list[Location]]:
-    """Take a list of ```LoaderCriteria```. The list will be grouped (list of list) based on most efficient loading (similar carrier) then returned."""
+    """Take a list of ```Criteria```. The list will be grouped (list of list) based on most efficient loading (similar carrier) then returned.
+    .
+    """
     if not all(
         isinstance(criterion.labware, labware.PipettableLabware)
         for criterion in criteria

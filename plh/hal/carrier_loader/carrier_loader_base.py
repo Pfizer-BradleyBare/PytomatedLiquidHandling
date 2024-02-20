@@ -19,6 +19,20 @@ class CarrierLoaderBase(HALDevice, Interface):
         BeforeValidator(carrier.validate_list),
     ]
 
+    def assert_supported_carriers(
+        self: CarrierLoaderBase,
+        carriers: list[carrier.CarrierBase],
+    ) -> None:
+        exceptions = [
+            carrier.exceptions.CarrierNotSupportedError(self, item)
+            for item in carriers
+            if item not in self.supported_carriers
+        ]
+
+        if len(exceptions) != 0:
+            msg = "Some carriers are not supported."
+            raise ExceptionGroup(msg, exceptions)
+
     @abstractmethod
     def load(
         self: CarrierLoaderBase,

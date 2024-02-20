@@ -10,8 +10,6 @@ from plh.hal import labware
 from plh.hal import layout_item as li
 from plh.hal.tools import HALDevice, Interface
 
-from .options import HeatCoolShakeOptions
-
 
 @dataclasses.dataclass(kw_only=True, eq=False)
 class HeatCoolShakeBase(Interface, HALDevice):
@@ -23,84 +21,48 @@ class HeatCoolShakeBase(Interface, HALDevice):
     ]
     """Plates where incubations, shaking will occur."""
 
-    def assert_get_layout_item(
+    def assert_plates(
         self: HeatCoolShakeBase,
-        options: HeatCoolShakeOptions,
+        labwares: list[labware.LabwareBase],
     ) -> None:
-        """Must called before calling ```get_layout_item```.
+        supported_labware = [item.labware for item in self.plates]
 
-        If any exceptions are thrown then you are trying to use an incompatible device.
-
-        Raises ValueError or ExceptionGroup of the following:
-            Labware.LabwareNotSupportedError
-        """
-        if options.layout_item is None:
-            raise ValueError("layout_item must not be None")
-
-        excepts = []
-
-        layout_item = options.layout_item
-
-        supported_labware = [
-            layout_item.labware.identifier for layout_item in self.plates
+        exceptions = [
+            labware.exceptions.LabwareNotSupportedError(self, item)
+            for item in labwares
+            if item not in supported_labware
         ]
 
-        if layout_item.labware not in supported_labware:
-            excepts.append(
-                labware.exceptions.LabwareNotSupportedError(
-                    self,
-                    layout_item.labware,
-                ),
-            )
-
-        if len(excepts) > 0:
-            msg = "Exceptions"
-            raise ExceptionGroup(msg, excepts)
+        if len(exceptions) != 0:
+            msg = "Some labware is not supported."
+            raise ExceptionGroup(msg, exceptions)
 
     def get_layout_item(
         self: HeatCoolShakeBase,
-        options: HeatCoolShakeOptions,
+        labware: labware.LabwareBase,
     ) -> li.CoverablePlate | li.Plate:
         """Gets a layout item on the heat_cool_shake device that is compatible with your current layout item."""
-        self.assert_get_layout_item(options)
-
-        layout_item = options.layout_item
-
-        assert layout_item is not None
+        self.assert_plates([labware])
 
         for supported_layout_item in self.plates:
-            if supported_layout_item.labware == layout_item.labware:
+            if supported_layout_item.labware == labware:
                 return supported_layout_item
 
-        raise labware.exceptions.LabwareNotSupportedError(self, layout_item.labware)
+        msg = "Should never reach this point."
+        raise RuntimeError(msg)
 
     @abstractmethod
-    def assert_set_temperature(
-        self: HeatCoolShakeBase,
-        options: HeatCoolShakeOptions,
-    ) -> None:
-        """Must called before calling ```set_temperature``` and ```set_temperature_time```.
-
-        If any exceptions are thrown then you are trying to use an incompatible device.
-
-        Raises ValueError or ExceptionGroup of the following:
-
-            HeatCoolShakeDevice.CoolingNotSupportedError
-
-            HeatCoolShakeDevice.HeatingNotSupportedError
-        """
-        if options.temperature is None:
-            raise ValueError("temperature must not be None")
+    def assert_temperature(self, temperature: float) -> None: ...
 
     @abstractmethod
-    def set_temperature(self: HeatCoolShakeBase, options: HeatCoolShakeOptions) -> None:
+    def set_temperature(self: HeatCoolShakeBase, temperature: float) -> None:
         """Sets temperature on the device."""
         ...
 
     @abstractmethod
     def set_temperature_time(
         self: HeatCoolShakeBase,
-        options: HeatCoolShakeOptions,
+        temperature: float,
     ) -> float:
         """Calculates the time to cool or heat to your desired temperature."""
         ...
@@ -111,25 +73,15 @@ class HeatCoolShakeBase(Interface, HALDevice):
         ...
 
     @abstractmethod
-    def assert_set_shaking_speed(
+    def assert_rpm(
         self: HeatCoolShakeBase,
-        options: HeatCoolShakeOptions,
-    ) -> None:
-        """Must called before calling ```set_shaking_speed```.
-
-        If any exceptions are thrown then you are trying to use an incompatible device.
-
-        Raises ValueError or ExceptionGroup of the following:
-
-            HeatCoolShakeDevice.ShakingNotSupportedError
-        """
-        if options.rpm is None:
-            raise ValueError("rpm must not be None")
+        rpm: float,
+    ) -> None: ...
 
     @abstractmethod
     def set_shaking_speed(
         self: HeatCoolShakeBase,
-        options: HeatCoolShakeOptions,
+        rpm: float,
     ) -> None:
         """Sets the shaking speed on your device. NOTE: To turn off shaking set the speed to 0."""
         ...

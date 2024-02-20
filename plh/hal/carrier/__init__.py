@@ -6,6 +6,11 @@ from .moveable_carrier import MoveableCarrier
 from .non_moveable_carrier import NonMoveableCarrier
 from .pydantic_validators import validate_instance, validate_list
 
+if True:
+    """Exceptions always come last."""
+
+from . import exceptions
+
 __all__ = [
     "CarrierBase",
     "NonMoveableCarrier",
@@ -13,6 +18,7 @@ __all__ = [
     "HamiltonAutoloadCarrier",
     "validate_instance",
     "validate_list",
+    "exceptions",
 ]
 
 identifier = str
