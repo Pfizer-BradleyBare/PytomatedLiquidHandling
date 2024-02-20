@@ -1,13 +1,6 @@
 NonPipettable Labware:
   - identifier: NTRTipRack
     enabled: True
-    part_number: 235947(50uL) or 235950(300uL)
-    model_path_3d:
-    image_path_2d:
-    image_path_3d:
-    container_model_path_3d:
-    container_image_path_2d:
-    container_image_path_3d:
     layout:
       type: Numeric
       direction: Columnwise
@@ -24,13 +17,6 @@ NonPipettable Labware:
 
   - identifier: FTRTipRack
     enabled: True
-    part_number: 235904(1000uL)
-    model_path_3d:
-    image_path_2d:
-    image_path_3d:
-    container_model_path_3d:
-    container_image_path_2d:
-    container_image_path_3d:
     layout:
       type: Numeric
       direction: Columnwise
@@ -47,13 +33,6 @@ NonPipettable Labware:
 
   - identifier: FTRStackableTipRack
     enabled: True
-    part_number: Custom
-    model_path_3d:
-    image_path_2d:
-    image_path_3d:
-    container_model_path_3d:
-    container_image_path_2d:
-    container_image_path_3d:
     layout:
       type: Numeric
       direction: Columnwise

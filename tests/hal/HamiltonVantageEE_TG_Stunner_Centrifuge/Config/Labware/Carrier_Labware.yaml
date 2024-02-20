@@ -1,13 +1,6 @@
 Pipettable Labware:
   - identifier: Hamilton1500uLFlipTubeCarrier
     enabled: True
-    part_number: "?"
-    model_path_3d:
-    image_path_2d:
-    image_path_3d:
-    container_model_path_3d:
-    container_image_path_2d:
-    container_image_path_3d:
     layout:
       type: Numeric
       direction: Columnwise
@@ -35,13 +28,6 @@ Pipettable Labware:
 
   - identifier: 15mLCentrifugeTubeCarrier
     enabled: True
-    part_number: "?"
-    model_path_3d:
-    image_path_2d:
-    image_path_3d:
-    container_model_path_3d:
-    container_image_path_2d:
-    container_image_path_3d:
     layout:
       type: Numeric
       direction: Columnwise
@@ -69,13 +55,6 @@ Pipettable Labware:
 
   - identifier: Hamilton60mLReagentReservoirCarrier
     enabled: True
-    part_number: "?"
-    model_path_3d:
-    image_path_2d:
-    image_path_3d:
-    container_model_path_3d:
-    container_image_path_2d:
-    container_image_path_3d:
     layout:
       type: Numeric
       direction: Columnwise
