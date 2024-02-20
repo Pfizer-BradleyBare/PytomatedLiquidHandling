@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from typing import DefaultDict
+from typing import Annotated, DefaultDict
 
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import FlipTubeTool
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
-from plh.hal import layout_item
+from plh.hal import backend, layout_item
 
 from .closeable_container_base import *
 from .closeable_container_base import CloseableContainerBase
@@ -20,7 +21,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
     This device only supports FlipTubes in the landscape orientation.
     """
 
-    backend: HamiltonBackendBase
+    backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
     """Only Hamilton backends are supported."""
 
     tool_labware_id: str

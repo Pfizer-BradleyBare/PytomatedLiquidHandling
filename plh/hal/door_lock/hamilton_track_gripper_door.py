@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+from typing import Annotated
+
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import TrackGripper
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.hal import backend
 
 from .door_lock_base import *
 from .door_lock_base import DoorLockBase
@@ -13,7 +17,10 @@ from .door_lock_base import DoorLockBase
 class HamiltonTrackGripperDoor(DoorLockBase):
     """Door locks associated with Track Gripper."""
 
-    backend: VantageTrackGripperEntryExit
+    backend: Annotated[
+        VantageTrackGripperEntryExit,
+        BeforeValidator(backend.validate_instance),
+    ]
 
     def initialize(self: HamiltonTrackGripperDoor) -> None:
         """No initialization required."""

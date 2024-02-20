@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import field
-from typing import cast
+from typing import Annotated, cast
 
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import ML_STAR, TrackGripper
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
-from plh.hal import deck_location
+from plh.hal import backend, deck_location
 from plh.hal.exceptions import CriticalHALError
 
 from .options import GetPlaceOptions
@@ -17,7 +18,11 @@ from .transport_base import TransportBase
 
 @dataclasses.dataclass(kw_only=True, eq=False)
 class VantageTrackGripper(TransportBase):
-    backend: VantageTrackGripperEntryExit
+
+    backend: Annotated[
+        VantageTrackGripperEntryExit,
+        BeforeValidator(backend.validate_instance),
+    ]
 
     @dataclasses.dataclass(kw_only=True)
     class GetOptions(TransportBase.GetOptions):

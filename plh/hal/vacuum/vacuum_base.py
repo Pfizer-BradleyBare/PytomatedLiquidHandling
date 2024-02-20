@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from abc import abstractmethod
+from typing import Annotated
 
-from pydantic import dataclasses, field_validator
+from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import layout_item
 from plh.hal.tools import HALDevice, Interface
@@ -14,36 +16,18 @@ from .filter_plate_configuration import FilterPlateConfiguration
 class VacuumBase(Interface, HALDevice):
     """Describes an on deck vacuum device."""
 
-    manifold_park: layout_item.VacuumManifold
+    manifold_park: Annotated[
+        layout_item.VacuumManifold, BeforeValidator(layout_item.validate_instance)
+    ]
     """Park position for the vacuum manifold."""
 
-    manifold_processing: layout_item.VacuumManifold
+    manifold_processing: Annotated[
+        layout_item.VacuumManifold, BeforeValidator(layout_item.validate_instance)
+    ]
     """Vacuum position for the vacuum manifold."""
 
     filter_plate_configurations: dict[str, FilterPlateConfiguration]
     """Operational configurations for each filter plate supported by the vacuum device."""
-
-    @field_validator("manifold_park", "manifold_processing", mode="before")
-    @classmethod
-    def __manifolds_validate(
-        cls: type[VacuumBase],
-        v: str | layout_item.LayoutItemBase,
-    ) -> layout_item.LayoutItemBase:
-        if isinstance(v, layout_item.LayoutItemBase):
-            return v
-        identifier = v
-
-        objects = layout_item.devices
-
-        if identifier not in objects:
-            raise ValueError(
-                identifier
-                + " is not found in "
-                + layout_item.LayoutItemBase.__name__
-                + " objects.",
-            )
-
-        return objects[identifier]
 
     def assert_options(
         self: VacuumBase,

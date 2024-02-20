@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+from typing import Annotated
+
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import ML_STAR
+from plh.hal import backend
 
 from .door_lock_base import *
 from .door_lock_base import DoorLockBase
@@ -13,7 +17,10 @@ from .door_lock_base import DoorLockBase
 class HamiltonFrontCover(DoorLockBase):
     """Main Hamilton door locks."""
 
-    backend: HamiltonBackendBase
+    backend: Annotated[
+        HamiltonBackendBase,
+        BeforeValidator(backend.validate_instance),
+    ]
 
     def initialize(self: HamiltonFrontCover) -> None:
         """No initialization required."""

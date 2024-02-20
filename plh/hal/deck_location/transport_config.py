@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+from typing import Annotated
+
 from pydantic import ValidationInfo, dataclasses, field_serializer, field_validator
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import transport
+from plh.hal.tools.interface import *
 
 # There is a circular dependacy in Transport. This is ONLY because it makes configuration simpler.
 # Basically DeckLocation should not depend on Transport. So we hide the dependacy here and below.
@@ -13,7 +17,10 @@ from plh.hal import transport
 class TransportConfig:
     """Associated settings to get/place an object at this deck location with a specific transport device."""
 
-    transport_device: transport.TransportBase
+    transport_device: Annotated[
+        transport.TransportBase,
+        BeforeValidator(transport.validate_instance),
+    ]
     """Transport object that will be used to transfer."""
 
     get_options: transport.TransportBase.GetOptions
@@ -30,32 +37,6 @@ class TransportConfig:
         ),
     ) -> dict:
         return vars(options)
-
-    @field_validator("transport_device", mode="before")
-    @classmethod
-    def __transport_device_validate(
-        cls: type[TransportConfig],
-        v: str | transport.TransportBase,
-    ) -> transport.TransportBase:
-        # There is a circular dependacy in Transport. This is ONLY because it makes configuration simpler.
-        # Basically DeckLocation should not depend on Transport. So we hide the dependacy above and here.
-        # This may be a code smell. Not sure.
-
-        if isinstance(v, transport.TransportBase):
-            return v
-
-        objects = transport.devices
-        identifier = v
-
-        if identifier not in objects:
-            raise ValueError(
-                identifier
-                + " is not found in "
-                + transport.TransportBase.__name__
-                + " objects.",
-            )
-
-        return objects[identifier]
 
     @field_validator("get_options", mode="before")
     @classmethod

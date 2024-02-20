@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from typing import Annotated
+
 from pydantic import dataclasses, field_validator
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import tip
 
@@ -9,27 +12,11 @@ from .liquid_class import LiquidClass
 
 @dataclasses.dataclass(kw_only=True)
 class PipetteTip:
-    tip: tip.TipBase
+    tip: Annotated[tip.TipBase, BeforeValidator(tip.validate_instance)]
     tip_support_dropoff_labware_id: str
     tip_support_pickup_labware_id: str
     tip_waste_labware_id: str
     supported_liquid_class_categories: dict[str, list[LiquidClass]]
-
-    @field_validator("tip", mode="before")
-    @classmethod
-    def __tip_validate(cls: type[PipetteTip], v: str | tip.TipBase) -> tip.TipBase:
-        if isinstance(v, tip.TipBase):
-            return v
-
-        objects = tip.devices
-        identifier = v
-
-        if identifier not in objects:
-            raise ValueError(
-                identifier + " is not found in " + tip.TipBase.__name__ + " objects.",
-            )
-
-        return objects[identifier]
 
     @field_validator("supported_liquid_class_categories", mode="after")
     @classmethod

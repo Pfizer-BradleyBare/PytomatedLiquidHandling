@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import field
-from typing import cast
+from typing import Annotated, cast
 
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uLCOREGrip
-from plh.hal import deck_location
+from plh.hal import backend, deck_location
 
 from .exceptions import GetHardwareError, PlaceHardwareError
 from .options import GetPlaceOptions
@@ -19,7 +20,7 @@ from .transport_base import TransportBase
 class HamiltonCOREGripper(TransportBase):
     """Gripper that uses Hamilton CORE channels."""
 
-    backend: HamiltonBackendBase
+    backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
     """Only Hamilton backends."""
 
     gripper_labware_id: str

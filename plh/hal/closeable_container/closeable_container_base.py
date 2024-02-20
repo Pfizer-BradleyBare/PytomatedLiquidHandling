@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from abc import abstractmethod
+from typing import Annotated
 
-from pydantic import dataclasses, field_validator
+from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import deck_location, labware
 from plh.hal.tools import HALDevice, Interface
@@ -17,65 +19,17 @@ class CloseableContainerBase(Interface, HALDevice):
     NOTE: This is NOT the same as a lid for a coverable plate.
     """
 
-    supported_deck_locations: list[deck_location.DeckLocationBase]
+    supported_deck_locations: Annotated[
+        list[deck_location.DeckLocationBase],
+        BeforeValidator(deck_location.validate_list),
+    ]
     """The supported deck locations to where an open/close operation can occur."""
 
-    supported_labware: list[labware.LabwareBase]
+    supported_labware: Annotated[
+        list[labware.LabwareBase],
+        BeforeValidator(labware.validate_list),
+    ]
     """The device can only open/close labware of this type(s)."""
-
-    @field_validator("supported_deck_locations", mode="before")
-    @classmethod
-    def __supported_deck_locations_validate(
-        cls: type[CloseableContainerBase],
-        v: list[str | deck_location.DeckLocationBase],
-    ) -> list[deck_location.DeckLocationBase]:
-        supported_objects = []
-
-        objects = deck_location.devices
-
-        for item in v:
-            if isinstance(item, deck_location.DeckLocationBase):
-                supported_objects.append(item)
-
-            elif item not in objects:
-                raise ValueError(
-                    item
-                    + " is not found in "
-                    + deck_location.DeckLocationBase.__name__
-                    + " objects.",
-                )
-
-            else:
-                supported_objects.append(objects[item])
-
-        return supported_objects
-
-    @field_validator("supported_labware", mode="before")
-    @classmethod
-    def __supported_labwares_validate(
-        cls: type[CloseableContainerBase],
-        v: list[str | labware.LabwareBase],
-    ) -> list[labware.LabwareBase]:
-        supported_objects = []
-
-        objects = labware.devices
-
-        for item in v:
-            if isinstance(item, labware.LabwareBase):
-                supported_objects.append(item)
-
-            elif item not in objects:
-                raise ValueError(
-                    item
-                    + " is not found in "
-                    + labware.LabwareBase.__name__
-                    + " objects.",
-                )
-
-            else:
-                supported_objects.append(objects[item])
-
-        return supported_objects
 
     def assert_open_close(
         self: CloseableContainerBase,

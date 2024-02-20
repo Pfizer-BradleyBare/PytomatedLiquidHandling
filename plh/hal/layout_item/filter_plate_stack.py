@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from typing import Annotated
+
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import labware
 
@@ -14,5 +17,8 @@ from .layout_item_base import LayoutItemBase
 class FilterPlateStack(LayoutItemBase):
     """TODO"""
 
-    labware: labware.NonPipettableLabware
+    labware: Annotated[
+        labware.NonPipettableLabware,
+        BeforeValidator(labware.validate_instance),
+    ]
     filter_plate: CoverableFilterPlate | FilterPlate

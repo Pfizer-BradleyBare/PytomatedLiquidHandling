@@ -1,4 +1,7 @@
+from typing import Annotated
+
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import labware
 
@@ -10,5 +13,8 @@ from .layout_item_base import LayoutItemBase
 class TipRack(LayoutItemBase):
     """A rack that can hold tips used for pipetting."""
 
-    labware: labware.NonPipettableLabware
+    labware: Annotated[
+        labware.NonPipettableLabware,
+        BeforeValidator(labware.validate_instance),
+    ]
     """You should not pipette to/from a tip rack."""

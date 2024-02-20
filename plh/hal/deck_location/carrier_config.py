@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import cast
+from typing import Annotated, cast
 
 from pydantic import ValidationInfo, dataclasses, field_validator
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import carrier
 
@@ -13,36 +14,14 @@ _used_carriers: list[str] = []
 class CarrierConfig:
     """Connects a DeckLocation to a specific carrier position."""
 
-    carrier: carrier.CarrierBase
+    carrier: Annotated[
+        carrier.CarrierBase,
+        BeforeValidator(carrier.validate_instance),
+    ]
     """A carrier object."""
 
     position: int
     """A position on the above carrier object."""
-
-    @field_validator(
-        "carrier",
-        mode="before",
-    )
-    @classmethod
-    def __carrier_validate(
-        cls: type[CarrierConfig],
-        v: str | carrier.CarrierBase,
-    ) -> carrier.CarrierBase:
-        if isinstance(v, carrier.CarrierBase):
-            return v
-
-        objects = carrier.devices
-        identifier = v
-
-        if identifier not in objects:
-            raise ValueError(
-                identifier
-                + " is not found in "
-                + carrier.CarrierBase.__name__
-                + " objects.",
-            )
-
-        return objects[identifier]
 
     @field_validator("Position", mode="after")
     @classmethod

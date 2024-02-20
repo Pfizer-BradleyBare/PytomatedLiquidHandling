@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from typing import Annotated
+
 from pydantic import ValidationInfo, dataclasses, field_validator
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import labware, pipette
 from plh.hal import layout_item as li
@@ -11,38 +14,14 @@ from plh.hal.tools import HALDevice
 class MagneticRackBase(HALDevice):
     """A magnetic rack to be used for condensing magnetic beads."""
 
-    plates: list[li.CoverablePlate | li.Plate]
+    plates: Annotated[
+        list[li.CoverablePlate | li.Plate],
+        BeforeValidator(li.validate_list),
+    ]
     """Supported plates."""
 
     pipettes: list[pipette.PipetteBase]
     """Supported pipettes."""
-
-    @field_validator("plates", mode="before")
-    @classmethod
-    def __plates_validate(
-        cls: type[MagneticRackBase],
-        v: list[str | li.LayoutItemBase],
-    ) -> list[li.CoverablePlate | li.Plate]:
-        supported_objects = []
-
-        objects = li.devices
-
-        for item in v:
-            if isinstance(item, li.LayoutItemBase):
-                supported_objects.append(item)
-
-            elif item not in objects:
-                raise ValueError(
-                    item
-                    + " is not found in "
-                    + li.LayoutItemBase.__name__
-                    + " objects.",
-                )
-
-            else:
-                supported_objects.append(objects[item])
-
-        return supported_objects
 
     @field_validator("pipettes", mode="before")
     @classmethod

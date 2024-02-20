@@ -8,6 +8,7 @@ from plh.driver.tools import *
 
 from .deck_location_base import *
 from .deck_location_base import DeckLocationBase
+from .transport_config import *
 from .transport_config import TransportConfig
 
 

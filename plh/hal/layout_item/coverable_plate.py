@@ -1,44 +1,30 @@
 from __future__ import annotations
 
-from pydantic import dataclasses, field_validator
+from typing import Annotated
+
+from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import labware
 
-from .layout_item_base import *
-from .layout_item_base import LayoutItemBase
 from .lid import Lid
+from .plate import *
+from .plate import Plate
+from .pydantic_validators import validate_instance
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class CoverablePlate(LayoutItemBase):
+class CoverablePlate(Plate):
     """A plate that can be covered and uncovered."""
 
-    labware: labware.PipettableLabware
+    labware: Annotated[
+        labware.PipettableLabware,
+        BeforeValidator(labware.validate_instance),
+    ]
     """Plates are by definition possible to pipetted to/from."""
 
-    lid: Lid
+    lid: Annotated[
+        Lid,
+        BeforeValidator(validate_instance),
+    ]
     """Lid object associated with this plate."""
-
-    @field_validator("lid", mode="before")
-    @classmethod
-    def __lid_validate(
-        cls: type[CoverablePlate],
-        v: str | LayoutItemBase,
-    ) -> LayoutItemBase:
-        if isinstance(v, LayoutItemBase):
-            return v
-
-        from . import devices
-
-        objects = devices
-        identifier = v
-
-        if identifier not in objects:
-            raise ValueError(
-                identifier
-                + " is not found in "
-                + LayoutItemBase.__name__
-                + " objects.",
-            )
-
-        return objects[identifier]

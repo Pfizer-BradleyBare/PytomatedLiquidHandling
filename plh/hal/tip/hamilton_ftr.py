@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from typing import cast
+from typing import Annotated, cast
 
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import HSLTipCountingLib
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
-from plh.hal import transport
+from plh.hal import backend, transport
 
 from .tip_base import *
 from .tip_base import TipBase
@@ -16,7 +17,7 @@ from .tip_base import TipBase
 class HamiltonFTR(TipBase):
     """Hamilton FTR (Filtered Tip Rack) tip device."""
 
-    backend: HamiltonBackendBase
+    backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
     """Only supported on Hamilton systems."""
 
     def deinitialize(self: HamiltonFTR) -> None:

@@ -1,10 +1,13 @@
 from __future__ import annotations
 
-from pydantic import dataclasses, field_validator, model_validator
+from typing import Annotated
+
+from pydantic import dataclasses, model_validator
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import EntryExit
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
-from plh.hal import layout_item, transport
+from plh.hal import backend, layout_item, transport
 
 from .tip_base import *
 from .tip_base import TipBase
@@ -14,7 +17,10 @@ from .tip_base import TipBase
 class EETipStack:
     """Entry exit containing a stack of tips."""
 
-    tip_rack: layout_item.TipRack
+    tip_rack: Annotated[
+        layout_item.TipRack,
+        BeforeValidator(layout_item.validate_instance),
+    ]
     """Rack layout item that will be used to retrieve a tip rack from the EE stack."""
 
     module_number: int
@@ -26,28 +32,6 @@ class EETipStack:
     stack_count: int = field(init=False, default=0)
     """Number of items in the stack."""
 
-    @field_validator("tip_rack", mode="before")
-    @classmethod
-    def __tip_rack_validate(
-        cls: type[EETipStack],
-        v: str | layout_item.LayoutItemBase,
-    ) -> layout_item.LayoutItemBase:
-        if isinstance(v, layout_item.LayoutItemBase):
-            return v
-
-        objects = layout_item.devices
-        identifier = v
-
-        if identifier not in objects:
-            raise ValueError(
-                identifier
-                + " is not found in "
-                + layout_item.LayoutItemBase.__name__
-                + " objects.",
-            )
-
-        return objects[identifier]
-
 
 @dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonEETipBase(TipBase):
@@ -56,36 +40,20 @@ class HamiltonEETipBase(TipBase):
     NOTE: Your number of tip racks and tip stacks must be equal.
     """
 
-    backend: VantageTrackGripperEntryExit
+    backend: Annotated[
+        VantageTrackGripperEntryExit,
+        BeforeValidator(backend.validate_instance),
+    ]
     """Only supported on Hamilton Vantage systems."""
 
     tip_stacks: list[EETipStack]
     """Stacks associated with this tip device."""
 
-    tip_rack_waste: layout_item.TipRack
+    tip_rack_waste: Annotated[
+        layout_item.TipRack,
+        BeforeValidator(layout_item.validate_instance),
+    ]
     """Rack waste location. Empty racks will be transport here to be thrown away."""
-
-    @field_validator("tip_rack_waste", mode="before")
-    @classmethod
-    def __tip_rack_validate(
-        cls: type[HamiltonEETipBase],
-        v: str | layout_item.LayoutItemBase,
-    ) -> layout_item.LayoutItemBase:
-        if isinstance(v, layout_item.LayoutItemBase):
-            return v
-
-        objects = layout_item.devices
-        identifier = v
-
-        if identifier not in objects:
-            raise ValueError(
-                identifier
-                + " is not found in "
-                + layout_item.LayoutItemBase.__name__
-                + " objects.",
-            )
-
-        return objects[identifier]
 
     @model_validator(mode="after")
     @staticmethod

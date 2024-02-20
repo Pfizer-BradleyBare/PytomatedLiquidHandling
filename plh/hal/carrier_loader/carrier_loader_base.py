@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from abc import abstractmethod
+from typing import Annotated
 
-from pydantic import dataclasses, field_validator
+from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import carrier
 from plh.hal.tools import HALDevice, Interface
@@ -12,34 +14,10 @@ from plh.hal.tools import HALDevice, Interface
 class CarrierLoaderBase(HALDevice, Interface):
     """A device that can move a carrier in and out of a system without user intervention."""
 
-    supported_carriers: list[carrier.CarrierBase]
-
-    @field_validator("supported_carriers", mode="before")
-    @classmethod
-    def __supported_carriers_validate(
-        cls: type[CarrierLoaderBase],
-        v: list[str | carrier.CarrierBase],
-    ) -> list[carrier.CarrierBase]:
-        supported_objects = []
-
-        objects = carrier.devices
-
-        for item in v:
-            if isinstance(item, carrier.CarrierBase):
-                supported_objects.append(item)
-
-            elif item not in objects:
-                raise ValueError(
-                    item
-                    + " is not found in "
-                    + carrier.CarrierBase.__name__
-                    + " objects.",
-                )
-
-            else:
-                supported_objects.append(objects[item])
-
-        return supported_objects
+    supported_carriers: Annotated[
+        list[carrier.CarrierBase],
+        BeforeValidator(carrier.validate_list),
+    ]
 
     @abstractmethod
     def load(

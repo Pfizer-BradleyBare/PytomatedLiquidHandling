@@ -3,8 +3,10 @@ from __future__ import annotations
 import copy
 from abc import abstractmethod
 from math import ceil
+from typing import Annotated
 
 from pydantic import dataclasses, field_validator
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.tools import *
 from plh.hal import deck_location, labware
@@ -24,9 +26,18 @@ from .pipette_tip import PipetteTip
 @dataclasses.dataclass(kw_only=True, eq=False)
 class PipetteBase(Interface, HALDevice):
     supported_tips: list[PipetteTip]
-    supported_source_labware: list[labware.PipettableLabware]
-    supported_destination_labware: list[labware.PipettableLabware]
-    supported_deck_locations: list[deck_location.DeckLocationBase]
+    supported_source_labware: Annotated[
+        list[labware.PipettableLabware],
+        BeforeValidator(labware.validate_list),
+    ]
+    supported_destination_labware: Annotated[
+        list[labware.PipettableLabware],
+        BeforeValidator(labware.validate_list),
+    ]
+    supported_deck_locations: Annotated[
+        list[deck_location.DeckLocationBase],
+        BeforeValidator(deck_location.validate_list),
+    ]
 
     waste_labware_id: str
 
@@ -37,64 +48,6 @@ class PipetteBase(Interface, HALDevice):
         v: list[PipetteTip],
     ) -> list[PipetteTip]:
         return sorted(v, key=lambda x: x.tip.volume)
-
-    @field_validator("supported_deck_locations", mode="before")
-    @classmethod
-    def __supported_deck_locations_validate(
-        cls: type[PipetteBase],
-        v: list[str | deck_location.DeckLocationBase],
-    ) -> list[deck_location.DeckLocationBase]:
-        supported_objects = []
-
-        objects = deck_location.devices
-
-        for item in v:
-            if isinstance(item, deck_location.DeckLocationBase):
-                supported_objects.append(item)
-
-            elif item not in objects:
-                raise ValueError(
-                    item
-                    + " is not found in "
-                    + deck_location.DeckLocationBase.__name__
-                    + " objects.",
-                )
-
-            else:
-                supported_objects.append(objects[item])
-
-        return supported_objects
-
-    @field_validator(
-        "supported_source_labware",
-        "supported_destination_labware",
-        mode="before",
-    )
-    @classmethod
-    def __supported_labwares_validate(
-        cls: type[PipetteBase],
-        v: list[str | labware.LabwareBase],
-    ) -> list[labware.LabwareBase]:
-        supported_objects = []
-
-        objects = labware.devices
-
-        for item in v:
-            if isinstance(item, labware.LabwareBase):
-                supported_objects.append(item)
-
-            elif item not in objects:
-                raise ValueError(
-                    item
-                    + " is not found in "
-                    + labware.LabwareBase.__name__
-                    + " objects.",
-                )
-
-            else:
-                supported_objects.append(objects[item])
-
-        return supported_objects
 
     def _get_max_transfer_volume(
         self: PipetteBase,

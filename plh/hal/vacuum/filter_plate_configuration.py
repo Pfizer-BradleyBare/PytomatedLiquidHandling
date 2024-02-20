@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from pydantic import dataclasses, field_validator
+from typing import Annotated
+
+from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import layout_item
 
@@ -8,7 +11,8 @@ from plh.hal import layout_item
 @dataclasses.dataclass(kw_only=True)
 class DefaultVacuumPressures:
     """Facilitates simple selection of vacuum pressures. Each filter plate has "ideal" pressures.
-    NOTE: This is subjective."""
+    NOTE: This is subjective.
+    """
 
     low: float
     """Slow flow of liquid through the filter plate."""
@@ -24,7 +28,10 @@ class DefaultVacuumPressures:
 class FilterPlateConfiguration:
     """Compatibilities with a certain vacuum filter plate."""
 
-    filter_plate: layout_item.FilterPlate | layout_item.CoverableFilterPlate
+    filter_plate: Annotated[
+        layout_item.FilterPlate | layout_item.CoverableFilterPlate,
+        BeforeValidator(layout_item.validate_instance),
+    ]
     """The filter plate."""
 
     collection_plate: layout_item.Plate
@@ -35,26 +42,3 @@ class FilterPlateConfiguration:
 
     default_vacuum_pressures: DefaultVacuumPressures
     """Default vacuum pressures object."""
-
-    @field_validator("filter_plate", "collection_plate", mode="before")
-    @classmethod
-    def __plates_validate(
-        cls: type[FilterPlateConfiguration],
-        v: str | layout_item.LayoutItemBase,
-    ) -> layout_item.LayoutItemBase:
-        if isinstance(v, layout_item.LayoutItemBase):
-            return v
-
-        identifier = v
-
-        objects = layout_item.devices
-
-        if identifier not in objects:
-            raise ValueError(
-                identifier
-                + " is not found in "
-                + layout_item.LayoutItemBase.__name__
-                + " objects.",
-            )
-
-        return objects[identifier]

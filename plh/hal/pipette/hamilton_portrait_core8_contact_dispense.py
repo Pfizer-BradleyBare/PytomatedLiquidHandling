@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 import itertools
-from typing import Literal, cast
+from typing import Annotated, Literal, cast
 
 from loguru import logger
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
-from plh.hal import labware, tip
+from plh.hal import backend, labware, tip
 
 from .options import (
     TransferOptions,
@@ -22,7 +23,8 @@ from .pipette_base import PipetteBase
 
 @dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonPortraitCORE8ContactDispense(PipetteBase):
-    backend: HamiltonBackendBase
+    backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
+
     active_channels: list[Literal[1, 2, 3, 4, 5, 6, 7, 8]]
 
     def initialize(self: HamiltonPortraitCORE8ContactDispense) -> None: ...

@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import field
-from typing import cast
+from typing import Annotated, cast
 
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import Visual_NTR_Library
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
-from plh.hal import layout_item, transport
+from plh.hal import backend, layout_item, transport
 
 from .tip_base import *
 from .tip_base import AvailablePosition, TipBase
@@ -17,10 +18,13 @@ from .tip_base import AvailablePosition, TipBase
 class HamiltonNTR(TipBase):
     """Hamilton NTR(Nested Tip Rack) tip device."""
 
-    backend: HamiltonBackendBase
+    backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
     """Only supported on Hamilton systems."""
 
-    tip_rack_waste: layout_item.TipRack
+    tip_rack_waste: Annotated[
+        layout_item.TipRack,
+        BeforeValidator(layout_item.validate_instance),
+    ]
     """Rack waste location. Empty racks will be transport here to be thrown away."""
 
     available_positions_per_teir: list[list[AvailablePosition]] = field(

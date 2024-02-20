@@ -1,4 +1,7 @@
+from typing import Annotated
+
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import labware
 
@@ -10,5 +13,8 @@ from .layout_item_base import LayoutItemBase
 class Plate(LayoutItemBase):
     """A plate."""
 
-    labware: labware.PipettableLabware
+    labware: Annotated[
+        labware.PipettableLabware,
+        BeforeValidator(labware.validate_instance),
+    ]
     """Plates are by definition possible to pipetted to/from."""

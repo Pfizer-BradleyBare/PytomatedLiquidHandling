@@ -5,6 +5,7 @@ from .labware_base import LabwareBase
 from .layout import AlphanumericLayout, Layout, LayoutSorting, NumericLayout
 from .non_pipettable_labware import NonPipettableLabware
 from .pipettable_labware import PipettableLabware
+from .pydantic_validators import validate_instance, validate_list
 from .well import Well
 from .well_segment import WellSegment
 
@@ -24,6 +25,8 @@ __all__ = [
     "Well",
     "WellSegment",
     "exceptions",
+    "validate_instance",
+    "validate_list",
 ]
 
 identifier = str

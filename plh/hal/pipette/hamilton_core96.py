@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from math import ceil
 
-from pydantic import dataclasses, field_validator
+from pydantic import dataclasses
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL, CORE96Head
@@ -17,29 +17,6 @@ from .pipette_base import PipetteBase
 class HamiltonCORE96(PipetteBase):
     backend: HamiltonBackendBase
     hamilton_portrait_core_8: HamiltonPortraitCORE8
-
-    @field_validator("hamilton_portrait_core_8", mode="before")
-    @classmethod
-    def __hamilton_portrait_core_8_validate(
-        cls: type[HamiltonCORE96],
-        v: str | PipetteBase,
-    ) -> PipetteBase:
-        if isinstance(v, PipetteBase):
-            return v
-
-        from . import devices
-
-        # Import here otherwise we get circular import error... Nature of the beast
-
-        objects = devices
-        identifier = v
-
-        if identifier not in objects:
-            raise ValueError(
-                identifier + " is not found in " + PipetteBase.__name__ + " objects.",
-            )
-
-        return objects[identifier]
 
     def transfer(self: HamiltonCORE96, options: list[TransferOptions]) -> None:
         opt = options[0]

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from abc import abstractmethod
+from typing import Annotated
 
-from pydantic import dataclasses, field_validator
+from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import labware
 from plh.hal import layout_item as li
@@ -15,35 +17,11 @@ from .options import HeatCoolShakeOptions
 class HeatCoolShakeBase(Interface, HALDevice):
     """A device that can perform either heating, cooling, and shaking or any combination of the three."""
 
-    plates: list[li.CoverablePlate | li.Plate]
+    plates: Annotated[
+        list[li.CoverablePlate | li.Plate],
+        BeforeValidator(li.validate_list),
+    ]
     """Plates where incubations, shaking will occur."""
-
-    @field_validator("plates", mode="before")
-    @classmethod
-    def __supported_plates_validate(
-        cls: type[HeatCoolShakeBase],
-        v: list[str | li.LayoutItemBase],
-    ) -> list[li.LayoutItemBase]:
-        supported_objects = []
-
-        objects = li.devices
-
-        for item in v:
-            if isinstance(item, li.LayoutItemBase):
-                supported_objects.append(item)
-
-            elif item not in objects:
-                raise ValueError(
-                    item
-                    + " is not found in "
-                    + li.LayoutItemBase.__name__
-                    + " objects.",
-                )
-
-            else:
-                supported_objects.append(objects[item])
-
-        return supported_objects
 
     def assert_get_layout_item(
         self: HeatCoolShakeBase,

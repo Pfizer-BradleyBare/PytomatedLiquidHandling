@@ -5,6 +5,7 @@ from .hamilton_ee_ntr import HamiltonEENTR
 from .hamilton_ee_tip_base import EETipStack, HamiltonEETipBase
 from .hamilton_ftr import HamiltonFTR
 from .hamilton_ntr import HamiltonNTR
+from .pydantic_validators import validate_instance
 from .tip_base import TipBase
 
 if True:
@@ -20,6 +21,7 @@ __all__ = [
     "HamiltonEENTR",
     "EETipStack",
     "exceptions",
+    "validate_instance",
 ]
 
 identifier = str

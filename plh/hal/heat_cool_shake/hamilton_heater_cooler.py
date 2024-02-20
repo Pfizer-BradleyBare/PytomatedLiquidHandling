@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import field
+from typing import Annotated
 
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import HamiltonHeaterCooler as HamiltonHeaterCoolerDriver
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
+from plh.hal import backend
 
 from .exceptions import ShakingNotSupportedError
 from .heat_cool_shake_base import *
@@ -20,7 +23,7 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
     com_port: str
     """Port to communicate with the device 'COM1'."""
 
-    backend: HamiltonBackendBase
+    backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
     """This device is only supported by Hamilton backends."""
 
     handle_id: str = field(init=False, default="NONE")

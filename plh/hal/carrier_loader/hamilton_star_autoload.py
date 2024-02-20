@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from typing import cast
+from typing import Annotated, cast
 
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON.backend import MicrolabSTAR
 from plh.driver.HAMILTON.ML_STAR import Autoload
+from plh.hal import backend
 from plh.hal import carrier as c
 
 from .carrier_loader_base import CarrierLoaderBase
@@ -15,9 +17,12 @@ from .carrier_loader_base import CarrierLoaderBase
 class HamiltonStarAutoload(CarrierLoaderBase):
     """A device that can move a carrier in and out of a system without user intervention."""
 
-    backend: MicrolabSTAR
+    backend: Annotated[MicrolabSTAR, BeforeValidator(backend.validate_instance)]
 
-    supported_carriers: list[c.HamiltonAutoloadCarrier]
+    supported_carriers: Annotated[
+        list[c.HamiltonAutoloadCarrier],
+        BeforeValidator(c.validate_list),
+    ]
 
     def initialize(self: HamiltonStarAutoload) -> None:
         """No initialization required."""

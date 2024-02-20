@@ -1,4 +1,7 @@
+from typing import Annotated
+
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import labware
 
@@ -10,5 +13,8 @@ from .layout_item_base import LayoutItemBase
 class Lid(LayoutItemBase):
     """A lid that can cover a layout item."""
 
-    labware: labware.NonPipettableLabware
+    labware: Annotated[
+        labware.NonPipettableLabware,
+        BeforeValidator(labware.validate_instance),
+    ]
     """Lids can never be pipette to/from."""

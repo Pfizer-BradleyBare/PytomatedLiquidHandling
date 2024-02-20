@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from pydantic import dataclasses, field_validator, model_validator
+from typing import Annotated
+
+from pydantic import dataclasses, model_validator
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import deck_location, labware
 from plh.hal.tools import HALDevice
@@ -16,55 +19,17 @@ class LayoutItemBase(HALDevice):
     labware_id: str
     """Labware id from the automation software for this deck position."""
 
-    deck_location: deck_location.DeckLocationBase
+    deck_location: Annotated[
+        deck_location.DeckLocationBase,
+        BeforeValidator(deck_location.validate_instance),
+    ]
     """Deck location object associated with this position. NOTE: Many layout items can be in the same deck location."""
 
-    labware: labware.LabwareBase
+    labware: Annotated[
+        labware.LabwareBase,
+        BeforeValidator(labware.validate_instance),
+    ]
     """Labware type for this layout item."""
-
-    @field_validator("deck_location", mode="before")
-    @classmethod
-    def __deck_location_validate(
-        cls: type[LayoutItemBase],
-        v: str | deck_location.DeckLocationBase,
-    ) -> deck_location.DeckLocationBase:
-        if isinstance(v, deck_location.DeckLocationBase):
-            return v
-
-        objects = deck_location.devices
-        identifier = v
-
-        if identifier not in objects:
-            raise ValueError(
-                identifier
-                + " is not found in "
-                + deck_location.DeckLocationBase.__name__
-                + " objects.",
-            )
-
-        return objects[identifier]
-
-    @field_validator("labware", mode="before")
-    @classmethod
-    def __labware_validate(
-        cls: type[LayoutItemBase],
-        v: str | labware.LabwareBase,
-    ) -> labware.LabwareBase:
-        if isinstance(v, labware.LabwareBase):
-            return v
-
-        objects = labware.devices
-        identifier = v
-
-        if identifier not in objects:
-            raise ValueError(
-                identifier
-                + " is not found in "
-                + labware.LabwareBase.__name__
-                + " objects.",
-            )
-
-        return objects[identifier]
 
     @model_validator(mode="after")
     @staticmethod

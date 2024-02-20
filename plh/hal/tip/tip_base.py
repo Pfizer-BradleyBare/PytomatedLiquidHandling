@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from abc import abstractmethod
 from dataclasses import field
+from typing import Annotated
 
-from pydantic import dataclasses, field_validator
+from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import layout_item, transport
 from plh.hal.tools import HALDevice, Interface
@@ -24,7 +26,10 @@ class AvailablePosition:
 class TipBase(Interface, HALDevice):
     """A tip device that facilitates tip tracking and tier removal as needed."""
 
-    tip_racks: list[layout_item.TipRack]
+    tip_racks: Annotated[
+        list[layout_item.TipRack],
+        BeforeValidator(layout_item.validate_list),
+    ]
     """Rack layout items associated with the device."""
 
     volume: float
@@ -35,33 +40,6 @@ class TipBase(Interface, HALDevice):
         default_factory=list,
     )
     """Tip positions that are immediately available for use."""
-
-    @field_validator("tip_racks", mode="before")
-    @classmethod
-    def __tip_racks_validate(
-        cls: type[TipBase],
-        v: list[str | layout_item.LayoutItemBase],
-    ) -> list[layout_item.LayoutItemBase]:
-        supported_objects = []
-
-        objects = layout_item.devices
-
-        for item in v:
-            if isinstance(item, layout_item.LayoutItemBase):
-                supported_objects.append(item)
-
-            elif item not in objects:
-                raise ValueError(
-                    item
-                    + " is not found in "
-                    + layout_item.LayoutItemBase.__name__
-                    + " objects.",
-                )
-
-            else:
-                supported_objects.append(objects[item])
-
-        return supported_objects
 
     def _parse_available_positions(
         self: TipBase,

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from abc import abstractmethod
+from typing import Annotated
 
-from pydantic import Field, dataclasses, field_validator
+from pydantic import Field, dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import deck_location, labware
 from plh.hal.tools import HALDevice, Interface
@@ -15,39 +17,15 @@ from .options import GetPlaceOptions
 class TransportBase(Interface, HALDevice):
     """Describes devices that can move layout items around the deck."""
 
-    supported_labware: list[labware.LabwareBase]
+    supported_labware: Annotated[
+        list[labware.LabwareBase],
+        BeforeValidator(labware.validate_list),
+    ]
     """Labware that can be moved by the device."""
 
     last_transport_flag: bool = Field(exclude=False, default=True)
     """Flag that indicates if the current transport is the last transport.
     This should be managed for multiple transports if you do not want repeated park operations occuring."""
-
-    @field_validator("supported_labware", mode="before")
-    @classmethod
-    def __supported_labware_validate(
-        cls: type[TransportBase],
-        v: list[str | labware.LabwareBase],
-    ) -> list[labware.LabwareBase]:
-        supported_objects = []
-
-        objects = labware.devices
-
-        for item in v:
-            if isinstance(item, labware.LabwareBase):
-                supported_objects.append(v)
-
-            elif item not in objects:
-                raise ValueError(
-                    item
-                    + " is not found in "
-                    + labware.LabwareBase.__name__
-                    + " objects.",
-                )
-
-            else:
-                supported_objects.append(objects[item])
-
-        return supported_objects
 
     @dataclasses.dataclass(kw_only=True)
     class GetOptions:

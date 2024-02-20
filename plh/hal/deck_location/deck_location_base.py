@@ -4,6 +4,7 @@ from pydantic import dataclasses, model_validator
 
 from plh.hal.tools import HALDevice
 
+from .carrier_config import *
 from .carrier_config import CarrierConfig
 
 

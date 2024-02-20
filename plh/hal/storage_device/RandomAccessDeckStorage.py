@@ -5,6 +5,7 @@ from pydantic import dataclasses
 from plh.hal import layout_item as li
 
 from .reservation import Reservation
+from .storage_device_base import *
 from .storage_device_base import StorageDeviceBase
 
 
@@ -72,7 +73,8 @@ class RandomAccessDeckStorage(StorageDeviceBase):
         return reservation.layout_item
 
     def prepare_retrieve(
-        self: RandomAccessDeckStorage, reservation_id: str
+        self: RandomAccessDeckStorage,
+        reservation_id: str,
     ) -> None: ...
 
     def retrieve(
