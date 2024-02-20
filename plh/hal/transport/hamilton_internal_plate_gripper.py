@@ -47,7 +47,22 @@ class HamiltonInternalPlateGripper(TransportBase):
         self: HamiltonInternalPlateGripper,
         options: GetPlaceOptions,
     ) -> None:
-        self.assert_get_place(options)
+        self.assert_supported_labware(
+            [
+                options.source_layout_item.labware,
+                options.destination_layout_item.labware,
+            ],
+        )
+        self.assert_supported_deck_locations(
+            [
+                options.source_layout_item.deck_location,
+                options.destination_layout_item.deck_location,
+            ],
+        )
+        self.assert_compatible_deck_locations(
+            options.source_layout_item.deck_location,
+            options.destination_layout_item.deck_location,
+        )
 
         source_layout_item = options.source_layout_item
         destination_layout_item = options.destination_layout_item
@@ -100,7 +115,22 @@ class HamiltonInternalPlateGripper(TransportBase):
         self: HamiltonInternalPlateGripper,
         options: GetPlaceOptions,
     ) -> None:
-        self.assert_get_place(options)
+        self.assert_supported_labware(
+            [
+                options.source_layout_item.labware,
+                options.destination_layout_item.labware,
+            ],
+        )
+        self.assert_supported_deck_locations(
+            [
+                options.source_layout_item.deck_location,
+                options.destination_layout_item.deck_location,
+            ],
+        )
+        self.assert_compatible_deck_locations(
+            options.source_layout_item.deck_location,
+            options.destination_layout_item.deck_location,
+        )
 
         source_layout_item = options.source_layout_item
         destination_layout_item = options.destination_layout_item

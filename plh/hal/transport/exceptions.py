@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from plh.hal import layout_item
+from plh.hal import deck_location, layout_item
 from plh.hal.exceptions import HALError, UserInteractionRequiredError
 
 from .options import GetPlaceOptions
@@ -17,6 +17,8 @@ class WrongTransportDeviceError(HALError):
     """Transport device is not the same as required by the DeckLocation TransportOptions."""
 
     error_device: TransportBase
+
+    deck_location: deck_location.DeckLocationBase
 
     ViableTransportDevices: list[TransportBase]
 

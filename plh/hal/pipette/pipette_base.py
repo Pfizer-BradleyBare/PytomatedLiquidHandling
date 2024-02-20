@@ -26,6 +26,7 @@ from .pipette_tip import PipetteTip
 @dataclasses.dataclass(kw_only=True, eq=False)
 class PipetteBase(Interface, HALDevice):
     supported_tips: list[PipetteTip]
+
     supported_source_labware: Annotated[
         list[labware.PipettableLabware],
         BeforeValidator(labware.validate_list),
@@ -48,6 +49,55 @@ class PipetteBase(Interface, HALDevice):
         v: list[PipetteTip],
     ) -> list[PipetteTip]:
         return sorted(v, key=lambda x: x.tip.volume)
+
+    def assert_supported_source_labware(
+        self: PipetteBase,
+        labwares: list[labware.LabwareBase],
+    ) -> None:
+        exceptions = [
+            labware.exceptions.LabwareNotSupportedError(self, item)
+            for item in labwares
+            if item not in self.supported_source_labware
+        ]
+
+        if len(exceptions) != 0:
+            msg = "Some labware is not supported."
+            raise ExceptionGroup(msg, exceptions)
+
+    def assert_supported_destination_labware(
+        self: PipetteBase,
+        labwares: list[labware.LabwareBase],
+    ) -> None:
+        exceptions = [
+            labware.exceptions.LabwareNotSupportedError(self, item)
+            for item in labwares
+            if item not in self.supported_source_labware
+        ]
+
+        if len(exceptions) != 0:
+            msg = "Some labware is not supported."
+            raise ExceptionGroup(msg, exceptions)
+
+    def assert_supported_deck_locations(
+        self: PipetteBase,
+        deck_locations: list[deck_location.DeckLocationBase],
+    ) -> None:
+        exceptions = [
+            deck_location.exceptions.DeckLocationNotSupportedError(self, item)
+            for item in deck_locations
+            if item not in self.supported_deck_locations
+        ]
+
+        if len(exceptions) != 0:
+            msg = "Some deck locations are not supported."
+            raise ExceptionGroup(msg, exceptions)
+
+    def assert_supported_liquid_class_categories(
+        self: PipetteBase,
+        category_name_volumes: list[tuple[str, float]],
+    ) -> None:
+        # TODO
+        ...
 
     def _get_max_transfer_volume(
         self: PipetteBase,

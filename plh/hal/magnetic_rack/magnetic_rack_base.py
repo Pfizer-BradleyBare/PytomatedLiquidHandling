@@ -96,15 +96,34 @@ class MagneticRackBase(HALDevice):
 
         return supported_objects
 
+    def assert_plates(
+        self: MagneticRackBase,
+        labwares: list[labware.LabwareBase],
+    ) -> None:
+        supported_labware = [item.labware for item in self.plates]
+
+        exceptions = [
+            labware.exceptions.LabwareNotSupportedError(self, item)
+            for item in labwares
+            if item not in supported_labware
+        ]
+
+        if len(exceptions) != 0:
+            msg = "Some labware is not supported."
+            raise ExceptionGroup(msg, exceptions)
+
     def get_layout_item(
         self: MagneticRackBase,
-        layout_item: li.LayoutItemBase,
+        labware: labware.LabwareBase,
     ) -> li.CoverablePlate | li.Plate:
+        self.assert_plates([labware])
+
         for supported_layout_item in self.plates:
-            if supported_layout_item.labware == layout_item.labware:
+            if supported_layout_item.labware == labware:
                 return supported_layout_item
 
-        raise labware.exceptions.LabwareNotSupportedError(self, layout_item.labware)
+        msg = "Should never reach this point."
+        raise RuntimeError(msg)
 
     def get_aspirate_storage_buffer_liquid_class_category(
         self: MagneticRackBase,

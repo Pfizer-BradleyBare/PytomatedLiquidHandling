@@ -53,103 +53,70 @@ class TransportBase(Interface, HALDevice):
         """No deinitialization actions are performed."""
         ...
 
-    def assert_get_place(
+    def assert_supported_labware(
         self: TransportBase,
-        options: GetPlaceOptions,
+        labwares: list[labware.LabwareBase],
     ) -> None:
-        """Must be called before calling ```Transport``` or ```TransportTime```"""
-        excepts = []
+        exceptions = [
+            labware.exceptions.LabwareNotSupportedError(self, item)
+            for item in labwares
+            if item not in self.supported_labware
+        ]
 
-        if options.source_layout_item is None:
-            ValueError("source_layout_item must not be None")
+        if len(exceptions) != 0:
+            msg = "Some labware is not supported."
+            raise ExceptionGroup(msg, exceptions)
 
-        excepts = []
+    def assert_supported_deck_locations(
+        self: TransportBase,
+        deck_locations: list[deck_location.DeckLocationBase],
+    ) -> None:
 
-        if not isinstance(
-            options.source_layout_item.deck_location,
-            deck_location.TransportableDeckLocation,
-        ):
-            excepts.append(
-                deck_location.exceptions.DeckLocationNotTransportableError(
-                    self,
-                    options.source_layout_item.deck_location,
-                ),
-            )
-        # Check deck location is transportable
+        exceptions = []
 
-        if isinstance(
-            options.source_layout_item.deck_location,
-            deck_location.TransportableDeckLocation,
-        ):
-            supported_devices = [
-                config.transport_device
-                for config in options.source_layout_item.deck_location.transport_configs
-            ]
-            if self not in supported_devices:
-                excepts.append(WrongTransportDeviceError(self, supported_devices))
-        # Transport device must support this deck location
+        for item in deck_locations:
+            if not isinstance(item, deck_location.TransportableDeckLocation):
+                exceptions.append(
+                    deck_location.exceptions.DeckLocationNotTransportableError(
+                        self,
+                        item,
+                    ),
+                )
 
-        if options.source_layout_item.labware not in self.supported_labware:
-            excepts.append(
-                labware.exceptions.LabwareNotSupportedError(
-                    self,
-                    options.source_layout_item.labware,
-                ),
-            )
-        # Check labware is supported
+            else:
+                transport_devices = [
+                    config.transport_device for config in item.transport_configs
+                ]
 
-        if not isinstance(
-            options.destination_layout_item.deck_location,
-            deck_location.TransportableDeckLocation,
-        ):
-            excepts.append(
-                deck_location.exceptions.DeckLocationNotTransportableError(
-                    self,
-                    options.destination_layout_item.deck_location,
-                ),
-            )
-        # Check deck location is transportable
+                if self not in transport_devices:
+                    exceptions.append(
+                        WrongTransportDeviceError(self, item, transport_devices),
+                    )
 
-        if isinstance(
-            options.destination_layout_item.deck_location,
-            deck_location.TransportableDeckLocation,
-        ):
-            supported_devices = [
-                config.transport_device
-                for config in options.destination_layout_item.deck_location.transport_configs
-            ]
-            if self not in supported_devices:
-                excepts.append(WrongTransportDeviceError(self, supported_devices))
-        # Transport device must support this deck location
+        if len(exceptions) != 0:
+            msg = "Some deck locations are not supported."
+            raise ExceptionGroup(msg, exceptions)
 
-        if options.destination_layout_item.labware not in self.supported_labware:
-            excepts.append(
-                labware.exceptions.LabwareNotSupportedError(
-                    self,
-                    options.destination_layout_item.labware,
-                ),
-            )
-        # Check labware is supported
+    def assert_compatible_deck_locations(
+        self: TransportBase,
+        source: deck_location.DeckLocationBase,
+        destination: deck_location.DeckLocationBase,
+    ) -> None:
+        self.assert_supported_deck_locations([source, destination])
 
-        compatible_transport_configs = (
+        compatible_configs = (
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                options.source_layout_item.deck_location,
-                options.destination_layout_item.deck_location,
+                source,
+                destination,
             )
         )
-        if len(compatible_transport_configs) == 0:
-            excepts.append(
-                deck_location.exceptions.DeckLocationTransportConfigsNotCompatibleError(
-                    self,
-                    options.source_layout_item.deck_location,
-                    options.destination_layout_item.deck_location,
-                ),
-            )
-        # Check configs are compatible
 
-        if len(excepts) > 0:
-            msg = "Exceptions"
-            raise ExceptionGroup(msg, excepts)
+        if len(compatible_configs) == 0:
+            raise deck_location.exceptions.DeckLocationTransportConfigsNotCompatibleError(
+                self,
+                source,
+                destination,
+            )
 
     @abstractmethod
     def get(
