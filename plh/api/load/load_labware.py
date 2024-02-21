@@ -7,6 +7,8 @@ from itertools import groupby
 from plh.api import container
 from plh.hal import carrier_loader, labware, layout_item
 
+loaded_labware_tracker: list[LoadedLabware] = []
+
 
 @dataclass
 class LoadedLabware:
@@ -118,3 +120,67 @@ def group(
         )
     ]
     # Now organize the items by carrier.
+
+
+def prepare(loaded_labware: list[tuple[LoadedLabware, None | LoadedLabware]]) -> None:
+    """Prepares the LoadedLabware returned from ```group``` for loading or unloading.
+    If the tuple contains None then the loading locations will be emptied.
+    If the tuple contains a LoadedLabware then the LoadedLabware will be moved to the position for unloading, swapping, or container addition.
+    """
+    ...
+
+
+def start(loaded_labware: list[LoadedLabware]) -> None:
+    """Will move the deck locations out to the user using the associated carrier_mover."""
+    carriers = {
+        item.layout_item.deck_location.carrier_config.carrier for item in loaded_labware
+    }
+
+    if len(carriers) != 1:
+        raise RuntimeError(
+            "You can only load 1 carrier at a time. The list your provided relies on multiple carriers...",
+        )
+    # are all carriers the same?
+
+    for loader in carrier_loader.devices.values():
+        try:
+            loader.assert_supported_carriers(list(carriers))
+        except* ExceptionGroup:
+            continue
+        # Find our correct carrier loader
+
+        loader.unload(list(carriers)[0])
+
+
+def end(loaded_labware: list[LoadedLabware]) -> None:
+    """Will move the deck locations back into the deck using the associated carrier_mover."""
+    carriers = {
+        item.layout_item.deck_location.carrier_config.carrier for item in loaded_labware
+    }
+
+    if len(carriers) != 1:
+        raise RuntimeError(
+            "You can only load 1 carrier at a time. The list your provided relies on multiple carriers...",
+        )
+    # are all carriers the same?
+
+    for loader in carrier_loader.devices.values():
+        try:
+            loader.assert_supported_carriers(list(carriers))
+        except* ExceptionGroup:
+            continue
+        # Find our correct carrier loader
+
+        loader.load(list(carriers)[0])
+
+
+def programmatic_load(loaded_labware: list[LoadedLabware]) -> None:
+    """Will add the labware in the labware tracker. This officially makes the API layer aware that the labware is now on the deck."""
+    global loaded_labware_tracker
+    loaded_labware_tracker += loaded_labware
+
+
+def programmatic_unload(loaded_labware: list[LoadedLabware]) -> None:
+    """Will remove the labware from the labware tracker. The API layer now assumes that this labware is no longer on the deck."""
+    for item in loaded_labware:
+        loaded_labware_tracker.remove(item)
