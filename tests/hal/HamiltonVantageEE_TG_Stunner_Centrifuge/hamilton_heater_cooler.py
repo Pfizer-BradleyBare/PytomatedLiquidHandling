@@ -4,27 +4,20 @@ import os
 
 from loguru import logger
 
-from plh import hal
-from plh.api.deck.container import Liquid, LiquidVolume, PropertyWeight, Viscosity, Well
-from plh.api.deck.loader import Criteria, group
+from plh import api, hal
 
 logger.enable("plh")
 
 
 hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
 
-IAA_liquid = Liquid("IAA")
-TCEP_liquid = Liquid("TCEP", viscosity=PropertyWeight(Viscosity.HIGH, 1))
+labware_type = hal.labware.devices["Hamilton1500uLFlipTubeRack"]
 
-IAA = Well([LiquidVolume(IAA_liquid, 100000)])
-
-print(IAA.get_total_volume())
-print(IAA.get_well_property(lambda x: x.viscosity))
-
-c = Criteria([IAA], hal.labware.devices["Hamilton1500uLFlipTubeRack"])
-
-
-group([c])
-
+print(
+    [
+        [item.layout_item.identifier for item in sub]
+        for sub in api.load.group([labware_type] * 2)
+    ]
+)
 
 input("ENTER")
