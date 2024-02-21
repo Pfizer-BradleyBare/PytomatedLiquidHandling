@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import copy
 from dataclasses import InitVar, dataclass, field
-from typing import Callable, ClassVar, TypeVar, cast
+from typing import Callable, TypeVar, cast
 
 from .liquid import Liquid, LiquidVolume
 from .property import LiquidPropertyBase, PropertyWeight, PropertyWeightVolume
@@ -23,25 +23,12 @@ class Well:
     )
     """Liquids and associated volume contained in the well."""
 
-    _hashable_counter: ClassVar[int] = 0
-    _hashable_value: int = field(init=False)
-    """Simple way to define a custom hashable value for this class to make it a dict key."""
-
     def __post_init__(self: Well, initial_liquids: list[LiquidVolume]) -> None:
-        self._hashable_value = Well._hashable_counter
-        Well._hashable_counter += 1
-
         for liquid_volume in initial_liquids:
             if liquid_volume.liquid in self.liquids:
                 self.liquids[liquid_volume.liquid] += liquid_volume.volume
             else:
                 self.liquids[liquid_volume.liquid] = liquid_volume.volume
-
-    def __hash__(self: Well) -> int:
-        return hash(self._hashable_value)
-
-    def __eq__(self: Well, __value: Well) -> bool:
-        return self._hashable_value == __value._hashable_value
 
     def get_total_volume(self: Well) -> float:
         """Total volume present in the well."""
