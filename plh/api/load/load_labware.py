@@ -34,16 +34,17 @@ def group(
     labware_only: list[labware.LabwareBase] = [
         item.labware if isinstance(item, LoadedLabware) else item for item in labwares
     ]
+    # To do the loading we need a list of only labware items that are required.
 
     labware_meta: dict[labware.LabwareBase, list[None | LoadedLabware]] = defaultdict(
         list,
     )
-
     for labware_type, meta in [
         (item.labware, item) if isinstance(item, LoadedLabware) else (item, None)
         for item in labwares
     ]:
         labware_meta[labware_type].append(meta)
+    # collect meta data for the grouping to be used when selecting layout_items
 
     loadable_carriers = sum(
         [loader.supported_carriers for loader in carrier_loader.devices.values()],
