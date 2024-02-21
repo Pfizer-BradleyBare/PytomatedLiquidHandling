@@ -7,10 +7,6 @@ from typing import Callable, Literal
 from pydantic import dataclasses
 
 
-class InvalidpositionError(ValueError):
-    ...
-
-
 class LayoutSorting(Enum):
     """How the positions of a labware are sorted in the automation software."""
 
@@ -36,24 +32,22 @@ class Layout(ABC):
 
     def total_positions(self: Layout) -> int:
         """Total positions = rows * columns"""
-
         return self.rows * self.columns
 
     def get_position_id(self: Layout, position: str | int) -> str:
         """Dependent on sorting object the correct position id will be returned given a str or an integer. Position ID returned depends on layout subclass (Numeric vs Alphanumeric)."""
-
         if isinstance(position, int):
             position = str(position)
 
-        fail = False
+        fail = True
         if (
-            not position.isalnum() and position.isalpha() and position.isdigit()
-        ) or not position.isdigit():
-            fail = True
+            position.isalnum() and not position.isalpha() and not position.isdigit()
+        ) or position.isdigit():
+            fail = False
 
         if fail is True:
             msg = "position can be either alphanumeric or numeric.\nAlphanumeric must contain both numbers and letters. Ex: A1, B12, 10H.\nNumeric must only contain digits. Ex: 1 13 95"
-            raise InvalidpositionError(msg)
+            raise ValueError(msg)
 
         if self.direction == LayoutSorting.Columnwise:
             return self._get_columnwise_position_id(position)
@@ -88,12 +82,10 @@ class Layout(ABC):
         ...
 
     @abstractmethod
-    def _get_columnwise_position_id(self: Layout, position: str) -> str:
-        ...
+    def _get_columnwise_position_id(self: Layout, position: str) -> str: ...
 
     @abstractmethod
-    def _get_rowwise_position_id(self: Layout, position: str) -> str:
-        ...
+    def _get_rowwise_position_id(self: Layout, position: str) -> str: ...
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -188,7 +180,6 @@ class AlphanumericLayout(Layout):
         positions: list[str | int],
     ) -> list[list[str]]:
         """Uses numeric addressing to group positions then converts back to alphanumeric."""
-
         numeric_addressing = NumericLayout(
             rows=self.rows,
             columns=self.columns,
@@ -205,7 +196,6 @@ class AlphanumericLayout(Layout):
         positions: list[str | int],
     ) -> list[list[str]]:
         """Uses numeric addressing to group positions then converts back to alphanumeric."""
-
         numeric_addressing = NumericLayout(
             rows=self.rows,
             columns=self.columns,
