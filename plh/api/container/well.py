@@ -23,6 +23,12 @@ class Well:
     )
     """Liquids and associated volume contained in the well."""
 
+    def __hash__(self: Well) -> int:
+        return hash(id(self))
+
+    def __eq__(self: Well, __value: object) -> bool:
+        return self is __value
+
     def __post_init__(self: Well, initial_liquids: list[LiquidVolume]) -> None:
         for liquid_volume in initial_liquids:
             if liquid_volume.liquid in self.liquids:
