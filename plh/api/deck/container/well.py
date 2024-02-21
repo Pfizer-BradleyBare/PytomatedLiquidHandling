@@ -4,8 +4,6 @@ import copy
 from dataclasses import InitVar, dataclass, field
 from typing import Callable, ClassVar, TypeVar, cast
 
-from plh.hal import labware
-
 from .liquid import Liquid, LiquidVolume
 from .property import LiquidPropertyBase, PropertyWeight, PropertyWeightVolume
 
@@ -14,10 +12,7 @@ T = TypeVar("T", bound="LiquidPropertyBase")
 
 @dataclass
 class Well:
-    """A physical well that contains a liquid or mixture of liquids."""
-
-    labware: labware.PipettableLabware
-    """The labware this well will belong to if loaded on the deck."""
+    """A programmatic well that contains a liquid or mixture of liquids."""
 
     initial_liquids: InitVar[list[LiquidVolume]] = field(default=[])
     """Initial well contents."""
