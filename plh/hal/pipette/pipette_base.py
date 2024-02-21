@@ -71,7 +71,7 @@ class PipetteBase(Interface, HALDevice):
         exceptions = [
             labware.exceptions.LabwareNotSupportedError(self, item)
             for item in labwares
-            if item not in self.supported_source_labware
+            if item not in self.supported_destination_labware
         ]
 
         if len(exceptions) != 0:
