@@ -27,7 +27,9 @@ transport_options = hal.transport.GetPlaceOptions(
     destination_layout_item=destination,
 )
 
-gripper.assert_get_place(transport_options)
+gripper.assert_supported_labware([source.labware,destination.labware])
+gripper.assert_supported_deck_locations([source.deck_location,destination.deck_location])
+gripper.assert_compatible_deck_locations(source.deck_location,destination.deck_location)
 
 gripper.get(transport_options)
 

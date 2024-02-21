@@ -21,7 +21,7 @@ class HeatCoolShakeBase(Interface, HALDevice):
     ]
     """Plates where incubations, shaking will occur."""
 
-    def assert_plates(
+    def assert_supported_labware(
         self: HeatCoolShakeBase,
         labwares: list[labware.LabwareBase],
     ) -> None:
@@ -42,7 +42,7 @@ class HeatCoolShakeBase(Interface, HALDevice):
         labware: labware.LabwareBase,
     ) -> li.CoverablePlate | li.Plate:
         """Gets a layout item on the heat_cool_shake device that is compatible with your current layout item."""
-        self.assert_plates([labware])
+        self.assert_supported_labware([labware])
 
         for supported_layout_item in self.plates:
             if supported_layout_item.labware == labware:

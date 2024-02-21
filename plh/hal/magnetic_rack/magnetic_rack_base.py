@@ -96,7 +96,7 @@ class MagneticRackBase(HALDevice):
 
         return supported_objects
 
-    def assert_plates(
+    def assert_supported_labware(
         self: MagneticRackBase,
         labwares: list[labware.LabwareBase],
     ) -> None:
@@ -116,7 +116,7 @@ class MagneticRackBase(HALDevice):
         self: MagneticRackBase,
         labware: labware.LabwareBase,
     ) -> li.CoverablePlate | li.Plate:
-        self.assert_plates([labware])
+        self.assert_supported_labware([labware])
 
         for supported_layout_item in self.plates:
             if supported_layout_item.labware == labware:
