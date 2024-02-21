@@ -15,9 +15,9 @@ labware_type = hal.labware.devices["Hamilton1500uLFlipTubeRack"]
 
 print(
     [
-        [item.layout_item.identifier for item in sub]
+        [(item.layout_item.identifier, meta) for item, meta in sub]
         for sub in api.load.group([labware_type] * 2)
-    ]
+    ],
 )
 
 input("ENTER")

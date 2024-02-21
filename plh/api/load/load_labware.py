@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import defaultdict
 from dataclasses import dataclass, field
 from itertools import groupby
 
@@ -26,8 +27,24 @@ class LoadedLabware:
         )
 
 
-def group(labwares: list[labware.LabwareBase]) -> list[list[LoadedLabware]]:
-    """Takes a list of labware and groups it by carrier for loading."""
+def group(
+    labwares: list[labware.LabwareBase | LoadedLabware],
+) -> list[list[tuple[LoadedLabware, None | LoadedLabware]]]:
+    """Takes a list of labware or ```LoadedLabware``` and groups it by carrier for loading."""
+    labware_only: list[labware.LabwareBase] = [
+        item.labware if isinstance(item, LoadedLabware) else item for item in labwares
+    ]
+
+    labware_meta: dict[labware.LabwareBase, list[None | LoadedLabware]] = defaultdict(
+        list,
+    )
+
+    for labware_type, meta in [
+        (item.labware, item) if isinstance(item, LoadedLabware) else (item, None)
+        for item in labwares
+    ]:
+        labware_meta[labware_type].append(meta)
+
     loadable_carriers = sum(
         [loader.supported_carriers for loader in carrier_loader.devices.values()],
         [],
@@ -44,7 +61,9 @@ def group(labwares: list[labware.LabwareBase]) -> list[list[LoadedLabware]]:
     )
     # These are all the potential layout items we can use to load.
 
-    required_labware = {labware: labwares.count(labware) for labware in set(labwares)}
+    required_labware = {
+        labware: labware_only.count(labware) for labware in set(labware_only)
+    }
     # get number of each labware we need to load.
 
     loadable_labware = [
@@ -64,31 +83,37 @@ def group(labwares: list[labware.LabwareBase]) -> list[list[LoadedLabware]]:
     )
     # get number of available labware positions sorted from least available to most available.
 
-    loaded_layout_items: list[layout_item.LayoutItemBase] = []
+    loaded_layout_items_meta: list[
+        tuple[layout_item.LayoutItemBase, LoadedLabware | None]
+    ] = []
 
-    for labware, num_available in available_labware.items():
-        num_to_load = required_labware[labware]
+    for labware_type, num_available in available_labware.items():
+        num_to_load = required_labware[labware_type]
+        meta = labware_meta[labware_type]
 
         if num_to_load > num_available:
             raise RuntimeError("Not enough labware available!")
 
-        loaded_layout_items += [
-            layout_item
-            for layout_item in loadable_layout_items
-            if layout_item.labware is labware
-            and layout_item.deck_location
-            not in [item.deck_location for item in loaded_layout_items]
-        ][:num_to_load]
+        loaded_layout_items_meta += zip(
+            [
+                layout_item
+                for layout_item in loadable_layout_items
+                if layout_item.labware is labware_type
+                and layout_item.deck_location
+                not in [item[0].deck_location for item in loaded_layout_items_meta]
+            ][:num_to_load],
+            meta,
+        )
     # Try to load it.
 
     return [
         [
-            LoadedLabware(layout_item.labware, layout_item)
-            for layout_item in layout_item_group
+            (LoadedLabware(layout_item.labware, layout_item), meta)
+            for layout_item, meta in layout_item_group
         ]
         for carrier, layout_item_group in groupby(
-            loaded_layout_items,
-            lambda x: x.deck_location.carrier_config.carrier,
+            loaded_layout_items_meta,
+            lambda x: x[0].deck_location.carrier_config.carrier,
         )
     ]
     # Now organize the items by carrier.
