@@ -31,12 +31,14 @@ def layout_item_transport(
 
         device = compatible_configs[0][0].transport_device
 
+        device.assert_supported_deck_locations([source.deck_location,destination.deck_location])
+        device.assert_supported_labware([source.labware,destination.labware])
+        device.assert_compatible_deck_locations(source.deck_location,destination.deck_location)
+
         options = transport.GetPlaceOptions(
             source_layout_item=source,
             destination_layout_item=destination,
         )
-
-        device.assert_get_place(options)
 
         device.get(options)
 
