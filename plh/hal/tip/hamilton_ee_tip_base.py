@@ -10,7 +10,7 @@ from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.hal import backend, layout_item
 
 from .tip_base import *
-from .tip_base import TipBase
+from .tip_base import AvailablePosition, TipBase
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -96,6 +96,15 @@ class HamiltonEETipBase(TipBase):
             # Move the stack to beam so we can access the tip rack.
 
             stack.stack_count -= 1
+
+            self.available_positions = [
+                AvailablePosition(
+                    LabwareID=tip_rack.labware_id,
+                    PositionID=tip_rack.labware.layout.get_position_id(i),
+                )
+                for tip_rack in self.tip_racks
+                for i in range(1, tip_rack.labware.layout.total_positions() + 1)
+            ]
 
         return sum(
             [
