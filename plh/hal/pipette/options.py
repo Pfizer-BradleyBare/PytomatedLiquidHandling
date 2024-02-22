@@ -7,19 +7,6 @@ from plh.hal import layout_item
 from plh.hal.deck_location import *
 from plh.hal.labware import *
 
-from .pipette_tip import PipetteTip
-
-
-@dataclasses.dataclass(kw_only=True)
-class _PickupOptions:
-    """Options used for low level ```_pickup``` function."""
-
-    channel_number: int
-    """Channel to use to pickup the tip"""
-
-    pipette_tip: PipetteTip
-    """Which ```PipetteTip``` to try to pickup."""
-
 
 @dataclasses.dataclass(kw_only=True)
 class _AspirateDispenseOptions:
@@ -48,20 +35,6 @@ class _AspirateDispenseOptions:
 
     volume: float
     """Volume to aspirate / dispense."""
-
-
-@dataclasses.dataclass(kw_only=True)
-class _EjectOptions:
-    """Options used for low level ```_eject``` function."""
-
-    channel_number: int
-    """Channel to eject."""
-
-    labware_id: str
-    """Labware ID to eject into."""
-
-    position_id: str
-    """Position ID in labware id to eject into."""
 
 
 @dataclasses.dataclass(kw_only=True)

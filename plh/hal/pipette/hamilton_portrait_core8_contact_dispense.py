@@ -14,11 +14,10 @@ from plh.hal import backend, labware, tip
 from .options import (
     TransferOptions,
     _AspirateDispenseOptions,
-    _EjectOptions,
-    _PickupOptions,
 )
 from .pipette_base import *
 from .pipette_base import PipetteBase
+from .pipette_tip import PipetteTip
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
@@ -27,18 +26,16 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
 
     active_channels: list[Literal[1, 2, 3, 4, 5, 6, 7, 8]]
 
-    def initialize(self: HamiltonPortraitCORE8ContactDispense) -> None:
-        ...
+    def initialize(self: HamiltonPortraitCORE8ContactDispense) -> None: ...
 
-    def deinitialize(self: HamiltonPortraitCORE8ContactDispense) -> None:
-        ...
+    def deinitialize(self: HamiltonPortraitCORE8ContactDispense) -> None: ...
 
     def _pickup(
         self: HamiltonPortraitCORE8ContactDispense,
-        options: list[_PickupOptions],
+        *args: tuple[int, PipetteTip],
     ) -> None:
         """Tips is a list of tuples of (channel_number, Tip)"""
-        options = sorted(options, key=lambda x: x.channel_number)
+        args = tuple(sorted(args, key=lambda x: x[0]))
 
         successful_pickups: dict[int, tuple[str, str]] = {}
         # We can track which pickups worked here, so we do not arbitrarily waste tips when a bad tip fails to be picked up.
@@ -53,49 +50,43 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
             )
 
             try:
-                for option in options:
-                    if option.channel_number in successful_pickups:
+                for channel_number, pipette_tip in args:
+                    if channel_number in successful_pickups:
                         continue
                     # We need to check first if any tips were successful in being picked up. If so, we do not need to pickup a tip with that channel.
 
-                    if option.channel_number in not_executed_pickups:
+                    if channel_number in not_executed_pickups:
                         command.options.append(
                             Channel1000uL.Pickup.Options(
-                                ChannelNumber=option.channel_number,
-                                LabwareID=not_executed_pickups[option.channel_number][
-                                    0
-                                ],
-                                PositionID=not_executed_pickups[option.channel_number][
-                                    1
-                                ],
+                                ChannelNumber=channel_number,
+                                LabwareID=not_executed_pickups[channel_number][0],
+                                PositionID=not_executed_pickups[channel_number][1],
                             ),
                         )
                         continue
                     # If there are any not executed pickups then those will trump any new positions. Let's at least give the non-attempted positions a chance.
 
                     try:
-                        labware_id = option.pipette_tip.tip.available_positions[
-                            0
-                        ].LabwareID
-                        position_id = option.pipette_tip.tip.available_positions[
-                            0
-                        ].PositionID
+                        labware_id = pipette_tip.tip.available_positions[0].LabwareID
+                        position_id = pipette_tip.tip.available_positions[0].PositionID
                         # There may not be any positions left. If not, we will catch that and raise a teir discard event.
 
                         command.options.append(
                             Channel1000uL.Pickup.Options(
-                                ChannelNumber=option.channel_number,
+                                ChannelNumber=channel_number,
                                 LabwareID=labware_id,
                                 PositionID=position_id,
                             ),
                         )
                     except IndexError as e:
                         self._eject(
-                            [
-                                _EjectOptions(
-                                    channel_number=pickup_key,
-                                    labware_id=successful_pickups[pickup_key][0],
-                                    position_id=successful_pickups[pickup_key][1],
+                            *[
+                                (
+                                    pickup_key,
+                                    (
+                                        successful_pickups[pickup_key][0],
+                                        successful_pickups[pickup_key][1],
+                                    ),
                                 )
                                 for pickup_key in successful_pickups
                             ],
@@ -103,12 +94,12 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
 
                         raise ExceptionGroup(
                             "Errors during tip pickup",
-                            [tip.exceptions.TierOutOfTipsError(option.pipette_tip.tip)],
+                            [tip.exceptions.TierOutOfTipsError(pipette_tip.tip)],
                         ) from e
                     # It is possible that there are not enough tips in the teir to support this pickup operation.
                     # We DO NOT want to hold tips when a teir is empty. We need to be able to grab the gripper. So we will eject them.
 
-                    option.pipette_tip.tip.use_tips(1)
+                    pipette_tip.tip.use_tips(1)
                     # We are going to assume straight off that the pickup will be successful. If it is not then we will handle later.
 
                 not_executed_pickups = {}
@@ -175,19 +166,19 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
 
     def _eject(
         self: HamiltonPortraitCORE8ContactDispense,
-        options: list[_EjectOptions],
+        *args: tuple[int, tuple[str, str]],
     ) -> None:
         """Positions is a list of tuple of (channel_number,(labware_id,position_id))."""
-        options = sorted(options, key=lambda x: x.channel_number)
+        args = tuple(sorted(args, key=lambda x: x[0]))
 
         command = Channel1000uL.Eject.Command(backend_error_handling=False, options=[])
 
-        for option in options:
+        for channel_number, (labware_id, position_id) in args:
             command.options.append(
                 Channel1000uL.Eject.Options(
-                    ChannelNumber=option.channel_number,
-                    LabwareID=option.labware_id,
-                    PositionID=option.position_id,
+                    ChannelNumber=channel_number,
+                    LabwareID=labware_id,
+                    PositionID=position_id,
                 ),
             )
 
@@ -343,11 +334,8 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
 
         for channel_group in channel_grouped_options_with_tips:
             self._pickup(
-                [
-                    _PickupOptions(
-                        channel_number=self.active_channels[index],
-                        pipette_tip=tip,
-                    )
+                *[
+                    (self.active_channels[index], tip)
                     for index, (tip, option) in enumerate(channel_group)
                 ],
             )
@@ -450,11 +438,10 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
             self._dispense(aspdis_options)
 
             self._eject(
-                [
-                    _EjectOptions(
-                        channel_number=self.active_channels[index],
-                        labware_id=self.waste_labware_id,
-                        position_id=str(self.active_channels[index]),
+                *[
+                    (
+                        self.active_channels[index],
+                        (self.waste_labware_id, str(self.active_channels[index])),
                     )
                     for index, (tip, option) in enumerate(channel_group)
                 ],

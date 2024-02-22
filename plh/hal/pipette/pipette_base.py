@@ -17,8 +17,6 @@ from plh.hal.tools import HALDevice, Interface
 from .options import (
     TransferOptions,
     _AspirateDispenseOptions,
-    _EjectOptions,
-    _PickupOptions,
 )
 from .pipette_tip import PipetteTip
 
@@ -183,7 +181,7 @@ class PipetteBase(Interface, HALDevice):
     @abstractmethod
     def _pickup(
         self: PipetteBase,
-        options: list[_PickupOptions],
+        *args: tuple[int, PipetteTip],
     ) -> None:
         """This function should pickup tips from a given pipette tip location."""
         """Errors should be handled here, such that iteration will continue accross tips until either the teir runs out of positions or tips are successfully picked up."""
@@ -192,7 +190,7 @@ class PipetteBase(Interface, HALDevice):
     @abstractmethod
     def _eject(
         self: PipetteBase,
-        positions: list[_EjectOptions],
+        *args: tuple[int, tuple[str, str]],
     ) -> None:
         """This function should eject tips to a positions defined by ```_EjectOptions```."""
         ...
