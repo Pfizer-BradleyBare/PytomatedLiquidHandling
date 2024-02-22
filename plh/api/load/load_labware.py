@@ -39,6 +39,12 @@ class LoadedLabware:
     """If the loaded labware is currently covered with a lid. Default is False.
     If labware is loaded with a lid then the user should update this."""
 
+    def __hash__(self: LoadedLabware) -> int:
+        return hash(self.identifier)
+
+    def __eq__(self: LoadedLabware, __value: LoadedLabware) -> bool:
+        return self.identifier == __value.identifier
+
     def __post_init__(self: LoadedLabware) -> None:
         self.well_assignments = dict.fromkeys(
             range(1, self.labware.layout.total_positions() + 1),

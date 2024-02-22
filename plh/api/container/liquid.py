@@ -23,24 +23,30 @@ class Liquid:
     ```Volatility```, ```Viscosity```, ```Homogeneity```,and ```Polarity```.
     """
 
-    def __hash__(self:Liquid) -> int:
+    def __hash__(self: Liquid) -> int:
         return hash(self.name)
 
-    def __eq__(self:Liquid, __value: Liquid) -> bool:
+    def __eq__(self: Liquid, __value: Liquid) -> bool:
         return self.name == __value.name
 
     name: str
     """The liquid name."""
 
-    volatility: PropertyWeight[Volatility] = field(default=PropertyWeight(Volatility.MEDIUM))
+    volatility: PropertyWeight[Volatility] = field(
+        default=PropertyWeight(Volatility.MEDIUM)
+    )
     """The voltaility property and weight for the liquid.
     For example: ACN mixed with water still makes a solution significantly non-viscous but only slightly volatile."""
 
-    viscosity: PropertyWeight[Viscosity] = field(default=PropertyWeight(Viscosity.MEDIUM))
+    viscosity: PropertyWeight[Viscosity] = field(
+        default=PropertyWeight(Viscosity.MEDIUM)
+    )
     """The viscosity property and weight for the liquid.
     For example: ACN mixed with water still makes a solution significantly non-viscous but only slightly volatile."""
 
-    homogeneity: PropertyWeight[Homogeneity] = field(default=PropertyWeight(Homogeneity.HOMOGENOUS))
+    homogeneity: PropertyWeight[Homogeneity] = field(
+        default=PropertyWeight(Homogeneity.HOMOGENOUS)
+    )
     """The homogeneity property and weight for the liquid.
     For example: It's possible to have a reagent that causes a precipitation.
     A small amount of reagent added would have to have a huge weight to change the composition."""
@@ -48,4 +54,3 @@ class Liquid:
     polarity: PropertyWeight[Polarity] = field(default=PropertyWeight(Polarity.POLAR))
     """The polarity property and weight for the liquid.
     For example: Chloroform is not conductive at all. But a small amount of water will add significant polarity."""
-

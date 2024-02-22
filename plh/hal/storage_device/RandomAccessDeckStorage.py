@@ -55,7 +55,8 @@ class RandomAccessDeckStorage(StorageDeviceBase):
 
         del self.reservations[reservation_id]
 
-    def prepare_store(self: RandomAccessDeckStorage, reservation_id: str) -> None: ...
+    def prepare_store(self: RandomAccessDeckStorage, reservation_id: str) -> None:
+        ...
 
     def store(self: RandomAccessDeckStorage, reservation_id: str) -> li.LayoutItemBase:
         if reservation_id not in self.reservations:
@@ -75,7 +76,8 @@ class RandomAccessDeckStorage(StorageDeviceBase):
     def prepare_retrieve(
         self: RandomAccessDeckStorage,
         reservation_id: str,
-    ) -> None: ...
+    ) -> None:
+        ...
 
     def retrieve(
         self: RandomAccessDeckStorage,

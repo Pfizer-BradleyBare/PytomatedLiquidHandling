@@ -109,7 +109,8 @@ class HamiltonInternalPlateGripper(TransportBase):
     def get_time(
         self: HamiltonInternalPlateGripper,
         options: GetPlaceOptions,
-    ) -> float: ...
+    ) -> float:
+        ...
 
     def place(
         self: HamiltonInternalPlateGripper,
@@ -170,4 +171,5 @@ class HamiltonInternalPlateGripper(TransportBase):
     def place_time(
         self: HamiltonInternalPlateGripper,
         options: GetPlaceOptions,
-    ) -> float: ...
+    ) -> float:
+        ...

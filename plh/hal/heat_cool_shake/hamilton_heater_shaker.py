@@ -161,7 +161,8 @@ class HamiltonHeaterShaker(HeatCoolShakeBase):
     def assert_rpm(
         self: HamiltonHeaterShaker,
         rpm: float,
-    ) -> None: ...
+    ) -> None:
+        ...
 
     def set_shaking_speed(
         self: HamiltonHeaterShaker,

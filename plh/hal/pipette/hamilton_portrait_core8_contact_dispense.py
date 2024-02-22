@@ -27,9 +27,11 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
 
     active_channels: list[Literal[1, 2, 3, 4, 5, 6, 7, 8]]
 
-    def initialize(self: HamiltonPortraitCORE8ContactDispense) -> None: ...
+    def initialize(self: HamiltonPortraitCORE8ContactDispense) -> None:
+        ...
 
-    def deinitialize(self: HamiltonPortraitCORE8ContactDispense) -> None: ...
+    def deinitialize(self: HamiltonPortraitCORE8ContactDispense) -> None:
+        ...
 
     def _pickup(
         self: HamiltonPortraitCORE8ContactDispense,
@@ -457,6 +459,8 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                     for index, (tip, option) in enumerate(channel_group)
                 ],
             )
+
+            channel_group
 
     def transfer_time(
         self: HamiltonPortraitCORE8ContactDispense,

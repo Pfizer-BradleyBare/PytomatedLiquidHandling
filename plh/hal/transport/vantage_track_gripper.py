@@ -118,7 +118,8 @@ class VantageTrackGripper(TransportBase):
     def get_time(
         self: VantageTrackGripper,
         options: GetPlaceOptions,
-    ) -> float: ...
+    ) -> float:
+        ...
 
     def place(
         self: VantageTrackGripper,
@@ -182,4 +183,5 @@ class VantageTrackGripper(TransportBase):
     def place_time(
         self: VantageTrackGripper,
         options: GetPlaceOptions,
-    ) -> float: ...
+    ) -> float:
+        ...

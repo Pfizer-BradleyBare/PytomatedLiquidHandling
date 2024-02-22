@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Generic, TypeVar
 
-T = TypeVar("T",bound="LiquidPropertyBase")
+T = TypeVar("T", bound="LiquidPropertyBase")
+
 
 class LiquidPropertyBase(Enum):
     """Base enum for defining liquid properties. All items should be auto()."""
@@ -18,11 +19,15 @@ class LiquidPropertyBase(Enum):
         if len(property_volumes) == 0:
             raise ValueError("List must contain at least 1 item.")
 
-        if not all(isinstance(item.property_weight.property, cls) for item in property_volumes):
+        if not all(
+            isinstance(item.property_weight.property, cls) for item in property_volumes
+        ):
             msg = "All property values must be from the same property."
             raise ValueError(msg)
 
-        total_volume = sum(property_volume.volume for property_volume in property_volumes)
+        total_volume = sum(
+            property_volume.volume for property_volume in property_volumes
+        )
 
         property_contributions = []
 
@@ -106,7 +111,6 @@ class PropertyWeight(Generic[T]):
 
     weight: int = 1
     """The weight of this part in a solution composition."""
-
 
 
 @dataclass(frozen=True)
