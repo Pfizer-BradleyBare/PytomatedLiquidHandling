@@ -82,12 +82,10 @@ class Layout(ABC):
         ...
 
     @abstractmethod
-    def _get_columnwise_position_id(self: Layout, position: str) -> str:
-        ...
+    def _get_columnwise_position_id(self: Layout, position: str) -> str: ...
 
     @abstractmethod
-    def _get_rowwise_position_id(self: Layout, position: str) -> str:
-        ...
+    def _get_rowwise_position_id(self: Layout, position: str) -> str: ...
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -99,7 +97,10 @@ class NumericLayout(Layout):
 
     def sort_positions(self: NumericLayout, positions: list[str | int]) -> list[str]:
         """Sorts by number."""
-        return sorted([self.get_position_id(pos) for pos in positions])
+        return [
+            str(pos)
+            for pos in sorted([int(self.get_position_id(pos)) for pos in positions])
+        ]
 
     def group_positions_columnwise(
         self: NumericLayout,
