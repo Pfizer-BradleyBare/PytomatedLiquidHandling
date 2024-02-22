@@ -1,13 +1,8 @@
 from __future__ import annotations
 
-from collections import defaultdict
-
-from plh.api.deck.container import Well
-from plh.api.deck.loader import loaded_wells
-from plh.hal import (
-    deck_location,
-)
-from plh.hal import layout_item as li
+from plh.api.container import Well
+from plh.api.load import LoadedLabware, loaded_labware_tracker, well_assignment_tracker
+from plh.hal import deck_location, layout_item
 
 from .layout_item_transport import layout_item_transport
 
@@ -16,15 +11,23 @@ def well_transport(
     wells: list[Well],
     deck_locations: list[deck_location.DeckLocationBase],
 ) -> None:
-    layout_items: dict[li.LayoutItemBase, list[Well]] = defaultdict(list)
 
-    for well in wells:
-        for layout_item_info in loaded_wells[well]:
-            layout_items[layout_item_info[0]].append(well)
-    # multiple wells can be in a single layout item. Let's get the unique ones.
-    # Some layout items may already be in an acceptable location. Skip those.
+    loaded_items_to_move: list[LoadedLabware] = list(
+        {
+            loaded_labware
+            for loaded_labware in sum(
+                [well_assignment_tracker[well] for well in wells],
+                [],
+            )
+            if loaded_labware.layout_item.deck_location not in deck_locations
+        },
+    )
+    # The items we need to move are the ones that are NOT already in valid deck_locatins.
+    # Only unique.
 
-    used_deck_locations = [layout_item.deck_location for layout_item in layout_items]
+    used_deck_locations = [
+        layout_item.deck_location for layout_item in loaded_labware_tracker
+    ]
 
     possible_deck_locations = [
         deck_location
@@ -32,30 +35,32 @@ def well_transport(
         if deck_location not in used_deck_locations
     ]
 
-    if len(possible_deck_locations) < len(layout_items):
+    if len(possible_deck_locations) < len(loaded_items_to_move):
         raise RuntimeError(
             "There are not enough free deck locations to transport this container.",
         )
 
-    possible_layout_items = [
-        layout_item
-        for layout_item in li.devices.values()
-        if layout_item.deck_location in possible_deck_locations
-    ]
+    possible_layout_items = sorted(
+        [
+            layout_item
+            for layout_item in layout_item.devices.values()
+            if layout_item.deck_location in possible_deck_locations
+        ],
+        key=lambda x: x.deck_location.identifier,
+    )
 
-    for (source, wells), destination in zip(
-        layout_items.items(),
-        possible_layout_items,
-    ):
-        layout_item_transport(source, destination)
-
-        for well in wells:
-            loaded_wells[well] = [
-                (
-                    (destination, layout_item_info[1])
-                    if layout_item_info[0] is source
-                    else layout_item_info
+    transport_assignments: list[tuple[LoadedLabware, layout_item.LayoutItemBase]] = []
+    for loaded_item_to_move in loaded_items_to_move:
+        for possible_layout_item in possible_layout_items:
+            if loaded_item_to_move.layout_item.labware == possible_layout_item.labware:
+                transport_assignments.append(
+                    (loaded_item_to_move, possible_layout_item),
                 )
-                for layout_item_info in loaded_wells[well]
-            ]
+                possible_layout_items.remove(possible_layout_item)
+                break
+
+    for source_loaded_item, destination in transport_assignments:
+        layout_item_transport(source_loaded_item.layout_item, destination)
+
+        source_loaded_item.layout_item = destination
         # Change the tracked location of this layout item.
