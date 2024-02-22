@@ -49,15 +49,20 @@ def well_transport(
         key=lambda x: x.deck_location.identifier,
     )
 
+    assigned_deck_locations: list[deck_location.DeckLocationBase] = []
     transport_assignments: list[tuple[LoadedLabware, layout_item.LayoutItemBase]] = []
     for loaded_item_to_move in loaded_items_to_move:
         for possible_layout_item in possible_layout_items:
-            if loaded_item_to_move.layout_item.labware == possible_layout_item.labware:
+            if (
+                loaded_item_to_move.layout_item.labware == possible_layout_item.labware
+                and possible_layout_item.deck_location not in assigned_deck_locations
+            ):
                 transport_assignments.append(
                     (loaded_item_to_move, possible_layout_item),
                 )
-                possible_layout_items.remove(possible_layout_item)
+                assigned_deck_locations.append(possible_layout_item.deck_location)
                 break
+    # For each item we need to move we need to find the right possible layout item.
 
     for source_loaded_item, destination in transport_assignments:
         layout_item_transport(source_loaded_item.layout_item, destination)
