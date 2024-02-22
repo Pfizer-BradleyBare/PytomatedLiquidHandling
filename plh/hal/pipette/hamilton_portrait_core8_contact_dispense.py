@@ -79,18 +79,19 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                             ),
                         )
                     except IndexError as e:
-                        self._eject(
-                            *[
-                                (
-                                    pickup_key,
+                        if len(successful_pickups) != 0:
+                            self._eject(
+                                *[
                                     (
-                                        successful_pickups[pickup_key][0],
-                                        successful_pickups[pickup_key][1],
-                                    ),
-                                )
-                                for pickup_key in successful_pickups
-                            ],
-                        )
+                                        pickup_key,
+                                        (
+                                            successful_pickups[pickup_key][0],
+                                            successful_pickups[pickup_key][1],
+                                        ),
+                                    )
+                                    for pickup_key in successful_pickups
+                                ],
+                            )
 
                         raise ExceptionGroup(
                             "Errors during tip pickup",
