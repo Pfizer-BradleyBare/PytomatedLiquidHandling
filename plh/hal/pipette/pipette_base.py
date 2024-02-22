@@ -201,13 +201,15 @@ class PipetteBase(Interface, HALDevice):
     def _aspirate(
         self: PipetteBase,
         options: list[_AspirateDispenseOptions],
-    ) -> None: ...
+    ) -> None:
+        ...
 
     @abstractmethod
     def _dispense(
         self: PipetteBase,
         options: list[_AspirateDispenseOptions],
-    ) -> None: ...
+    ) -> None:
+        ...
 
     def assert_options(
         self: PipetteBase,
@@ -255,7 +257,9 @@ class PipetteBase(Interface, HALDevice):
             # Check liquid class compatibility
 
     @abstractmethod
-    def transfer(self: PipetteBase, options: list[TransferOptions]) -> None: ...
+    def transfer(self: PipetteBase, options: list[TransferOptions]) -> None:
+        ...
 
     @abstractmethod
-    def transfer_time(self: PipetteBase, options: list[TransferOptions]) -> float: ...
+    def transfer_time(self: PipetteBase, options: list[TransferOptions]) -> float:
+        ...

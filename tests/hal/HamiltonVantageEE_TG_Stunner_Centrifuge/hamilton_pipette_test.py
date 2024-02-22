@@ -9,7 +9,6 @@ from plh import hal
 logger.enable("plh")
 
 
-
 hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
 
 
@@ -36,7 +35,7 @@ pipette.transfer(
             source_mix_cycles=0,
             source_liquid_class_category="Test",
             destination_layout_item=plate,
-            destination_position=int(i/8) + 1,
+            destination_position=int(i / 8) + 1,
             destination_well_volume=200,
             destination_mix_cycles=0,
             destination_liquid_class_category="Test",

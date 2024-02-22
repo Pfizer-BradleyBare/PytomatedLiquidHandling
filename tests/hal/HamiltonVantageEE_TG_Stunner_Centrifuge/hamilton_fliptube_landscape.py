@@ -41,7 +41,9 @@ open_close_options.append(
 )
 
 closeable_container_device.assert_supported_labware([flip_tube_plate.labware])
-closeable_container_device.assert_supported_deck_locations([flip_tube_plate.deck_location])
+closeable_container_device.assert_supported_deck_locations(
+    [flip_tube_plate.deck_location]
+)
 closeable_container_device.open(open_close_options)
 closeable_container_device.close(open_close_options)
 

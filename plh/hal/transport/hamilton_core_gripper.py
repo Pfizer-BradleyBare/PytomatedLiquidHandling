@@ -27,7 +27,8 @@ class HamiltonCOREGripper(TransportBase):
     """Labware id to pick up the gripper from the deck."""
 
     @dataclasses.dataclass(kw_only=True)
-    class GetOptions(TransportBase.GetOptions): ...
+    class GetOptions(TransportBase.GetOptions):
+        ...
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
@@ -99,7 +100,8 @@ class HamiltonCOREGripper(TransportBase):
     def get_time(
         self: HamiltonCOREGripper,
         options: GetPlaceOptions,
-    ) -> float: ...
+    ) -> float:
+        ...
 
     def place(
         self: HamiltonCOREGripper,
@@ -164,4 +166,5 @@ class HamiltonCOREGripper(TransportBase):
     def place_time(
         self: HamiltonCOREGripper,
         options: GetPlaceOptions,
-    ) -> float: ...
+    ) -> float:
+        ...

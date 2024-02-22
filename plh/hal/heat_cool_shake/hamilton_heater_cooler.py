@@ -61,7 +61,8 @@ class HamiltonHeaterCooler(HeatCoolShakeBase):
     def assert_temperature(
         self: HamiltonHeaterCooler,
         temperature: float,
-    ) -> None: ...
+    ) -> None:
+        ...
 
     def set_temperature(
         self: HamiltonHeaterCooler,

@@ -52,7 +52,8 @@ class HeatCoolShakeBase(Interface, HALDevice):
         raise RuntimeError(msg)
 
     @abstractmethod
-    def assert_temperature(self, temperature: float) -> None: ...
+    def assert_temperature(self, temperature: float) -> None:
+        ...
 
     @abstractmethod
     def set_temperature(self: HeatCoolShakeBase, temperature: float) -> None:
@@ -76,7 +77,8 @@ class HeatCoolShakeBase(Interface, HALDevice):
     def assert_rpm(
         self: HeatCoolShakeBase,
         rpm: float,
-    ) -> None: ...
+    ) -> None:
+        ...
 
     @abstractmethod
     def set_shaking_speed(
