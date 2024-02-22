@@ -38,6 +38,9 @@ class HALDevice:
     def __hash__(self: HALDevice) -> int:
         return hash(type(self).__name__ + self.identifier)
 
+    def __str__(self) -> str:
+        return self.identifier
+
     def __init_subclass__(cls: type[HALDevice]) -> None:
         cls.hal_devices[cls.__name__] = cls
 
