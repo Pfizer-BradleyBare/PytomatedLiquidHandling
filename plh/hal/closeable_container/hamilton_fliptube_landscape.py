@@ -11,7 +11,6 @@ from plh.hal import backend, layout_item
 
 from .closeable_container_base import *
 from .closeable_container_base import CloseableContainerBase
-from .options import OpenCloseOptions
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
@@ -43,14 +42,16 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
 
     def open(
         self: HamiltonFlipTubeLandscape,
-        options: list[OpenCloseOptions],
+        *args: tuple[layout_item.LayoutItemBase, str | int],
     ) -> None:
         """Hamilton FlipTube tool supports a max of 4 tools in use simultaneously in the driver.
         Thus, the function will sort the desired open positions then creates groups of 4 to open.
         """
-        self.assert_supported_labware(*[item.layout_item.labware for item in options])
+        self.assert_supported_labware(
+            *[layout_item.labware for layout_item, position in args],
+        )
         self.assert_supported_deck_locations(
-            *[item.layout_item.deck_location for item in options],
+            *[layout_item.deck_location for layout_item, position in args],
         )
 
         command = FlipTubeTool.ToolsPickUp.Command(
@@ -68,13 +69,13 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         # Pickup
 
         layout_item_keys: dict[str, layout_item.LayoutItemBase] = {
-            opt.layout_item.identifier: opt.layout_item for opt in options
+            layout_item.identifier: layout_item for layout_item, position in args
         }
         layout_item_positions = DefaultDict(list)
         # Open
 
-        for opt in options:
-            layout_item_positions[opt.layout_item.identifier].append(opt.position)
+        for layout_item, position in args:
+            layout_item_positions[layout_item.identifier].append(position)
         # Collect positions organized by layout item
 
         for key in layout_item_positions:
@@ -115,25 +116,29 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
 
     def open_time(
         self: HamiltonFlipTubeLandscape,
-        options: list[OpenCloseOptions],
+        *args: tuple[layout_item.LayoutItemBase, str | int],
     ) -> float:
         """TODO"""
-        self.assert_supported_labware(*[item.layout_item.labware for item in options])
+        self.assert_supported_labware(
+            *[layout_item.labware for layout_item, position in args],
+        )
         self.assert_supported_deck_locations(
-            *[item.layout_item.deck_location for item in options],
+            *[layout_item.deck_location for layout_item, position in args],
         )
         return 0
 
     def close(
         self: HamiltonFlipTubeLandscape,
-        options: list[OpenCloseOptions],
+        *args: tuple[layout_item.LayoutItemBase, str | int],
     ) -> None:
         """Hamilton FlipTube tool supports a max of 4 tools in use simultaneously in the driver.
         Thus, the function will sort the desired open positions then creates groups of 4 to open.
         """
-        self.assert_supported_labware(*[item.layout_item.labware for item in options])
+        self.assert_supported_labware(
+            *[layout_item.labware for layout_item, position in args],
+        )
         self.assert_supported_deck_locations(
-            *[item.layout_item.deck_location for item in options],
+            *[layout_item.deck_location for layout_item, position in args],
         )
 
         command = FlipTubeTool.ToolsPickUp.Command(
@@ -151,13 +156,13 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         # Pickup
 
         layout_item_keys: dict[str, layout_item.LayoutItemBase] = {
-            opt.layout_item.identifier: opt.layout_item for opt in options
+            layout_item.identifier: layout_item for layout_item, position in args
         }
         layout_item_positions = DefaultDict(list)
         # close
 
-        for opt in options:
-            layout_item_positions[opt.layout_item.identifier].append(opt.position)
+        for layout_item, position in args:
+            layout_item_positions[layout_item.identifier].append(position)
         # Collect positions organized by layout item
 
         for key in layout_item_positions:
@@ -198,11 +203,13 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
 
     def close_time(
         self: HamiltonFlipTubeLandscape,
-        options: list[OpenCloseOptions],
+        *args: tuple[layout_item.LayoutItemBase, str | int],
     ) -> float:
         """TODO"""
-        self.assert_supported_labware(*[item.layout_item.labware for item in options])
+        self.assert_supported_labware(
+            *[layout_item.labware for layout_item, position in args],
+        )
         self.assert_supported_deck_locations(
-            *[item.layout_item.deck_location for item in options],
+            *[layout_item.deck_location for layout_item, position in args],
         )
         return 0

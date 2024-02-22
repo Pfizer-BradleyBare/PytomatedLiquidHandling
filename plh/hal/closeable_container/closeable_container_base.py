@@ -6,10 +6,8 @@ from typing import Annotated
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from plh.hal import deck_location, labware
+from plh.hal import deck_location, labware, layout_item
 from plh.hal.tools import HALDevice, Interface
-
-from .options import OpenCloseOptions
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
@@ -61,23 +59,29 @@ class CloseableContainerBase(Interface, HALDevice):
             raise ExceptionGroup(msg, exceptions)
 
     @abstractmethod
-    def open(self: CloseableContainerBase, options: list[OpenCloseOptions]) -> None:
+    def open(
+        self: CloseableContainerBase,
+        *args: tuple[layout_item.LayoutItemBase, str | int],
+    ) -> None:
         """Initiates an open event dependent on ```OpenCloseOptions```."""
 
     @abstractmethod
     def open_time(
         self: CloseableContainerBase,
-        options: list[OpenCloseOptions],
+        *args: tuple[layout_item.LayoutItemBase, str | int],
     ) -> float:
         """Calculates the time to open dependent on ```OpenCloseOptions```."""
 
     @abstractmethod
-    def close(self: CloseableContainerBase, options: list[OpenCloseOptions]) -> None:
+    def close(
+        self: CloseableContainerBase,
+        *args: tuple[layout_item.LayoutItemBase, str | int],
+    ) -> None:
         """Initiates an close event dependent on ```OpenCloseOptions```."""
 
     @abstractmethod
     def close_time(
         self: CloseableContainerBase,
-        options: list[OpenCloseOptions],
+        *args: tuple[layout_item.LayoutItemBase, str | int],
     ) -> float:
         """Calculates the time to close dependent on ```OpenCloseOptions```."""

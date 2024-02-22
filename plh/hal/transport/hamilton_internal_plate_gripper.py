@@ -11,7 +11,6 @@ from plh.driver.HAMILTON.ML_STAR import iSwap
 from plh.hal import backend, deck_location
 
 from .exceptions import GetHardwareError, PlaceHardwareError
-from .options import GetPlaceOptions
 from .transport_base import *
 from .transport_base import TransportBase
 
@@ -43,34 +42,32 @@ class HamiltonInternalPlateGripper(TransportBase):
             compare=True,
         )
 
-    def get(
+    def transport(
         self: HamiltonInternalPlateGripper,
-        options: GetPlaceOptions,
+        source: layout_item.LayoutItemBase,
+        destination: layout_item.LayoutItemBase,
     ) -> None:
         self.assert_supported_labware(
-            options.source_layout_item.labware,
-            options.destination_layout_item.labware,
+            source.labware,
+            destination.labware,
         )
         self.assert_supported_deck_locations(
-            options.source_layout_item.deck_location,
-            options.destination_layout_item.deck_location,
+            source.deck_location,
+            destination.deck_location,
         )
         self.assert_compatible_deck_locations(
-            options.source_layout_item.deck_location,
-            options.destination_layout_item.deck_location,
+            source.deck_location,
+            destination.deck_location,
         )
-
-        source_layout_item = options.source_layout_item
-        destination_layout_item = options.destination_layout_item
 
         compatible_configs = (
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                source_layout_item.deck_location,
-                destination_layout_item.deck_location,
+                source.deck_location,
+                destination.deck_location,
             )[0]
         )
 
-        labware = source_layout_item.labware
+        labware = source.labware
 
         get_options = cast(
             HamiltonInternalPlateGripper.GetOptions,
@@ -79,7 +76,7 @@ class HamiltonInternalPlateGripper(TransportBase):
 
         command = iSwap.GetPlate.Command(
             options=iSwap.GetPlate.Options(
-                LabwareID=source_layout_item.labware_id,
+                LabwareID=source.labware_id,
                 GripWidth=labware.dimensions.y_length - labware.transport_offsets.close,
                 OpenWidth=labware.dimensions.y_length + labware.transport_offsets.open,
                 GripHeight=labware.transport_offsets.top,
@@ -99,40 +96,8 @@ class HamiltonInternalPlateGripper(TransportBase):
         except* iSwap.GetPlate.exceptions.HardwareError as e:
             raise ExceptionGroup(
                 "Exception",
-                [GetHardwareError(self, source_layout_item)],
+                [GetHardwareError(self, source)],
             ) from e
-
-    def get_time(
-        self: HamiltonInternalPlateGripper,
-        options: GetPlaceOptions,
-    ) -> float: ...
-
-    def place(
-        self: HamiltonInternalPlateGripper,
-        options: GetPlaceOptions,
-    ) -> None:
-        self.assert_supported_labware(
-            options.source_layout_item.labware,
-            options.destination_layout_item.labware,
-        )
-        self.assert_supported_deck_locations(
-            options.source_layout_item.deck_location,
-            options.destination_layout_item.deck_location,
-        )
-        self.assert_compatible_deck_locations(
-            options.source_layout_item.deck_location,
-            options.destination_layout_item.deck_location,
-        )
-
-        source_layout_item = options.source_layout_item
-        destination_layout_item = options.destination_layout_item
-
-        compatible_configs = (
-            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                source_layout_item.deck_location,
-                destination_layout_item.deck_location,
-            )[0]
-        )
 
         place_options = cast(
             HamiltonInternalPlateGripper.PlaceOptions,
@@ -141,7 +106,7 @@ class HamiltonInternalPlateGripper(TransportBase):
 
         command = iSwap.PlacePlate.Command(
             options=iSwap.PlacePlate.Options(
-                LabwareID=destination_layout_item.labware_id,
+                LabwareID=destination.labware_id,
                 Movement=place_options.Movement,
                 RetractDistance=place_options.RetractDistance,
                 LiftupHeight=place_options.LiftupHeight,
@@ -156,10 +121,11 @@ class HamiltonInternalPlateGripper(TransportBase):
         except* iSwap.PlacePlate.exceptions.HardwareError as e:
             raise ExceptionGroup(
                 "Exception",
-                [PlaceHardwareError(self, destination_layout_item)],
+                [PlaceHardwareError(self, destination)],
             ) from e
 
-    def place_time(
-        self: HamiltonInternalPlateGripper,
-        options: GetPlaceOptions,
-    ) -> float: ...
+    def transport_time(
+        self: TransportBase,
+        source: layout_item.LayoutItemBase,
+        destination: layout_item.LayoutItemBase,
+    ) -> None: ...

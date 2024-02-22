@@ -11,7 +11,6 @@ from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.hal import backend, deck_location
 from plh.hal.exceptions import CriticalHALError
 
-from .options import GetPlaceOptions
 from .transport_base import *
 from .transport_base import TransportBase
 
@@ -47,34 +46,33 @@ class VantageTrackGripper(TransportBase):
             )
         )
 
-    def get(
-        self: VantageTrackGripper,
-        options: GetPlaceOptions,
+    def transport(
+        self: TransportBase,
+        source: layout_item.LayoutItemBase,
+        destination: layout_item.LayoutItemBase,
     ) -> None:
+
         self.assert_supported_labware(
-            options.source_layout_item.labware,
-            options.destination_layout_item.labware,
+            source.labware,
+            destination.labware,
         )
         self.assert_supported_deck_locations(
-            options.source_layout_item.deck_location,
-            options.destination_layout_item.deck_location,
+            source.deck_location,
+            destination.deck_location,
         )
         self.assert_compatible_deck_locations(
-            options.source_layout_item.deck_location,
-            options.destination_layout_item.deck_location,
+            source.deck_location,
+            destination.deck_location,
         )
-
-        source_layout_item = options.source_layout_item
-        destination_layout_item = options.destination_layout_item
 
         compatible_configs = (
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                source_layout_item.deck_location,
-                destination_layout_item.deck_location,
+                source.deck_location,
+                destination.deck_location,
             )[0]
         )
 
-        labware = source_layout_item.labware
+        labware = source.labware
 
         get_options = cast(
             VantageTrackGripper.GetOptions,
@@ -111,39 +109,7 @@ class VantageTrackGripper(TransportBase):
         except* TrackGripper.GripPlateFromTaughtPosition.exceptions.HardwareError as e:
             raise ExceptionGroup("Exception", [CriticalHALError(self)]) from e
 
-    def get_time(
-        self: VantageTrackGripper,
-        options: GetPlaceOptions,
-    ) -> float: ...
-
-    def place(
-        self: VantageTrackGripper,
-        options: GetPlaceOptions,
-    ) -> None:
-        self.assert_supported_labware(
-            options.source_layout_item.labware,
-            options.destination_layout_item.labware,
-        )
-        self.assert_supported_deck_locations(
-            options.source_layout_item.deck_location,
-            options.destination_layout_item.deck_location,
-        )
-        self.assert_compatible_deck_locations(
-            options.source_layout_item.deck_location,
-            options.destination_layout_item.deck_location,
-        )
-
-        source_layout_item = options.source_layout_item
-        destination_layout_item = options.destination_layout_item
-
-        compatible_configs = (
-            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                source_layout_item.deck_location,
-                destination_layout_item.deck_location,
-            )[0]
-        )
-
-        labware = destination_layout_item.labware
+        labware = destination.labware
 
         place_options = cast(
             VantageTrackGripper.PlaceOptions,
@@ -171,7 +137,8 @@ class VantageTrackGripper(TransportBase):
         except* TrackGripper.PlacePlateToTaughtPosition.exceptions.HardwareError as e:
             raise ExceptionGroup("Exception", [CriticalHALError(self)]) from e
 
-    def place_time(
-        self: VantageTrackGripper,
-        options: GetPlaceOptions,
-    ) -> float: ...
+    def transport_time(
+        self: TransportBase,
+        source: layout_item.LayoutItemBase,
+        destination: layout_item.LayoutItemBase,
+    ) -> None: ...

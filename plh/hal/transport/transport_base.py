@@ -6,11 +6,10 @@ from typing import Annotated
 from pydantic import Field, dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from plh.hal import deck_location, labware
+from plh.hal import deck_location, labware, layout_item
 from plh.hal.tools import HALDevice, Interface
 
 from .exceptions import WrongTransportDeviceError
-from .options import GetPlaceOptions
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
@@ -119,33 +118,19 @@ class TransportBase(Interface, HALDevice):
             )
 
     @abstractmethod
-    def get(
+    def transport(
         self: TransportBase,
-        options: GetPlaceOptions,
+        source: layout_item.LayoutItemBase,
+        destination: layout_item.LayoutItemBase,
     ) -> None:
         """Gets a layout item from the deck."""
         ...
 
     @abstractmethod
-    def get_time(
+    def transport_time(
         self: TransportBase,
-        options: GetPlaceOptions,
-    ) -> float:
-        """Calculates time required to get a layout item from the deck."""
-        ...
-
-    @abstractmethod
-    def place(
-        self: TransportBase,
-        options: GetPlaceOptions,
+        source: layout_item.LayoutItemBase,
+        destination: layout_item.LayoutItemBase,
     ) -> None:
-        """Places a layout item on the deck."""
-        ...
-
-    @abstractmethod
-    def place_time(
-        self: TransportBase,
-        options: GetPlaceOptions,
-    ) -> float:
-        """Calculates time required to place a layout item on the deck."""
+        """Gets a layout item from the deck."""
         ...

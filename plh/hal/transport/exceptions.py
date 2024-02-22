@@ -6,8 +6,6 @@ from typing import TYPE_CHECKING
 from plh.hal import deck_location, layout_item
 from plh.hal.exceptions import HALError, UserInteractionRequiredError
 
-from .options import GetPlaceOptions
-
 if TYPE_CHECKING:
     from .transport_base import TransportBase
 
@@ -61,9 +59,5 @@ class PlaceHardwareError(TransportHardwareError):
         """Retries the place operation. We cannot leave a plate picked up.
         NOTE: Due to the nature of the error. The source and destination are now the same.
         """
-        self.error_device.place(
-            GetPlaceOptions(
-                source_layout_item=self.layout_item,
-                destination_layout_item=self.layout_item,
-            ),
-        )
+
+        # TODO

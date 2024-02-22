@@ -8,10 +8,9 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uLCOREGrip
-from plh.hal import backend, deck_location
+from plh.hal import backend, deck_location, layout_item
 
 from .exceptions import GetHardwareError, PlaceHardwareError
-from .options import GetPlaceOptions
 from .transport_base import *
 from .transport_base import TransportBase
 
@@ -35,31 +34,38 @@ class HamiltonCOREGripper(TransportBase):
             compare=False,
         )
 
-    def get(
+    def transport(
         self: HamiltonCOREGripper,
-        options: GetPlaceOptions,
+        source: layout_item.LayoutItemBase,
+        destination: layout_item.LayoutItemBase,
     ) -> None:
+
         self.assert_supported_labware(
-            options.source_layout_item.labware,
-            options.destination_layout_item.labware,
+            source.labware,
+            destination.labware,
         )
         self.assert_supported_deck_locations(
-            options.source_layout_item.deck_location,
-            options.destination_layout_item.deck_location,
+            source.deck_location,
+            destination.deck_location,
         )
         self.assert_compatible_deck_locations(
-            options.source_layout_item.deck_location,
-            options.destination_layout_item.deck_location,
+            source.deck_location,
+            destination.deck_location,
         )
 
-        source_layout_item = options.source_layout_item
+        compatible_configs = (
+            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+                source.deck_location,
+                destination.deck_location,
+            )[0]
+        )
 
-        labware = source_layout_item.labware
+        labware = source.labware
 
         command = Channel1000uLCOREGrip.GetPlate.Command(
             options=Channel1000uLCOREGrip.GetPlate.Options(
                 GripperLabwareID=self.gripper_labware_id,
-                PlateLabwareID=source_layout_item.labware_id,
+                PlateLabwareID=source.labware_id,
                 GripWidth=labware.dimensions.y_length - labware.transport_offsets.close,
                 OpenWidth=labware.dimensions.y_length + labware.transport_offsets.open,
                 GripHeight=labware.transport_offsets.top,
@@ -89,40 +95,8 @@ class HamiltonCOREGripper(TransportBase):
             except* Channel1000uLCOREGrip.GetPlate.exceptions.HardwareError as e:
                 raise ExceptionGroup(
                     "Exceptions",
-                    [GetHardwareError(self, source_layout_item)],
+                    [GetHardwareError(self, source)],
                 ) from e
-
-    def get_time(
-        self: HamiltonCOREGripper,
-        options: GetPlaceOptions,
-    ) -> float: ...
-
-    def place(
-        self: HamiltonCOREGripper,
-        options: GetPlaceOptions,
-    ) -> None:
-        self.assert_supported_labware(
-            options.source_layout_item.labware,
-            options.destination_layout_item.labware,
-        )
-        self.assert_supported_deck_locations(
-            options.source_layout_item.deck_location,
-            options.destination_layout_item.deck_location,
-        )
-        self.assert_compatible_deck_locations(
-            options.source_layout_item.deck_location,
-            options.destination_layout_item.deck_location,
-        )
-
-        source_layout_item = options.source_layout_item
-        destination_layout_item = options.destination_layout_item
-
-        compatible_configs = (
-            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                source_layout_item.deck_location,
-                destination_layout_item.deck_location,
-            )[0]
-        )
 
         place_options = cast(
             HamiltonCOREGripper.PlaceOptions,
@@ -131,7 +105,7 @@ class HamiltonCOREGripper(TransportBase):
 
         command = Channel1000uLCOREGrip.PlacePlate.Command(
             options=Channel1000uLCOREGrip.PlacePlate.Options(
-                LabwareID=destination_layout_item.labware_id,
+                LabwareID=destination.labware_id,
                 CheckPlateExists=place_options.CheckPlateExists,
                 EjectTool=Channel1000uLCOREGrip.PlacePlate.YesNoOptions(
                     int(self.last_transport_flag),
@@ -150,10 +124,11 @@ class HamiltonCOREGripper(TransportBase):
         except* Channel1000uLCOREGrip.PlacePlate.exceptions.HardwareError as e:
             raise ExceptionGroup(
                 "Exception",
-                [PlaceHardwareError(self, destination_layout_item)],
+                [PlaceHardwareError(self, destination)],
             ) from e
 
-    def place_time(
-        self: HamiltonCOREGripper,
-        options: GetPlaceOptions,
-    ) -> float: ...
+    def transport_time(
+        self: TransportBase,
+        source: layout_item.LayoutItemBase,
+        destination: layout_item.LayoutItemBase,
+    ) -> None: ...
