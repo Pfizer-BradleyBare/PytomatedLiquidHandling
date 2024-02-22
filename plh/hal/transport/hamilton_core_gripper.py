@@ -27,8 +27,7 @@ class HamiltonCOREGripper(TransportBase):
     """Labware id to pick up the gripper from the deck."""
 
     @dataclasses.dataclass(kw_only=True)
-    class GetOptions(TransportBase.GetOptions):
-        ...
+    class GetOptions(TransportBase.GetOptions): ...
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
@@ -41,16 +40,12 @@ class HamiltonCOREGripper(TransportBase):
         options: GetPlaceOptions,
     ) -> None:
         self.assert_supported_labware(
-            [
-                options.source_layout_item.labware,
-                options.destination_layout_item.labware,
-            ],
+            options.source_layout_item.labware,
+            options.destination_layout_item.labware,
         )
         self.assert_supported_deck_locations(
-            [
-                options.source_layout_item.deck_location,
-                options.destination_layout_item.deck_location,
-            ],
+            options.source_layout_item.deck_location,
+            options.destination_layout_item.deck_location,
         )
         self.assert_compatible_deck_locations(
             options.source_layout_item.deck_location,
@@ -100,24 +95,19 @@ class HamiltonCOREGripper(TransportBase):
     def get_time(
         self: HamiltonCOREGripper,
         options: GetPlaceOptions,
-    ) -> float:
-        ...
+    ) -> float: ...
 
     def place(
         self: HamiltonCOREGripper,
         options: GetPlaceOptions,
     ) -> None:
         self.assert_supported_labware(
-            [
-                options.source_layout_item.labware,
-                options.destination_layout_item.labware,
-            ],
+            options.source_layout_item.labware,
+            options.destination_layout_item.labware,
         )
         self.assert_supported_deck_locations(
-            [
-                options.source_layout_item.deck_location,
-                options.destination_layout_item.deck_location,
-            ],
+            options.source_layout_item.deck_location,
+            options.destination_layout_item.deck_location,
         )
         self.assert_compatible_deck_locations(
             options.source_layout_item.deck_location,
@@ -166,5 +156,4 @@ class HamiltonCOREGripper(TransportBase):
     def place_time(
         self: HamiltonCOREGripper,
         options: GetPlaceOptions,
-    ) -> float:
-        ...
+    ) -> float: ...

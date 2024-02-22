@@ -23,13 +23,13 @@ class HeatCoolShakeBase(Interface, HALDevice):
 
     def assert_supported_labware(
         self: HeatCoolShakeBase,
-        labwares: list[labware.LabwareBase],
+        *args: labware.LabwareBase,
     ) -> None:
         supported_labware = [item.labware for item in self.plates]
 
         exceptions = [
             labware.exceptions.LabwareNotSupportedError(self, item)
-            for item in labwares
+            for item in args
             if item not in supported_labware
         ]
 
@@ -42,7 +42,7 @@ class HeatCoolShakeBase(Interface, HALDevice):
         labware: labware.LabwareBase,
     ) -> li.CoverablePlate | li.Plate:
         """Gets a layout item on the heat_cool_shake device that is compatible with your current layout item."""
-        self.assert_supported_labware([labware])
+        self.assert_supported_labware(labware)
 
         for supported_layout_item in self.plates:
             if supported_layout_item.labware == labware:
@@ -52,8 +52,7 @@ class HeatCoolShakeBase(Interface, HALDevice):
         raise RuntimeError(msg)
 
     @abstractmethod
-    def assert_temperature(self, temperature: float) -> None:
-        ...
+    def assert_temperature(self, temperature: float) -> None: ...
 
     @abstractmethod
     def set_temperature(self: HeatCoolShakeBase, temperature: float) -> None:
@@ -77,8 +76,7 @@ class HeatCoolShakeBase(Interface, HALDevice):
     def assert_rpm(
         self: HeatCoolShakeBase,
         rpm: float,
-    ) -> None:
-        ...
+    ) -> None: ...
 
     @abstractmethod
     def set_shaking_speed(

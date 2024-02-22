@@ -48,9 +48,9 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         """Hamilton FlipTube tool supports a max of 4 tools in use simultaneously in the driver.
         Thus, the function will sort the desired open positions then creates groups of 4 to open.
         """
-        self.assert_supported_labware([item.layout_item.labware for item in options])
+        self.assert_supported_labware(*[item.layout_item.labware for item in options])
         self.assert_supported_deck_locations(
-            [item.layout_item.deck_location for item in options],
+            *[item.layout_item.deck_location for item in options],
         )
 
         command = FlipTubeTool.ToolsPickUp.Command(
@@ -118,9 +118,9 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         options: list[OpenCloseOptions],
     ) -> float:
         """TODO"""
-        self.assert_supported_labware([item.layout_item.labware for item in options])
+        self.assert_supported_labware(*[item.layout_item.labware for item in options])
         self.assert_supported_deck_locations(
-            [item.layout_item.deck_location for item in options],
+            *[item.layout_item.deck_location for item in options],
         )
         return 0
 
@@ -131,9 +131,9 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         """Hamilton FlipTube tool supports a max of 4 tools in use simultaneously in the driver.
         Thus, the function will sort the desired open positions then creates groups of 4 to open.
         """
-        self.assert_supported_labware([item.layout_item.labware for item in options])
+        self.assert_supported_labware(*[item.layout_item.labware for item in options])
         self.assert_supported_deck_locations(
-            [item.layout_item.deck_location for item in options],
+            *[item.layout_item.deck_location for item in options],
         )
 
         command = FlipTubeTool.ToolsPickUp.Command(
@@ -201,8 +201,8 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         options: list[OpenCloseOptions],
     ) -> float:
         """TODO"""
-        self.assert_supported_labware([item.layout_item.labware for item in options])
+        self.assert_supported_labware(*[item.layout_item.labware for item in options])
         self.assert_supported_deck_locations(
-            [item.layout_item.deck_location for item in options],
+            *[item.layout_item.deck_location for item in options],
         )
         return 0

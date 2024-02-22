@@ -33,11 +33,12 @@ class CloseableContainerBase(Interface, HALDevice):
 
     def assert_supported_labware(
         self: CloseableContainerBase,
-        labwares: list[labware.LabwareBase],
+        *args: labware.LabwareBase,
     ) -> None:
+
         exceptions = [
             labware.exceptions.LabwareNotSupportedError(self, item)
-            for item in labwares
+            for item in args
             if item not in self.supported_labware
         ]
 
@@ -47,11 +48,11 @@ class CloseableContainerBase(Interface, HALDevice):
 
     def assert_supported_deck_locations(
         self: CloseableContainerBase,
-        deck_locations: list[deck_location.DeckLocationBase],
+        *args: deck_location.DeckLocationBase,
     ) -> None:
         exceptions = [
             deck_location.exceptions.DeckLocationNotSupportedError(self, item)
-            for item in deck_locations
+            for item in args
             if item not in self.supported_deck_locations
         ]
 

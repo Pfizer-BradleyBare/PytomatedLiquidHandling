@@ -52,11 +52,11 @@ class PipetteBase(Interface, HALDevice):
 
     def assert_supported_source_labware(
         self: PipetteBase,
-        labwares: list[labware.LabwareBase],
+        *args: labware.LabwareBase,
     ) -> None:
         exceptions = [
             labware.exceptions.LabwareNotSupportedError(self, item)
-            for item in labwares
+            for item in args
             if item not in self.supported_source_labware
         ]
 
@@ -66,11 +66,11 @@ class PipetteBase(Interface, HALDevice):
 
     def assert_supported_destination_labware(
         self: PipetteBase,
-        labwares: list[labware.LabwareBase],
+        *args: labware.LabwareBase,
     ) -> None:
         exceptions = [
             labware.exceptions.LabwareNotSupportedError(self, item)
-            for item in labwares
+            for item in args
             if item not in self.supported_destination_labware
         ]
 
@@ -80,11 +80,11 @@ class PipetteBase(Interface, HALDevice):
 
     def assert_supported_deck_locations(
         self: PipetteBase,
-        deck_locations: list[deck_location.DeckLocationBase],
+        *args: deck_location.DeckLocationBase,
     ) -> None:
         exceptions = [
             deck_location.exceptions.DeckLocationNotSupportedError(self, item)
-            for item in deck_locations
+            for item in args
             if item not in self.supported_deck_locations
         ]
 
@@ -94,7 +94,7 @@ class PipetteBase(Interface, HALDevice):
 
     def assert_supported_liquid_class_categories(
         self: PipetteBase,
-        category_name_volumes: list[tuple[str, float]],
+        *args: tuple[str, float],
     ) -> None:
         # TODO
         ...
@@ -201,15 +201,13 @@ class PipetteBase(Interface, HALDevice):
     def _aspirate(
         self: PipetteBase,
         options: list[_AspirateDispenseOptions],
-    ) -> None:
-        ...
+    ) -> None: ...
 
     @abstractmethod
     def _dispense(
         self: PipetteBase,
         options: list[_AspirateDispenseOptions],
-    ) -> None:
-        ...
+    ) -> None: ...
 
     def assert_options(
         self: PipetteBase,
@@ -257,9 +255,7 @@ class PipetteBase(Interface, HALDevice):
             # Check liquid class compatibility
 
     @abstractmethod
-    def transfer(self: PipetteBase, options: list[TransferOptions]) -> None:
-        ...
+    def transfer(self: PipetteBase, options: list[TransferOptions]) -> None: ...
 
     @abstractmethod
-    def transfer_time(self: PipetteBase, options: list[TransferOptions]) -> float:
-        ...
+    def transfer_time(self: PipetteBase, options: list[TransferOptions]) -> float: ...

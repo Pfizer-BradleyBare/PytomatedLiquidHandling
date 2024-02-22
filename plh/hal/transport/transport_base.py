@@ -55,11 +55,11 @@ class TransportBase(Interface, HALDevice):
 
     def assert_supported_labware(
         self: TransportBase,
-        labwares: list[labware.LabwareBase],
+        *args: labware.LabwareBase,
     ) -> None:
         exceptions = [
             labware.exceptions.LabwareNotSupportedError(self, item)
-            for item in labwares
+            for item in args
             if item not in self.supported_labware
         ]
 
@@ -69,12 +69,12 @@ class TransportBase(Interface, HALDevice):
 
     def assert_supported_deck_locations(
         self: TransportBase,
-        deck_locations: list[deck_location.DeckLocationBase],
+        *args: deck_location.DeckLocationBase,
     ) -> None:
 
         exceptions = []
 
-        for item in deck_locations:
+        for item in args:
             if not isinstance(item, deck_location.TransportableDeckLocation):
                 exceptions.append(
                     deck_location.exceptions.DeckLocationNotTransportableError(
@@ -102,7 +102,7 @@ class TransportBase(Interface, HALDevice):
         source: deck_location.DeckLocationBase,
         destination: deck_location.DeckLocationBase,
     ) -> None:
-        self.assert_supported_deck_locations([source, destination])
+        self.assert_supported_deck_locations(source, destination)
 
         compatible_configs = (
             deck_location.TransportableDeckLocation.get_compatible_transport_configs(

@@ -48,16 +48,12 @@ class HamiltonInternalPlateGripper(TransportBase):
         options: GetPlaceOptions,
     ) -> None:
         self.assert_supported_labware(
-            [
-                options.source_layout_item.labware,
-                options.destination_layout_item.labware,
-            ],
+            options.source_layout_item.labware,
+            options.destination_layout_item.labware,
         )
         self.assert_supported_deck_locations(
-            [
-                options.source_layout_item.deck_location,
-                options.destination_layout_item.deck_location,
-            ],
+            options.source_layout_item.deck_location,
+            options.destination_layout_item.deck_location,
         )
         self.assert_compatible_deck_locations(
             options.source_layout_item.deck_location,
@@ -109,24 +105,19 @@ class HamiltonInternalPlateGripper(TransportBase):
     def get_time(
         self: HamiltonInternalPlateGripper,
         options: GetPlaceOptions,
-    ) -> float:
-        ...
+    ) -> float: ...
 
     def place(
         self: HamiltonInternalPlateGripper,
         options: GetPlaceOptions,
     ) -> None:
         self.assert_supported_labware(
-            [
-                options.source_layout_item.labware,
-                options.destination_layout_item.labware,
-            ],
+            options.source_layout_item.labware,
+            options.destination_layout_item.labware,
         )
         self.assert_supported_deck_locations(
-            [
-                options.source_layout_item.deck_location,
-                options.destination_layout_item.deck_location,
-            ],
+            options.source_layout_item.deck_location,
+            options.destination_layout_item.deck_location,
         )
         self.assert_compatible_deck_locations(
             options.source_layout_item.deck_location,
@@ -171,5 +162,4 @@ class HamiltonInternalPlateGripper(TransportBase):
     def place_time(
         self: HamiltonInternalPlateGripper,
         options: GetPlaceOptions,
-    ) -> float:
-        ...
+    ) -> float: ...

@@ -21,11 +21,11 @@ class CarrierLoaderBase(HALDevice, Interface):
 
     def assert_supported_carriers(
         self: CarrierLoaderBase,
-        carriers: list[carrier.CarrierBase],
+        *args: carrier.CarrierBase,
     ) -> None:
         exceptions = [
             carrier.exceptions.CarrierNotSupportedError(self, item)
-            for item in carriers
+            for item in args
             if item not in self.supported_carriers
         ]
 

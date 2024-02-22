@@ -52,16 +52,12 @@ class VantageTrackGripper(TransportBase):
         options: GetPlaceOptions,
     ) -> None:
         self.assert_supported_labware(
-            [
-                options.source_layout_item.labware,
-                options.destination_layout_item.labware,
-            ],
+            options.source_layout_item.labware,
+            options.destination_layout_item.labware,
         )
         self.assert_supported_deck_locations(
-            [
-                options.source_layout_item.deck_location,
-                options.destination_layout_item.deck_location,
-            ],
+            options.source_layout_item.deck_location,
+            options.destination_layout_item.deck_location,
         )
         self.assert_compatible_deck_locations(
             options.source_layout_item.deck_location,
@@ -118,24 +114,19 @@ class VantageTrackGripper(TransportBase):
     def get_time(
         self: VantageTrackGripper,
         options: GetPlaceOptions,
-    ) -> float:
-        ...
+    ) -> float: ...
 
     def place(
         self: VantageTrackGripper,
         options: GetPlaceOptions,
     ) -> None:
         self.assert_supported_labware(
-            [
-                options.source_layout_item.labware,
-                options.destination_layout_item.labware,
-            ],
+            options.source_layout_item.labware,
+            options.destination_layout_item.labware,
         )
         self.assert_supported_deck_locations(
-            [
-                options.source_layout_item.deck_location,
-                options.destination_layout_item.deck_location,
-            ],
+            options.source_layout_item.deck_location,
+            options.destination_layout_item.deck_location,
         )
         self.assert_compatible_deck_locations(
             options.source_layout_item.deck_location,
@@ -183,5 +174,4 @@ class VantageTrackGripper(TransportBase):
     def place_time(
         self: VantageTrackGripper,
         options: GetPlaceOptions,
-    ) -> float:
-        ...
+    ) -> float: ...

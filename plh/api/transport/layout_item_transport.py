@@ -25,9 +25,13 @@ def layout_item_transport(
 
         device = compatible_configs[0][0].transport_device
 
-        device.assert_supported_deck_locations([source_deck_location,destination_deck_location])
-        device.assert_supported_labware([source.labware,destination.labware])
-        device.assert_compatible_deck_locations(source_deck_location,destination_deck_location)
+        device.assert_supported_deck_locations(
+            source_deck_location, destination_deck_location
+        )
+        device.assert_supported_labware(source.labware, destination.labware)
+        device.assert_compatible_deck_locations(
+            source_deck_location, destination_deck_location
+        )
 
         options = transport.GetPlaceOptions(
             source_layout_item=source,
