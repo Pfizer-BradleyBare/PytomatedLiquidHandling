@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from typing import Annotated
+from typing import Annotated, cast
 
 from pydantic import dataclasses, model_validator
 from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import EntryExit
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
-from plh.hal import backend, layout_item, transport
+from plh.hal import backend, layout_item
 
 from .tip_base import *
 from .tip_base import TipBase
@@ -71,7 +71,9 @@ class HamiltonEETipBase(TipBase):
             [tips_per_rack * stack.stack_count for stack in self.tip_stacks],
         )
 
-    def discard_teir(self: HamiltonEETipBase) -> list[transport.GetPlaceOptions]:
+    def discard_teir(
+        self: HamiltonEETipBase,
+    ) -> list[tuple[layout_item.LayoutItemBase, layout_item.LayoutItemBase]]:
         """For any given number of racks the tip stacks will be used to replenish.
         If a stack runs out of tips then the stack will be moved to the so stacks are depleted in order.
         """
@@ -98,13 +100,13 @@ class HamiltonEETipBase(TipBase):
         return sum(
             [
                 [
-                    transport.GetPlaceOptions(
-                        source_layout_item=rack,
-                        destination_layout_item=self.tip_rack_waste,
+                    (
+                        cast(layout_item.LayoutItemBase, rack),
+                        cast(layout_item.LayoutItemBase, self.tip_rack_waste),
                     ),
-                    transport.GetPlaceOptions(
-                        source_layout_item=stack.tip_rack,
-                        destination_layout_item=rack,
+                    (
+                        cast(layout_item.LayoutItemBase, stack.tip_rack),
+                        cast(layout_item.LayoutItemBase, rack),
                     ),
                 ]
                 for rack, stack in zip(self.tip_racks, self.tip_stacks)

@@ -7,7 +7,7 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import HSLTipCountingLib
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
-from plh.hal import backend, transport
+from plh.hal import backend
 
 from .tip_base import *
 from .tip_base import TipBase
@@ -43,7 +43,9 @@ class HamiltonFTR(TipBase):
         """FTR tips do not have teirs so remaining tips is just all the tips left."""
         return len(self.available_positions)
 
-    def discard_teir(self: HamiltonFTR) -> list[transport.GetPlaceOptions]:
+    def discard_teir(
+        self: HamiltonFTR,
+    ) -> list[tuple[layout_item.LayoutItemBase, layout_item.LayoutItemBase]]:
         """Cannot discard teir. You must load more tips."""
         raise RuntimeError("TODO: Tip reload error")
 

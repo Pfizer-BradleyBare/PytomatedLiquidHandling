@@ -7,7 +7,7 @@ from typing import Annotated
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from plh.hal import layout_item, transport
+from plh.hal import layout_item
 from plh.hal.tools import HALDevice, Interface
 
 
@@ -69,7 +69,9 @@ class TipBase(Interface, HALDevice):
         ...
 
     @abstractmethod
-    def discard_teir(self: TipBase) -> list[transport.GetPlaceOptions]:
+    def discard_teir(
+        self: TipBase,
+    ) -> list[tuple[layout_item.LayoutItemBase, layout_item.LayoutItemBase]]:
         """Returns a list of transport options to discard the current teir."""
         ...
 

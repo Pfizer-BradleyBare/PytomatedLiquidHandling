@@ -8,7 +8,7 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import Visual_NTR_Library
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
-from plh.hal import backend, layout_item, transport
+from plh.hal import backend, layout_item
 
 from .tip_base import *
 from .tip_base import AvailablePosition, TipBase
@@ -75,7 +75,9 @@ class HamiltonNTR(TipBase):
             * tips_per_rack
         )
 
-    def discard_teir(self: HamiltonNTR) -> list[transport.GetPlaceOptions]:
+    def discard_teir(
+        self: HamiltonNTR,
+    ) -> list[tuple[layout_item.LayoutItemBase, layout_item.LayoutItemBase]]:
         """Returns the layout items from the top layer of a teir with the appropraite discard location.
         NOTE: The top teir after edit will be partially available.
         Thus, we use the ```available_positions_per_teir``` information to only discard the remaining teirs.
@@ -90,9 +92,9 @@ class HamiltonNTR(TipBase):
         self.available_positions_per_teir = self.available_positions_per_teir[1:]
 
         return [
-            transport.GetPlaceOptions(
-                source_layout_item=rack,
-                destination_layout_item=self.tip_rack_waste,
+            (
+                rack,
+                self.tip_rack_waste,
             )
             for rack in discard_racks
         ]
