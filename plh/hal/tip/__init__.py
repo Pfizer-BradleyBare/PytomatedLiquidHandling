@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .hamilton_ee_custom_ftr import HamiltonEECustomFTR
+from .hamilton_ee_ftr_1000uL import HamiltonEEFTR1000uL
 from .hamilton_ee_ntr import HamiltonEENTR
 from .hamilton_ee_tip_base import EETipStack, HamiltonEETipBase
 from .hamilton_ftr import HamiltonFTR
@@ -17,7 +17,7 @@ __all__ = [
     "HamiltonFTR",
     "HamiltonNTR",
     "HamiltonEETipBase",
-    "HamiltonEECustomFTR",
+    "HamiltonEEFTR1000uL",
     "HamiltonEENTR",
     "EETipStack",
     "exceptions",
