@@ -81,11 +81,11 @@ class LoadedLabware:
 
 
 def group(
-    labwares: list[labware.LabwareBase | LoadedLabware],
+    *args: labware.LabwareBase | LoadedLabware,
 ) -> list[list[tuple[LoadedLabware, None | LoadedLabware]]]:
     """Takes a list of labware or ```LoadedLabware``` and groups it by carrier for loading."""
     labware_only: list[labware.LabwareBase] = [
-        item.labware if isinstance(item, LoadedLabware) else item for item in labwares
+        item.labware if isinstance(item, LoadedLabware) else item for item in args
     ]
     # To do the loading we need a list of only labware items that are required.
 
@@ -94,7 +94,7 @@ def group(
     )
     for labware_type, meta in [
         (item.labware, item) if isinstance(item, LoadedLabware) else (item, None)
-        for item in labwares
+        for item in args
     ]:
         labware_meta[labware_type].append(meta)
     # collect meta data for the grouping to be used when selecting layout_items
@@ -173,7 +173,7 @@ def group(
     # Now organize the items by carrier.
 
 
-def prepare(loaded_labware: list[tuple[LoadedLabware, None | LoadedLabware]]) -> None:
+def prepare(*args: tuple[LoadedLabware, None | LoadedLabware]) -> None:
     """Prepares the LoadedLabware returned from ```group``` for loading or unloading.
     If the tuple contains None then the loading locations will be emptied.
     If the tuple contains a LoadedLabware then the LoadedLabware will be moved to the position for unloading, swapping, or container addition.
@@ -181,11 +181,10 @@ def prepare(loaded_labware: list[tuple[LoadedLabware, None | LoadedLabware]]) ->
     ...
 
 
-def start(loaded_labware: list[tuple[LoadedLabware, None | LoadedLabware]]) -> None:
+def start(*args: tuple[LoadedLabware, None | LoadedLabware]) -> None:
     """Will move the deck locations out to the user using the associated carrier_mover."""
     carriers = {
-        item.layout_item.deck_location.carrier_config.carrier
-        for item, meta in loaded_labware
+        item.layout_item.deck_location.carrier_config.carrier for item, meta in args
     }
 
     if len(carriers) != 1:
@@ -204,11 +203,10 @@ def start(loaded_labware: list[tuple[LoadedLabware, None | LoadedLabware]]) -> N
         loader.unload(list(carriers)[0])
 
 
-def end(loaded_labware: list[tuple[LoadedLabware, None | LoadedLabware]]) -> None:
+def end(*args: tuple[LoadedLabware, None | LoadedLabware]) -> None:
     """Will move the deck locations back into the deck using the associated carrier_mover."""
     carriers = {
-        item.layout_item.deck_location.carrier_config.carrier
-        for item, meta in loaded_labware
+        item.layout_item.deck_location.carrier_config.carrier for item, meta in args
     }
 
     if len(carriers) != 1:
@@ -227,18 +225,18 @@ def end(loaded_labware: list[tuple[LoadedLabware, None | LoadedLabware]]) -> Non
         loader.load(list(carriers)[0])
 
 
-def load(loaded_labware: list[LoadedLabware]) -> None:
+def load(*args: LoadedLabware) -> None:
     """Will add the labware in the labware tracker. This officially makes the API layer aware that the labware is now on the deck."""
-    for item in loaded_labware:
+    for item in args:
         if item.layout_item in loaded_labware_tracker:
             raise RuntimeError("Layout item already taken. Critical error.")
 
         loaded_labware_tracker[item.layout_item] = item
 
 
-def unload(loaded_labware: list[LoadedLabware]) -> None:
+def unload(*args: LoadedLabware) -> None:
     """Will remove the labware from the labware tracker. The API layer now assumes that this labware is no longer on the deck."""
-    for item in loaded_labware:
+    for item in args:
         if item.layout_item not in loaded_labware_tracker:
             raise RuntimeError("Layout item is not tracked. Critical error.")
 
