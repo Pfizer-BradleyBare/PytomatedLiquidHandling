@@ -22,22 +22,19 @@ gripper.initialize()
 source = hal.layout_item.devices["Carrier48_Pos1_Biorad200uLPCRPlate"]
 destination = hal.layout_item.devices["Carrier48_Pos2_Biorad200uLPCRPlate"]
 
-transport_options = hal.transport.GetPlaceOptions(
-    source_layout_item=source,
-    destination_layout_item=destination,
-)
 
-gripper.assert_supported_labware([source.labware, destination.labware])
+gripper.assert_supported_labware(source.labware, destination.labware)
 gripper.assert_supported_deck_locations(
-    [source.deck_location, destination.deck_location]
+    source.deck_location,
+    destination.deck_location,
 )
 gripper.assert_compatible_deck_locations(
-    source.deck_location, destination.deck_location
+    source.deck_location,
+    destination.deck_location,
 )
 
-gripper.get(transport_options)
+gripper.transport(source, destination)
 
-gripper.place(transport_options)
 
 input("ENTER")
 
