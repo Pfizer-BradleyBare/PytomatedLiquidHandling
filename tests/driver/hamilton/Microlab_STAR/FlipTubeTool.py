@@ -33,31 +33,29 @@ def main(backend: MicrolabSTAR) -> None:
     backend.acknowledge(command, FlipTubeTool.ToolsPickUp.Response)
 
     logger.info("Open")
-    command = FlipTubeTool.FlipTubeOpen.Command(options=[])
+    command = FlipTubeTool.FlipTubeOpen.Command(
+        options=FlipTubeTool.FlipTubeOpen.OptionsList(LabwareID="FlipTubes"),
+    )
     command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
-            LabwareID="FlipTubes",
             PositionID="1",
             ChannelNumber=1,
         ),
     )
     command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
-            LabwareID="FlipTubes",
             PositionID="2",
             ChannelNumber=2,
         ),
     )
     command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
-            LabwareID="FlipTubes",
             PositionID="3",
             ChannelNumber=3,
         ),
     )
     command.options.append(
         FlipTubeTool.FlipTubeOpen.Options(
-            LabwareID="FlipTubes",
             PositionID="4",
             ChannelNumber=4,
         ),
@@ -67,35 +65,34 @@ def main(backend: MicrolabSTAR) -> None:
     backend.acknowledge(command, FlipTubeTool.FlipTubeOpen.Response)
 
     logger.info("Close")
-    command = FlipTubeTool.FlipTubeClose.Command(options=[])
+    command = FlipTubeTool.FlipTubeClose.Command(
+        options=FlipTubeTool.FlipTubeClose.OptionsList(LabwareID="FlipTubes"),
+    )
     command.options.append(
         FlipTubeTool.FlipTubeClose.Options(
-            LabwareID="FlipTubes",
             PositionID="1",
             ChannelNumber=1,
         ),
     )
     command.options.append(
         FlipTubeTool.FlipTubeClose.Options(
-            LabwareID="FlipTubes",
             PositionID="2",
             ChannelNumber=2,
         ),
     )
     command.options.append(
         FlipTubeTool.FlipTubeClose.Options(
-            LabwareID="FlipTubes",
             PositionID="3",
             ChannelNumber=3,
         ),
     )
     command.options.append(
         FlipTubeTool.FlipTubeClose.Options(
-            LabwareID="FlipTubes",
             PositionID="4",
             ChannelNumber=4,
         ),
     )
+
     backend.execute(command)
     backend.wait(command)
     backend.acknowledge(command, FlipTubeTool.FlipTubeOpen.Response)

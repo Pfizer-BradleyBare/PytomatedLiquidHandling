@@ -5,6 +5,10 @@ from plh.driver.tools import OptionsBase
 
 @dataclasses.dataclass(kw_only=True, frozen=True)
 class Options(OptionsBase):
-    LabwareID: str
     PositionID: str
     ChannelNumber: int
+
+
+@dataclasses.dataclass(kw_only=True)
+class OptionsList(list[OptionsBase]):
+    LabwareID: str
