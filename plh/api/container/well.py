@@ -23,6 +23,8 @@ class Well:
     """Liquids and associated volume contained in the well."""
 
     def __init__(self: Well, *initial_liquids: LiquidVolume):
+        self.liquids = {}
+
         for liquid_volume in initial_liquids:
             if liquid_volume.liquid in self.liquids:
                 self.liquids[liquid_volume.liquid] += liquid_volume.volume
