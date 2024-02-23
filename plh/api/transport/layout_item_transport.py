@@ -3,7 +3,6 @@ from __future__ import annotations
 from plh.hal import (
     deck_location,
     layout_item,
-    transport,
 )
 
 
@@ -26,21 +25,14 @@ def layout_item_transport(
         device = compatible_configs[0][0].transport_device
 
         device.assert_supported_deck_locations(
-            source_deck_location, destination_deck_location
+            source_deck_location, destination_deck_location,
         )
         device.assert_supported_labware(source.labware, destination.labware)
         device.assert_compatible_deck_locations(
-            source_deck_location, destination_deck_location
+            source_deck_location, destination_deck_location,
         )
 
-        options = transport.GetPlaceOptions(
-            source_layout_item=source,
-            destination_layout_item=destination,
-        )
-
-        device.get(options)
-
-        device.place(options)
+        device.transport(source,destination)
     # In this case the two locations are compatible so we can just do the transport
 
     else:
