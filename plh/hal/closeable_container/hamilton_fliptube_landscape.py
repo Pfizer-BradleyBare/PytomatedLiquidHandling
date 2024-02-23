@@ -7,7 +7,7 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import FlipTubeTool
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
-from plh.hal import backend, layout_item
+from plh.hal import backend
 
 from .closeable_container_base import *
 from .closeable_container_base import CloseableContainerBase
@@ -68,35 +68,41 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         self.backend.acknowledge(command, FlipTubeTool.ToolsPickUp.Response)
         # Pickup
 
-        layout_item_keys: dict[str, layout_item.LayoutItemBase] = {
-            layout_item.identifier: layout_item for layout_item, position in args
-        }
-        layout_item_positions = DefaultDict(list)
+        layout_item_positions: dict[layout_item.LayoutItemBase, list[str | int]] = (
+            DefaultDict(list)
+        )
+        grouped_layout_item_positions: dict[
+            layout_item.LayoutItemBase,
+            list[list[str]],
+        ] = DefaultDict(list)
         # Open
 
         for layout_item, position in args:
-            layout_item_positions[layout_item.identifier].append(position)
+            layout_item_positions[layout_item].append(position)
         # Collect positions organized by layout item
 
-        for key in layout_item_positions:
-            groups = layout_item_keys[key].labware.layout.group_positions_columnwise(
-                layout_item_positions[key],
+        for layout_item, position in layout_item_positions.items():
+            groups = layout_item.labware.layout.group_positions_columnwise(
+                position,
             )
 
-            layout_item_positions[key] = [
+            grouped_layout_item_positions[layout_item] = [
                 group[i : i + 4] for group in groups for i in range(0, len(group), 4)
             ]
             # Max number in each group is 4. Truncate them here just in case
         # Sort columnwise because the fliptube tool orientation is landscape. Meaning most efficient
         # open is along the columns
 
-        for key in layout_item_positions:
-            for group in layout_item_positions[key]:
-                command = FlipTubeTool.FlipTubeOpen.Command(options=[])
+        for layout_item, grouped_positions in grouped_layout_item_positions.items():
+            for group in grouped_positions:
+                command = FlipTubeTool.FlipTubeOpen.Command(
+                    options=FlipTubeTool.FlipTubeOpen.OptionsList(
+                        LabwareID=layout_item.labware_id,
+                    ),
+                )
                 for index, pos_id in enumerate(group):
                     command.options.append(
                         FlipTubeTool.FlipTubeOpen.Options(
-                            LabwareID=layout_item_keys[key].labware_id,
                             PositionID=pos_id,
                             ChannelNumber=index + 1,
                         ),
@@ -155,35 +161,41 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         self.backend.acknowledge(command, FlipTubeTool.ToolsPickUp.Response)
         # Pickup
 
-        layout_item_keys: dict[str, layout_item.LayoutItemBase] = {
-            layout_item.identifier: layout_item for layout_item, position in args
-        }
-        layout_item_positions = DefaultDict(list)
+        layout_item_positions: dict[layout_item.LayoutItemBase, list[str | int]] = (
+            DefaultDict(list)
+        )
+        grouped_layout_item_positions: dict[
+            layout_item.LayoutItemBase,
+            list[list[str]],
+        ] = DefaultDict(list)
         # close
 
         for layout_item, position in args:
-            layout_item_positions[layout_item.identifier].append(position)
+            layout_item_positions[layout_item].append(position)
         # Collect positions organized by layout item
 
-        for key in layout_item_positions:
-            groups = layout_item_keys[key].labware.layout.group_positions_columnwise(
-                layout_item_positions[key],
+        for layout_item, position in layout_item_positions.items():
+            groups = layout_item.labware.layout.group_positions_columnwise(
+                position,
             )
 
-            layout_item_positions[key] = [
+            grouped_layout_item_positions[layout_item] = [
                 group[i : i + 4] for group in groups for i in range(0, len(group), 4)
             ]
             # Max number in each group is 4. Truncate them here just in case
         # Sort columnwise because the fliptube tool orientation is landscape. Meaning most efficient
         # close is along the columns
 
-        for key in layout_item_positions:
-            for group in layout_item_positions[key]:
-                command = FlipTubeTool.FlipTubeClose.Command(options=[])
+        for layout_item, grouped_positions in grouped_layout_item_positions.items():
+            for group in grouped_positions:
+                command = FlipTubeTool.FlipTubeClose.Command(
+                    options=FlipTubeTool.FlipTubeClose.OptionsList(
+                        LabwareID=layout_item.labware_id,
+                    ),
+                )
                 for index, pos_id in enumerate(group):
                     command.options.append(
                         FlipTubeTool.FlipTubeClose.Options(
-                            LabwareID=layout_item_keys[key].labware_id,
                             PositionID=pos_id,
                             ChannelNumber=index + 1,
                         ),
