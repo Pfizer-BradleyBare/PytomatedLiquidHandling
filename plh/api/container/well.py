@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import copy
-from dataclasses import InitVar, dataclass, field
+from dataclasses import dataclass, field
 from typing import Callable, TypeVar, cast
+
+from plh.hal import labware
 
 from .liquid import Liquid, LiquidVolume
 from .property import LiquidPropertyBase, PropertyWeight, PropertyWeightVolume
@@ -10,12 +12,9 @@ from .property import LiquidPropertyBase, PropertyWeight, PropertyWeightVolume
 T = TypeVar("T", bound="LiquidPropertyBase")
 
 
-@dataclass
+@dataclass(init=False)
 class Well:
     """A programmatic well that contains a liquid or mixture of liquids."""
-
-    initial_liquids: InitVar[list[LiquidVolume]] = field(default=[])
-    """Initial well contents."""
 
     liquids: dict[Liquid, float] = field(
         init=False,
@@ -23,18 +22,18 @@ class Well:
     )
     """Liquids and associated volume contained in the well."""
 
-    def __hash__(self: Well) -> int:
-        return hash(id(self))
-
-    def __eq__(self: Well, __value: object) -> bool:
-        return self is __value
-
-    def __post_init__(self: Well, initial_liquids: list[LiquidVolume]) -> None:
+    def __init__(self: Well, *initial_liquids: LiquidVolume):
         for liquid_volume in initial_liquids:
             if liquid_volume.liquid in self.liquids:
                 self.liquids[liquid_volume.liquid] += liquid_volume.volume
             else:
                 self.liquids[liquid_volume.liquid] = liquid_volume.volume
+
+    def __hash__(self: Well) -> int:
+        return hash(id(self))
+
+    def __eq__(self: Well, __value: object) -> bool:
+        return self is __value
 
     def get_total_volume(self: Well) -> float:
         """Total volume present in the well."""
@@ -100,3 +99,19 @@ class Well:
                 property_volumes,
             ),
         )
+
+
+@dataclass(init=False)
+class SimulationWell(Well):
+    """Combined a programmatic well with a physical labware to perform api simulations."""
+
+    labware: labware.LabwareBase
+    """labware that will be used for simultion of the api functions."""
+
+    def __init__(
+        self: SimulationWell,
+        labware: labware.LabwareBase,
+        *initial_liquids: LiquidVolume,
+    ) -> None:
+        Well.__init__(self, *initial_liquids)
+        self.labware = labware
