@@ -49,5 +49,5 @@ def install_venus_dependencies() -> None:
             shutil.copytree(
                 src=item,
                 dst="C:\\Program Files (x86)\\HAMILTON\\Library",
-                dirs_exist_ok=False,
+                dirs_exist_ok=True,
             )
