@@ -63,9 +63,6 @@ private function CreateUSBDevice( device & ML_STAR, object & i_EndpointOutputDat
 // }} ""
 private variable ComPort;
 private variable HandleID;
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 private variable Status;
 // {{ 5 "CreateUSBDevice" "InitLocals"
@@ -118,9 +115,6 @@ private function StartTempCtrl( device & ML_STAR, object & i_EndpointOutputDataJ
 // }} ""
 private variable HandleID;
 private variable Temperature;
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 private variable Status;
 // {{ 5 "StartTempCtrl" "InitLocals"
@@ -172,9 +166,6 @@ HSLJsonLib::Release(o_JSONObject);
 private function StopTempCtrl( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private variable HandleID;
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 private variable Status;
 // {{ 5 "StopTempCtrl" "InitLocals"
@@ -224,9 +215,6 @@ private function StartShaker( device & ML_STAR, object & i_EndpointOutputDataJSO
 // }} ""
 private variable HandleID;
 private variable ShakingSpeed;
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 private variable Status;
 // {{ 5 "StartShaker" "InitLocals"
@@ -278,9 +266,6 @@ HSLJsonLib::Release(o_JSONObject);
 private function StopShaker( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private variable HandleID;
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 private variable Status;
 // {{ 5 "StopShaker" "InitLocals"
@@ -330,9 +315,6 @@ private function GetTemperature( device & ML_STAR, object & i_EndpointOutputData
 // }} ""
 private variable HandleID;
 private variable Temperature;
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 private variable Status;
 // {{ 5 "GetTemperature" "InitLocals"
@@ -400,9 +382,6 @@ private function GetShakerSpeed( device & ML_STAR, object & i_EndpointOutputData
 // }} ""
 private variable HandleID;
 private variable ShakingSpeed;
-private variable CustomErrorHandling;
-private variable State;
-private variable Message;
 private object o_JSONObject;
 private variable Status;
 // {{ 5 "GetShakerSpeed" "InitLocals"
@@ -422,8 +401,8 @@ HSLJsonLib::Create(o_JSONObject);
 // {{{ 19 1 0 "a459d5eb_a138_40f1_bfc072dc0fb6ba33" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
 Status = HSLHamHeaterShaker::GetShakerSpeed(HandleID, ShakingSpeed);
 // }} ""
-// {{{ 20 1 0 "2faabdf0_f85e_4737_bf2bba472978ff03" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
-HSLJsonLib::SetIntegerProperty(o_JSONObject, Translate("ShakingSpeed"), ShakingSpeed);
+// {{{ 20 1 0 "2ac74d4f_f9d3_4260_a4e6aca0c23ed358" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLJsonLib::SetIntegerProperty(o_JSONObject, Translate("ShakerSpeed"), ShakingSpeed);
 // }} ""
 // {{ 21 1 0 "6a1365c2_b30e_438e_be6df47c476e1e50" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 if (Status != 0)
@@ -572,10 +551,7 @@ abort;
 private function SetPlateLock( device & ML_STAR, object & i_EndpointOutputDataJSONObject ) void {
 // }} ""
 private variable PlateLockState;
-private variable CustomErrorHandling;
 private variable HandleID;
-private variable Message;
-private variable State;
 private object o_JSONObject;
 private variable Status;
 // {{ 5 "SetPlateLock" "InitLocals"
@@ -627,4 +603,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 08:46$$checksum=d904bcbc$$length=084$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-02-29 13:12$$checksum=691e7939$$length=091$$
