@@ -16,7 +16,8 @@ class PipetteTip:
     tip_support_dropoff_labware_id: str
     tip_support_pickup_labware_id: str
     tip_waste_labware_id: str
-    supported_liquid_class_categories: dict[str, list[LiquidClass]]
+    supported_aspirate_liquid_class_categories: dict[str, list[LiquidClass]]
+    supported_dispense_liquid_class_categories: dict[str, list[LiquidClass]]
 
     @field_validator("supported_liquid_class_categories", mode="after")
     @classmethod
@@ -30,4 +31,4 @@ class PipetteTip:
         return v
 
     def is_liquid_class_category_supported(self: PipetteTip, category: str) -> bool:
-        return category in self.supported_liquid_class_categories
+        return category in self.supported_aspirate_liquid_class_categories

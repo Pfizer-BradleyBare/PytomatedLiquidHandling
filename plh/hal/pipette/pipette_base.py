@@ -90,7 +90,14 @@ class PipetteBase(Interface, HALDevice):
             msg = "Some deck locations are not supported."
             raise ExceptionGroup(msg, exceptions)
 
-    def assert_supported_liquid_class_categories(
+    def assert_supported_aspirate_liquid_class_categories(
+        self: PipetteBase,
+        *args: tuple[str, float],
+    ) -> None:
+        # TODO
+        ...
+
+    def assert_supported_dispense_liquid_class_categories(
         self: PipetteBase,
         *args: tuple[str, float],
     ) -> None:
@@ -110,13 +117,13 @@ class PipetteBase(Interface, HALDevice):
             ) and tip.is_liquid_class_category_supported(
                 destination_liquid_class_category,
             ):
-                for liquid_class in tip.supported_liquid_class_categories[
+                for liquid_class in tip.supported_aspirate_liquid_class_categories[
                     source_liquid_class_category
                 ]:
                     if liquid_class.max_volume > max_volume:
                         max_volume = liquid_class.max_volume
 
-                for liquid_class in tip.supported_liquid_class_categories[
+                for liquid_class in tip.supported_dispense_liquid_class_categories[
                     destination_liquid_class_category
                 ]:
                     if liquid_class.max_volume > max_volume:
@@ -165,7 +172,7 @@ class PipetteBase(Interface, HALDevice):
     ) -> str:
         tip = self._get_tip(liquid_class_category, liquid_class_category, volume)
 
-        for liquid_class in tip.supported_liquid_class_categories[
+        for liquid_class in tip.supported_aspirate_liquid_class_categories[
             liquid_class_category
         ]:
             if liquid_class.max_volume > volume:
@@ -173,7 +180,7 @@ class PipetteBase(Interface, HALDevice):
 
         return [
             liquid_class.liquid_class_name
-            for liquid_class in tip.supported_liquid_class_categories[
+            for liquid_class in tip.supported_aspirate_liquid_class_categories[
                 liquid_class_category
             ]
         ][-1]

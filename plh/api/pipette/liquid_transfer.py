@@ -1,18 +1,15 @@
-from dataclasses import dataclass
-
-from PytomatedLiquidHandling.API.Tools import Container
-
-
-@dataclass
-class LiquidTransferOptions:
-    Source: Container.Well.Well
-    Destination: Container.Well.Well
-    Volume: float
+from plh.api.container import Well
+from plh.api.load import well_assignment_tracker
+from plh import hal
 
 
-def LiquidTransfer(Options: list[LiquidTransferOptions]):
-    ...
+def LiquidTransfer(*args: tuple[Well, Well, float]):
+
+    if not all(
+        source in well_assignment_tracker and destination in well_assignment_tracker
+        for source, destination, _ in args
+    ):
+        raise RuntimeError("Well are not assigned to any physical labware.")
 
 
-def LiquidTransferTime(Options: list[LiquidTransferOptions]):
-    ...
+def LiquidTransferTime(*args: tuple[Well, Well, float]): ...
