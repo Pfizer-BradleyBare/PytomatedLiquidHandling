@@ -28,11 +28,6 @@ class GripModeOptions(Enum):
     GripOnLongSide = 1
 
 
-class MovementOptions(Enum):
-    Simple = 0
-    Complex = 1
-
-
 class LabwareOrientationOptions(Enum):
     NegativeYAxis = 1
     PositiveXAxis = 2
@@ -47,7 +42,6 @@ class Options(OptionsBase):
     OpenWidth: float
     GripHeight: float = 3
     GripMode: GripModeOptions = GripModeOptions.GripOnShortSide
-    Movement: MovementOptions = MovementOptions.Simple
     RetractDistance: float = 0
     LiftupHeight: float = 0
     LabwareOrientation: LabwareOrientationOptions = (
@@ -55,5 +49,5 @@ class Options(OptionsBase):
     )
     GripForce: int = 4
     Tolerance: float = 2
-    InverseGrip: YesNoOptions = YesNoOptions.No
-    CollisionControl: YesNoOptions = YesNoOptions.Yes
+    InverseGrip: bool = False
+    CollisionControl: bool = True

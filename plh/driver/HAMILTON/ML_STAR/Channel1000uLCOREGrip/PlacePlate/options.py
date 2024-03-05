@@ -5,11 +5,6 @@ from pydantic import dataclasses
 from plh.driver.tools import OptionsBase
 
 
-class YesNoOptions(Enum):
-    No = 0
-    Yes = 1
-
-
 class XSpeedOptions(Enum):
     XSpeed1 = 1
     XSpeed2 = 2
@@ -21,8 +16,8 @@ class XSpeedOptions(Enum):
 @dataclasses.dataclass(kw_only=True, frozen=True)
 class Options(OptionsBase):
     LabwareID: str
-    EjectTool: YesNoOptions
+    EjectTool: bool
     XSpeed: XSpeedOptions = XSpeedOptions.XSpeed4
     ZSpeed: float = 128.7
     PressOnDistance: float = 1
-    CheckPlateExists: YesNoOptions = YesNoOptions.No
+    CheckPlateExists: bool = False

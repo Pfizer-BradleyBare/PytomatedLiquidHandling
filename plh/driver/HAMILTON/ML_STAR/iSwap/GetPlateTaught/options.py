@@ -18,14 +18,29 @@ class GripForceOptions(Enum):
     GripForce9 = 9
 
 
+class GripModeOptions(Enum):
+    GripOnShortSide = 0
+    GripOnLongSide = 1
+
+
+class MovementOptions(Enum):
+    Simple = 0
+    Complex = 1
+
+
+class LabwareOrientationOptions(Enum):
+    NegativeYAxis = 1
+    PositiveXAxis = 2
+    PositiveYAxis = 3
+    NegativeXAxis = 4
+
+
 @dataclasses.dataclass(kw_only=True, frozen=True)
 class Options(OptionsBase):
-    GripperLabwareID: str
-    PlateLabwareID: str
+    LabwareID: str
     GripWidth: float
     OpenWidth: float
-    GripHeight: float = 3
-    GripForce: GripForceOptions = GripForceOptions.GripForce4
-    GripSpeed: float = 277.8
-    ZSpeed: float = 128.7
-    CheckPlateExists: bool = False
+    TaughtPathName: str
+    GripForce: int = 4
+    Tolerance: float = 2
+    CollisionControl: bool = True

@@ -27,7 +27,7 @@ def main(backend: MicrolabSTAR) -> None:
     command = Channel1000uLCOREGrip.PlacePlate.Command(
         options=Channel1000uLCOREGrip.PlacePlate.Options(
             LabwareID="Plate_1",
-            EjectTool=Channel1000uLCOREGrip.PlacePlate.YesNoOptions.Yes,
+            EjectTool=True,
         ),
         backend_error_handling=False,
     )

@@ -5,5 +5,6 @@ from plh.driver.tools import OptionsBase
 
 @dataclasses.dataclass(kw_only=True, frozen=True)
 class Options(OptionsBase):
-    SpeedPercentage: int = 50
+    LabwareID: str
+    TaughtPathName: str
     CollisionControl: bool = True

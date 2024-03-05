@@ -1,6 +1,6 @@
 from . import exceptions
 from .command import Command
-from .options import LabwareOrientationOptions, MovementOptions, Options, YesNoOptions
+from .options import LabwareOrientationOptions, Options
 from .response import Response
 
 __all__ = [
@@ -8,7 +8,5 @@ __all__ = [
     "Response",
     "Options",
     "exceptions",
-    "YesNoOptions",
     "LabwareOrientationOptions",
-    "MovementOptions",
 ]

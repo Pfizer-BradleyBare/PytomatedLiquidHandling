@@ -93,7 +93,7 @@ class VantageTrackGripper(TransportBase):
                 CoordinatedMovement=get_options.CoordinatedMovement,
                 GripForcePercentage=100,
                 SpeedPercentage=100,
-                CollisionControl=TrackGripper.GripPlateFromTaughtPosition.YesNoOptions.Yes,
+                CollisionControl=TrackGripper.GripPlateFromTaughtPosition.= True,
                 TaughtPathName=get_options.TaughtPathName,
             ),
             backend_error_handling=False,
@@ -122,7 +122,7 @@ class VantageTrackGripper(TransportBase):
                 TaughtPathName=place_options.TaughtPathName,
                 CoordinatedMovement=place_options.CoordinatedMovement,
                 SpeedPercentage=100,
-                CollisionControl=TrackGripper.PlacePlateToTaughtPosition.YesNoOptions.Yes,
+                CollisionControl=TrackGripper.PlacePlateToTaughtPosition.= True,
             ),
             backend_error_handling=False,
         )

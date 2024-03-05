@@ -1,5 +1,5 @@
 from .command import Command
-from .options import LLDOptions, ModeOptions, Options, YesNoOptions
+from .options import LLDOptions, ModeOptions, Options
 from .response import Response
 
 __all__ = [
@@ -8,5 +8,4 @@ __all__ = [
     "Options",
     "ModeOptions",
     "LLDOptions",
-    "YesNoOptions",
 ]

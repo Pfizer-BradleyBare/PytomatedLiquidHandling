@@ -24,11 +24,6 @@ class LLDOptions(Enum):
     FromLabwareDefinition = 5
 
 
-class YesNoOptions(Enum):
-    No = 0
-    Yes = 1
-
-
 @dataclasses.dataclass(kw_only=True, frozen=True)
 class Options(OptionsBase):
     LabwareID: str
@@ -40,7 +35,7 @@ class Options(OptionsBase):
     CapacitiveLiquidLevelDetection: LLDOptions = LLDOptions.Off
     SubmergeDepth: float = 2
     SideTouch: int = 0
-    LiquidFollowing: YesNoOptions = YesNoOptions.No
+    LiquidFollowing: bool = False
     MixCycles: int = 0
     MixPosition: float = 0
     MixVolume: float = 0
