@@ -10,8 +10,8 @@ def main(backend: MicrolabSTAR) -> None:
     logger.info(f"Executing main() from {__file__}")
 
     logger.info("GetPlate")
-    command = iSwap.GetPlate.Command(
-        options=iSwap.GetPlate.Options(
+    command = iSwap.GetPlateCarrier.Command(
+        options=iSwap.GetPlateCarrier.Options(
             LabwareID="Plate_1",
             GripWidth=87,
             OpenWidth=91,
@@ -20,18 +20,18 @@ def main(backend: MicrolabSTAR) -> None:
     )
     backend.execute(command)
     backend.wait(command)
-    backend.acknowledge(command, iSwap.GetPlate.Response)
+    backend.acknowledge(command, iSwap.GetPlateCarrier.Response)
 
     logger.info("PlacePlate")
-    command = iSwap.PlacePlate.Command(
-        options=iSwap.PlacePlate.Options(
+    command = iSwap.PlacePlateCarrier.Command(
+        options=iSwap.PlacePlateCarrier.Options(
             LabwareID="Plate_1",
         ),
         backend_error_handling=False,
     )
     backend.execute(command)
     backend.wait(command)
-    backend.acknowledge(command, iSwap.PlacePlate.Response)
+    backend.acknowledge(command, iSwap.PlacePlateCarrier.Response)
 
 
 if __name__ == "__main__":

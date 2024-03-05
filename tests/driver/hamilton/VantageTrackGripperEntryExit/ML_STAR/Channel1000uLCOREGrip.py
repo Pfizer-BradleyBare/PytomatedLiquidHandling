@@ -25,7 +25,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     command = Channel1000uLCOREGrip.PlacePlate.Command(
         options=Channel1000uLCOREGrip.PlacePlate.Options(
             LabwareID="Plate_1",
-            EjectTool=Channel1000uLCOREGrip.PlacePlate.= True,
+            EjectTool=True,
         ),
         backend_error_handling=False,
     )

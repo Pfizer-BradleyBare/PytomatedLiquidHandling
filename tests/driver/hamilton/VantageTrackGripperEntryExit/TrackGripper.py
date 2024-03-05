@@ -41,8 +41,8 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
 
     logger.info("GripPlateFromTaughtPosition")
 
-    command = TrackGripper.GripPlateFromTaughtPosition.Command(
-        options=TrackGripper.GripPlateFromTaughtPosition.Options(
+    command = TrackGripper.GripPlateTaught.Command(
+        options=TrackGripper.GripPlateTaught.Options(
             OpenWidth=1,
             TaughtPathName="On Deck Transition Point",
         ),
@@ -50,12 +50,12 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     )
     backend.execute(command)
     backend.wait(command)
-    backend.acknowledge(command, TrackGripper.GripPlateFromTaughtPosition.Response)
+    backend.acknowledge(command, TrackGripper.GripPlateTaught.Response)
 
     logger.info("PlacePlateToTaughtPosition")
 
-    command = TrackGripper.PlacePlateToTaughtPosition.Command(
-        options=TrackGripper.PlacePlateToTaughtPosition.Options(
+    command = TrackGripper.PlacePlateTaught.Command(
+        options=TrackGripper.PlacePlateTaught.Options(
             OpenWidth=1,
             TaughtPathName="On Deck Transition Point",
         ),
@@ -63,7 +63,7 @@ def main(backend: VantageTrackGripperEntryExit) -> None:
     )
     backend.execute(command)
     backend.wait(command)
-    backend.acknowledge(command, TrackGripper.PlacePlateToTaughtPosition.Response)
+    backend.acknowledge(command, TrackGripper.PlacePlateTaught.Response)
 
 
 if __name__ == "__main__":
