@@ -206,7 +206,7 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                     PositionID=option.position_id,
                     LiquidClass=option.liquid_class,
                     Volume=option.volume,
-                    Mode=Channel1000uL.Aspirate.ModeOptions.AspirateAll,
+                    Mode=Channel1000uL.Aspirate.AspirateModeOptions.AspirateAll,
                     CapacitiveLiquidLevelDetection=Channel1000uL.Aspirate.LLDOptions.Off,
                     SubmergeDepth=0,
                     PressureLiquidLevelDetection=Channel1000uL.Aspirate.LLDOptions.Off,
@@ -246,7 +246,7 @@ class HamiltonPortraitCORE8ContactDispense(PipetteBase):
                     PositionID=option.position_id,
                     LiquidClass=option.liquid_class,
                     Volume=option.volume,
-                    Mode=Channel1000uL.Dispense.ModeOptions.FromLiquidClassDefinition,
+                    Mode=Channel1000uL.Dispense.DispenseModeOptions.FromLiquidClassDefinition,
                     FixHeightFromBottom=cast(
                         labware.PipettableLabware,
                         option.layout_item.labware,
