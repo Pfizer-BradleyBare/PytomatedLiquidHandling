@@ -5,8 +5,6 @@ from loguru import logger
 from plh.driver.HAMILTON.backend import MicrolabSTAR
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
 
-quit()
-
 
 def main(backend: MicrolabSTAR) -> None:
     logger.info(f"Executing main() from {__file__}")
