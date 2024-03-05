@@ -14,7 +14,7 @@ Please see each layer for descriptions / examples.
 
 from loguru import logger
 
-from . import cli, driver
+from . import api, cli, driver, hal
 
 __all__ = ["cli", "driver", "hal", "api"]
 

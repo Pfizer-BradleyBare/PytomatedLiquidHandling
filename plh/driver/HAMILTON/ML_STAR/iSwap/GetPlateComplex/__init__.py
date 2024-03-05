@@ -13,7 +13,7 @@ __all__ = [
     "Response",
     "Options",
     "exceptions",
-    "LabwareOrientationOptions",
-    "GripModeOptions",
     "GripForceOptions",
+    "GripModeOptions",
+    "LabwareOrientationOptions",
 ]

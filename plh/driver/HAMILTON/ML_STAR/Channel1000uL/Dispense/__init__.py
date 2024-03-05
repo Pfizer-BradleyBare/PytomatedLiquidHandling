@@ -1,6 +1,6 @@
 from . import exceptions
 from .command import Command
-from .options import LLDOptions, ModeOptions, Options
+from .options import DispenseModeOptions, LLDOptions, Options
 from .response import Response
 
 __all__ = [
@@ -8,6 +8,6 @@ __all__ = [
     "Response",
     "Options",
     "exceptions",
-    "ModeOptions",
+    "DispenseModeOptions",
     "LLDOptions",
 ]

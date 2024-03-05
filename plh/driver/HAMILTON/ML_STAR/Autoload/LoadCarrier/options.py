@@ -1,14 +1,7 @@
-from enum import Enum
-
 from pydantic import dataclasses
 
+from plh.driver.HAMILTON.complex_inputs import LabwarePositionsOptions
 from plh.driver.tools import OptionsBase
-
-
-class LabwarePositionsOptions(Enum):
-    ReadPresentLabware = "?"
-    ReadAllPositions = "*"
-    ReadNone = ""
 
 
 @dataclasses.dataclass(kw_only=True, frozen=True)

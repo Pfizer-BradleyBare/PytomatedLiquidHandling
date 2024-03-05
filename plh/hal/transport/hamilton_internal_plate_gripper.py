@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import field
+from enum import Enum
 from typing import Annotated, cast
 
 from pydantic import dataclasses
@@ -22,23 +23,27 @@ class HamiltonInternalPlateGripper(TransportBase):
     backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
     """Only Hamilton backends."""
 
+    class MovementOptions(Enum):
+        Carrier = "Carrier"
+        Complex = "Complex"
+
     @dataclasses.dataclass(kw_only=True)
     class GetOptions(TransportBase.GetOptions):
-        GripMode: iSwap.GetPlate.GripModeOptions = field(compare=True)
-        Movement: iSwap.GetPlate.MovementOptions = field(compare=True)
+        GripMode: iSwap.GripModeOptions = field(compare=True)
+        Movement: HamiltonInternalPlateGripper.MovementOptions = field(compare=True)
         RetractDistance: float = field(compare=False)
         LiftupHeight: float = field(compare=False)
-        LabwareOrientation: iSwap.GetPlate.LabwareOrientationOptions = field(
+        LabwareOrientation: iSwap.LabwareOrientationOptions = field(
             compare=True,
         )
-        InverseGrip: iSwap.GetPlate.YesNoOptions = field(compare=True)
+        InverseGrip: bool = field(compare=True)
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
-        Movement: iSwap.PlacePlate.MovementOptions = field(compare=True)
+        Movement: HamiltonInternalPlateGripper.MovementOptions = field(compare=True)
         RetractDistance: float = field(compare=False)
         LiftupHeight: float = field(compare=False)
-        LabwareOrientation: iSwap.PlacePlate.LabwareOrientationOptions = field(
+        LabwareOrientation: iSwap.LabwareOrientationOptions = field(
             compare=True,
         )
 
@@ -74,55 +79,98 @@ class HamiltonInternalPlateGripper(TransportBase):
             compatible_configs[0].get_options,
         )
 
-        command = iSwap.GetPlate.Command(
-            options=iSwap.GetPlate.Options(
-                LabwareID=source.labware_id,
-                GripWidth=labware.dimensions.y_length - labware.transport_offsets.close,
-                OpenWidth=labware.dimensions.y_length + labware.transport_offsets.open,
-                GripHeight=labware.transport_offsets.top,
-                GripMode=get_options.GripMode,
-                Movement=get_options.Movement,
-                RetractDistance=get_options.RetractDistance,
-                LiftupHeight=get_options.LiftupHeight,
-                LabwareOrientation=get_options.LabwareOrientation,
-                InverseGrip=get_options.InverseGrip,
-            ),
-            backend_error_handling=False,
-        )
-        try:
-            self.backend.execute(command)
-            self.backend.wait(command)
-            self.backend.acknowledge(command, iSwap.GetPlate.Response)
-        except* iSwap.GetPlate.exceptions.HardwareError as e:
-            raise ExceptionGroup(
-                "Exception",
-                [GetHardwareError(self, source)],
-            ) from e
-
         place_options = cast(
             HamiltonInternalPlateGripper.PlaceOptions,
             compatible_configs[1].place_options,
         )
 
-        command = iSwap.PlacePlate.Command(
-            options=iSwap.PlacePlate.Options(
-                LabwareID=destination.labware_id,
-                Movement=place_options.Movement,
-                RetractDistance=place_options.RetractDistance,
-                LiftupHeight=place_options.LiftupHeight,
-                LabwareOrientation=place_options.LabwareOrientation,
-            ),
-            backend_error_handling=False,
-        )
-        try:
-            self.backend.execute(command)
-            self.backend.wait(command)
-            self.backend.acknowledge(command, iSwap.PlacePlate.Response)
-        except* iSwap.PlacePlate.exceptions.HardwareError as e:
-            raise ExceptionGroup(
-                "Exception",
-                [PlaceHardwareError(self, destination)],
-            ) from e
+        if get_options.Movement == HamiltonInternalPlateGripper.MovementOptions.Carrier:
+            command = iSwap.GetPlateCarrier.Command(
+                options=iSwap.GetPlateCarrier.Options(
+                    LabwareID=source.labware_id,
+                    GripWidth=labware.dimensions.y_length
+                    - labware.transport_offsets.close,
+                    OpenWidth=labware.dimensions.y_length
+                    + labware.transport_offsets.open,
+                    GripHeight=labware.transport_offsets.top,
+                    GripMode=get_options.GripMode,
+                    InverseGrip=get_options.InverseGrip,
+                ),
+                backend_error_handling=False,
+            )
+            try:
+                self.backend.execute(command)
+                self.backend.wait(command)
+                self.backend.acknowledge(command, iSwap.GetPlateCarrier.Response)
+            except* iSwap.GetPlateCarrier.exceptions.HardwareError as e:
+                raise ExceptionGroup(
+                    "Exception",
+                    [GetHardwareError(self, source)],
+                ) from e
+
+            command = iSwap.PlacePlateCarrier.Command(
+                options=iSwap.PlacePlateCarrier.Options(
+                    LabwareID=destination.labware_id,
+                ),
+                backend_error_handling=False,
+            )
+            try:
+                self.backend.execute(command)
+                self.backend.wait(command)
+                self.backend.acknowledge(command, iSwap.PlacePlateCarrier.Response)
+            except* iSwap.PlacePlateCarrier.exceptions.HardwareError as e:
+                raise ExceptionGroup(
+                    "Exception",
+                    [PlaceHardwareError(self, destination)],
+                ) from e
+
+        elif (
+            get_options.Movement == HamiltonInternalPlateGripper.MovementOptions.Complex
+        ):
+            command = iSwap.GetPlateComplex.Command(
+                options=iSwap.GetPlateComplex.Options(
+                    LabwareID=source.labware_id,
+                    GripWidth=labware.dimensions.y_length
+                    - labware.transport_offsets.close,
+                    OpenWidth=labware.dimensions.y_length
+                    + labware.transport_offsets.open,
+                    GripHeight=labware.transport_offsets.top,
+                    GripMode=get_options.GripMode,
+                    RetractDistance=get_options.RetractDistance,
+                    LiftupHeight=get_options.LiftupHeight,
+                    LabwareOrientation=get_options.LabwareOrientation,
+                    InverseGrip=get_options.InverseGrip,
+                ),
+                backend_error_handling=False,
+            )
+            try:
+                self.backend.execute(command)
+                self.backend.wait(command)
+                self.backend.acknowledge(command, iSwap.GetPlateComplex.Response)
+            except* iSwap.GetPlateComplex.exceptions.HardwareError as e:
+                raise ExceptionGroup(
+                    "Exception",
+                    [GetHardwareError(self, source)],
+                ) from e
+
+            command = iSwap.PlacePlateComplex.Command(
+                options=iSwap.PlacePlateComplex.Options(
+                    LabwareID=destination.labware_id,
+                    RetractDistance=place_options.RetractDistance,
+                    LiftupHeight=place_options.LiftupHeight,
+                    LabwareOrientation=place_options.LabwareOrientation,
+                ),
+                backend_error_handling=False,
+            )
+            try:
+                self.backend.execute(command)
+                self.backend.wait(command)
+                self.backend.acknowledge(command, iSwap.PlacePlateCarrier.Response)
+            except* iSwap.PlacePlateCarrier.exceptions.HardwareError as e:
+                raise ExceptionGroup(
+                    "Exception",
+                    [PlaceHardwareError(self, destination)],
+                ) from e
 
     def transport_time(
         self: TransportBase,

@@ -1,13 +1,7 @@
-from enum import Enum
-
 from pydantic import dataclasses
 
+from plh.driver.HAMILTON.complex_inputs import PositionOptions
 from plh.driver.tools import OptionsBase
-
-
-class PositionOptions(Enum):
-    Bottom = "Bottom"
-    Beam = "Beam"
 
 
 @dataclasses.dataclass(kw_only=True, frozen=True)

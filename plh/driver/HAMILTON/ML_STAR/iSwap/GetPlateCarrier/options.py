@@ -1,26 +1,7 @@
-from enum import Enum
-
 from pydantic import dataclasses
 
+from plh.driver.HAMILTON.complex_inputs import GripForceOptions, GripModeOptions
 from plh.driver.tools import OptionsBase
-
-
-class GripForceOptions(Enum):
-    GripForce0 = 0
-    GripForce1 = 1
-    GripForce2 = 2
-    GripForce3 = 3
-    GripForce4 = 4
-    GripForce5 = 5
-    GripForce6 = 6
-    GripForce7 = 7
-    GripForce8 = 8
-    GripForce9 = 9
-
-
-class GripModeOptions(Enum):
-    GripOnShortSide = 0
-    GripOnLongSide = 1
 
 
 @dataclasses.dataclass(kw_only=True, frozen=True)

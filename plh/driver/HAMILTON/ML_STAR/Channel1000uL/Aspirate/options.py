@@ -1,23 +1,7 @@
-from enum import Enum
-
 from pydantic import dataclasses
 
+from plh.driver.HAMILTON.complex_inputs import AspirateModeOptions, LLDOptions
 from plh.driver.tools import OptionsBase
-
-
-class ModeOptions(Enum):
-    Aspiration = 0
-    ConsequtiveAspiration = 1
-    AspirateAll = 2
-
-
-class LLDOptions(Enum):
-    Off = 0
-    VeryHigh = 1
-    High = 2
-    Medium = 3
-    Low = 4
-    FromLabwareDefinition = 5
 
 
 @dataclasses.dataclass(kw_only=True, frozen=True)
@@ -27,7 +11,7 @@ class Options(OptionsBase):
     PositionID: str
     LiquidClass: str
     Volume: float
-    Mode: ModeOptions = ModeOptions.Aspiration
+    Mode: AspirateModeOptions = AspirateModeOptions.Aspiration
     CapacitiveLiquidLevelDetection: LLDOptions = LLDOptions.Off
     SubmergeDepth: float = 2
     PressureLiquidLevelDetection: LLDOptions = LLDOptions.Off

@@ -1,13 +1,7 @@
-from enum import Enum
-
 from pydantic import dataclasses
 
+from plh.driver.HAMILTON.complex_inputs import ToolOrientationOptions
 from plh.driver.tools import OptionsBase
-
-
-class ToolOrientationOptions(Enum):
-    Landscape = 0
-    Portrait = 1
 
 
 @dataclasses.dataclass(kw_only=True, frozen=True)

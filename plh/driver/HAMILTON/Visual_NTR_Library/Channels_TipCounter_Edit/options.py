@@ -1,13 +1,7 @@
-from enum import Enum
-
 from pydantic import dataclasses
 
+from plh.driver.HAMILTON.complex_inputs import SortingOptions
 from plh.driver.tools import OptionsBase
-
-
-class SortingOptions(Enum):
-    RackColumns = 0
-    TierColumns = 1
 
 
 @dataclasses.dataclass(kw_only=True, frozen=True)

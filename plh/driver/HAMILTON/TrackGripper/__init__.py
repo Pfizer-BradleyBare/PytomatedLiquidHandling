@@ -1,13 +1,16 @@
+from plh.driver.HAMILTON.complex_inputs import LabwareOrientationOptions
+
 from . import (
-    GripPlateFromTaughtPosition,
+    GripPlateTaught,
     LockUnlockDoors,
     MoveToHomePosition,
-    PlacePlateToTaughtPosition,
+    PlacePlateTaught,
 )
 
 __all__ = [
-    "GripPlateFromTaughtPosition",
+    "GripPlateTaught",
     "LockUnlockDoors",
     "MoveToHomePosition",
-    "PlacePlateToTaughtPosition",
+    "PlacePlateTaught",
+    "LabwareOrientationOptions",
 ]

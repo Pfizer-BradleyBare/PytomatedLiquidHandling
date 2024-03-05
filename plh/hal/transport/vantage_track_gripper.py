@@ -6,7 +6,7 @@ from typing import Annotated, cast
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from plh.driver.HAMILTON import ML_STAR, TrackGripper
+from plh.driver.HAMILTON import TrackGripper
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.hal import backend, deck_location
 from plh.hal.exceptions import CriticalHALError
@@ -27,23 +27,19 @@ class VantageTrackGripper(TransportBase):
     class GetOptions(TransportBase.GetOptions):
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
-        Orientation: ML_STAR.iSwap.GetPlate.LabwareOrientationOptions = field(
+        Orientation: TrackGripper.LabwareOrientationOptions = field(
             compare=True,
         )
-        CoordinatedMovement: TrackGripper.GripPlateFromTaughtPosition.YesNoOptions = (
-            field(
-                compare=False,
-            )
+        CoordinatedMovement: bool = field(
+            compare=False,
         )
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
-        CoordinatedMovement: TrackGripper.PlacePlateToTaughtPosition.YesNoOptions = (
-            field(
-                compare=False,
-            )
+        CoordinatedMovement: bool = field(
+            compare=False,
         )
 
     def transport(
@@ -81,19 +77,19 @@ class VantageTrackGripper(TransportBase):
 
         if (
             get_options.Orientation
-            == ML_STAR.iSwap.GetPlate.LabwareOrientationOptions.PositiveYAxis
+            == TrackGripper.LabwareOrientationOptions.PositiveYAxis
         ):
             open_width = labware.dimensions.x_length + labware.transport_offsets.open
         else:
             open_width = labware.dimensions.y_length + labware.transport_offsets.open
 
-        command = TrackGripper.GripPlateFromTaughtPosition.Command(
-            options=TrackGripper.GripPlateFromTaughtPosition.Options(
+        command = TrackGripper.GripPlateTaught.Command(
+            options=TrackGripper.GripPlateTaught.Options(
                 OpenWidth=open_width,
                 CoordinatedMovement=get_options.CoordinatedMovement,
                 GripForcePercentage=100,
                 SpeedPercentage=100,
-                CollisionControl=TrackGripper.GripPlateFromTaughtPosition.= True,
+                CollisionControl=True,
                 TaughtPathName=get_options.TaughtPathName,
             ),
             backend_error_handling=False,
@@ -104,9 +100,9 @@ class VantageTrackGripper(TransportBase):
             self.backend.wait(command)
             self.backend.acknowledge(
                 command,
-                TrackGripper.GripPlateFromTaughtPosition.Response,
+                TrackGripper.GripPlateTaught.Response,
             )
-        except* TrackGripper.GripPlateFromTaughtPosition.exceptions.HardwareError as e:
+        except* TrackGripper.GripPlateTaught.exceptions.HardwareError as e:
             raise ExceptionGroup("Exception", [CriticalHALError(self)]) from e
 
         labware = destination.labware
@@ -116,13 +112,13 @@ class VantageTrackGripper(TransportBase):
             compatible_configs[1].place_options,
         )
 
-        command = TrackGripper.PlacePlateToTaughtPosition.Command(
-            options=TrackGripper.PlacePlateToTaughtPosition.Options(
+        command = TrackGripper.PlacePlateTaught.Command(
+            options=TrackGripper.PlacePlateTaught.Options(
                 OpenWidth=labware.transport_offsets.open,
                 TaughtPathName=place_options.TaughtPathName,
                 CoordinatedMovement=place_options.CoordinatedMovement,
                 SpeedPercentage=100,
-                CollisionControl=TrackGripper.PlacePlateToTaughtPosition.= True,
+                CollisionControl=True,
             ),
             backend_error_handling=False,
         )
@@ -132,9 +128,9 @@ class VantageTrackGripper(TransportBase):
             self.backend.wait(command)
             self.backend.acknowledge(
                 command,
-                TrackGripper.PlacePlateToTaughtPosition.Response,
+                TrackGripper.PlacePlateTaught.Response,
             )
-        except* TrackGripper.PlacePlateToTaughtPosition.exceptions.HardwareError as e:
+        except* TrackGripper.PlacePlateTaught.exceptions.HardwareError as e:
             raise ExceptionGroup("Exception", [CriticalHALError(self)]) from e
 
     def transport_time(
