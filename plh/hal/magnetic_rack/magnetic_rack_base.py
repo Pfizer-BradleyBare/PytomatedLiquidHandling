@@ -56,14 +56,25 @@ class MagneticRackBase(HALDevice):
                             "MagneticRack: " + info.data["Identifier"] + " Aspirate"
                         )
 
-                        if category_name not in tip.supported_liquid_class_categories:
-                            tip.supported_liquid_class_categories[category_name] = []
+                        if (
+                            category_name
+                            not in tip.supported_aspirate_liquid_class_categories
+                        ):
+                            tip.supported_aspirate_liquid_class_categories[
+                                category_name
+                            ] = []
 
-                        tip.supported_liquid_class_categories[category_name].append(
+                        tip.supported_aspirate_liquid_class_categories[
+                            category_name
+                        ].append(
                             liquid_class,
                         )
-                        tip.supported_liquid_class_categories[category_name] = sorted(
-                            tip.supported_liquid_class_categories[category_name],
+                        tip.supported_aspirate_liquid_class_categories[
+                            category_name
+                        ] = sorted(
+                            tip.supported_aspirate_liquid_class_categories[
+                                category_name
+                            ],
                             key=lambda x: x.max_volume,
                         )
 
@@ -80,14 +91,25 @@ class MagneticRackBase(HALDevice):
                             "MagneticRack: " + info.data["Identifier"] + " Dispense"
                         )
 
-                        if category_name not in tip.supported_liquid_class_categories:
-                            tip.supported_liquid_class_categories[category_name] = []
+                        if (
+                            category_name
+                            not in tip.supported_dispense_liquid_class_categories
+                        ):
+                            tip.supported_dispense_liquid_class_categories[
+                                category_name
+                            ] = []
 
-                        tip.supported_liquid_class_categories[category_name].append(
+                        tip.supported_dispense_liquid_class_categories[
+                            category_name
+                        ].append(
                             liquid_class,
                         )
-                        tip.supported_liquid_class_categories[category_name] = sorted(
-                            tip.supported_liquid_class_categories[category_name],
+                        tip.supported_dispense_liquid_class_categories[
+                            category_name
+                        ] = sorted(
+                            tip.supported_dispense_liquid_class_categories[
+                                category_name
+                            ],
                             key=lambda x: x.max_volume,
                         )
                         break

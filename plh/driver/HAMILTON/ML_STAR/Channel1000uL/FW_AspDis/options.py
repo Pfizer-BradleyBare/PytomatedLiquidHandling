@@ -21,11 +21,6 @@ class LLDOptions(Enum):
     FromLabwareDefinition = 5
 
 
-class YesNoOptions(Enum):
-    No = 0
-    Yes = 1
-
-
 @dataclasses.dataclass(kw_only=True, frozen=True)
 class Options(OptionsBase):
     LabwareID: str
@@ -36,18 +31,18 @@ class Options(OptionsBase):
 class OptionsList(list[Options]):
     LLDSearchHeight: int
     LiquidClass: str
-    SettlingTimeStoppable: YesNoOptions
-    Aspirate: YesNoOptions
-    AspirateTraverseBeforeAspirate: YesNoOptions
-    AspirateTraverseAfterAspirate: YesNoOptions
+    SettlingTimeStoppable: bool
+    Aspirate: bool
+    AspirateTraverseBeforeAspirate: bool
+    AspirateTraverseAfterAspirate: bool
     AspirateFixHeightFromBottom: float
     AspirateRetractDistanceForTransportAir: int
     AspirateVolume: float
     AspirateAdditionalSettlingTime: int
     AspirateBlowoutVolume: float | Literal[""]
-    Dispense: YesNoOptions
-    DispenseTraverseBeforeDispense: YesNoOptions
-    DispenseTraverseAfterDispense: YesNoOptions
+    Dispense: bool
+    DispenseTraverseBeforeDispense: bool
+    DispenseTraverseAfterDispense: bool
     DispenseFixHeightFromBottom: float
     DispenseVolume: float
     DispenseAdditionalSettlingTime: int

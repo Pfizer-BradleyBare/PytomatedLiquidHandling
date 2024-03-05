@@ -20,11 +20,6 @@ class LLDOptions(Enum):
     FromLabwareDefinition = 5
 
 
-class YesNoOptions(Enum):
-    No = 0
-    Yes = 1
-
-
 @dataclasses.dataclass(kw_only=True, frozen=True)
 class Options(OptionsBase):
     ChannelNumber: int
@@ -39,7 +34,7 @@ class Options(OptionsBase):
     MaxHeightDifference: float = 0
     FixHeightFromBottom: float = 0
     RetractDistanceForTransportAir: float = 0
-    LiquidFollowing: YesNoOptions = YesNoOptions.No
+    LiquidFollowing: bool = False
     MixCycles: int = 0
     MixPosition: float = 0
     MixVolume: float = 0

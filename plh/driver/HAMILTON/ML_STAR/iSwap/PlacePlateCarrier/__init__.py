@@ -1,6 +1,6 @@
 from . import exceptions
 from .command import Command
-from .options import Options, XSpeedOptions
+from .options import Options
 from .response import Response
 
 __all__ = [
@@ -8,5 +8,4 @@ __all__ = [
     "Response",
     "Options",
     "exceptions",
-    "XSpeedOptions",
 ]

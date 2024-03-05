@@ -24,6 +24,8 @@ class HamiltonCommandBase(CommandBase):
             for key, value in output.items():
                 if isinstance(value, Enum):
                     output[key] = value.value
+                elif isinstance(value, bool):
+                    output[key] = int(value)
                 else:
                     output[key] = value
 

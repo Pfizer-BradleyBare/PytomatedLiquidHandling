@@ -30,7 +30,7 @@ class HamiltonCOREGripper(TransportBase):
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
-        CheckPlateExists: Channel1000uLCOREGrip.PlacePlate.YesNoOptions = field(
+        CheckPlateExists: bool = field(
             compare=False,
         )
 
@@ -107,9 +107,7 @@ class HamiltonCOREGripper(TransportBase):
             options=Channel1000uLCOREGrip.PlacePlate.Options(
                 LabwareID=destination.labware_id,
                 CheckPlateExists=place_options.CheckPlateExists,
-                EjectTool=Channel1000uLCOREGrip.PlacePlate.YesNoOptions(
-                    int(self.last_transport_flag),
-                ),
+                EjectTool=self.last_transport_flag,
             ),
             backend_error_handling=False,
         )

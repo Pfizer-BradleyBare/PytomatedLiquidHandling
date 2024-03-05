@@ -1,6 +1,11 @@
 from . import exceptions
 from .command import Command
-from .options import GripForceOptions, Options
+from .options import (
+    GripForceOptions,
+    GripModeOptions,
+    LabwareOrientationOptions,
+    Options,
+)
 from .response import Response
 
 __all__ = [
@@ -8,5 +13,7 @@ __all__ = [
     "Response",
     "Options",
     "exceptions",
+    "LabwareOrientationOptions",
+    "GripModeOptions",
     "GripForceOptions",
 ]
