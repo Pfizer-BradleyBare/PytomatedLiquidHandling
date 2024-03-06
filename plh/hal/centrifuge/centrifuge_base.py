@@ -72,8 +72,16 @@ class CentrifugeBase(Interface, HALDevice):
         """Exposes a bucket to be loaded. Will not return until bucket is fully exposed."""
 
     @abstractmethod
-    def select_bucket_time(self: CentrifugeBase, index: int) -> None:
+    def select_bucket_time(self: CentrifugeBase, index: int) -> float:
         """Time required to expose a bucket."""
+
+    @abstractmethod
+    def close(self: CentrifugeBase) -> None:
+        """Closes the centrifuge. Will not return until fully closed."""
+
+    @abstractmethod
+    def close_time(self: CentrifugeBase) -> float:
+        """Time to close the centrifuge."""
 
     @abstractmethod
     def spin(
@@ -86,7 +94,11 @@ class CentrifugeBase(Interface, HALDevice):
 
     @abstractmethod
     def stop(self: CentrifugeBase) -> None:
-        """Stop the centrifuge. Function will not return until fully stopped."""
+        """Stop the centrifuge. Will not return until fully stopped."""
+
+    @abstractmethod
+    def stop_time(self: CentrifugeBase) -> float:
+        """Time to stop the centrifuge."""
 
     @abstractmethod
     def is_spinning(self: CentrifugeBase) -> bool:
