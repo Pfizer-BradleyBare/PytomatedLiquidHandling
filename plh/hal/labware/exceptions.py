@@ -14,7 +14,20 @@ class LabwareNotSupportedError(HALError):
     """
 
     labware: LabwareBase
-    """List of LabwareBase objects that were not supported"""
+    """List of LabwareBase object that were not supported"""
+
+
+@dataclass
+class LabwareStackNotSupportedError(HALError):
+    """HAL device does not support your Labware.
+    This can be thrown for any LayoutItem inputs.
+    """
+
+    top_labware: LabwareBase
+    """The top of the stack. Generally a filter plate."""
+
+    bottom_labware: LabwareBase
+    """the bottom of the stack. Generally a plate."""
 
 
 @dataclass
