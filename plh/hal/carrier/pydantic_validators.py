@@ -31,6 +31,9 @@ def validate_list(
 
     objects = devices
 
+    if v is None:
+        return supported_objects
+
     for item in v:
         if isinstance(item, CarrierBase):
             supported_objects.append(item)

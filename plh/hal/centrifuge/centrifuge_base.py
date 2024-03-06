@@ -8,6 +8,7 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.hal import labware
 from plh.hal import layout_item as li
+from plh.hal.layout_item.filter_plate_stack import *
 from plh.hal.tools import HALDevice, Interface
 
 

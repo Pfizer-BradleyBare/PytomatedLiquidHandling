@@ -12,21 +12,9 @@
 #
 #############################################################
 
-Hamilton Heater Shaker:
-  - Identifier: Heater 1
-    Enabled: True
-    Backend: Hammy
-    Backend Error Handling: False
-    Com Port: 1
-    Plates:
-      - Item1
-      - Item2
-
-  - Identifier: Heater 2
-    Enabled: True
-    Backend Identifier: Hammy
-    Backend Error Handling: False
-    Com Port: 2
-    Plates:
-      - Item1
-      - Item2
+Hamilton Hig4:
+  - identifier: Hig4
+    enabled: True
+    backend: Hamilton
+    adapter_id: "0"
+    filter_plate_stacks:
