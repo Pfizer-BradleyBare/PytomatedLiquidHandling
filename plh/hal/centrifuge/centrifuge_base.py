@@ -42,12 +42,12 @@ class CentrifugeBase(Interface, HALDevice):
 
     def get_layout_item(
         self: CentrifugeBase,
-        stack_labware: tuple[labware.LabwareBase, labware.LabwareBase],
+        labware_stack: tuple[labware.LabwareBase, labware.LabwareBase],
     ) -> li.FilterPlateStack:
         """Gets a layout item on the centrifuge device that is compatible with your current labware stack."""
-        self.assert_supported_labware(stack_labware)
+        self.assert_supported_labware(labware_stack)
 
-        filter_labware, base_labware = stack_labware
+        filter_labware, base_labware = labware_stack
 
         for supported_layout_item in self.filter_plate_stacks:
             if (
