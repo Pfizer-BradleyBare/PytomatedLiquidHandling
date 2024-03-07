@@ -33,7 +33,7 @@ Hamilton EE NTR:
     volume: 300
     tip_rack_waste: Carrier60_Pos3_Waste_NTR_300uL
     tip_stacks:
-      - module_number: 4
+      - module_number: 1
         stack_number: 3
         tip_rack: Carrier70_Pos3_NTRTipRack
     tip_racks:
@@ -43,10 +43,10 @@ Hamilton EE NTR:
     enabled: True
     backend: Hamilton
     tips_per_rack: 96
-    volume: 300
+    volume: 50
     tip_rack_waste: Carrier60_Pos3_Waste_NTR_50uL
     tip_stacks:
-      - module_number: 4
+      - module_number: 1
         stack_number: 4
         tip_rack: Carrier70_Pos4_NTRTipRack
     tip_racks:

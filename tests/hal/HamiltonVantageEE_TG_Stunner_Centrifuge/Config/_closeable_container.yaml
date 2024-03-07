@@ -14,6 +14,8 @@ Hamilton FlipTube Landscape:
       - Hamilton1500uLFlipTubeCarrier
       - Hamilton1500uLFlipTubeRack
     supported_deck_locations:
+      - Carrier7_Pos4
+
       - Carrier42_Pos1
       - Carrier42_Pos2
       - Carrier42_Pos3

@@ -34,3 +34,29 @@ HamiltonPortraitCORE8ContactDispense:
           Test:
             - liquid_class_name: "HighVolume_Water_DispenseSurface_Empty"
               max_volume: 1000
+
+      - tip: 300uL NTR
+        tip_support_dropoff_labware_id: Test
+        tip_support_pickup_labware_id: Test
+        tip_waste_labware_id: Test
+        supported_aspirate_liquid_class_categories:
+          Test:
+            - liquid_class_name: "HighVolume_Water_DispenseSurface_Empty"
+              max_volume: 1000
+        supported_dispense_liquid_class_categories:
+          Test:
+            - liquid_class_name: "HighVolume_Water_DispenseSurface_Empty"
+              max_volume: 1000
+
+      - tip: 50uL NTR
+        tip_support_dropoff_labware_id: Test
+        tip_support_pickup_labware_id: Test
+        tip_waste_labware_id: Test
+        supported_aspirate_liquid_class_categories:
+          Test:
+            - liquid_class_name: "HighVolume_Water_DispenseSurface_Empty"
+              max_volume: 1000
+        supported_dispense_liquid_class_categories:
+          Test:
+            - liquid_class_name: "HighVolume_Water_DispenseSurface_Empty"
+              max_volume: 1000

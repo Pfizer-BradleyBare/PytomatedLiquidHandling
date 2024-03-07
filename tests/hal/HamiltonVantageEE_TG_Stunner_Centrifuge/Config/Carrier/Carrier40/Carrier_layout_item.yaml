@@ -1,5 +1,5 @@
 Plate:
   - enabled: True
-    labware_id: Centrifuge_Tubes_1
+    labware_id: SMP_CAR_24_15x95_A00_0002
     deck_location: Carrier40_Pos1
     labware: 15mLCentrifugeTubeCarrier

@@ -15,7 +15,7 @@ hamilton_backend = hal.backend.devices["Hamilton"]
 
 hamilton_backend.start()
 
-flip_tube_plate = hal.layout_item.devices["Carrier42_Pos1_Hamilton1500uLFlipTubeRack"]
+flip_tube_plate = hal.layout_item.devices["Carrier41_Pos1_Hamilton1500uLFlipTubeCarrier"]
 
 closeable_container_device = hal.closeable_container.devices["FlipTube"]
 
@@ -26,18 +26,12 @@ closeable_container_device.assert_supported_deck_locations(
     flip_tube_plate.deck_location,
 )
 closeable_container_device.open(
-    (flip_tube_plate, 2),
-    (flip_tube_plate, 6),
-    (flip_tube_plate, 4),
-    (flip_tube_plate, 5),
-    (flip_tube_plate, 3),
+    (flip_tube_plate, 32),
+    (flip_tube_plate, 31),
 )
 closeable_container_device.close(
-    (flip_tube_plate, 2),
-    (flip_tube_plate, 6),
-    (flip_tube_plate, 4),
-    (flip_tube_plate, 5),
-    (flip_tube_plate, 3),
+    (flip_tube_plate, 32),
+    (flip_tube_plate, 31),
 )
 
 input("ENTER")
