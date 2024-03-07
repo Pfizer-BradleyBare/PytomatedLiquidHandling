@@ -14,9 +14,6 @@ hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
 source = hal.layout_item.devices["Carrier42_Pos1_Hamilton1500uLFlipTubeRack"]
 destination = hal.layout_item.devices["Centrifuge_Pos1_Hamilton1500uLFlipTubeRack"]
 
-api.transport.layout_item_transport(source, destination)
-api.transport.layout_item_transport(destination, source)
-quit()
 
 hamilton_backend = hal.backend.devices["Hamilton"]
 hamilton_backend.start()
@@ -27,8 +24,8 @@ gripper.initialize()
 gripper = hal.transport.devices["TrackGripper"]
 gripper.initialize()
 
-
-
-
+api.transport.layout_item_transport(source, destination)
+api.transport.layout_item_transport(destination, source)
+quit()
 
 input("ENTER")

@@ -25,14 +25,16 @@ def layout_item_transport(
         device = compatible_configs[0][0].transport_device
 
         device.assert_supported_deck_locations(
-            source_deck_location, destination_deck_location,
+            source_deck_location,
+            destination_deck_location,
         )
         device.assert_supported_labware(source.labware, destination.labware)
         device.assert_compatible_deck_locations(
-            source_deck_location, destination_deck_location,
+            source_deck_location,
+            destination_deck_location,
         )
 
-        device.transport(source,destination)
+        device.transport(source, destination)
     # In this case the two locations are compatible so we can just do the transport
 
     else:
@@ -42,20 +44,25 @@ def layout_item_transport(
             for location in deck_location.devices.values()
             if isinstance(location, deck_location.TransportableDeckLocation)
         ]:
-            if location is source:
+            if location is source.deck_location:
                 continue
-            if location is destination:
+            if location is destination.deck_location:
                 continue
 
-            print(location.identifier)
-
-            compatible_configs = deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                source,
-                destination,
+            source_compatible_configs = deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+                source.deck_location,
                 location,
             )
 
-            if len(compatible_configs) > 0:
+            destination_compatible_configs = deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+                destination.deck_location,
+                location,
+            )
+
+            if (
+                len(source_compatible_configs) > 0
+                and len(destination_compatible_configs) > 0
+            ):
 
                 intermediate = [
                     layout_item
