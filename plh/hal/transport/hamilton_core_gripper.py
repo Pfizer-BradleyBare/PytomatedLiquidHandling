@@ -88,6 +88,7 @@ class HamiltonCOREGripper(TransportBase):
                 Channel1000uLCOREGrip.GetPlate.exceptions.ExecutionError,
                 Channel1000uLCOREGrip.GetPlate.exceptions.GripperPickupError,
                 Channel1000uLCOREGrip.GetPlate.exceptions.NotExecutedError,
+                Channel1000uLCOREGrip.GetPlate.exceptions.NoTipError,
             ):
                 # skip these errors.They can be repeated without consequence
                 ...
