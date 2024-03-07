@@ -28,3 +28,5 @@ api.transport.layout_item_transport(source, destination)
 api.transport.layout_item_transport(destination, source)
 
 input("ENTER")
+
+hamilton_backend.stop()

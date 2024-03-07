@@ -9,6 +9,12 @@ function OnAbort(  ) void {
 // }} ""
 // {{ 5 "OnAbort" "InitLocals"
 // }} ""
+// {{ 171 1 0 "bbaa0bb1_bf41_4d32_bf03195fba15e88d" "ML_STAR:{81DA4252-3BA9-11d4-AE21-0004ACB1DCB2}"
+{
+	variable arrRetValues[];
+	arrRetValues = ML_STAR._81DA4252_3BA9_11d4_AE21_0004ACB1DCB2("bbaa0bb1_bf41_4d32_bf03195fba15e88d"); // MoveToPosition
+}
+// }} ""
 // {{{ 5 "OnAbort" "End"
 }
 // }} ""
@@ -559,4 +565,4 @@ abort;
 }
 // }} ""
 /* {{ 2 "SubmethodInsertLine" "" */ // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-02-29 09:52$$checksum=3b5a17b2$$length=091$$
+// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-03-07 12:18$$checksum=5f0ad7d3$$length=091$$
