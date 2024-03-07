@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import Annotated
-
+from dataclasses import fields
 from pydantic import ValidationInfo, dataclasses, field_serializer, field_validator
 from pydantic.functional_validators import BeforeValidator
 
@@ -79,4 +79,5 @@ class TransportConfig:
         )
 
     def __hash__(self: TransportConfig) -> int:
-        return hash(f"{self.transport_device.identifier}{self.get_options}")
+        return hash(f"{self.transport_device.identifier}{[self.get_options.__dict__[field.name] for field in fields(self.get_options) if field.compare is True]}")
+        #Hash is only a combination of the options fields used for comparison.

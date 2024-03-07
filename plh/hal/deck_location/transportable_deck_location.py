@@ -22,7 +22,7 @@ class TransportableDeckLocation(DeckLocationBase):
     @classmethod
     def get_compatible_transport_configs(
         cls: type[TransportableDeckLocation],
-        *args,
+        *args:DeckLocationBase,
     ) -> list[tuple[TransportConfig, ...]]:
         """Gets a list of compatible transport configurations for different deck locations.
 

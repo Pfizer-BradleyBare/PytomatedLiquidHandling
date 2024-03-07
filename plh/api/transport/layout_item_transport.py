@@ -47,6 +47,8 @@ def layout_item_transport(
             if location is destination:
                 continue
 
+            print(location.identifier)
+
             compatible_configs = deck_location.TransportableDeckLocation.get_compatible_transport_configs(
                 source,
                 destination,
