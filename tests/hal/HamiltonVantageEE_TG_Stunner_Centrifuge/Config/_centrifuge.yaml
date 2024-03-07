@@ -17,4 +17,4 @@ Hamilton Hig4:
     enabled: True
     backend: Hamilton
     adapter_id: "0"
-    filter_plate_stacks:
+    plates:

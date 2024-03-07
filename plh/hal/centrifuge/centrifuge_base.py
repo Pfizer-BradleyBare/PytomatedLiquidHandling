@@ -16,23 +16,23 @@ from plh.hal.tools import HALDevice, Interface
 class CentrifugeBase(Interface, HALDevice):
     """On deck centrifuge that can be accessed by a liquid handler."""
 
-    filter_plate_stacks: Annotated[
-        list[li.FilterPlateStack],
+    plates: Annotated[
+        list[li.Plate | li.CoverablePlate | li.FilterPlateStack],
         BeforeValidator(li.validate_list),
     ]
     """The acceptable filter plate stacks supported by the centrifuge."""
 
     def assert_supported_labware(
         self: CentrifugeBase,
-        *args: tuple[labware.LabwareBase, labware.LabwareBase],
+        *args: labware.LabwareBase,
     ) -> None:
         supported_labware = [
-            (item.filter_plate.labware, item.base.labware)
-            for item in self.filter_plate_stacks
+            item.labware if isinstance(item, li.Plate) else item.filter_plate.labware
+            for item in self.plates
         ]
 
         exceptions = [
-            labware.exceptions.LabwareStackNotSupportedError(self, *item)
+            labware.exceptions.LabwareNotSupportedError(self, item)
             for item in args
             if item not in supported_labware
         ]
@@ -43,18 +43,19 @@ class CentrifugeBase(Interface, HALDevice):
 
     def get_layout_item(
         self: CentrifugeBase,
-        labware_stack: tuple[labware.LabwareBase, labware.LabwareBase],
-    ) -> li.FilterPlateStack:
+        labware: labware.LabwareBase,
+    ) -> li.Plate | li.CoverablePlate | li.FilterPlateStack:
         """Gets a layout item on the centrifuge device that is compatible with your current labware stack."""
-        self.assert_supported_labware(labware_stack)
+        self.assert_supported_labware(labware)
 
-        filter_labware, base_labware = labware_stack
+        for supported_layout_item in self.plates:
+            supported_labware = (
+                supported_layout_item.labware
+                if isinstance(supported_layout_item, li.Plate)
+                else supported_layout_item.filter_plate.labware
+            )
 
-        for supported_layout_item in self.filter_plate_stacks:
-            if (
-                supported_layout_item.filter_plate.labware == filter_labware
-                and supported_layout_item.base.labware == base_labware
-            ):
+            if labware == supported_labware:
                 return supported_layout_item
 
         msg = "Should never reach this point."

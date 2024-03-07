@@ -18,19 +18,6 @@ class LabwareNotSupportedError(HALError):
 
 
 @dataclass
-class LabwareStackNotSupportedError(HALError):
-    """HAL device does not support your Labware.
-    This can be thrown for any LayoutItem inputs.
-    """
-
-    top_labware: LabwareBase
-    """The top of the stack. Generally a filter plate."""
-
-    bottom_labware: LabwareBase
-    """the bottom of the stack. Generally a plate."""
-
-
-@dataclass
 class LabwareNotEqualError(HALError):
     """Your two input Labwares are not equal.
     This can be thrown for any source and destination LayoutItem inputs.
