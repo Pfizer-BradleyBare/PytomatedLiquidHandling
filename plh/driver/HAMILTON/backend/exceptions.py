@@ -400,5 +400,6 @@ error_code_description_map: dict[str, int] = {
     ###CUSTOM BELOW###
     "Peripheral device communication failed": 10001,
     "Gripper did not detect expected labware": 10002,
+    "(tip presence check).)\n(0x28 - 0x1 - 0x80a)\n": 10002,
     "LabwareId is invalid for the current deck layout": 10003,
 }

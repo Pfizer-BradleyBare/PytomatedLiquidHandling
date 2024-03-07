@@ -20,7 +20,7 @@ gripper = hal.transport.devices["COREGripper"]
 gripper.initialize()
 
 source = hal.layout_item.devices["Carrier48_Pos1_Biorad200uLPCRPlate"]
-destination = hal.layout_item.devices["Carrier48_Pos2_Biorad200uLPCRPlate"]
+destination = hal.layout_item.devices["Carrier48_Pos1_Biorad200uLPCRPlate"]
 
 
 gripper.assert_supported_labware(source.labware, destination.labware)
@@ -32,8 +32,8 @@ gripper.assert_compatible_deck_locations(
     source.deck_location,
     destination.deck_location,
 )
-
-gripper.transport(source, destination)
+for i in range(0,10):
+    gripper.transport(source, destination)
 
 
 input("ENTER")
