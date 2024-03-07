@@ -11,7 +11,7 @@ from plh.hal import backend
 
 from .centrifuge_base import *
 from .centrifuge_base import CentrifugeBase
-
+import time
 
 @dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonHig4(CentrifugeBase):
@@ -94,6 +94,9 @@ class HamiltonHig4(CentrifugeBase):
         self.backend.execute(command)
         self.backend.wait(command)
         self.backend.acknowledge(command, HSLHiGCentrifugeLib.AbortSpin.Response)
+
+        while self.is_spinning():
+            time.sleep(5)
 
     def stop_time(self: HamiltonHig4) -> float:
         return 30
