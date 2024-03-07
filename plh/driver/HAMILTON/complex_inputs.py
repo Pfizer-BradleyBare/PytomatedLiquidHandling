@@ -14,7 +14,7 @@ class PydanticExtendEnumValidation(Enum):
             return cls[v]
         except KeyError:
             try:
-                cls(v)
+                return cls(v)
             except:
                 raise ValueError("invalid value")
 
@@ -32,7 +32,6 @@ class GripForceOptions(PydanticExtendEnumValidation):
     GripForce7 = 7
     GripForce8 = 8
     GripForce9 = 9
-
 
 class GripModeOptions(PydanticExtendEnumValidation):
     """Which side the gripper should contact when gripping the labware."""
