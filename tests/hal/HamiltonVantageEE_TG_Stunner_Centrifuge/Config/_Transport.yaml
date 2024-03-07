@@ -31,3 +31,10 @@ HamiltonCOREGripper:
     - FTRTipRack
     - FTRStackableTipRack
     - VacuumManifoldShort
+
+VantageTrackGripper:
+  identifier: TrackGripper
+  enabled: True
+  backend: Hamilton
+  supported_labware:
+    - Hamilton1500uLFlipTubeRack

@@ -1,0 +1,11 @@
+Transportable Deck Location:
+  - enabled: True
+    carrier_config:
+      carrier: Carrier-1
+      position: 1
+
+    transport_configs:
+      - transport_device: COREGripper
+        get_options:
+        place_options:
+          CheckPlateExists: False
