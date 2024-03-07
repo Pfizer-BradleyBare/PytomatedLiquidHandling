@@ -5,6 +5,8 @@ from . import (
     AspirationMonitoring_1000uLChannel_On,
     ClotDetectionMonitoring_1000uLChannel_Off,
     ClotDetectionMonitoring_1000uLChannel_On,
+    GetContainerVolume,
+    MeasureContainerVolume,
 )
 
 __all__ = [
@@ -14,4 +16,6 @@ __all__ = [
     "AspirationMonitoring_1000uLChannel_On",
     "ClotDetectionMonitoring_1000uLChannel_Off",
     "ClotDetectionMonitoring_1000uLChannel_On",
+    "GetContainerVolume",
+    "MeasureContainerVolume",
 ]
