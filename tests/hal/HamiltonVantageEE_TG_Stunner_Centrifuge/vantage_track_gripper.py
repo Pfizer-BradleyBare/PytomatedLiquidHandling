@@ -26,6 +26,5 @@ gripper.initialize()
 
 api.transport.layout_item_transport(source, destination)
 api.transport.layout_item_transport(destination, source)
-quit()
 
 input("ENTER")

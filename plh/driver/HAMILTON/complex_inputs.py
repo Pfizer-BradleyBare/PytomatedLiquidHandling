@@ -6,15 +6,17 @@ class PydanticExtendEnumValidation(Enum):
 
     @classmethod
     def __get_validators__(cls):
-        cls.lookup = {v: k.value for v, k in cls.__members__.items()}
         yield cls.validate
 
     @classmethod
     def validate(cls, v, item):
         try:
-            return cls.lookup[v]
+            return cls[v]
         except KeyError:
-            raise ValueError("invalid value")
+            try:
+                cls(v)
+            except:
+                raise ValueError("invalid value")
 
 
 class GripForceOptions(PydanticExtendEnumValidation):
