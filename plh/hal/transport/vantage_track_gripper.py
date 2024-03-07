@@ -26,7 +26,7 @@ class VantageTrackGripper(TransportBase):
 
     @dataclasses.dataclass(kw_only=True)
     class GetOptions(TransportBase.GetOptions):
-        ParkLabwareID: str = field(compare=False)
+        ParkLabwareID: str | None = field(compare=False)
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
         Orientation: TrackGripper.LabwareOrientationOptions = field(
@@ -38,7 +38,7 @@ class VantageTrackGripper(TransportBase):
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
-        ParkLabwareID: str = field(compare=False)
+        ParkLabwareID: str | None = field(compare=False)
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
         CoordinatedMovement: bool = field(
@@ -78,17 +78,18 @@ class VantageTrackGripper(TransportBase):
             compatible_configs[0].get_options,
         )
 
-        command = MoveToPositionSequence.Command(
-            options=MoveToPositionSequence.Options(
-                LabwareID=get_options.ParkLabwareID,
-                ZMode=MoveToPositionSequence.ZModeOptions.MaxHeight,
-            ),
-            backend_error_handling=False,
-        )
+        if get_options.ParkLabwareID is not None:
+            command = MoveToPositionSequence.Command(
+                options=MoveToPositionSequence.Options(
+                    LabwareID=get_options.ParkLabwareID,
+                    ZMode=MoveToPositionSequence.ZModeOptions.MaxHeight,
+                ),
+                backend_error_handling=False,
+            )
 
-        self.backend.execute(command)
-        self.backend.wait(command)
-        self.backend.acknowledge(command, MoveToPositionSequence.Response)
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(command, MoveToPositionSequence.Response)
 
         if (
             get_options.Orientation
@@ -127,17 +128,18 @@ class VantageTrackGripper(TransportBase):
             compatible_configs[1].place_options,
         )
 
-        command = MoveToPositionSequence.Command(
-            options=MoveToPositionSequence.Options(
-                LabwareID=place_options.ParkLabwareID,
-                ZMode=MoveToPositionSequence.ZModeOptions.MaxHeight,
-            ),
-            backend_error_handling=False,
-        )
+        if place_options.ParkLabwareID is not None:
+            command = MoveToPositionSequence.Command(
+                options=MoveToPositionSequence.Options(
+                    LabwareID=place_options.ParkLabwareID,
+                    ZMode=MoveToPositionSequence.ZModeOptions.MaxHeight,
+                ),
+                backend_error_handling=False,
+            )
 
-        self.backend.execute(command)
-        self.backend.wait(command)
-        self.backend.acknowledge(command, MoveToPositionSequence.Response)
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(command, MoveToPositionSequence.Response)
 
         command = TrackGripper.PlacePlateTaught.Command(
             options=TrackGripper.PlacePlateTaught.Options(
