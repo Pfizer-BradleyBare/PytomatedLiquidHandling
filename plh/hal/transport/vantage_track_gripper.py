@@ -8,6 +8,7 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import TrackGripper
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.driver.HAMILTON.ML_STAR.Channel1000uL import MoveToPositionSequence
 from plh.hal import backend, deck_location
 from plh.hal.exceptions import CriticalHALError
 
@@ -25,6 +26,7 @@ class VantageTrackGripper(TransportBase):
 
     @dataclasses.dataclass(kw_only=True)
     class GetOptions(TransportBase.GetOptions):
+        ParkLabwareID: str = field(compare=False)
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
         Orientation: TrackGripper.LabwareOrientationOptions = field(
@@ -36,6 +38,7 @@ class VantageTrackGripper(TransportBase):
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
+        ParkLabwareID: str = field(compare=False)
         TaughtPathName: str = field(compare=False)
         PathTime: float = field(compare=False)
         CoordinatedMovement: bool = field(
@@ -75,6 +78,18 @@ class VantageTrackGripper(TransportBase):
             compatible_configs[0].get_options,
         )
 
+        command = MoveToPositionSequence.Command(
+            options=MoveToPositionSequence.Options(
+                LabwareID=get_options.ParkLabwareID,
+                ZMode=MoveToPositionSequence.ZModeOptions.MaxHeight,
+            ),
+            backend_error_handling=False,
+        )
+
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, MoveToPositionSequence.Response)
+
         if (
             get_options.Orientation
             == TrackGripper.LabwareOrientationOptions.PositiveYAxis
@@ -111,6 +126,18 @@ class VantageTrackGripper(TransportBase):
             VantageTrackGripper.PlaceOptions,
             compatible_configs[1].place_options,
         )
+
+        command = MoveToPositionSequence.Command(
+            options=MoveToPositionSequence.Options(
+                LabwareID=place_options.ParkLabwareID,
+                ZMode=MoveToPositionSequence.ZModeOptions.MaxHeight,
+            ),
+            backend_error_handling=False,
+        )
+
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, MoveToPositionSequence.Response)
 
         command = TrackGripper.PlacePlateTaught.Command(
             options=TrackGripper.PlacePlateTaught.Options(
