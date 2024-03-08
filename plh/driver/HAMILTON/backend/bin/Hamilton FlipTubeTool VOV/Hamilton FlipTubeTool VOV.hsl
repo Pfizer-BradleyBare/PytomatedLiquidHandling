@@ -869,7 +869,9 @@
           blnErrorFlag = ASWGLOBAL::BOOL::TRUE;
         }
 
-        // move up to traverse height with modified speed&power
+        // move up to traverse height with default speed&power
+        _SetZParameter(_intInstrumentZPower, _intInstrumentZSpeed);
+        
         fltarrMoveZPositions.SetSize(0);
         for(intPosition = 0; intPosition < fltarrZPositions.GetSize(); intPosition++)
         {
@@ -930,7 +932,7 @@
         }
 
         // set speed and power
-        _SetZParameter(_intInstrumentZPower, _intOpen_Z_Speed); // v1.7: move up with _intOpen_Z_Speed (was _intInstrumentZSpeed)
+        _SetZParameter(_intInstrumentZPower, _intInstrumentZSpeed); // v1.7: move up with _intOpen_Z_Speed (was _intInstrumentZSpeed)
 
         // move up to traverse height
         fltarrMoveZPositions.SetSize(0);
@@ -1141,7 +1143,7 @@
       _fltCloseX_Offset.SetAt(1, -2.45);
 
       // OffestVariables for FlipTubeTool General
-      _fltPreOpen_Z_End = 14.55; // v1.7: reduced to 14.55 (from 14.95)
+      _fltPreOpen_Z_End = 14.0; // v1.7: reduced to 14.55 (from 14.95)
 
       _fltOpen_Z_Start = 42.3;
       _fltOpen_Z_End = 38.0;

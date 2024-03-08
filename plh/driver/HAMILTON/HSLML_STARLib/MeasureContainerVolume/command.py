@@ -12,7 +12,7 @@ from .options import OptionsList
 class Command(
     CommandOptionsListMixin[OptionsList],
     HamiltonCommandActionBase,
-    CommandBackendErrorHandlingMixin,
+    
 ):
     def serialize_options(self: Command) -> dict[str, list]:
         output = HamiltonCommandActionBase.serialize_options(self)

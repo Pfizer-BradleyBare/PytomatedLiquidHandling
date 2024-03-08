@@ -12,5 +12,5 @@ from .options import Options
 class Command(
     CommandOptionsListMixin[list[Options]],
     HamiltonCommandActionBase,
-    CommandBackendErrorHandlingMixin,
+    
 ): ...
