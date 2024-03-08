@@ -22,36 +22,29 @@ class TransportableDeckLocation(DeckLocationBase):
     @classmethod
     def get_compatible_transport_configs(
         cls: type[TransportableDeckLocation],
-        *args: DeckLocationBase,
-    ) -> list[tuple[TransportConfig, ...]]:
+        source: DeckLocationBase,
+        destination: DeckLocationBase,
+    ) -> list[tuple[TransportConfig, TransportConfig]]:
         """Gets a list of compatible transport configurations for different deck locations.
 
         If DeckLocationNotTransportableError is thrown then your deck location is not compatible with transport.
         """
-        if not len(args) > 1:
-            raise ValueError("Must compare 2 or more deck_locations.")
-
         if not all(
-            isinstance(location, TransportableDeckLocation) for location in args
+            isinstance(location, TransportableDeckLocation)
+            for location in [source, destination]
         ):
             return []
 
-        location_configs = [
-            cast(TransportableDeckLocation, location).transport_configs
-            for location in args
-        ]
-
         return [
-            tuple(
-                [
-                    config
-                    for configs in location_configs
-                    for config in configs
-                    if config == compatible_config
-                ],
-            )
-            for compatible_config in list(set.intersection(*map(set, location_configs)))
+            (source_config, destination_config)
+            for source_config in cast(
+                TransportableDeckLocation,
+                source,
+            ).transport_configs
+            for destination_config in cast(
+                TransportableDeckLocation,
+                destination,
+            ).transport_configs
+            if source_config == destination_config
         ]
-
-    # Use intersection to find the compatible configs. NOTE: the hash for transport config only depends on transport device and get_config.
-    # Then use the compatible configs to contruct our tuple of location specific transport configs that are all compatible.
+        # __eq__ is defined for transport config so we just iterate through and collect the ones that are equal.

@@ -64,12 +64,15 @@ class VantageTrackGripper(TransportBase):
             destination.deck_location,
         )
 
-        compatible_configs = (
-            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+        compatible_configs = next(
+            configs
+            for configs in deck_location.TransportableDeckLocation.get_compatible_transport_configs(
                 source.deck_location,
                 destination.deck_location,
-            )[0]
+            )
+            if configs[0].transport_device is self
         )
+        # Select the first compatible config for this transport device.
 
         labware = source.labware
 
