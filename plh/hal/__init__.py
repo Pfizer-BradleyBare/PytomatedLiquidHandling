@@ -24,6 +24,7 @@ from . import (
     tools,
     transport,
     vacuum,
+    volume_measure,
 )
 
 __all__ = [
@@ -44,6 +45,7 @@ __all__ = [
     "tools",
     "transport",
     "vacuum",
+    "volume_measure",
     "exceptions",
 ]
 

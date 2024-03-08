@@ -14,6 +14,7 @@ from .liquid_class import LiquidClass
 from .options import TransferOptions, _AspirateDispenseOptions
 from .pipette_base import PipetteBase
 from .pipette_tip import PipetteTip
+from .pydantic_validators import validate_instance
 
 if True:
     from . import exceptions
@@ -25,7 +26,7 @@ __all__ = [
     "LiquidClass",
     "TransferOptions",
     "_AspirateDispenseOptions",
-    "_EjectOptions",
+    "validate_instance",
     "_PickupOptions",
     "HamiltonPortraitCORE8",
     "HamiltonPortraitCORE8ContactDispense",
