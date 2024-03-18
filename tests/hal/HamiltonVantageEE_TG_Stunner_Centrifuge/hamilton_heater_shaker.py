@@ -12,13 +12,18 @@ logger.enable("plh")
 
 hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
 
+print(263.7 - 49.25 - 188)
 
 print(
     cast(
         hal.labware.PipettableLabware,
         hal.labware.devices["Hamilton1500uLFlipTubeRack"],
-    ).get_volume_from_height(263.7 - 188),
+    ).get_volume_from_height(-100),
 )
 
-
-input("ENTER")
+print(
+    cast(
+        hal.labware.PipettableLabware,
+        hal.labware.devices["Hamilton1500uLFlipTubeRack"],
+    ).get_height_from_volume(1000),
+)

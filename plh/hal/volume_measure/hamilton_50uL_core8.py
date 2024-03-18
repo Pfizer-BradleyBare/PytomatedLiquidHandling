@@ -48,16 +48,16 @@ class Hamilton50uLCORE8(Interface, HALDevice):
 
         tips = {tip.tip.volume: tip for tip in self.pipette.supported_tips}
 
-        if 50 not in tips:
+        try:
+            self._pipette_tip = tips[50]
+        except KeyError as e:
             msg = "50uL tip not available with the chosen pipette."
-            raise ValueError(msg)
+            raise ValueError(msg) from e
 
         self.supported_labware = self.pipette.supported_source_labware
         self.supported_deck_locations = self.pipette.supported_deck_locations
         self.backend = self.pipette.backend
         # Copy this info from the pipette because it drives our compatibility
-
-        self._pipette_tip = tips[50]
 
         return self
 
@@ -67,7 +67,7 @@ class Hamilton50uLCORE8(Interface, HALDevice):
     ) -> list[float]:
         """Measures volume and returns a list of float volumes"""
         if len(args) > self._pipette_tip.tip.remaining_tips():
-            raise RuntimeError("Not enough tips remaining.")
+            raise RuntimeError("Not enough tips remaining to do this measurement.")
 
         layout_items = {layout_item for layout_item, _ in args}
 
