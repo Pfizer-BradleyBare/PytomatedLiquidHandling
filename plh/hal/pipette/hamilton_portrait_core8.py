@@ -1,268 +1,279 @@
 from __future__ import annotations
 
-import itertools
-from collections import defaultdict
-from typing import Literal, cast
+from typing import Annotated, Literal, cast
 
+from loguru import logger
 from pydantic import dataclasses
+from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
-from plh.hal import labware
+from plh.hal import backend, labware
 
-from .options import TransferOptions
+from .options import (
+    _AspirateDispenseOptions,
+)
+from .pipette_base import *
 from .pipette_base import PipetteBase
 from .pipette_tip import PipetteTip
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonPortraitCORE8(PipetteBase):
-    backend: HamiltonBackendBase
+    backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
+
     active_channels: list[Literal[1, 2, 3, 4, 5, 6, 7, 8]]
 
-    def _group_options(
+    def initialize(self: HamiltonPortraitCORE8) -> None: ...
+
+    def deinitialize(self: HamiltonPortraitCORE8) -> None: ...
+
+    def _pickup(
         self: HamiltonPortraitCORE8,
-        options: list[TransferOptions],
-    ) -> defaultdict[str, list[tuple[PipetteTip, TransferOptions]]]:
-        liquid_class_max_volumes: dict[str, float] = {}
-        for opt in options:
-            combined_name = (
-                opt.source_liquid_class_category
-                + ":"
-                + opt.destination_liquid_class_category
+        *args: tuple[int, PipetteTip],
+    ) -> None:
+        """Tips is a list of tuples of (channel_number, Tip)"""
+        args = tuple(sorted(args, key=lambda x: x[0]))
+
+        successful_pickups: dict[int, tuple[str, str]] = {}
+        # We can track which pickups worked here, so we do not arbitrarily waste tips when a bad tip fails to be picked up.
+
+        not_executed_pickups: dict[int, tuple[str, str]] = {}
+        # If a tip isn't executed we may want to save it and try again. We only want to abort NoTipErrors
+
+        while True:
+            command = Channel1000uL.Pickup.Command(
+                backend_error_handling=False,
+                options=[],
             )
 
-            if combined_name not in liquid_class_max_volumes:
-                liquid_class_max_volumes[combined_name] = self._get_max_transfer_volume(
-                    opt.source_liquid_class_category,
-                    opt.destination_liquid_class_category,
-                )
-        # Max volume for each liquid class pairing. Important
+            try:
+                for channel_number, pipette_tip in args:
+                    if channel_number in successful_pickups:
+                        continue
+                    # We need to check first if any tips were successful in being picked up. If so, we do not need to pickup a tip with that channel.
 
-        final_tranfer_options: list[TransferOptions] = []
-        truncated_final_tranfer_options: list[list[TransferOptions]] = []
+                    if channel_number in not_executed_pickups:
+                        command.options.append(
+                            Channel1000uL.Pickup.Options(
+                                ChannelNumber=channel_number,
+                                LabwareID=not_executed_pickups[channel_number][0],
+                                PositionID=not_executed_pickups[channel_number][1],
+                            ),
+                        )
+                        continue
+                    # If there are any not executed pickups then those will trump any new positions. Let's at least give the non-attempted positions a chance.
 
-        for opt in options:
-            combined_name = (
-                opt.source_liquid_class_category
-                + ":"
-                + opt.destination_liquid_class_category
-            )
+                    try:
+                        labware_id = pipette_tip.tip.available_positions[0].LabwareID
+                        position_id = pipette_tip.tip.available_positions[0].PositionID
+                        # There may not be any positions left. If not, we will catch that and attempt to discard the teir.
 
-            truncated_options = self._truncate_transfer_volume(
-                opt,
-                liquid_class_max_volumes[combined_name],
-            )
+                        command.options.append(
+                            Channel1000uL.Pickup.Options(
+                                ChannelNumber=channel_number,
+                                LabwareID=labware_id,
+                                PositionID=position_id,
+                            ),
+                        )
+                    except IndexError:
+                        if len(successful_pickups) != 0:
+                            self._eject(
+                                *[
+                                    (
+                                        pickup_key,
+                                        (
+                                            successful_pickups[pickup_key][0],
+                                            successful_pickups[pickup_key][1],
+                                        ),
+                                    )
+                                    for pickup_key in successful_pickups
+                                ],
+                            )
+                        # We DO NOT want to hold tips when a teir is empty. We need to be able to grab the gripper. So we will eject them.
 
-            if len(truncated_options) == 1:
-                final_tranfer_options += truncated_options
-                # If there is only 1 option then no truncation occured. We want to perform all non truncated transfers first.
-            else:
-                truncated_final_tranfer_options.append(truncated_options)
-                # If there is more than one we want to collect them so we can shuffle. This may increaes final pipetting speed.=
-        # Truncate based on max volume
+                        successful_pickups = {}
+                        not_executed_pickups = {}
+                        # We have ejected all tips and will discard a teir. We need to start fresh.
 
-        final_tranfer_options += [
-            i
-            for l in itertools.zip_longest(
-                *truncated_final_tranfer_options,
-                fillvalue=None,
-            )
-            for i in l
-            if i is not None
-        ]
-        # Shuffle our truncated options then add to the end.
+                        pipette_tip.tip.discard_teir()
 
-        tip_grouped_options: defaultdict[
-            str,
-            list[tuple[PipetteTip, TransferOptions]],
-        ] = defaultdict(list)
-        for opt in options:
-            tip = self._get_tip(
-                opt.source_liquid_class_category,
-                opt.destination_liquid_class_category,
-                opt.transfer_volume,
-            )
+                        break
+                    # It is possible that there are not enough tips in the teir to support this pickup operation.
 
-            tip_grouped_options[tip.tip.identifier].append((tip, opt))
-        return tip_grouped_options
+                    pipette_tip.tip.use_tips(1)
+                    # We are going to assume straight off that the pickup will be successful. If it is not then we will handle later.
 
-    def transfer(self: HamiltonPortraitCORE8, options: list[TransferOptions]) -> None:
-        num_active_channels = len(self.active_channels)
+                not_executed_pickups = {}
+                # We will rebild our not executed pickups on each round as needed.
 
-        tip_grouped_options = self._group_options(options)
-
-        for tip_opt_group in tip_grouped_options.values():
-            tip = tip_opt_group[0][0]
-
-            packages_opts = [
-                [tip_opt[1] for tip_opt in tip_opt_group][x : x + num_active_channels]
-                for x in range(0, len(tip_opt_group), num_active_channels)
-            ]
-            # Packaging in sets of num channels
-
-            if len(packages_opts) > tip.tip.remaining_tips():
-                raise RuntimeError("Not enough tips left")
-            # are there at minimum enough tips left?
-
-            for opts in packages_opts:
-                if len(tip.tip.available_positions) < len(opts):
-                    tip.tip.discard_teir()
-                # If not enough tips then get user to help
-
-                tip_positions = tip.tip.available_positions[: len(opts)]
-
-                get_options: list[Channel1000uL.Pickup.Options] = []
-                for index, (opt, channel_number) in enumerate(
-                    zip(opts, self.active_channels),
-                ):
-                    get_options.append(
-                        Channel1000uL.Pickup.Options(
-                            ChannelNumber=channel_number,
-                            LabwareID=tip_positions[index].LabwareID,
-                            PositionID=tip_positions[index].PositionID,
-                        ),
-                    )
-                command = Channel1000uL.Pickup.Command(
-                    backend_error_handling=False,
-                    options=get_options,
-                )
                 self.backend.execute(command)
                 self.backend.wait(command)
                 self.backend.acknowledge(command, Channel1000uL.Pickup.Response)
-                # Pickup the tips
+                # Give 'er a shot
 
-                aspirate_options: list[Channel1000uL.Aspirate.Options] = []
-                for index, (opt, channel_number) in enumerate(
-                    zip(opts, self.active_channels),
-                ):
-                    aspirate_labware = cast(
-                        labware.PipettableLabware,
-                        opt.source_layout_item.labware,
-                    )
+                break
+                # Yay we picked up the tips!
 
-                    numeric_layout = labware.NumericLayout(
-                        rows=opt.source_layout_item.labware.layout.rows,
-                        columns=opt.source_layout_item.labware.layout.columns,
-                        direction=opt.source_layout_item.labware.layout.direction,
-                    )
-                    # we need to do some numeric offsets to the position so convert it to a number first if it is not one.
-
-                    aspirate_position = (
-                        (int(numeric_layout.get_position_id(opt.source_position)) - 1)
-                        * aspirate_labware.well_definition.positions_per_well
-                        + index
-                        + 1
-                    )
-                    # The position MUST take into account the number of sequences per well.
-                    # This calculates the proper position in the well for each channel if the container has multiple position positions.
-
-                    aspirate_options.append(
-                        Channel1000uL.Aspirate.Options(
-                            ChannelNumber=channel_number,
-                            LabwareID=opt.source_layout_item.labware_id,
-                            PositionID=opt.source_layout_item.labware.layout.get_position_id(
-                                aspirate_position,
-                            ),
-                            LiquidClass=str(
-                                self._get_liquid_class(
-                                    opt.source_liquid_class_category,
-                                    opt.transfer_volume,
-                                ),
-                            ),
-                            Volume=opt.transfer_volume,
-                        ),
-                    )
-
-                command = Channel1000uL.Aspirate.Command(
-                    backend_error_handling=False,
-                    options=aspirate_options,
+            except* Channel1000uL.Pickup.exceptions.NotExecutedError as e:
+                exceptions = cast(
+                    tuple[Channel1000uL.Pickup.exceptions.NotExecutedError, ...],
+                    e.exceptions,
                 )
-                self.backend.execute(command)
-                self.backend.wait(command)
-                self.backend.acknowledge(command, Channel1000uL.Aspirate.Response)
 
-                dispense_options: list[Channel1000uL.Dispense.Options] = []
-                for index, (opt, channel_number) in enumerate(
-                    zip(opts, self.active_channels),
-                ):
-                    dispense_labware = cast(
-                        labware.PipettableLabware,
-                        opt.destination_layout_item.labware,
-                    )
+                logger.info(exceptions)
 
-                    numeric_layout = labware.NumericLayout(
-                        rows=opt.destination_layout_item.labware.layout.rows,
-                        columns=opt.destination_layout_item.labware.layout.columns,
-                        direction=opt.destination_layout_item.labware.layout.direction,
-                    )
-                    # we need to do some numeric offsets to the position so convert it to a number first if it is not one.
+                non_executed_pickups = [
+                    exception.HamiltonBlockData.num
+                    for exception in exceptions
+                    if exception.HamiltonBlockData is not None
+                ]
+                # We cannot be sure if block data will be present.
 
-                    dispense_position = (
-                        (
-                            int(
-                                numeric_layout.get_position_id(
-                                    opt.destination_position,
-                                ),
-                            )
-                            - 1
+                for option in command.options:
+                    if option.ChannelNumber in non_executed_pickups:
+                        not_executed_pickups[option.ChannelNumber] = (
+                            option.LabwareID,
+                            option.PositionID,
                         )
-                        * dispense_labware.well_definition.positions_per_well
-                        + index
-                        + 1
-                    )
-                    # The position MUST take into account the number of sequences per well.
-                    # This calculates the proper position in the well for each channel if the container has multiple position positions.
+                # We need to figure out which tips we should retry
+                # We are guarenteed by the Hamilton response base object that all except groups will be flat.
 
-                    dispense_options.append(
-                        Channel1000uL.Dispense.Options(
-                            ChannelNumber=channel_number,
-                            LabwareID=opt.destination_layout_item.labware_id,
-                            PositionID=opt.destination_layout_item.labware.layout.get_position_id(
-                                dispense_position,
-                            ),
-                            LiquidClass=str(
-                                self._get_liquid_class(
-                                    opt.destination_liquid_class_category,
-                                    opt.transfer_volume,
-                                ),
-                            ),
-                            Volume=opt.transfer_volume,
-                        ),
-                    )
-
-                command = Channel1000uL.Dispense.Command(
-                    backend_error_handling=False,
-                    options=dispense_options,
+            except* Channel1000uL.Pickup.exceptions.NoTipError as e:
+                exceptions = cast(
+                    tuple[Channel1000uL.Pickup.exceptions.NoTipError, ...],
+                    e.exceptions,
                 )
-                self.backend.execute(command)
-                self.backend.wait(command)
-                self.backend.acknowledge(command, Channel1000uL.Dispense.Response)
+                # We are guarenteed by the Hamilton response base object that all except groups will be flat.
 
-                eject_positions = ["1", "2", "3", "4", "13", "14", "15", "16"]
-                # Hamilton waste always has 16 positions. Do be compatible with liquid waste we want to use the outer positions
-                eject_options: list[Channel1000uL.Eject.Options] = []
-                for index, (opt, channel_number) in enumerate(
-                    zip(opts, self.active_channels),
-                ):
-                    eject_options.append(
-                        Channel1000uL.Eject.Options(
-                            LabwareID=tip.tip_waste_labware_id,
-                            ChannelNumber=channel_number,
-                            PositionID=eject_positions[index],
-                        ),
-                    )
+                logger.info(exceptions)
 
-                command = Channel1000uL.Eject.Command(
-                    backend_error_handling=False,
-                    options=eject_options,
-                )
-                self.backend.execute(command)
-                self.backend.wait(command)
-                self.backend.acknowledge(command, Channel1000uL.Eject.Response)
+                non_success_pickups = [
+                    exception.HamiltonBlockData.num
+                    for exception in exceptions
+                    if exception.HamiltonBlockData is not None
+                ]
+                # We cannot be sure if block data will be present.
 
-    def transfer_time(
+                for option in command.options:
+                    if (
+                        option.ChannelNumber not in non_success_pickups
+                        and option.ChannelNumber not in not_executed_pickups
+                    ):
+                        successful_pickups[option.ChannelNumber] = (
+                            option.LabwareID,
+                            option.PositionID,
+                        )
+                # We need to figure out which tips were picked up successfully.
+
+    def _eject(
         self: HamiltonPortraitCORE8,
-        options: list[TransferOptions],
-    ) -> float:
-        return 0
+        *args: tuple[int, tuple[str, str]],
+    ) -> None:
+        """Positions is a list of tuple of (channel_number,(labware_id,position_id))."""
+        args = tuple(sorted(args, key=lambda x: x[0]))
+
+        command = Channel1000uL.Eject.Command(backend_error_handling=False, options=[])
+
+        for channel_number, (labware_id, position_id) in args:
+            command.options.append(
+                Channel1000uL.Eject.Options(
+                    ChannelNumber=channel_number,
+                    LabwareID=labware_id,
+                    PositionID=position_id,
+                ),
+            )
+
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, Channel1000uL.Eject.Response)
+
+    def _eject_waste(
+        self: HamiltonPortraitCORE8,
+        *args: int,
+    ) -> None:
+        self._eject(
+            *[
+                (channel_number, (self.waste_labware_id, str(channel_number)))
+                for channel_number in args
+            ],
+        )
+
+    def _aspirate(
+        self: HamiltonPortraitCORE8,
+        options: list[_AspirateDispenseOptions],
+    ) -> None:
+        options = sorted(options, key=lambda x: x.channel_number)
+
+        command = Channel1000uL.Aspirate.Command(
+            backend_error_handling=False,
+            options=[],
+        )
+
+        for option in options:
+            command.options.append(
+                Channel1000uL.Aspirate.Options(
+                    ChannelNumber=option.channel_number,
+                    LabwareID=option.layout_item.labware_id,
+                    PositionID=option.position_id,
+                    LiquidClass=option.liquid_class,
+                    Volume=option.volume,
+                    Mode=Channel1000uL.Aspirate.AspirateModeOptions.AspirateAll,
+                    CapacitiveLiquidLevelDetection=Channel1000uL.Aspirate.LLDOptions.Off,
+                    SubmergeDepth=0,
+                    PressureLiquidLevelDetection=Channel1000uL.Aspirate.LLDOptions.Off,
+                    MaxHeightDifference=0,
+                    FixHeightFromBottom=cast(
+                        labware.PipettableLabware,
+                        option.layout_item.labware,
+                    ).get_height_from_volume(option.well_volume),
+                    RetractDistanceForTransportAir=5,
+                    LiquidFollowing=True,
+                    MixCycles=option.mix_cycles,
+                    MixPosition=0,
+                    MixVolume=option.mix_volume,
+                ),
+            )
+
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, Channel1000uL.Aspirate.Response)
+
+    def _dispense(
+        self: HamiltonPortraitCORE8,
+        options: list[_AspirateDispenseOptions],
+    ) -> None:
+        options = sorted(options, key=lambda x: x.channel_number)
+
+        command = Channel1000uL.Dispense.Command(
+            backend_error_handling=False,
+            options=[],
+        )
+
+        for option in options:
+            command.options.append(
+                Channel1000uL.Dispense.Options(
+                    ChannelNumber=option.channel_number,
+                    LabwareID=option.layout_item.labware_id,
+                    PositionID=option.position_id,
+                    LiquidClass=option.liquid_class,
+                    Volume=option.volume,
+                    Mode=Channel1000uL.Dispense.DispenseModeOptions.FromLiquidClassDefinition,
+                    FixHeightFromBottom=cast(
+                        labware.PipettableLabware,
+                        option.layout_item.labware,
+                    ).get_height_from_volume(option.well_volume),
+                    RetractDistanceForTransportAir=5,
+                    CapacitiveLiquidLevelDetection=Channel1000uL.Dispense.LLDOptions.Off,
+                    SubmergeDepth=0,
+                    SideTouch=False,
+                    LiquidFollowing=True,
+                    MixCycles=option.mix_cycles,
+                    MixPosition=0,
+                    MixVolume=option.mix_volume,
+                ),
+            )
+
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, Channel1000uL.Dispense.Response)
