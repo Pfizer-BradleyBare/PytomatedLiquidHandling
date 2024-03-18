@@ -17,6 +17,9 @@ class PipettableLabware(LabwareBase):
     def get_height_from_volume(self: PipettableLabware, volume: float) -> float:
         calculated_height = 0.0
 
+        if volume <= 0:
+            return calculated_height
+
         segments = self.well_definition.segments
 
         while True:
@@ -50,8 +53,12 @@ class PipettableLabware(LabwareBase):
         return calculated_height
 
     def get_volume_from_height(self: PipettableLabware, height: float) -> float:
-        segments = self.well_definition.segments
         calculated_volume = 0
+
+        if height <= 0:
+            return calculated_volume
+
+        segments = self.well_definition.segments
 
         for segment in segments:
             segment_height = segment.height
