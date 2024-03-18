@@ -24,7 +24,7 @@ class VolumeMeasureBase(Interface, HALDevice):
         BeforeValidator(deck_location.validate_list),
     ]
 
-    def assert_supported_destination_labware(
+    def assert_supported_labware(
         self: VolumeMeasureBase,
         *args: labware.LabwareBase,
     ) -> None:
