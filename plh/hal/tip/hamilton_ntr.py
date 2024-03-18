@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import field
-from typing import Annotated, cast
+from typing import Annotated
 
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import Visual_NTR_Library
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
-from plh.hal import backend, layout_item
+from plh.hal import backend, deck_location, layout_item
 
 from .tip_base import *
 from .tip_base import AvailablePosition, TipBase
@@ -38,6 +38,33 @@ class HamiltonNTR(TipBase):
         default_factory=list,
     )
     """NTR racks are stacked. Thus, we need to track the racks in each row of the stack. These are all racks (active and inactive)."""
+
+    def initialize(self: HamiltonNTR) -> None:
+        """Uses the NTR library to edit the number of available tips."""
+        command = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
+            options=Visual_NTR_Library.Channels_TipCounter_Edit.OptionsList(
+                TipCounter=f"{type(self).__name__}_{int(self.volume)}",
+                DialogTitle="Please update the number of "
+                + str(self.volume)
+                + "uL tips currently loaded on the system",
+            ),
+        )
+        for tip_rack in self.tip_racks:
+            command.options.append(
+                Visual_NTR_Library.Channels_TipCounter_Edit.Options(
+                    LabwareID=tip_rack.labware_id,
+                ),
+            )
+
+        self.backend.execute(command)
+        self.backend.wait(command)
+
+        self.update_available_positions(
+            self.backend.acknowledge(
+                command,
+                Visual_NTR_Library.Channels_TipCounter_Edit.Response,
+            ).AvailablePositions,
+        )
 
     def deinitialize(self: HamiltonNTR) -> None:
         """Saves the current position of the tips using the NTR driver."""
@@ -77,9 +104,8 @@ class HamiltonNTR(TipBase):
 
     def discard_teir(
         self: HamiltonNTR,
-    ) -> list[tuple[layout_item.LayoutItemBase, layout_item.LayoutItemBase]]:
-        """Returns the layout items from the top layer of a teir with the appropraite discard location.
-        NOTE: The top teir after edit will be partially available.
+    ) -> None:
+        """NOTE: The top teir after edit will be partially available.
         Thus, we use the ```available_positions_per_teir``` information to only discard the remaining teirs.
         """
         discard_racks = self.available_racks_per_teir[0]
@@ -91,43 +117,27 @@ class HamiltonNTR(TipBase):
         self.available_positions = self.available_positions_per_teir[0]
         self.available_positions_per_teir = self.available_positions_per_teir[1:]
 
-        return [
-            (
+        for rack in discard_racks:
+            transport_configs = deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+                rack.deck_location,
+                self.tip_rack_waste.deck_location,
+            )
+
+            transport_configs[0][0].transport_device.transport(
                 rack,
                 self.tip_rack_waste,
             )
-            for rack in discard_racks
-        ]
+            # NOTE: We are guarenteed that the rack and waste locations are compatible
 
-    def update_available_positions(self: HamiltonNTR) -> None:
-        """Uses the NTR library to edit the number of available tips.
-        After tip selection we need to extract information about the teirs in current and subsequence layers.
-        """
-        command = Visual_NTR_Library.Channels_TipCounter_Edit.Command(
-            options=Visual_NTR_Library.Channels_TipCounter_Edit.OptionsList(
-                TipCounter=f"{type(self).__name__}_{int(self.volume)}",
-                DialogTitle="Please update the number of "
-                + str(self.volume)
-                + "uL tips currently loaded on the system",
-            ),
-        )
-        for tip_rack in self.tip_racks:
-            command.options.append(
-                Visual_NTR_Library.Channels_TipCounter_Edit.Options(
-                    LabwareID=tip_rack.labware_id,
-                ),
-            )
+        # discard the racks
 
-        self.backend.execute(command)
-        self.backend.wait(command)
+    def update_available_positions(
+        self: HamiltonNTR,
+        raw_available_positions: list[dict[str, str]],
+    ) -> None:
+        """Extracts information about the teirs in current and subsequence layers."""
         self._parse_available_positions(
-            cast(
-                list[dict[str, str]],
-                self.backend.acknowledge(
-                    command,
-                    Visual_NTR_Library.Channels_TipCounter_Edit.Response,
-                ).AvailablePositions,
-            ),
+            raw_available_positions,
         )
 
         teirs = len(self.tip_racks)

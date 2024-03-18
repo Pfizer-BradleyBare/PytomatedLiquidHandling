@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Annotated, cast
+from typing import Annotated
 
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
@@ -19,6 +19,29 @@ class HamiltonFTR(TipBase):
 
     backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
     """Only supported on Hamilton systems."""
+
+    def initialize(self: HamiltonFTR) -> None:
+        """Uses the FTR edit command to allow the user to specify the number of tips available."""
+        command = HSLTipCountingLib.Edit.Command(
+            options=HSLTipCountingLib.Edit.OptionsList(
+                TipCounter=f"{type(self).__name__}_{int(self.volume)}",
+                DialogTitle=f"Please update the number of {int(self.volume)}uL tips currently loaded on the system",
+            ),
+        )
+        for tip_rack in self.tip_racks:
+            command.options.append(
+                HSLTipCountingLib.Edit.Options(LabwareID=tip_rack.labware_id),
+            )
+
+        self.backend.execute(command)
+        self.backend.wait(command)
+
+        self.update_available_positions(
+            self.backend.acknowledge(
+                command,
+                HSLTipCountingLib.Edit.Response,
+            ).AvailablePositions,
+        )
 
     def deinitialize(self: HamiltonFTR) -> None:
         """Saves the current position using the FTR driver."""
@@ -45,31 +68,12 @@ class HamiltonFTR(TipBase):
 
     def discard_teir(
         self: HamiltonFTR,
-    ) -> list[tuple[layout_item.LayoutItemBase, layout_item.LayoutItemBase]]:
-        """Cannot discard teir. You must load more tips."""
+    ) -> None:
+        """Cannot discard teir for normal FTR tips. You must load more tips."""
         raise RuntimeError("TODO: Tip reload error")
 
-    def update_available_positions(self: HamiltonFTR) -> None:
-        """Uses the FTR edit command to allow the user to specify the number of tips available."""
-        command = HSLTipCountingLib.Edit.Command(
-            options=HSLTipCountingLib.Edit.OptionsList(
-                TipCounter=f"{type(self).__name__}_{int(self.volume)}",
-                DialogTitle=f"Please update the number of {int(self.volume)}uL tips currently loaded on the system",
-            ),
-        )
-        for tip_rack in self.tip_racks:
-            command.options.append(
-                HSLTipCountingLib.Edit.Options(LabwareID=tip_rack.labware_id),
-            )
-
-        self.backend.execute(command)
-        self.backend.wait(command)
-        self._parse_available_positions(
-            cast(
-                list[dict[str, str]],
-                self.backend.acknowledge(
-                    command,
-                    HSLTipCountingLib.Edit.Response,
-                ).AvailablePositions,
-            ),
-        )
+    def update_available_positions(
+        self: HamiltonFTR,
+        raw_available_positions: list[dict[str, str]],
+    ) -> None:
+        self._parse_available_positions(raw_available_positions)

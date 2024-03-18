@@ -1,13 +1,14 @@
 from __future__ import annotations
 
-from typing import Annotated, cast
+from abc import abstractmethod
+from typing import Annotated
 
-from pydantic import dataclasses, model_validator
+from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import EntryExit
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
-from plh.hal import backend, layout_item
+from plh.hal import backend, deck_location, layout_item
 
 from .tip_base import *
 from .tip_base import AvailablePosition, TipBase
@@ -37,7 +38,6 @@ class EETipStack:
 class HamiltonEETipBase(TipBase):
     """Hamilton tip device with integration with EE (entry exit) for higher tip capacity.
     In this configuration tips are stored in EE until needed then moved to the deck.
-    NOTE: Your number of tip racks and tip stacks must be equal.
     """
 
     backend: Annotated[
@@ -55,14 +55,6 @@ class HamiltonEETipBase(TipBase):
     ]
     """Rack waste location. Empty racks will be transport here to be thrown away."""
 
-    @model_validator(mode="after")
-    @staticmethod
-    def __model_validate(v: HamiltonEETipBase) -> HamiltonEETipBase:
-        if len(v.tip_racks) != len(v.tip_stacks):
-            msg = "Number of tip_racks and tip_stacks must be equal."
-            raise ValueError(msg)
-        return v
-
     def remaining_tips(self: HamiltonEETipBase) -> int:
         """Remaining tips is the number of available positions + the number of stacks."""
         tips_per_rack = self.tip_racks[0].labware.layout.total_positions()
@@ -71,54 +63,75 @@ class HamiltonEETipBase(TipBase):
             [tips_per_rack * stack.stack_count for stack in self.tip_stacks],
         )
 
+    @abstractmethod
+    def initialize(self: HamiltonEETipBase) -> None:
+        """Counts the number of items in each stack. Edits the number of available tips using FTR edit."""
+
     def discard_teir(
         self: HamiltonEETipBase,
-    ) -> list[tuple[layout_item.LayoutItemBase, layout_item.LayoutItemBase]]:
+    ) -> None:
         """For any given number of racks the tip stacks will be used to replenish.
         If a stack runs out of tips then the stack will be moved to the so stacks are depleted in order.
         """
-        for stack in self.tip_stacks:
-            if stack.stack_count == 0:
-                raise RuntimeError("Out of items. TODO reload error.")
+        if len(self.tip_racks) > sum(stack.stack_count for stack in self.tip_stacks):
+            raise RuntimeError("Not enough stack items to replenish racks.")
 
-            command = EntryExit.MoveToBeam.Command(
-                options=EntryExit.MoveToBeam.Options(
-                    ModuleNumber=stack.module_number,
-                    StackNumber=stack.stack_number,
-                    OffsetFromBeam=0,
-                ),
-                backend_error_handling=False,
+        for rack in self.tip_racks:
+            for stack in self.tip_stacks[:]:
+                if stack.stack_count == 0:
+                    self.tip_stacks.remove(stack)
+                    self.tip_stacks.append(stack)
+                    continue
+                # If we have emptied a tip stack then we will skip it.
+                # Before we skip it we want to move it to the end of our list of stacks so we use whole stacks.
+
+                command = EntryExit.MoveToBeam.Command(
+                    options=EntryExit.MoveToBeam.Options(
+                        ModuleNumber=stack.module_number,
+                        StackNumber=stack.stack_number,
+                        OffsetFromBeam=0,
+                    ),
+                    backend_error_handling=False,
+                )
+
+                self.backend.execute(command)
+                self.backend.wait(command)
+                self.backend.acknowledge(command, EntryExit.MoveToBeam.Response)
+                # Move the stack to beam so we can access the tip rack.
+
+                stack.stack_count -= 1
+
+                break
+
+            transport_configs = deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+                rack.deck_location,
+                self.tip_rack_waste.deck_location,
             )
 
-            self.backend.execute(command)
-            self.backend.wait(command)
-            self.backend.acknowledge(command, EntryExit.MoveToBeam.Response)
-            # Move the stack to beam so we can access the tip rack.
+            transport_configs[0][0].transport_device.transport(
+                rack,
+                self.tip_rack_waste,
+            )
+            # NOTE: We are guarenteed that the rack and waste locations are compatible
 
-            stack.stack_count -= 1
+            transport_configs = deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+                stack.tip_rack.deck_location,
+                rack.deck_location,
+            )
 
-            self.available_positions = [
-                AvailablePosition(
-                    LabwareID=tip_rack.labware_id,
-                    PositionID=tip_rack.labware.layout.get_position_id(i),
-                )
-                for tip_rack in self.tip_racks
-                for i in range(1, tip_rack.labware.layout.total_positions() + 1)
-            ]
+            transport_configs[0][0].transport_device.transport(
+                stack.tip_rack,
+                rack,
+            )
+            # NOTE: We are also guarenteed that the stack and rack locations are compatible
 
-        return sum(
-            [
-                [
-                    (
-                        cast(layout_item.LayoutItemBase, rack),
-                        cast(layout_item.LayoutItemBase, self.tip_rack_waste),
-                    ),
-                    (
-                        cast(layout_item.LayoutItemBase, stack.tip_rack),
-                        cast(layout_item.LayoutItemBase, rack),
-                    ),
-                ]
-                for rack, stack in zip(self.tip_racks, self.tip_stacks)
-            ],
-            [],
-        )
+        # repeat for all racks
+
+        self.available_positions = [
+            AvailablePosition(
+                LabwareID=tip_rack.labware_id,
+                PositionID=tip_rack.labware.layout.get_position_id(i),
+            )
+            for tip_rack in self.tip_racks
+            for i in range(1, tip_rack.labware.layout.total_positions() + 1)
+        ]

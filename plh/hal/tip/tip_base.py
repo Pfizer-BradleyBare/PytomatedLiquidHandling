@@ -53,9 +53,9 @@ class TipBase(Interface, HALDevice):
                 ),
             )
 
+    @abstractmethod
     def initialize(self: TipBase) -> None:
         """Initiates a user update of the available tip positions then stores in the device using the ```update_available_positions``` instance method."""
-        self.update_available_positions()
 
     def use_tips(self: TipBase, num: int) -> None:
         """Indicates that the following number of tips have been used and are no longer available."""
@@ -71,10 +71,13 @@ class TipBase(Interface, HALDevice):
     @abstractmethod
     def discard_teir(
         self: TipBase,
-    ) -> list[tuple[layout_item.LayoutItemBase, layout_item.LayoutItemBase]]:
-        """Returns a list of transport options to discard the current teir."""
+    ) -> None:
+        """Uses the compatible transport device to discard the teir."""
         ...
 
     @abstractmethod
-    def update_available_positions(self: TipBase) -> None:
+    def update_available_positions(
+        self: TipBase,
+        raw_available_positions: list[dict[str, str]],
+    ) -> None:
         """Initiates an update of the available positions. This is not neccesarily the same as Initialize"""
