@@ -15,7 +15,6 @@ class PipetteTip:
     tip: Annotated[tip.TipBase, BeforeValidator(tip.validate_instance)]
     tip_support_dropoff_labware_id: str
     tip_support_pickup_labware_id: str
-    tip_waste_labware_id: str
     supported_aspirate_liquid_class_categories: dict[str, list[LiquidClass]]
     supported_dispense_liquid_class_categories: dict[str, list[LiquidClass]]
 

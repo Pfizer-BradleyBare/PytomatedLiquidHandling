@@ -203,6 +203,14 @@ class PipetteBase(Interface, HALDevice):
         ...
 
     @abstractmethod
+    def _eject_waste(
+        self: PipetteBase,
+        *args: int,
+    ) -> None:
+        """This function should eject tips to a positions defined by ```_EjectOptions```."""
+        ...
+
+    @abstractmethod
     def _aspirate(
         self: PipetteBase,
         options: list[_AspirateDispenseOptions],
