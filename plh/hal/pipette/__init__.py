@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-# from .hamilton_portrait_core8 import HamiltonPortraitCORE8
+from .hamilton_portrait_core8 import HamiltonPortraitCORE8
 from .hamilton_portrait_core8_contact_dispense import (
     HamiltonPortraitCORE8ContactDispense,
 )
@@ -27,7 +27,6 @@ __all__ = [
     "TransferOptions",
     "_AspirateDispenseOptions",
     "validate_instance",
-    "_PickupOptions",
     "HamiltonPortraitCORE8",
     "HamiltonPortraitCORE8ContactDispense",
     "HamiltonCORE96",
