@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
+from dataclasses import field
 from typing import Annotated
 
 from pydantic import dataclasses
@@ -8,7 +9,7 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import EntryExit
 from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
-from plh.hal import backend, deck_location, layout_item
+from plh.hal import backend, layout_item, transport
 
 from .tip_base import *
 from .tip_base import AvailablePosition, TipBase
@@ -103,28 +104,10 @@ class HamiltonEETipBase(TipBase):
 
                 break
 
-            transport_configs = deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                rack.deck_location,
-                self.tip_rack_waste.deck_location,
+            transport.transport_layout_items(
+                (rack, self.tip_rack_waste),
+                (stack.tip_rack, rack),
             )
-
-            transport_configs[0][0].transport_device.transport(
-                rack,
-                self.tip_rack_waste,
-            )
-            # NOTE: We are guarenteed that the rack and waste locations are compatible
-
-            transport_configs = deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                stack.tip_rack.deck_location,
-                rack.deck_location,
-            )
-
-            transport_configs[0][0].transport_device.transport(
-                stack.tip_rack,
-                rack,
-            )
-            # NOTE: We are also guarenteed that the stack and rack locations are compatible
-
         # repeat for all racks
 
         self.available_positions = [

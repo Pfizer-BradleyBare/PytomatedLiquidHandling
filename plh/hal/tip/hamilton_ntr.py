@@ -8,7 +8,7 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON import Visual_NTR_Library
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
-from plh.hal import backend, deck_location, layout_item
+from plh.hal import backend, layout_item, transport
 
 from .tip_base import *
 from .tip_base import AvailablePosition, TipBase
@@ -117,18 +117,9 @@ class HamiltonNTR(TipBase):
         self.available_positions = self.available_positions_per_teir[0]
         self.available_positions_per_teir = self.available_positions_per_teir[1:]
 
-        for rack in discard_racks:
-            transport_configs = deck_location.TransportableDeckLocation.get_compatible_transport_configs(
-                rack.deck_location,
-                self.tip_rack_waste.deck_location,
-            )
-
-            transport_configs[0][0].transport_device.transport(
-                rack,
-                self.tip_rack_waste,
-            )
-            # NOTE: We are guarenteed that the rack and waste locations are compatible
-
+        transport.transport_layout_items(
+            *[(rack, self.tip_rack_waste) for rack in discard_racks],
+        )
         # discard the racks
 
     def update_available_positions(
