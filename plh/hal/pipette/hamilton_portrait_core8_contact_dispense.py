@@ -5,6 +5,7 @@ from typing import cast
 
 from pydantic import dataclasses
 
+from plh.driver.HAMILTON.ML_STAR import Channel1000uL
 from plh.hal import labware
 
 from .hamilton_portrait_core8 import *
@@ -18,6 +19,85 @@ from .pipette_tip import PipetteTip
 
 @dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
+    def _aspirate(
+        self: HamiltonPortraitCORE8ContactDispense,
+        options: list[_AspirateDispenseOptions],
+    ) -> None:
+        options = sorted(options, key=lambda x: x.channel_number)
+
+        command = Channel1000uL.Aspirate.Command(
+            backend_error_handling=False,
+            options=[],
+        )
+
+        for option in options:
+            command.options.append(
+                Channel1000uL.Aspirate.Options(
+                    ChannelNumber=option.channel_number,
+                    LabwareID=option.layout_item.labware_id,
+                    PositionID=option.position_id,
+                    LiquidClass=option.liquid_class,
+                    Volume=option.volume,
+                    Mode=Channel1000uL.Aspirate.AspirateModeOptions.AspirateAll,
+                    CapacitiveLiquidLevelDetection=Channel1000uL.Aspirate.LLDOptions.Off,
+                    SubmergeDepth=0,
+                    PressureLiquidLevelDetection=Channel1000uL.Aspirate.LLDOptions.Off,
+                    MaxHeightDifference=0,
+                    FixHeightFromBottom=cast(
+                        labware.PipettableLabware,
+                        option.layout_item.labware,
+                    ).get_height_from_volume(option.well_volume),
+                    RetractDistanceForTransportAir=5,
+                    LiquidFollowing=True,
+                    MixCycles=option.mix_cycles,
+                    MixPosition=0,
+                    MixVolume=option.mix_volume,
+                ),
+            )
+
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, Channel1000uL.Aspirate.Response)
+
+    def _dispense(
+        self: HamiltonPortraitCORE8ContactDispense,
+        options: list[_AspirateDispenseOptions],
+    ) -> None:
+        options = sorted(options, key=lambda x: x.channel_number)
+
+        command = Channel1000uL.Dispense.Command(
+            backend_error_handling=False,
+            options=[],
+        )
+
+        for option in options:
+            command.options.append(
+                Channel1000uL.Dispense.Options(
+                    ChannelNumber=option.channel_number,
+                    LabwareID=option.layout_item.labware_id,
+                    PositionID=option.position_id,
+                    LiquidClass=option.liquid_class,
+                    Volume=option.volume,
+                    Mode=Channel1000uL.Dispense.DispenseModeOptions.FromLiquidClassDefinition,
+                    FixHeightFromBottom=cast(
+                        labware.PipettableLabware,
+                        option.layout_item.labware,
+                    ).get_height_from_volume(option.well_volume),
+                    RetractDistanceForTransportAir=5,
+                    CapacitiveLiquidLevelDetection=Channel1000uL.Dispense.LLDOptions.Off,
+                    SubmergeDepth=0,
+                    SideTouch=False,
+                    LiquidFollowing=True,
+                    MixCycles=option.mix_cycles,
+                    MixPosition=0,
+                    MixVolume=option.mix_volume,
+                ),
+            )
+
+        self.backend.execute(command)
+        self.backend.wait(command)
+        self.backend.acknowledge(command, Channel1000uL.Dispense.Response)
+
     def transfer(
         self: HamiltonPortraitCORE8ContactDispense,
         options: list[TransferOptions],
@@ -190,17 +270,12 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
             self._dispense(aspdis_options)
 
-            self._eject(
+            self._eject_waste(
                 *[
-                    (
-                        self.active_channels[index],
-                        (self.waste_labware_id, str(self.active_channels[index])),
-                    )
-                    for index, (tip, option) in enumerate(channel_group)
+                    self.active_channels[index]
+                    for index, (_, _) in enumerate(channel_group)
                 ],
             )
-
-            channel_group
 
     def transfer_time(
         self: HamiltonPortraitCORE8ContactDispense,
