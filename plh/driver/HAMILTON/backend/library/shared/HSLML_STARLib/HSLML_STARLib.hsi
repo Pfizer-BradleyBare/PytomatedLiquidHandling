@@ -168,36 +168,10 @@ return;
 // {{ 78 1 0 "74e99b99_ed98_4f48_9b900eaf989b61db" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
 }
 // }} ""
-// {{ 79 1 0 "cabf8725_cd76_469d_8c8e711c8b14d5ed" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "MeasureContainerVolume")
-{
-// }} ""
-// {{{ 80 1 0 "5ba33c70_c3c4_4b9f_89014470435d76e2" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-MeasureContainerVolume(ML_STAR, i_EndpointOutputDataJSONObject);
-// }} ""
-// {{{ 81 1 0 "15c364a9_b16b_4de4_ae599a9dfe02cd8d" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
-return;
-// }} ""
-// {{ 82 1 0 "cabf8725_cd76_469d_8c8e711c8b14d5ed" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-}
-// }} ""
-// {{ 83 1 0 "670e8300_7ee2_497e_bcfd6a0945de8c84" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-if (CommandName == "GetContainerVolume")
-{
-// }} ""
-// {{{ 84 1 0 "51af3ee6_6142_474d_8fcec9227dbea7ba" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
-GetContainerVolume(ML_STAR, i_EndpointOutputDataJSONObject);
-// }} ""
-// {{{ 85 1 0 "5473b799_e529_4c6e_9768a3840f31165e" "{9EC997CD-FD3B-4280-811B-49E99DCF062C}"
-return;
-// }} ""
-// {{ 86 1 0 "670e8300_7ee2_497e_bcfd6a0945de8c84" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
-}
-// }} ""
-// {{ 87 1 0 "1689c1c8_e978_40ba_b6c8933fd0fe578b" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+// {{ 79 1 0 "1689c1c8_e978_40ba_b6c8933fd0fe578b" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
 MECC::TraceComment(Translate("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nCommand not handled. Please correct. Aborting...\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
 // }} ""
-// {{ 88 1 0 "1b64ed4a_0150_4e4f_884bc5d949c97d51" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
+// {{ 80 1 0 "1b64ed4a_0150_4e4f_884bc5d949c97d51" "{930D6C31-8EFB-11d4-A3BA-002035848439}"
 abort;
 // }} ""
 // {{{ 5 "HandleCommand" "End"
@@ -372,4 +346,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-03-08 12:34$$checksum=9fff4132$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-03-18 11:59$$checksum=6969c4c3$$length=084$$
