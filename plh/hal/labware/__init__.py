@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .calibration_point import CalibrationPoint
 from .dimensions import Dimensions
 from .labware_base import LabwareBase
 from .layout import AlphanumericLayout, Layout, LayoutSorting, NumericLayout
@@ -7,7 +8,6 @@ from .non_pipettable_labware import NonPipettableLabware
 from .pipettable_labware import PipettableLabware
 from .pydantic_validators import validate_instance, validate_list
 from .well import Well
-from .well_segment import WellSegment
 
 if True:
     from . import exceptions
@@ -23,7 +23,7 @@ __all__ = [
     "NonPipettableLabware",
     "PipettableLabware",
     "Well",
-    "WellSegment",
+    "CalibrationPoint",
     "exceptions",
     "validate_instance",
     "validate_list",

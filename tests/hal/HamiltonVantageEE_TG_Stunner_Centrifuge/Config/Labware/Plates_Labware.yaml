@@ -10,21 +10,9 @@ Pipettable Labware:
       positions_per_well: 1
       max_volume: 3
       dead_volume: 0
-      segments:
-        - height: 0.001
-          equation: h * 0.0942
-
-        - height: 0.12
-          equation: h * 0.2827
-
-        - height: 0.13
-          equation: h * 0.3325
-
-        - height: 0.95
-          equation: h * 1.9906
-
-        - height: 0.7
-          equation: h * 4.4305
+      calibration_curve:
+        - volume: 1
+          height: 1
 
     dimensions:
       x_length: 124.5
@@ -46,12 +34,9 @@ Pipettable Labware:
       positions_per_well: 1
       max_volume: 200
       dead_volume: 10
-      segments:
-        - height: 0
-          equation: h * 2.3562
-
-        - height: 14.68
-          equation: h * 16.4934
+      calibration_curve:
+        - volume: 1
+          height: 1
 
     dimensions:
       x_length: 124.75
@@ -73,12 +58,9 @@ Pipettable Labware:
       positions_per_well: 1
       max_volume: 400
       dead_volume: 10
-      segments:
-        - height: 3
-          equation: h * 18.9150
-
-        - height: 8
-          equation: h * 56.7450
+      calibration_curve:
+        - volume: 1
+          height: 1
 
     dimensions:
       x_length: 123.25
@@ -100,12 +82,9 @@ Pipettable Labware:
       positions_per_well: 1
       max_volume: 1200
       dead_volume: 10
-      segments:
-        - height: 3
-          equation: h * 27.7088
-
-        - height: 18
-          equation: h * 70.5600
+      calibration_curve:
+        - volume: 1
+          height: 1
 
     dimensions:
       x_length: 124.75
@@ -127,12 +106,9 @@ Pipettable Labware:
       positions_per_well: 1
       max_volume: 2000
       dead_volume: 10
-      segments:
-        - height: 4
-          equation: h*h*(12.5664-(1.0472*h))
-
-        - height: 38
-          equation: h * 64.0000
+      calibration_curve:
+        - volume: 1
+          height: 1
 
     dimensions:
       x_length: 124.50
@@ -154,12 +130,9 @@ Pipettable Labware:
       positions_per_well: 1
       max_volume: 1500
       dead_volume: 10
-      segments:
-        - height: 16.1
-          equation: h * 20.2737
-
-        - height: 22
-          equation: h * 65.0624
+      calibration_curve:
+        - volume: 1
+          height: 1
 
     dimensions:
       x_length: 128

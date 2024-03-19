@@ -19,12 +19,12 @@ print(
     cast(
         hal.labware.PipettableLabware,
         hal.labware.devices["Hamilton1500uLFlipTubeCarrier"],
-    ).get_volume_from_height(-100),
+    ).interpolate_height(100),
 )
 
 print(
     cast(
         hal.labware.PipettableLabware,
         hal.labware.devices["Hamilton1500uLFlipTubeCarrier"],
-    ).get_height_from_volume(1000),
+    ).interpolate_volume(1000),
 )
