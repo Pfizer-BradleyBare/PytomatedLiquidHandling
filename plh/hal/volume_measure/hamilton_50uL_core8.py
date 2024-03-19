@@ -51,7 +51,7 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
         tips = {tip.tip.volume: tip for tip in self.pipette.supported_tips}
 
         try:
-            self._pipette_tip = tips[300]
+            self._pipette_tip = tips[50]
         except KeyError as e:
             msg = "50uL tip not available with the chosen pipette."
             raise ValueError(msg) from e
@@ -96,8 +96,9 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
         }
         # Collect Z heights
 
-        tip_length = 49.25
+        tip_length = 0
         # 50uL tip height
+        # NOTE: Unsure why but Hamilton does not add the tip length when getting liquid level with this tip. ???
 
         liquid_levels: list[float] = []
 
