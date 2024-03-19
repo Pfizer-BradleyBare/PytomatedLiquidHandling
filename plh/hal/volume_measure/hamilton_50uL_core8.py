@@ -210,7 +210,7 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
         for layout_item, position in args:
             pos_id = layout_item.labware.layout.get_position_id(position)
 
-            out.append(liquid_levels[(layout_item,pos_id)].pop(0) - z_heights[layout_item] - tip_length)
+            out.append(cast(labware.PipettableLabware,layout_item.labware).get_volume_from_height(liquid_levels[(layout_item,pos_id)].pop(0) - z_heights[layout_item] - tip_length))
         #Take measured liquid levels and reorder to match input order.
 
         return out
