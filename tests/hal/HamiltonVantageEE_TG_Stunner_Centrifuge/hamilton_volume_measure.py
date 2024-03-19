@@ -22,7 +22,7 @@ for tip in vm.pipette.supported_tips:
     tip.tip.initialize()
 
 
-print(vm.measure_volume((li, 27),(li, 28), (li, 29), (li, 30), (li, 31), (li, 32)))
+print(vm.measure_volume((li, 32),(li, 31), (li, 30), (li, 29), (li, 28), (li, 27)))
 
 for tip in vm.pipette.supported_tips:
     tip.tip.deinitialize()

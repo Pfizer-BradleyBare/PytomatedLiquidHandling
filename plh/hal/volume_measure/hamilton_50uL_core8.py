@@ -148,7 +148,7 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
                     )
 
                     true_position = (
-                        (int(numeric_layout.get_position_id(position)) - 1)
+                        (int(numeric_layout.get_position_id(pos_id)) - 1)
                         * pipettable_labware.well_definition.positions_per_well
                     ) + (
                         (index % pipettable_labware.well_definition.positions_per_well) + 1
