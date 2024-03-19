@@ -320,5 +320,27 @@ def load_yaml_configuration(config_base_folder: str) -> None:
             f"No {centrifuge.CentrifugeBase.__name__} objects were loaded.",
         )
 
+    loaded = False
+    for root, _, files in os.walk(config_base_folder):
+        for file in files:
+            if (
+                file.lower().endswith(".yaml")
+                and "_volume_measure.yaml" in file.lower()
+            ):
+                logger.debug(f"Starting to load {pathlib.Path(root) / file}")
+                loaded = True
+                with (pathlib.Path(root) / file).open() as config_file:
+                    json = yaml.full_load(config_file)
+
+                tools.load_device_config(
+                    json,
+                    volume_measure.VolumeMeasureBase,
+                    volume_measure.devices,
+                )
+    if loaded is not True:
+        warns.append(
+            f"No {volume_measure.VolumeMeasureBase.__name__} objects were loaded.",
+        )
+
     for warn in warns:
         logger.warning(warn)

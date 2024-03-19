@@ -11,11 +11,13 @@ from plh.driver.HAMILTON.HSLLabwrAccess import AbsolutePositionValuesGetForLabwa
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
 from plh.hal import deck_location, labware, layout_item, pipette
 from plh.hal.pipette.hamilton_portrait_core8 import *
-from plh.hal.tools import HALDevice, Interface
+
+from .volume_measure_base import *
+from .volume_measure_base import VolumeMeasureBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class Hamilton50uLCORE8(Interface, HALDevice):
+class Hamilton50uLCORE8(VolumeMeasureBase):
     """Device that can be used to measure the volume of liquid in a container."""
 
     pipette: Annotated[
