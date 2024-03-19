@@ -12,12 +12,12 @@ from plh.driver.HAMILTON.ML_STAR import Channel1000uL
 from plh.hal import deck_location, labware, layout_item, pipette
 from plh.hal.pipette.hamilton_portrait_core8 import *
 
-from .volume_measure_base import *
-from .volume_measure_base import VolumeMeasureBase
+from .container_measure_base import *
+from .container_measure_base import ContainerMeasureBase, MeasureValues
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class Hamilton50uLCORE8(VolumeMeasureBase):
+class Hamilton50uLCORE8(ContainerMeasureBase):
     """Device that can be used to measure the volume of liquid in a container."""
 
     pipette: Annotated[
@@ -63,11 +63,11 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
 
         return self
 
-    def measure_volume(
+    def measure(
         self: Hamilton50uLCORE8,
         *args: tuple[layout_item.LayoutItemBase, int | str],
-    ) -> list[float]:
-        """Measures volume and returns a list of float volumes"""
+    ) -> list[MeasureValues]:
+        """Measures volume and returns a list of MeasureValues."""
         if len(args) > self._pipette_tip.tip.remaining_tips():
             raise RuntimeError("Not enough tips remaining to do this measurement.")
 
@@ -96,9 +96,8 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
         }
         # Collect Z heights
 
-        tip_length = 0
+        tip_length = 49.25
         # 50uL tip height
-        # NOTE: Unsure why but Hamilton does not add the tip length when getting liquid level with this tip. ???
 
         liquid_levels: list[float] = []
 
@@ -193,8 +192,13 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
             # Get them measured liquid levels.
 
         return [
-            cast(labware.PipettableLabware, layout_item.labware).get_volume_from_height(
-                liquid_level - z_heights[layout_item] - tip_length,
+            MeasureValues(
+                volume=cast(
+                    labware.PipettableLabware, layout_item.labware
+                ).get_volume_from_height(
+                    liquid_level - z_heights[layout_item] - tip_length,
+                ),
+                height=liquid_level - z_heights[layout_item] - tip_length,
             )
             for liquid_level, (layout_item, position) in zip(liquid_levels, args)
         ]

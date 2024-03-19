@@ -11,8 +11,14 @@ from plh.hal.layout_item.filter_plate_stack import *
 from plh.hal.tools import HALDevice, Interface
 
 
+@dataclasses.dataclass(kw_only=True)
+class MeasureValues:
+    volume: float
+    height: float
+
+
 @dataclasses.dataclass(kw_only=True, eq=False)
-class VolumeMeasureBase(Interface, HALDevice):
+class ContainerMeasureBase(Interface, HALDevice):
     """Device that can be used to measure the volume of liquid in a container."""
 
     supported_labware: Annotated[
@@ -25,7 +31,7 @@ class VolumeMeasureBase(Interface, HALDevice):
     ]
 
     def assert_supported_labware(
-        self: VolumeMeasureBase,
+        self: ContainerMeasureBase,
         *args: labware.LabwareBase,
     ) -> None:
         exceptions = [
@@ -39,7 +45,7 @@ class VolumeMeasureBase(Interface, HALDevice):
             raise ExceptionGroup(msg, exceptions)
 
     def assert_supported_deck_locations(
-        self: VolumeMeasureBase,
+        self: ContainerMeasureBase,
         *args: deck_location.DeckLocationBase,
     ) -> None:
         exceptions = [
@@ -53,8 +59,8 @@ class VolumeMeasureBase(Interface, HALDevice):
             raise ExceptionGroup(msg, exceptions)
 
     @abstractmethod
-    def measure_volume(
-        self: VolumeMeasureBase,
+    def measure(
+        self: ContainerMeasureBase,
         *args: tuple[layout_item.LayoutItemBase, int | str],
-    ) -> list[float]:
-        """Measures volume and returns a list of float volumes"""
+    ) -> list[MeasureValues]:
+        """Measures container and returns a list of MeasureValues."""

@@ -11,6 +11,7 @@ from . import (
     carrier_loader,
     centrifuge,
     closeable_container,
+    container_measure,
     deck_location,
     door_lock,
     exceptions,
@@ -24,7 +25,6 @@ from . import (
     tools,
     transport,
     vacuum,
-    volume_measure,
 )
 
 __all__ = [
@@ -33,6 +33,7 @@ __all__ = [
     "carrier_loader",
     "centrifuge",
     "closeable_container",
+    "container_measure",
     "deck_location",
     "door_lock",
     "heat_cool_shake",
@@ -45,7 +46,6 @@ __all__ = [
     "tools",
     "transport",
     "vacuum",
-    "volume_measure",
     "exceptions",
 ]
 
@@ -325,7 +325,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
         for file in files:
             if (
                 file.lower().endswith(".yaml")
-                and "_volume_measure.yaml" in file.lower()
+                and "_container_measure.yaml" in file.lower()
             ):
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
@@ -334,12 +334,12 @@ def load_yaml_configuration(config_base_folder: str) -> None:
 
                 tools.load_device_config(
                     json,
-                    volume_measure.VolumeMeasureBase,
-                    volume_measure.devices,
+                    container_measure.ContainerMeasureBase,
+                    container_measure.devices,
                 )
     if loaded is not True:
         warns.append(
-            f"No {volume_measure.VolumeMeasureBase.__name__} objects were loaded.",
+            f"No {container_measure.ContainerMeasureBase.__name__} objects were loaded.",
         )
 
     for warn in warns:
