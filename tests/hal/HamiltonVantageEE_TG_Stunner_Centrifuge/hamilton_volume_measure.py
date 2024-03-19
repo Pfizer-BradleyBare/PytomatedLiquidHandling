@@ -15,7 +15,7 @@ li = hal.layout_item.devices["Carrier41_Pos1_Hamilton1500uLFlipTubeCarrier"]
 
 vm = cast(hal.volume_measure.Hamilton50uLCORE8,hal.volume_measure.devices["Pipette Measure"])
 
-vm.backend.simulation_on=True
+vm.backend.simulation_on=False
 vm.backend.start()
 
 for tip in vm.pipette.supported_tips:
