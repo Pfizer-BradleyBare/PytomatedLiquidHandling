@@ -81,9 +81,9 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
             layout_item_positions[layout_item].append(position)
         # Collect positions organized by layout item
 
-        for layout_item, position in layout_item_positions.items():
+        for layout_item, positions in layout_item_positions.items():
             groups = layout_item.labware.layout.group_positions_columnwise(
-                position,
+                positions,
             )
 
             grouped_layout_item_positions[layout_item] = [
@@ -174,9 +174,9 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
             layout_item_positions[layout_item].append(position)
         # Collect positions organized by layout item
 
-        for layout_item, position in layout_item_positions.items():
+        for layout_item, positions in layout_item_positions.items():
             groups = layout_item.labware.layout.group_positions_columnwise(
-                position,
+                positions,
             )
 
             grouped_layout_item_positions[layout_item] = [
