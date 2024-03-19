@@ -54,7 +54,7 @@ class PipettableLabware(LabwareBase):
 
     def get_volume_from_height(self: PipettableLabware, height: float) -> float:
         calculated_volume = 0
-        
+
         segments = self.well_definition.segments
 
         for segment in segments:
