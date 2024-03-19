@@ -73,7 +73,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                                 PositionID=position_id,
                             ),
                         )
-                    except IndexError:
+                    except IndexError as e:
                         if len(successful_pickups) != 0:
                             self._eject(
                                 *[
@@ -95,7 +95,9 @@ class HamiltonPortraitCORE8(PipetteBase):
 
                         pipette_tip.tip.discard_teir()
 
-                        break
+                        raise IndexError from e
+                        #Raise error to help us break out and start over with new teir
+                    
                     # It is possible that there are not enough tips in the teir to support this pickup operation.
 
                     pipette_tip.tip.use_tips(1)
@@ -162,6 +164,10 @@ class HamiltonPortraitCORE8(PipetteBase):
                             option.PositionID,
                         )
                 # We need to figure out which tips were picked up successfully.
+
+            except* IndexError as e:
+                #Restarts the while loop
+                ...
 
     def _eject(
         self: HamiltonPortraitCORE8,
