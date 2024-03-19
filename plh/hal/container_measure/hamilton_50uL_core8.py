@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import field
-from typing import Annotated, cast
+from typing import Annotated, cast,DefaultDict
 
 from pydantic import dataclasses, model_validator
 from pydantic.functional_validators import BeforeValidator
@@ -99,108 +99,121 @@ class Hamilton50uLCORE8(ContainerMeasureBase):
         tip_length = 42.95
         # 50uL tip height
 
-        liquid_levels: list[float] = []
+        layout_item_positions: dict[layout_item.LayoutItemBase, list[str | int]] = (
+            DefaultDict(list)
+        )
+        grouped_layout_item_positions: dict[
+            layout_item.LayoutItemBase,
+            list[list[str]],
+        ] = DefaultDict(list)
 
-        measurement_groups = [
-            args[x : x + len(self.pipette.active_channels)]
-            for x in range(0, len(args), len(self.pipette.active_channels))
-        ]
-        # Group by number of active channels. Thus the length of this is the number of tip pickups that will occur.
+        for layout_item, position in args:
+            layout_item_positions[layout_item].append(position)
+        # Collect positions organized by layout item
 
-        for group in measurement_groups:
-            self.pipette._pickup(
-                *[
-                    (self.pipette.active_channels[index], self._pipette_tip)
-                    for index, (layout_item, position) in enumerate(group)
-                ],
+        for layout_item, positions in layout_item_positions.items():
+            groups = layout_item.labware.layout.group_positions_columnwise(
+                positions,
             )
 
-            command = Channel1000uL.Aspirate.Command(
-                backend_error_handling=False,
-                options=[],
-            )
-            for index, (layout_item, position) in enumerate(group):
-                pipettable_labware = cast(
-                    labware.PipettableLabware,
-                    layout_item.labware,
-                )
-
-                numeric_layout = labware.NumericLayout(
-                    rows=pipettable_labware.layout.rows,
-                    columns=pipettable_labware.layout.columns,
-                    direction=pipettable_labware.layout.direction,
-                )
-
-                true_position = (
-                    (int(numeric_layout.get_position_id(position)) - 1)
-                    * pipettable_labware.well_definition.positions_per_well
-                ) + (
-                    (index % pipettable_labware.well_definition.positions_per_well) + 1
-                )
-                # It is possible for labware types to have multiple sequences per well.
-                # This will spread channels across all wells for more efficient pipetting.
-                # What is the math?
-                # Assume we have a plate of 5 wells with 8 sequences per well.
-                # position can be from 1 to 5 for the 5 wells
-                # Thus, we subtract one from the positions to make it zero indexed.
-                # Then we will multiply by 8 to get to the correct positionID. (1-1) * 8 = 0 so first well.
-                # We get the remainder of the channel number by the sequence positions to make sure we do not overshoot.
-                # Then add 1 to assign it to the channel specific well.
-
-                command.options.append(
-                    Channel1000uL.Aspirate.Options(
-                        ChannelNumber=self.pipette.active_channels[index],
-                        LabwareID=layout_item.labware_id,
-                        PositionID=layout_item.labware.layout.get_position_id(
-                            true_position,
-                        ),
-                        LiquidClass=list(
-                            self._pipette_tip.supported_aspirate_liquid_class_categories.values(),
-                        )[0][0].liquid_class_name,
-                        Volume=0,
-                        Mode=Channel1000uL.Aspirate.AspirateModeOptions.AspirateAll,
-                        SubmergeDepth=0,
-                        PressureLiquidLevelDetection=Channel1000uL.Aspirate.LLDOptions.High,
-                        RetractDistanceForTransportAir=5,
-                    ),
-                )
-
-            self.backend.execute(command)
-            self.backend.wait(command)
-            self.backend.acknowledge(command, Channel1000uL.Aspirate.Response)
-            # Do the dummy aspiration.
-
-            self.pipette._eject_waste(
-                *[
-                    self.pipette.active_channels[index]
-                    for index, (layout_item, position) in enumerate(group)
-                ],
-            )
-
-            command = Channel1000uL.GetLastLiquidLevel.Command()
-            self.backend.execute(command)
-            self.backend.wait(command)
-            channel_liquid_levels = self.backend.acknowledge(
-                command,
-                Channel1000uL.GetLastLiquidLevel.Response,
-            ).ChannelLiquidLevels
-
-            liquid_levels += [
-                float(channel_liquid_levels.block_data[index].step_data)
-                for index in range(len(group))
+            grouped_layout_item_positions[layout_item] = [
+                group[i : i + len(self.pipette.active_channels)] for group in groups for i in range(0, len(group), len(self.pipette.active_channels))
             ]
-            # Get them measured liquid levels.
+            # Max number in each group is number of active channels
 
-        return [
-            MeasureValues(
-                volume=cast(
-                    labware.PipettableLabware,
-                    layout_item.labware,
-                ).get_volume_from_height(
-                    liquid_level - z_heights[layout_item] - tip_length,
-                ),
-                height=liquid_level - z_heights[layout_item] - tip_length,
-            )
-            for liquid_level, (layout_item, position) in zip(liquid_levels, args)
-        ]
-        # Calculate the volume
+        liquid_levels: dict[tuple,list[float]] = DefaultDict(list)
+
+        for layout_item, grouped_positions in grouped_layout_item_positions.items():
+            for group in grouped_positions:
+                self.pipette._pickup(
+                    *[
+                        (self.pipette.active_channels[index], self._pipette_tip)
+                        for index, position in enumerate(group)
+                    ],
+                )
+
+                command = Channel1000uL.Aspirate.Command(
+                    backend_error_handling=False,
+                    options=[],
+                )
+                for index, pos_id in enumerate(group):
+                    pipettable_labware = cast(
+                        labware.PipettableLabware,
+                        layout_item.labware,
+                    )
+
+                    numeric_layout = labware.NumericLayout(
+                        rows=pipettable_labware.layout.rows,
+                        columns=pipettable_labware.layout.columns,
+                        direction=pipettable_labware.layout.direction,
+                    )
+
+                    true_position = (
+                        (int(numeric_layout.get_position_id(pos_id)) - 1)
+                        * pipettable_labware.well_definition.positions_per_well
+                    ) + (
+                        (index % pipettable_labware.well_definition.positions_per_well) + 1
+                    )
+                    # It is possible for labware types to have multiple sequences per well.
+                    # This will spread channels across all wells for more efficient pipetting.
+                    # What is the math?
+                    # Assume we have a plate of 5 wells with 8 sequences per well.
+                    # position can be from 1 to 5 for the 5 wells
+                    # Thus, we subtract one from the positions to make it zero indexed.
+                    # Then we will multiply by 8 to get to the correct positionID. (1-1) * 8 = 0 so first well.
+                    # We get the remainder of the channel number by the sequence positions to make sure we do not overshoot.
+                    # Then add 1 to assign it to the channel specific well.
+
+                    command.options.append(
+                        Channel1000uL.Aspirate.Options(
+                            ChannelNumber=self.pipette.active_channels[index],
+                            LabwareID=layout_item.labware_id,
+                            PositionID=layout_item.labware.layout.get_position_id(
+                                true_position,
+                            ),
+                            LiquidClass=list(
+                                self._pipette_tip.supported_aspirate_liquid_class_categories.values(),
+                            )[0][0].liquid_class_name,
+                            Volume=0,
+                            Mode=Channel1000uL.Aspirate.AspirateModeOptions.AspirateAll,
+                            SubmergeDepth=0,
+                            PressureLiquidLevelDetection=Channel1000uL.Aspirate.LLDOptions.High,
+                            RetractDistanceForTransportAir=5,
+                        ),
+                    )
+
+                self.backend.execute(command)
+                self.backend.wait(command)
+                self.backend.acknowledge(command, Channel1000uL.Aspirate.Response)
+                # Do the dummy aspiration.
+
+                self.pipette._eject_waste(
+                    *[
+                        self.pipette.active_channels[index]
+                        for index, position in enumerate(group)
+                    ],
+                )
+
+                command = Channel1000uL.GetLastLiquidLevel.Command()
+                self.backend.execute(command)
+                self.backend.wait(command)
+                channel_liquid_levels = self.backend.acknowledge(
+                    command,
+                    Channel1000uL.GetLastLiquidLevel.Response,
+                ).ChannelLiquidLevels
+
+                for index, pos_id in enumerate(group):
+                    liquid_levels[(layout_item,pos_id)].append(float(channel_liquid_levels.block_data[index].step_data))
+                # Get them measured liquid levels.
+
+        out = []
+
+        for layout_item, position in args:
+            pos_id = layout_item.labware.layout.get_position_id(position)
+
+            liquid_level = liquid_levels[(layout_item,pos_id)].pop(0)
+
+            out.append(MeasureValues(volume=cast(labware.PipettableLabware,layout_item.labware).get_volume_from_height(liquid_level - z_heights[layout_item] - tip_length),height=liquid_level - z_heights[layout_item] - tip_length))
+        #Take measured liquid levels and reorder to match input order.
+
+        return out
