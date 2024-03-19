@@ -1,4 +1,4 @@
-import dataclasses
+from pydantic import dataclasses
 
 from plh.driver.HAMILTON.backend import HamiltonResponseBase
 

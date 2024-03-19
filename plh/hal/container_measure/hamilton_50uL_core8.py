@@ -194,7 +194,8 @@ class Hamilton50uLCORE8(ContainerMeasureBase):
         return [
             MeasureValues(
                 volume=cast(
-                    labware.PipettableLabware, layout_item.labware
+                    labware.PipettableLabware,
+                    layout_item.labware,
                 ).get_volume_from_height(
                     liquid_level - z_heights[layout_item] - tip_length,
                 ),
