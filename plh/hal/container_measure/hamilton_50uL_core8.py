@@ -96,7 +96,7 @@ class Hamilton50uLCORE8(ContainerMeasureBase):
         }
         # Collect Z heights
 
-        tip_length = 49.25
+        tip_length = 42.95
         # 50uL tip height
 
         liquid_levels: list[float] = []
