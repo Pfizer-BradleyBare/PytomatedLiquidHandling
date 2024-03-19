@@ -51,7 +51,7 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
         tips = {tip.tip.volume: tip for tip in self.pipette.supported_tips}
 
         try:
-            self._pipette_tip = tips[50]
+            self._pipette_tip = tips[300]
         except KeyError as e:
             msg = "50uL tip not available with the chosen pipette."
             raise ValueError(msg) from e
@@ -165,10 +165,17 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
                     ),
                 )
 
-                self.backend.execute(command)
-                self.backend.wait(command)
-                self.backend.acknowledge(command, Channel1000uL.Aspirate.Response)
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(command, Channel1000uL.Aspirate.Response)
             # Do the dummy aspiration.
+
+            self.pipette._eject_waste(
+                *[
+                    self.pipette.active_channels[index]
+                    for index, (layout_item, position) in enumerate(group)
+                ],
+            )
 
             command = Channel1000uL.GetLastLiquidLevel.Command()
             self.backend.execute(command)
