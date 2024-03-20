@@ -13,6 +13,10 @@ Pipettable Labware:
       calibration_curve:
         - volume: 10
           height: 0.5
+        - volume: 20
+          height: 1.5
+        - volume: 40
+          height: 2.9
         - volume: 150
           height: 6.4
         - volume: 300
