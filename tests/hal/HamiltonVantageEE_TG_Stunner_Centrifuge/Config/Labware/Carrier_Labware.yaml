@@ -63,8 +63,10 @@ Pipettable Labware:
       max_volume: 15000
       dead_volume: 500
       calibration_curve:
-        - volume: 1
-          height: 1
+        - volume: 1461.004
+          height: 23.36
+        - volume: 15269.62
+          height: 118.61
 
     dimensions:
       x_length: 0
@@ -87,8 +89,10 @@ Pipettable Labware:
       max_volume: 60000
       dead_volume: 500
       calibration_curve:
-        - volume: 1
-          height: 1
+        - volume: 3603.027
+          height: 6.72
+        - volume: 80009.43
+          height: 62.72
 
     dimensions:
       x_length: 0

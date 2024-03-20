@@ -270,6 +270,8 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
             self._dispense(aspdis_options)
 
+            option.destination_well_volume += option.transfer_volume
+
             self._eject_waste(
                 *[
                     self.active_channels[index]

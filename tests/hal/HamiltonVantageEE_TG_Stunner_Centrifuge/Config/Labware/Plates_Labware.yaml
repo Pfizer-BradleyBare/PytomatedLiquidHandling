@@ -11,8 +11,16 @@ Pipettable Labware:
       max_volume: 3
       dead_volume: 0
       calibration_curve:
-        - volume: 1
-          height: 1
+        - volume: 0.0000942
+          height: 0.001
+        - volume: 0.0340182
+          height: 0.121
+        - volume: 0.0772432
+          height: 0.251
+        - volume: 1.9683132
+          height: 1.201
+        - volume: 5.0696632
+          height: 1.901
 
     dimensions:
       x_length: 124.5
@@ -35,8 +43,8 @@ Pipettable Labware:
       max_volume: 200
       dead_volume: 10
       calibration_curve:
-        - volume: 1
-          height: 1
+        - volume: 242.1231
+          height: 14.68
 
     dimensions:
       x_length: 124.75
@@ -59,8 +67,10 @@ Pipettable Labware:
       max_volume: 400
       dead_volume: 10
       calibration_curve:
-        - volume: 1
-          height: 1
+        - volume: 56.745
+          height: 3
+        - volume: 510.705
+          height: 11
 
     dimensions:
       x_length: 123.25
@@ -83,8 +93,10 @@ Pipettable Labware:
       max_volume: 1200
       dead_volume: 10
       calibration_curve:
-        - volume: 1
-          height: 1
+        - volume: 83.1264
+          height: 3
+        - volume: 1353.2064
+          height: 21
 
     dimensions:
       x_length: 124.75
@@ -107,8 +119,10 @@ Pipettable Labware:
       max_volume: 2000
       dead_volume: 10
       calibration_curve:
-        - volume: 1
-          height: 1
+        - volume: 134.0416
+          height: 4
+        - volume: 2566.0416
+          height: 42
 
     dimensions:
       x_length: 124.50
@@ -131,8 +145,36 @@ Pipettable Labware:
       max_volume: 1500
       dead_volume: 10
       calibration_curve:
-        - volume: 1
-          height: 1
+        - volume: 10
+          height: 0.5
+        - volume: 20
+          height: 1.5
+        - volume: 40
+          height: 2.9
+        - volume: 150
+          height: 6.4
+        - volume: 300
+          height: 12.5
+        - volume: 450
+          height: 15.3
+        - volume: 600
+          height: 17.9
+        - volume: 750
+          height: 20.4
+        - volume: 900
+          height: 23.4
+        - volume: 1050
+          height: 25.5
+        - volume: 1200
+          height: 27.6
+        - volume: 1350
+          height: 30
+        - volume: 1500
+          height: 32.2
+        - volume: 1650
+          height: 34.3
+        - volume: 1800
+          height: 36.4
 
     dimensions:
       x_length: 128
