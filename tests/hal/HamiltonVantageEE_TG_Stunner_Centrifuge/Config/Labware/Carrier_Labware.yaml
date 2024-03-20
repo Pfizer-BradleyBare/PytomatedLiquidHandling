@@ -10,12 +10,23 @@ Pipettable Labware:
       positions_per_well: 1
       max_volume: 1500
       dead_volume: 10
-      segments:
-        - height: 16.1
-          equation: h * 20.2737
-
-        - height: 22
-          equation: h * 65.0624
+      calibration_curve:
+        - volume: 20
+          height: 1.15
+        - volume: 100
+          height: 5.5
+        - volume: 200
+          height: 10.55
+        - volume: 500
+          height: 15.85
+        - volume: 750
+          height: 18.45
+        - volume: 1000
+          height: 22.25
+        - volume: 1500
+          height: 28.55
+        - volume: 1800
+          height: 33.05
 
     dimensions:
       x_length: 0
@@ -37,12 +48,9 @@ Pipettable Labware:
       positions_per_well: 1
       max_volume: 15000
       dead_volume: 500
-      segments:
-        - height: 23.36
-          equation: h * 62.5430
-
-        - height: 95.25
-          equation: h * 144.9724
+      calibration_curve:
+        - volume: 1
+          height: 1
 
     dimensions:
       x_length: 0
@@ -64,12 +72,9 @@ Pipettable Labware:
       positions_per_well: 8
       max_volume: 60000
       dead_volume: 500
-      segments:
-        - height: 6.72
-          equation: h * 67.0206
-
-        - height: 56
-          equation: h * 170.5500
+      calibration_curve:
+        - volume: 1
+          height: 1
 
     dimensions:
       x_length: 0

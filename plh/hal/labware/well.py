@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pydantic import dataclasses
 
-from .well_segment import WellSegment
+from .calibration_point import CalibrationPoint
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -18,5 +18,9 @@ class Well:
     dead_volume: float
     """Minimum volume required for accurate pipetting from a well."""
 
-    segments: list[WellSegment]
-    """Segments which mathmatically describe a well."""
+    calibration_curve: list[CalibrationPoint]
+    """Calibration curve used to mathematically describe a well."""
+
+    def __post_init__(self: Well) -> None:
+        self.calibration_curve.append(CalibrationPoint(volume=0, height=0))
+        self.calibration_curve = sorted(self.calibration_curve, key=lambda x: x.volume)

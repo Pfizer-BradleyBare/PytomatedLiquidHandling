@@ -206,14 +206,16 @@ class Hamilton50uLCORE8(ContainerMeasureBase):
                     liquid_levels[(layout_item,pos_id)].append(float(channel_liquid_levels.block_data[index].step_data))
                 # Get them measured liquid levels.
 
-        out = []
-
-        for layout_item, position in args:
-            pos_id = layout_item.labware.layout.get_position_id(position)
-
-            liquid_level = liquid_levels[(layout_item,pos_id)].pop(0)
-
-            out.append(MeasureValues(volume=cast(labware.PipettableLabware,layout_item.labware).get_volume_from_height(liquid_level - z_heights[layout_item] - tip_length),height=liquid_level - z_heights[layout_item] - tip_length))
-        #Take measured liquid levels and reorder to match input order.
-
-        return out
+        return [
+            MeasureValues(
+                volume=cast(
+                    labware.PipettableLabware,
+                    layout_item.labware,
+                ).interpolate_height(
+                    liquid_level - z_heights[layout_item] - tip_length,
+                ),
+                height=liquid_level - z_heights[layout_item] - tip_length,
+            )
+            for liquid_level, (layout_item, position) in zip(liquid_levels, args)
+        ]
+        # Calculate the volume

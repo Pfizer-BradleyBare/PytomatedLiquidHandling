@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from itertools import pairwise
+
 from pydantic import dataclasses
 
 from .labware_base import *
@@ -14,63 +16,80 @@ class PipettableLabware(LabwareBase):
     well_definition: Well
     """Well object."""
 
-    def get_height_from_volume(self: PipettableLabware, volume: float) -> float:
-        calculated_height = 0.0
-
+    def interpolate_volume(self: PipettableLabware, volume: float) -> float:
+        """Calculates height at a given volume."""
         if volume <= 0:
-            return calculated_height
+            return 0
 
-        segments = self.well_definition.segments
+        interpolation_points = list(pairwise(self.well_definition.calibration_curve))
+        # edge case where we may not find points to interpolate. This will extrapolate past the last two points on the curve.
 
-        while True:
-            temp_height = calculated_height
-            calculated_volume = 0
-            # reset each round
+        points = interpolation_points[-1]
 
-            for segment in segments:
-                segment_height = segment.height
-                eval_height = temp_height
+        for p1, p2 in interpolation_points:
+            v1 = p1.volume
+            v2 = p2.volume
 
-                if eval_height > segment_height:
-                    eval_height = segment_height
-                # Make sure we do not exceed the segment height during the calc
+            if v1 <= volume <= v2:
+                points = (p1, p2)
 
-                calculated_volume += eval(  # noqa:PGH001 S307
-                    segment.equation,
-                    {},
-                    {"h": eval_height},
-                )
-                temp_height -= segment_height
+        p1, p2 = points
 
-                if temp_height <= 0:
-                    break
+        # NOTE: height is our rise or Y and volume is our run or X
 
-            if calculated_volume >= volume or temp_height > 0:
-                break
+        v1 = p1.volume
+        h1 = p1.height
 
-            calculated_height += 0.1
+        v2 = p2.volume
+        h2 = p2.height
 
-        return calculated_height
+        rise = h2 - h1
+        run = v2 - v1
 
-    def get_volume_from_height(self: PipettableLabware, height: float) -> float:
-        calculated_volume = 0
+        if rise == 0 or run == 0:
+            return h1
 
-        segments = self.well_definition.segments
+        m = rise / run
+        x = volume - v1
+        b = h1
 
-        for segment in segments:
-            if height <= 0:
-                return calculated_volume
+        return m * x + b
 
-            segment_height = segment.height
+    def interpolate_height(self: PipettableLabware, height: float) -> float:
+        """Calculates volume at a given height."""
+        if height <= 0:
+            return 0
 
-            eval_height = segment_height if height > segment_height else height
+        interpolation_points = list(pairwise(self.well_definition.calibration_curve))
+        # edge case where we may not find points to interpolate. This will extrapolate past the last two points on the curve.
 
-            height -= segment_height
+        points = interpolation_points[-1]
 
-            calculated_volume += eval(  # noqa:PGH001 S307
-                segment.equation,
-                {},
-                {"h": eval_height},
-            )
+        for p1, p2 in interpolation_points:
+            h1 = p1.height
+            h2 = p2.height
 
-        return calculated_volume
+            if h1 <= height <= h2:
+                points = (p1, p2)
+
+        p1, p2 = points
+
+        # NOTE: height is our run or X and volume is our rise or Y
+
+        v1 = p1.volume
+        h1 = p1.height
+
+        v2 = p2.volume
+        h2 = p2.height
+
+        rise = v2 - v1
+        run = h2 - h1
+
+        if rise == 0 or run == 0:
+            return v1
+
+        m = rise / run
+        x = height - h1
+        b = v1
+
+        return m * x + b

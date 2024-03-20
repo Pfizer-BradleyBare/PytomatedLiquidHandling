@@ -46,7 +46,7 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
                     FixHeightFromBottom=cast(
                         labware.PipettableLabware,
                         option.layout_item.labware,
-                    ).get_height_from_volume(option.well_volume),
+                    ).interpolate_volume(option.well_volume),
                     RetractDistanceForTransportAir=5,
                     LiquidFollowing=True,
                     MixCycles=option.mix_cycles,
@@ -82,7 +82,7 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
                     FixHeightFromBottom=cast(
                         labware.PipettableLabware,
                         option.layout_item.labware,
-                    ).get_height_from_volume(option.well_volume),
+                    ).interpolate_volume(option.well_volume),
                     RetractDistanceForTransportAir=5,
                     CapacitiveLiquidLevelDetection=Channel1000uL.Dispense.LLDOptions.Off,
                     SubmergeDepth=0,
