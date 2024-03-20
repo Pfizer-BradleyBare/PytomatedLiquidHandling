@@ -145,36 +145,186 @@ Pipettable Labware:
       max_volume: 1500
       dead_volume: 10
       calibration_curve:
-        - volume: 10
-          height: 0.5
-        - volume: 20
-          height: 1.5
-        - volume: 40
-          height: 2.9
-        - volume: 150
-          height: 6.4
-        - volume: 300
-          height: 12.5
-        - volume: 450
-          height: 15.3
-        - volume: 600
-          height: 17.9
-        - volume: 750
-          height: 20.4
-        - volume: 900
-          height: 23.4
-        - volume: 1050
-          height: 25.5
-        - volume: 1200
-          height: 27.6
-        - volume: 1350
-          height: 30
-        - volume: 1500
-          height: 32.2
-        - volume: 1650
-          height: 34.3
-        - volume: 1800
-          height: 36.4
+        - height: 1.2000000000000028
+          volume: 20
+        - height: 2.700000000000003
+          volume: 40
+        - height: 3.8000000000000256
+          volume: 60
+        - height: 4.500000000000014
+          volume: 80
+        - height: 5.90000000000002
+          volume: 100
+        - height: 6.800000000000026
+          volume: 120
+        - height: 7.40000000000002
+          volume: 140
+        - height: 8.200000000000003
+          volume: 160
+        - height: 8.90000000000002
+          volume: 180
+        - height: 9.500000000000014
+          volume: 200
+        - height: 10.000000000000014
+          volume: 220
+        - height: 10.600000000000009
+          volume: 240
+        - height: 11.000000000000014
+          volume: 260
+        - height: 11.40000000000002
+          volume: 280
+        - height: 12.200000000000003
+          volume: 300
+        - height: 12.600000000000009
+          volume: 320
+        - height: 13.100000000000009
+          volume: 340
+        - height: 13.600000000000009
+          volume: 360
+        - height: 14.100000000000009
+          volume: 380
+        - height: 14.500000000000014
+          volume: 400
+        - height: 14.800000000000026
+          volume: 420
+        - height: 15.300000000000026
+          volume: 440
+        - height: 15.600000000000009
+          volume: 460
+        - height: 15.800000000000026
+          volume: 480
+        - height: 16.40000000000002
+          volume: 500
+        - height: 16.700000000000003
+          volume: 520
+        - height: 16.90000000000002
+          volume: 540
+        - height: 17.300000000000026
+          volume: 560
+        - height: 17.700000000000003
+          volume: 580
+        - height: 18.10000000000001
+          volume: 600
+        - height: 18.200000000000003
+          volume: 620
+        - height: 18.500000000000014
+          volume: 640
+        - height: 19.000000000000014
+          volume: 660
+        - height: 19.200000000000003
+          volume: 680
+        - height: 19.60000000000001
+          volume: 700
+        - height: 20.000000000000014
+          volume: 720
+        - height: 20.200000000000003
+          volume: 740
+        - height: 20.700000000000003
+          volume: 760
+        - height: 20.90000000000002
+          volume: 780
+        - height: 21.300000000000026
+          volume: 800
+        - height: 21.500000000000014
+          volume: 820
+        - height: 21.800000000000026
+          volume: 840
+        - height: 22.200000000000003
+          volume: 860
+        - height: 22.40000000000002
+          volume: 880
+        - height: 22.90000000000002
+          volume: 900
+        - height: 23.200000000000003
+          volume: 920
+        - height: 23.500000000000014
+          volume: 940
+        - height: 24.000000000000014
+          volume: 960
+        - height: 24.300000000000026
+          volume: 980
+        - height: 24.700000000000003
+          volume: 1000
+        - height: 24.90000000000002
+          volume: 1020
+        - height: 25.300000000000026
+          volume: 1040
+        - height: 25.500000000000014
+          volume: 1060
+        - height: 25.800000000000026
+          volume: 1080
+        - height: 26.300000000000026
+          volume: 1100
+        - height: 26.60000000000001
+          volume: 1120
+        - height: 26.90000000000002
+          volume: 1140
+        - height: 27.200000000000003
+          volume: 1160
+        - height: 27.40000000000002
+          volume: 1180
+        - height: 27.90000000000002
+          volume: 1200
+        - height: 28.10000000000001
+          volume: 1220
+        - height: 28.300000000000026
+          volume: 1240
+        - height: 28.700000000000003
+          volume: 1260
+        - height: 28.90000000000002
+          volume: 1280
+        - height: 29.40000000000002
+          volume: 1300
+        - height: 29.60000000000001
+          volume: 1320
+        - height: 29.90000000000002
+          volume: 1340
+        - height: 30.200000000000003
+          volume: 1360
+        - height: 30.500000000000014
+          volume: 1380
+        - height: 30.90000000000002
+          volume: 1400
+        - height: 31.200000000000003
+          volume: 1420
+        - height: 31.40000000000002
+          volume: 1440
+        - height: 31.700000000000003
+          volume: 1460
+        - height: 31.90000000000002
+          volume: 1480
+        - height: 32.500000000000014
+          volume: 1500
+        - height: 32.800000000000026
+          volume: 1520
+        - height: 32.90000000000002
+          volume: 1540
+        - height: 33.300000000000026
+          volume: 1560
+        - height: 33.500000000000014
+          volume: 1580
+        - height: 33.90000000000002
+          volume: 1600
+        - height: 34.10000000000001
+          volume: 1620
+        - height: 34.500000000000014
+          volume: 1640
+        - height: 34.7
+          volume: 1660
+        - height: 34.90000000000002
+          volume: 1680
+        - height: 35.40000000000002
+          volume: 1700
+        - height: 35.7
+          volume: 1720
+        - height: 35.800000000000026
+          volume: 1740
+        - height: 36.300000000000026
+          volume: 1760
+        - height: 36.500000000000014
+          volume: 1780
+        - height: 36.90000000000002
+          volume: 1800
 
     dimensions:
       x_length: 128
