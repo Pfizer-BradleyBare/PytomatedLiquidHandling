@@ -50,9 +50,10 @@ class PipettableLabware(LabwareBase):
             return h1
 
         m = rise / run
+        x = volume - v1
         b = h1
 
-        return m * volume + b
+        return m * x + b
 
     def interpolate_height(self: PipettableLabware, height: float) -> float:
         """Calculates volume at a given height."""
@@ -88,6 +89,7 @@ class PipettableLabware(LabwareBase):
             return v1
 
         m = rise / run
-        b = h1
+        x = height - h1
+        b = v1
 
-        return m * height + b
+        return m * x + b
