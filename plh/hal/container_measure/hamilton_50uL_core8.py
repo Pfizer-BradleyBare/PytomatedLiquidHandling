@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import field
-from typing import Annotated, cast,DefaultDict
+from typing import Annotated, DefaultDict, cast
 
 from pydantic import dataclasses, model_validator
 from pydantic.functional_validators import BeforeValidator
@@ -117,11 +117,13 @@ class Hamilton50uLCORE8(ContainerMeasureBase):
             )
 
             grouped_layout_item_positions[layout_item] = [
-                group[i : i + len(self.pipette.active_channels)] for group in groups for i in range(0, len(group), len(self.pipette.active_channels))
+                group[i : i + len(self.pipette.active_channels)]
+                for group in groups
+                for i in range(0, len(group), len(self.pipette.active_channels))
             ]
             # Max number in each group is number of active channels
 
-        liquid_levels: dict[tuple,list[float]] = DefaultDict(list)
+        liquid_levels: dict[tuple, list[float]] = DefaultDict(list)
 
         for layout_item, grouped_positions in grouped_layout_item_positions.items():
             for group in grouped_positions:
@@ -152,7 +154,8 @@ class Hamilton50uLCORE8(ContainerMeasureBase):
                         (int(numeric_layout.get_position_id(pos_id)) - 1)
                         * pipettable_labware.well_definition.positions_per_well
                     ) + (
-                        (index % pipettable_labware.well_definition.positions_per_well) + 1
+                        (index % pipettable_labware.well_definition.positions_per_well)
+                        + 1
                     )
                     # It is possible for labware types to have multiple sequences per well.
                     # This will spread channels across all wells for more efficient pipetting.
@@ -203,19 +206,24 @@ class Hamilton50uLCORE8(ContainerMeasureBase):
                 ).ChannelLiquidLevels
 
                 for index, pos_id in enumerate(group):
-                    liquid_levels[(layout_item,pos_id)].append(float(channel_liquid_levels.block_data[index].step_data))
+                    liquid_levels[(layout_item, pos_id)].append(
+                        float(channel_liquid_levels.block_data[index].step_data),
+                    )
                 # Get them measured liquid levels.
 
-        return [
-            MeasureValues(
-                volume=cast(
-                    labware.PipettableLabware,
-                    layout_item.labware,
-                ).interpolate_height(
-                    liquid_level - z_heights[layout_item] - tip_length,
-                ),
-                height=liquid_level - z_heights[layout_item] - tip_length,
-            )
-            for liquid_level, (layout_item, position) in zip(liquid_levels, args)
-        ]
+        out = []
+        for layout_item, position in args:
+            pos_id = layout_item.labware.layout.get_position_id(position)
+
+            liquid_level = liquid_levels[(layout_item, pos_id)].pop(0)
+
+            height = liquid_level - z_heights[layout_item] - tip_length
+            volume = cast(
+                labware.PipettableLabware,
+                layout_item.labware,
+            ).interpolate_height(height)
+
+            out.append(MeasureValues(volume=volume, height=height))
+
+        return out
         # Calculate the volume
