@@ -21,9 +21,9 @@ from .pipette_tip import PipetteTip
 class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
     def _aspirate(
         self: HamiltonPortraitCORE8ContactDispense,
-        options: list[_AspirateDispenseOptions],
+        *args: _AspirateDispenseOptions,
     ) -> None:
-        options = sorted(options, key=lambda x: x.channel_number)
+        options = sorted(args, key=lambda x: x.channel_number)
 
         command = Channel1000uL.Aspirate.Command(
             backend_error_handling=False,
@@ -61,9 +61,9 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
     def _dispense(
         self: HamiltonPortraitCORE8ContactDispense,
-        options: list[_AspirateDispenseOptions],
+        *args: _AspirateDispenseOptions,
     ) -> None:
-        options = sorted(options, key=lambda x: x.channel_number)
+        options = sorted(args, key=lambda x: x.channel_number)
 
         command = Channel1000uL.Dispense.Command(
             backend_error_handling=False,
@@ -100,7 +100,7 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
     def transfer(
         self: HamiltonPortraitCORE8ContactDispense,
-        options: list[TransferOptions],
+        *args: tuple[TransferOptions,...],
     ) -> None:
         # assuming the options are sorted for now.
 
@@ -281,6 +281,6 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
     def transfer_time(
         self: HamiltonPortraitCORE8ContactDispense,
-        options: list[TransferOptions],
+        *args: tuple[TransferOptions,...],
     ) -> float:
         return 0

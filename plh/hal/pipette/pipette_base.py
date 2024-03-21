@@ -5,7 +5,7 @@ from abc import abstractmethod
 from math import ceil
 from typing import Annotated
 
-from pydantic import dataclasses, field_validator
+from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.tools import *
@@ -40,13 +40,8 @@ class PipetteBase(Interface, HALDevice):
 
     waste_labware_id: str
 
-    @field_validator("supported_tips", mode="after")
-    @classmethod
-    def __supported_tips_validate(
-        cls: type[PipetteBase],
-        v: list[PipetteTip],
-    ) -> list[PipetteTip]:
-        return sorted(v, key=lambda x: x.tip.volume)
+    def __post_init__(self:PipetteBase) -> None:
+        self.supported_tips = sorted(self.supported_tips,key=lambda x:x.tip.volume)
 
     def assert_supported_source_labware(
         self: PipetteBase,
@@ -213,62 +208,29 @@ class PipetteBase(Interface, HALDevice):
     @abstractmethod
     def _aspirate(
         self: PipetteBase,
-        options: list[_AspirateDispenseOptions],
+        *args: _AspirateDispenseOptions,
     ) -> None: ...
 
     @abstractmethod
     def _dispense(
         self: PipetteBase,
-        options: list[_AspirateDispenseOptions],
+        *args: _AspirateDispenseOptions,
     ) -> None: ...
 
     def assert_options(
         self: PipetteBase,
-        options: list[TransferOptions],
+        *args: tuple[TransferOptions,...],
     ) -> None:
-        unsupported_deck_locations = []
-        unsupported_labware = []
-        unsupported_liquid_class_categories = []
-
-        for opt in options:
-            source_labware = opt.source_layout_item.labware
-            destination_labware = opt.destination_layout_item.labware
-            if source_labware not in self.supported_source_labware:
-                unsupported_labware.append(source_labware)
-            if destination_labware not in self.supported_destination_labware:
-                unsupported_labware.append(destination_labware)
-            # Check Labware Compatibility
-
-            source_deck_location = opt.source_layout_item.deck_location
-            destination_deck_location = opt.destination_layout_item.deck_location
-            if source_deck_location not in self.supported_deck_locations:
-                unsupported_deck_locations.append(source_deck_location)
-            if destination_deck_location not in self.supported_deck_locations:
-                unsupported_deck_locations.append(destination_deck_location)
-            # Check DeckLocation compatibility
-
-            source_liquid_class_category = opt.source_liquid_class_category
-            destination_liquid_class_category = opt.destination_liquid_class_category
-            if not any(
-                PipetteTip.is_liquid_class_category_supported(
-                    source_liquid_class_category,
-                )
-                for PipetteTip in self.supported_tips
-            ):
-                unsupported_liquid_class_categories.append(source_liquid_class_category)
-            if not any(
-                PipetteTip.is_liquid_class_category_supported(
-                    destination_liquid_class_category,
-                )
-                for PipetteTip in self.supported_tips
-            ):
-                unsupported_liquid_class_categories.append(
-                    destination_liquid_class_category,
-                )
-            # Check liquid class compatibility
+        ...
 
     @abstractmethod
-    def transfer(self: PipetteBase, options: list[TransferOptions]) -> None: ...
+    def transfer(self: PipetteBase, *args: tuple[TransferOptions,...]) -> None:
+        """args is a tuple of transfer options.
+        The first item in the tuple is the aspirate options.
+        The following items in the tuple are dispense options which can support repeat dispensing."""
 
     @abstractmethod
-    def transfer_time(self: PipetteBase, options: list[TransferOptions]) -> float: ...
+    def transfer_time(self: PipetteBase, *args: tuple[TransferOptions,...]) -> float:
+        """args is a tuple of transfer options.
+        The first item in the tuple is the aspirate options.
+        The following items in the tuple are dispense options which can support repeat dispensing."""

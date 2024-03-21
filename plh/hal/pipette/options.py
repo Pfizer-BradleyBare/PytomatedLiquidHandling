@@ -41,47 +41,21 @@ class _AspirateDispenseOptions:
 class TransferOptions:
     """Options that can be used for ```transfer``` and ```transfer_time```."""
 
-    source_layout_item: layout_item.LayoutItemBase
-    """What layout item we are aspirating from."""
+    layout_item: layout_item.LayoutItemBase
+    """Layout item to aspirate /dispense from"""
 
-    source_position: int | str
-    """What position in the ```source_layout_item``` we are aspirating from.
+    position: int | str
+    """Position in the layout item.
     NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
 
-    source_well_volume: float
-    """Current volume in ```source_position``` of ```source_layout_item```."""
+    well_volume: float
+    """Present volume in the well"""
 
-    source_mix_cycles: int
-    """Cycles to mix before aspiration."""
+    mix_cycles: int
+    """Cycles to mix either before aspiration or after dispense. 0 if not needed."""
 
-    source_liquid_class_category: str
-    """What liquid class category to use for aspiration."""
-
-    source_sample_group: int | None = None
-    """This indicates that the sources with the same sample group number have the exact same solution composition.
-    So no contamination will occur upon multiple aspiration.
-    NOTE: If ```source_sample_group``` and ```destination_sample_group``` match then the device will assume they are the same as well."""
-
-    destination_layout_item: layout_item.LayoutItemBase
-    """What layout item we are dispensing to."""
-
-    destination_position: int | str
-    """What position in the ```destination_layout_item``` we are dispensing to.
-    NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
-
-    destination_well_volume: float
-    """Current volume in ```destination_position``` of ```destination_layout_item```."""
-
-    destination_mix_cycles: int
-    """Cycles to mix after dispense."""
-
-    destination_liquid_class_category: str
-    """What liquid class category to use for dispense."""
-
-    destination_sample_group: int | None = None
-    """This indicates that the destinations with the same sample group number have the exact same solution composition.
-    So no contamination will occur upon multiple dispense.
-    NOTE: If ```source_sample_group``` and ```destination_sample_group``` match then the device will assume they are the same as well."""
+    liquid_class_category: str
+    """Liquid class category for aspiration / dispense."""
 
     transfer_volume: float
-    """Volume that is transfered from source to destination."""
+    """Volume to aspirate / dispense."""
