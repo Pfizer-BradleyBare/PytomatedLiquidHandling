@@ -150,49 +150,24 @@ class PipetteBase(Interface, HALDevice):
             msg = "Some dispense liquid class categories are not supported."
             raise ExceptionGroup(msg, exceptions)
 
-    def _get_max_transfer_volume(
+    def _get_liquid_class(
         self: PipetteBase,
-        source_liquid_class_category: str,
-        destination_liquid_class_category: str,
-    ) -> float:
-        max_volume = 0
-
-        for tip in self.supported_tips:
-            if tip.is_liquid_class_category_supported(
-                source_liquid_class_category,
-            ) and tip.is_liquid_class_category_supported(
-                destination_liquid_class_category,
-            ):
-                for liquid_class in tip.supported_aspirate_liquid_class_categories[
-                    source_liquid_class_category
-                ]:
-                    if liquid_class.max_volume > max_volume:
-                        max_volume = liquid_class.max_volume
-
-                for liquid_class in tip.supported_dispense_liquid_class_categories[
-                    destination_liquid_class_category
-                ]:
-                    if liquid_class.max_volume > max_volume:
-                        max_volume = liquid_class.max_volume
-
-        return max_volume
-
-    def _truncate_transfer_volume(
-        self: PipetteBase,
-        options: TransferOptions,
+        aspirate_liquid_class_category: str,
+        dispense_liquid_class_category: str,
         volume: float,
-    ) -> list[TransferOptions]:
-        options = copy.copy(options)
-        num_transfers = ceil(options.transfer_volume / volume)
-        options.transfer_volume /= num_transfers
-
-        return [copy.copy(options) for _ in range(num_transfers)]
+    ) -> LiquidClass:
+        for tip in self.supported_tips:
+            if (
+                aspirate_liquid_class_category
+                in tip.supported_aspirate_liquid_class_categories
+                and dispense_liquid_class_category
+                in tip.supported_dispense_liquid_class_categories
+            ):
+                ...
 
     def _get_tip(
         self: PipetteBase,
-        source_liquid_class_category: str,
-        destination_liquid_class_category: str,
-        volume: float,
+        liquid_class: LiquidClass,
     ) -> PipetteTip:
         possible_pipette_tips = [
             pipette_tip
@@ -211,25 +186,16 @@ class PipetteBase(Interface, HALDevice):
 
         return possible_pipette_tips[-1]
 
-    def _get_liquid_class(
+    def _truncate_transfer_volume(
         self: PipetteBase,
-        liquid_class_category: str,
+        options: TransferOptions,
         volume: float,
-    ) -> str:
-        tip = self._get_tip(liquid_class_category, liquid_class_category, volume)
+    ) -> list[TransferOptions]:
+        options = copy.copy(options)
+        num_transfers = ceil(options.transfer_volume / volume)
+        options.transfer_volume /= num_transfers
 
-        for liquid_class in tip.supported_aspirate_liquid_class_categories[
-            liquid_class_category
-        ]:
-            if liquid_class.max_volume > volume:
-                return liquid_class.liquid_class_name
-
-        return [
-            liquid_class.liquid_class_name
-            for liquid_class in tip.supported_aspirate_liquid_class_categories[
-                liquid_class_category
-            ]
-        ][-1]
+        return [copy.copy(options) for _ in range(num_transfers)]
 
     @abstractmethod
     def _pickup(
