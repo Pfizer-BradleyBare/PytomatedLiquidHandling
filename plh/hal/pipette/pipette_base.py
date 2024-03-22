@@ -105,6 +105,10 @@ class PipetteBase(Interface, HALDevice):
                     ]:
                         if liquid_class.min_volume <= volume < liquid_class.max_volume:
                             supported_liquid_class = liquid_class
+                            break
+
+                if supported_liquid_class is not None:
+                    break
 
             if supported_liquid_class is None:
                 exceptions.append(
@@ -132,6 +136,10 @@ class PipetteBase(Interface, HALDevice):
                     ]:
                         if liquid_class.min_volume <= volume < liquid_class.max_volume:
                             supported_liquid_class = liquid_class
+                            break
+
+                if supported_liquid_class is not None:
+                    break
 
             if supported_liquid_class is None:
                 exceptions.append(
