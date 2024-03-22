@@ -14,6 +14,8 @@ from plh.hal.deck_location import *
 from plh.hal.labware import *
 from plh.hal.tools import HALDevice, Interface
 
+from .exceptions import LiquidClassCategoryNotSupportedError
+from .liquid_class import LiquidClass
 from .options import (
     TransferOptions,
     _AspirateDispenseOptions,
@@ -40,8 +42,8 @@ class PipetteBase(Interface, HALDevice):
 
     waste_labware_id: str
 
-    def __post_init__(self:PipetteBase) -> None:
-        self.supported_tips = sorted(self.supported_tips,key=lambda x:x.tip.volume)
+    def __post_init__(self: PipetteBase) -> None:
+        self.supported_tips = sorted(self.supported_tips, key=lambda x: x.tip.volume)
 
     def assert_supported_source_labware(
         self: PipetteBase,
@@ -89,15 +91,56 @@ class PipetteBase(Interface, HALDevice):
         self: PipetteBase,
         *args: tuple[str, float],
     ) -> None:
-        # TODO
-        ...
+
+        exceptions = []
+
+        for category, volume in args:
+            supported_liquid_class: None | LiquidClass = None
+
+            for tip in self.supported_tips:
+
+                if category in tip.supported_aspirate_liquid_class_categories:
+                    for liquid_class in tip.supported_aspirate_liquid_class_categories[
+                        category
+                    ]:
+                        if liquid_class.min_volume <= volume < liquid_class.max_volume:
+                            supported_liquid_class = liquid_class
+
+            if supported_liquid_class is None:
+                exceptions.append(
+                    LiquidClassCategoryNotSupportedError(self, category, volume),
+                )
+
+        if len(exceptions) != 0:
+            msg = "Some aspirate liquid class categories are not supported."
+            raise ExceptionGroup(msg, exceptions)
 
     def assert_supported_dispense_liquid_class_categories(
         self: PipetteBase,
         *args: tuple[str, float],
     ) -> None:
-        # TODO
-        ...
+        exceptions = []
+
+        for category, volume in args:
+            supported_liquid_class: None | LiquidClass = None
+
+            for tip in self.supported_tips:
+
+                if category in tip.supported_dispense_liquid_class_categories:
+                    for liquid_class in tip.supported_aspirate_liquid_class_categories[
+                        category
+                    ]:
+                        if liquid_class.min_volume <= volume < liquid_class.max_volume:
+                            supported_liquid_class = liquid_class
+
+            if supported_liquid_class is None:
+                exceptions.append(
+                    LiquidClassCategoryNotSupportedError(self, category, volume),
+                )
+
+        if len(exceptions) != 0:
+            msg = "Some dispense liquid class categories are not supported."
+            raise ExceptionGroup(msg, exceptions)
 
     def _get_max_transfer_volume(
         self: PipetteBase,
@@ -219,18 +262,19 @@ class PipetteBase(Interface, HALDevice):
 
     def assert_options(
         self: PipetteBase,
-        *args: tuple[TransferOptions,...],
-    ) -> None:
-        ...
+        *args: tuple[TransferOptions, ...],
+    ) -> None: ...
 
     @abstractmethod
-    def transfer(self: PipetteBase, *args: tuple[TransferOptions,...]) -> None:
-        """args is a tuple of transfer options.
+    def transfer(self: PipetteBase, *args: tuple[TransferOptions, ...]) -> None:
+        """Args is a tuple of transfer options.
         The first item in the tuple is the aspirate options.
-        The following items in the tuple are dispense options which can support repeat dispensing."""
+        The following items in the tuple are dispense options which can support repeat dispensing.
+        """
 
     @abstractmethod
-    def transfer_time(self: PipetteBase, *args: tuple[TransferOptions,...]) -> float:
-        """args is a tuple of transfer options.
+    def transfer_time(self: PipetteBase, *args: tuple[TransferOptions, ...]) -> float:
+        """Args is a tuple of transfer options.
         The first item in the tuple is the aspirate options.
-        The following items in the tuple are dispense options which can support repeat dispensing."""
+        The following items in the tuple are dispense options which can support repeat dispensing.
+        """

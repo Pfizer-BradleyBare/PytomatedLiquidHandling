@@ -28,10 +28,12 @@ HamiltonPortraitCORE8ContactDispense:
         supported_aspirate_liquid_class_categories:
           Test:
             - liquid_class_name: "HighVolume_Water_DispenseSurface_Empty"
+              min_volume: 0
               max_volume: 1000
         supported_dispense_liquid_class_categories:
           Test:
             - liquid_class_name: "HighVolume_Water_DispenseSurface_Empty"
+              min_volume: 0
               max_volume: 1000
 
       - tip: 300uL NTR
@@ -40,10 +42,12 @@ HamiltonPortraitCORE8ContactDispense:
         supported_aspirate_liquid_class_categories:
           Test:
             - liquid_class_name: "StandardVolume_Water_DispenseSurface_Empty"
+              min_volume: 0
               max_volume: 300
         supported_dispense_liquid_class_categories:
           Test:
             - liquid_class_name: "StandardVolume_Water_DispenseSurface_Empty"
+              min_volume: 0
               max_volume: 300
 
       - tip: 50uL NTR
@@ -52,8 +56,10 @@ HamiltonPortraitCORE8ContactDispense:
         supported_aspirate_liquid_class_categories:
           Test:
             - liquid_class_name: "Tip_50ul_Water_DispenseSurface_Empty"
+              min_volume: 0
               max_volume: 50
         supported_dispense_liquid_class_categories:
           Test:
             - liquid_class_name: "Tip_50ul_Water_DispenseSurface_Empty"
+              min_volume: 0
               max_volume: 50

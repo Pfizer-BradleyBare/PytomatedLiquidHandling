@@ -17,8 +17,9 @@ class LiquidClassCategoryNotSupportedError(HALError):
 
     error_device: PipetteBase
 
-    Categories: list[str]
-    """List of category names and associated volumes tuple[Name,Volume] that were not supported"""
+    category: str
+
+    volume: float
 
 
 @dataclass
