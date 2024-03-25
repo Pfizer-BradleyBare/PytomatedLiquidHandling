@@ -56,7 +56,7 @@ class Hamilton50uLCORE8(ContainerMeasureBase):
             msg = "50uL tip not available with the chosen pipette."
             raise ValueError(msg) from e
 
-        self.supported_labware = self.pipette.supported_source_labware
+        self.supported_labware = self.pipette.supported_aspirate_labware
         self.supported_deck_locations = self.pipette.supported_deck_locations
         self.backend = self.pipette.backend
         # Copy this info from the pipette because it drives our compatibility

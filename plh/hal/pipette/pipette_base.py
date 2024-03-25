@@ -14,7 +14,6 @@ from plh.hal.deck_location import *
 from plh.hal.labware import *
 from plh.hal.tools import HALDevice, Interface
 
-from .exceptions import LiquidClassCategoryNotSupportedError
 from .liquid_class import LiquidClass
 from .options import (
     TransferOptions,
@@ -27,11 +26,11 @@ from .pipette_tip import PipetteTip
 class PipetteBase(Interface, HALDevice):
     supported_tips: list[PipetteTip]
 
-    supported_source_labware: Annotated[
+    supported_aspirate_labware: Annotated[
         list[labware.PipettableLabware],
         BeforeValidator(labware.validate_list),
     ]
-    supported_destination_labware: Annotated[
+    supported_dispense_labware: Annotated[
         list[labware.PipettableLabware],
         BeforeValidator(labware.validate_list),
     ]
@@ -45,28 +44,28 @@ class PipetteBase(Interface, HALDevice):
     def __post_init__(self: PipetteBase) -> None:
         self.supported_tips = sorted(self.supported_tips, key=lambda x: x.tip.volume)
 
-    def assert_supported_source_labware(
+    def assert_supported_aspirate_labware(
         self: PipetteBase,
         *args: labware.LabwareBase,
     ) -> None:
         exceptions = [
             labware.exceptions.LabwareNotSupportedError(self, item)
             for item in args
-            if item not in self.supported_source_labware
+            if item not in self.supported_aspirate_labware
         ]
 
         if len(exceptions) != 0:
             msg = "Some labware is not supported."
             raise ExceptionGroup(msg, exceptions)
 
-    def assert_supported_destination_labware(
+    def assert_supported_dispense_labware(
         self: PipetteBase,
         *args: labware.LabwareBase,
     ) -> None:
         exceptions = [
             labware.exceptions.LabwareNotSupportedError(self, item)
             for item in args
-            if item not in self.supported_destination_labware
+            if item not in self.supported_dispense_labware
         ]
 
         if len(exceptions) != 0:
@@ -85,69 +84,6 @@ class PipetteBase(Interface, HALDevice):
 
         if len(exceptions) != 0:
             msg = "Some deck locations are not supported."
-            raise ExceptionGroup(msg, exceptions)
-
-    def assert_supported_aspirate_liquid_class_categories(
-        self: PipetteBase,
-        *args: tuple[str, float],
-    ) -> None:
-
-        exceptions = []
-
-        for category, volume in args:
-            supported_liquid_class: None | LiquidClass = None
-
-            for tip in self.supported_tips:
-
-                if category in tip.supported_aspirate_liquid_class_categories:
-                    for liquid_class in tip.supported_aspirate_liquid_class_categories[
-                        category
-                    ]:
-                        if liquid_class.min_volume <= volume < liquid_class.max_volume:
-                            supported_liquid_class = liquid_class
-                            break
-
-                if supported_liquid_class is not None:
-                    break
-
-            if supported_liquid_class is None:
-                exceptions.append(
-                    LiquidClassCategoryNotSupportedError(self, category, volume),
-                )
-
-        if len(exceptions) != 0:
-            msg = "Some aspirate liquid class categories are not supported."
-            raise ExceptionGroup(msg, exceptions)
-
-    def assert_supported_dispense_liquid_class_categories(
-        self: PipetteBase,
-        *args: tuple[str, float],
-    ) -> None:
-        exceptions = []
-
-        for category, volume in args:
-            supported_liquid_class: None | LiquidClass = None
-
-            for tip in self.supported_tips:
-
-                if category in tip.supported_dispense_liquid_class_categories:
-                    for liquid_class in tip.supported_aspirate_liquid_class_categories[
-                        category
-                    ]:
-                        if liquid_class.min_volume <= volume < liquid_class.max_volume:
-                            supported_liquid_class = liquid_class
-                            break
-
-                if supported_liquid_class is not None:
-                    break
-
-            if supported_liquid_class is None:
-                exceptions.append(
-                    LiquidClassCategoryNotSupportedError(self, category, volume),
-                )
-
-        if len(exceptions) != 0:
-            msg = "Some dispense liquid class categories are not supported."
             raise ExceptionGroup(msg, exceptions)
 
     def _get_liquid_class(
@@ -221,18 +157,6 @@ class PipetteBase(Interface, HALDevice):
     ) -> None:
         """This function should eject tips to a positions defined by ```_EjectOptions```."""
         ...
-
-    @abstractmethod
-    def _aspirate(
-        self: PipetteBase,
-        *args: _AspirateDispenseOptions,
-    ) -> None: ...
-
-    @abstractmethod
-    def _dispense(
-        self: PipetteBase,
-        *args: _AspirateDispenseOptions,
-    ) -> None: ...
 
     def assert_options(
         self: PipetteBase,

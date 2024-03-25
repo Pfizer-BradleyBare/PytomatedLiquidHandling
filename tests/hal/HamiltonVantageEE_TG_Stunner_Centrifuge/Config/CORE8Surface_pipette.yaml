@@ -12,10 +12,10 @@ HamiltonPortraitCORE8ContactDispense:
     active_channels: [1, 2, 3, 4, 5, 6, 7, 8]
     waste_labware_id: VStarWaste_16Pos_0001
 
-    supported_source_labware:
+    supported_aspirate_labware:
       - Biorad200uLPCRPlate
 
-    supported_destination_labware:
+    supported_dispense_labware:
       - Biorad200uLPCRPlate
 
     supported_deck_locations:
