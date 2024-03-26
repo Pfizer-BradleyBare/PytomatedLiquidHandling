@@ -6,8 +6,8 @@ from typing import Callable, TypeVar, cast
 
 from plh.hal import labware
 
-from .liquid import Liquid, LiquidVolume
-from .property import LiquidPropertyBase, PropertyWeight, PropertyWeightVolume
+from .liquid import Liquid
+from .property import LiquidPropertyBase
 
 T = TypeVar("T", bound="LiquidPropertyBase")
 
@@ -22,14 +22,14 @@ class Well:
     )
     """Liquids and associated volume contained in the well."""
 
-    def __init__(self: Well, *initial_liquids: LiquidVolume):
+    def __init__(self: Well, *initial_liquids: tuple[Liquid, float]):
         self.liquids = {}
 
-        for liquid_volume in initial_liquids:
-            if liquid_volume.liquid in self.liquids:
-                self.liquids[liquid_volume.liquid] += liquid_volume.volume
+        for liquid, volume in initial_liquids:
+            if liquid in self.liquids:
+                self.liquids[liquid] += volume
             else:
-                self.liquids[liquid_volume.liquid] = liquid_volume.volume
+                self.liquids[liquid] = volume
 
     def __hash__(self: Well) -> int:
         return hash(id(self))
@@ -41,9 +41,9 @@ class Well:
         """Total volume present in the well."""
         return sum(self.liquids.values())
 
-    def aspirate(self: Well, volume: float) -> list[LiquidVolume]:
+    def aspirate(self: Well, volume: float) -> list[tuple[Liquid, float]]:
         """Aspirate a volume from the well. Returns a list of (liquid,volume) that was aspirated."""
-        aspirated_liquids: list[LiquidVolume] = []
+        aspirated_liquids: list[tuple[Liquid, float]] = []
 
         total_volume = self.get_total_volume()
 
@@ -57,7 +57,7 @@ class Well:
             removed_volume = volume * removed_fraction
             new_volume = volume - removed_volume
 
-            aspirated_liquids.append(LiquidVolume(liquid, removed_volume))
+            aspirated_liquids.append((liquid, removed_volume))
 
             if new_volume > 0:
                 self.liquids[liquid] = new_volume
@@ -66,21 +66,19 @@ class Well:
 
         return aspirated_liquids
 
-    def dispense(self: Well, liquid_volumes: list[LiquidVolume]) -> None:
+    def dispense(self: Well, liquid_volumes: list[tuple[Liquid, float]]) -> None:
         """Dispense a list of (liquid,volume) into a well."""
-        for dispensed_liquid_volume in liquid_volumes:
-
-            liquid = dispensed_liquid_volume.liquid
+        for liquid, volume in liquid_volumes:
 
             current_volume = 0
             if liquid in self.liquids:
                 current_volume = self.liquids[liquid]
 
-            self.liquids[liquid] = dispensed_liquid_volume.volume + current_volume
+            self.liquids[liquid] = volume + current_volume
 
     def get_well_property(
         self: Well,
-        property_function: Callable[[Liquid], PropertyWeight[T]],
+        property_function: Callable[[Liquid], tuple[T, int]],
     ) -> T:
         """Get a specific liquid property based on the composition of liquids in the well."""
         if len(self.liquids) == 0:
@@ -88,7 +86,7 @@ class Well:
             raise ValueError(msg)
 
         property_volumes = [
-            PropertyWeightVolume(property_function(liquid), volume)
+            (property_function(liquid), volume)
             for liquid, volume in self.liquids.items()
         ]
 
@@ -96,7 +94,7 @@ class Well:
             T,
             cast(
                 LiquidPropertyBase,
-                property_volumes[0].property_weight.property,
+                property_volumes[0][0][0],
             ).calculate_composition_property(
                 property_volumes,
             ),
@@ -113,7 +111,7 @@ class SimulationWell(Well):
     def __init__(
         self: SimulationWell,
         labware: labware.LabwareBase,
-        *initial_liquids: LiquidVolume,
+        *initial_liquids: tuple[Liquid, float],
     ) -> None:
         Well.__init__(self, *initial_liquids)
         self.labware = labware
