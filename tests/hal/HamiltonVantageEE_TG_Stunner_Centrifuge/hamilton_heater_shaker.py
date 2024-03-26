@@ -1,35 +1,39 @@
 from __future__ import annotations
 
-from plh.api import container
+import os
+from typing import cast
 
-#
-#
-# Define our liquids
-#
-#
-Water = container.Liquid("Water")
-ACN = container.Liquid(
-    "ACN",
-    volatility=(container.Volatility.HIGH, 5),
-    viscosity=(container.Viscosity.LOW, 5),
+from loguru import logger
+
+from plh import hal
+
+logger.enable("plh")
+
+
+hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
+
+
+print(
+    cast(
+        hal.labware.PipettableLabware,
+        hal.labware.devices["Hamilton1500uLFlipTubeCarrier"],
+    ).interpolate_height(28.55),
 )
-Glycerol = container.Liquid(
-    "Glycerol",
-    volatility=(container.Volatility.LOW, 10),
-    viscosity=(container.Viscosity.HIGH, 10),
+
+print(
+    cast(
+        hal.labware.PipettableLabware,
+        hal.labware.devices["Hamilton1500uLFlipTubeCarrier"],
+    ).interpolate_volume(2000),
 )
 
-#
-#
-# Our test wells
-#
-#
-Water_ACN_Well = container.Well((Water, 500))
-print(Water_ACN_Well.get_well_property(lambda x: x.volatility))  # Medium
-Water_ACN_Well.dispense([(ACN, 150)])
-print(Water_ACN_Well.get_well_property(lambda x: x.volatility))  # High
+curve = cast(
+    hal.labware.PipettableLabware,
+    hal.labware.devices["Hamilton1500uLFlipTubeCarrier"],
+).well_definition.calibration_curve
 
-Water_Glycerol_Well = container.Well((Water, 500))
-print(Water_Glycerol_Well.get_well_property(lambda x: x.viscosity))  # Medium
-Water_Glycerol_Well.dispense([(Glycerol, 100)])
-print(Water_Glycerol_Well.get_well_property(lambda x: x.viscosity))  # High
+for point in curve:
+    print(point.height, point.volume)
+
+
+input("Enter")

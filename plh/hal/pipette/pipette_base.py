@@ -158,6 +158,18 @@ class PipetteBase(Interface, HALDevice):
         """This function should eject tips to a positions defined by ```_EjectOptions```."""
         ...
 
+    @abstractmethod
+    def _aspirate(
+        self: PipetteBase,
+        *args: _AspirateDispenseOptions,
+    ) -> None: ...
+
+    @abstractmethod
+    def _dispense(
+        self: PipetteBase,
+        *args: _AspirateDispenseOptions,
+    ) -> None: ...
+
     def assert_options(
         self: PipetteBase,
         *args: tuple[TransferOptions, ...],

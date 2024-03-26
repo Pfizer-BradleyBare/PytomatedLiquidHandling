@@ -28,7 +28,7 @@ def main(backend: MicrolabSTAR) -> None:
     command = HSLHamHeaterShakerLib.SetPlateLock.Command(
         options=HSLHamHeaterShakerLib.SetPlateLock.Options(
             HandleID=handle_id,
-            PlateLockState=HSLHamHeaterShakerLib.SetPlateLock.PlateLockStateOptions.Locked,
+            PlateLockState=HSLHamHeaterShakerLib.SetPlateLock.LockStateOptions.Locked,
         ),
     )
     backend.execute(command)

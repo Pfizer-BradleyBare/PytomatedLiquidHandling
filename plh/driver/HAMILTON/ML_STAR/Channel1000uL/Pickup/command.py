@@ -17,7 +17,7 @@ class Command(
     def serialize_options(self: Command) -> dict[str, list]:
         output = HamiltonCommandActionBase.serialize_options(self)
 
-        channel_number_list = ["0"] * 8
+        channel_number_list = ["0"] * 16
 
         for channel_number in output["ChannelNumber"]:
             channel_number_list[channel_number - 1] = "1"
