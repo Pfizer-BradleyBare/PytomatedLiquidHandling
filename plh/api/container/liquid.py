@@ -1,8 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import NamedTuple
 
 from .property import Homogeneity, Polarity, Viscosity, Volatility
+
+
+class tt(NamedTuple):
+    pass
 
 
 @dataclass(frozen=True)
@@ -13,13 +18,12 @@ class Liquid:
     """
 
     def __hash__(self: Liquid) -> int:
-        return hash(self.name)
+        return hash(
+            f"{self.volatility[0].value}{self.volatility[1]}{self.viscosity[0].value}{self.viscosity[1]}{self.homogeneity[0].value}{self.homogeneity[1]}{self.polarity[0].value}{self.polarity[1]}",
+        )
 
     def __eq__(self: Liquid, __value: Liquid) -> bool:
-        return self.name == __value.name
-
-    name: str
-    """The liquid name."""
+        return hash(self) == hash(__value)
 
     volatility: tuple[Volatility, int] = field(
         default=(Volatility.MEDIUM, 1),
