@@ -21,9 +21,11 @@ class HamiltonPortraitCORE8(PipetteBase):
 
     active_channels: list[Literal[1, 2, 3, 4, 5, 6, 7, 8]]
 
-    def initialize(self: HamiltonPortraitCORE8) -> None: ...
+    def initialize(self: HamiltonPortraitCORE8) -> None:
+        ...
 
-    def deinitialize(self: HamiltonPortraitCORE8) -> None: ...
+    def deinitialize(self: HamiltonPortraitCORE8) -> None:
+        ...
 
     def _pickup(
         self: HamiltonPortraitCORE8,
@@ -96,8 +98,8 @@ class HamiltonPortraitCORE8(PipetteBase):
                         pipette_tip.tip.discard_teir()
 
                         raise IndexError from e
-                        #Raise error to help us break out and start over with new teir
-                    
+                        # Raise error to help us break out and start over with new teir
+
                     # It is possible that there are not enough tips in the teir to support this pickup operation.
 
                     pipette_tip.tip.use_tips(1)
@@ -166,7 +168,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                 # We need to figure out which tips were picked up successfully.
 
             except* IndexError as e:
-                #Restarts the while loop
+                # Restarts the while loop
                 ...
 
     def _eject(

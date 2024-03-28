@@ -12,4 +12,5 @@ def LiquidTransfer(*args: tuple[Well, Well, float]):
         raise RuntimeError("Well are not assigned to any physical labware.")
 
 
-def LiquidTransferTime(*args: tuple[Well, Well, float]): ...
+def LiquidTransferTime(*args: tuple[Well, Well, float]):
+    ...

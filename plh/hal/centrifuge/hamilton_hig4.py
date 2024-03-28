@@ -13,6 +13,7 @@ from .centrifuge_base import *
 from .centrifuge_base import CentrifugeBase
 import time
 
+
 @dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonHig4(CentrifugeBase):
     """Hamilton implementation of the Bionex Hig4 centrifuge."""

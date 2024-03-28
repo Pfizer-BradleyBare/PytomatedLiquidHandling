@@ -68,9 +68,9 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         self.backend.acknowledge(command, FlipTubeTool.ToolsPickUp.Response)
         # Pickup
 
-        layout_item_positions: dict[layout_item.LayoutItemBase, list[str | int]] = (
-            DefaultDict(list)
-        )
+        layout_item_positions: dict[
+            layout_item.LayoutItemBase, list[str | int]
+        ] = DefaultDict(list)
         grouped_layout_item_positions: dict[
             layout_item.LayoutItemBase,
             list[list[str]],
@@ -161,9 +161,9 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         self.backend.acknowledge(command, FlipTubeTool.ToolsPickUp.Response)
         # Pickup
 
-        layout_item_positions: dict[layout_item.LayoutItemBase, list[str | int]] = (
-            DefaultDict(list)
-        )
+        layout_item_positions: dict[
+            layout_item.LayoutItemBase, list[str | int]
+        ] = DefaultDict(list)
         grouped_layout_item_positions: dict[
             layout_item.LayoutItemBase,
             list[list[str]],

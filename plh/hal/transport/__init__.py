@@ -68,7 +68,11 @@ def transport_layout_items(
         # We will assume we use this device many times.
 
         try:
-            next_source, next_destination, next_transport_device = compatible_transports[index + 1]
+            (
+                next_source,
+                next_destination,
+                next_transport_device,
+            ) = compatible_transports[index + 1]
             if transport_device != next_transport_device:
                 transport_device.last_transport_flag = True
         except IndexError:

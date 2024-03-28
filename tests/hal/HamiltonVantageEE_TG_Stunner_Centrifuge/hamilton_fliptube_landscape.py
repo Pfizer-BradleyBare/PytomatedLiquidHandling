@@ -29,8 +29,6 @@ closeable_container_device.open(
     (flip_tube_plate, 24),
     (flip_tube_plate, 23),
     (flip_tube_plate, 22),
-
-
 )
 
 closeable_container_device.close(

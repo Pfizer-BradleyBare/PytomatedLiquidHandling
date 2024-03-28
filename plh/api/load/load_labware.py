@@ -198,7 +198,7 @@ def start(*args: tuple[LoadedLabware, None | LoadedLabware]) -> None:
             loader.assert_supported_carriers(*list(carriers))
         except ExceptionGroup:
             ...
-            #continue
+            # continue
         # Find our correct carrier loader
 
         loader.unload(list(carriers)[0])
@@ -221,7 +221,7 @@ def end(*args: tuple[LoadedLabware, None | LoadedLabware]) -> None:
             loader.assert_supported_carriers(*list(carriers))
         except ExceptionGroup:
             ...
-            #continue
+            # continue
         # Find our correct carrier loader
 
         loader.load(list(carriers)[0])

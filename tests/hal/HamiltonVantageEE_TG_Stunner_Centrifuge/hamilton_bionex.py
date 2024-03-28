@@ -20,7 +20,7 @@ cent.initialize()
 
 cent.close()
 
-cent.spin(2000,100,100)
+cent.spin(2000, 100, 100)
 
 import time
 

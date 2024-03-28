@@ -99,9 +99,9 @@ class Hamilton50uLCORE8(ContainerMeasureBase):
         tip_length = 42.3
         # 50uL tip height
 
-        layout_item_positions: dict[layout_item.LayoutItemBase, list[str | int]] = (
-            DefaultDict(list)
-        )
+        layout_item_positions: dict[
+            layout_item.LayoutItemBase, list[str | int]
+        ] = DefaultDict(list)
         grouped_layout_item_positions: dict[
             layout_item.LayoutItemBase,
             list[list[str]],

@@ -42,4 +42,3 @@ class Liquid:
     polarity: tuple[Polarity, int] = field(default=(Polarity.POLAR, 1))
     """The polarity property and weight for the liquid.
     For example: Chloroform is not conductive at all. But a small amount of water will add significant polarity."""
-

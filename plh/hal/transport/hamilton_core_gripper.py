@@ -26,7 +26,8 @@ class HamiltonCOREGripper(TransportBase):
     """Labware id to pick up the gripper from the deck."""
 
     @dataclasses.dataclass(kw_only=True)
-    class GetOptions(TransportBase.GetOptions): ...
+    class GetOptions(TransportBase.GetOptions):
+        ...
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
@@ -133,4 +134,5 @@ class HamiltonCOREGripper(TransportBase):
         self: TransportBase,
         source: layout_item.LayoutItemBase,
         destination: layout_item.LayoutItemBase,
-    ) -> None: ...
+    ) -> None:
+        ...

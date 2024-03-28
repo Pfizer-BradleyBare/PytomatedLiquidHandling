@@ -290,6 +290,7 @@ class PeripheralDeviceCommunicationError(HamiltonError):
 class GripperPickupError(HamiltonError):
     """This error is common with the Vantage Quad-CORE-Grippers. Currently a software issue in VOV software."""
 
+
 @dataclass(frozen=True)
 class InvalidLabwareID(HamiltonError):
     """The labware ID is not available in the deck layout."""
@@ -346,7 +347,7 @@ error_code_map: dict[int, type[HamiltonError]] = {
     ###CUSTOM BELOW###
     10001: PeripheralDeviceCommunicationError,
     10002: GripperPickupError,
-    10003: InvalidLabwareID
+    10003: InvalidLabwareID,
 }
 
 error_code_description_map: dict[str, int] = {

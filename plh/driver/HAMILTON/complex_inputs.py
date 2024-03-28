@@ -33,6 +33,7 @@ class GripForceOptions(PydanticExtendEnumValidation):
     GripForce8 = 8
     GripForce9 = 9
 
+
 class GripModeOptions(PydanticExtendEnumValidation):
     """Which side the gripper should contact when gripping the labware."""
 

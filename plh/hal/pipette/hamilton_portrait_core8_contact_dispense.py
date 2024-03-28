@@ -100,7 +100,7 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
     def transfer(
         self: HamiltonPortraitCORE8ContactDispense,
-        *args: tuple[TransferOptions,...],
+        *args: tuple[TransferOptions, ...],
     ) -> None:
         # assuming the options are sorted for now.
 
@@ -281,6 +281,6 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
     def transfer_time(
         self: HamiltonPortraitCORE8ContactDispense,
-        *args: tuple[TransferOptions,...],
+        *args: tuple[TransferOptions, ...],
     ) -> float:
         return 0

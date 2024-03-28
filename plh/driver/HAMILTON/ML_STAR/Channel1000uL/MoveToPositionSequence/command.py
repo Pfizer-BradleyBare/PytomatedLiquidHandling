@@ -13,4 +13,5 @@ class Command(
     CommandOptionsMixin[Options],
     HamiltonCommandActionBase,
     CommandBackendErrorHandlingMixin,
-): ...
+):
+    ...

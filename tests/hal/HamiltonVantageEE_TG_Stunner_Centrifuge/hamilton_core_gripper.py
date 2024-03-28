@@ -32,7 +32,7 @@ gripper.assert_compatible_deck_locations(
     source.deck_location,
     destination.deck_location,
 )
-for i in range(0,10):
+for i in range(0, 10):
     gripper.transport(source, destination)
 
 

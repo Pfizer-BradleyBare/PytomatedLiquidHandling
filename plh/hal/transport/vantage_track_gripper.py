@@ -172,4 +172,5 @@ class VantageTrackGripper(TransportBase):
         self: TransportBase,
         source: layout_item.LayoutItemBase,
         destination: layout_item.LayoutItemBase,
-    ) -> None: ...
+    ) -> None:
+        ...
