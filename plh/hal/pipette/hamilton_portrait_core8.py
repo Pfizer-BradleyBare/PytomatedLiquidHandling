@@ -8,7 +8,7 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
-from plh.hal import backend
+from plh.hal import backend, labware, layout_item
 from plh.hal.pipette.options import TransferOptions
 
 from .pipette_base import *
@@ -22,17 +22,49 @@ class HamiltonPortraitCORE8(PipetteBase):
 
     active_channels: list[Literal[1, 2, 3, 4, 5, 6, 7, 8]]
 
+    def assert_transfer_options(
+        self: PipetteBase, *args: tuple[TransferOptions, ...],
+    ) -> None:
+        """Portrait channels can pretty much handle any case. So nothing to check and assert here."""
+        ...
+
     def initialize(self: HamiltonPortraitCORE8) -> None:
         ...
 
     def deinitialize(self: HamiltonPortraitCORE8) -> None:
         ...
 
-    def assert_transfer_options(
-        self: PipetteBase, *args: tuple[TransferOptions, ...]
-    ) -> None:
-        """Portrait channels can pretty much handle any case. So nothing to check and assert here."""
-        ...
+    def _align_pipetting_channel(self:HamiltonPortraitCORE8, channel_number: int, layout_item: layout_item.LayoutItemBase, position: str | int) -> str:
+        """Used to align a channel to the correct position in labware that have more than one sequence per well.
+        Very important for efficient pipetting."""
+        pipettable_labware = cast(
+            labware.PipettableLabware,
+            layout_item.labware,
+        )
+
+        numeric_layout = labware.NumericLayout(
+            rows=pipettable_labware.layout.rows,
+            columns=pipettable_labware.layout.columns,
+            direction=pipettable_labware.layout.direction,
+        )
+
+        position = (
+            (int(numeric_layout.get_position_id(position)) - 1)
+            * pipettable_labware.well_definition.positions_per_well
+        ) + (
+            (channel_number % pipettable_labware.well_definition.positions_per_well) + 1
+        )
+        # It is possible for labware types to have multiple sequences per well.
+        # This will spread channels across all wells for more efficient pipetting.
+        # What is the math?
+        # Assume we have a plate of 5 wells with 8 sequences per well.
+        # position can be from 1 to 5 for the 5 wells
+        # Thus, we subtract one from the positions to make it zero indexed.
+        # Then we will multiply by 8 to get to the correct positionID. (1-1) * 8 = 0 so first well.
+        # We get the remainder of the channel number by the sequence positions to make sure we do not overshoot.
+        # Then add 1 to assign it to the channel specific well.
+
+        return pipettable_labware.layout.get_position_id(position)
 
     def _pickup(
         self: HamiltonPortraitCORE8,
