@@ -150,6 +150,12 @@ class PipetteBase(Interface, HALDevice):
             if len(possible_tips) == 0:
                 raise Exception("No supported tips are capable of supporting this request.")
 
+    @abstractmethod
+    def assert_transfer_options(self:PipetteBase, *args:tuple[TransferOptions, ...]) -> None:
+        """Used by the implementing device to check that all other option possibilities are able to be
+        accomplish by the device."""
+        ...
+
 
     @abstractmethod
     def _pickup(
