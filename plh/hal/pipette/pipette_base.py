@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import copy
 from abc import abstractmethod
-from math import ceil
 from typing import Annotated
 
 from pydantic import dataclasses
@@ -14,7 +12,6 @@ from plh.hal.deck_location import *
 from plh.hal.labware import *
 from plh.hal.tools import HALDevice, Interface
 
-from .liquid_class import LiquidClass
 from .options import (
     TransferOptions,
     _AspirateDispenseOptions,
@@ -86,52 +83,73 @@ class PipetteBase(Interface, HALDevice):
             msg = "Some deck locations are not supported."
             raise ExceptionGroup(msg, exceptions)
 
-    def _get_liquid_class(
+    def assert_supported_tips(
         self: PipetteBase,
-        aspirate_liquid_class_category: str,
-        dispense_liquid_class_category: str,
-        volume: float,
-    ) -> LiquidClass:
-        for tip in self.supported_tips:
-            if (
-                aspirate_liquid_class_category
-                in tip.supported_aspirate_liquid_class_categories
-                and dispense_liquid_class_category
-                in tip.supported_dispense_liquid_class_categories
-            ):
-                ...
+        *args: tuple[TransferOptions, ...],
+    ) -> None:
+        """Checks that the liquid_class_category and volume is compatible for both dispense and aspirate steps.
+        The dispense steps are checked first as those are high priority (because they need to be most accurate)."""
 
-    def _get_tip(
-        self: PipetteBase,
-        liquid_class: LiquidClass,
-    ) -> PipetteTip:
-        possible_pipette_tips = [
-            pipette_tip
-            for pipette_tip in self.supported_tips
-            if pipette_tip.is_liquid_class_category_supported(
-                source_liquid_class_category,
-            )
-            and pipette_tip.is_liquid_class_category_supported(
-                destination_liquid_class_category,
-            )
-        ]
+        for arg in args:
+            aspirate_option = arg[0]
+            dispense_options = arg[1:]
 
-        for pipette_tip in possible_pipette_tips:
-            if pipette_tip.tip.volume >= volume:
-                return pipette_tip
+            aspirate_liquid_class_category = aspirate_option.liquid_class_category
+            aspirate_volume = aspirate_option.transfer_volume
 
-        return possible_pipette_tips[-1]
+            dispense_liquid_class_categories = [
+                option.liquid_class_category for option in dispense_options
+            ]
+            dispense_volumes = [option.transfer_volume for option in dispense_options]
 
-    def _truncate_transfer_volume(
-        self: PipetteBase,
-        options: TransferOptions,
-        volume: float,
-    ) -> list[TransferOptions]:
-        options = copy.copy(options)
-        num_transfers = ceil(options.transfer_volume / volume)
-        options.transfer_volume /= num_transfers
+            possible_tips: list[PipetteTip] = [
+                tip
+                for tip in self.supported_tips
+                if all(
+                    dispense_category in tip.supported_dispense_liquid_class_categories
+                    for dispense_category in dispense_liquid_class_categories
+                )
+            ]
+            # We should first try to find a tip that satisfies the dispense volumes and liquid class category
 
-        return [copy.copy(options) for _ in range(num_transfers)]
+            for possible_tip in possible_tips[:]:
+                for category, volume in zip(
+                    dispense_liquid_class_categories, dispense_volumes,
+                ):
+                    flag = False
+                    for (
+                        liquid_class
+                    ) in possible_tip.supported_dispense_liquid_class_categories[
+                        category
+                    ]:
+                        if liquid_class.min_volume <= volume <= liquid_class.max_volume:
+                            flag = True
+                            break
+
+                    if flag is False:
+                        possible_tips.remove(possible_tip)
+            # Now, using the tip we need to confirm that the volumes are supported as well.
+
+            possible_tips:list[PipetteTip] = [tip for tip in possible_tips if aspirate_liquid_class_category in tip.supported_aspirate_liquid_class_categories]
+
+            for possible_tip in possible_tips:
+                flag = False
+                for (
+                    liquid_class
+                ) in possible_tip.supported_dispense_liquid_class_categories[
+                    category
+                ]:
+                    if liquid_class.min_volume <= aspirate_volume <= liquid_class.max_volume:
+                        flag = True
+                        break
+
+                if flag is False:
+                    possible_tips.remove(possible_tip)
+            #Now we need to check if the aspirate options will work.
+
+            if len(possible_tips) == 0:
+                raise Exception("No supported tips are capable of supporting this request.")
+
 
     @abstractmethod
     def _pickup(
@@ -162,29 +180,32 @@ class PipetteBase(Interface, HALDevice):
     def _aspirate(
         self: PipetteBase,
         *args: _AspirateDispenseOptions,
-    ) -> None: ...
+    ) -> None:
+        ...
 
     @abstractmethod
     def _dispense(
         self: PipetteBase,
         *args: _AspirateDispenseOptions,
-    ) -> None: ...
+    ) -> None:
+        ...
 
     def assert_options(
         self: PipetteBase,
         *args: tuple[TransferOptions, ...],
-    ) -> None: ...
+    ) -> None:
+        ...
 
     @abstractmethod
     def transfer(self: PipetteBase, *args: tuple[TransferOptions, ...]) -> None:
         """Args is a tuple of transfer options.
         The first item in the tuple is the aspirate options.
-        The following items in the tuple are dispense options which can support repeat dispensing.
+        The following items in the tuple are dispense options which can support repeat dispensing and tip re-use.
         """
 
     @abstractmethod
     def transfer_time(self: PipetteBase, *args: tuple[TransferOptions, ...]) -> float:
         """Args is a tuple of transfer options.
         The first item in the tuple is the aspirate options.
-        The following items in the tuple are dispense options which can support repeat dispensing.
+        The following items in the tuple are dispense options which can support repeat dispensing and tip re-use.
         """
