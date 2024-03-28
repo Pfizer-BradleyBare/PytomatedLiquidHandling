@@ -1,39 +1,13 @@
 from __future__ import annotations
 
-import os
-from typing import cast
+from plh.api import container
 
-from loguru import logger
+a = container.Liquid()
+b = container.Liquid()
 
-from plh import hal
-
-logger.enable("plh")
+well = container.Well((a,100),(b,500))
 
 
-hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
 
+print(well.get_well_property(lambda x: x.polarity))
 
-print(
-    cast(
-        hal.labware.PipettableLabware,
-        hal.labware.devices["Hamilton1500uLFlipTubeCarrier"],
-    ).interpolate_height(28.55),
-)
-
-print(
-    cast(
-        hal.labware.PipettableLabware,
-        hal.labware.devices["Hamilton1500uLFlipTubeCarrier"],
-    ).interpolate_volume(2000),
-)
-
-curve = cast(
-    hal.labware.PipettableLabware,
-    hal.labware.devices["Hamilton1500uLFlipTubeCarrier"],
-).well_definition.calibration_curve
-
-for point in curve:
-    print(point.height, point.volume)
-
-
-input("Enter")
