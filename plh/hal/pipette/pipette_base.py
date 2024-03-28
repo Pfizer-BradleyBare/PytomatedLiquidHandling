@@ -91,71 +91,87 @@ class PipetteBase(Interface, HALDevice):
         The dispense steps are checked first as those are high priority (because they need to be most accurate)."""
 
         for arg in args:
-            aspirate_option = arg[0]
-            dispense_options = arg[1:]
+            if len(self._get_supported_tips(*arg)) == 0:
+                raise Exception("Tip does not support the options.")
 
-            aspirate_liquid_class_category = aspirate_option.liquid_class_category
-            aspirate_volume = aspirate_option.transfer_volume
+    def _get_supported_tips(
+        self: PipetteBase,
+        *args: TransferOptions,
+    ) -> list[PipetteTip]:
+        """Checks that the liquid_class_category and volume is compatible for both dispense and aspirate steps.
+        The dispense steps are checked first as those are high priority (because they need to be most accurate)."""
 
-            dispense_liquid_class_categories = [
-                option.liquid_class_category for option in dispense_options
-            ]
-            dispense_volumes = [option.transfer_volume for option in dispense_options]
+        aspirate_option = args[0]
+        dispense_options = args[1:]
 
-            possible_tips: list[PipetteTip] = [
-                tip
-                for tip in self.supported_tips
-                if all(
-                    dispense_category in tip.supported_dispense_liquid_class_categories
-                    for dispense_category in dispense_liquid_class_categories
-                )
-            ]
-            # We should first try to find a tip that satisfies the dispense volumes and liquid class category
+        aspirate_liquid_class_category = aspirate_option.liquid_class_category
+        aspirate_volume = aspirate_option.transfer_volume
 
-            for possible_tip in possible_tips[:]:
-                for category, volume in zip(
-                    dispense_liquid_class_categories, dispense_volumes,
-                ):
-                    flag = False
-                    for (
-                        liquid_class
-                    ) in possible_tip.supported_dispense_liquid_class_categories[
-                        category
-                    ]:
-                        if liquid_class.min_volume <= volume <= liquid_class.max_volume:
-                            flag = True
-                            break
+        dispense_liquid_class_categories = [
+            option.liquid_class_category for option in dispense_options
+        ]
+        dispense_volumes = [option.transfer_volume for option in dispense_options]
 
-                    if flag is False:
-                        possible_tips.remove(possible_tip)
-            # Now, using the tip we need to confirm that the volumes are supported as well.
+        possible_tips: list[PipetteTip] = [
+            tip
+            for tip in self.supported_tips
+            if all(
+                dispense_category in tip.supported_dispense_liquid_class_categories
+                for dispense_category in dispense_liquid_class_categories
+            )
+        ]
+        # We should first try to find a tip that satisfies the dispense volumes and liquid class category
 
-            possible_tips:list[PipetteTip] = [tip for tip in possible_tips if aspirate_liquid_class_category in tip.supported_aspirate_liquid_class_categories]
-
-            for possible_tip in possible_tips:
+        for possible_tip in possible_tips[:]:
+            for category, volume in zip(
+                dispense_liquid_class_categories,
+                dispense_volumes,
+            ):
                 flag = False
                 for (
                     liquid_class
-                ) in possible_tip.supported_dispense_liquid_class_categories[
-                    category
-                ]:
-                    if liquid_class.min_volume <= aspirate_volume <= liquid_class.max_volume:
+                ) in possible_tip.supported_dispense_liquid_class_categories[category]:
+                    if liquid_class.min_volume <= volume <= liquid_class.max_volume:
                         flag = True
                         break
 
                 if flag is False:
                     possible_tips.remove(possible_tip)
-            #Now we need to check if the aspirate options will work.
+        # Now, using the tip we need to confirm that the volumes are supported as well.
 
-            if len(possible_tips) == 0:
-                raise Exception("No supported tips are capable of supporting this request.")
+        possible_tips: list[PipetteTip] = [
+            tip
+            for tip in possible_tips
+            if aspirate_liquid_class_category
+            in tip.supported_aspirate_liquid_class_categories
+        ]
+
+        for possible_tip in possible_tips:
+            flag = False
+            for liquid_class in possible_tip.supported_dispense_liquid_class_categories[
+                category
+            ]:
+                if (
+                    liquid_class.min_volume
+                    <= aspirate_volume
+                    <= liquid_class.max_volume
+                ):
+                    flag = True
+                    break
+
+            if flag is False:
+                possible_tips.remove(possible_tip)
+        # Now we need to check if the aspirate options will work.
+
+        return possible_tips
 
     @abstractmethod
-    def assert_transfer_options(self:PipetteBase, *args:tuple[TransferOptions, ...]) -> None:
+    def assert_transfer_options(
+        self: PipetteBase, *args: tuple[TransferOptions, ...]
+    ) -> None:
         """Used by the implementing device to check that all other option possibilities are able to be
         accomplish by the device."""
         ...
-
 
     @abstractmethod
     def _pickup(
