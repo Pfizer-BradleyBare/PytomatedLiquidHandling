@@ -9,6 +9,7 @@ from pydantic.functional_validators import BeforeValidator
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
 from plh.hal import backend
+from plh.hal.pipette.options import TransferOptions
 
 from .pipette_base import *
 from .pipette_base import PipetteBase
@@ -25,6 +26,12 @@ class HamiltonPortraitCORE8(PipetteBase):
         ...
 
     def deinitialize(self: HamiltonPortraitCORE8) -> None:
+        ...
+
+    def assert_transfer_options(
+        self: PipetteBase, *args: tuple[TransferOptions, ...]
+    ) -> None:
+        """Portrait channels can pretty much handle any case. So nothing to check and assert here."""
         ...
 
     def _pickup(
@@ -167,7 +174,7 @@ class HamiltonPortraitCORE8(PipetteBase):
                         )
                 # We need to figure out which tips were picked up successfully.
 
-            except* IndexError as e:
+            except* IndexError:
                 # Restarts the while loop
                 ...
 
