@@ -167,7 +167,8 @@ class PipetteBase(Interface, HALDevice):
 
     @abstractmethod
     def assert_transfer_options(
-        self: PipetteBase, *args: tuple[TransferOptions, ...]
+        self: PipetteBase,
+        *args: tuple[TransferOptions, ...],
     ) -> None:
         """Used by the implementing device to check that all other option possibilities are able to be
         accomplish by the device."""
@@ -209,12 +210,6 @@ class PipetteBase(Interface, HALDevice):
     def _dispense(
         self: PipetteBase,
         *args: _AspirateDispenseOptions,
-    ) -> None:
-        ...
-
-    def assert_options(
-        self: PipetteBase,
-        *args: tuple[TransferOptions, ...],
     ) -> None:
         ...
 
