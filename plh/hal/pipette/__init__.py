@@ -11,7 +11,7 @@ if True:
 
 # from .hamilton_core96 import HamiltonCORE96
 from .liquid_class import LiquidClass
-from .options import TransferOptions, _AspirateDispenseOptions
+from .options import AspirateOptions, DispenseOptions, _AspirateDispenseOptions
 from .pipette_base import PipetteBase
 from .pipette_tip import PipetteTip
 from .pydantic_validators import validate_instance
@@ -24,7 +24,8 @@ __all__ = [
     "PipetteBase",
     "PipetteTip",
     "LiquidClass",
-    "TransferOptions",
+    "AspirateOptions",
+    "DispenseOptions",
     "_AspirateDispenseOptions",
     "validate_instance",
     "HamiltonPortraitCORE8",

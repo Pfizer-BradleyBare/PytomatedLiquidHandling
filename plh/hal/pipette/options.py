@@ -37,25 +37,47 @@ class _AspirateDispenseOptions:
     """Volume to aspirate / dispense."""
 
 
+
 @dataclasses.dataclass(kw_only=True)
-class TransferOptions:
+class AspirateOptions:
     """Options that can be used for ```transfer``` and ```transfer_time```."""
 
     layout_item: layout_item.LayoutItemBase
-    """Layout item to aspirate /dispense from"""
+    """Layout item to aspirate from."""
 
     position: int | str
     """Position in the layout item.
-    NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself and the HAL device will position tips accordingly."""
+    NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself then the HAL device will position tips accordingly."""
 
-    well_volume: float
-    """Present volume in the well"""
+    current_volume: float
+    """Present volume in the specified layout_item position."""
 
-    mix_cycles: int
-    """Cycles to mix either before aspiration or after dispense. 0 if not needed."""
+    mix_cycles: int = 0
+    """Cycles to mix before aspiration. 0 if not needed."""
 
     liquid_class_category: str
-    """Liquid class category for aspiration / dispense."""
+    """Liquid class category for aspiration."""
+
+
+@dataclasses.dataclass(kw_only=True)
+class DispenseOptions:
+    """Options that can be used for ```transfer``` and ```transfer_time```."""
+
+    layout_item: layout_item.LayoutItemBase
+    """Layout item to dispense in to."""
+
+    position: int | str
+    """Position in the layout item.
+    NOTE: Labware can have multiple sequences per "well." So, this assumes you choose the well itself then the HAL device will position tips accordingly."""
+
+    current_volume: float
+    """Present volume in the specified layout_item position."""
+
+    mix_cycles: int = 0
+    """Cycles to mix after dispense. 0 if not needed."""
+
+    liquid_class_category: str
+    """Liquid class category for dispense."""
 
     transfer_volume: float
-    """Volume to aspirate / dispense."""
+    """Volume to dispense."""

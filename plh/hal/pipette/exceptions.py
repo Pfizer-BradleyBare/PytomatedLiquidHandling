@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from plh.hal.exceptions import HALError, UserInteractionRequiredError
 
-from .options import TransferOptions
+from .options import AspirateOptions, DispenseOptions
 
 if TYPE_CHECKING:
     from .pipette_base import PipetteBase
@@ -26,7 +26,7 @@ class LiquidClassCategoryNotSupportedError(HALError):
 class IncompleteTransferError(HALError):
     """You're transfer operation experienced an error. You should retry with the following options."""
 
-    options: TransferOptions
+    options: tuple[AspirateOptions, *tuple[DispenseOptions,...]]
 
 
 @dataclass

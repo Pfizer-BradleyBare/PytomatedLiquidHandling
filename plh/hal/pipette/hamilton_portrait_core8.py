@@ -9,7 +9,7 @@ from pydantic.functional_validators import BeforeValidator
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
 from plh.driver.HAMILTON.ML_STAR import Channel1000uL
 from plh.hal import backend, labware, layout_item
-from plh.hal.pipette.options import TransferOptions
+from plh.hal.pipette.options import AspirateOptions, DispenseOptions
 
 from .pipette_base import *
 from .pipette_base import PipetteBase
@@ -23,7 +23,8 @@ class HamiltonPortraitCORE8(PipetteBase):
     active_channels: list[Literal[1, 2, 3, 4, 5, 6, 7, 8]]
 
     def assert_transfer_options(
-        self: PipetteBase, *args: tuple[TransferOptions, ...],
+        self: PipetteBase,
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]],
     ) -> None:
         """Portrait channels can pretty much handle any case. So nothing to check and assert here."""
         ...
@@ -34,7 +35,12 @@ class HamiltonPortraitCORE8(PipetteBase):
     def deinitialize(self: HamiltonPortraitCORE8) -> None:
         ...
 
-    def _align_pipetting_channel(self:HamiltonPortraitCORE8, channel_number: int, layout_item: layout_item.LayoutItemBase, position: str | int) -> str:
+    def _align_pipetting_channel(
+        self: HamiltonPortraitCORE8,
+        channel_number: int,
+        layout_item: layout_item.LayoutItemBase,
+        position: str | int,
+    ) -> str:
         """Used to align a channel to the correct position in labware that have more than one sequence per well.
         Very important for efficient pipetting."""
         pipettable_labware = cast(

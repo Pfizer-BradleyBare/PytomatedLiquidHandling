@@ -49,6 +49,7 @@ class MagneticRackBase(HALDevice):
                 liquid_class = pipette.LiquidClass(
                     liquid_class_name=pipette_config["LiquidClassName"],
                     max_volume=pipette_config["MaxVolume"],
+                    min_volume=pipette_config["MinVolume"],
                 )
                 for tip in pipette_object.supported_tips:
                     if tip.tip.volume >= liquid_class.max_volume:
@@ -84,6 +85,7 @@ class MagneticRackBase(HALDevice):
                 liquid_class = pipette.LiquidClass(
                     liquid_class_name=pipette_config["LiquidClassName"],
                     max_volume=pipette_config["MaxVolume"],
+                    min_volume=pipette_config["MinVolume"],
                 )
                 for tip in pipette_object.supported_tips:
                     if tip.tip.volume >= liquid_class.max_volume:

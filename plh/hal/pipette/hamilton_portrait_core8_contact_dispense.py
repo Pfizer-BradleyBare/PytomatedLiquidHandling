@@ -11,7 +11,8 @@ from plh.hal import labware
 from .hamilton_portrait_core8 import *
 from .hamilton_portrait_core8 import HamiltonPortraitCORE8
 from .options import (
-    TransferOptions,
+    AspirateOptions,
+    DispenseOptions,
     _AspirateDispenseOptions,
 )
 from .pipette_tip import PipetteTip
@@ -100,9 +101,13 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
     def transfer(
         self: HamiltonPortraitCORE8ContactDispense,
-        *args: tuple[TransferOptions, ...],
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]],
     ) -> None:
         # assuming the options are sorted for now.
+
+        # pick the tips we are going to use for each set of transfer options.
+
+        # group by similar tips
 
         max_volume_per_liquid_class_category_combo: dict[str, float] = {}
 
@@ -281,6 +286,6 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
     def transfer_time(
         self: HamiltonPortraitCORE8ContactDispense,
-        *args: tuple[TransferOptions, ...],
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]],
     ) -> float:
         return 0

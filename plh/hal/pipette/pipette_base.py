@@ -13,7 +13,8 @@ from plh.hal.labware import *
 from plh.hal.tools import HALDevice, Interface
 
 from .options import (
-    TransferOptions,
+    AspirateOptions,
+    DispenseOptions,
     _AspirateDispenseOptions,
 )
 from .pipette_tip import PipetteTip
@@ -85,7 +86,7 @@ class PipetteBase(Interface, HALDevice):
 
     def assert_supported_tips(
         self: PipetteBase,
-        *args: tuple[TransferOptions, ...],
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]],
     ) -> None:
         """Checks that the liquid_class_category and volume is compatible for both dispense and aspirate steps.
         The dispense steps are checked first as those are high priority (because they need to be most accurate)."""
@@ -96,7 +97,7 @@ class PipetteBase(Interface, HALDevice):
 
     def _get_supported_tips(
         self: PipetteBase,
-        *args: TransferOptions,
+        *args: *tuple[AspirateOptions, *tuple[DispenseOptions,...]],
     ) -> list[PipetteTip]:
         """Checks that the liquid_class_category and volume is compatible for both dispense and aspirate steps.
         The dispense steps are checked first as those are high priority (because they need to be most accurate)."""
@@ -105,7 +106,6 @@ class PipetteBase(Interface, HALDevice):
         dispense_options = args[1:]
 
         aspirate_liquid_class_category = aspirate_option.liquid_class_category
-        aspirate_volume = aspirate_option.transfer_volume
 
         dispense_liquid_class_categories = [
             option.liquid_class_category for option in dispense_options
@@ -145,22 +145,6 @@ class PipetteBase(Interface, HALDevice):
             if aspirate_liquid_class_category
             in tip.supported_aspirate_liquid_class_categories
         ]
-
-        for possible_tip in possible_tips:
-            flag = False
-            for liquid_class in possible_tip.supported_dispense_liquid_class_categories[
-                category
-            ]:
-                if (
-                    liquid_class.min_volume
-                    <= aspirate_volume
-                    <= liquid_class.max_volume
-                ):
-                    flag = True
-                    break
-
-            if flag is False:
-                possible_tips.remove(possible_tip)
         # Now we need to check if the aspirate options will work.
 
         return possible_tips
@@ -168,7 +152,7 @@ class PipetteBase(Interface, HALDevice):
     @abstractmethod
     def assert_transfer_options(
         self: PipetteBase,
-        *args: tuple[TransferOptions, ...],
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]],
     ) -> None:
         """Used by the implementing device to check that all other option possibilities are able to be
         accomplish by the device."""
@@ -214,14 +198,14 @@ class PipetteBase(Interface, HALDevice):
         ...
 
     @abstractmethod
-    def transfer(self: PipetteBase, *args: tuple[TransferOptions, ...]) -> None:
+    def transfer(self: PipetteBase, *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]]) -> None:
         """Args is a tuple of transfer options.
         The first item in the tuple is the aspirate options.
         The following items in the tuple are dispense options which can support repeat dispensing and tip re-use.
         """
 
     @abstractmethod
-    def transfer_time(self: PipetteBase, *args: tuple[TransferOptions, ...]) -> float:
+    def transfer_time(self: PipetteBase, *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]]) -> float:
         """Args is a tuple of transfer options.
         The first item in the tuple is the aspirate options.
         The following items in the tuple are dispense options which can support repeat dispensing and tip re-use.
