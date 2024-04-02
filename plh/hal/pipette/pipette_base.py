@@ -86,22 +86,22 @@ class PipetteBase(Interface, HALDevice):
 
     def assert_supported_tips(
         self: PipetteBase,
-        *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]],
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions, ...]],
     ) -> None:
         """Checks that the liquid_class_category and volume is compatible for both dispense and aspirate steps.
-        The dispense steps are checked first as those are high priority (because they need to be most accurate)."""
-
+        The dispense steps are checked first as those are high priority (because they need to be most accurate).
+        """
         for arg in args:
             if len(self._get_supported_tips(*arg)) == 0:
                 raise Exception("Tip does not support the options.")
 
     def _get_supported_tips(
         self: PipetteBase,
-        *args: *tuple[AspirateOptions, *tuple[DispenseOptions,...]],
+        *args: * tuple[AspirateOptions, *tuple[DispenseOptions, ...]],
     ) -> list[PipetteTip]:
         """Checks that the liquid_class_category and volume is compatible for both dispense and aspirate steps.
-        The dispense steps are checked first as those are high priority (because they need to be most accurate)."""
-
+        The dispense steps are checked first as those are high priority (because they need to be most accurate).
+        """
         aspirate_option = args[0]
         dispense_options = args[1:]
 
@@ -152,10 +152,11 @@ class PipetteBase(Interface, HALDevice):
     @abstractmethod
     def assert_transfer_options(
         self: PipetteBase,
-        *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]],
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions, ...]],
     ) -> None:
         """Used by the implementing device to check that all other option possibilities are able to be
-        accomplish by the device."""
+        accomplish by the device.
+        """
         ...
 
     @abstractmethod
@@ -187,26 +188,32 @@ class PipetteBase(Interface, HALDevice):
     def _aspirate(
         self: PipetteBase,
         *args: _AspirateDispenseOptions,
-    ) -> None:
-        ...
+    ) -> None: ...
 
     @abstractmethod
     def _dispense(
         self: PipetteBase,
         *args: _AspirateDispenseOptions,
-    ) -> None:
-        ...
+    ) -> None: ...
 
     @abstractmethod
-    def transfer(self: PipetteBase, *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]]) -> None:
+    def transfer(
+        self: PipetteBase,
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions, ...]],
+    ) -> None:
         """Args is a tuple of transfer options.
         The first item in the tuple is the aspirate options.
         The following items in the tuple are dispense options which can support repeat dispensing and tip re-use.
+        NOTE: Tip re-use is dependant on the pipetting device.
         """
 
     @abstractmethod
-    def transfer_time(self: PipetteBase, *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]]) -> float:
+    def transfer_time(
+        self: PipetteBase,
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions, ...]],
+    ) -> float:
         """Args is a tuple of transfer options.
         The first item in the tuple is the aspirate options.
         The following items in the tuple are dispense options which can support repeat dispensing and tip re-use.
+        NOTE: Tip re-use is dependant on the pipetting device.
         """
