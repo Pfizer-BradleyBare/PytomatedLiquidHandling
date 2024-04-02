@@ -101,9 +101,32 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
     def transfer(
         self: HamiltonPortraitCORE8ContactDispense,
-        *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]],
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions, ...]],
     ) -> None:
-        # assuming the options are sorted for now.
+
+        self.assert_supported_aspirate_labware(
+            *{arg[0].layout_item.labware for arg in args},
+        )
+        self.assert_supported_dispense_labware(
+            *{opt.layout_item.labware for arg in args for opt in arg[1:]},
+        )
+        self.assert_supported_deck_locations(
+            *{opt.layout_item.deck_location for arg in args for opt in arg},
+        )
+        self.assert_supported_tips(*args)
+        self.assert_transfer_options(*args)
+        # Check everything is kosher.
+
+        possible_tip_assignments = [
+            (arg, [tip for tip in self._get_supported_tips(*arg)]) for arg in args
+        ]
+
+        tip_assignments = [
+            arg
+            for arg, supported_tips in possible_tip_assignments
+            for opt in arg[1:]
+            for tip in supported_tips
+        ]
 
         # pick the tips we are going to use for each set of transfer options.
 
@@ -286,6 +309,6 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
     def transfer_time(
         self: HamiltonPortraitCORE8ContactDispense,
-        *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]],
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions, ...]],
     ) -> float:
         return 0
