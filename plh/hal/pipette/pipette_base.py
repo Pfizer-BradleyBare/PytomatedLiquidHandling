@@ -101,6 +101,7 @@ class PipetteBase(Interface, HALDevice):
     ) -> list[PipetteTip]:
         """Checks that the liquid_class_category and volume is compatible for both dispense and aspirate steps.
         The dispense steps are checked first as those are high priority (because they need to be most accurate).
+        NOTE: list is in order of smallest to largest volume.
         """
         aspirate_option = args[0]
         dispense_options = args[1:]
@@ -137,6 +138,7 @@ class PipetteBase(Interface, HALDevice):
 
                 if flag is False:
                     possible_tips.remove(possible_tip)
+                    break
         # Now, using the tip we need to confirm that the volumes are supported as well.
 
         possible_tips: list[PipetteTip] = [
