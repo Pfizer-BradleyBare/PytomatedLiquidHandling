@@ -139,6 +139,10 @@ class PipetteBase(Interface, HALDevice):
                 if flag is False:
                     possible_tips.remove(possible_tip)
                     break
+                # If a category volume combination fails we abort the tip completely.
+                # This will ensure we can use the same tip across all related dispense steps.
+                # TODO: Eventually we can rewrite this to assign tips to a given category volume combination, but not now.
+
         # Now, using the tip we need to confirm that the volumes are supported as well.
 
         possible_tips: list[PipetteTip] = [
