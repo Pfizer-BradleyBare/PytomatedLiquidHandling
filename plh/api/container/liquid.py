@@ -14,8 +14,12 @@ class Liquid:
 
     def __hash__(self: Liquid) -> int:
         return hash(
-            f"{self.volatility[0].value}{self.volatility[1]}{self.viscosity[0].value}{self.viscosity[1]}{self.homogeneity[0].value}{self.homogeneity[1]}{self.polarity[0].value}{self.polarity[1]}",
+            f"{self.volatility[0].value}{self.volatility[1]}"
+            f"{self.viscosity[0].value}{self.viscosity[1]}"
+            f"{self.homogeneity[0].value}{self.homogeneity[1]}"
+            f"{self.polarity[0].value}{self.polarity[1]}",
         )
+        # The hash is the value plus the weight of each property concatenated into a string.
 
     def __eq__(self: Liquid, __value: Liquid) -> bool:
         return hash(self) == hash(__value)
