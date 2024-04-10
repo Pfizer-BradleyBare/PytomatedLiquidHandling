@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import itertools
+from copy import copy
+from math import ceil
 from typing import cast
 
 from pydantic import dataclasses
@@ -99,11 +101,7 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
         self.backend.wait(command)
         self.backend.acknowledge(command, Channel1000uL.Dispense.Response)
 
-    def transfer(
-        self: HamiltonPortraitCORE8ContactDispense,
-        *args: tuple[AspirateOptions, *tuple[DispenseOptions, ...]],
-    ) -> None:
-
+    def save(self):
         self.assert_supported_aspirate_labware(
             *{arg[0].layout_item.labware for arg in args},
         )
@@ -117,20 +115,68 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
         self.assert_transfer_options(*args)
         # Check everything is kosher.
 
-        possible_tip_assignments = [
-            (arg, [tip for tip in self._get_supported_tips(*arg)]) for arg in args
-        ]
+    def transfer(
+        self: HamiltonPortraitCORE8ContactDispense,
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions, ...]],
+    ) -> None:
 
-        tip_assignments = [
-            arg
-            for arg, supported_tips in possible_tip_assignments
-            for opt in arg[1:]
-            for tip in supported_tips
-        ]
+        tip_assignments = [(arg, self._get_supported_tips(*arg)[-1]) for arg in args]
+        # From our tip assignments we will always use the largest tip.
+        # Liquid classes should be validated so we can be confident in a good transfer
 
-        # pick the tips we are going to use for each set of transfer options.
+        for pipette_options, pipette_tip in tip_assignments[:]:
+            tip_assignments.remove((pipette_options, pipette_tip))
+            # Remove the assignment initially, we will add it back by the end of the inner loop.
 
-        # group by similar tips
+            aspirate_option = pipette_options[0]
+
+            max_volume = pipette_tip.supported_aspirate_liquid_class_categories[
+                aspirate_option.liquid_class_category
+            ][-1].max_volume
+
+            chunk: list[DispenseOptions] = []
+            for dispense_option in pipette_options[1:]:
+                chunk.append(dispense_option)
+
+                chunk_volume = sum([opt.transfer_volume for opt in chunk])
+
+                if chunk_volume > max_volume:
+                    tip_assignments.append(
+                        ((aspirate_option, *chunk[:-1]), pipette_tip),
+                    )
+                    chunk = chunk[-1:]
+
+            if len(chunk) != 0:
+                tip_assignments.append(
+                    ((aspirate_option, *chunk), pipette_tip),
+                )
+        # Check that the total dispense volume can actually be aspirated by the liquid class.
+        # If not, we need to split the dispense steps to fit the aspirate liquid class.
+
+        for pipette_options, pipette_tip in tip_assignments[:]:
+            aspirate_option = pipette_options[0]
+
+            max_volume = pipette_tip.tip.volume
+
+            for dispense_option in pipette_options[1:]:
+                transfer_volume = dispense_option.transfer_volume
+
+                if transfer_volume > max_volume:
+                    tip_assignments.remove((pipette_options, pipette_tip))
+                    # We are going to remake the assignment below.
+
+                    new_dispense_option = copy(dispense_option)
+                    # Make a copy of dispense option because we are going to change it.
+
+                    num_aspirations = ceil(transfer_volume / max_volume)
+                    new_dispense_option.transfer_volume /= num_aspirations
+
+                    tip_assignments += [
+                        ((aspirate_option, new_dispense_option), pipette_tip)
+                        for _ in range(num_aspirations)
+                    ]
+        # Check that the total dispense volume can actually be aspirated by the tip
+        # If not, we need to split the dispense steps to fit the tip volume.
 
         max_volume_per_liquid_class_category_combo: dict[str, float] = {}
 

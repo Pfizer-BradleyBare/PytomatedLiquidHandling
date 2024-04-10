@@ -4,20 +4,38 @@ import os
 
 from loguru import logger
 
-from plh import api, hal
+from plh import hal
+from plh.hal.pipette import AspirateOptions, DispenseOptions
 
 logger.enable("plh")
 
-
 hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
 
-labware_type = hal.labware.devices["Hamilton1500uLFlipTubeRack"]
-other_labware_type = hal.labware.devices["Biorad200uLPCRPlate"]
-print(
-    [
-        [(str(item.layout_item), meta) for item, meta in sub]
-        for sub in api.load.group(*[labware_type] * 2, *[other_labware_type] * 5)
-    ],
+
+li1 = hal.layout_item.devices["Carrier48_Pos1_Biorad200uLPCRPlate"]
+li2 = hal.layout_item.devices["Carrier48_Pos2_Biorad200uLPCRPlate"]
+li3 = hal.layout_item.devices["Carrier48_Pos3_Biorad200uLPCRPlate"]
+li4 = hal.layout_item.devices["Carrier48_Pos4_Biorad200uLPCRPlate"]
+p = hal.pipette.devices["Pipette"]
+
+a = AspirateOptions(
+    layout_item=li1,
+    position=1,
+    current_volume=1,
+    mix_cycles=0,
+    liquid_class_category="Test",
+)
+d = DispenseOptions(
+    layout_item=li2,
+    position=1,
+    current_volume=1,
+    mix_cycles=0,
+    liquid_class_category="Test",
+    transfer_volume=100,
 )
 
-input("ENTER")
+opts = (a, d, d, d, d, d)
+
+p.transfer(opts)
+
+print(p._get_supported_tips(*opts)[-1].tip.identifier)
