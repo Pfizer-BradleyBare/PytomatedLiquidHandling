@@ -150,8 +150,16 @@ class PipetteBase(Interface, HALDevice):
             for tip in possible_tips
             if aspirate_liquid_class_category
             in tip.supported_aspirate_liquid_class_categories
+            and all(
+                tip.supported_aspirate_liquid_class_categories[
+                    aspirate_liquid_class_category
+                ][-1].max_volume
+                >= dispense_volume
+                for dispense_volume in dispense_volumes
+            )
         ]
         # Now we need to check if the aspirate options will work.
+        # At minimum the aspirate liquid class should support a volume equal to or greater than our dispense volume.
 
         return possible_tips
 
