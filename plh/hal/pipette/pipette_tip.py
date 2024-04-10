@@ -17,3 +17,13 @@ class PipetteTip:
     tip_support_pickup_labware_id: str
     supported_aspirate_liquid_class_categories: dict[str, list[LiquidClass]]
     supported_dispense_liquid_class_categories: dict[str, list[LiquidClass]]
+
+    def __post_init__(self: PipetteTip) -> None:
+        self.supported_aspirate_liquid_class_categories = {
+            category: sorted(liquid_classes, key=lambda x: x.max_volume)
+            for category, liquid_classes in self.supported_aspirate_liquid_class_categories.items()
+        }
+        self.supported_dispense_liquid_class_categories = {
+            category: sorted(liquid_classes, key=lambda x: x.max_volume)
+            for category, liquid_classes in self.supported_dispense_liquid_class_categories.items()
+        }
