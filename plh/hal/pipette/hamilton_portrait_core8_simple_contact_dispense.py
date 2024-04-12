@@ -344,10 +344,7 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
             pipette_tip,
             layout_item_cycle_column_groups,
         ) in tip_layout_item_cycle_column_groups.items():
-            for (
-                layout_item,
-                cycle_column_groups,
-            ) in layout_item_cycle_column_groups.items():
+            for cycle_column_groups in layout_item_cycle_column_groups.values():
                 for column_groups in cycle_column_groups:
                     for column_group in column_groups:
 
@@ -368,8 +365,68 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
                                 ],
                             )
 
-                            self._aspirate(
-                                *[
+                            aspirate_options: list[
+                                tuple[
+                                    int,
+                                    str,
+                                    str,
+                                    float,
+                                    int,
+                                    float,
+                                    str,
+                                    float,
+                                ]
+                            ] = []
+
+                            dispense_options: list[
+                                tuple[
+                                    int,
+                                    str,
+                                    str,
+                                    float,
+                                    int,
+                                    float,
+                                    str,
+                                    float,
+                                ]
+                            ] = []
+
+                            for channel_number, (
+                                aspirate_option,
+                                dispense_option,
+                            ) in enumerate(channel_group):
+
+                                aspirate_well_volume = well_volume_tracker[
+                                    (
+                                        aspirate_option.layout_item,
+                                        aspirate_option.position,
+                                    )
+                                ]
+
+                                well_volume_tracker[
+                                    (
+                                        aspirate_option.layout_item,
+                                        aspirate_option.position,
+                                    )
+                                ] -= dispense_option.transfer_volume
+
+                                dispense_well_volume = well_volume_tracker[
+                                    (
+                                        dispense_option.layout_item,
+                                        dispense_option.position,
+                                    )
+                                ]
+
+                                well_volume_tracker[
+                                    (
+                                        dispense_option.layout_item,
+                                        dispense_option.position,
+                                    )
+                                ] += dispense_option.transfer_volume
+
+                                transfer_volume = dispense_option.transfer_volume
+
+                                aspirate_options.append(
                                     (
                                         channel_number,
                                         aspirate_option.layout_item.labware_id,
@@ -381,36 +438,44 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
                                         cast(
                                             labware.PipettableLabware,
                                             aspirate_option.layout_item.labware,
-                                        ).interpolate_volume(
-                                            well_volume_tracker[
-                                                (
-                                                    aspirate_option.layout_item,
-                                                    aspirate_option.position,
-                                                )
-                                            ],
-                                        ),
+                                        ).interpolate_volume(aspirate_well_volume),
                                         aspirate_option.mix_cycles,
-                                        well_volume_tracker[
-                                            (
-                                                aspirate_option.layout_item,
-                                                aspirate_option.position,
-                                            )
-                                        ]
-                                        * 0.75,
+                                        aspirate_well_volume * 0.75,
                                         pipette_tip.get_aspirate_liquid_class(
                                             aspirate_option.liquid_class_category,
-                                            dispense_option.transfer_volume,
+                                            transfer_volume,
                                         ).liquid_class_name,
-                                        dispense_option.transfer_volume,
-                                    )
-                                    for channel_number, (
-                                        aspirate_option,
-                                        dispense_option,
-                                    ) in enumerate(channel_group)
-                                ],
-                            )
+                                        transfer_volume,
+                                    ),
+                                )
+
+                                dispense_options.append(
+                                    (
+                                        channel_number,
+                                        dispense_option.layout_item.labware_id,
+                                        self._align_pipetting_channel(
+                                            channel_number,
+                                            dispense_option.layout_item,
+                                            dispense_option.position,
+                                        ),
+                                        cast(
+                                            labware.PipettableLabware,
+                                            dispense_option.layout_item.labware,
+                                        ).interpolate_volume(aspirate_well_volume),
+                                        dispense_option.mix_cycles,
+                                        (dispense_well_volume + transfer_volume) * 0.75,
+                                        pipette_tip.get_aspirate_liquid_class(
+                                            dispense_option.liquid_class_category,
+                                            transfer_volume,
+                                        ).liquid_class_name,
+                                        transfer_volume,
+                                    ),
+                                )
+
+                            self._aspirate(*aspirate_options)
                             # asp
 
+                            self._dispense(*dispense_options)
                             # Disp
 
                             self._eject_waste(
