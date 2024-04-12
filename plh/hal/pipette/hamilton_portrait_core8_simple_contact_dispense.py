@@ -131,7 +131,11 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
         self.backend.wait(command)
         self.backend.acknowledge(command, Channel1000uL.Dispense.Response)
 
-    def save(self):
+    def transfer(
+        self: HamiltonPortraitCORE8SimpleContactDispense,
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions, ...]],
+    ) -> None:
+
         self.assert_supported_aspirate_labware(
             *{arg[0].layout_item.labware for arg in args},
         )
@@ -145,11 +149,6 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
         self.assert_transfer_options(*args)
         # Check everything is kosher.
 
-    def transfer(
-        self: HamiltonPortraitCORE8SimpleContactDispense,
-        *args: tuple[AspirateOptions, *tuple[DispenseOptions, ...]],
-    ) -> None:
-
         for arg in args:
             for pipette_option in arg:
                 pipette_option.position = (
@@ -157,7 +156,7 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
                         pipette_option.position,
                     )
                 )
-        # convert all to a string position
+        # convert all positions to a string
 
         tip_assignments = [(arg, self._get_supported_tips(*arg)[-1]) for arg in args]
         # From our tip assignments we will always use the largest tip.
