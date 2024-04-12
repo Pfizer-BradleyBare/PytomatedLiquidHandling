@@ -348,11 +348,13 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
                 for column_groups in cycle_column_groups:
                     for column_group in column_groups:
 
-                        num_channels = len(self.active_channels)
-
                         channel_groups = [
-                            column_group[x : x + num_channels]
-                            for x in range(0, len(column_group), num_channels)
+                            column_group[x : x + len(self.active_channels)]
+                            for x in range(
+                                0,
+                                len(column_group),
+                                len(self.active_channels),
+                            )
                         ]
                         # It is possible to have more or less channels than grouped rows per column. So we need to channel group them
 
@@ -361,7 +363,10 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
                             self._pickup(
                                 *[
                                     (channel_number, pipette_tip)
-                                    for channel_number, _ in enumerate(channel_group)
+                                    for channel_number, _ in zip(
+                                        self.active_channels,
+                                        channel_group,
+                                    )
                                 ],
                             )
 
@@ -394,7 +399,7 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
                             for channel_number, (
                                 aspirate_option,
                                 dispense_option,
-                            ) in enumerate(channel_group):
+                            ) in zip(self.active_channels, channel_group):
 
                                 aspirate_well_volume = well_volume_tracker[
                                     (
@@ -481,7 +486,10 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
                             self._eject_waste(
                                 *[
                                     channel_number
-                                    for channel_number, _ in enumerate(channel_group)
+                                    for channel_number, _ in zip(
+                                        self.active_channels,
+                                        channel_group,
+                                    )
                                 ],
                             )
 
