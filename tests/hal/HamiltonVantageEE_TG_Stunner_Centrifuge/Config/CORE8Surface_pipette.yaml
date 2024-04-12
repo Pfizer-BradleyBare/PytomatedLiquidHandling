@@ -5,7 +5,7 @@
 #
 #############################################################
 
-HamiltonPortraitCORE8ContactDispense:
+HamiltonPortraitCORE8SimpleContactDispense:
   - identifier: Pipette
     enabled: True
     backend: Hamilton

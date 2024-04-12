@@ -15,7 +15,6 @@ from plh.hal.tools import HALDevice, Interface
 from .options import (
     AspirateOptions,
     DispenseOptions,
-    _AspirateDispenseOptions,
 )
 from .pipette_tip import PipetteTip
 
@@ -201,13 +200,31 @@ class PipetteBase(Interface, HALDevice):
     @abstractmethod
     def _aspirate(
         self: PipetteBase,
-        *args: _AspirateDispenseOptions,
+        *args: tuple[
+            int,
+            str,
+            str,
+            float,
+            int,
+            float,
+            str,
+            float,
+        ],
     ) -> None: ...
 
     @abstractmethod
     def _dispense(
         self: PipetteBase,
-        *args: _AspirateDispenseOptions,
+        *args: tuple[
+            int,
+            str,
+            str,
+            float,
+            int,
+            float,
+            str,
+            float,
+        ],
     ) -> None: ...
 
     @abstractmethod

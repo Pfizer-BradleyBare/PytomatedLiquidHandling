@@ -9,36 +9,6 @@ from plh.hal.labware import *
 
 
 @dataclasses.dataclass(kw_only=True)
-class _AspirateDispenseOptions:
-    """Options use for low level ```_aspirate``` and ```_dispense``` functions."""
-
-    channel_number: int
-    "Channel to use for aspiration / dispense"
-
-    layout_item: layout_item.LayoutItemBase
-    "Layout item to aspirate /dispense from"
-
-    position_id: str
-    "PositionID in the layout item"
-
-    well_volume: float
-    """Present volume in the well"""
-
-    mix_cycles: int
-    """Cycles to mix. 0 if not needed."""
-
-    mix_volume: float
-    """Only matter if ```MixCycles``` is greater than 0. Must be less than or equal to ```WellVolume```."""
-
-    liquid_class: str
-    """Liquid class name for aspiration / dispense."""
-
-    volume: float
-    """Volume to aspirate / dispense."""
-
-
-
-@dataclasses.dataclass(kw_only=True)
 class AspirateOptions:
     """Options that can be used for ```transfer``` and ```transfer_time```."""
 

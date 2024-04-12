@@ -31,7 +31,7 @@ d = DispenseOptions(
     current_volume=1,
     mix_cycles=0,
     liquid_class_category="Test",
-    transfer_volume=100,
+    transfer_volume=1500,
 )
 
 opts = (a, d, d, d, d, d)

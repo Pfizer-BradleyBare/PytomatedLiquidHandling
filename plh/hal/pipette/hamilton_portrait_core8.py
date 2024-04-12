@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Annotated, Literal, cast
 
 from loguru import logger
-from pydantic import dataclasses
+from pydantic import dataclasses, field_validator
 from pydantic.functional_validators import BeforeValidator
 
 from plh.driver.HAMILTON.backend import HamiltonBackendBase
@@ -20,20 +20,31 @@ from .pipette_tip import PipetteTip
 class HamiltonPortraitCORE8(PipetteBase):
     backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
 
-    active_channels: list[Literal[1, 2, 3, 4, 5, 6, 7, 8]]
+    active_channels: list[
+        Literal[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    ]
+
+    @field_validator("active_channels", mode="after")
+    @classmethod
+    def __validate_active_channels(
+        cls: type[HamiltonPortraitCORE8],
+        v: list[int],
+    ) -> list[int]:
+        if len(v) != len(set(v)):
+            raise ValueError("active_channels value must all be unique!")
+
+        return v
 
     def assert_transfer_options(
         self: PipetteBase,
-        *args: tuple[AspirateOptions, *tuple[DispenseOptions,...]],
+        *args: tuple[AspirateOptions, *tuple[DispenseOptions, ...]],
     ) -> None:
         """Portrait channels can pretty much handle any case. So nothing to check and assert here."""
         ...
 
-    def initialize(self: HamiltonPortraitCORE8) -> None:
-        ...
+    def initialize(self: HamiltonPortraitCORE8) -> None: ...
 
-    def deinitialize(self: HamiltonPortraitCORE8) -> None:
-        ...
+    def deinitialize(self: HamiltonPortraitCORE8) -> None: ...
 
     def _align_pipetting_channel(
         self: HamiltonPortraitCORE8,
@@ -42,7 +53,8 @@ class HamiltonPortraitCORE8(PipetteBase):
         position: str | int,
     ) -> str:
         """Used to align a channel to the correct position in labware that have more than one sequence per well.
-        Very important for efficient pipetting."""
+        Very important for efficient pipetting.
+        """
         pipettable_labware = cast(
             labware.PipettableLabware,
             layout_item.labware,

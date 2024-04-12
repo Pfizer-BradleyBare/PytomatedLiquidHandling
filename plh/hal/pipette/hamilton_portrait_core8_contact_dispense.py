@@ -3,7 +3,7 @@ from __future__ import annotations
 import itertools
 from copy import copy
 from math import ceil
-from typing import cast
+from typing import DefaultDict, cast
 
 from pydantic import dataclasses
 
@@ -12,11 +12,7 @@ from plh.hal import labware
 
 from .hamilton_portrait_core8 import *
 from .hamilton_portrait_core8 import HamiltonPortraitCORE8
-from .options import (
-    AspirateOptions,
-    DispenseOptions,
-    _AspirateDispenseOptions,
-)
+from .options import AspirateOptions, DispenseOptions
 from .pipette_tip import PipetteTip
 
 
@@ -24,7 +20,16 @@ from .pipette_tip import PipetteTip
 class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
     def _aspirate(
         self: HamiltonPortraitCORE8ContactDispense,
-        *args: _AspirateDispenseOptions,
+        *args: tuple[
+            int,
+            str,
+            str,
+            float,
+            int,
+            float,
+            str,
+            float,
+        ],
     ) -> None:
         options = sorted(args, key=lambda x: x.channel_number)
 
@@ -64,7 +69,16 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
     def _dispense(
         self: HamiltonPortraitCORE8ContactDispense,
-        *args: _AspirateDispenseOptions,
+        *args: tuple[
+            int,
+            str,
+            str,
+            float,
+            int,
+            float,
+            str,
+            float,
+        ],
     ) -> None:
         options = sorted(args, key=lambda x: x.channel_number)
 
@@ -122,7 +136,7 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
 
         tip_assignments = [(arg, self._get_supported_tips(*arg)[-1]) for arg in args]
         # From our tip assignments we will always use the largest tip.
-        # Liquid classes should be validated so we can be confident in a good transfer
+        # Liquid classes should be validated so we can be confident in a precise transfer
 
         for pipette_options, pipette_tip in tip_assignments[:]:
             tip_assignments.remove((pipette_options, pipette_tip))
@@ -154,29 +168,62 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
         # If not, we need to split the dispense steps to fit the aspirate liquid class.
 
         for pipette_options, pipette_tip in tip_assignments[:]:
+            tip_assignments.remove((pipette_options, pipette_tip))
+            # Remove the assignment initially, we will add it back by the end of the inner loop.
+
             aspirate_option = pipette_options[0]
 
             max_volume = pipette_tip.tip.volume
 
+            chunk: list[DispenseOptions] = []
             for dispense_option in pipette_options[1:]:
-                transfer_volume = dispense_option.transfer_volume
+                chunk.append(dispense_option)
 
-                if transfer_volume > max_volume:
-                    tip_assignments.remove((pipette_options, pipette_tip))
-                    # We are going to remake the assignment below.
+                chunk_volume = sum([opt.transfer_volume for opt in chunk])
 
-                    new_dispense_option = copy(dispense_option)
-                    # Make a copy of dispense option because we are going to change it.
+                if chunk_volume > max_volume:
+                    if len(chunk) > 1:
+                        tip_assignments.append(
+                            ((aspirate_option, *chunk[:-1]), pipette_tip),
+                        )
+                        chunk = chunk[-1:]
+                    else:
+                        new_dispense_option = copy(chunk.pop(0))
+                        # Make a copy of dispense option because we are going to change it.
 
-                    num_aspirations = ceil(transfer_volume / max_volume)
-                    new_dispense_option.transfer_volume /= num_aspirations
+                        num_aspirations = ceil(chunk_volume / max_volume)
+                        new_dispense_option.transfer_volume /= num_aspirations
 
-                    tip_assignments += [
-                        ((aspirate_option, new_dispense_option), pipette_tip)
-                        for _ in range(num_aspirations)
-                    ]
+                        tip_assignments += [
+                            ((aspirate_option, new_dispense_option), pipette_tip)
+                            for _ in range(num_aspirations)
+                        ]
+
+            if len(chunk) != 0:
+                tip_assignments.append(
+                    ((aspirate_option, *chunk), pipette_tip),
+                )
         # Check that the total dispense volume can actually be aspirated by the tip
         # If not, we need to split the dispense steps to fit the tip volume.
+
+        #
+        #
+        # At this point the pipette steps have a tip assigned and the steps are guarenteed to be supported by the liquid classes and tip volumes.
+        #
+        #
+        for a, b in tip_assignments:
+            print(len(a))
+        quit()
+
+        tip_groups: dict[
+            PipetteTip,
+            list[tuple[AspirateOptions, *tuple[DispenseOptions, ...]]],
+        ] = DefaultDict(list)
+        for pipette_options, pipette_tip in tip_assignments:
+            tip_groups[pipette_tip].append(pipette_options)
+        # group by tip
+
+        # group by labware
 
         max_volume_per_liquid_class_category_combo: dict[str, float] = {}
 

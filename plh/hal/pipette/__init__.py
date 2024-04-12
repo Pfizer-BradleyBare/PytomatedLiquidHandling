@@ -4,6 +4,9 @@ from .hamilton_portrait_core8 import HamiltonPortraitCORE8
 from .hamilton_portrait_core8_contact_dispense import (
     HamiltonPortraitCORE8ContactDispense,
 )
+from .hamilton_portrait_core8_simple_contact_dispense import (
+    HamiltonPortraitCORE8SimpleContactDispense,
+)
 
 if True:
     pass
@@ -11,7 +14,7 @@ if True:
 
 # from .hamilton_core96 import HamiltonCORE96
 from .liquid_class import LiquidClass
-from .options import AspirateOptions, DispenseOptions, _AspirateDispenseOptions
+from .options import AspirateOptions, DispenseOptions
 from .pipette_base import PipetteBase
 from .pipette_tip import PipetteTip
 from .pydantic_validators import validate_instance
@@ -30,6 +33,7 @@ __all__ = [
     "validate_instance",
     "HamiltonPortraitCORE8",
     "HamiltonPortraitCORE8ContactDispense",
+    "HamiltonPortraitCORE8SimpleContactDispense",
     "HamiltonCORE96",
     "exceptions",
 ]
