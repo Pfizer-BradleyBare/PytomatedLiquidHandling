@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-from plh.api.tools import ReservationBase
+from plh.api.tools.reservation import ReservationBase
 
 
 @dataclass(frozen=True)
 class IncubateReservation(ReservationBase):
-    Started: bool = field(init=False, default=False)
-    Temperature: float
-    RPM: int
+    started: bool = field(init=False, default=False)
+    temperature: float
+    rpm: int

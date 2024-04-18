@@ -11,7 +11,7 @@ from plh.hal import transport as hal_transport
 from .well import Well
 
 
-def transport(
+def move(
     wells: list[Well],
     deck_locations: list[deck_location.DeckLocationBase],
 ) -> None:
