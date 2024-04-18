@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from plh.api.tools import loaded_labware
+from plh.api.tools import LoadedLabware
 
 
 def prepare(
-    *args: tuple[loaded_labware.LoadedLabware, None | loaded_labware.LoadedLabware]
+    *args: tuple[LoadedLabware, None | LoadedLabware],
 ) -> None:
     """Prepares the LoadedLabware returned from ```group``` for loading or unloading.
     If the tuple contains None then the loading locations will be emptied.

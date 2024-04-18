@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from plh.api.tools import loaded_labware
+from plh.api.tools import LoadedLabware, loaded_labware_tracker, well_assignment_tracker
 from plh.hal import deck_location, layout_item
 from plh.hal import transport as hal_transport
 
@@ -12,11 +12,11 @@ def transport(
     deck_locations: list[deck_location.DeckLocationBase],
 ) -> None:
 
-    loaded_items_to_move: list[loaded_labware.LoadedLabware] = list(
+    loaded_items_to_move: list[LoadedLabware] = list(
         {
             loaded_labware
             for loaded_labware in sum(
-                [loaded_labware.well_assignment_tracker[well] for well in wells],
+                [list(well_assignment_tracker[well]) for well in wells],
                 [],
             )
             if loaded_labware.layout_item.deck_location not in deck_locations
@@ -26,8 +26,7 @@ def transport(
     # Only unique.
 
     used_deck_locations = [
-        layout_item.deck_location
-        for layout_item in loaded_labware.loaded_labware_tracker
+        layout_item.deck_location for layout_item in loaded_labware_tracker
     ]
 
     possible_deck_locations = [
@@ -51,9 +50,7 @@ def transport(
     )
 
     assigned_deck_locations: list[deck_location.DeckLocationBase] = []
-    transport_assignments: list[
-        tuple[loaded_labware.LoadedLabware, layout_item.LayoutItemBase]
-    ] = []
+    transport_assignments: list[tuple[LoadedLabware, layout_item.LayoutItemBase]] = []
     for loaded_item_to_move in loaded_items_to_move:
         for possible_layout_item in possible_layout_items:
             if (

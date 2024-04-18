@@ -9,8 +9,10 @@ from plh.hal import labware, layout_item
 loaded_labware_tracker: dict[layout_item.LayoutItemBase, LoadedLabware] = {}
 """Tracks the location of ```LoadedLabware```"""
 
-well_assignment_tracker: dict[container.Well, list[LoadedLabware]] = DefaultDict(list)
-"""Helper variable to find ```Well``` ```LoadedLabware``` faster."""
+well_assignment_tracker: dict[container.Well, set[LoadedLabware]] = DefaultDict(set)
+"""Helper variable to find ```Well``` ```LoadedLabware``` faster.
+Let's say we have a well that contains 2000uL of liquid but is loaded into a labware that has a max of 1500uL.
+The single programmatic well could now be spread across two physical wells or maybe even two loaded labware."""
 
 
 @dataclass
@@ -57,7 +59,7 @@ class LoadedLabware:
     def create_assignments(
         self: LoadedLabware,
         well: container.Well,
-        assignments: list[int],
+        *assignments: int,
     ) -> None:
         for assignment in assignments:
             if self.well_assignments[assignment] is not None:
@@ -65,7 +67,7 @@ class LoadedLabware:
 
             self.well_assignments[assignment] = well
 
-        well_assignment_tracker[well].append(self)
+        well_assignment_tracker[well].add(self)
 
     def get_well_assignments(self: LoadedLabware, well: container.Well) -> list[int]:
         return [

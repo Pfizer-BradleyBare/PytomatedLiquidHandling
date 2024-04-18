@@ -3,33 +3,27 @@ from __future__ import annotations
 from itertools import groupby
 from typing import DefaultDict
 
-from plh.api.tools import loaded_labware
+from plh.api.tools import LoadedLabware
 from plh.hal import carrier_loader, labware, layout_item
 
 
 def group(
-    *args: labware.LabwareBase | loaded_labware.LoadedLabware,
-) -> list[
-    list[tuple[loaded_labware.LoadedLabware, None | loaded_labware.LoadedLabware]]
-]:
+    *args: labware.LabwareBase | LoadedLabware,
+) -> list[list[tuple[LoadedLabware, None | LoadedLabware]]]:
     """Takes a list of labware or ```LoadedLabware``` and groups it by carrier for loading."""
     labware_only: list[labware.LabwareBase] = [
-        item.labware if isinstance(item, loaded_labware.LoadedLabware) else item
-        for item in args
+        item.labware if isinstance(item, LoadedLabware) else item for item in args
     ]
     # To do the loading we need a list of only labware items that are required.
 
     labware_meta: dict[
-        labware.LabwareBase, list[None | loaded_labware.LoadedLabware]
+        labware.LabwareBase,
+        list[None | LoadedLabware],
     ] = DefaultDict(
         list,
     )
     for labware_type, meta in [
-        (
-            (item.labware, item)
-            if isinstance(item, loaded_labware.LoadedLabware)
-            else (item, None)
-        )
+        ((item.labware, item) if isinstance(item, LoadedLabware) else (item, None))
         for item in args
     ]:
         labware_meta[labware_type].append(meta)
@@ -74,7 +68,7 @@ def group(
     # get number of available labware positions sorted from least available to most available.
 
     loaded_layout_items_meta: list[
-        tuple[layout_item.LayoutItemBase, loaded_labware.LoadedLabware | None]
+        tuple[layout_item.LayoutItemBase, LoadedLabware | None]
     ] = []
 
     for labware_type, num_available in available_labware.items():
@@ -98,7 +92,7 @@ def group(
 
     return [
         [
-            (loaded_labware.LoadedLabware(layout_item.labware, layout_item), meta)
+            (LoadedLabware(layout_item.labware, layout_item), meta)
             for layout_item, meta in layout_item_group
         ]
         for carrier, layout_item_group in groupby(

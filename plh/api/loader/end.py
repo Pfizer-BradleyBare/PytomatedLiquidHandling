@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from plh.api.tools import loaded_labware
+from plh.api.tools import LoadedLabware
 from plh.hal import carrier_loader
 
 
 def end(
-    *args: tuple[loaded_labware.LoadedLabware, None | loaded_labware.LoadedLabware],
+    *args: tuple[LoadedLabware, None | LoadedLabware],
 ) -> None:
     """Will move the deck locations back into the deck using the associated carrier_mover."""
     carriers = {
