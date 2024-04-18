@@ -4,8 +4,6 @@ import copy
 from dataclasses import dataclass, field
 from typing import Callable, TypeVar, cast
 
-from plh.hal import labware
-
 from .liquid import Liquid
 from .property import LiquidPropertyBase
 
@@ -99,19 +97,3 @@ class Well:
                 property_volumes,
             ),
         )
-
-
-@dataclass(init=False)
-class SimulationWell(Well):
-    """Combined a programmatic well with a physical labware to perform api simulations."""
-
-    labware: labware.LabwareBase
-    """labware that will be used for simultion of the api functions."""
-
-    def __init__(
-        self: SimulationWell,
-        labware: labware.LabwareBase,
-        *initial_liquids: tuple[Liquid, float],
-    ) -> None:
-        Well.__init__(self, *initial_liquids)
-        self.labware = labware

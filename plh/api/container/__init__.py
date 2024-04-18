@@ -1,13 +1,14 @@
 from .liquid import Liquid
 from .property import Homogeneity, Polarity, Viscosity, Volatility
-from .well import SimulationWell, Well
+from .transport import transport
+from .well import Well
 
 __all__ = [
     "Well",
-    "SimulationWell",
     "Liquid",
     "Volatility",
     "Viscosity",
     "Homogeneity",
     "Polarity",
+    "transport",
 ]

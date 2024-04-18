@@ -1,22 +1,22 @@
 from __future__ import annotations
 
-from plh.api.container import Well
-from plh.api.load import LoadedLabware, loaded_labware_tracker, well_assignment_tracker
+from plh.api.tools import loaded_labware
 from plh.hal import deck_location, layout_item
+from plh.hal import transport as hal_transport
 
-from .layout_item_transport import layout_item_transport
+from .well import Well
 
 
-def well_transport(
+def transport(
     wells: list[Well],
     deck_locations: list[deck_location.DeckLocationBase],
 ) -> None:
 
-    loaded_items_to_move: list[LoadedLabware] = list(
+    loaded_items_to_move: list[loaded_labware.LoadedLabware] = list(
         {
             loaded_labware
             for loaded_labware in sum(
-                [well_assignment_tracker[well] for well in wells],
+                [loaded_labware.well_assignment_tracker[well] for well in wells],
                 [],
             )
             if loaded_labware.layout_item.deck_location not in deck_locations
@@ -26,7 +26,8 @@ def well_transport(
     # Only unique.
 
     used_deck_locations = [
-        layout_item.deck_location for layout_item in loaded_labware_tracker
+        layout_item.deck_location
+        for layout_item in loaded_labware.loaded_labware_tracker
     ]
 
     possible_deck_locations = [
@@ -50,7 +51,9 @@ def well_transport(
     )
 
     assigned_deck_locations: list[deck_location.DeckLocationBase] = []
-    transport_assignments: list[tuple[LoadedLabware, layout_item.LayoutItemBase]] = []
+    transport_assignments: list[
+        tuple[loaded_labware.LoadedLabware, layout_item.LayoutItemBase]
+    ] = []
     for loaded_item_to_move in loaded_items_to_move:
         for possible_layout_item in possible_layout_items:
             if (
@@ -64,8 +67,14 @@ def well_transport(
                 break
     # For each item we need to move we need to find the right possible layout item.
 
-    for source_loaded_item, destination in transport_assignments:
-        layout_item_transport(source_loaded_item.layout_item, destination)
+    hal_transport.transport_layout_items(
+        *[
+            (source_loaded_item.layout_item, destination)
+            for source_loaded_item, destination in transport_assignments
+        ],
+    )
+    # Do the transports first. They are all submitted together so we can group by transport device for faster processing.
 
+    for source_loaded_item, destination in transport_assignments:
         source_loaded_item.layout_item = destination
-        # Change the tracked location of this layout item.
+    # Change the tracked location of this layout item.
