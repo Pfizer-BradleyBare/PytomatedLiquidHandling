@@ -3,26 +3,20 @@ from __future__ import annotations
 from plh.api.tools.loaded_labware import (
     LoadedLabware,
     loaded_labware_tracker,
-    well_assignment_tracker,
 )
 from plh.hal import deck_location, layout_item
 from plh.hal import transport as hal_transport
 
-from .well import Well
 
-
-def move(
-    wells: list[Well],
+def move_loaded_labware(
+    loaded_labwares: list[LoadedLabware],
     deck_locations: list[deck_location.DeckLocationBase],
 ) -> None:
 
     loaded_items_to_move: list[LoadedLabware] = list(
         {
             loaded_labware
-            for loaded_labware in sum(
-                [list(well_assignment_tracker[well]) for well in wells],
-                [],
-            )
+            for loaded_labware in loaded_labwares
             if loaded_labware.layout_item.deck_location not in deck_locations
         },
     )
