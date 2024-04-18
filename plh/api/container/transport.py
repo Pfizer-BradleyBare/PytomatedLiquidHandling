@@ -1,6 +1,10 @@
 from __future__ import annotations
 
-from plh.api.tools import LoadedLabware, loaded_labware_tracker, well_assignment_tracker
+from plh.api.tools.loaded_labware import (
+    LoadedLabware,
+    loaded_labware_tracker,
+    well_assignment_tracker,
+)
 from plh.hal import deck_location, layout_item
 from plh.hal import transport as hal_transport
 
