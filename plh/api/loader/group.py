@@ -3,7 +3,7 @@ from __future__ import annotations
 from itertools import groupby
 from typing import DefaultDict
 
-from plh.api.tools import LoadedLabware
+from plh.api.tools.loaded_labware import LoadedLabware
 from plh.hal import carrier_loader, labware, layout_item
 
 

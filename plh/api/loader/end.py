@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from plh.api.tools import LoadedLabware
+from plh.api.tools.loaded_labware import LoadedLabware
 from plh.hal import carrier_loader
 
 
