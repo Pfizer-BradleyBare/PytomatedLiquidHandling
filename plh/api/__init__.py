@@ -25,9 +25,11 @@ def initialize() -> None:
     )
     from plh.hal.tools import Interface
 
+    for device in backend.devices.values():
+        device.start()
+
     devices = (
-        list(backend.devices.values())
-        + list(carrier.devices.values())
+        list(carrier.devices.values())
         + list(carrier_loader.devices.values())
         + list(centrifuge.devices.values())
         + list(closeable_container.devices.values())
@@ -72,9 +74,11 @@ def deinitialize() -> None:
     )
     from plh.hal.tools import Interface
 
+    for device in backend.devices.values():
+        device.stop()
+
     devices = (
-        list(backend.devices.values())
-        + list(carrier.devices.values())
+        list(carrier.devices.values())
         + list(carrier_loader.devices.values())
         + list(centrifuge.devices.values())
         + list(closeable_container.devices.values())
