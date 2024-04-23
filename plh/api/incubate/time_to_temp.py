@@ -2,7 +2,7 @@ from .reservation import IncubateReservation
 
 
 def time_to_temp(reservations: list[IncubateReservation]) -> float:
-
+    """Will provide the highest time to equilibrate all reservations."""
     max_time = 0
 
     for reservation in reservations:
