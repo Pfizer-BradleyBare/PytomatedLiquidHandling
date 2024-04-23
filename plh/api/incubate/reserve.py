@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from plh.api import container
 from plh.api.tools.loaded_labware import well_assignment_tracker
-from plh.api.tools.reservation import hal_device_reservation_tracker, track
+from plh.api.tools.reservation import hal_device_reservation_tracker, register
 from plh.hal import heat_cool_shake, labware
 
 from .reservation import IncubateReservation
@@ -11,6 +13,7 @@ def reserve(
     rpm: int,
     *wells: container.Well,
 ) -> list[IncubateReservation]:
+    """Reserve an available heat cool shake device sorted by lowest time to temperature. Once reserved will start heating to your desired temp."""
     loaded_labwares = {
         loaded_labware
         for well in wells
@@ -48,7 +51,7 @@ def reserve(
     # possible devices must support the temp and rpm and labware requirements of the wells.
 
     if len(loaded_labwares) > len(possible_devices):
-        raise Exception(
+        raise RuntimeError(
             "Not enough HeatCoolShake devices available for this container...",
         )
 
@@ -72,7 +75,7 @@ def reserve(
 
         reservation = IncubateReservation(device, loaded_labware, temperature, rpm)
 
-        track(reservation)
+        register(reservation)
         reservations.append(reservation)
 
     return reservations

@@ -1,5 +1,7 @@
-from . import reservations
+from .reservation import IncubateReservation
 
 
-def release(container: str) -> None:
-    r = reservations
+def end(reservation: IncubateReservation) -> None:
+    """Stop the incubation. Will NOT move the labware off the device."""
+    reservation.hal_device.set_shaking_speed(0)
+    reservation.hal_device.set_temperature(25)
