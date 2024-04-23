@@ -7,7 +7,7 @@ from .reservation_base import (
 )
 
 
-def track(reservation: ReservationBase) -> None:
+def register(reservation: ReservationBase) -> None:
     """Utility method to register a reservation."""
     if reservation.hal_device in hal_device_reservation_tracker:
         raise RuntimeError("HAL device already taken. Critical error.")

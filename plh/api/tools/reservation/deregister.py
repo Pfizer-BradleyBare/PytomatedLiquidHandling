@@ -7,7 +7,7 @@ from .reservation_base import (
 )
 
 
-def untrack(reservation: ReservationBase) -> None:
+def deregister(reservation: ReservationBase) -> None:
     """Utility method to remove a reservation registration."""
     if reservation.hal_device in hal_device_reservation_tracker:
         raise RuntimeError("HAL device not reserved. Critical error.")
