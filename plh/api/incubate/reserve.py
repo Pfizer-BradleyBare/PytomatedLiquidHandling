@@ -3,8 +3,8 @@ from __future__ import annotations
 from plh.api import container
 from plh.api.tools.loaded_labware import well_assignment_tracker
 from plh.api.tools.reservation import hal_device_reservation_tracker, register
-from plh.hal import heat_cool_shake, labware
 
+from .get_compatible_devices import get_compatible_devices
 from .reservation import IncubateReservation
 
 
@@ -21,37 +21,17 @@ def reserve(
     }
     # all the labware we need to reserve for. Each labware needs a reservation.
 
-    possible_devices: list[heat_cool_shake.HeatCoolShakeBase] = []
+    possible_devices = get_compatible_devices(
+        temperature,
+        rpm,
+        *[loaded_labware.layout_item.labware for loaded_labware in loaded_labwares],
+    )
 
-    for device in heat_cool_shake.devices.values():
-        if device in hal_device_reservation_tracker:
-            continue
-
-        try:
-            device.assert_supported_labware(
-                *[
-                    loaded_labware.layout_item.labware
-                    for loaded_labware in loaded_labwares
-                ],
-            )
-        except labware.exceptions.LabwareNotSupportedError:
-            continue
-
-        try:
-            device.assert_rpm(rpm)
-        except heat_cool_shake.exceptions.ShakingNotSupportedError:
-            continue
-
-        try:
-            device.assert_temperature(temperature)
-        except (
-            heat_cool_shake.exceptions.CoolingNotSupportedError,
-            heat_cool_shake.exceptions.HeatingNotSupportedError,
-        ):
-            continue
-
-        possible_devices.append(device)
-    # possible devices must support the temp and rpm and labware requirements of the wells.
+    possible_devices = [
+        device
+        for device in possible_devices
+        if device not in hal_device_reservation_tracker
+    ]
 
     if len(loaded_labwares) > len(possible_devices):
         raise RuntimeError(

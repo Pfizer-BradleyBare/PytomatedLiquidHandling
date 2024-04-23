@@ -4,17 +4,17 @@ from plh.hal import heat_cool_shake
 from plh.hal import labware as lab
 
 
-def assert_compatible_device(
+def get_compatible_devices(
     temperature: float,
     rpm: int,
-    labware: lab.LabwareBase,
-) -> bool:
+    *labwares: lab.LabwareBase,
+) -> list[heat_cool_shake.HeatCoolShakeBase]:
     """Confirm that the temperature, shaking rpm speed, and labware is actually supported by at least 1 heat cool shake device."""
     possible_devices: list[heat_cool_shake.HeatCoolShakeBase] = []
 
     for device in heat_cool_shake.devices.values():
         try:
-            device.assert_supported_labware(labware)
+            device.assert_supported_labware(*labwares)
         except lab.exceptions.LabwareNotSupportedError:
             continue
 
@@ -34,4 +34,4 @@ def assert_compatible_device(
         possible_devices.append(device)
     # possible devices must support the temp and rpm and labware requirements of the wells.
 
-    return len(possible_devices) != 0
+    return possible_devices
