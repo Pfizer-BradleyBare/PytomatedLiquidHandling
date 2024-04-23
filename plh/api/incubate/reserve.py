@@ -13,7 +13,7 @@ def reserve(
     rpm: int,
     *wells: container.Well,
 ) -> list[IncubateReservation]:
-    """Reserve an available heat cool shake device sorted by lowest time to temperature. Once reserved will start heating to your desired temp."""
+    """Reserve available heat cool shake devices sorted by lowest time to temperature. Once reserved will start heating to your desired temp."""
     loaded_labwares = {
         loaded_labware
         for well in wells
