@@ -6,7 +6,7 @@ from .reservation import IncubateReservation
 def start(reservation: IncubateReservation) -> None:
     """Move the reservation to the reserved device then start heating and shaking at the reserved parameters."""
     destination_deck_location = reservation.hal_device.get_layout_item(
-        reservation.loaded_labware.labware,
+        reservation.loaded_labware.layout_item.labware,
     ).deck_location
 
     move_loaded_labware([reservation.loaded_labware], [destination_deck_location])

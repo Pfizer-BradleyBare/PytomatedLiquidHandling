@@ -12,7 +12,8 @@ def group(
 ) -> list[list[tuple[LoadedLabware, None | LoadedLabware]]]:
     """Takes a list of labware or ```LoadedLabware``` and groups it by carrier for loading."""
     labware_only: list[labware.LabwareBase] = [
-        item.labware if isinstance(item, LoadedLabware) else item for item in args
+        item.layout_item.labware if isinstance(item, LoadedLabware) else item
+        for item in args
     ]
     # To do the loading we need a list of only labware items that are required.
 
@@ -23,7 +24,11 @@ def group(
         list,
     )
     for labware_type, meta in [
-        ((item.labware, item) if isinstance(item, LoadedLabware) else (item, None))
+        (
+            (item.layout_item.labware, item)
+            if isinstance(item, LoadedLabware)
+            else (item, None)
+        )
         for item in args
     ]:
         labware_meta[labware_type].append(meta)
@@ -91,10 +96,7 @@ def group(
     # Try to load it.
 
     return [
-        [
-            (LoadedLabware(layout_item.labware, layout_item), meta)
-            for layout_item, meta in layout_item_group
-        ]
+        [(LoadedLabware(layout_item), meta) for layout_item, meta in layout_item_group]
         for carrier, layout_item_group in groupby(
             loaded_layout_items_meta,
             lambda x: x[0].deck_location.carrier_config.carrier,

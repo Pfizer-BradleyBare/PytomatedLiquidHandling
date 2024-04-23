@@ -29,7 +29,10 @@ def reserve(
 
         try:
             device.assert_supported_labware(
-                *[loaded_labware.labware for loaded_labware in loaded_labwares],
+                *[
+                    loaded_labware.layout_item.labware
+                    for loaded_labware in loaded_labwares
+                ],
             )
         except labware.exceptions.LabwareNotSupportedError:
             continue
