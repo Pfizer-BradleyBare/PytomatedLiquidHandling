@@ -25,16 +25,16 @@ class LoadedLabware:
     layout_item: layout_item.LayoutItemBase
     """Where it is or will be on deck."""
 
+    is_covered: bool = field(default=False)
+    """If the loaded labware is currently covered with a lid. Default is False.
+    If labware is loaded with a lid then the user should update this."""
+
     well_assignments: dict[int, container.Well | None] = field(init=False)
     """Wells that have been assigned to the container."""
 
     well_volumes: dict[int, float] = field(init=False)
     """Current tracked volume in the well.
     NOTE: This may not be correct if significant evaporation occured."""
-
-    is_covered: bool = field(init=False, default=False)
-    """If the loaded labware is currently covered with a lid. Default is False.
-    If labware is loaded with a lid then the user should update this."""
 
     def __hash__(self: LoadedLabware) -> int:
         return hash(self.identifier)
