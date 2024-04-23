@@ -74,9 +74,6 @@ def deinitialize() -> None:
     )
     from plh.hal.tools import Interface
 
-    for device in backend.devices.values():
-        device.stop()
-
     devices = (
         list(carrier.devices.values())
         + list(carrier_loader.devices.values())
@@ -99,3 +96,6 @@ def deinitialize() -> None:
     for device in devices:
         if isinstance(device, Interface):
             device.deinitialize()
+
+    for device in backend.devices.values():
+        device.stop()
