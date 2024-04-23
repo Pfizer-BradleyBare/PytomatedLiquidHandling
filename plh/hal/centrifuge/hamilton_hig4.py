@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from typing import Annotated
 
 from pydantic import dataclasses
@@ -11,7 +12,7 @@ from plh.hal import backend
 
 from .centrifuge_base import *
 from .centrifuge_base import CentrifugeBase
-import time
+from .exceptions import GForceOutOfRangeError, InvalidBucketNumberError
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
@@ -46,10 +47,12 @@ class HamiltonHig4(CentrifugeBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, HSLHiGCentrifugeLib.Disconnect.Response)
 
-    def get_bucket_pattern(self: HamiltonHig4, num_buckets: int) -> list[int]:
+    def assert_num_buckets(self: HamiltonHig4, num_buckets: int) -> None:
         if num_buckets != 2:
-            msg = "Only 2 buckets at a time are supported."
-            raise ValueError(msg)
+            raise InvalidBucketNumberError(self, num_buckets, 2)
+
+    def get_bucket_pattern(self: HamiltonHig4, num_buckets: int) -> list[int]:
+        self.assert_num_buckets(num_buckets)
 
         return [0, 1]
 
@@ -72,6 +75,12 @@ class HamiltonHig4(CentrifugeBase):
 
     def close_time(self: HamiltonHig4) -> float:
         return 30
+
+    def assert_xG(self: CentrifugeBase, xG: float) -> None:
+        max_xG = 5000
+
+        if xG > max_xG:
+            raise GForceOutOfRangeError(self, xG, max_xG)
 
     def spin(
         self: HamiltonHig4,

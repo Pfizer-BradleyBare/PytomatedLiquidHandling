@@ -62,8 +62,13 @@ class CentrifugeBase(Interface, HALDevice):
         raise RuntimeError(msg)
 
     @abstractmethod
+    def assert_num_buckets(self: CentrifugeBase, num_buckets: int) -> None:
+        """Confirm that the number of requested buckets is supported by the centrifuge."""
+        ...
+
+    @abstractmethod
     def get_bucket_pattern(self: CentrifugeBase, num_buckets: int) -> list[int]:
-        """With centrifuges with many buckets it may be possible to load odd numbers of stacks.
+        """Centrifuges with many buckets may be possible to load odd numbers of stacks.
         This will account for the bucket configuration and attempt to support your number of buckets required.
         Will return a list of bucket indices to load in any order.
         """
@@ -84,6 +89,11 @@ class CentrifugeBase(Interface, HALDevice):
     @abstractmethod
     def close_time(self: CentrifugeBase) -> float:
         """Time to close the centrifuge."""
+
+    @abstractmethod
+    def assert_xG(self: CentrifugeBase, xG: float) -> None:
+        """Test that the xG is possible with this centrifuge."""
+        ...
 
     @abstractmethod
     def spin(
