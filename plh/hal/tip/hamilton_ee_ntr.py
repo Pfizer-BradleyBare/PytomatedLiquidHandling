@@ -84,6 +84,10 @@ class HamiltonEENTR(HamiltonEETipBase):
                 backend_error_handling=False,
             )
 
+            self.backend.execute(command)
+            self.backend.wait(command)
+            self.backend.acknowledge(command, EntryExit.MoveRandomShelfAccess.Response)
+
     def update_available_positions(
         self: HamiltonEENTR,
         raw_available_positions: list[dict[str, str]],
