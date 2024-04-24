@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import DefaultDict
 
 from plh.api import container
-from plh.hal import layout_item
+from plh.implementation import layout_item
 
 loaded_labware_tracker: dict[layout_item.LayoutItemBase, LoadedLabware] = {}
 """Tracks the location of ```LoadedLabware```"""

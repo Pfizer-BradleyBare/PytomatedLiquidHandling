@@ -1,7 +1,7 @@
 from loguru import logger
 
-from plh.driver.HAMILTON import HamiltonHeaterCooler
-from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.device.HAMILTON import HamiltonHeaterCooler
+from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
 
 COM_PORT = "COM7"
 

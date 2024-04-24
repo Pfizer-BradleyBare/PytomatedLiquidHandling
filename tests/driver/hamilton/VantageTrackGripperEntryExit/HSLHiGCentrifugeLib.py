@@ -1,7 +1,7 @@
 from loguru import logger
 
-from plh.driver.HAMILTON import HSLHiGCentrifugeLib
-from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.device.HAMILTON import HSLHiGCentrifugeLib
+from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
 
 ADAPTER_ID = "HX1"
 

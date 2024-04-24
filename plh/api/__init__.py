@@ -4,7 +4,7 @@ __all__ = ["container", "loader", "incubate", "deck_manager", "tools"]
 
 
 def initialize() -> None:
-    from plh.hal import (
+    from plh.implementation import (
         backend,
         carrier,
         carrier_loader,
@@ -23,7 +23,7 @@ def initialize() -> None:
         transport,
         vacuum,
     )
-    from plh.hal.tools import Interface
+    from plh.implementation.tools import Interface
 
     for device in backend.devices.values():
         device.start()
@@ -53,7 +53,7 @@ def initialize() -> None:
 
 
 def deinitialize() -> None:
-    from plh.hal import (
+    from plh.implementation import (
         backend,
         carrier,
         carrier_loader,
@@ -72,7 +72,7 @@ def deinitialize() -> None:
         transport,
         vacuum,
     )
-    from plh.hal.tools import Interface
+    from plh.implementation.tools import Interface
 
     devices = (
         list(carrier.devices.values())

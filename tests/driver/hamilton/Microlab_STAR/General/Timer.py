@@ -2,8 +2,8 @@ import pathlib
 
 from loguru import logger
 
-from plh.driver.HAMILTON.backend import MicrolabSTAR
-from plh.driver.HAMILTON.General import Timer
+from plh.device.HAMILTON.backend import MicrolabSTAR
+from plh.device.HAMILTON.General import Timer
 
 
 def main(backend: MicrolabSTAR) -> None:

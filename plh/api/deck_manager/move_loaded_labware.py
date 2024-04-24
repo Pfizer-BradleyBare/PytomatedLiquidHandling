@@ -4,8 +4,8 @@ from plh.api.tools.loaded_labware import (
     LoadedLabware,
     loaded_labware_tracker,
 )
-from plh.hal import deck_location, layout_item
-from plh.hal import transport as hal_transport
+from plh.implementation import deck_location, layout_item
+from plh.implementation import transport as hal_transport
 
 
 def move_loaded_labware(

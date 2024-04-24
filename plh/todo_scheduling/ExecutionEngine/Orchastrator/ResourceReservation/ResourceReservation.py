@@ -8,7 +8,7 @@ from PytomatedLiquidHandling.Tools.BaseClasses import (
     UniqueObjectTrackerABC,
 )
 
-from plh.hal import DeckLocation, TempControlDevice
+from plh.implementation import DeckLocation, TempControlDevice
 
 if TYPE_CHECKING:
     from ..Orchastrator import Orchastrator

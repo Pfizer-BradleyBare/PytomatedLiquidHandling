@@ -1,7 +1,7 @@
 from loguru import logger
 
-from plh.driver.HAMILTON import HSLVacuuBrandPump
-from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.device.HAMILTON import HSLVacuuBrandPump
+from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
 
 COM_PORT = 1
 PUMP_ID = 1

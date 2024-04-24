@@ -2,8 +2,8 @@ import pathlib
 
 from loguru import logger
 
-from plh.driver.HAMILTON import Visual_NTR_Library
-from plh.driver.HAMILTON.backend import MicrolabSTAR
+from plh.device.HAMILTON import Visual_NTR_Library
+from plh.device.HAMILTON.backend import MicrolabSTAR
 
 
 def main(backend: MicrolabSTAR) -> None:

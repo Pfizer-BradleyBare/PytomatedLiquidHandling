@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from plh.hal import LayoutItem
+from plh.implementation import LayoutItem
 
 if TYPE_CHECKING:
     from ..Orchastrator import Orchastrator
@@ -18,11 +18,8 @@ class Storage:
         default_factory=LayoutItem.LayoutItemTracker,
     )
 
-    def IsStored(self):
-        ...
+    def IsStored(self): ...
 
-    def Acquire(self):
-        ...
+    def Acquire(self): ...
 
-    def Release(self):
-        ...
+    def Release(self): ...

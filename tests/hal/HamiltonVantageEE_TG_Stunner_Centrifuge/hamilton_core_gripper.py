@@ -4,23 +4,25 @@ import os
 
 from loguru import logger
 
-from plh import hal
+from plh import implementation
 
 logger.enable("plh")
 
 
-hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
+implementation.load_yaml_configuration(
+    os.path.join(os.path.dirname(__file__), "Config")
+)
 
-hamilton_backend = hal.backend.devices["Hamilton"]
+hamilton_backend = implementation.backend.devices["Hamilton"]
 
 hamilton_backend.start()
 
-gripper = hal.transport.devices["COREGripper"]
+gripper = implementation.transport.devices["COREGripper"]
 
 gripper.initialize()
 
-source = hal.layout_item.devices["Carrier48_Pos1_Biorad200uLPCRPlate"]
-destination = hal.layout_item.devices["Carrier48_Pos1_Biorad200uLPCRPlate"]
+source = implementation.layout_item.devices["Carrier48_Pos1_Biorad200uLPCRPlate"]
+destination = implementation.layout_item.devices["Carrier48_Pos1_Biorad200uLPCRPlate"]
 
 
 gripper.assert_supported_labware(source.labware, destination.labware)

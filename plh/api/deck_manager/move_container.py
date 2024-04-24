@@ -4,7 +4,7 @@ from plh.api.container import Well
 from plh.api.tools.loaded_labware import (
     well_assignment_tracker,
 )
-from plh.hal import deck_location
+from plh.implementation import deck_location
 
 from .move_loaded_labware import move_loaded_labware
 

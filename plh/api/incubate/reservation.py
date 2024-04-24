@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from plh.api.tools.reservation import ReservationBase
-from plh.hal.heat_cool_shake import HeatCoolShakeBase
+from plh.implementation.heat_cool_shake import HeatCoolShakeBase
 
 
 @dataclass(frozen=True)

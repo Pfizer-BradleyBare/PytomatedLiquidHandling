@@ -1,20 +1,20 @@
 from __future__ import annotations
 
-from plh.hal import heat_cool_shake
-from plh.hal import labware as lab
+from plh.implementation import heat_cool_shake
+from plh.implementation import labware as lab
 
 
 def get_compatible_devices(
     temperature: float,
     rpm: int,
-    *labwares: lab.LabwareBase,
+    labware: lab.LabwareBase,
 ) -> list[heat_cool_shake.HeatCoolShakeBase]:
     """Confirm that the temperature, shaking rpm speed, and labware is actually supported by at least 1 heat cool shake device."""
     possible_devices: list[heat_cool_shake.HeatCoolShakeBase] = []
 
     for device in heat_cool_shake.devices.values():
         try:
-            device.assert_supported_labware(*labwares)
+            device.assert_supported_labware(labware)
         except lab.exceptions.LabwareNotSupportedError:
             continue
 

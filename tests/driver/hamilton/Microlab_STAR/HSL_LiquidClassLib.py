@@ -2,8 +2,8 @@ import pathlib
 
 from loguru import logger
 
-from plh.driver.HAMILTON import HSL_LiquidClassLib
-from plh.driver.HAMILTON.backend import MicrolabSTAR
+from plh.device.HAMILTON import HSL_LiquidClassLib
+from plh.device.HAMILTON.backend import MicrolabSTAR
 
 
 def main(backend: MicrolabSTAR) -> None:

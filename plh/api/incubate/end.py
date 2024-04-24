@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from plh.api.deck_manager import move_loaded_labware
-from plh.hal import deck_location
+from plh.implementation import deck_location
 
 from .reservation import IncubateReservation
 

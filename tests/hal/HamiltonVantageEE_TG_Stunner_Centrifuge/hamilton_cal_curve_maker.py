@@ -6,7 +6,7 @@ from typing import cast
 
 from loguru import logger
 
-from plh import hal
+from plh import implementation
 
 logger.enable("plh")
 
@@ -18,18 +18,20 @@ for points, (v1, v2) in zip(segment_points, pairwise(segment_volumes)):
     increment = (v2 - v1) / points
     vols += [int(v1 + increment * (i + 1)) for i in range(points)]
 
-hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
+implementation.load_yaml_configuration(
+    os.path.join(os.path.dirname(__file__), "Config")
+)
 
-pipette = hal.pipette.devices["Pipette"]
+pipette = implementation.pipette.devices["Pipette"]
 
-hal.pipette.TransferOptions
+implementation.pipette.TransferOptions
 
 
-li = hal.layout_item.devices["Carrier41_Pos1_Hamilton1500uLFlipTubeCarrier"]
+li = implementation.layout_item.devices["Carrier41_Pos1_Hamilton1500uLFlipTubeCarrier"]
 
 vm = cast(
-    hal.container_measure.Hamilton50uLCORE8,
-    hal.container_measure.devices["Pipette Measure"],
+    implementation.container_measure.Hamilton50uLCORE8,
+    implementation.container_measure.devices["Pipette Measure"],
 )
 
 vm.backend.simulation_on = False

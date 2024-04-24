@@ -4,19 +4,21 @@ import os
 
 from loguru import logger
 
-from plh import hal
-from plh.hal.pipette import AspirateOptions, DispenseOptions
+from plh import implementation
+from plh.implementation.pipette import AspirateOptions, DispenseOptions
 
 logger.enable("plh")
 
-hal.load_yaml_configuration(os.path.join(os.path.dirname(__file__), "Config"))
+implementation.load_yaml_configuration(
+    os.path.join(os.path.dirname(__file__), "Config")
+)
 
 
-li1 = hal.layout_item.devices["Carrier48_Pos1_Biorad200uLPCRPlate"]
-li2 = hal.layout_item.devices["Carrier48_Pos2_Biorad200uLPCRPlate"]
-li3 = hal.layout_item.devices["Carrier48_Pos3_Biorad200uLPCRPlate"]
-li4 = hal.layout_item.devices["Carrier48_Pos4_Biorad200uLPCRPlate"]
-p = hal.pipette.devices["Pipette"]
+li1 = implementation.layout_item.devices["Carrier48_Pos1_Biorad200uLPCRPlate"]
+li2 = implementation.layout_item.devices["Carrier48_Pos2_Biorad200uLPCRPlate"]
+li3 = implementation.layout_item.devices["Carrier48_Pos3_Biorad200uLPCRPlate"]
+li4 = implementation.layout_item.devices["Carrier48_Pos4_Biorad200uLPCRPlate"]
+p = implementation.pipette.devices["Pipette"]
 
 a = AspirateOptions(
     layout_item=li1,

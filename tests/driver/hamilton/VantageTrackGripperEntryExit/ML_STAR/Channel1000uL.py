@@ -1,7 +1,7 @@
 from loguru import logger
 
-from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
-from plh.driver.HAMILTON.ML_STAR import Channel1000uL
+from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.device.HAMILTON.ML_STAR import Channel1000uL
 
 
 def main(backend: VantageTrackGripperEntryExit) -> None:

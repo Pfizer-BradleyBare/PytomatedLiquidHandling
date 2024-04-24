@@ -9,7 +9,7 @@ from PytomatedLiquidHandling.Tools.BaseClasses import (
     NonUniqueObjectTrackerABC,
 )
 
-from plh.hal import Labware, LayoutItem
+from plh.implementation import Labware, LayoutItem
 
 from .AssignedWell import AssignedWell, AssignedWellTracker
 

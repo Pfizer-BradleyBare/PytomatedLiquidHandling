@@ -26,7 +26,7 @@ def install_venus_dependencies() -> None:
         "Press <Enter> to continue Venus4 library installation. Otherwise, cancel with <Ctrl+C>",
     )
 
-    from plh.driver.HAMILTON.backend import bin as HAMILTON_bin
+    from plh.device.HAMILTON.backend import bin as HAMILTON_bin
 
     bin_folder = pathlib.Path(HAMILTON_bin.__file__).parent
 

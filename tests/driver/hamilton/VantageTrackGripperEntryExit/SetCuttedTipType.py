@@ -1,7 +1,7 @@
 from loguru import logger
 
-from plh.driver.HAMILTON import SetCuttedTipType
-from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.device.HAMILTON import SetCuttedTipType
+from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
 
 
 def main(backend: VantageTrackGripperEntryExit) -> None:

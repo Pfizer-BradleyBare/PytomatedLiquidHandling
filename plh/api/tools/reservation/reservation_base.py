@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import DefaultDict
 
 from plh.api.tools.loaded_labware import LoadedLabware
-from plh.hal.tools import HALDevice
+from plh.implementation.tools import HALDevice
 
 hal_device_reservation_tracker: dict[HALDevice, ReservationBase] = {}
 """Convienence method to get a reservation from a hal device"""

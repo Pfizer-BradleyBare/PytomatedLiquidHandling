@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from plh.api.tools.loaded_labware import LoadedLabware
-from plh.hal import carrier_loader
+from plh.implementation import carrier_loader
 
 
 def end(

@@ -2,8 +2,8 @@ import pathlib
 
 from loguru import logger
 
-from plh.driver.HAMILTON.backend import MicrolabSTAR
-from plh.driver.HAMILTON.ML_STAR import iSwap
+from plh.device.HAMILTON.backend import MicrolabSTAR
+from plh.device.HAMILTON.ML_STAR import iSwap
 
 
 def main(backend: MicrolabSTAR) -> None:

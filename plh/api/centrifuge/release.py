@@ -1,10 +1,14 @@
 from plh.api.tools.reservation import deregister
 
-from .end import end
 from .reservation import IncubateReservation
 
 
-def release(reservation: IncubateReservation) -> None:
-    """End the reservation."""
-    end(reservation)
-    deregister(reservation)
+def release(reservations: list[IncubateReservation]) -> None:
+    """End the reservations."""
+    for reservation in reservations:
+        if reservation.status is True:
+            RuntimeError(
+                "Reservation currently running. Must end first. Critical error.",
+            )
+
+        deregister(reservation)

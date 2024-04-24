@@ -2,8 +2,8 @@ import pathlib
 
 from loguru import logger
 
-from plh.driver.HAMILTON import PlateEditor96
-from plh.driver.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.device.HAMILTON import PlateEditor96
+from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
 
 
 def main(backend: VantageTrackGripperEntryExit) -> None:
