@@ -18,7 +18,7 @@ class MeasureValues:
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class ContainerMeasureBase(Interface, HALDevice):
+class VolumeMeasureBase(Interface, HALDevice):
     """Device that can be used to measure the volume of liquid in a container."""
 
     supported_labware: Annotated[
@@ -31,7 +31,7 @@ class ContainerMeasureBase(Interface, HALDevice):
     ]
 
     def assert_supported_labware(
-        self: ContainerMeasureBase,
+        self: VolumeMeasureBase,
         *args: labware.LabwareBase,
     ) -> None:
         exceptions = [
@@ -45,7 +45,7 @@ class ContainerMeasureBase(Interface, HALDevice):
             raise ExceptionGroup(msg, exceptions)
 
     def assert_supported_deck_locations(
-        self: ContainerMeasureBase,
+        self: VolumeMeasureBase,
         *args: deck_location.DeckLocationBase,
     ) -> None:
         exceptions = [
@@ -60,7 +60,7 @@ class ContainerMeasureBase(Interface, HALDevice):
 
     @abstractmethod
     def measure(
-        self: ContainerMeasureBase,
+        self: VolumeMeasureBase,
         *args: tuple[layout_item.LayoutItemBase, int | str],
     ) -> list[MeasureValues]:
         """Measures container and returns a list of MeasureValues."""

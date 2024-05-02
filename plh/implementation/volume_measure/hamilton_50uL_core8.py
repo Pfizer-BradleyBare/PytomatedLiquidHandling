@@ -12,12 +12,12 @@ from plh.device.HAMILTON.ML_STAR import Channel1000uL
 from plh.implementation import deck_location, labware, layout_item, pipette
 from plh.implementation.pipette.hamilton_portrait_core8 import *
 
-from .container_measure_base import *
-from .container_measure_base import ContainerMeasureBase, MeasureValues
+from .volume_measure_base import *
+from .volume_measure_base import MeasureValues, VolumeMeasureBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class Hamilton50uLCORE8(ContainerMeasureBase):
+class Hamilton50uLCORE8(VolumeMeasureBase):
     """Device that can be used to measure the volume of liquid in a container."""
 
     pipette: Annotated[
