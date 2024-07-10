@@ -1,6 +1,6 @@
 
 // this ALWAYS GENERATED file contains the sub-method library header
-// Generated at 6/2/2023 1:01:30 PM
+// Generated at 7/10/2024 2:22:25 PM
 
 #pragma once
 #ifndef HSL_RUNTIME
@@ -15,4 +15,4 @@ function _Channels_Asp_Disp( variable _ChannelPattern, variable _Aspirate, varia
 #ifdef HSL_RUNTIME
 #include __filename__ ".hsi"
 #endif
-// $$author=BAREB$$valid=0$$time=2023-06-02 13:01$$checksum=7e83cd18$$length=082$$
+// $$author=BAREB$$valid=0$$time=2024-07-10 14:22$$checksum=03a2b667$$length=082$$

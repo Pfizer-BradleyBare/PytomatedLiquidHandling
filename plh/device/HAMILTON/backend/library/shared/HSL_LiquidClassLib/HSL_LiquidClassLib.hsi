@@ -1,11 +1,11 @@
 // {{{ 2 "IncludeGuard" "PragmaOnce"
 #pragma once
 // }} ""
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_"
+#include "plh\\shared\\Server\\JsonParser\\JsonParser.hs_"
 #include "HSLJson\\HSLJson.hsl"
-#include "HSL_LiquidClassLib.hsl"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "plh\\hamilton\\HSL_LiquidClassLib\\HSL_LiquidClassLib.hsl"
+#include "plh\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
+#include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLErrLib.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
@@ -192,4 +192,4 @@ abort;
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 13:30$$checksum=7ae2c717$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-07-10 14:19$$checksum=4eb46112$$length=084$$

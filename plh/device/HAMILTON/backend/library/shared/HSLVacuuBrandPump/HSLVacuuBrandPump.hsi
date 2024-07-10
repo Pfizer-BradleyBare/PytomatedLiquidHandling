@@ -2,9 +2,9 @@
 #pragma once
 // }} ""
 #include "HSLVacuuBrandPump.hsl"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
+#include "plh\\shared\\Server\\JsonParser\\JsonParser.hs_"
+#include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "plh\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLErrLib.hsl"
 #include "HSLTrcLib.hsl"
@@ -455,4 +455,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 14:30$$checksum=f23beca5$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-07-10 14:21$$checksum=3537b60a$$length=084$$

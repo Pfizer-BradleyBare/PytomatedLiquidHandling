@@ -1,13 +1,13 @@
 // {{{ 2 "IncludeGuard" "PragmaOnce"
 #pragma once
 // }} ""
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "plh\\shared\\Server\\JsonParser\\JsonParser.hs_"
+#include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
 #include "HSLSeqLib.hsl"
 #include "Visual_NTR_library\\Visual_NTR_library.hs_"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
+#include "plh\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
 #include "HSLFilLib.hsl"
 #include "HSLStrLib.hsl"
 #include "HSLUtilLib.hsl"
@@ -479,4 +479,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 08:44$$checksum=aa437445$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-07-10 14:17$$checksum=e2d8a6b2$$length=084$$

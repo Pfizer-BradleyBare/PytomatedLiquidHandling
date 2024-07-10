@@ -2,12 +2,12 @@
 #pragma once
 // }} ""
 #include "HslHamHeaterShakerLib.hsl"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "plh\\shared\\Server\\JsonParser\\JsonParser.hs_"
+#include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLJson\\HSLJson.hsl"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
+#include "plh\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_"
 #include "HSLStrLib.hsl"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\Logger\\Logger.hs_"
+#include "plh\\shared\\Server\\Logger\\Logger.hs_"
 #include "HSLErrLib.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
@@ -603,4 +603,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-02-29 13:12$$checksum=691e7939$$length=091$$
+// $$author=BAREB$$valid=0$$time=2024-07-10 14:19$$checksum=54573a18$$length=084$$

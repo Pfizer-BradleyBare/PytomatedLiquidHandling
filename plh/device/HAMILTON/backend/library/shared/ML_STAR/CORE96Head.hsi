@@ -2,11 +2,11 @@
 #pragma once
 // }} ""
 #include "HSLSeqLib.hsl"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_"
+#include "plh\\shared\\Server\\JsonParser\\JsonParser.hs_"
 #include "HSLErrLib.hsl"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLJson\\HSLJson.hsl"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\STAR_Channel_MPH_fwCmd\\STAR_Channel_MPH_fwCmd.hs_"
+#include "plh\\shared\\STAR_Channel_MPH_fwCmd\\STAR_Channel_MPH_fwCmd.hs_"
 #include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
@@ -748,4 +748,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 08:49$$checksum=40e19fe0$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-07-10 14:25$$checksum=eece104c$$length=084$$

@@ -2,7 +2,7 @@
 #pragma once
 // }} ""
 #include "HSLTrcLib.hsl"
-#include "HSL_LiquidClassLib.hsl"
+#include "plh\\hamilton\\HSL_LiquidClassLib\\HSL_LiquidClassLib.hsl"
 #include "HSLMthLib.hsl"
 #include "HSLStrLib.hsl"
 #include "HSLSeqLib.hsl"
@@ -3403,4 +3403,4 @@ if( 0 == timer2.WaitTimer(hslTrue, hslFalse) )
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2023-06-02 13:01$$checksum=0d873328$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-07-10 14:22$$checksum=fb120dc8$$length=084$$

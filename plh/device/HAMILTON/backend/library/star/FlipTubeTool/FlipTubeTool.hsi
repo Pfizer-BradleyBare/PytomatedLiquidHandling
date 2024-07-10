@@ -2,11 +2,11 @@
 #pragma once
 // }} ""
 #include "HSLSeqLib.hsl"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
+#include "plh\\shared\\Server\\JsonParser\\JsonParser.hs_"
+#include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLErrLib.hsl"
-#include "Hamilton FlipTubeTool\\Hamilton FlipTubeTool.hsl"
+#include "plh\\hamilton\\Hamilton FlipTubeTool\\Hamilton FlipTubeTool.hsl"
 #include "HSLLabwrAccess\\HSLLabwrAccess.hsl"
 #include "VirtualLabware_V2.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
@@ -454,4 +454,4 @@ HSLJsonLib::Release(o_JSONObject);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-03-07 16:49$$checksum=8e5953e2$$length=091$$
+// $$author=BAREB$$valid=0$$time=2024-07-10 14:26$$checksum=4e48f4ca$$length=084$$

@@ -5,7 +5,7 @@
 #include "HSLStrLib.hsl"
 #include "HSLJson\\HSLJson.hsl"
 #include "HSLUtilLib2.hsl"
-#include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\Logger\\Logger.hs_"
+#include "plh\\shared\\Server\\Logger\\Logger.hs_"
 #include "HSLTrcLib.hsl"
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
@@ -113,4 +113,4 @@ return (ReturnStatusCode);
 // {{{ 2 "LibraryNamespace" "End"
 } // library namespace
 // }} ""
-// $$author=BAREB$$valid=0$$time=2024-01-17 15:39$$checksum=173f6a36$$length=084$$
+// $$author=BAREB$$valid=0$$time=2024-07-10 14:23$$checksum=eae21bc6$$length=084$$
