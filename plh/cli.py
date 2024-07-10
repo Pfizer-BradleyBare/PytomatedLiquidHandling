@@ -26,9 +26,22 @@ def install_venus_dependencies() -> None:
         "Press <Enter> to continue Venus4 library installation. Otherwise, cancel with <Ctrl+C>",
     )
 
-    from plh.device.HAMILTON.backend import bin as HAMILTON_bin
+    from plh.device.HAMILTON import backend
 
-    bin_folder = pathlib.Path(HAMILTON_bin.__file__).parent
+    backend_path = pathlib.Path(backend.__file__)
+    hamilton_path = pathlib.Path("C:\\Program Files (x86)\\HAMILTON\\Library")
+
+    backend_installer_folder = backend_path / "installer"
+    backend_labware_folder = backend_path / "labware"
+    backend_library_folder = backend_path / "library"
+    backend_method_folder = backend_path / "method"
+
+    hamilton_bin_folder = hamilton_path / "Bin"
+    hamilton_labware_folder = hamilton_path / "LabWare"
+    hamilton_library_folder = hamilton_path / "Library"
+    hamilton_methods_folder = hamilton_path / "Methods"
+
+    bin_folder = pathlib.Path(hamilton_bin.__file__).parent
 
     for item in bin_folder.iterdir():
         if item.is_file() and item.suffix == ".exe":
