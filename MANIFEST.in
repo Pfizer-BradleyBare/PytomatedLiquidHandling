@@ -1,3 +1,4 @@
-recursive-include plh/driver/HAMILTON/backend/bin/ *
-
-recursive-include plh/driver/UnchainedLabs_Instruments/backend/bin/ *
+# https://packaging.python.org/guides/using-manifest-in/
+graft plh
+global-exclude __pycache__
+global-exclude *.py[cod]

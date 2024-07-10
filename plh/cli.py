@@ -28,8 +28,8 @@ def install_venus() -> None:
 
     from plh.device.HAMILTON import backend
 
-    backend_path = pathlib.Path(backend.__file__)
-    hamilton_path = pathlib.Path("C:\\Program Files (x86)\\HAMILTON\\Library")
+    backend_path = pathlib.Path(backend.__file__).parent
+    hamilton_path = pathlib.Path("C:\\Program Files (x86)\\HAMILTON")
 
     backend_installer_folder = backend_path / "installer"
     backend_labware_folder = backend_path / "labware"
@@ -41,28 +41,19 @@ def install_venus() -> None:
     hamilton_library_folder = hamilton_path / "Library" / "plh"
     hamilton_methods_folder = hamilton_path / "Methods" / "plh"
 
-    hamilton_bin_folder.unlink(missing_ok=True)
-    hamilton_labware_folder.unlink(missing_ok=True)
-    hamilton_library_folder.unlink(missing_ok=True)
-    hamilton_methods_folder.unlink(missing_ok=True)
+    shutil.rmtree(hamilton_bin_folder)
+    shutil.rmtree(hamilton_labware_folder)
+    shutil.rmtree(hamilton_library_folder)
+    shutil.rmtree(hamilton_methods_folder)
     # Clean the folders first
-
-    hamilton_bin_folder.mkdir()
-    hamilton_labware_folder.mkdir()
-    hamilton_library_folder.mkdir()
-    hamilton_methods_folder.mkdir()
-    # Make the folders
 
     shutil.copytree(backend_installer_folder, hamilton_bin_folder)
     shutil.copytree(backend_labware_folder, hamilton_labware_folder)
     shutil.copytree(backend_library_folder, hamilton_library_folder)
     shutil.copytree(backend_method_folder, hamilton_methods_folder)
+    # copy the content
 
-    return
-
-    bin_folder = pathlib.Path(hamilton_bin.__file__).parent
-
-    for item in bin_folder.iterdir():
+    for item in hamilton_bin_folder.iterdir():
         if item.is_file() and item.suffix == ".exe":
             process = subprocess.Popen(
                 [  # noqa:S603
@@ -76,10 +67,3 @@ def install_venus() -> None:
                 ...
             # Wait for completion
         # run file if .exe (installs libraries)
-
-        if item.is_dir():
-            shutil.copytree(
-                src=item,
-                dst="C:\\Program Files (x86)\\HAMILTON\\Library",
-                dirs_exist_ok=True,
-            )

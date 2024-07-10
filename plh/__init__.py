@@ -14,9 +14,9 @@ Please see each layer for descriptions / examples.
 
 from loguru import logger
 
-from . import api, cli, device, implementation
+from . import cli, device, implementation
 
-__all__ = ["cli", "device", "implementation", "api"]
+__all__ = ["cli", "device", "implementation"]
 
 logger.disable("plh")
 # Programmer is excepted to enable loguru to see PLH logs
