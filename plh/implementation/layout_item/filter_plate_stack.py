@@ -10,13 +10,14 @@ from .coverable_plate import *
 from .coverable_plate import CoverablePlate
 from .filter_plate import *
 from .filter_plate import FilterPlate
+from .layout_item_base import LayoutItemBase
 from .plate import *
 from .plate import Plate
 from .pydantic_validators import validate_instance
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class FilterPlateStack:
+class FilterPlateStack(LayoutItemBase):
     """A filter plate stack is made of two parts: a filter plate, and a lower base labware to hold the filter plate.
     Filter plates generally have open bottom wells so the lower labware prevents contamination from contact with the carriers or deck.
     """
