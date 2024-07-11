@@ -15,10 +15,10 @@ def plh() -> None:
 
 @plh.command()
 def install_venus() -> None:
-    """Installs all Venus libraries required by plh by invoking a set of Hamilton supplied .exe files."""
+    """Installs all Venus requirements for plh (libraries, labware, sub-methods)."""
     if not pathlib.Path("C:\\Program Files (x86)\\HAMILTON").exists():
         print(
-            "Hamilton Venus4 software does not appear to be installed. Please install before running this command",
+            "Hamilton Venus software does not appear to be installed. Please install before running this command",
         )
         return
 
