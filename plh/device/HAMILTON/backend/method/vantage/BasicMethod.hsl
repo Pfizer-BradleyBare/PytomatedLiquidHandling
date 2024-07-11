@@ -4,110 +4,110 @@
  namespace _Method { #include "HSLJson\\HSLJson.hsl" } 
  namespace _ActionServer { #include "HSLJson\\HSLJson.hsl" } 
  namespace _StateServer { #include "HSLJson\\HSLJson.hsl" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\Logger\\Logger.hs_" } 
- namespace _ActionServer { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\Logger\\Logger.hs_" } 
- namespace _StateServer { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\Logger\\Logger.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
- namespace _ActionServer { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
- namespace _StateServer { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _Method { #include "plh\\shared\\Server\\Logger\\Logger.hs_" } 
+ namespace _ActionServer { #include "plh\\shared\\Server\\Logger\\Logger.hs_" } 
+ namespace _StateServer { #include "plh\\shared\\Server\\Logger\\Logger.hs_" } 
+ namespace _Method { #include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _ActionServer { #include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _StateServer { #include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
  namespace _ActionServerProcessa { #include "HSLHttp\\HSLHttp.hsl" } 
  namespace _ActionServerProcessa { #include "HSLJson\\HSLJson.hsl" } 
- namespace _ActionServerProcessa { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\Logger\\Logger.hs_" } 
- namespace _ActionServerProcessa { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _ActionServerProcessa { #include "plh\\shared\\Server\\Logger\\Logger.hs_" } 
+ namespace _ActionServerProcessa { #include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
  namespace _ActionServerProc { #include "HSLHttp\\HSLHttp.hsl" } 
  namespace _ActionServerProc { #include "HSLJson\\HSLJson.hsl" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\Logger\\Logger.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\Server\\Logger\\Logger.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
  namespace _ActionServerProc { #include "HSLHttp\\HSLHttp.hsl" } 
  namespace _ActionServerProc { #include "HSLJson\\HSLJson.hsl" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\Logger\\Logger.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\Server\\Logger\\Logger.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
  namespace _StateServerProc { #include "HSLHttp\\HSLHttp.hsl" } 
  namespace _StateServerProc { #include "HSLJson\\HSLJson.hsl" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\Logger\\Logger.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\_Visual_NTR_Library\\_Visual_NTR_Library.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\_Visual_NTR_Library\\_Visual_NTR_Library.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\_Visual_NTR_Library\\_Visual_NTR_Library.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\SetCuttedTipType\\CuttedTipType.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\SetCuttedTipType\\CuttedTipType.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\SetCuttedTipType\\CuttedTipType.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HamiltonHeaterCooler\\HamiltonHeaterCooler.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HamiltonHeaterCooler\\HamiltonHeaterCooler.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HamiltonHeaterCooler\\HamiltonHeaterCooler.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLHamHeaterShakerLib\\_HSLHamHeaterShakerLib.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLHamHeaterShakerLib\\_HSLHamHeaterShakerLib.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLHamHeaterShakerLib\\_HSLHamHeaterShakerLib.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLLabwrAccess\\HSLLabwrAccess.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLLabwrAccess\\HSLLabwrAccess.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLLabwrAccess\\HSLLabwrAccess.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSL_LiquidClassLib\\HSL_LiquidClassLib.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSL_LiquidClassLib\\HSL_LiquidClassLib.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSL_LiquidClassLib\\HSL_LiquidClassLib.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\Server\\JsonParser\\JsonParser.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\Server\\Logger\\Logger.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\Server\\ActionServerEndpoints\\ActionServerEndpoints.hs_" } 
+ namespace _Method { #include "plh\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\Server\\StateServerEndpoints\\StateServerEndpoints.hs_" } 
+ namespace _Method { #include "plh\\shared\\_Visual_NTR_Library\\_Visual_NTR_Library.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\_Visual_NTR_Library\\_Visual_NTR_Library.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\_Visual_NTR_Library\\_Visual_NTR_Library.hs_" } 
+ namespace _Method { #include "plh\\shared\\SetCuttedTipType\\CuttedTipType.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\SetCuttedTipType\\CuttedTipType.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\SetCuttedTipType\\CuttedTipType.hs_" } 
+ namespace _Method { #include "plh\\shared\\HamiltonHeaterCooler\\HamiltonHeaterCooler.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\HamiltonHeaterCooler\\HamiltonHeaterCooler.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\HamiltonHeaterCooler\\HamiltonHeaterCooler.hs_" } 
+ namespace _Method { #include "plh\\shared\\HSLHamHeaterShakerLib\\_HSLHamHeaterShakerLib.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\HSLHamHeaterShakerLib\\_HSLHamHeaterShakerLib.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\HSLHamHeaterShakerLib\\_HSLHamHeaterShakerLib.hs_" } 
+ namespace _Method { #include "plh\\shared\\HSLLabwrAccess\\HSLLabwrAccess.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\HSLLabwrAccess\\HSLLabwrAccess.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\HSLLabwrAccess\\HSLLabwrAccess.hs_" } 
+ namespace _Method { #include "plh\\shared\\HSL_LiquidClassLib\\HSL_LiquidClassLib.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\HSL_LiquidClassLib\\HSL_LiquidClassLib.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\HSL_LiquidClassLib\\HSL_LiquidClassLib.hs_" } 
+ namespace _Method { #include "plh\\shared\\Server\\JsonParser\\JsonParser.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\Server\\JsonParser\\JsonParser.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\Server\\JsonParser\\JsonParser.hs_" } 
+ namespace _Method { #include "plh\\shared\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\HSLVacuuBrandPump\\HSLVacuuBrandPump.hs_" } 
  namespace _Method { #include "HSLTrcLib.hsl" } 
  namespace _ActionServerProc { #include "HSLTrcLib.hsl" } 
  namespace _StateServerProc { #include "HSLTrcLib.hsl" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\Channel1000uL.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\Channel1000uL.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\Channel1000uL.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\Channel1000uLCOREGrip.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\Channel1000uLCOREGrip.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\Channel1000uLCOREGrip.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\CORE96Head.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\CORE96Head.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\CORE96Head.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\iSwap.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\iSwap.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\iSwap.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\Autoload.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\Autoload.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\Autoload.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\ML_STAR.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\ML_STAR.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\ML_STAR\\ML_STAR.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLTipCountingLib\\_HSLTipCountingLib.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLTipCountingLib\\_HSLTipCountingLib.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLTipCountingLib\\_HSLTipCountingLib.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\General\\Timer.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\General\\Timer.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\General\\Timer.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\EntryExit\\EntryExit.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\EntryExit\\EntryExit.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\EntryExit\\EntryExit.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\TrackGripper\\TrackGripper.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\TrackGripper\\TrackGripper.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\TrackGripper\\TrackGripper.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\FlipTubeTool\\FlipTubeTool.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\FlipTubeTool\\FlipTubeTool.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\vantage\\FlipTubeTool\\FlipTubeTool.hs_" } 
-#include "plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.res"
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLHiGCentrifugeLib\\HSLHiGCentrifugeLib.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLHiGCentrifugeLib\\HSLHiGCentrifugeLib.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLHiGCentrifugeLib\\HSLHiGCentrifugeLib.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLML_STARLib\\HSLML_STARLib.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLML_STARLib\\HSLML_STARLib.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\HSLML_STARLib\\HSLML_STARLib.hs_" } 
- namespace _Method { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\PlateEditor96\\_PlateEditor96.hs_" } 
- namespace _ActionServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\PlateEditor96\\_PlateEditor96.hs_" } 
- namespace _StateServerProc { #include "plh\\plh\\driver\\HAMILTON\\backend\\library\\shared\\PlateEditor96\\_PlateEditor96.hs_" } 
+ namespace _Method { #include "plh\\shared\\ML_STAR\\Channel1000uL.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\ML_STAR\\Channel1000uL.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\ML_STAR\\Channel1000uL.hs_" } 
+ namespace _Method { #include "plh\\shared\\ML_STAR\\Channel1000uLCOREGrip.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\ML_STAR\\Channel1000uLCOREGrip.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\ML_STAR\\Channel1000uLCOREGrip.hs_" } 
+ namespace _Method { #include "plh\\shared\\ML_STAR\\CORE96Head.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\ML_STAR\\CORE96Head.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\ML_STAR\\CORE96Head.hs_" } 
+ namespace _Method { #include "plh\\shared\\ML_STAR\\iSwap.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\ML_STAR\\iSwap.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\ML_STAR\\iSwap.hs_" } 
+ namespace _Method { #include "plh\\shared\\ML_STAR\\Autoload.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\ML_STAR\\Autoload.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\ML_STAR\\Autoload.hs_" } 
+ namespace _Method { #include "plh\\shared\\ML_STAR\\ML_STAR.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\ML_STAR\\ML_STAR.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\ML_STAR\\ML_STAR.hs_" } 
+ namespace _Method { #include "plh\\shared\\HSLTipCountingLib\\_HSLTipCountingLib.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\HSLTipCountingLib\\_HSLTipCountingLib.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\HSLTipCountingLib\\_HSLTipCountingLib.hs_" } 
+ namespace _Method { #include "plh\\shared\\General\\Timer.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\General\\Timer.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\General\\Timer.hs_" } 
+ namespace _Method { #include "plh\\vantage\\EntryExit\\EntryExit.hs_" } 
+ namespace _ActionServerProc { #include "plh\\vantage\\EntryExit\\EntryExit.hs_" } 
+ namespace _StateServerProc { #include "plh\\vantage\\EntryExit\\EntryExit.hs_" } 
+ namespace _Method { #include "plh\\vantage\\TrackGripper\\TrackGripper.hs_" } 
+ namespace _ActionServerProc { #include "plh\\vantage\\TrackGripper\\TrackGripper.hs_" } 
+ namespace _StateServerProc { #include "plh\\vantage\\TrackGripper\\TrackGripper.hs_" } 
+ namespace _Method { #include "plh\\vantage\\FlipTubeTool\\FlipTubeTool.hs_" } 
+ namespace _ActionServerProc { #include "plh\\vantage\\FlipTubeTool\\FlipTubeTool.hs_" } 
+ namespace _StateServerProc { #include "plh\\vantage\\FlipTubeTool\\FlipTubeTool.hs_" } 
+#include "plh\\active_layout\\active_layout.res"
+ namespace _Method { #include "plh\\shared\\HSLHiGCentrifugeLib\\HSLHiGCentrifugeLib.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\HSLHiGCentrifugeLib\\HSLHiGCentrifugeLib.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\HSLHiGCentrifugeLib\\HSLHiGCentrifugeLib.hs_" } 
+ namespace _Method { #include "plh\\shared\\HSLML_STARLib\\HSLML_STARLib.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\HSLML_STARLib\\HSLML_STARLib.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\HSLML_STARLib\\HSLML_STARLib.hs_" } 
+ namespace _Method { #include "plh\\shared\\PlateEditor96\\_PlateEditor96.hs_" } 
+ namespace _ActionServerProc { #include "plh\\shared\\PlateEditor96\\_PlateEditor96.hs_" } 
+ namespace _StateServerProc { #include "plh\\shared\\PlateEditor96\\_PlateEditor96.hs_" } 
  namespace _Method { #include "HSLSeqLib.hsl" } 
  namespace _ActionServerProc { #include "HSLSeqLib.hsl" } 
  namespace _StateServerProc { #include "HSLSeqLib.hsl" } 
 /* {{ 2 "LibraryInsertLine" "" */ // }} ""
 variable StateServerProc;
 variable ActionServerProc;
-global device ML_STAR ("plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.lay", "ML_STAR", hslTrue);
-global device EntryExit ("plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.lay", "EntryExit", hslTrue);
-global device TrackGripper ("plh\\plh\\driver\\HAMILTON\\backend\\layout\\__active_layout__.lay", "TrackGripper", hslTrue);
+global device ML_STAR ("plh\\active_layout\\active_layout.lay", "ML_STAR", hslTrue);
+global device EntryExit ("plh\\active_layout\\active_layout.lay", "EntryExit", hslTrue);
+global device TrackGripper ("plh\\active_layout\\active_layout.lay", "TrackGripper", hslTrue);
 /* {{ 2 "VariableInsertLine" "" */ // }} ""
 // {{ 2 "TemplateIncludeBlock" ""
  namespace _Method { #include "HSLMETEDLib.hs_" } 
@@ -261,4 +261,4 @@ _PLATEEDITOR96::_ExitLibrary();
 // {{{ 5 "main" "End"
 } }
 // }} ""
-// $$author=FCNCHV-ARDLC$$valid=0$$time=2024-03-07 12:18$$checksum=ea081347$$length=091$$
+// $$author=fcnchv-ardlc$$valid=0$$time=2024-07-11 08:59$$checksum=46063700$$length=091$$
