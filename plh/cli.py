@@ -41,10 +41,10 @@ def install_venus() -> None:
     hamilton_library_folder = hamilton_path / "Library" / "plh"
     hamilton_methods_folder = hamilton_path / "Methods" / "plh"
 
-    shutil.rmtree(hamilton_bin_folder,ignore_errors=True)
-    shutil.rmtree(hamilton_labware_folder,ignore_errors=True)
-    shutil.rmtree(hamilton_library_folder,ignore_errors=True)
-    shutil.rmtree(hamilton_methods_folder,ignore_errors=True)
+    shutil.rmtree(hamilton_bin_folder, ignore_errors=True)
+    shutil.rmtree(hamilton_labware_folder, ignore_errors=True)
+    shutil.rmtree(hamilton_library_folder, ignore_errors=True)
+    shutil.rmtree(hamilton_methods_folder, ignore_errors=True)
     # Clean the folders first
 
     shutil.copytree(backend_installer_folder, hamilton_bin_folder)
@@ -52,6 +52,17 @@ def install_venus() -> None:
     shutil.copytree(backend_library_folder, hamilton_library_folder)
     shutil.copytree(backend_method_folder, hamilton_methods_folder)
     # copy the content
+
+    (hamilton_methods_folder / "active_layout").mkdir()
+    shutil.copyfile(
+        hamilton_methods_folder / "blank_layout" / "blank_layout.lay",
+        hamilton_methods_folder / "active_layout" / "active_layout.lay",
+    )
+    shutil.copyfile(
+        hamilton_methods_folder / "blank_layout" / "blank_layout.res",
+        hamilton_methods_folder / "active_layout" / "active_layout.res",
+    )
+    # Copy an initial blank layout, to rid of layout related errors.
 
     for item in hamilton_bin_folder.iterdir():
         if item.is_file() and item.suffix == ".exe":
