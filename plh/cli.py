@@ -41,10 +41,10 @@ def install_venus() -> None:
     hamilton_library_folder = hamilton_path / "Library" / "plh"
     hamilton_methods_folder = hamilton_path / "Methods" / "plh"
 
-    shutil.rmtree(hamilton_bin_folder)
-    shutil.rmtree(hamilton_labware_folder)
-    shutil.rmtree(hamilton_library_folder)
-    shutil.rmtree(hamilton_methods_folder)
+    shutil.rmtree(hamilton_bin_folder,ignore_errors=True)
+    shutil.rmtree(hamilton_labware_folder,ignore_errors=True)
+    shutil.rmtree(hamilton_library_folder,ignore_errors=True)
+    shutil.rmtree(hamilton_methods_folder,ignore_errors=True)
     # Clean the folders first
 
     shutil.copytree(backend_installer_folder, hamilton_bin_folder)
