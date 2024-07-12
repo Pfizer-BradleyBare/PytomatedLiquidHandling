@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from abc import abstractmethod
+from dataclasses import field
 from typing import Annotated
 
-from pydantic import Field, dataclasses
+from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import deck_location, labware, layout_item
@@ -22,7 +23,7 @@ class TransportBase(Interface, HALDevice):
     ]
     """Labware that can be moved by the device."""
 
-    last_transport_flag: bool = Field(exclude=False, default=True)
+    last_transport_flag: bool = field(init=False, default=True)
     """Flag that indicates if the current transport is the last transport.
     This should be managed for multiple transports if you do not want repeated park operations occuring."""
 
