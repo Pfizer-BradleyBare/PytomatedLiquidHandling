@@ -68,10 +68,8 @@ class HamiltonPortraitCORE8(PipetteBase):
 
         position = (
             (int(numeric_layout.get_position_id(position)) - 1)
-            * pipettable_labware.well_definition.positions_per_well
-        ) + (
-            (channel_number % pipettable_labware.well_definition.positions_per_well) + 1
-        )
+            * pipettable_labware.positions_per_well
+        ) + ((channel_number % pipettable_labware.positions_per_well) + 1)
         # It is possible for labware types to have multiple sequences per well.
         # This will spread channels across all wells for more efficient pipetting.
         # What is the math?

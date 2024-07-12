@@ -152,11 +152,8 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
 
                     true_position = (
                         (int(numeric_layout.get_position_id(pos_id)) - 1)
-                        * pipettable_labware.well_definition.positions_per_well
-                    ) + (
-                        (index % pipettable_labware.well_definition.positions_per_well)
-                        + 1
-                    )
+                        * pipettable_labware.positions_per_well
+                    ) + ((index % pipettable_labware.positions_per_well) + 1)
                     # It is possible for labware types to have multiple sequences per well.
                     # This will spread channels across all wells for more efficient pipetting.
                     # What is the math?

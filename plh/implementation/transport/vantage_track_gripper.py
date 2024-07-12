@@ -98,9 +98,9 @@ class VantageTrackGripper(TransportBase):
             get_options.Orientation
             == TrackGripper.LabwareOrientationOptions.NegativeYAxis
         ):
-            open_width = labware.dimensions.x_length + labware.transport_offsets.open
+            open_width = labware.x_length + labware.open
         else:
-            open_width = labware.dimensions.y_length + labware.transport_offsets.open
+            open_width = labware.y_length + labware.open
 
         if open_width > 135:
             open_width = 135
@@ -149,7 +149,7 @@ class VantageTrackGripper(TransportBase):
 
         command = TrackGripper.PlacePlateTaught.Command(
             options=TrackGripper.PlacePlateTaught.Options(
-                OpenWidth=labware.transport_offsets.open,
+                OpenWidth=labware.open,
                 TaughtPathName=place_options.TaughtPathName,
                 CoordinatedMovement=place_options.CoordinatedMovement,
                 SpeedPercentage=100,
