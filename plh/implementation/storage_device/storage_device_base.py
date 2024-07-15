@@ -10,7 +10,16 @@ from pydantic.functional_validators import BeforeValidator
 from plh.implementation import layout_item as li
 from plh.implementation.tools import HALDevice
 
-from .reservation import Reservation
+
+@dataclasses.dataclass(kw_only=True)
+class Reservation:
+    """Information about a reservated position."""
+
+    layout_item: li.LayoutItemBase
+    """The position reserved."""
+
+    is_stored: bool = field(init=False, default=False)
+    """Is an object current in this position."""
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)

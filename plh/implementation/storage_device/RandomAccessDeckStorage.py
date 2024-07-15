@@ -4,7 +4,6 @@ from pydantic import dataclasses
 
 from plh.implementation import layout_item as li
 
-from .reservation import Reservation
 from .storage_device_base import *
 from .storage_device_base import StorageDeviceBase
 
