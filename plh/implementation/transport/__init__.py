@@ -7,28 +7,30 @@ from .transport_base import TransportBase
 from .vantage_track_gripper import VantageTrackGripper
 
 if True:
-    from . import exceptions
+    """Above needs to be imported first!"""
 
 from plh.implementation.tools import load_device_config as _load_device_config
+
+from . import exceptions
 
 identifier = str
 devices: dict[identifier, TransportBase] = {}
 
 
-def load(json: dict[str, list[dict]]) -> dict[identifier, TransportBase]:
-    return _load_device_config(json, TransportBase, devices)
+def load(json: dict[str, list[dict]]) -> None:
+    _load_device_config(json, TransportBase, devices)
 
 
-def register(device: TransportBase):
+def register(device: TransportBase) -> None:
     global devices
     devices[device.identifier] = device
 
 
-def unregister(device: TransportBase):
+def unregister(device: TransportBase) -> None:
     del devices[device.identifier]
 
 
-def unregister_all():
+def unregister_all() -> None:
     global devices
     devices = {}
 

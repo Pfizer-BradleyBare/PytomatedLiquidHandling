@@ -7,28 +7,30 @@ from .pipettable_labware import PipettableLabware
 from .pydantic_validators import validate_instance, validate_list
 
 if True:
-    from . import exceptions
+    """Above needs to be imported first!"""
 
 from plh.implementation.tools import load_device_config as _load_device_config
+
+from . import exceptions
 
 identifier = str
 devices: dict[identifier, LabwareBase] = {}
 
 
-def load(json: dict[str, list[dict]]) -> dict[identifier, LabwareBase]:
-    return _load_device_config(json, LabwareBase, devices)
+def load(json: dict[str, list[dict]])  -> None:
+    _load_device_config(json, LabwareBase, devices)
 
 
-def register(device: LabwareBase):
+def register(device: LabwareBase) -> None:
     global devices
     devices[device.identifier] = device
 
 
-def unregister(device: LabwareBase):
+def unregister(device: LabwareBase) -> None:
     del devices[device.identifier]
 
 
-def unregister_all():
+def unregister_all() -> None:
     global devices
     devices = {}
 

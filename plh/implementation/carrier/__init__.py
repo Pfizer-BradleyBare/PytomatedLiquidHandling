@@ -7,7 +7,7 @@ from .non_moveable_carrier import NonMoveableCarrier
 from .pydantic_validators import validate_instance, validate_list
 
 if True:
-    """Exceptions always come last."""
+    """Above needs to be imported first!"""
 
 from plh.implementation.tools import load_device_config as _load_device_config
 
@@ -17,20 +17,20 @@ identifier = str
 devices: dict[identifier, CarrierBase] = {}
 
 
-def load(json: dict[str, list[dict]]) -> dict[identifier, CarrierBase]:
-    return _load_device_config(json, CarrierBase, devices)
+def load(json: dict[str, list[dict]]) -> None:
+    _load_device_config(json, CarrierBase, devices)
 
 
-def register(device: CarrierBase):
+def register(device: CarrierBase) -> None:
     global devices
     devices[device.identifier] = device
 
 
-def unregister(device: CarrierBase):
+def unregister(device: CarrierBase) -> None:
     del devices[device.identifier]
 
 
-def unregister_all():
+def unregister_all() -> None:
     global devices
     devices = {}
 

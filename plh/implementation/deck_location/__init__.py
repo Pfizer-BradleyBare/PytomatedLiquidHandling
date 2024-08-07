@@ -7,28 +7,31 @@ from .transport_config import TransportConfig
 from .transportable_deck_location import TransportableDeckLocation
 
 if True:
-    from . import exceptions
+    """Above needs to be imported first!"""
+
 
 from plh.implementation.tools import load_device_config as _load_device_config
+
+from . import exceptions
 
 identifier = str
 devices: dict[identifier, DeckLocationBase] = {}
 
 
-def load(json: dict[str, list[dict]]) -> dict[identifier, DeckLocationBase]:
-    return _load_device_config(json, DeckLocationBase, devices)
+def load(json: dict[str, list[dict]]) -> None:
+    _load_device_config(json, DeckLocationBase, devices)
 
 
-def register(device: DeckLocationBase):
+def register(device: DeckLocationBase) -> None:
     global devices
     devices[device.identifier] = device
 
 
-def unregister(device: DeckLocationBase):
+def unregister(device: DeckLocationBase) -> None:
     del devices[device.identifier]
 
 
-def unregister_all():
+def unregister_all() -> None:
     global devices
     devices = {}
 

@@ -31,20 +31,20 @@ identifier = str
 devices: dict[identifier, BackendBase] = {}
 
 
-def load(json: dict[str, list[dict]]) -> dict[identifier, BackendBase]:
-    return _load_device_config(json, BackendBase, devices)
+def load(json: dict[str, list[dict]]) -> None:
+    _load_device_config(json, BackendBase, devices)
 
 
-def register(device: BackendBase):
+def register(device: BackendBase) -> None:
     global devices
     devices[device.identifier] = device
 
 
-def unregister(device: BackendBase):
+def unregister(device: BackendBase) -> None:
     del devices[device.identifier]
 
 
-def unregister_all():
+def unregister_all() -> None:
     global devices
     devices = {}
 

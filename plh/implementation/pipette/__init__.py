@@ -20,7 +20,31 @@ from .pipette_tip import PipetteTip
 from .pydantic_validators import validate_instance
 
 if True:
-    from . import exceptions
+    """Above needs to be imported first!"""
+
+from plh.implementation.tools import load_device_config as _load_device_config
+
+from . import exceptions
+
+identifier = str
+devices: dict[identifier, PipetteBase] = {}
+
+def load(json: dict[str, list[dict]])  -> None:
+    _load_device_config(json, PipetteBase, devices)
+
+
+def register(device: PipetteBase) -> None:
+    global devices
+    devices[device.identifier] = device
+
+
+def unregister(device: PipetteBase) -> None:
+    del devices[device.identifier]
+
+
+def unregister_all() -> None:
+    global devices
+    devices = {}
 
 
 __all__ = [
@@ -36,7 +60,9 @@ __all__ = [
     "HamiltonPortraitCORE8SimpleContactDispense",
     "HamiltonCORE96",
     "exceptions",
+    "devices",
+    "load",
+    "register",
+    "unregister",
+    "unregister_all",
 ]
-
-identifier = str
-devices: dict[identifier, PipetteBase] = {}

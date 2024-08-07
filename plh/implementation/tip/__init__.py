@@ -9,28 +9,30 @@ from .pydantic_validators import validate_instance
 from .tip_base import TipBase
 
 if True:
-    from . import exceptions
+    """Above needs to be imported first!"""
 
 from plh.implementation.tools import load_device_config as _load_device_config
+
+from . import exceptions
 
 identifier = str
 devices: dict[identifier, TipBase] = {}
 
 
-def load(json: dict[str, list[dict]]) -> dict[identifier, TipBase]:
-    return _load_device_config(json, TipBase, devices)
+def load(json: dict[str, list[dict]]) -> None:
+    _load_device_config(json, TipBase, devices)
 
 
-def register(device: TipBase):
+def register(device: TipBase)-> None:
     global devices
     devices[device.identifier] = device
 
 
-def unregister(device: TipBase):
+def unregister(device: TipBase)-> None:
     del devices[device.identifier]
 
 
-def unregister_all():
+def unregister_all()-> None:
     global devices
     devices = {}
 

@@ -6,7 +6,32 @@ from .heat_cool_shake_base import HeatCoolShakeBase
 from .options import HeatCoolShakeOptions
 
 if True:
-    from . import exceptions
+    """Above needs to be imported first!"""
+
+from plh.implementation.tools import load_device_config as _load_device_config
+
+from . import exceptions
+
+identifier = str
+devices: dict[identifier, HeatCoolShakeBase] = {}
+
+def load(json: dict[str, list[dict]]) -> dict[identifier, HeatCoolShakeBase]:
+    return _load_device_config(json, HeatCoolShakeBase, devices)
+
+
+def register(device: HeatCoolShakeBase):
+    global devices
+    devices[device.identifier] = device
+
+
+def unregister(device: HeatCoolShakeBase):
+    del devices[device.identifier]
+
+
+def unregister_all():
+    global devices
+    devices = {}
+
 
 __all__ = [
     "HeatCoolShakeBase",
@@ -14,6 +39,10 @@ __all__ = [
     "HamiltonHeaterCooler",
     "exceptions",
     "HeatCoolShakeOptions",
+    "exceptions",
+    "devices",
+    "load",
+    "register",
+    "unregister",
+    "unregister_all",
 ]
-identifier = str
-devices: dict[identifier, HeatCoolShakeBase] = {}

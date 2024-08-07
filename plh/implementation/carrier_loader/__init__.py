@@ -5,7 +5,7 @@ from .hamilton_star_autoload import HamiltonStarAutoload
 from .hamilton_vantage_autoload import HamiltonVantageAutoload
 
 if True:
-    """Exceptions always come last."""
+    """Above needs to be imported first!"""
 
 from plh.implementation.tools import load_device_config as _load_device_config
 
@@ -13,20 +13,20 @@ identifier = str
 devices: dict[identifier, CarrierLoaderBase] = {}
 
 
-def load(json: dict[str, list[dict]]) -> dict[identifier, CarrierLoaderBase]:
-    return _load_device_config(json, CarrierLoaderBase, devices)
+def load(json: dict[str, list[dict]]) -> None:
+    _load_device_config(json, CarrierLoaderBase, devices)
 
 
-def register(device: CarrierLoaderBase):
+def register(device: CarrierLoaderBase) -> None:
     global devices
     devices[device.identifier] = device
 
 
-def unregister(device: CarrierLoaderBase):
+def unregister(device: CarrierLoaderBase) -> None:
     del devices[device.identifier]
 
 
-def unregister_all():
+def unregister_all() -> None:
     global devices
     devices = {}
 
