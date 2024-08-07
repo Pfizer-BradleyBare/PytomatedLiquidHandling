@@ -31,7 +31,7 @@ class Stunner(BackendSimpleBase):
 
         import clr
 
-        clr.AddReference(base_path / "Stunner.dll")  # type: ignore
+        clr.AddReference(str(base_path / "Stunner.dll"))  # type: ignore
         from UnchainedLabs_Instruments import Stunner as Stun  # type: ignore
 
         # The stunner API access uses a .DLL library. This step loads the .dll as a module.
