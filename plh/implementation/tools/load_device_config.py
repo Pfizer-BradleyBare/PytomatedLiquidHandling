@@ -49,25 +49,24 @@ def load_device_config(
             )
 
         item = json[key]
-        if item["enabled"] is True:
-            hal_device = cls(**item)
+        # if item["enabled"] is True:
+        hal_device = cls(**item)
 
-            if hal_device.identifier in devices:
-                raise ValueError(
-                    hal_device.identifier
-                    + " already exists. Idenitifers must be unique.",
-                )
-
-            # logger.debug(
-            #    hal_device.simple_representation(),
-            # )
-            devices[hal_device.identifier] = hal_device  # type: ignore IDK why this is an error...
-        else:
-            logger.warning(
-                item["Identifier"]
-                + " is disabled so will not be loaded as a "
-                + base_object.__name__
-                + " object.",
+        if hal_device.identifier in devices:
+            raise ValueError(
+                hal_device.identifier + " already exists. Idenitifers must be unique.",
             )
+
+        # logger.debug(
+        #    hal_device.simple_representation(),
+        # )
+        devices[hal_device.identifier] = hal_device  # type: ignore IDK why this is an error...
+        # else:
+        #    logger.warning(
+        #        item["Identifier"]
+        #        + " is disabled so will not be loaded as a "
+        #        + base_object.__name__
+        #        + " object.",
+        #    )
 
     return devices
