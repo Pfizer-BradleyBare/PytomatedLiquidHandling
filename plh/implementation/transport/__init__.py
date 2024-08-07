@@ -15,7 +15,7 @@ identifier = str
 devices: dict[identifier, TransportBase] = {}
 
 
-def load(json: dict[str, dict]) -> dict[identifier, TransportBase]:
+def load(json: dict[str, list[dict]]) -> dict[identifier, TransportBase]:
     return _load_device_config(json, TransportBase, devices)
 
 

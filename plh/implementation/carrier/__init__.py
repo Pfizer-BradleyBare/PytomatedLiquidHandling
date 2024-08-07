@@ -9,7 +9,7 @@ from .pydantic_validators import validate_instance, validate_list
 if True:
     """Exceptions always come last."""
 
-from plh.implementation.tools import load_device_list_config as _load_device_list_config
+from plh.implementation.tools import load_device_config as _load_device_config
 
 from . import exceptions
 
@@ -18,7 +18,7 @@ devices: dict[identifier, CarrierBase] = {}
 
 
 def load(json: dict[str, list[dict]]) -> dict[identifier, CarrierBase]:
-    return _load_device_list_config(json, CarrierBase, devices)
+    return _load_device_config(json, CarrierBase, devices)
 
 
 def register(device: CarrierBase):

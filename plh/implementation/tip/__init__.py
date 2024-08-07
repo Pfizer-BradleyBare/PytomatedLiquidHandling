@@ -11,14 +11,14 @@ from .tip_base import TipBase
 if True:
     from . import exceptions
 
-from plh.implementation.tools import load_device_list_config as _load_device_list_config
+from plh.implementation.tools import load_device_config as _load_device_config
 
 identifier = str
 devices: dict[identifier, TipBase] = {}
 
 
 def load(json: dict[str, list[dict]]) -> dict[identifier, TipBase]:
-    return _load_device_list_config(json, TipBase, devices)
+    return _load_device_config(json, TipBase, devices)
 
 
 def register(device: TipBase):

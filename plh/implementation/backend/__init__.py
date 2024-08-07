@@ -31,7 +31,7 @@ identifier = str
 devices: dict[identifier, BackendBase] = {}
 
 
-def load(json: dict[str, dict]) -> dict[identifier, BackendBase]:
+def load(json: dict[str, list[dict]]) -> dict[identifier, BackendBase]:
     return _load_device_config(json, BackendBase, devices)
 
 

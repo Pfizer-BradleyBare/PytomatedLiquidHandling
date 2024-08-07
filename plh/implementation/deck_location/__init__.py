@@ -9,14 +9,14 @@ from .transportable_deck_location import TransportableDeckLocation
 if True:
     from . import exceptions
 
-from plh.implementation.tools import load_device_list_config as _load_device_list_config
+from plh.implementation.tools import load_device_config as _load_device_config
 
 identifier = str
 devices: dict[identifier, DeckLocationBase] = {}
 
 
 def load(json: dict[str, list[dict]]) -> dict[identifier, DeckLocationBase]:
-    return _load_device_list_config(json, DeckLocationBase, devices)
+    return _load_device_config(json, DeckLocationBase, devices)
 
 
 def register(device: DeckLocationBase):

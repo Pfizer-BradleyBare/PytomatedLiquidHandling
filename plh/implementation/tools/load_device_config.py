@@ -13,11 +13,11 @@ T = TypeVar("T", bound="Union[HALDevice, BackendBase]")
 
 
 def load_device_config(
-    json: dict,
+    json: dict[str, list[dict]],
     base_object: type[T],
     devices: dict[str, T],
 ) -> dict[str, T]:
-    """Loads a single device configuration based on the json key."""
+    """Loads a list of device configurations based on the json key."""
     # logger.info("Loading " + base_object.__name__ + " configuration.")
 
     if bool(json) is False:
@@ -48,19 +48,21 @@ def load_device_config(
                 + ". You may be trying to load a config with the wrong HALDevice.",
             )
 
-        item = json[key]
-        # if item["enabled"] is True:
-        hal_device = cls(**item)
+        for item in json[key]:
+            # if item["enabled"] is True:
+            hal_device = cls(**item)
 
-        if hal_device.identifier in devices:
-            raise ValueError(
-                hal_device.identifier + " already exists. Idenitifers must be unique.",
-            )
+            if hal_device.identifier in devices:
+                raise ValueError(
+                    hal_device.identifier
+                    + " already exists. Idenitifers must be unique.",
+                )
 
-        # logger.debug(
-        #    hal_device.simple_representation(),
-        # )
-        devices[hal_device.identifier] = hal_device  # type: ignore IDK why this is an error...
+            # logger.debug(
+            #    hal_device.simple_representation(),
+            # )
+
+            devices[hal_device.identifier] = hal_device  # type: ignore IDK why this is an error...
         # else:
         #    logger.warning(
         #        item["Identifier"]

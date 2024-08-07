@@ -14,14 +14,14 @@ from .vacuum_manifold import VacuumManifold
 if True:
     ...
 
-from plh.implementation.tools import load_device_list_config as _load_device_list_config
+from plh.implementation.tools import load_device_config as _load_device_config
 
 identifier = str
 devices: dict[identifier, LayoutItemBase] = {}
 
 
 def load(json: dict[str, list[dict]]) -> dict[identifier, LayoutItemBase]:
-    return _load_device_list_config(json, LayoutItemBase, devices)
+    return _load_device_config(json, LayoutItemBase, devices)
 
 
 def register(device: LayoutItemBase):

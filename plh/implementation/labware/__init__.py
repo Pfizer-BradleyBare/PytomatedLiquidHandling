@@ -9,14 +9,14 @@ from .pydantic_validators import validate_instance, validate_list
 if True:
     from . import exceptions
 
-from plh.implementation.tools import load_device_list_config as _load_device_list_config
+from plh.implementation.tools import load_device_config as _load_device_config
 
 identifier = str
 devices: dict[identifier, LabwareBase] = {}
 
 
 def load(json: dict[str, list[dict]]) -> dict[identifier, LabwareBase]:
-    return _load_device_list_config(json, LabwareBase, devices)
+    return _load_device_config(json, LabwareBase, devices)
 
 
 def register(device: LabwareBase):
