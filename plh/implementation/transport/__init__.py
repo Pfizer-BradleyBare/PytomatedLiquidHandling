@@ -9,6 +9,29 @@ from .vantage_track_gripper import VantageTrackGripper
 if True:
     from . import exceptions
 
+from plh.implementation.tools import load_device_config as _load_device_config
+
+identifier = str
+devices: dict[identifier, TransportBase] = {}
+
+
+def load(json: dict[str, dict]) -> dict[identifier, TransportBase]:
+    return _load_device_config(json, TransportBase, devices)
+
+
+def register(device: TransportBase):
+    global devices
+    devices[device.identifier] = device
+
+
+def unregister(device: TransportBase):
+    del devices[device.identifier]
+
+
+def unregister_all():
+    global devices
+    devices = {}
+
 
 __all__ = [
     "TransportBase",
@@ -17,10 +40,12 @@ __all__ = [
     "VantageTrackGripper",
     "exceptions",
     "validate_instance",
+    "devices",
+    "load",
+    "register",
+    "unregister",
+    "unregister_all",
 ]
-
-identifier = str
-devices: dict[identifier, TransportBase] = {}
 
 
 from plh.implementation import deck_location, layout_item

@@ -11,6 +11,29 @@ from .tip_base import TipBase
 if True:
     from . import exceptions
 
+from plh.implementation.tools import load_device_list_config as _load_device_list_config
+
+identifier = str
+devices: dict[identifier, TipBase] = {}
+
+
+def load(json: dict[str, list[dict]]) -> dict[identifier, TipBase]:
+    return _load_device_list_config(json, TipBase, devices)
+
+
+def register(device: TipBase):
+    global devices
+    devices[device.identifier] = device
+
+
+def unregister(device: TipBase):
+    del devices[device.identifier]
+
+
+def unregister_all():
+    global devices
+    devices = {}
+
 
 __all__ = [
     "TipBase",
@@ -22,7 +45,9 @@ __all__ = [
     "EETipStack",
     "exceptions",
     "validate_instance",
+    "devices",
+    "load",
+    "register",
+    "unregister",
+    "unregister_all",
 ]
-
-identifier = str
-devices: dict[identifier, TipBase] = {}

@@ -23,7 +23,6 @@ _HALDevice.hal_devices[_VantageTrackGripperEntryExit.__name__] = cast(
     _VantageTrackGripperEntryExit,
 )
 # Add microlab star and vantage to HALDevice so they can be loaded during configuration
-print(_HALDevice.hal_devices)
 
 _HALDevice.hal_devices[_Stunner.__name__] = cast(Type[_HALDevice], _Stunner)
 # Add Stunner to HALDevice so they can be loaded during configuration
@@ -45,9 +44,17 @@ def unregister(device: BackendBase):
     del devices[device.identifier]
 
 
-def unregister_all(device: BackendBase):
+def unregister_all():
     global devices
     devices = {}
 
 
-__all__ = ["BackendBase", "validate_instance", "devices", "load"]
+__all__ = [
+    "BackendBase",
+    "validate_instance",
+    "devices",
+    "load",
+    "register",
+    "unregister",
+    "unregister_all",
+]
