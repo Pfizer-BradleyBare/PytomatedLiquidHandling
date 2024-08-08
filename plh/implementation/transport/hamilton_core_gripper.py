@@ -69,9 +69,9 @@ class HamiltonCOREGripper(TransportBase):
             options=Channel1000uLCOREGrip.GetPlate.Options(
                 GripperLabwareID=self.gripper_labware_id,
                 PlateLabwareID=source.labware_id,
-                GripWidth=labware.y_length - labware.close,
-                OpenWidth=labware.y_length + labware.open,
-                GripHeight=labware.top,
+                GripWidth=labware.y_length - labware.transport_close_offset,
+                OpenWidth=labware.y_length + labware.transport_open_offset,
+                GripHeight=labware.transport_top_offset,
             ),
             backend_error_handling=False,
         )

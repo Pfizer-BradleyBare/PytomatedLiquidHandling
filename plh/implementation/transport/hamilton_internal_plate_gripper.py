@@ -91,9 +91,9 @@ class HamiltonInternalPlateGripper(TransportBase):
             command = iSwap.GetPlateCarrier.Command(
                 options=iSwap.GetPlateCarrier.Options(
                     LabwareID=source.labware_id,
-                    GripWidth=labware.y_length - labware.close,
-                    OpenWidth=labware.y_length + labware.open,
-                    GripHeight=labware.top,
+                    GripWidth=labware.y_length - labware.transport_close_offset,
+                    OpenWidth=labware.y_length + labware.transport_open_offset,
+                    GripHeight=labware.transport_top_offset,
                     GripMode=get_options.GripMode,
                     InverseGrip=get_options.InverseGrip,
                 ),
@@ -131,9 +131,9 @@ class HamiltonInternalPlateGripper(TransportBase):
             command = iSwap.GetPlateComplex.Command(
                 options=iSwap.GetPlateComplex.Options(
                     LabwareID=source.labware_id,
-                    GripWidth=labware.y_length - labware.close,
-                    OpenWidth=labware.y_length + labware.open,
-                    GripHeight=labware.top,
+                    GripWidth=labware.y_length - labware.transport_close_offset,
+                    OpenWidth=labware.y_length + labware.transport_open_offset,
+                    GripHeight=labware.transport_top_offset,
                     GripMode=get_options.GripMode,
                     RetractDistance=get_options.RetractDistance,
                     LiftupHeight=get_options.LiftupHeight,

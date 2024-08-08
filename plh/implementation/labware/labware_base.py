@@ -20,16 +20,16 @@ class LabwareBase(HALDevice):
     z_length: float
     """Also known as height."""
 
-    open: float
+    transport_open_offset: float
     """How much the grippers will open before moving to labware. This offset is added to the size of the labware."""
 
-    close: float
+    transport_close_offset: float
     """How much the grippers should close around the labware. This offset is subtracted from the size of the labware."""
 
-    top: float
+    transport_top_offset: float
     """How far down from the top of the labware the gripper will grip."""
 
-    bottom: float
+    transport_bottom_offset: float
     """How far up from the bottom of the labware the gripper will grip."""
 
     layout: AlphanumericLayout | NumericLayout
