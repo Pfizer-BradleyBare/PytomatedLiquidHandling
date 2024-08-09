@@ -15,8 +15,8 @@ class CarrierBase(HALDevice):
     track_start: int
     """The deck track where the carrier starts (Starting contact point)."""
 
-    track_end: int
-    """The deck track where the carrier ends (Ending contact point)."""
+    width: int
+    """The number of tracks occupied by the carrier"""
 
     num_labware_positions: int
     """Number of labware supported by the carrier."""
