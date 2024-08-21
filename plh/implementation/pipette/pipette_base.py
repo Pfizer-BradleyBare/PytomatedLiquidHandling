@@ -10,7 +10,7 @@ from plh.device.tools import *
 from plh.implementation import deck_location, labware
 from plh.implementation.deck_location import *
 from plh.implementation.labware import *
-from plh.implementation.tools import HALDevice, Interface
+from plh.implementation.tools import BackendResource, GenericResource
 
 from .options import (
     AspirateOptions,
@@ -20,7 +20,7 @@ from .pipette_tip import PipetteTip
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class PipetteBase(Interface, HALDevice):
+class PipetteBase(BackendResource, GenericResource):
     supported_tips: list[PipetteTip]
 
     supported_aspirate_labware: Annotated[

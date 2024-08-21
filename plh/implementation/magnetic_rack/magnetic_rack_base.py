@@ -7,11 +7,11 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import labware, pipette
 from plh.implementation import layout_item as li
-from plh.implementation.tools import HALDevice
+from plh.implementation.tools import GenericResource
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class MagneticRackBase(HALDevice):
+class MagneticRackBase(GenericResource):
     """A magnetic rack to be used for condensing magnetic beads."""
 
     plates: Annotated[

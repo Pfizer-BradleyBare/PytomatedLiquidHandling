@@ -8,7 +8,7 @@ from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import layout_item
-from plh.implementation.tools import HALDevice, Interface
+from plh.implementation.tools import BackendResource, GenericResource
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -23,7 +23,7 @@ class AvailablePosition:
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class TipBase(Interface, HALDevice):
+class TipBase(BackendResource, GenericResource):
     """A tip device that facilitates tip tracking and tier removal as needed."""
 
     tip_racks: Annotated[

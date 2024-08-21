@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from pydantic import dataclasses, model_validator
 
-from plh.implementation.tools import HALDevice
+from plh.implementation.tools import GenericResource
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class CarrierBase(HALDevice):
+class CarrierBase(GenericResource):
     """A physical carrier on an automation system deck."""
 
     identifier: str = "None"

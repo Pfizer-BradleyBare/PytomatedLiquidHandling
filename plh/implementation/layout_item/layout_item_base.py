@@ -6,11 +6,11 @@ from pydantic import dataclasses, model_validator
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import deck_location, labware
-from plh.implementation.tools import HALDevice
+from plh.implementation.tools import GenericResource
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class LayoutItemBase(HALDevice):
+class LayoutItemBase(GenericResource):
     """A labware position on a deck."""
 
     identifier: str = "None"

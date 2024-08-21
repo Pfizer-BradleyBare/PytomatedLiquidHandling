@@ -22,7 +22,7 @@ class HamiltonVantageAutoload(CarrierLoaderBase):
         BeforeValidator(backend.validate_instance),
     ]
     supported_carriers: Annotated[
-        list[c.MoveableCarrier],
+        list[c.GenericManualMoveCarrier],
         BeforeValidator(c.validate_list),
     ]
 
@@ -37,7 +37,7 @@ class HamiltonVantageAutoload(CarrierLoaderBase):
         carrier: c.CarrierBase,
     ) -> list[tuple[int, str]]:
         """Uses the autoload to load carriers into the deck. Will read barcode of loaded positions if barcode is available then return [(position,barcode),...]."""
-        carrier = cast(c.HamiltonAutoloadCarrier, carrier)
+        carrier = cast(c.GenericAutomaticMoveCarrier, carrier)
 
         command = Autoload.LoadCarrier.Command(
             backend_error_handling=False,
@@ -51,7 +51,7 @@ class HamiltonVantageAutoload(CarrierLoaderBase):
 
     def unload(self: CarrierLoaderBase, carrier: c.CarrierBase) -> None:
         """Uses the autoload to unload carriers."""
-        carrier = cast(c.HamiltonAutoloadCarrier, carrier)
+        carrier = cast(c.GenericAutomaticMoveCarrier, carrier)
 
         command = Autoload.UnloadCarrier.Command(
             backend_error_handling=False,

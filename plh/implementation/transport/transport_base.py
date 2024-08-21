@@ -8,13 +8,13 @@ from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import deck_location, labware, layout_item
-from plh.implementation.tools import HALDevice, Interface
+from plh.implementation.tools import BackendResource, GenericResource
 
 from .exceptions import WrongTransportDeviceError
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class TransportBase(Interface, HALDevice):
+class TransportBase(BackendResource, GenericResource):
     """Describes devices that can move layout items around the deck."""
 
     supported_labware: Annotated[

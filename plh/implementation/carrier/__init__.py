@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from .carrier_base import CarrierBase
-from .hamilton_autoload_carrier import HamiltonAutoloadCarrier
-from .moveable_carrier import MoveableCarrier
-from .non_moveable_carrier import NonMoveableCarrier
+from .generic_automatic_move_carrier import GenericAutomaticMoveCarrier
+from .generic_manual_move_carrier import GenericManualMoveCarrier
+from .generic_stationary_carrier import GenericStationaryCarrier
 from .pydantic_validators import validate_instance, validate_list
 
 if True:
@@ -37,9 +37,9 @@ def unregister_all() -> None:
 
 __all__ = [
     "CarrierBase",
-    "NonMoveableCarrier",
-    "MoveableCarrier",
-    "HamiltonAutoloadCarrier",
+    "GenericStationaryCarrier",
+    "GenericManualMoveCarrier",
+    "GenericAutomaticMoveCarrier",
     "validate_instance",
     "validate_list",
     "exceptions",

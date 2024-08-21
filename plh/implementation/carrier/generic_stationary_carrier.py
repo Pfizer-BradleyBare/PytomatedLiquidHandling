@@ -5,5 +5,5 @@ from .carrier_base import CarrierBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class NonMoveableCarrier(CarrierBase):
+class GenericStationaryCarrier(CarrierBase):
     """A carrier which can not be moved in any way."""

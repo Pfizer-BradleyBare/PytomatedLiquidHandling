@@ -11,11 +11,11 @@ from plh.implementation import backend
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class Interface(ABC):
+class BackendResource(ABC):
     """Allows devices to abstract away functionality.
 
     Example: There are many systems which utilize pipette devices.
-    Devices that inherit from interface will expose a set of abstract functions to simplify interaction across all systems.
+    Devices that inherit from BackendResource will expose a set of abstract functions to simplify interaction across all systems.
     """
 
     backend: Annotated[
@@ -25,7 +25,7 @@ class Interface(ABC):
     """The backend that will be used to execute physical actions. NOTE: devices are backend specific."""
 
     @abstractmethod
-    def initialize(self: Interface) -> None: ...
+    def initialize(self: BackendResource) -> None: ...
 
     @abstractmethod
-    def deinitialize(self: Interface) -> None: ...
+    def deinitialize(self: BackendResource) -> None: ...

@@ -4,14 +4,14 @@ import dataclasses
 from abc import ABC, abstractmethod
 from typing import Any
 
-from plh.implementation.tools import HALDevice
+from plh.implementation.tools import GenericResource
 
 
 @dataclasses.dataclass
 class HALError(Exception):
     """Base class for all HAL Errors."""
 
-    error_device: HALDevice
+    error_device: GenericResource
     """The device that the error occurred on."""
 
 

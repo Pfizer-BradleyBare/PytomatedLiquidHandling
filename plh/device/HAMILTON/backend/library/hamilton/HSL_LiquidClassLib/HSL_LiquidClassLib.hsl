@@ -192,7 +192,7 @@ namespace LiquidClassLib
          dispenseModeFilter,
          tipTypeFilter,
          parsNames);
-      outLiquidClassNames = parsNames.GetKeys(); // Schlüssel sind Liquidklassennamen
+      outLiquidClassNames = parsNames.GetKeys(); // Schlï¿½ssel sind Liquidklassennamen
       
       {
          // sortiere das array. Dazu muss ein zweites array erstellt werden, 
@@ -223,8 +223,8 @@ namespace LiquidClassLib
       Selected_LiquidClassObject = objectTemp;
    }
 
-   // Gibt die Korrekturpunkte der Kurve zurück. Die X-Werte werden im outXWerte-Array zurückgegeben.
-   // Im outYWerte-Array werden die Y-Werte zurückgegeben. Die Korrekturpunkte sind in den 
+   // Gibt die Korrekturpunkte der Kurve zurï¿½ck. Die X-Werte werden im outXWerte-Array zurï¿½ckgegeben.
+   // Im outYWerte-Array werden die Y-Werte zurï¿½ckgegeben. Die Korrekturpunkte sind in den 
    // Arrays nach X-Wert aufsteigend sortiert.
    function GetCorrectionCurve( variable& outXWerte[], variable& outYWerte[]) variable
    {
@@ -251,7 +251,7 @@ namespace LiquidClassLib
 
    function UpdateCorrectionCurve( variable inXWerte[], variable inYWerte[]) void
    {
-      // TODO: Überprüfen ob beide arrays gleich viel werte enthalten.
+      // TODO: ï¿½berprï¿½fen ob beide arrays gleich viel werte enthalten.
       object parsCorrectionCurves;
       
       Check_IsSelected();
@@ -324,7 +324,7 @@ namespace LiquidClassLib
       return (Selected_LiquidClassObject.Item2( LIQUIDCLASS_PARAMS::DispenseParameter, dispenseParameter));
    }
 
-   // Schaltet TADM für selektierte Liquidklasse ein, wenn es noch nocht ist.
+   // Schaltet TADM fï¿½r selektierte Liquidklasse ein, wenn es noch nocht ist.
    function EnableTadm() void
    {
       variable tadmEnabled;
@@ -501,7 +501,7 @@ namespace LiquidClassLib
    }
 
 
-// 07.04.2009: mdarin: created with claudio jörg
+// 07.04.2009: mdarin: created with claudio jï¿½rg
 // get tiptypes in array. (parallel-array)
 // get tip-name in array. (parallel-array)
 // tip-types depending on config-file!
@@ -526,7 +526,7 @@ namespace LiquidClassLib
 
    	if ( 0 == objTmp.GetObject("IHxCoreTipTypes2", starTipTypes) ) // create temp object
    	{
-   		Trace("ERROR: Query Interface to IHxCoreTipTypes2"); // error create object
+   		Trace("ERROR: Query BackendResource to IHxCoreTipTypes2"); // error create object
          return(hslFalse);
    	}
       //   Trace(starTipTypes);

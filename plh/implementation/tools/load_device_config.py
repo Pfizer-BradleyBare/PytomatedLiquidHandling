@@ -6,10 +6,10 @@ from loguru import logger
 
 from plh.device.tools import BackendBase
 
-from .hal_device import HALDevice
+from .generic_resource import GenericResource
 from .remove_key_whitespace import remove_key_whitespace
 
-T = TypeVar("T", bound="Union[HALDevice, BackendBase]")
+T = TypeVar("T", bound="Union[GenericResource, BackendBase]")
 
 
 def load_device_config(
@@ -31,7 +31,7 @@ def load_device_config(
 
     for key in json:
         try:
-            cls = HALDevice.hal_devices[key]
+            cls = GenericResource.hal_devices[key]
         except KeyError as e:
             raise ValueError(
                 key
@@ -45,7 +45,7 @@ def load_device_config(
                 cls.__name__
                 + " is not a subclass of "
                 + base_object.__name__
-                + ". You may be trying to load a config with the wrong HALDevice.",
+                + ". You may be trying to load a config with the wrong GenericResource.",
             )
 
         for item in json[key]:

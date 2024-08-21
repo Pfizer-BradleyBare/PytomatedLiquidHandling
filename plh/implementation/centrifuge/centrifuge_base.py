@@ -9,11 +9,11 @@ from pydantic.functional_validators import BeforeValidator
 from plh.implementation import labware
 from plh.implementation import layout_item as li
 from plh.implementation.layout_item.filter_plate_stack import *
-from plh.implementation.tools import HALDevice, Interface
+from plh.implementation.tools import BackendResource, GenericResource
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class CentrifugeBase(Interface, HALDevice):
+class CentrifugeBase(BackendResource, GenericResource):
     """On deck centrifuge that can be accessed by a liquid handler."""
 
     plates: Annotated[

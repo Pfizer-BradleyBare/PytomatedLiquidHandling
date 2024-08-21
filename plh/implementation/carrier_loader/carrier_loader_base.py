@@ -7,11 +7,11 @@ from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import carrier
-from plh.implementation.tools import HALDevice, Interface
+from plh.implementation.tools import BackendResource, GenericResource
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class CarrierLoaderBase(HALDevice, Interface):
+class CarrierLoaderBase(GenericResource, BackendResource):
     """A device that can move a carrier in and out of a system without user intervention."""
 
     supported_carriers: Annotated[

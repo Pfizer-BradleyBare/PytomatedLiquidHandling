@@ -14,18 +14,20 @@ from plh.device.HAMILTON.backend import (
     VantageTrackGripperEntryExit as _VantageTrackGripperEntryExit,
 )
 from plh.device.UnchainedLabs_Instruments.backend import Stunner as _Stunner
-from plh.implementation.tools import HALDevice as _HALDevice
+from plh.implementation.tools import GenericResource as _GenericResource
 from plh.implementation.tools import load_device_config as _load_device_config
 
-_HALDevice.hal_devices[_MicrolabStar.__name__] = cast(Type[_HALDevice], _MicrolabStar)
-_HALDevice.hal_devices[_VantageTrackGripperEntryExit.__name__] = cast(
-    Type[_HALDevice],
+_GenericResource.hal_devices[_MicrolabStar.__name__] = cast(
+    Type[_GenericResource], _MicrolabStar
+)
+_GenericResource.hal_devices[_VantageTrackGripperEntryExit.__name__] = cast(
+    Type[_GenericResource],
     _VantageTrackGripperEntryExit,
 )
-# Add microlab star and vantage to HALDevice so they can be loaded during configuration
+# Add microlab star and vantage to GenericResource so they can be loaded during configuration
 
-_HALDevice.hal_devices[_Stunner.__name__] = cast(Type[_HALDevice], _Stunner)
-# Add Stunner to HALDevice so they can be loaded during configuration
+_GenericResource.hal_devices[_Stunner.__name__] = cast(Type[_GenericResource], _Stunner)
+# Add Stunner to GenericResource so they can be loaded during configuration
 
 identifier = str
 devices: dict[identifier, BackendBase] = {}

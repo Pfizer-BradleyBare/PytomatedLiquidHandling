@@ -8,7 +8,7 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import deck_location, labware, layout_item
 from plh.implementation.layout_item.filter_plate_stack import *
-from plh.implementation.tools import HALDevice, Interface
+from plh.implementation.tools import BackendResource, GenericResource
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -18,7 +18,7 @@ class MeasureValues:
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class VolumeMeasureBase(Interface, HALDevice):
+class VolumeMeasureBase(BackendResource, GenericResource):
     """Device that can be used to measure the volume of liquid in a container."""
 
     supported_labware: Annotated[

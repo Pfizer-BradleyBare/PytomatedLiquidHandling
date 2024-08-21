@@ -7,7 +7,7 @@ from pydantic import BaseModel, dataclasses, field_validator
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class HALDevice:
+class GenericResource:
     """A high level device that is part of a fully functioning automation system.
 
     Example: An automation system is, at minimum, made up of a deck (with carriers and labware) and a pipette.
@@ -16,7 +16,7 @@ class HALDevice:
     that increase the capability of an automation system shall be described by this class.
     """
 
-    hal_devices: ClassVar[dict[str, type[HALDevice]]] = {}
+    hal_devices: ClassVar[dict[str, type[GenericResource]]] = {}
     """All subclasses"""
 
     identifier: str
@@ -24,24 +24,24 @@ class HALDevice:
 
     @field_validator("Identifier", mode="after")
     @classmethod
-    def __validation_identifier(cls: type[HALDevice], v: str) -> str:
+    def __validation_identifier(cls: type[GenericResource], v: str) -> str:
         if " " in v:
             msg = "Spaces are not allowed in Identifiers. Please replace with underscores (_)."
             raise ValueError(msg)
         return v
 
-    def __eq__(self: HALDevice, __value: HALDevice) -> bool:
+    def __eq__(self: GenericResource, __value: GenericResource) -> bool:
         return (type(self).__name__ + self.identifier) == (
             type(__value).__name__ + __value.identifier
         )
 
-    def __hash__(self: HALDevice) -> int:
+    def __hash__(self: GenericResource) -> int:
         return hash(type(self).__name__ + self.identifier)
 
     def __str__(self) -> str:
         return self.identifier
 
-    def __init_subclass__(cls: type[HALDevice]) -> None:
+    def __init_subclass__(cls: type[GenericResource]) -> None:
         cls.hal_devices[cls.__name__] = cls
 
     def simple_representation(self) -> str:

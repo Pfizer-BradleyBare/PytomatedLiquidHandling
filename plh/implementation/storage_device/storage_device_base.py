@@ -8,7 +8,7 @@ from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import layout_item as li
-from plh.implementation.tools import HALDevice
+from plh.implementation.tools import GenericResource
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -23,7 +23,7 @@ class Reservation:
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class StorageDeviceBase(HALDevice):
+class StorageDeviceBase(GenericResource):
     """Can be used to store any number and any combination of labware types."""
 
     layout_items: Annotated[list[li.LayoutItemBase], BeforeValidator(li.validate_list)]
