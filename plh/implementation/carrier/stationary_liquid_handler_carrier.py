@@ -5,5 +5,5 @@ from .carrier_base import CarrierBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class GenericAutomaticMoveCarrier(CarrierBase):
-    """A carrier which can be accessed and moved by an autoloading mechanism."""
+class StationaryLiquidHandlerCarrier(CarrierBase):
+    """A carrier which can not be moved in any way."""

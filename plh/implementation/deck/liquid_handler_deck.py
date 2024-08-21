@@ -7,7 +7,7 @@ from .deck_base import DeckBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class GenericLiquidHandlerDeck(DeckBase):
+class LiquidHandlerDeck(DeckBase):
     """A liquid handler deck. Liquid handlers typically have tracks upon which carriers are placed."""
 
     num_tracks: int

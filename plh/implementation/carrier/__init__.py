@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+from .automatic_move_liquid_handler_carrier import AutomaticMoveLiquidHandlerCarrier
 from .carrier_base import CarrierBase
-from .generic_automatic_move_carrier import GenericAutomaticMoveCarrier
-from .generic_manual_move_carrier import GenericManualMoveCarrier
-from .generic_stationary_carrier import GenericStationaryCarrier
+from .manual_move_liquid_handler_carrier import ManualMoveLiquidHandlerCarrier
 from .pydantic_validators import validate_instance, validate_list
+from .stationary_liquid_handler_carrier import StationaryLiquidHandlerCarrier
 
 if True:
     """Above needs to be imported first!"""
@@ -37,9 +37,9 @@ def unregister_all() -> None:
 
 __all__ = [
     "CarrierBase",
-    "GenericStationaryCarrier",
-    "GenericManualMoveCarrier",
-    "GenericAutomaticMoveCarrier",
+    "StationaryLiquidHandlerCarrier",
+    "ManualMoveLiquidHandlerCarrier",
+    "AutomaticMoveLiquidHandlerCarrier",
     "validate_instance",
     "validate_list",
     "exceptions",
