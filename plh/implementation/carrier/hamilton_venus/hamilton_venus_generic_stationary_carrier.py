@@ -25,8 +25,8 @@ class HamiltonVenusGenericStationaryCarrier(StationaryLiquidHandlerCarrierBase):
     ]
     """A deck object."""
 
-    def initialize(self: backend._Resource) -> None:
-        return
+    def initialize(self: HamiltonVenusGenericStationaryCarrier) -> None:
+        return super().initialize()
 
-    def deinitialize(self: backend._Resource) -> None:
-        return
+    def deinitialize(self: HamiltonVenusGenericStationaryCarrier) -> None:
+        return super().deinitialize()

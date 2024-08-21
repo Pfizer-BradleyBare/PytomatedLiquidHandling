@@ -7,10 +7,6 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import transport
 
-# There is a circular dependacy in Transport. This is ONLY because it makes configuration simpler.
-# Basically CarrierLocation should not depend on Transport. So we hide the dependacy here and below.
-# This may be a code smell. Not sure.
-
 
 @dataclasses.dataclass(kw_only=True)
 class TransportConfig:

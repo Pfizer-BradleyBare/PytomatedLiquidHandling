@@ -25,8 +25,8 @@ class HamiltonVenusGenericManualMoveCarrier(ManualMoveLiquidHandlerCarrierBase):
     ]
     """A deck object."""
 
-    def initialize(self: backend._Resource) -> None:
-        return
+    def initialize(self: HamiltonVenusGenericManualMoveCarrier) -> None:
+        return super().initialize()
 
-    def deinitialize(self: backend._Resource) -> None:
-        return
+    def deinitialize(self: HamiltonVenusGenericManualMoveCarrier) -> None:
+        return super().deinitialize()

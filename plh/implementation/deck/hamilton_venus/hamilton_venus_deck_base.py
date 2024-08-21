@@ -20,7 +20,7 @@ class HamiltonVenusDeckBase(LiquidHandlerDeckBase):
     ]
 
     def initialize(self: HamiltonVenusDeckBase) -> None:
-        super().initialize()
+        return super().initialize()
 
     def deinitialize(self: HamiltonVenusDeckBase) -> None:
-        super().deinitialize()
+        return super().deinitialize()
