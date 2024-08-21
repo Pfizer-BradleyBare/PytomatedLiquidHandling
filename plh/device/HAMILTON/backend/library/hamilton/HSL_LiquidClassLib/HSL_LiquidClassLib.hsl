@@ -526,7 +526,7 @@ namespace LiquidClassLib
 
    	if ( 0 == objTmp.GetObject("IHxCoreTipTypes2", starTipTypes) ) // create temp object
    	{
-   		Trace("ERROR: Query BackendResource to IHxCoreTipTypes2"); // error create object
+   		Trace("ERROR: Query Interface to IHxCoreTipTypes2"); // error create object
          return(hslFalse);
    	}
       //   Trace(starTipTypes);

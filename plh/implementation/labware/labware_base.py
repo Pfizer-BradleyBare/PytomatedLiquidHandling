@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from pydantic import dataclasses
 
-from plh.implementation.tools import GenericResource
+from plh.implementation.tools import Resource
 
 from .layout import AlphanumericLayout, NumericLayout
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class LabwareBase(GenericResource):
+class LabwareBase(Resource):
     """Type of physical labware (200uL plate, lid, etc.)."""
 
     x_length: float

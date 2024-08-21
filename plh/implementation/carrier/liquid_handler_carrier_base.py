@@ -15,7 +15,7 @@ class LiquidHandlerCarrierBase(CarrierBase):
     """A physical carrier on an liquid handler system deck."""
 
     deck: Annotated[
-        deck.LiquidHandlerDeck,
+        deck.LiquidHandlerDeckBase,
         BeforeValidator(deck.validate_instance),
     ]
     """A deck object."""

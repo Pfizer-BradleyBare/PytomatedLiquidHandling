@@ -11,13 +11,13 @@ from pydantic import (
 )
 
 from plh.implementation import carrier
-from plh.implementation.tools import GenericResource
+from plh.implementation.tools import Resource
 
 _used_carriers: list[str] = []
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class DeckLocationBase(GenericResource):
+class DeckLocationBase(Resource):
     """A specific location on an automation deck."""
 
     identifier: str = "None"

@@ -1,4 +1,4 @@
-"""Command Line BackendResource (cli) for plh.
+"""Command Line Interface (cli) for plh.
 """
 
 import pathlib

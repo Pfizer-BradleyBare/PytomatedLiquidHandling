@@ -7,7 +7,7 @@ from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import layout_item
-from plh.implementation.tools import BackendResource, GenericResource
+from plh.implementation.tools import Resource
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -47,7 +47,7 @@ class FilterPlateConfiguration:
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class VacuumBase(BackendResource, GenericResource):
+class VacuumBase(Resource):
     """Describes an on deck vacuum device."""
 
     manifold_park: Annotated[

@@ -6,7 +6,7 @@ from pydantic import ValidationInfo, dataclasses, field_serializer, field_valida
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import transport
-from plh.implementation.tools.backend_resource import *
+from plh.implementation.tools.resource import *
 
 # There is a circular dependacy in Transport. This is ONLY because it makes configuration simpler.
 # Basically DeckLocation should not depend on Transport. So we hide the dependacy here and below.

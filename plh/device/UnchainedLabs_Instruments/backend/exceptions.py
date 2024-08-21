@@ -49,7 +49,7 @@ class IncorrectArgumentPlateIDAlreadyMeasuredError(Exception): ...
 class IncorrectArgumentPlateIDIsNotValidError(Exception): ...
 
 
-class AccessInterruptedByLocalUserBackendResourceError(Exception): ...
+class AccessInterruptedByLocalUserInterfaceError(Exception): ...
 
 
 class TimeoutError(Exception): ...
@@ -144,7 +144,7 @@ status_code_map: dict[int, type[Exception]] = {
     -104: ResultsCanOnlyBeExportedIfAllPlatesAreMeasuredError,
     -103: IncorrectArgumentPlateIDAlreadyMeasuredError,
     -102: IncorrectArgumentPlateIDIsNotValidError,
-    -100: AccessInterruptedByLocalUserBackendResourceError,
+    -100: AccessInterruptedByLocalUserInterfaceError,
     -99: TimeoutError,
     -68: StoreBlanksMoreThanOneStoredBlankSampleGroupAvailableError,
     -67: StoreBlanksStoredBlankSampleGroupNameIncorrectByNameError,

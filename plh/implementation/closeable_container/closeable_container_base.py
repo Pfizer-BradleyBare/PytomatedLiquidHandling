@@ -7,11 +7,11 @@ from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import deck_location, labware, layout_item
-from plh.implementation.tools import BackendResource, GenericResource
+from plh.implementation.tools import Resource
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class CloseableContainerBase(BackendResource, GenericResource):
+class CloseableContainerBase(Resource):
     """A container that is part of a labware type that can be opened with some kind of tool.
 
     NOTE: This is NOT the same as a lid for a coverable plate.

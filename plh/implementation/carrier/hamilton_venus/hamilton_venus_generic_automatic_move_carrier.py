@@ -5,21 +5,19 @@ from typing import Annotated
 from pydantic import BeforeValidator, dataclasses
 
 from plh.implementation import deck
-from plh.implementation.tools import Resource
+
+from ..manual_move_liquid_handler_carrier_base import ManualMoveLiquidHandlerCarrierBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class CarrierBase(Resource):
+class HamiltonVenusGenericAutomaticMoveCarrier(ManualMoveLiquidHandlerCarrierBase):
     """A physical carrier on a system deck."""
 
-    identifier: str = "None"
-    """It is optional to specify an identifier. If one is not specified then the identifier will be automatically generated."""
-
     deck: Annotated[
-        deck.DeckBase,
+        deck.hamilton_venus.HamiltonDeckBase,
         BeforeValidator(deck.validate_instance),
     ]
     """A deck object."""
 
-    num_labware_positions: int
-    """Number of labware supported by the carrier."""
+    labware_id: str
+    """Carrier deck labware id."""
