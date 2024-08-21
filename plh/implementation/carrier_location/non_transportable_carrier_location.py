@@ -1,6 +1,5 @@
 from pydantic import dataclasses
 
-from .carrier_location_base import *
 from .carrier_location_base import CarrierLocationBase
 
 

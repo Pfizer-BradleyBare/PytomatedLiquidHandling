@@ -11,7 +11,6 @@ from plh.device.HAMILTON import EntryExit
 from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.implementation import backend, layout_item, transport
 
-from .tip_base import *
 from .tip_base import AvailablePosition, TipBase
 
 

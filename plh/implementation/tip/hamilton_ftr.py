@@ -9,7 +9,6 @@ from plh.device.HAMILTON import HSLTipCountingLib
 from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.implementation import backend
 
-from .tip_base import *
 from .tip_base import TipBase
 
 

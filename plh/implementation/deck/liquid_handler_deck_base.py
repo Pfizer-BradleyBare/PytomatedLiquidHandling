@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from pydantic import dataclasses
 
-from .deck_base import *
 from .deck_base import DeckBase
 
 

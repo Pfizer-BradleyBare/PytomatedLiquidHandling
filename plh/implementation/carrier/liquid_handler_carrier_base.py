@@ -6,7 +6,6 @@ from pydantic import BeforeValidator, dataclasses, model_validator
 
 from plh.implementation import deck
 
-from .carrier_base import *
 from .carrier_base import CarrierBase
 
 

@@ -7,7 +7,6 @@ from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import carrier_location, labware, layout_item
-from plh.implementation.layout_item.filter_plate_stack import *
 from plh.implementation.tools import Resource
 
 

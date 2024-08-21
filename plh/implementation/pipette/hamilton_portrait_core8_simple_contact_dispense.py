@@ -10,7 +10,6 @@ from plh.device.HAMILTON.ML_STAR import Channel1000uL
 from plh.implementation import labware
 from plh.implementation import layout_item as li
 
-from .hamilton_portrait_core8 import *
 from .hamilton_portrait_core8 import HamiltonPortraitCORE8
 from .options import (
     AspirateOptions,

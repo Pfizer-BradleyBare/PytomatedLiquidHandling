@@ -4,7 +4,6 @@ from abc import abstractmethod
 
 from pydantic import dataclasses
 
-from .manual_move_liquid_handler_carrier_base import *
 from .manual_move_liquid_handler_carrier_base import ManualMoveLiquidHandlerCarrierBase
 
 

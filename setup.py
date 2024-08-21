@@ -11,7 +11,7 @@ setup(
         "click",
         "pyyaml",
         "flask",
-        "pydantic==2.4.2",
+        "pydantic",  # ==2.4.2",
         "pythonnet",
     ],
     url="https://github.com/Pfizer-BradleyBare/PytomatedLiquidHandling.git",

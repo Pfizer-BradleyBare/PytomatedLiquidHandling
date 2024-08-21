@@ -10,9 +10,7 @@ from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.device.HAMILTON.HSLLabwrAccess import AbsolutePositionValuesGetForLabwareID
 from plh.device.HAMILTON.ML_STAR import Channel1000uL
 from plh.implementation import carrier_location, labware, layout_item, pipette
-from plh.implementation.pipette.hamilton_portrait_core8 import *
 
-from .volume_measure_base import *
 from .volume_measure_base import MeasureValues, VolumeMeasureBase
 
 

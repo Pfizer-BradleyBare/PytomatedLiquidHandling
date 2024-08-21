@@ -1,6 +1,5 @@
 from pydantic import dataclasses
 
-from .labware_base import *
 from .labware_base import LabwareBase
 
 

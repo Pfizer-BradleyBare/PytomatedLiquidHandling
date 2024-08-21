@@ -8,7 +8,6 @@ from pydantic.functional_validators import BeforeValidator
 from plh.implementation import labware
 
 from .lid import Lid
-from .plate import *
 from .plate import Plate
 from .pydantic_validators import validate_instance
 

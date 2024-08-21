@@ -1,6 +1,5 @@
 from pydantic import dataclasses
 
-from .carrier_base import *
 from .carrier_base import CarrierBase
 
 

@@ -5,7 +5,6 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import labware
 
-from .layout_item_base import *
 from .layout_item_base import LayoutItemBase
 
 

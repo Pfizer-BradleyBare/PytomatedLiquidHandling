@@ -11,7 +11,6 @@ from plh.device.HAMILTON.ML_STAR import Channel1000uL
 from plh.implementation import backend, labware, layout_item
 from plh.implementation.pipette.options import AspirateOptions, DispenseOptions
 
-from .pipette_base import *
 from .pipette_base import PipetteBase
 from .pipette_tip import PipetteTip
 

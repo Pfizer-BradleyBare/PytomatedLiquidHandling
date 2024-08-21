@@ -11,7 +11,6 @@ from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.implementation import backend
 
 from .exceptions import CoolingNotSupportedError
-from .heat_cool_shake_base import *
 from .heat_cool_shake_base import HeatCoolShakeBase
 
 

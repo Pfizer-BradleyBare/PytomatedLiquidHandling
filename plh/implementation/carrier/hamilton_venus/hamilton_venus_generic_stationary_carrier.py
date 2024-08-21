@@ -24,3 +24,9 @@ class HamiltonVenusGenericStationaryCarrier(StationaryLiquidHandlerCarrierBase):
         BeforeValidator(deck.validate_instance),
     ]
     """A deck object."""
+
+    def initialize(self: backend._Resource) -> None:
+        return
+
+    def deinitialize(self: backend._Resource) -> None:
+        return

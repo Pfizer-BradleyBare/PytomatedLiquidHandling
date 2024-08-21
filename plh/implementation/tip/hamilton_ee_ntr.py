@@ -4,7 +4,6 @@ from pydantic import dataclasses
 
 from plh.device.HAMILTON import EntryExit, HSLTipCountingLib
 
-from .hamilton_ee_tip_base import *
 from .hamilton_ee_tip_base import HamiltonEETipBase
 
 

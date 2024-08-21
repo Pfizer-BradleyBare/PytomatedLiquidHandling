@@ -10,7 +10,6 @@ from plh.device.HAMILTON import HSLHiGCentrifugeLib
 from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.implementation import backend
 
-from .centrifuge_base import *
 from .centrifuge_base import CentrifugeBase
 from .exceptions import GForceOutOfRangeError, InvalidBucketNumberError
 

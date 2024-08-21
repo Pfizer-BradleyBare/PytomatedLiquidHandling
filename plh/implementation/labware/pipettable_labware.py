@@ -5,7 +5,6 @@ from itertools import pairwise
 from pydantic import dataclasses
 from typing_extensions import TypedDict
 
-from .labware_base import *
 from .labware_base import LabwareBase
 
 
