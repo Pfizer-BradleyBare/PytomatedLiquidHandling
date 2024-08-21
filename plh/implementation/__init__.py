@@ -65,7 +65,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
                 with (pathlib.Path(root) / file).open() as config_file:
                     json = yaml.full_load(config_file)
 
-                tools.load_device_config(
+                tools.load_resource_config(
                     json,
                     backend.BackendBase,
                     backend.devices,
@@ -102,7 +102,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
                 with (pathlib.Path(root) / file).open() as config_file:
                     json = yaml.full_load(config_file)
 
-                tools.load_device_config(
+                tools.load_resource_config(
                     json,
                     carrier_loader.CarrierLoaderBase,
                     carrier_loader.devices,
@@ -138,7 +138,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
                 with (pathlib.Path(root) / file).open() as config_file:
                     json = yaml.full_load(config_file)
 
-                tools.load_device_config(
+                tools.load_resource_config(
                     json,
                     transport.TransportBase,
                     transport.devices,
@@ -330,7 +330,7 @@ def load_yaml_configuration(config_base_folder: str) -> None:
                 with (pathlib.Path(root) / file).open() as config_file:
                     json = yaml.full_load(config_file)
 
-                tools.load_device_config(
+                tools.load_resource_config(
                     json,
                     volume_measure.VolumeMeasureBase,
                     volume_measure.devices,

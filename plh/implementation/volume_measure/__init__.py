@@ -6,14 +6,14 @@ from .volume_measure_base import VolumeMeasureBase
 if True:
     """Above needs to be imported first!"""
 
-from plh.implementation.tools import load_device_config as _load_device_config
+from plh.implementation.tools import load_resource_config as _load_resource_config
 
 identifier = str
 devices: dict[identifier, VolumeMeasureBase] = {}
 
 
-def load(json: dict[str, list[dict]])  -> None:
-    _load_device_config(json, VolumeMeasureBase, devices)
+def load(json: dict[str, list[dict]]) -> None:
+    _load_resource_config(json, VolumeMeasureBase, devices)
 
 
 def register(device: VolumeMeasureBase) -> None:

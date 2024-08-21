@@ -6,13 +6,14 @@ from .storage_device_base import StorageDeviceBase
 if True:
     """Above needs to be imported first!"""
 
-from plh.implementation.tools import load_device_config as _load_device_config
+from plh.implementation.tools import load_resource_config as _load_resource_config
 
 identifier = str
 devices: dict[identifier, StorageDeviceBase] = {}
 
-def load(json: dict[str, list[dict]])  -> None:
-    _load_device_config(json, StorageDeviceBase, devices)
+
+def load(json: dict[str, list[dict]]) -> None:
+    _load_resource_config(json, StorageDeviceBase, devices)
 
 
 def register(device: StorageDeviceBase) -> None:

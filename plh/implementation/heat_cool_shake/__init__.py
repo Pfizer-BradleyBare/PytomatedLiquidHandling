@@ -8,15 +8,16 @@ from .options import HeatCoolShakeOptions
 if True:
     """Above needs to be imported first!"""
 
-from plh.implementation.tools import load_device_config as _load_device_config
+from plh.implementation.tools import load_resource_config as _load_resource_config
 
 from . import exceptions
 
 identifier = str
 devices: dict[identifier, HeatCoolShakeBase] = {}
 
+
 def load(json: dict[str, list[dict]]) -> dict[identifier, HeatCoolShakeBase]:
-    return _load_device_config(json, HeatCoolShakeBase, devices)
+    return _load_resource_config(json, HeatCoolShakeBase, devices)
 
 
 def register(device: HeatCoolShakeBase):

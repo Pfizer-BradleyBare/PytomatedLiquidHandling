@@ -12,7 +12,7 @@ from .remove_key_whitespace import remove_key_whitespace
 T = TypeVar("T", bound="Union[GenericResource, BackendBase]")
 
 
-def load_device_config(
+def load_resource_config(
     json: dict[str, list[dict]],
     base_object: type[T],
     devices: dict[str, T],

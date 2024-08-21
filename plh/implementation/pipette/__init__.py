@@ -22,15 +22,16 @@ from .pydantic_validators import validate_instance
 if True:
     """Above needs to be imported first!"""
 
-from plh.implementation.tools import load_device_config as _load_device_config
+from plh.implementation.tools import load_resource_config as _load_resource_config
 
 from . import exceptions
 
 identifier = str
 devices: dict[identifier, PipetteBase] = {}
 
-def load(json: dict[str, list[dict]])  -> None:
-    _load_device_config(json, PipetteBase, devices)
+
+def load(json: dict[str, list[dict]]) -> None:
+    _load_resource_config(json, PipetteBase, devices)
 
 
 def register(device: PipetteBase) -> None:

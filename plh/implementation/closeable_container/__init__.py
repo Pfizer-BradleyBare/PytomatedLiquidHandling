@@ -6,14 +6,14 @@ from .hamilton_fliptube_landscape import HamiltonFlipTubeLandscape
 if True:
     """Above needs to be imported first!"""
 
-from plh.implementation.tools import load_device_config as _load_device_config
+from plh.implementation.tools import load_resource_config as _load_resource_config
 
 identifier = str
 devices: dict[identifier, CloseableContainerBase] = {}
 
 
 def load(json: dict[str, list[dict]]) -> None:
-    _load_device_config(json, CloseableContainerBase, devices)
+    _load_resource_config(json, CloseableContainerBase, devices)
 
 
 def register(device: CloseableContainerBase) -> None:

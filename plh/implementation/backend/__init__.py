@@ -15,10 +15,11 @@ from plh.device.HAMILTON.backend import (
 )
 from plh.device.UnchainedLabs_Instruments.backend import Stunner as _Stunner
 from plh.implementation.tools import GenericResource as _GenericResource
-from plh.implementation.tools import load_device_config as _load_device_config
+from plh.implementation.tools import load_resource_config as _load_resource_config
 
 _GenericResource.hal_devices[_MicrolabStar.__name__] = cast(
-    Type[_GenericResource], _MicrolabStar
+    Type[_GenericResource],
+    _MicrolabStar,
 )
 _GenericResource.hal_devices[_VantageTrackGripperEntryExit.__name__] = cast(
     Type[_GenericResource],
@@ -34,7 +35,7 @@ devices: dict[identifier, BackendBase] = {}
 
 
 def load(json: dict[str, list[dict]]) -> None:
-    _load_device_config(json, BackendBase, devices)
+    _load_resource_config(json, BackendBase, devices)
 
 
 def register(device: BackendBase) -> None:

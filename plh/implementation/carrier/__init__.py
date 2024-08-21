@@ -9,7 +9,7 @@ from .pydantic_validators import validate_instance, validate_list
 if True:
     """Above needs to be imported first!"""
 
-from plh.implementation.tools import load_device_config as _load_device_config
+from plh.implementation.tools import load_resource_config as _load_resource_config
 
 from . import exceptions
 
@@ -18,7 +18,7 @@ devices: dict[identifier, CarrierBase] = {}
 
 
 def load(json: dict[str, list[dict]]) -> None:
-    _load_device_config(json, CarrierBase, devices)
+    _load_resource_config(json, CarrierBase, devices)
 
 
 def register(device: CarrierBase) -> None:

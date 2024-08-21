@@ -9,7 +9,7 @@ from .vantage_track_gripper import VantageTrackGripper
 if True:
     """Above needs to be imported first!"""
 
-from plh.implementation.tools import load_device_config as _load_device_config
+from plh.implementation.tools import load_resource_config as _load_resource_config
 
 from . import exceptions
 
@@ -18,7 +18,7 @@ devices: dict[identifier, TransportBase] = {}
 
 
 def load(json: dict[str, list[dict]]) -> None:
-    _load_device_config(json, TransportBase, devices)
+    _load_resource_config(json, TransportBase, devices)
 
 
 def register(device: TransportBase) -> None:
