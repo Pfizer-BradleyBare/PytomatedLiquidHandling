@@ -12,11 +12,11 @@ if TYPE_CHECKING:
 
 @dataclass
 class WrongTransportDeviceError(HALError):
-    """Transport device is not the same as required by the DeckLocation TransportOptions."""
+    """Transport device is not the same as required by the CarrierLocation TransportOptions."""
 
     error_device: TransportBase
 
-    deck_location: carrier_location.DeckLocationBase
+    deck_location: carrier_location.CarrierLocationBase
 
     ViableTransportDevices: list[TransportBase]
 

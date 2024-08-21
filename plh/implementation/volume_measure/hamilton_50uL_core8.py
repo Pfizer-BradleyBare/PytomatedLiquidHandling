@@ -33,7 +33,7 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
     ] = field(init=False)
 
     supported_deck_locations: Annotated[
-        list[carrier_location.DeckLocationBase],
+        list[carrier_location.CarrierLocationBase],
         BeforeValidator(carrier_location.validate_list),
     ] = field(init=False)
 

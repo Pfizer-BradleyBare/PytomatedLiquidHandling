@@ -26,7 +26,7 @@ class VolumeMeasureBase(Resource):
         BeforeValidator(labware.validate_list),
     ]
     supported_deck_locations: Annotated[
-        list[carrier_location.DeckLocationBase],
+        list[carrier_location.CarrierLocationBase],
         BeforeValidator(carrier_location.validate_list),
     ]
 
@@ -46,10 +46,10 @@ class VolumeMeasureBase(Resource):
 
     def assert_supported_deck_locations(
         self: VolumeMeasureBase,
-        *args: carrier_location.DeckLocationBase,
+        *args: carrier_location.CarrierLocationBase,
     ) -> None:
         exceptions = [
-            carrier_location.exceptions.DeckLocationNotSupportedError(self, item)
+            carrier_location.exceptions.CarrierLocationNotSupportedError(self, item)
             for item in args
             if item not in self.supported_deck_locations
         ]

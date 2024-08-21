@@ -20,7 +20,7 @@ class LayoutItemBase(Resource):
     """Labware id from the automation software for this deck position."""
 
     deck_location: Annotated[
-        carrier_location.DeckLocationBase,
+        carrier_location.CarrierLocationBase,
         BeforeValidator(carrier_location.validate_instance),
     ]
     """Deck location object associated with this position. NOTE: Many layout items can be in the same deck location."""

@@ -9,7 +9,7 @@ from plh.implementation import transport
 from plh.implementation.tools.resource import *
 
 # There is a circular dependacy in Transport. This is ONLY because it makes configuration simpler.
-# Basically DeckLocation should not depend on Transport. So we hide the dependacy here and below.
+# Basically CarrierLocation should not depend on Transport. So we hide the dependacy here and below.
 # This may be a code smell. Not sure.
 
 

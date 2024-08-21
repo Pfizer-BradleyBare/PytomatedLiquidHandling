@@ -8,10 +8,10 @@ from loguru import logger
 from . import (
     backend,
     carrier,
+    carrier_location,
     centrifuge,
     closeable_container,
     deck,
-    carrier_location,
     exceptions,
     heat_cool_shake,
     labware,
@@ -157,12 +157,12 @@ def load_yaml_configuration(config_base_folder: str) -> None:
 
                 tools.load_device_list_config(
                     json,
-                    carrier_location.DeckLocationBase,
+                    carrier_location.CarrierLocationBase,
                     carrier_location.devices,
                 )
     if loaded is not True:
         warns.append(
-            f"No {carrier_location.DeckLocationBase.__name__} objects were loaded.",
+            f"No {carrier_location.CarrierLocationBase.__name__} objects were loaded.",
         )
 
     loaded = False

@@ -67,7 +67,7 @@ class HamiltonInternalPlateGripper(TransportBase):
 
         compatible_configs = next(
             configs
-            for configs in carrier_location.TransportableDeckLocation.get_compatible_transport_configs(
+            for configs in carrier_location.TransportableCarrierLocation.get_compatible_transport_configs(
                 source.deck_location,
                 destination.deck_location,
             )

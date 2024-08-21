@@ -69,15 +69,15 @@ class TransportBase(Resource):
 
     def assert_supported_deck_locations(
         self: TransportBase,
-        *args: carrier_location.DeckLocationBase,
+        *args: carrier_location.CarrierLocationBase,
     ) -> None:
 
         exceptions = []
 
         for item in args:
-            if not isinstance(item, carrier_location.TransportableDeckLocation):
+            if not isinstance(item, carrier_location.TransportableCarrierLocation):
                 exceptions.append(
-                    carrier_location.exceptions.DeckLocationNotTransportableError(
+                    carrier_location.exceptions.CarrierLocationNotTransportableError(
                         self,
                         item,
                     ),
@@ -99,20 +99,18 @@ class TransportBase(Resource):
 
     def assert_compatible_deck_locations(
         self: TransportBase,
-        source: carrier_location.DeckLocationBase,
-        destination: carrier_location.DeckLocationBase,
+        source: carrier_location.CarrierLocationBase,
+        destination: carrier_location.CarrierLocationBase,
     ) -> None:
         self.assert_supported_deck_locations(source, destination)
 
-        compatible_configs = (
-            carrier_location.TransportableDeckLocation.get_compatible_transport_configs(
-                source,
-                destination,
-            )
+        compatible_configs = carrier_location.TransportableCarrierLocation.get_compatible_transport_configs(
+            source,
+            destination,
         )
 
         if len(compatible_configs) == 0:
-            raise carrier_location.exceptions.DeckLocationTransportConfigsNotCompatibleError(
+            raise carrier_location.exceptions.CarrierLocationTransportConfigsNotCompatibleError(
                 self,
                 source,
                 destination,
