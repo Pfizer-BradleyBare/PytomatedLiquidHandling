@@ -50,7 +50,7 @@ __all__ = [
 ]
 
 
-from plh.implementation import deck_location, layout_item
+from plh.implementation import carrier_location, layout_item
 
 
 def transport_layout_items(
@@ -70,7 +70,7 @@ def transport_layout_items(
 
     for source, destination in args:
         transport_configs = (
-            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+            carrier_location.TransportableDeckLocation.get_compatible_transport_configs(
                 source.deck_location,
                 destination.deck_location,
             )
@@ -122,8 +122,8 @@ def transport_layout_items(
 
     transportable_deck_locations = [
         location
-        for location in deck_location.devices.values()
-        if isinstance(location, deck_location.TransportableDeckLocation)
+        for location in carrier_location.devices.values()
+        if isinstance(location, carrier_location.TransportableDeckLocation)
     ]
     # Potential locations that can be used as an intermediate.
 
@@ -136,12 +136,12 @@ def transport_layout_items(
                 continue
             # If one of our items is already in the location then obviously it is not an acceptable intermediate location.
 
-            source_compatible_configs = deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+            source_compatible_configs = carrier_location.TransportableDeckLocation.get_compatible_transport_configs(
                 source.deck_location,
                 location,
             )
 
-            destination_compatible_configs = deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+            destination_compatible_configs = carrier_location.TransportableDeckLocation.get_compatible_transport_configs(
                 destination.deck_location,
                 location,
             )

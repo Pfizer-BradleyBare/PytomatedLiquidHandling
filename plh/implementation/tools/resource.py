@@ -80,7 +80,11 @@ class Resource(ABC):
         return json.dumps(model_load_json, indent=4)
 
     @abstractmethod
-    def initialize(self: Resource) -> None: ...
+    def initialize(self: Resource) -> None:
+        if self.backend.is_running == False:
+            raise RuntimeError("Backend is not running.")
 
     @abstractmethod
-    def deinitialize(self: Resource) -> None: ...
+    def deinitialize(self: Resource) -> None:
+        if self.backend.is_running == False:
+            raise RuntimeError("Backend is not running.")

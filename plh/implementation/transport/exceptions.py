@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from plh.implementation import deck_location, layout_item
+from plh.implementation import carrier_location, layout_item
 from plh.implementation.exceptions import HALError, UserInteractionRequiredError
 
 if TYPE_CHECKING:
@@ -16,7 +16,7 @@ class WrongTransportDeviceError(HALError):
 
     error_device: TransportBase
 
-    deck_location: deck_location.DeckLocationBase
+    deck_location: carrier_location.DeckLocationBase
 
     ViableTransportDevices: list[TransportBase]
 

@@ -1,7 +1,7 @@
 from pydantic import dataclasses
 
-from .deck_location_base import *
-from .deck_location_base import DeckLocationBase
+from .carrier_location_base import *
+from .carrier_location_base import DeckLocationBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)

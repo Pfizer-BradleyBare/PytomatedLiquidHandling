@@ -8,11 +8,10 @@ from loguru import logger
 from . import (
     backend,
     carrier,
-    carrier_loader,
     centrifuge,
     closeable_container,
     deck,
-    deck_location,
+    carrier_location,
     exceptions,
     heat_cool_shake,
     labware,
@@ -30,11 +29,10 @@ from . import (
 __all__ = [
     "backend",
     "carrier",
-    "carrier_loader",
     "centrifuge",
     "closeable_container",
     "deck",
-    "deck_location",
+    "carrier_location",
     "heat_cool_shake",
     "labware",
     "layout_item",
@@ -159,12 +157,12 @@ def load_yaml_configuration(config_base_folder: str) -> None:
 
                 tools.load_device_list_config(
                     json,
-                    deck_location.DeckLocationBase,
-                    deck_location.devices,
+                    carrier_location.DeckLocationBase,
+                    carrier_location.devices,
                 )
     if loaded is not True:
         warns.append(
-            f"No {deck_location.DeckLocationBase.__name__} objects were loaded.",
+            f"No {carrier_location.DeckLocationBase.__name__} objects were loaded.",
         )
 
     loaded = False

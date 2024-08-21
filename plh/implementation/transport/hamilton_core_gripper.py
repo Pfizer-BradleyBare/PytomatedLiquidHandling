@@ -8,7 +8,7 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.device.HAMILTON.ML_STAR import Channel1000uLCOREGrip
-from plh.implementation import backend, deck_location, layout_item
+from plh.implementation import backend, carrier_location, layout_item
 
 from .exceptions import GetHardwareError, PlaceHardwareError
 from .transport_base import *
@@ -55,7 +55,7 @@ class HamiltonCOREGripper(TransportBase):
 
         compatible_configs = next(
             configs
-            for configs in deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+            for configs in carrier_location.TransportableDeckLocation.get_compatible_transport_configs(
                 source.deck_location,
                 destination.deck_location,
             )

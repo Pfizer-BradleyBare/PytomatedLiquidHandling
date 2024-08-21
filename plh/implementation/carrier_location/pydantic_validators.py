@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .deck_location_base import DeckLocationBase
+from .carrier_location_base import DeckLocationBase
 
 
 def validate_list(

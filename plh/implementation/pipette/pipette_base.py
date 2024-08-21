@@ -7,8 +7,8 @@ from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.device.tools import *
-from plh.implementation import deck_location, labware
-from plh.implementation.deck_location import *
+from plh.implementation import carrier_location, labware
+from plh.implementation.carrier_location import *
 from plh.implementation.labware import *
 from plh.implementation.tools import Resource
 
@@ -32,8 +32,8 @@ class PipetteBase(Resource):
         BeforeValidator(labware.validate_list),
     ]
     supported_deck_locations: Annotated[
-        list[deck_location.DeckLocationBase],
-        BeforeValidator(deck_location.validate_list),
+        list[carrier_location.DeckLocationBase],
+        BeforeValidator(carrier_location.validate_list),
     ]
 
     waste_labware_id: str
@@ -71,10 +71,10 @@ class PipetteBase(Resource):
 
     def assert_supported_deck_locations(
         self: PipetteBase,
-        *args: deck_location.DeckLocationBase,
+        *args: carrier_location.DeckLocationBase,
     ) -> None:
         exceptions = [
-            deck_location.exceptions.DeckLocationNotSupportedError(self, item)
+            carrier_location.exceptions.DeckLocationNotSupportedError(self, item)
             for item in args
             if item not in self.supported_deck_locations
         ]

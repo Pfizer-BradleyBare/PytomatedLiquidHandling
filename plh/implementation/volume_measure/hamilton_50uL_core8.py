@@ -9,7 +9,7 @@ from pydantic.functional_validators import BeforeValidator
 from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.device.HAMILTON.HSLLabwrAccess import AbsolutePositionValuesGetForLabwareID
 from plh.device.HAMILTON.ML_STAR import Channel1000uL
-from plh.implementation import deck_location, labware, layout_item, pipette
+from plh.implementation import carrier_location, labware, layout_item, pipette
 from plh.implementation.pipette.hamilton_portrait_core8 import *
 
 from .volume_measure_base import *
@@ -33,8 +33,8 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
     ] = field(init=False)
 
     supported_deck_locations: Annotated[
-        list[deck_location.DeckLocationBase],
-        BeforeValidator(deck_location.validate_list),
+        list[carrier_location.DeckLocationBase],
+        BeforeValidator(carrier_location.validate_list),
     ] = field(init=False)
 
     _pipette_tip: pipette.PipetteTip = field(init=False)

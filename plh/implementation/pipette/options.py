@@ -4,7 +4,7 @@ from pydantic import dataclasses
 
 from plh.device.tools import *
 from plh.implementation import layout_item
-from plh.implementation.deck_location import *
+from plh.implementation.carrier_location import *
 from plh.implementation.labware import *
 
 

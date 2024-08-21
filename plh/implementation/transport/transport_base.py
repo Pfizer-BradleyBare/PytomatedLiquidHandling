@@ -7,7 +7,7 @@ from typing import Annotated
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from plh.implementation import deck_location, labware, layout_item
+from plh.implementation import carrier_location, labware, layout_item
 from plh.implementation.tools import Resource
 
 from .exceptions import WrongTransportDeviceError
@@ -69,15 +69,15 @@ class TransportBase(Resource):
 
     def assert_supported_deck_locations(
         self: TransportBase,
-        *args: deck_location.DeckLocationBase,
+        *args: carrier_location.DeckLocationBase,
     ) -> None:
 
         exceptions = []
 
         for item in args:
-            if not isinstance(item, deck_location.TransportableDeckLocation):
+            if not isinstance(item, carrier_location.TransportableDeckLocation):
                 exceptions.append(
-                    deck_location.exceptions.DeckLocationNotTransportableError(
+                    carrier_location.exceptions.DeckLocationNotTransportableError(
                         self,
                         item,
                     ),
@@ -99,20 +99,20 @@ class TransportBase(Resource):
 
     def assert_compatible_deck_locations(
         self: TransportBase,
-        source: deck_location.DeckLocationBase,
-        destination: deck_location.DeckLocationBase,
+        source: carrier_location.DeckLocationBase,
+        destination: carrier_location.DeckLocationBase,
     ) -> None:
         self.assert_supported_deck_locations(source, destination)
 
         compatible_configs = (
-            deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+            carrier_location.TransportableDeckLocation.get_compatible_transport_configs(
                 source,
                 destination,
             )
         )
 
         if len(compatible_configs) == 0:
-            raise deck_location.exceptions.DeckLocationTransportConfigsNotCompatibleError(
+            raise carrier_location.exceptions.DeckLocationTransportConfigsNotCompatibleError(
                 self,
                 source,
                 destination,

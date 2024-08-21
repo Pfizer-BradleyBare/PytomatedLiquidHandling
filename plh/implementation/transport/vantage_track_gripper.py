@@ -9,7 +9,7 @@ from pydantic.functional_validators import BeforeValidator
 from plh.device.HAMILTON import TrackGripper
 from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.device.HAMILTON.ML_STAR.Channel1000uL import MoveToPositionSequence
-from plh.implementation import backend, deck_location
+from plh.implementation import backend, carrier_location
 from plh.implementation.exceptions import CriticalHALError
 
 from .transport_base import *
@@ -66,7 +66,7 @@ class VantageTrackGripper(TransportBase):
 
         compatible_configs = next(
             configs
-            for configs in deck_location.TransportableDeckLocation.get_compatible_transport_configs(
+            for configs in carrier_location.TransportableDeckLocation.get_compatible_transport_configs(
                 source.deck_location,
                 destination.deck_location,
             )

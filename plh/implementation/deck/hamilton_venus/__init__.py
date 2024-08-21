@@ -1,3 +1,3 @@
-from .hamilton_deck_base import HamiltonDeckBase
+from .hamilton_venus_deck_base import HamiltonVenusDeckBase
 
-__all__ = ["HamiltonDeckBase"]
+__all__ = ["HamiltonVenusDeckBase"]

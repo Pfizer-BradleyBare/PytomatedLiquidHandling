@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from plh.implementation.exceptions import HALError
 
-from .deck_location_base import DeckLocationBase
+from .carrier_location_base import DeckLocationBase
 
 
 @dataclass

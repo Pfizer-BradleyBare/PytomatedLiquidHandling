@@ -5,7 +5,7 @@ from typing import Annotated
 from pydantic import dataclasses, model_validator
 from pydantic.functional_validators import BeforeValidator
 
-from plh.implementation import deck_location, labware
+from plh.implementation import carrier_location, labware
 from plh.implementation.tools import Resource
 
 
@@ -20,8 +20,8 @@ class LayoutItemBase(Resource):
     """Labware id from the automation software for this deck position."""
 
     deck_location: Annotated[
-        deck_location.DeckLocationBase,
-        BeforeValidator(deck_location.validate_instance),
+        carrier_location.DeckLocationBase,
+        BeforeValidator(carrier_location.validate_instance),
     ]
     """Deck location object associated with this position. NOTE: Many layout items can be in the same deck location."""
 

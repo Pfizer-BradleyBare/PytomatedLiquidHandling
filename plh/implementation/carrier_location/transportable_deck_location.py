@@ -6,8 +6,8 @@ from pydantic import dataclasses
 
 from plh.device.tools import *
 
-from .deck_location_base import *
-from .deck_location_base import DeckLocationBase
+from .carrier_location_base import *
+from .carrier_location_base import DeckLocationBase
 from .transport_config import *
 from .transport_config import TransportConfig
 

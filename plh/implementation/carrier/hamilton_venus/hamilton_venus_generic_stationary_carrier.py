@@ -4,7 +4,8 @@ from typing import Annotated
 
 from pydantic import BeforeValidator, dataclasses
 
-from plh.implementation import deck
+from plh.device.HAMILTON.backend import HamiltonBackendBase
+from plh.implementation import backend, deck
 
 from ..stationary_liquid_handler_carrier_base import StationaryLiquidHandlerCarrierBase
 
@@ -13,8 +14,13 @@ from ..stationary_liquid_handler_carrier_base import StationaryLiquidHandlerCarr
 class HamiltonVenusGenericStationaryCarrier(StationaryLiquidHandlerCarrierBase):
     """A physical carrier on a system deck."""
 
+    backend: Annotated[
+        HamiltonBackendBase,
+        BeforeValidator(backend.validate_instance),
+    ]
+
     deck: Annotated[
-        deck.hamilton_venus.HamiltonDeckBase,
+        deck.hamilton_venus.HamiltonVenusDeckBase,
         BeforeValidator(deck.validate_instance),
     ]
     """A deck object."""
