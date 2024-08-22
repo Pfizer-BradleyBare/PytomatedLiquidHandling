@@ -19,7 +19,7 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
     """Device that can be used to measure the volume of liquid in a container."""
 
     pipette: Annotated[
-        pipette.HamiltonPortraitCORE8,
+        pipette.hamilton_venus.HamiltonPortraitCORE8,
         BeforeValidator(pipette.validate_instance),
     ]
 
