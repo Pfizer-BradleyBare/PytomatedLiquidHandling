@@ -1,25 +1,25 @@
 Tip Rack:
   - enabled: True
     labware_id: Tips_FTR_1000uL_1
-    deck_location: Carrier27_Pos1
+    carrier_location: Carrier27_Pos1
     labware: FTRTipRack
 
   - enabled: True
     labware_id: Tips_FTR_1000uL_2
-    deck_location: Carrier27_Pos2
+    carrier_location: Carrier27_Pos2
     labware: FTRTipRack
 
   - enabled: True
     labware_id: Tips_FTR_1000uL_3
-    deck_location: Carrier27_Pos3
+    carrier_location: Carrier27_Pos3
     labware: FTRTipRack
 
   - enabled: True
     labware_id: Tips_FTR_1000uL_4
-    deck_location: Carrier27_Pos4
+    carrier_location: Carrier27_Pos4
     labware: FTRTipRack
 
   - enabled: True
     labware_id: Tips_FTR_1000uL_5
-    deck_location: Carrier27_Pos5
+    carrier_location: Carrier27_Pos5
     labware: FTRTipRack

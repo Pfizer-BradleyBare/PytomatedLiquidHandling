@@ -17,7 +17,7 @@ class CloseableContainerBase(Resource, Interface):
     NOTE: This is NOT the same as a lid for a coverable plate.
     """
 
-    supported_deck_locations: Annotated[
+    supported_carrier_locations: Annotated[
         list[carrier_location.CarrierLocationBase],
         BeforeValidator(carrier_location.validate_list),
     ]
@@ -44,14 +44,14 @@ class CloseableContainerBase(Resource, Interface):
             msg = "Some labware is not supported."
             raise ExceptionGroup(msg, exceptions)
 
-    def assert_supported_deck_locations(
+    def assert_supported_carrier_locations(
         self: CloseableContainerBase,
         *args: carrier_location.CarrierLocationBase,
     ) -> None:
         exceptions = [
             carrier_location.exceptions.CarrierLocationNotSupportedError(self, item)
             for item in args
-            if item not in self.supported_deck_locations
+            if item not in self.supported_carrier_locations
         ]
 
         if len(exceptions) != 0:

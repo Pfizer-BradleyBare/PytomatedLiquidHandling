@@ -59,7 +59,7 @@ class TransportBase(Resource, Interface):
             msg = "Some labware is not supported."
             raise ExceptionGroup(msg, exceptions)
 
-    def assert_supported_deck_locations(
+    def assert_supported_carrier_locations(
         self: TransportBase,
         *args: carrier_location.CarrierLocationBase,
     ) -> None:
@@ -89,12 +89,12 @@ class TransportBase(Resource, Interface):
             msg = "Some deck locations are not supported."
             raise ExceptionGroup(msg, exceptions)
 
-    def assert_compatible_deck_locations(
+    def assert_compatible_carrier_locations(
         self: TransportBase,
         source: carrier_location.CarrierLocationBase,
         destination: carrier_location.CarrierLocationBase,
     ) -> None:
-        self.assert_supported_deck_locations(source, destination)
+        self.assert_supported_carrier_locations(source, destination)
 
         compatible_configs = carrier_location.TransportableCarrierLocation.get_compatible_transport_configs(
             source,

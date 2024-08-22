@@ -16,7 +16,7 @@ class WrongTransportDeviceError(HALError):
 
     error_device: TransportBase
 
-    deck_location: carrier_location.CarrierLocationBase
+    carrier_location: carrier_location.CarrierLocationBase
 
     ViableTransportDevices: list[TransportBase]
 

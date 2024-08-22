@@ -60,20 +60,20 @@ class HamiltonVenusVantageTrackGripper(TransportBase):
             source.labware,
             destination.labware,
         )
-        self.assert_supported_deck_locations(
-            source.deck_location,
-            destination.deck_location,
+        self.assert_supported_carrier_locations(
+            source.carrier_location,
+            destination.carrier_location,
         )
-        self.assert_compatible_deck_locations(
-            source.deck_location,
-            destination.deck_location,
+        self.assert_compatible_carrier_locations(
+            source.carrier_location,
+            destination.carrier_location,
         )
 
         compatible_configs = next(
             configs
             for configs in carrier_location.TransportableCarrierLocation.get_compatible_transport_configs(
-                source.deck_location,
-                destination.deck_location,
+                source.carrier_location,
+                destination.carrier_location,
             )
             if configs[0].transport_device is self
         )

@@ -1,56 +1,56 @@
 Lid:
   - enabled: True
     labware_id: Carrier54_Pos1_Corning2000uL96WellPCR_Lid
-    deck_location: Carrier54_Pos1
+    carrier_location: Carrier54_Pos1
     labware: CorningCostar2000uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier54_Pos2_Corning2000uL96WellPCR_Lid
-    deck_location: Carrier54_Pos2
+    carrier_location: Carrier54_Pos2
     labware: CorningCostar2000uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier54_Pos3_Corning2000uL96WellPCR_Lid
-    deck_location: Carrier54_Pos3
+    carrier_location: Carrier54_Pos3
     labware: CorningCostar2000uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier54_Pos4_Corning2000uL96WellPCR_Lid
-    deck_location: Carrier54_Pos4
+    carrier_location: Carrier54_Pos4
     labware: CorningCostar2000uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier54_Pos5_Corning2000uL96WellPCR_Lid
-    deck_location: Carrier54_Pos5
+    carrier_location: Carrier54_Pos5
     labware: CorningCostar2000uLPCRPlate_Lid
 
 Coverable Plate:
   - enabled: True
     labware_id: Carrier54_Pos1_Corning2000uL96WellPCR
-    deck_location: Carrier54_Pos1
+    carrier_location: Carrier54_Pos1
     labware: CorningCostar2000uLPCRPlate
     lid: Carrier54_Pos1_CorningCostar2000uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier54_Pos2_Corning2000uL96WellPCR
-    deck_location: Carrier54_Pos2
+    carrier_location: Carrier54_Pos2
     labware: CorningCostar2000uLPCRPlate
     lid: Carrier54_Pos2_CorningCostar2000uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier54_Pos3_Corning2000uL96WellPCR
-    deck_location: Carrier54_Pos3
+    carrier_location: Carrier54_Pos3
     labware: CorningCostar2000uLPCRPlate
     lid: Carrier54_Pos3_CorningCostar2000uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier54_Pos4_Corning2000uL96WellPCR
-    deck_location: Carrier54_Pos4
+    carrier_location: Carrier54_Pos4
     labware: CorningCostar2000uLPCRPlate
     lid: Carrier54_Pos4_CorningCostar2000uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier54_Pos5_Corning2000uL96WellPCR
-    deck_location: Carrier54_Pos5
+    carrier_location: Carrier54_Pos5
     labware: CorningCostar2000uLPCRPlate
     lid: Carrier54_Pos5_CorningCostar2000uLPCRPlate_Lid

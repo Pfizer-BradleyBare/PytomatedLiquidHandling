@@ -1,10 +1,10 @@
 Tip Rack:
   - enabled: True
     labware_id: Tips_NTR_300uL
-    deck_location: Carrier33_Pos3
+    carrier_location: Carrier33_Pos3
     labware: NTRTipRack
 
   - enabled: True
     labware_id: Tips_NTR_50uL
-    deck_location: Carrier33_Pos4
+    carrier_location: Carrier33_Pos4
     labware: NTRTipRack

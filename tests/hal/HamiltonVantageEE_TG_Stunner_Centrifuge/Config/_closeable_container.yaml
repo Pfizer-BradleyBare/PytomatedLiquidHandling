@@ -13,7 +13,7 @@ Hamilton FlipTube Landscape:
     supported_labware:
       - Hamilton1500uLFlipTubeCarrier
       - Hamilton1500uLFlipTubeRack
-    supported_deck_locations:
+    supported_carrier_locations:
       - Carrier7_Pos4
 
       - Carrier42_Pos1

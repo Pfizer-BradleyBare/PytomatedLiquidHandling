@@ -66,8 +66,8 @@ def transport_layout_items(
 
     for source, destination in args:
         transport_configs = carrier_location.TransportableCarrierLocation.get_compatible_transport_configs(
-            source.deck_location,
-            destination.deck_location,
+            source.carrier_location,
+            destination.carrier_location,
         )
 
         if len(transport_configs) == 0:
@@ -101,20 +101,20 @@ def transport_layout_items(
         # See if the next transport device is the same as the current. If so, then we will keep using it.
         # If an Index error occurs then obviously the next device is not the same.
 
-        transport_device.assert_supported_deck_locations(
-            source.deck_location,
-            destination.deck_location,
+        transport_device.assert_supported_carrier_locations(
+            source.carrier_location,
+            destination.carrier_location,
         )
         transport_device.assert_supported_labware(source.labware, destination.labware)
-        transport_device.assert_compatible_deck_locations(
-            source.deck_location,
-            destination.deck_location,
+        transport_device.assert_compatible_carrier_locations(
+            source.carrier_location,
+            destination.carrier_location,
         )
 
         transport_device.transport(source, destination)
     # Do the compatible transports first.
 
-    transportable_deck_locations = [
+    transportable_carrier_locations = [
         location
         for location in carrier_location.devices.values()
         if isinstance(location, carrier_location.TransportableCarrierLocation)
@@ -123,20 +123,20 @@ def transport_layout_items(
 
     for source, destination in incompatible_transports:
 
-        for location in transportable_deck_locations:
-            if location is source.deck_location:
+        for location in transportable_carrier_locations:
+            if location is source.carrier_location:
                 continue
-            if location is destination.deck_location:
+            if location is destination.carrier_location:
                 continue
             # If one of our items is already in the location then obviously it is not an acceptable intermediate location.
 
             source_compatible_configs = carrier_location.TransportableCarrierLocation.get_compatible_transport_configs(
-                source.deck_location,
+                source.carrier_location,
                 location,
             )
 
             destination_compatible_configs = carrier_location.TransportableCarrierLocation.get_compatible_transport_configs(
-                destination.deck_location,
+                destination.carrier_location,
                 location,
             )
 
@@ -149,7 +149,7 @@ def transport_layout_items(
                     layout_item
                     for layout_item in layout_item.devices.values()
                     if layout_item.labware == source.labware
-                    and layout_item.deck_location == location
+                    and layout_item.carrier_location == location
                 ]
 
                 if len(intermediate) == 0:

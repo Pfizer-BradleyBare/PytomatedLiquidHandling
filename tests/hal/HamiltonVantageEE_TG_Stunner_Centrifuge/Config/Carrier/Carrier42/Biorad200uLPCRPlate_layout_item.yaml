@@ -1,56 +1,56 @@
 Lid:
   - enabled: True
     labware_id: Carrier42_Pos1_Biorad200uL96WellPCR_Lid
-    deck_location: Carrier42_Pos1
+    carrier_location: Carrier42_Pos1
     labware: Biorad200uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier42_Pos2_Biorad200uL96WellPCR_Lid
-    deck_location: Carrier42_Pos2
+    carrier_location: Carrier42_Pos2
     labware: Biorad200uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier42_Pos3_Biorad200uL96WellPCR_Lid
-    deck_location: Carrier42_Pos3
+    carrier_location: Carrier42_Pos3
     labware: Biorad200uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier42_Pos4_Biorad200uL96WellPCR_Lid
-    deck_location: Carrier42_Pos4
+    carrier_location: Carrier42_Pos4
     labware: Biorad200uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier42_Pos5_Biorad200uL96WellPCR_Lid
-    deck_location: Carrier42_Pos5
+    carrier_location: Carrier42_Pos5
     labware: Biorad200uLPCRPlate_Lid
 
 Coverable Plate:
   - enabled: True
     labware_id: Carrier42_Pos1_Biorad200uL96WellPCR
-    deck_location: Carrier42_Pos1
+    carrier_location: Carrier42_Pos1
     labware: Biorad200uLPCRPlate
     lid: Carrier42_Pos1_Biorad200uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier42_Pos2_Biorad200uL96WellPCR
-    deck_location: Carrier42_Pos2
+    carrier_location: Carrier42_Pos2
     labware: Biorad200uLPCRPlate
     lid: Carrier42_Pos2_Biorad200uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier42_Pos3_Biorad200uL96WellPCR
-    deck_location: Carrier42_Pos3
+    carrier_location: Carrier42_Pos3
     labware: Biorad200uLPCRPlate
     lid: Carrier42_Pos3_Biorad200uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier42_Pos4_Biorad200uL96WellPCR
-    deck_location: Carrier42_Pos4
+    carrier_location: Carrier42_Pos4
     labware: Biorad200uLPCRPlate
     lid: Carrier42_Pos4_Biorad200uLPCRPlate_Lid
 
   - enabled: True
     labware_id: Carrier42_Pos5_Biorad200uL96WellPCR
-    deck_location: Carrier42_Pos5
+    carrier_location: Carrier42_Pos5
     labware: Biorad200uLPCRPlate
     lid: Carrier42_Pos5_Biorad200uLPCRPlate_Lid

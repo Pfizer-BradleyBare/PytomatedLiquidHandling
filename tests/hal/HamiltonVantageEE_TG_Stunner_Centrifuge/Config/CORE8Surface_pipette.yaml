@@ -18,7 +18,7 @@ HamiltonPortraitCORE8SimpleContactDispense:
     supported_dispense_labware:
       - Biorad200uLPCRPlate
 
-    supported_deck_locations:
+    supported_carrier_locations:
       - Carrier48_Pos1
 
     supported_tips:

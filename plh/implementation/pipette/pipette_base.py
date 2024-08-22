@@ -28,7 +28,7 @@ class PipetteBase(Resource):
         list[labware.PipettableLabware],
         BeforeValidator(labware.validate_list),
     ]
-    supported_deck_locations: Annotated[
+    supported_carrier_locations: Annotated[
         list[carrier_location.CarrierLocationBase],
         BeforeValidator(carrier_location.validate_list),
     ]
@@ -66,14 +66,14 @@ class PipetteBase(Resource):
             msg = "Some labware is not supported."
             raise ExceptionGroup(msg, exceptions)
 
-    def assert_supported_deck_locations(
+    def assert_supported_carrier_locations(
         self: PipetteBase,
         *args: carrier_location.CarrierLocationBase,
     ) -> None:
         exceptions = [
             carrier_location.exceptions.CarrierLocationNotSupportedError(self, item)
             for item in args
-            if item not in self.supported_deck_locations
+            if item not in self.supported_carrier_locations
         ]
 
         if len(exceptions) != 0:

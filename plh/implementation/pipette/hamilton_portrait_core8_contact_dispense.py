@@ -121,8 +121,8 @@ class HamiltonPortraitCORE8ContactDispense(HamiltonPortraitCORE8):
         self.assert_supported_dispense_labware(
             *{opt.layout_item.labware for arg in args for opt in arg[1:]},
         )
-        self.assert_supported_deck_locations(
-            *{opt.layout_item.deck_location for arg in args for opt in arg},
+        self.assert_supported_carrier_locations(
+            *{opt.layout_item.carrier_location for arg in args for opt in arg},
         )
         self.assert_supported_tips(*args)
         self.assert_transfer_options(*args)

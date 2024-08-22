@@ -49,8 +49,8 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
         self.assert_supported_labware(
             *[layout_item.labware for layout_item, position in args],
         )
-        self.assert_supported_deck_locations(
-            *[layout_item.deck_location for layout_item, position in args],
+        self.assert_supported_carrier_locations(
+            *[layout_item.carrier_location for layout_item, position in args],
         )
 
         command = FlipTubeTool.ToolsPickUp.Command(
@@ -127,8 +127,8 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
         self.assert_supported_labware(
             *[layout_item.labware for layout_item, position in args],
         )
-        self.assert_supported_deck_locations(
-            *[layout_item.deck_location for layout_item, position in args],
+        self.assert_supported_carrier_locations(
+            *[layout_item.carrier_location for layout_item, position in args],
         )
         return 0
 
@@ -142,8 +142,8 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
         self.assert_supported_labware(
             *[layout_item.labware for layout_item, position in args],
         )
-        self.assert_supported_deck_locations(
-            *[layout_item.deck_location for layout_item, position in args],
+        self.assert_supported_carrier_locations(
+            *[layout_item.carrier_location for layout_item, position in args],
         )
 
         command = FlipTubeTool.ToolsPickUp.Command(
@@ -220,7 +220,7 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
         self.assert_supported_labware(
             *[layout_item.labware for layout_item, position in args],
         )
-        self.assert_supported_deck_locations(
-            *[layout_item.deck_location for layout_item, position in args],
+        self.assert_supported_carrier_locations(
+            *[layout_item.carrier_location for layout_item, position in args],
         )
         return 0

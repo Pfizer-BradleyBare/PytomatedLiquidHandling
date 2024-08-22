@@ -1,5 +1,5 @@
 Plate:
   - enabled: True
     labware_id: Reagent_Reservoirs_1
-    deck_location: Carrier39_Pos1
+    carrier_location: Carrier39_Pos1
     labware: Hamilton60mLReagentReservoirCarrier

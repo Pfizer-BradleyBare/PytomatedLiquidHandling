@@ -29,7 +29,9 @@ class HamiltonVenusInternalPlateGripper(TransportBase):
     @dataclasses.dataclass(kw_only=True)
     class GetOptions(TransportBase.GetOptions):
         GripMode: iSwap.GripModeOptions = field(compare=True)
-        Movement: HamiltonVenusInternalPlateGripper.MovementOptions = field(compare=True)
+        Movement: HamiltonVenusInternalPlateGripper.MovementOptions = field(
+            compare=True
+        )
         RetractDistance: float = field(compare=False)
         LiftupHeight: float = field(compare=False)
         LabwareOrientation: iSwap.LabwareOrientationOptions = field(
@@ -39,7 +41,9 @@ class HamiltonVenusInternalPlateGripper(TransportBase):
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
-        Movement: HamiltonVenusInternalPlateGripper.MovementOptions = field(compare=True)
+        Movement: HamiltonVenusInternalPlateGripper.MovementOptions = field(
+            compare=True
+        )
         RetractDistance: float = field(compare=False)
         LiftupHeight: float = field(compare=False)
         LabwareOrientation: iSwap.LabwareOrientationOptions = field(
@@ -61,20 +65,20 @@ class HamiltonVenusInternalPlateGripper(TransportBase):
             source.labware,
             destination.labware,
         )
-        self.assert_supported_deck_locations(
-            source.deck_location,
-            destination.deck_location,
+        self.assert_supported_carrier_locations(
+            source.carrier_location,
+            destination.carrier_location,
         )
-        self.assert_compatible_deck_locations(
-            source.deck_location,
-            destination.deck_location,
+        self.assert_compatible_carrier_locations(
+            source.carrier_location,
+            destination.carrier_location,
         )
 
         compatible_configs = next(
             configs
             for configs in carrier_location.TransportableCarrierLocation.get_compatible_transport_configs(
-                source.deck_location,
-                destination.deck_location,
+                source.carrier_location,
+                destination.carrier_location,
             )
             if configs[0].transport_device is self
         )
@@ -92,7 +96,10 @@ class HamiltonVenusInternalPlateGripper(TransportBase):
             compatible_configs[1].place_options,
         )
 
-        if get_options.Movement == HamiltonVenusInternalPlateGripper.MovementOptions.Carrier:
+        if (
+            get_options.Movement
+            == HamiltonVenusInternalPlateGripper.MovementOptions.Carrier
+        ):
             command = iSwap.GetPlateCarrier.Command(
                 options=iSwap.GetPlateCarrier.Options(
                     LabwareID=source.labware_id,
@@ -131,7 +138,8 @@ class HamiltonVenusInternalPlateGripper(TransportBase):
                 ) from e
 
         elif (
-            get_options.Movement == HamiltonVenusInternalPlateGripper.MovementOptions.Complex
+            get_options.Movement
+            == HamiltonVenusInternalPlateGripper.MovementOptions.Complex
         ):
             command = iSwap.GetPlateComplex.Command(
                 options=iSwap.GetPlateComplex.Options(

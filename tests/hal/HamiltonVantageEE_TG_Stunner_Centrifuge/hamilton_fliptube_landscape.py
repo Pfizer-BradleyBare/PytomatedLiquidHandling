@@ -10,7 +10,7 @@ logger.enable("plh")
 
 
 implementation.load_yaml_configuration(
-    os.path.join(os.path.dirname(__file__), "Config")
+    os.path.join(os.path.dirname(__file__), "Config"),
 )
 
 hamilton_backend = implementation.backend.devices["Hamilton"]
@@ -26,8 +26,8 @@ closeable_container_device = implementation.closeable_container.devices["FlipTub
 closeable_container_device.initialize()
 
 closeable_container_device.assert_supported_labware(flip_tube_plate.labware)
-closeable_container_device.assert_supported_deck_locations(
-    flip_tube_plate.deck_location,
+closeable_container_device.assert_supported_carrier_locations(
+    flip_tube_plate.carrier_location,
 )
 closeable_container_device.open(
     (flip_tube_plate, 24),

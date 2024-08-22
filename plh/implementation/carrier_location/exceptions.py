@@ -13,22 +13,22 @@ class CarrierLocationNotSupportedError(HALError):
     This can be thrown for any LayoutItem inputs.
     """
 
-    deck_location: CarrierLocationBase
+    carrier_location: CarrierLocationBase
     """CarrierLocationBase object that is not supported."""
 
     def __str__(self) -> str:
-        return self.deck_location.identifier
+        return self.carrier_location.identifier
 
 
 @dataclass
 class CarrierLocationNotTransportableError(HALError):
     """Your deck location is not transportable but the action you attempted requires a transportable deck location."""
 
-    deck_location: CarrierLocationBase
+    carrier_location: CarrierLocationBase
     """CarrierLocationBase object that is not transportable."""
 
     def __str__(self) -> str:
-        return self.deck_location.identifier
+        return self.carrier_location.identifier
 
 
 @dataclass
@@ -38,11 +38,11 @@ class CarrierLocationTransportConfigsNotCompatibleError(HALError):
     You should find an intermediate deck location to enable comaptibility.
     """
 
-    source_deck_location: CarrierLocationBase
+    source_carrier_location: CarrierLocationBase
     """Source transportable deck location."""
 
-    destination_deck_location: CarrierLocationBase
+    destination_carrier_location: CarrierLocationBase
     """Destination transportable deck location."""
 
     def __str__(self) -> str:
-        return f"{self.source_deck_location.identifier} != {self.destination_deck_location.identifier}"
+        return f"{self.source_carrier_location.identifier} != {self.destination_carrier_location.identifier}"

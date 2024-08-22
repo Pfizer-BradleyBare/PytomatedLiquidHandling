@@ -30,7 +30,7 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
         BeforeValidator(labware.validate_list),
     ] = field(init=False)
 
-    supported_deck_locations: Annotated[
+    supported_carrier_locations: Annotated[
         list[carrier_location.CarrierLocationBase],
         BeforeValidator(carrier_location.validate_list),
     ] = field(init=False)
@@ -55,7 +55,7 @@ class Hamilton50uLCORE8(VolumeMeasureBase):
             raise ValueError(msg) from e
 
         self.supported_labware = self.pipette.supported_aspirate_labware
-        self.supported_deck_locations = self.pipette.supported_deck_locations
+        self.supported_carrier_locations = self.pipette.supported_carrier_locations
         self.backend = self.pipette.backend
         # Copy this info from the pipette because it drives our compatibility
 

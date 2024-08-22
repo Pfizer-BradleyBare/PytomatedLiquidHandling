@@ -14,12 +14,12 @@ class LayoutItemBase(Resource):
     """A labware position on a deck."""
 
     identifier: str = "None"
-    """Identifier is optional. If identifier is not specified than identifier will be ```<deck_location.identifier>_<labware.identifier>```"""
+    """Identifier is optional. If identifier is not specified than identifier will be ```<carrier_location.identifier>_<labware.identifier>```"""
 
     labware_id: str
     """Labware id from the automation software for this deck position."""
 
-    deck_location: Annotated[
+    carrier_location: Annotated[
         carrier_location.CarrierLocationBase,
         BeforeValidator(carrier_location.validate_instance),
     ]
@@ -35,5 +35,5 @@ class LayoutItemBase(Resource):
     @staticmethod
     def __model_validate(v: LayoutItemBase) -> LayoutItemBase:
         if v.identifier == "None":
-            v.identifier = f"{v.deck_location.identifier}_{v.labware.identifier!s}"
+            v.identifier = f"{v.carrier_location.identifier}_{v.labware.identifier!s}"
         return v

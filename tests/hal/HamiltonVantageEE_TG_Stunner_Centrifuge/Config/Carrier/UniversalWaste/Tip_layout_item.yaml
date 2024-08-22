@@ -2,11 +2,11 @@ Tip Rack:
   - enabled: True
     identifier: Carrier60_Pos3_Waste_NTR_300uL
     labware_id: Waste_NTR_300uL
-    deck_location: Carrier60_Pos3
+    carrier_location: Carrier60_Pos3
     labware: NTRTipRack
 
   - enabled: True
     identifier: Carrier60_Pos3_Waste_NTR_50uL
     labware_id: Waste_NTR_50uL
-    deck_location: Carrier60_Pos3
+    carrier_location: Carrier60_Pos3
     labware: NTRTipRack

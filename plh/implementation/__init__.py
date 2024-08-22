@@ -149,7 +149,10 @@ def load_yaml_configuration(config_base_folder: str) -> None:
     loaded = False
     for root, _, files in os.walk(config_base_folder):
         for file in files:
-            if file.lower().endswith(".yaml") and "_deck_location.yaml" in file.lower():
+            if (
+                file.lower().endswith(".yaml")
+                and "_carrier_location.yaml" in file.lower()
+            ):
                 logger.debug(f"Starting to load {pathlib.Path(root) / file}")
                 loaded = True
                 with (pathlib.Path(root) / file).open() as config_file:

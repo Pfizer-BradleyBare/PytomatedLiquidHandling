@@ -21,7 +21,7 @@ class RandomAccessDeckStorage(StorageDeviceBase):
             raise RuntimeError(msg)
 
         reserved_sites = [
-            Site.layout_item.deck_location for Site in self.reservations.values()
+            Site.layout_item.carrier_location for Site in self.reservations.values()
         ]
 
         reservation_labware = layout_item.labware
@@ -30,7 +30,7 @@ class RandomAccessDeckStorage(StorageDeviceBase):
             site
             for site in self.layout_items
             if site.labware == reservation_labware
-            and site.deck_location not in reserved_sites
+            and site.carrier_location not in reserved_sites
         ]
         # site must support the labware and must also not overlap with already reserved deck locations
 
