@@ -31,12 +31,12 @@ class FilterPlateConfiguration:
     """Compatibilities with a certain vacuum filter plate."""
 
     filter_plate: Annotated[
-        layout_item.FilterPlate | layout_item.CoverableFilterPlate,
+        layout_item.FilterPlateBase | layout_item.CoverableFilterPlateBase,
         BeforeValidator(layout_item.validate_instance),
     ]
     """The filter plate."""
 
-    collection_plate: layout_item.Plate
+    collection_plate: layout_item.PlateBase
     """The compatible plate for eluate collection."""
 
     max_pressure: float
@@ -51,13 +51,13 @@ class VacuumBase(Resource):
     """Describes an on deck vacuum device."""
 
     manifold_park: Annotated[
-        layout_item.VacuumManifold,
+        layout_item.VacuumManifoldBase,
         BeforeValidator(layout_item.validate_instance),
     ]
     """Park position for the vacuum manifold."""
 
     manifold_processing: Annotated[
-        layout_item.VacuumManifold,
+        layout_item.VacuumManifoldBase,
         BeforeValidator(layout_item.validate_instance),
     ]
     """Vacuum position for the vacuum manifold."""
@@ -67,7 +67,7 @@ class VacuumBase(Resource):
 
     def assert_options(
         self: VacuumBase,
-        layout_item: layout_item.CoverablePlate | layout_item.Plate,
+        layout_item: layout_item.CoverablePlateBase | layout_item.PlateBase,
         pressure: None | float = None,
     ) -> None:
         """TODO

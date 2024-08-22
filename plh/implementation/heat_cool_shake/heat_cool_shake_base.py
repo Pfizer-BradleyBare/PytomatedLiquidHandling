@@ -16,7 +16,7 @@ class HeatCoolShakeBase(Resource, Interface):
     """A device that can perform either heating, cooling, or shaking or any combination of the three."""
 
     plates: Annotated[
-        list[li.CoverablePlate | li.Plate],
+        list[li.CoverablePlateBase | li.PlateBase],
         BeforeValidator(li.validate_list),
     ]
     """Plates where incubations, shaking will occur."""
@@ -40,7 +40,7 @@ class HeatCoolShakeBase(Resource, Interface):
     def get_layout_item(
         self: HeatCoolShakeBase,
         labware: labware.LabwareBase,
-    ) -> li.CoverablePlate | li.Plate:
+    ) -> li.CoverablePlateBase | li.PlateBase:
         """Gets a layout item on the heat_cool_shake device that is compatible with your current layout item."""
         self.assert_supported_labware(labware)
 

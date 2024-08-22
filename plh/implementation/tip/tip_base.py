@@ -27,7 +27,7 @@ class TipBase(Resource):
     """A tip device that facilitates tip tracking and tier removal as needed."""
 
     tip_racks: Annotated[
-        list[layout_item.TipRack],
+        list[layout_item.TipRackBase],
         BeforeValidator(layout_item.validate_list),
     ]
     """Rack layout items associated with the device."""

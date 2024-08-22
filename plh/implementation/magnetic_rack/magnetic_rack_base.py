@@ -15,7 +15,7 @@ class MagneticRackBase(Resource):
     """A magnetic rack to be used for condensing magnetic beads."""
 
     plates: Annotated[
-        list[li.CoverablePlate | li.Plate],
+        list[li.CoverablePlateBase | li.PlateBase],
         BeforeValidator(li.validate_list),
     ]
     """Supported plates."""
@@ -139,7 +139,7 @@ class MagneticRackBase(Resource):
     def get_layout_item(
         self: MagneticRackBase,
         labware: labware.LabwareBase,
-    ) -> li.CoverablePlate | li.Plate:
+    ) -> li.CoverablePlateBase | li.PlateBase:
         self.assert_supported_labware(labware)
 
         for supported_layout_item in self.plates:

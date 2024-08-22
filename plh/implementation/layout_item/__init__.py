@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from . import hamilton_venus
-from .coverable_filter_plate_base import CoverableFilterPlateBaseBase
+from .coverable_filter_plate_base import CoverableFilterPlateBase
 from .coverable_plate_base import CoverablePlateBase
 from .filter_plate_base import FilterPlateBase
 from .filter_plate_stack_base import FilterPlateStackBase
@@ -48,7 +48,7 @@ __all__ = [
     "LidBase",
     "FilterPlateStackBase",
     "FilterPlateBase",
-    "CoverableFilterPlateBaseBase",
+    "CoverableFilterPlateBase",
     "hamilton_venus",
     "validate_list",
     "validate_instance",

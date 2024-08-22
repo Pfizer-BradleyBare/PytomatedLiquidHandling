@@ -68,6 +68,18 @@ class HamiltonVenusVantageTrackGripper(TransportBase):
             source.carrier_location,
             destination.carrier_location,
         )
+        if not isinstance(
+            source,
+            layout_item.hamilton_venus.HamiltonVenusLayoutItemBase,
+        ):
+            raise ValueError("Only HamiltonLayoutItemBase are accepted for source.")
+        if not isinstance(
+            destination,
+            layout_item.hamilton_venus.HamiltonVenusLayoutItemBase,
+        ):
+            raise ValueError(
+                "Only HamiltonLayoutItemBase are accepted for destination.",
+            )
 
         compatible_configs = next(
             configs

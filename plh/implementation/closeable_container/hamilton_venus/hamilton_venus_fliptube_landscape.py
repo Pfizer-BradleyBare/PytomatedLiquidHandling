@@ -1,13 +1,14 @@
 from __future__ import annotations
 
-from typing import Annotated, DefaultDict
+from typing import Annotated, DefaultDict, cast
 
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.device.HAMILTON import FlipTubeTool
 from plh.device.HAMILTON.backend import HamiltonBackendBase
-from plh.implementation import backend, layout_item
+from plh.implementation import backend
+from plh.implementation import layout_item as li
 
 from ..closeable_container_base import CloseableContainerBase
 
@@ -41,7 +42,7 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
 
     def open(
         self: HamiltonVenusFlipTubeLandscape,
-        *args: tuple[layout_item.LayoutItemBase, str | int],
+        *args: tuple[li.LayoutItemBase, str | int],
     ) -> None:
         """Hamilton FlipTube tool supports a max of 4 tools in use simultaneously in the driver.
         Thus, the function will sort the desired open positions then creates groups of 4 to open.
@@ -52,6 +53,11 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
         self.assert_supported_carrier_locations(
             *[layout_item.carrier_location for layout_item, position in args],
         )
+        if not all(
+            isinstance(layout_item, li.hamilton_venus.HamiltonVenusLayoutItemBase)
+            for layout_item, position in args
+        ):
+            raise ValueError("Only HamiltonLayoutItemBase are accepted.")
 
         command = FlipTubeTool.ToolsPickUp.Command(
             options=FlipTubeTool.ToolsPickUp.OptionsList(
@@ -67,11 +73,11 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
         self.backend.acknowledge(command, FlipTubeTool.ToolsPickUp.Response)
         # Pickup
 
-        layout_item_positions: dict[layout_item.LayoutItemBase, list[str | int]] = (
-            DefaultDict(list)
+        layout_item_positions: dict[li.LayoutItemBase, list[str | int]] = DefaultDict(
+            list,
         )
         grouped_layout_item_positions: dict[
-            layout_item.LayoutItemBase,
+            li.LayoutItemBase,
             list[list[str]],
         ] = DefaultDict(list)
         # Open
@@ -96,7 +102,10 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
             for group in grouped_positions:
                 command = FlipTubeTool.FlipTubeOpen.Command(
                     options=FlipTubeTool.FlipTubeOpen.OptionsList(
-                        LabwareID=layout_item.labware_id,
+                        LabwareID=cast(
+                            li.hamilton_venus.HamiltonVenusLayoutItemBase,
+                            layout_item,
+                        ).labware_id,
                     ),
                 )
                 for index, pos_id in enumerate(group):
@@ -121,7 +130,7 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
 
     def open_time(
         self: HamiltonVenusFlipTubeLandscape,
-        *args: tuple[layout_item.LayoutItemBase, str | int],
+        *args: tuple[li.LayoutItemBase, str | int],
     ) -> float:
         """TODO"""
         self.assert_supported_labware(
@@ -130,11 +139,16 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
         self.assert_supported_carrier_locations(
             *[layout_item.carrier_location for layout_item, position in args],
         )
+        if not all(
+            isinstance(layout_item, li.hamilton_venus.HamiltonVenusLayoutItemBase)
+            for layout_item, position in args
+        ):
+            raise ValueError("Only HamiltonLayoutItemBase are accepted.")
         return 0
 
     def close(
         self: HamiltonVenusFlipTubeLandscape,
-        *args: tuple[layout_item.LayoutItemBase, str | int],
+        *args: tuple[li.LayoutItemBase, str | int],
     ) -> None:
         """Hamilton FlipTube tool supports a max of 4 tools in use simultaneously in the driver.
         Thus, the function will sort the desired open positions then creates groups of 4 to open.
@@ -145,6 +159,11 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
         self.assert_supported_carrier_locations(
             *[layout_item.carrier_location for layout_item, position in args],
         )
+        if not all(
+            isinstance(layout_item, li.hamilton_venus.HamiltonVenusLayoutItemBase)
+            for layout_item, position in args
+        ):
+            raise ValueError("Only HamiltonLayoutItemBase are accepted.")
 
         command = FlipTubeTool.ToolsPickUp.Command(
             options=FlipTubeTool.ToolsPickUp.OptionsList(
@@ -160,11 +179,11 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
         self.backend.acknowledge(command, FlipTubeTool.ToolsPickUp.Response)
         # Pickup
 
-        layout_item_positions: dict[layout_item.LayoutItemBase, list[str | int]] = (
-            DefaultDict(list)
+        layout_item_positions: dict[li.LayoutItemBase, list[str | int]] = DefaultDict(
+            list,
         )
         grouped_layout_item_positions: dict[
-            layout_item.LayoutItemBase,
+            li.LayoutItemBase,
             list[list[str]],
         ] = DefaultDict(list)
         # close
@@ -189,7 +208,10 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
             for group in grouped_positions:
                 command = FlipTubeTool.FlipTubeClose.Command(
                     options=FlipTubeTool.FlipTubeClose.OptionsList(
-                        LabwareID=layout_item.labware_id,
+                        LabwareID=cast(
+                            li.hamilton_venus.HamiltonVenusLayoutItemBase,
+                            layout_item,
+                        ).labware_id,
                     ),
                 )
                 for index, pos_id in enumerate(group):
@@ -214,7 +236,7 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
 
     def close_time(
         self: HamiltonVenusFlipTubeLandscape,
-        *args: tuple[layout_item.LayoutItemBase, str | int],
+        *args: tuple[li.LayoutItemBase, str | int],
     ) -> float:
         """TODO"""
         self.assert_supported_labware(
@@ -223,4 +245,9 @@ class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
         self.assert_supported_carrier_locations(
             *[layout_item.carrier_location for layout_item, position in args],
         )
+        if not all(
+            isinstance(layout_item, li.hamilton_venus.HamiltonVenusLayoutItemBase)
+            for layout_item, position in args
+        ):
+            raise ValueError("Only HamiltonLayoutItemBase are accepted.")
         return 0

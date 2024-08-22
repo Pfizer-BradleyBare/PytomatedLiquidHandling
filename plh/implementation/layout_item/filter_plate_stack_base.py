@@ -5,7 +5,7 @@ from typing import Annotated
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from .coverable_filter_plate_base import CoverableFilterPlateBaseBase
+from .coverable_filter_plate_base import CoverableFilterPlateBase
 from .coverable_plate_base import CoverablePlateBase
 from .filter_plate_base import FilterPlateBase
 from .plate_base import PlateBase
@@ -19,7 +19,7 @@ class FilterPlateStackBase:
     """
 
     filter_plate: Annotated[
-        CoverableFilterPlateBaseBase | FilterPlateBase,
+        CoverableFilterPlateBase | FilterPlateBase,
         BeforeValidator(validate_instance),
     ]
     """The filter plate."""

@@ -146,6 +146,11 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
         )
         self.assert_supported_tips(*args)
         self.assert_transfer_options(*args)
+        if not all(
+            isinstance(layout_item, li.hamilton_venus.HamiltonVenusLayoutItemBase)
+            for layout_item, position in args
+        ):
+            raise ValueError("Only HamiltonLayoutItemBase are accepted.")
         # Check everything is kosher.
 
         for arg in args:
@@ -432,7 +437,10 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
                                 aspirate_options.append(
                                     (
                                         channel_number,
-                                        aspirate_option.layout_item.labware_id,
+                                        cast(
+                                            li.hamilton_venus.HamiltonVenusLayoutItemBase,
+                                            aspirate_option.layout_item,
+                                        ).labware_id,
                                         self._align_pipetting_channel(
                                             channel_number,
                                             aspirate_option.layout_item,
@@ -455,7 +463,10 @@ class HamiltonPortraitCORE8SimpleContactDispense(HamiltonPortraitCORE8):
                                 dispense_options.append(
                                     (
                                         channel_number,
-                                        dispense_option.layout_item.labware_id,
+                                        cast(
+                                            li.hamilton_venus.HamiltonVenusLayoutItemBase,
+                                            dispense_option.layout_item,
+                                        ).labware_id,
                                         self._align_pipetting_channel(
                                             channel_number,
                                             dispense_option.layout_item,

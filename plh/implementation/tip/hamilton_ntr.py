@@ -20,8 +20,13 @@ class HamiltonNTR(TipBase):
     backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
     """Only supported on Hamilton systems."""
 
+    tip_racks: Annotated[
+        list[layout_item.hamilton_venus.HamiltonVenusTipRack],
+        BeforeValidator(layout_item.validate_list),
+    ]
+
     tip_rack_waste: Annotated[
-        layout_item.TipRack,
+        layout_item.hamilton_venus.HamiltonVenusTipRack,
         BeforeValidator(layout_item.validate_instance),
     ]
     """Rack waste location. Empty racks will be transport here to be thrown away."""
@@ -32,7 +37,9 @@ class HamiltonNTR(TipBase):
     )
     """NTR racks are stacked. Thus, we need to track the available positions in each row of the stack. These are the inactive positions."""
 
-    available_racks_per_teir: list[list[layout_item.TipRack]] = field(
+    available_racks_per_teir: list[
+        list[layout_item.hamilton_venus.HamiltonVenusTipRack]
+    ] = field(
         init=False,
         default_factory=list,
     )

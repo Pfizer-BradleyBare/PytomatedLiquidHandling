@@ -19,7 +19,7 @@ class EETipStack:
     """Entry exit containing a stack of tips."""
 
     tip_rack: Annotated[
-        layout_item.TipRack,
+        layout_item.hamilton_venus.HamiltonVenusTipRack,
         BeforeValidator(layout_item.validate_instance),
     ]
     """Rack layout item that will be used to retrieve a tip rack from the EE stack."""
@@ -40,6 +40,11 @@ class HamiltonEETipBase(TipBase):
     In this configuration tips are stored in EE until needed then moved to the deck.
     """
 
+    tip_racks: Annotated[
+        list[layout_item.hamilton_venus.HamiltonVenusTipRack],
+        BeforeValidator(layout_item.validate_list),
+    ]
+
     backend: Annotated[
         VantageTrackGripperEntryExit,
         BeforeValidator(backend.validate_instance),
@@ -50,7 +55,7 @@ class HamiltonEETipBase(TipBase):
     """Stacks associated with this tip device."""
 
     tip_rack_waste: Annotated[
-        layout_item.TipRack,
+        layout_item.hamilton_venus.HamiltonVenusTipRack,
         BeforeValidator(layout_item.validate_instance),
     ]
     """Rack waste location. Empty racks will be transport here to be thrown away."""

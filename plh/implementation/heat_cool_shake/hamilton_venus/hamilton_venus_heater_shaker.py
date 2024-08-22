@@ -9,6 +9,7 @@ from pydantic.functional_validators import BeforeValidator
 from plh.device.HAMILTON import HSLHamHeaterShakerLib
 from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.implementation import backend
+from plh.implementation import layout_item as li
 
 from ..exceptions import CoolingNotSupportedError
 from ..heat_cool_shake_base import HeatCoolShakeBase
@@ -17,6 +18,14 @@ from ..heat_cool_shake_base import HeatCoolShakeBase
 @dataclasses.dataclass(kw_only=True, eq=False)
 class HamiltonVenusHeaterShaker(HeatCoolShakeBase):
     """Hamilton device that can heat and shake."""
+
+    plates: Annotated[
+        list[
+            li.hamilton_venus.HamiltonVenusCoverablePlate
+            | li.hamilton_venus.HamiltonVenusPlate
+        ],
+        BeforeValidator(li.validate_list),
+    ]
 
     com_port: int
     """Port to communicate with the device '1'."""
