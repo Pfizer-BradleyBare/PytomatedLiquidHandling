@@ -8,11 +8,11 @@ from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import labware
 from plh.implementation import layout_item as li
-from plh.implementation.tools import Resource
+from plh.implementation.tools import Interface, Resource
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class HeatCoolShakeBase(Resource):
+class HeatCoolShakeBase(Resource, Interface):
     """A device that can perform either heating, cooling, and shaking or any combination of the three."""
 
     plates: Annotated[

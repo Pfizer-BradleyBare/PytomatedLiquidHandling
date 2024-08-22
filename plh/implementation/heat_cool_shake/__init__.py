@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from .hamilton_heater_cooler import HamiltonHeaterCooler
-from .hamilton_heater_shaker import HamiltonHeaterShaker
+from . import hamilton_venus
 from .heat_cool_shake_base import HeatCoolShakeBase
 from .options import HeatCoolShakeOptions
 
@@ -36,8 +35,7 @@ def unregister_all():
 
 __all__ = [
     "HeatCoolShakeBase",
-    "HamiltonHeaterShaker",
-    "HamiltonHeaterCooler",
+    "hamilton_venus",
     "exceptions",
     "HeatCoolShakeOptions",
     "exceptions",

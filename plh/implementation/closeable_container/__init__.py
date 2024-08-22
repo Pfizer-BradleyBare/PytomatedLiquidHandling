@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from . import hamilton_venus
 from .closeable_container_base import CloseableContainerBase
-from .hamilton_fliptube_landscape import HamiltonFlipTubeLandscape
 
 if True:
     """Above needs to be imported first!"""
@@ -32,7 +32,7 @@ def unregister_all() -> None:
 
 __all__ = [
     "CloseableContainerBase",
-    "HamiltonFlipTubeLandscape",
+    "hamilton_venus",
     "devices",
     "load",
     "register",

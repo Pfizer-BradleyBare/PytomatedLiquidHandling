@@ -44,9 +44,3 @@ class TransportableCarrierLocation(CarrierLocationBase):
             if source_config == destination_config
         ]
         # __eq__ is defined for transport config so we just iterate through and collect the ones that are equal.
-
-    def initialize(self: TransportableCarrierLocation) -> None:
-        return super().initialize()
-
-    def deinitialize(self: TransportableCarrierLocation) -> None:
-        return super().deinitialize()

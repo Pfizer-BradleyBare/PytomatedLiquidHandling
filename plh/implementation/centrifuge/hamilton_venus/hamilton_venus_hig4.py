@@ -10,12 +10,12 @@ from plh.device.HAMILTON import HSLHiGCentrifugeLib
 from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.implementation import backend
 
-from .centrifuge_base import CentrifugeBase
-from .exceptions import GForceOutOfRangeError, InvalidBucketNumberError
+from ..centrifuge_base import CentrifugeBase
+from ..exceptions import GForceOutOfRangeError, InvalidBucketNumberError
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class HamiltonHig4(CentrifugeBase):
+class HamiltonVenusHiG4(CentrifugeBase):
     """Hamilton implementation of the Bionex Hig4 centrifuge."""
 
     backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
@@ -24,7 +24,7 @@ class HamiltonHig4(CentrifugeBase):
     adapter_id: str
     """Bionex adapter ID as determined by the USB CAN application provided by Bionex."""
 
-    def initialize(self: HamiltonHig4) -> None:
+    def initialize(self: HamiltonVenusHiG4) -> None:
         command = HSLHiGCentrifugeLib.Connect.Command(
             options=HSLHiGCentrifugeLib.Connect.Options(AdapterID=self.adapter_id),
         )
@@ -37,7 +37,7 @@ class HamiltonHig4(CentrifugeBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, HSLHiGCentrifugeLib.Home.Response)
 
-    def deinitialize(self: HamiltonHig4) -> None:
+    def deinitialize(self: HamiltonVenusHiG4) -> None:
         self.select_bucket(0)
         # Open the centrifuge before we disconnect. The centrifuge should be stored open.
 
@@ -46,16 +46,16 @@ class HamiltonHig4(CentrifugeBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, HSLHiGCentrifugeLib.Disconnect.Response)
 
-    def assert_num_buckets(self: HamiltonHig4, num_buckets: int) -> None:
+    def assert_num_buckets(self: HamiltonVenusHiG4, num_buckets: int) -> None:
         if num_buckets != 2:
             raise InvalidBucketNumberError(self, num_buckets, 2)
 
-    def get_bucket_pattern(self: HamiltonHig4, num_buckets: int) -> list[int]:
+    def get_bucket_pattern(self: HamiltonVenusHiG4, num_buckets: int) -> list[int]:
         self.assert_num_buckets(num_buckets)
 
         return [0, 1]
 
-    def select_bucket(self: HamiltonHig4, index: int) -> None:
+    def select_bucket(self: HamiltonVenusHiG4, index: int) -> None:
         command = HSLHiGCentrifugeLib.OpenShield.Command(
             options=HSLHiGCentrifugeLib.OpenShield.Options(BucketIndex=index),
         )
@@ -63,16 +63,16 @@ class HamiltonHig4(CentrifugeBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, HSLHiGCentrifugeLib.OpenShield.Response)
 
-    def select_bucket_time(self: HamiltonHig4, index: int) -> float:
+    def select_bucket_time(self: HamiltonVenusHiG4, index: int) -> float:
         return 30
 
-    def close(self: HamiltonHig4) -> None:
+    def close(self: HamiltonVenusHiG4) -> None:
         command = HSLHiGCentrifugeLib.CloseShield.Command()
         self.backend.execute(command)
         self.backend.wait(command)
         self.backend.acknowledge(command, HSLHiGCentrifugeLib.CloseShield.Response)
 
-    def close_time(self: HamiltonHig4) -> float:
+    def close_time(self: HamiltonVenusHiG4) -> float:
         return 30
 
     def assert_xG(self: CentrifugeBase, xG: float) -> None:
@@ -82,7 +82,7 @@ class HamiltonHig4(CentrifugeBase):
             raise GForceOutOfRangeError(self, xG, max_xG)
 
     def spin(
-        self: HamiltonHig4,
+        self: HamiltonVenusHiG4,
         xG: float,
         accel_percent: float,
         decel_percent: float,
@@ -98,7 +98,7 @@ class HamiltonHig4(CentrifugeBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, HSLHiGCentrifugeLib.Spin.Response)
 
-    def stop(self: HamiltonHig4) -> None:
+    def stop(self: HamiltonVenusHiG4) -> None:
         command = HSLHiGCentrifugeLib.AbortSpin.Command()
         self.backend.execute(command)
         self.backend.wait(command)
@@ -107,10 +107,10 @@ class HamiltonHig4(CentrifugeBase):
         while self.is_spinning():
             time.sleep(5)
 
-    def stop_time(self: HamiltonHig4) -> float:
+    def stop_time(self: HamiltonVenusHiG4) -> float:
         return 30
 
-    def is_spinning(self: HamiltonHig4) -> bool:
+    def is_spinning(self: HamiltonVenusHiG4) -> bool:
         command = HSLHiGCentrifugeLib.IsSpinning.Command()
         self.backend.execute(command)
         self.backend.wait(command)

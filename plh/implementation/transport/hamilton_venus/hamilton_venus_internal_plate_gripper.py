@@ -11,12 +11,12 @@ from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.device.HAMILTON.ML_STAR import iSwap
 from plh.implementation import backend, carrier_location, layout_item
 
-from .exceptions import GetHardwareError, PlaceHardwareError
-from .transport_base import TransportBase
+from ..exceptions import GetHardwareError, PlaceHardwareError
+from ..transport_base import TransportBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class HamiltonInternalPlateGripper(TransportBase):
+class HamiltonVenusInternalPlateGripper(TransportBase):
     """Gripper that uses the Hamilton IPG (internal plate gripper)."""
 
     backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
@@ -29,7 +29,7 @@ class HamiltonInternalPlateGripper(TransportBase):
     @dataclasses.dataclass(kw_only=True)
     class GetOptions(TransportBase.GetOptions):
         GripMode: iSwap.GripModeOptions = field(compare=True)
-        Movement: HamiltonInternalPlateGripper.MovementOptions = field(compare=True)
+        Movement: HamiltonVenusInternalPlateGripper.MovementOptions = field(compare=True)
         RetractDistance: float = field(compare=False)
         LiftupHeight: float = field(compare=False)
         LabwareOrientation: iSwap.LabwareOrientationOptions = field(
@@ -39,15 +39,21 @@ class HamiltonInternalPlateGripper(TransportBase):
 
     @dataclasses.dataclass(kw_only=True)
     class PlaceOptions(TransportBase.PlaceOptions):
-        Movement: HamiltonInternalPlateGripper.MovementOptions = field(compare=True)
+        Movement: HamiltonVenusInternalPlateGripper.MovementOptions = field(compare=True)
         RetractDistance: float = field(compare=False)
         LiftupHeight: float = field(compare=False)
         LabwareOrientation: iSwap.LabwareOrientationOptions = field(
             compare=True,
         )
 
+    def initialize(self: HamiltonVenusInternalPlateGripper) -> None:
+        return super().initialize()
+
+    def deinitialize(self: HamiltonVenusInternalPlateGripper) -> None:
+        return super().deinitialize()
+
     def transport(
-        self: HamiltonInternalPlateGripper,
+        self: HamiltonVenusInternalPlateGripper,
         source: layout_item.LayoutItemBase,
         destination: layout_item.LayoutItemBase,
     ) -> None:
@@ -77,16 +83,16 @@ class HamiltonInternalPlateGripper(TransportBase):
         labware = source.labware
 
         get_options = cast(
-            HamiltonInternalPlateGripper.GetOptions,
+            HamiltonVenusInternalPlateGripper.GetOptions,
             compatible_configs[0].get_options,
         )
 
         place_options = cast(
-            HamiltonInternalPlateGripper.PlaceOptions,
+            HamiltonVenusInternalPlateGripper.PlaceOptions,
             compatible_configs[1].place_options,
         )
 
-        if get_options.Movement == HamiltonInternalPlateGripper.MovementOptions.Carrier:
+        if get_options.Movement == HamiltonVenusInternalPlateGripper.MovementOptions.Carrier:
             command = iSwap.GetPlateCarrier.Command(
                 options=iSwap.GetPlateCarrier.Options(
                     LabwareID=source.labware_id,
@@ -125,7 +131,7 @@ class HamiltonInternalPlateGripper(TransportBase):
                 ) from e
 
         elif (
-            get_options.Movement == HamiltonInternalPlateGripper.MovementOptions.Complex
+            get_options.Movement == HamiltonVenusInternalPlateGripper.MovementOptions.Complex
         ):
             command = iSwap.GetPlateComplex.Command(
                 options=iSwap.GetPlateComplex.Options(
@@ -171,7 +177,7 @@ class HamiltonInternalPlateGripper(TransportBase):
                 ) from e
 
     def transport_time(
-        self: TransportBase,
+        self: HamiltonVenusInternalPlateGripper,
         source: layout_item.LayoutItemBase,
         destination: layout_item.LayoutItemBase,
     ) -> None: ...

@@ -9,11 +9,11 @@ from plh.device.HAMILTON import FlipTubeTool
 from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.implementation import backend, layout_item
 
-from .closeable_container_base import CloseableContainerBase
+from ..closeable_container_base import CloseableContainerBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class HamiltonFlipTubeLandscape(CloseableContainerBase):
+class HamiltonVenusFlipTubeLandscape(CloseableContainerBase):
     """Hamilton FlipTubes are a special, Hamilton compatible, 1500uL conical tube that can be opened and closed on deck with a FlipTube tool.
 
     This device only supports FlipTubes in the landscape orientation.
@@ -25,7 +25,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
     tool_labware_id: str
     """The labware id of the FlipTube tool."""
 
-    def initialize(self: HamiltonFlipTubeLandscape) -> None:
+    def initialize(self: HamiltonVenusFlipTubeLandscape) -> None:
         """Executes the Hamilton FlipTubeTool Initialize command in the landscape orientation."""
         command = FlipTubeTool.Initialize.Command(
             options=FlipTubeTool.Initialize.Options(
@@ -36,11 +36,11 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         self.backend.wait(command)
         self.backend.acknowledge(command, FlipTubeTool.Initialize.Response)
 
-    def deinitialize(self: HamiltonFlipTubeLandscape) -> None:
+    def deinitialize(self: HamiltonVenusFlipTubeLandscape) -> None:
         """No deinitialization actions are executed."""
 
     def open(
-        self: HamiltonFlipTubeLandscape,
+        self: HamiltonVenusFlipTubeLandscape,
         *args: tuple[layout_item.LayoutItemBase, str | int],
     ) -> None:
         """Hamilton FlipTube tool supports a max of 4 tools in use simultaneously in the driver.
@@ -120,7 +120,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         self.backend.acknowledge(command, FlipTubeTool.ToolsEject.Response)
 
     def open_time(
-        self: HamiltonFlipTubeLandscape,
+        self: HamiltonVenusFlipTubeLandscape,
         *args: tuple[layout_item.LayoutItemBase, str | int],
     ) -> float:
         """TODO"""
@@ -133,7 +133,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         return 0
 
     def close(
-        self: HamiltonFlipTubeLandscape,
+        self: HamiltonVenusFlipTubeLandscape,
         *args: tuple[layout_item.LayoutItemBase, str | int],
     ) -> None:
         """Hamilton FlipTube tool supports a max of 4 tools in use simultaneously in the driver.
@@ -213,7 +213,7 @@ class HamiltonFlipTubeLandscape(CloseableContainerBase):
         self.backend.acknowledge(command, FlipTubeTool.ToolsEject.Response)
 
     def close_time(
-        self: HamiltonFlipTubeLandscape,
+        self: HamiltonVenusFlipTubeLandscape,
         *args: tuple[layout_item.LayoutItemBase, str | int],
     ) -> float:
         """TODO"""

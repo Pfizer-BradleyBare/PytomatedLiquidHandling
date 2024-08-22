@@ -12,11 +12,11 @@ from plh.device.HAMILTON.ML_STAR.Channel1000uL import MoveToPositionSequence
 from plh.implementation import backend, carrier_location, layout_item
 from plh.implementation.exceptions import CriticalHALError
 
-from .transport_base import TransportBase
+from ..transport_base import TransportBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class VantageTrackGripper(TransportBase):
+class HamiltonVenusVantageTrackGripper(TransportBase):
 
     backend: Annotated[
         VantageTrackGripperEntryExit,
@@ -44,8 +44,14 @@ class VantageTrackGripper(TransportBase):
             compare=False,
         )
 
+    def initialize(self: HamiltonVenusVantageTrackGripper) -> None:
+        return super().initialize()
+
+    def deinitialize(self: HamiltonVenusVantageTrackGripper) -> None:
+        return super().deinitialize()
+
     def transport(
-        self: TransportBase,
+        self: HamiltonVenusVantageTrackGripper,
         source: layout_item.LayoutItemBase,
         destination: layout_item.LayoutItemBase,
     ) -> None:
@@ -76,7 +82,7 @@ class VantageTrackGripper(TransportBase):
         labware = source.labware
 
         get_options = cast(
-            VantageTrackGripper.GetOptions,
+            HamiltonVenusVantageTrackGripper.GetOptions,
             compatible_configs[0].get_options,
         )
 
@@ -129,7 +135,7 @@ class VantageTrackGripper(TransportBase):
         labware = destination.labware
 
         place_options = cast(
-            VantageTrackGripper.PlaceOptions,
+            HamiltonVenusVantageTrackGripper.PlaceOptions,
             compatible_configs[1].place_options,
         )
 
@@ -168,7 +174,7 @@ class VantageTrackGripper(TransportBase):
             raise ExceptionGroup("Exception", [CriticalHALError(self)]) from e
 
     def transport_time(
-        self: TransportBase,
+        self: HamiltonVenusVantageTrackGripper,
         source: layout_item.LayoutItemBase,
         destination: layout_item.LayoutItemBase,
     ) -> None: ...

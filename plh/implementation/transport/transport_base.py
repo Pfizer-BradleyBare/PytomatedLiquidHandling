@@ -8,13 +8,13 @@ from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import carrier_location, labware, layout_item
-from plh.implementation.tools import Resource
+from plh.implementation.tools import Interface, Resource
 
 from .exceptions import WrongTransportDeviceError
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class TransportBase(Resource):
+class TransportBase(Resource, Interface):
     """Describes devices that can move layout items around the deck."""
 
     supported_labware: Annotated[
@@ -44,14 +44,6 @@ class TransportBase(Resource):
         NOTE: options should be dataclass fields with the appropraite compare boolean set.
         Boolean should be True if the setting is critical, otherwise false.
         """
-
-    def initialize(self: TransportBase) -> None:
-        """No initialization actions are performed."""
-        ...
-
-    def deinitialize(self: TransportBase) -> None:
-        """No deinitialization actions are performed."""
-        ...
 
     def assert_supported_labware(
         self: TransportBase,

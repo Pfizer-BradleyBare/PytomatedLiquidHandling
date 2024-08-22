@@ -10,12 +10,12 @@ from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.device.HAMILTON.ML_STAR import Channel1000uLCOREGrip
 from plh.implementation import backend, carrier_location, layout_item
 
-from .exceptions import GetHardwareError, PlaceHardwareError
-from .transport_base import TransportBase
+from ..exceptions import GetHardwareError, PlaceHardwareError
+from ..transport_base import TransportBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class HamiltonCOREGripper(TransportBase):
+class HamiltonVenusCOREGripper(TransportBase):
     """Gripper that uses Hamilton CORE channels."""
 
     backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
@@ -33,8 +33,14 @@ class HamiltonCOREGripper(TransportBase):
             compare=False,
         )
 
+    def initialize(self: HamiltonVenusCOREGripper) -> None:
+        return super().initialize()
+
+    def deinitialize(self: HamiltonVenusCOREGripper) -> None:
+        return super().deinitialize()
+
     def transport(
-        self: HamiltonCOREGripper,
+        self: HamiltonVenusCOREGripper,
         source: layout_item.LayoutItemBase,
         destination: layout_item.LayoutItemBase,
     ) -> None:
@@ -102,7 +108,7 @@ class HamiltonCOREGripper(TransportBase):
                 ) from e
 
         place_options = cast(
-            HamiltonCOREGripper.PlaceOptions,
+            HamiltonVenusCOREGripper.PlaceOptions,
             compatible_configs[1].place_options,
         )
 
@@ -129,7 +135,7 @@ class HamiltonCOREGripper(TransportBase):
             ) from e
 
     def transport_time(
-        self: TransportBase,
+        self: HamiltonVenusCOREGripper,
         source: layout_item.LayoutItemBase,
         destination: layout_item.LayoutItemBase,
     ) -> None: ...

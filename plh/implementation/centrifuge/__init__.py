@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from . import hamilton_venus
 from .centrifuge_base import CentrifugeBase
-from .hamilton_hig4 import HamiltonHig4
 
 if True:
     """Above needs to be imported first!"""
@@ -34,7 +34,7 @@ def unregister_all() -> None:
 
 __all__ = [
     "CentrifugeBase",
-    "HamiltonHig4",
+    "hamilton_venus",
     "exceptions",
     "devices",
     "load",

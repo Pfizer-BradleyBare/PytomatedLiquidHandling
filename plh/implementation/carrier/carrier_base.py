@@ -5,11 +5,11 @@ from typing import Annotated
 from pydantic import BeforeValidator, dataclasses
 
 from plh.implementation import deck
-from plh.implementation.tools import Resource
+from plh.implementation.tools import Interface, Resource
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class CarrierBase(Resource):
+class CarrierBase(Resource, Interface):
     """A physical carrier on a system deck."""
 
     identifier: str = "None"
