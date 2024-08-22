@@ -9,6 +9,7 @@ from pydantic.functional_validators import BeforeValidator
 from plh.device.HAMILTON import HSLHiGCentrifugeLib
 from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.implementation import backend
+from plh.implementation import layout_item as li
 
 from ..centrifuge_base import CentrifugeBase
 from ..exceptions import GForceOutOfRangeError, InvalidBucketNumberError
@@ -20,6 +21,14 @@ class HamiltonVenusHiG4(CentrifugeBase):
 
     backend: Annotated[HamiltonBackendBase, BeforeValidator(backend.validate_instance)]
     """Only Hamilton backends."""
+
+    plates: Annotated[
+        list[
+            li.hamilton_venus.HamiltonVenusPlate
+            | li.hamilton_venus.HamiltonVenusCoverablePlate
+        ],  # | li.hamilton_venus.HamiltonVenusFilterPlateStack],
+        BeforeValidator(li.validate_list),
+    ]
 
     adapter_id: str
     """Bionex adapter ID as determined by the USB CAN application provided by Bionex."""

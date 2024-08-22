@@ -16,7 +16,7 @@ class CentrifugeBase(Resource, Interface):
     """On deck centrifuge that can be accessed by a liquid handler."""
 
     plates: Annotated[
-        list[li.Plate | li.CoverablePlate | li.FilterPlateStack],
+        list[li.PlateBase | li.CoverablePlateBase | li.FilterPlateStackBase],
         BeforeValidator(li.validate_list),
     ]
     """The acceptable filter plate stacks supported by the centrifuge."""
@@ -26,7 +26,11 @@ class CentrifugeBase(Resource, Interface):
         *args: labware.LabwareBase,
     ) -> None:
         supported_labware = [
-            item.labware if isinstance(item, li.Plate) else item.filter_plate.labware
+            (
+                item.labware
+                if isinstance(item, li.PlateBase)
+                else item.filter_plate.labware
+            )
             for item in self.plates
         ]
 
@@ -43,14 +47,14 @@ class CentrifugeBase(Resource, Interface):
     def get_layout_item(
         self: CentrifugeBase,
         labware: labware.LabwareBase,
-    ) -> li.Plate | li.CoverablePlate | li.FilterPlateStack:
+    ) -> li.PlateBase | li.CoverablePlateBase | li.FilterPlateStackBase:
         """Gets a layout item on the centrifuge device that is compatible with your current labware stack."""
         self.assert_supported_labware(labware)
 
         for supported_layout_item in self.plates:
             supported_labware = (
                 supported_layout_item.labware
-                if isinstance(supported_layout_item, li.Plate)
+                if isinstance(supported_layout_item, li.PlateBase)
                 else supported_layout_item.filter_plate.labware
             )
 
