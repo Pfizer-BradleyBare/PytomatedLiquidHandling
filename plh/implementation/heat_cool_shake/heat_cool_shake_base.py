@@ -13,7 +13,7 @@ from plh.implementation.tools import Interface, Resource
 
 @dataclasses.dataclass(kw_only=True, eq=False)
 class HeatCoolShakeBase(Resource, Interface):
-    """A device that can perform either heating, cooling, and shaking or any combination of the three."""
+    """A device that can perform either heating, cooling, or shaking or any combination of the three."""
 
     plates: Annotated[
         list[li.CoverablePlate | li.Plate],
