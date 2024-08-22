@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .hamilton_50uL_core8 import Hamilton50uLCORE8
+from . import hamilton_venus
 from .volume_measure_base import VolumeMeasureBase
 
 if True:
@@ -32,7 +32,7 @@ def unregister_all() -> None:
 
 __all__ = [
     "VolumeMeasureBase",
-    "Hamilton50uLCORE8",
+    "hamilton_venus",
     "devices",
     "load",
     "register",

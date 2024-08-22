@@ -11,7 +11,7 @@ from plh.device.HAMILTON.HSLLabwrAccess import AbsolutePositionValuesGetForLabwa
 from plh.device.HAMILTON.ML_STAR import Channel1000uL
 from plh.implementation import carrier_location, labware, layout_item, pipette
 
-from .volume_measure_base import MeasureValues, VolumeMeasureBase
+from ..volume_measure_base import MeasureValues, VolumeMeasureBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)

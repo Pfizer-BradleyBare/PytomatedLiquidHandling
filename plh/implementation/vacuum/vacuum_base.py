@@ -11,22 +11,6 @@ from plh.implementation.tools import Resource
 
 
 @dataclasses.dataclass(kw_only=True)
-class DefaultVacuumPressures:
-    """Facilitates simple selection of vacuum pressures. Each filter plate has "ideal" pressures.
-    NOTE: This is subjective.
-    """
-
-    low: float
-    """Slow flow of liquid through the filter plate."""
-
-    medium: float
-    """Average flow of liquid through the filter plate."""
-
-    high: float
-    """Fast flow of liquid through the filter plate."""
-
-
-@dataclasses.dataclass(kw_only=True)
 class FilterPlateConfiguration:
     """Compatibilities with a certain vacuum filter plate."""
 
@@ -42,8 +26,14 @@ class FilterPlateConfiguration:
     max_pressure: float
     """The max pressure of the filter plate. Typically this the pressure at which you have filter flex occuring and airflow skyrockets."""
 
-    default_vacuum_pressures: DefaultVacuumPressures
-    """Default vacuum pressures object."""
+    default_pressure_low: float
+    """Slow flow of liquid through the filter plate."""
+
+    default_pressure_medium: float
+    """Average flow of liquid through the filter plate."""
+
+    default_pressure_high: float
+    """Fast flow of liquid through the filter plate."""
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)

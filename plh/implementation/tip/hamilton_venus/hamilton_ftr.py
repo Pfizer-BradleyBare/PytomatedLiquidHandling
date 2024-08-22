@@ -9,7 +9,7 @@ from plh.device.HAMILTON import HSLTipCountingLib
 from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.implementation import backend, layout_item
 
-from .tip_base import TipBase
+from ..tip_base import TipBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)

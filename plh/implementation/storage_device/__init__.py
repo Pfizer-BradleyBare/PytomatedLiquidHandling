@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .RandomAccessDeckStorage import RandomAccessDeckStorage
+from . import generic
 from .storage_device_base import StorageDeviceBase
 
 if True:
@@ -32,7 +32,7 @@ def unregister_all() -> None:
 
 __all__ = [
     "StorageDeviceBase",
-    "RandomAccessDeckStorage",
+    "generic",
     "devices",
     "load",
     "register",

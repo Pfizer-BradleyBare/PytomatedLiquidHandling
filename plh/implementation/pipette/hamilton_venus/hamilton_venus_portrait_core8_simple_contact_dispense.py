@@ -10,12 +10,12 @@ from plh.device.HAMILTON.ML_STAR import Channel1000uL
 from plh.implementation import labware
 from plh.implementation import layout_item as li
 
-from .hamilton_portrait_core8 import HamiltonPortraitCORE8
-from .options import (
+from ..options import (
     AspirateOptions,
     DispenseOptions,
 )
-from .pipette_tip import PipetteTip
+from ..pipette_tip import PipetteTip
+from .hamilton_venus_portrait_core8 import HamiltonPortraitCORE8
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)

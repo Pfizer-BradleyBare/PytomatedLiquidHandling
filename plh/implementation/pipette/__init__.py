@@ -1,12 +1,6 @@
 from __future__ import annotations
 
-from .hamilton_portrait_core8 import HamiltonPortraitCORE8
-from .hamilton_portrait_core8_contact_dispense import (
-    HamiltonPortraitCORE8ContactDispense,
-)
-from .hamilton_portrait_core8_simple_contact_dispense import (
-    HamiltonPortraitCORE8SimpleContactDispense,
-)
+from . import hamilton_venus
 
 if True:
     pass
@@ -54,12 +48,8 @@ __all__ = [
     "LiquidClass",
     "AspirateOptions",
     "DispenseOptions",
-    "_AspirateDispenseOptions",
+    "hamilton_venus",
     "validate_instance",
-    "HamiltonPortraitCORE8",
-    "HamiltonPortraitCORE8ContactDispense",
-    "HamiltonPortraitCORE8SimpleContactDispense",
-    "HamiltonCORE96",
     "exceptions",
     "devices",
     "load",

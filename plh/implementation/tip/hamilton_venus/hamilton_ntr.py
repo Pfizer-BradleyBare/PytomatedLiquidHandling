@@ -10,7 +10,7 @@ from plh.device.HAMILTON import Visual_NTR_Library
 from plh.device.HAMILTON.backend import HamiltonBackendBase
 from plh.implementation import backend, layout_item, transport
 
-from .tip_base import AvailablePosition, TipBase
+from ..tip_base import AvailablePosition, TipBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)

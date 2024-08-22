@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from .hamilton_vacuum import HamiltonVacuum
-from .vacuum_base import DefaultVacuumPressures, FilterPlateConfiguration, VacuumBase
+from . import hamilton_venus
+from .vacuum_base import FilterPlateConfiguration, VacuumBase
 
 if True:
     """Above needs to be imported first!"""
@@ -33,8 +33,7 @@ def unregister_all() -> None:
 __all__ = [
     "VacuumBase",
     "FilterPlateConfiguration",
-    "DefaultVacuumPressures",
-    "HamiltonVacuum",
+    "hamilton_venus",
     "devices",
     "load",
     "register",

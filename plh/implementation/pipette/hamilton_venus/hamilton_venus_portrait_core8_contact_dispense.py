@@ -10,9 +10,9 @@ from pydantic import dataclasses
 from plh.device.HAMILTON.ML_STAR import Channel1000uL
 from plh.implementation import labware
 
-from .hamilton_portrait_core8 import HamiltonPortraitCORE8
-from .options import AspirateOptions, DispenseOptions
-from .pipette_tip import PipetteTip
+from .hamilton_venus_portrait_core8 import HamiltonPortraitCORE8
+from ..options import AspirateOptions, DispenseOptions
+from ..pipette_tip import PipetteTip
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)

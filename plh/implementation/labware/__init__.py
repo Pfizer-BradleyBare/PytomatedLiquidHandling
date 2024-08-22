@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from . import generic, hamilton
 from .labware_base import LabwareBase
 from .layout import AlphanumericLayout, Layout, LayoutSorting, NumericLayout
 from .non_pipettable_labware import NonPipettableLabware
@@ -43,6 +44,8 @@ __all__ = [
     "LayoutSorting",
     "NonPipettableLabware",
     "PipettableLabware",
+    "generic",
+    "hamilton",
     "exceptions",
     "validate_instance",
     "validate_list",

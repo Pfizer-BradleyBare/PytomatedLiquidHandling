@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from abc import abstractmethod
 from dataclasses import field
 from typing import Annotated
 
@@ -11,7 +10,7 @@ from plh.device.HAMILTON import EntryExit
 from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
 from plh.implementation import backend, layout_item, transport
 
-from .tip_base import AvailablePosition, TipBase
+from ..tip_base import AvailablePosition, TipBase
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -67,10 +66,6 @@ class HamiltonEETipBase(TipBase):
         return len(self.available_positions) + sum(
             [tips_per_rack * stack.stack_count for stack in self.tip_stacks],
         )
-
-    @abstractmethod
-    def initialize(self: HamiltonEETipBase) -> None:
-        """Counts the number of items in each stack. Edits the number of available tips using FTR edit."""
 
     def discard_teir(
         self: HamiltonEETipBase,

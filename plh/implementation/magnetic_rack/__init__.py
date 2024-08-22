@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .magnetic_rack import MagneticRack
+from . import generic
 from .magnetic_rack_base import MagneticRackBase
 
 if True:
@@ -32,7 +32,7 @@ def unregister_all() -> None:
 
 __all__ = [
     "MagneticRackBase",
-    "MagneticRack",
+    "generic",
     "devices",
     "load",
     "register",

@@ -8,7 +8,7 @@ from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import layout_item
-from plh.implementation.tools import Resource
+from plh.implementation.tools import Interface, Resource
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -23,7 +23,7 @@ class AvailablePosition:
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class TipBase(Resource):
+class TipBase(Resource, Interface):
     """A tip device that facilitates tip tracking and tier removal as needed."""
 
     tip_racks: Annotated[
@@ -52,10 +52,6 @@ class TipBase(Resource):
                     PositionID=pos["PositionID"],
                 ),
             )
-
-    @abstractmethod
-    def initialize(self: TipBase) -> None:
-        """Initiates a user update of the available tip positions then stores in the device using the ```update_available_positions``` instance method."""
 
     def use_tips(self: TipBase, num: int) -> None:
         """Indicates that the following number of tips have been used and are no longer available."""

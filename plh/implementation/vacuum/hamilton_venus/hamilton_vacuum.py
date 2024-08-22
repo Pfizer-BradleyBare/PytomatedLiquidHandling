@@ -4,7 +4,7 @@ from pydantic import dataclasses
 
 from plh.device.HAMILTON.backend import HamiltonBackendBase
 
-from .vacuum_base import VacuumBase
+from ..vacuum_base import VacuumBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)

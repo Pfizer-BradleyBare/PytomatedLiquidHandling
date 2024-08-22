@@ -7,7 +7,7 @@ from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import carrier_location, labware
-from plh.implementation.tools import Resource
+from plh.implementation.tools import Interface, Resource
 
 from .options import (
     AspirateOptions,
@@ -17,7 +17,7 @@ from .pipette_tip import PipetteTip
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class PipetteBase(Resource):
+class PipetteBase(Resource, Interface):
     supported_tips: list[PipetteTip]
 
     supported_aspirate_labware: Annotated[
