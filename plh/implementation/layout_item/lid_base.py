@@ -9,11 +9,11 @@ from .layout_item_base import LayoutItemBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class Plate(LayoutItemBase):
-    """A plate."""
+class LidBase(LayoutItemBase):
+    """A lid that can cover a layout item."""
 
     labware: Annotated[
-        labware.PipettableLabware,
+        labware.NonPipettableLabware,
         BeforeValidator(labware.validate_instance),
     ]
-    """Plates are by definition possible to pipetted to/from."""
+    """Lids can never be pipette to/from."""

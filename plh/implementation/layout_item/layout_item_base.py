@@ -6,18 +6,15 @@ from pydantic import dataclasses, model_validator
 from pydantic.functional_validators import BeforeValidator
 
 from plh.implementation import carrier_location, labware
-from plh.implementation.tools import Resource
+from plh.implementation.tools import Interface, Resource
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class LayoutItemBase(Resource):
+class LayoutItemBase(Resource, Interface):
     """A labware position on a deck."""
 
     identifier: str = "None"
     """Identifier is optional. If identifier is not specified than identifier will be ```<carrier_location.identifier>_<labware.identifier>```"""
-
-    labware_id: str
-    """Labware id from the automation software for this deck position."""
 
     carrier_location: Annotated[
         carrier_location.CarrierLocationBase,

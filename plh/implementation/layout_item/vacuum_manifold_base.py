@@ -9,7 +9,7 @@ from .layout_item_base import LayoutItemBase
 
 
 @dataclasses.dataclass(kw_only=True, eq=False)
-class VacuumManifold(LayoutItemBase):
+class VacuumManifoldBase(LayoutItemBase):
     """A manifold that is used as part of vacuum operations."""
 
     labware: Annotated[
