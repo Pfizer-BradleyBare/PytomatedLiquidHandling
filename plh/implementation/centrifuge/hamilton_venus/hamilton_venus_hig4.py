@@ -26,7 +26,9 @@ class HamiltonVenusHiG4(CentrifugeBase):
         list[
             li.hamilton_venus.HamiltonVenusPlate
             | li.hamilton_venus.HamiltonVenusCoverablePlate
-        ],  # | li.hamilton_venus.HamiltonVenusFilterPlateStack],
+            | li.hamilton_venus.HamiltonVenusFilterPlate
+            | li.hamilton_venus.HamiltonVenusCoverableFilterPlate
+        ],
         BeforeValidator(li.validate_list),
     ]
 

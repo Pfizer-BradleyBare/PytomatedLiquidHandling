@@ -20,9 +20,6 @@ class FilterPlateConfiguration:
     ]
     """The filter plate."""
 
-    collection_plate: layout_item.PlateBase
-    """The compatible plate for eluate collection."""
-
     max_pressure: float
     """The max pressure of the filter plate. Typically this the pressure at which you have filter flex occuring and airflow skyrockets."""
 

@@ -4,7 +4,6 @@ from . import hamilton_venus
 from .coverable_filter_plate_base import CoverableFilterPlateBase
 from .coverable_plate_base import CoverablePlateBase
 from .filter_plate_base import FilterPlateBase
-from .filter_plate_stack_base import FilterPlateStackBase
 from .layout_item_base import LayoutItemBase
 from .lid_base import LidBase
 from .plate_base import PlateBase
@@ -46,7 +45,6 @@ __all__ = [
     "PlateBase",
     "CoverablePlateBase",
     "LidBase",
-    "FilterPlateStackBase",
     "FilterPlateBase",
     "CoverableFilterPlateBase",
     "hamilton_venus",

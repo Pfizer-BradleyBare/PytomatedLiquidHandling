@@ -1,4 +1,6 @@
+from .hamilton_venus_coverable_filter_plate import HamiltonVenusCoverableFilterPlate
 from .hamilton_venus_coverable_plate import HamiltonVenusCoverablePlate
+from .hamilton_venus_filter_plate import HamiltonVenusFilterPlate
 from .hamilton_venus_layout_item_base import HamiltonVenusLayoutItemBase
 from .hamilton_venus_lid import HamiltonVenusLid
 from .hamilton_venus_plate import HamiltonVenusPlate
@@ -12,4 +14,6 @@ __all__ = [
     "HamiltonVenusPlate",
     "HamiltonVenusTipRack",
     "HamiltonVenusVacuumManifold",
+    "HamiltonVenusFilterPlate",
+    "HamiltonVenusCoverableFilterPlate",
 ]
