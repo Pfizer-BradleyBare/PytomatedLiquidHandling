@@ -26,7 +26,7 @@ def install_venus() -> None:
         "Press <Enter> to continue Venus4 library installation. Otherwise, cancel with <Ctrl+C>",
     )
 
-    from plh.device.HAMILTON import backend
+    from plh.device.hamilton_venus import backend
 
     backend_path = pathlib.Path(backend.__file__).parent
     hamilton_path = pathlib.Path("C:\\Program Files (x86)\\HAMILTON")

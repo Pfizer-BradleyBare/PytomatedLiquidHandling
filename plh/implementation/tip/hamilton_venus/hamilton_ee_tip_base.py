@@ -6,8 +6,8 @@ from typing import Annotated
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from plh.device.HAMILTON import EntryExit
-from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.device.hamilton_venus import EntryExit
+from plh.device.hamilton_venus.backend import VantageTrackGripperEntryExit
 from plh.implementation import backend, layout_item, transport
 
 from ..tip_base import AvailablePosition, TipBase

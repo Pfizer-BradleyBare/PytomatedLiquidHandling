@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pydantic import dataclasses
 
-from plh.device.HAMILTON import EntryExit, HSLTipCountingLib
+from plh.device.hamilton_venus import EntryExit, HSLTipCountingLib
 
 from .hamilton_ee_tip_base import HamiltonEETipBase
 

@@ -1,7 +1,7 @@
 from loguru import logger
 
-from plh.device.HAMILTON import HSLHamHeaterShakerLib
-from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.device.hamilton_venus import HSLHamHeaterShakerLib
+from plh.device.hamilton_venus.backend import VantageTrackGripperEntryExit
 
 COM_PORT = 1
 

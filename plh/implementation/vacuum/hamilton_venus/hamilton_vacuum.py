@@ -2,7 +2,7 @@ from dataclasses import field
 
 from pydantic import dataclasses
 
-from plh.device.HAMILTON.backend import HamiltonBackendBase
+from plh.device.hamilton_venus.backend import HamiltonBackendBase
 
 from ..vacuum_base import VacuumBase
 

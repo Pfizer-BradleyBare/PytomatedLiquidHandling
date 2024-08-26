@@ -4,7 +4,7 @@ from typing import Annotated
 
 from pydantic import BeforeValidator, dataclasses
 
-from plh.device.HAMILTON.backend import HamiltonBackendBase
+from plh.device.hamilton_venus.backend import HamiltonBackendBase
 from plh.implementation import backend, deck
 
 from ..stationary_liquid_handler_carrier_base import StationaryLiquidHandlerCarrierBase

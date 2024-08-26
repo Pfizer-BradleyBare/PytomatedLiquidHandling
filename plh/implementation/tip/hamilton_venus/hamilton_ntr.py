@@ -6,8 +6,8 @@ from typing import Annotated
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from plh.device.HAMILTON import Visual_NTR_Library
-from plh.device.HAMILTON.backend import HamiltonBackendBase
+from plh.device.hamilton_venus import Visual_NTR_Library
+from plh.device.hamilton_venus.backend import HamiltonBackendBase
 from plh.implementation import backend, layout_item, transport
 
 from ..tip_base import AvailablePosition, TipBase

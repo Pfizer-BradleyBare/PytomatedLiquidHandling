@@ -5,8 +5,8 @@ from typing import Annotated, DefaultDict, cast
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from plh.device.HAMILTON import FlipTubeTool
-from plh.device.HAMILTON.backend import HamiltonBackendBase
+from plh.device.hamilton_venus import FlipTubeTool
+from plh.device.hamilton_venus.backend import HamiltonBackendBase
 from plh.implementation import backend
 from plh.implementation import layout_item as li
 

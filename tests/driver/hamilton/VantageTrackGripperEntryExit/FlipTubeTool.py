@@ -1,7 +1,7 @@
 from loguru import logger
 
-from plh.device.HAMILTON import FlipTubeTool
-from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.device.hamilton_venus import FlipTubeTool
+from plh.device.hamilton_venus.backend import VantageTrackGripperEntryExit
 
 
 def main(backend: VantageTrackGripperEntryExit) -> None:

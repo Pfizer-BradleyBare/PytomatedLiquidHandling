@@ -2,8 +2,8 @@ import pathlib
 
 from loguru import logger
 
-from plh.device.HAMILTON import HSLHamHeaterShakerLib
-from plh.device.HAMILTON.backend import MicrolabSTAR
+from plh.device.hamilton_venus import HSLHamHeaterShakerLib
+from plh.device.hamilton_venus.backend import MicrolabSTAR
 
 COM_PORT = 1
 

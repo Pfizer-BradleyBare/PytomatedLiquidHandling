@@ -4,8 +4,8 @@ from typing import Annotated
 
 from pydantic import BeforeValidator, dataclasses
 
-from plh.device.HAMILTON.backend import HamiltonBackendBase
-from plh.device.HAMILTON.HSLLabwrAccess import TestLabwareIDExists
+from plh.device.hamilton_venus.backend import HamiltonBackendBase
+from plh.device.hamilton_venus.HSLLabwrAccess import TestLabwareIDExists
 from plh.implementation import backend, deck
 
 from ..automatic_move_liquid_handler_carrier_base import (

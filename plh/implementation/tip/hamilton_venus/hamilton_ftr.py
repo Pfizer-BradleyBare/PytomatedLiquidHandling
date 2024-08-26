@@ -5,8 +5,8 @@ from typing import Annotated
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from plh.device.HAMILTON import HSLTipCountingLib
-from plh.device.HAMILTON.backend import HamiltonBackendBase
+from plh.device.hamilton_venus import HSLTipCountingLib
+from plh.device.hamilton_venus.backend import HamiltonBackendBase
 from plh.implementation import backend, layout_item
 
 from ..tip_base import TipBase

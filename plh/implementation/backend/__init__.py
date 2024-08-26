@@ -9,8 +9,8 @@ from .pydantic_validators import validate_instance
 if True:
     """Above needs to be imported first!"""
 
-from plh.device.HAMILTON.backend import MicrolabSTAR as _MicrolabStar
-from plh.device.HAMILTON.backend import (
+from plh.device.hamilton_venus.backend import MicrolabSTAR as _MicrolabStar
+from plh.device.hamilton_venus.backend import (
     VantageTrackGripperEntryExit as _VantageTrackGripperEntryExit,
 )
 from plh.device.UnchainedLabs_Instruments.backend import Stunner as _Stunner

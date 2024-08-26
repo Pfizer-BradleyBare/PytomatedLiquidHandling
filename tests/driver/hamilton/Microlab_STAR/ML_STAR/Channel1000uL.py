@@ -2,8 +2,8 @@ import pathlib
 
 from loguru import logger
 
-from plh.device.HAMILTON.backend import MicrolabSTAR
-from plh.device.HAMILTON.ML_STAR import Channel1000uL
+from plh.device.hamilton_venus.backend import MicrolabSTAR
+from plh.device.hamilton_venus.ML_STAR import Channel1000uL
 
 
 def main(backend: MicrolabSTAR) -> None:

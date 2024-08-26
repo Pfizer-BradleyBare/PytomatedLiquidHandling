@@ -6,9 +6,11 @@ from typing import Annotated, DefaultDict, cast
 from pydantic import dataclasses, model_validator
 from pydantic.functional_validators import BeforeValidator
 
-from plh.device.HAMILTON.backend import HamiltonBackendBase
-from plh.device.HAMILTON.HSLLabwrAccess import AbsolutePositionValuesGetForLabwareID
-from plh.device.HAMILTON.ML_STAR import Channel1000uL
+from plh.device.hamilton_venus.backend import HamiltonBackendBase
+from plh.device.hamilton_venus.HSLLabwrAccess import (
+    AbsolutePositionValuesGetForLabwareID,
+)
+from plh.device.hamilton_venus.ML_STAR import Channel1000uL
 from plh.implementation import carrier_location, labware, layout_item, pipette
 
 from ..volume_measure_base import MeasureValues, VolumeMeasureBase

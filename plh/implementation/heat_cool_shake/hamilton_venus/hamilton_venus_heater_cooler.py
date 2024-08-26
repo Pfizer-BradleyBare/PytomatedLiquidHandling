@@ -6,8 +6,8 @@ from typing import Annotated
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from plh.device.HAMILTON import HamiltonHeaterCooler as HamiltonHeaterCoolerDriver
-from plh.device.HAMILTON.backend import HamiltonBackendBase
+from plh.device.hamilton_venus import HamiltonHeaterCooler as HamiltonHeaterCoolerDriver
+from plh.device.hamilton_venus.backend import HamiltonBackendBase
 from plh.implementation import backend
 from plh.implementation import layout_item as li
 

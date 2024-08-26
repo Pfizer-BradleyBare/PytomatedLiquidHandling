@@ -2,8 +2,8 @@ import pathlib
 
 from loguru import logger
 
-from plh.device.HAMILTON import HSLHiGCentrifugeLib
-from plh.device.HAMILTON.backend import MicrolabSTAR
+from plh.device.hamilton_venus import HSLHiGCentrifugeLib
+from plh.device.hamilton_venus.backend import MicrolabSTAR
 
 ADAPTER_ID = "HX1"
 

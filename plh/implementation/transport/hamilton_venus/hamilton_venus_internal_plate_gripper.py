@@ -7,8 +7,8 @@ from typing import Annotated, cast
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from plh.device.HAMILTON.backend import HamiltonBackendBase
-from plh.device.HAMILTON.ML_STAR import iSwap
+from plh.device.hamilton_venus.backend import HamiltonBackendBase
+from plh.device.hamilton_venus.ML_STAR import iSwap
 from plh.implementation import backend, carrier_location, layout_item
 
 from ..exceptions import GetHardwareError, PlaceHardwareError

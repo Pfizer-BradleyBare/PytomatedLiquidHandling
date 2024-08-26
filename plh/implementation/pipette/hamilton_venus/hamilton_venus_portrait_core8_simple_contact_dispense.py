@@ -6,7 +6,7 @@ from typing import DefaultDict, cast
 
 from pydantic import dataclasses
 
-from plh.device.HAMILTON.ML_STAR import Channel1000uL
+from plh.device.hamilton_venus.ML_STAR import Channel1000uL
 from plh.implementation import labware
 from plh.implementation import layout_item as li
 

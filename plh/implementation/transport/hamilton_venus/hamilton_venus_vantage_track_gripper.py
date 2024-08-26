@@ -6,9 +6,9 @@ from typing import Annotated, cast
 from pydantic import dataclasses
 from pydantic.functional_validators import BeforeValidator
 
-from plh.device.HAMILTON import TrackGripper
-from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
-from plh.device.HAMILTON.ML_STAR.Channel1000uL import MoveToPositionSequence
+from plh.device.hamilton_venus import TrackGripper
+from plh.device.hamilton_venus.backend import VantageTrackGripperEntryExit
+from plh.device.hamilton_venus.ML_STAR.Channel1000uL import MoveToPositionSequence
 from plh.implementation import backend, carrier_location, layout_item
 from plh.implementation.exceptions import CriticalHALError
 

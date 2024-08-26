@@ -7,7 +7,7 @@ from typing import DefaultDict, cast
 
 from pydantic import dataclasses
 
-from plh.device.HAMILTON.ML_STAR import Channel1000uL
+from plh.device.hamilton_venus.ML_STAR import Channel1000uL
 from plh.implementation import labware
 
 from .hamilton_venus_portrait_core8 import HamiltonPortraitCORE8

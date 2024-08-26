@@ -2,8 +2,8 @@ import pathlib
 
 from loguru import logger
 
-from plh.device.HAMILTON import FlipTubeTool
-from plh.device.HAMILTON.backend import MicrolabSTAR
+from plh.device.hamilton_venus import FlipTubeTool
+from plh.device.hamilton_venus.backend import MicrolabSTAR
 
 
 def main(backend: MicrolabSTAR) -> None:

@@ -1,7 +1,7 @@
 from loguru import logger
 
-from plh.device.HAMILTON import HSLLabwrAccess
-from plh.device.HAMILTON.backend import VantageTrackGripperEntryExit
+from plh.device.hamilton_venus import HSLLabwrAccess
+from plh.device.hamilton_venus.backend import VantageTrackGripperEntryExit
 
 
 def main(backend: VantageTrackGripperEntryExit) -> None:

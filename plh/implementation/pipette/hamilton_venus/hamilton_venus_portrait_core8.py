@@ -6,8 +6,8 @@ from loguru import logger
 from pydantic import dataclasses, field_validator
 from pydantic.functional_validators import BeforeValidator
 
-from plh.device.HAMILTON.backend import HamiltonBackendBase
-from plh.device.HAMILTON.ML_STAR import Channel1000uL
+from plh.device.hamilton_venus.backend import HamiltonBackendBase
+from plh.device.hamilton_venus.ML_STAR import Channel1000uL
 from plh.implementation import backend, labware, layout_item
 from plh.implementation.pipette.options import AspirateOptions, DispenseOptions
 
