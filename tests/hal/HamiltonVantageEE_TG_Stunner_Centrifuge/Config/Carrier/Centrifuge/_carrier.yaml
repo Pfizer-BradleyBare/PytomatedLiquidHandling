@@ -1,6 +1,0 @@
-NonMoveable Carrier:
-  - enabled: True
-    identifier: Centrifuge
-    track_start: -1
-    track_end: -20
-    num_labware_positions: 1

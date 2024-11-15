@@ -1,5 +1,0 @@
-Plate:
-  - enabled: True
-    labware_id: SMP_CAR_24_15x95_A00_0002
-    carrier_location: Carrier40_Pos1
-    labware: 15mLCentrifugeTubeCarrier

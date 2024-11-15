@@ -1,6 +1,0 @@
-Hamilton Hig4:
-  - identifier: Hig4
-    enabled: True
-    backend: Hamilton
-    adapter_id: "0"
-    plates:

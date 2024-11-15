@@ -1,5 +1,4 @@
-"""Command Line Interface (cli) for plh.
-"""
+"""Command Line Interface (cli) for plh."""
 
 import pathlib
 import shutil
@@ -26,7 +25,7 @@ def install_venus() -> None:
         "Press <Enter> to continue Venus4 library installation. Otherwise, cancel with <Ctrl+C>",
     )
 
-    from plh.device.hamilton_venus import backend
+    from plh.hamilton_venus import backend
 
     backend_path = pathlib.Path(backend.__file__).parent
     hamilton_path = pathlib.Path("C:\\Program Files (x86)\\HAMILTON")
@@ -67,7 +66,7 @@ def install_venus() -> None:
     for item in hamilton_bin_folder.iterdir():
         if item.is_file() and item.suffix == ".exe":
             process = subprocess.Popen(
-                [  # noqa:S603
+                [
                     item,
                 ],
                 stdout=subprocess.PIPE,

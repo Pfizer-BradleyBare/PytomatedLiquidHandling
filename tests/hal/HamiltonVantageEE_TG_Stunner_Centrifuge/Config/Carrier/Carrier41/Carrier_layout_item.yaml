@@ -1,5 +1,0 @@
-Plate:
-  - enabled: True
-    labware_id: SMP_CAR_32_FlipTubes_A02_0001
-    carrier_location: Carrier41_Pos1
-    labware: Hamilton1500uLFlipTubeCarrier

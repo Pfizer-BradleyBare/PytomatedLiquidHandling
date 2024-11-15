@@ -1,5 +1,0 @@
-Plate:
-  - enabled: True
-    labware_id: _GripperTransition_HamiltonFlipTube24Well
-    carrier_location: Centrifuge_Pos1
-    labware: Hamilton1500uLFlipTubeRack

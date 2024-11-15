@@ -1,5 +1,0 @@
-Moveable Carrier:
-  - enabled: True
-    track_start: 27
-    track_end: 32
-    num_labware_positions: 5

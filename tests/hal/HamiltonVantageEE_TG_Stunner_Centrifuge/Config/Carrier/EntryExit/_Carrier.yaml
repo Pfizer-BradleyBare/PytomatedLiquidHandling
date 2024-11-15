@@ -1,5 +1,0 @@
-Non Moveable Carrier:
-  - enabled: True
-    track_start: 70
-    track_end: 79
-    num_labware_positions: 4
