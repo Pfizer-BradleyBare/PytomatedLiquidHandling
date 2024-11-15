@@ -18,7 +18,7 @@ class BackendBase:
     """A base class for all backends."""
 
     identifier: str
-    """A name given to the backend. Creates compatibility with the HAL layer."""
+    """A name given to the backend."""
 
     is_running: bool = field(init=False, default=False)
     """Is the backend running?"""
